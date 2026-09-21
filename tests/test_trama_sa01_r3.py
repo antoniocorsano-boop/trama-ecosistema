@@ -21,6 +21,11 @@ class R3CorpusTests(unittest.TestCase):
         self.assertTrue(data["splitPolicy"]["holdoutLocked"])
         self.assertFalse(set(data["splitPolicy"]["developmentCaseIds"]) & set(data["splitPolicy"]["holdoutCaseIds"]))
 
+    def test_workflow_cannot_run_holdout(self):
+        workflow=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3.yml").read_text(encoding="utf-8")
+        self.assertIn("--split DEVELOPMENT", workflow)
+        self.assertNotIn("--split HOLDOUT", workflow)
+
     def test_validator_passes(self):
         r=subprocess.run([sys.executable,str(VALIDATOR)],cwd=ROOT,text=True,capture_output=True)
         self.assertEqual(r.returncode,0,r.stdout+r.stderr)
