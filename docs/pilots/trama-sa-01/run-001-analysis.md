@@ -1,6 +1,6 @@
 # TRAMA-SA-01 — Run 001 TypeSafe
 
-Stato: **PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_PENDING**
+Stato: **PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_COMPLETE / REVISE**
 
 ## Identificazione
 
@@ -29,7 +29,7 @@ Il corpus ha superato il validatore:
 
 ## Confronto con le etichette attese preregistrate
 
-Questo confronto **non equivale alla revisione umana finale**.
+Le etichette attese sono state confermate nella revisione umana finale del Run 001.
 
 | Caso | Atteso nel corpus | TypeSafe | Confidence | Claim support |
 | --- | --- | --- | ---: | ---: |
@@ -87,9 +87,21 @@ Il run contiene un warning non bloccante relativo alla transizione dei runner Gi
 
 Il warning non ha alterato il run: job e artifact upload sono conclusi con successo. Va trattato come manutenzione separata.
 
+## Revisione umana finale
+
+Conferma del 21 settembre 2026:
+
+- `SA01-004`: `INSUFFICIENT_EVIDENCE` confermato;
+- `SA01-008`: `INSUFFICIENT_EVIDENCE` confermato;
+- le altre otto etichette preregistrate sono confermate;
+- esito del Run 001: **REVISE**.
+
+La revisione non promuove `TRAMA-ADR-009`; autorizza soltanto il passaggio al disegno sperimentale R2.
+
 ## Stato di governance
 
 - `TRAMA-ADR-009`: resta `PROPOSED`;
-- human review: **PENDING**;
+- human review Run 001: **COMPLETE**;
+- outcome: **REVISE**;
 - runtime TypeSafe nei prodotti: **NOT_AUTHORIZED**;
 - `DOS-A1`: resta `RUNTIME_DEFERRED`.
