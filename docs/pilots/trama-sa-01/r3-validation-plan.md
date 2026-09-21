@@ -113,12 +113,9 @@ Nessun esito modifica automaticamente `TRAMA-ADR-009`.
 
 ## Consolidamento canonico pre-run
 
-Prima di qualsiasi esecuzione provider R3, il corpus è stato consolidato in `r3-cases.json` versione `3.1.0`.
+Il corpus canonico è stato consolidato in `r3-cases.json` versione `3.1.0` dopo aver identificato come non conforme il precedente corpus monodisciplinare.
 
-Verifica effettuata prima del consolidamento:
-- run provider R3 eseguiti: **0**;
-- holdout osservato da TypeSafe: **no**;
-- tuning sull'holdout: **no**.
+Prima del consolidamento canonico erano già stati avviati due run DEVELOPMENT sul corpus monodisciplinare; entrambi sono esclusi dall'evidenza R3. Il relativo HOLDOUT non è stato eseguito e nessun output dei due run è stato usato per tuning, modifica di prompt, boundary, casi o nuovo holdout.
 
 Il corpus canonico contiene:
 - 48 casi;
