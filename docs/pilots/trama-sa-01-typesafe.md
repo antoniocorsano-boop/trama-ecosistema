@@ -189,5 +189,49 @@ Stato corrente:
 
 - `TRAMA-ADR-009 = PROPOSED`;
 - proposta tecnica: **R3** prima di qualunque `APPROVED`;
-- R3: **PROPOSED / NOT_YET_AUTHORIZED**;
+- R3: **AUTHORIZED_FOR_EXPERIMENT / DEVELOPMENT_RUN_NOT_YET_EXECUTED**;
 - runtime nei prodotti: **NOT_AUTHORIZED**.
+
+
+### R3 — Development-first
+
+R3 è autorizzato come esperimento controllato, con guardia operativa DEVELOPMENT-only.
+
+Corpus canonico preregistrato prima del primo run:
+- `r3-cases.json` versione `3.1.0`;
+- 48 casi sintetici;
+- 32 DEVELOPMENT;
+- 16 HOLDOUT bloccati;
+- quattro domini didattici;
+- 24 coppie di parafrasi;
+- policy di routing/escalation preregistrate.
+
+Nessun run R3 è stato eseguito sul corpus precedente. Il nuovo holdout non è stato esposto al provider.
+
+Il workflow corrente:
+- esegue soltanto DEVELOPMENT;
+- non contiene `--split HOLDOUT`;
+- non imposta il flag `TRAMA_R3_HOLDOUT_AUTHORIZED`;
+- produce raw advisory-only e metriche DEVELOPMENT;
+- non modifica `TRAMA-ADR-009`.
+
+Stato: **AUTHORIZED_FOR_EXPERIMENT / DEVELOPMENT_RUN_NOT_YET_EXECUTED**.
+
+
+## Run monodisciplinari esclusi
+
+Prima del consolidamento canonico 3.1.0 erano stati avviati due run DEVELOPMENT sul corpus R3 monodisciplinare:
+
+- run `35648847753`: **FAILURE**;
+- run `35649286123`: **SUCCESS**.
+
+Entrambi sono classificati **NON_CANONICAL / EXCLUDED_FROM_R3_EVIDENCE** perché il corpus usato non rispettava il requisito multi-dominio già previsto dal piano R3.
+
+La non conformità del corpus era stata identificata prima di usare questi output per analisi o tuning. Nessun risultato dei due run viene utilizzato per:
+- modificare prompt;
+- modificare boundary;
+- selezionare casi;
+- modificare l'holdout canonico 3.1.0;
+- sostenere `TRAMA-ADR-009`.
+
+L'HOLDOUT canonico 3.1.0 non è stato eseguito.
