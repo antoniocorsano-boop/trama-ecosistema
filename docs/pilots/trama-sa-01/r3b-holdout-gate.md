@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3B — HOLDOUT one-shot gate
 
-Gate state: **DEFINED / SOURCE PIN PENDING / NOT AUTHORIZED FOR EXECUTION**
+Gate state: **DEFINED / SOURCE PINNED / NOT EFFECTIVE UNTIL EXACT-HEAD HUMAN APPROVAL + MERGE**
 
 ## Purpose
 
@@ -37,9 +37,13 @@ This deliberately protects HOLDOUT independence. A failure after claim requires 
 
 ## Current state
 
-The workflow and harness are prepared, but the source SHA is still a placeholder in this intermediate revision.
+The authorized source revision is:
 
-Therefore the HOLDOUT remains technically and procedurally blocked.
+c2595b7354f68ffdd383c71fc253014b01cbcb71
+
+It is an ancestor of the final gate branch and contains the frozen harness/corpus plus the fail-closed HOLDOUT guard.
+
+The HOLDOUT remains procedurally blocked until exact-head human approval and merge of the final PR.
 
 ## Invariants
 
