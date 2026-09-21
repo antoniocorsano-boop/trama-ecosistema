@@ -30,3 +30,15 @@ Ogni proposta deve dichiarare:
 - non incorporare dati personali o segreti;
 - preferire collegamenti alle fonti autorevoli alle copie integrali.
 
+
+## Skill TypeSafe per gli agenti
+
+Quando una modifica TRAMA riguarda giudizi semantici, classificazione, selezione, ranking, estrazione o verifica basata su TypeSafe:
+
+- consultare la skill ufficiale `typesafe-ai` e la documentazione corrente del fornitore;
+- usare un solo metodo di installazione della skill per ambiente;
+- trattare la skill come strumento dell'agente di sviluppo, non come dipendenza runtime;
+- applicare i confini definiti in `docs/assurance/typesafe-semantic-assurance.md`;
+- non introdurre SDK, credenziali o chiamate API nei prodotti senza una decisione TRAMA distinta.
+
+Riferimento upstream: https://github.com/typesafe-ai/skills/blob/main/skills/typesafe-ai/SKILL.md

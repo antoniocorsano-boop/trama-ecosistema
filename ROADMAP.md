@@ -111,6 +111,23 @@ Stato proposto: HUMAN REVIEW REQUIRED.
 - gestione di rifiuto, sostituzione e ripetizione;
 - ricevuta comprensibile all'utente.
 
+
+### TRAMA-SA-01 — TypeSafe semantic assurance pilot
+
+Stato proposto: HUMAN REVIEW REQUIRED.
+
+- provider semantico opzionale e advisory-only;
+- nessuna nuova autorità e nessuna scrittura automatica;
+- pre-gate deterministico obbligatorio;
+- casi sintetici, pubblici o minimizzati e nessun dato personale;
+- giudizi tipizzati usati per coerenza, evidenza e casi ambigui;
+- revisione umana di ogni caso durante il pilota;
+- soglie definite soltanto dopo calibrazione sul dominio;
+- report finale con accordo umano, falsi passaggi, casi non decidibili, latenza, costo e failure mode;
+- ogni eventuale integrazione runtime richiede una decisione TRAMA distinta.
+
+Riferimenti: `TRAMA-ADR-009`, `docs/assurance/typesafe-semantic-assurance.md`, `docs/pilots/trama-sa-01-typesafe.md`.
+
 ## R5 Preparazione all'adozione
 
 - verifica del nome TRAMA;
