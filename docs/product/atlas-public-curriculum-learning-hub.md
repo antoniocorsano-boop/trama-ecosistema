@@ -9,7 +9,7 @@
 
 Questa proposta consolida il ruolo di Curriculum Atlas alla luce dell'architettura TRAMA già approvata:
 
-**Arena governa il curricolo; Atlas lo rende intelligibile e pubblica risorse/pagine; Docente OS rende operativo il lavoro docente. I trasferimenti tra i tre prodotti restano quattro flussi distinti, non una pipeline che sposta l'autorità.**
+**Arena governa il curricolo; Atlas integrale lo rende intelligibile, navigabile e collegato a percorsi, conoscenza e risorse; Docente OS rende operativo il lavoro docente. La produzione specialistica degli artefatti è affidata a un'Officina materiali governata e separata. I trasferimenti restano flussi distinti, non una pipeline che sposta l'autorità.**
 
 Atlas non deve evolvere come semplice collezione di card o come visualizzazione 3D del curricolo. Deve diventare la superficie pubblica e didattica dell'ecosistema: il luogo in cui il curricolo approvato viene compreso, esplorato e collegato a percorsi, lezioni e materiali pubblicabili.
 
@@ -287,13 +287,14 @@ Regola:
 
 ## 7. Information Architecture target
 
-Navigazione primaria proposta:
+Navigazione primaria proposta per Atlas integrale:
 
 - **Curricolo**
 - **Percorsi**
-- **Lezioni**
-- **Materiali**
+- **Risorse**
 - **Esplora**
+
+La vista **Lezioni** resta una superficie contestuale dello Student Learning Hub, insieme alla vista **Obiettivi**; non sostituisce la navigazione curricolare primaria.
 
 “Fonti” resta disponibile come provenance/disclosure, non come destinazione primaria.
 
@@ -542,3 +543,87 @@ Con la promozione governata di TRAMA-ADR-007 e TRAMA-ADR-008 sono approvati:
 - DOS-A1 resta differita;
 - nessuna autenticazione studenti o nuova dipendenza runtime è autorizzata;
 - ogni futura implementazione richiede i gate tecnici, privacy, sicurezza, accessibilità e collaudo umano previsti dai contratti.
+
+
+## 19. Addendum — Atlas integrale e Officina materiali
+
+**Stato:** PROPOSED / HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED  
+**Decisione collegata:** TRAMA-ADR-010
+
+### 19.1 Atlas integrale
+
+Atlas non è una biblioteca di file né un semplice visualizzatore Spatial. Il prodotto target unifica, sullo stesso modello semantico:
+- mappa navigabile del curricolo;
+- progressioni verticali e orizzontali;
+- prerequisiti, raccordi e percorsi concettuali;
+- ricerca e navigazione intelligente (“Chiedi ad Atlas”);
+- Student Learning Hub;
+- biblioteca educativa di Learning Object e risorse;
+- collegamenti curricolo ↔ obiettivi ↔ UDA/lezioni pubblicate ↔ materiali;
+- provenance e versioni Arena sotto progressive disclosure.
+
+Regola: **la biblioteca è una dimensione di Atlas, non la definizione di Atlas**.
+
+### 19.2 Officina materiali
+
+La produzione di infografiche, schede, presentazioni, immagini, mappe, verifiche e altri artefatti di qualità è una capacità specialistica distinta dalla regia didattica di Docente OS e dall'autorità editoriale di Atlas.
+
+Flusso target:
+
+`Arena → contesto curricolare → Docente OS → ricerca/riuso Atlas → brief didattico → Officina materiali → revisione docente → uso nella lezione → eventuale pubblicazione in Atlas`.
+
+L'Officina materiali:
+- riceve un brief strutturato da Docente OS;
+- può usare pattern, Learning Object, design profile e risorse di Atlas;
+- può selezionare motori specialistici diversi per tipo di artefatto;
+- non approva curricolo, lezioni o pubblicazioni;
+- non persiste automaticamente il risultato come risorsa Atlas;
+- restituisce proposte modificabili/sostituibili/scartabili;
+- conserva provenance del processo di produzione e dei materiali sorgente.
+
+### 19.3 Docente OS non è il motore grafico
+
+Docente OS resta il workspace e l'orchestratore professionale. Deve:
+- conoscere classe, lezione, obiettivi, sequenza e materiali già disponibili;
+- cercare prima il riuso in Atlas;
+- costruire il brief di produzione quando serve un nuovo artefatto;
+- mostrare anteprima e alternative;
+- consentire modifica, rigenerazione parziale, sostituzione o esclusione;
+- collegare il materiale approvato alla lezione;
+- richiedere una pubblicazione Atlas soltanto dopo decisione esplicita del docente.
+
+Non deve diventare un editor grafico generalista né produrre autonomamente asset definitivi tramite un unico renderer interno.
+
+### 19.4 Riusa prima di generare
+
+Prima di una nuova produzione, il sistema deve verificare se Atlas contiene una risorsa compatibile con nodo curricolare, annualità, disciplina, funzione e contesto d'uso.
+
+Esiti ammessi per il docente:
+- **Riutilizza**;
+- **Adatta**;
+- **Crea nuova**.
+
+La scelta resta umana. La similarità semantica o una proposta automatica non equivalgono ad adozione.
+
+### 19.5 Pubblicazione e qualità
+
+Un materiale della lezione e una risorsa Atlas pubblicata sono oggetti distinti. Un artefatto può restare locale/provvisorio in Docente OS; per entrare nella biblioteca Atlas deve superare almeno:
+- coerenza didattica e curricolare;
+- leggibilità e qualità editoriale;
+- accessibilità applicabile;
+- provenienza;
+- diritti/licenze;
+- revisione e conferma docente.
+
+La pubblicazione continua a usare il confine `LessonPublicationManifest → PublicationReceipt`; l'Officina materiali non lo bypassa.
+
+### 19.6 Invarianti
+
+Questo addendum:
+- non sposta l'autorità curricolare da Arena;
+- non rende Atlas fonte curricolare di Docente OS;
+- non crea una seconda copia autorevole degli obiettivi;
+- non autorizza runtime autonomo dell'Officina materiali;
+- non autorizza pubblicazione automatica;
+- non modifica `DOS-A1 = RUNTIME_DEFERRED`;
+- non introduce dati personali degli studenti nel flusso pubblico.
