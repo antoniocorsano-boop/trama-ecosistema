@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.1.0",
+  "registerVersion": "1.3.0",
   "updatedAt": "2026-09-21",
   "decisions": [
     {
@@ -82,6 +82,34 @@
         "Docente OS"
       ],
       "decision": "La baseline curricolare è persistente per classe, disciplina, anno e versione; il file manuale resta interoperabilità o ripiego, mentre ogni trasporto assistito deve conservare verificabilità, feedback visibile e decisione finale del docente senza produrre autorità o persistenza implicite.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-007",
+      "title": "Atlas come superficie pubblica e didattica di TRAMA",
+      "status": "PROPOSED",
+      "date": "2026-09-21",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "Atlas è proposto come superficie pubblica e didattica dell'ecosistema: curriculum pubblico, Student Learning Hub, biblioteca educativa e Smart Views. Le proiezioni curricolari restano vincolate ad Arena; Atlas è candidato a essere autorevole solo per identità, versione e stato delle proprie risorse e pubblicazioni. La promozione futura ad APPROVED richiede aggiornamento contestuale del source registry.",
+      "humanControlImpact": "PRESERVED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-008",
+      "title": "Pubblicazione esplicita Docente OS verso Atlas",
+      "status": "PROPOSED",
+      "date": "2026-09-21",
+      "scope": [
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "La futura pubblicazione didattica Docente OS → Atlas avviene tramite anteprima e conferma esplicita del docente, LessonPublicationManifest minimizzato e versionato, binding autorevole ad Arena e PublicationReceipt Atlas distinta. Il modello richiede controllo di versione, idempotenza, reversibilità, policy di visibilità/minimizzazione, gate diritti/licenze e accessibilità WCAG 2.2 AA con verifica automatica e umana. Preparazione, uso, pubblicazione e approvazione restano stati distinti; nessun dato personale studente è trasferito.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
