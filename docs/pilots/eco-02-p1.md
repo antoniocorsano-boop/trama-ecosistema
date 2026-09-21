@@ -102,3 +102,24 @@ La chiusura di ECO-02/P1:
 - non trasforma una baseline provvisoria in approvazione istituzionale;
 - non autorizza scritture autonome nel piano o nel diario;
 - non rende obbligatorio il trasferimento manuale per le lezioni successive.
+
+
+## Miglioramento successivo al collaudo P8 — P9
+
+Il collaudo mobile successivo al consolidamento P8 ha evidenziato tre problemi di controllo docente nella superficie **Prima della lezione**:
+
+- doppione percettivo tra strumento disponibile e stessa domanda già presente nella sequenza;
+- domanda guida locale troppo generica;
+- impossibilità di modificare direttamente la proposta o un'aggiunta già accettata.
+
+Decisione di progetto:
+
+- una proposta deve comparire in **una sola superficie del lifecycle**;
+- la proposta resta modificabile prima dell'uso;
+- solo una conferma esplicita la rende effettiva nella lezione;
+- se il docente modifica un elemento già accettato, la precedente accettazione non può sopravvivere silenziosamente: l'elemento torna da riesaminare e richiede una nuova conferma;
+- provenienza e proiezione canonica restano immutate.
+
+Implementazione candidata: Docente OS PR #571 — `ECO-02/P9 — editable teacher proposals without duplicate states`.
+
+Stato TRAMA: **CANDIDATE / HUMAN REVIEW REQUIRED**. Non è registrata come implementata finché la PR prodotto non supera i gate e non viene integrata.
