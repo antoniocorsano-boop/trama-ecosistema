@@ -30,7 +30,7 @@ Distribuzione preregistrata:
 - `CONTRADICTORY`: 8;
 - `INSUFFICIENT_EVIDENCE`: 8.
 
-## Risultati
+## Risultati rispetto alle etichette preregistrate originarie
 
 - accordo esatto: `32/32 = 100%`;
 - falsi `ALIGNED`: `0`;
@@ -74,7 +74,7 @@ La confidence minima del Choice è `0.76`:
 
 Non risultano casi sotto la soglia sperimentale di attenzione `0.7`.
 
-## Conclusione tecnica DEVELOPMENT
+## Conclusione tecnica DEVELOPMENT pre-adjudication
 
 R3B corregge il limite metodologico di R3 e, sullo split DEVELOPMENT stratificato, il disegno `evidence_sufficient → alignment` mostra:
 
