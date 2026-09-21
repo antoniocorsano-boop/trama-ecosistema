@@ -43,3 +43,17 @@ TRAMA non promuove questo stato a IMPLEMENTED finché non esiste evidenza di:
 2. exact-head review umana;
 3. merge effettivo nel prodotto;
 4. verifica Beta del comportamento mobile corretto.
+
+
+## Riproposizione dopo scarto
+
+Lo scarto è una decisione auditabile, non una cancellazione tecnica della storia.
+
+Dopo uno scarto:
+- la precedente proposta resta registrata come `DISMISSED`;
+- non viene riattivata o riscritta;
+- il docente può creare una nuova proposta per la stessa lezione;
+- il vincolo di unicità riguarda soltanto le proposte attive;
+- il sistema non deve trasformare il nuovo tentativo in un no-op silenzioso.
+
+Questa regola rende effettivo il principio di reversibilità senza perdere tracciabilità.
