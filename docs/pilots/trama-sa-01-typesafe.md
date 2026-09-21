@@ -189,5 +189,32 @@ Stato corrente:
 
 - `TRAMA-ADR-009 = PROPOSED`;
 - proposta tecnica: **R3** prima di qualunque `APPROVED`;
-- R3: **PROPOSED / NOT_YET_AUTHORIZED**;
+- R3: **AUTHORIZED_FOR_EXPERIMENT / IMPLEMENTATION_IN_REVIEW**;
 - runtime nei prodotti: **NOT_AUTHORIZED**.
+
+
+### R3 — Robustezza e calibrazione
+
+R3 è autorizzato esclusivamente come esperimento controllato.
+
+Corpus canonico preregistrato prima del primo run provider:
+- `r3-cases.json` versione `3.1.0`;
+- 48 casi sintetici;
+- 32 development;
+- 16 holdout con tuning vietato;
+- 12 casi per etichetta;
+- quattro domini didattici;
+- 24 coppie di parafrasi.
+
+Il corpus monodisciplinare precedente è stato sostituito **prima di qualsiasi run R3**. Nessun risultato provider è stato osservato sul vecchio holdout.
+
+Il workflow R3:
+- non accetta boundary o confidence threshold come input;
+- usa policy preregistrate nel corpus;
+- produce raw advisory-only e metriche separate development/holdout;
+- non scrive su Arena, Atlas o Docente OS;
+- richiede review umana dopo il run.
+
+Stato: **AUTHORIZED_FOR_EXPERIMENT / IMPLEMENTATION_IN_REVIEW**.
+
+`TRAMA-ADR-009` resta `PROPOSED`.
