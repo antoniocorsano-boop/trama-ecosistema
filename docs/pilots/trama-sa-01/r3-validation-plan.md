@@ -1,6 +1,16 @@
 # TRAMA-SA-01/R3 — Piano di robustezza e calibrazione
 
-Stato: **PROPOSED / NOT_YET_AUTHORIZED**
+Stato: **AUTHORIZED_FOR_SYNTHETIC_PILOT / IMPLEMENTATION_IN_REVIEW**
+
+## Autorizzazione umana
+
+R3 è stato autorizzato il 21 settembre 2026 esclusivamente per il pilota sintetico descritto in questo documento.
+
+L'autorizzazione **non**:
+- promuove `TRAMA-ADR-009`;
+- autorizza runtime in Arena, Atlas o Docente OS;
+- autorizza dati personali;
+- modifica `DOS-A1`.
 
 ## Obiettivo
 
