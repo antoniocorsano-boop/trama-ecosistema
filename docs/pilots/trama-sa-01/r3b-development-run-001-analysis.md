@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3B — Development Run 001
 
-Stato: **PROVIDER_RUN_COMPLETE / AI_CROSS_REVIEW_COMPLETE / HUMAN_ADJUDICATION_REQUIRED / HOLDOUT_LOCKED**
+Stato: **PROVIDER_RUN_COMPLETE / AI_CROSS_REVIEW_COMPLETE / HUMAN_ADJUDICATION_COMPLETE / HOLDOUT_LOCKED**
 
 ## Identificazione
 
@@ -90,7 +90,7 @@ Questo risultato **non equivale ancora a validazione finale** perché i 16 casi 
 ## Stato di governance
 
 - R3B DEVELOPMENT provider run: **COMPLETE**;
-- human review DEVELOPMENT: **PENDING**;
+- human adjudication DEVELOPMENT: **COMPLETE**;
 - R3B HOLDOUT: **LOCKED / NOT_EXECUTED**;
 - `TRAMA-ADR-009`: **PROPOSED**;
 - runtime TypeSafe: **NOT_AUTHORIZED**;
@@ -98,7 +98,7 @@ Questo risultato **non equivale ancora a validazione finale** perché i 16 casi 
 
 ## Gate successivo
 
-Lo sblocco dei 16 casi HOLDOUT richiede una decisione umana distinta dopo la review di questo report.
+Lo sblocco dei 16 casi HOLDOUT richiede una decisione umana distinta e una modifica separata dell'harness.
 
 
 ## Terza valutazione indipendente
@@ -113,3 +113,22 @@ Esito: **PASS_WITH_ADJUDICATION_REQUIRED**.
 - nessuna modifica retroattiva al corpus.
 
 Riferimento: `docs/pilots/trama-sa-01/r3b-third-evaluation.md`.
+
+
+## Adjudication finale DEVELOPMENT
+
+La decisione umana conferma la terza valutazione sul caso contestato:
+
+- `SA01-R3B-003`: **PARTIAL**;
+- etichetta preregistrata originaria: `ALIGNED`;
+- output TypeSafe: `ALIGNED`;
+- corpus originario lasciato invariato.
+
+Metriche da mantenere separate:
+
+- **32/32** rispetto alle etichette preregistrate originarie;
+- **31/32** rispetto alle etichette umanamente adjudicate.
+
+Esito DEVELOPMENT: **PASS_WITH_ONE_ADJUDICATED_ERROR**.
+
+HOLDOUT resta **LOCKED / NOT_EXECUTED**.
