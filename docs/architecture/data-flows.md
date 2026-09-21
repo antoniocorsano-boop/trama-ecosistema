@@ -11,7 +11,7 @@ I quattro flussi tra Arena, Atlas e Docente OS sono **distinti per autorità, pa
 | **Arena → Atlas** | proiezione pubblicabile del curricolo | riferimenti/versione Arena, relazioni pubblicabili, stato e provenance | Arena resta fonte curricolare; Atlas pubblica una proiezione non sostitutiva | consentito secondo stato editoriale |
 | **Arena → Docente OS** | baseline curricolare per il lavoro professionale | curricolo, applicabilità, stato, impronta, provenienza, riferimenti di autorità | Arena resta fonte curricolare; Docente OS conserva il contesto docente | consentito, esplicito e verificabile |
 | **Atlas → Docente OS** | proposta di LO e materiali | identificativo, versione, stato, accesso, provenance della risorsa | Atlas è fonte della risorsa; il docente decide uso/adattamento/esclusione | consentito come proposta, mai adozione automatica |
-| **Docente OS → Atlas** | pubblicazione didattica esplicita | `LessonPublicationManifest` minimizzato, binding Arena, riferimenti LO/materiali, visibilità | Docente OS decide; Atlas governa solo lo stato della pubblicazione; Arena resta fonte del curricolo | **PROPOSED / NOT_IMPLEMENTED** |
+| **Docente OS → Atlas** | pubblicazione didattica esplicita | `LessonPublicationManifest` minimizzato, binding Arena, riferimenti LO/materiali, visibilità | Docente OS decide; Atlas governa solo lo stato della pubblicazione; Arena resta fonte del curricolo | **APPROVED_CONTRACT / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME** |
 
 La risposta Atlas all'ultimo flusso è una `PublicationReceipt`, distinta dal `LessonPublicationManifest`; certifica l'esito dell'operazione Atlas e non crea un nuovo canale curricolare.
 
@@ -53,7 +53,7 @@ Riferimento:
 
 ## 4. Docente OS → Atlas — pubblicazione didattica
 
-Stato: **PROPOSED / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME**.
+Stato: **APPROVED_CONTRACT / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME**.
 
 Contenuto minimo:
 - `LessonPublicationManifest` versionato;
