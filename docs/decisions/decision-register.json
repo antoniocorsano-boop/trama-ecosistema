@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.5.0",
+  "registerVersion": "1.6.0",
   "updatedAt": "2026-09-21",
   "decisions": [
     {
@@ -126,6 +126,21 @@
       ],
       "decision": "TypeSafe è proposto come provider opzionale di giudizi semantici tipizzati e probabilistici, esclusivamente advisory-only. Regole deterministiche, autorizzazioni, stato ed effetti restano nel codice e nelle autorità esistenti; il pilota TRAMA-SA-01 usa soltanto dati sintetici, pubblici o minimizzati e mantiene revisione umana di ogni caso. Nessun output TypeSafe autorizza pubblicazione, adozione, modifica o attivazione di DOS-A1. Un eventuale uso runtime richiede una decisione TRAMA separata.",
       "humanControlImpact": "PRESERVED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-010",
+      "title": "Atlas integrale e separazione dell'Officina materiali",
+      "status": "PROPOSED",
+      "date": "2026-09-21",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "Atlas resta il visualizzatore/navigatore intelligente integrale del curricolo e include biblioteca e Student Learning Hub senza ridursi a repository. Docente OS costruisce il contesto e il brief ma non è il motore grafico generalista; una Officina materiali specialistica può produrre proposte usando anche pattern e risorse Atlas. Si applica riusa-prima-di-generare e ogni adozione/pubblicazione resta una decisione esplicita del docente. Nessun runtime è autorizzato da questa decisione proposta.",
+      "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
   ]
