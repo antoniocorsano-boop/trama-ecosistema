@@ -120,9 +120,9 @@ Decisione di progetto:
 - se il docente modifica un elemento già accettato, la precedente accettazione non può sopravvivere silenziosamente: l'elemento torna da riesaminare e richiede una nuova conferma;
 - provenienza e proiezione canonica restano immutate.
 
-Implementazione candidata: Docente OS PR #571 — `ECO-02/P9 — editable teacher proposals without duplicate states`.
+Implementazione: Docente OS PR #571 — `ECO-02/P9 — editable teacher proposals without duplicate states` — **integrata** su merge commit `bbe3d55dddaaea34983ed356abe6a8ffe1891fba` dopo HUMAN EXACT-HEAD REVIEW — PASS sull'exact head `10662211f8a13300685f2c27dcbf245c82044175`.
 
-Stato TRAMA: **CANDIDATE / HUMAN REVIEW REQUIRED**. Non è registrata come implementata finché la PR prodotto non supera i gate e non viene integrata.
+Stato TRAMA: **IMPLEMENTED / BETA RECHECK REQUIRED**. La soluzione è nel prodotto; resta da verificare sulla Beta pubblicata il comportamento mobile corretto prima di considerare esaurita l'evidenza P9.
 
 
 Chiarimento di reversibilità P9: uno scarto non blocca future proposte. La proposta scartata resta nello storico come `DISMISSED`, mentre una successiva richiesta del docente crea una nuova proposta distinta e soggetta allo stesso controllo umano.
