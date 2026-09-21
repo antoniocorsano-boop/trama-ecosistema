@@ -109,3 +109,46 @@ R3 può produrre soltanto:
 - `CANDIDATE_FOR_ADR_REVIEW`.
 
 Nessun esito modifica automaticamente `TRAMA-ADR-009`.
+
+
+## Consolidamento canonico pre-run
+
+Il corpus canonico è stato consolidato in `r3-cases.json` versione `3.1.0` dopo aver identificato come non conforme il precedente corpus monodisciplinare.
+
+Prima del consolidamento canonico erano già stati avviati due run DEVELOPMENT sul corpus monodisciplinare; entrambi sono esclusi dall'evidenza R3. Il relativo HOLDOUT non è stato eseguito e nessun output dei due run è stato usato per tuning, modifica di prompt, boundary, casi o nuovo holdout.
+
+Il corpus canonico contiene:
+- 48 casi;
+- 32 DEVELOPMENT;
+- 16 HOLDOUT bloccati;
+- 12 casi per ciascuna etichetta;
+- 12 casi per ciascuno dei quattro domini: Tecnologia, Scienze, Matematica, Educazione civica;
+- 24 coppie di parafrasi.
+
+Policy sperimentali preregistrate:
+- baseline evidence routing: `0.5`;
+- fascia conservativa di review: `0.4–0.6`;
+- alignment confidence floor: `0.65`.
+
+Questi valori servono esclusivamente al confronto sperimentale e non costituiscono soglie runtime o autorizzative.
+
+Il workflow corrente esegue soltanto DEVELOPMENT. L'HOLDOUT richiede una review umana dei risultati DEVELOPMENT e un gate separato.
+
+
+## Run monodisciplinari esclusi
+
+Prima del consolidamento canonico 3.1.0 erano stati avviati due run DEVELOPMENT sul corpus R3 monodisciplinare:
+
+- run `35648847753`: **FAILURE**;
+- run `35649286123`: **SUCCESS**.
+
+Entrambi sono classificati **NON_CANONICAL / EXCLUDED_FROM_R3_EVIDENCE** perché il corpus usato non rispettava il requisito multi-dominio già previsto dal piano R3.
+
+La non conformità del corpus era stata identificata prima di usare questi output per analisi o tuning. Nessun risultato dei due run viene utilizzato per:
+- modificare prompt;
+- modificare boundary;
+- selezionare casi;
+- modificare l'holdout canonico 3.1.0;
+- sostenere `TRAMA-ADR-009`.
+
+L'HOLDOUT canonico 3.1.0 non è stato eseguito.
