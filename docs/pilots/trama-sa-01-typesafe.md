@@ -257,4 +257,11 @@ Riferimenti:
 - `docs/pilots/trama-sa-01/r3b-authorization.md`;
 - `docs/pilots/trama-sa-01/r3b-cases.json`.
 
-Stato: **AUTHORIZED_FOR_DEVELOPMENT_ONLY / PROVIDER_RUN_NOT_YET_EXECUTED**.
+Stato: **DEVELOPMENT_PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_PENDING / HOLDOUT_LOCKED**.
+
+
+R3B DEVELOPMENT Run 001: `32/32`, 0 provider errors, 0 falsi ALIGNED, 0 falsi INSUFFICIENT_EVIDENCE.
+
+Rapporto: `docs/pilots/trama-sa-01/r3b-development-run-001-analysis.md`.
+
+HOLDOUT resta bloccato fino a review umana distinta.
