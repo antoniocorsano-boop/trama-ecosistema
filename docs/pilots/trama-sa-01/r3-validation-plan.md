@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3 — Piano di robustezza e calibrazione
 
-Stato: **PROPOSED / NOT_YET_AUTHORIZED**
+Stato: **AUTHORIZED / IMPLEMENTATION_IN_REVIEW**
 
 ## Obiettivo
 
@@ -107,3 +107,31 @@ R3 può produrre soltanto:
 - `CANDIDATE_FOR_ADR_REVIEW`.
 
 Nessun esito modifica automaticamente `TRAMA-ADR-009`.
+
+
+## Autorizzazione R3
+
+Autorizzata il 21 settembre 2026 per il solo perimetro sperimentale TRAMA-SA-01/R3.
+
+L'autorizzazione consente:
+- costruzione e validazione del corpus preregistrato;
+- esecuzione manuale del workflow R3 sul corpus sintetico;
+- calcolo di metriche development/holdout;
+- review umana dei risultati.
+
+Non consente:
+- modifica dello stato di `TRAMA-ADR-009`;
+- uso runtime in Arena, Atlas o Docente OS;
+- trasferimento di dati personali;
+- tuning sull'holdout;
+- trasformazione di probability/confidence in autorizzazione operativa.
+
+### Implementazione preregistrata
+
+- corpus: `docs/pilots/trama-sa-01/r3-corpus.json`;
+- harness: `scripts/run_trama_sa01_r3.py`;
+- adapter TypeSafe: `scripts/run_trama_sa01_typesafe_r3.py`;
+- workflow manuale: `.github/workflows/trama-sa01-typesafe-r3.yml`;
+- test: `tests/test_trama_sa01_r3.py`.
+
+Le policy R3 sono versionate nel corpus e non sono parametri del workflow.
