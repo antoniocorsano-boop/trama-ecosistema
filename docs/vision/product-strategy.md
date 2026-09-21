@@ -67,6 +67,13 @@ Domini proposti:
 
 La preparazione e la decisione di pubblicare restano in Docente OS.
 Arena resta autorevole per curricolo, applicabilità e stato approvativo.
+La pubblicazione Docente OS → Atlas usa un `LessonPublicationManifest` distinto dalla `PublicationReceipt` emessa da Atlas, con binding ad Arena, minimizzazione, diritti/licenze, accessibilità e reversibilità.
+I quattro flussi Arena → Atlas, Arena → Docente OS, Atlas → Docente OS e Docente OS → Atlas restano separati per autorità e finalità.
 
 Riferimento:
 docs/product/atlas-public-curriculum-learning-hub.md.
+
+
+## Gate di autorità Atlas
+
+L'estensione del ruolo Atlas non modifica ancora il registro delle fonti. Se TRAMA-ADR-007 sarà promossa ad `APPROVED`, lo stesso pacchetto di promozione dovrà aggiornare `docs/knowledge/source-registry.json` per dichiarare Atlas autorità delle proprie pubblicazioni/pagine e del relativo stato editoriale, senza modificare l'autorità curricolare di Arena o quella professionale di Docente OS.
