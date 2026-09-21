@@ -8,8 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 PATH=ROOT/"docs"/"pilots"/"trama-sa-01"/"r3-cases.json"
 LABELS={"ALIGNED","PARTIAL","CONTRADICTORY","INSUFFICIENT_EVIDENCE"}
 
-def main():
-    c=json.loads(PATH.read_text(encoding="utf-8"))
+def validate_corpus(c):
     errors=[]
     cases=c.get("cases",[])
     if len(cases)!=48: errors.append(f"expected 48 cases, got {len(cases)}")
@@ -38,6 +37,11 @@ def main():
         if not e.get("objective"): errors.append(f"{x.get('id')}: objective required")
         if m.get("authorityState")!="APPROVED": errors.append(f"{x.get('id')}: authorityState")
         if x.get("expectedStage")!="SEMANTIC_REVIEW": errors.append(f"{x.get('id')}: semantic stage required")
+    return errors
+
+def main():
+    c=json.loads(PATH.read_text(encoding="utf-8"))
+    errors=validate_corpus(c)
     if errors:
         print("\n".join("ERROR: "+e for e in errors)); return 1
     print("TRAMA-SA-01/R3 corpus validation: PASS (48 semantic; 32 development; 16 locked holdout; 12/label)")
