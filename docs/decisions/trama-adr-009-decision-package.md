@@ -146,3 +146,23 @@ Prima di ripresentare ADR-009 per approvazione:
 7. confermare che il contratto TRAMA resta provider-neutral;
 8. mantenere revisione umana sui casi ambigui;
 9. mantenere separata ogni futura decisione runtime.
+
+
+## Stato dopo autorizzazione R3
+
+Il 21 settembre 2026 è stata autorizzata **Opzione B — R3**, limitatamente alla sperimentazione.
+
+Prima del primo run provider il corpus è stato consolidato per rispettare integralmente il piano:
+- quattro domini didattici;
+- 48 casi bilanciati;
+- split 32 DEVELOPMENT / 16 HOLDOUT;
+- 24 coppie di parafrasi;
+- policy preregistrate;
+- workflow DEVELOPMENT-only.
+
+L'HOLDOUT non è ancora autorizzato all'esecuzione e richiede un gate umano separato dopo l'analisi DEVELOPMENT.
+
+Stato invariato:
+- `TRAMA-ADR-009 = PROPOSED`;
+- runtime TypeSafe nei prodotti = `NOT_AUTHORIZED`;
+- `DOS-A1 = RUNTIME_DEFERRED`.
