@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R2 — Run 001 TypeSafe
 
-Stato: **PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_PENDING**
+Stato: **PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_COMPLETE / CANDIDATE**
 
 ## Identificazione
 
@@ -81,13 +81,22 @@ Il boundary `0.5` ha funzionato come meccanismo di routing nel campione corrente
 
 Resta il warning non bloccante relativo alla transizione GitHub Actions da Node.js 20 a Node.js 24 per le action correnti. Il run e l'upload dell'artefatto sono comunque conclusi con successo.
 
+## Revisione umana finale
+
+La revisione umana del 21 settembre 2026 conferma tutte le 10 etichette R2, compresi:
+
+- `SA01-004 = INSUFFICIENT_EVIDENCE`;
+- `SA01-008 = INSUFFICIENT_EVIDENCE`;
+- le altre otto etichette come risultanti dal run.
+
+Outcome R2: **CANDIDATE**.
+
+`CANDIDATE` significa soltanto che il disegno R2 merita una decisione TRAMA successiva per un eventuale uso limitato. Non equivale ad approvazione, non autorizza runtime e non modifica automaticamente `TRAMA-ADR-009`.
+
 ## Stato di governance
 
-- human review R2: **PENDING**;
+- human review R2: **COMPLETE**;
+- outcome R2: **CANDIDATE**;
 - `TRAMA-ADR-009`: **PROPOSED**;
 - runtime nei prodotti: **NOT_AUTHORIZED**;
 - `DOS-A1`: **RUNTIME_DEFERRED**.
-
-## Decisione da prendere dopo la review umana
-
-La review umana deve confermare o correggere le 10 etichette risultanti. Solo dopo sarà possibile proporre uno stato del pilota R2, senza promozione automatica di ADR-009.
