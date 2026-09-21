@@ -31,10 +31,44 @@ class R3BTests(unittest.TestCase):
         self.assertEqual(r.returncode,0,r.stdout+r.stderr)
         self.assertIn("HOLDOUT 4/label",r.stdout)
 
-    def test_holdout_requires_provider_key_after_explicit_gate(self):
+    def test_holdout_fails_closed_without_one_shot_authorization(self):
         r=subprocess.run([sys.executable,str(SCRIPT),"--split","HOLDOUT"],cwd=ROOT,text=True,capture_output=True)
-        self.assertEqual(r.returncode,2)
-        self.assertIn("TYPESAFE_API_KEY",r.stderr)
+        self.assertEqual(r.returncode,3)
+        self.assertIn("HOLDOUT bloccato",r.stderr)
+
+    def test_authorized_holdout_selects_exactly_16(self):
+        import os
+        sys.path.insert(0,str(ROOT/"scripts"))
+        import run_trama_sa01_typesafe_r3b as r3b
+        data=json.loads(CORPUS.read_text(encoding="utf-8"))
+        old=os.environ.get("TRAMA_R3B_HOLDOUT_AUTHORIZED")
+        try:
+            os.environ["TRAMA_R3B_HOLDOUT_AUTHORIZED"]="true"
+            selected=r3b.selected_cases(data,"HOLDOUT")
+            self.assertEqual(len(selected),16)
+            self.assertEqual({c["id"] for c in selected},set(data["splitPolicy"]["holdoutCaseIds"]))
+        finally:
+            if old is None:
+                os.environ.pop("TRAMA_R3B_HOLDOUT_AUTHORIZED",None)
+            else:
+                os.environ["TRAMA_R3B_HOLDOUT_AUTHORIZED"]=old
+
+    def test_holdout_workflow_is_pinned_and_durably_one_shot(self):
+        import re
+        w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b-holdout.yml").read_text(encoding="utf-8")
+        self.assertIn('TRAMA_R3B_HOLDOUT_AUTHORIZED: "true"',w)
+        self.assertIn('TRAMA_R3B_MODEL: "jev-latest"',w)
+        self.assertIn('test "$GITHUB_REF" = "refs/heads/main"',w)
+        self.assertIn("listCommitStatusesForRef",w)
+        self.assertIn("createCommitStatus",w)
+        self.assertIn("trama-sa01/r3b-holdout-consumed",w)
+        self.assertIn("continue-on-error: true",w)
+        self.assertIn("if: always()",w)
+        self.assertIn("if-no-files-found: warn",w)
+        self.assertIn("--split HOLDOUT",w)
+        match=re.search(r'TRAMA_R3B_AUTHORIZED_SOURCE_SHA: "([0-9a-f]{40})"',w)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1),"c2595b7354f68ffdd383c71fc253014b01cbcb71")
 
     def test_workflow_is_development_only(self):
         w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b.yml").read_text(encoding="utf-8")
