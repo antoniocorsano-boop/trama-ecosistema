@@ -28,3 +28,28 @@ L'autorizzazione R3 non:
 - autorizza `DOS-A1`.
 
 Stato invariato: `TRAMA-ADR-009 = PROPOSED`; `DOS-A1 = RUNTIME_DEFERRED`.
+
+
+## Corpus canonico dopo consolidamento
+
+Prima del primo run provider R3, il corpus è stato consolidato per rispettare il piano R3 completo.
+
+Corpus canonico:
+- versione: `3.1.0`;
+- file: `r3-cases.json`;
+- 48 casi;
+- 32 development;
+- 16 holdout locked;
+- 12 casi per etichetta;
+- quattro domini: Tecnologia, Scienze, Matematica, Educazione civica;
+- 24 coppie di parafrasi;
+- nessun dato personale.
+
+Il corpus precedente era monodisciplinare. È stato sostituito **prima di qualsiasi run R3**, quindi nessun risultato provider ha influenzato la nuova preregistrazione.
+
+Policy sperimentali preregistrate:
+- baseline evidence routing `0.5`;
+- review band `0.4–0.6`;
+- alignment confidence floor `0.65`.
+
+Le policy non sono modificabili dal workflow e non hanno valore autorizzativo.
