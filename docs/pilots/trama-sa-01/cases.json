@@ -1,0 +1,273 @@
+{
+  "pilotSpecVersion": "1.0.0",
+  "pilotId": "TRAMA-SA-01",
+  "createdAt": "2026-09-21",
+  "policy": {
+    "advisoryOnly": true,
+    "personalDataAllowed": false,
+    "providerRuntimeWritesAllowed": false,
+    "humanReviewRequiredForEverySemanticCase": true,
+    "thresholdsPrecalibrated": false
+  },
+  "labels": [
+    "ALIGNED",
+    "PARTIAL",
+    "CONTRADICTORY",
+    "INSUFFICIENT_EVIDENCE"
+  ],
+  "cases": [
+    {
+      "id": "SA01-001",
+      "family": "clear-alignment",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Riconoscere l'agricoltura come sistema tecnologico in cui risorse, energia, tecniche, organizzazione e impatti ambientali sono tra loro collegati.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Agricoltura come sistema tecnologico",
+        "summary": "La lezione presenta l'agricoltura come sistema tecnologico e mette in relazione risorse, energia, tecniche, organizzazione e conseguenze ambientali.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-002",
+      "family": "partial-formulation",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Analizzare un processo produttivo considerando risorse, fasi, energia, organizzazione e impatti.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Dal campo al prodotto",
+        "summary": "La lezione ricostruisce le fasi principali di un processo produttivo agricolo e le risorse utilizzate.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-003",
+      "family": "explicit-contradiction",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Comprendere che i sistemi agricoli dipendono da risorse, energia, tecniche e condizioni ambientali.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Agricoltura come sistema tecnologico",
+        "summary": "La lezione sostiene che la produzione agricola è indipendente dalle risorse energetiche e dalle condizioni ambientali.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-004",
+      "family": "insufficient-evidence",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni aspetti della tecnologia.",
+        "source": "SYNTHETIC_INCOMPLETE_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Agricoltura come sistema tecnologico",
+        "summary": "La lezione confronta irrigazione a goccia e irrigazione per aspersione rispetto a consumo idrico, manutenzione e adattamento alle colture.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-005",
+      "family": "italian-school-lexicon",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Rappresentare semplici relazioni di un sistema tecnologico mediante schemi, simboli e organizzatori grafici.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Schema del sistema agricolo",
+        "summary": "Gli alunni costruiscono uno schema con ingressi, fasi, uscite e relazioni del sistema agricolo usando simboli e organizzatori grafici.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-006",
+      "family": "partial-resource-fit",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Confrontare tecniche agricole considerando efficacia, consumo di risorse e possibili impatti ambientali.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Confronto tra tecniche",
+        "summary": "La risorsa confronta due tecniche agricole esclusivamente in base alla velocità di esecuzione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-007",
+      "family": "plausible-but-contradictory",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Distinguere materia prima, semilavorato e prodotto finito all'interno di una trasformazione tecnologica.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Trasformazioni",
+        "summary": "La lezione definisce il prodotto finito come la materia naturale prima di qualsiasi trasformazione e il semilavorato come il risultato conclusivo pronto all'uso.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-008",
+      "family": "ambiguous-multiple-alternatives",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare e descrivere elementi di un processo tecnologico.",
+        "source": "SYNTHETIC_INCOMPLETE_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Macchine agricole",
+        "summary": "La lezione valuta quale macchina sia più sostenibile in assoluto tra trattore cingolato e trattore gommato.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-009",
+      "family": "deterministic-missing-version",
+      "expectedStage": "PRE_GATE_REJECT",
+      "expectedSemanticLabel": null,
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Agricoltura come sistema tecnologico",
+        "summary": "Contenuto semanticamente plausibile ma privo del riferimento di versione richiesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-010",
+      "family": "deterministic-personal-context",
+      "expectedStage": "PRE_GATE_REJECT",
+      "expectedSemanticLabel": null,
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Agricoltura come sistema tecnologico",
+        "summary": "Caso sintetico per verificare il blocco del contesto personale.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC",
+        "studentIdentifier": "synthetic-student-001"
+      }
+    },
+    {
+      "id": "SA01-011",
+      "family": "supported-claim",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Individuare relazioni tra disponibilità idrica, scelta delle tecniche irrigue e uso responsabile delle risorse.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Acqua e irrigazione",
+        "summary": "La lezione collega disponibilità d'acqua, scelta del metodo irriguo e attenzione al consumo della risorsa.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-012",
+      "family": "unsupported-added-claim",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Riconoscere vantaggi e limiti di tecniche agricole diverse in relazione al contesto.",
+        "source": "SYNTHETIC_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:tecnologia-secondaria-primo-grado",
+        "curriculumVersionRef": "arena-v2026.09",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-receipt-synthetic",
+        "title": "Tecniche agricole",
+        "summary": "La lezione afferma che una singola tecnica agricola è sempre la migliore in qualunque territorio, clima e coltura.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    }
+  ]
+}
