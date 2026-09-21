@@ -34,7 +34,7 @@ def sdk_version() -> str:
 
 def load_sdk():
     if not os.environ.get("TYPESAFE_API_KEY"):
-        raise RuntimeError("TYPESAFE_API_KEY non configurata; esecuzione R2 non avviata")
+        raise RuntimeError("TYPESAFE_API_KEY non configurata; esecuzione R3 non avviata")
     try:
         from typesafe_sdk import Choice, Noul, TypeSafeClient
     except ModuleNotFoundError as exc:
@@ -141,6 +141,7 @@ def run_case(client, Choice, Noul, case: dict, model: str) -> dict:
 
     return {
         "caseId": case["id"],
+        "evaluatedSplit": split,
         "provider": "TypeSafe",
         "providerSdk": "typesafe-sdk",
         "providerSdkVersion": sdk_version(),
@@ -162,7 +163,14 @@ def run_case(client, Choice, Noul, case: dict, model: str) -> dict:
     }
 
 
-def execute(output: Path, model: str) -> int:
+def selected_cases(corpus: dict, split: str) -> list[dict]:
+    semantic = {case["id"]: case for case in semantic_cases(corpus)}
+    policy = corpus.get("splitPolicy", {})
+    ids = policy.get("developmentCaseIds", []) if split == "DEVELOPMENT" else policy.get("holdoutCaseIds", [])
+    return [semantic[case_id] for case_id in ids if case_id in semantic]
+
+
+def execute(output: Path, model: str, split: str) -> int:
     corpus = harness.load_json(R3_CASES_PATH)
     errors = harness.validate_cases(corpus)
     if errors:
@@ -176,11 +184,12 @@ def execute(output: Path, model: str) -> int:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 
+    cases = selected_cases(corpus, split)
     results: list[dict] = []
     provider_errors: list[dict] = []
 
     with TypeSafeClient() as client:
-        for case in semantic_cases(corpus):
+        for case in cases:
             try:
                 results.append(run_case(client, Choice, Noul, case, model))
             except Exception as exc:
@@ -211,15 +220,16 @@ def execute(output: Path, model: str) -> int:
         f"TRAMA-SA-01/R3 raw run: {len(results)} results, "
         f"{len(provider_errors)} provider errors -> {output}"
     )
-    return 0 if not provider_errors and len(results) == len(semantic_cases(corpus)) else 1
+    return 0 if not provider_errors and len(results) == len(cases) else 1
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="TRAMA-SA-01/R3 TypeSafe robustness adapter")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--model", default="jev-latest")
+    parser.add_argument("--split", choices=["DEVELOPMENT", "HOLDOUT"], default="DEVELOPMENT")
     args = parser.parse_args()
-    return execute(args.output, args.model)
+    return execute(args.output, args.model, args.split)
 
 
 if __name__ == "__main__":
