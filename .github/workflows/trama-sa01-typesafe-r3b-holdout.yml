@@ -13,7 +13,7 @@ jobs:
     env:
       TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
       TRAMA_R3B_HOLDOUT_AUTHORIZED: "true"
-      TRAMA_R3B_AUTHORIZED_SOURCE_SHA: "PENDING_PIN"
+      TRAMA_R3B_AUTHORIZED_SOURCE_SHA: "c2595b7354f68ffdd383c71fc253014b01cbcb71"
       TRAMA_R3B_CONSUMPTION_CONTEXT: "trama-sa01/r3b-holdout-consumed"
       TRAMA_R3B_MODEL: "jev-latest"
 
