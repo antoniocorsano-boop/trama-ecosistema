@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.2.0",
+  "registerVersion": "1.3.0",
   "updatedAt": "2026-09-21",
   "decisions": [
     {
@@ -96,7 +96,7 @@
         "Atlas",
         "Docente OS"
       ],
-      "decision": "Atlas è proposto come superficie pubblica e didattica dell'ecosistema: curriculum pubblico, Student Learning Hub, biblioteca educativa e Smart Views, senza sostituire Arena come autorità curricolare né Docente OS come workspace professionale.",
+      "decision": "Atlas è proposto come superficie pubblica e didattica dell'ecosistema: curriculum pubblico, Student Learning Hub, biblioteca educativa e Smart Views. Le proiezioni curricolari restano vincolate ad Arena; Atlas è candidato a essere autorevole solo per identità, versione e stato delle proprie risorse e pubblicazioni. La promozione futura ad APPROVED richiede aggiornamento contestuale del source registry.",
       "humanControlImpact": "PRESERVED",
       "supersedes": []
     },
@@ -109,7 +109,7 @@
         "Atlas",
         "Docente OS"
       ],
-      "decision": "La futura pubblicazione didattica verso Atlas avviene tramite anteprima, conferma esplicita del docente e LessonPublicationManifest minimizzato e versionato; preparazione, uso e pubblicazione restano stati distinti e nessun dato personale studente è trasferito.",
+      "decision": "La futura pubblicazione didattica Docente OS → Atlas avviene tramite anteprima e conferma esplicita del docente, LessonPublicationManifest minimizzato e versionato, binding autorevole ad Arena e PublicationReceipt Atlas distinta. Il modello richiede controllo di versione, idempotenza, reversibilità, policy di visibilità/minimizzazione, gate diritti/licenze e accessibilità WCAG 2.2 AA con verifica automatica e umana. Preparazione, uso, pubblicazione e approvazione restano stati distinti; nessun dato personale studente è trasferito.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
