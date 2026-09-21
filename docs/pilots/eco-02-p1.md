@@ -45,6 +45,18 @@ Il file manuale `.cml-handoff.json`:
 
 Un trasporto assistito o automatico è ammesso soltanto se conserva provenienza, integrità, controllo umano e possibilità di rivalidazione. Non può produrre persistenza silenziosa né approvazione implicita.
 
+## Evidenza della prova di preparazione
+
+La precedente prova docente registrata in Docente OS #555 conserva valore come evidenza parziale:
+
+- durata adattata da 120 a **60 minuti**;
+- percorso curricolo → obiettivo → attività → materiali → verifica valutato **5/5** per chiarezza;
+- controllo pedagogico valutato **5/5**;
+- risparmio percepito **oltre 15 minuti**;
+- risorsa Atlas mantenuta come proposta e non accettata automaticamente.
+
+Questa evidenza misura la qualità della preparazione, non la riuscita tecnica del flusso Beta completo.
+
 ## Evidenza umana già disponibile
 
 Nella prova Beta reale è stato osservato il trasferimento del file Arena e la sua disponibilità locale. È stata inoltre rilevata l'assenza di un riscontro utente sufficiente durante trasferimento e accettazione.
