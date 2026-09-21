@@ -31,7 +31,9 @@ Il pilota non è più una sola dimostrazione documentale. Il percorso reale Aren
 - PR #561 — rafforzamento di identità del pilota, autorità, persistenza e quarantena;
 - PR #562 — correzione del runtime della Server Action;
 - PR #563 — allineamento della sezione canonica e riscontro visibile di avanzamento/esito;
-- PR #564 — contratto professionale guidato speculare ad Arena.
+- PR #564 — contratto professionale guidato speculare ad Arena;
+- PR #566 — ricevuta exact-state della preparazione;
+- PR #568 — consolidamento dell’accesso «Prima della lezione» e dell’evidenza del pilota.
 
 ## Decisione operativa consolidata
 
@@ -65,6 +67,18 @@ La PR Docente OS #563 è stata integrata specificamente per rendere visibili ava
 
 Questa evidenza è utile ma non sostituisce il **nuovo collaudo umano sulla versione corretta**.
 
+## Nuovo rilievo umano — P9
+
+Nel collaudo Beta successivo a P8 il docente ha rilevato tre problemi sulla **domanda guida**:
+
+- duplicazione percettiva tra lo strumento di proposta e la stessa domanda già presente nella sequenza;
+- formulazione automatica troppo generica rispetto alla lezione;
+- assenza di una modifica diretta e visibile del testo da parte del docente.
+
+Il requisito teacher-first viene quindi precisato: una domanda generata resta **proposta modificabile**; se il docente modifica una domanda già accettata, la modifica deve invalidare l’accettazione precedente e richiedere una nuova conferma esplicita prima dell’uso in classe.
+
+La correzione è in lavorazione in **Docente OS #570 — ECO-02/P9**. Finché non viene integrata e riprovata sulla Beta, questo rilievo resta **OPEN** e il pilota non può essere considerato concluso.
+
 ## Condizioni residue di prontezza
 
 Prima dell'esecuzione controllata e della chiusura del pilota devono risultare insieme:
@@ -78,7 +92,8 @@ Prima dell'esecuzione controllata e della chiusura del pilota devono risultare i
 - collocazione nell'orario: **pendente**;
 - stato canonico dei materiali: **da confermare sul caso reale**;
 - decisione sulla risorsa Atlas: **da registrare sul caso reale**;
-- revisione umana del flusso pubblicato completo: **pendente**.
+- revisione umana del flusso pubblicato completo: **pendente**;
+- domanda guida teacher-editable senza duplicazione percettiva: **correzione P9 in corso / retest pendente**.
 
 ## Indicatori
 
