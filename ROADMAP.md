@@ -92,6 +92,9 @@ Stato proposto: HUMAN REVIEW REQUIRED.
 ### R3-P5 / ATLAS-P5 — Smart Navigation
 
 - Chiedi ad Atlas;
+- navigazione per disciplina → annualità → nucleo → obiettivi → evidenze → risorse;
+- “Segui il concetto” lungo la progressione verticale;
+- prerequisiti, raccordi e relazioni interdisciplinari;
 - Perspectives;
 - semantic zoom;
 - Visuale | Elenco.
@@ -104,6 +107,21 @@ Stato proposto: HUMAN REVIEW REQUIRED.
 - eventuali esiti aggregati soltanto dopo distinta autorizzazione TRAMA.
 
 ## R4 Esperienza professionale guidata
+
+### R4-P1 — Officina materiali specialistica
+
+Stato proposto: **HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED**.
+
+- Docente OS costruisce il brief didattico, non il rendering definitivo;
+- ricerca Atlas e scelta **Riutilizza | Adatta | Crea nuova** prima della generazione;
+- produzione con motore specialistico adeguato al tipo di artefatto;
+- uso dei pattern/LO/design profile Atlas quando pertinenti;
+- anteprima, confronto e modifica sotto controllo del docente;
+- collegamento alla lezione soltanto dopo decisione docente;
+- pubblicazione in Atlas separata e governata da `LessonPublicationManifest` / `PublicationReceipt`;
+- provenance, diritti/licenze, accessibilità e qualità editoriale come gate;
+- nessuna pubblicazione o adozione automatica.
+
 
 - eliminazione del trasferimento quotidiano opaco;
 - anteprima e conferma esplicita;
