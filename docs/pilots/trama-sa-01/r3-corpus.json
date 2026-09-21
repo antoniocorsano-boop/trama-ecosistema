@@ -1,0 +1,1145 @@
+{
+  "r3SpecVersion": "1.0.0",
+  "pilotId": "TRAMA-SA-01/R3",
+  "authorizedAt": "2026-09-21",
+  "authorizationScope": "R3_EXPERIMENT_ONLY",
+  "providerNeutral": true,
+  "personalDataAllowed": false,
+  "runtimeWritesAllowed": false,
+  "advisoryOnly": true,
+  "humanReviewRequired": true,
+  "labels": [
+    "ALIGNED",
+    "PARTIAL",
+    "CONTRADICTORY",
+    "INSUFFICIENT_EVIDENCE"
+  ],
+  "splits": {
+    "development": {
+      "count": 32,
+      "tuningAllowed": true
+    },
+    "holdout": {
+      "count": 16,
+      "tuningAllowed": false
+    }
+  },
+  "preRegisteredPolicies": {
+    "baselineP05": {
+      "evidenceRoutingBoundary": 0.5,
+      "purpose": "QUERY_ROUTING_ONLY_NOT_AUTHORIZATION"
+    },
+    "conservativeEscalation": {
+      "evidenceReviewLow": 0.4,
+      "evidenceReviewHigh": 0.6,
+      "alignmentConfidenceFloor": 0.65,
+      "purpose": "EXPERIMENTAL_REVIEW_ESCALATION_ONLY_NOT_AUTHORIZATION"
+    }
+  },
+  "cases": [
+    {
+      "id": "R3-DEV-TEC-A-01",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-TEC-A",
+      "evidence": {
+        "objective": "Analizzare un sistema energetico distinguendo fonti, trasformazioni, usi e impatti ambientali.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia ALIGNED",
+        "summary": "La lezione ricostruisce un sistema energetico distinguendo le fonti, le trasformazioni dell'energia, gli usi finali e i principali impatti ambientali.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-TEC-A-02",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-TEC-A",
+      "evidence": {
+        "objective": "Analizzare un sistema energetico distinguendo fonti, trasformazioni, usi e impatti ambientali.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia ALIGNED",
+        "summary": "Gli alunni rappresentano fonti, passaggi di trasformazione, impieghi dell'energia e conseguenze ambientali all'interno di uno stesso sistema.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-TEC-P-01",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-TEC-P",
+      "evidence": {
+        "objective": "Confrontare materiali considerando proprietà, lavorazioni, impieghi e possibilità di recupero a fine vita.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia PARTIAL",
+        "summary": "La risorsa confronta alcuni materiali per proprietà, principali lavorazioni e impieghi.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-TEC-P-02",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-TEC-P",
+      "evidence": {
+        "objective": "Confrontare materiali considerando proprietà, lavorazioni, impieghi e possibilità di recupero a fine vita.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia PARTIAL",
+        "summary": "Gli alunni mettono a confronto materiali in base a caratteristiche tecniche, lavorazioni possibili e usi tipici.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-TEC-C-01",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-TEC-C",
+      "evidence": {
+        "objective": "Riconoscere che la scelta di una soluzione tecnica dipende da requisiti, vincoli e contesto d'uso.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia CONTRADICTORY",
+        "summary": "La lezione afferma che una soluzione tecnica è valida indipendentemente dai requisiti e dai vincoli del contesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-TEC-C-02",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-TEC-C",
+      "evidence": {
+        "objective": "Riconoscere che la scelta di una soluzione tecnica dipende da requisiti, vincoli e contesto d'uso.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia CONTRADICTORY",
+        "summary": "La risorsa sostiene che il contesto d'uso non modifica mai la scelta della soluzione tecnica migliore.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-TEC-I-01",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-TEC-I",
+      "evidence": {
+        "objective": "Conoscere aspetti della tecnologia contemporanea.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia INSUFFICIENT_EVIDENCE",
+        "summary": "La lezione confronta stampa 3D FDM e stereolitografia per precisione, materiali, costi e sicurezza d'uso.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-TEC-I-02",
+      "split": "development",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-TEC-I",
+      "evidence": {
+        "objective": "Conoscere aspetti della tecnologia contemporanea.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia INSUFFICIENT_EVIDENCE",
+        "summary": "Gli alunni valutano vantaggi e limiti di FDM e SLA rispetto a finitura, materiali disponibili, costo e gestione operativa.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-A-01",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-SCI-A",
+      "evidence": {
+        "objective": "Spiegare come materia ed energia circolano in un ecosistema attraverso produttori, consumatori e decompositori.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze ALIGNED",
+        "summary": "La lezione descrive il flusso di energia e il riciclo della materia collegando produttori, consumatori e decompositori.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-A-02",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-SCI-A",
+      "evidence": {
+        "objective": "Spiegare come materia ed energia circolano in un ecosistema attraverso produttori, consumatori e decompositori.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze ALIGNED",
+        "summary": "Gli alunni costruiscono una rete che mostra passaggi di energia e trasformazioni della materia tra produttori, consumatori e decompositori.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-P-01",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-SCI-P",
+      "evidence": {
+        "objective": "Interpretare un cambiamento di stato collegando temperatura, scambi di energia e comportamento delle particelle.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze PARTIAL",
+        "summary": "La risorsa collega il cambiamento di stato alla temperatura e allo scambio di energia.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-P-02",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-SCI-P",
+      "evidence": {
+        "objective": "Interpretare un cambiamento di stato collegando temperatura, scambi di energia e comportamento delle particelle.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze PARTIAL",
+        "summary": "Gli alunni spiegano fusione ed evaporazione considerando variazione di temperatura e trasferimento di energia.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-C-01",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-SCI-C",
+      "evidence": {
+        "objective": "Comprendere che in un circuito elettrico chiuso la corrente richiede un percorso continuo.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze CONTRADICTORY",
+        "summary": "La lezione sostiene che la corrente può circolare stabilmente anche quando il circuito è aperto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-C-02",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-SCI-C",
+      "evidence": {
+        "objective": "Comprendere che in un circuito elettrico chiuso la corrente richiede un percorso continuo.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze CONTRADICTORY",
+        "summary": "La risorsa afferma che interrompere il percorso del circuito non impedisce il passaggio della corrente.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-I-01",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-SCI-I",
+      "evidence": {
+        "objective": "Osservare fenomeni naturali e descriverli.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze INSUFFICIENT_EVIDENCE",
+        "summary": "La lezione valuta come pH, temperatura e salinità influenzano la germinazione di semi di specie diverse.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-SCI-I-02",
+      "split": "development",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-SCI-I",
+      "evidence": {
+        "objective": "Osservare fenomeni naturali e descriverli.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze INSUFFICIENT_EVIDENCE",
+        "summary": "Gli alunni confrontano l'effetto combinato di pH, temperatura e concentrazione salina sulla germinazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-A-01",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-MAT-A",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità diretta mediante tabella, formula e grafico cartesiano.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica ALIGNED",
+        "summary": "La lezione collega tabella, formula e grafico per descrivere una relazione di proporzionalità diretta.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-A-02",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-MAT-A",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità diretta mediante tabella, formula e grafico cartesiano.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica ALIGNED",
+        "summary": "Gli alunni passano tra valori tabellari, espressione algebrica e grafico cartesiano della stessa proporzionalità diretta.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-P-01",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-MAT-P",
+      "evidence": {
+        "objective": "Risolvere problemi percentuali distinguendo valore iniziale, percentuale, variazione e valore finale.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica PARTIAL",
+        "summary": "La risorsa esercita il calcolo della percentuale a partire da un valore iniziale.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-P-02",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-MAT-P",
+      "evidence": {
+        "objective": "Risolvere problemi percentuali distinguendo valore iniziale, percentuale, variazione e valore finale.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica PARTIAL",
+        "summary": "Gli alunni calcolano una percentuale nota su una quantità data e interpretano il risultato.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-C-01",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-MAT-C",
+      "evidence": {
+        "objective": "Comprendere che moltiplicare per un numero compreso tra zero e uno riduce il valore positivo di partenza.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica CONTRADICTORY",
+        "summary": "La lezione afferma che moltiplicare un numero positivo per 0,5 lo rende sempre maggiore.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-C-02",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-MAT-C",
+      "evidence": {
+        "objective": "Comprendere che moltiplicare per un numero compreso tra zero e uno riduce il valore positivo di partenza.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica CONTRADICTORY",
+        "summary": "La risorsa sostiene che il prodotto di un numero positivo per un fattore tra zero e uno aumenta il valore iniziale.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-I-01",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-MAT-I",
+      "evidence": {
+        "objective": "Utilizzare strumenti matematici per risolvere problemi.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica INSUFFICIENT_EVIDENCE",
+        "summary": "La lezione confronta mediana, media aritmetica e media ponderata per descrivere distribuzioni con valori anomali.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-MAT-I-02",
+      "split": "development",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-MAT-I",
+      "evidence": {
+        "objective": "Utilizzare strumenti matematici per risolvere problemi.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica INSUFFICIENT_EVIDENCE",
+        "summary": "Gli alunni scelgono tra media, mediana e media ponderata in presenza di outlier e pesi differenti.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-A-01",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-CIV-A",
+      "evidence": {
+        "objective": "Valutare l'affidabilità di un'informazione digitale considerando fonte, evidenze, data e possibilità di verifica.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica ALIGNED",
+        "summary": "La lezione guida a controllare fonte, evidenze, data di pubblicazione e possibilità di verifica prima di ritenere affidabile un contenuto digitale.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-A-02",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "paraphrase-aligned",
+      "paraphraseGroup": "R3-DEV-CIV-A",
+      "evidence": {
+        "objective": "Valutare l'affidabilità di un'informazione digitale considerando fonte, evidenze, data e possibilità di verifica.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica ALIGNED",
+        "summary": "Gli alunni valutano un'informazione online controllando provenienza, prove disponibili, aggiornamento e riscontri indipendenti.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-P-01",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-CIV-P",
+      "evidence": {
+        "objective": "Riconoscere diritti e responsabilità nell'uso di contenuti digitali considerando autore, licenza, attribuzione e riuso.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica PARTIAL",
+        "summary": "La risorsa spiega come individuare autore e licenza di un contenuto digitale.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-P-02",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "paraphrase-partial-omission",
+      "paraphraseGroup": "R3-DEV-CIV-P",
+      "evidence": {
+        "objective": "Riconoscere diritti e responsabilità nell'uso di contenuti digitali considerando autore, licenza, attribuzione e riuso.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica PARTIAL",
+        "summary": "Gli alunni verificano chi ha creato una risorsa e quale licenza la accompagna.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-C-01",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-CIV-C",
+      "evidence": {
+        "objective": "Comprendere che la protezione dei dati richiede minimizzazione, finalità definite e accessi proporzionati.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica CONTRADICTORY",
+        "summary": "La lezione sostiene che raccogliere il maggior numero possibile di dati è sempre preferibile anche senza una finalità definita.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-C-02",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "paraphrase-contradiction",
+      "paraphraseGroup": "R3-DEV-CIV-C",
+      "evidence": {
+        "objective": "Comprendere che la protezione dei dati richiede minimizzazione, finalità definite e accessi proporzionati.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica CONTRADICTORY",
+        "summary": "La risorsa afferma che la minimizzazione non è necessaria quando i dati possono essere tecnicamente archiviati.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-I-01",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-CIV-I",
+      "evidence": {
+        "objective": "Partecipare responsabilmente alla vita digitale.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica INSUFFICIENT_EVIDENCE",
+        "summary": "La lezione confronta autenticazione a più fattori, passkey e password manager rispetto a phishing, usabilità e recupero dell'account.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-DEV-CIV-I-02",
+      "split": "development",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-DEV-CIV-I",
+      "evidence": {
+        "objective": "Partecipare responsabilmente alla vita digitale.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Educazione civica INSUFFICIENT_EVIDENCE",
+        "summary": "Gli alunni valutano MFA, passkey e gestori di password considerando resistenza al phishing, semplicità d'uso e procedure di recupero.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-TEC-A-01",
+      "split": "holdout",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "holdout-paraphrase-aligned",
+      "paraphraseGroup": "R3-HOLD-TEC-A",
+      "evidence": {
+        "objective": "Descrivere il ciclo di vita di un prodotto collegando materie prime, produzione, uso, manutenzione e fine vita.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Tecnologia ALIGNED",
+        "summary": "La lezione segue il prodotto dalle materie prime alla fabbricazione, quindi uso, manutenzione e gestione del fine vita.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-TEC-A-02",
+      "split": "holdout",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "holdout-paraphrase-aligned",
+      "paraphraseGroup": "R3-HOLD-TEC-A",
+      "evidence": {
+        "objective": "Descrivere il ciclo di vita di un prodotto collegando materie prime, produzione, uso, manutenzione e fine vita.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Tecnologia ALIGNED",
+        "summary": "Gli alunni ricostruiscono le fasi del ciclo di vita mettendo in relazione approvvigionamento, produzione, utilizzo, manutenzione e dismissione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-SCI-A-01",
+      "split": "holdout",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "holdout-paraphrase-aligned",
+      "paraphraseGroup": "R3-HOLD-SCI-A",
+      "evidence": {
+        "objective": "Mettere in relazione struttura e funzione degli organi dell'apparato respiratorio durante gli scambi gassosi.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Scienze ALIGNED",
+        "summary": "La risorsa collega la struttura delle vie respiratorie e degli alveoli alla loro funzione negli scambi di ossigeno e anidride carbonica.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-SCI-A-02",
+      "split": "holdout",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "ALIGNED",
+      "family": "holdout-paraphrase-aligned",
+      "paraphraseGroup": "R3-HOLD-SCI-A",
+      "evidence": {
+        "objective": "Mettere in relazione struttura e funzione degli organi dell'apparato respiratorio durante gli scambi gassosi.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Scienze ALIGNED",
+        "summary": "Gli alunni spiegano come caratteristiche di trachea, bronchi e alveoli sostengano il percorso dell'aria e gli scambi gassosi.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-SCI-P-01",
+      "split": "holdout",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "holdout-paraphrase-partial-omission",
+      "paraphraseGroup": "R3-HOLD-SCI-P",
+      "evidence": {
+        "objective": "Analizzare una catena alimentare distinguendo livelli trofici, flusso di energia e dipendenza reciproca tra organismi.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Scienze PARTIAL",
+        "summary": "La lezione identifica produttori, consumatori e principali livelli trofici di una catena alimentare.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-SCI-P-02",
+      "split": "holdout",
+      "domain": "Scienze",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "holdout-paraphrase-partial-omission",
+      "paraphraseGroup": "R3-HOLD-SCI-P",
+      "evidence": {
+        "objective": "Analizzare una catena alimentare distinguendo livelli trofici, flusso di energia e dipendenza reciproca tra organismi.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:scienze",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Scienze PARTIAL",
+        "summary": "Gli alunni ordinano gli organismi in livelli trofici e ricostruiscono chi si nutre di chi.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-MAT-P-01",
+      "split": "holdout",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "holdout-paraphrase-partial-omission",
+      "paraphraseGroup": "R3-HOLD-MAT-P",
+      "evidence": {
+        "objective": "Interpretare un grafico statistico considerando scala, unità di misura, distribuzione dei dati e possibili rappresentazioni fuorvianti.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Matematica PARTIAL",
+        "summary": "La risorsa insegna a leggere scala, unità di misura e valori riportati in un grafico.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-MAT-P-02",
+      "split": "holdout",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "PARTIAL",
+      "family": "holdout-paraphrase-partial-omission",
+      "paraphraseGroup": "R3-HOLD-MAT-P",
+      "evidence": {
+        "objective": "Interpretare un grafico statistico considerando scala, unità di misura, distribuzione dei dati e possibili rappresentazioni fuorvianti.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Matematica PARTIAL",
+        "summary": "Gli alunni interpretano assi, scala e unità di un grafico per ricavarne i valori rappresentati.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-MAT-C-01",
+      "split": "holdout",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "holdout-paraphrase-contradiction",
+      "paraphraseGroup": "R3-HOLD-MAT-C",
+      "evidence": {
+        "objective": "Comprendere che l'area di una figura non dipende soltanto dal suo perimetro.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Matematica CONTRADICTORY",
+        "summary": "La lezione afferma che due figure con lo stesso perimetro hanno necessariamente la stessa area.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-MAT-C-02",
+      "split": "holdout",
+      "domain": "Matematica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "holdout-paraphrase-contradiction",
+      "paraphraseGroup": "R3-HOLD-MAT-C",
+      "evidence": {
+        "objective": "Comprendere che l'area di una figura non dipende soltanto dal suo perimetro.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:matematica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Matematica CONTRADICTORY",
+        "summary": "La risorsa sostiene che conoscere il perimetro determina sempre in modo univoco l'area della figura.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-CIV-C-01",
+      "split": "holdout",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "holdout-paraphrase-contradiction",
+      "paraphraseGroup": "R3-HOLD-CIV-C",
+      "evidence": {
+        "objective": "Riconoscere che libertà di espressione e responsabilità comunicativa devono essere esercitate nel rispetto dei diritti altrui.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Educazione civica CONTRADICTORY",
+        "summary": "La lezione sostiene che online la libertà di espressione elimina ogni responsabilità verso i diritti delle altre persone.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-CIV-C-02",
+      "split": "holdout",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "family": "holdout-paraphrase-contradiction",
+      "paraphraseGroup": "R3-HOLD-CIV-C",
+      "evidence": {
+        "objective": "Riconoscere che libertà di espressione e responsabilità comunicativa devono essere esercitate nel rispetto dei diritti altrui.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Educazione civica CONTRADICTORY",
+        "summary": "La risorsa afferma che in rete qualunque contenuto è legittimo per il solo fatto di essere un'opinione personale.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-CIV-I-01",
+      "split": "holdout",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "holdout-paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-HOLD-CIV-I",
+      "evidence": {
+        "objective": "Agire in modo consapevole nella comunità.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Educazione civica INSUFFICIENT_EVIDENCE",
+        "summary": "La lezione confronta bilancio partecipativo, consultazione pubblica e petizione digitale rispetto a rappresentatività, trasparenza e tempi decisionali.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-CIV-I-02",
+      "split": "holdout",
+      "domain": "Educazione civica",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "holdout-paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-HOLD-CIV-I",
+      "evidence": {
+        "objective": "Agire in modo consapevole nella comunità.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:educazione-civica",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Educazione civica INSUFFICIENT_EVIDENCE",
+        "summary": "Gli alunni valutano tre strumenti di partecipazione civica considerando inclusività, tracciabilità delle decisioni e tempi di risposta.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-TEC-I-01",
+      "split": "holdout",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "holdout-paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-HOLD-TEC-I",
+      "evidence": {
+        "objective": "Comprendere strumenti e processi tecnologici.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Tecnologia INSUFFICIENT_EVIDENCE",
+        "summary": "La risorsa confronta rete mesh, stella e bus rispetto a resilienza, cablaggio, manutenzione e scalabilità.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "R3-HOLD-TEC-I-02",
+      "split": "holdout",
+      "domain": "Tecnologia",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "family": "holdout-paraphrase-insufficient-evidence",
+      "paraphraseGroup": "R3-HOLD-TEC-I",
+      "evidence": {
+        "objective": "Comprendere strumenti e processi tecnologici.",
+        "source": "SYNTHETIC_R3_ARENA_EVIDENCE"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:synthetic:tecnologia",
+        "curriculumVersionRef": "arena-r3-synthetic-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Holdout Tecnologia INSUFFICIENT_EVIDENCE",
+        "summary": "Gli alunni valutano topologie mesh, stella e bus considerando tolleranza ai guasti, quantità di collegamenti, gestione e crescita della rete.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    }
+  ]
+}
