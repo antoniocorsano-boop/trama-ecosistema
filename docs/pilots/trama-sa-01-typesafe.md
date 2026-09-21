@@ -128,7 +128,7 @@ Il comando `prepare` produce uno stato provider-neutral e **non effettua chiamat
 
 - corpus e harness: **READY / INTEGRATED**;
 - adattatore TypeSafe live: **READY / INTEGRATED**;\n- chiamata al provider TypeSafe: **RUN 001 COMPLETE / 10 RESULTS / 0 PROVIDER ERRORS**;
-- revisione umana degli esiti TypeSafe: **PENDING**;
+- revisione umana degli esiti TypeSafe Run 001: **COMPLETE / OUTCOME REVISE**;
 - promozione di `TRAMA-ADR-009`: **NOT_AUTHORIZED**.
 
 
@@ -146,4 +146,4 @@ La versione SDK verificata è `typesafe-sdk 0.7.1`. Il workflow
 Il primo run live è completato. Il rapporto aggregato è in
 `docs/pilots/trama-sa-01/run-001-analysis.md`.
 
-La revisione umana resta pendente e `TRAMA-ADR-009` non cambia stato.
+La revisione umana del Run 001 è completata con esito **REVISE**. `TRAMA-ADR-009` non cambia stato.
