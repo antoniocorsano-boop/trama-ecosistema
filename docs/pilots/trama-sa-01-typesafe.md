@@ -174,3 +174,20 @@ La revisione umana ha confermato tutte le 10 etichette del Run R2.
 Outcome: **CANDIDATE**.
 
 R2 non promuove automaticamente `TRAMA-ADR-009`: qualunque passaggio da `PROPOSED` richiede un pacchetto decisionale separato e una review umana distinta.
+
+
+### Decision package ADR-009
+
+Dopo la chiusura R2 con outcome **CANDIDATE**, la decisione è separata dal pilota.
+
+Riferimenti:
+
+- `docs/decisions/trama-adr-009-decision-package.md`;
+- `docs/pilots/trama-sa-01/r3-validation-plan.md`.
+
+Stato corrente:
+
+- `TRAMA-ADR-009 = PROPOSED`;
+- proposta tecnica: **R3** prima di qualunque `APPROVED`;
+- R3: **PROPOSED / NOT_YET_AUTHORIZED**;
+- runtime nei prodotti: **NOT_AUTHORIZED**.
