@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.4.0",
+  "registerVersion": "1.5.0",
   "updatedAt": "2026-09-21",
   "decisions": [
     {
@@ -111,6 +111,21 @@
       ],
       "decision": "È approvato il contratto di pubblicazione didattica Docente OS → Atlas basato su anteprima e conferma esplicita del docente, LessonPublicationManifest minimizzato e versionato, binding autorevole ad Arena e PublicationReceipt Atlas distinta. Versionamento, idempotenza, reversibilità, visibilità/minimizzazione, diritti/licenze e WCAG 2.2 AA restano gate obbligatori. Il runtime resta NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME fino a distinta implementazione e review.",
       "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-009",
+      "title": "TypeSafe come capacità opzionale di assurance semantica",
+      "status": "PROPOSED",
+      "date": "2026-09-21",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "TypeSafe è proposto come provider opzionale di giudizi semantici tipizzati e probabilistici, esclusivamente advisory-only. Regole deterministiche, autorizzazioni, stato ed effetti restano nel codice e nelle autorità esistenti; il pilota TRAMA-SA-01 usa soltanto dati sintetici, pubblici o minimizzati e mantiene revisione umana di ogni caso. Nessun output TypeSafe autorizza pubblicazione, adozione, modifica o attivazione di DOS-A1. Un eventuale uso runtime richiede una decisione TRAMA separata.",
+      "humanControlImpact": "PRESERVED",
       "supersedes": []
     }
   ]
