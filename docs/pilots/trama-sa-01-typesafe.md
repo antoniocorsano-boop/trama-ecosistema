@@ -127,8 +127,8 @@ Il comando `prepare` produce uno stato provider-neutral e **non effettua chiamat
 ### Stato operativo del pilota
 
 - corpus e harness: **READY / INTEGRATED**;
-- adattatore TypeSafe live: **IMPLEMENTATION_IN_REVIEW**;\n- chiamata al provider TypeSafe: **PENDING / REQUIRES_DEDICATED_API_KEY**;
-- revisione umana degli esiti TypeSafe: **PENDING**;
+- adattatore TypeSafe live: **READY / INTEGRATED**;\n- chiamata al provider TypeSafe: **RUN 001 COMPLETE / 10 RESULTS / 0 PROVIDER ERRORS**;
+- revisione umana degli esiti TypeSafe Run 001: **COMPLETE / OUTCOME REVISE**;
 - promozione di `TRAMA-ADR-009`: **NOT_AUTHORIZED**.
 
 
@@ -139,3 +139,11 @@ Il disegno e i confini dell'adattatore sono documentati in
 
 La versione SDK verificata è `typesafe-sdk 0.7.1`. Il workflow
 `TRAMA-SA-01 TypeSafe Pilot` è manuale e non viene eseguito su push o pull request.
+
+
+### Run 001
+
+Il primo run live è completato. Il rapporto aggregato è in
+`docs/pilots/trama-sa-01/run-001-analysis.md`.
+
+La revisione umana del Run 001 è completata con esito **REVISE**. `TRAMA-ADR-009` non cambia stato.
