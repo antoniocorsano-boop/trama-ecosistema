@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3 — Piano di robustezza e calibrazione
 
-Stato: **PROPOSED / NOT_YET_AUTHORIZED**
+Stato: **AUTHORIZED_FOR_EXPERIMENT / IMPLEMENTATION_IN_REVIEW**
 
 ## Obiettivo
 
@@ -107,3 +107,38 @@ R3 può produrre soltanto:
 - `CANDIDATE_FOR_ADR_REVIEW`.
 
 Nessun esito modifica automaticamente `TRAMA-ADR-009`.
+
+
+## Consolidamento preregistrazione
+
+Prima di qualsiasi run provider R3, il corpus iniziale monodisciplinare è stato sostituito dal corpus canonico `r3-cases.json` versione `3.1.0`.
+
+Verifica effettuata prima del consolidamento:
+- run R3 provider eseguiti: **0**;
+- holdout osservato da TypeSafe: **no**;
+- tuning sull'holdout: **no**.
+
+Il corpus canonico ora contiene:
+- 48 casi;
+- 32 development;
+- 16 holdout bloccati;
+- 12 casi per etichetta;
+- 12 casi per ciascuno dei quattro domini: Tecnologia, Scienze, Matematica, Educazione civica;
+- 24 coppie di parafrasi;
+- policy preregistrate nel file corpus e non modificabili dal workflow.
+
+Policy sperimentali preregistrate:
+- baseline evidence routing: `0.5`;
+- fascia conservativa di review: `0.4–0.6`;
+- confidence floor alignment: `0.65`.
+
+Questi valori servono soltanto al confronto sperimentale e non sono soglie runtime o di autorizzazione.
+
+## Implementazione canonica
+
+- corpus: `docs/pilots/trama-sa-01/r3-cases.json`;
+- validator/scorer: `scripts/run_trama_sa01_r3.py`;
+- entrypoint validator compatibile: `scripts/validate_trama_sa01_r3.py`;
+- adapter TypeSafe: `scripts/run_trama_sa01_typesafe_r3.py`;
+- workflow manuale: `.github/workflows/trama-sa01-typesafe-r3.yml`;
+- regressioni: `tests/test_trama_sa01_r3.py`.
