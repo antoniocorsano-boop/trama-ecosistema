@@ -19,28 +19,42 @@ jobs:
       TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Require dedicated TypeSafe key
         run: |
           if [ -z "$TYPESAFE_API_KEY" ]; then
             echo "TYPESAFE_API_KEY is not configured for TRAMA-SA-01/R3."
             exit 2
           fi
+
       - name: Install pinned pilot dependency
         run: python3 -m pip install -r requirements/trama-sa01-typesafe.txt
+
       - name: Validate preregistered R3 corpus
-        run: python3 scripts/validate_trama_sa01_r3.py
-      - name: Run TypeSafe semantic pilot R3
+        run: python3 scripts/run_trama_sa01_r3.py validate
+
+      - name: Run TypeSafe R3
         run: |
           python3 scripts/run_trama_sa01_typesafe_r3.py \
             --model "${{ inputs.model }}" \
             --output artifacts/trama-sa01-typesafe-r3-raw.json
-      - name: Upload raw advisory results
+
+      - name: Score development and sealed holdout
+        run: |
+          python3 scripts/run_trama_sa01_r3.py score \
+            --results artifacts/trama-sa01-typesafe-r3-raw.json \
+            --output artifacts/trama-sa01-r3-metrics.json
+
+      - name: Upload raw and metrics
         uses: actions/upload-artifact@v4
         with:
-          name: trama-sa01-typesafe-r3-raw
-          path: artifacts/trama-sa01-typesafe-r3-raw.json
+          name: trama-sa01-typesafe-r3
+          path: |
+            artifacts/trama-sa01-typesafe-r3-raw.json
+            artifacts/trama-sa01-r3-metrics.json
           if-no-files-found: error
           retention-days: 14
