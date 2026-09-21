@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3B — Development Run 001
 
-Stato: **PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_PENDING / HOLDOUT_LOCKED**
+Stato: **PROVIDER_RUN_COMPLETE / AI_CROSS_REVIEW_COMPLETE / HUMAN_ADJUDICATION_REQUIRED / HOLDOUT_LOCKED**
 
 ## Identificazione
 
@@ -99,3 +99,17 @@ Questo risultato **non equivale ancora a validazione finale** perché i 16 casi 
 ## Gate successivo
 
 Lo sblocco dei 16 casi HOLDOUT richiede una decisione umana distinta dopo la review di questo report.
+
+
+## Terza valutazione indipendente
+
+È stata completata una AI cross-review distinta dal provider.
+
+Esito: **PASS_WITH_ADJUDICATION_REQUIRED**.
+
+- 31/32 etichette preregistrate confermate;
+- `SA01-R3B-003` contestato come possibile `PARTIAL` invece di `ALIGNED`;
+- HOLDOUT resta bloccato;
+- nessuna modifica retroattiva al corpus.
+
+Riferimento: `docs/pilots/trama-sa-01/r3b-third-evaluation.md`.
