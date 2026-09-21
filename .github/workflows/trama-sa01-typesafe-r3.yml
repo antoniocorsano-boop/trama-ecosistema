@@ -1,4 +1,4 @@
-name: TRAMA-SA-01 TypeSafe Pilot R3
+name: TRAMA-SA-01 TypeSafe Pilot R3 Development
 
 on:
   workflow_dispatch:
@@ -35,12 +35,13 @@ jobs:
       - name: Run TypeSafe semantic pilot R3
         run: |
           python3 scripts/run_trama_sa01_typesafe_r3.py \
+            --split DEVELOPMENT \
             --model "${{ inputs.model }}" \
-            --output artifacts/trama-sa01-typesafe-r3-raw.json
+            --output artifacts/trama-sa01-typesafe-r3-development-raw.json
       - name: Upload raw advisory results
         uses: actions/upload-artifact@v4
         with:
-          name: trama-sa01-typesafe-r3-raw
-          path: artifacts/trama-sa01-typesafe-r3-raw.json
+          name: trama-sa01-typesafe-r3-development-raw
+          path: artifacts/trama-sa01-typesafe-r3-development-raw.json
           if-no-files-found: error
           retention-days: 14

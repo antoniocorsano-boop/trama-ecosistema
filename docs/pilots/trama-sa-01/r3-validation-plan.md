@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3 — Piano di robustezza e calibrazione
 
-Stato: **PROPOSED / NOT_YET_AUTHORIZED**
+Stato: **AUTHORIZED_FOR_EXPERIMENT / DEVELOPMENT_RUN_NOT_YET_EXECUTED**
 
 ## Obiettivo
 
@@ -42,6 +42,8 @@ Prima di qualunque tuning:
 - 16 casi: holdout finale.
 
 L'holdout non deve essere usato per modificare prompt, criteri o boundary.
+
+**Guardia operativa:** il workflow R3 autorizzato esegue soltanto i 32 casi DEVELOPMENT. I 16 casi HOLDOUT non sono eseguibili dal workflow corrente e richiedono un gate umano successivo dopo l'analisi DEVELOPMENT.
 
 ## Disegno
 
