@@ -54,7 +54,7 @@ Il primo ambito di validazione è la scuola secondaria di primo grado, attravers
 
 ## Estensione proposta del ruolo Atlas
 
-Stato: **PROPOSED / HUMAN REVIEW REQUIRED**.
+Stato: **APPROVED_GOVERNANCE / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME**.
 
 La proposta TRAMA-ATLAS-01 estende Atlas da biblioteca semantica/visuale a superficie pubblica e didattica dell'ecosistema, senza modificare i confini di autorità.
 
@@ -74,6 +74,13 @@ Riferimento:
 docs/product/atlas-public-curriculum-learning-hub.md.
 
 
-## Gate di autorità Atlas
+## Confine di autorità Atlas approvato
 
-L'estensione del ruolo Atlas non modifica ancora il registro delle fonti. Se TRAMA-ADR-007 sarà promossa ad `APPROVED`, lo stesso pacchetto di promozione dovrà aggiornare `docs/knowledge/source-registry.json` per dichiarare Atlas autorità delle proprie pubblicazioni/pagine e del relativo stato editoriale, senza modificare l'autorità curricolare di Arena o quella professionale di Docente OS.
+Con TRAMA-ADR-007 e TRAMA-ADR-008 approvati, il registro delle fonti dichiara Atlas autorevole per identità, versione e stato delle proprie risorse, pagine e pubblicazioni, incluso l'esito espresso tramite `PublicationReceipt`.
+
+Restano invariati:
+- Arena come autorità del curricolo, delle fonti, dell'applicabilità, della versione e dello stato approvativo;
+- Docente OS come autorità del contesto professionale e della decisione del docente;
+- TRAMA come governo dei contratti e dei confini trasversali.
+
+L'approvazione di governance non abilita il runtime Docente OS → Atlas, che resta `NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME`.

@@ -1,6 +1,6 @@
 # Contratto Docente OS verso Atlas — pubblicazione didattica
 
-**Stato:** PROPOSED  
+**Stato:** APPROVED_GOVERNANCE / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME  
 **Data:** 21 settembre 2026  
 **Scope:** Docente OS → Atlas  
 **Decisione collegata:** TRAMA-ADR-008
@@ -215,12 +215,14 @@ La `PublicationReceipt` è la risposta di controllo all'operazione n. 4, non un 
 
 ## 12. Registro delle fonti
 
-Finché TRAMA-ADR-007 e TRAMA-ADR-008 restano `PROPOSED`, `docs/knowledge/source-registry.json` non deve essere promosso per dichiarare nuove autorità già operative.
+Con la promozione di TRAMA-ADR-007 e TRAMA-ADR-008, `docs/knowledge/source-registry.json` viene aggiornato nello stesso pacchetto per dichiarare esplicitamente:
 
-**Gate di promozione:** quando TRAMA-ADR-007 sarà eventualmente portata ad `APPROVED`, lo stesso pacchetto di promozione deve aggiornare il source registry per dichiarare esplicitamente:
-- Atlas come autorità delle pagine/pubblicazioni Atlas e del relativo stato editoriale;
-- Arena invariata come autorità del curricolo;
-- Docente OS invariato come autorità del contesto e delle decisioni professionali.
+- Atlas come autorità di identità, versione e stato delle proprie risorse;
+- Atlas come autorità di pagine/pubblicazioni Atlas, versioni, stato editoriale e `PublicationReceipt`;
+- Arena invariata come autorità del curricolo, della sua applicabilità, versione e stato;
+- Docente OS invariato come autorità del contesto professionale e della decisione del docente.
+
+Il registro delle fonti non autorizza l'esecuzione runtime del flusso: definisce soltanto i confini di autorità per le capacità che saranno eventualmente implementate.
 
 ## 13. Stato implementativo
 

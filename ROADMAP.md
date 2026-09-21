@@ -120,8 +120,12 @@ Stato proposto: HUMAN REVIEW REQUIRED.
 - stima dei costi e validazione della domanda;
 - pilota di istituto.
 
-## Gate di promozione ADR-007
+## Gate di promozione ADR-007/008
 
-Quando TRAMA-ADR-007 sarà eventualmente promossa ad `APPROVED`, lo stesso pacchetto deve aggiornare `docs/knowledge/source-registry.json` per dichiarare Atlas autorità delle proprie pagine/pubblicazioni e del relativo stato editoriale, lasciando invariata Arena come autorità del curricolo e Docente OS come autorità del contesto professionale.
+**Gate soddisfatto nel pacchetto di promozione governata:** TRAMA-ADR-007 e TRAMA-ADR-008 sono portati ad `APPROVED` insieme all'aggiornamento di `docs/knowledge/source-registry.json`.
+
+Il registro dichiara Atlas autorevole per identità/versione/stato delle proprie risorse e per pagine/pubblicazioni Atlas, versioni, stato editoriale e receipt. Restano invariati Arena come autorità del curricolo e Docente OS come autorità del contesto e delle decisioni professionali.
+
+Questa promozione non cambia lo stato implementativo di R3-P4: il runtime Docente OS → Atlas resta `NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME`.
 
 `DOS-A1` può cambiare stato soltanto mediante una decisione esplicita successiva alle evidenze del pilota.

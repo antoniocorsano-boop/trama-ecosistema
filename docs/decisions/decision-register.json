@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.3.0",
+  "registerVersion": "1.4.0",
   "updatedAt": "2026-09-21",
   "decisions": [
     {
@@ -88,7 +88,7 @@
     {
       "id": "TRAMA-ADR-007",
       "title": "Atlas come superficie pubblica e didattica di TRAMA",
-      "status": "PROPOSED",
+      "status": "APPROVED",
       "date": "2026-09-21",
       "scope": [
         "TRAMA",
@@ -96,20 +96,20 @@
         "Atlas",
         "Docente OS"
       ],
-      "decision": "Atlas è proposto come superficie pubblica e didattica dell'ecosistema: curriculum pubblico, Student Learning Hub, biblioteca educativa e Smart Views. Le proiezioni curricolari restano vincolate ad Arena; Atlas è candidato a essere autorevole solo per identità, versione e stato delle proprie risorse e pubblicazioni. La promozione futura ad APPROVED richiede aggiornamento contestuale del source registry.",
+      "decision": "Atlas è approvato come superficie pubblica e didattica dell'ecosistema per curriculum pubblico, Student Learning Hub, biblioteca educativa e Smart Views. Arena resta l'unica autorità curricolare; Atlas è autorevole esclusivamente per identità, versione e stato delle proprie risorse, pagine e pubblicazioni. L'approvazione di governance non autorizza da sola nuove capacità runtime.",
       "humanControlImpact": "PRESERVED",
       "supersedes": []
     },
     {
       "id": "TRAMA-ADR-008",
       "title": "Pubblicazione esplicita Docente OS verso Atlas",
-      "status": "PROPOSED",
+      "status": "APPROVED",
       "date": "2026-09-21",
       "scope": [
         "Atlas",
         "Docente OS"
       ],
-      "decision": "La futura pubblicazione didattica Docente OS → Atlas avviene tramite anteprima e conferma esplicita del docente, LessonPublicationManifest minimizzato e versionato, binding autorevole ad Arena e PublicationReceipt Atlas distinta. Il modello richiede controllo di versione, idempotenza, reversibilità, policy di visibilità/minimizzazione, gate diritti/licenze e accessibilità WCAG 2.2 AA con verifica automatica e umana. Preparazione, uso, pubblicazione e approvazione restano stati distinti; nessun dato personale studente è trasferito.",
+      "decision": "È approvato il contratto di pubblicazione didattica Docente OS → Atlas basato su anteprima e conferma esplicita del docente, LessonPublicationManifest minimizzato e versionato, binding autorevole ad Arena e PublicationReceipt Atlas distinta. Versionamento, idempotenza, reversibilità, visibilità/minimizzazione, diritti/licenze e WCAG 2.2 AA restano gate obbligatori. Il runtime resta NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME fino a distinta implementazione e review.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }

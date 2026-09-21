@@ -1,5 +1,5 @@
 {
-  "registryVersion": "1.0.0",
+  "registryVersion": "1.1.0",
   "updatedAt": "2026-09-21",
   "sources": [
     {
@@ -17,7 +17,13 @@
     {
       "domain": "learning-resources",
       "authority": "Curriculum-Atlas",
-      "content": ["relationships", "paths", "learning-objects", "resource-status"],
+      "content": ["relationships", "paths", "learning-objects", "resource-identity", "resource-version", "resource-status"],
+      "drivePolicy": "PREVIEW_OR_REPORT_ONLY"
+    },
+    {
+      "domain": "atlas-publication",
+      "authority": "Curriculum-Atlas",
+      "content": ["published-pages", "publications", "publication-version", "publication-state", "publication-receipts"],
       "drivePolicy": "PREVIEW_OR_REPORT_ONLY"
     },
     {
@@ -34,4 +40,3 @@
     }
   ]
 }
-

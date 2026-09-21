@@ -1,6 +1,6 @@
 # TRAMA-ATLAS-01 — Ruolo prodotto, curricolo pubblico, Student Learning Hub e modello di pubblicazione
 
-**Stato:** PROPOSED_CANONICAL / HUMAN_REVIEW_REQUIRED  
+**Stato:** APPROVED_GOVERNANCE / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME  
 **Data:** 21 settembre 2026  
 **Perimetro:** TRAMA · Arena · Atlas · Docente OS  
 **Decisioni collegate:** TRAMA-ADR-007, TRAMA-ADR-008
@@ -122,12 +122,14 @@ Resta autorevole per:
 ### Atlas
 
 È autorevole per:
-- identità/versione/stato delle proprie risorse;
-- proiezioni navigabili;
-- rappresentazioni visuali;
+- identità, versione e stato delle proprie risorse;
+- proiezioni navigabili e rappresentazioni visuali;
 - catalogo materiali;
-- pagine pubblicate;
+- identità, versione e stato delle proprie pagine/pubblicazioni;
+- `PublicationReceipt` e stato editoriale Atlas;
 - collegamenti curricolo ↔ LO ↔ materiali ↔ lezioni pubblicate.
+
+Questa autorità Atlas non si estende a fonti, obiettivi, applicabilità, stato approvativo o versioni curricolari, che restano sotto Arena.
 
 ### TRAMA
 
@@ -519,29 +521,24 @@ Questa proposta:
 - non autorizza autenticazione studenti;
 - non autorizza nuove dipendenze runtime.
 
-## 18. Decisioni richieste
+## 18. Decisioni approvate e limiti di efficacia
 
-Per passare da PROPOSED ad APPROVED occorre confermare:
+Con la promozione governata di TRAMA-ADR-007 e TRAMA-ADR-008 sono approvati:
+
 1. Atlas come superficie pubblica e didattica di TRAMA;
 2. Student Learning Hub come dominio Atlas;
-3. Docente OS come unico workspace editoriale professionale per la pubblicazione docente;
+3. Docente OS come unico workspace editoriale professionale per la decisione di pubblicazione docente;
 4. separazione formale tra `LessonPublicationManifest` e `PublicationReceipt`;
 5. binding obbligatorio alle fonti Arena senza seconda copia autorevole degli obiettivi;
-6. policy di visibilità/minimizzazione e gate diritti + WCAG 2.2 AA;
-7. Visual Grammar e Atlas Design Core prima dell'ampliamento delle feature;
+6. policy di visibilità/minimizzazione e gate diritti/licenze + WCAG 2.2 AA;
+7. Visual Grammar e Atlas Design Core come fondazione prima dell'ampliamento delle feature;
 8. mapping canonico `R3-*` ↔ alias `ATLAS-*`;
-9. OutcomeAggregateSnapshot ancora differito;
-10. aggiornamento di `docs/knowledge/source-registry.json` **nello stesso pacchetto futuro che promuoverà ADR-007 ad APPROVED**, non prima.
+9. aggiornamento contestuale di `docs/knowledge/source-registry.json`, con Atlas autorevole per proprie risorse, pagine, pubblicazioni e relativo stato editoriale;
+10. mantenimento di Arena come autorità curricolare e di Docente OS come autorità del contesto e delle decisioni professionali.
 
-**Stato corrente:** TRAMA-ADR-007 e TRAMA-ADR-008 restano `PROPOSED`; nessun runtime di pubblicazione è autorizzato.
-
-## 18. Decisioni richieste
-
-Per passare da PROPOSED ad APPROVED occorre confermare:
-1. Atlas come superficie pubblica e didattica di TRAMA;
-2. Student Learning Hub come dominio Atlas;
-3. Docente OS come unico workspace editoriale professionale per la pubblicazione docente;
-4. LessonPublicationManifest come direzione contrattuale;
-5. Visual Grammar come principio di rappresentazione;
-6. Atlas Design Core prima dell'ampliamento delle feature;
-7. OutcomeAggregateSnapshot ancora differito.
+**Limiti invarianti dopo l'approvazione:**
+- `OutcomeAggregateSnapshot` resta `DEFERRED / NOT_AUTHORIZED`;
+- il runtime Docente OS → Atlas resta `NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME`;
+- DOS-A1 resta differita;
+- nessuna autenticazione studenti o nuova dipendenza runtime è autorizzata;
+- ogni futura implementazione richiede i gate tecnici, privacy, sicurezza, accessibilità e collaudo umano previsti dai contratti.
