@@ -36,6 +36,29 @@ class R3BTests(unittest.TestCase):
         self.assertEqual(r.returncode,3)
         self.assertIn("HOLDOUT bloccato",r.stderr)
 
+    def test_authorized_holdout_selects_exactly_16(self):
+        sys.path.insert(0,str(ROOT/"scripts"))
+        import os
+        import run_trama_sa01_typesafe_r3b as r3b
+        data=json.loads(CORPUS.read_text(encoding="utf-8"))
+        old=os.environ.get("TRAMA_R3B_HOLDOUT_AUTHORIZED")
+        try:
+            os.environ["TRAMA_R3B_HOLDOUT_AUTHORIZED"]="true"
+            selected=r3b.selected_cases(data,"HOLDOUT")
+            self.assertEqual(len(selected),16)
+            self.assertEqual({c["id"] for c in selected},set(data["splitPolicy"]["holdoutCaseIds"]))
+        finally:
+            if old is None:
+                os.environ.pop("TRAMA_R3B_HOLDOUT_AUTHORIZED",None)
+            else:
+                os.environ["TRAMA_R3B_HOLDOUT_AUTHORIZED"]=old
+
+    def test_holdout_workflow_is_one_shot_and_explicitly_authorized(self):
+        w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b-holdout.yml").read_text(encoding="utf-8")
+        self.assertIn("github.run_number == 1",w)
+        self.assertIn('TRAMA_R3B_HOLDOUT_AUTHORIZED: "true"',w)
+        self.assertIn("--split HOLDOUT",w)
+
     def test_workflow_is_development_only(self):
         w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b.yml").read_text(encoding="utf-8")
         self.assertIn("--split DEVELOPMENT",w)
