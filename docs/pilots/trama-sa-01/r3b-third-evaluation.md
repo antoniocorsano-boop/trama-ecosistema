@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3B — Terza valutazione indipendente
 
-Stato: **AI_CROSS_REVIEW_COMPLETE / HUMAN_ADJUDICATION_REQUIRED / HOLDOUT_LOCKED**
+Stato: **AI_CROSS_REVIEW_COMPLETE / HUMAN_ADJUDICATION_COMPLETE / HOLDOUT_LOCKED**
 
 Data: 21 settembre 2026  
 Ambito: R3B DEVELOPMENT, 32 casi  
@@ -125,3 +125,24 @@ Prima di sbloccare HOLDOUT:
 2. non modificare prompt, boundary o casi HOLDOUT sulla base del risultato;
 3. registrare la decisione come annotazione post-preregistration;
 4. solo dopo, valutare una distinta autorizzazione HOLDOUT.
+
+
+## Adjudication umana
+
+Decisione del 21 settembre 2026:
+
+- `SA01-R3B-003 = PARTIAL`;
+- il corpus preregistrato **non viene modificato retroattivamente**;
+- l'adjudication è registrata come annotazione post-preregistration;
+- TypeSafe resta registrato come `ALIGNED` sul caso;
+- HOLDOUT resta bloccato.
+
+Conseguenza sulle metriche:
+
+- accordo TypeSafe vs etichette preregistrate originali: **32/32**;
+- accordo TypeSafe vs etichette adjudicate: **31/32**;
+- unico disaccordo adjudicato: `SA01-R3B-003` (`ALIGNED` provider vs `PARTIAL` umano).
+
+Esito DEVELOPMENT dopo adjudication: **PASS_WITH_ONE_ADJUDICATED_ERROR**.
+
+Questo esito non promuove `TRAMA-ADR-009` e non autorizza runtime.
