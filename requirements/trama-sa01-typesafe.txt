@@ -1,0 +1,3 @@
+# Solo per il pilota TRAMA-SA-01; non è una dipendenza runtime dell'ecosistema.
+# Versione verificata nel repository ufficiale typesafe-ai/typesafe-sdk-python il 21-09-2026.
+typesafe-sdk==0.7.1
