@@ -24,12 +24,12 @@ La formulazione deve essere validata con docenti, dirigenti e referenti prima de
 | --- | --- | --- |
 | ecosistema | TRAMA | visione, principi e standard comuni |
 | governo | TRAMA Arena | curricolo, fonti, revisioni e approvazioni |
-| conoscenza | TRAMA Atlas | percorsi, relazioni e materiali |
+| conoscenza e pubblicazione | TRAMA Atlas | curricolo pubblico, percorsi, relazioni, lezioni pubblicate e materiali |
 | operatività | Docente OS parte di TRAMA | pianificazione, lezioni e riflessione |
 
 ## Offerta ipotizzata
 
-- **TRAMA Pubblica**: curricolo consultabile, Atlas e materiali pubblicabili;
+- **TRAMA Pubblica**: curricolo comprensibile e navigabile, percorsi, Student Learning Hub e materiali pubblicabili;
 - **TRAMA Docente**: classi, orario, piani, preparazione e diario;
 - **TRAMA Scuola**: dipartimenti, ruoli, approvazioni e distribuzione;
 - **TRAMA Servizi**: avvio, migrazione, formazione e assistenza.
@@ -50,3 +50,23 @@ Il primo ambito di validazione è la scuola secondaria di primo grado, attravers
 - funzionamento professionale anche senza assistente automatico;
 - minimizzazione dei dati tra prodotti.
 
+
+
+## Estensione proposta del ruolo Atlas
+
+Stato: **PROPOSED / HUMAN REVIEW REQUIRED**.
+
+La proposta TRAMA-ATLAS-01 estende Atlas da biblioteca semantica/visuale a superficie pubblica e didattica dell'ecosistema, senza modificare i confini di autorità.
+
+Domini proposti:
+- curriculum pubblico per famiglie, studenti e comunità;
+- Student Learning Hub con vista per lezioni e per obiettivi;
+- biblioteca educativa e Visual Library;
+- Smart Views e navigazione semantica;
+- presentazione futura di indicatori aggregati di qualità, solo dopo distinta autorizzazione.
+
+La preparazione e la decisione di pubblicare restano in Docente OS.
+Arena resta autorevole per curricolo, applicabilità e stato approvativo.
+
+Riferimento:
+docs/product/atlas-public-curriculum-learning-hub.md.
