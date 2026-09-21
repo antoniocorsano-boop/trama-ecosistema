@@ -103,3 +103,30 @@ Il report finale deve proporre uno dei seguenti stati, senza applicarlo automati
 - `CANDIDATE`: merita una successiva decisione TRAMA per un'integrazione limitata.
 
 `CANDIDATE` non equivale ad `APPROVED`, non autorizza runtime e non modifica `DOS-A1`.
+
+## Implementazione del banco di prova
+
+Il banco di prova provider-neutral è versionato nel repository:
+
+- `docs/pilots/trama-sa-01/cases.json`: corpus sintetico canonico;
+- `docs/pilots/trama-sa-01/result-contract.md`: contratto dei risultati;
+- `docs/pilots/trama-sa-01/report-template.md`: rapporto umano;
+- `scripts/run_trama_sa01.py`: pre-gate, preparazione input e calcolo metriche;
+- `tests/test_trama_sa01.py`: regressioni del banco di prova.
+
+Comandi locali:
+
+```sh
+python3 scripts/run_trama_sa01.py validate
+python3 scripts/run_trama_sa01.py prepare --output /tmp/trama-sa01-input.json
+python3 -m unittest discover -s tests -v
+```
+
+Il comando `prepare` produce uno stato provider-neutral e **non effettua chiamate TypeSafe**. Un adapter TypeSafe potrà essere aggiunto soltanto dopo verifica della documentazione API/SDK corrente e disponibilità di credenziali dedicate; tale adapter non potrà introdurre scritture runtime.
+
+### Stato operativo del pilota
+
+- corpus e harness: **IMPLEMENTATION_IN_REVIEW**;
+- chiamata al provider TypeSafe: **PENDING / NOT_YET_EXECUTED**;
+- revisione umana degli esiti TypeSafe: **PENDING**;
+- promozione di `TRAMA-ADR-009`: **NOT_AUTHORIZED**.
