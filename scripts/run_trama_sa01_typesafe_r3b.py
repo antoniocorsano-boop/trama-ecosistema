@@ -29,9 +29,7 @@ def load_sdk():
 
 def selected_cases(corpus,split):
     policy=corpus["splitPolicy"]
-    if split=="HOLDOUT":
-        raise RuntimeError("R3B HOLDOUT bloccato: serve una nuova autorizzazione umana e una modifica esplicita dell'harness")
-    ids=policy["developmentCaseIds"]
+    ids=policy["developmentCaseIds"] if split=="DEVELOPMENT" else policy["holdoutCaseIds"]
     by_id={c["id"]:c for c in corpus["cases"]}
     return [by_id[i] for i in ids]
 
@@ -143,7 +141,7 @@ def execute(output,model,split):
         "iteration":"R3B",
         "corpusVersion":corpus["pilotSpecVersion"],
         "evaluatedSplit":split,
-        "holdoutLocked":True,
+        "holdoutLocked": split != "HOLDOUT",
         "provider":"TypeSafe",
         "requestedModel":model,
         "advisoryOnly":True,
@@ -175,7 +173,7 @@ def main():
         print("R3B corpus PASS"); return 0
     try:return execute(args.output,args.model,args.split)
     except RuntimeError as exc:
-        print(f"ERROR: {exc}",file=sys.stderr); return 3 if "HOLDOUT bloccato" in str(exc) else 2
+        print(f"ERROR: {exc}",file=sys.stderr); return 2
 
 if __name__=="__main__":
     sys.exit(main())

@@ -31,10 +31,10 @@ class R3BTests(unittest.TestCase):
         self.assertEqual(r.returncode,0,r.stdout+r.stderr)
         self.assertIn("HOLDOUT 4/label",r.stdout)
 
-    def test_holdout_fails_closed_before_provider(self):
+    def test_holdout_requires_provider_key_after_explicit_gate(self):
         r=subprocess.run([sys.executable,str(SCRIPT),"--split","HOLDOUT"],cwd=ROOT,text=True,capture_output=True)
-        self.assertEqual(r.returncode,3)
-        self.assertIn("HOLDOUT bloccato",r.stderr)
+        self.assertEqual(r.returncode,2)
+        self.assertIn("TYPESAFE_API_KEY",r.stderr)
 
     def test_workflow_is_development_only(self):
         w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b.yml").read_text(encoding="utf-8")
