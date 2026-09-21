@@ -19,15 +19,27 @@ Non è autorizzato:
 - eseguire i 16 casi HOLDOUT;
 - usare dati personali;
 - modificare il boundary come policy runtime;
-- promuovere `TRAMA-ADR-009`;
+- promuovere TRAMA-ADR-009;
 - integrare TypeSafe nei prodotti;
-- attivare `DOS-A1`.
+- attivare DOS-A1.
 
 Il passaggio a HOLDOUT richiede una nuova decisione umana.
 
-
 ## HOLDOUT one-shot gate
 
-A one-shot HOLDOUT gate is defined in `r3b-holdout-gate.md`.
+Il gate one-shot è definito in r3b-holdout-gate.md.
 
-It becomes effective only after exact-head human approval and merge of the PR that introduces the gate. Until then, this authorization remains DEVELOPMENT-only.
+La revisione sorgente preregistrata è pin-nata a:
+
+33ad808ab02c42d68d4f5443452a65b274dc4ae2
+
+Il gate:
+- accetta dispatch soltanto da main;
+- carica harness/corpus dalla revisione pin-nata;
+- usa un marker durevole di consumo prima del provider;
+- conserva l'artefatto anche quando il provider step fallisce dopo aver prodotto il payload;
+- non consente rerun dopo la claim del provider attempt.
+
+Il gate diventa effettivo soltanto dopo exact-head human approval e merge della PR che introduce queste garanzie.
+
+Fino a quel momento questa autorizzazione resta DEVELOPMENT-only e il HOLDOUT non deve essere eseguito.
