@@ -11,17 +11,62 @@
 - dati personali: esclusi;
 - automazione autonoma: esclusa.
 
-## Condizioni di prontezza
+## Stato verificato al 21 settembre 2026
 
-Il pilota non è pronto per l'esecuzione finché non risultano insieme:
+Il pilota non è più una sola dimostrazione documentale. Il percorso reale Arena → Docente OS è stato progressivamente materializzato e corretto.
 
-- classe esatta;
-- data reale;
-- collocazione nell'orario;
-- riferimento curricolare valido;
-- stato dei materiali canonico;
-- feedback visibile sul trasferimento;
-- revisione umana dell'esperienza pubblicata.
+### Arena
+
+- PR #314 — autorizzazione del pilota teacher-first;
+- PR #315 — pacchetto provvisorio Tecnologia 2C;
+- PR #317 — obbligo di segnale Arena verificabile per qualunque transizione di autorità approvata;
+- PR #318 — contratto `CML-DOS-PROFESSIONAL-GUIDED-WORKFLOW-V1`.
+
+### Docente OS
+
+- PR #554 — predisposizione del pilota;
+- PR #557 — gate reale «Approva e procedi»;
+- PR #558 — approvazione della preparazione su baseline provvisoria completa;
+- PR #559 — intake teacher-first del curricolo Arena;
+- PR #561 — rafforzamento di identità del pilota, autorità, persistenza e quarantena;
+- PR #562 — correzione del runtime della Server Action;
+- PR #563 — allineamento della sezione canonica e riscontro visibile di avanzamento/esito;
+- PR #564 — contratto professionale guidato speculare ad Arena.
+
+## Decisione operativa consolidata
+
+La baseline curricolare è trattata come riferimento persistente per **classe + disciplina + anno scolastico + versione**.
+
+Il file manuale `.cml-handoff.json`:
+
+- è ammesso nel pilota, per interoperabilità e come ripiego;
+- non costituisce prova autonoma di autorità istituzionale;
+- non deve essere richiesto per ogni lezione nel modello professionale ordinario.
+
+Un trasporto assistito o automatico è ammesso soltanto se conserva provenienza, integrità, controllo umano e possibilità di rivalidazione. Non può produrre persistenza silenziosa né approvazione implicita.
+
+## Evidenza umana già disponibile
+
+Nella prova Beta reale è stato osservato il trasferimento del file Arena e la sua disponibilità locale. È stata inoltre rilevata l'assenza di un riscontro utente sufficiente durante trasferimento e accettazione.
+
+La PR Docente OS #563 è stata integrata specificamente per rendere visibili avanzamento, errore ed esito e per correggere il confronto fra `gradeRef=grade-2` e `sectionRef=C`.
+
+Questa evidenza è utile ma non sostituisce il **nuovo collaudo umano sulla versione corretta**.
+
+## Condizioni residue di prontezza
+
+Prima dell'esecuzione controllata e della chiusura del pilota devono risultare insieme:
+
+- classe esatta: **soddisfatta — Tecnologia 2C**;
+- riferimento curricolare valido e impronta verificabile: **soddisfatto per la baseline provvisoria di pianificazione**;
+- gate docente reale: **integrato**;
+- confini di autorità e persistenza server-side: **integrati**;
+- feedback visibile sul trasferimento: **correzione integrata, nuova prova umana pendente**;
+- data reale: **pendente**;
+- collocazione nell'orario: **pendente**;
+- stato canonico dei materiali: **da confermare sul caso reale**;
+- decisione sulla risorsa Atlas: **da registrare sul caso reale**;
+- revisione umana del flusso pubblicato completo: **pendente**.
 
 ## Indicatori
 
@@ -37,5 +82,11 @@ Il pilota non è pronto per l'esecuzione finché non risultano insieme:
 
 ## Esito
 
-L'esito deve essere registrato mediante un rapporto umano distinto dagli eventi tecnici. Il completamento del pilota non attiva automaticamente `DOS-A1`.
+L'esito deve essere registrato mediante un rapporto umano distinto dagli eventi tecnici.
 
+La chiusura di ECO-02/P1:
+
+- non attiva automaticamente `DOS-A1`;
+- non trasforma una baseline provvisoria in approvazione istituzionale;
+- non autorizza scritture autonome nel piano o nel diario;
+- non rende obbligatorio il trasferimento manuale per le lezioni successive.
