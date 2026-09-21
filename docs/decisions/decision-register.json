@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.1.0",
+  "registerVersion": "1.2.0",
   "updatedAt": "2026-09-21",
   "decisions": [
     {
@@ -82,6 +82,34 @@
         "Docente OS"
       ],
       "decision": "La baseline curricolare è persistente per classe, disciplina, anno e versione; il file manuale resta interoperabilità o ripiego, mentre ogni trasporto assistito deve conservare verificabilità, feedback visibile e decisione finale del docente senza produrre autorità o persistenza implicite.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-007",
+      "title": "Atlas come superficie pubblica e didattica di TRAMA",
+      "status": "PROPOSED",
+      "date": "2026-09-21",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "Atlas è proposto come superficie pubblica e didattica dell'ecosistema: curriculum pubblico, Student Learning Hub, biblioteca educativa e Smart Views, senza sostituire Arena come autorità curricolare né Docente OS come workspace professionale.",
+      "humanControlImpact": "PRESERVED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-008",
+      "title": "Pubblicazione esplicita Docente OS verso Atlas",
+      "status": "PROPOSED",
+      "date": "2026-09-21",
+      "scope": [
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "La futura pubblicazione didattica verso Atlas avviene tramite anteprima, conferma esplicita del docente e LessonPublicationManifest minimizzato e versionato; preparazione, uso e pubblicazione restano stati distinti e nessun dato personale studente è trasferito.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
