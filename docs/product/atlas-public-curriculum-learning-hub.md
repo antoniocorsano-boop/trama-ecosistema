@@ -545,4 +545,3 @@ Per passare da PROPOSED ad APPROVED occorre confermare:
 5. Visual Grammar come principio di rappresentazione;
 6. Atlas Design Core prima dell'ampliamento delle feature;
 7. OutcomeAggregateSnapshot ancora differito.
-
