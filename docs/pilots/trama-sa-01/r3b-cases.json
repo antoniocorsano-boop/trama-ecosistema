@@ -1,0 +1,1337 @@
+{
+  "pilotSpecVersion": "3.1.0",
+  "pilotId": "TRAMA-SA-01/R3B",
+  "iteration": "R3B",
+  "createdAt": "2026-09-21",
+  "preregistered": true,
+  "provenance": {
+    "derivedFromDesign": "R3_EVIDENCE_THEN_ALIGNMENT",
+    "reusesR3CaseIds": false,
+    "reusesObservedR3Cases": false
+  },
+  "policy": {
+    "advisoryOnly": true,
+    "personalDataAllowed": false,
+    "providerRuntimeWritesAllowed": false,
+    "humanReviewRequiredForEverySemanticCase": true,
+    "thresholdsPrecalibrated": false,
+    "adr009Status": "PROPOSED",
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "splitPolicy": {
+    "developmentCaseIds": [
+      "SA01-R3B-002",
+      "SA01-R3B-003",
+      "SA01-R3B-004",
+      "SA01-R3B-006",
+      "SA01-R3B-007",
+      "SA01-R3B-008",
+      "SA01-R3B-011",
+      "SA01-R3B-012",
+      "SA01-R3B-013",
+      "SA01-R3B-015",
+      "SA01-R3B-016",
+      "SA01-R3B-017",
+      "SA01-R3B-020",
+      "SA01-R3B-021",
+      "SA01-R3B-022",
+      "SA01-R3B-024",
+      "SA01-R3B-025",
+      "SA01-R3B-026",
+      "SA01-R3B-029",
+      "SA01-R3B-030",
+      "SA01-R3B-031",
+      "SA01-R3B-033",
+      "SA01-R3B-034",
+      "SA01-R3B-035",
+      "SA01-R3B-038",
+      "SA01-R3B-039",
+      "SA01-R3B-040",
+      "SA01-R3B-042",
+      "SA01-R3B-043",
+      "SA01-R3B-044",
+      "SA01-R3B-047",
+      "SA01-R3B-048"
+    ],
+    "holdoutCaseIds": [
+      "SA01-R3B-001",
+      "SA01-R3B-005",
+      "SA01-R3B-009",
+      "SA01-R3B-010",
+      "SA01-R3B-014",
+      "SA01-R3B-018",
+      "SA01-R3B-019",
+      "SA01-R3B-023",
+      "SA01-R3B-027",
+      "SA01-R3B-028",
+      "SA01-R3B-032",
+      "SA01-R3B-036",
+      "SA01-R3B-037",
+      "SA01-R3B-041",
+      "SA01-R3B-045",
+      "SA01-R3B-046"
+    ],
+    "holdoutLocked": true,
+    "holdoutAuthorizationRequired": true,
+    "tuningOnHoldoutAllowed": false,
+    "stratified": true,
+    "developmentPerLabel": 8,
+    "holdoutPerLabel": 4
+  },
+  "labels": [
+    "ALIGNED",
+    "PARTIAL",
+    "CONTRADICTORY",
+    "INSUFFICIENT_EVIDENCE"
+  ],
+  "cases": [
+    {
+      "id": "SA01-R3B-001",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-ALIGNED",
+      "family": "design-relations",
+      "variant": 1,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Riconoscere come forma, materiale e funzione concorrano alla progettazione di un oggetto tecnico.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 001",
+        "summary": "La lezione mette in relazione forma, materiale scelto e funzione dell'oggetto durante una semplice attività di progettazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-002",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-ALIGNED",
+      "family": "system-components",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Analizzare un semplice impianto domestico distinguendo componenti, flussi e funzione complessiva.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 002",
+        "summary": "Gli alunni individuano i principali componenti di un impianto domestico, descrivono i flussi e collegano ogni elemento alla funzione del sistema.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-003",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-ALIGNED",
+      "family": "packaging-comparison",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Confrontare soluzioni di imballaggio considerando protezione, quantità di materiale e fine vita.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 003",
+        "summary": "L'attività confronta imballaggi diversi rispetto a protezione del prodotto, materiale impiegato e possibilità di recupero a fine vita.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-004",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-PARTIAL",
+      "family": "composite-omission",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Valutare un edificio considerando struttura, involucro, impianti e rapporto con il contesto.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 004",
+        "summary": "La lezione analizza struttura, involucro e impianti dell'edificio, senza considerare il rapporto con il contesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-005",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-PARTIAL",
+      "family": "criterion-omission",
+      "variant": 2,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Confrontare fonti energetiche considerando disponibilità, continuità, costi e impatti.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 005",
+        "summary": "Gli alunni confrontano alcune fonti per disponibilità, continuità e impatti, senza affrontare i costi.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-006",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-PARTIAL",
+      "family": "scope-reduction",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Analizzare una rete digitale considerando dispositivi, collegamenti, servizi e sicurezza di base.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 006",
+        "summary": "L'attività riconosce dispositivi, collegamenti e servizi della rete, ma non considera gli aspetti di sicurezza di base.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-007",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-CONTRADICTORY",
+      "family": "explicit-negation",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Riconoscere che le proprietà dei materiali orientano la scelta degli impieghi.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 007",
+        "summary": "La lezione afferma che le proprietà dei materiali non hanno alcuna relazione con gli impieghi possibili.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-008",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-CONTRADICTORY",
+      "family": "concept-reversal",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Comprendere che un circuito aperto interrompe il passaggio della corrente.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 008",
+        "summary": "L'attività sostiene che in un circuito aperto la corrente circola normalmente come in un circuito chiuso.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-009",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-CONTRADICTORY",
+      "family": "absolute-generalization",
+      "variant": 3,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Valutare tecniche diverse in relazione alle condizioni e al contesto d'uso.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 009",
+        "summary": "La lezione sostiene che una stessa tecnica è sempre la migliore, indipendentemente dalle condizioni e dal contesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-010",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-comparison",
+      "variant": 1,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni aspetti delle macchine.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 010",
+        "summary": "La lezione conclude che una trasmissione a cinghia è sempre più efficiente di una trasmissione a ingranaggi in qualunque macchina.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-011",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-absolute",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare elementi degli edifici.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 011",
+        "summary": "L'attività stabilisce che una specifica soluzione strutturale è sempre la più sicura in ogni zona sismica.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-012",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "labelGroup": "TEC-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-specificity",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere temi delle tecnologie digitali.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:tec",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Tecnologia 012",
+        "summary": "La sintesi afferma che una specifica banda wireless è sempre la scelta migliore per ogni ambiente e servizio.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-013",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-ALIGNED",
+      "family": "proportionality",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Riconoscere e rappresentare relazioni di proporzionalità diretta in situazioni concrete.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 013",
+        "summary": "Gli alunni riconoscono situazioni di proporzionalità diretta e le rappresentano con tabelle e grafici.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-014",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-ALIGNED",
+      "family": "geometry-measures",
+      "variant": 2,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Confrontare area e perimetro di figure piane riconoscendo che descrivono grandezze diverse.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 014",
+        "summary": "La lezione confronta area e perimetro di figure piane e chiarisce che misurano aspetti differenti.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-015",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-ALIGNED",
+      "family": "data-literacy",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Leggere una distribuzione di dati usando frequenze, valori centrali e semplici rappresentazioni grafiche.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 015",
+        "summary": "L'attività interpreta frequenze, valori centrali e grafici per descrivere una semplice distribuzione di dati.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-016",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-PARTIAL",
+      "family": "criterion-omission",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Interpretare una relazione lineare considerando pendenza, intercetta e significato nel contesto.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 016",
+        "summary": "La lezione interpreta la pendenza di una relazione lineare nel contesto, senza discutere l'intercetta.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-017",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-PARTIAL",
+      "family": "composite-omission",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Descrivere una trasformazione geometrica considerando punti corrispondenti, distanze e orientamento.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 017",
+        "summary": "Gli alunni individuano punti corrispondenti e confrontano le distanze, senza esaminare l'orientamento.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-018",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-PARTIAL",
+      "family": "process-omission",
+      "variant": 3,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Risolvere un problema motivando strategia, calcoli e controllo del risultato.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 018",
+        "summary": "L'attività richiede strategia e calcoli, ma non prevede il controllo finale del risultato.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-019",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-CONTRADICTORY",
+      "family": "rule-reversal",
+      "variant": 1,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Comprendere che moltiplicare due numeri negativi produce un numero positivo.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 019",
+        "summary": "La lezione afferma che il prodotto di due numeri negativi è sempre negativo.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-020",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-CONTRADICTORY",
+      "family": "concept-negation",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Riconoscere che frazioni equivalenti rappresentano lo stesso valore.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 020",
+        "summary": "L'attività sostiene che due frazioni equivalenti rappresentano necessariamente valori diversi.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-021",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-CONTRADICTORY",
+      "family": "statistical-contradiction",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Comprendere che la media aritmetica può essere influenzata da valori molto distanti dagli altri.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 021",
+        "summary": "La sintesi afferma che valori estremi non possono mai modificare la media aritmetica.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-022",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-method",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni concetti di geometria.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 022",
+        "summary": "La lezione conclude che una specifica costruzione geometrica è sempre il metodo ottimale per qualunque problema di misura.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-023",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-rule",
+      "variant": 2,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare relazioni tra numeri.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 023",
+        "summary": "L'attività afferma che una certa successione continuerà indefinitamente con una regola specifica non indicata nell'obiettivo.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-024",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "labelGroup": "MAT-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-causality",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere alcuni aspetti dei dati.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:mat",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Matematica 024",
+        "summary": "La sintesi attribuisce una precisa causa statistica a una variazione osservata senza alcuna evidenza o variabile esplicitata.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-025",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-ALIGNED",
+      "family": "photosynthesis",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Descrivere come luce, acqua e anidride carbonica siano coinvolte nella fotosintesi.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 025",
+        "summary": "La lezione collega luce, acqua e anidride carbonica al processo di fotosintesi nelle piante.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-026",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-ALIGNED",
+      "family": "state-changes",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Riconoscere i passaggi di stato collegandoli a variazioni di temperatura.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 026",
+        "summary": "Gli alunni mettono in relazione fusione, evaporazione e condensazione con variazioni di temperatura.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-027",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-ALIGNED",
+      "family": "ecosystem-relations",
+      "variant": 3,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Descrivere relazioni tra organismi e fattori ambientali in un ecosistema.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 027",
+        "summary": "L'attività ricostruisce relazioni tra organismi, risorse e condizioni ambientali di un ecosistema.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-028",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-PARTIAL",
+      "family": "criterion-omission",
+      "variant": 1,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Descrivere una forza considerando intensità, direzione, verso e punto di applicazione.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 028",
+        "summary": "La lezione considera intensità, direzione e verso della forza, ma non il punto di applicazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-029",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-PARTIAL",
+      "family": "component-omission",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Ricostruire una rete alimentare considerando produttori, consumatori e decompositori.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 029",
+        "summary": "Gli alunni rappresentano produttori e consumatori della rete alimentare, senza includere i decompositori.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-030",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-PARTIAL",
+      "family": "process-omission",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Descrivere il ciclo dell'acqua considerando evaporazione, condensazione, precipitazione e raccolta.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 030",
+        "summary": "L'attività descrive evaporazione, precipitazione e raccolta, ma omette la condensazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-031",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-CONTRADICTORY",
+      "family": "conservation-negation",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Comprendere che in una trasformazione fisica ordinaria la materia non scompare.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 031",
+        "summary": "La lezione sostiene che durante una trasformazione fisica la materia può sparire completamente senza lasciare prodotti.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-032",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-CONTRADICTORY",
+      "family": "biological-negation",
+      "variant": 2,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Riconoscere che anche le piante svolgono respirazione cellulare.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 032",
+        "summary": "L'attività afferma che le piante non svolgono mai respirazione cellulare.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-033",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-CONTRADICTORY",
+      "family": "concept-collapse",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Comprendere che la temperatura e il calore sono grandezze concettualmente distinte.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 033",
+        "summary": "La sintesi presenta temperatura e calore come termini perfettamente equivalenti in ogni situazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-034",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-causality",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni fenomeni naturali.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 034",
+        "summary": "La lezione conclude che un singolo fattore specifico è sempre la causa principale di ogni frana.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-035",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-generalization",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare organismi viventi.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 035",
+        "summary": "L'attività stabilisce che una particolare caratteristica osservata determina sempre la sopravvivenza di una specie in qualunque ambiente.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-036",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "labelGroup": "SCI-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-comparison",
+      "variant": 3,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere alcuni aspetti dell'energia.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:sci",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Scienze 036",
+        "summary": "La sintesi afferma che una specifica trasformazione energetica è sempre la più efficiente senza criteri o dati nell'evidenza.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-037",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-ALIGNED",
+      "family": "territory-relations",
+      "variant": 1,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Interpretare relazioni tra caratteristiche del territorio e attività umane.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 037",
+        "summary": "La lezione mette in relazione caratteristiche del territorio, risorse disponibili e attività umane presenti.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-038",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-ALIGNED",
+      "family": "demographic-indicators",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Leggere semplici indicatori demografici per descrivere caratteristiche di una popolazione.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 038",
+        "summary": "Gli alunni utilizzano indicatori demografici di base per descrivere struttura e dinamica di una popolazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-039",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-ALIGNED",
+      "family": "climate-factors",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Riconoscere alcuni fattori geografici che influenzano il clima di un luogo.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 039",
+        "summary": "L'attività collega clima, latitudine, altitudine e distanza dal mare in esempi geografici semplici.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-040",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-PARTIAL",
+      "family": "composite-omission",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Analizzare una migrazione considerando cause, percorso, destinazione e conseguenze.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 040",
+        "summary": "La lezione considera cause, percorso e destinazione della migrazione, senza affrontarne le conseguenze.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-041",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-PARTIAL",
+      "family": "map-criterion-omission",
+      "variant": 2,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Interpretare una carta geografica usando legenda, scala, orientamento e simboli.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 041",
+        "summary": "Gli alunni usano legenda, orientamento e simboli della carta, ma non lavorano sulla scala.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-042",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-PARTIAL",
+      "family": "scope-reduction",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Analizzare l'urbanizzazione considerando crescita, servizi, mobilità e impatti ambientali.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 042",
+        "summary": "L'attività considera crescita urbana, servizi e mobilità, senza discutere gli impatti ambientali.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-043",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-CONTRADICTORY",
+      "family": "climate-negation",
+      "variant": 1,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Comprendere che la latitudine può influenzare le condizioni climatiche.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 043",
+        "summary": "La lezione sostiene che la latitudine non può avere alcun effetto sulle condizioni climatiche.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-044",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-CONTRADICTORY",
+      "family": "distribution-contradiction",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Riconoscere che la popolazione è distribuita in modo diseguale nello spazio.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 044",
+        "summary": "L'attività afferma che la popolazione mondiale è distribuita uniformemente in ogni territorio.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-045",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-CONTRADICTORY",
+      "family": "human-impact-negation",
+      "variant": 3,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Interpretare il paesaggio come risultato anche di trasformazioni operate dalle società umane.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 045",
+        "summary": "La sintesi sostiene che le attività umane non modificano mai il paesaggio.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-046",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-land-use",
+      "variant": 1,
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni aspetti del territorio.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 046",
+        "summary": "La lezione conclude che una singola forma di uso del suolo è sempre la migliore per qualsiasi territorio.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-047",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-causality",
+      "variant": 2,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare fenomeni della popolazione.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 047",
+        "summary": "L'attività attribuisce una variazione demografica a una causa precisa che non compare nell'obiettivo o in altre evidenze.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3B-048",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "labelGroup": "GEO-INSUFFICIENT_EVIDENCE",
+      "family": "unsupported-absolute",
+      "variant": 3,
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere alcuni temi del clima.",
+        "source": "SYNTHETIC_R3B_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3b:geo",
+        "curriculumVersionRef": "arena-r3b-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3b-synthetic-receipt",
+        "title": "R3B Geografia 048",
+        "summary": "La sintesi afferma che un solo fattore geografico determina sempre il clima di qualunque località.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    }
+  ]
+}

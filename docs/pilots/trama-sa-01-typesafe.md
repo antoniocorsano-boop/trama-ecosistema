@@ -235,3 +235,26 @@ La non conformità del corpus era stata identificata prima di usare questi outpu
 - sostenere `TRAMA-ADR-009`.
 
 L'HOLDOUT canonico 3.1.0 non è stato eseguito.
+
+
+### R3B — stratified validation
+
+R3 DEVELOPMENT ha prodotto 32/32 sullo split eseguito, ma ha evidenziato un limite metodologico: nessun caso `INSUFFICIENT_EVIDENCE` era presente nel DEVELOPMENT.
+
+R3B è autorizzato come esperimento distinto con **48 casi nuovi**, senza riuso dei casi osservati R3:
+
+- DEVELOPMENT: 32 casi, 8 per etichetta;
+- HOLDOUT: 16 casi, 4 per etichetta;
+- HOLDOUT bloccato nell'harness e nel workflow;
+- nessun dato personale;
+- `advisoryOnly=true`;
+- `TRAMA-ADR-009 = PROPOSED`;
+- `DOS-A1 = RUNTIME_DEFERRED`.
+
+Riferimenti:
+
+- `docs/pilots/trama-sa-01/r3b-validation-plan.md`;
+- `docs/pilots/trama-sa-01/r3b-authorization.md`;
+- `docs/pilots/trama-sa-01/r3b-cases.json`.
+
+Stato: **AUTHORIZED_FOR_DEVELOPMENT_ONLY / PROVIDER_RUN_NOT_YET_EXECUTED**.
