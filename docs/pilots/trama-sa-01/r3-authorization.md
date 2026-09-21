@@ -28,3 +28,30 @@ L'autorizzazione R3 non:
 - autorizza `DOS-A1`.
 
 Stato invariato: `TRAMA-ADR-009 = PROPOSED`; `DOS-A1 = RUNTIME_DEFERRED`.
+
+
+## Corpus canonico e gate DEVELOPMENT
+
+Prima del primo run provider, R3 è stato consolidato sul corpus `3.1.0`:
+
+- 48 casi;
+- 32 DEVELOPMENT;
+- 16 HOLDOUT locked;
+- 12 casi per etichetta;
+- quattro domini: Tecnologia, Scienze, Matematica, Educazione civica;
+- 24 coppie di parafrasi;
+- nessun dato personale.
+
+Il corpus precedente era monodisciplinare ed è stato sostituito **prima di qualsiasi run R3**.
+
+L'autorizzazione corrente abilita soltanto DEVELOPMENT. L'HOLDOUT:
+- non è presente nel workflow corrente;
+- è bloccato dalla CLI senza `TRAMA_R3_HOLDOUT_AUTHORIZED=true`;
+- richiede una decisione umana separata dopo la review DEVELOPMENT.
+
+Policy preregistrate:
+- baseline `0.5`;
+- review band `0.4–0.6`;
+- alignment confidence floor `0.65`.
+
+Le policy hanno valore esclusivamente sperimentale e advisory.
