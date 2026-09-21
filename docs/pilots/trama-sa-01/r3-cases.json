@@ -1,0 +1,1179 @@
+{
+  "pilotSpecVersion": "3.0.0",
+  "pilotId": "TRAMA-SA-01/R3",
+  "createdAt": "2026-09-21",
+  "preregistered": true,
+  "tuningOnHoldoutAllowed": false,
+  "policy": {
+    "advisoryOnly": true,
+    "personalDataAllowed": false,
+    "providerRuntimeWritesAllowed": false,
+    "humanReviewRequired": true,
+    "adr009Status": "PROPOSED",
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "split": {
+    "development": 32,
+    "holdout": 16
+  },
+  "labels": [
+    "ALIGNED",
+    "PARTIAL",
+    "CONTRADICTORY",
+    "INSUFFICIENT_EVIDENCE"
+  ],
+  "cases": [
+    {
+      "id": "SA01-R3-001",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "direct",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 001",
+        "summary": "La proposta analizza un sistema tecnologico collegando risorse, energia, fasi e impatti.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-002",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "paraphrase",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 002",
+        "summary": "L'attività didattica analizza un sistema tecnologico collegando risorse, energia, fasi e impatti.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-003",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "extended-paraphrase",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 003",
+        "summary": "La proposta analizza un sistema tecnologico collegando risorse, energia, fasi e impatti. Gli studenti esplicitano i collegamenti osservati.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-004",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "subtle-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 004",
+        "summary": "La proposta affronta solo uno degli elementi centrali dell'obiettivo di Tecnologia.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-005",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "relation-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 005",
+        "summary": "L'attività tratta una parte pertinente dell'obiettivo di Tecnologia, omettendo le relazioni richieste.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-006",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "composite-omission",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 006",
+        "summary": "La sintesi considera alcuni elementi previsti in Tecnologia, ma non il confronto complessivo richiesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-007",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "explicit-contradiction",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 007",
+        "summary": "La proposta sostiene che gli elementi indicati nell'obiettivo di Tecnologia non abbiano relazioni tra loro.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-008",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "negation",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 008",
+        "summary": "L'attività nega esplicitamente il rapporto centrale richiesto dall'obiettivo di Tecnologia.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-009",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "implicit-contradiction",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Analizzare un sistema tecnologico mettendo in relazione risorse, energia, fasi e impatti.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 009",
+        "summary": "La sintesi presenta come indipendenti fattori che l'obiettivo di Tecnologia richiede di mettere in relazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-010",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "generic-evidence",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni aspetti di Tecnologia.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 010",
+        "summary": "La proposta formula una conclusione specifica e comparativa in Tecnologia che l'obiettivo generico non consente di verificare.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-011",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "unsupported-specificity",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare elementi relativi a Tecnologia.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 011",
+        "summary": "L'attività attribuisce priorità assoluta a una soluzione specifica di Tecnologia senza criteri presenti nell'evidenza.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-012",
+      "domain": "Tecnologia",
+      "domainCode": "TEC",
+      "family": "unsupported-causality",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere temi di Tecnologia.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:tec",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Tecnologia 012",
+        "summary": "La sintesi introduce una relazione causale dettagliata in Tecnologia non sostenuta dall'obiettivo disponibile.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-013",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "direct",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 013",
+        "summary": "La proposta rappresenta relazioni di proporzionalità e ne interpreta il significato in situazioni concrete.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-014",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "paraphrase",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 014",
+        "summary": "L'attività didattica rappresenta relazioni di proporzionalità e ne interpreta il significato in situazioni concrete.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-015",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "extended-paraphrase",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 015",
+        "summary": "La proposta rappresenta relazioni di proporzionalità e ne interpreta il significato in situazioni concrete. Gli studenti esplicitano i collegamenti osservati.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-016",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "subtle-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 016",
+        "summary": "La proposta affronta solo uno degli elementi centrali dell'obiettivo di Matematica.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-017",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "relation-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 017",
+        "summary": "L'attività tratta una parte pertinente dell'obiettivo di Matematica, omettendo le relazioni richieste.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-018",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "composite-omission",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 018",
+        "summary": "La sintesi considera alcuni elementi previsti in Matematica, ma non il confronto complessivo richiesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-019",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "explicit-contradiction",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 019",
+        "summary": "La proposta sostiene che gli elementi indicati nell'obiettivo di Matematica non abbiano relazioni tra loro.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-020",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "negation",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 020",
+        "summary": "L'attività nega esplicitamente il rapporto centrale richiesto dall'obiettivo di Matematica.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-021",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "implicit-contradiction",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Rappresentare relazioni di proporzionalità e interpretarne il significato in situazioni concrete.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 021",
+        "summary": "La sintesi presenta come indipendenti fattori che l'obiettivo di Matematica richiede di mettere in relazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-022",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "generic-evidence",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni aspetti di Matematica.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 022",
+        "summary": "La proposta formula una conclusione specifica e comparativa in Matematica che l'obiettivo generico non consente di verificare.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-023",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "unsupported-specificity",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare elementi relativi a Matematica.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 023",
+        "summary": "L'attività attribuisce priorità assoluta a una soluzione specifica di Matematica senza criteri presenti nell'evidenza.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-024",
+      "domain": "Matematica",
+      "domainCode": "MAT",
+      "family": "unsupported-causality",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere temi di Matematica.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:mat",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Matematica 024",
+        "summary": "La sintesi introduce una relazione causale dettagliata in Matematica non sostenuta dall'obiettivo disponibile.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-025",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "direct",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 025",
+        "summary": "La proposta descrive le relazioni tra componenti di un ecosistema e gli effetti prodotti da una variazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-026",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "paraphrase",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 026",
+        "summary": "L'attività didattica descrive le relazioni tra componenti di un ecosistema e gli effetti prodotti da una variazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-027",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "extended-paraphrase",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 027",
+        "summary": "La proposta descrive le relazioni tra componenti di un ecosistema e gli effetti prodotti da una variazione. Gli studenti esplicitano i collegamenti osservati.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-028",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "subtle-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 028",
+        "summary": "La proposta affronta solo uno degli elementi centrali dell'obiettivo di Scienze.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-029",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "relation-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 029",
+        "summary": "L'attività tratta una parte pertinente dell'obiettivo di Scienze, omettendo le relazioni richieste.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-030",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "composite-omission",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 030",
+        "summary": "La sintesi considera alcuni elementi previsti in Scienze, ma non il confronto complessivo richiesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-031",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "explicit-contradiction",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 031",
+        "summary": "La proposta sostiene che gli elementi indicati nell'obiettivo di Scienze non abbiano relazioni tra loro.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-032",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "negation",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 032",
+        "summary": "L'attività nega esplicitamente il rapporto centrale richiesto dall'obiettivo di Scienze.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-033",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "implicit-contradiction",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Descrivere relazioni tra componenti di un ecosistema e riconoscere gli effetti di una variazione.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 033",
+        "summary": "La sintesi presenta come indipendenti fattori che l'obiettivo di Scienze richiede di mettere in relazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-034",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "generic-evidence",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni aspetti di Scienze.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 034",
+        "summary": "La proposta formula una conclusione specifica e comparativa in Scienze che l'obiettivo generico non consente di verificare.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-035",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "unsupported-specificity",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare elementi relativi a Scienze.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 035",
+        "summary": "L'attività attribuisce priorità assoluta a una soluzione specifica di Scienze senza criteri presenti nell'evidenza.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-036",
+      "domain": "Scienze",
+      "domainCode": "SCI",
+      "family": "unsupported-causality",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere temi di Scienze.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:sci",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Scienze 036",
+        "summary": "La sintesi introduce una relazione causale dettagliata in Scienze non sostenuta dall'obiettivo disponibile.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-037",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "direct",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 037",
+        "summary": "La proposta collega territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-038",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "paraphrase",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 038",
+        "summary": "L'attività didattica collega territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-039",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "extended-paraphrase",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "ALIGNED",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 039",
+        "summary": "La proposta collega territorio, attività umane, risorse e trasformazioni del paesaggio. Gli studenti esplicitano i collegamenti osservati.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-040",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "subtle-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 040",
+        "summary": "La proposta affronta solo uno degli elementi centrali dell'obiettivo di Geografia.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-041",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "relation-omission",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 041",
+        "summary": "L'attività tratta una parte pertinente dell'obiettivo di Geografia, omettendo le relazioni richieste.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-042",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "composite-omission",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "PARTIAL",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 042",
+        "summary": "La sintesi considera alcuni elementi previsti in Geografia, ma non il confronto complessivo richiesto.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-043",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "explicit-contradiction",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 043",
+        "summary": "La proposta sostiene che gli elementi indicati nell'obiettivo di Geografia non abbiano relazioni tra loro.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-044",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "negation",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 044",
+        "summary": "L'attività nega esplicitamente il rapporto centrale richiesto dall'obiettivo di Geografia.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-045",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "implicit-contradiction",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "CONTRADICTORY",
+      "evidence": {
+        "objective": "Interpretare relazioni tra territorio, attività umane, risorse e trasformazioni del paesaggio.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 045",
+        "summary": "La sintesi presenta come indipendenti fattori che l'obiettivo di Geografia richiede di mettere in relazione.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-046",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "generic-evidence",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Conoscere alcuni aspetti di Geografia.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 046",
+        "summary": "La proposta formula una conclusione specifica e comparativa in Geografia che l'obiettivo generico non consente di verificare.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-047",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "unsupported-specificity",
+      "split": "DEVELOPMENT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Osservare elementi relativi a Geografia.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 047",
+        "summary": "L'attività attribuisce priorità assoluta a una soluzione specifica di Geografia senza criteri presenti nell'evidenza.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    },
+    {
+      "id": "SA01-R3-048",
+      "domain": "Geografia",
+      "domainCode": "GEO",
+      "family": "unsupported-causality",
+      "split": "HOLDOUT",
+      "expectedStage": "SEMANTIC_REVIEW",
+      "expectedSemanticLabel": "INSUFFICIENT_EVIDENCE",
+      "evidence": {
+        "objective": "Comprendere temi di Geografia.",
+        "source": "SYNTHETIC_R3_PREREGISTERED"
+      },
+      "manifest": {
+        "manifestVersion": "1.0",
+        "curriculumRef": "arena:r3:geo",
+        "curriculumVersionRef": "arena-r3-v1",
+        "authorityState": "APPROVED",
+        "authorityReceiptRef": "arena-r3-synthetic-receipt",
+        "title": "R3 Geografia 048",
+        "summary": "La sintesi introduce una relazione causale dettagliata in Geografia non sostenuta dall'obiettivo disponibile.",
+        "rightsStatus": "CLEARED_SYNTHETIC",
+        "accessibilityStatus": "REVIEWED_SYNTHETIC"
+      }
+    }
+  ]
+}
