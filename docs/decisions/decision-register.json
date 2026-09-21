@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.0.0",
+  "registerVersion": "1.1.0",
   "updatedAt": "2026-09-21",
   "decisions": [
     {
@@ -8,7 +8,12 @@
       "title": "TRAMA come livello di governo comune",
       "status": "APPROVED",
       "date": "2026-09-21",
-      "scope": ["TRAMA", "Arena", "Atlas", "Docente OS"],
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
       "decision": "TRAMA governa decisioni e contratti trasversali senza diventare una quarta applicazione.",
       "humanControlImpact": "NONE",
       "supersedes": []
@@ -18,7 +23,11 @@
       "title": "Arena rimane la fonte curricolare autorevole",
       "status": "APPROVED",
       "date": "2026-09-21",
-      "scope": ["Arena", "Atlas", "Docente OS"],
+      "scope": [
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
       "decision": "Atlas può pubblicare il curricolo ma non sostituisce Arena nel trasferimento verso Docente OS.",
       "humanControlImpact": "PRESERVED",
       "supersedes": []
@@ -28,7 +37,13 @@
       "title": "Base di conoscenza federata",
       "status": "APPROVED",
       "date": "2026-09-21",
-      "scope": ["TRAMA", "Arena", "Atlas", "Docente OS", "Drive"],
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Drive"
+      ],
       "decision": "Ogni dominio conserva una sola fonte autorevole; Drive ospita documenti umani e copie dichiarate, non una replica tecnica completa.",
       "humanControlImpact": "PRESERVED",
       "supersedes": []
@@ -38,7 +53,9 @@
       "title": "DOS-A1 resta differita",
       "status": "APPROVED",
       "date": "2026-09-21",
-      "scope": ["Docente OS"],
+      "scope": [
+        "Docente OS"
+      ],
       "decision": "La capacità operativa automatizzata DOS-A1 rimane RUNTIME_DEFERRED fino a nuova autorizzazione esplicita.",
       "humanControlImpact": "PRESERVED",
       "supersedes": []
@@ -48,11 +65,25 @@
       "title": "TRAMA resta un nome di lavoro",
       "status": "APPROVED",
       "date": "2026-09-21",
-      "scope": ["TRAMA"],
+      "scope": [
+        "TRAMA"
+      ],
       "decision": "Il nome non è presentato come marchio definitivo prima delle verifiche giuridiche e digitali.",
       "humanControlImpact": "NONE",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-006",
+      "title": "Flusso professionale guidato Arena verso Docente OS",
+      "status": "APPROVED",
+      "date": "2026-09-21",
+      "scope": [
+        "Arena",
+        "Docente OS"
+      ],
+      "decision": "La baseline curricolare è persistente per classe, disciplina, anno e versione; il file manuale resta interoperabilità o ripiego, mentre ogni trasporto assistito deve conservare verificabilità, feedback visibile e decisione finale del docente senza produrre autorità o persistenza implicite.",
+      "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
   ]
 }
-
