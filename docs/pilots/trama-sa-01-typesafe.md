@@ -147,3 +147,19 @@ Il primo run live è completato. Il rapporto aggregato è in
 `docs/pilots/trama-sa-01/run-001-analysis.md`.
 
 La revisione umana del Run 001 è completata con esito **REVISE**. `TRAMA-ADR-009` non cambia stato.
+
+
+### R2 — Evidence gate
+
+Dopo la review umana del Run 001 con outcome **REVISE**, TRAMA-SA-01 introduce una seconda iterazione sperimentale:
+
+- `evidence_sufficient` tramite `Noul`;
+- `alignment` tramite `Choice` soltanto nel ramo sperimentale con evidenza sufficiente;
+- boundary `0.5` usato solo per query routing nel laboratorio, non come soglia di autorizzazione;
+- output ancora `advisoryOnly=true`;
+- revisione umana obbligatoria dopo il run;
+- nessuna promozione automatica di `TRAMA-ADR-009`.
+
+Riferimento: `docs/pilots/trama-sa-01/r2-evidence-gate.md`.
+
+Stato R2: **IMPLEMENTATION_IN_REVIEW / PROVIDER_RUN_NOT_YET_EXECUTED**.
