@@ -41,6 +41,10 @@ Il gate deve:
 - bloccare qualunque rerun o secondo dispatch dopo la claim;
 - preservare l'artefatto anche se il provider step termina con errore dopo aver scritto il payload.
 
+La revisione sorgente autorizzabile è pin-nata a:
+
+c2595b7354f68ffdd383c71fc253014b01cbcb71
+
 L'esecuzione HOLDOUT resta bloccata fino a nuova review umana exact-head della PR finale.
 
 Il passaggio a HOLDOUT non approva ADR-009, non abilita runtime nei prodotti e non modifica DOS-A1.
