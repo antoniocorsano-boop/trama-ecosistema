@@ -273,3 +273,12 @@ R3B DEVELOPMENT adjudication:
 - 31/32 vs ground truth adjudicato;
 - outcome: **PASS_WITH_ONE_ADJUDICATED_ERROR**;
 - HOLDOUT ancora bloccato.
+
+
+### R3B HOLDOUT one-shot gate
+
+After DEVELOPMENT adjudication, a separate HOLDOUT gate is prepared.
+
+It is fail-closed in the harness and becomes effective only after exact-head human approval and merge. The gate does not alter corpus, prompt, boundary or provider contract.
+
+Reference: `docs/pilots/trama-sa-01/r3b-holdout-gate.md`.
