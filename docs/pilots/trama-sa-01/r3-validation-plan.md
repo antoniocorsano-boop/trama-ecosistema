@@ -109,3 +109,30 @@ R3 può produrre soltanto:
 - `CANDIDATE_FOR_ADR_REVIEW`.
 
 Nessun esito modifica automaticamente `TRAMA-ADR-009`.
+
+
+## Consolidamento canonico pre-run
+
+Prima di qualsiasi esecuzione provider R3, il corpus è stato consolidato in `r3-cases.json` versione `3.1.0`.
+
+Verifica effettuata prima del consolidamento:
+- run provider R3 eseguiti: **0**;
+- holdout osservato da TypeSafe: **no**;
+- tuning sull'holdout: **no**.
+
+Il corpus canonico contiene:
+- 48 casi;
+- 32 DEVELOPMENT;
+- 16 HOLDOUT bloccati;
+- 12 casi per ciascuna etichetta;
+- 12 casi per ciascuno dei quattro domini: Tecnologia, Scienze, Matematica, Educazione civica;
+- 24 coppie di parafrasi.
+
+Policy sperimentali preregistrate:
+- baseline evidence routing: `0.5`;
+- fascia conservativa di review: `0.4–0.6`;
+- alignment confidence floor: `0.65`.
+
+Questi valori servono esclusivamente al confronto sperimentale e non costituiscono soglie runtime o autorizzative.
+
+Il workflow corrente esegue soltanto DEVELOPMENT. L'HOLDOUT richiede una review umana dei risultati DEVELOPMENT e un gate separato.
