@@ -162,6 +162,15 @@ Dopo la review umana del Run 001 con outcome **REVISE**, TRAMA-SA-01 introduce u
 
 Riferimento: `docs/pilots/trama-sa-01/r2-evidence-gate.md`.
 
-Stato R2: **PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_PENDING**.
+Stato R2: **HUMAN_REVIEW_COMPLETE / OUTCOME CANDIDATE**.
 
 Rapporto aggregato: `docs/pilots/trama-sa-01/r2-run-001-analysis.md`.
+
+
+### Chiusura R2
+
+La revisione umana ha confermato tutte le 10 etichette del Run R2.
+
+Outcome: **CANDIDATE**.
+
+R2 non promuove automaticamente `TRAMA-ADR-009`: qualunque passaggio da `PROPOSED` richiede un pacchetto decisionale separato e una review umana distinta.
