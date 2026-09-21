@@ -189,5 +189,24 @@ Stato corrente:
 
 - `TRAMA-ADR-009 = PROPOSED`;
 - proposta tecnica: **R3** prima di qualunque `APPROVED`;
-- R3: **PROPOSED / NOT_YET_AUTHORIZED**;
+- R3: **AUTHORIZED / IMPLEMENTATION_IN_REVIEW**;
 - runtime nei prodotti: **NOT_AUTHORIZED**.
+
+
+### R3 — Robustezza e calibrazione
+
+R3 è autorizzato esclusivamente come esperimento controllato.
+
+Perimetro preregistrato:
+- 48 casi sintetici;
+- 32 development;
+- 16 holdout con `tuningAllowed=false`;
+- 12 casi per ciascuna etichetta;
+- quattro domini didattici;
+- 24 coppie di parafrasi;
+- policy baseline 0.5 e policy conservativa di escalation preregistrate;
+- nessun parametro di soglia modificabile dal workflow.
+
+Stato: **AUTHORIZED / IMPLEMENTATION_IN_REVIEW**.
+
+`TRAMA-ADR-009` resta `PROPOSED`.
