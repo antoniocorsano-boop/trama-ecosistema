@@ -27,11 +27,17 @@ def load_sdk():
     from typesafe_sdk import Choice,Noul,TypeSafeClient
     return Choice,Noul,TypeSafeClient
 
+def holdout_authorized():
+    return os.environ.get("TRAMA_R3B_HOLDOUT_AUTHORIZED") == "true"
+
 def selected_cases(corpus,split):
     policy=corpus["splitPolicy"]
     if split=="HOLDOUT":
-        raise RuntimeError("R3B HOLDOUT bloccato: serve una nuova autorizzazione umana e una modifica esplicita dell'harness")
-    ids=policy["developmentCaseIds"]
+        if not holdout_authorized():
+            raise RuntimeError("R3B HOLDOUT bloccato: autorizzazione one-shot assente")
+        ids=policy["holdoutCaseIds"]
+    else:
+        ids=policy["developmentCaseIds"]
     by_id={c["id"]:c for c in corpus["cases"]}
     return [by_id[i] for i in ids]
 
@@ -143,7 +149,8 @@ def execute(output,model,split):
         "iteration":"R3B",
         "corpusVersion":corpus["pilotSpecVersion"],
         "evaluatedSplit":split,
-        "holdoutLocked":True,
+        "holdoutLockedByCorpus":True,
+        "holdoutAuthorizationUsed": bool(split=="HOLDOUT" and holdout_authorized()),
         "provider":"TypeSafe",
         "requestedModel":model,
         "advisoryOnly":True,
