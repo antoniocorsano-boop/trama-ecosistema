@@ -18,6 +18,7 @@ from importlib import metadata
 from pathlib import Path
 
 import run_trama_sa01 as harness
+import validate_trama_sa01_r3 as r3_validator
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "artifacts" / "trama-sa01-typesafe-r3-raw.json"
@@ -99,7 +100,7 @@ def add_usage(total: dict[str, int], usage) -> None:
     total["outputTokens"] += usage.output_tokens or 0
 
 
-def run_case(client, Choice, Noul, case: dict, model: str) -> dict:
+def run_case(client, Choice, Noul, case: dict, model: str, split: str) -> dict:
     state = state_for(case)
     digest = harness.canonical_digest(state)
     total_usage = {"inputTokens": 0, "outputTokens": 0}
@@ -172,7 +173,7 @@ def selected_cases(corpus: dict, split: str) -> list[dict]:
 
 def execute(output: Path, model: str, split: str) -> int:
     corpus = harness.load_json(R3_CASES_PATH)
-    errors = harness.validate_cases(corpus)
+    errors = r3_validator.validate_corpus(corpus)
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
@@ -191,7 +192,7 @@ def execute(output: Path, model: str, split: str) -> int:
     with TypeSafeClient() as client:
         for case in cases:
             try:
-                results.append(run_case(client, Choice, Noul, case, model))
+                results.append(run_case(client, Choice, Noul, case, model, split))
             except Exception as exc:
                 provider_errors.append(
                     {"caseId": case["id"], "errorType": type(exc).__name__, "message": str(exc)}
@@ -201,6 +202,7 @@ def execute(output: Path, model: str, split: str) -> int:
         "pilotId": "TRAMA-SA-01",
         "iteration": "R3",
         "corpusVersion": corpus["pilotSpecVersion"],
+        "evaluatedSplit": split,
         "provider": "TypeSafe",
         "requestedModel": model,
         "advisoryOnly": True,
