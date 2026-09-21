@@ -102,3 +102,27 @@ La chiusura di ECO-02/P1:
 - non trasforma una baseline provvisoria in approvazione istituzionale;
 - non autorizza scritture autonome nel piano o nel diario;
 - non rende obbligatorio il trasferimento manuale per le lezioni successive.
+
+
+## Miglioramento successivo al collaudo P8 — P9
+
+Il collaudo mobile successivo al consolidamento P8 ha evidenziato tre problemi di controllo docente nella superficie **Prima della lezione**:
+
+- doppione percettivo tra strumento disponibile e stessa domanda già presente nella sequenza;
+- domanda guida locale troppo generica;
+- impossibilità di modificare direttamente la proposta o un'aggiunta già accettata.
+
+Decisione di progetto:
+
+- una proposta deve comparire in **una sola superficie del lifecycle**;
+- la proposta resta modificabile prima dell'uso;
+- solo una conferma esplicita la rende effettiva nella lezione;
+- se il docente modifica un elemento già accettato, la precedente accettazione non può sopravvivere silenziosamente: l'elemento torna da riesaminare e richiede una nuova conferma;
+- provenienza e proiezione canonica restano immutate.
+
+Implementazione: Docente OS PR #571 — `ECO-02/P9 — editable teacher proposals without duplicate states` — **integrata** su merge commit `bbe3d55dddaaea34983ed356abe6a8ffe1891fba` dopo HUMAN EXACT-HEAD REVIEW — PASS sull'exact head `10662211f8a13300685f2c27dcbf245c82044175`.
+
+Stato TRAMA: **IMPLEMENTED / BETA RECHECK REQUIRED**. La soluzione è nel prodotto; resta da verificare sulla Beta pubblicata il comportamento mobile corretto prima di considerare esaurita l'evidenza P9.
+
+
+Chiarimento di reversibilità P9: uno scarto non blocca future proposte. La proposta scartata resta nello storico come `DISMISSED`, mentre una successiva richiesta del docente crea una nuova proposta distinta e soggetta allo stesso controllo umano.
