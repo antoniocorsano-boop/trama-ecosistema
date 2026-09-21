@@ -24,3 +24,10 @@ Non è autorizzato:
 - attivare `DOS-A1`.
 
 Il passaggio a HOLDOUT richiede una nuova decisione umana.
+
+
+## HOLDOUT one-shot gate
+
+A one-shot HOLDOUT gate is defined in `r3b-holdout-gate.md`.
+
+It becomes effective only after exact-head human approval and merge of the PR that introduces the gate. Until then, this authorization remains DEVELOPMENT-only.
