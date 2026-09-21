@@ -75,7 +75,7 @@
     {
       "id": "TRAMA-ADR-006",
       "title": "Flusso professionale guidato Arena verso Docente OS",
-      "status": "APPROVED",
+      "status": "IMPLEMENTED",
       "date": "2026-09-21",
       "scope": [
         "Arena",
