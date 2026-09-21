@@ -152,7 +152,7 @@ Prima di ripresentare ADR-009 per approvazione:
 
 Il 21 settembre 2026 è stata autorizzata **Opzione B — R3**, limitatamente alla sperimentazione.
 
-Prima del primo run provider il corpus è stato consolidato per rispettare integralmente il piano:
+Dopo aver escluso dall'evidenza due run DEVELOPMENT sul precedente corpus monodisciplinare, il corpus canonico 3.1.0 è stato consolidato per rispettare integralmente il piano:
 - quattro domini didattici;
 - 48 casi bilanciati;
 - split 32 DEVELOPMENT / 16 HOLDOUT;
