@@ -24,3 +24,15 @@ Non è autorizzato:
 - attivare `DOS-A1`.
 
 Il passaggio a HOLDOUT richiede una nuova decisione umana.
+
+
+## Adjudication DEVELOPMENT e autorizzazione al gate HOLDOUT
+
+Decisione successiva alla review indipendente:
+
+- `SA01-R3B-003 = PARTIAL` come annotazione post-preregistration;
+- corpus preregistrato invariato;
+- nessun tuning del provider, prompt o boundary;
+- DEVELOPMENT chiuso come **PASS_WITH_ONE_ADJUDICATED_ERROR**.
+
+È autorizzata la **preparazione tecnica** del gate HOLDOUT sui 16 casi congelati. L'esecuzione avverrà tramite workflow manuale separato e non costituisce approvazione di ADR-009 o del runtime.
