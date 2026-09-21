@@ -21,6 +21,17 @@ class R3CorpusTests(unittest.TestCase):
         self.assertTrue(data["splitPolicy"]["holdoutLocked"])
         self.assertFalse(set(data["splitPolicy"]["developmentCaseIds"]) & set(data["splitPolicy"]["holdoutCaseIds"]))
 
+    def test_r3_validator_is_reusable_by_harness(self):
+        sys.path.insert(0,str(ROOT/"scripts"))
+        import validate_trama_sa01_r3 as validator
+        import run_trama_sa01_typesafe_r3 as r3
+        data=json.loads(CORPUS.read_text(encoding="utf-8"))
+        self.assertEqual(validator.validate_corpus(data),[])
+        self.assertEqual(len(r3.selected_cases(data,"DEVELOPMENT")),32)
+        self.assertEqual(len(r3.selected_cases(data,"HOLDOUT")),16)
+        source=(ROOT/"scripts"/"run_trama_sa01_typesafe_r3.py").read_text(encoding="utf-8")
+        self.assertNotIn("harness.validate_cases(corpus)",source)
+
     def test_workflow_cannot_run_holdout(self):
         workflow=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3.yml").read_text(encoding="utf-8")
         self.assertIn("--split DEVELOPMENT", workflow)
