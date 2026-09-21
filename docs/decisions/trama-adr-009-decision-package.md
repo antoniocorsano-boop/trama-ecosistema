@@ -146,3 +146,15 @@ Prima di ripresentare ADR-009 per approvazione:
 7. confermare che il contratto TRAMA resta provider-neutral;
 8. mantenere revisione umana sui casi ambigui;
 9. mantenere separata ogni futura decisione runtime.
+
+
+## Stato successivo alla decisione umana R3
+
+Il 21 settembre 2026 è stata autorizzata **Opzione B — R3**.
+
+Conseguenze:
+- R3 può essere implementato ed eseguito sul corpus sintetico preregistrato;
+- `TRAMA-ADR-009` resta `PROPOSED`;
+- `APPROVED` non è autorizzato;
+- ogni runtime nei prodotti resta `NOT_AUTHORIZED`;
+- l'holdout R3 non può essere usato per tuning prima della valutazione finale.
