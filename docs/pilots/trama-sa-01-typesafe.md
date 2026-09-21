@@ -206,7 +206,7 @@ Corpus canonico preregistrato prima del primo run:
 - 24 coppie di parafrasi;
 - policy di routing/escalation preregistrate.
 
-Nessun run R3 è stato eseguito sul corpus precedente. Il nuovo holdout non è stato esposto al provider.
+Due run DEVELOPMENT erano già stati avviati sul corpus precedente monodisciplinare; sono classificati NON_CANONICAL ed esclusi dall'evidenza R3. Il nuovo HOLDOUT canonico 3.1.0 non è stato esposto al provider.
 
 Il workflow corrente:
 - esegue soltanto DEVELOPMENT;
