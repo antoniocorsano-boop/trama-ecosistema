@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schemas/decision-register.schema.json",
+  "registerVersion": "1.0.0",
+  "updatedAt": "2026-09-21",
+  "decisions": [
+    {
+      "id": "TRAMA-ADR-001",
+      "title": "TRAMA come livello di governo comune",
+      "status": "APPROVED",
+      "date": "2026-09-21",
+      "scope": ["TRAMA", "Arena", "Atlas", "Docente OS"],
+      "decision": "TRAMA governa decisioni e contratti trasversali senza diventare una quarta applicazione.",
+      "humanControlImpact": "NONE",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-002",
+      "title": "Arena rimane la fonte curricolare autorevole",
+      "status": "APPROVED",
+      "date": "2026-09-21",
+      "scope": ["Arena", "Atlas", "Docente OS"],
+      "decision": "Atlas può pubblicare il curricolo ma non sostituisce Arena nel trasferimento verso Docente OS.",
+      "humanControlImpact": "PRESERVED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-003",
+      "title": "Base di conoscenza federata",
+      "status": "APPROVED",
+      "date": "2026-09-21",
+      "scope": ["TRAMA", "Arena", "Atlas", "Docente OS", "Drive"],
+      "decision": "Ogni dominio conserva una sola fonte autorevole; Drive ospita documenti umani e copie dichiarate, non una replica tecnica completa.",
+      "humanControlImpact": "PRESERVED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-004",
+      "title": "DOS-A1 resta differita",
+      "status": "APPROVED",
+      "date": "2026-09-21",
+      "scope": ["Docente OS"],
+      "decision": "La capacità operativa automatizzata DOS-A1 rimane RUNTIME_DEFERRED fino a nuova autorizzazione esplicita.",
+      "humanControlImpact": "PRESERVED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-005",
+      "title": "TRAMA resta un nome di lavoro",
+      "status": "APPROVED",
+      "date": "2026-09-21",
+      "scope": ["TRAMA"],
+      "decision": "Il nome non è presentato come marchio definitivo prima delle verifiche giuridiche e digitali.",
+      "humanControlImpact": "NONE",
+      "supersedes": []
+    }
+  ]
+}
+

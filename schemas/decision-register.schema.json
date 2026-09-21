@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.example/schemas/decision-register.schema.json",
+  "title": "TRAMA Decision Register",
+  "type": "object",
+  "required": ["registerVersion", "updatedAt", "decisions"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {"type": "string"},
+    "registerVersion": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "updatedAt": {"type": "string", "format": "date"},
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "status", "date", "scope", "decision", "humanControlImpact", "supersedes"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^TRAMA-ADR-[0-9]{3}$"},
+          "title": {"type": "string", "minLength": 5},
+          "status": {"enum": ["PROPOSED", "UNDER_REVIEW", "APPROVED", "IMPLEMENTED", "SUPERSEDED", "REJECTED"]},
+          "date": {"type": "string", "format": "date"},
+          "scope": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+          "decision": {"type": "string", "minLength": 20},
+          "humanControlImpact": {"enum": ["NONE", "PRESERVED", "STRENGTHENED", "CHANGED"]},
+          "supersedes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^TRAMA-ADR-[0-9]{3}$"}}
+        }
+      }
+    }
+  }
+}
+
