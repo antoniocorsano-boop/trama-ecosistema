@@ -21,3 +21,16 @@ Proporre oggetti di apprendimento e materiali alla preparazione della lezione.
 
 Sono vietati sinonimi locali non dichiarati dal contratto.
 
+
+
+## Flusso inverso distinto
+
+Questa specifica governa soltanto **Atlas → Docente OS** per la proposta di risorse.
+
+La futura pubblicazione didattica **Docente OS → Atlas** è un flusso distinto, proposto in:
+`docs/contracts/docente-os-atlas-publication.md`.
+
+I due flussi non devono essere fusi:
+- proposta di una risorsa non equivale a pubblicazione;
+- uso in lezione non equivale a pubblicazione;
+- pubblicazione non equivale ad approvazione curricolare o istituzionale.
