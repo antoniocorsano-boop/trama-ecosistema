@@ -123,3 +123,6 @@ Decisione di progetto:
 Implementazione candidata: Docente OS PR #571 — `ECO-02/P9 — editable teacher proposals without duplicate states`.
 
 Stato TRAMA: **CANDIDATE / HUMAN REVIEW REQUIRED**. Non è registrata come implementata finché la PR prodotto non supera i gate e non viene integrata.
+
+
+Chiarimento di reversibilità P9: uno scarto non blocca future proposte. La proposta scartata resta nello storico come `DISMISSED`, mentre una successiva richiesta del docente crea una nuova proposta distinta e soggetta allo stesso controllo umano.
