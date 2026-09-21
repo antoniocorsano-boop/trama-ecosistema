@@ -1,6 +1,6 @@
 # TRAMA-SA-01/R3B — Validazione stratificata
 
-Stato: **AUTHORIZED_FOR_SYNTHETIC_PILOT / DEVELOPMENT_NOT_YET_EXECUTED**
+Stato: **DEVELOPMENT_COMPLETE / HOLDOUT_GATE_PREPARED_NOT_YET_EXECUTED**
 
 ## Autorizzazione
 
@@ -94,3 +94,15 @@ L'harness rifiuta `--split HOLDOUT` salvo autorizzazione esplicita codificata in
 - `TRAMA-ADR-009 = PROPOSED`;
 - runtime TypeSafe = NOT_AUTHORIZED;
 - `DOS-A1 = RUNTIME_DEFERRED`.
+
+
+## Post-DEVELOPMENT adjudication e gate HOLDOUT
+
+Il DEVELOPMENT è chiuso con esito **PASS_WITH_ONE_ADJUDICATED_ERROR**.
+
+- TypeSafe vs ground truth preregistrato: 32/32;
+- dopo adjudication umana di `SA01-R3B-003 = PARTIAL`: 31/32;
+- corpus, prompt, boundary e 16 casi HOLDOUT restano invariati;
+- nessun tuning è stato effettuato sui casi HOLDOUT.
+
+La modifica successiva abilita tecnicamente un workflow separato HOLDOUT. L'esecuzione resta un gate distinto e non modifica ADR-009 né autorizza runtime.
