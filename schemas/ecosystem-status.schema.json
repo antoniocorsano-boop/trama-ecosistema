@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.example/schemas/ecosystem-status.schema.json",
+  "title": "TRAMA Ecosystem Status",
+  "type": "object",
+  "required": ["schemaVersion", "updatedAt", "capabilities"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {"type": "string"},
+    "schemaVersion": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "updatedAt": {"type": "string", "format": "date"},
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "state", "authority", "humanReview"],
+        "properties": {
+          "id": {"type": "string", "minLength": 2},
+          "label": {"type": "string", "minLength": 3},
+          "state": {"enum": ["CLOSED", "ACTIVE", "DEFERRED", "BLOCKED", "PLANNED"]},
+          "authority": {"type": "string", "minLength": 2},
+          "humanReview": {"enum": ["NOT_REQUIRED", "PENDING", "PASS", "FAIL"]}
+        }
+      }
+    }
+  }
+}
