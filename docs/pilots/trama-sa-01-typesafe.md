@@ -273,3 +273,19 @@ R3B DEVELOPMENT adjudication:
 - 31/32 vs ground truth adjudicato;
 - outcome: **PASS_WITH_ONE_ADJUDICATED_ERROR**;
 - HOLDOUT ancora bloccato.
+
+
+### R3B HOLDOUT one-shot gate
+
+Dopo l'adjudication DEVELOPMENT viene preparato un gate HOLDOUT separato.
+
+Il gate resta bloccato finché non sono soddisfatti insieme:
+- source SHA pin-nato;
+- main-only dispatch;
+- marker durevole di consumo;
+- conservazione dell'artefatto anche su provider error;
+- exact-head human review finale.
+
+Riferimento: docs/pilots/trama-sa-01/r3b-holdout-gate.md.
+
+TRAMA-ADR-009 resta PROPOSED e il runtime TypeSafe resta NOT_AUTHORIZED.
