@@ -42,7 +42,7 @@ Prima del primo run provider, R3 è stato consolidato sul corpus `3.1.0`:
 - 24 coppie di parafrasi;
 - nessun dato personale.
 
-Il corpus precedente era monodisciplinare ed è stato sostituito **prima di qualsiasi run R3**.
+Il corpus precedente era monodisciplinare. Due run DEVELOPMENT erano già stati avviati su quel corpus; sono esclusi dall'evidenza R3 e il corpus canonico 3.1.0 li sostituisce senza riutilizzarne gli output.
 
 L'autorizzazione corrente abilita soltanto DEVELOPMENT. L'HOLDOUT:
 - non è presente nel workflow corrente;
