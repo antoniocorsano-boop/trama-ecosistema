@@ -17,6 +17,9 @@ class R3BTests(unittest.TestCase):
         self.assertTrue(data["splitPolicy"]["holdoutLocked"])
         self.assertFalse(data["splitPolicy"]["tuningOnHoldoutAllowed"])
         self.assertFalse(set(c["id"] for c in data["cases"]) & set(c["id"] for c in old["cases"]))
+        new_pairs={(c["evidence"]["objective"],c["manifest"]["summary"]) for c in data["cases"]}
+        old_pairs={(c["evidence"]["objective"],c["manifest"]["summary"]) for c in old["cases"]}
+        self.assertFalse(new_pairs & old_pairs)
         by_id={c["id"]:c for c in data["cases"]}
         for label in data["labels"]:
             self.assertEqual(sum(c["expectedSemanticLabel"]==label for c in data["cases"]),12)
