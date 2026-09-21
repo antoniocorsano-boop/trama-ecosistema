@@ -6,7 +6,7 @@ Aggiornato al 21 settembre 2026.
 | --- | --- | --- |
 | Curricolo governato | Operativo | Arena rimane la fonte autorevole |
 | ECO-01 | Chiuso | forma docente validata per Tecnologia I II III |
-| ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS integrato fino a P5; collaudo umano finale ancora pendente |
+| ECO-02/P1 | Pilota controllato attivo | percorso reale consolidato fino a P8; P9 aperto su domanda guida modificabile e non duplicata |
 | Atlas | Da consolidare | base stabile, accessibilità e prove Android desktop LIM |
 | Docente OS | Operativo nel proprio dominio | gate docente, intake Arena e riscontro utente integrati; nessuna automazione autonoma |
 | DOS-A1 | RUNTIME_DEFERRED | richiede una nuova autorizzazione esplicita e non è implicato dalla chiusura del pilota |
@@ -23,7 +23,8 @@ Sono già recepiti nei prodotti:
 - intake Arena con confini di autorità rafforzati;
 - correzione del runtime della Server Action;
 - correzione del perimetro sezione `grade-2 + C` e riscontro visibile di avanzamento/esito;
-- contratto professionale guidato Arena ↔ Docente OS.
+- contratto professionale guidato Arena ↔ Docente OS;
+- gate exact-state della preparazione e accesso stabile «Prima della lezione» consolidati fino a P8.
 
 Il trasferimento manuale `.cml-handoff.json` resta ammesso per interoperabilità, pilota e ripiego, ma **non è il modello ordinario per ogni lezione**.
 
@@ -34,7 +35,8 @@ Prima di classificare ECO-02/P1 come concluso devono ancora risultare insieme:
 1. data reale e collocazione nell'orario della lezione pilota;
 2. stato canonico dei materiali e decisione docente sulla risorsa Atlas;
 3. nuova prova sulla Beta successiva alla correzione Docente OS #563, con avanzamento ed esito chiaramente visibili;
-4. registrazione dell'esito umano del flusso completo fino a «Approva e procedi».
+4. registrazione dell'esito umano del flusso completo fino a «Approva e procedi»;
+5. integrazione e retest della correzione P9: una sola rappresentazione della domanda guida, modifica docente esplicita e nuova conferma dopo ogni modifica.
 
 ## Semaforo di ecosistema
 
