@@ -54,10 +54,22 @@ class R3BTests(unittest.TestCase):
                 os.environ["TRAMA_R3B_HOLDOUT_AUTHORIZED"]=old
 
     def test_holdout_workflow_is_one_shot_and_explicitly_authorized(self):
+        import re
         w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b-holdout.yml").read_text(encoding="utf-8")
-        self.assertIn("github.run_number == 1",w)
         self.assertIn('TRAMA_R3B_HOLDOUT_AUTHORIZED: "true"',w)
+        self.assertIn('TRAMA_R3B_MODEL: "jev-latest"',w)
+        self.assertIn('test "$GITHUB_REF" = "refs/heads/main"',w)
+        self.assertIn("listCommitStatusesForRef",w)
+        self.assertIn("createCommitStatus",w)
+        self.assertIn("trama-sa01/r3b-holdout-consumed",w)
+        self.assertIn("continue-on-error: true",w)
+        self.assertIn("if: always()",w)
+        self.assertIn("if-no-files-found: warn",w)
         self.assertIn("--split HOLDOUT",w)
+        self.assertNotIn("github.run_number == 1",w)
+        match=re.search(r'TRAMA_R3B_AUTHORIZED_SOURCE_SHA: "([0-9a-f]{40})"',w)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1),"33ad808ab02c42d68d4f5443452a65b274dc4ae2")
 
     def test_workflow_is_development_only(self):
         w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b.yml").read_text(encoding="utf-8")
