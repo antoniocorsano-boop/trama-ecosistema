@@ -162,4 +162,6 @@ Dopo la review umana del Run 001 con outcome **REVISE**, TRAMA-SA-01 introduce u
 
 Riferimento: `docs/pilots/trama-sa-01/r2-evidence-gate.md`.
 
-Stato R2: **IMPLEMENTATION_IN_REVIEW / PROVIDER_RUN_NOT_YET_EXECUTED**.
+Stato R2: **PROVIDER_RUN_COMPLETE / HUMAN_REVIEW_PENDING**.
+
+Rapporto aggregato: `docs/pilots/trama-sa-01/r2-run-001-analysis.md`.
