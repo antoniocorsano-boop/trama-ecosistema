@@ -7,15 +7,24 @@ permissions:
   contents: read
   statuses: write
 
+concurrency:
+  group: trama-sa01-r3b-holdout-one-shot
+  cancel-in-progress: false
+
 jobs:
   r3b-holdout:
     runs-on: ubuntu-latest
     env:
       TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
       TRAMA_R3B_HOLDOUT_AUTHORIZED: "true"
-      TRAMA_R3B_AUTHORIZED_SOURCE_SHA: "c2595b7354f68ffdd383c71fc253014b01cbcb71"
+      TRAMA_R3B_CONSUMPTION_ANCHOR_SHA: "72aa1a9919229120f69f9de41f877bb428d46897"
       TRAMA_R3B_CONSUMPTION_CONTEXT: "trama-sa01/r3b-holdout-consumed"
       TRAMA_R3B_MODEL: "jev-latest"
+      TRAMA_R3B_CASES_BLOB: "d161cc03f50d1777eaa58010419f3cc64aaa02a4"
+      TRAMA_R3B_HARNESS_BLOB: "086fac2415238478d25311b2e74b444aafca21e6"
+      TRAMA_R3B_R2_BLOB: "1c2f3ef60752f22ff1be5e346bdf62aaa945486a"
+      TRAMA_R3B_BASE_BLOB: "f564092d3670dd39aac2d1db8e754b91afcffc34"
+      TRAMA_R3B_REQUIREMENTS_BLOB: "47d4db62b5f9d139f57b2b79b9a1ab665c749a27"
 
     steps:
       - name: Checkout gate revision
@@ -24,18 +33,27 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Verify main-only dispatch and authorized source
+      - name: Verify main-only dispatch and stable consumption anchor
         shell: bash
         run: |
           test "$GITHUB_REF" = "refs/heads/main"
-          printf '%s' "$TRAMA_R3B_AUTHORIZED_SOURCE_SHA" | grep -Eq '^[0-9a-f]{40}$'
-          git cat-file -e "$TRAMA_R3B_AUTHORIZED_SOURCE_SHA^{commit}"
-          git merge-base --is-ancestor "$TRAMA_R3B_AUTHORIZED_SOURCE_SHA" "$GITHUB_SHA"
+          printf '%s' "$TRAMA_R3B_CONSUMPTION_ANCHOR_SHA" | grep -Eq '^[0-9a-f]{40}$'
+          git cat-file -e "$TRAMA_R3B_CONSUMPTION_ANCHOR_SHA^{commit}"
+          git merge-base --is-ancestor "$TRAMA_R3B_CONSUMPTION_ANCHOR_SHA" "$GITHUB_SHA"
 
-      - name: Reject an already consumed HOLDOUT source
+      - name: Verify authorized R3B experiment content
+        shell: bash
+        run: |
+          test "$(git hash-object docs/pilots/trama-sa-01/r3b-cases.json)" = "$TRAMA_R3B_CASES_BLOB"
+          test "$(git hash-object scripts/run_trama_sa01_typesafe_r3b.py)" = "$TRAMA_R3B_HARNESS_BLOB"
+          test "$(git hash-object scripts/run_trama_sa01_typesafe_r2.py)" = "$TRAMA_R3B_R2_BLOB"
+          test "$(git hash-object scripts/run_trama_sa01.py)" = "$TRAMA_R3B_BASE_BLOB"
+          test "$(git hash-object requirements/trama-sa01-typesafe.txt)" = "$TRAMA_R3B_REQUIREMENTS_BLOB"
+
+      - name: Reject an already consumed HOLDOUT
         uses: actions/github-script@v7
         env:
-          AUTHORIZED_SOURCE_SHA: ${{ env.TRAMA_R3B_AUTHORIZED_SOURCE_SHA }}
+          CONSUMPTION_ANCHOR_SHA: ${{ env.TRAMA_R3B_CONSUMPTION_ANCHOR_SHA }}
           CONSUMPTION_CONTEXT: ${{ env.TRAMA_R3B_CONSUMPTION_CONTEXT }}
         with:
           script: |
@@ -44,7 +62,7 @@ jobs:
               {
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: process.env.AUTHORIZED_SOURCE_SHA,
+                ref: process.env.CONSUMPTION_ANCHOR_SHA,
                 per_page: 100,
               },
             )
@@ -52,14 +70,8 @@ jobs:
               (status) => status.context === process.env.CONSUMPTION_CONTEXT,
             )
             if (consumed) {
-              core.setFailed('R3B HOLDOUT already consumed for the authorized source revision')
+              core.setFailed('R3B HOLDOUT already consumed')
             }
-
-      - name: Checkout authorized R3B source
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ env.TRAMA_R3B_AUTHORIZED_SOURCE_SHA }}
-          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -77,14 +89,14 @@ jobs:
       - name: Claim one-shot HOLDOUT provider attempt
         uses: actions/github-script@v7
         env:
-          AUTHORIZED_SOURCE_SHA: ${{ env.TRAMA_R3B_AUTHORIZED_SOURCE_SHA }}
+          CONSUMPTION_ANCHOR_SHA: ${{ env.TRAMA_R3B_CONSUMPTION_ANCHOR_SHA }}
           CONSUMPTION_CONTEXT: ${{ env.TRAMA_R3B_CONSUMPTION_CONTEXT }}
         with:
           script: |
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: process.env.AUTHORIZED_SOURCE_SHA,
+              sha: process.env.CONSUMPTION_ANCHOR_SHA,
               state: 'pending',
               context: process.env.CONSUMPTION_CONTEXT,
               description: 'R3B HOLDOUT provider attempt claimed; reruns are blocked',
@@ -113,7 +125,7 @@ jobs:
         if: always() && steps.holdout.outcome != 'skipped'
         uses: actions/github-script@v7
         env:
-          AUTHORIZED_SOURCE_SHA: ${{ env.TRAMA_R3B_AUTHORIZED_SOURCE_SHA }}
+          CONSUMPTION_ANCHOR_SHA: ${{ env.TRAMA_R3B_CONSUMPTION_ANCHOR_SHA }}
           CONSUMPTION_CONTEXT: ${{ env.TRAMA_R3B_CONSUMPTION_CONTEXT }}
           HOLDOUT_OUTCOME: ${{ steps.holdout.outcome }}
         with:
@@ -121,7 +133,7 @@ jobs:
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: process.env.AUTHORIZED_SOURCE_SHA,
+              sha: process.env.CONSUMPTION_ANCHOR_SHA,
               state: 'success',
               context: process.env.CONSUMPTION_CONTEXT,
               description: `R3B HOLDOUT consumed; provider step outcome=${process.env.HOLDOUT_OUTCOME}`,
