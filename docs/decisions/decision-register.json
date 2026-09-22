@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.8.0",
+  "registerVersion": "1.9.0",
   "updatedAt": "2026-09-22",
   "decisions": [
     {
@@ -146,7 +146,7 @@
     {
       "id": "TRAMA-ADR-011",
       "title": "Educazione civica: separazione tra quadro istituzionale e attuazione di classe",
-      "status": "PROPOSED",
+      "status": "APPROVED",
       "date": "2026-09-22",
       "scope": [
         "TRAMA",
@@ -154,7 +154,7 @@
         "Atlas",
         "Docente OS"
       ],
-      "decision": "Arena governa il quadro istituzionale annuale approvato di Educazione civica; Docente OS governa progettazione, conferma docente, attività condivise e consuntivo di classe; Atlas mostra soltanto il quadro approvato. Le quote per primaria e secondaria di primo grado sono annuali e il totale approvabile è almeno 33 ore; le attività condivise emergono dalla progettazione di classe e contano una sola volta nel totale. Nessun valore settimanale locale sostituisce il quadro Arena.",
+      "decision": "Arena governa il quadro istituzionale annuale approvato di Educazione civica; Docente OS governa progettazione, conferma docente, attività condivise e consuntivo di classe; Atlas mostra soltanto il quadro approvato. Le quote per primaria e secondaria di primo grado sono annuali e il totale approvabile è almeno 33 ore; le attività condivise emergono dalla progettazione di classe e contano una sola volta nel totale. Nessun valore settimanale locale sostituisce il quadro Arena. L'approvazione di governance non autorizza da sola alcuna capacità runtime.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
