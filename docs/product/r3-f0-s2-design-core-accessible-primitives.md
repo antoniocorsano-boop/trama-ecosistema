@@ -56,6 +56,18 @@ Scale neutrali e riutilizzabili:
 - movimento;
 - livelli di sovrapposizione.
 
+Valori di riferimento S2, espressi come decisione di design e non come API frontend:
+
+| Scala | Valori |
+| --- | --- |
+| spacing | 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 px |
+| radius | 0 · 4 · 8 px · full solo per forme realmente circolari |
+| border | 1 px standard · 2 px enfasi/focus quando necessario |
+| interactive | 24 px minimo WCAG; 32 px compatto; 44 px preferito per controlli touch primari |
+| content measure | circa 65–75 caratteri per riga nei contenuti editoriali |
+
+I valori possono essere raffinati nei prototipi soltanto mantenendo equivalenza semantica e accessibilità.
+
 ### 2.2 Semantic roles
 
 Ruoli indipendenti dalla futura palette di marca:
@@ -122,17 +134,19 @@ La baseline non introduce font esterni.
 
 ### Ruoli
 
-| Token | Uso |
-| --- | --- |
-| `type.display` | titoli di apertura o grandi viste, uso raro |
-| `type.page-title` | titolo pagina |
-| `type.section-title` | sezioni |
-| `type.subsection-title` | sottosezioni |
-| `type.body` | lettura principale |
-| `type.body-strong` | enfasi semantica |
-| `type.small` | testo secondario |
-| `type.metadata` | provenienza, versione, stato |
-| `type.code` | identificativi tecnici solo dove necessari |
+Formato: **dimensione / line-height / peso**.
+
+| Token | Valore di riferimento | Uso |
+| --- | --- | --- |
+| `type.display` | 2rem / 1.15 / 700 | titoli di apertura o grandi viste, uso raro |
+| `type.page-title` | 1.75rem / 1.2 / 700 | titolo pagina |
+| `type.section-title` | 1.375rem / 1.3 / 700 | sezioni |
+| `type.subsection-title` | 1.125rem / 1.4 / 600 | sottosezioni |
+| `type.body` | 1rem / 1.6 / 400 | lettura principale |
+| `type.body-strong` | 1rem / 1.6 / 600 | enfasi semantica |
+| `type.small` | 0.875rem / 1.5 / 400 | testo secondario |
+| `type.metadata` | 0.8125rem / 1.45 / 400 | provenienza, versione, stato |
+| `type.code` | 0.875rem / 1.5 / 400 | identificativi tecnici solo dove necessari |
 
 Regole:
 
