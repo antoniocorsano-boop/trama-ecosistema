@@ -13,13 +13,15 @@ Esito:
 - skip link verso `main`: PASS;
 - tutte le ancore interne hanno un target esistente: PASS;
 - nessun `id` duplicato: PASS;
-- nessun `script`: PASS;
+- unico script locale `prototype.js`, senza dipendenze esterne o rete: PASS;
 - nessun asset o URL esterno: PASS;
 - nessun framework frontend: PASS;
 - visuale della mappa esclusa dall'albero accessibile con `aria-hidden=true`: PASS;
+- relazioni visuali O2.1 → risorsa e O2.1 → raccordo riallineate all'elenco equivalente: PASS;
 - elenco equivalente presente: PASS;
 - `role=status` presente solo sul feedback UI transitorio: PASS;
 - `details/summary` per provenance: PASS;
+- tabs Lezioni ↔ Obiettivi con `tablist/tab/tabpanel` e tastiera ArrowLeft/ArrowRight/Home/End: PASS statico;
 - `aria-current` presente dove applicabile: PASS;
 - `:focus-visible`: PASS;
 - skip link visibile al focus: PASS;
