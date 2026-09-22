@@ -1,6 +1,6 @@
 # ECO-02/P1 — Runbook collaudo umano finale
 
-**Stato:** READY_FOR_HUMAN_EXECUTION / PILOT_STILL_ACTIVE  
+**Stato:** READY_FOR_HUMAN_EXECUTION_V2 / PILOT_STILL_ACTIVE  
 **Perimetro:** Tecnologia · classe 2C · sequenza «Agricoltura come sistema tecnologico»  
 **Dati personali:** non richiesti  
 **Automazione autonoma:** non autorizzata
@@ -22,6 +22,8 @@ Prima di iniziare devono risultare:
 - P9 disponibile con una sola rappresentazione della proposta;
 - registrazione TeachingSession operativa in Beta;
 - Runtime Health Beta verde;
+- TRAMA-PW-01 integrato;
+- Product CI, P6 Performance Runtime e HVA Runtime post-merge PASS sul Beta Docente OS;
 - nessun intervento tecnico pianificato durante la prova.
 
 Se una precondizione manca, il collaudo si ferma e non viene classificato come FAIL didattico.
@@ -37,23 +39,22 @@ Verificare:
 - lezione/sequenza riconoscibile;
 - data e collocazione coerenti nel dominio Docente OS.
 
-### 2. Acquisizione/rivalidazione Arena e gate «Approva e procedi»
+### 2. Baseline Arena e gate «Approva e procedi»
 
-Eseguire una volta il flusso controllato Arena → Docente OS previsto per il pilota 2C.
+Verificare il comportamento ordinario previsto dal modello persistente Arena → Docente OS.
 
 La prova deve mostrare realmente:
 
-- avvio dell'acquisizione o rivalidazione della baseline;
-- elemento selezionato e provenienza Arena;
-- avanzamento visibile;
-- esito comprensibile;
-- eventuale errore senza perdita del contesto;
-- gate reale «Approva e procedi» quando il flusso lo richiede;
-- nessuna approvazione implicita derivante dal solo trasporto o dalla persistenza.
+- baseline corretta già associata a classe + disciplina + anno + versione, quando corrente;
+- provenienza Arena chiaramente riconoscibile;
+- stato della baseline comprensibile;
+- nessun nuovo trasferimento manuale richiesto per la singola lezione;
+- gate reale «Approva e procedi» soltanto quando il flusso lo richiede;
+- nessuna approvazione implicita derivante dal solo trasporto, dalla persistenza o dalla navigazione.
 
-Se la baseline è già corrente, usare il percorso di rivalidazione/refresh previsto dal pilota e verificare comunque l'esito visibile. Non è sufficiente constatare che una baseline esiste già.
+Se una vera azione di acquisizione o rivalidazione è necessaria nel caso reale, allora devono essere percepibili intenzione, stato in corso quando pertinente, esito, stato risultante e prossimo passo secondo TRAMA-PW-01. Non va forzato un refresh artificiale soltanto per produrre evidenza.
 
-Il trasferimento manuale .cml-handoff.json può essere usato solo se il pilota lo richiede come trasporto controllato o ripiego; non deve diventare una procedura da ripetere per ogni lezione.
+Il trasferimento manuale .cml-handoff.json resta ammesso solo come interoperabilità, pilota o ripiego; non è una procedura ordinaria e non deve essere ripetuto per ogni lezione.
 
 ### 3. Contesto curricolare
 
@@ -165,7 +166,7 @@ Non devono comparire:
 
 Rispondere con PASS / PARTIAL / FAIL e una nota breve:
 
-1. Acquisizione/rivalidazione Arena e relativo esito comprensibili?
+1. Baseline Arena, stato e provenienza comprensibili senza trasferimenti superflui?
 2. Origine curricolare e obiettivo della lezione chiari?
 3. Gate «Approva e procedi» esplicito e non implicito?
 4. Risorsa Atlas realmente controllabile?
@@ -184,7 +185,7 @@ Il pilota può essere proposto per chiusura soltanto se:
 - **tutte e 10 le domande finali sono PASS**;
 - lo stato complessivo del collaudo è PASS;
 - nessuna adozione o approvazione avviene automaticamente;
-- il flusso Arena → Docente OS e il gate «Approva e procedi» sono stati realmente esercitati;
+- il comportamento reale Arena → Docente OS è stato verificato senza forzare trasferimenti o refresh non necessari, e il gate «Approva e procedi» è stato esercitato solo quando pertinente;
 - il ciclo P9 accettazione → modifica → riconferma è stato realmente esercitato;
 - il rapporto umano finale è registrato;
 - una successiva PR TRAMA propone esplicitamente la chiusura;
@@ -200,3 +201,19 @@ La chiusura non attiva DOS-A1 e non autorizza nuovi runtime cross-product.
 - PARTIAL — pilota resta ACTIVE con rilievi circoscritti;
 - FAIL — pilota resta ACTIVE e richiede correzione prima di una nuova prova;
 - BLOCKED — prova non valida per precondizione tecnica mancante.
+
+## Ricevuta finale proposta
+
+In caso di PASS pieno, il rapporto umano deve produrre una ricevuta sintetica con:
+
+- identificativo `ECO-02/P1`;
+- data del collaudo;
+- perimetro Tecnologia 2C;
+- esito `PASS`;
+- conferma `NO_TECHNICAL_INTERVENTION_DURING_RUN`;
+- conferma `TEACHER_CONTROL_PRESERVED`;
+- conferma `TRAMA_PW_01_OBSERVED`;
+- conferma `NO_IMPLICIT_APPROVAL`;
+- conferma `DOS_A1_REMAINS_RUNTIME_DEFERRED`.
+
+Solo dopo integrazione della PR di chiusura e HUMAN EXACT-HEAD REVIEW PASS lo stato canonico può diventare `CLOSED_VERIFIED`.
