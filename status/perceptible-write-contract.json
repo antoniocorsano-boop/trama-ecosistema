@@ -1,0 +1,72 @@
+{
+  "contract": "TRAMA-PW-01",
+  "version": 1,
+  "title": "Perceptible Write Contract",
+  "scope": [
+    "Arena",
+    "Docente OS",
+    "Atlas",
+    "future TRAMA user-facing products"
+  ],
+  "rule": "NO_SILENT_USER_INITIATED_WRITES",
+  "required": [
+    "intent",
+    "pending_when_async",
+    "success",
+    "failure",
+    "result_state",
+    "next_step_when_useful",
+    "assistive_announcement",
+    "non_color_only"
+  ],
+  "criticalWrite": {
+    "toastOnlyAllowed": false,
+    "persistentResultStateRequired": true
+  },
+  "implicitApprovalForbidden": true,
+  "enforcement": {
+    "changedWriteSurfaceRequiresEvidence": true,
+    "ciGateRequired": true,
+    "humanCriticalJourneyCheckRequired": true,
+    "baselineAuditRequired": true,
+    "failClosed": true
+  },
+  "boundaries": {
+    "authorizesNewWrites": false,
+    "activatesDOSA1": false,
+    "authorizesCrossProductRuntime": false,
+    "changesArenaAuthority": false,
+    "atlasRequiresAuthentication": false,
+    "atlasAllowsPersonalStudentData": false,
+    "atlasPrivacyFirst": true
+  },
+  "adoption": {
+    "trama": {
+      "pr": 44,
+      "state": "DRAFT"
+    },
+    "docenteOs": {
+      "enforcementPr": 582,
+      "regressionFixPr": 581,
+      "state": "IN_PROGRESS"
+    },
+    "arena": {
+      "enforcementPr": 328,
+      "state": "IN_PROGRESS"
+    },
+    "atlas": {
+      "enforcementPr": 12,
+      "state": "IN_PROGRESS"
+    }
+  },
+  "rolloutState": "ROLLING_ENFORCEMENT",
+  "fullEnforcementRequires": [
+    "TRAMA governance approval",
+    "product gates PASS and merged",
+    "Docente OS regression retest PASS",
+    "baseline audit of existing Arena and Docente OS writes"
+  ],
+  "decisionRef": "TRAMA-ADR-012",
+  "assuranceDevelopmentProtocolRef": "docs/process/assurance-gate-development-protocol.md",
+  "rolloutPolicy": "CANARY_BEFORE_CROSS_PRODUCT"
+}
