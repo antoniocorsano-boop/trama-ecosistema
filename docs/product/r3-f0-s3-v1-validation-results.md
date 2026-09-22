@@ -1,6 +1,6 @@
 # R3-F0/S3-V1 — Validation Results
 
-**Stato:** STATIC_CONTRACT_PASS / REAL_RENDERING_PENDING / NO_RUNTIME  
+**Stato:** STATIC_CONTRACT_PASS / AUTOMATED_BROWSER_RENDER_PASS / HUMAN_VISUAL_PENDING / NO_RUNTIME  
 **Artefatto:** `docs/product/prototypes/r3-f0-s3-v1/index.html`
 
 ## 1. Validazione strutturale eseguita
@@ -47,22 +47,35 @@ Rapporto contro bianco:
 
 Questa misurazione verifica i valori campione, non sostituisce il controllo completo di ogni combinazione resa dal browser.
 
-## 3. Cosa NON è ancora PASS
+## 3. Browser evidence automatica
 
-Il runtime di analisi disponibile non ha accesso di rete al ramo GitHub per materializzare automaticamente il file in Chromium. Perciò non vengono attribuiti PASS non osservati.
+Il workflow dedicato **R3-F0 S3-V1 Browser Evidence** ha eseguito con Chrome/Chromium headless:
 
-Restano PENDING:
+- rendering Android-like `390 × 844`: PASS;
+- rendering desktop `1440 × 1100`: PASS;
+- rendering grande schermo/LIM `1920 × 1080`: PASS;
+- DOM renderizzato con marker critici: PASS;
+- generazione screenshot: PASS;
+- upload artifact: PASS.
 
-- Android portrait reale/simulato con rendering;
-- desktop con rendering;
-- LIM / grande schermo;
+Run di riferimento sull'exact head `8c3af92dfdf5841522d2072c7f0496e8d4d83f17`: `35683224857`.
+
+Artifact: `r3-f0-s3-v1-rendering` (id `10676260188`).
+
+Questo dimostra che il prototipo viene realmente materializzato dal browser nei tre viewport. Non equivale a una review visuale umana o a un test assistivo.
+
+## 4. Cosa resta PENDING
+
+- review visuale umana del rendering Android;
+- review visuale umana desktop;
+- review visuale umana LIM / grande schermo;
 - walkthrough tastiera sul DOM renderizzato;
 - screen reader reale;
 - reflow a 320 CSS px e zoom;
-- non-text contrast sui bordi/indicatori nel rendering;
+- non-text contrast completo sui bordi/indicatori nel rendering;
 - controllo visuale in scala di grigi.
 
-## 4. Interpretazione
+## 5. Interpretazione
 
 `STATIC_CONTRACT_PASS` significa che il prototipo è sufficientemente coerente per essere sottoposto a rendering e review umana.
 
