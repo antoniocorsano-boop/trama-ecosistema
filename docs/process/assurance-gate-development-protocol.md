@@ -88,6 +88,8 @@ Ordine:
 
 È vietato propagare contemporaneamente una prima implementazione non ancora stress-testata a tutti i prodotti.
 
+Le euristiche devono avere un escape hatch esplicito e revisionabile: `@trama-write` per write custom non riconosciute, `@trama-readonly` solo per falsi positivi dimostrabili. Nessun marker sostituisce i test o autorizza una write.
+
 ### G6 — Baseline storica separata
 
 L'enforcement sulle nuove/modificate superfici e l'audit del codice storico sono attività distinte.
