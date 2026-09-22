@@ -88,10 +88,17 @@ Ruoli indipendenti dalla futura palette di marca:
 - `focus.ring`
 - `selection.background`
 - `selection.foreground`
-- `status.info`
-- `status.success`
-- `status.warning`
-- `status.error`
+- `editorial.draft`
+- `editorial.published`
+- `editorial.updated`
+- `editorial.withdrawn`
+- `editorial.rejected`
+- `curricular.current`
+- `curricular.superseded`
+- `ui.info`
+- `ui.success`
+- `ui.warning`
+- `ui.error`
 - `authority.arena`
 - `domain.atlas`
 - `domain.docente-os`
@@ -104,6 +111,8 @@ I ruoli `authority.*` e `domain.*` servono a riconoscere provenienza e dominio. 
 I componenti possono derivare token locali dai ruoli semantici, ma non introdurre significati nuovi o colori hard-coded.
 
 Regola: **nessun componente possiede un colore autorevole proprio**.
+
+Regola aggiuntiva: i namespace `editorial.*`, `curricular.*` e `ui.*` non sono intercambiabili. Un'implementazione non può usare un token `ui.*` per rappresentare uno stato persistente di pubblicazione o un token `editorial.*` per un errore/transitorio dell'interfaccia.
 
 ## 3. Direzione cromatica
 
@@ -279,6 +288,13 @@ Atlas non rappresenta la proposta come già adottata.
 
 Loading, empty, error, selected e focus non devono essere confusi con stati editoriali o curricolari.
 
+Mappatura obbligatoria:
+
+- stato editoriale persistente → `editorial.*`;
+- stato curricolare/proiezione Arena → `curricular.*`;
+- feedback transitorio dell'interfaccia → `ui.*`;
+- focus/selection restano stati di interazione e non usano nessuno dei namespace precedenti come scorciatoia semantica.
+
 ## 10. Primitive accessibili
 
 ### Link
@@ -332,8 +348,15 @@ Loading, empty, error, selected e focus non devono essere confusi con stati edit
 
 ### Status
 
-**Uso:** stato editoriale o informativo.  
-**Vincoli:** testo + segnale visuale; non usare un solo colore; vocabolario coerente.
+**Uso:** rendere visibile uno stato appartenente a **un solo dominio semantico alla volta**.
+
+Varianti distinte:
+
+- **EditorialStatus** — stato persistente di una risorsa/pagina/pubblicazione Atlas: bozza, pubblicato, aggiornato, ritirato, rifiutato;
+- **CurricularStatus** — stato/proiezione proveniente da Arena, ad esempio corrente o superato, senza possibilità di modifica da Atlas;
+- **UIFeedbackStatus** — feedback transitorio dell'interfaccia: info, successo dell'operazione, avviso, errore.
+
+**Vincoli:** testo + segnale visuale; non usare un solo colore; vocabolari separati; nessuna variante deve riutilizzare etichette o token di un altro dominio solo per somiglianza cromatica o stilistica. Un errore di caricamento non può apparire come stato editoriale della risorsa; una risorsa ritirata non può apparire come semplice warning transitorio.
 
 ### Relation chip
 
@@ -492,7 +515,7 @@ S2 può essere considerato completato soltanto se:
 - [ ] nessun colore di marca è hard-coded come significato unico;
 - [ ] tipografia e spacing sostengono lettura su mobile, desktop e LIM;
 - [ ] focus e selezione sono distinti;
-- [ ] stati curricolare/editoriale/interfaccia sono distinti;
+- [ ] stati curricolare/editoriale/interfaccia sono distinti anche nei namespace token e nei contratti di presentazione;
 - [ ] tutte le primitive minime hanno un contratto di comportamento;
 - [ ] ogni primitiva critica è utilizzabile da tastiera;
 - [ ] le alternative accessibili previste da S1 restano preservate;
