@@ -27,9 +27,17 @@ def load_sdk():
     from typesafe_sdk import Choice,Noul,TypeSafeClient
     return Choice,Noul,TypeSafeClient
 
+def holdout_authorized():
+    return os.environ.get("TRAMA_R3B_HOLDOUT_AUTHORIZED") == "true"
+
 def selected_cases(corpus,split):
     policy=corpus["splitPolicy"]
-    ids=policy["developmentCaseIds"] if split=="DEVELOPMENT" else policy["holdoutCaseIds"]
+    if split=="HOLDOUT":
+        if not holdout_authorized():
+            raise RuntimeError("R3B HOLDOUT bloccato: autorizzazione one-shot assente")
+        ids=policy["holdoutCaseIds"]
+    else:
+        ids=policy["developmentCaseIds"]
     by_id={c["id"]:c for c in corpus["cases"]}
     return [by_id[i] for i in ids]
 
@@ -141,7 +149,8 @@ def execute(output,model,split):
         "iteration":"R3B",
         "corpusVersion":corpus["pilotSpecVersion"],
         "evaluatedSplit":split,
-        "holdoutLocked": split != "HOLDOUT",
+        "holdoutLockedByCorpus":True,
+        "holdoutAuthorizationUsed": bool(split=="HOLDOUT" and holdout_authorized()),
         "provider":"TypeSafe",
         "requestedModel":model,
         "advisoryOnly":True,
@@ -173,7 +182,7 @@ def main():
         print("R3B corpus PASS"); return 0
     try:return execute(args.output,args.model,args.split)
     except RuntimeError as exc:
-        print(f"ERROR: {exc}",file=sys.stderr); return 2
+        print(f"ERROR: {exc}",file=sys.stderr); return 3 if "HOLDOUT bloccato" in str(exc) else 2
 
 if __name__=="__main__":
     sys.exit(main())

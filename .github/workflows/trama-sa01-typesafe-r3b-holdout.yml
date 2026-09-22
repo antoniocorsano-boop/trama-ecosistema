@@ -2,42 +2,145 @@ name: TRAMA-SA-01 TypeSafe Pilot R3B Holdout
 
 on:
   workflow_dispatch:
-    inputs:
-      model:
-        description: "Modello TypeSafe da richiedere"
-        required: true
-        default: "jev-latest"
-        type: string
 
 permissions:
   contents: read
+  statuses: write
+
+concurrency:
+  group: trama-sa01-r3b-holdout-one-shot
+  cancel-in-progress: false
 
 jobs:
   r3b-holdout:
     runs-on: ubuntu-latest
     env:
       TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+      TRAMA_R3B_HOLDOUT_AUTHORIZED: "true"
+      TRAMA_R3B_CONSUMPTION_ANCHOR_SHA: "72aa1a9919229120f69f9de41f877bb428d46897"
+      TRAMA_R3B_CONSUMPTION_CONTEXT: "trama-sa01/r3b-holdout-consumed"
+      TRAMA_R3B_MODEL: "jev-latest"
+      TRAMA_R3B_CASES_BLOB: "d161cc03f50d1777eaa58010419f3cc64aaa02a4"
+      TRAMA_R3B_HARNESS_BLOB: "086fac2415238478d25311b2e74b444aafca21e6"
+      TRAMA_R3B_R2_BLOB: "1c2f3ef60752f22ff1be5e346bdf62aaa945486a"
+      TRAMA_R3B_BASE_BLOB: "f564092d3670dd39aac2d1db8e754b91afcffc34"
+      TRAMA_R3B_REQUIREMENTS_BLOB: "47d4db62b5f9d139f57b2b79b9a1ab665c749a27"
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout gate revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Verify main-only dispatch and stable consumption anchor
+        shell: bash
+        run: |
+          test "$GITHUB_REF" = "refs/heads/main"
+          printf '%s' "$TRAMA_R3B_CONSUMPTION_ANCHOR_SHA" | grep -Eq '^[0-9a-f]{40}$'
+          git cat-file -e "$TRAMA_R3B_CONSUMPTION_ANCHOR_SHA^{commit}"
+          git merge-base --is-ancestor "$TRAMA_R3B_CONSUMPTION_ANCHOR_SHA" "$GITHUB_SHA"
+
+      - name: Verify authorized R3B experiment content
+        shell: bash
+        run: |
+          test "$(git hash-object docs/pilots/trama-sa-01/r3b-cases.json)" = "$TRAMA_R3B_CASES_BLOB"
+          test "$(git hash-object scripts/run_trama_sa01_typesafe_r3b.py)" = "$TRAMA_R3B_HARNESS_BLOB"
+          test "$(git hash-object scripts/run_trama_sa01_typesafe_r2.py)" = "$TRAMA_R3B_R2_BLOB"
+          test "$(git hash-object scripts/run_trama_sa01.py)" = "$TRAMA_R3B_BASE_BLOB"
+          test "$(git hash-object requirements/trama-sa01-typesafe.txt)" = "$TRAMA_R3B_REQUIREMENTS_BLOB"
+
+      - name: Reject an already consumed HOLDOUT
+        uses: actions/github-script@v7
+        env:
+          CONSUMPTION_ANCHOR_SHA: ${{ env.TRAMA_R3B_CONSUMPTION_ANCHOR_SHA }}
+          CONSUMPTION_CONTEXT: ${{ env.TRAMA_R3B_CONSUMPTION_CONTEXT }}
+        with:
+          script: |
+            const statuses = await github.paginate(
+              github.rest.repos.listCommitStatusesForRef,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: process.env.CONSUMPTION_ANCHOR_SHA,
+                per_page: 100,
+              },
+            )
+            const consumed = statuses.some(
+              (status) => status.context === process.env.CONSUMPTION_CONTEXT,
+            )
+            if (consumed) {
+              core.setFailed('R3B HOLDOUT already consumed')
+            }
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Require dedicated TypeSafe key
         run: test -n "$TYPESAFE_API_KEY"
+
       - name: Install pinned dependency
         run: python3 -m pip install -r requirements/trama-sa01-typesafe.txt
-      - name: Validate frozen R3B corpus
+
+      - name: Validate preregistered R3B corpus
         run: python3 scripts/run_trama_sa01_typesafe_r3b.py --validate-only
-      - name: Run frozen R3B HOLDOUT once
+
+      - name: Claim one-shot HOLDOUT provider attempt
+        uses: actions/github-script@v7
+        env:
+          CONSUMPTION_ANCHOR_SHA: ${{ env.TRAMA_R3B_CONSUMPTION_ANCHOR_SHA }}
+          CONSUMPTION_CONTEXT: ${{ env.TRAMA_R3B_CONSUMPTION_CONTEXT }}
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: process.env.CONSUMPTION_ANCHOR_SHA,
+              state: 'pending',
+              context: process.env.CONSUMPTION_CONTEXT,
+              description: 'R3B HOLDOUT provider attempt claimed; reruns are blocked',
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            })
+
+      - name: Run R3B HOLDOUT one-shot
+        id: holdout
+        continue-on-error: true
         run: |
           python3 scripts/run_trama_sa01_typesafe_r3b.py \
             --split HOLDOUT \
-            --model "${{ inputs.model }}" \
+            --model "$TRAMA_R3B_MODEL" \
             --output artifacts/trama-sa01-typesafe-r3b-holdout-raw.json
+
       - name: Upload advisory results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: trama-sa01-typesafe-r3b-holdout-raw
           path: artifacts/trama-sa01-typesafe-r3b-holdout-raw.json
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
+
+      - name: Finalize HOLDOUT consumption marker
+        if: always() && steps.holdout.outcome != 'skipped'
+        uses: actions/github-script@v7
+        env:
+          CONSUMPTION_ANCHOR_SHA: ${{ env.TRAMA_R3B_CONSUMPTION_ANCHOR_SHA }}
+          CONSUMPTION_CONTEXT: ${{ env.TRAMA_R3B_CONSUMPTION_CONTEXT }}
+          HOLDOUT_OUTCOME: ${{ steps.holdout.outcome }}
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: process.env.CONSUMPTION_ANCHOR_SHA,
+              state: 'success',
+              context: process.env.CONSUMPTION_CONTEXT,
+              description: `R3B HOLDOUT consumed; provider step outcome=${process.env.HOLDOUT_OUTCOME}`,
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            })
+
+      - name: Enforce HOLDOUT run result
+        if: always()
+        shell: bash
+        run: test "${{ steps.holdout.outcome }}" = "success"
