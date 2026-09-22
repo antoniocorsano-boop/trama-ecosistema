@@ -351,10 +351,16 @@ main { max-width: 1120px; margin: 0 auto; }
 
 .map-figure {
   margin: var(--space-8) 0;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .map-canvas {
   display: grid;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  contain: inline-size;
   grid-template-columns: minmax(110px, 1fr) 56px minmax(130px, 1fr) 56px minmax(130px, 1fr);
   grid-template-rows: repeat(5, minmax(70px, auto));
   gap: var(--space-3);
