@@ -65,7 +65,8 @@ TRAMA-SA-01 resta separato dal percorso prodotto. Il provider è advisory-only. 
 - attivazione di DOS-A1;
 - pubblicazione automatica Docente OS → Atlas;
 - OutcomeAggregateSnapshot;
-- autenticazione studenti;
+- account, login o autenticazione studenti in Atlas, esclusi dall'architettura privacy-first;
+- profili, tracking o personalizzazione individuale degli studenti in Atlas;
 - motori Officina materiali in runtime;
 - chiusura automatica di ECO-02/P1;
 - promozione di TypeSafe a gate decisionale.
