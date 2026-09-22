@@ -41,9 +41,9 @@ flowchart LR
 
 | Livello | Stato | Significato |
 | --- | --- | --- |
-| Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati |
+| Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati; TRAMA-PW-01 integrato |
 | Arena | **OPERATIVA** | Fonte curricolare autorevole; EC-01/Arena-F4 integrato |
-| Docente OS | **OPERATIVO** | Preparazione, contesto, decisione docente e registrazione lezione disponibili |
+| Docente OS | **OPERATIVO / CANARY PASS** | Preparazione, contesto, decisione docente e registrazione lezione disponibili; post-merge Product CI, P6 Performance Runtime e HVA Runtime PASS sul Beta reale |
 | ECO-02/P1 | **ACTIVE** | È il principale gate reale ancora da chiudere: collaudo umano integrato Tecnologia 2C |
 | Atlas R3-F0 | **ACTIVE** | Fondazione prodotto/design in avanzamento; S1/S2 integrati, S3 non ancora chiuso |
 | Runtime Docente OS → Atlas | **NON AUTORIZZATO** | Nessuna pubblicazione automatica cross-product |
@@ -54,10 +54,14 @@ flowchart LR
 
 ### Priorità canonica corrente
 
+La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md).
+
 1. **Chiudere ECO-02/P1** con un caso reale integrato Tecnologia 2C senza correzioni tecniche durante il percorso.
 2. **Chiudere R3-F0/S3** con review visuale umana, tastiera, screen reader, reflow e non-text-contrast.
-3. Solo dopo queste evidenze, decidere l'apertura dei successivi slice Atlas e di eventuali runtime cross-product.
-4. Mantenere **DOS-A1 deferred**, Officina runtime non autorizzata e Atlas privacy-first.
+3. **Consolidare Atlas prima di ampliarlo**, dando priorità a R3-P2 Curriculum pubblico e R3-P5 Smart Navigation.
+4. **Ridurre l'attrito del percorso docente** mantenendo Arena → Docente OS diretto e Atlas opzionale, non obbligatorio.
+5. Solo dopo superfici Atlas mature, valutare R3-P4 Docente OS → Atlas con un nuovo gate umano/runtime.
+6. Mantenere **DOS-A1 deferred**, Officina runtime non autorizzata e Atlas privacy-first.
 
 
 | Area | Stato | Evidenza o prossimo controllo |
@@ -70,6 +74,7 @@ flowchart LR
 | Atlas / R3 | R3-F0 attivo | ADR-007/008/010 approvate; Product & Design Foundation approvata e integrata; avvio consentito entro i confini NO_RUNTIME e privacy-first |
 | Docente OS | Operativo nel proprio dominio | baseline persistente, preparazione, proposte teacher-editable, registrazione lezione e runtime release contract verificati |
 | Officina materiali / R4-P1 | Architettura approvata / runtime non autorizzato | separazione tra regia didattica e produzione specialistica approvata da ADR-010; implementazione ancora da progettare |
+| TRAMA-PW-01 | **Integrato / canary Docente OS PASS** | contratto trasversale no-silent-write integrato; Product CI, P6 Performance Runtime e HVA Runtime PASS sul Beta Docente OS dopo il merge applicativo |
 | TRAMA-SA-01 | Pilota assurance attivo | gate R3B HOLDOUT one-shot integrato; HOLDOUT non eseguito; TypeSafe resta advisory-only |
 | DOS-A1 | RUNTIME_DEFERRED | richiede una nuova autorizzazione esplicita; nessuna evidenza corrente lo attiva implicitamente |
 | Marca TRAMA | Nome di lavoro | verifiche giuridiche, digitali e di posizionamento ancora pendenti |
