@@ -108,9 +108,10 @@ Questa associazione **non costituisce palette definitiva** e non autorizza valor
 Requisiti:
 
 - target WCAG 2.2 AA;
-- testo normale con contrasto adeguato al target AA;
-- testo grande e grafica informativa con contrasto adeguato al target AA;
-- bordi e focus visibili in condizioni di contrasto ridotto;
+- testo normale: contrasto minimo 4.5:1;
+- testo grande: contrasto minimo 3:1;
+- componenti UI e parti grafiche necessarie alla comprensione: contrasto minimo 3:1 rispetto ai colori adiacenti;
+- bordi e indicatori di stato necessari alla comprensione rispettano il requisito di contrasto non testuale;
 - stati success/error/warning non identificati soltanto da verde/rosso/giallo;
 - provenienza Arena non identificata soltanto dal colore;
 - nessuna combinazione di marca può prevalere sulla leggibilità.
@@ -210,11 +211,12 @@ Ogni controllo interattivo deve distinguere almeno:
 Regole:
 
 - focus sempre visibile;
-- focus non oscurato da header, overlay o pannelli;
+- al livello AA, il componente che riceve focus non può risultare interamente nascosto da contenuti creati dall'interfaccia;
 - selezione e focus sono stati differenti;
 - hover non è requisito per comprendere o usare il controllo;
 - disabilitato non sostituisce una spiegazione;
-- il caricamento non deve causare perdita del contesto.
+- il caricamento non deve causare perdita del contesto;
+- i target per input puntatore rispettano almeno 24 × 24 CSS px oppure una delle eccezioni/spaziature ammesse da WCAG 2.2; per i controlli primari touch Atlas preferisce aree più generose quando lo spazio lo consente.
 
 ## 8. Movimento
 
@@ -285,12 +287,12 @@ Loading, empty, error, selected e focus non devono essere confusi con stati edit
 ### Disclosure
 
 **Uso:** dettagli secondari come provenance, versione, filtri avanzati.  
-**Vincoli:** apertura/chiusura da tastiera; stato espanso comprensibile; contenuto essenziale non nascosto per default.
+**Vincoli:** `Enter` e `Space` attivano apertura/chiusura; stato espanso semanticamente esposto; contenuto essenziale non nascosto per default.
 
 ### Tabs
 
 **Uso:** prospettive equivalenti dello stesso dominio, ad esempio Lezioni ↔ Obiettivi.  
-**Vincoli:** non usate come navigazione primaria; relazione tab/pannello esplicita; ordine tastiera prevedibile.
+**Vincoli:** non usate come navigazione primaria; relazione tab/pannello esplicita; `Tab` entra/esce dal gruppo secondo il pattern; frecce sinistra/destra spostano il focus fra tab orizzontali; l'attivazione automatica è ammessa solo se il pannello viene mostrato senza latenza percepibile, altrimenti si usa attivazione esplicita con `Enter`/`Space`.
 
 ### Search
 
@@ -310,7 +312,9 @@ Loading, empty, error, selected e focus non devono essere confusi con stati edit
 ### Tree / Outline
 
 **Uso:** disciplina → annualità → nucleo → obiettivo.  
-**Vincoli:** espansione prevedibile; livello gerarchico comprensibile; equivalente lineare disponibile quando necessario.
+**Regola di scelta:** per la normale navigazione pubblica si preferisce **outline semantico + disclosure**. Un vero widget `tree` è ammesso solo quando serve il modello applicativo con navigazione gerarchica a frecce.  
+**Vincoli tree:** frecce su/giù muovono il focus tra nodi visibili; destra apre o entra nel ramo; sinistra chiude o torna al genitore; focus e selezione restano distinguibili.  
+**Vincoli comuni:** livello gerarchico comprensibile; equivalente lineare disponibile quando necessario.
 
 ### Status
 
@@ -454,7 +458,19 @@ Per ogni componente, un futuro prototipo deve mostrare:
 - la provenienza non diventa banner permanente salvo necessità di autorità o rischio di ambiguità;
 - gli stati editoriali non devono sembrare valutazioni di qualità didattica.
 
-## 16. Criteri di accettazione S2
+## 16. Riferimenti di conformità per i prototipi
+
+La verifica S2/S3 deve usare almeno:
+
+- WCAG 2.2 SC 1.4.3 — Contrast (Minimum);
+- WCAG 2.2 SC 1.4.11 — Non-text Contrast;
+- WCAG 2.2 SC 2.4.11 — Focus Not Obscured (Minimum);
+- WCAG 2.2 SC 2.5.8 — Target Size (Minimum);
+- WAI-ARIA Authoring Practices — Disclosure, Tabs e Tree View, quando il relativo pattern viene effettivamente usato.
+
+Questi riferimenti guidano i prototipi ma non autorizzano markup ARIA superfluo: quando l'HTML nativo o un outline/disclosure semplice è sufficiente, resta la scelta preferita.
+
+## 17. Criteri di accettazione S2
 
 S2 può essere considerato completato soltanto se:
 
@@ -471,7 +487,7 @@ S2 può essere considerato completato soltanto se:
 - [ ] nessuna scelta introduce una dipendenza frontend;
 - [ ] una review umana exact-head produce PASS o CHANGES_REQUIRED.
 
-## 17. Passo successivo dopo S2
+## 18. Passo successivo dopo S2
 
 Solo dopo review S2:
 
