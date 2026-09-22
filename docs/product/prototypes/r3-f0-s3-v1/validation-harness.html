@@ -27,10 +27,14 @@
         doc.body.scrollWidth <= win.innerWidth + 1;
 
       const map = doc.querySelector(".map-canvas");
-      tests.mapOwnsIts2DOverflow =
+      const mapFigure = doc.querySelector(".map-figure");
+      const equivalentList = doc.getElementById("elenco");
+      tests.mobileMapFallback =
         !!map &&
-        getComputedStyle(map).overflowX === "auto" &&
-        map.scrollWidth >= map.clientWidth;
+        !!mapFigure &&
+        !!equivalentList &&
+        getComputedStyle(mapFigure).display === "none" &&
+        getComputedStyle(equivalentList).display !== "none";
 
       const first = doc.getElementById("tab-lezioni");
       const second = doc.getElementById("tab-obiettivi");
