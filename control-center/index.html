@@ -185,6 +185,7 @@ const REPOS=[
  {key:'Docente OS',repo:'antoniocorsano-boop/docente-os-2026-27',color:'#ffbd4a'}
 ];
 const state={mode:'teacher',prs:[],runs:[],priorities:[],filter:'all',search:''};
+const SNAPSHOT_KEY='trama-control-center-public-snapshot-v1';
 const api=async path=>{const r=await fetch('https://api.github.com'+path,{headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw new Error('GitHub API '+r.status);return r.json()};
 const raw=async url=>{const r=await fetch(url);if(!r.ok)throw new Error('Documento '+r.status);return r.text()};
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -208,9 +209,16 @@ async function load(){
    all.forEach(z=>{if(z.type==='prs')z.x.forEach(p=>state.prs.push({...p,_repo:z.r}));else(z.x.workflow_runs||[]).forEach(w=>state.runs.push({...w,_repo:z.r}))});
    state.prs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));state.runs.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
    state.priorities=parsePriorities(statusMd);
+   try{localStorage.setItem(SNAPSHOT_KEY,JSON.stringify({savedAt:new Date().toISOString(),prs:state.prs,runs:state.runs,priorities:state.priorities}))}catch{}
    render();
    document.getElementById('liveText').textContent='Dati GitHub aggiornati';document.getElementById('updated').textContent='Aggiornato '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
- }catch(e){document.getElementById('liveText').textContent='Aggiornamento non riuscito';document.getElementById('errorBox').innerHTML='<div class="error">Impossibile leggere temporaneamente le API pubbliche GitHub: '+esc(e.message)+'. Riprova con “Aggiorna”.</div>'}
+ }catch(e){
+   let restored=false;
+   try{const snap=JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'null');if(snap?.prs&&snap?.runs){state.prs=snap.prs;state.runs=snap.runs;state.priorities=snap.priorities||[];render();restored=true;document.getElementById('updated').textContent='Ultimo stato salvato '+new Date(snap.savedAt).toLocaleString('it-IT')}}
+   catch{}
+   document.getElementById('liveText').textContent=restored?'Offline · ultimo stato disponibile':'Aggiornamento non riuscito';
+   document.getElementById('errorBox').innerHTML=restored?'<div class="error" style="color:#ffe29b;background:#443717">Sei offline o GitHub non è raggiungibile: visualizzo l’ultimo stato pubblico salvato su questo dispositivo.</div>':'<div class="error">Impossibile leggere temporaneamente le API pubbliche GitHub: '+esc(e.message)+'. Riprova con “Aggiorna”.</div>'
+ }
 }
 function filteredPrs(){return state.prs.filter(p=>(state.filter==='all'||p._repo.key===state.filter)&&(!state.search||((p.title+' '+p.number+' '+p._repo.key+' '+p.state).toLowerCase().includes(state.search))))}
 function render(){
