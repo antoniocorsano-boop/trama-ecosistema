@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.6.0",
-  "updatedAt": "2026-09-21",
+  "registerVersion": "1.7.0",
+  "updatedAt": "2026-09-22",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -131,15 +131,15 @@
     {
       "id": "TRAMA-ADR-010",
       "title": "Atlas integrale e separazione dell'Officina materiali",
-      "status": "PROPOSED",
-      "date": "2026-09-21",
+      "status": "APPROVED",
+      "date": "2026-09-22",
       "scope": [
         "TRAMA",
         "Arena",
         "Atlas",
         "Docente OS"
       ],
-      "decision": "Atlas resta il visualizzatore/navigatore intelligente integrale del curricolo e include biblioteca e Student Learning Hub senza ridursi a repository. Docente OS costruisce il contesto e il brief ma non è il motore grafico generalista; una Officina materiali specialistica può produrre proposte usando anche pattern e risorse Atlas. Si applica riusa-prima-di-generare e ogni adozione/pubblicazione resta una decisione esplicita del docente. Nessun runtime è autorizzato da questa decisione proposta.",
+      "decision": "Atlas resta il visualizzatore/navigatore intelligente integrale del curricolo e include biblioteca e Student Learning Hub senza ridursi a repository. Docente OS costruisce il contesto e il brief ma non è il motore grafico generalista; una Officina materiali specialistica può produrre proposte usando anche pattern e risorse Atlas. Si applica riusa-prima-di-generare e ogni adozione/pubblicazione resta una decisione esplicita del docente. Nessun runtime è autorizzato da questa decisione di governance.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }

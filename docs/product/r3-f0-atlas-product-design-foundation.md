@@ -1,8 +1,16 @@
 # R3-F0 — Atlas Product & Design Foundation
 
-**Stato:** READY_FOR_IMPLEMENTATION_REVIEW / NO_RUNTIME  
+**Stato:** ACTIVE / START_GATE_PASS / NO_RUNTIME  
 **Alias prodotto:** ATLAS-F0  
 **Autorità:** TRAMA governa lo slice; Atlas resta il dominio di prodotto interessato.
+
+## Stato della review
+
+La review umana della **fondazione/avvio** è PASS. Questo autorizza l'esecuzione degli incrementi di prodotto/design entro i confini del presente documento.
+
+La checklist `r3-f0-human-review-checklist.md` resta invece il **gate di uscita dello slice R3-F0** e non è ancora soddisfatta: i suoi elementi vanno verificati sugli artefatti prodotti.
+
+Il primo incremento è **R3-F0/S1 — Information Architecture + Visual Grammar**.
 
 ## Scopo
 

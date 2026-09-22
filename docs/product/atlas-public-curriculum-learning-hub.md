@@ -3,7 +3,7 @@
 **Stato:** APPROVED_GOVERNANCE / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME  
 **Data:** 21 settembre 2026  
 **Perimetro:** TRAMA · Arena · Atlas · Docente OS  
-**Decisioni collegate:** TRAMA-ADR-007, TRAMA-ADR-008
+**Decisioni collegate:** TRAMA-ADR-007, TRAMA-ADR-008, TRAMA-ADR-010
 
 ## 1. Scopo
 
@@ -568,7 +568,7 @@ Con la promozione governata di TRAMA-ADR-007 e TRAMA-ADR-008 sono approvati:
 
 ## 19. Addendum — Atlas integrale e Officina materiali
 
-**Stato:** PROPOSED / HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED  
+**Stato:** APPROVED_GOVERNANCE / RUNTIME NOT AUTHORIZED  
 **Decisione collegata:** TRAMA-ADR-010
 
 ### 19.1 Atlas integrale

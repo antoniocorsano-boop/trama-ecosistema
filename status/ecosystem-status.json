@@ -1,6 +1,6 @@
 {
   "$schema": "../schemas/ecosystem-status.schema.json",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "updatedAt": "2026-09-22",
   "capabilities": [
     {
@@ -29,7 +29,11 @@
       "label": "Atlas Product & Design Foundation",
       "state": "ACTIVE",
       "authority": "Atlas",
-      "humanReview": "PASS"
+      "humanReview": "PENDING",
+      "reviewGates": {
+        "start": "PASS",
+        "exit": "PENDING"
+      }
     },
     {
       "id": "R4-P1",
