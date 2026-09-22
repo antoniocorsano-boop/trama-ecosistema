@@ -1,4 +1,4 @@
-name: R3-F0 S3-V1 Browser Evidence
+name: R3-F0 S3-V2 Validation Evidence
 
 on:
   pull_request:
@@ -32,7 +32,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: r3-f0-s3-v1-rendering
+          name: r3-f0-s3-v2-evidence
           path: artifacts/r3-f0-s3-v1/
           if-no-files-found: error
           retention-days: 14
