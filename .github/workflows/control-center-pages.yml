@@ -39,6 +39,10 @@ jobs:
           grep -q "manifest.webmanifest" control-center/index.html
           grep -q "serviceWorker" control-center/index.html
           grep -q '"display": "standalone"' control-center/manifest.webmanifest
+          grep -q "pointer:coarse" control-center/index.html
+          grep -q "max-width:980px" control-center/index.html
+          grep -q "mobile-prs" control-center/index.html
+          grep -q "mobile-nav" control-center/index.html
           if grep -Eq "(ghp_|github_pat_|Authorization:|Bearer )" control-center/index.html; then
             echo "Secret-like token or authorization header found in static dashboard" >&2
             exit 1
