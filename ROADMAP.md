@@ -45,7 +45,9 @@ Obiettivi trasversali:
 
 ### R3-F0 / ATLAS-F0 — Product & Design Foundation
 
-Stato proposto: HUMAN REVIEW REQUIRED.
+Stato corrente: **ACTIVE / START GATE HUMAN REVIEW PASS / EXIT REVIEW PENDING**.
+
+Primo incremento autorizzato: **R3-F0/S1 — Information Architecture + Visual Grammar**, esclusivamente prodotto/design e `NO_RUNTIME`.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
