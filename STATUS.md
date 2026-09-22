@@ -5,7 +5,7 @@ Aggiornato al 22 settembre 2026.
 | Area | Stato | Evidenza o prossimo controllo |
 | --- | --- | --- |
 | Curricolo governato | Operativo | Arena rimane la fonte autorevole |
-| Educazione civica / EC-01 | Governance in review | contratto primo ciclo proposto; Arena = quadro approvato, Docente OS = attuazione, Atlas = consultazione; nessuna autorizzazione runtime |
+| Educazione civica / EC-01 | Governance approvata / implementazione separata | contratto primo ciclo approvato; Arena = quadro approvato, Docente OS = attuazione, Atlas = consultazione; nessuna autorizzazione runtime |
 | ECO-01 | Chiuso | forma docente e contratti cross-product validati |
 | ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS consolidato fino a P9; registrazione lezione verificata in Beta; collaudo umano integrato finale ancora pendente |
 | Atlas / R3 | R3-F0 attivo | ADR-007/008/010 approvate; Product & Design Foundation approvata e integrata; avvio consentito entro i confini NO_RUNTIME e privacy-first |
@@ -47,9 +47,9 @@ Prima della chiusura devono risultare insieme, nello **stesso caso reale integra
 
 La chiusura del pilota non autorizza DOS-A1.
 
-## Educazione civica — modello proposto
+## Educazione civica — modello approvato
 
-È aperta la proposta TRAMA-ADR-011 con contratto canonico `docs/contracts/educazione-civica-primo-ciclo.md`.
+TRAMA-ADR-011 è approvata con contratto canonico `docs/contracts/educazione-civica-primo-ciclo.md`.
 
 Confini proposti:
 
@@ -61,7 +61,7 @@ Confini proposti:
 - attività condivise: nate dalla progettazione di classe, conteggiate una sola volta nel totale e mantenute separate dalle quote proprie delle discipline;
 - nessun dato di attuazione ritorna ad Arena o Atlas.
 
-Il contratto resta **PROPOSED / HUMAN REVIEW REQUIRED / NO_RUNTIME_AUTHORIZATION** fino alla review exact-head.
+Il contratto è **APPROVED_GOVERNANCE / NO_RUNTIME_AUTHORIZATION**. Le implementazioni restano separate e richiedono i rispettivi gate exact-head.
 
 ## Atlas — prossimo cantiere principale
 
