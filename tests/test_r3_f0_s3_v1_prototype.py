@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PROTOTYPE = ROOT / "docs" / "product" / "prototypes" / "r3-f0-s3-v1"
 HTML_PATH = PROTOTYPE / "index.html"
 CSS_PATH = PROTOTYPE / "styles.css"
+JS_PATH = PROTOTYPE / "prototype.js"
 
 
 def _luminance(hex_color: str) -> float:
@@ -25,6 +26,7 @@ class S3V1PrototypeContractTests(unittest.TestCase):
     def setUpClass(cls):
         cls.html = HTML_PATH.read_text(encoding="utf-8")
         cls.css = CSS_PATH.read_text(encoding="utf-8")
+        cls.js = JS_PATH.read_text(encoding="utf-8")
 
     def test_single_h1_and_skip_link(self):
         self.assertEqual(len(re.findall(r"<h1\b", self.html)), 1)
@@ -39,16 +41,32 @@ class S3V1PrototypeContractTests(unittest.TestCase):
         self.assertEqual(missing, [], f"Missing anchor targets: {missing}")
 
     def test_no_runtime_or_external_assets(self):
-        self.assertNotRegex(self.html.lower(), r"<script\b")
+        scripts = re.findall(r'<script[^>]+src="([^"]+)"', self.html, flags=re.IGNORECASE)
+        self.assertEqual(scripts, ["prototype.js"])
         self.assertNotRegex(self.html.lower(), r"https?://|src=\"//|href=\"//")
         self.assertNotRegex(self.html.lower(), r"react|vue|angular|svelte|bootstrap|tailwind")
+        self.assertNotRegex(self.js.lower(), r"fetch\(|xmlhttprequest|websocket|https?://")
 
     def test_accessible_map_and_status_contracts(self):
         self.assertIn('class="map-canvas" aria-hidden="true"', self.html)
         self.assertIn('id="elenco"', self.html)
+        self.assertIn("edge-prerequisite", self.html)
+        self.assertIn("edge-resource", self.html)
+        self.assertIn("edge-raccordo", self.html)
         self.assertEqual(self.html.count('role="status"'), 1)
         for label in ("CurricularStatus", "EditorialStatus", "UIFeedbackStatus"):
             self.assertIn(label, self.html)
+
+    def test_tabs_semantics_and_keyboard_contract(self):
+        self.assertIn('role="tablist"', self.html)
+        self.assertEqual(self.html.count('role="tab"'), 2)
+        self.assertEqual(self.html.count('role="tabpanel"'), 2)
+        self.assertIn('aria-selected="true"', self.html)
+        self.assertIn('aria-selected="false"', self.html)
+        for key in ("ArrowRight", "ArrowLeft", "Home", "End"):
+            self.assertIn(key, self.js)
+        self.assertIn('setAttribute("aria-selected"', self.js)
+        self.assertIn("panel.hidden = !selected", self.js)
 
     def test_focus_targets_responsive_and_motion_contracts(self):
         self.assertIn(":focus-visible", self.css)
