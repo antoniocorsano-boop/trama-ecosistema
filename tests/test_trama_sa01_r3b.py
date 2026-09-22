@@ -53,12 +53,17 @@ class R3BTests(unittest.TestCase):
             else:
                 os.environ["TRAMA_R3B_HOLDOUT_AUTHORIZED"]=old
 
-    def test_holdout_workflow_is_pinned_and_durably_one_shot(self):
-        import re
+    def test_holdout_workflow_is_content_pinned_serialized_and_durably_one_shot(self):
         w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b-holdout.yml").read_text(encoding="utf-8")
         self.assertIn('TRAMA_R3B_HOLDOUT_AUTHORIZED: "true"',w)
         self.assertIn('TRAMA_R3B_MODEL: "jev-latest"',w)
         self.assertIn('test "$GITHUB_REF" = "refs/heads/main"',w)
+        self.assertIn("group: trama-sa01-r3b-holdout-one-shot",w)
+        self.assertIn("cancel-in-progress: false",w)
+        self.assertIn('TRAMA_R3B_CONSUMPTION_ANCHOR_SHA: "72aa1a9919229120f69f9de41f877bb428d46897"',w)
+        self.assertIn('TRAMA_R3B_CASES_BLOB: "d161cc03f50d1777eaa58010419f3cc64aaa02a4"',w)
+        self.assertIn('TRAMA_R3B_HARNESS_BLOB: "086fac2415238478d25311b2e74b444aafca21e6"',w)
+        self.assertIn("git hash-object docs/pilots/trama-sa-01/r3b-cases.json",w)
         self.assertIn("listCommitStatusesForRef",w)
         self.assertIn("createCommitStatus",w)
         self.assertIn("trama-sa01/r3b-holdout-consumed",w)
@@ -66,9 +71,7 @@ class R3BTests(unittest.TestCase):
         self.assertIn("if: always()",w)
         self.assertIn("if-no-files-found: warn",w)
         self.assertIn("--split HOLDOUT",w)
-        match=re.search(r'TRAMA_R3B_AUTHORIZED_SOURCE_SHA: "([0-9a-f]{40})"',w)
-        self.assertIsNotNone(match)
-        self.assertEqual(match.group(1),"c2595b7354f68ffdd383c71fc253014b01cbcb71")
+        self.assertNotIn("TRAMA_R3B_AUTHORIZED_SOURCE_SHA",w)
 
     def test_workflow_is_development_only(self):
         w=(ROOT/".github"/"workflows"/"trama-sa01-typesafe-r3b.yml").read_text(encoding="utf-8")
