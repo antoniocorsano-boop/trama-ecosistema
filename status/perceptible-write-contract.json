@@ -35,7 +35,10 @@
     "authorizesNewWrites": false,
     "activatesDOSA1": false,
     "authorizesCrossProductRuntime": false,
-    "changesArenaAuthority": false
+    "changesArenaAuthority": false,
+    "atlasRequiresAuthentication": false,
+    "atlasAllowsPersonalStudentData": false,
+    "atlasPrivacyFirst": true
   },
   "adoption": {
     "trama": {
@@ -62,5 +65,6 @@
     "product gates PASS and merged",
     "Docente OS regression retest PASS",
     "baseline audit of existing Arena and Docente OS writes"
-  ]
+  ],
+  "decisionRef": "TRAMA-ADR-012"
 }
