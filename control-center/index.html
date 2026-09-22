@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#061b31">
+<meta name="description" content="TRAMA Control Center: vista dinamica read-only dell'ecosistema TRAMA.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TRAMA">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icons/icon-192.svg">
 <title>TRAMA Control Center</title>
 <style>
 :root{--bg:#061b31;--panel:#0a2846;--panel2:#0d3155;--line:#155482;--text:#f4f8ff;--muted:#9fc0df;--cyan:#39c6ff;--green:#42df91;--amber:#ffbd4a;--red:#ff6a7a;--violet:#ab7cff;--blue:#5fa8ff}
@@ -20,7 +29,63 @@ main{padding:22px 26px 34px;max-width:1600px;width:100%;margin:auto}.top{display
 .timeline{display:grid;gap:10px}.event{display:grid;grid-template-columns:12px 1fr;gap:10px}.event .pin{width:10px;height:10px;background:var(--green);border-radius:50%;margin-top:5px}.event small{color:#8eb5d0}
 .rules{display:grid;gap:7px}.rule{display:flex;gap:8px;color:#bfd7e8}.empty{color:#88a9c0;padding:22px;text-align:center}.error{color:#ffc4ca;background:#451d28;padding:10px;border-radius:8px}.footer{margin-top:18px;color:#7fa8c4;font-size:12px;display:flex;justify-content:space-between}
 .hidden{display:none!important}
-@media(max-width:1100px){.app{grid-template-columns:1fr}aside{display:none}.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(4,1fr)}}@media(max-width:650px){main{padding:14px}.cards{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(2,1fr)}.toolbar{display:grid}.toggle{margin:0}.top{align-items:flex-start;flex-direction:column}}
+.install{border-color:#2fba82;color:#aef2cf}
+.mobile-nav{display:none}
+.mobile-prs{display:none}
+@media(max-width:1100px){.app{grid-template-columns:1fr}aside{display:none}.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(4,1fr)}}@media(max-width:700px){
+  html{scroll-behavior:smooth}
+  body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+  main{padding:12px 12px 28px}
+  .top{align-items:flex-start;flex-direction:column;gap:7px;padding-bottom:11px}
+  .title h1{font-size:21px;line-height:1.15}
+  .title p{font-size:12px;line-height:1.35}
+  .live{font-size:12px}
+  .toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0 12px}
+  .select{grid-column:1/3;width:100%}
+  .search{grid-column:1/3;min-width:0;width:100%}
+  .toggle{margin:0;grid-column:1/2;width:100%}
+  .toggle button{flex:1;padding:9px 8px}
+  .refresh{grid-column:2/3;padding:9px 12px}
+  .install{grid-column:1/3;width:100%}
+  .cards{display:flex;grid-template-columns:none;gap:9px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -12px;padding:0 12px 9px;scrollbar-width:none}
+  .cards::-webkit-scrollbar,.pipeline::-webkit-scrollbar{display:none}
+  .card{flex:0 0 44vw;min-width:148px;max-width:178px;scroll-snap-align:start;padding:11px 12px}
+  .card .label{font-size:12px}
+  .card .num{font-size:23px;margin:2px 0}
+  .card small{font-size:10px}
+  .grid{display:flex;flex-direction:column;gap:11px;margin-top:4px}
+  #actionsPanel{order:1}
+  #gate{order:2}
+  #pr{order:3}
+  #secondaryPanels{order:4}
+  .panel{padding:11px;border-radius:11px}
+  .panel h2{font-size:15px;margin-bottom:9px;gap:8px}
+  .panel h2 .subtle{font-size:10px;text-align:right}
+  .pipeline{display:flex;grid-template-columns:none;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -2px;padding:0 2px 4px}
+  .step{flex:0 0 155px;min-width:155px;min-height:102px;scroll-snap-align:start;padding:8px 7px}
+  .step strong{font-size:12px;margin:4px 0}
+  .step p{font-size:10px}
+  .badge{font-size:9px;margin-top:6px;padding:2px 6px}
+  .actions{gap:7px}
+  .action{grid-template-columns:22px 1fr auto;padding:9px 8px;font-size:11px}
+  .prio{font-size:9px}
+  .table-wrap{display:none}
+  .mobile-prs{display:grid;gap:8px}
+  .mobile-pr{display:block;padding:10px;background:#0b2a48;border:1px solid #164e76;border-radius:10px}
+  .mobile-pr-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+  .mobile-pr-title{font-weight:800;font-size:13px}
+  .mobile-pr-sub{display:block;color:#8fb3cd;font-size:10px;margin-top:2px}
+  .mobile-pr-meta{display:grid;grid-template-columns:1fr auto;gap:4px 8px;margin-top:8px;color:#b8d1e3;font-size:10px}
+  .timeline{gap:8px}
+  .event{font-size:11px}
+  .event small{font-size:9px}
+  .rules{font-size:11px}
+  .footer{font-size:10px;padding-bottom:6px}
+  .mobile-nav{display:grid;position:fixed;z-index:30;left:0;right:0;bottom:0;grid-template-columns:repeat(4,1fr);background:#061a30eF;backdrop-filter:blur(14px);border-top:1px solid #18527c;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+  .mobile-nav a,.mobile-nav button{appearance:none;border:0;background:transparent;color:#afd0e6;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 10px system-ui;padding:3px}
+  .mobile-nav .icon{font-size:18px;line-height:1}
+}
+@media(max-width:380px){.card{flex-basis:48vw}.step{flex-basis:145px;min-width:145px}}
 </style>
 </head>
 <body>
@@ -50,6 +115,7 @@ main{padding:22px 26px 34px;max-width:1600px;width:100%;margin:auto}.top{display
     <input id="search" class="search" placeholder="Cerca PR, repository o stato…">
     <div class="toggle"><button id="teacherBtn" class="active">Vista docente</button><button id="techBtn">Vista tecnica</button></div>
     <button id="refresh" class="refresh">↻ Aggiorna</button>
+    <button id="installBtn" class="refresh install hidden">⇩ Installa app</button>
   </div>
 
   <section class="cards">
@@ -74,18 +140,18 @@ main{padding:22px 26px 34px;max-width:1600px;width:100%;margin:auto}.top{display
       </div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="actionsPanel">
       <h2>Cosa devo fare adesso <span class="subtle">dal piano TRAMA</span></h2>
       <div id="actions" class="actions"><div class="empty">Caricamento priorità…</div></div>
     </section>
 
     <section class="panel" id="pr">
       <h2 id="tableTitle">Pull request in evidenza <span class="subtle">clicca una riga per aprire GitHub</span></h2>
-      <div class="table-wrap"><table class="table"><thead id="thead"></thead><tbody id="prRows"></tbody></table></div>
+      <div id="prCards" class="mobile-prs"></div><div class="table-wrap"><table class="table"><thead id="thead"></thead><tbody id="prRows"></tbody></table></div>
     </section>
 
-    <div>
-      <section class="panel" style="margin-bottom:14px">
+    <div id="secondaryPanels">
+      <section class="panel" id="eventsPanel" style="margin-bottom:14px">
         <h2>Eventi recenti <span class="subtle">workflow GitHub</span></h2>
         <div id="events" class="timeline"><div class="empty">Caricamento eventi…</div></div>
       </section>
@@ -104,6 +170,12 @@ main{padding:22px 26px 34px;max-width:1600px;width:100%;margin:auto}.top{display
   <div id="errorBox"></div>
   <footer class="footer"><span>TRAMA · Control Center in sola lettura</span><span id="updated">–</span></footer>
 </main>
+<nav class="mobile-nav" aria-label="Navigazione rapida">
+  <a href="#panoramica"><span class="icon">⌂</span><span>Home</span></a>
+  <a href="#actionsPanel"><span class="icon">◎</span><span>Azioni</span></a>
+  <a href="#pr"><span class="icon">⑂</span><span>PR</span></a>
+  <a href="#eventsPanel"><span class="icon">◷</span><span>Eventi</span></a>
+</nav>
 </div>
 <script>
 const REPOS=[
@@ -113,6 +185,7 @@ const REPOS=[
  {key:'Docente OS',repo:'antoniocorsano-boop/docente-os-2026-27',color:'#ffbd4a'}
 ];
 const state={mode:'teacher',prs:[],runs:[],priorities:[],filter:'all',search:''};
+const SNAPSHOT_KEY='trama-control-center-public-snapshot-v1';
 const api=async path=>{const r=await fetch('https://api.github.com'+path,{headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw new Error('GitHub API '+r.status);return r.json()};
 const raw=async url=>{const r=await fetch(url);if(!r.ok)throw new Error('Documento '+r.status);return r.text()};
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -136,9 +209,16 @@ async function load(){
    all.forEach(z=>{if(z.type==='prs')z.x.forEach(p=>state.prs.push({...p,_repo:z.r}));else(z.x.workflow_runs||[]).forEach(w=>state.runs.push({...w,_repo:z.r}))});
    state.prs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));state.runs.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
    state.priorities=parsePriorities(statusMd);
+   try{localStorage.setItem(SNAPSHOT_KEY,JSON.stringify({savedAt:new Date().toISOString(),prs:state.prs,runs:state.runs,priorities:state.priorities}))}catch{}
    render();
    document.getElementById('liveText').textContent='Dati GitHub aggiornati';document.getElementById('updated').textContent='Aggiornato '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
- }catch(e){document.getElementById('liveText').textContent='Aggiornamento non riuscito';document.getElementById('errorBox').innerHTML='<div class="error">Impossibile leggere temporaneamente le API pubbliche GitHub: '+esc(e.message)+'. Riprova con “Aggiorna”.</div>'}
+ }catch(e){
+   let restored=false;
+   try{const snap=JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'null');if(snap?.prs&&snap?.runs){state.prs=snap.prs;state.runs=snap.runs;state.priorities=snap.priorities||[];render();restored=true;document.getElementById('updated').textContent='Ultimo stato salvato '+new Date(snap.savedAt).toLocaleString('it-IT')}}
+   catch{}
+   document.getElementById('liveText').textContent=restored?'Offline · ultimo stato disponibile':'Aggiornamento non riuscito';
+   document.getElementById('errorBox').innerHTML=restored?'<div class="error" style="color:#ffe29b;background:#443717">Sei offline o GitHub non è raggiungibile: visualizzo l’ultimo stato pubblico salvato su questo dispositivo.</div>':'<div class="error">Impossibile leggere temporaneamente le API pubbliche GitHub: '+esc(e.message)+'. Riprova con “Aggiorna”.</div>'
+ }
 }
 function filteredPrs(){return state.prs.filter(p=>(state.filter==='all'||p._repo.key===state.filter)&&(!state.search||((p.title+' '+p.number+' '+p._repo.key+' '+p.state).toLowerCase().includes(state.search))))}
 function render(){
@@ -157,7 +237,11 @@ function renderTable(){
  document.getElementById('tableTitle').innerHTML=(tech?'Pull request ed exact head':'Pull request in evidenza')+' <span class="subtle">clicca una riga per aprire GitHub</span>';
  document.getElementById('thead').innerHTML=tech?'<tr><th>PR</th><th>Repository</th><th>Exact head</th><th>Stato</th><th>Prossimo passo</th><th>Aggiornato</th></tr>':'<tr><th>PR</th><th>Repository</th><th>Stato</th><th>Cosa significa per te</th><th>Aggiornato</th></tr>';
  const rows=filteredPrs().slice(0,10); const body=document.getElementById('prRows');
- if(!rows.length){body.innerHTML='<tr><td colspan="6" class="empty">Nessuna pull request corrisponde ai filtri.</td></tr>';return}
+ const cards=document.getElementById('prCards');
+ if(!rows.length){body.innerHTML='<tr><td colspan="6" class="empty">Nessuna pull request corrisponde ai filtri.</td></tr>';cards.innerHTML='<div class="empty">Nessuna pull request corrisponde ai filtri.</div>';return}
+ cards.innerHTML=rows.map(p=>{const [st,cl]=statusOf(p),sha=p.head?.sha?.slice(0,9)||'–',next=humanNext(p);
+   return '<a class="mobile-pr" href="'+esc(p.html_url)+'" target="_blank"><div class="mobile-pr-top"><div><span class="mobile-pr-title">'+esc(p._repo.key)+' #'+p.number+'</span><span class="mobile-pr-sub">'+esc(p.title)+'</span></div><span class="status '+cl+'">'+st+'</span></div><div class="mobile-pr-meta"><span>'+esc(next)+'</span><span>'+ago(p.updated_at)+'</span>'+(tech?'<span class="mono">'+sha+'</span><span>'+esc(p._repo.key)+'</span>':'')+'</div></a>'
+ }).join('');
  body.innerHTML=rows.map(p=>{const [st,cl]=statusOf(p),sha=p.head?.sha?.slice(0,9)||'–',next=humanNext(p);
   const common='<td><a href="'+esc(p.html_url)+'" target="_blank"><strong>'+esc(p._repo.key)+' #'+p.number+'</strong><br><span class="subtle">'+esc(p.title)+'</span></a></td><td>'+esc(p._repo.key)+'</td>';
   return '<tr>'+common+(tech?'<td class="mono">'+sha+'</td><td><span class="status '+cl+'">'+st+'</span></td><td>'+esc(next)+'</td><td>'+ago(p.updated_at)+'</td>':'<td><span class="status '+cl+'">'+st+'</span></td><td>'+esc(next)+'</td><td>'+ago(p.updated_at)+'</td>')+'</tr>'
@@ -174,6 +258,15 @@ document.getElementById('refresh').onclick=load;
 document.getElementById('repoFilter').onchange=e=>{state.filter=e.target.value;render()};
 document.getElementById('search').oninput=e=>{state.search=e.target.value.toLowerCase().trim();renderTable()};
 REPOS.forEach(r=>{const o=document.createElement('option');o.value=r.key;o.textContent=r.key;repoFilter.appendChild(o)});
-load();
+
+let deferredInstall=null;
+const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;installBtn.classList.remove('hidden')});
+installBtn.onclick=async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;installBtn.classList.add('hidden')};
+window.addEventListener('appinstalled',()=>installBtn.classList.add('hidden'));
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+function connectivity(){const online=navigator.onLine;document.getElementById('liveText').textContent=online?'Dati GitHub aggiornati':'Offline · ultimo contenuto disponibile';document.querySelector('.live .dot').style.background=online?'var(--green)':'var(--amber)'}
+window.addEventListener('online',()=>{connectivity();load()});window.addEventListener('offline',connectivity);
+load().finally(connectivity);
 </script>
 </body></html>

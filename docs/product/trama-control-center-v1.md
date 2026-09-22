@@ -1,6 +1,6 @@
 # TRAMA Control Center v1
 
-**Stato:** ACTIVE / READ_ONLY / NO_WRITE_AUTHORITY  
+**Stato:** ACTIVE / READ_ONLY / PWA / NO_WRITE_AUTHORITY  
 **Data:** 22 settembre 2026
 
 ## Scopo
@@ -25,6 +25,27 @@ La prima versione:
 - CurManLight Arena;
 - Curriculum Atlas;
 - Docente OS.
+
+## Esperienza mobile e PWA
+
+La superficie è progettata mobile-first:
+
+- indicatori sintetici in scorrimento orizzontale;
+- pipeline in scorrimento orizzontale a schede;
+- pull request rese come card su smartphone;
+- navigazione inferiore rapida;
+- priorità mostrate prima dei dettagli tecnici;
+- layout con safe-area per dispositivi mobili.
+
+La PWA include:
+
+- manifest installabile;
+- service worker;
+- icone applicazione;
+- modalità standalone;
+- shell offline;
+- ultimo snapshot pubblico GitHub conservato localmente sul dispositivo;
+- nessuna credenziale o dato personale persistito.
 
 ## Viste
 
@@ -65,7 +86,7 @@ Il deploy è automatico a ogni commit su `main`.
 
 Il workflow GitHub di validazione verifica:
 
-- presenza della pagina;
+- presenza della pagina, manifest, service worker e icone PWA;
 - contratto read-only;
 - assenza di token GitHub o header Authorization;
 - validità sintattica del JavaScript browser.
@@ -73,6 +94,7 @@ Il workflow GitHub di validazione verifica:
 ## Limiti intenzionali v1
 
 - usa API GitHub pubbliche con relativo rate limit;
+- lo snapshot offline contiene esclusivamente dati pubblici GitHub e priorità pubbliche TRAMA;
 - non visualizza dati privati;
 - non consente azioni GitHub;
 - non sostituisce la documentazione canonica;

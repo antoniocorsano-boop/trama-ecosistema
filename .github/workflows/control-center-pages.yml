@@ -29,9 +29,16 @@ jobs:
         run: |
           set -euo pipefail
           test -s control-center/index.html
+          test -s control-center/manifest.webmanifest
+          test -s control-center/sw.js
+          test -s control-center/icons/icon-192.svg
+          test -s control-center/icons/icon-512.svg
           grep -q "TRAMA Control Center" control-center/index.html
           grep -q "SOLA LETTURA" control-center/index.html
           grep -q "api.github.com" control-center/index.html
+          grep -q "manifest.webmanifest" control-center/index.html
+          grep -q "serviceWorker" control-center/index.html
+          grep -q '"display": "standalone"' control-center/manifest.webmanifest
           if grep -Eq "(ghp_|github_pat_|Authorization:|Bearer )" control-center/index.html; then
             echo "Secret-like token or authorization header found in static dashboard" >&2
             exit 1
@@ -46,4 +53,7 @@ jobs:
           if (!match) throw new Error('Inline script not found')
           new Function(match[1])
           console.log('CONTROL_CENTER_JS_SYNTAX_PASS')
+          const sw = fs.readFileSync('control-center/sw.js', 'utf8')
+          new Function(sw)
+          console.log('CONTROL_CENTER_SW_SYNTAX_PASS')
           NODE
