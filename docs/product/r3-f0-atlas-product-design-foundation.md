@@ -10,7 +10,7 @@ La review umana della **fondazione/avvio** è PASS. Questo autorizza l'esecuzion
 
 La checklist `r3-f0-human-review-checklist.md` resta invece il **gate di uscita dello slice R3-F0** e non è ancora soddisfatta: i suoi elementi vanno verificati sugli artefatti prodotti.
 
-Il primo incremento è **R3-F0/S1 — Information Architecture + Visual Grammar**.
+**R3-F0/S1 — Information Architecture + Visual Grammar** è integrato con HUMAN REVIEW PASS. Il secondo incremento è **R3-F0/S2 — Design Core & Accessible Primitives**, attualmente in review e sempre `NO_RUNTIME`.
 
 ## Scopo
 
