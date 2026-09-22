@@ -60,11 +60,13 @@ I colori non costituiscono da soli il significato: ogni stato contiene etichetta
 
 ## 3. Matrice di validazione
 
+Browser evidence automatica corrente: workflow `R3-F0 S3-V1 Browser Evidence` PASS su 390×844, 1440×1100 e 1920×1080. Le verifiche qualitative restano umane.
+
 | Gate | Metodo | Stato iniziale | Evidenza richiesta |
 | --- | --- | --- | --- |
-| Android portrait | rendering reale | PENDING | screenshot + note reflow/touch |
-| Desktop | rendering reale | PENDING | screenshot + note layout/focus |
-| LIM / grande schermo | rendering reale | PENDING | screenshot/foto + leggibilità a distanza |
+| Android portrait | browser headless + review umana | AUTOMATED_RENDER_PASS / HUMAN_REVIEW_PENDING | screenshot + note reflow/touch |
+| Desktop | browser headless + review umana | AUTOMATED_RENDER_PASS / HUMAN_REVIEW_PENDING | screenshot + note layout/focus |
+| LIM / grande schermo | browser headless + review umana | AUTOMATED_RENDER_PASS / HUMAN_REVIEW_PENDING | screenshot/foto + leggibilità a distanza |
 | Tastiera | walkthrough | PENDING | ordine focus + skip link + details |
 | Screen reader | prova reale | PENDING | headings/nav/lists/details/status |
 | Use of Color 1.4.1 | review visuale | PENDING | scala di grigi / testo di stato |
