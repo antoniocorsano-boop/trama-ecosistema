@@ -1,4 +1,4 @@
-name: Deploy TRAMA Control Center
+name: Validate TRAMA Control Center
 
 on:
   pull_request:
@@ -14,11 +14,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "trama-control-center-pages-${{ github.ref }}"
+  group: "trama-control-center-validate-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -49,22 +47,3 @@ jobs:
           new Function(match[1])
           console.log('CONTROL_CENTER_JS_SYNTAX_PASS')
           NODE
-
-  deploy:
-    if: github.event_name != 'pull_request'
-    needs: validate
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: control-center
-      - name: Deploy Control Center
-        id: deployment
-        uses: actions/deploy-pages@v4
