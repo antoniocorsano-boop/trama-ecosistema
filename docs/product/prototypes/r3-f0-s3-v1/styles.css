@@ -185,7 +185,8 @@ main { max-width: 1120px; margin: 0 auto; }
 }
 
 .year-switcher,
-.view-switcher {
+.view-switcher,
+.tab-list {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
@@ -193,12 +194,25 @@ main { max-width: 1120px; margin: 0 auto; }
 }
 
 .year-switcher a,
-.view-switcher a {
+.view-switcher a,
+.tab-list button {
   padding-inline: var(--space-4);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-small);
   background: var(--surface-raised);
   color: var(--text-primary);
+}
+
+.tab-list button {
+  min-height: 44px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab-list button[aria-selected="true"] {
+  border-width: 2px;
+  background: var(--selection-bg);
+  font-weight: 700;
 }
 
 .year-switcher .is-current {
@@ -383,8 +397,16 @@ main { max-width: 1120px; margin: 0 auto; }
 }
 .l1 { grid-column: 2; grid-row: 3; }
 .l2 { grid-column: 4; grid-row: 3; }
-.l3 { grid-column: 5; grid-row: 2; transform: rotate(90deg); }
-.l4 { grid-column: 4; grid-row: 5; border-top: 2px dashed var(--border-strong); background: transparent; }
+
+.map-edge {
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-align: center;
+}
+.edge-prerequisite { grid-column: 5; grid-row: 2; }
+.edge-resource { grid-column: 5; grid-row: 4; }
+.edge-raccordo { grid-column: 4; grid-row: 4; align-self: end; }
 
 .map-figure figcaption {
   margin-top: var(--space-3);
@@ -419,7 +441,7 @@ footer {
 }
 
 @media (min-width: 760px) {
-  .student-views { grid-template-columns: 1fr 1fr; }
+  .student-views { max-width: 760px; }
   .teacher-grid { grid-template-columns: 1fr 1fr; }
   .state-grid { grid-template-columns: repeat(3, 1fr); }
   .zoom-levels { grid-template-columns: repeat(3, 1fr); }
