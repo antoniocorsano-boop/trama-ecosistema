@@ -335,6 +335,8 @@ main { max-width: 1120px; margin: 0 auto; }
 .status {
   display: inline-block;
   width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   padding: 0.2rem 0.5rem;
   border-left: 4px solid currentColor;
   font-size: 0.875rem;
