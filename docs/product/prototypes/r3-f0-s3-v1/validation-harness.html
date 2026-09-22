@@ -76,7 +76,8 @@
       ].filter(Boolean);
 
       const focusDiagnostics = focusTargets.map((el) => {
-        el.focus();
+        el.scrollIntoView({ block: "center", inline: "nearest" });
+        el.focus({ preventScroll: true });
         const r = el.getBoundingClientRect();
         return {
           tag: el.tagName,
