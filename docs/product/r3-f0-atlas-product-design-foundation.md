@@ -10,7 +10,7 @@ La review umana della **fondazione/avvio** è PASS. Questo autorizza l'esecuzion
 
 La checklist `r3-f0-human-review-checklist.md` resta invece il **gate di uscita dello slice R3-F0** e non è ancora soddisfatta: i suoi elementi vanno verificati sugli artefatti prodotti.
 
-**R3-F0/S1 — Information Architecture + Visual Grammar** e **R3-F0/S2 — Design Core & Accessible Primitives** sono integrati con HUMAN REVIEW PASS. Il terzo incremento è **R3-F0/S3 — Journey Prototypes & 2D Map POC**, attualmente in review e sempre `NO_RUNTIME`.
+**R3-F0/S1 — Information Architecture + Visual Grammar** e **R3-F0/S2 — Design Core & Accessible Primitives** sono integrati con HUMAN REVIEW PASS. Di **R3-F0/S3 — Journey Prototypes & 2D Map POC** è integrato con HUMAN REVIEW PASS il pacchetto statico `NO_RUNTIME`; le verifiche su prototipo renderizzato restano PENDING e impediscono di dichiarare S3 o l'exit R3-F0 completati.
 
 ## Scopo
 
