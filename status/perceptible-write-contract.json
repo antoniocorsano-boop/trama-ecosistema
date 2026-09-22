@@ -66,5 +66,7 @@
     "Docente OS regression retest PASS",
     "baseline audit of existing Arena and Docente OS writes"
   ],
-  "decisionRef": "TRAMA-ADR-012"
+  "decisionRef": "TRAMA-ADR-012",
+  "assuranceDevelopmentProtocolRef": "docs/process/assurance-gate-development-protocol.md",
+  "rolloutPolicy": "CANARY_BEFORE_CROSS_PRODUCT"
 }
