@@ -41,12 +41,14 @@ Lo **Student Learning Hub** è una superficie contestuale. Non diventa una quint
 - Annualità
 - Nucleo
 - Obiettivo
-- Evidenza
+- Evidenza curricolare/didattica non individuale
 - Percorso
 - Lezione pubblicabile
 - Risorsa Atlas
 - Relazione
 - Provenienza/versione
+
+In S1, **Evidenza** indica esclusivamente una evidenza curricolare/didattica pubblicabile e non individuale (esempio di prestazione, prodotto, traccia o manifestazione attesa dell'apprendimento). Non indica valutazioni, esiti, osservazioni o dati riferibili a un singolo studente.
 
 Le entità tecniche interne non devono emergere nell'interfaccia primaria.
 
