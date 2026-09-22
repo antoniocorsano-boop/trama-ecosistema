@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>S3-V2 validation harness</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; }
+    iframe { display: block; width: 320px; height: 800px; border: 0; }
+    pre { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <iframe id="subject" src="index.html" title="Atlas prototype under validation"></iframe>
+  <pre id="result" data-validation="PENDING">PENDING</pre>
+  <script>
+    const frame = document.getElementById("subject");
+    const result = document.getElementById("result");
+
+    frame.addEventListener("load", () => {
+      const win = frame.contentWindow;
+      const doc = frame.contentDocument;
+      const tests = {};
+
+      const root = doc.documentElement;
+      tests.reflow320 =
+        root.scrollWidth <= win.innerWidth + 1 &&
+        doc.body.scrollWidth <= win.innerWidth + 1;
+
+      const map = doc.querySelector(".map-canvas");
+      tests.mapOwnsIts2DOverflow =
+        !!map &&
+        getComputedStyle(map).overflowX === "auto" &&
+        map.scrollWidth >= map.clientWidth;
+
+      const first = doc.getElementById("tab-lezioni");
+      const second = doc.getElementById("tab-obiettivi");
+      first.focus();
+      first.dispatchEvent(new KeyboardEvent("keydown", {
+        key: "ArrowRight",
+        bubbles: true
+      }));
+
+      tests.tabsArrowRight =
+        doc.activeElement === second &&
+        second.getAttribute("aria-selected") === "true" &&
+        first.getAttribute("aria-selected") === "false" &&
+        doc.getElementById("lezioni").hidden === true &&
+        doc.getElementById("obiettivi").hidden === false;
+
+      second.dispatchEvent(new KeyboardEvent("keydown", {
+        key: "Home",
+        bubbles: true
+      }));
+
+      tests.tabsHome =
+        doc.activeElement === first &&
+        first.getAttribute("aria-selected") === "true";
+
+      const details = doc.querySelector("details.provenance");
+      const summary = details.querySelector("summary");
+      summary.click();
+      tests.disclosureToggle = details.open === true;
+
+      const skip = doc.querySelector(".skip-link");
+      skip.focus();
+      tests.skipLinkVisibleOnFocus =
+        parseFloat(getComputedStyle(skip).top) >= 0;
+
+      const focusTargets = [
+        doc.querySelector(".primary-nav a"),
+        doc.querySelector(".year-switcher .is-current"),
+        summary,
+        first,
+        doc.querySelector('.view-switcher a[href="#elenco"]'),
+        doc.querySelector(".action-link")
+      ].filter(Boolean);
+
+      tests.focusNotEntirelyObscured = focusTargets.every((el) => {
+        el.focus();
+        const r = el.getBoundingClientRect();
+        return r.bottom > 0 && r.top < win.innerHeight;
+      });
+
+      tests.stateTextSurvivesWithoutColor =
+        doc.body.textContent.includes("CurricularStatus · CORRENTE") &&
+        doc.body.textContent.includes("EditorialStatus · RITIRATA") &&
+        doc.body.textContent.includes("UIFeedbackStatus · ERRORE TEMPORANEO");
+
+      const passed = Object.values(tests).every(Boolean);
+      result.dataset.validation = passed ? "PASS" : "FAIL";
+      result.textContent = JSON.stringify({
+        viewport: { width: win.innerWidth, height: win.innerHeight },
+        scroll: {
+          root: root.scrollWidth,
+          body: doc.body.scrollWidth
+        },
+        tests
+      }, null, 2);
+    });
+  </script>
+</body>
+</html>
