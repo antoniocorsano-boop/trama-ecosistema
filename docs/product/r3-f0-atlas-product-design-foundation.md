@@ -37,6 +37,21 @@ Student Learning Hub resta una superficie contestuale, non sostituisce la naviga
 
 Fonti e provenance restano disponibili sotto progressive disclosure.
 
+### 1.1 Privacy-first student experience
+
+R3-F0 assume come requisito non negoziabile:
+
+- nessun account studente;
+- nessun login individuale;
+- nessun profilo persistente;
+- nessun identificatore personale stabile;
+- nessun tracking o analytics individuale;
+- nessuna cronologia personale;
+- nessuna personalizzazione basata su identità;
+- nessun dato di valutazione individuale in Atlas.
+
+La navigazione studente deve funzionare tramite contesto non identificante e minimizzato. Se un contenuto richiede autenticazione personale, resta fuori dallo Student Learning Hub Atlas.
+
 ### 2. Visual Grammar of Curriculum
 
 Deve essere formalizzata una grammatica visuale che leghi il tipo di relazione educativa alla rappresentazione appropriata.
@@ -164,7 +179,8 @@ Lo slice deve produrre:
 R3-F0 non autorizza:
 
 - runtime Docente OS → Atlas;
-- autenticazione studenti;
+- account, login o autenticazione studenti;
+- profili, tracking o personalizzazione individuale;
 - OutcomeAggregateSnapshot;
 - pubblicazione automatica;
 - Officina materiali in runtime;
@@ -184,7 +200,8 @@ R3-F0 può essere promosso soltanto se:
 5. accessibilità automatica e review umana non mostrano blocker;
 6. Atlas non appare come fonte curricolare autonoma;
 7. nessun flusso implica adozione o pubblicazione automatica;
-8. review umana exact-head = PASS.
+8. Student Learning Hub è pienamente fruibile senza autenticazione, profilo o identificatore personale;
+9. review umana exact-head = PASS.
 
 ## Condizione di avvio
 
