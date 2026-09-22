@@ -47,7 +47,9 @@ Obiettivi trasversali:
 
 Stato corrente: **ACTIVE / START GATE HUMAN REVIEW PASS / EXIT REVIEW PENDING**.
 
-Primo incremento autorizzato: **R3-F0/S1 — Information Architecture + Visual Grammar**, esclusivamente prodotto/design e `NO_RUNTIME`.
+Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Grammar**, con HUMAN EXACT-HEAD REVIEW PASS; resta esclusivamente prodotto/design e `NO_RUNTIME`.
+
+Prossimo incremento previsto: **R3-F0/S2 — Design Core & Accessible Primitives**, ancora soggetto a propria review exact-head.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
