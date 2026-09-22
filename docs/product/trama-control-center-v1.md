@@ -1,6 +1,6 @@
 # TRAMA Control Center v1
 
-**Stato:** PROPOSED / READ_ONLY / NO_WRITE_AUTHORITY  
+**Stato:** ACTIVE / READ_ONLY / NO_WRITE_AUTHORITY  
 **Data:** 22 settembre 2026
 
 ## Scopo
@@ -53,15 +53,17 @@ Le priorità vengono lette da `STATUS.md`, sezione **Priorità canonica corrente
 
 ## Hosting
 
-La superficie è pubblicata tramite GitHub Pages dal contenuto di `control-center/`.
+La superficie è pubblicata tramite **Render Static Site** dal contenuto di `control-center/` sul ramo `main`.
 
-URL atteso:
+URL pubblico:
 
-`https://antoniocorsano-boop.github.io/trama-ecosistema/`
+`https://trama-control-center.onrender.com`
+
+Il deploy è automatico a ogni commit su `main`.
 
 ## Sicurezza
 
-Il workflow di pubblicazione verifica:
+Il workflow GitHub di validazione verifica:
 
 - presenza della pagina;
 - contratto read-only;
