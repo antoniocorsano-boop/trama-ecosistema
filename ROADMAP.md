@@ -51,7 +51,7 @@ Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Gra
 
 Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives**, con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`.
 
-Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. Sotto-incremento corrente: **R3-F0/S3-V1 — Rendered Prototype Validation**, con prototipo HTML/CSS standalone e validazione strutturale/contrasto campione; restano PENDING le prove reali device/accessibilità, quindi S3 non è ancora chiuso.
+Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. Sotto-incremento corrente: **R3-F0/S3-V1 — Rendered Prototype Validation**, con prototipo HTML/CSS standalone, validazione strutturale/contrasto campione e browser rendering automatizzato PASS su mobile-like, desktop e LIM; restano PENDING le review umane e le prove assistive/interattive, quindi S3 non è ancora chiuso.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
