@@ -1,6 +1,6 @@
 # R3-F0/S2 — Atlas Design Core & Accessible Primitives
 
-**Stato:** UNDER_REVIEW / NO_RUNTIME  
+**Stato:** INTEGRATED / HUMAN_REVIEW_PASS / NO_RUNTIME  
 **Parent:** R3-F0 / ATLAS-F0  
 **Dipendenza:** R3-F0/S1 — INTEGRATED / HUMAN_REVIEW_PASS  
 **Prodotto interessato:** Atlas  
@@ -524,9 +524,13 @@ S2 può essere considerato completato soltanto se:
 - [ ] nessuna scelta introduce una dipendenza frontend;
 - [ ] una review umana exact-head produce PASS o CHANGES_REQUIRED.
 
-## 18. Passo successivo dopo S2
+## 18. Esito e passo successivo
 
-Solo dopo review S2:
+Review S2 completata con PASS sull'exact head `a710b475db11b8103028d4ba6c6afd67d26e3193`; merge commit `06dddc9166c008c9d03967ed494da731a1ab5bee`.
+
+Il passo successivo è R3-F0/S3 — Journey Prototypes & 2D Map POC.
+
+S3:
 
 - prototipare i tre journey definiti da R3-F0;
 - realizzare un POC mappa 2D su un solo caso rappresentativo;
