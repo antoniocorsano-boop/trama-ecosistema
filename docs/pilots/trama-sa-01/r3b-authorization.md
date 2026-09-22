@@ -36,15 +36,15 @@ Non è autorizzato:
 
 Il gate deve:
 - essere dispatchabile soltanto da main;
-- caricare harness e corpus da una revisione sorgente pin-nata;
+- verificare gli hash Git-blob congelati di corpus, harness, dipendenze logiche e requirements;
+- usare un anchor di consumo immutabile nella storia di main;
+- serializzare i dispatch concorrenti con un unico concurrency group;
 - usare un marker durevole di consumo prima delle chiamate provider;
 - bloccare qualunque rerun o secondo dispatch dopo la claim;
 - preservare l'artefatto anche se il provider step termina con errore dopo aver scritto il payload.
 
-La revisione sorgente autorizzabile è pin-nata a:
-
-c2595b7354f68ffdd383c71fc253014b01cbcb71
-
 L'esecuzione HOLDOUT resta bloccata fino a nuova review umana exact-head della PR finale.
+
+Il merge del gate ne autorizza la disponibilità, non l'esecuzione automatica. Il dispatch HOLDOUT richiede una distinta azione esplicita dell'operatore.
 
 Il passaggio a HOLDOUT non approva ADR-009, non abilita runtime nei prodotti e non modifica DOS-A1.
