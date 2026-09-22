@@ -1,0 +1,40 @@
+{
+  "contract": "TRAMA-PW-01",
+  "version": 1,
+  "title": "Perceptible Write Contract",
+  "scope": [
+    "Arena",
+    "Docente OS",
+    "Atlas",
+    "future TRAMA user-facing products"
+  ],
+  "rule": "NO_SILENT_USER_INITIATED_WRITES",
+  "required": [
+    "intent",
+    "pending_when_async",
+    "success",
+    "failure",
+    "result_state",
+    "next_step_when_useful",
+    "assistive_announcement",
+    "non_color_only"
+  ],
+  "criticalWrite": {
+    "toastOnlyAllowed": false,
+    "persistentResultStateRequired": true
+  },
+  "implicitApprovalForbidden": true,
+  "enforcement": {
+    "changedWriteSurfaceRequiresEvidence": true,
+    "ciGateRequired": true,
+    "humanCriticalJourneyCheckRequired": true,
+    "baselineAuditRequired": true,
+    "failClosed": true
+  },
+  "boundaries": {
+    "authorizesNewWrites": false,
+    "activatesDOSA1": false,
+    "authorizesCrossProductRuntime": false,
+    "changesArenaAuthority": false
+  }
+}
