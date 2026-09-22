@@ -106,6 +106,19 @@ Ogni gate deve usare il livello minimo di compute sufficiente:
 
 Si sale di livello soltanto se il rischio non è verificabile al livello precedente.
 
+## Review freeze — exact head immutabile
+
+Quando una PR entra in third-party review o human exact-head review:
+
+- si registra l'exact head candidato;
+- agenti, bot e automazioni non devono aggiungere commit a quella branch;
+- ogni nuovo commit invalida automaticamente le review già espresse;
+- la PR torna a stato tecnico di revisione prima di richiedere una nuova conferma umana;
+- nessun PASS precedente può essere trasferito implicitamente al nuovo SHA;
+- eventuali rilievi emersi durante la review si raccolgono prima, poi si riapre la branch in una sola tranche correttiva quando possibile.
+
+Obiettivo: evitare review concorrenti con sviluppo ancora in corso e ridurre cicli di CI/review ripetuti.
+
 ## Regola di chiusura
 
 Un assurance gate può essere dichiarato stabile solo quando:
