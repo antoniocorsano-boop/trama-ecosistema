@@ -27,7 +27,7 @@ main{padding:22px 26px 34px;max-width:1600px;width:100%;margin:auto}.top{display
 .actions{display:grid;gap:8px}.action{display:grid;grid-template-columns:26px 1fr auto;gap:9px;align-items:center;padding:10px;background:#0b2a48;border-radius:9px;border:1px solid #164e76}.prio{font-size:11px;padding:2px 7px;border-radius:999px}.high{background:#4b1c29;color:#ff9fa9}.med{background:#4a3b16;color:#ffd873}
 .table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:10px 8px;border-bottom:1px solid #164462;text-align:left;vertical-align:top}.table th{color:#93b9d5;font-size:12px}.table tr:hover{background:#0d3152}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#8cc9f4}.status{padding:4px 8px;border-radius:999px;font-weight:800;font-size:11px;display:inline-block}.s-green{background:#124a36;color:#86f1b8}.s-amber{background:#4a3916;color:#ffd36d}.s-blue{background:#123d68;color:#8ac7ff}.s-red{background:#4a1e29;color:#ff9fac}
 .timeline{display:grid;gap:10px}.event{display:grid;grid-template-columns:12px 1fr;gap:10px}.event .pin{width:10px;height:10px;background:var(--green);border-radius:50%;margin-top:5px}.event small{color:#8eb5d0}
-.rules{display:grid;gap:7px}.rule{display:flex;gap:8px;color:#bfd7e8}.empty{color:#88a9c0;padding:22px;text-align:center}.error{color:#ffc4ca;background:#451d28;padding:10px;border-radius:8px}.footer{margin-top:18px;color:#7fa8c4;font-size:12px;display:flex;justify-content:space-between}
+.rules{display:grid;gap:7px}.rule{display:flex;gap:8px;color:#bfd7e8}.empty{color:#88a9c0;padding:22px;text-align:center}.error{color:#ffc4ca;background:#451d28;padding:10px;border-radius:8px}.notice{color:#ffe29b;background:#443717;padding:10px;border-radius:8px}.footer{margin-top:18px;color:#7fa8c4;font-size:12px;display:flex;justify-content:space-between}
 .hidden{display:none!important}
 .install{border-color:#2fba82;color:#aef2cf}
 .mobile-nav{display:none}
@@ -185,7 +185,7 @@ const REPOS=[
  {key:'Atlas',repo:'antoniocorsano-boop/Curriculum-Atlas',color:'#ab7cff'},
  {key:'Docente OS',repo:'antoniocorsano-boop/docente-os-2026-27',color:'#ffbd4a'}
 ];
-const state={mode:'teacher',prs:[],runs:[],priorities:[],filter:'all',search:''};
+const state={mode:'teacher',prs:[],runs:[],priorities:[],filter:'all',search:'',health:'loading',failedSources:[],lastSuccessAt:null};
 const SNAPSHOT_KEY='trama-control-center-public-snapshot-v1';
 const api=async path=>{const r=await fetch('https://api.github.com'+path,{headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw new Error('GitHub API '+r.status);return r.json()};
 const raw=async url=>{const r=await fetch(url);if(!r.ok)throw new Error('Documento '+r.status);return r.text()};
@@ -198,27 +198,101 @@ function parsePriorities(md){
  const chunk=md.slice(i,i+2500); const arr=[]; for(const line of chunk.split('\n')){const m=line.match(/^\d+\.\s+\*\*(.+?)\*\*(.*)$/);if(m)arr.push((m[1]+m[2]).replace(/\[(.*?)\]\(.*?\)/g,'$1').trim())}
  return arr.slice(0,6)
 }
+function readSnapshot(){
+ try{return JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'null')}catch{return null}
+}
+function snapshotRows(snap,type,repoKey){
+ if(!snap)return[];
+ const rows=type==='prs'?snap.prs:snap.runs;
+ return (rows||[]).filter(x=>x?._repo?.key===repoKey)
+}
+function setHealth(kind,failed=[]){
+ state.health=kind;state.failedSources=failed;
+ const textEl=document.getElementById('liveText');
+ const dot=document.querySelector('.live .dot');
+ const box=document.getElementById('errorBox');
+ const snap=readSnapshot();
+ if(kind==='offline'){
+   textEl.textContent='Offline · ultimo stato disponibile';
+   dot.style.background='var(--amber)';
+   box.innerHTML='<div class="notice">Dispositivo offline: visualizzo l’ultimo stato pubblico salvato su questo dispositivo.</div>';
+   return;
+ }
+ if(kind==='degraded'){
+   textEl.textContent='Connessione attiva · GitHub non completamente aggiornato';
+   dot.style.background='var(--amber)';
+   const names=[...new Set(failed.map(x=>x.label))];
+   const when=snap?.savedAt?' Ultimo snapshot completo: '+new Date(snap.savedAt).toLocaleString('it-IT')+'.':'';
+   box.innerHTML='<div class="notice">La connessione Internet è attiva, ma '+names.length+' fonte'+(names.length===1?'':'i')+' GitHub non '+(names.length===1?'è':'sono')+' stata'+(names.length===1?'':'e')+' aggiornata'+(names.length===1?'':'e')+'. Mostro i dati disponibili e, dove necessario, l’ultimo dato salvato.'+when+'</div>';
+   return;
+ }
+ if(kind==='error'){
+   textEl.textContent='Connessione attiva · aggiornamento GitHub non riuscito';
+   dot.style.background='var(--red)';
+   box.innerHTML='<div class="error">Internet risulta disponibile, ma GitHub non ha restituito dati utilizzabili. Riprova con “Aggiorna”.</div>';
+   return;
+ }
+ textEl.textContent='Dati GitHub aggiornati';
+ dot.style.background='var(--green)';
+ box.innerHTML='';
+}
 async function load(){
- document.getElementById('liveText').textContent='Aggiornamento in corso…';document.getElementById('errorBox').innerHTML='';
- try{
-   const work=REPOS.flatMap(r=>[
-     api('/repos/'+r.repo+'/pulls?state=all&sort=updated&direction=desc&per_page=12').then(x=>({type:'prs',r,x})),
-     api('/repos/'+r.repo+'/actions/runs?per_page=12').then(x=>({type:'runs',r,x})).catch(()=>({type:'runs',r,x:{workflow_runs:[]}}))
-   ]);
-   const [all,statusMd]=await Promise.all([Promise.all(work),raw('https://raw.githubusercontent.com/antoniocorsano-boop/trama-ecosistema/main/STATUS.md').catch(()=> '')]);
-   state.prs=[];state.runs=[];
-   all.forEach(z=>{if(z.type==='prs')z.x.forEach(p=>state.prs.push({...p,_repo:z.r}));else(z.x.workflow_runs||[]).forEach(w=>state.runs.push({...w,_repo:z.r}))});
-   state.prs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));state.runs.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-   state.priorities=parsePriorities(statusMd);
-   try{localStorage.setItem(SNAPSHOT_KEY,JSON.stringify({savedAt:new Date().toISOString(),prs:state.prs,runs:state.runs,priorities:state.priorities}))}catch{}
-   render();
-   document.getElementById('liveText').textContent='Dati GitHub aggiornati';document.getElementById('updated').textContent='Aggiornato '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
- }catch(e){
-   let restored=false;
-   try{const snap=JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'null');if(snap?.prs&&snap?.runs){state.prs=snap.prs;state.runs=snap.runs;state.priorities=snap.priorities||[];render();restored=true;document.getElementById('updated').textContent='Ultimo stato salvato '+new Date(snap.savedAt).toLocaleString('it-IT')}}
-   catch{}
-   document.getElementById('liveText').textContent=restored?'Offline · ultimo stato disponibile':'Aggiornamento non riuscito';
-   document.getElementById('errorBox').innerHTML=restored?'<div class="error" style="color:#ffe29b;background:#443717">Sei offline o GitHub non è raggiungibile: visualizzo l’ultimo stato pubblico salvato su questo dispositivo.</div>':'<div class="error">Impossibile leggere temporaneamente le API pubbliche GitHub: '+esc(e.message)+'. Riprova con “Aggiorna”.</div>'
+ document.getElementById('liveText').textContent='Aggiornamento in corso…';
+ document.getElementById('errorBox').innerHTML='';
+ if(!navigator.onLine){
+   const snap=readSnapshot();
+   if(snap?.prs&&snap?.runs){state.prs=snap.prs;state.runs=snap.runs;state.priorities=snap.priorities||[];render();document.getElementById('updated').textContent='Ultimo stato salvato '+new Date(snap.savedAt).toLocaleString('it-IT')}
+   setHealth('offline');
+   return;
+ }
+ const snap=readSnapshot();
+ const work=REPOS.flatMap(r=>[
+   api('/repos/'+r.repo+'/pulls?state=all&sort=updated&direction=desc&per_page=12')
+     .then(x=>({ok:true,type:'prs',r,x}))
+     .catch(error=>({ok:false,type:'prs',r,error})),
+   api('/repos/'+r.repo+'/actions/runs?per_page=12')
+     .then(x=>({ok:true,type:'runs',r,x}))
+     .catch(error=>({ok:false,type:'runs',r,error}))
+ ]);
+ const [all,statusResult]=await Promise.all([
+   Promise.all(work),
+   raw('https://raw.githubusercontent.com/antoniocorsano-boop/trama-ecosistema/main/STATUS.md')
+     .then(x=>({ok:true,x}))
+     .catch(error=>({ok:false,error}))
+ ]);
+ state.prs=[];state.runs=[];
+ const failed=[];
+ let successCount=0;
+ all.forEach(z=>{
+   if(z.ok){
+     successCount++;
+     if(z.type==='prs')z.x.forEach(p=>state.prs.push({...p,_repo:z.r}));
+     else (z.x.workflow_runs||[]).forEach(w=>state.runs.push({...w,_repo:z.r}));
+   }else{
+     failed.push({label:z.r.key+' '+(z.type==='prs'?'PR':'workflow'),error:z.error?.message||'errore'});
+     const cached=snapshotRows(snap,z.type,z.r.key);
+     if(z.type==='prs')state.prs.push(...cached);else state.runs.push(...cached);
+   }
+ });
+ state.prs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
+ state.runs.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+ if(statusResult.ok)state.priorities=parsePriorities(statusResult.x);
+ else{
+   failed.push({label:'priorità TRAMA',error:statusResult.error?.message||'errore'});
+   state.priorities=snap?.priorities||[];
+ }
+ render();
+ if(successCount===REPOS.length*2&&statusResult.ok){
+   const savedAt=new Date().toISOString();
+   state.lastSuccessAt=savedAt;
+   try{localStorage.setItem(SNAPSHOT_KEY,JSON.stringify({savedAt,prs:state.prs,runs:state.runs,priorities:state.priorities}))}catch{}
+   document.getElementById('updated').textContent='Aggiornato '+new Date(savedAt).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+   setHealth('fresh');
+ }else if(successCount>0 || (snap?.prs&&snap?.runs)){
+   document.getElementById('updated').textContent=snap?.savedAt?'Ultimo snapshot completo '+new Date(snap.savedAt).toLocaleString('it-IT'):'Aggiornamento parziale';
+   setHealth('degraded',failed);
+ }else{
+   setHealth('error',failed);
  }
 }
 function filteredPrs(){return state.prs.filter(p=>(state.filter==='all'||p._repo.key===state.filter)&&(!state.search||((p.title+' '+p.number+' '+p._repo.key+' '+p.state).toLowerCase().includes(state.search))))}
@@ -268,8 +342,12 @@ window.addEventListener('appinstalled',()=>installBtn.classList.add('hidden'));
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 function applyLayoutMarker(){const mobile=window.matchMedia('(max-width:980px), (hover:none) and (pointer:coarse)').matches;document.documentElement.dataset.layout=mobile?'mobile':'desktop';const el=document.getElementById('layoutMode');if(el)el.textContent=mobile?'· mobile':''}
 window.addEventListener('resize',applyLayoutMarker);applyLayoutMarker();
-function connectivity(){const online=navigator.onLine;document.getElementById('liveText').textContent=online?'Dati GitHub aggiornati':'Offline · ultimo contenuto disponibile';document.querySelector('.live .dot').style.background=online?'var(--green)':'var(--amber)'}
-window.addEventListener('online',()=>{connectivity();load()});window.addEventListener('offline',connectivity);
-load().finally(connectivity);
+function connectivity(){
+ if(!navigator.onLine){setHealth('offline');return}
+ if(state.health==='offline')load();
+}
+window.addEventListener('online',()=>load());
+window.addEventListener('offline',()=>setHealth('offline'));
+load();
 </script>
 </body></html>

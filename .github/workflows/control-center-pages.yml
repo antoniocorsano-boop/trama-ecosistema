@@ -43,6 +43,9 @@ jobs:
           grep -q "max-width:980px" control-center/index.html
           grep -q "mobile-prs" control-center/index.html
           grep -q "mobile-nav" control-center/index.html
+          grep -q "navigator.onLine" control-center/index.html
+          grep -q "Connessione attiva · GitHub non completamente aggiornato" control-center/index.html
+          grep -q "Dispositivo offline" control-center/index.html
           if grep -Eq "(ghp_|github_pat_|Authorization:|Bearer )" control-center/index.html; then
             echo "Secret-like token or authorization header found in static dashboard" >&2
             exit 1
