@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/ecosystem-status.schema.json",
   "schemaVersion": "1.0.0",
-  "updatedAt": "2026-09-21",
+  "updatedAt": "2026-09-22",
   "capabilities": [
     {
       "id": "ECO-01",
