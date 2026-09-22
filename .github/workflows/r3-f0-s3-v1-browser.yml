@@ -13,7 +13,7 @@ on:
     paths:
       - "docs/product/prototypes/r3-f0-s3-v1/**"
       - "scripts/validate_s3_v1_browser.py"
-      - "tests/test_r3-f0-s3-v1_prototype.py"
+      - "tests/test_r3_f0_s3_v1_prototype.py"
       - ".github/workflows/r3-f0-s3-v1-browser.yml"
 
 permissions:
