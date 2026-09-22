@@ -88,3 +88,20 @@ Non significa:
 - frontend Atlas autorizzato;
 - runtime cross-product autorizzato;
 - DOS-A1 autorizzato.
+
+
+## 6. Consolidamento exit review 2026-09-22
+
+Le evidenze browser sono state riesaminate direttamente sui tre screenshot dell'artifact `r3-f0-s3-v1-rendering`.
+
+Esito indipendente:
+
+- Android-like 390×844: `VISUAL_PASS_WITH_SCOPE_LIMIT`;
+- desktop 1440×1100: `VISUAL_PASS`;
+- LIM 1920×1080: `VISUAL_PARTIAL` perché leggibilità a distanza di navigazione e metadata richiede ancora verifica reale.
+
+La checklist finale consolidata è in:
+
+`docs/product/r3-f0-s3-exit-review-2026-09-22.md`
+
+Questo consolidamento non sostituisce la review umana/assistiva e non chiude S3.
