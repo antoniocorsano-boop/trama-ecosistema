@@ -45,7 +45,7 @@ ADR-010 è approvata e integrata. Sono quindi consolidati:
 - Officina materiali separata dalla regia Docente OS;
 - principio «Riutilizza | Adatta | Crea nuova».
 
-Il primo slice raccomandato è ora R3-F0, già preparato ma da riallineare al nuovo `main` e sottoporre a nuova review exact-head.
+R3-F0 è approvato, integrato e attivo come primo slice di prodotto/design Atlas. Il perimetro resta NO_RUNTIME e privacy-first, senza autenticazione/account studenti né profilazione individuale.
 
 ### Assurance TypeSafe
 
@@ -56,7 +56,7 @@ TRAMA-SA-01 resta separato dal percorso prodotto. Il provider è advisory-only. 
 1. debito documentale e PR superate: completato;
 2. gate TypeSafe R3B integrato senza eseguire il HOLDOUT: completato;
 3. ADR-010 / Atlas integrale: approvata e integrata;
-4. riallineare e sottoporre a review R3-F0 come slice separato;
+4. R3-F0 Product & Design Foundation: approvato, integrato e attivo;
 5. eseguire il collaudo umano integrato ECO-02/P1 usando il runbook canonico;
 6. solo dopo le evidenze, valutare ulteriori runtime cross-product.
 

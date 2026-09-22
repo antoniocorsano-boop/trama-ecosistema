@@ -7,7 +7,7 @@ Aggiornato al 22 settembre 2026.
 | Curricolo governato | Operativo | Arena rimane la fonte autorevole |
 | ECO-01 | Chiuso | forma docente e contratti cross-product validati |
 | ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS consolidato fino a P9; registrazione lezione verificata in Beta; collaudo umano integrato finale ancora pendente |
-| Atlas / R3 | Fondazione pronta al prossimo gate | ADR-007/008/010 approvate; R3-F0 è preparato e richiede riallineamento + nuova review exact-head |
+| Atlas / R3 | R3-F0 attivo | ADR-007/008/010 approvate; Product & Design Foundation approvata e integrata; avvio consentito entro i confini NO_RUNTIME e privacy-first |
 | Docente OS | Operativo nel proprio dominio | baseline persistente, preparazione, proposte teacher-editable, registrazione lezione e runtime release contract verificati |
 | Officina materiali / R4-P1 | Architettura approvata / runtime non autorizzato | separazione tra regia didattica e produzione specialistica approvata da ADR-010; implementazione ancora da progettare |
 | TRAMA-SA-01 | Pilota assurance attivo | gate R3B HOLDOUT one-shot integrato; HOLDOUT non eseguito; TypeSafe resta advisory-only |
@@ -56,7 +56,7 @@ La governance di base è già consolidata:
 - LessonPublicationManifest e PublicationReceipt restano distinti;
 - il runtime Docente OS → Atlas resta NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME.
 
-**TRAMA-ADR-010 — Atlas integrale e Officina materiali** è approvata e integrata. **R3-F0 — Product & Design Foundation** è ora il prossimo slice di prodotto, ma richiede riallineamento al nuovo `main`, nuovi gate e una nuova review umana exact-head prima di essere promosso.
+**TRAMA-ADR-010 — Atlas integrale e Officina materiali** è approvata e integrata. **R3-F0 — Product & Design Foundation** è approvato, integrato e `ACTIVE` come slice di prodotto/design. Restano esclusi runtime cross-product, autenticazione/account studenti, profili o tracking individuale, Officina runtime e DOS-A1.
 
 ## TypeSafe — assurance separata dal prodotto
 
