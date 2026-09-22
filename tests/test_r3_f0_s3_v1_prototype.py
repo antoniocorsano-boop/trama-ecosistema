@@ -70,7 +70,9 @@ class S3V1PrototypeContractTests(unittest.TestCase):
 
     def test_focus_targets_responsive_and_motion_contracts(self):
         self.assertIn(":focus-visible", self.css)
+        self.assertIn("button:focus-visible", self.css)
         self.assertIn(".skip-link:focus", self.css)
+        self.assertIn("overflow-x: clip", self.css)
         self.assertRegex(self.css, r"min-height:\s*44px")
         self.assertRegex(self.css, r"@media\s*\(max-width:\s*759px\)")
         self.assertRegex(self.css, r"@media\s*\(min-width:\s*1400px\)")
