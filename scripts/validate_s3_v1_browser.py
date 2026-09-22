@@ -124,8 +124,11 @@ def main() -> None:
                 raise RuntimeError(f"Rendered DOM is missing marker: {marker}")
 
         harness_dom = dump_dom(browser, base + "validation-harness.html")
+        (OUT / "validation-harness-dom.html").write_text(harness_dom, encoding="utf-8")
         if 'data-validation="PASS"' not in harness_dom:
-            raise RuntimeError("Validation harness did not produce PASS")
+            result_start = harness_dom.find('<pre id="result"')
+            detail = harness_dom[result_start:result_start + 5000] if result_start >= 0 else harness_dom[-5000:]
+            raise RuntimeError("Validation harness did not produce PASS. Rendered result:\n" + detail)
 
         viewports = {
             "android": (390, 844),
@@ -167,7 +170,6 @@ def main() -> None:
                 raise RuntimeError(f"Non-text contrast failed for {name}: {ratio:.2f}:1")
 
         (OUT / "rendered-dom.html").write_text(dom, encoding="utf-8")
-        (OUT / "validation-harness-dom.html").write_text(harness_dom, encoding="utf-8")
         (OUT / "non-text-contrast.txt").write_text(
             "\n".join(f"{name}: {ratio:.2f}:1" for name, ratio in contrast_report.items()) + "\n",
             encoding="utf-8",
