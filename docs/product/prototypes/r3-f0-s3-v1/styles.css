@@ -49,6 +49,7 @@ a {
 a:hover { text-decoration-thickness: 0.13em; }
 
 a:focus-visible,
+button:focus-visible,
 summary:focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 4px;
@@ -355,6 +356,7 @@ main { max-width: 1120px; margin: 0 auto; }
   margin: var(--space-8) 0;
   min-width: 0;
   max-width: 100%;
+  overflow-x: clip;
 }
 
 .map-canvas {
