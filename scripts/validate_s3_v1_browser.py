@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import math
 import shutil
 import struct
 import subprocess
@@ -30,6 +31,68 @@ def png_size(path: Path) -> tuple[int, int]:
     return struct.unpack(">II", signature[16:24])
 
 
+def luminance(hex_color: str) -> float:
+    value = hex_color.lstrip("#")
+    rgb = [int(value[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    linear = [
+        c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+        for c in rgb
+    ]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+def contrast(a: str, b: str) -> float:
+    high, low = sorted((luminance(a), luminance(b)), reverse=True)
+    return (high + 0.05) / (low + 0.05)
+
+
+def screenshot(browser: str, url: str, name: str, width: int, height: int) -> None:
+    target = OUT / f"{name}.png"
+    subprocess.run(
+        [
+            browser,
+            "--headless=new",
+            "--disable-gpu",
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--hide-scrollbars",
+            f"--window-size={width},{height}",
+            f"--screenshot={target}",
+            url,
+        ],
+        check=True,
+        capture_output=True,
+        timeout=45,
+    )
+    if not target.exists() or target.stat().st_size < 10_000:
+        raise RuntimeError(f"Screenshot evidence missing or unexpectedly small: {target}")
+    actual_width, actual_height = png_size(target)
+    if actual_width != width or actual_height != height:
+        raise RuntimeError(
+            f"Unexpected screenshot size for {name}: "
+            f"{actual_width}x{actual_height}, expected {width}x{height}"
+        )
+
+
+def dump_dom(browser: str, url: str) -> str:
+    return subprocess.run(
+        [
+            browser,
+            "--headless=new",
+            "--disable-gpu",
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--virtual-time-budget=1500",
+            "--dump-dom",
+            url,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=45,
+    ).stdout
+
+
 def main() -> None:
     browser = find_browser()
 
@@ -45,24 +108,10 @@ def main() -> None:
     thread.start()
 
     try:
-        url = f"http://127.0.0.1:{server.server_port}/index.html"
+        base = f"http://127.0.0.1:{server.server_port}/"
+        url = base + "index.html"
 
-        dom = subprocess.run(
-            [
-                browser,
-                "--headless=new",
-                "--disable-gpu",
-                "--no-sandbox",
-                "--disable-dev-shm-usage",
-                "--dump-dom",
-                url,
-            ],
-            check=True,
-            capture_output=True,
-            text=True,
-            timeout=45,
-        ).stdout
-
+        dom = dump_dom(browser, url)
         required = (
             "Agricoltura come sistema tecnologico",
             "CurricularStatus",
@@ -74,41 +123,59 @@ def main() -> None:
             if marker not in dom:
                 raise RuntimeError(f"Rendered DOM is missing marker: {marker}")
 
+        harness_dom = dump_dom(browser, base + "validation-harness.html")
+        if 'data-validation="PASS"' not in harness_dom:
+            raise RuntimeError("Validation harness did not produce PASS")
+
         viewports = {
-            "android-390x844": (390, 844),
-            "desktop-1440x1100": (1440, 1100),
-            "lim-1920x1080": (1920, 1080),
+            "android": (390, 844),
+            "desktop": (1440, 1100),
+            "lim": (1920, 1080),
+            "reflow320": (320, 800),
+        }
+        sections = {
+            "top": "",
+            "student": "#percorsi",
+            "teacher": "#risorse",
+            "map": "#esplora",
+            "states": "#states-title",
         }
 
-        for name, (width, height) in viewports.items():
-            target = OUT / f"{name}.png"
-            subprocess.run(
-                [
+        for viewport, (width, height) in viewports.items():
+            for section, fragment in sections.items():
+                screenshot(
                     browser,
-                    "--headless=new",
-                    "--disable-gpu",
-                    "--no-sandbox",
-                    "--disable-dev-shm-usage",
-                    "--hide-scrollbars",
-                    f"--window-size={width},{height}",
-                    f"--screenshot={target}",
-                    url,
-                ],
-                check=True,
-                capture_output=True,
-                timeout=45,
-            )
-            if not target.exists() or target.stat().st_size < 10_000:
-                raise RuntimeError(f"Screenshot evidence missing or unexpectedly small: {target}")
-            actual_width, actual_height = png_size(target)
-            if actual_width != width or actual_height != height:
-                raise RuntimeError(
-                    f"Unexpected screenshot size for {name}: "
-                    f"{actual_width}x{actual_height}, expected {width}x{height}"
+                    url + fragment,
+                    f"{viewport}-{section}-{width}x{height}",
+                    width,
+                    height,
                 )
 
+        non_text_pairs = {
+            "focus-ring-on-white": ("#0369a1", "#ffffff"),
+            "strong-border-on-white": ("#6b7280", "#ffffff"),
+            "arena-indicator-on-white": ("#312e81", "#ffffff"),
+            "atlas-indicator-on-white": ("#0f766e", "#ffffff"),
+            "withdrawn-indicator-on-white": ("#7c2d12", "#ffffff"),
+            "error-indicator-on-white": ("#991b1b", "#ffffff"),
+        }
+        contrast_report = {}
+        for name, pair in non_text_pairs.items():
+            ratio = contrast(*pair)
+            contrast_report[name] = ratio
+            if ratio < 3.0:
+                raise RuntimeError(f"Non-text contrast failed for {name}: {ratio:.2f}:1")
+
         (OUT / "rendered-dom.html").write_text(dom, encoding="utf-8")
+        (OUT / "validation-harness-dom.html").write_text(harness_dom, encoding="utf-8")
+        (OUT / "non-text-contrast.txt").write_text(
+            "\n".join(f"{name}: {ratio:.2f}:1" for name, ratio in contrast_report.items()) + "\n",
+            encoding="utf-8",
+        )
         print(f"Browser validation PASS using {browser}")
+        print("Validation harness PASS at 320 CSS px")
+        for name, ratio in contrast_report.items():
+            print(f"{name}: {ratio:.2f}:1")
     finally:
         server.shutdown()
         server.server_close()
