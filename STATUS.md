@@ -1,16 +1,16 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 21 settembre 2026.
+Aggiornato al 22 settembre 2026.
 
 | Area | Stato | Evidenza o prossimo controllo |
 | --- | --- | --- |
 | Curricolo governato | Operativo | Arena rimane la fonte autorevole |
 | ECO-01 | Chiuso | forma docente e contratti cross-product validati |
 | ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS consolidato fino a P9; registrazione lezione verificata in Beta; collaudo umano integrato finale ancora pendente |
-| Atlas / R3 | Fondazione da avviare | ADR-007/008 approvate; ADR-010 proposta; R3-F0 è il prossimo slice di prodotto |
+| Atlas / R3 | Fondazione pronta al prossimo gate | ADR-007/008/010 approvate; R3-F0 è preparato e richiede riallineamento + nuova review exact-head |
 | Docente OS | Operativo nel proprio dominio | baseline persistente, preparazione, proposte teacher-editable, registrazione lezione e runtime release contract verificati |
-| Officina materiali / R4-P1 | Proposta architetturale | separazione tra regia didattica e produzione specialistica da sottoporre a review umana |
-| TRAMA-SA-01 | Pilota assurance attivo | TypeSafe resta advisory-only; gate R3B HOLDOUT da consolidare prima del one-shot |
+| Officina materiali / R4-P1 | Architettura approvata / runtime non autorizzato | separazione tra regia didattica e produzione specialistica approvata da ADR-010; implementazione ancora da progettare |
+| TRAMA-SA-01 | Pilota assurance attivo | gate R3B HOLDOUT one-shot integrato; HOLDOUT non eseguito; TypeSafe resta advisory-only |
 | DOS-A1 | RUNTIME_DEFERRED | richiede una nuova autorizzazione esplicita; nessuna evidenza corrente lo attiva implicitamente |
 | Marca TRAMA | Nome di lavoro | verifiche giuridiche, digitali e di posizionamento ancora pendenti |
 
@@ -31,6 +31,8 @@ Sono già recepiti o verificati:
 - trasferimento manuale .cml-handoff.json mantenuto soltanto come interoperabilità, pilota o ripiego.
 
 Il fatto che singoli sottoflussi siano stati verificati non equivale ancora al collaudo umano finale del pilota 2C.
+
+Il runbook canonico del collaudo finale è ora integrato e richiede una prova reale senza interventi tecnici correttivi durante il percorso.
 
 ## Gate residuo per chiudere ECO-02/P1
 
@@ -54,17 +56,20 @@ La governance di base è già consolidata:
 - LessonPublicationManifest e PublicationReceipt restano distinti;
 - il runtime Docente OS → Atlas resta NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME.
 
-La proposta **TRAMA-ADR-010 — Atlas integrale e Officina materiali** è mantenuta nella PR TRAMA #26 finché non viene integrata. **R3-F0 — Product & Design Foundation** può essere attivato soltanto dopo che ADR-010 è presente nel registro canonico e approvata mediante review umana exact-head.
+**TRAMA-ADR-010 — Atlas integrale e Officina materiali** è approvata e integrata. **R3-F0 — Product & Design Foundation** è ora il prossimo slice di prodotto, ma richiede riallineamento al nuovo `main`, nuovi gate e una nuova review umana exact-head prima di essere promosso.
 
 ## TypeSafe — assurance separata dal prodotto
 
 TRAMA-SA-01 resta un pilota di assurance **advisory-only**. Non crea autorità e non autorizza scritture.
 
-Il gate R3B HOLDOUT non è ancora eseguibile come one-shot finché non sono risolti i rilievi su:
+Il gate R3B HOLDOUT one-shot è ora integrato con:
+- dispatch solo da main;
+- pin dei contenuti sperimentali;
+- concurrency serializzata;
+- marker durevole di consumo;
+- conservazione dell'artefatto anche su provider error.
 
-- pin dell'input/harness autorizzato;
-- blocco durevole dei rerun dopo il consumo del holdout;
-- conservazione dell'artefatto anche in caso di errori provider.
+Il merge del gate non ha eseguito il HOLDOUT. Qualunque dispatch resta un'azione esplicita separata e non promuove TRAMA-ADR-009.
 
 TypeSafe non blocca l'avvio di R3-F0 Atlas.
 
