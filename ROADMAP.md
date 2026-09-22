@@ -108,6 +108,14 @@ Stato proposto: HUMAN REVIEW REQUIRED.
 
 ## R4 Esperienza professionale guidata
 
+Obiettivi generali R4:
+
+- eliminazione del trasferimento quotidiano opaco;
+- anteprima e conferma esplicita;
+- avanzamento e risultato visibili;
+- gestione di rifiuto, sostituzione e ripetizione;
+- ricevuta comprensibile all'utente.
+
 ### R4-P1 — Officina materiali specialistica
 
 Stato proposto: **HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED**.
@@ -121,13 +129,6 @@ Stato proposto: **HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED**.
 - pubblicazione in Atlas separata e governata da `LessonPublicationManifest` / `PublicationReceipt`;
 - provenance, diritti/licenze, accessibilità e qualità editoriale come gate;
 - nessuna pubblicazione o adozione automatica.
-
-
-- eliminazione del trasferimento quotidiano opaco;
-- anteprima e conferma esplicita;
-- avanzamento e risultato visibili;
-- gestione di rifiuto, sostituzione e ripetizione;
-- ricevuta comprensibile all'utente.
 
 
 ### TRAMA-SA-01 — TypeSafe semantic assurance pilot
