@@ -73,6 +73,7 @@ class S3V1PrototypeContractTests(unittest.TestCase):
         self.assertIn("button:focus-visible", self.css)
         self.assertIn(".skip-link:focus", self.css)
         self.assertIn("overflow-x: clip", self.css)
+        self.assertIn('.view-switcher a[href="#visuale"]', self.css)
         self.assertRegex(self.css, r"min-height:\s*44px")
         self.assertRegex(self.css, r"@media\s*\(max-width:\s*759px\)")
         self.assertRegex(self.css, r"@media\s*\(min-width:\s*1400px\)")
