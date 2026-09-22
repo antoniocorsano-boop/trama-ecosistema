@@ -475,6 +475,44 @@ footer {
   .map-figure figcaption { font-size: 0.95rem; }
 }
 
+@media (min-width: 1600px) {
+  body { font-size: 1.25rem; }
+
+  .site-header {
+    padding-inline: max(var(--space-12), calc((100vw - 1440px) / 2));
+  }
+
+  main { max-width: 1440px; }
+
+  .hero,
+  .section {
+    padding-block: var(--space-16);
+    padding-inline: var(--space-12);
+  }
+
+  .hero h1 { font-size: 3.75rem; }
+  .section h2 { font-size: 2.5rem; }
+  .section h3 { font-size: 1.5rem; }
+
+  .primary-nav a,
+  .year-switcher a,
+  .view-switcher a,
+  .action-link,
+  .tab-list button,
+  .provenance summary {
+    min-height: 52px;
+  }
+
+  .prototype-label,
+  .eyebrow,
+  .placeholder,
+  .status,
+  .map-figure figcaption,
+  .map-edge {
+    font-size: 1rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
