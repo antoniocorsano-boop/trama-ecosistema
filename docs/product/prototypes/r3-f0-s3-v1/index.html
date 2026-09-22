@@ -91,14 +91,14 @@
 
       <p class="privacy-note">Nessun login, profilo persistente, tracking individuale o dato di valutazione.</p>
 
-      <nav class="view-switcher" aria-label="Viste del percorso">
-        <a href="#lezioni">Lezioni</a>
-        <a href="#obiettivi">Obiettivi</a>
-      </nav>
+      <div class="tab-list" role="tablist" aria-label="Viste del percorso">
+        <button type="button" role="tab" id="tab-lezioni" aria-selected="true" aria-controls="lezioni">Lezioni</button>
+        <button type="button" role="tab" id="tab-obiettivi" aria-selected="false" aria-controls="obiettivi" tabindex="-1">Obiettivi</button>
+      </div>
 
       <div class="student-views">
-        <section id="lezioni" class="view-panel" aria-labelledby="lezioni-title">
-          <h3 id="lezioni-title">Lezioni</h3>
+        <section id="lezioni" class="view-panel" role="tabpanel" aria-labelledby="tab-lezioni" tabindex="0">
+          <h3>Lezioni</h3>
           <ol class="lesson-list">
             <li>
               <strong>Agricoltura come sistema tecnologico</strong>
@@ -111,8 +111,8 @@
           </ol>
         </section>
 
-        <section id="obiettivi" class="view-panel" aria-labelledby="obiettivi-title">
-          <h3 id="obiettivi-title">Obiettivi</h3>
+        <section id="obiettivi" class="view-panel" role="tabpanel" aria-labelledby="tab-obiettivi" tabindex="0" hidden>
+          <h3>Obiettivi</h3>
           <div class="objective-block">
             <strong>Obiettivo O2.1 <span class="placeholder">[Arena placeholder]</span></strong>
             <p>Stesso dominio informativo della vista Lezioni, organizzato per obiettivo.</p>
@@ -189,8 +189,9 @@
           <div class="map-node relation x1">Raccordo Scienze</div>
           <div class="map-line l1"></div>
           <div class="map-line l2"></div>
-          <div class="map-line l3"></div>
-          <div class="map-line l4"></div>
+          <div class="map-edge edge-prerequisite">↓ prerequisito</div>
+          <div class="map-edge edge-resource">↓ risorsa</div>
+          <div class="map-edge edge-raccordo">↙ raccordo</div>
         </div>
         <figcaption>Vista visuale dimostrativa. L’accesso equivalente è disponibile subito dopo in forma di elenco.</figcaption>
       </figure>
@@ -286,5 +287,6 @@
   <footer>
     <p>R3-F0/S3-V1 · prototipo statico · nessun dato personale · nessun runtime cross-product.</p>
   </footer>
+  <script src="prototype.js" defer></script>
 </body>
 </html>
