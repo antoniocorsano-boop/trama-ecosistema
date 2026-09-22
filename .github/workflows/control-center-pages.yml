@@ -1,6 +1,10 @@
 name: Deploy TRAMA Control Center
 
 on:
+  pull_request:
+    paths:
+      - "control-center/**"
+      - ".github/workflows/control-center-pages.yml"
   push:
     branches: ["main"]
     paths:
@@ -14,15 +18,15 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "trama-control-center-pages"
-  cancel-in-progress: false
+  group: "trama-control-center-pages-${{ github.ref }}"
+  cancel-in-progress: true
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Validate static dashboard
+      - name: Validate static dashboard contract
         shell: bash
         run: |
           set -euo pipefail
@@ -34,8 +38,20 @@ jobs:
             echo "Secret-like token or authorization header found in static dashboard" >&2
             exit 1
           fi
+      - name: Validate browser JavaScript syntax
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('fs')
+          const html = fs.readFileSync('control-center/index.html', 'utf8')
+          const match = html.match(/<script>([\s\S]*?)<\/script>/)
+          if (!match) throw new Error('Inline script not found')
+          new Function(match[1])
+          console.log('CONTROL_CENTER_JS_SYNTAX_PASS')
+          NODE
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: validate
     runs-on: ubuntu-latest
     environment:
