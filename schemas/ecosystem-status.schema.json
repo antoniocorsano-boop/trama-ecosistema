@@ -20,7 +20,15 @@
           "label": {"type": "string", "minLength": 3},
           "state": {"enum": ["CLOSED", "ACTIVE", "DEFERRED", "BLOCKED", "PLANNED"]},
           "authority": {"type": "string", "minLength": 2},
-          "humanReview": {"enum": ["NOT_REQUIRED", "PENDING", "PASS", "FAIL"]}
+          "humanReview": {"enum": ["NOT_REQUIRED", "PENDING", "PASS", "FAIL"]},
+          "reviewGates": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "start": {"enum": ["NOT_REQUIRED", "PENDING", "PASS", "FAIL"]},
+              "exit": {"enum": ["NOT_REQUIRED", "PENDING", "PASS", "FAIL"]}
+            }
+          }
         }
       }
     }
