@@ -12,7 +12,8 @@ Questo repository non contiene una quarta applicazione e non replica le basi di 
 - `ECO-01`: chiusa;
 - `ECO-02/P1`: pilota controllato attivo;
 - `DOS-A1`: `RUNTIME_DEFERRED`;
-- integrazione automatica: non autorizzata.
+- integrazione automatica: non autorizzata;
+- TRAMA-PW-01: integrato; canary Docente OS post-merge PASS su Product CI, P6 Performance Runtime e HVA Runtime.
 
 Lo stato sintetico è in [STATUS.md](STATUS.md). Le decisioni vincolanti sono registrate in [docs/decisions/decision-register.json](docs/decisions/decision-register.json).
 
@@ -34,6 +35,7 @@ Lo stato sintetico è in [STATUS.md](STATUS.md). Le decisioni vincolanti sono re
 4. [Flussi dei dati](docs/architecture/data-flows.md)
 5. [Governo](GOVERNANCE.md)
 6. [Roadmap](ROADMAP.md)
+7. [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md)
 
 ## Verifica locale
 
