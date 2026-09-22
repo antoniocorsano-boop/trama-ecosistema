@@ -1,13 +1,56 @@
 {
   "$schema": "../schemas/ecosystem-status.schema.json",
   "schemaVersion": "1.0.0",
-  "updatedAt": "2026-09-21",
+  "updatedAt": "2026-09-22",
   "capabilities": [
-    {"id": "ECO-01", "label": "Contratti e forma docente", "state": "CLOSED", "authority": "TRAMA", "humanReview": "PASS"},
-    {"id": "ECO-02-P1", "label": "Pilota Tecnologia 2C", "state": "ACTIVE", "authority": "TRAMA", "humanReview": "PENDING"},
-    {"id": "DOS-A1", "label": "Integrazione operativa automatizzata", "state": "DEFERRED", "authority": "Docente OS", "humanReview": "PENDING"},
-    {"id": "ATLAS-STABLE", "label": "Base stabile Atlas", "state": "PLANNED", "authority": "Atlas", "humanReview": "PENDING"},
-    {"id": "TRAMA-BRAND", "label": "Nome e marchio definitivi", "state": "PLANNED", "authority": "TRAMA", "humanReview": "PENDING"}
+    {
+      "id": "ECO-01",
+      "label": "Contratti e forma docente",
+      "state": "CLOSED",
+      "authority": "TRAMA",
+      "humanReview": "PASS"
+    },
+    {
+      "id": "ECO-02-P1",
+      "label": "Pilota Tecnologia 2C",
+      "state": "ACTIVE",
+      "authority": "TRAMA",
+      "humanReview": "PENDING"
+    },
+    {
+      "id": "DOS-A1",
+      "label": "Integrazione operativa automatizzata",
+      "state": "DEFERRED",
+      "authority": "Docente OS",
+      "humanReview": "PENDING"
+    },
+    {
+      "id": "R3-F0",
+      "label": "Atlas Product & Design Foundation",
+      "state": "PLANNED",
+      "authority": "Atlas",
+      "humanReview": "PENDING"
+    },
+    {
+      "id": "R4-P1",
+      "label": "Officina materiali specialistica",
+      "state": "PLANNED",
+      "authority": "TRAMA",
+      "humanReview": "PENDING"
+    },
+    {
+      "id": "TRAMA-SA-01",
+      "label": "TypeSafe semantic assurance pilot",
+      "state": "ACTIVE",
+      "authority": "TRAMA",
+      "humanReview": "PENDING"
+    },
+    {
+      "id": "TRAMA-BRAND",
+      "label": "Nome e marchio definitivi",
+      "state": "PLANNED",
+      "authority": "TRAMA",
+      "humanReview": "PENDING"
+    }
   ]
 }
-
