@@ -36,5 +36,31 @@
     "activatesDOSA1": false,
     "authorizesCrossProductRuntime": false,
     "changesArenaAuthority": false
-  }
+  },
+  "adoption": {
+    "trama": {
+      "pr": 44,
+      "state": "DRAFT"
+    },
+    "docenteOs": {
+      "enforcementPr": 582,
+      "regressionFixPr": 581,
+      "state": "IN_PROGRESS"
+    },
+    "arena": {
+      "enforcementPr": 328,
+      "state": "IN_PROGRESS"
+    },
+    "atlas": {
+      "enforcementPr": 12,
+      "state": "IN_PROGRESS"
+    }
+  },
+  "rolloutState": "ROLLING_ENFORCEMENT",
+  "fullEnforcementRequires": [
+    "TRAMA governance approval",
+    "product gates PASS and merged",
+    "Docente OS regression retest PASS",
+    "baseline audit of existing Arena and Docente OS writes"
+  ]
 }
