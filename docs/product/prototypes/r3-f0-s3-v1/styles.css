@@ -467,9 +467,9 @@ footer {
 
   .primary-nav { gap: var(--space-2) var(--space-4); }
 
-  .map-canvas {
-    grid-template-columns: 120px 40px 130px 40px 140px;
-    padding: var(--space-4);
+  .map-figure,
+  .view-switcher a[href="#visuale"] {
+    display: none;
   }
 
   .relation-list > div { grid-template-columns: 1fr; gap: 0; }
