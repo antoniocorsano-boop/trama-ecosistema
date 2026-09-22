@@ -1,9 +1,9 @@
 # Contratto TRAMA — Educazione civica nel primo ciclo
 
-**Stato:** PROPOSED / HUMAN REVIEW REQUIRED / NO_RUNTIME_AUTHORIZATION  
+**Stato:** APPROVED_GOVERNANCE / NO_RUNTIME_AUTHORIZATION  
 **Data:** 22 settembre 2026  
 **Scope:** Arena · Docente OS · Atlas  
-**Decisione collegata:** TRAMA-ADR-011
+**Decisione collegata:** TRAMA-ADR-011 — APPROVED
 
 ## 1. Scopo
 
@@ -370,7 +370,7 @@ Le tabelle generiche di orario possono continuare a usare `weekly_minutes` per l
 
 ## 20. Gate e stato runtime
 
-Questo contratto definisce governance e requisiti.
+Questo contratto definisce governance e requisiti approvati.
 
 Non autorizza:
 
