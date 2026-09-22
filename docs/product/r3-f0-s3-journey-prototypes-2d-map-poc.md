@@ -1,6 +1,6 @@
 # R3-F0/S3 — Journey Prototypes & 2D Map POC
 
-**Stato:** UNDER_REVIEW / NO_RUNTIME  
+**Stato:** STATIC_PACKAGE_INTEGRATED / HUMAN_REVIEW_PASS / EXIT_GATES_PENDING / NO_RUNTIME  
 **Parent:** R3-F0 / ATLAS-F0  
 **Dipendenze:** R3-F0/S1 e R3-F0/S2 — INTEGRATED / HUMAN_REVIEW_PASS  
 **Prodotto interessato:** Atlas  
@@ -318,8 +318,12 @@ S3 non autorizza:
 - DOS-A1;
 - chiusura automatica di R3-F0.
 
-## 13. Passo successivo
+## 13. Esito corrente e passo successivo
 
-Dopo S3, se i prototipi risultano validati, il passo successivo può essere un incremento separato di **Product Prototype Assembly / Validation**, ancora distinto da qualsiasi runtime cross-product.
+Il pacchetto statico S3 è stato approvato con HUMAN EXACT-HEAD REVIEW PASS sull'exact head `e58ad641fb46ded63da714aec706bc14ac60a0d2` e integrato con merge commit `74dbcbea894ff8871784c62baa142be967884001`.
+
+Restano PENDING le verifiche che richiedono un prototipo renderizzato: Android, desktop, LIM, screen reader e test automatici di contrasto/reflow. Per questo S3 non è ancora chiuso.
+
+Il prossimo lavoro deve essere un incremento separato di **Rendered Prototype Validation**, ancora distinto da qualsiasi runtime cross-product e senza attivare DOS-A1.
 
 L'**exit review complessiva di R3-F0 resta PENDING** fino alla verifica degli output obbligatori e della checklist finale.
