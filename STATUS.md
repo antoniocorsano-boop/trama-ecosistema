@@ -4,7 +4,8 @@ Aggiornato al 22 settembre 2026.
 
 | Area | Stato | Evidenza o prossimo controllo |
 | --- | --- | --- |
-| Curricolo governato | Operativo | Arena rimane la fonte autorevole |\n| Educazione civica / EC-01 | Governance in review | contratto primo ciclo proposto; Arena = quadro approvato, Docente OS = attuazione, Atlas = consultazione; nessuna autorizzazione runtime |
+| Curricolo governato | Operativo | Arena rimane la fonte autorevole |
+| Educazione civica / EC-01 | Governance in review | contratto primo ciclo proposto; Arena = quadro approvato, Docente OS = attuazione, Atlas = consultazione; nessuna autorizzazione runtime |
 | ECO-01 | Chiuso | forma docente e contratti cross-product validati |
 | ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS consolidato fino a P9; registrazione lezione verificata in Beta; collaudo umano integrato finale ancora pendente |
 | Atlas / R3 | R3-F0 attivo | ADR-007/008/010 approvate; Product & Design Foundation approvata e integrata; avvio consentito entro i confini NO_RUNTIME e privacy-first |
@@ -104,4 +105,5 @@ TypeSafe non blocca l'avvio di R3-F0 Atlas.
 5. Trasporto, persistenza e pubblicazione non equivalgono ad approvazione istituzionale.
 6. Atlas non richiede né mantiene autenticazione, account, profili, tracking o dati personali individuali degli studenti.
 7. Drive non è una memoria tecnica concorrente.
-8. Ogni capacità runtime nuova richiede il proprio gate, evidenza e review exact-head.\n9. Educazione civica non deve essere modellata come quota settimanale locale per disciplina: il quadro annuale approvato appartiene ad Arena e l'attuazione reale appartiene a Docente OS.
+8. Ogni capacità runtime nuova richiede il proprio gate, evidenza e review exact-head.
+9. Educazione civica non deve essere modellata come quota settimanale locale per disciplina: il quadro annuale approvato appartiene ad Arena e l'attuazione reale appartiene a Docente OS.
