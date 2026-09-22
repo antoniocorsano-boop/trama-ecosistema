@@ -11,8 +11,9 @@ Produrre e validare un prototipo renderizzabile reale dei journey S3 senza intro
 Il prototipo:
 
 - usa solo HTML e CSS locali;
-- non usa JavaScript;
+- usa un solo JavaScript locale minimale per il pattern accessibile Lezioni ↔ Obiettivi;
 - non usa framework, package manager, font esterni o CDN;
+- lo script locale non effettua rete, tracking o accesso a dati;
 - non effettua rete, analytics o tracking;
 - non contiene dati personali;
 - non implementa runtime cross-product;
@@ -32,6 +33,7 @@ Il prototipo:
 - semantic zoom a tre livelli;
 - CurricularStatus / EditorialStatus / UIFeedbackStatus simultanei;
 - skip link;
+- tabs Lezioni ↔ Obiettivi con ruoli ARIA e tastiera ArrowLeft/ArrowRight/Home/End;
 - focus visibile;
 - target primari almeno 44 px nel prototipo;
 - reflow responsive;
