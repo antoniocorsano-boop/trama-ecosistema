@@ -75,16 +75,40 @@
         doc.querySelector(".action-link")
       ].filter(Boolean);
 
-      tests.focusNotEntirelyObscured = focusTargets.every((el) => {
+      const focusDiagnostics = focusTargets.map((el) => {
         el.focus();
         const r = el.getBoundingClientRect();
-        return r.bottom > 0 && r.top < win.innerHeight;
+        return {
+          tag: el.tagName,
+          text: (el.textContent || "").trim().slice(0, 80),
+          top: Math.round(r.top),
+          bottom: Math.round(r.bottom),
+          viewportHeight: win.innerHeight,
+          visible: r.bottom > 0 && r.top < win.innerHeight
+        };
       });
+      tests.focusNotEntirelyObscured = focusDiagnostics.every((item) => item.visible);
 
       tests.stateTextSurvivesWithoutColor =
         doc.body.textContent.includes("CurricularStatus · CORRENTE") &&
         doc.body.textContent.includes("EditorialStatus · RITIRATA") &&
         doc.body.textContent.includes("UIFeedbackStatus · ERRORE TEMPORANEO");
+
+      const overflowers = Array.from(doc.querySelectorAll("*"))
+        .map((el) => {
+          const r = el.getBoundingClientRect();
+          return {
+            tag: el.tagName,
+            id: el.id || "",
+            className: typeof el.className === "string" ? el.className : "",
+            text: (el.textContent || "").trim().slice(0, 60),
+            left: Math.round(r.left),
+            right: Math.round(r.right),
+            width: Math.round(r.width)
+          };
+        })
+        .filter((item) => item.right > win.innerWidth + 1 || item.left < -1)
+        .slice(0, 20);
 
       const passed = Object.values(tests).every(Boolean);
       result.dataset.validation = passed ? "PASS" : "FAIL";
@@ -94,7 +118,9 @@
           root: root.scrollWidth,
           body: doc.body.scrollWidth
         },
-        tests
+        tests,
+        overflowers,
+        focusDiagnostics
       }, null, 2);
     });
   </script>
