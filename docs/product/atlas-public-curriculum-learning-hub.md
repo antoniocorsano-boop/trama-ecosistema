@@ -332,9 +332,30 @@ Lo studente deve poter:
 
 **Minimizzazione:** la sezione e la data esatta della lezione non sono informazioni pubbliche predefinite. Devono comparire soltanto se necessarie alla comprensione/routing e compatibili con la visibility policy.
 
-Per il pilota iniziale non è richiesto un account studente se la pubblicazione può restare priva di dati personali e ad accesso pubblico effettivamente coerente con la policy dichiarata.
+### 9.1 Privacy-first per gli studenti
 
-Qualsiasi futura autenticazione, personalizzazione o visibilità non pubblica richiede una distinta valutazione privacy, sicurezza, base giuridica ed enforcement tecnico.
+Atlas adotta come invariante di prodotto il principio **no student authentication**.
+
+Lo Student Learning Hub deve essere fruibile senza:
+- account studente;
+- login individuale;
+- profilo persistente;
+- identificatore personale stabile;
+- cronologia personale;
+- tracciamento o profilazione individuale;
+- dati di valutazione o esiti individuali.
+
+La selezione del contesto deve usare soltanto informazioni non identificanti e strettamente necessarie, come:
+- disciplina;
+- grado/annualità;
+- percorso o sequenza pubblicata;
+- eventuali filtri di contenuto non personali.
+
+Se una risorsa richiede identità individuale, autenticazione o dati personali per essere fruita, **non appartiene allo Student Learning Hub di Atlas** e deve restare nel sistema competente, soggetto alla propria governance.
+
+La sezione e la data esatta restano omesse per impostazione predefinita. Non si introduce autenticazione studente come scorciatoia per ottenere personalizzazione o visibilità selettiva.
+
+Regola architetturale: **privacy by design e data minimization precedono personalizzazione, analytics e convenience**.
 
 ## 10. Esiti e qualità dell'offerta formativa
 
@@ -519,7 +540,7 @@ Questa proposta:
 - estende Atlas alla pubblicazione didattica senza introdurre dati personali;
 - non attiva DOS-A1;
 - non autorizza OutcomeAggregateSnapshot;
-- non autorizza autenticazione studenti;
+- esclude l'autenticazione studenti come principio architetturale privacy-first;
 - non autorizza nuove dipendenze runtime.
 
 ## 18. Decisioni approvate e limiti di efficacia
