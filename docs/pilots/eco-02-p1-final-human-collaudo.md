@@ -37,16 +37,35 @@ Verificare:
 - lezione/sequenza riconoscibile;
 - data e collocazione coerenti nel dominio Docente OS.
 
-### 2. Contesto curricolare
+### 2. Acquisizione/rivalidazione Arena e gate «Approva e procedi»
 
-Verificare che il docente riconosca:
+Eseguire una volta il flusso controllato Arena → Docente OS previsto per il pilota 2C.
+
+La prova deve mostrare realmente:
+
+- avvio dell'acquisizione o rivalidazione della baseline;
+- elemento selezionato e provenienza Arena;
+- avanzamento visibile;
+- esito comprensibile;
+- eventuale errore senza perdita del contesto;
+- gate reale «Approva e procedi» quando il flusso lo richiede;
+- nessuna approvazione implicita derivante dal solo trasporto o dalla persistenza.
+
+Se la baseline è già corrente, usare il percorso di rivalidazione/refresh previsto dal pilota e verificare comunque l'esito visibile. Non è sufficiente constatare che una baseline esiste già.
+
+Il trasferimento manuale .cml-handoff.json può essere usato solo se il pilota lo richiede come trasporto controllato o ripiego; non deve diventare una procedura da ripetere per ogni lezione.
+
+### 3. Contesto curricolare
+
+Dopo il gate verificare che il docente riconosca:
 
 - provenienza Arena;
 - obiettivo/i rilevanti;
 - stato della baseline;
-- assenza di richiesta di nuovo trasferimento manuale .cml-handoff.json per la singola lezione.
+- persistenza per classe + disciplina + anno + versione;
+- assenza di richiesta di un nuovo trasferimento manuale per la singola lezione.
 
-### 3. Prima della lezione
+### 4. Prima della lezione
 
 Aprire la superficie di preparazione e verificare:
 
@@ -56,22 +75,28 @@ Aprire la superficie di preparazione e verificare:
 - possibilità di modifica;
 - possibilità di esclusione o sostituzione.
 
-### 4. P9 — modifica e riconferma
+### 5. P9 — accettazione, modifica e riconferma
 
-Eseguire esplicitamente:
+Eseguire esplicitamente nell'ordine seguente:
 
-1. modificare una proposta;
-2. verificare che l'accettazione precedente non resti valida in modo silenzioso;
-3. confermare nuovamente con un'azione esplicita;
-4. verificare che solo dopo la conferma l'elemento risulti effettivo nella lezione.
+1. scegliere una proposta ancora non adottata;
+2. confermarla una prima volta con l'azione esplicita prevista;
+3. verificare che risulti effettiva nella lezione;
+4. modificare il testo dell'elemento già accettato;
+5. verificare che la precedente accettazione decada e che l'elemento torni in stato da riesaminare;
+6. verificare che la versione modificata non sia già effettiva nella lezione;
+7. confermare nuovamente con un'azione esplicita;
+8. verificare che solo dopo la seconda conferma la versione modificata risulti effettiva.
 
 Esito minimo:
+- prima accettazione visibile;
 - modifica visibile;
+- invalidazione esplicita dell'accettazione precedente;
 - stato da riesaminare dopo la modifica;
 - nuova conferma necessaria;
 - nessun doppione percettivo.
 
-### 5. Decisione sulla risorsa Atlas
+### 6. Decisione sulla risorsa Atlas
 
 Registrare una delle sole decisioni ammesse:
 
@@ -84,7 +109,7 @@ La proposta Atlas non deve risultare automaticamente adottata.
 
 Annotare in forma sintetica il motivo della scelta senza dati personali.
 
-### 6. Uso della preparazione
+### 7. Uso della preparazione
 
 Verificare se, al momento di usarla in classe, la preparazione risulta:
 
@@ -94,7 +119,7 @@ Verificare se, al momento di usarla in classe, la preparazione risulta:
 - coerente con il tempo disponibile;
 - priva di passaggi manuali opachi.
 
-### 7. Registrazione della lezione
+### 8. Registrazione della lezione
 
 Al termine:
 
@@ -103,7 +128,7 @@ Al termine:
 - verificare che la registrazione dei minuti sia distinta dalla decisione di completamento del blocco;
 - non confermare automaticamente il completamento se il docente non lo ritiene didatticamente concluso.
 
-### 8. Chiusura del test
+### 9. Chiusura del test
 
 Senza modificare il sistema durante il collaudo, registrare:
 
@@ -121,8 +146,9 @@ Il rapporto umano deve contenere soltanto:
 - classe 2C;
 - disciplina Tecnologia;
 - sequenza testata;
+- esito del flusso Arena → Docente OS e del gate «Approva e procedi»;
 - decisione sulla risorsa Atlas;
-- esito P9;
+- esito P9 accettazione → modifica → riconferma;
 - esito registrazione TeachingSession;
 - tempo percepito di preparazione;
 - problemi osservati;
@@ -139,15 +165,15 @@ Non devono comparire:
 
 Rispondere con PASS / PARTIAL / FAIL e una nota breve:
 
-1. Origine curricolare chiara?
-2. Obiettivo della lezione chiaro?
-3. Risorsa Atlas realmente controllabile?
-4. P9 modifica + riconferma comprensibili?
-5. Preparazione pronta all'uso senza lavoro tecnico?
-6. Registrazione della lezione comprensibile?
-7. Completamento del blocco correttamente separato dalla registrazione?
-8. Flusso complessivo più semplice del percorso manuale precedente?
-9. Qualità didattica sufficiente per l'uso reale?
+1. Acquisizione/rivalidazione Arena e relativo esito comprensibili?
+2. Origine curricolare e obiettivo della lezione chiari?
+3. Gate «Approva e procedi» esplicito e non implicito?
+4. Risorsa Atlas realmente controllabile?
+5. P9 accettazione → modifica → riconferma comprensibili?
+6. Preparazione pronta all'uso senza lavoro tecnico?
+7. Registrazione della lezione comprensibile?
+8. Completamento del blocco correttamente separato dalla registrazione?
+9. Flusso complessivo più semplice del percorso manuale precedente e qualità didattica sufficiente?
 10. Il docente mantiene il controllo in ogni passaggio?
 
 ## Criterio di chiusura ECO-02/P1
@@ -155,11 +181,16 @@ Rispondere con PASS / PARTIAL / FAIL e una nota breve:
 Il pilota può essere proposto per chiusura soltanto se:
 
 - non emergono blocker;
-- i punti 1, 3, 4, 6, 7 e 10 sono PASS;
+- **tutte e 10 le domande finali sono PASS**;
+- lo stato complessivo del collaudo è PASS;
 - nessuna adozione o approvazione avviene automaticamente;
+- il flusso Arena → Docente OS e il gate «Approva e procedi» sono stati realmente esercitati;
+- il ciclo P9 accettazione → modifica → riconferma è stato realmente esercitato;
 - il rapporto umano finale è registrato;
 - una successiva PR TRAMA propone esplicitamente la chiusura;
 - una nuova HUMAN EXACT-HEAD REVIEW approva quella chiusura.
+
+Qualunque risposta PARTIAL o FAIL mantiene ECO-02/P1 ACTIVE e impedisce la proposta di chiusura finché il rilievo non è risolto e nuovamente verificato.
 
 La chiusura non attiva DOS-A1 e non autorizza nuovi runtime cross-product.
 
