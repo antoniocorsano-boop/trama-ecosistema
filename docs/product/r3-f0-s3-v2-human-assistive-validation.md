@@ -76,7 +76,7 @@ Questo impedisce di validare soltanto la parte alta della pagina.
 Controlli:
 
 - nessun overflow orizzontale della pagina a 320 CSS px;
-- la mappa mantiene il proprio overflow 2D locale senza imporlo alla pagina;
+- a 320 CSS px la visuale 2D viene sostituita dall'elenco equivalente, come previsto dalla matrice S3 per Android/mobile;
 - ArrowRight cambia tab, selezione e pannello;
 - Home torna al primo tab;
 - disclosure provenance apre correttamente;
