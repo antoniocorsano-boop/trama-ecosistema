@@ -1,0 +1,70 @@
+name: Deploy TRAMA Control Center
+
+on:
+  pull_request:
+    paths:
+      - "control-center/**"
+      - ".github/workflows/control-center-pages.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "control-center/**"
+      - ".github/workflows/control-center-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "trama-control-center-pages-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate static dashboard contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s control-center/index.html
+          grep -q "TRAMA Control Center" control-center/index.html
+          grep -q "SOLA LETTURA" control-center/index.html
+          grep -q "api.github.com" control-center/index.html
+          if grep -Eq "(ghp_|github_pat_|Authorization:|Bearer )" control-center/index.html; then
+            echo "Secret-like token or authorization header found in static dashboard" >&2
+            exit 1
+          fi
+      - name: Validate browser JavaScript syntax
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('fs')
+          const html = fs.readFileSync('control-center/index.html', 'utf8')
+          const match = html.match(/<script>([\s\S]*?)<\/script>/)
+          if (!match) throw new Error('Inline script not found')
+          new Function(match[1])
+          console.log('CONTROL_CENTER_JS_SYNTAX_PASS')
+          NODE
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: control-center
+      - name: Deploy Control Center
+        id: deployment
+        uses: actions/deploy-pages@v4
