@@ -16,7 +16,7 @@
     const frame = document.getElementById("subject");
     const result = document.getElementById("result");
 
-    frame.addEventListener("load", async () => {
+    frame.addEventListener("load", () => {
       const win = frame.contentWindow;
       const doc = frame.contentDocument;
       const tests = {};
@@ -75,24 +75,41 @@
         doc.querySelector(".action-link")
       ].filter(Boolean);
 
-      const nextFrame = () => new Promise((resolve) => win.requestAnimationFrame(resolve));
-      const focusDiagnostics = [];
-      for (const el of focusTargets) {
-        el.scrollIntoView({ block: "center", inline: "nearest" });
-        await nextFrame();
-        await nextFrame();
+      const focusDiagnostics = focusTargets.map((el) => {
         el.focus({ preventScroll: true });
-        const r = el.getBoundingClientRect();
-        focusDiagnostics.push({
+        const style = getComputedStyle(el);
+        const receivesFocus = doc.activeElement === el;
+        const focusIndicator =
+          style.outlineStyle !== "none" &&
+          parseFloat(style.outlineWidth || "0") >= 2;
+        return {
           tag: el.tagName,
           text: (el.textContent || "").trim().slice(0, 80),
-          top: Math.round(r.top),
-          bottom: Math.round(r.bottom),
-          viewportHeight: win.innerHeight,
-          visible: r.bottom > 0 && r.top < win.innerHeight
-        });
-      }
-      tests.focusNotEntirelyObscured = focusDiagnostics.every((item) => item.visible);
+          receivesFocus,
+          focusIndicator
+        };
+      });
+      tests.focusTargetsReceiveFocus =
+        focusDiagnostics.every((item) => item.receivesFocus);
+      tests.focusIndicatorVisible =
+        focusDiagnostics.every((item) => item.focusIndicator);
+
+      const persistentOverlays = Array.from(doc.querySelectorAll("body *"))
+        .filter((el) => {
+          const style = getComputedStyle(el);
+          if (!["fixed", "sticky"].includes(style.position)) {
+            return false;
+          }
+          const r = el.getBoundingClientRect();
+          return r.width > 0 && r.height > 0 && style.visibility !== "hidden";
+        })
+        .map((el) => ({
+          tag: el.tagName,
+          id: el.id || "",
+          className: typeof el.className === "string" ? el.className : "",
+          position: getComputedStyle(el).position
+        }));
+      tests.noPersistentAuthorOverlay = persistentOverlays.length === 0;
 
       tests.stateTextSurvivesWithoutColor =
         doc.body.textContent.includes("CurricularStatus · CORRENTE") &&
@@ -143,6 +160,7 @@
         tests,
         overflowers,
         nonMapOverflowers,
+        persistentOverlays,
         focusDiagnostics
       }, null, 2);
     });
