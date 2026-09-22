@@ -1,6 +1,6 @@
 # R3-F0 — Atlas Product & Design Foundation
 
-**Stato:** DRAFT / BLOCKED_ON_ADR_010_APPROVAL / NO_RUNTIME  
+**Stato:** READY_FOR_IMPLEMENTATION_REVIEW / NO_RUNTIME  
 **Alias prodotto:** ATLAS-F0  
 **Autorità:** TRAMA governa lo slice; Atlas resta il dominio di prodotto interessato.
 
@@ -12,13 +12,15 @@ Questo slice non implementa ancora capacità runtime cross-product.
 
 ## Dipendenze
 
-R3-F0 può entrare in esecuzione soltanto dopo:
+TRAMA-ADR-010 è approvata e integrata.
 
-- approvazione umana exact-head di TRAMA-ADR-010;
-- conferma degli invarianti di autorità già definiti da ADR-007/008;
-- mantenimento di Arena come fonte curricolare;
-- mantenimento di Docente OS come workspace professionale;
-- conferma che DOS-A1 resta RUNTIME_DEFERRED.
+R3-F0 può entrare in esecuzione soltanto mantenendo:
+
+- gli invarianti di autorità definiti da ADR-007/008/010;
+- Arena come fonte curricolare;
+- Docente OS come workspace professionale;
+- DOS-A1 in stato RUNTIME_DEFERRED;
+- il runtime Docente OS → Atlas non autorizzato finché non esiste una distinta decisione.
 
 ## Output obbligatori
 
@@ -186,4 +188,4 @@ R3-F0 può essere promosso soltanto se:
 
 ## Condizione di avvio
 
-Finché ADR-010 resta PROPOSED, questo documento è soltanto un **implementation-ready brief** e non autorizza esecuzione.
+Questo documento è un **implementation-ready brief**. La sua integrazione autorizza l'avvio dello slice R3-F0 di prodotto/design entro i confini descritti, ma non autorizza capacità runtime cross-product, nuove dipendenze frontend o DOS-A1.
