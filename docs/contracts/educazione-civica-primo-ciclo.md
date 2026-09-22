@@ -85,6 +85,8 @@ Per ogni anno scolastico Arena gestisce un solo quadro approvato per ciascun ord
 - primaria;
 - secondaria di primo grado.
 
+Nello stesso ordine di scuola e nello stesso anno scolastico la distribuzione approvata è unica: non sono ammesse varianti istituzionali per singola classe, sezione o anno di corso. Le differenze operative tra classi appartengono alla progettazione e all'attuazione in Docente OS, non al quadro approvato di Arena.
+
 Per primaria e secondaria di primo grado:
 
 - il totale approvabile deve essere >= 33 ore;
@@ -103,11 +105,14 @@ All'apertura di un nuovo anno scolastico Arena può clonare il quadro approvato 
 
 Prima di ogni nuova approvazione:
 
-1. Arena verifica fonti ufficiali;
-2. registra data, fonti consultate ed esito;
-3. segnala eventuali modifiche normative rilevanti;
-4. blocca l'approvazione se una modifica rilevante non è stata recepita;
-5. richiede conferma umana esplicita anche quando non sono emerse novità.
+1. Arena esegue automaticamente una verifica delle fonti ufficiali previste dal contratto;
+2. registra data, fonti consultate ed esito del controllo automatico;
+3. presenta in modo leggibile eventuali modifiche normative rilevanti o l'esito "nessuna modifica rilevante rilevata";
+4. blocca l'approvazione se una modifica rilevante non è stata recepita nel quadro;
+5. richiede una conferma umana esplicita dell'esito della verifica normativa, anche quando non sono emerse novità;
+6. solo dopo tale conferma il quadro può essere sottoposto alla distinta approvazione istituzionale.
+
+La sequenza è quindi: **controllo automatico → esito e fonti → conferma umana → eventuale approvazione**.
 
 La conferma normativa non equivale all'approvazione del quadro: sono due eventi distinti.
 
@@ -216,7 +221,7 @@ Il singolo docente vede la situazione della propria disciplina:
 - ore residue;
 - eventuali scostamenti.
 
-Non gli viene imposta come vista ordinaria la situazione complessiva delle 33 ore della classe.
+Il singolo docente vede **solo la situazione della propria disciplina**. Il quadro complessivo della classe verso le 33 ore appartiene alla vista del referente e non è esposto nella vista ordinaria del docente.
 
 ### 11.2 Referente
 
@@ -339,7 +344,7 @@ Le tabelle generiche di orario possono continuare a usare `weekly_minutes` per l
 - quote disciplinari annuali;
 - gate >= 33 ore;
 - binding nuclei/obiettivi;
-- verifica normativa ufficiale;
+- verifica normativa automatica su fonti ufficiali, seguita da conferma umana;
 - versionamento e approvazione;
 - export/proiezione della sola versione approvata.
 
