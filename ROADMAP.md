@@ -49,7 +49,9 @@ Stato corrente: **ACTIVE / START GATE HUMAN REVIEW PASS / EXIT REVIEW PENDING**.
 
 Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Grammar**, con HUMAN EXACT-HEAD REVIEW PASS; resta esclusivamente prodotto/design e `NO_RUNTIME`.
 
-Incremento corrente: **R3-F0/S2 — Design Core & Accessible Primitives**, in review exact-head e `NO_RUNTIME`.
+Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives**, con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`.
+
+Incremento corrente: **R3-F0/S3 — Journey Prototypes & 2D Map POC**, in review exact-head e `NO_RUNTIME`.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
