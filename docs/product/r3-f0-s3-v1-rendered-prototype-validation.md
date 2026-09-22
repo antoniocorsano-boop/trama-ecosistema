@@ -1,6 +1,6 @@
 # R3-F0/S3-V1 — Rendered Prototype Validation
 
-**Stato:** IN_PROGRESS / NO_RUNTIME  
+**Stato:** PROTOTYPE_PACKAGE_INTEGRATED / HUMAN_REVIEW_PASS / HUMAN_ASSISTIVE_GATES_PENDING / NO_RUNTIME  
 **Parent:** R3-F0/S3 — EXIT_GATES_PENDING  
 **Artefatto:** `docs/product/prototypes/r3-f0-s3-v1/index.html`
 
@@ -150,7 +150,13 @@ Verificare:
 - `role=status` limitato al feedback UI transitorio;
 - EditorialStatus e CurricularStatus letti come contenuto persistente, non annunci live.
 
-## 9. Criterio di chiusura S3-V1
+## 9. Stato di integrazione
+
+Il pacchetto S3-V1 è stato approvato con HUMAN EXACT-HEAD REVIEW PASS sull'exact head `5e1a6feb1d3a4ae08f3547841e7ceef20e37bed6` e integrato con merge commit `4e34b363b2969051ff8dce4a7ee5a88d09b400a7`.
+
+Questa integrazione approva prototipo, test e browser evidence, ma **non chiude** i gate visuali umani/assistivi elencati sotto e non chiude S3 o R3-F0.
+
+## 10. Criterio di chiusura S3-V1
 
 S3-V1 può produrre PASS soltanto quando:
 
@@ -166,7 +172,7 @@ S3-V1 può produrre PASS soltanto quando:
 
 Il merge del prototipo **non equivale** automaticamente al PASS di questi gate.
 
-## 10. Confini
+## 11. Confini
 
 S3-V1 non autorizza:
 
