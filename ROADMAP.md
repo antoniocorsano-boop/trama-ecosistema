@@ -51,7 +51,7 @@ Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Gra
 
 Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives**, con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`.
 
-Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. Sotto-incremento **R3-F0/S3-V1 — Rendered Prototype Validation**: pacchetto approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main` (exact head `5e1a6feb1d3a4ae08f3547841e7ceef20e37bed6`; merge `4e34b363b2969051ff8dce4a7ee5a88d09b400a7`). Il prototipo HTML/CSS con JavaScript locale minimale, la validazione strutturale/contrasto campione e il browser rendering automatizzato sono PASS su mobile-like, desktop e LIM; restano PENDING le review umane e le prove assistive/interattive, quindi S3 non è ancora chiuso.
+Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. **R3-F0/S3-V1 — Rendered Prototype Validation** resta valido come harness tecnico/accessibilità: contratto statico, contrasto campione e browser rendering automatizzato sono PASS, ma la HUMAN PRODUCT REVIEW ha rilevato che la superficie non rappresenta ancora Atlas come prodotto. È quindi introdotto **R3-F0/S3-V2 — Atlas Product Experience Prototype**, dedicato a shell applicativa, design system, navigazione Curricolo/Esplora/Risorse/Percorsi, mappa relazionale, responsive mobile/LIM e exit review di prodotto. S3 resta ACTIVE fino alla chiusura di V2.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
@@ -59,8 +59,9 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - primitive accessibili e component catalogue;
 - target WCAG 2.2 AA;
 - test automatici + verifica umana dell'accessibilità;
-- prototipo di prodotto;
-- POC di mappa 2D professionale;
+- prototipo di prodotto S3-V2 coerente con il target visuale Atlas approvato;
+- frontend foundation con stack maturo e component system governato;
+- POC di mappa 2D professionale evoluto in RelationCanvas navigabile;
 - conservazione di Galaxy/Spatial come vista specialistica.
 
 ### R3-P2 / ATLAS-P2 — Curriculum pubblico
