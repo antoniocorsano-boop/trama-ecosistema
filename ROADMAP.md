@@ -171,3 +171,37 @@ Il registro dichiara Atlas autorevole per identità/versione/stato delle proprie
 Questa promozione non cambia lo stato implementativo di R3-P4: il runtime Docente OS → Atlas resta `NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME`.
 
 `DOS-A1` può cambiare stato soltanto mediante una decisione esplicita successiva alle evidenze del pilota.
+
+
+## Sequenza operativa trasversale — Piano atomico
+
+Il piano dettagliato è in [docs/strategy/atomic-operating-plan-2026-09-22.md](docs/strategy/atomic-operating-plan-2026-09-22.md).
+
+La roadmap deve essere letta con questa priorità:
+
+1. chiusura verificata di ECO-02/P1;
+2. chiusura R3-F0/S3;
+3. R3-P2 Curriculum pubblico;
+4. R3-P5 Smart Navigation;
+5. continuità d'esperienza Docente OS ↔ Arena ↔ Atlas senza rendere Atlas un passaggio obbligatorio;
+6. R4-P1 Officina materiali;
+7. R3-P3 Learning Hub;
+8. R3-P4 solo dopo superfici Atlas mature e nuova autorizzazione;
+9. R3-P6 Curriculum Health;
+10. identità prodotto, adozione e pilota di istituto.
+
+### Regola di portafoglio
+
+Un nuovo cantiere non deve essere promosso soltanto perché tecnicamente possibile. Prima devono essere disponibili, per il cantiere precedente:
+
+- evidenza automatica;
+- evidenza runtime quando pertinente;
+- verifica umana;
+- decisione di promozione;
+- aggiornamento della documentazione canonica.
+
+Questa regola serve a ridurre rilavorazioni, duplicazioni, regressioni già note e consumo di risorse dovuto a problemi ripetuti.
+
+### Nota architetturale
+
+La sequenza di investimento non trasforma i prodotti in una pipeline. Restano distinti i quattro flussi governati tra Arena, Atlas e Docente OS. In particolare, Arena → Docente OS resta necessario e Atlas resta opzionale rispetto alla preparazione ordinaria del docente.

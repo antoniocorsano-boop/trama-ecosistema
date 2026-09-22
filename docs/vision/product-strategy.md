@@ -84,3 +84,23 @@ Restano invariati:
 - TRAMA come governo dei contratti e dei confini trasversali.
 
 L'approvazione di governance non abilita il runtime Docente OS → Atlas, che resta `NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME`.
+
+
+## Principio operativo 2026-09-22
+
+La metafora atomica del piano generale è adottata come rappresentazione strategica, con una precisazione vincolante: TRAMA non è una catena lineare.
+
+- TRAMA governa i contratti e i confini;
+- Arena resta l'autorità curricolare;
+- Docente OS resta il workspace professionale e il luogo della decisione;
+- Atlas rende navigabili conoscenza, relazioni e risorse;
+- Arena → Docente OS deve funzionare direttamente;
+- Atlas non è un passaggio obbligatorio e non sostituisce Arena.
+
+La priorità di prodotto è quindi:
+
+**stabilità reale → Atlas utile → continuità d'esperienza → qualità dei materiali → adozione.**
+
+Il criterio di successo non è il numero di funzioni implementate, ma la capacità del docente di completare un percorso reale dal contesto curricolare alla lezione con meno attrito, senza duplicazioni, senza write silenziose e senza interventi tecnici.
+
+Riferimento operativo: [Piano operativo atomico](../strategy/atomic-operating-plan-2026-09-22.md).
