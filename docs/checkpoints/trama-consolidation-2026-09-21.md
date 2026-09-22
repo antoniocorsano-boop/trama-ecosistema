@@ -39,26 +39,26 @@ Queste evidenze rafforzano il pilota ma non chiudono ECO-02/P1 senza il collaudo
 
 Le decisioni ADR-007/008 sono approvate. Il runtime di pubblicazione resta non implementato.
 
-Il prossimo snodo è ADR-010:
+ADR-010 è approvata e integrata. Sono quindi consolidati:
 - Atlas integrale come atlante intelligente del curricolo;
 - biblioteca come dominio di Atlas, non come sua definizione;
 - Officina materiali separata dalla regia Docente OS;
 - principio «Riutilizza | Adatta | Crea nuova».
 
-Dopo ADR-010, il primo slice raccomandato è R3-F0.
+Il primo slice raccomandato è ora R3-F0, già preparato ma da riallineare al nuovo `main` e sottoporre a nuova review exact-head.
 
 ### Assurance TypeSafe
 
-TRAMA-SA-01 resta separato dal percorso prodotto. Il provider è advisory-only e il one-shot HOLDOUT non deve partire finché il gate non garantisce input autorizzato, consumo unico e conservazione dell'evidenza in caso di errore.
+TRAMA-SA-01 resta separato dal percorso prodotto. Il provider è advisory-only. Il gate one-shot HOLDOUT è integrato con pin di contenuto, serializzazione, consumo durevole e conservazione dell'evidenza; il HOLDOUT non è stato eseguito.
 
 ## Sequenza di lavoro
 
-1. chiusura del debito documentale e delle PR superate;
-2. consolidamento del gate TypeSafe R3B senza eseguire il HOLDOUT;
-3. review umana di ADR-010 / Atlas integrale;
-4. avvio di R3-F0 come slice separato;
-5. collaudo umano integrato ECO-02/P1;
-6. solo dopo le evidenze, valutazione di ulteriori runtime cross-product.
+1. debito documentale e PR superate: completato;
+2. gate TypeSafe R3B integrato senza eseguire il HOLDOUT: completato;
+3. ADR-010 / Atlas integrale: approvata e integrata;
+4. riallineare e sottoporre a review R3-F0 come slice separato;
+5. eseguire il collaudo umano integrato ECO-02/P1 usando il runbook canonico;
+6. solo dopo le evidenze, valutare ulteriori runtime cross-product.
 
 ## Non autorizzato da questo checkpoint
 
