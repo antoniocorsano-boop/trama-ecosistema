@@ -9,7 +9,7 @@
 
 Questa proposta consolida il ruolo di Curriculum Atlas alla luce dell'architettura TRAMA già approvata:
 
-**Arena governa il curricolo; Atlas integrale lo rende intelligibile, navigabile e collegato a percorsi, conoscenza e risorse; Docente OS rende operativo il lavoro docente. La produzione specialistica degli artefatti è affidata a un'Officina materiali governata e separata. I trasferimenti restano flussi distinti, non una pipeline che sposta l'autorità.**
+**Arena governa il curricolo; Atlas lo rende intelligibile e pubblica risorse/pagine; Docente OS rende operativo il lavoro docente. I trasferimenti tra i tre prodotti restano quattro flussi distinti, non una pipeline che sposta l'autorità.**
 
 Atlas non deve evolvere come semplice collezione di card o come visualizzazione 3D del curricolo. Deve diventare la superficie pubblica e didattica dell'ecosistema: il luogo in cui il curricolo approvato viene compreso, esplorato e collegato a percorsi, lezioni e materiali pubblicabili.
 
