@@ -2,10 +2,68 @@
 
 Aggiornato al 22 settembre 2026.
 
+
+## Mappa unica TRAMA — stato corrente
+
+```mermaid
+flowchart LR
+  TRAMA["TRAMA · governo ecosistema"]
+
+  TRAMA --> ARENA["Arena · autorità curricolare"]
+  TRAMA --> DOS["Docente OS · contesto e decisione docente"]
+  TRAMA --> ATLAS["Atlas · navigazione, risorse e pubblicazioni"]
+  TRAMA --> ASSURANCE["Assurance · TypeSafe advisory-only"]
+  TRAMA --> BRAND["Adozione · marca e istituto"]
+
+  ARENA --> ECO01["ECO-01 · CLOSED"]
+  ARENA --> ECF4["EC-01/Arena-F4 · CLOSED / INTEGRATED"]
+  ARENA --> ECO02["ECO-02/P1 · ACTIVE · collaudo umano finale pendente"]
+
+  DOS --> DOSBASE["Baseline + preparazione + TeachingSession · OPERATIVE"]
+  DOS --> DOSA1["DOS-A1 · DEFERRED"]
+
+  ATLAS --> R3F0["R3-F0 · ACTIVE"]
+  R3F0 --> S1["S1 IA + Visual Grammar · INTEGRATED"]
+  R3F0 --> S2["S2 Design Core · INTEGRATED"]
+  R3F0 --> S3["S3 Journey + 2D Map · ACTIVE / EXIT PENDING"]
+  ATLAS --> R3P2["R3-P2 Curriculum pubblico · PLANNED"]
+  ATLAS --> R3P3["R3-P3 Student Learning Hub · PLANNED"]
+  ATLAS --> R3P4["R3-P4 Docente OS → Atlas · NOT AUTHORIZED"]
+  ATLAS --> R3P5["R3-P5 Smart Navigation · PLANNED"]
+  ATLAS --> R3P6["R3-P6 Curriculum Health · PLANNED"]
+
+  TRAMA --> R4P1["R4-P1 Officina materiali · PLANNED / NO RUNTIME"]
+  ASSURANCE --> TSA["TRAMA-SA-01 · ACTIVE / HOLDOUT NOT RUN"]
+  BRAND --> TB["TRAMA-BRAND · PLANNED"]
+```
+
+### Lettura operativa
+
+| Livello | Stato | Significato |
+| --- | --- | --- |
+| Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati |
+| Arena | **OPERATIVA** | Fonte curricolare autorevole; EC-01/Arena-F4 integrato |
+| Docente OS | **OPERATIVO** | Preparazione, contesto, decisione docente e registrazione lezione disponibili |
+| ECO-02/P1 | **ACTIVE** | È il principale gate reale ancora da chiudere: collaudo umano integrato Tecnologia 2C |
+| Atlas R3-F0 | **ACTIVE** | Fondazione prodotto/design in avanzamento; S1/S2 integrati, S3 non ancora chiuso |
+| Runtime Docente OS → Atlas | **NON AUTORIZZATO** | Nessuna pubblicazione automatica cross-product |
+| Officina materiali | **PLANNED** | Architettura approvata; runtime ancora da progettare/autorizzare |
+| DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
+| TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
+| Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
+
+### Priorità canonica corrente
+
+1. **Chiudere ECO-02/P1** con un caso reale integrato Tecnologia 2C senza correzioni tecniche durante il percorso.
+2. **Chiudere R3-F0/S3** con review visuale umana, tastiera, screen reader, reflow e non-text-contrast.
+3. Solo dopo queste evidenze, decidere l'apertura dei successivi slice Atlas e di eventuali runtime cross-product.
+4. Mantenere **DOS-A1 deferred**, Officina runtime non autorizzata e Atlas privacy-first.
+
+
 | Area | Stato | Evidenza o prossimo controllo |
 | --- | --- | --- |
 | Curricolo governato | Operativo | Arena rimane la fonte autorevole |
-| Educazione civica / EC-01 | Governance approvata / implementazione separata | contratto primo ciclo approvato; Arena = quadro approvato, Docente OS = attuazione, Atlas = consultazione; nessuna autorizzazione runtime |
+| Educazione civica / EC-01 | Governance approvata / implementazione separata | contratto primo ciclo approvato; Arena = quadro approvato, Docente OS = attuazione, Atlas = consultazione; nessuna autorizzazione runtime |\n| EC-01/Arena-F4 | **Integrato** | trusted normative checker integrato in Arena su merge `f0cc66a4795af90e85eacf5f32b5a91e88c7c1d8`; Edge Function validata ma non deployata; nessun fingerprint reale seedato automaticamente |
 | ECO-01 | Chiuso | forma docente e contratti cross-product validati |
 | ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS consolidato fino a P9; registrazione lezione verificata in Beta; collaudo umano integrato finale ancora pendente |
 | Atlas / R3 | R3-F0 attivo | ADR-007/008/010 approvate; Product & Design Foundation approvata e integrata; avvio consentito entro i confini NO_RUNTIME e privacy-first |
