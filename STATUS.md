@@ -77,7 +77,7 @@ TypeSafe non blocca l'avvio di R3-F0 Atlas.
 
 - **Verde**: governo delle autorità, baseline Arena, controllo docente, contratti di pubblicazione, hardening runtime Docente OS.
 - **Giallo**: chiusura ECO-02/P1, Atlas Product Foundation, Officina materiali, TypeSafe HOLDOUT, marca e adozione.
-- **Rosso / non autorizzato**: adozione o pubblicazione autonoma, DOS-A1, esiti individuali verso Atlas, autenticazione studenti non governata.
+- **Rosso / escluso dall'architettura**: autenticazione/account studente, profili o tracking individuale in Atlas. **Rosso / non autorizzato**: adozione o pubblicazione autonoma, DOS-A1, esiti individuali verso Atlas.
 
 ## Vincoli attivi
 
@@ -86,6 +86,6 @@ TypeSafe non blocca l'avvio di R3-F0 Atlas.
 3. Classe, calendario, preparazione, diario e decisioni professionali restano nel dominio Docente OS.
 4. Una baseline curricolare è persistente per classe, disciplina, anno e versione; non deve essere trasferita manualmente a ogni lezione.
 5. Trasporto, persistenza e pubblicazione non equivalgono ad approvazione istituzionale.
-6. Nessun dato personale studente è richiesto dal repository TRAMA.
+6. Atlas non richiede né mantiene autenticazione, account, profili, tracking o dati personali individuali degli studenti.
 7. Drive non è una memoria tecnica concorrente.
 8. Ogni capacità runtime nuova richiede il proprio gate, evidenza e review exact-head.
