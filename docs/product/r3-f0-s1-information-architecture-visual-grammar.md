@@ -1,6 +1,6 @@
 # R3-F0/S1 — Information Architecture + Visual Grammar
 
-**Stato:** UNDER_REVIEW / NO_RUNTIME  
+**Stato:** INTEGRATED / HUMAN_REVIEW_PASS / NO_RUNTIME  
 **Parent:** R3-F0 / ATLAS-F0  
 **Prodotto interessato:** Atlas  
 **Autorità:** TRAMA governa lo slice; Arena resta l'autorità curricolare; Atlas governa identità/versione/stato delle proprie risorse e pubblicazioni; Docente OS governa contesto professionale e decisione docente.
@@ -225,9 +225,11 @@ S1 può essere considerato completato soltanto se:
 - [ ] le regole supportano mobile, desktop, LIM e tastiera;
 - [ ] una review umana exact-head produce PASS o CHANGES_REQUIRED.
 
-## 10. Passo successivo dopo S1
+## 10. Esito e passo successivo
 
-Solo dopo review di S1:
+Review S1 completata con PASS sull'exact head `636ba644b4c31a20951a75ccaf5bcd43b837ada8`; merge commit `9539cac98760c8324172013f25fcb501545ad3d8`.
+
+Il passo successivo è:
 
 - **R3-F0/S2 — Design Core & Accessible Primitives**, con token, ruoli semantici, tipografia, focus, stati, primitive e catalogo componenti;
 - successivamente prototipi dei journey e POC mappa 2D.
