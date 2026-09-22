@@ -109,3 +109,15 @@ La v1 è utile se consente all'utente di capire in pochi secondi:
 3. quali workflow sono passati o ancora in corso;
 4. quale priorità viene dopo;
 5. dove aprire GitHub solo quando serve.
+
+
+## Stato connettività
+
+Il Control Center distingue esplicitamente:
+
+- **offline reale**: `navigator.onLine === false`; viene mostrato l'ultimo snapshot locale;
+- **degrado GitHub**: Internet è disponibile ma una o più fonti GitHub non rispondono; vengono mostrati i dati aggiornati disponibili e, solo per le fonti fallite, l'ultimo dato locale;
+- **fresh**: tutte le fonti GitHub e lo stato TRAMA sono aggiornati;
+- **errore GitHub**: Internet è disponibile ma nessuna fonte remota è utilizzabile.
+
+Il fallimento di una singola fonte non deve più degradare l'intera dashboard a stato offline.
