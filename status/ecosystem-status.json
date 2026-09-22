@@ -11,6 +11,13 @@
       "humanReview": "PASS"
     },
     {
+      "id": "EC-01-F4",
+      "label": "Arena trusted normative checker",
+      "state": "CLOSED",
+      "authority": "Arena",
+      "humanReview": "PASS"
+    },
+    {
       "id": "ECO-02-P1",
       "label": "Pilota Tecnologia 2C",
       "state": "ACTIVE",
