@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atlas — prototipo renderizzato R3-F0/S3-V1</title>
+  <meta name="description" content="Prototipo statico e accessibile per validare i journey Atlas senza runtime cross-product.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Salta al contenuto</a>
+
+  <header class="site-header">
+    <div class="brand-row">
+      <strong class="brand">Atlas</strong>
+      <span class="prototype-label">Prototipo S3-V1 · NO_RUNTIME</span>
+    </div>
+    <nav aria-label="Navigazione principale">
+      <ul class="primary-nav">
+        <li><a href="#curricolo">Curricolo</a></li>
+        <li><a href="#percorsi">Percorsi</a></li>
+        <li><a href="#risorse">Risorse</a></li>
+        <li><a href="#esplora">Esplora</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenuto">
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="eyebrow">Tecnologia · scuola secondaria di primo grado</p>
+      <h1 id="hero-title">Agricoltura come sistema tecnologico</h1>
+      <p class="lede">Un caso di prova per verificare leggibilità, progressione curricolare, risorse Atlas, mappa 2D e distinzione degli stati senza account studente o dati personali.</p>
+      <p class="authority-note"><strong>Fonte curricolare:</strong> Arena. Le etichette marcate “placeholder” non sono formulazioni curricolari definitive.</p>
+    </section>
+
+    <section id="curricolo" class="section" aria-labelledby="curricolo-title">
+      <div class="section-heading">
+        <p class="eyebrow">Journey pubblico / famiglia</p>
+        <h2 id="curricolo-title">Comprendere dove si colloca il tema</h2>
+      </div>
+
+      <nav class="breadcrumbs" aria-label="Percorso">
+        <ol>
+          <li><a href="#curricolo">Curricolo</a></li>
+          <li><a href="#curricolo">Tecnologia</a></li>
+          <li aria-current="page">Seconda</li>
+        </ol>
+      </nav>
+
+      <div class="year-switcher" aria-label="Annualità">
+        <a href="#curricolo">Prima</a>
+        <a class="is-current" href="#curricolo" aria-current="page">Seconda</a>
+        <a href="#curricolo">Terza</a>
+      </div>
+
+      <div class="progression" aria-label="Progressione tra annualità">
+        <div><span class="step-number">1</span><span>Prima</span></div>
+        <div class="current-step"><span class="step-number">2</span><span>Seconda · annualità corrente</span></div>
+        <div><span class="step-number">3</span><span>Terza</span></div>
+      </div>
+
+      <div class="curriculum-outline">
+        <h3>Nucleo <span class="placeholder">[Arena placeholder]</span></h3>
+        <ol>
+          <li>
+            <strong>Obiettivo O2.1 <span class="placeholder">[Arena placeholder]</span></strong>
+            <ul>
+              <li>Evidenza didattica non individuale</li>
+              <li><a href="#risorse">Risorsa Atlas: Agricoltura come sistema</a></li>
+            </ul>
+          </li>
+          <li><strong>Obiettivo O2.2 <span class="placeholder">[Arena placeholder]</span></strong></li>
+        </ol>
+      </div>
+
+      <details class="provenance">
+        <summary>Mostra fonte e versione</summary>
+        <div>
+          <p><strong>Fonte curricolare:</strong> Arena</p>
+          <p><strong>Versione:</strong> disponibile dalla fonte autorevole.</p>
+          <p>Atlas visualizza il riferimento; non modifica né approva lo stato curricolare.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="percorsi" class="section alt-surface" aria-labelledby="student-title">
+      <div class="section-heading">
+        <p class="eyebrow">Journey studente · privacy-first</p>
+        <h2 id="student-title">Lezioni e obiettivi, senza account</h2>
+      </div>
+
+      <p class="privacy-note">Nessun login, profilo persistente, tracking individuale o dato di valutazione.</p>
+
+      <div class="tab-list" role="tablist" aria-label="Viste del percorso">
+        <button type="button" role="tab" id="tab-lezioni" aria-selected="true" aria-controls="lezioni">Lezioni</button>
+        <button type="button" role="tab" id="tab-obiettivi" aria-selected="false" aria-controls="obiettivi" tabindex="-1">Obiettivi</button>
+      </div>
+
+      <div class="student-views">
+        <section id="lezioni" class="view-panel" role="tabpanel" aria-labelledby="tab-lezioni" tabindex="0">
+          <h3>Lezioni</h3>
+          <ol class="lesson-list">
+            <li>
+              <strong>Agricoltura come sistema tecnologico</strong>
+              <ul>
+                <li><a href="#risorse">Schema visuale</a></li>
+                <li><a href="#risorse">Sintesi</a></li>
+                <li><a href="#risorse">Attività</a></li>
+              </ul>
+            </li>
+          </ol>
+        </section>
+
+        <section id="obiettivi" class="view-panel" role="tabpanel" aria-labelledby="tab-obiettivi" tabindex="0" hidden>
+          <h3>Obiettivi</h3>
+          <div class="objective-block">
+            <strong>Obiettivo O2.1 <span class="placeholder">[Arena placeholder]</span></strong>
+            <p>Stesso dominio informativo della vista Lezioni, organizzato per obiettivo.</p>
+            <ul>
+              <li>Agricoltura come sistema tecnologico</li>
+              <li>Schema visuale</li>
+              <li>Sintesi</li>
+              <li>Attività</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="risorse" class="section" aria-labelledby="teacher-title">
+      <div class="section-heading">
+        <p class="eyebrow">Journey docente</p>
+        <h2 id="teacher-title">Esplorare il curricolo senza trasformare Atlas in Docente OS</h2>
+      </div>
+
+      <div class="teacher-grid">
+        <div>
+          <h3>Posizione e relazioni</h3>
+          <dl class="relation-list">
+            <div><dt>Annualità</dt><dd>Seconda</dd></div>
+            <div><dt>Prerequisito</dt><dd>P1 <span class="placeholder">[placeholder]</span></dd></div>
+            <div><dt>Raccordo</dt><dd>Scienze <span class="placeholder">[placeholder]</span></dd></div>
+          </dl>
+        </div>
+
+        <div>
+          <h3>Risorse Atlas</h3>
+          <ul class="resource-list">
+            <li>
+              <strong>Agricoltura come sistema</strong>
+              <span class="status editorial">EditorialStatus · PUBBLICATA</span>
+            </li>
+            <li>
+              <strong>Schema sistema agricolo</strong>
+              <span class="status editorial">EditorialStatus · AGGIORNATA</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <aside class="domain-note" aria-label="Confine di dominio">
+        <strong>Confine professionale:</strong> le decisioni “riutilizza / adatta / sostituisci / escludi” appartengono a Docente OS e non sono azioni operative in questo prototipo Atlas.
+      </aside>
+    </section>
+
+    <section id="esplora" class="section alt-surface" aria-labelledby="map-title">
+      <div class="section-heading">
+        <p class="eyebrow">POC mappa 2D</p>
+        <h2 id="map-title">Esplorare relazioni senza rendere la mappa obbligatoria</h2>
+      </div>
+
+      <div class="view-switcher" aria-label="Rappresentazione">
+        <a href="#visuale">Visuale</a>
+        <a href="#elenco">Elenco equivalente</a>
+      </div>
+
+      <figure id="visuale" class="map-figure">
+        <div class="map-canvas" aria-hidden="true">
+          <div class="map-node year y1">Prima</div>
+          <div class="map-arrow a1">↓</div>
+          <div class="map-node year y2">Seconda</div>
+          <div class="map-arrow a2">↓</div>
+          <div class="map-node year y3">Terza</div>
+
+          <div class="map-node curriculum n1">Nucleo<br><small>Arena placeholder</small></div>
+          <div class="map-node curriculum o1">Obiettivo O2.1<br><small>Arena placeholder</small></div>
+          <div class="map-node relation p1">Prerequisito P1</div>
+          <div class="map-node atlas r1">Risorsa Atlas<br><small>Agricoltura come sistema</small></div>
+          <div class="map-node relation x1">Raccordo Scienze</div>
+          <div class="map-line l1"></div>
+          <div class="map-line l2"></div>
+          <div class="map-edge edge-prerequisite">↓ prerequisito</div>
+          <div class="map-edge edge-resource">↓ risorsa</div>
+          <div class="map-edge edge-raccordo">↙ raccordo</div>
+        </div>
+        <figcaption>Vista visuale dimostrativa. L’accesso equivalente è disponibile subito dopo in forma di elenco.</figcaption>
+      </figure>
+
+      <section id="elenco" class="equivalent-list" aria-labelledby="elenco-title">
+        <h3 id="elenco-title">Elenco equivalente</h3>
+        <ol>
+          <li>
+            Seconda annualità
+            <ol>
+              <li>
+                Nucleo <span class="placeholder">[Arena placeholder]</span>
+                <ol>
+                  <li>
+                    Obiettivo O2.1 <span class="placeholder">[Arena placeholder]</span>
+                    <ul>
+                      <li>Prerequisito: P1 <span class="placeholder">[placeholder]</span></li>
+                      <li>Risorsa Atlas: Agricoltura come sistema</li>
+                      <li>Raccordo interdisciplinare: Scienze <span class="placeholder">[placeholder]</span></li>
+                    </ul>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </section>
+
+      <section class="semantic-zoom" aria-labelledby="zoom-title">
+        <h3 id="zoom-title">Semantic zoom</h3>
+        <div class="zoom-levels">
+          <article>
+            <h4>1 · Panoramica</h4>
+            <p>Prima → <strong>Seconda</strong> → Terza</p>
+          </article>
+          <article>
+            <h4>2 · Relazioni</h4>
+            <p>Seconda → Nucleo → Obiettivo + prerequisiti e raccordi</p>
+          </article>
+          <article>
+            <h4>3 · Dettaglio</h4>
+            <p>Obiettivo → risorse Atlas + provenance + stato editoriale</p>
+          </article>
+        </div>
+      </section>
+    </section>
+
+    <section class="section" aria-labelledby="states-title">
+      <div class="section-heading">
+        <p class="eyebrow">Stress test</p>
+        <h2 id="states-title">Tre domini di stato nello stesso schermo</h2>
+      </div>
+
+      <div class="state-grid">
+        <article class="state-card curricular-state">
+          <h3>Obiettivo O2.1</h3>
+          <p class="status curricular">CurricularStatus · CORRENTE</p>
+          <p>Fonte: Arena. Atlas visualizza lo stato proveniente dalla fonte.</p>
+        </article>
+
+        <article class="state-card editorial-state">
+          <h3>Schema sistema agricolo</h3>
+          <p class="status editorial withdrawn">EditorialStatus · RITIRATA</p>
+          <p>Stato persistente della risorsa Atlas.</p>
+        </article>
+
+        <article class="state-card ui-state" role="status">
+          <h3>Risorse correlate</h3>
+          <p class="status ui-error">UIFeedbackStatus · ERRORE TEMPORANEO</p>
+          <p>Non è stato possibile caricare due risorse correlate.</p>
+          <a class="action-link" href="#states-title">Riprova</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section alt-surface" aria-labelledby="validation-title">
+      <div class="section-heading">
+        <p class="eyebrow">Validation surface</p>
+        <h2 id="validation-title">Cosa verificare sul rendering</h2>
+      </div>
+      <ul class="check-list">
+        <li>Android portrait: una colonna, nessun overflow orizzontale.</li>
+        <li>Desktop: contenuto leggibile senza dashboard/card overload.</li>
+        <li>LIM: gerarchia e metadata leggibili a distanza.</li>
+        <li>Tastiera: skip link, focus visibile, ordine coerente.</li>
+        <li>Screen reader: struttura per heading, nav, list, details e status comprensibile.</li>
+        <li>Scala di grigi: i tre stati restano distinguibili dal testo.</li>
+        <li>Zoom/reflow: nessuna informazione essenziale viene tagliata.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>R3-F0/S3-V1 · prototipo statico · nessun dato personale · nessun runtime cross-product.</p>
+  </footer>
+  <script src="prototype.js" defer></script>
+</body>
+</html>

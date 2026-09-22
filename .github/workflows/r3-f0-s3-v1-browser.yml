@@ -1,0 +1,38 @@
+name: R3-F0 S3-V1 Browser Evidence
+
+on:
+  pull_request:
+    paths:
+      - "docs/product/prototypes/r3-f0-s3-v1/**"
+      - "docs/product/r3-f0-s3-v1-*.md"
+      - "scripts/validate_s3_v1_browser.py"
+      - "tests/test_r3_f0_s3_v1_prototype.py"
+      - ".github/workflows/r3-f0-s3-v1-browser.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/product/prototypes/r3-f0-s3-v1/**"
+      - "scripts/validate_s3_v1_browser.py"
+      - "tests/test_r3_f0_s3_v1_prototype.py"
+      - ".github/workflows/r3-f0-s3-v1-browser.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate rendered prototype in Chrome
+        run: python3 scripts/validate_s3_v1_browser.py
+
+      - name: Upload rendering evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r3-f0-s3-v1-rendering
+          path: artifacts/r3-f0-s3-v1/
+          if-no-files-found: error
+          retention-days: 14
