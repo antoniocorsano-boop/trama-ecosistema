@@ -54,7 +54,7 @@ La governance di base è già consolidata:
 - LessonPublicationManifest e PublicationReceipt restano distinti;
 - il runtime Docente OS → Atlas resta NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME.
 
-Il prossimo passaggio è la review di **TRAMA-ADR-010 — Atlas integrale e Officina materiali** e, dopo approvazione, l'avvio di **R3-F0 — Product & Design Foundation**.
+La proposta **TRAMA-ADR-010 — Atlas integrale e Officina materiali** è mantenuta nella PR TRAMA #26 finché non viene integrata. **R3-F0 — Product & Design Foundation** può essere attivato soltanto dopo che ADR-010 è presente nel registro canonico e approvata mediante review umana exact-head.
 
 ## TypeSafe — assurance separata dal prodotto
 
