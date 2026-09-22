@@ -24,6 +24,17 @@ Questa checklist si applica all'uscita dello slice R3-F0.
 - [ ] La progressione verticale è leggibile.
 - [ ] Prerequisiti e raccordi interdisciplinari sono comprensibili.
 
+## Privacy-first
+
+- [ ] Nessun account studente.
+- [ ] Nessun login/autenticazione individuale.
+- [ ] Nessun profilo persistente o identificatore personale stabile.
+- [ ] Nessun tracking, analytics o cronologia individuale.
+- [ ] Nessuna personalizzazione basata su identità.
+- [ ] Nessun dato di valutazione/esito individuale in Atlas.
+- [ ] Il contesto studente usa solo dati non identificanti e minimizzati.
+- [ ] Un contenuto che richiede identità personale resta fuori dallo Student Learning Hub Atlas.
+
 ## Accessibilità
 
 - [ ] Journey critici eseguibili da tastiera.
