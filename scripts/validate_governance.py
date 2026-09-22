@@ -94,6 +94,33 @@ def validate_sources() -> None:
         fail(f"source-registry: domini mancanti: {', '.join(sorted(missing))}")
 
 
+def validate_perceptible_write_contract() -> None:
+    data = load_json("status/perceptible-write-contract.json")
+    decisions = load_json("docs/decisions/decision-register.json")
+    decision_ref = data.get("decisionRef")
+    decision_ids = {item.get("id") for item in decisions.get("decisions", [])}
+    if decision_ref not in decision_ids:
+        fail("TRAMA-PW-01: decisionRef assente o non registrato")
+    if decision_ref != "TRAMA-ADR-012":
+        fail("TRAMA-PW-01: decisionRef deve puntare a TRAMA-ADR-012")
+    boundaries = data.get("boundaries", {})
+    required_false = {
+        "authorizesNewWrites",
+        "activatesDOSA1",
+        "authorizesCrossProductRuntime",
+        "changesArenaAuthority",
+        "atlasRequiresAuthentication",
+        "atlasAllowsPersonalStudentData",
+    }
+    for key in required_false:
+        if boundaries.get(key) is not False:
+            fail(f"TRAMA-PW-01: boundary {key} deve essere false")
+    if boundaries.get("atlasPrivacyFirst") is not True:
+        fail("TRAMA-PW-01: atlasPrivacyFirst deve essere true")
+    if data.get("rolloutState") not in {"ROLLING_ENFORCEMENT", "FULLY_ENFORCED"}:
+        fail("TRAMA-PW-01: rolloutState non ammesso")
+
+
 def validate_links() -> None:
     link_re = re.compile(r"\[[^]]+\]\((?!https?://|mailto:|#)([^)]+)\)")
     for path in ROOT.rglob("*.md"):
@@ -117,6 +144,7 @@ def main() -> int:
     validate_decisions()
     validate_status()
     validate_sources()
+    validate_perceptible_write_contract()
     validate_links()
     validate_repository_policy()
     if ERRORS:
