@@ -1,7 +1,7 @@
 # TRAMA-ADR-010 — Atlas integrale e separazione dell'Officina materiali
 
-**Stato:** PROPOSED  
-**Data:** 2026-09-21  
+**Stato:** APPROVED  
+**Data:** 2026-09-22  
 **Perimetro:** TRAMA · Arena · Atlas · Docente OS · Officina materiali  
 **Runtime:** NOT AUTHORIZED
 
@@ -9,7 +9,7 @@
 
 Le prove reali di preparazione delle lezioni mostrano due esigenze distinte: Atlas deve restare l'atlante integrale del curricolo e non ridursi a deposito di materiali; nello stesso tempo la produzione di artefatti didattici di qualità richiede motori specialistici e non deve essere caricata sul renderer interno di Docente OS.
 
-## Decisione proposta
+## Decisione approvata
 
 1. **Atlas integrale** è la superficie di visualizzazione e navigazione intelligente del curricolo: mappa curricolare, progressioni, percorsi, prerequisiti, relazioni, ricerca semantica, Student Learning Hub, Learning Object e risorse pubblicate.
 2. La biblioteca educativa è un dominio di Atlas, non la sua definizione complessiva.
@@ -38,4 +38,13 @@ Le prove reali di preparazione delle lezioni mostrano due esigenze distinte: Atl
 
 ## Stato implementativo
 
-Questa ADR documenta una proposta architetturale. Non autorizza API, provider, dipendenze, persistenze, automazioni o pubblicazione runtime. Ogni implementazione richiede slice, gate ed exact-head review dedicati.
+Questa ADR è approvata come decisione di governance sulla separazione dei ruoli e sul modello target. Non autorizza API, provider, dipendenze, persistenze, automazioni o pubblicazione runtime. Ogni implementazione richiede slice, gate ed exact-head review dedicati.
+
+## Evidenza di approvazione
+
+- PR: #26
+- exact head sottoposto a review umana: `ac2f40865115a27912e0e0edc3776eba37f50370`
+- esito: HUMAN REVIEW — PASS
+- merge commit: `9d08a1d3382e1491da242157ee2c0d598e3b49fe`
+
+L'approvazione riguarda la decisione architetturale. **Runtime Officina materiali, pubblicazione automatica e DOS-A1 restano non autorizzati.**
