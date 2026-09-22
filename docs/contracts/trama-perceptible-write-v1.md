@@ -42,6 +42,8 @@ Sono comprese almeno:
 
 Le azioni puramente read-only non rientrano nel contratto.
 
+Per meccanismi mutativi custom non riconoscibili staticamente si usa il marker `@trama-write`. Nei rari casi ambigui realmente read-only si può usare `@trama-readonly`; il marker non può mascherare una write effettiva e resta soggetto a review.
+
 ## 4. Enforcement
 
 Ogni prodotto deve mantenere:
