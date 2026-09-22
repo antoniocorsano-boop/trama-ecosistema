@@ -51,7 +51,7 @@ Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Gra
 
 Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives**, con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`.
 
-Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. Sotto-incremento **R3-F0/S3-V1 — Rendered Prototype Validation**: pacchetto approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main` (exact head `5e1a6feb1d3a4ae08f3547841e7ceef20e37bed6`; merge `4e34b363b2969051ff8dce4a7ee5a88d09b400a7`). Il prototipo HTML/CSS con JavaScript locale minimale, la validazione strutturale/contrasto campione e il browser rendering automatizzato sono PASS su mobile-like, desktop e LIM; restano PENDING le review umane e le prove assistive/interattive, quindi S3 non è ancora chiuso.
+Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. Sotto-incremento **R3-F0/S3-V1 — Rendered Prototype Validation**: pacchetto approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main` (exact head `5e1a6feb1d3a4ae08f3547841e7ceef20e37bed6`; merge `4e34b363b2969051ff8dce4a7ee5a88d09b400a7`). Il prototipo HTML/CSS con JavaScript locale minimale, la validazione strutturale/contrasto campione e il browser rendering automatizzato sono PASS su mobile-like, desktop e LIM; è ora seguito da **R3-F0/S3-V2 — Human & Assistive Validation**, che chiude progressivamente review visuale, tastiera, reflow e non-text contrast; il test screen reader reale resta un gate distinto. S3 non è ancora chiuso.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
