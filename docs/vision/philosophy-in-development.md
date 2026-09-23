@@ -273,7 +273,27 @@ La finalità non è chiedere “perché?” all'infinito, ma sviluppare persiste
 **Contesto:** filosofia cognitiva di ATLAS-PERCHÉ.  
 **Stato:** PEDAGOGICAL DIRECTION / DA VALIDARE.
 
-## 18. Registro sintetico
+## 18. Evoluzione della metafora atomica
+
+La ricostruzione della vision modifica anche il significato della metafora atomica già adottata.
+
+### V22 — Dalla struttura alla trasformazione
+
+> **La metafora atomica evolve da rappresentazione di struttura a rappresentazione di trasformazione: nuclei distinti, orbite governate, materia educativa che cambia forma e apertura verso l'esperienza reale.**
+
+**Contesto:** impatto della vision sul mockup dell'ecosistema, 23 settembre 2026.  
+**Stato:** DESIGN DIRECTION.
+
+### V23 — Curricolo in movimento
+
+> **TRAMA non collega soltanto prodotti; mette in movimento il curricolo.**
+
+**Contesto:** evoluzione della metafora atomica.  
+**Stato:** DESIGN DIRECTION.
+
+Design rationale completo: [Evoluzione della metafora atomica](../strategy/atomic-metaphor-evolution-2026-09-23.md).
+
+## 19. Registro sintetico
 
 | ID | Sintesi | Contesto | Stato |
 | --- | --- | --- | --- |
@@ -298,8 +318,10 @@ La finalità non è chiedere “perché?” all'infinito, ma sviluppare persiste
 | V19 | generazione subordinata a qualità e decisione | AI/materiali | design |
 | V20 | verifica automatica, decisione umana | assurance | emerging |
 | V21 | comprensione usabile, controllabile, riapribile | pedagogia | directional |
+| V22 | metafora: struttura → trasformazione | mockup/vision | design direction |
+| V23 | TRAMA mette in movimento il curricolo | mockup/vision | design direction |
 
-## 19. Regola di manutenzione
+## 20. Regola di manutenzione
 
 Quando emerge una nuova frase o un principio che cambia la comprensione del prodotto:
 
@@ -309,7 +331,7 @@ Quando emerge una nuova frase o un principio che cambia la comprensione del prod
 4. non trasformare una buona formulazione in regola vincolante senza review;
 5. promuoverlo in ADR, contratto o governance quando diventa normativo.
 
-## 20. Collegamenti
+## 21. Collegamenti
 
 - [Strategia di prodotto](./product-strategy.md)
 - [TRAMA-ATLAS-01](../product/atlas-public-curriculum-learning-hub.md)
@@ -319,7 +341,7 @@ Quando emerge una nuova frase o un principio che cambia la comprensione del prod
 - [Protocollo pilot](../product/atlas-perche-pilot-protocol.md)
 - [Piano operativo atomico](../strategy/atomic-operating-plan-2026-09-22.md)
 
-## 21. Criterio di conservazione della filosofia
+## 22. Criterio di conservazione della filosofia
 
 Questo documento deve consentire, anche a distanza di tempo, di rispondere a quattro domande:
 
