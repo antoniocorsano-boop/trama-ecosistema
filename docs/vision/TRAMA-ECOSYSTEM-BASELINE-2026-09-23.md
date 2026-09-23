@@ -140,7 +140,7 @@ Questa gerarchia impedisce che Atlas diventi una semplice biblioteca di file.
 - **Runtime Docente OS → Atlas:** non autorizzato.
 - **DOS-A1:** deferred.
 - **Officina materiali:** architettura prevista, runtime non autorizzato.
-- **PR TRAMA #61:** formalizza Atlas Mockup V2 come passaggio da struttura a trasformazione educativa; è una direzione di design, non un’autorizzazione runtime.
+- **Atlas Mockup V2:** la specifica `docs/design/atlas-mockup-v2-vision-alignment.md` è integrata su `main` tramite PR #61 (merge `2077386a7deea9c8143c9ab1c37bbcc27e562bf8`); formalizza il passaggio da struttura a trasformazione educativa e resta una direzione di design, non un’autorizzazione runtime.
 
 ## 7. La trasformazione educativa come principio di prodotto
 
@@ -343,3 +343,30 @@ Non sostituisce ADR, contratti tecnici o stato dei repository. Li collega in una
 ## 21. Formula finale
 
 TRAMA non tenta di automatizzare la scuola. Tenta di **rendere coerente, visibile e praticabile il percorso con cui una comunità scolastica trasforma un curricolo autorevole in esperienza educativa**, mantenendo distinti autorità istituzionale, professionalità docente e accesso pubblico.
+
+
+## 22. Registro documentale della baseline
+
+| Oggetto | Ruolo | Stato al 23/09/2026 |
+| --- | --- | --- |
+| `docs/design/atlas-mockup-v2-vision-alignment.md` | Specifica di design Atlas V2 | **INTEGRATA** via PR #61 |
+| `docs/vision/TRAMA-ECOSYSTEM-BASELINE-2026-09-23.md` | Baseline concettuale versionata | **IN REVIEW** via PR #62 |
+| Dossier ufficiale TRAMA | Documento narrativo e architetturale esteso | **ASSET CONTROLLATO** |
+| Infografica “TRAMA: Scuola in movimento” | Metafora atomica istituzionale | **ASSET BASELINE** |
+| Tavola tecnica TRAMA | Authority, flussi, gate e L1–L4 | **ASSET COMPLEMENTARE** |
+
+### Regola di precedenza
+
+ADR e contratti approvati prevalgono sui documenti narrativi; `STATUS.md` e i piani operativi determinano lo stato corrente; le specifiche integrate definiscono i comportamenti del relativo dominio; dossier e asset collegano e spiegano tali fonti ma non autorizzano runtime.
+
+## 23. Regola per i futuri asset
+
+Ogni nuovo asset TRAMA deve dichiarare:
+- data/versione;
+- stato: reale, in sviluppo o ipotesi;
+- dominio responsabile;
+- authority di riferimento;
+- stato di autorizzazione runtime;
+- relazione con la fonte canonica.
+
+In assenza di tali dati, l’asset è da considerare **illustrativo** e non fonte decisionale.
