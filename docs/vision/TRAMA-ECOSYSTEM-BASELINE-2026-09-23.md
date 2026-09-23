@@ -1,7 +1,7 @@
 # TRAMA — Dossier dell’ecosistema
 
 **Versione:** 23 settembre 2026  
-**Stato:** BASELINE CONCETTUALE E DOCUMENTALE / NON AUTORIZZA NUOVI RUNTIME  
+**Stato:** SYNTHESIS BASELINE / DOCUMENTATION-ONLY / NON NORMATIVE / NON AUTORIZZA NUOVI RUNTIME  
 **Scopo:** sostenere nel tempo l’ecosistema TRAMA con una base condivisa di significato, architettura, linguaggio, documentazione e asset.
 
 ## 1. Tesi centrale
@@ -130,7 +130,9 @@ Una sequenza coerente di attività e materiali collegata a progressione, concett
 
 Questa gerarchia impedisce che Atlas diventi una semplice biblioteca di file.
 
-## 6. Stato consolidato al 23 settembre 2026
+## 6. Fotografia di stato al 23 settembre 2026
+
+> Questa sezione è una fotografia storica. Per lo stato corrente e per le priorità operative fanno fede rispettivamente [`STATUS.md`](../../STATUS.md) e il [Piano operativo atomico](../strategy/atomic-operating-plan-2026-09-22.md).
 
 - **Arena:** operativa come authority curricolare.
 - **Docente OS:** operativo nel proprio dominio, con baseline, preparazione e TeachingSession.
@@ -328,7 +330,7 @@ Una nuova funzione, schermata o asset è coerente quando:
 
 ## 20. Uso di questo dossier
 
-Questo dossier deve fungere da baseline per:
+Questa baseline deve fungere da **indice di orientamento e sintesi** per:
 - nuove specifiche;
 - onboarding di collaboratori e agenti;
 - presentazioni a dirigenti, docenti e stakeholder;
@@ -338,7 +340,7 @@ Questo dossier deve fungere da baseline per:
 - scelta e produzione dei futuri asset;
 - ricostruzione della filosofia di progetto nel tempo.
 
-Non sostituisce ADR, contratti tecnici o stato dei repository. Li collega in una narrazione coerente.
+Non sostituisce ADR, contratti tecnici, `STATUS.md`, piano operativo atomico, specifiche integrate o filosofia in sviluppo. Li collega in una narrazione coerente e rinvia sempre alla fonte primaria.
 
 ## 21. Formula finale
 
@@ -357,7 +359,15 @@ TRAMA non tenta di automatizzare la scuola. Tenta di **rendere coerente, visibil
 
 ### Regola di precedenza
 
-ADR e contratti approvati prevalgono sui documenti narrativi; `STATUS.md` e i piani operativi determinano lo stato corrente; le specifiche integrate definiscono i comportamenti del relativo dominio; dossier e asset collegano e spiegano tali fonti ma non autorizzano runtime.
+1. **ADR e contratti approvati** — decisioni normative e confini di authority.
+2. **`STATUS.md`** — stato corrente verificato.
+3. **Piano operativo atomico** — priorità e sequenza operativa.
+4. **Specifiche integrate** — comportamento del relativo dominio o superficie.
+5. **Filosofia in sviluppo** — razionale, frasi-cardine e ipotesi non normative.
+6. **Questa baseline** — sintesi e indice trasversale.
+7. **Dossier e asset visuali** — comunicazione e spiegazione.
+
+In caso di divergenza, la fonte di livello superiore prevale. La baseline non può introdurre una decisione, uno stato o una priorità non presenti nella fonte primaria.
 
 ## 23. Regola per i futuri asset
 
@@ -370,3 +380,15 @@ Ogni nuovo asset TRAMA deve dichiarare:
 - relazione con la fonte canonica.
 
 In assenza di tali dati, l’asset è da considerare **illustrativo** e non fonte decisionale.
+
+
+## 24. Relazione con le fonti preesistenti
+
+Questa baseline non sostituisce:
+- [Filosofia in sviluppo](./philosophy-in-development.md), che conserva il **perché** e le ipotesi;
+- [Strategia di prodotto](./product-strategy.md), che definisce posizionamento e promessa di prodotto;
+- [Evoluzione della metafora atomica](../strategy/atomic-metaphor-evolution-2026-09-23.md), che governa la **semantica visuale** della metafora;
+- [Piano operativo atomico](../strategy/atomic-operating-plan-2026-09-22.md), che governa la **sequenza operativa**;
+- [STATUS.md](../../STATUS.md), che governa lo **stato corrente**.
+
+La funzione della baseline è rendere queste fonti attraversabili come un sistema unico senza duplicarne l’autorità.
