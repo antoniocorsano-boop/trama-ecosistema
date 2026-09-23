@@ -51,7 +51,7 @@ Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Gra
 
 Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives**, con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`.
 
-Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. **R3-F0/S3-V1 — Rendered Prototype Validation** resta valido come harness tecnico/accessibilità: contratto statico, contrasto campione e browser rendering automatizzato sono PASS, ma la HUMAN PRODUCT REVIEW ha rilevato che la superficie non rappresenta ancora Atlas come prodotto. È quindi introdotto **R3-F0/S3-V2 — Atlas Product Experience Prototype**, dedicato a shell applicativa, design system, navigazione Curricolo/Esplora/Risorse/Percorsi, mappa relazionale, responsive mobile/LIM e exit review di prodotto. S3 resta ACTIVE fino alla chiusura di V2.
+Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. **R3-F0/S3-V1 — Rendered Prototype Validation** resta valido come harness tecnico/accessibilità. La HUMAN PRODUCT REVIEW ha portato a **R3-F0/S3-V2 — Atlas Product Experience Prototype**. In V2 sono ora integrati **F0 Foundation**, **F1 Curricolo verticale d’istituto + Materiali pubblici di base** e **F2 Esplora relazionale**; F2 include XYFlow/React Flow, zoom semantico, filtri, pannello contestuale, Mappa/Elenco equivalente e layout mobile dedicato. Restano **F3 Materiali+Risorse, F4 Mobile+LIM e F5 Exit**. S3 resta ACTIVE fino alla chiusura verificata di V2.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
@@ -94,7 +94,8 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - visibility/minimization policy;
 - gate diritti/licenze;
 - gate WCAG 2.2 AA con verifica automatica + umana;
-- nessun dato personale studente.
+- nessun dato personale studente;
+- substrato asset Git-first secondo `ATLAS-MAT-PUB-01`: normalizzazione, manifest, commit, deploy, smoke test e receipt tecnica separati dalla decisione editoriale.
 
 ### R3-P5 / ATLAS-P5 — Smart Navigation
 
@@ -134,6 +135,7 @@ Stato proposto: **HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED**.
 - anteprima, confronto e modifica sotto controllo del docente;
 - collegamento alla lezione soltanto dopo decisione docente;
 - pubblicazione in Atlas separata e governata da `LessonPublicationManifest` / `PublicationReceipt`;
+- riuso del publisher Git-first `ATLAS-MAT-PUB-01` come infrastruttura tecnica, senza attribuire capacità editoriale autonoma all'Officina;
 - provenance, diritti/licenze, accessibilità e qualità editoriale come gate;
 - nessuna pubblicazione o adozione automatica.
 
@@ -156,10 +158,9 @@ Primo slice: **R4-P2/S1 — Reflective Lesson Continuity**.
 - nessun nuovo runtime cross-product;
 - DOS-A1 resta `RUNTIME_DEFERRED`.
 
-La progettazione e la prototipazione `NO_RUNTIME` sono autorizzate subito e possono procedere senza dichiarare chiusi ECO-02/P1 o R3-F0/S3. L'implementazione runtime richiede un gate distinto.
+La progettazione e la prototipazione `NO_RUNTIME` sono autorizzate in parallelo ai cantieri correnti. L'implementazione runtime richiede un gate distinto.
 
 Riferimento: `docs/product/r4-p2-professional-practice.md`.
-
 
 ### TRAMA-SA-01 — TypeSafe semantic assurance pilot
 
