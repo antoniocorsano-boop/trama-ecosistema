@@ -370,7 +370,7 @@ Le pratiche educative generali possono ispirare la progettazione; testi, schede,
 
 Il gate editoriale deve bloccare asset con diritti non chiariti.
 
-## 16. Fonti e riferimenti di base
+## 16. Fonti tracciate e riferimenti contestuali
 
 ### Metacognizione
 - Education Endowment Foundation, *Metacognition and Self-Regulated Learning* (guidance report, aggiornamento 2025).
@@ -395,22 +395,15 @@ Il gate editoriale deve bloccare asset con diritti non chiariti.
 - EEF: trial e valutazioni relative a *Philosophy for Children*.
 - EEF: *Dialogic Teaching*.
 
-### Self-explanation
-- Rittle-Johnson et al.: letteratura sui benefici e sui limiti della self-explanation.
-- Evidenze recenti sottolineano che i prompt di spiegazione devono essere graduati per evitare sovraccarico.
-
-### Productive Failure
-- Manu Kapur / ETH Zürich: condizioni in cui il tentativo iniziale prima dell'istruzione esplicita può preparare apprendimenti più profondi.
-
-### Competenza digitale
-- Commissione europea, JRC, *DigComp 2.2*: uso critico, sicuro e consapevole delle tecnologie e delle informazioni.
+### Riferimenti contestuali non usati come claim verificati
+I riferimenti seguenti informano il panorama progettuale ma, in questa versione, **non sostengono requisiti della Traceability Matrix**: self-explanation, Productive Failure / Manu Kapur, EEF Early Years su talk/thinking/self-regulation e DigComp 2.2. Restano bibliografia contestuale finché non vengono promossi nell'Evidence Register con Source ID, localizzatore e limiti verificati.
 
 ### Normativa
 - D.M. 9 dicembre 2025, n. 221, *Indicazioni nazionali per il curricolo della scuola dell'infanzia e del primo ciclo d'istruzione*.
 
 ### Accessibilità e offline web
-- W3C, WCAG 2.2.
-- MDN, Progressive Web Apps, Service Worker, Web App Manifest, IndexedDB.
+- W3C, WCAG 2.2 — fonte tracciata come `STD-AP-01`.
+- MDN, Progressive Web Apps, Service Worker, Web App Manifest, IndexedDB — riferimento tecnico contestuale, non claim-bearing in questa baseline.
 
 ## 17. Matrice di progettazione delle attività
 
@@ -479,7 +472,7 @@ Ogni prototipo deve essere collaudato:
 | AP-R5 | attività ludiche e funzioni esecutive nelle età basse | SCI-AP-05 | ADAPTED | pilot P1 | PARTIAL |
 | AP-R6 | dialogo strutturato / philosophical inquiry | SCI-AP-06 | ADAPTED / context-dependent | pilot + review | PARTIAL |
 | AP-R7 | archetipi A1-A12 e progressione Atlas 3–14 | SCI-AP-01, SCI-AP-04 | **DESIGN_RULE / HYPOTHESIS E3** | pilot P1-P5 | GAP / TO_VALIDATE |
-| AP-R8 | compatibilità con Indicazioni nazionali | POL-IT-AP-01 | CONTEXTUAL; binding effettivo resta Arena | review curricolare | PARTIAL |
+| AP-R8 | compatibilità con Indicazioni nazionali | LAW-IT-AP-01 | DIRECT / NORMATIVE_CONTEXT; binding operativo resta Arena | review curricolare | PARTIAL |
 | AP-R9 | target WCAG 2.2 AA | STD-AP-01 | DESIGN_REQUIREMENT | test accessibilità su artefatti reali | PARTIAL |
 | AP-R10 | nessun account/tracking studente e stato locale | governance TRAMA + privacy-first | DESIGN_RULE | test browser/privacy futuro | PROPOSED |
 | AP-R11 | ActivityPackage v1 rappresenta i cinque pilot | evidenza interna P1-P5 | HYPOTHESIS / EXPERIMENTAL CONTRACT | schema tests + pilot | TO_VALIDATE |
@@ -502,7 +495,7 @@ Prima di introdurre `ActivityPackage v1` nel runtime:
 - [ ] review terza;
 - [ ] HUMAN EXACT-HEAD REVIEW.
 
-## 21. Non obiettivi
+## 22. Non obiettivi
 
 Questa proposta non:
 - autorizza runtime;
@@ -516,7 +509,7 @@ Questa proposta non:
 - vincola tutte le attività alla presenza di uno schermo;
 - autorizza il riuso di materiali terzi senza verifica della licenza.
 
-## 22. Prossimi passi
+## 23. Prossimi passi
 
 1. review del presente dossier;
 2. matrice verticale completa per annualità/campi/discipline;
