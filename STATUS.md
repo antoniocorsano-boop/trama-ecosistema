@@ -1,6 +1,6 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 22 settembre 2026.
+Aggiornato al 23 settembre 2026.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -41,7 +41,7 @@ flowchart LR
 
 | Livello | Stato | Significato |
 | --- | --- | --- |
-| Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati; TRAMA-PW-01 integrato |
+| Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati; TRAMA-PW-01 integrato; baseline documentale ecosistema integrata via PR #62 |
 | Arena | **OPERATIVA** | Fonte curricolare autorevole; EC-01/Arena-F4 integrato |
 | Docente OS | **OPERATIVO / CANARY PASS** | Preparazione, contesto, decisione docente e registrazione lezione disponibili; post-merge Product CI, P6 Performance Runtime e HVA Runtime PASS sul Beta reale |
 | ECO-02/P1 | **ACTIVE** | È il principale gate reale ancora da chiudere: collaudo umano integrato Tecnologia 2C |
@@ -51,6 +51,34 @@ flowchart LR
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
+
+## Baseline documentale dell’ecosistema — integrata
+
+La PR **#62 — TRAMA ecosystem baseline — vision, architecture and assets** è stata integrata su `main` con merge commit:
+
+`fa596cd78e046fcfb0be1fb2fed5781b9199d8e2`
+
+Exact head sottoposto a review:
+
+`cee3e604dd9c406dbba902bad4cf49eb8fe0c8db`
+
+Sono ora parte del repository:
+
+- `docs/vision/TRAMA-ECOSYSTEM-BASELINE-2026-09-23.md` — baseline di sintesi e indice trasversale;
+- `docs/product/TRAMA-PROJECT-PAGE.md` — pagina di progetto canonica;
+- `docs/process/trama-documentation-maintenance-plan-2026-09-23.md` — piano di manutenzione documentale.
+
+La baseline **non modifica la sequenza operativa** e non sostituisce le fonti già autorevoli. Restano in vigore le precedenze dichiarate:
+
+1. ADR e contratti approvati — decisioni normative;
+2. `STATUS.md` — stato corrente;
+3. Piano operativo atomico — priorità e sequenza operativa;
+4. specifiche integrate — comportamento del relativo dominio;
+5. Filosofia in sviluppo — razionale e ipotesi;
+6. baseline ecosistema — sintesi e indice;
+7. dossier e asset visuali — supporto non normativo.
+
+L’integrazione non autorizza R3-P4, DOS-A1, pubblicazione automatica o altri runtime cross-product.
 
 ### Priorità canonica corrente
 
