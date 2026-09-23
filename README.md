@@ -30,12 +30,14 @@ Lo stato sintetico è in [STATUS.md](STATUS.md). Le decisioni vincolanti sono re
 ## Percorso di lettura
 
 1. [Visione del prodotto](docs/vision/product-strategy.md)
-2. [Architettura dell'ecosistema](docs/architecture/ecosystem-overview.md)
-3. [Confini di autorità](docs/architecture/authority-boundaries.md)
-4. [Flussi dei dati](docs/architecture/data-flows.md)
-5. [Governo](GOVERNANCE.md)
-6. [Roadmap](ROADMAP.md)
-7. [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md)
+2. [Filosofia in sviluppo e frasi-cardine](docs/vision/philosophy-in-development.md)
+3. [Architettura dell'ecosistema](docs/architecture/ecosystem-overview.md)
+4. [Confini di autorità](docs/architecture/authority-boundaries.md)
+5. [Flussi dei dati](docs/architecture/data-flows.md)
+6. [Governo](GOVERNANCE.md)
+7. [Roadmap](ROADMAP.md)
+8. [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md)
+9. [Riferimento scientifico IA generativa e competenza professionale docente](docs/research/trama-rsr-01-genai-language-teaching.md)
 
 ## Verifica locale
 

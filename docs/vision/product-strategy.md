@@ -1,5 +1,7 @@
 # Strategia di prodotto TRAMA
 
+> Per la ricostruzione del razionale, delle frasi-cardine e dei principi ancora in evoluzione, vedere [Filosofia in sviluppo](./philosophy-in-development.md).
+
 ## Definizione
 
 TRAMA è un ecosistema professionale per la scuola che collega curricolo approvato, conoscenza navigabile e azione didattica, mantenendo il docente al controllo e rendendo verificabile la provenienza di decisioni e materiali.
