@@ -94,7 +94,8 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - visibility/minimization policy;
 - gate diritti/licenze;
 - gate WCAG 2.2 AA con verifica automatica + umana;
-- nessun dato personale studente.
+- nessun dato personale studente;
+- substrato asset Git-first secondo `ATLAS-MAT-PUB-01`: normalizzazione, manifest, commit, deploy, smoke test e receipt tecnica separati dalla decisione editoriale.
 
 ### R3-P5 / ATLAS-P5 — Smart Navigation
 
@@ -134,6 +135,7 @@ Stato proposto: **HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED**.
 - anteprima, confronto e modifica sotto controllo del docente;
 - collegamento alla lezione soltanto dopo decisione docente;
 - pubblicazione in Atlas separata e governata da `LessonPublicationManifest` / `PublicationReceipt`;
+- riuso del publisher Git-first `ATLAS-MAT-PUB-01` come infrastruttura tecnica, senza attribuire capacità editoriale autonoma all'Officina;
 - provenance, diritti/licenze, accessibilità e qualità editoriale come gate;
 - nessuna pubblicazione o adozione automatica.
 
