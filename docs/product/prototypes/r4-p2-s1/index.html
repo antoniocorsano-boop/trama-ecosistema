@@ -164,7 +164,7 @@ textarea{width:100%;min-height:104px;border:1px solid var(--border);border-radiu
     </div>
 
     <div class="step">
-      <div class="step-label"><span class="num">3</span><div><strong>Cosa vuoi portare avanti?</strong><div class="help">Solo le decisioni che confermi arriveranno alla prossima preparazione.</div></div></div>
+      <div class="step-label"><span class="num">3</span><div><strong>Cosa vuoi portare avanti?</strong><div class="help">Conferma le decisioni che ritieni valide; scegli separatamente quali portare nella prossima preparazione.</div></div></div>
       <label for="decisionInput" class="sr-only">Nuova decisione</label>
       <textarea id="decisionInput" placeholder="Es. Aprire la prossima lezione con l’esempio della bicicletta come sistema tecnologico."></textarea>
       <div class="action-row"><button class="secondary" id="addDecision">Aggiungi decisione</button></div>
@@ -201,17 +201,24 @@ function showToast(message){
 function openDrawer(){
   lastFocus=document.activeElement;backdrop.classList.add('open');
   document.body.style.overflow='hidden';
-  setTimeout(()=>document.getElementById('observations').focus(),0);
+  setTimeout(()=>document.getElementById('quickClose').focus(),0);
 }
-function closeDrawer(){
+function hasUnsavedContent(){
+  return Boolean(document.getElementById('observations').value.trim() || document.getElementById('reflection').value.trim() || document.getElementById('decisionInput').value.trim() || decisions.length);
+}
+function closeDrawer(force=false){
+  if(!force && hasUnsavedContent()){
+    showToast('Ci sono note non salvate. Usa “Salva bozza” o “Conferma riflessione”.');
+    return;
+  }
   backdrop.classList.remove('open');document.body.style.overflow='';
   if(lastFocus) lastFocus.focus();
 }
 openBtn.addEventListener('click',openDrawer);
-closeBtn.addEventListener('click',closeDrawer);
-backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeDrawer()});
+closeBtn.addEventListener('click',()=>closeDrawer(false));
+backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeDrawer(false)});
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&backdrop.classList.contains('open'))closeDrawer();
+  if(e.key==='Escape'&&backdrop.classList.contains('open'))closeDrawer(false);
   if(e.key==='Tab'&&backdrop.classList.contains('open')){
     const items=[...backdrop.querySelectorAll('button,textarea,[href],input,select,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled);
     if(!items.length)return;
@@ -265,7 +272,7 @@ document.getElementById('quickClose').addEventListener('click',()=>{
   document.getElementById('decisionCount').textContent='0 confermate';
   document.getElementById('updatedText').textContent='adesso';
   showToast('Lezione chiusa senza ulteriori azioni.');
-  closeDrawer();
+  closeDrawer(true);
 });
 document.getElementById('knowledgeLink').addEventListener('click',()=>{
   document.getElementById('knowledgeState').textContent='Risorsa dimostrativa collegata · relazione: utile per il seguito';
@@ -283,7 +290,7 @@ document.getElementById('confirmReflection').addEventListener('click',()=>{
   document.getElementById('decisionCount').textContent=confirmed+' confermate · '+carried+' portate avanti';
   document.getElementById('updatedText').textContent='adesso';
   showToast(confirmed? 'Riflessione confermata. Solo le decisioni scelte con “Porta nella prossima preparazione” saranno trasferite.' : 'Riflessione confermata senza azioni per la prossima lezione.');
-  closeDrawer();
+  closeDrawer(true);
 });
 </script>
 </body>
