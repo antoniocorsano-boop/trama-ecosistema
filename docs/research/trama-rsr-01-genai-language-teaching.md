@@ -18,7 +18,7 @@
 | Standard di tracciabilità | [TRAMA-EVIDENCE-01](../assurance/trama-evidence-01.md) |
 | Runtime effect | **NONE / NO_RUNTIME_AUTHORIZATION** |
 | Open gaps | learner-level AI, assessment individuale, futura applicabilità specifica AI Act/GDPR |
-| Independent review | CHANGES REQUIRED su head precedente; rilievi recepiti in questa revisione |
+| Independent review | **PENDING sull'exact head corrente**; review precedenti conservate come evidenza storica |
 | Last verified | 2026-09-23 |
 
 ## 1. Scopo
@@ -243,10 +243,10 @@ Uso non ammesso:
 
 | Req ID | Requisito | Source IDs | Derivation | Verification | Stato |
 | --- | --- | --- | --- | --- | --- |
-| RSR-A | autorità professionale umana | SCI-01, SCI-02, POL-EU-01 | DIRECT + TRAMA governance | EVD-01, contratti esistenti | VERIFIED |
+| RSR-A | autorità professionale umana | SCI-01, SCI-02, POL-EU-01 | DIRECT + TRAMA governance | contratti esistenti + EVD-CURRENT-REVIEW | **PENDING CURRENT-HEAD REVIEW** |
 | RSR-B | contesto minimo senza sorveglianza | POL-IT-01, POL-EU-01, AUTH-IT-01, LAW-EU-01 | CONTEXTUAL | privacy review futura per runtime | PARTIAL |
 | RSR-C | provenance interna; disclosure pubblica separata | SCI-01, POL-EU-01 | DIRECT + DESIGN_RULE | evidence manifest futuro | PARTIAL |
-| RSR-D | validation ladder | SCI-01, STD-01, STD-02 | ADAPTED / DESIGN_RULE | TRAMA-SA-01 + review umana | VERIFIED come metodo |
+| RSR-D | validation ladder | SCI-01, STD-01, STD-02 | ADAPTED / DESIGN_RULE | TRAMA-SA-01 + EVD-CURRENT-REVIEW | **PENDING CURRENT-HEAD REVIEW** |
 | RSR-E | uso proporzionato IA | SCI-01 (sostenibilità), STD-02 | DESIGN_RULE | metriche costi/qualità future | HYPOTHESIS |
 | RSR-F | interazione docente senza prompt engineering obbligatorio | SCI-01, SCI-02 | ADAPTED | UX review futura | PARTIAL |
 | RSR-G | governance separata assessment learner-level | SCI-01, POL-EU-01, AUTH-IT-01, LAW-EU-01 | DIRECT + CONTEXTUAL | evidence pack dedicato futuro | GAP / NO_RUNTIME |
