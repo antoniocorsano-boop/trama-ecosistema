@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.10.0",
-  "updatedAt": "2026-09-22",
+  "registerVersion": "1.11.0",
+  "updatedAt": "2026-09-23",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -170,6 +170,20 @@
         "Docente OS"
       ],
       "decision": "È proposto TRAMA-PW-01 come contratto trasversale: ogni write user-initiated deve rendere percepibili intenzione, stato in corso quando asincrono, esito esplicito, stato risultante e prossimo passo quando utile; successo ed errore devono essere accessibili e verificati da evidenza automatica legata alla singola write. Nessuna persistenza, navigazione o trasmissione equivale ad approvazione implicita. L'adozione non autorizza nuove write, runtime cross-product o DOS-A1.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-013",
+      "title": "Substrato Git-first per la pubblicazione degli asset Atlas",
+      "status": "PROPOSED",
+      "date": "2026-09-23",
+      "scope": [
+        "TRAMA",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "È proposto un substrato Git-first per gli asset Atlas: file versionati nel repository, normalizzazione build-time, manifest strutturato, deploy statico verificato e PublicationReceipt tecnica. Sharp è il componente proposto per la normalizzazione raster; DAM/CMS completi non sono dipendenze necessarie in questa fase. La decisione non autorizza pubblicazione automatica Docente OS → Atlas né pubblicazione senza conferma docente.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
