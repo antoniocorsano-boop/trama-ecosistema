@@ -4,6 +4,7 @@
 **PR:** #60  
 **Exact head esaminato:** `0a7c1fb3d4c60ee2ff02c51c19ed93030e3bc722`  
 **Esito:** PASS WITH REQUIRED CLARIFICATIONS  
+**Evidence status:** HISTORICAL — precedente a TRAMA-EVIDENCE-01  
 **Tipo:** review pedagogica, epistemologica e di compatibilità TRAMA
 
 ## 1. Esito sintetico
@@ -123,3 +124,9 @@ PASS:
 La progettazione può proseguire con la matrice verticale solo dopo il recepimento di C1–C5 nella stessa branch.
 
 La review non autorizza runtime, merge o promozione dello stato della proposta.
+
+## 6. Stato dopo adozione TRAMA-EVIDENCE-01
+
+Questa review resta una ricevuta storica sul solo exact head indicato sopra e non viene trasferita al nuovo SHA.
+La branch adotta ora TRAMA-EVIDENCE-01 come canary tramite Assurance Summary, Evidence Register separato e Traceability Matrix.
+È richiesta una nuova review indipendente exact-head dopo il completamento dei check correnti.
