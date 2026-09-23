@@ -162,3 +162,21 @@ Docente OS:
   - Percorso professionale
 
 L’assistente IA è una capacità trasversale, non una sezione autonoma.
+
+
+## Specifica S1
+
+La specifica funzionale e UX di **R4-P2/S1 — Reflective Lesson Continuity** è definita in:
+
+- `docs/product/r4-p2-s1-reflective-lesson-continuity.md`
+
+La specifica completa il gate documentale di progettazione per:
+- modello dati minimo;
+- stati e transizioni;
+- privacy/minimizzazione;
+- UX dei momenti di riflessione;
+- provenance;
+- non-silent-write;
+- criteri di verifica umana.
+
+Resta esclusa l'autorizzazione runtime.
