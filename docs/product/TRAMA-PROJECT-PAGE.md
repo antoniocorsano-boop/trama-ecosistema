@@ -13,9 +13,11 @@ Non è una quarta applicazione. È la grammatica di governo che mantiene distint
 - **Docente OS** — decisione e trasformazione professionale;
 - **Atlas** — membrana pubblica, navigazione e fruizione.
 
-## Promessa di prodotto
+## Formula di ecosistema
 
 **Dal curricolo all’esperienza, senza perdere autorità, responsabilità o contesto.**
+
+Questa è una formula narrativa della baseline. La **promessa di valore di prodotto** resta quella registrata in [Strategia di prodotto](../vision/product-strategy.md) — “Dal curricolo alla lezione, con il docente sempre al controllo” — ancora da validare esternamente.
 
 Il percorso semantico di riferimento è:
 
@@ -30,21 +32,28 @@ Custodisce curricolo verticale d’istituto, provenienza, versioni, approvazione
 Porta il curricolo nel contesto reale della classe. Il docente accetta, modifica, sostituisce o esclude proposte e conserva la decisione professionale.
 
 ### Atlas
-Rende pubblici e navigabili curricolo, lezioni, materiali, attività e percorsi. La selezione classe/disciplina è contesto pubblico, non identità dello studente.
+È la superficie pubblica e navigabile dell’ecosistema. Oggi rende disponibile una parte del curricolo e dei materiali; il target di prodotto integrato estende progressivamente la fruizione verso lezioni, attività e percorsi. La selezione classe/disciplina è contesto pubblico, non identità dello studente.
 
-## Principi non negoziabili
+## Invarianti
 
 - teacher-first;
 - privacy-first;
-- accessibilità WCAG 2.2 AA;
 - no silent write;
 - provenienza verificabile;
 - nessuna seconda authority curricolare;
 - nessun runtime cross-product implicito;
-- mobile e LIM come superfici progettate;
-- attività capaci di portare anche fuori dallo schermo.
+- nessun account o tracking individuale dello studente in Atlas.
 
-## Modello Atlas
+## Direzioni di design integrate
+
+- accessibilità WCAG 2.2 AA come target;
+- mobile e LIM come superfici progettate;
+- attività capaci di includere passaggi fuori dallo schermo;
+- progressione Atlas da risorse e materiali verso attività e percorsi.
+
+## Modello Atlas V2
+
+Il modello seguente è un riferimento di prodotto/design integrato; non equivale allo stato runtime corrente.
 
 | Livello | Significato |
 | --- | --- |
