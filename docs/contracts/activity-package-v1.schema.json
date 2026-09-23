@@ -1,0 +1,554 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.example/schemas/activity-package-v1.schema.json",
+  "title": "TRAMA Atlas ActivityPackage v1",
+  "description": "Schema sperimentale per attività Atlas pubbliche/offline. Non autorizza runtime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "activityId",
+    "version",
+    "title",
+    "schoolLevel",
+    "ageBand",
+    "grades",
+    "mode",
+    "cognitiveMoves",
+    "activityArchetypes",
+    "curriculumBinding",
+    "steps",
+    "offline",
+    "accessibility",
+    "rights",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0-experimental"
+    },
+    "activityId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.-]+)?$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 600
+    },
+    "schoolLevel": {
+      "enum": [
+        "INFANZIA",
+        "PRIMARIA",
+        "SECONDARIA_I_GRADO"
+      ]
+    },
+    "ageBand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 14
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 14
+        }
+      }
+    },
+    "grades": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "INFANZIA_3",
+          "INFANZIA_4",
+          "INFANZIA_5",
+          "PRIMARIA_1",
+          "PRIMARIA_2",
+          "PRIMARIA_3",
+          "PRIMARIA_4",
+          "PRIMARIA_5",
+          "SECONDARIA_I_1",
+          "SECONDARIA_I_2",
+          "SECONDARIA_I_3"
+        ]
+      }
+    },
+    "disciplineRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "maxLength": 128
+      }
+    },
+    "mode": {
+      "enum": [
+        "CLASS",
+        "STUDENT",
+        "BOTH"
+      ]
+    },
+    "estimatedDurationMinutes": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 240
+    },
+    "cognitiveMoves": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "DISCOVER",
+          "OBSERVE",
+          "QUESTION",
+          "HYPOTHESIZE",
+          "SEARCH",
+          "TEST",
+          "EXPLAIN",
+          "CHECK",
+          "REFLECT",
+          "REOPEN"
+        ]
+      }
+    },
+    "whyTypes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "DESCRIPTION",
+          "CAUSE",
+          "MECHANISM",
+          "FUNCTION",
+          "MOTIVATION",
+          "ORIGIN",
+          "MEANING",
+          "EVIDENCE",
+          "JUSTIFICATION",
+          "RELIABILITY"
+        ]
+      }
+    },
+    "activityArchetypes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5",
+          "A6",
+          "A7",
+          "A8",
+          "A9",
+          "A10",
+          "A11",
+          "A12"
+        ]
+      }
+    },
+    "curriculumBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "curriculumVersionRef",
+        "objectiveRefs"
+      ],
+      "properties": {
+        "authority": {
+          "const": "Arena"
+        },
+        "curriculumVersionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "authorityState": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "authorityReceiptRef": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "objectiveRefs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "maxLength": 160
+          }
+        }
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "materialId",
+          "kind",
+          "delivery"
+        ],
+        "properties": {
+          "materialId": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "kind": {
+            "enum": [
+              "IMAGE",
+              "AUDIO",
+              "VIDEO",
+              "TEXT",
+              "DATA",
+              "DOCUMENT",
+              "PHYSICAL_MATERIAL_GUIDE"
+            ]
+          },
+          "delivery": {
+            "enum": [
+              "EMBEDDED",
+              "PUBLIC_URL",
+              "TEACHER_PROVIDED"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "maxLength": 512
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048
+          },
+          "altText": {
+            "type": "string",
+            "maxLength": 800
+          },
+          "transcriptRef": {
+            "type": "string",
+            "maxLength": 512
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stepId",
+          "kind",
+          "prompt"
+        ],
+        "properties": {
+          "stepId": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+          },
+          "kind": {
+            "enum": [
+              "STIMULUS",
+              "OBSERVE",
+              "QUESTION",
+              "PREDICT",
+              "HYPOTHESIS",
+              "EVIDENCE",
+              "OFFSCREEN",
+              "TEST",
+              "COMPARE",
+              "EXPLAIN",
+              "REFLECT",
+              "REOPEN",
+              "TEACHER_PAUSE"
+            ]
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          },
+          "teacherPrompt": {
+            "type": "string",
+            "maxLength": 1600
+          },
+          "materialRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "maxLength": 128
+            }
+          },
+          "response": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "types": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "NONE",
+                    "TEXT",
+                    "CHOICE",
+                    "DRAWING",
+                    "LOCAL_FILE",
+                    "ORAL_CLASS"
+                  ]
+                }
+              },
+              "persistLocally": {
+                "type": "boolean",
+                "default": false
+              },
+              "required": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          },
+          "next": {
+            "type": "string",
+            "maxLength": 64
+          }
+        }
+      }
+    },
+    "observableIndicators": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 400
+      }
+    },
+    "offline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligible",
+        "requiredAssets",
+        "localState"
+      ],
+      "properties": {
+        "eligible": {
+          "type": "boolean"
+        },
+        "requiredAssets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "maxLength": 512
+          }
+        },
+        "localState": {
+          "enum": [
+            "NONE",
+            "SESSION",
+            "PERSISTENT_DEVICE"
+          ]
+        },
+        "exportAllowed": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "keyboard",
+        "nonVisualEquivalent"
+      ],
+      "properties": {
+        "target": {
+          "const": "WCAG_2_2_AA"
+        },
+        "keyboard": {
+          "type": "boolean"
+        },
+        "nonVisualEquivalent": {
+          "type": "boolean"
+        },
+        "reducedMotion": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1200
+        }
+      },
+      "description": "Candidate accessibility declaration. target=WCAG_2_2_AA does not by itself prove conformance; unmet booleans may be represented during drafting but must fail the separate publication gate."
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "license"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "CLEARED",
+            "PARTIAL",
+            "NOT_CLEARED"
+          ]
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "attributions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "source"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "source": {
+                "type": "string",
+                "maxLength": 2048
+              },
+              "license": {
+                "type": "string",
+                "maxLength": 160
+              }
+            }
+          }
+        }
+      },
+      "description": "Candidate rights state. PARTIAL and NOT_CLEARED are structurally valid drafting states but must fail the separate publication gate."
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "createdBy",
+        "createdAt"
+      ],
+      "properties": {
+        "createdBy": {
+          "type": "string",
+          "pattern": "^(ROLE|ORG|AUTHOR_REF):[A-Za-z0-9._-]{1,120}$",
+          "maxLength": 132,
+          "description": "Privacy-safe non-student provenance identifier for the public package. Use a role, organization, or controlled author reference; do not place a teacher's personal name, student identity, email, or account identifier here."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sourceActivityRef": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "contentDigest": {
+          "type": "string",
+          "maxLength": 160
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "CLASS"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "offline": {
+            "properties": {
+              "localState": {
+                "enum": [
+                  "NONE",
+                  "SESSION"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "studentName"
+            ]
+          },
+          {
+            "required": [
+              "studentId"
+            ]
+          },
+          {
+            "required": [
+              "email"
+            ]
+          },
+          {
+            "required": [
+              "accountId"
+            ]
+          },
+          {
+            "required": [
+              "analyticsUserId"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "$comment": "Structural validation only. A schema-valid package is not necessarily publishable; publication requires separate Atlas editorial, rights and accessibility gates (ATLAS-MAT-PUB-01)."
+}
