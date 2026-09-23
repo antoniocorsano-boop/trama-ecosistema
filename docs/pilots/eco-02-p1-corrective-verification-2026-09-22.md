@@ -1,7 +1,9 @@
 # ECO-02/P1 — Verifica correttiva del 22 settembre 2026
 
 **Stato:** EVIDENCE RECORDED / NOT FINAL COLLAUDO / PILOT STILL ACTIVE  
-**Perimetro:** Tecnologia · 2C · B01 «Il territorio agricolo come sistema»
+**Perimetro:** Tecnologia · 2C · sequenza canonica «Agricoltura come sistema tecnologico» · lezione B01 «Il territorio agricolo come sistema»
+
+**Mappatura:** B01 «Il territorio agricolo come sistema» è la lezione osservata all'interno della sequenza canonica ECO-02/P1 «Agricoltura come sistema tecnologico»; non sostituisce né rinomina la sequenza del pilota.
 
 ## Regola di validità
 
