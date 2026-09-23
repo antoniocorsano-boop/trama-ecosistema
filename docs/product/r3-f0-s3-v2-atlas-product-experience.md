@@ -370,7 +370,9 @@ Budget iniziale:
 - filtri;
 - preview;
 - metadata;
-- table/list/grid.
+- table/list/grid;
+- integrazione del substrato asset Git-first definito da `ATLAS-MAT-PUB-01` per normalizzazione, manifest, deploy verificato e receipt tecnica;
+- nessuna automazione editoriale implicita: la pubblicazione resta distinta dalla generazione e soggetta al controllo docente.
 
 ### S3-V2/F4 — Mobile + LIM
 - bottom navigation;
