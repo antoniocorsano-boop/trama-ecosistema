@@ -83,6 +83,23 @@ Esito:
 Riferimento:
 `docs/contracts/docente-os-atlas-publication.md`.
 
+## Substrato tecnico degli asset Atlas
+
+Riferimento: `ATLAS-MAT-PUB-01` e `TRAMA-ADR-013`.
+
+Per gli asset visuali approvati è proposto un percorso Git-first distinto dalla decisione editoriale:
+
+`asset → validate → optimize → manifest → commit → deploy → smoke test → PublicationReceipt`.
+
+Vincoli:
+
+- la pipeline tecnica non decide se pubblicare;
+- la normalizzazione raster può usare Sharp o equivalente;
+- file e metadati pubblici restano versionati nel repository Atlas;
+- checksum, commit SHA e URL pubblico fanno parte della tracciabilità;
+- nessun DAM/CMS completo è richiesto come dipendenza architetturale in questa fase;
+- il runtime Docente OS → Atlas resta soggetto allo stato e ai gate di R3-P4/ADR-008.
+
 ## Policy di minimizzazione per la pubblicazione
 
 - `grade`: ammesso come contesto didattico;
