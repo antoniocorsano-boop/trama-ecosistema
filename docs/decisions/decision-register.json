@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.7.0",
-  "updatedAt": "2026-09-22",
+  "registerVersion": "1.11.0",
+  "updatedAt": "2026-09-23",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -140,6 +140,50 @@
         "Docente OS"
       ],
       "decision": "Atlas resta il visualizzatore/navigatore intelligente integrale del curricolo e include biblioteca e Student Learning Hub senza ridursi a repository. Docente OS costruisce il contesto e il brief ma non è il motore grafico generalista; una Officina materiali specialistica può produrre proposte usando anche pattern e risorse Atlas. Si applica riusa-prima-di-generare e ogni adozione/pubblicazione resta una decisione esplicita del docente. Nessun runtime è autorizzato da questa decisione di governance.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-011",
+      "title": "Educazione civica: separazione tra quadro istituzionale e attuazione di classe",
+      "status": "APPROVED",
+      "date": "2026-09-22",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "Arena governa il quadro istituzionale annuale approvato di Educazione civica; Docente OS governa progettazione, conferma docente, attività condivise e consuntivo di classe; Atlas mostra soltanto il quadro approvato. Le quote per primaria e secondaria di primo grado sono annuali e il totale approvabile è almeno 33 ore; le attività condivise emergono dalla progettazione di classe e contano una sola volta nel totale. Nessun valore settimanale locale sostituisce il quadro Arena. L'approvazione di governance non autorizza da sola alcuna capacità runtime.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-012",
+      "title": "Feedback percepibile obbligatorio per ogni write user-initiated",
+      "status": "PROPOSED",
+      "date": "2026-09-22",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "È proposto TRAMA-PW-01 come contratto trasversale: ogni write user-initiated deve rendere percepibili intenzione, stato in corso quando asincrono, esito esplicito, stato risultante e prossimo passo quando utile; successo ed errore devono essere accessibili e verificati da evidenza automatica legata alla singola write. Nessuna persistenza, navigazione o trasmissione equivale ad approvazione implicita. L'adozione non autorizza nuove write, runtime cross-product o DOS-A1.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-013",
+      "title": "Substrato Git-first per la pubblicazione degli asset Atlas",
+      "status": "PROPOSED",
+      "date": "2026-09-23",
+      "scope": [
+        "TRAMA",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "È proposto un substrato Git-first per gli asset Atlas: file versionati nel repository, normalizzazione build-time, manifest strutturato, deploy statico verificato e PublicationReceipt tecnica. Sharp è il componente proposto per la normalizzazione raster; DAM/CMS completi non sono dipendenze necessarie in questa fase. La decisione non autorizza pubblicazione automatica Docente OS → Atlas né pubblicazione senza conferma docente.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }

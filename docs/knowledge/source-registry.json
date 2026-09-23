@@ -1,41 +1,101 @@
 {
-  "registryVersion": "1.1.0",
-  "updatedAt": "2026-09-21",
+  "registryVersion": "1.2.0",
+  "updatedAt": "2026-09-22",
   "sources": [
     {
       "domain": "ecosystem-governance",
       "authority": "trama-ecosistema",
-      "content": ["decisions", "contracts", "architecture", "ecosystem-status"],
+      "content": [
+        "decisions",
+        "contracts",
+        "architecture",
+        "ecosystem-status"
+      ],
       "drivePolicy": "HUMAN_READABLE_COPY_ONLY"
     },
     {
       "domain": "curriculum",
       "authority": "CurManLight_arena",
-      "content": ["curriculum", "applicability", "approval", "provenance"],
+      "content": [
+        "curriculum",
+        "applicability",
+        "approval",
+        "provenance"
+      ],
       "drivePolicy": "INSTITUTIONAL_EXPORT_ONLY"
     },
     {
       "domain": "learning-resources",
       "authority": "Curriculum-Atlas",
-      "content": ["relationships", "paths", "learning-objects", "resource-identity", "resource-version", "resource-status"],
+      "content": [
+        "relationships",
+        "paths",
+        "learning-objects",
+        "resource-identity",
+        "resource-version",
+        "resource-status"
+      ],
       "drivePolicy": "PREVIEW_OR_REPORT_ONLY"
     },
     {
       "domain": "atlas-publication",
       "authority": "Curriculum-Atlas",
-      "content": ["published-pages", "publications", "publication-version", "publication-state", "publication-receipts"],
+      "content": [
+        "published-pages",
+        "publications",
+        "publication-version",
+        "publication-state",
+        "publication-receipts"
+      ],
       "drivePolicy": "PREVIEW_OR_REPORT_ONLY"
+    },
+    {
+      "domain": "civic-education-framework",
+      "authority": "CurManLight_arena",
+      "content": [
+        "approved-annual-framework",
+        "school-order-scope",
+        "annual-discipline-allocations",
+        "civic-objectives",
+        "normative-verification",
+        "framework-version"
+      ],
+      "drivePolicy": "INSTITUTIONAL_EXPORT_ONLY"
+    },
+    {
+      "domain": "civic-education-implementation",
+      "authority": "docente-os-2026-27",
+      "content": [
+        "class-planning",
+        "teacher-confirmed-hours",
+        "shared-activities",
+        "class-ledger",
+        "coverage",
+        "annual-deviations"
+      ],
+      "drivePolicy": "EXPLICIT_EXPORT_ONLY"
     },
     {
       "domain": "teacher-context",
       "authority": "docente-os-2026-27",
-      "content": ["classes", "schedule", "preparation", "journal", "teacher-decisions"],
+      "content": [
+        "classes",
+        "schedule",
+        "preparation",
+        "journal",
+        "teacher-decisions"
+      ],
       "drivePolicy": "EXPLICIT_EXPORT_ONLY"
     },
     {
       "domain": "collaborative-documents",
       "authority": "Drive",
-      "content": ["minutes", "pilot-reports", "presentations", "institutional-documents"],
+      "content": [
+        "minutes",
+        "pilot-reports",
+        "presentations",
+        "institutional-documents"
+      ],
       "drivePolicy": "AUTHORITATIVE_FOR_DECLARED_DOCUMENT_ONLY"
     }
   ]

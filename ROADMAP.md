@@ -51,7 +51,7 @@ Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Gra
 
 Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives**, con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`.
 
-Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. Sotto-incremento **R3-F0/S3-V1 — Rendered Prototype Validation**: pacchetto approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main` (exact head `5e1a6feb1d3a4ae08f3547841e7ceef20e37bed6`; merge `4e34b363b2969051ff8dce4a7ee5a88d09b400a7`). Il prototipo HTML/CSS con JavaScript locale minimale, la validazione strutturale/contrasto campione e il browser rendering automatizzato sono PASS su mobile-like, desktop e LIM; restano PENDING le review umane e le prove assistive/interattive, quindi S3 non è ancora chiuso.
+Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. **R3-F0/S3-V1 — Rendered Prototype Validation** resta valido come harness tecnico/accessibilità. La HUMAN PRODUCT REVIEW ha portato a **R3-F0/S3-V2 — Atlas Product Experience Prototype**. In V2 sono ora integrati **F0 Foundation**, **F1 Curricolo verticale d’istituto + Materiali pubblici di base** e **F2 Esplora relazionale**; F2 include XYFlow/React Flow, zoom semantico, filtri, pannello contestuale, Mappa/Elenco equivalente e layout mobile dedicato. Restano **F3 Materiali+Risorse, F4 Mobile+LIM e F5 Exit**. S3 resta ACTIVE fino alla chiusura verificata di V2.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
@@ -59,8 +59,9 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - primitive accessibili e component catalogue;
 - target WCAG 2.2 AA;
 - test automatici + verifica umana dell'accessibilità;
-- prototipo di prodotto;
-- POC di mappa 2D professionale;
+- prototipo di prodotto S3-V2 coerente con il target visuale Atlas approvato;
+- frontend foundation con stack maturo e component system governato;
+- POC di mappa 2D professionale evoluto in RelationCanvas navigabile;
 - conservazione di Galaxy/Spatial come vista specialistica.
 
 ### R3-P2 / ATLAS-P2 — Curriculum pubblico
@@ -93,7 +94,8 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - visibility/minimization policy;
 - gate diritti/licenze;
 - gate WCAG 2.2 AA con verifica automatica + umana;
-- nessun dato personale studente.
+- nessun dato personale studente;
+- substrato asset Git-first secondo `ATLAS-MAT-PUB-01`: normalizzazione, manifest, commit, deploy, smoke test e receipt tecnica separati dalla decisione editoriale.
 
 ### R3-P5 / ATLAS-P5 — Smart Navigation
 
@@ -133,9 +135,32 @@ Stato proposto: **HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED**.
 - anteprima, confronto e modifica sotto controllo del docente;
 - collegamento alla lezione soltanto dopo decisione docente;
 - pubblicazione in Atlas separata e governata da `LessonPublicationManifest` / `PublicationReceipt`;
+- riuso del publisher Git-first `ATLAS-MAT-PUB-01` come infrastruttura tecnica, senza attribuire capacità editoriale autonoma all'Officina;
 - provenance, diritti/licenze, accessibilità e qualità editoriale come gate;
 - nessuna pubblicazione o adozione automatica.
 
+
+### R4-P2 — Professional Practice
+
+Stato: **DESIGN AUTHORIZED / RUNTIME NOT AUTHORIZED**.
+
+Obiettivo: consolidare Docente OS come ambiente di professionalità docente continua, mantenendo il docente come decisore e l'IA come capacità advisory.
+
+Primo slice: **R4-P2/S1 — Reflective Lesson Continuity**.
+
+- diario riflessivo strutturato collegato alle lezioni;
+- distinzione tra osservazione, riflessione e decisione;
+- continuità verso la preparazione successiva;
+- collegamento contestuale con Conoscenza;
+- assistente professionale contestuale teacher-editable;
+- `KnowledgeResource != TeachingMaterial`;
+- nessuna scrittura silenziosa;
+- nessun nuovo runtime cross-product;
+- DOS-A1 resta `RUNTIME_DEFERRED`.
+
+La progettazione e la prototipazione `NO_RUNTIME` sono autorizzate in parallelo ai cantieri correnti. L'implementazione runtime richiede un gate distinto.
+
+Riferimento: `docs/product/r4-p2-professional-practice.md`.
 
 ### TRAMA-SA-01 — TypeSafe semantic assurance pilot
 
@@ -171,3 +196,38 @@ Il registro dichiara Atlas autorevole per identità/versione/stato delle proprie
 Questa promozione non cambia lo stato implementativo di R3-P4: il runtime Docente OS → Atlas resta `NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME`.
 
 `DOS-A1` può cambiare stato soltanto mediante una decisione esplicita successiva alle evidenze del pilota.
+
+
+## Sequenza operativa trasversale — Piano atomico
+
+Il piano dettagliato è in [docs/strategy/atomic-operating-plan-2026-09-22.md](docs/strategy/atomic-operating-plan-2026-09-22.md).
+
+La roadmap deve essere letta con questa priorità:
+
+1. chiusura verificata di ECO-02/P1;
+2. chiusura R3-F0/S3;
+   - in parallelo è consentita la sola progettazione NO_RUNTIME di R4-P2/S1 Professional Practice;
+3. R3-P2 Curriculum pubblico;
+4. R3-P5 Smart Navigation;
+5. continuità d'esperienza Docente OS ↔ Arena ↔ Atlas senza rendere Atlas un passaggio obbligatorio;
+6. R4-P1 Officina materiali;
+7. R3-P3 Learning Hub;
+8. R3-P4 solo dopo superfici Atlas mature e nuova autorizzazione;
+9. R3-P6 Curriculum Health;
+10. identità prodotto, adozione e pilota di istituto.
+
+### Regola di portafoglio
+
+Un nuovo cantiere non deve essere promosso soltanto perché tecnicamente possibile. Prima devono essere disponibili, per il cantiere precedente:
+
+- evidenza automatica;
+- evidenza runtime quando pertinente;
+- verifica umana;
+- decisione di promozione;
+- aggiornamento della documentazione canonica.
+
+Questa regola serve a ridurre rilavorazioni, duplicazioni, regressioni già note e consumo di risorse dovuto a problemi ripetuti.
+
+### Nota architetturale
+
+La sequenza di investimento non trasforma i prodotti in una pipeline. Restano distinti i quattro flussi governati tra Arena, Atlas e Docente OS. In particolare, Arena → Docente OS resta necessario e Atlas resta opzionale rispetto alla preparazione ordinaria del docente.

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Docente OS — R4-P2/S1 Reflective Lesson Continuity</title>
+<style>
+:root{
+  --bg:#f6f7f8;--surface:#fff;--surface-2:#f0f2f4;--text:#17202a;--muted:#5e6a75;
+  --border:#d7dde2;--focus:#234f77;--accent:#244d70;--ok:#2f654a;--shadow:0 8px 28px rgba(20,30,40,.08);
+  --radius:14px;--space:16px;--max:1180px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,textarea,input{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.shell{max-width:var(--max);margin:auto;padding:24px}
+.topbar{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:20px}
+.brand{display:flex;gap:12px;align-items:center}
+.brand-mark{width:38px;height:38px;border-radius:10px;background:#1f3d59;color:#fff;display:grid;place-items:center;font-weight:700}
+.badge{font-size:.78rem;border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:5px 9px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.lesson{padding:24px}
+.eyebrow{color:var(--muted);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+h1{font-size:1.75rem;margin:.25rem 0 .4rem}
+.meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:.92rem}
+.section{border-top:1px solid var(--border);margin-top:24px;padding-top:22px}
+.section-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.section h2{font-size:1.18rem;margin:0 0 4px}
+.help{color:var(--muted);margin:0}
+.primary,.secondary,.quiet,.dangerless{border-radius:10px;padding:10px 14px;border:1px solid transparent;font-weight:650}
+.primary{background:#1f4667;color:#fff}
+.secondary{background:var(--surface);border-color:var(--border);color:var(--text)}
+.quiet{background:transparent;color:var(--accent);padding:8px 10px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:#eef5f1;color:#27553f;border:1px solid #c9ddd1;border-radius:999px;padding:5px 9px;font-size:.85rem}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.summary-box{border:1px solid var(--border);border-radius:12px;padding:14px;background:#fbfcfc}
+.summary-box strong{display:block;font-size:.9rem;margin-bottom:4px}
+.aside{padding:18px;align-self:start;position:sticky;top:20px}
+.aside h2{font-size:1rem;margin:0 0 12px}
+.previous{border-left:3px solid #68839a;padding-left:12px;margin:14px 0}
+.previous small{color:var(--muted)}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.drawer-backdrop{position:fixed;inset:0;background:rgba(10,20,30,.36);display:none;align-items:stretch;justify-content:flex-end}
+.drawer-backdrop.open{display:flex}
+.drawer{width:min(620px,100%);background:var(--surface);height:100%;overflow:auto;box-shadow:-16px 0 40px rgba(0,0,0,.16);padding:22px}
+.drawer-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;position:sticky;top:0;background:var(--surface);padding-bottom:14px;z-index:2}
+.drawer h2{margin:0;font-size:1.35rem}
+.iconbtn{border:1px solid var(--border);background:var(--surface);border-radius:10px;width:40px;height:40px}
+.step{border-top:1px solid var(--border);padding:20px 0}
+.step:first-of-type{border-top:0}
+.step-label{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.num{width:28px;height:28px;border-radius:50%;background:#e9eef2;display:grid;place-items:center;font-weight:700}
+textarea{width:100%;min-height:104px;border:1px solid var(--border);border-radius:10px;padding:12px;background:#fff;color:var(--text);resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 10px;color:var(--muted)}
+.ai-box{border:1px dashed #9aa9b5;border-radius:12px;padding:12px;margin-top:12px;background:#fafbfc}
+.ai-title{font-weight:700}
+.decision-list{display:grid;gap:10px;margin-top:12px}
+.decision{border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;justify-content:space-between;gap:12px}
+.decision small{color:var(--muted);display:block}
+.footer-actions{position:sticky;bottom:0;background:linear-gradient(to top,var(--surface) 78%,transparent);padding-top:22px;display:flex;gap:10px;justify-content:flex-end}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d2b36;color:#fff;padding:11px 16px;border-radius:10px;display:none;box-shadow:var(--shadow)}
+.toast.show{display:block}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:850px){
+  .layout{grid-template-columns:1fr}
+  .aside{position:static}
+  .summary-grid{grid-template-columns:1fr}
+  .shell{padding:14px}
+  .lesson{padding:18px}
+  .drawer{padding:18px 18px calc(24px + env(safe-area-inset-bottom));}
+  .drawer-head{
+    position:relative;
+    top:auto;
+    margin:0;
+    padding:0 0 18px;
+    border-bottom:1px solid var(--border);
+    z-index:auto;
+  }
+  .footer-actions{
+    position:static;
+    background:var(--surface);
+    padding:22px 0 0;
+    margin-top:4px;
+    flex-wrap:wrap;
+  }
+  .footer-actions .primary,.footer-actions .secondary{flex:1 1 180px}
+  .step-label{align-items:flex-start}
+  .num{flex:0 0 28px;margin-top:2px}
+  .decision{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark" aria-hidden="true">D</div><div><strong>Docente OS</strong><div class="eyebrow">Pratica professionale</div></div></div>
+    <span class="badge">R4-P2/S1 · Prototipo NO_RUNTIME</span>
+  </header>
+
+  <main class="layout">
+    <article class="card lesson" aria-labelledby="lesson-title">
+      <div class="eyebrow">2C · Tecnologia · 23 settembre 2026</div>
+      <h1 id="lesson-title">Tecnica, tecnologia e sistema tecnologico</h1>
+      <div class="meta"><span>1 ora</span><span>•</span><span>UDA introduttiva</span><span>•</span><span>Curricolo collegato</span></div>
+
+      <section class="section" aria-labelledby="continuity-title">
+        <h2 id="continuity-title">Dalla lezione precedente</h2>
+        <p class="help">Solo elementi confermati dal docente, utili per preparare questa lezione.</p>
+        <div class="previous">
+          <strong>Riprendere il concetto di bisogno</strong>
+          <small>Da: lezione del 18 settembre</small>
+          <div class="action-row">
+            <button class="secondary">Usa</button><button class="quiet">Modifica</button><button class="quiet">Ignora</button>
+          </div>
+        </div>
+        <div class="previous">
+          <strong>Mostrare un esempio concreto prima della definizione</strong>
+          <small>Da: riflessione del 18 settembre</small>
+          <div class="action-row">
+            <button class="secondary">Usa</button><button class="quiet">Modifica</button><button class="quiet">Ignora</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Prima della lezione</h2>
+        <p class="help">Obiettivo, attività e materiali già preparati.</p>
+        <div class="summary-grid">
+          <div class="summary-box"><strong>Obiettivo</strong>Distinguere tecnica, tecnologia e sistema tecnologico.</div>
+          <div class="summary-box"><strong>Attività</strong>Spiegazione breve, esempi, schema alla lavagna.</div>
+          <div class="summary-box"><strong>Materiali</strong>Infografica + scheda alunno.</div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="after-title">
+        <div class="section-head">
+          <div>
+            <h2 id="after-title">Dopo la lezione</h2>
+            <p class="help">Registra solo ciò che ti serve per capire e preparare meglio il seguito.</p>
+          </div>
+          <button class="primary" id="openReflection">Com’è andata?</button>
+        </div>
+        <div id="reflectionState" class="summary-grid" aria-live="polite">
+          <div class="summary-box"><strong>Riflessione</strong><span id="statusText">Non avviata</span></div>
+          <div class="summary-box"><strong>Decisioni per il seguito</strong><span id="decisionCount">0 confermate</span></div>
+          <div class="summary-box"><strong>Ultima modifica</strong><span id="updatedText">—</span></div>
+        </div>
+      </section>
+    </article>
+
+    
+  </main>
+</div>
+
+<div class="drawer-backdrop" id="backdrop">
+  <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="reflectionTitle">
+    <div class="drawer-head">
+      <div><div class="eyebrow">Dopo la lezione · 2C Tecnologia</div><h2 id="reflectionTitle">Com’è andata?</h2><p class="help">Puoi chiudere in pochi secondi oppure approfondire nei tre passaggi.</p>
+      <div class="action-row"><button class="secondary" id="quickClose">Tutto regolare · chiudi</button></div></div>
+      <button class="iconbtn" id="closeReflection" aria-label="Chiudi">×</button>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">1</span><div><strong>Cosa hai osservato?</strong><div class="help">Fatti, evidenze, tempi, reazioni della classe.</div></div></div>
+      <textarea id="observations" aria-label="Osservazioni" placeholder="Es. La distinzione tra tecnica e tecnologia è risultata chiara; più incerto il concetto di sistema tecnologico."></textarea>
+      <div class="chips" aria-label="Spunti facoltativi">
+        <button class="chip" data-prompt="Ha funzionato: ">Cosa ha funzionato</button>
+        <button class="chip" data-prompt="Da riprendere: ">Dove si sono fermati</button>
+        <button class="chip" data-prompt="Non completato: ">Cosa non hai completato</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">2</span><div><strong>Cosa ne ricavi?</strong><div class="help">La tua interpretazione professionale, distinta dai fatti osservati.</div></div></div>
+      <textarea id="reflection" aria-label="Riflessione" placeholder="Es. Devo introdurre il sistema tecnologico partendo da un oggetto reale e ricostruendone input, processo e output."></textarea>
+      <div class="ai-box">
+        <div class="ai-title">Assistente professionale <span class="badge">facoltativo</span></div>
+        <p class="help">Non modifica nulla senza una tua azione.</p>
+        <div class="action-row">
+          <button class="secondary" id="aiSeparate">Distingui fatti e interpretazioni</button>
+          <button class="secondary" id="aiQuestions">Fammi 2 domande</button>
+        </div>
+        <div id="aiResult" class="help" aria-live="polite" style="margin-top:10px"></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label"><span class="num">3</span><div><strong>Cosa vuoi portare avanti?</strong><div class="help">Conferma le decisioni che ritieni valide; scegli separatamente quali portare nella prossima preparazione.</div></div></div>
+      <label for="decisionInput" class="sr-only">Nuova decisione</label>
+      <textarea id="decisionInput" placeholder="Es. Aprire la prossima lezione con l’esempio della bicicletta come sistema tecnologico."></textarea>
+      <div class="action-row"><button class="secondary" id="addDecision">Aggiungi decisione</button></div>
+      <div class="decision-list" id="decisionList" aria-live="polite"></div>
+    </div>
+
+    <div class="step">
+      <strong>Collegamenti a Conoscenza</strong>
+      <p class="help">Le fonti restano conoscenza professionale: non diventano automaticamente materiali per gli studenti.</p>
+      <button class="secondary" id="knowledgeLink">Collega una risorsa</button>
+      <span id="knowledgeState" class="help" style="margin-left:8px"></span>
+    </div>
+
+    <div class="footer-actions">
+      <button class="secondary" id="saveDraft">Salva bozza</button>
+      <button class="primary" id="confirmReflection">Conferma riflessione</button>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const backdrop=document.getElementById('backdrop');
+const openBtn=document.getElementById('openReflection');
+const closeBtn=document.getElementById('closeReflection');
+const toast=document.getElementById('toast');
+let lastFocus=null;
+let decisions=[];
+
+function showToast(message){
+  toast.textContent=message;toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2200);
+}
+function openDrawer(){
+  lastFocus=document.activeElement;backdrop.classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('quickClose').focus(),0);
+}
+function hasUnsavedContent(){
+  return Boolean(document.getElementById('observations').value.trim() || document.getElementById('reflection').value.trim() || document.getElementById('decisionInput').value.trim() || decisions.length);
+}
+function closeDrawer(force=false){
+  if(!force && hasUnsavedContent()){
+    showToast('Ci sono note non salvate. Usa “Salva bozza” o “Conferma riflessione”.');
+    return;
+  }
+  backdrop.classList.remove('open');document.body.style.overflow='';
+  if(lastFocus) lastFocus.focus();
+}
+openBtn.addEventListener('click',openDrawer);
+closeBtn.addEventListener('click',()=>closeDrawer(false));
+backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeDrawer(false)});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&backdrop.classList.contains('open'))closeDrawer(false);
+  if(e.key==='Tab'&&backdrop.classList.contains('open')){
+    const items=[...backdrop.querySelectorAll('button,textarea,[href],input,select,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled);
+    if(!items.length)return;
+    const first=items[0],last=items[items.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+});
+
+document.querySelectorAll('.chip').forEach(btn=>btn.addEventListener('click',()=>{
+  const box=document.getElementById('observations');
+  box.value+=(box.value?'\n':'')+btn.dataset.prompt;
+  box.focus();
+}));
+
+document.getElementById('aiSeparate').addEventListener('click',()=>{
+  document.getElementById('aiResult').textContent='Proposta dimostrativa: separa ciò che hai osservato da ciò che stai ipotizzando. Nessun testo verrà scritto nei campi automaticamente.';
+});
+document.getElementById('aiQuestions').addEventListener('click',()=>{
+  document.getElementById('aiResult').textContent='1. In quale momento hai notato l’incertezza?  2. Quale esempio concreto potrebbe aiutarti a verificarla nella prossima lezione?';
+});
+
+function renderDecisions(){
+  const list=document.getElementById('decisionList');list.innerHTML='';
+  decisions.forEach((d,i)=>{
+    const row=document.createElement('div');row.className='decision';
+    row.innerHTML='<div><strong>'+escapeHtml(d.text)+'</strong><small>'+(d.confirmed?'Confermata dal docente':'Proposta · non ancora applicata')+'</small></div>';
+    const actions=document.createElement('div');actions.className='action-row';
+    const confirm=document.createElement('button');confirm.className=d.confirmed?'quiet':'secondary';confirm.textContent=d.confirmed?'Confermata':'Conferma';
+    confirm.addEventListener('click',()=>{d.confirmed=true;renderDecisions()});
+    if(d.confirmed){
+      const carry=document.createElement('button');carry.className=d.carried?'quiet':'secondary';carry.textContent=d.carried?'Nella prossima preparazione':'Porta nella prossima preparazione';
+      carry.addEventListener('click',()=>{d.carried=true;renderDecisions();showToast('Decisione aggiunta alla prossima preparazione.');});
+      actions.append(confirm,carry);
+    } else {
+      actions.append(confirm);
+    }
+    const remove=document.createElement('button');remove.className='quiet';remove.textContent='Escludi';
+    remove.addEventListener('click',()=>{decisions.splice(i,1);renderDecisions()});
+    actions.append(remove);row.append(actions);list.append(row);
+  });
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+document.getElementById('addDecision').addEventListener('click',()=>{
+  const input=document.getElementById('decisionInput');
+  if(!input.value.trim())return;
+  decisions.push({text:input.value.trim(),confirmed:false,carried:false});input.value='';renderDecisions();
+});
+document.getElementById('quickClose').addEventListener('click',()=>{
+  document.getElementById('statusText').textContent='Chiusa · nulla da segnalare';
+  document.getElementById('decisionCount').textContent='0 confermate';
+  document.getElementById('updatedText').textContent='adesso';
+  showToast('Lezione chiusa senza ulteriori azioni.');
+  closeDrawer(true);
+});
+document.getElementById('knowledgeLink').addEventListener('click',()=>{
+  document.getElementById('knowledgeState').textContent='Risorsa dimostrativa collegata · relazione: utile per il seguito';
+  showToast('Collegamento aggiunto alla riflessione');
+});
+document.getElementById('saveDraft').addEventListener('click',()=>{
+  document.getElementById('statusText').textContent='Bozza';
+  document.getElementById('updatedText').textContent='adesso';
+  showToast('Bozza salvata. Nessuna decisione è stata applicata altrove.');
+});
+document.getElementById('confirmReflection').addEventListener('click',()=>{
+  const confirmed=decisions.filter(d=>d.confirmed).length;
+  const carried=decisions.filter(d=>d.carried).length;
+  document.getElementById('statusText').textContent='Completata';
+  document.getElementById('decisionCount').textContent=(confirmed===1?'1 confermata':confirmed+' confermate')+' · '+(carried===1?'1 portata avanti':carried+' portate avanti');
+  document.getElementById('updatedText').textContent='adesso';
+  showToast(confirmed? 'Riflessione confermata. Solo le decisioni scelte con “Porta nella prossima preparazione” saranno trasferite.' : 'Riflessione confermata senza azioni per la prossima lezione.');
+  closeDrawer(true);
+});
+</script>
+</body>
+</html>

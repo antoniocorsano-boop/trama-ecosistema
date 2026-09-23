@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#061b31">
+<meta name="description" content="TRAMA Control Center: vista dinamica read-only dell'ecosistema TRAMA.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TRAMA">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icons/icon-192.svg">
+<title>TRAMA Control Center</title>
+<style>
+:root{--bg:#061b31;--panel:#0a2846;--panel2:#0d3155;--line:#155482;--text:#f4f8ff;--muted:#9fc0df;--cyan:#39c6ff;--green:#42df91;--amber:#ffbd4a;--red:#ff6a7a;--violet:#ab7cff;--blue:#5fa8ff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#041426,#082641 55%,#06182c);color:var(--text);font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:inherit;text-decoration:none}.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+aside{border-right:1px solid #12466f;background:#061a30;padding:22px 14px;position:sticky;top:0;height:100vh}.brand{font-weight:800;letter-spacing:.22em;font-size:23px;margin:0 10px 4px}.tagline{color:#55cfff;font-size:10px;letter-spacing:.14em;margin:0 10px 28px}.nav a{display:flex;gap:12px;padding:12px;border-radius:10px;color:#cfe2f3;margin:4px 0}.nav a.active,.nav a:hover{background:#0c3a63;color:white;outline:1px solid #1f78b4}.foot{position:absolute;bottom:22px;left:24px;color:#77a8cb;font-size:12px}
+main{padding:22px 26px 34px;max-width:1600px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid #194c74;padding-bottom:16px}.title h1{font-size:28px;margin:0}.title p{margin:2px 0;color:#75c8ff;font-size:16px}.live{display:flex;align-items:center;gap:9px;color:#b7d5ea}.dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
+.toolbar{display:flex;gap:10px;align-items:center;margin:18px 0;flex-wrap:wrap}.select,.search,.toggle button,.refresh{background:#0a2744;border:1px solid #1b5a89;color:#eaf5ff;border-radius:9px;padding:10px 12px}.search{min-width:280px;flex:1}.toggle{display:flex;margin-left:auto}.toggle button{border-radius:0;cursor:pointer}.toggle button:first-child{border-radius:9px 0 0 9px}.toggle button:last-child{border-radius:0 9px 9px 0}.toggle button.active{background:#1d9fe0;color:#031525;font-weight:700}.refresh{cursor:pointer}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.card,.panel{background:linear-gradient(180deg,#0b2948,#08233e);border:1px solid #155d91;border-radius:12px;box-shadow:0 12px 30px #0003}.card{padding:15px}.card .label{color:#bcd6e9;font-weight:700}.card .num{font-size:29px;font-weight:800;margin:5px 0}.card small{color:#7ca6c5}.c-green{border-color:#1ca56f}.c-violet{border-color:#7d58c9}.c-amber{border-color:#c48b22}
+.grid{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(280px,.9fr);gap:14px;margin-top:14px}.panel{padding:14px}.panel h2{font-size:18px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center}.subtle{font-size:12px;color:#8ab3d1}
+.pipeline{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.step{padding:10px 8px;border:1px solid #1774aa;border-radius:10px;min-height:116px;text-align:center}.step strong{display:block;margin:6px 0}.step p{margin:0;color:#a9c6db;font-size:12px}.badge{display:inline-block;margin-top:8px;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#113d61;border:1px solid #2479ad}.ok{color:#84f0b6;border-color:#2cc47e}.warn{color:#ffd77a;border-color:#d3941d}.human{border-color:#cf941e;background:#32281566}
+.actions{display:grid;gap:8px}.action{display:grid;grid-template-columns:26px 1fr auto;gap:9px;align-items:center;padding:10px;background:#0b2a48;border-radius:9px;border:1px solid #164e76}.prio{font-size:11px;padding:2px 7px;border-radius:999px}.high{background:#4b1c29;color:#ff9fa9}.med{background:#4a3b16;color:#ffd873}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:10px 8px;border-bottom:1px solid #164462;text-align:left;vertical-align:top}.table th{color:#93b9d5;font-size:12px}.table tr:hover{background:#0d3152}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#8cc9f4}.status{padding:4px 8px;border-radius:999px;font-weight:800;font-size:11px;display:inline-block}.s-green{background:#124a36;color:#86f1b8}.s-amber{background:#4a3916;color:#ffd36d}.s-blue{background:#123d68;color:#8ac7ff}.s-red{background:#4a1e29;color:#ff9fac}
+.timeline{display:grid;gap:10px}.event{display:grid;grid-template-columns:12px 1fr;gap:10px}.event .pin{width:10px;height:10px;background:var(--green);border-radius:50%;margin-top:5px}.event small{color:#8eb5d0}
+.rules{display:grid;gap:7px}.rule{display:flex;gap:8px;color:#bfd7e8}.empty{color:#88a9c0;padding:22px;text-align:center}.error{color:#ffc4ca;background:#451d28;padding:10px;border-radius:8px}.notice{color:#ffe29b;background:#443717;padding:10px;border-radius:8px}.footer{margin-top:18px;color:#7fa8c4;font-size:12px;display:flex;justify-content:space-between}
+.hidden{display:none!important}
+.install{border-color:#2fba82;color:#aef2cf}
+.mobile-nav{display:none}
+.mobile-prs{display:none}
+@media(max-width:1100px){.app{grid-template-columns:1fr}aside{display:none}.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(4,1fr)}}@media(max-width:980px),(hover:none) and (pointer:coarse){
+  html{scroll-behavior:smooth}
+  body{padding-bottom:calc(68px + env(safe-area-inset-bottom));overflow-x:hidden}
+  main{padding:12px 12px 28px;max-width:100vw;overflow-x:hidden}
+  .top{align-items:flex-start;flex-direction:column;gap:7px;padding-bottom:11px}
+  .title h1{font-size:21px;line-height:1.15}
+  .title p{font-size:12px;line-height:1.35}
+  .live{font-size:12px}
+  .toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0 12px}
+  .select{grid-column:1/3;width:100%}
+  .search{grid-column:1/3;min-width:0;width:100%}
+  .toggle{margin:0;grid-column:1/2;width:100%}
+  .toggle button{flex:1;padding:9px 8px}
+  .refresh{grid-column:2/3;padding:9px 12px}
+  .install{grid-column:1/3;width:100%}
+  .cards{display:flex!important;grid-template-columns:none!important;gap:9px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -12px;padding:0 12px 9px;scrollbar-width:none;overscroll-behavior-x:contain}
+  .cards::-webkit-scrollbar,.pipeline::-webkit-scrollbar{display:none}
+  .card{flex:0 0 44vw;min-width:148px;max-width:178px;scroll-snap-align:start;padding:11px 12px}
+  .card .label{font-size:12px}
+  .card .num{font-size:23px;margin:2px 0}
+  .card small{font-size:10px}
+  .grid{display:flex;flex-direction:column;gap:11px;margin-top:4px;min-width:0}.grid>*{min-width:0}
+  #actionsPanel{order:1}
+  #gate{order:2}
+  #pr{order:3}
+  #secondaryPanels{order:4}
+  .panel{padding:11px;border-radius:11px}
+  .panel h2{font-size:15px;margin-bottom:9px;gap:8px}
+  .panel h2 .subtle{font-size:10px;text-align:right}
+  .pipeline{display:flex!important;grid-template-columns:none!important;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -2px;padding:0 2px 4px;overscroll-behavior-x:contain}
+  .step{flex:0 0 155px;min-width:155px;min-height:102px;scroll-snap-align:start;padding:8px 7px}
+  .step strong{font-size:12px;margin:4px 0}
+  .step p{font-size:10px}
+  .badge{font-size:9px;margin-top:6px;padding:2px 6px}
+  .actions{gap:7px}
+  .action{grid-template-columns:22px 1fr auto;padding:9px 8px;font-size:11px}
+  .prio{font-size:9px}
+  .table-wrap{display:none!important}
+  .mobile-prs{display:grid!important;gap:8px}
+  .mobile-pr{display:block;padding:10px;background:#0b2a48;border:1px solid #164e76;border-radius:10px}
+  .mobile-pr-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+  .mobile-pr-title{font-weight:800;font-size:13px}
+  .mobile-pr-sub{display:block;color:#8fb3cd;font-size:10px;margin-top:2px}
+  .mobile-pr-meta{display:grid;grid-template-columns:1fr auto;gap:4px 8px;margin-top:8px;color:#b8d1e3;font-size:10px}
+  .timeline{gap:8px}
+  .event{font-size:11px}
+  .event small{font-size:9px}
+  .rules{font-size:11px}
+  .footer{font-size:10px;padding-bottom:6px}
+  .mobile-nav{display:grid!important;position:fixed;z-index:30;left:0;right:0;bottom:0;grid-template-columns:repeat(4,1fr);background:#061a30eF;backdrop-filter:blur(14px);border-top:1px solid #18527c;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+  .mobile-nav a,.mobile-nav button{appearance:none;border:0;background:transparent;color:#afd0e6;display:flex;flex-direction:column;align-items:center;gap:2px;font:600 10px system-ui;padding:3px}
+  .mobile-nav .icon{font-size:18px;line-height:1}
+}
+@media(max-width:380px){.card{flex-basis:48vw}.step{flex-basis:145px;min-width:145px}}
+@media(min-width:981px) and (hover:hover) and (pointer:fine){.mobile-nav{display:none!important}.mobile-prs{display:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand">TRAMA</div>
+  <div class="tagline">CONTROL CENTER · SOLA LETTURA</div>
+  <nav class="nav">
+    <a class="active" href="#panoramica">⌂ Panoramica</a>
+    <a href="#repository">▣ Repository</a>
+    <a href="#pr">⑂ Pull Request</a>
+    <a href="#gate">✓ Gate</a>
+    <a href="#canary">↗ Canary / Beta</a>
+    <a href="#documentazione">▤ Documentazione</a>
+    <a href="#roadmap">◇ Roadmap</a>
+  </nav>
+  <div class="foot"><span class="dot" style="display:inline-block;margin-right:8px"></span>API GitHub pubbliche<br>nessuna scrittura abilitata</div>
+</aside>
+<main id="panoramica">
+  <header class="top">
+    <div class="title"><h1>TRAMA Control Center</h1><p id="subtitle">Vista docente · cosa accade, cosa è verificato, cosa richiede te</p></div>
+    <div class="live"><span class="dot"></span><span id="liveText">Aggiornamento dati…</span><span id="layoutMode" class="subtle"></span></div>
+  </header>
+
+  <div class="toolbar">
+    <select id="repoFilter" class="select"><option value="all">Tutti i repository</option></select>
+    <input id="search" class="search" placeholder="Cerca PR, repository o stato…">
+    <div class="toggle"><button id="teacherBtn" class="active">Vista docente</button><button id="techBtn">Vista tecnica</button></div>
+    <button id="refresh" class="refresh">↻ Aggiorna</button>
+    <button id="installBtn" class="refresh install hidden">⇩ Installa app</button>
+  </div>
+
+  <section class="cards">
+    <div class="card"><div class="label">Repository attivi</div><div class="num" id="repoCount">4</div><small>nell’ecosistema TRAMA</small></div>
+    <div class="card c-green"><div class="label">PR aperte</div><div class="num" id="openCount">–</div><small>nei repository monitorati</small></div>
+    <div class="card c-violet"><div class="label">Gate / workflow recenti</div><div class="num" id="runCount">–</div><small>ultimi controlli osservati</small></div>
+    <div class="card c-green"><div class="label">PASS recenti</div><div class="num" id="passCount">–</div><small>workflow conclusi con successo</small></div>
+    <div class="card c-amber"><div class="label">Priorità correnti</div><div class="num" id="priorityCount">–</div><small>dal piano canonico TRAMA</small></div>
+  </section>
+
+  <div class="grid">
+    <section class="panel" id="gate">
+      <h2>Flusso live del TRAMA Ecosistema <span class="subtle">automatico ↔ decisione umana ↔ automatico</span></h2>
+      <div class="pipeline">
+        <div class="step"><div>①</div><strong>Branch</strong><p>si prepara una modifica</p><span class="badge">TRACCIATO</span></div>
+        <div class="step"><div>②</div><strong>Pull Request</strong><p>la proposta è visibile</p><span class="badge" id="pipePr">–</span></div>
+        <div class="step"><div>③</div><strong>Controlli automatici</strong><p>governance, CI, test</p><span class="badge ok" id="pipeChecks">LIVE</span></div>
+        <div class="step human"><div>④</div><strong>Review umana</strong><p>decisione sull’exact head</p><span class="badge warn">DECISIONE UMANA</span></div>
+        <div class="step"><div>⑤</div><strong>Merge</strong><p>entra nel ramo principale</p><span class="badge">GOVERNATO</span></div>
+        <div class="step"><div>⑥</div><strong>Canary / Beta</strong><p>verifica sul runtime reale</p><span class="badge ok">CANARY-FIRST</span></div>
+        <div class="step"><div>⑦</div><strong>Documentazione</strong><p>si aggiorna lo stato canonico</p><span class="badge">MEMORIA</span></div>
+      </div>
+    </section>
+
+    <section class="panel" id="actionsPanel">
+      <h2>Cosa devo fare adesso <span class="subtle">dal piano TRAMA</span></h2>
+      <div id="actions" class="actions"><div class="empty">Caricamento priorità…</div></div>
+    </section>
+
+    <section class="panel" id="pr">
+      <h2 id="tableTitle">Pull request in evidenza <span class="subtle">clicca una riga per aprire GitHub</span></h2>
+      <div id="prCards" class="mobile-prs"></div><div class="table-wrap"><table class="table"><thead id="thead"></thead><tbody id="prRows"></tbody></table></div>
+    </section>
+
+    <div id="secondaryPanels">
+      <section class="panel" id="eventsPanel" style="margin-bottom:14px">
+        <h2>Eventi recenti <span class="subtle">workflow GitHub</span></h2>
+        <div id="events" class="timeline"><div class="empty">Caricamento eventi…</div></div>
+      </section>
+      <section class="panel">
+        <h2>Regole chiave TRAMA</h2>
+        <div class="rules">
+          <div class="rule">✓ <span>Nessuna write silenziosa</span></div>
+          <div class="rule">✓ <span>Nessuna approvazione implicita</span></div>
+          <div class="rule">✓ <span>Nessuna promozione senza evidenza</span></div>
+          <div class="rule">✓ <span>Review sull’exact head</span></div>
+          <div class="rule">✓ <span>DOS-A1 = RUNTIME_DEFERRED</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div id="errorBox"></div>
+  <footer class="footer"><span>TRAMA · Control Center in sola lettura</span><span id="updated">–</span></footer>
+</main>
+<nav class="mobile-nav" aria-label="Navigazione rapida">
+  <a href="#panoramica"><span class="icon">⌂</span><span>Home</span></a>
+  <a href="#actionsPanel"><span class="icon">◎</span><span>Azioni</span></a>
+  <a href="#pr"><span class="icon">⑂</span><span>PR</span></a>
+  <a href="#eventsPanel"><span class="icon">◷</span><span>Eventi</span></a>
+</nav>
+</div>
+<script>
+const REPOS=[
+ {key:'TRAMA',repo:'antoniocorsano-boop/trama-ecosistema',color:'#39c6ff'},
+ {key:'Arena',repo:'antoniocorsano-boop/CurManLight_arena',color:'#42df91'},
+ {key:'Atlas',repo:'antoniocorsano-boop/Curriculum-Atlas',color:'#ab7cff'},
+ {key:'Docente OS',repo:'antoniocorsano-boop/docente-os-2026-27',color:'#ffbd4a'}
+];
+const state={mode:'teacher',prs:[],runs:[],priorities:[],filter:'all',search:'',health:'loading',failedSources:[],lastSuccessAt:null};
+const SNAPSHOT_KEY='trama-control-center-public-snapshot-v1';
+const api=async path=>{const r=await fetch('https://api.github.com'+path,{headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw new Error('GitHub API '+r.status);return r.json()};
+const raw=async url=>{const r=await fetch(url);if(!r.ok)throw new Error('Documento '+r.status);return r.text()};
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const ago=d=>{const s=Math.max(0,(Date.now()-new Date(d))/1000);if(s<60)return 'ora';if(s<3600)return Math.floor(s/60)+' min fa';if(s<86400)return Math.floor(s/3600)+' h fa';return Math.floor(s/86400)+' g fa'};
+function statusOf(pr){if(pr.merged_at)return['Integrata','s-green'];if(pr.draft)return['Bozza','s-amber'];if(pr.state==='open')return['Aperta','s-blue'];return['Chiusa','s-red']}
+function humanNext(pr){if(pr.draft)return 'Completare la proposta';if(pr.state==='open')return 'Controllare gate / review';return pr.merged_at?'Nessuna azione':'Verificare esito'}
+function parsePriorities(md){
+ const marker='### Priorità canonica corrente'; const i=md.indexOf(marker); if(i<0)return[];
+ const chunk=md.slice(i,i+2500); const arr=[]; for(const line of chunk.split('\n')){const m=line.match(/^\d+\.\s+\*\*(.+?)\*\*(.*)$/);if(m)arr.push((m[1]+m[2]).replace(/\[(.*?)\]\(.*?\)/g,'$1').trim())}
+ return arr.slice(0,6)
+}
+function readSnapshot(){
+ try{return JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'null')}catch{return null}
+}
+function snapshotRows(snap,type,repoKey){
+ if(!snap)return[];
+ const rows=type==='prs'?snap.prs:snap.runs;
+ return (rows||[]).filter(x=>x?._repo?.key===repoKey)
+}
+function setHealth(kind,failed=[]){
+ state.health=kind;state.failedSources=failed;
+ const textEl=document.getElementById('liveText');
+ const dot=document.querySelector('.live .dot');
+ const box=document.getElementById('errorBox');
+ const snap=readSnapshot();
+ if(kind==='offline'){
+   textEl.textContent='Offline · ultimo stato disponibile';
+   dot.style.background='var(--amber)';
+   box.innerHTML='<div class="notice">Dispositivo offline: visualizzo l’ultimo stato pubblico salvato su questo dispositivo.</div>';
+   return;
+ }
+ if(kind==='degraded'){
+   textEl.textContent='Connessione attiva · GitHub non completamente aggiornato';
+   dot.style.background='var(--amber)';
+   const names=[...new Set(failed.map(x=>x.label))];
+   const when=snap?.savedAt?' Ultimo snapshot completo: '+new Date(snap.savedAt).toLocaleString('it-IT')+'.':'';
+   box.innerHTML='<div class="notice">La connessione Internet è attiva, ma '+names.length+' fonte'+(names.length===1?'':'i')+' GitHub non '+(names.length===1?'è':'sono')+' stata'+(names.length===1?'':'e')+' aggiornata'+(names.length===1?'':'e')+'. Mostro i dati disponibili e, dove necessario, l’ultimo dato salvato.'+when+'</div>';
+   return;
+ }
+ if(kind==='error'){
+   textEl.textContent='Connessione attiva · aggiornamento GitHub non riuscito';
+   dot.style.background='var(--red)';
+   box.innerHTML='<div class="error">Internet risulta disponibile, ma GitHub non ha restituito dati utilizzabili. Riprova con “Aggiorna”.</div>';
+   return;
+ }
+ textEl.textContent='Dati GitHub aggiornati';
+ dot.style.background='var(--green)';
+ box.innerHTML='';
+}
+async function load(){
+ document.getElementById('liveText').textContent='Aggiornamento in corso…';
+ document.getElementById('errorBox').innerHTML='';
+ if(!navigator.onLine){
+   const snap=readSnapshot();
+   if(snap?.prs&&snap?.runs){state.prs=snap.prs;state.runs=snap.runs;state.priorities=snap.priorities||[];render();document.getElementById('updated').textContent='Ultimo stato salvato '+new Date(snap.savedAt).toLocaleString('it-IT')}
+   setHealth('offline');
+   return;
+ }
+ const snap=readSnapshot();
+ const work=REPOS.flatMap(r=>[
+   api('/repos/'+r.repo+'/pulls?state=all&sort=updated&direction=desc&per_page=12')
+     .then(x=>({ok:true,type:'prs',r,x}))
+     .catch(error=>({ok:false,type:'prs',r,error})),
+   api('/repos/'+r.repo+'/actions/runs?per_page=12')
+     .then(x=>({ok:true,type:'runs',r,x}))
+     .catch(error=>({ok:false,type:'runs',r,error}))
+ ]);
+ const [all,statusResult]=await Promise.all([
+   Promise.all(work),
+   raw('https://raw.githubusercontent.com/antoniocorsano-boop/trama-ecosistema/main/STATUS.md')
+     .then(x=>({ok:true,x}))
+     .catch(error=>({ok:false,error}))
+ ]);
+ state.prs=[];state.runs=[];
+ const failed=[];
+ let successCount=0;
+ all.forEach(z=>{
+   if(z.ok){
+     successCount++;
+     if(z.type==='prs')z.x.forEach(p=>state.prs.push({...p,_repo:z.r}));
+     else (z.x.workflow_runs||[]).forEach(w=>state.runs.push({...w,_repo:z.r}));
+   }else{
+     failed.push({label:z.r.key+' '+(z.type==='prs'?'PR':'workflow'),error:z.error?.message||'errore'});
+     const cached=snapshotRows(snap,z.type,z.r.key);
+     if(z.type==='prs')state.prs.push(...cached);else state.runs.push(...cached);
+   }
+ });
+ state.prs.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
+ state.runs.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+ if(statusResult.ok)state.priorities=parsePriorities(statusResult.x);
+ else{
+   failed.push({label:'priorità TRAMA',error:statusResult.error?.message||'errore'});
+   state.priorities=snap?.priorities||[];
+ }
+ render();
+ if(successCount===REPOS.length*2&&statusResult.ok){
+   const savedAt=new Date().toISOString();
+   state.lastSuccessAt=savedAt;
+   try{localStorage.setItem(SNAPSHOT_KEY,JSON.stringify({savedAt,prs:state.prs,runs:state.runs,priorities:state.priorities}))}catch{}
+   document.getElementById('updated').textContent='Aggiornato '+new Date(savedAt).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+   setHealth('fresh');
+ }else if(successCount>0 || (snap?.prs&&snap?.runs)){
+   document.getElementById('updated').textContent=snap?.savedAt?'Ultimo snapshot completo '+new Date(snap.savedAt).toLocaleString('it-IT'):'Aggiornamento parziale';
+   setHealth('degraded',failed);
+ }else{
+   setHealth('error',failed);
+ }
+}
+function filteredPrs(){return state.prs.filter(p=>(state.filter==='all'||p._repo.key===state.filter)&&(!state.search||((p.title+' '+p.number+' '+p._repo.key+' '+p.state).toLowerCase().includes(state.search))))}
+function render(){
+ const open=state.prs.filter(p=>p.state==='open').length, recent=state.runs.slice(0,30), pass=recent.filter(r=>r.conclusion==='success').length;
+ document.getElementById('openCount').textContent=open;document.getElementById('runCount').textContent=recent.length;document.getElementById('passCount').textContent=pass;document.getElementById('priorityCount').textContent=state.priorities.length||3;document.getElementById('pipePr').textContent=open+' APERTE';
+ renderActions();renderTable();renderEvents()
+}
+function renderActions(){
+ const a=document.getElementById('actions');const items=state.priorities.length?state.priorities:[
+   'Chiudere ECO-02/P1 con il collaudo umano finale','Chiudere R3-F0/S3 Atlas','Consolidare Atlas con R3-P2 e R3-P5'
+ ];
+ a.innerHTML=items.slice(0,5).map((x,i)=>'<div class="action"><strong>'+(i+1)+'</strong><span>'+esc(x)+'</span><span class="prio '+(i<2?'high':'med')+'">'+(i<2?'Alta':'Media')+'</span></div>').join('')
+}
+function renderTable(){
+ const tech=state.mode==='tech';document.getElementById('subtitle').textContent=tech?'Vista tecnica · exact head, workflow e stato dei gate':'Vista docente · cosa accade, cosa è verificato, cosa richiede te';
+ document.getElementById('tableTitle').innerHTML=(tech?'Pull request ed exact head':'Pull request in evidenza')+' <span class="subtle">clicca una riga per aprire GitHub</span>';
+ document.getElementById('thead').innerHTML=tech?'<tr><th>PR</th><th>Repository</th><th>Exact head</th><th>Stato</th><th>Prossimo passo</th><th>Aggiornato</th></tr>':'<tr><th>PR</th><th>Repository</th><th>Stato</th><th>Cosa significa per te</th><th>Aggiornato</th></tr>';
+ const rows=filteredPrs().slice(0,10); const body=document.getElementById('prRows');
+ const cards=document.getElementById('prCards');
+ if(!rows.length){body.innerHTML='<tr><td colspan="6" class="empty">Nessuna pull request corrisponde ai filtri.</td></tr>';cards.innerHTML='<div class="empty">Nessuna pull request corrisponde ai filtri.</div>';return}
+ cards.innerHTML=rows.map(p=>{const [st,cl]=statusOf(p),sha=p.head?.sha?.slice(0,9)||'–',next=humanNext(p);
+   return '<a class="mobile-pr" href="'+esc(p.html_url)+'" target="_blank"><div class="mobile-pr-top"><div><span class="mobile-pr-title">'+esc(p._repo.key)+' #'+p.number+'</span><span class="mobile-pr-sub">'+esc(p.title)+'</span></div><span class="status '+cl+'">'+st+'</span></div><div class="mobile-pr-meta"><span>'+esc(next)+'</span><span>'+ago(p.updated_at)+'</span>'+(tech?'<span class="mono">'+sha+'</span><span>'+esc(p._repo.key)+'</span>':'')+'</div></a>'
+ }).join('');
+ body.innerHTML=rows.map(p=>{const [st,cl]=statusOf(p),sha=p.head?.sha?.slice(0,9)||'–',next=humanNext(p);
+  const common='<td><a href="'+esc(p.html_url)+'" target="_blank"><strong>'+esc(p._repo.key)+' #'+p.number+'</strong><br><span class="subtle">'+esc(p.title)+'</span></a></td><td>'+esc(p._repo.key)+'</td>';
+  return '<tr>'+common+(tech?'<td class="mono">'+sha+'</td><td><span class="status '+cl+'">'+st+'</span></td><td>'+esc(next)+'</td><td>'+ago(p.updated_at)+'</td>':'<td><span class="status '+cl+'">'+st+'</span></td><td>'+esc(next)+'</td><td>'+ago(p.updated_at)+'</td>')+'</tr>'
+ }).join('')
+}
+function renderEvents(){
+ const ev=document.getElementById('events'),runs=state.runs.filter(r=>state.filter==='all'||r._repo.key===state.filter).slice(0,8);
+ if(!runs.length){ev.innerHTML='<div class="empty">Nessun workflow recente.</div>';return}
+ ev.innerHTML=runs.map(r=>'<a class="event" href="'+esc(r.html_url)+'" target="_blank"><span class="pin" style="background:'+(r.conclusion==='success'?'#42df91':r.status==='in_progress'?'#ffbd4a':'#5fa8ff')+'"></span><span><strong>'+esc(r.name)+'</strong><br><small>'+esc(r._repo.key)+' · '+esc(r.status)+(r.conclusion?' · '+esc(r.conclusion):'')+' · '+ago(r.created_at)+'</small></span></a>').join('')
+}
+document.getElementById('teacherBtn').onclick=()=>{state.mode='teacher';teacherBtn.classList.add('active');techBtn.classList.remove('active');renderTable()};
+document.getElementById('techBtn').onclick=()=>{state.mode='tech';techBtn.classList.add('active');teacherBtn.classList.remove('active');renderTable()};
+document.getElementById('refresh').onclick=load;
+document.getElementById('repoFilter').onchange=e=>{state.filter=e.target.value;render()};
+document.getElementById('search').oninput=e=>{state.search=e.target.value.toLowerCase().trim();renderTable()};
+REPOS.forEach(r=>{const o=document.createElement('option');o.value=r.key;o.textContent=r.key;repoFilter.appendChild(o)});
+
+let deferredInstall=null;
+const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;installBtn.classList.remove('hidden')});
+installBtn.onclick=async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;installBtn.classList.add('hidden')};
+window.addEventListener('appinstalled',()=>installBtn.classList.add('hidden'));
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+function applyLayoutMarker(){const mobile=window.matchMedia('(max-width:980px), (hover:none) and (pointer:coarse)').matches;document.documentElement.dataset.layout=mobile?'mobile':'desktop';const el=document.getElementById('layoutMode');if(el)el.textContent=mobile?'· mobile':''}
+window.addEventListener('resize',applyLayoutMarker);applyLayoutMarker();
+function connectivity(){
+ if(!navigator.onLine){setHealth('offline');return}
+ if(state.health==='offline')load();
+}
+window.addEventListener('online',()=>load());
+window.addEventListener('offline',()=>setHealth('offline'));
+load();
+</script>
+</body></html>
