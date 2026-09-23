@@ -134,7 +134,8 @@ textarea{width:100%;min-height:104px;border:1px solid var(--border);border-radiu
 <div class="drawer-backdrop" id="backdrop">
   <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="reflectionTitle">
     <div class="drawer-head">
-      <div><div class="eyebrow">Dopo la lezione · 2C Tecnologia</div><h2 id="reflectionTitle">Com’è andata?</h2><p class="help">Tre passaggi. Puoi fermarti quando hai scritto ciò che ti serve.</p></div>
+      <div><div class="eyebrow">Dopo la lezione · 2C Tecnologia</div><h2 id="reflectionTitle">Com’è andata?</h2><p class="help">Puoi chiudere in pochi secondi oppure approfondire nei tre passaggi.</p>
+      <div class="action-row"><button class="secondary" id="quickClose">Tutto regolare · chiudi</button></div></div>
       <button class="iconbtn" id="closeReflection" aria-label="Chiudi">×</button>
     </div>
 
@@ -209,7 +210,16 @@ function closeDrawer(){
 openBtn.addEventListener('click',openDrawer);
 closeBtn.addEventListener('click',closeDrawer);
 backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeDrawer()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&backdrop.classList.contains('open'))closeDrawer()});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&backdrop.classList.contains('open'))closeDrawer();
+  if(e.key==='Tab'&&backdrop.classList.contains('open')){
+    const items=[...backdrop.querySelectorAll('button,textarea,[href],input,select,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled);
+    if(!items.length)return;
+    const first=items[0],last=items[items.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+});
 
 document.querySelectorAll('.chip').forEach(btn=>btn.addEventListener('click',()=>{
   const box=document.getElementById('observations');
@@ -232,16 +242,30 @@ function renderDecisions(){
     const actions=document.createElement('div');actions.className='action-row';
     const confirm=document.createElement('button');confirm.className=d.confirmed?'quiet':'secondary';confirm.textContent=d.confirmed?'Confermata':'Conferma';
     confirm.addEventListener('click',()=>{d.confirmed=true;renderDecisions()});
+    if(d.confirmed){
+      const carry=document.createElement('button');carry.className=d.carried?'quiet':'secondary';carry.textContent=d.carried?'Nella prossima preparazione':'Porta nella prossima preparazione';
+      carry.addEventListener('click',()=>{d.carried=true;renderDecisions();showToast('Decisione aggiunta alla prossima preparazione.');});
+      actions.append(confirm,carry);
+    } else {
+      actions.append(confirm);
+    }
     const remove=document.createElement('button');remove.className='quiet';remove.textContent='Escludi';
     remove.addEventListener('click',()=>{decisions.splice(i,1);renderDecisions()});
-    actions.append(confirm,remove);row.append(actions);list.append(row);
+    actions.append(remove);row.append(actions);list.append(row);
   });
 }
 function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 document.getElementById('addDecision').addEventListener('click',()=>{
   const input=document.getElementById('decisionInput');
   if(!input.value.trim())return;
-  decisions.push({text:input.value.trim(),confirmed:false});input.value='';renderDecisions();
+  decisions.push({text:input.value.trim(),confirmed:false,carried:false});input.value='';renderDecisions();
+});
+document.getElementById('quickClose').addEventListener('click',()=>{
+  document.getElementById('statusText').textContent='Chiusa · nulla da segnalare';
+  document.getElementById('decisionCount').textContent='0 confermate';
+  document.getElementById('updatedText').textContent='adesso';
+  showToast('Lezione chiusa senza ulteriori azioni.');
+  closeDrawer();
 });
 document.getElementById('knowledgeLink').addEventListener('click',()=>{
   document.getElementById('knowledgeState').textContent='Risorsa dimostrativa collegata · relazione: utile per il seguito';
@@ -254,10 +278,11 @@ document.getElementById('saveDraft').addEventListener('click',()=>{
 });
 document.getElementById('confirmReflection').addEventListener('click',()=>{
   const confirmed=decisions.filter(d=>d.confirmed).length;
+  const carried=decisions.filter(d=>d.carried).length;
   document.getElementById('statusText').textContent='Rivista dal docente';
-  document.getElementById('decisionCount').textContent=confirmed+' confermate';
+  document.getElementById('decisionCount').textContent=confirmed+' confermate · '+carried+' portate avanti';
   document.getElementById('updatedText').textContent='adesso';
-  showToast(confirmed? 'Riflessione confermata. Le decisioni restano da applicare esplicitamente.' : 'Riflessione confermata senza azioni per la prossima lezione.');
+  showToast(confirmed? 'Riflessione confermata. Solo le decisioni scelte con “Porta nella prossima preparazione” saranno trasferite.' : 'Riflessione confermata senza azioni per la prossima lezione.');
   closeDrawer();
 });
 </script>
