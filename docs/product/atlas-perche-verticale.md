@@ -6,6 +6,21 @@
 **Collegamento prodotto:** R3-F0/S3-V2, F3 Materiali + Risorse  
 **Target educativo:** scuola dell'infanzia e primo ciclo, 3–14 anni
 
+## Assurance Summary
+
+| Campo | Valore |
+| --- | --- |
+| Artifact ID | ATLAS-PERCHÉ-01 |
+| Scope | baseline di ricerca e progettazione per attività Atlas 3–14 anni |
+| Scientific basis | **PARTIAL / DIFFERENZIATA E1-E3** |
+| Normative context | **VERIFIED come contesto curricolare / nessuna certificazione generale** |
+| Evidence pack | [Evidence Register separato](../research/evidence/atlas-perche-01-evidence-register.md) |
+| Standard di tracciabilità | [TRAMA-EVIDENCE-01](../assurance/trama-evidence-01.md) |
+| Runtime effect | **NONE / NO_RUNTIME_AUTHORIZATION** |
+| Open gaps | efficacia causale, validazione cross-discipline, pilot reali, rights/accessibility per asset concreti |
+| Independent review | **PENDING sull'exact head corrente**; review precedente conservata come evidenza storica |
+| Last verified | 2026-09-23 |
+
 ## 1. Decisione proposta
 
 Atlas introduce una famiglia trasversale di attività orientate ad allenare progressivamente la capacità di:
@@ -453,7 +468,23 @@ Ogni prototipo deve essere collaudato:
 - con osservazione del carico cognitivo;
 - verificando che la tecnologia non sostituisca l'attività cognitiva.
 
-## 20. Gate prima dell'implementazione
+## 20. Traceability matrix — ricerca / contesto / design
+
+| Req ID | Claim / requisito | Source IDs | Derivation | Verification | Stato |
+| --- | --- | --- | --- | --- | --- |
+| AP-R1 | metacognizione integrata nel curricolo come base del progetto | SCI-AP-01 | DIRECT / evidence-informed guidance | review indipendente + pilot futuri | VERIFIED come base, non come efficacia Atlas |
+| AP-R2 | inquiry: domanda, investigazione, evidenza, spiegazione e argomentazione | SCI-AP-04 | DIRECT | review indipendente + binding Arena | VERIFIED come framework |
+| AP-R3 | thinking routines come pattern di supporto a osservazione/spiegazione | SCI-AP-02 | ADAPTED | review pedagogica | PARTIAL |
+| AP-R4 | QFT come riferimento per formulazione/uso delle domande | SCI-AP-03 | ADAPTED | review pedagogica | PARTIAL |
+| AP-R5 | attività ludiche e funzioni esecutive nelle età basse | SCI-AP-05 | ADAPTED | pilot P1 | PARTIAL |
+| AP-R6 | dialogo strutturato / philosophical inquiry | SCI-AP-06 | ADAPTED / context-dependent | pilot + review | PARTIAL |
+| AP-R7 | archetipi A1-A12 e progressione Atlas 3–14 | SCI-AP-01, SCI-AP-04 | **DESIGN_RULE / HYPOTHESIS E3** | pilot P1-P5 | GAP / TO_VALIDATE |
+| AP-R8 | compatibilità con Indicazioni nazionali | POL-IT-AP-01 | CONTEXTUAL; binding effettivo resta Arena | review curricolare | PARTIAL |
+| AP-R9 | target WCAG 2.2 AA | STD-AP-01 | DESIGN_REQUIREMENT | test accessibilità su artefatti reali | PARTIAL |
+| AP-R10 | nessun account/tracking studente e stato locale | governance TRAMA + privacy-first | DESIGN_RULE | test browser/privacy futuro | PROPOSED |
+| AP-R11 | ActivityPackage v1 rappresenta i cinque pilot | evidenza interna P1-P5 | HYPOTHESIS / EXPERIMENTAL CONTRACT | schema tests + pilot | TO_VALIDATE |
+
+## 21. Gate prima dell'implementazione
 
 Prima di introdurre `ActivityPackage v1` nel runtime:
 
