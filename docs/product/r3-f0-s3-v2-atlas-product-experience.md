@@ -1,7 +1,7 @@
 # R3-F0/S3-V2 — Atlas Product Experience Prototype
 
 **Data:** 22 settembre 2026  
-**Stato:** PROPOSED / PRODUCT_IMPLEMENTATION_PLAN / NO_CROSS_PRODUCT_RUNTIME  
+**Stato:** ACTIVE / F0-F2 INTEGRATED / NO_CROSS_PRODUCT_RUNTIME  
 **Parent:** R3-F0/S3  
 **Supersede:** S3-V1 come prototipo di prodotto; S3-V1 resta harness tecnico/accessibilità  
 **Prodotto:** Atlas
@@ -335,7 +335,7 @@ Budget iniziale:
 
 ## 12. Slice di implementazione
 
-### S3-V2/F0 — Foundation
+### S3-V2/F0 — Foundation · INTEGRATED
 - app shell;
 - routing;
 - theme/tokens;
@@ -344,7 +344,7 @@ Budget iniziale:
 - test componenti;
 - responsive shell.
 
-### S3-V2/F1 — Curricolo + contesto pubblico materiali
+### S3-V2/F1 — Curricolo + contesto pubblico materiali · INTEGRATED
 - curricolo verticale di istituto;
 - aree/dipartimenti;
 - discipline;
@@ -356,14 +356,14 @@ Budget iniziale:
 - provenance Arena;
 - modello pubblico classe → disciplina → lezione → materiali, senza dati personali.
 
-### S3-V2/F2 — Esplora
+### S3-V2/F2 — Esplora · INTEGRATED
 - canvas relazionale;
 - filtri;
 - semantic zoom;
 - pannello contestuale;
 - equivalente elenco.
 
-### S3-V2/F3 — Materiali + Risorse
+### S3-V2/F3 — Materiali + Risorse · NEXT
 - browser pubblico classe → disciplina → lezione;
 - materiali pubblicati;
 - resource catalog;
@@ -415,3 +415,17 @@ S3-V2 non autorizza:
 - DOS-A1;
 - automazione di adozione;
 - scrittura su Arena.
+## 15. Stato implementativo corrente
+
+Integrato in `Curriculum-Atlas`:
+
+- **F0 Foundation** — merge `68ba12e06cddd781c28d38e8cd5eab24216ed9fb`;
+- **F1 Curricolo verticale d’istituto + Materiali pubblici di base** — merge `ec0c2e0c89e7d1ac56c3cfb3b00ca66a3f51f869`;
+- **F2 Esplora** — merge `973429968d480eeeaf31362a9c6da7f18fed50e3`.
+
+F2 è stato validato sull’exact head `c8f0fc6967694391dbfe5510660f8d1007818b77` con Foundation, TRAMA Perceptible Write, F1 Visual Evidence e F2 Visual Evidence PASS. L’evidenza F2 comprende Mappa/Elenco su mobile e desktop, controllo overflow e layout mobile verticale dedicato.
+
+**Prossimo slice: F3 Materiali + Risorse.**
+
+Questa avanzamento non autorizza dati Arena live, pubblicazione Docente OS → Atlas, account studenti, tracking individuale, R3-P4 o DOS-A1.
+
