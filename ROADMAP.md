@@ -140,6 +140,28 @@ Stato proposto: **HUMAN REVIEW REQUIRED / RUNTIME NOT AUTHORIZED**.
 - nessuna pubblicazione o adozione automatica.
 
 
+### R4-P2 — Professional Practice
+
+Stato: **DESIGN AUTHORIZED / RUNTIME NOT AUTHORIZED**.
+
+Obiettivo: consolidare Docente OS come ambiente di professionalità docente continua, mantenendo il docente come decisore e l'IA come capacità advisory.
+
+Primo slice: **R4-P2/S1 — Reflective Lesson Continuity**.
+
+- diario riflessivo strutturato collegato alle lezioni;
+- distinzione tra osservazione, riflessione e decisione;
+- continuità verso la preparazione successiva;
+- collegamento contestuale con Conoscenza;
+- assistente professionale contestuale teacher-editable;
+- `KnowledgeResource != TeachingMaterial`;
+- nessuna scrittura silenziosa;
+- nessun nuovo runtime cross-product;
+- DOS-A1 resta `RUNTIME_DEFERRED`.
+
+La progettazione e la prototipazione `NO_RUNTIME` sono autorizzate in parallelo ai cantieri correnti. L'implementazione runtime richiede un gate distinto.
+
+Riferimento: `docs/product/r4-p2-professional-practice.md`.
+
 ### TRAMA-SA-01 — TypeSafe semantic assurance pilot
 
 Stato proposto: HUMAN REVIEW REQUIRED.
@@ -184,6 +206,7 @@ La roadmap deve essere letta con questa priorità:
 
 1. chiusura verificata di ECO-02/P1;
 2. chiusura R3-F0/S3;
+   - in parallelo è consentita la sola progettazione NO_RUNTIME di R4-P2/S1 Professional Practice;
 3. R3-P2 Curriculum pubblico;
 4. R3-P5 Smart Navigation;
 5. continuità d'esperienza Docente OS ↔ Arena ↔ Atlas senza rendere Atlas un passaggio obbligatorio;
