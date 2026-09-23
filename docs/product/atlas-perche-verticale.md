@@ -21,6 +21,14 @@
 | Independent review | **PENDING sull'exact head corrente**; review precedente conservata come evidenza storica |
 | Last verified | 2026-09-23 |
 
+## 0. Posizionamento nella vision TRAMA
+
+ATLAS-PERCHÉ non è un prodotto separato. È il primo caso di studio con cui TRAMA verifica se Atlas può evolvere da superficie di pubblicazione di materiali a superficie capace di pubblicare anche **attività didattiche eseguibili**, restando pubblica, privacy-first, curricolarmente collegata e governata dal docente.
+
+La vision completa e le frasi-cardine che spiegano questa relazione sono conservate in [TRAMA — Filosofia in sviluppo](../vision/philosophy-in-development.md).
+
+ATLAS-PERCHÉ va quindi letto come **reference implementation** di una capacità Atlas, non come deviazione dalla roadmap F3 Materiali + Risorse.
+
 ## 1. Decisione proposta
 
 Atlas introduce una famiglia trasversale di attività orientate ad allenare progressivamente la capacità di:
