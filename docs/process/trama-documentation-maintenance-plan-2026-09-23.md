@@ -4,7 +4,7 @@
 **Stato:** DOCUMENTATION GOVERNANCE / NON NORMATIVE FOR PRODUCT SEQUENCING  
 **Scopo:** evitare duplicazioni, disallineamenti e perdita di provenienza nella documentazione dell’ecosistema.
 
-> La sequenza operativa di prodotto resta definita da [Piano operativo atomico](./atomic-operating-plan-2026-09-22.md).  
+> La sequenza operativa di prodotto resta definita da [Piano operativo atomico](../strategy/atomic-operating-plan-2026-09-22.md).  
 > Lo stato corrente resta definito da [STATUS.md](../../STATUS.md).  
 > Questo documento governa soltanto il mantenimento delle fonti e degli asset documentali.
 
