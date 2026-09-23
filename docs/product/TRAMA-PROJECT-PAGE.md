@@ -55,6 +55,8 @@ Rende pubblici e navigabili curricolo, lezioni, materiali, attività e percorsi.
 
 ## Stato corrente
 
+Questa sezione è una **fotografia sintetica al 23 settembre 2026**. Per lo stato aggiornato fa fede [`STATUS.md`](../../STATUS.md).
+
 - Arena: operativa come authority curricolare.
 - Docente OS: operativo nel proprio dominio.
 - Atlas R3-F0/S3-V2: attivo.
@@ -63,22 +65,18 @@ Rende pubblici e navigabili curricolo, lezioni, materiali, attività e percorsi.
 - Docente OS → Atlas automatico: **non autorizzato**.
 - DOS-A1: **RUNTIME_DEFERRED**.
 
-## Roadmap sintetica
+## Priorità operative
 
-1. Chiudere ECO-02/P1 con collaudo umano reale.
-2. Completare Atlas F3 Materiali+Risorse.
-3. Validare F4 Mobile+LIM.
-4. Chiudere F5 Exit.
-5. Consolidare la catena curricolo → materiali/attività.
-6. Valutare separatamente le evoluzioni R3-P2/P3/P5/P6.
-7. Qualunque R3-P4 richiede una nuova autorizzazione esplicita.
+La sequenza canonica non è definita in questa pagina. Fa fede il [Piano operativo atomico](../strategy/atomic-operating-plan-2026-09-22.md), richiamato anche da `STATUS.md`.
+
+In sintesi, la direzione corrente privilegia: chiusura delle prove reali già aperte, completamento dell’esperienza Atlas e successivo consolidamento prima di nuove capacità. Qualunque R3-P4 richiede una nuova autorizzazione esplicita.
 
 ## Asset ufficiali della baseline
 
-- **Metafora atomica istituzionale** — identità e significato dell’ecosistema.
-- **Tavola tecnica** — authority, flussi, gate e modello L1–L4.
-- **Dossier ufficiale** — lettura estesa di vision, governance, stato e roadmap.
-- **Baseline repository** — fonte testuale versionata per sviluppo e review.
+- **Metafora atomica istituzionale** — asset di baseline per identità e significato dell’ecosistema.
+- **Tavola tecnica** — asset complementare per authority, flussi, gate e modello L1–L4.
+- **Dossier ufficiale** — documento di supporto narrativo e architetturale.
+- **Baseline repository** — sintesi versionata e indice delle fonti canoniche.
 
 Gli asset non sostituiscono ADR, contratti, `STATUS.md` o specifiche tecniche.
 
@@ -94,7 +92,8 @@ Gli asset non sostituiscono ADR, contratti, `STATUS.md` o specifiche tecniche.
 
 - [Baseline ecosistema](../vision/TRAMA-ECOSYSTEM-BASELINE-2026-09-23.md)
 - [Atlas Mockup V2](../design/atlas-mockup-v2-vision-alignment.md)
-- [Roadmap documentale e operativa](../strategy/trama-documentation-operating-roadmap-2026-09-23.md)
+- [Piano operativo atomico](../strategy/atomic-operating-plan-2026-09-22.md)
+- [Piano di manutenzione documentale](../process/trama-documentation-maintenance-plan-2026-09-23.md)
 - [Stato corrente](../../STATUS.md)
 
 ## Regola di mantenimento
