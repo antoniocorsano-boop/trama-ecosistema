@@ -37,6 +37,7 @@ Lo stato sintetico è in [STATUS.md](STATUS.md). Le decisioni vincolanti sono re
 6. [Governo](GOVERNANCE.md)
 7. [Roadmap](ROADMAP.md)
 8. [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md)
+9. [Riferimento scientifico IA generativa e competenza professionale docente](docs/research/trama-rsr-01-genai-language-teaching.md)
 
 ## Verifica locale
 
