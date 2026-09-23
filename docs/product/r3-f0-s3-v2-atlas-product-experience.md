@@ -443,9 +443,9 @@ Atlas deve mostrare non soltanto la struttura del curricolo, ma il modo in cui i
 - attività;
 - percorsi.
 
-ATLAS-PERCHÉ è assunto come reference implementation sperimentale del pattern **LearningActivity**, non come roadmap autonoma.
+ATLAS-PERCHÉ è assunto come reference implementation sperimentale del pattern **LearningActivity**, non come roadmap autonoma e **non come nuovo exit criterion di S3**.
 
-Per F3–F5 il target visuale e di interazione è definito in:
+Per F3–F5 la specifica seguente orienta il target visuale e di interazione **senza ampliare automaticamente scope o gate già approvati**:
 [Atlas Mockup V2 — Vision Alignment Specification](../design/atlas-mockup-v2-vision-alignment.md).
 
 Questa estensione:
