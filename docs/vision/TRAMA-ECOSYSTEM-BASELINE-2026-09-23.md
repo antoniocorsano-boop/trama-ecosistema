@@ -1,4 +1,4 @@
-# TRAMA — Dossier dell’ecosistema
+# TRAMA — Baseline di sintesi dell’ecosistema
 
 **Versione:** 23 settembre 2026  
 **Stato:** SYNTHESIS BASELINE / DOCUMENTATION-ONLY / NON NORMATIVE / NON AUTORIZZA NUOVI RUNTIME  
@@ -357,9 +357,9 @@ TRAMA non tenta di automatizzare la scuola. Tenta di **rendere coerente, visibil
 | --- | --- | --- |
 | `docs/design/atlas-mockup-v2-vision-alignment.md` | Specifica di design Atlas V2 | **INTEGRATA** via PR #61 |
 | `docs/vision/TRAMA-ECOSYSTEM-BASELINE-2026-09-23.md` | Baseline concettuale versionata | **IN REVIEW** via PR #62 |
-| Dossier ufficiale TRAMA | Documento narrativo e architetturale esteso | **ASSET CONTROLLATO** |
-| Infografica “TRAMA: Scuola in movimento” | Metafora atomica istituzionale | **ASSET BASELINE** |
-| Tavola tecnica TRAMA | Authority, flussi, gate e L1–L4 | **ASSET COMPLEMENTARE** |
+| Dossier ufficiale TRAMA | Documento narrativo e architetturale esteso, conservato come asset di progetto fuori repository | **SUPPORTO NON NORMATIVO** |
+| Infografica “TRAMA: Scuola in movimento” | Metafora atomica istituzionale, conservata come asset di progetto fuori repository | **SUPPORTO VISUALE** |
+| Tavola tecnica TRAMA | Authority, flussi, gate e L1–L4, conservata come asset di progetto fuori repository | **SUPPORTO VISUALE** |
 
 ### Regola di precedenza
 
@@ -369,7 +369,7 @@ TRAMA non tenta di automatizzare la scuola. Tenta di **rendere coerente, visibil
 4. **Specifiche integrate** — comportamento del relativo dominio o superficie.
 5. **Filosofia in sviluppo** — razionale, frasi-cardine e ipotesi non normative.
 6. **Questa baseline** — sintesi e indice trasversale.
-7. **Dossier e asset visuali** — comunicazione e spiegazione.
+7. **Dossier e asset visuali** — comunicazione e spiegazione; non costituiscono fonte canonica finché non sono versionati e richiamati esplicitamente da una fonte di livello superiore.
 
 In caso di divergenza, la fonte di livello superiore prevale. La baseline non può introdurre una decisione, uno stato o una priorità non presenti nella fonte primaria.
 
