@@ -17,6 +17,12 @@ La metafora è valida se interpretata così:
 - Atlas non è una seconda fonte curricolare e non è un passaggio obbligatorio;
 - nessuna automazione sostituisce la decisione professionale del docente.
 
+### 1.1 Evoluzione semantica della metafora
+
+La metafora resta valida sul piano di governance, ma la vision successiva ne amplia il significato: non rappresenta soltanto domini e relazioni, bensì anche la trasformazione del curricolo in esperienza educativa.
+
+Questo ampliamento è documentato come **design direction non normativa** in [Evoluzione della metafora atomica — 2026-09-23](./atomic-metaphor-evolution-2026-09-23.md).
+
 ## 2. Stato reale da cui partiamo
 
 ### Operativo
