@@ -413,3 +413,24 @@ Non fanno parte di S1:
 - runtime agentico autonomo.
 
 Questi elementi richiedono slice o decisioni successive.
+
+
+## 17. Prototipo di interazione
+
+È disponibile un prototipo statico NO_RUNTIME in:
+
+- `docs/product/prototypes/r4-p2-s1/index.html`
+
+Il prototipo rappresenta:
+- scheda lezione con sezione **Dopo la lezione**;
+- azione **Com’è andata?**;
+- pannello a tre passaggi Osservazione → Riflessione → Decisione;
+- assistenza IA facoltativa e non scrivente;
+- conferma esplicita delle decisioni;
+- collegamento non distruttivo a Conoscenza;
+- feedback visibile per salvataggio e conferma;
+- blocco **Dalla lezione precedente** con azioni Usa / Modifica / Ignora;
+- comportamento responsive per schermi piccoli;
+- navigazione da tastiera e focus visibile.
+
+Il prototipo non rappresenta né autorizza persistenza, runtime IA, integrazioni cross-product o scritture reali.
