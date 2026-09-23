@@ -93,7 +93,7 @@ Prefisso ID: `EVD-`.
 
 ## 4. Assurance Summary obbligatorio
 
-Ogni documento TRAMA che fonda requisiti su evidenza scientifica o contesto normativo dovrebbe aprirsi con una scheda sintetica:
+Ogni documento TRAMA che fonda requisiti su evidenza scientifica o contesto normativo **deve** aprirsi con una scheda sintetica:
 
 | Campo | Valore |
 | --- | --- |
@@ -175,6 +175,19 @@ Ogni review deve registrare:
 - decisione PASS / CHANGES REQUIRED.
 
 Un nuovo commit invalida il PASS exact-head precedente secondo il protocollo TRAMA di review freeze.
+
+### Evidenze post-commit e ricevute esterne
+
+Le evidenze che nascono **dopo** la creazione dell'exact head — per esempio workflow CI, review indipendenti e HUMAN REVIEW — non possono essere scritte dentro lo stesso commit senza modificarne lo SHA.
+
+Per evitare una dipendenza circolare:
+- il repository contiene il requisito, il registro delle fonti e le evidenze pre-commit;
+- CI e review exact-head sono registrate come **ricevute esterne immutabili** nel sistema che le produce (GitHub check, workflow run, review/commento PR);
+- l'Assurance Summary nel commit dichiara lo stato `PENDING` per le ricevute post-commit non ancora prodotte;
+- la promozione/merge deve verificare che le ricevute esterne si riferiscano esattamente allo SHA candidato;
+- non è richiesto un commit solo per copiare nel repository l'ID di una review PASS, perché ciò invaliderebbe il PASS appena ottenuto.
+
+Un registro può mantenere ricevute storiche di head precedenti, purché siano marcate `HISTORICAL` e non usate come verifica positiva dell'head corrente.
 
 ## 10. Automazione futura
 
