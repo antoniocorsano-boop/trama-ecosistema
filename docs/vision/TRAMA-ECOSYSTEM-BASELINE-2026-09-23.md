@@ -114,7 +114,7 @@ Ogni passaggio conserva la provenienza e la possibilità di controllo umano. La 
 
 ## 5. Modello dei contenuti pubblici Atlas
 
-Atlas deve distinguere quattro livelli.
+Nel **target di prodotto/design Atlas V2** la specifica integrata distingue quattro livelli. Questa classificazione descrive il modello verso cui evolve la superficie pubblica; non implica che tutti i livelli siano già disponibili in runtime.
 
 ### L1 — Risorsa
 Unità elementare: immagine, PDF, slide, video, infografica, link, documento o altro oggetto fruibile.
@@ -128,7 +128,7 @@ Una esperienza guidata con stimolo, sequenza, interazioni, eventuali fasi fuori 
 ### L4 — Percorso
 Una sequenza coerente di attività e materiali collegata a progressione, concetti, obiettivi e annualità.
 
-Questa gerarchia impedisce che Atlas diventi una semplice biblioteca di file.
+Questa gerarchia è il riferimento di design per evitare che Atlas evolva come semplice biblioteca di file.
 
 ## 6. Fotografia di stato al 23 settembre 2026
 
@@ -161,7 +161,7 @@ L’utente deve poter riconoscere il contesto curricolare senza essere costretto
 
 ## 8. Visione dell’esperienza Atlas
 
-Tre ingressi pubblici devono restare riconoscibili:
+Nella specifica Atlas Mockup V2 integrata, tre ingressi pubblici devono restare riconoscibili:
 1. **Esplora il curricolo**
 2. **Vai ai materiali della tua classe**
 3. **Scopri percorsi e attività**
@@ -242,18 +242,22 @@ Rendere più intelligente la scoperta di obiettivi, raccordi, materiali, attivit
 ### R3-P6 — Curriculum Health
 Dare visibilità aggregata su copertura, coerenza e qualità del curricolo, senza trasformare la misurazione in sorveglianza individuale.
 
-## 14. Principi non negoziabili
+## 14. Invarianti e direzioni di design
 
+### Invarianti di governance
 1. Arena resta l’autorità curricolare.
 2. Il docente resta il decisore professionale.
-3. Atlas resta pubblico e privacy-first.
+3. Atlas resta privacy-first e non richiede account o tracking individuale dello studente.
 4. Nessun runtime cross-product viene autorizzato implicitamente da un mockup o da un documento di vision.
-5. Provenienza e versione devono rimanere verificabili.
-6. Mobile e LIM sono superfici progettate, non adattamenti tardivi.
-7. Le attività possono portare fuori dallo schermo e nel mondo reale.
-8. Accessibilità e feedback non sono rifiniture ma parte dell’architettura di fiducia.
-9. Le relazioni tra prodotti devono rimanere governate e reversibili.
-10. La documentazione deve distinguere sempre stato reale, direzione approvata e ipotesi futura.
+5. Provenienza, versione e confini di authority devono rimanere verificabili.
+6. Le relazioni tra prodotti devono rimanere governate; pubblicazione, adozione e approvazione restano concetti distinti.
+7. La documentazione deve distinguere sempre stato reale, direzione approvata e ipotesi futura.
+
+### Direzioni di prodotto/design già integrate
+- mobile e LIM sono superfici da progettare specificamente, non semplici riduzioni del desktop;
+- le attività Atlas possono includere passaggi fuori dallo schermo e nel mondo reale;
+- accessibilità e feedback percepibile sono requisiti trasversali dell’esperienza;
+- il target Atlas evolve da struttura navigabile verso materiali, attività e percorsi, senza implicare che ogni livello sia già implementato.
 
 ## 15. Sistema documentale di TRAMA
 
