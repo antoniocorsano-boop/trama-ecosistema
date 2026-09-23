@@ -10,6 +10,17 @@ Lo schema sperimentale deve rappresentare tutti i cinque pilot senza introdurre 
 
 File canonico sperimentale: `activity-package-v1.schema.json`.
 
+## Validità strutturale ≠ pubblicabilità
+
+Il superamento del JSON Schema dimostra soltanto che un pacchetto è **strutturalmente valido** rispetto al contratto sperimentale. Non equivale ad approvazione editoriale, accessibilità verificata, diritti chiariti o autorizzazione alla pubblicazione.
+
+Sono quindi ammessi come stati strutturalmente rappresentabili, ma **non pubblicabili**:
+- `rights.status = PARTIAL` o `NOT_CLEARED`;
+- requisiti di accessibilità dichiarati ma non ancora soddisfatti;
+- evidenze o asset ancora soggetti a review.
+
+La pubblicabilità richiede un gate separato e deve riusare la governance Atlas esistente, in particolare `ATLAS-MAT-PUB-01`, senza duplicarne o indebolirne i controlli. Un pacchetto candidato può essere schema-valid e contemporaneamente publication-ineligible.
+
 ## Invarianti
 
 - binding curricolare per riferimento ad Arena;
@@ -22,7 +33,8 @@ File canonico sperimentale: `activity-package-v1.schema.json`.
 - supporto a fasi `OFFSCREEN`;
 - modalità `CLASS | STUDENT | BOTH`;
 - offline dichiarato, non implicito;
-- nessun punteggio sulla qualità del pensiero.
+- nessun punteggio sulla qualità del pensiero;
+- `provenance.createdBy` usa un riferimento privacy-safe non studente; non richiede né espone il nome personale del docente nel pacchetto pubblico.
 
 ## Validazione rispetto ai pilot
 
