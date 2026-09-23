@@ -24,13 +24,14 @@ S3-V2 deve invece dimostrare Atlas come **atlante integrale del curricolo**, nav
 
 Atlas deve consentire di:
 
-1. esplorare il curricolo come rete di relazioni;
-2. passare da annualità → nucleo → obiettivo → prerequisiti/raccordi → risorse;
+1. esplorare il **curricolo verticale di istituto** come rete di relazioni tra ordini di scuola, aree/dipartimenti, discipline, annualità, nuclei e obiettivi;
+2. passare da istituto → area/dipartimento → disciplina → ordine di scuola → annualità → nucleo → obiettivo → prerequisiti/raccordi → risorse;
 3. distinguere con chiarezza fonte Arena e contenuto Atlas;
 4. passare tra rappresentazione visuale e struttura testuale equivalente;
 5. trovare risorse e percorsi senza conoscere la struttura tecnica;
-6. mantenere esperienza coerente su desktop, tablet, mobile e LIM;
-7. funzionare senza account o tracking individuale studente.
+6. permettere allo studente di scegliere **classe → disciplina → lezione** e vedere i materiali didattici pubblicati per quella lezione;
+7. mantenere esperienza coerente su desktop, tablet, mobile e LIM;
+8. funzionare senza account o tracking individuale studente.
 
 ## 3. Superfici minime S3-V2
 
@@ -39,7 +40,7 @@ Atlas deve consentire di:
 Scopo:
 - ingresso pubblico;
 - orientamento;
-- accesso rapido a Esplora, Curricolo, Risorse, Percorsi e Lezioni.
+- accesso rapido a Esplora, Curricolo, Materiali, Risorse Atlas e Percorsi.
 
 Componenti:
 - App Shell;
@@ -66,15 +67,19 @@ Struttura:
 ### C. Curricolo
 
 Scopo:
-- navigazione gerarchica e progressione.
+- navigazione del **curricolo verticale di istituto**, non di una singola disciplina.
 
 Struttura:
+- vista istituto;
+- aree/dipartimenti;
+- discipline;
+- ordini di scuola;
+- classi/annualità;
 - albero/outline disciplinare;
 - breadcrumb;
-- annualità;
 - nuclei;
 - obiettivi;
-- progressione;
+- progressione verticale;
 - provenienza Arena;
 - raccordi e prerequisiti.
 
@@ -94,10 +99,27 @@ Struttura:
 - raccordi;
 - tab accessibili.
 
-### E. Risorse
+### E. Materiali
 
 Scopo:
-- esplorazione delle risorse Atlas.
+- accesso pubblico ai materiali didattici effettivamente pubblicati per le lezioni.
+
+Percorso principale:
+- classe;
+- disciplina;
+- lezioni in ordine;
+- materiali pubblicati per ciascuna lezione.
+
+Vincoli:
+- nessun account studente;
+- nessun profilo individuale;
+- nessun tracking personale;
+- la selezione classe/discipline definisce solo un contesto pubblico.
+
+### F. Risorse Atlas
+
+Scopo:
+- esplorazione delle risorse Atlas come catalogo editoriale.
 
 Struttura:
 - filtri;
@@ -109,7 +131,7 @@ Struttura:
 - stato editoriale;
 - relazioni curricolari.
 
-### F. Percorsi
+### G. Percorsi
 
 Scopo:
 - rappresentare sequenze didattiche collegate al curricolo.
@@ -210,6 +232,13 @@ Forma:
 - SelectionPanel
 - EquivalentOutline
 
+### Materials
+- ClassSelector
+- DisciplineSelector
+- LessonList
+- LessonMaterialGroup
+- PublishedMaterialItem
+
 ### Resources
 - ResourceCard
 - ResourceListItem
@@ -241,6 +270,8 @@ Atlas non modifica tali dati.
 ### Atlas
 Gestisce:
 - risorse;
+- materiali didattici pubblicati;
+- organizzazione pubblica per classe, disciplina e lezione;
 - pagine;
 - percorsi;
 - stato editoriale;
@@ -313,12 +344,17 @@ Budget iniziale:
 - test componenti;
 - responsive shell.
 
-### S3-V2/F1 — Curricolo
+### S3-V2/F1 — Curricolo + contesto pubblico materiali
+- curricolo verticale di istituto;
+- aree/dipartimenti;
+- discipline;
+- ordini di scuola;
 - curriculum tree;
 - annualità;
 - breadcrumb;
 - pagina nodo/obiettivo;
-- provenance Arena.
+- provenance Arena;
+- modello pubblico classe → disciplina → lezione → materiali, senza dati personali.
 
 ### S3-V2/F2 — Esplora
 - canvas relazionale;
@@ -327,7 +363,9 @@ Budget iniziale:
 - pannello contestuale;
 - equivalente elenco.
 
-### S3-V2/F3 — Risorse
+### S3-V2/F3 — Materiali + Risorse
+- browser pubblico classe → disciplina → lezione;
+- materiali pubblicati;
 - resource catalog;
 - filtri;
 - preview;
@@ -355,9 +393,10 @@ Budget iniziale:
 
 S3-V2 può chiudere S3 soltanto se:
 
-- [ ] le superfici A-F sono navigabili;
+- [ ] le superfici A-G sono navigabili;
 - [ ] Esplora appare e si comporta come un vero atlante, non come demo tecnica;
-- [ ] Curricolo e Nodo/Obiettivo sono coerenti con S1/S2;
+- [ ] Curricolo e Nodo/Obiettivo sono coerenti con S1/S2 e rappresentano il **curricolo verticale di istituto**, non una singola disciplina;
+- [ ] Materiali consente il percorso pubblico classe → disciplina → lezione senza dati personali;
 - [ ] mobile è progettato specificamente;
 - [ ] Arena/Atlas sono distinguibili;
 - [ ] mappa ed elenco sono equivalenti;
