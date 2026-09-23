@@ -40,6 +40,16 @@ La proposta converge con diversi filoni di ricerca e pratica educativa:
 
 La convergenza non giustifica un unico metodo rigido. Atlas deve raccogliere **archetipi didattici diversi**, unificati dalla stessa progressione cognitiva.
 
+### 2.1 Livelli di evidenza
+
+Per evitare sovrainterpretazioni, ogni fondamento o pattern viene classificato come:
+
+- **E1 — evidenza consolidata / guidance evidence-informed**: principi sostenuti da sintesi o guidance di ricerca robuste, ad esempio metacognizione integrata nel curricolo;
+- **E2 — pratica educativa sostenuta da ricerca ma dipendente da implementazione e contesto**: ad esempio dialogo strutturato, formulazione delle domande, routine di pensiero e inquiry;
+- **E3 — pattern progettuale Atlas da validare**: archetipi, sequenze UX, ActivityPackage e modalità offline specifiche del prodotto.
+
+Nessun pattern E3 può essere presentato come efficace in senso causale prima di una valutazione distinta.
+
 ## 3. Compatibilità con le Indicazioni nazionali
 
 Il D.M. 9 dicembre 2025, n. 221 adotta le nuove Indicazioni nazionali per il curricolo della scuola dell'infanzia e del primo ciclo, in vigore dall'11 febbraio 2026 e applicate gradualmente dall'a.s. 2026/2027.
@@ -432,6 +442,8 @@ Prima di estendere la capacità all'intero primo ciclo, realizzare cinque protot
 4. **Secondaria 1ª** — problema e modello;
 5. **Secondaria 3ª** — evidenze e fonti.
 
+I cinque prototipi costituiscono **pilot di fattibilità e validità d'uso**, non studi di efficacia causale. Devono osservare comprensibilità, usabilità, accessibilità, carico cognitivo, qualità delle interazioni e trasferibilità didattica.
+
 Ogni prototipo deve essere collaudato:
 - in classe reale;
 - su LIM;
@@ -477,7 +489,7 @@ Questa proposta non:
 
 1. review del presente dossier;
 2. matrice verticale completa per annualità/campi/discipline;
-3. definizione JSON Schema sperimentale di `ActivityPackage v1`;
-4. progettazione dei cinque pilot;
+3. progettazione dei cinque pilot;
+4. definizione JSON Schema sperimentale di `ActivityPackage v1`;
 5. prototipo F3 Atlas con “Avvia” e “Salva sul dispositivo”;
 6. test in classe prima di qualunque standardizzazione definitiva.
