@@ -6,6 +6,22 @@
 **Roadmap:** R4-P2 — Professional Practice  
 **Fonte di approfondimento:** Med Kharbach, *AI for Teacher Professional Development* (2026), cap. 9 di *Teaching with AI*.
 
+## Assurance Summary
+
+| Campo | Valore |
+| --- | --- |
+| Artifact ID | TRAMA-DOS-PP-01 / R4-P2 |
+| Scope | pratica e sviluppo professionale docente assistiti dall'IA |
+| Scientific basis | **PARTIAL / ADAPTED** |
+| Normative context | **VERIFIED come contesto / nessuna certificazione generale** |
+| Evidence pack | [Evidence Register separato](../research/evidence/r4-p2-professional-practice-evidence-register.md) |
+| Standard di tracciabilità | [TRAMA-EVIDENCE-01](../assurance/trama-evidence-01.md) |
+| Runtime effect | **NONE / RUNTIME NOT AUTHORIZED** |
+| Open gaps | efficacia del modello S1, validazione UX reale, privacy/runtime, calibrazione di eventuali pattern IA |
+| Independent review | **PENDING sull'exact head corrente** |
+| Last verified | 2026-09-23 |
+
+
 ## Decisione
 
 TRAMA adotta il principio secondo cui l’intelligenza artificiale sostiene lo sviluppo professionale continuo del docente senza assumere funzioni di autorità curricolare, valutazione autonoma o decisione professionale.
@@ -180,3 +196,18 @@ La specifica completa il gate documentale di progettazione per:
 - criteri di verifica umana.
 
 Resta esclusa l'autorizzazione runtime.
+
+## Traceability matrix
+
+| Req ID | Requisito TRAMA | Source IDs | Derivation | Verification | Stato |
+| --- | --- | --- | --- | --- | --- |
+| PP-R1 | l'IA resta advisory e il docente mantiene il giudizio professionale | SCI-PP-01, POL-IT-PP-01 | DIRECT + TRAMA governance | exact-head review | PARTIAL / DESIGN |
+| PP-R2 | riflessione strutturata come continuità tra lezione e preparazione successiva | SCI-PP-02 | ADAPTED / DESIGN_RULE | prototipo S1 + human product review | TO_VALIDATE |
+| PP-R3 | knowledge system personale/professionale distinto dai materiali didattici | SCI-PP-02 | ADAPTED + DESIGN_RULE | review architetturale | PARTIAL |
+| PP-R4 | nessuna decisione o write professionale silenziosa | SCI-PP-01 + TRAMA-PW-01 | DESIGN_RULE / GOVERNANCE | non-silent-write tests futuri | PROPOSED |
+| PP-R5 | pattern longitudinali non equivalgono a diagnosi o giudizi certi | SCI-PP-01 | ADAPTED / RISK_CONTROL | privacy + semantic review futura | PROPOSED |
+| PP-R6 | S1 resta NO_RUNTIME fino a gate separato | governance TRAMA | DIRECT | Governance + HUMAN REVIEW | PENDING CURRENT-HEAD REVIEW |
+
+## Regola di forza delle fonti
+
+La fonte Kharbach informa la progettazione come **guidance professionale research-informed**. Non viene usata come prova peer-reviewed di efficacia del prodotto. Le affermazioni più forti su autorità professionale, verifica e limiti dell'IA sono sostenute anche da TRAMA-RSR-01 / SCI-PP-01 e restano subordinate alla governance TRAMA.
