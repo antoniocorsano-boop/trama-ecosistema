@@ -6,6 +6,21 @@
 **DOI:** 10.1017/9781009618823  
 **Perimetro della fonte:** insegnamento linguistico; le estensioni ad altre discipline in TRAMA sono inferenze progettuali da validare, non risultati direttamente dimostrati dal volume.
 
+## Assurance Summary
+
+| Campo | Valore |
+| --- | --- |
+| Artifact ID | TRAMA-RSR-01 |
+| Scope | IA generativa nel lavoro professionale docente e nelle superfici TRAMA collegate |
+| Scientific basis | **VERIFIED / ADAPTED fuori dal dominio linguistico** |
+| Normative context | **VERIFIED come contesto / nessuna certificazione di conformità** |
+| Evidence pack | [Evidence Register separato](evidence/trama-rsr-01-evidence-register.md) |
+| Standard di tracciabilità | [TRAMA-EVIDENCE-01](../assurance/trama-evidence-01.md) |
+| Runtime effect | **NONE / NO_RUNTIME_AUTHORIZATION** |
+| Open gaps | learner-level AI, assessment individuale, futura applicabilità specifica AI Act/GDPR |
+| Independent review | CHANGES REQUIRED su head precedente; rilievi recepiti in questa revisione |
+| Last verified | 2026-09-23 |
+
 ## 1. Scopo
 
 Consolidare una lettura scientifica della fonte e tradurla in criteri progettuali verificabili per TRAMA, senza trasformare una pubblicazione pedagogica in specifica tecnica o in fonte di autorità curricolare.
@@ -40,15 +55,15 @@ Questa struttura è utile per TRAMA perché distingue attività professionali ch
 
 Il riferimento adotta cinque dimensioni di **Professional Generative AI Competence (P-GenAI-C)**:
 
-| Dimensione | Significato operativo |
-| --- | --- |
-| Competenza tecnologica | comprendere strumenti, capacità, limiti e differenze tra sistemi |
-| Compatibilità pedagogica | decidere se, quando e come l'IA migliora un obiettivo di apprendimento |
-| Lavoro professionale | usare l'IA per pianificazione, preparazione, feedback, comunicazione e attività professionali senza delegare la responsabilità |
-| Rischio, benessere ed etica | considerare privacy, bias, accuratezza, copyright, equità, dipendenza e impatti sociali/ambientali |
-| Preparazione degli studenti | sviluppare alfabetizzazione critica e uso consapevole dell'IA |
+| Dimensione | Formulazione della fonte | Adattamento TRAMA |
+| --- | --- | --- |
+| Competenza tecnologica | comprendere tecnologie GenAI, capacità e limiti | applicabile come competenza professionale generale |
+| Compatibilità pedagogica | valutare la compatibilità con l'insegnamento/apprendimento linguistico | **ADAPTED**: estesa da TRAMA alla compatibilità con obiettivi disciplinari e curricolari, da validare oltre il dominio linguistico |
+| Lavoro professionale | usare l'IA nelle attività professionali del docente | applicata a pianificazione, preparazione, feedback e comunicazione senza delega della responsabilità |
+| Rischio, benessere ed etica | considerare rischi, benessere e questioni etiche | collegata in TRAMA a privacy, bias, accuratezza, diritti, equità e impatti |
+| Preparazione degli studenti | preparare gli studenti a un contesto con IA generativa | tradotta in alfabetizzazione critica e uso consapevole, con governance separata per usi student-facing |
 
-Per TRAMA questo quadro è un riferimento pedagogico; non costituisce un modello di autorizzazione runtime.
+Per TRAMA questo quadro è un riferimento pedagogico. La colonna “Adattamento TRAMA” è una derivazione progettuale e non va attribuita direttamente agli autori. Il quadro non costituisce un modello di autorizzazione runtime.
 
 ## 5. Risultati della lettura per area
 
@@ -70,17 +85,21 @@ La fonte considera utile l'IA per creare o adattare testi, attività, supporti v
 ### 5.4 Valutazione e feedback
 Gli autori evidenziano il potenziale dell'IA nella progettazione di prove e nel feedback, ma considerano questa area più controversa. Trasparenza, validità, affidabilità, protezione dei dati e giudizio professionale restano centrali.
 
-**Derivazione TRAMA:** non introdurre punteggi, giudizi o feedback individuali automatizzati come effetto implicito. Qualunque futura capacità richiede scopo esplicito, evidenza, controllo docente, tracciabilità e decisione di governance distinta.
+**Derivazione TRAMA:** distinguere due classi:
+1. **teacher-support**: il docente usa l'IA per ideare una prova, una rubrica o esempi; resta un'attività di progettazione professionale;
+2. **learner-level processing**: l'IA tratta elaborati individuali, produce feedback sul singolo studente, classificazioni, punteggi o decisioni.
+
+La seconda classe ha un profilo di rischio sensibilmente maggiore e richiede governance, privacy review, validazione e tracciabilità specifiche. Nessun automatismo valutativo individuale è autorizzato da questo documento.
 
 ### 5.5 Studenti e IA
 La fonte collega l'uso studente dell'IA all'apprendimento autoregolato e all'alfabetizzazione all'IA. Il rischio è duplice: dipendenza eccessiva oppure mancato sfruttamento consapevole delle opportunità.
 
-**Derivazione TRAMA:** Atlas, se rivolto agli studenti, non deve trasformarsi in tutor generativo personale per impostazione predefinita. Prima vengono risorse pubbliche, percorsi comprensibili, provenienza e alfabetizzazione critica. Eventuali interazioni generative richiedono progetto separato, privacy review e vincoli specifici per età e contesto.
+**Derivazione TRAMA:** Atlas, se rivolto agli studenti, non deve trasformarsi in tutor generativo personale per impostazione predefinita. Prima vengono risorse pubbliche, percorsi comprensibili, provenienza e alfabetizzazione critica. Eventuali interazioni generative richiedono progetto separato, responsabilità istituzionale esplicita, privacy review, valutazione di appropriatezza per età e contesto e modalità di coinvolgimento di studenti/famiglie quando pertinente. Questa cautela è coerente anche con INT-01 e POL-IT-01 nel registro evidenze.
 
 ### 5.6 Etica e impatti sociali
 Il volume tratta bias linguistico/culturale, copyright e proprietà intellettuale, accuratezza, disuguaglianze di accesso e sostenibilità ambientale.
 
-**Derivazione TRAMA:** i gate su provenance, diritti/licenze, minimizzazione e accessibilità già presenti nell'ecosistema sono coerenti. Va aggiunto esplicitamente il principio di **uso proporzionato**: evitare generazioni, verifiche o pipeline non necessarie quando un procedimento deterministico o un artefatto già valido risolve il bisogno.
+**Derivazione TRAMA:** i gate su provenance, diritti/licenze, minimizzazione e accessibilità già presenti nell'ecosistema sono coerenti. La sostenibilità ambientale è una preoccupazione esplicita nella fonte. Il principio **“deterministico prima, generativo quando utile”** è però classificato da TRAMA come **DESIGN_RULE**, non come risultato scientifico dimostrato dal volume. Va validato separatamente rispetto a costi, qualità e impatti.
 
 ### 5.7 Competenza di interazione con l'IA
 L'interazione efficace è descritta come processo iterativo: contesto adeguato, richiesta specifica, controllo critico e raffinamento successivo. La qualità non dipende da una formula di prompt isolata, ma da conoscenza disciplinare, pensiero critico e capacità di iterazione.
@@ -131,7 +150,7 @@ Ogni funzione generativa che incide su progettazione, materiali, valutazione o p
 Il contesto fornito al modello deve essere quello minimo necessario. Non devono essere richiesti dati personali degli studenti per attività di pianificazione o produzione materiali quando il compito può essere svolto con dati di classe aggregati o descrittivi.
 
 ### RSR-C — Provenance and disclosure
-Quando un artefatto pubblicato è stato sostanzialmente prodotto o trasformato con IA, il sistema deve poter conservarne internamente la provenance. La modalità di disclosure pubblica va definita in base a finalità, policy e contesto, evitando etichette fuorvianti.
+Quando un artefatto pubblicato è stato sostanzialmente prodotto o trasformato con IA, il sistema deve conservarne internamente la provenance in forma verificabile. La **disclosure pubblica non è assunta come obbligo universale da questa fonte**: va definita separatamente in base a tipo di artefatto, policy istituzionale, diritti, finalità e norme applicabili.
 
 ### RSR-D — Validation ladder
 Ordine raccomandato:
@@ -142,13 +161,13 @@ Ordine raccomandato:
 5. revisione umana per decisioni professionali o pubbliche rilevanti.
 
 ### RSR-E — Proportional AI
-Usare IA generativa quando aggiunge valore rispetto a contenuto già disponibile, regola deterministica, recupero da fonte autorevole o trasformazione locale non generativa. La riduzione di chiamate ridondanti migliora prevedibilità, costi e sostenibilità.
+**Classificazione: DESIGN_RULE TRAMA.** Usare IA generativa quando aggiunge valore rispetto a contenuto già disponibile, regola deterministica, recupero da fonte autorevole o trasformazione locale non generativa. L'ipotesi che ciò migliori costi, prevedibilità e sostenibilità deve essere misurata e non viene attribuita a Moorhouse & Wong come risultato empirico.
 
 ### RSR-F — Teacher-facing interaction design
 Il docente non deve essere costretto a scrivere prompt complessi. L'interfaccia deve tradurre curricolo, obiettivi, vincoli, destinatari e formato in contesto strutturato, lasciando visibili e modificabili le scelte pedagogiche rilevanti.
 
 ### RSR-G — Separate assessment governance
-Valutazione, voto, feedback individuale e analisi di elaborati degli studenti devono restare fuori da autorizzazioni generiche all'uso dell'IA. Richiedono contratto, privacy review, policy di trasparenza e verifica specifici.
+La **progettazione docente di strumenti di valutazione** può essere trattata come supporto professionale, con revisione umana. Il **trattamento learner-level** di elaborati, feedback individuale, classificazioni, punteggi o decisioni resta invece fuori da autorizzazioni generiche all'uso dell'IA e richiede contratto, privacy review, valutazione normativa, policy di trasparenza e verifica specifici.
 
 ## 8. Impatto sui cantieri correnti
 
@@ -172,7 +191,25 @@ Nessuna promozione di autorità. Il quadro è coerente con assurance advisory-on
 ### DOS-A1
 Nessuna modifica: resta **RUNTIME_DEFERRED**. La fonte non giustifica automazione autonoma; sottolinea invece competenza, controllo e responsabilità professionale.
 
-## 9. Limiti della fonte e cautela nell'adozione
+## 9. Contesto scientifico, normativo e istituzionale
+
+TRAMA separa le autorità invece di fonderle in un'unica dichiarazione di “conformità”.
+
+| Evidence ID | Ruolo nel documento | Forza |
+| --- | --- | --- |
+| SCI-01 / SCI-02 | evidenza pedagogica e professionale su P-GenAI-C e uso docente | ricerca scientifica; non normativa |
+| POL-IT-01 | contesto di governance per l'introduzione dell'IA nelle scuole italiane | linea guida istituzionale MIM / DM 166/2025 |
+| POL-EU-01 | orientamenti etici e contesto AI Act/GDPR per educatori | guidance Commissione europea |
+| AUTH-IT-01 | protezione dati nel contesto scolastico | guidance dell'autorità nazionale competente |
+| LAW-EU-01 / LAW-EU-02 | quadro giuridico da valutare nel caso concreto | normativa UE cogente quando applicabile |
+| INT-01 | human-centred, privacy, età e validazione pedagogica/etica | guidance internazionale non cogente |
+| STD-01 / STD-02 | metodo di gestione, tracciabilità e rischio | standard/framework volontari |
+
+Il dettaglio, i localizzatori e i limiti sono mantenuti nel [registro evidenze separato](evidence/trama-rsr-01-evidence-register.md).
+
+Questa struttura consente di dire, per esempio, “**coerente con POL-IT-01**” o “**supportato da SCI-01**”, evitando l'affermazione generica “conforme alla normativa” quando non esiste ancora una verifica requisito-per-requisito.
+
+## 10. Limiti della fonte e cautela nell'adozione
 
 - Il volume riguarda principalmente l'insegnamento delle lingue.
 - Molti esempi sono specifici di produzione linguistica, conversazione, traduzione e feedback.
@@ -181,7 +218,7 @@ Nessuna modifica: resta **RUNTIME_DEFERRED**. La fonte non giustifica automazion
 - P-GenAI-C è utile come lente di progettazione e formazione, non come certificazione individuale del docente.
 - Normativa italiana, protezione dati, diritti d'autore e policy d'istituto restano fonti distinte e prevalenti nel proprio dominio.
 
-## 10. Adozione proposta
+## 11. Adozione proposta
 
 **Adottare la fonte come riferimento scientifico non normativo di TRAMA.**
 
@@ -197,17 +234,30 @@ Uso non ammesso:
 - derivarne automaticamente decisioni di valutazione;
 - estendere senza verifica risultati specifici dell'insegnamento linguistico a ogni disciplina.
 
-## 11. Riferimenti
+## 12. Riferimenti
 
 - Moorhouse, B. L., & Wong, K. M. (2025). *Generative Artificial Intelligence and Language Teaching*. Cambridge University Press & Assessment. DOI: 10.1017/9781009618823.
 - Moorhouse, B. L., Wan, Y., Wu, C., Kohnke, L., Ho, T. Y., & Kwong, T. (2024). *Developing language teachers’ professional generative AI competence: An intervention study in an initial language teacher education course*. System, 125, 103399. DOI: 10.1016/j.system.2024.103399.
 
-## 12. Decisione richiesta
+## 13. Traceability matrix
 
-Prima di trasformare RSR-A…RSR-G in governance vincolante, eseguire:
-- review scientifica indipendente della derivazione;
-- confronto con quadro europeo/italiano rilevante;
-- verifica di compatibilità con contratti TRAMA esistenti;
-- HUMAN REVIEW sul perimetro di adozione.
+| Req ID | Requisito | Source IDs | Derivation | Verification | Stato |
+| --- | --- | --- | --- | --- | --- |
+| RSR-A | autorità professionale umana | SCI-01, SCI-02, POL-EU-01 | DIRECT + TRAMA governance | EVD-01, contratti esistenti | VERIFIED |
+| RSR-B | contesto minimo senza sorveglianza | POL-IT-01, POL-EU-01, AUTH-IT-01, LAW-EU-01 | CONTEXTUAL | privacy review futura per runtime | PARTIAL |
+| RSR-C | provenance interna; disclosure pubblica separata | SCI-01, POL-EU-01 | DIRECT + DESIGN_RULE | evidence manifest futuro | PARTIAL |
+| RSR-D | validation ladder | SCI-01, STD-01, STD-02 | ADAPTED / DESIGN_RULE | TRAMA-SA-01 + review umana | VERIFIED come metodo |
+| RSR-E | uso proporzionato IA | SCI-01 (sostenibilità), STD-02 | DESIGN_RULE | metriche costi/qualità future | HYPOTHESIS |
+| RSR-F | interazione docente senza prompt engineering obbligatorio | SCI-01, SCI-02 | ADAPTED | UX review futura | PARTIAL |
+| RSR-G | governance separata assessment learner-level | SCI-01, POL-EU-01, AUTH-IT-01, LAW-EU-01 | DIRECT + CONTEXTUAL | evidence pack dedicato futuro | GAP / NO_RUNTIME |
+
+## 14. Decisione richiesta
+
+Prima di trasformare RSR-A…RSR-G in governance vincolante:
+- rieseguire la review scientifica indipendente sul nuovo exact head;
+- mantenere il registro evidenze aggiornato per fonti scientifiche e normative;
+- verificare compatibilità con i contratti TRAMA esistenti;
+- produrre evidence pack dedicati per learner-level AI e assessment individuale;
+- ottenere HUMAN REVIEW sul perimetro di adozione.
 
 Fino a quel momento: **RESEARCH_REFERENCE / NON_NORMATIVE / NO_RUNTIME_AUTHORIZATION**.
