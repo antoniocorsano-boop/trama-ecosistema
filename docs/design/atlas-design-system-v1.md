@@ -177,3 +177,31 @@ Lo sviluppo deve conservare:
 - tono visuale premium e sobrio.
 
 Non deve conservare errori testuali o dettagli inventati presenti nell'immagine generata.
+
+
+## 11. Estensione Vision Alignment — Mockup V2
+
+Il Design System v1 resta la fondazione canonica.
+
+La vision consolidata del 23 settembre 2026 introduce un'estensione di prodotto, non un secondo design system. Le nuove superfici devono seguire [Atlas Mockup V2 — Vision Alignment Specification](./atlas-mockup-v2-vision-alignment.md).
+
+Nuovi componenti Atlas da valutare/implementare nei successivi slice:
+- LearningActivityCard;
+- LearningActivityPlayer;
+- ActivityStep;
+- OffscreenStep;
+- LearningJourney;
+- LessonHeader;
+- LearningIntent;
+- MaterialRoleBadge;
+- OfflineAvailability;
+- PublicContextSelector;
+- CurriculumBindingDisclosure.
+
+Nuovi page pattern:
+- StudentHubLayout;
+- LessonPublicLayout;
+- LearningActivityLayout;
+- LearningJourneyLayout.
+
+Invariante: la nuova grammatica deve estendere i token, primitive e livelli esistenti senza introdurre una libreria visuale concorrente.

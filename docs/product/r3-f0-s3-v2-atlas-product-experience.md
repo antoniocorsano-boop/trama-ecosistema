@@ -431,3 +431,26 @@ F2 è stato validato sull’exact head `c8f0fc6967694391dbfe5510660f8d1007818b77
 
 Questa avanzamento non autorizza dati Arena live, pubblicazione Docente OS → Atlas, account studenti, tracking individuale, R3-P4 o DOS-A1.
 
+
+
+## 16. Vision alignment 2026-09-23
+
+La ricostruzione della vision TRAMA non modifica i confini S3-V2, ma precisa il target del prodotto.
+
+Atlas deve mostrare non soltanto la struttura del curricolo, ma il modo in cui il curricolo diventa esperienza pubblica attraverso:
+- lezioni;
+- materiali;
+- attività;
+- percorsi.
+
+ATLAS-PERCHÉ è assunto come reference implementation sperimentale del pattern **LearningActivity**, non come roadmap autonoma e **non come nuovo exit criterion di S3**.
+
+Per F3–F5 la specifica seguente orienta il target visuale e di interazione **senza ampliare automaticamente scope o gate già approvati**:
+[Atlas Mockup V2 — Vision Alignment Specification](../design/atlas-mockup-v2-vision-alignment.md).
+
+Questa estensione:
+- non autorizza R3-P4;
+- non introduce account studente;
+- non introduce tracking individuale;
+- non sposta authority da Arena;
+- non include il workspace professionale Docente OS dentro Atlas.
