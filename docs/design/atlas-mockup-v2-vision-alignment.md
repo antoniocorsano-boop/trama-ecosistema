@@ -61,10 +61,12 @@ Non usare Arena come destinazione primaria dello studente.
 
 Nel mockup Atlas pubblico Docente OS non diventa una superficie operativa.
 
-Quando necessario va rappresentato come:
+Quando necessario, sotto progressive disclosure o nelle viste di ecosistema, può essere rappresentato come:
 - origine della decisione editoriale;
 - contesto di preparazione;
 - riferimento alla decisione del docente.
+
+Nelle normali superfici pubbliche/studente **Docente OS non deve diventare un elemento di navigazione o branding operativo**.
 
 Non mostrare azioni professionali Docente OS come se fossero disponibili allo studente.
 
@@ -130,11 +132,13 @@ Il mockup non deve presentare L1–L4 come semplici card equivalenti.
 
 La home non deve sembrare una dashboard SaaS.
 
-Deve comunicare tre ingressi principali:
+Può offrire tre **shortcut editoriali di ingresso**, senza sostituire la information architecture canonica `Curricolo · Percorsi · Risorse · Esplora`:
 
 1. **Esplora il curricolo**
-2. **Vai ai materiali della tua classe**
-3. **Scopri percorsi e attività**
+2. **Vai ai materiali della tua classe/grado**
+3. **Scopri percorsi e, quando autorizzate, attività**
+
+Questi shortcut non trasformano Materiali o Student Learning Hub nella navigazione primaria di Atlas.
 
 Hero:
 - messaggio editoriale breve;
@@ -200,7 +204,7 @@ Mappa ed elenco devono restare equivalenti.
 
 Journey pubblico principale:
 
-**classe → disciplina → lezione → materiali**
+**classe/grado pubblico → disciplina → lezione → materiali**
 
 La pagina deve distinguere:
 - materiale;
@@ -296,7 +300,7 @@ Senza creare un secondo design system, Atlas DS v1 va esteso con componenti Tier
 - OffscreenStep
 - LearningJourney
 - LessonHeader
-- LearningIntent
+- LearningIntent (testo editoriale pubblico, distinto dagli obiettivi autorevoli Arena)
 - MaterialRoleBadge
 - OfflineAvailability
 - PublicContextSelector
@@ -363,7 +367,7 @@ Il mockup non deve mostrare:
 - cronologia personale server-side;
 - analytics individuale.
 
-La selezione classe/disciplina è contesto pubblico, non identità.
+La selezione classe/grado e disciplina è contesto pubblico, non identità. Sezione, identificativi interni e data esatta restano omessi per impostazione predefinita.
 
 ## 17. Accessibilità
 
@@ -380,15 +384,36 @@ Ogni nuova superficie deve avere:
 - niente informazione affidata solo al colore;
 - istruzioni comprensibili.
 
-## 18. Relazione con F3–F5
+## 18. Scope guard
+
+Questa specifica distingue due livelli:
+
+### Target V2 di prodotto
+Descrive la direzione completa verso lezioni, materiali, attività e percorsi.
+
+### Gate correnti R3-F0/S3-V2
+Restano quelli già approvati e non vengono ampliati automaticamente da questa specifica.
+
+In particolare:
+- F3 resta **Materiali + Risorse**;
+- F4 resta **Mobile + LIM**;
+- F5 resta **Exit**;
+- il pattern `LearningActivity` è una **estensione sperimentale/reference implementation**;
+- ATLAS-PERCHÉ non diventa requisito obbligatorio per chiudere S3;
+- nessun exit criterion vigente viene modificato senza una decisione esplicita separata.
+
+Il mockup può mostrare la direzione futura delle attività, ma la loro implementazione runtime non è condizione implicita di chiusura di R3-F0/S3.
+
+## 19. Relazione con F3–F5
 
 ### F3 — Materiali + Risorse
 
 Deve implementare:
 - lesson-as-context;
 - materiali organizzati per funzione;
-- catalogo risorse;
-- base per LearningActivity.
+- catalogo risorse.
+
+Può ospitare il **prototipo/reference pattern** LearningActivity, ma questo non amplia automaticamente lo scope né gli exit criteria di F3.
 
 ### F4 — Mobile + LIM
 
@@ -408,7 +433,7 @@ La review finale deve verificare anche:
 - Student Hub senza account;
 - attività non ridotte a semplici file/card.
 
-## 19. Non obiettivi
+## 20. Non obiettivi
 
 Questa specifica non autorizza:
 - R3-P4 runtime;
@@ -420,15 +445,15 @@ Questa specifica non autorizza:
 - trasferimento di autorità da Arena;
 - editor professionale Docente OS dentro Atlas.
 
-## 20. Acceptance criteria del mockup V2
+## 21. Acceptance criteria del mockup V2
 
 Il mockup è coerente con la vision quando un osservatore può capire, senza spiegazione tecnica, che:
 
 1. Atlas appartiene a un ecosistema ma ha un ruolo distinto;
 2. il curricolo è verticale e navigabile;
-3. il curricolo conduce a lezioni, materiali e attività;
+3. il curricolo conduce a lezioni e materiali e rende comprensibile la futura estensione verso attività;
 4. i materiali non sono solo una biblioteca di file;
-5. alcune attività portano fuori dallo schermo;
+5. quando una LearningActivity è rappresentata nel mockup, è chiaro che può portare fuori dallo schermo;
 6. lo studente non deve creare un account;
 7. il docente resta il decisore professionale;
 8. Arena resta la fonte curricolare;
