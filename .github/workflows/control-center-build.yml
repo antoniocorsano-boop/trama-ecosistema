@@ -1,0 +1,52 @@
+name: Build TRAMA Control Center Bundle
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "control-center/**"
+      - "config/**"
+      - "status/**"
+      - "docs/decisions/**"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/generate_stakeholder_report.py"
+      - "scripts/validate_stakeholder_assurance.py"
+      - "STATUS.md"
+      - "ROADMAP.md"
+      - ".github/workflows/control-center-build.yml"
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "trama-control-center-build"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Regenerate governed snapshot
+        run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.json
+      - name: Regenerate stakeholder dossier
+        run: python scripts/generate_stakeholder_report.py
+      - name: Verify bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s control-center/data/ecosystem-snapshot.json
+          test -s control-center/reports/stakeholder-assurance.html
+          test -s control-center/reports/stakeholder-assurance.md
+          grep -q "Dossier Stakeholder Assurance" control-center/reports/stakeholder-assurance.html
+          grep -q "Non costituisce certificazione" control-center/reports/stakeholder-assurance.html
+      - name: Package deployable Control Center
+        uses: actions/upload-artifact@v4
+        with:
+          name: trama-control-center-bundle
+          path: control-center/
+          if-no-files-found: error
+          retention-days: 14
