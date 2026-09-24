@@ -6,8 +6,6 @@ on:
       - "config/control-center-snapshot-sources.json"
       - "config/maturity-area-definitions.json"
       - "scripts/evaluate_maturity_definitions.py"
-      - "config/maturity-area-definitions.json"
-      - "scripts/evaluate_maturity_definitions.py"
       - "scripts/build_ecosystem_snapshot.py"
       - "schemas/ecosystem-snapshot.schema.json"
       - "status/ecosystem-status.json"
