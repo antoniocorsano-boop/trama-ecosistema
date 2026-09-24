@@ -178,6 +178,27 @@ Stato proposto: HUMAN REVIEW REQUIRED.
 
 Riferimenti: `TRAMA-ADR-009`, `docs/assurance/typesafe-semantic-assurance.md`, `docs/pilots/trama-sa-01-typesafe.md`.
 
+
+
+## TRAMA Control Center v2
+
+Sequenza governata del Control Center read-only:
+
+1. **CC2-F1 — Snapshot & Evidence Foundation** — integrata;
+2. **CC2-F2 — Snapshot-first Home** — in corso;
+3. **CC2-F3 — Decisioni & Gate** — pianificata;
+4. **CC2-F3A — Stakeholder Assurance Model** — pianificata in parallelo come modello dati/UX, senza claim automatici di compliance o certificazione;
+5. **CC2-F4 — Capability + Ecosystem Map** — pianificata;
+6. **CC2-F5 — Evidence Explorer + Integrity** — pianificata;
+7. **CC2-F6 — Timeline + Operational Path** — pianificata.
+
+CC2-F3A introduce una vista destinata a dirigente scolastico, DPO, referente accessibilità, responsabili tecnici e altri stakeholder. Deve distinguere evidenza interna, assessment indipendente e certificazione formale, senza overall score e senza autocertificazione.
+
+Riferimenti:
+- `docs/design/trama-control-center-v2-view-architecture.md`;
+- `docs/implementation/cc2-f3a-stakeholder-assurance-model.md`.
+
+
 ## R5 Preparazione all'adozione
 
 - verifica del nome TRAMA;
