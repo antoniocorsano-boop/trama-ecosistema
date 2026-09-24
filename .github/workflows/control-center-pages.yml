@@ -44,6 +44,13 @@ jobs:
           grep -q "Stakeholder Assurance" control-center/index.html
           grep -q "data-help-title" control-center/index.html
           grep -q "helpPopover" control-center/index.html
+          grep -q "helpAttr(claim.requirementId" control-center/index.html
+          grep -q "'assurance-card'" control-center/index.html
+          grep -q "'area'" control-center/index.html
+          grep -q "'alert'" control-center/index.html
+          grep -q "'dep'" control-center/index.html
+          grep -q "'exp-item'" control-center/index.html
+          grep -q "'ev'" control-center/index.html
           grep -q "reports/stakeholder-assurance.html" control-center/index.html
           test -s control-center/reports/stakeholder-assurance.html
           test -s control-center/reports/stakeholder-assurance.md
