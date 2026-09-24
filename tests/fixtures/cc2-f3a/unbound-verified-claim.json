@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "claims": [
+    {
+      "requirementId": "NEG-VER-001",
+      "domain": "ACCESSIBILITY",
+      "claimType": "EVIDENCE_BACKED_CLAIM",
+      "scope": "Negative fixture",
+      "status": "VERIFIED",
+      "evidenceRefs": [
+        "EV-X"
+      ],
+      "reviewAuthority": "Human review",
+      "assessor": null,
+      "standardRef": "WCAG 2.2 AA",
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [],
+      "externalCertificateRef": null
+    }
+  ]
+}
