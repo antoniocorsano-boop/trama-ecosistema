@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "areas": [
+    {
+      "id": "governance",
+      "name": "Governance e authority",
+      "ownerDomain": "TRAMA",
+      "levels": {
+        "0": {"requiredEvidenceTypes": [], "description": "Perimetro non definito"},
+        "1": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL"], "description": "Scopo, ownership, authority e confini documentati"},
+        "2": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED"], "description": "Contratti e gate approvati"},
+        "3": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD"], "description": "Governance implementata nelle superfici/versioni governate"},
+        "4": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "HUMAN_REVIEW"], "description": "Governance verificata su exact head"},
+        "5": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "HUMAN_REVIEW", "REGRESSION_HISTORY"], "description": "Governance stabilizzata nel tempo"}
+      }
+    },
+    {
+      "id": "arena",
+      "name": "Arena",
+      "ownerDomain": "Arena",
+      "levels": {
+        "0": {"requiredEvidenceTypes": [], "description": "Perimetro non definito"},
+        "1": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL"], "description": "Authority curricolare e ownership documentate"},
+        "2": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED"], "description": "Contratti e criteri di accettazione definiti"},
+        "3": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST"], "description": "Capacità implementata con output verificabile"},
+        "4": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST", "HUMAN_REVIEW"], "description": "Capacità verificata con review umana"},
+        "5": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST", "HUMAN_REVIEW", "REGRESSION_HISTORY"], "description": "Capacità stabilizzata nel tempo"}
+      }
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "ownerDomain": "Atlas",
+      "levels": {
+        "0": {"requiredEvidenceTypes": [], "description": "Perimetro non definito"},
+        "1": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL"], "description": "Ruolo pubblico e confini documentati"},
+        "2": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED"], "description": "Specifiche, contratti e gate definiti"},
+        "3": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST"], "description": "Superficie implementata e verificabile"},
+        "4": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST", "ACCESSIBILITY_GATE", "HUMAN_REVIEW"], "description": "Superficie verificata anche su accessibilità e review umana"},
+        "5": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST", "ACCESSIBILITY_GATE", "HUMAN_REVIEW", "REGRESSION_HISTORY", "ADOPTION_EVIDENCE"], "description": "Superficie stabilizzata e adottata"}
+      }
+    },
+    {
+      "id": "docente-os",
+      "name": "Docente OS",
+      "ownerDomain": "Docente OS",
+      "levels": {
+        "0": {"requiredEvidenceTypes": [], "description": "Perimetro non definito"},
+        "1": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL"], "description": "Ruolo teacher-first e confini documentati"},
+        "2": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED"], "description": "Contratti, criteri e gate definiti"},
+        "3": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST"], "description": "Capacità implementata e verificabile"},
+        "4": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST", "RUNTIME_CANARY", "HUMAN_REVIEW"], "description": "Capacità verificata sul runtime e con review umana"},
+        "5": {"requiredEvidenceTypes": ["DOCUMENT_CANONICAL", "CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST", "RUNTIME_CANARY", "HUMAN_REVIEW", "REGRESSION_HISTORY", "ADOPTION_EVIDENCE"], "description": "Capacità stabilizzata e adottata"}
+      }
+    }
+  ]
+}

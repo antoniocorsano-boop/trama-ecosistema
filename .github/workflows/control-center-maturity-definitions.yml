@@ -1,0 +1,36 @@
+name: Validate TRAMA Maturity Definitions
+
+on:
+  pull_request:
+    paths:
+      - "config/maturity-area-definitions.json"
+      - "scripts/evaluate_maturity_definitions.py"
+      - "docs/assurance/fixtures/maturity-evidence-pass-partial.json"
+      - "docs/assurance/fixtures/maturity-expected-levels.json"
+      - ".github/workflows/control-center-maturity-definitions.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "config/maturity-area-definitions.json"
+      - "scripts/evaluate_maturity_definitions.py"
+      - "docs/assurance/fixtures/maturity-evidence-pass-partial.json"
+      - "docs/assurance/fixtures/maturity-expected-levels.json"
+      - ".github/workflows/control-center-maturity-definitions.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate deterministic level evaluation
+        run: |
+          python scripts/evaluate_maturity_definitions.py             --evidence docs/assurance/fixtures/maturity-evidence-pass-partial.json             --expect docs/assurance/fixtures/maturity-expected-levels.json
+      - name: Validate no automatic promotion semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -Eq "(merge_pull_request|approve|authorize_runtime|requests\.(post|put|patch|delete)|Authorization:|Bearer )" scripts/evaluate_maturity_definitions.py
