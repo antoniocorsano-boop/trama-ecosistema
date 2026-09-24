@@ -51,6 +51,30 @@ flowchart LR
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
+| TRAMA Control Center v2 | **CC2-F0 INTEGRATED / CC2-F1 ACTIVE** | modello maturità/evidenze integrato via PR #65; avviata fondazione read-only dello snapshot, senza scoring automatico dei domini |
+
+## TRAMA Control Center v2 — maturità ed evidenze
+
+La PR **#65 — TRAMA Control Center v2 — maturity, evidence and ecosystem intelligence** è stata integrata su `main` con merge commit:
+
+`d23e6f8443ab6b7316696809327aba8249e6b01a`
+
+Exact head sottoposto a HUMAN EXACT-HEAD REVIEW — PASS:
+
+`f5ce0f770471b366bbe1a2959bb476c9b2179fa0`
+
+CC2-F0 è quindi integrato come baseline documentale e architetturale. Sono ora governati:
+
+- modello di maturità L0–L5 basato su evidenze;
+- distinzione tra livello confermato e livello candidato;
+- evidence registry, freshness e gate;
+- architettura snapshot-first e read-only;
+- target UI/UX desktop, mobile e LIM;
+- piano CC2-F0→F6;
+- schema `ecosystem-snapshot` e catalogo delle fonti;
+- TRAMA-ADR-014 resta **PROPOSED**: l'integrazione della baseline non la promuove automaticamente ad APPROVED.
+
+È ora avviato **CC2-F1 — Snapshot & Evidence Foundation**. Il primo slice resta deliberatamente conservativo: genera fasi, gate, provenance e stato delle fonti, ma **non assegna ancora livelli di maturità automatici ai domini** finché le regole L0–L5 per area non siano formalizzate, testate e sottoposte a review umana.
 
 ## Baseline documentale dell’ecosistema — integrata
 
