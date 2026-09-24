@@ -1,23 +1,340 @@
 [
-  {"id":"EV-GOV-DOC","type":"DOCUMENT_CANONICAL","area":"governance","status":"PASS"},
-  {"id":"EV-GOV-CONTRACT","type":"CONTRACT_APPROVED","area":"governance","status":"PASS"},
-  {"id":"EV-GOV-PR","type":"PR_EXACT_HEAD","area":"governance","status":"PASS"},
-  {"id":"EV-GOV-HUMAN","type":"HUMAN_REVIEW","area":"governance","status":"PASS"},
-
-  {"id":"EV-ARENA-DOC","type":"DOCUMENT_CANONICAL","area":"arena","status":"PASS"},
-  {"id":"EV-ARENA-CONTRACT","type":"CONTRACT_APPROVED","area":"arena","status":"PASS"},
-  {"id":"EV-ARENA-PR","type":"PR_EXACT_HEAD","area":"arena","status":"PASS"},
-  {"id":"EV-ARENA-CI","type":"AUTOMATED_TEST","area":"arena","status":"PASS"},
-
-  {"id":"EV-ATLAS-DOC","type":"DOCUMENT_CANONICAL","area":"atlas","status":"PASS"},
-  {"id":"EV-ATLAS-CONTRACT","type":"CONTRACT_APPROVED","area":"atlas","status":"PASS"},
-  {"id":"EV-ATLAS-PR","type":"PR_EXACT_HEAD","area":"atlas","status":"PASS"},
-  {"id":"EV-ATLAS-CI","type":"AUTOMATED_TEST","area":"atlas","status":"PASS"},
-  {"id":"EV-ATLAS-A11Y","type":"ACCESSIBILITY_GATE","area":"atlas","status":"PASS"},
-
-  {"id":"EV-DOS-DOC","type":"DOCUMENT_CANONICAL","area":"docente-os","status":"PASS"},
-  {"id":"EV-DOS-CONTRACT","type":"CONTRACT_APPROVED","area":"docente-os","status":"PASS"},
-  {"id":"EV-DOS-PR","type":"PR_EXACT_HEAD","area":"docente-os","status":"PASS"},
-  {"id":"EV-DOS-CI","type":"AUTOMATED_TEST","area":"docente-os","status":"PASS"},
-  {"id":"EV-DOS-CANARY","type":"RUNTIME_CANARY","area":"docente-os","status":"PASS"}
+  {
+    "id": "EV-GOV-DOC",
+    "type": "DOCUMENT_CANONICAL",
+    "area": "governance",
+    "status": "PASS",
+    "subject": "EV-GOV-DOC",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-GOV-CONTRACT",
+    "type": "CONTRACT_APPROVED",
+    "area": "governance",
+    "status": "PASS",
+    "subject": "EV-GOV-CONTRACT",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-GOV-PR",
+    "type": "PR_EXACT_HEAD",
+    "area": "governance",
+    "status": "PASS",
+    "subject": "EV-GOV-PR",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "governance",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-GOV-HUMAN",
+    "type": "HUMAN_REVIEW",
+    "area": "governance",
+    "status": "PASS",
+    "subject": "EV-GOV-HUMAN",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "governance",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-ARENA-DOC",
+    "type": "DOCUMENT_CANONICAL",
+    "area": "arena",
+    "status": "PASS",
+    "subject": "EV-ARENA-DOC",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-ARENA-CONTRACT",
+    "type": "CONTRACT_APPROVED",
+    "area": "arena",
+    "status": "PASS",
+    "subject": "EV-ARENA-CONTRACT",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-ARENA-PR",
+    "type": "PR_EXACT_HEAD",
+    "area": "arena",
+    "status": "PASS",
+    "subject": "EV-ARENA-PR",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "arena",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-ARENA-CI",
+    "type": "AUTOMATED_TEST",
+    "area": "arena",
+    "status": "PASS",
+    "subject": "EV-ARENA-CI",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "arena",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-ATLAS-DOC",
+    "type": "DOCUMENT_CANONICAL",
+    "area": "atlas",
+    "status": "PASS",
+    "subject": "EV-ATLAS-DOC",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-ATLAS-CONTRACT",
+    "type": "CONTRACT_APPROVED",
+    "area": "atlas",
+    "status": "PASS",
+    "subject": "EV-ATLAS-CONTRACT",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-ATLAS-PR",
+    "type": "PR_EXACT_HEAD",
+    "area": "atlas",
+    "status": "PASS",
+    "subject": "EV-ATLAS-PR",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "atlas",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-ATLAS-CI",
+    "type": "AUTOMATED_TEST",
+    "area": "atlas",
+    "status": "PASS",
+    "subject": "EV-ATLAS-CI",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "atlas",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-ATLAS-A11Y",
+    "type": "ACCESSIBILITY_GATE",
+    "area": "atlas",
+    "status": "PASS",
+    "subject": "EV-ATLAS-A11Y",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "atlas",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-DOS-DOC",
+    "type": "DOCUMENT_CANONICAL",
+    "area": "docente-os",
+    "status": "PASS",
+    "subject": "EV-DOS-DOC",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-DOS-CONTRACT",
+    "type": "CONTRACT_APPROVED",
+    "area": "docente-os",
+    "status": "PASS",
+    "subject": "EV-DOS-CONTRACT",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "UNTIL_CHANGE"
+    }
+  },
+  {
+    "id": "EV-DOS-PR",
+    "type": "PR_EXACT_HEAD",
+    "area": "docente-os",
+    "status": "PASS",
+    "subject": "EV-DOS-PR",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "docente-os",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-DOS-CI",
+    "type": "AUTOMATED_TEST",
+    "area": "docente-os",
+    "status": "PASS",
+    "subject": "EV-DOS-CI",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "docente-os",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  },
+  {
+    "id": "EV-DOS-CANARY",
+    "type": "RUNTIME_CANARY",
+    "area": "docente-os",
+    "status": "PASS",
+    "subject": "EV-DOS-CANARY",
+    "source": {
+      "ref": "cc2-f1d-fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00Z",
+    "confidence": "HIGH",
+    "supports": [],
+    "freshness": {
+      "policy": "RUNTIME_BOUND"
+    },
+    "binding": {
+      "capabilityRef": "docente-os",
+      "releaseRef": "fixture-release",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  }
 ]

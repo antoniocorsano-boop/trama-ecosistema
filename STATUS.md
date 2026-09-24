@@ -79,7 +79,7 @@ CC2-F0 è quindi integrato come baseline documentale e architetturale. Sono ora 
 - **CC2-F1/A** è integrato via PR #66, merge `4ab7baf9c6d0b8de900236753ec434f5a5bdb75e`: snapshot read-only, provenance, fasi, gate e validazione JSON Schema reale.
 - **CC2-F1/B** è integrato via PR #67, merge `91a97949792353193b22ec1bfa20687b4d11a3f8`: prime quattro aree Governance/Arena/Atlas/Docente OS con regole L0–L5 cumulative e evaluator deterministico.
 
-È avviato **CC2-F1/C**: collegamento conservativo delle definizioni allo snapshot. Finché la raccolta evidenze di dominio non è completa, le aree restano `PARTIAL` con confidenza `LOW` e `candidateLevel = confirmedLevel`; nessuna maturità viene promossa per inferenza o per assenza di evidenza.
+**CC2-F1/C** è integrato: collegamento conservativo delle definizioni allo snapshot, con aree `PARTIAL`, confidenza `LOW` e `candidateLevel = confirmedLevel`. È ora avviato **CC2-F1/D — Evidence Binding & Hardening**, che introduce binding capability/release/exact-head per evidenze forti, freshness effettiva, dipendenze per-area, schema delle maturity definitions e fixture negative, mantenendo il collector read-only e senza promozioni automatiche.
 
 ## Baseline documentale dell’ecosistema — integrata
 

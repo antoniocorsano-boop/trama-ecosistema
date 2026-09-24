@@ -1,0 +1,19 @@
+[
+  {
+    "id": "EV-NEG-EXPIRED",
+    "type": "DOCUMENT_CANONICAL",
+    "area": "governance",
+    "subject": "expired fixture",
+    "status": "PASS",
+    "source": {
+      "ref": "fixture"
+    },
+    "observedAt": "2026-09-20T00:00:00+00:00",
+    "freshness": {
+      "policy": "TIME_BOUND",
+      "expiresAt": "2026-09-21T00:00:00+00:00"
+    },
+    "confidence": "HIGH",
+    "supports": []
+  }
+]
