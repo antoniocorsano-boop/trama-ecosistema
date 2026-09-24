@@ -17,6 +17,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from evaluate_maturity_definitions import evaluate_area, validate_definitions
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -88,6 +90,8 @@ def build_snapshot(root: Path) -> dict:
     config = load_json(root / "config/control-center-snapshot-sources.json")
     eco_status = load_json(root / "status/ecosystem-status.json")
     decisions = load_json(root / "docs/decisions/decision-register.json")
+    maturity_definitions = load_json(root / "config/maturity-area-definitions.json")
+    validate_definitions(maturity_definitions)
     caps = capability_map(eco_status)
 
     source_state = {}
@@ -159,13 +163,42 @@ def build_snapshot(root: Path) -> dict:
             }
         )
 
+    maturity_results = [
+        evaluate_area(area_def, evidence)
+        for area_def in maturity_definitions["areas"]
+    ]
+    maturity_areas = [
+        {
+            "id": result["id"],
+            "name": result["name"],
+            "ownerDomain": result["ownerDomain"],
+            "confirmedLevel": result["confirmedLevel"],
+            "candidateLevel": result["confirmedLevel"],
+            "confidence": "LOW",
+            "status": "PARTIAL",
+            "evidenceRefs": [
+                item["id"]
+                for item in evidence
+                if item.get("area") == result["id"] and item.get("status") == "PASS"
+            ],
+            "blockingGateRefs": [
+                gate["id"]
+                for gate in gates
+                if gate.get("area") == result["id"] and gate.get("blocking") and gate.get("status") != "PASS"
+            ],
+            "dependencies": [],
+            "lastEvaluatedAt": observed_at,
+        }
+        for result in maturity_results
+    ]
+
     return {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
         "schemaVersion": "1.0.0",
         "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),
-        "areas": [],
+        "areas": maturity_areas,
         "gates": gates,
         "evidence": evidence,
         "dependencies": [
