@@ -7,6 +7,16 @@
       "claimType": "FORMAL_CERTIFICATION",
       "scope": "Negative fixture",
       "status": "FORMALLY_CERTIFIED",
+      "targetStatus": "FORMALLY_CERTIFIED",
+      "requiredEvidenceKinds": [
+        "INDEPENDENT_ASSESSMENT",
+        "EXTERNAL_CERTIFICATE",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "INDEPENDENT_ASSESSMENT",
+        "VERSION_BOUND_TEST"
+      ],
       "evidenceRefs": [
         "EV-X"
       ],
