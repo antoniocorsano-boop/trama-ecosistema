@@ -107,3 +107,9 @@ Valori iniziali:
 ## Implementazione F3A foundation
 
 Sono ora presenti schema del registry, registry conservativo iniziale, validator deterministico, fixture positive/negative, workflow dedicato e sezione `assuranceClaims` nello snapshot. La UI stakeholder resta esclusa da questa tranche.
+
+## Readiness rispetto al target
+
+Ogni claim espone ora uno stato attuale e un `targetStatus`. Il modello elenca i prerequisiti evidenziali richiesti, quelli già presenti e quelli mancanti. Lo snapshot deriva automaticamente `metPrerequisites`, `requiredPrerequisites` e `missingEvidenceKinds`.
+
+La readiness non è una percentuale di conformità e non costituisce certificazione. Serve a rendere leggibile la distanza tra lo stato dimostrato e quello necessario per arrivare a `VERIFIED`, `THIRD_PARTY_VERIFIED` o `FORMALLY_CERTIFIED`.
