@@ -36,6 +36,29 @@ jobs:
         run: python scripts/build_ecosystem_snapshot.py --check
       - name: Build snapshot fixture
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
+      - name: Validate generated snapshot against JSON Schema
+        shell: bash
+        run: |
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator, FormatChecker
+
+          schema = json.loads(Path("schemas/ecosystem-snapshot.schema.json").read_text(encoding="utf-8"))
+          snapshot = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+
+          Draft202012Validator.check_schema(schema)
+          validator = Draft202012Validator(schema, format_checker=FormatChecker())
+          errors = sorted(validator.iter_errors(snapshot), key=lambda e: list(e.absolute_path))
+          if errors:
+              for error in errors:
+                  path = ".".join(str(p) for p in error.absolute_path) or "<root>"
+                  print(f"{path}: {error.message}")
+              raise SystemExit(1)
+
+          print("TRAMA_ECOSYSTEM_SNAPSHOT_SCHEMA_PASS")
+          PY
       - name: Validate read-only contract
         shell: bash
         run: |
