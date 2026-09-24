@@ -452,7 +452,11 @@
           "verifiedAt",
           "expiresAt",
           "limitations",
-          "externalCertificateRef"
+          "externalCertificateRef",
+          "targetStatus",
+          "requiredEvidenceKinds",
+          "presentEvidenceKinds",
+          "readiness"
         ],
         "properties": {
           "requirementId": {
@@ -547,6 +551,91 @@
               "string",
               "null"
             ]
+          },
+          "targetStatus": {
+            "enum": [
+              "DOCUMENTED",
+              "IMPLEMENTED",
+              "VERIFIED",
+              "THIRD_PARTY_VERIFIED",
+              "FORMALLY_CERTIFIED"
+            ]
+          },
+          "requiredEvidenceKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
+          },
+          "presentEvidenceKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
+          },
+          "readiness": {
+            "type": "object",
+            "required": [
+              "currentStatus",
+              "targetStatus",
+              "metEvidenceKinds",
+              "missingEvidenceKinds",
+              "metPrerequisites",
+              "requiredPrerequisites"
+            ],
+            "properties": {
+              "currentStatus": {
+                "type": "string"
+              },
+              "targetStatus": {
+                "type": "string"
+              },
+              "metEvidenceKinds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "missingEvidenceKinds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "metPrerequisites": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "requiredPrerequisites": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": false
