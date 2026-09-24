@@ -1,0 +1,47 @@
+name: Validate TRAMA Ecosystem Snapshot
+
+on:
+  pull_request:
+    paths:
+      - "config/control-center-snapshot-sources.json"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "schemas/ecosystem-snapshot.schema.json"
+      - "status/ecosystem-status.json"
+      - "docs/decisions/decision-register.json"
+      - "STATUS.md"
+      - "ROADMAP.md"
+      - ".github/workflows/control-center-snapshot.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "config/control-center-snapshot-sources.json"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "schemas/ecosystem-snapshot.schema.json"
+      - "status/ecosystem-status.json"
+      - "docs/decisions/decision-register.json"
+      - "STATUS.md"
+      - "ROADMAP.md"
+      - ".github/workflows/control-center-snapshot.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate snapshot foundation
+        run: python scripts/build_ecosystem_snapshot.py --check
+      - name: Build snapshot fixture
+        run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
+      - name: Validate read-only contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -Eq "(requests\.(post|put|patch|delete)|urllib\.request\.Request.*method=['\"](POST|PUT|PATCH|DELETE)|Authorization:|Bearer )" scripts/build_ecosystem_snapshot.py
+          grep -q '"confirmedLevel"' schemas/ecosystem-snapshot.schema.json
+          grep -q '"candidateLevel"' schemas/ecosystem-snapshot.schema.json
+          grep -q '"evidence"' schemas/ecosystem-snapshot.schema.json
+          grep -q '"gates"' schemas/ecosystem-snapshot.schema.json
