@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from evaluate_maturity_definitions import evaluate_area, validate_definitions
+from validate_stakeholder_assurance import assurance_readiness, validate_registry
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -91,7 +92,9 @@ def build_snapshot(root: Path) -> dict:
     eco_status = load_json(root / "status/ecosystem-status.json")
     decisions = load_json(root / "docs/decisions/decision-register.json")
     maturity_definitions = load_json(root / "config/maturity-area-definitions.json")
+    assurance_registry = load_json(root / "config/stakeholder-assurance-registry.json")
     validate_definitions(maturity_definitions)
+    validate_registry(assurance_registry)
     caps = capability_map(eco_status)
 
     source_state = {}
@@ -202,6 +205,10 @@ def build_snapshot(root: Path) -> dict:
             {"from": "Arena", "to": "Atlas", "kind": "DATA_FLOW", "status": "GOVERNED"},
             {"from": "Docente OS", "to": "Atlas", "kind": "FUTURE_NOT_AUTHORIZED", "status": "NOT_AUTHORIZED"},
         ],
+        "assuranceClaims": [
+            {**claim, "readiness": assurance_readiness(claim)}
+            for claim in assurance_registry["claims"]
+        ],
         "expansionCandidates": [
             {"id": "R3-P2", "name": "Curriculum pubblico", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
             {"id": "R3-P5", "name": "Smart Navigation", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
@@ -219,6 +226,7 @@ def validate(snapshot: dict) -> None:
         "gates",
         "evidence",
         "dependencies",
+        "assuranceClaims",
         "expansionCandidates",
     }
     missing = sorted(required - snapshot.keys())

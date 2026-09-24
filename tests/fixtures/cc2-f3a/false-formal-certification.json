@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "claims": [
+    {
+      "requirementId": "NEG-CERT-001",
+      "domain": "EXTERNAL_CERTIFICATION",
+      "claimType": "FORMAL_CERTIFICATION",
+      "scope": "Negative fixture",
+      "status": "FORMALLY_CERTIFIED",
+      "targetStatus": "FORMALLY_CERTIFIED",
+      "requiredEvidenceKinds": [
+        "INDEPENDENT_ASSESSMENT",
+        "EXTERNAL_CERTIFICATE",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "INDEPENDENT_ASSESSMENT",
+        "VERSION_BOUND_TEST"
+      ],
+      "evidenceRefs": [
+        "EV-X"
+      ],
+      "reviewAuthority": "External body",
+      "assessor": null,
+      "standardRef": "Example standard",
+      "versionRef": "v1",
+      "verifiedAt": "2026-09-24T00:00:00Z",
+      "expiresAt": null,
+      "limitations": [],
+      "externalCertificateRef": null
+    }
+  ]
+}

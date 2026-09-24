@@ -5,6 +5,8 @@ on:
     paths:
       - "config/control-center-snapshot-sources.json"
       - "config/maturity-area-definitions.json"
+      - "config/stakeholder-assurance-registry.json"
+      - "scripts/validate_stakeholder_assurance.py"
       - "schemas/maturity-area-definitions.schema.json"
       - "tests/fixtures/cc2-f1d/**"
       - "scripts/evaluate_maturity_definitions.py"
@@ -20,6 +22,8 @@ on:
     paths:
       - "config/control-center-snapshot-sources.json"
       - "config/maturity-area-definitions.json"
+      - "config/stakeholder-assurance-registry.json"
+      - "scripts/validate_stakeholder_assurance.py"
       - "schemas/maturity-area-definitions.schema.json"
       - "tests/fixtures/cc2-f1d/**"
       - "scripts/evaluate_maturity_definitions.py"

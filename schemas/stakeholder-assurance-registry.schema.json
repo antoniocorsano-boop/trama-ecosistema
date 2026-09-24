@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/stakeholder-assurance-registry.schema.json",
+  "title": "TRAMA Stakeholder Assurance Registry",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "claims"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "requirementId",
+          "domain",
+          "claimType",
+          "scope",
+          "status",
+          "evidenceRefs",
+          "reviewAuthority",
+          "assessor",
+          "standardRef",
+          "versionRef",
+          "verifiedAt",
+          "expiresAt",
+          "limitations",
+          "externalCertificateRef",
+          "targetStatus",
+          "requiredEvidenceKinds",
+          "presentEvidenceKinds"
+        ],
+        "properties": {
+          "requirementId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "domain": {
+            "enum": [
+              "PRIVACY",
+              "NORMATIVE_GOVERNANCE",
+              "ACCESSIBILITY",
+              "USABILITY",
+              "SECURITY",
+              "OPERATIONAL_RELIABILITY",
+              "EXTERNAL_CERTIFICATION"
+            ]
+          },
+          "claimType": {
+            "enum": [
+              "EVIDENCE_BACKED_CLAIM",
+              "INDEPENDENT_ASSESSMENT",
+              "FORMAL_CERTIFICATION"
+            ]
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "DOCUMENTED",
+              "IMPLEMENTED",
+              "VERIFIED",
+              "THIRD_PARTY_VERIFIED",
+              "FORMALLY_CERTIFIED",
+              "PARTIAL",
+              "TO_VERIFY",
+              "NOT_APPLICABLE",
+              "BLOCKED"
+            ]
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "reviewAuthority": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "assessor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "standardRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "versionRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verifiedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "externalCertificateRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetStatus": {
+            "enum": [
+              "DOCUMENTED",
+              "IMPLEMENTED",
+              "VERIFIED",
+              "THIRD_PARTY_VERIFIED",
+              "FORMALLY_CERTIFIED"
+            ]
+          },
+          "requiredEvidenceKinds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
+          },
+          "presentEvidenceKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

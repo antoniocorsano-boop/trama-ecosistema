@@ -13,6 +13,7 @@
     "gates",
     "evidence",
     "dependencies",
+    "assuranceClaims",
     "expansionCandidates"
   ],
   "properties": {
@@ -432,6 +433,213 @@
     },
     "$schema": {
       "type": "string"
+    },
+    "assuranceClaims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "requirementId",
+          "domain",
+          "claimType",
+          "scope",
+          "status",
+          "evidenceRefs",
+          "reviewAuthority",
+          "assessor",
+          "standardRef",
+          "versionRef",
+          "verifiedAt",
+          "expiresAt",
+          "limitations",
+          "externalCertificateRef",
+          "targetStatus",
+          "requiredEvidenceKinds",
+          "presentEvidenceKinds",
+          "readiness"
+        ],
+        "properties": {
+          "requirementId": {
+            "type": "string"
+          },
+          "domain": {
+            "enum": [
+              "PRIVACY",
+              "NORMATIVE_GOVERNANCE",
+              "ACCESSIBILITY",
+              "USABILITY",
+              "SECURITY",
+              "OPERATIONAL_RELIABILITY",
+              "EXTERNAL_CERTIFICATION"
+            ]
+          },
+          "claimType": {
+            "enum": [
+              "EVIDENCE_BACKED_CLAIM",
+              "INDEPENDENT_ASSESSMENT",
+              "FORMAL_CERTIFICATION"
+            ]
+          },
+          "scope": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "DOCUMENTED",
+              "IMPLEMENTED",
+              "VERIFIED",
+              "THIRD_PARTY_VERIFIED",
+              "FORMALLY_CERTIFIED",
+              "PARTIAL",
+              "TO_VERIFY",
+              "NOT_APPLICABLE",
+              "BLOCKED"
+            ]
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reviewAuthority": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "assessor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "standardRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "versionRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verifiedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "externalCertificateRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetStatus": {
+            "enum": [
+              "DOCUMENTED",
+              "IMPLEMENTED",
+              "VERIFIED",
+              "THIRD_PARTY_VERIFIED",
+              "FORMALLY_CERTIFIED"
+            ]
+          },
+          "requiredEvidenceKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
+          },
+          "presentEvidenceKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
+          },
+          "readiness": {
+            "type": "object",
+            "required": [
+              "currentStatus",
+              "targetStatus",
+              "metEvidenceKinds",
+              "missingEvidenceKinds",
+              "metPrerequisites",
+              "requiredPrerequisites"
+            ],
+            "properties": {
+              "currentStatus": {
+                "type": "string"
+              },
+              "targetStatus": {
+                "type": "string"
+              },
+              "metEvidenceKinds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "missingEvidenceKinds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "metPrerequisites": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "requiredPrerequisites": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false
