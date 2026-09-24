@@ -1,6 +1,6 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 23 settembre 2026.
+Aggiornato al 24 settembre 2026.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -25,7 +25,7 @@ flowchart LR
   ATLAS --> R3F0["R3-F0 · ACTIVE"]
   R3F0 --> S1["S1 IA + Visual Grammar · INTEGRATED"]
   R3F0 --> S2["S2 Design Core · INTEGRATED"]
-  R3F0 --> S3["S3 Product Experience · ACTIVE / F0-F2 INTEGRATED"]
+  R3F0 --> S3["S3 Product Experience · ACTIVE / F0-F3 INTEGRATED"]
   ATLAS --> R3P2["R3-P2 Curriculum pubblico · PLANNED"]
   ATLAS --> R3P3["R3-P3 Student Learning Hub · PLANNED"]
   ATLAS --> R3P4["R3-P4 Docente OS → Atlas · NOT AUTHORIZED"]
@@ -45,7 +45,7 @@ flowchart LR
 | Arena | **OPERATIVA** | Fonte curricolare autorevole; EC-01/Arena-F4 integrato |
 | Docente OS | **OPERATIVO / CANARY PASS** | Preparazione, contesto, decisione docente e registrazione lezione disponibili; post-merge Product CI, P6 Performance Runtime e HVA Runtime PASS sul Beta reale |
 | ECO-02/P1 | **ACTIVE** | È il principale gate reale ancora da chiudere: collaudo umano integrato Tecnologia 2C |
-| Atlas R3-F0 | **ACTIVE / S3-V2 F0-F2 INTEGRATED** | Foundation, Curricolo verticale d’istituto, Materiali pubblici di base ed Esplora relazionale integrati; F3-F5 ancora da completare |
+| Atlas R3-F0 | **ACTIVE / S3-V2 F0-F3 INTEGRATED** | Foundation, Curricolo verticale d’istituto, Materiali pubblici di base, Esplora relazionale e F3 Materiali+Risorse integrati; F4 Mobile+LIM e F5 Exit ancora da completare |
 | Runtime Docente OS → Atlas | **NON AUTORIZZATO** | Nessuna pubblicazione automatica cross-product |
 | Officina materiali | **PLANNED** | Architettura approvata; runtime ancora da progettare/autorizzare |
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
@@ -85,7 +85,7 @@ L’integrazione non autorizza R3-P4, DOS-A1, pubblicazione automatica o altri r
 La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md).
 
 1. **Chiudere ECO-02/P1** con un caso reale integrato Tecnologia 2C senza correzioni tecniche durante il percorso.
-2. **Completare R3-F0/S3-V2 — Atlas Product Experience**: F0 Foundation, F1 Curricolo verticale/Materiali pubblici di base e F2 Esplora sono integrati; restano F3 Materiali+Risorse, F4 Mobile+LIM e F5 Exit.
+2. **Completare R3-F0/S3-V2 — Atlas Product Experience**: F0 Foundation, F1 Curricolo verticale/Materiali pubblici di base, F2 Esplora e F3 Materiali+Risorse sono integrati; restano F4 Mobile+LIM e F5 Exit.
 3. **Consolidare Atlas prima di ampliarlo**: R3-P2 Curriculum pubblico e R3-P5 Smart Navigation restano successivi alla chiusura verificata di S3-V2.
 4. **Ridurre l'attrito del percorso docente** mantenendo Arena → Docente OS diretto e Atlas opzionale, non obbligatorio.
 5. Solo dopo superfici Atlas mature, valutare R3-P4 Docente OS → Atlas con un nuovo gate umano/runtime.
@@ -99,7 +99,7 @@ La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strateg
 | EC-01/Arena-F4 | **Integrato** | trusted normative checker integrato in Arena su merge `f0cc66a4795af90e85eacf5f32b5a91e88c7c1d8`; Edge Function validata ma non deployata; nessun fingerprint reale seedato automaticamente |
 | ECO-01 | Chiuso | forma docente e contratti cross-product validati |
 | ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS consolidato fino a P9; registrazione lezione verificata in Beta; collaudo umano integrato finale ancora pendente |
-| Atlas / R3 | **R3-F0 / S3-V2 attivo** | F0 Foundation, F1 Curricolo verticale d’istituto + Materiali pubblici di base e F2 Esplora relazionale integrati in Curriculum-Atlas; F3-F5 pendenti; NO cross-product runtime |
+| Atlas / R3 | **R3-F0 / S3-V2 attivo** | F0 Foundation, F1 Curricolo verticale d’istituto + Materiali pubblici di base, F2 Esplora relazionale e F3 Materiali+Risorse integrati in Curriculum-Atlas; F4-F5 pendenti; NO cross-product runtime |
 | Docente OS | Operativo nel proprio dominio | baseline persistente, preparazione, proposte teacher-editable, registrazione lezione e runtime release contract verificati |
 | Officina materiali / R4-P1 | Architettura approvata / runtime non autorizzato | separazione tra regia didattica e produzione specialistica approvata da ADR-010; implementazione ancora da progettare |
 | TRAMA-PW-01 | **Integrato / canary Docente OS PASS** | contratto trasversale no-silent-write integrato; Product CI, P6 Performance Runtime e HVA Runtime PASS sul Beta Docente OS dopo il merge applicativo |
@@ -165,7 +165,7 @@ La governance di base è già consolidata:
 - LessonPublicationManifest e PublicationReceipt restano distinti;
 - il runtime Docente OS → Atlas resta NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME.
 
-**TRAMA-ADR-010 — Atlas integrale e Officina materiali** è approvata e integrata. **R3-F0 — Product & Design Foundation** è approvato, integrato e `ACTIVE` come slice di prodotto/design. Il primo incremento **R3-F0/S1 — Information Architecture + Visual Grammar** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main`; resta `NO_RUNTIME`. Il secondo incremento **R3-F0/S2 — Design Core & Accessible Primitives** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main`; resta `NO_RUNTIME`. Il pacchetto statico del terzo incremento **R3-F0/S3 — Journey Prototypes & 2D Map POC** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main`; resta `NO_RUNTIME`. S3 non è ancora chiuso. Il pacchetto **R3-F0/S3-V1 — Rendered Prototype Validation** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main` all'exact head `5e1a6feb1d3a4ae08f3547841e7ceef20e37bed6` (merge commit `4e34b363b2969051ff8dce4a7ee5a88d09b400a7`). Il prototipo HTML/CSS con JavaScript locale minimale resta `NO_RUNTIME`; contratto statico, test e browser rendering automatizzato Android-like/desktop/LIM sono PASS. La HUMAN PRODUCT REVIEW successiva ha rilevato un mismatch sostanziale con la Product & Design Foundation: S3-V1 resta quindi harness tecnico/accessibilità e non può chiudere S3. È ora in corso **R3-F0/S3-V2 — Atlas Product Experience Prototype**. Sono integrati in `Curriculum-Atlas`: **F0 Foundation** (merge `68ba12e06cddd781c28d38e8cd5eab24216ed9fb`), **F1 Curricolo verticale d’istituto + Materiali pubblici di base** (merge `ec0c2e0c89e7d1ac56c3cfb3b00ca66a3f51f869`) e **F2 Esplora relazionale** (merge `973429968d480eeeaf31362a9c6da7f18fed50e3`). F2 usa XYFlow/React Flow, zoom semantico, filtri, pannello contestuale e modalità Mappa/Elenco equivalente con layout mobile dedicato; i gate Foundation, Perceptible Write, F1 Visual Evidence e F2 Visual Evidence sono PASS sull’exact head di integrazione. Restano da completare **F3 Materiali+Risorse, F4 Mobile+LIM e F5 Exit**. Restano esclusi runtime cross-product, autenticazione/account studenti, profili o tracking individuale, Officina runtime e DOS-A1.
+**TRAMA-ADR-010 — Atlas integrale e Officina materiali** è approvata e integrata. **R3-F0 — Product & Design Foundation** è approvato, integrato e `ACTIVE` come slice di prodotto/design. Il primo incremento **R3-F0/S1 — Information Architecture + Visual Grammar** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main`; resta `NO_RUNTIME`. Il secondo incremento **R3-F0/S2 — Design Core & Accessible Primitives** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main`; resta `NO_RUNTIME`. Il pacchetto statico del terzo incremento **R3-F0/S3 — Journey Prototypes & 2D Map POC** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main`; resta `NO_RUNTIME`. S3 non è ancora chiuso. Il pacchetto **R3-F0/S3-V1 — Rendered Prototype Validation** è approvato con HUMAN EXACT-HEAD REVIEW PASS e integrato su `main` all'exact head `5e1a6feb1d3a4ae08f3547841e7ceef20e37bed6` (merge commit `4e34b363b2969051ff8dce4a7ee5a88d09b400a7`). Il prototipo HTML/CSS con JavaScript locale minimale resta `NO_RUNTIME`; contratto statico, test e browser rendering automatizzato Android-like/desktop/LIM sono PASS. La HUMAN PRODUCT REVIEW successiva ha rilevato un mismatch sostanziale con la Product & Design Foundation: S3-V1 resta quindi harness tecnico/accessibilità e non può chiudere S3. È ora in corso **R3-F0/S3-V2 — Atlas Product Experience Prototype**. Sono integrati in `Curriculum-Atlas`: **F0 Foundation** (merge `68ba12e06cddd781c28d38e8cd5eab24216ed9fb`), **F1 Curricolo verticale d’istituto + Materiali pubblici di base** (merge `ec0c2e0c89e7d1ac56c3cfb3b00ca66a3f51f869`) e **F2 Esplora relazionale** (merge `973429968d480eeeaf31362a9c6da7f18fed50e3`). F2 usa XYFlow/React Flow, zoom semantico, filtri, pannello contestuale e modalità Mappa/Elenco equivalente con layout mobile dedicato; i gate Foundation, Perceptible Write, F1 Visual Evidence e F2 Visual Evidence sono PASS sull’exact head di integrazione. **F3 Materiali+Risorse è integrato** in Curriculum-Atlas con merge `2a0f88b64e5002197cceeb2f82b06a5efd1edaee`. Restano da completare **F4 Mobile+LIM e F5 Exit**. Restano esclusi runtime cross-product, autenticazione/account studenti, profili o tracking individuale, Officina runtime e DOS-A1.
 
 ## TypeSafe — assurance separata dal prodotto
 
