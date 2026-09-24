@@ -1,0 +1,31 @@
+name: Validate Penpot pilot infrastructure
+
+on:
+  pull_request:
+    paths:
+      - "infrastructure/penpot/**"
+      - "design/penpot/**"
+      - ".github/workflows/validate-penpot-infra.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "infrastructure/penpot/**"
+      - "design/penpot/**"
+      - ".github/workflows/validate-penpot-infra.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate governed Penpot configuration
+        run: python3 infrastructure/penpot/validation/validate_penpot_config.py
+
+      - name: Validate Penpot manifest JSON
+        run: python3 -m json.tool design/penpot/manifest.json > /dev/null
