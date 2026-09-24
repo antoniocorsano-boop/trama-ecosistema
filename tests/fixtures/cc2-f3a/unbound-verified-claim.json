@@ -7,6 +7,16 @@
       "claimType": "EVIDENCE_BACKED_CLAIM",
       "scope": "Negative fixture",
       "status": "VERIFIED",
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "ACCESSIBILITY_AUDIT",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "ACCESSIBILITY_AUDIT"
+      ],
       "evidenceRefs": [
         "EV-X"
       ],
