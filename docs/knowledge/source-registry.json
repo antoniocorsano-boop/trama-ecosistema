@@ -1,6 +1,6 @@
 {
-  "registryVersion": "1.3.0",
-  "updatedAt": "2026-09-23",
+  "registryVersion": "1.4.0",
+  "updatedAt": "2026-09-24",
   "sources": [
     {
       "domain": "ecosystem-governance",
@@ -100,6 +100,19 @@
         "institutional-documents"
       ],
       "drivePolicy": "AUTHORITATIVE_FOR_DECLARED_DOCUMENT_ONLY"
+    },
+    {
+      "domain": "project-knowledge-projection",
+      "authority": "trama-ecosistema",
+      "content": [
+        "project-context-snapshot",
+        "context-packs",
+        "knowledge-events",
+        "source-bindings",
+        "supersession-links",
+        "negative-knowledge"
+      ],
+      "drivePolicy": "HUMAN_READABLE_REPORT_ONLY"
     }
   ]
 }
