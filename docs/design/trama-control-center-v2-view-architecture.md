@@ -164,6 +164,197 @@ Output:
 - nessuna incoerenza;
 - oppure elenco puntuale delle incoerenze con provenienza.
 
+
+
+## Vista stakeholder — Assurance & Quality
+
+Domanda: **quanto è affidabile, governato e verificato il prodotto rispetto ai vincoli che interessano chi deve adottarlo o autorizzarne l’uso?**
+
+Questa vista è destinata a soggetti che non devono leggere PR, SHA o dettagli di implementazione per comprendere il livello di qualità del sistema.
+
+Stakeholder principali:
+- dirigente scolastico;
+- DSGA / funzioni organizzative quando pertinenti;
+- DPO / referente privacy;
+- responsabile sicurezza o referente tecnico;
+- animatore digitale / team innovazione;
+- referente inclusione/accessibilità;
+- organi di governance dell’istituto;
+- partner o valutatori esterni.
+
+### Principio fondamentale
+
+La vista non assegna un unico “quality score” e non dichiara conformità o certificazioni non dimostrate.
+
+Deve distinguere almeno:
+
+1. **vincolo / requisito applicabile**;
+2. **stato di governance**;
+3. **evidenza tecnica disponibile**;
+4. **review umana / istituzionale**;
+5. **eventuale attestazione o certificazione esterna**;
+6. **limiti e questioni aperte**.
+
+### Domini di assurance
+
+#### Privacy & protezione dati
+
+Mostra in forma comprensibile:
+- presenza/assenza di account studente;
+- presenza/assenza di tracking individuale;
+- minimizzazione dei dati;
+- confini tra Arena, Atlas e Docente OS;
+- flussi di dati autorizzati e non autorizzati;
+- persistenza e località dei dati quando governate;
+- eventuali DPIA, registri, valutazioni o review pertinenti;
+- questioni ancora da validare con DPO o istituto.
+
+La vista deve distinguere chiaramente:
+- **privacy-by-design evidence**;
+- **policy/contract evidence**;
+- **institutional/legal review**.
+
+Nessun automatismo può dichiarare “GDPR compliant” come conclusione generale.
+
+#### Normativa scolastica e governance
+
+Mostra:
+- fonti normative censite;
+- contratti di dominio derivati;
+- ADR approvate;
+- decisioni istituzionali richieste;
+- elementi ancora `SOURCE_REFERENCE`, `DOMAIN_GOVERNED`, `HUMAN_REVIEWED` o `NOT_CERTIFIED`.
+
+La presenza di una fonte normativa non equivale automaticamente a validazione legale dell’intero prodotto.
+
+#### Accessibilità
+
+Mostra:
+- target WCAG;
+- gate automatici;
+- HVA/manual review;
+- superfici verificate;
+- superfici non ancora verificate;
+- browser/device coverage;
+- eventuali audit esterni.
+
+#### Usabilità e qualità dell’esperienza
+
+Mostra:
+- Human Validation / HVA;
+- test con casi reali;
+- responsive/mobile/LIM;
+- PWA/offline;
+- perceptible writes;
+- tempi/performance quando misurati;
+- regressioni visuali;
+- esiti di test con utenti o docenti.
+
+L’esito deve essere espresso come evidenza osservata, non come giudizio assoluto di “buona usabilità”.
+
+#### Sicurezza tecnica
+
+Mostra:
+- security gates;
+- dependency/security scanning;
+- ASVS o framework equivalente quando effettivamente applicato;
+- runtime canary;
+- release contract;
+- vulnerabilità note/non risolte;
+- limiti della copertura.
+
+#### Affidabilità operativa
+
+Mostra:
+- stato canary/beta;
+- incidenti/regressioni;
+- rollback/restore test;
+- freshness delle evidenze;
+- dipendenze esterne;
+- stato PWA/offline;
+- continuità del servizio quando misurata.
+
+#### Certificazioni, attestazioni e riferibilità esterna
+
+La UI deve distinguere tre categorie:
+
+- **Evidence-backed claim** — proprietà dimostrata da test o documento interno;
+- **Independent assessment** — valutazione di terza parte documentata;
+- **Formal certification** — certificazione rilasciata da soggetto competente, con ente, standard, ambito, versione, data di rilascio e scadenza.
+
+Non utilizzare il termine “certificato” quando esiste soltanto un test automatico, una review interna o una dichiarazione progettuale.
+
+### Modello di presentazione
+
+Per ogni dominio di assurance:
+
+- **Requisito / obiettivo**
+- **Stato**
+- **Copertura**
+- **Evidenze**
+- **Ultima verifica**
+- **Chi ha verificato**
+- **Scadenza / freshness**
+- **Limiti**
+- **Azioni ancora richieste**
+
+Stati consentiti, ad esempio:
+- Documentato
+- Implementato
+- Verificato
+- Verificato da terza parte
+- Certificato esternamente
+- Parziale
+- Da verificare
+- Non applicabile
+- Bloccato
+
+### Vista dirigente scolastico
+
+Per il dirigente la vista deve rispondere in pochi secondi a domande come:
+
+- quali vincoli sono coperti?
+- quali sono ancora aperti?
+- quali evidenze esistono?
+- quali richiedono decisione dell’istituto?
+- quali richiedono DPO, RSPP, referente accessibilità o altro soggetto competente?
+- cosa è stato testato realmente e su quale versione?
+- quali claim non possono ancora essere fatti?
+
+Il dettaglio tecnico resta disponibile in drill-down, ma non è il livello primario.
+
+### Vista assurance specialistica
+
+Dalla vista stakeholder deve essere possibile aprire un livello più tecnico per:
+- privacy;
+- accessibility;
+- security;
+- usability;
+- normative assurance;
+- operational reliability;
+- external certification registry.
+
+### Registro assurance
+
+Il modello dati dovrà prevedere un registro strutturato con almeno:
+- `requirementId`;
+- `domain`;
+- `claimType`;
+- `scope`;
+- `status`;
+- `evidenceRefs`;
+- `reviewAuthority`;
+- `assessor`;
+- `standardRef`;
+- `versionRef`;
+- `verifiedAt`;
+- `expiresAt`;
+- `limitations`;
+- `externalCertificateRef` quando realmente esistente.
+
+Questo registro dovrà rimanere separato dalla maturity del prodotto: un livello di maturità elevato non equivale automaticamente a conformità normativa o certificazione.
+
+
 ## Viste specialistiche successive
 
 ### Adoption readiness
