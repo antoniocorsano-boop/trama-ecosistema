@@ -79,7 +79,7 @@ CC2-F0 è quindi integrato come baseline documentale e architetturale. Sono ora 
 - **CC2-F1/A** è integrato via PR #66, merge `4ab7baf9c6d0b8de900236753ec434f5a5bdb75e`: snapshot read-only, provenance, fasi, gate e validazione JSON Schema reale.
 - **CC2-F1/B** è integrato via PR #67, merge `91a97949792353193b22ec1bfa20687b4d11a3f8`: prime quattro aree Governance/Arena/Atlas/Docente OS con regole L0–L5 cumulative e evaluator deterministico.
 
-**CC2-F1/C** e **CC2-F1/D** sono integrati: wiring conservativo, binding delle evidenze forti, freshness effettiva, dipendenze per-area, schema e fixture negative. È ora avviato **CC2-F2 — Snapshot-first Control Center shell**: prima superficie UI/PWA che consuma esclusivamente lo snapshot governato e mostra fasi, maturità, gate, evidenze, dipendenze ed espansioni senza score complessivo né accessi GitHub diretti dal browser.
+**CC2-F1/C** e **CC2-F1/D** sono integrati: wiring conservativo, binding delle evidenze forti, freshness effettiva, dipendenze per-area, schema e fixture negative. **CC2-F2 — Snapshot-first Control Center shell** è integrato. È ora attivo **CC2-F3A — Stakeholder Assurance Model**: schema, registry conservativo, validator e fixture impediscono autocertificazione e separano maturity, evidenza, assessment indipendente e certificazione formale.
 
 ## Baseline documentale dell’ecosistema — integrata
 
