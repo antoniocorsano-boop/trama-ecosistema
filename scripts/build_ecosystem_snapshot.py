@@ -176,17 +176,13 @@ def build_snapshot(root: Path) -> dict:
             "candidateLevel": result["confirmedLevel"],
             "confidence": "LOW",
             "status": "PARTIAL",
-            "evidenceRefs": [
-                item["id"]
-                for item in evidence
-                if item.get("area") == result["id"] and item.get("status") == "PASS"
-            ],
+            "evidenceRefs": result["currentEvidenceRefs"],
             "blockingGateRefs": [
                 gate["id"]
                 for gate in gates
                 if gate.get("area") == result["id"] and gate.get("blocking") and gate.get("status") != "PASS"
             ],
-            "dependencies": [],
+            "dependencies": result["dependencies"],
             "lastEvaluatedAt": observed_at,
         }
         for result in maturity_results
