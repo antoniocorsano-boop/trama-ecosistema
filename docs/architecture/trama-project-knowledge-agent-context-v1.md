@@ -67,7 +67,7 @@ Esempio concettuale:
   "blockingGates": [],
   "dependencies": [],
   "knownRejectedApproaches": [],
-  "nextValidActions": [],
+  "nextCandidateActions": [],
   "sourceRefs": []
 }
 ```
@@ -102,7 +102,7 @@ Il modello deve poter rappresentare almeno:
 - `Dependency`;
 - `KnownConflict`;
 - `KnowledgeEvent`;
-- `NextValidAction`;
+- `NextCandidateAction`;
 - `SourceRef`.
 
 ## 6. Stati della conoscenza
@@ -202,7 +202,7 @@ dependencies[]
 knownConflicts[]
 recentlyCompleted[]
 knownRejectedApproaches[]
-nextValidActions[]
+nextCandidateActions[]
 knowledgeSources[]
 ```
 
