@@ -32,6 +32,16 @@ def capability_map(status_doc: dict) -> dict:
     return {item["id"]: item for item in status_doc.get("capabilities", [])}
 
 
+def normalize_gate_status(value: str | None) -> str:
+    mapping = {
+        "PENDING": "OPEN",
+        "PASS": "PASS",
+        "FAIL": "FAIL",
+        "NOT_REQUIRED": "NOT_APPLICABLE",
+    }
+    return mapping.get(value or "", "OPEN")
+
+
 def phase_status(capabilities: dict) -> list[dict]:
     eco01 = capabilities.get("ECO-01", {})
     eco02 = capabilities.get("ECO-02-P1", {})
@@ -74,6 +84,7 @@ def phase_status(capabilities: dict) -> list[dict]:
 
 
 def build_snapshot(root: Path) -> dict:
+    observed_at = observed_at
     config = load_json(root / "config/control-center-snapshot-sources.json")
     eco_status = load_json(root / "status/ecosystem-status.json")
     decisions = load_json(root / "docs/decisions/decision-register.json")
@@ -87,7 +98,7 @@ def build_snapshot(root: Path) -> dict:
         exists = path.exists()
         source_state[source["id"]] = {
             "status": "FRESH" if exists else "BLOCKED",
-            "observedAt": datetime.now(timezone.utc).isoformat() if exists else None,
+            "observedAt": observed_at if exists else None,
             "ref": source["path"],
             "sha256": sha256_file(path) if exists else None,
         }
@@ -103,7 +114,7 @@ def build_snapshot(root: Path) -> dict:
                         "path": source["path"],
                         "sha256": sha256_file(path),
                     },
-                    "observedAt": datetime.now(timezone.utc).isoformat(),
+                    "observedAt": observed_at,
                     "freshness": {"policy": source["freshnessPolicy"], "expiresAt": None},
                     "confidence": "HIGH",
                     "supports": [],
@@ -124,7 +135,7 @@ def build_snapshot(root: Path) -> dict:
             "id": "GATE-R3-F0-EXIT",
             "area": "atlas",
             "type": "HUMAN",
-            "status": caps.get("R3-F0", {}).get("reviewGates", {}).get("exit", "OPEN"),
+            "status": normalize_gate_status(caps.get("R3-F0", {}).get("reviewGates", {}).get("exit")),
             "blocking": True,
             "requiredEvidenceTypes": ["ACCESSIBILITY_GATE", "HUMAN_REVIEW"],
             "decisionAuthority": "TRAMA/Human Review",
@@ -141,7 +152,7 @@ def build_snapshot(root: Path) -> dict:
                 "subject": "TRAMA-ADR-014",
                 "status": "PASS",
                 "source": {"path": "docs/decisions/decision-register.json", "ref": "TRAMA-ADR-014"},
-                "observedAt": datetime.now(timezone.utc).isoformat(),
+                "observedAt": observed_at,
                 "freshness": {"policy": "UNTIL_CHANGE", "expiresAt": None},
                 "confidence": "HIGH",
                 "supports": [],
@@ -151,7 +162,7 @@ def build_snapshot(root: Path) -> dict:
     return {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
         "schemaVersion": "1.0.0",
-        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),
         "areas": [],
@@ -190,10 +201,24 @@ def validate(snapshot: dict) -> None:
         raise ValueError(f"Unexpected phase set: {sorted(phase_ids)}")
 
     gate_ids = {g["id"] for g in snapshot["gates"]}
+    valid_gate_statuses = {"OPEN", "IN_PROGRESS", "PASS", "FAIL", "WAIVED", "NOT_APPLICABLE"}
+    for gate in snapshot["gates"]:
+        if gate["status"] not in valid_gate_statuses:
+            raise ValueError(f"Invalid gate status {gate['status']} for {gate['id']}")
+
     for phase in snapshot["phases"]:
         for gate_ref in phase.get("gateRefs", []):
             if gate_ref not in gate_ids:
                 raise ValueError(f"Unresolved gate reference: {gate_ref}")
+
+    source_statuses = {"FRESH", "STALE", "PARTIAL", "UNVERIFIED", "BLOCKED"}
+    for source_id, source in snapshot["sourceState"].items():
+        if source["status"] not in source_statuses:
+            raise ValueError(f"Invalid source status {source['status']} for {source_id}")
+
+    evidence_ids = {item["id"] for item in snapshot["evidence"]}
+    if len(evidence_ids) != len(snapshot["evidence"]):
+        raise ValueError("Duplicate evidence id detected")
 
 
 def main() -> int:
