@@ -1,0 +1,18 @@
+[
+  {
+    "id": "EV-NEG-UNBOUND-HUMAN",
+    "type": "HUMAN_REVIEW",
+    "area": "governance",
+    "subject": "negative fixture",
+    "status": "PASS",
+    "source": {
+      "ref": "fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00+00:00",
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "confidence": "HIGH",
+    "supports": []
+  }
+]
