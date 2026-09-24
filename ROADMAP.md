@@ -46,7 +46,7 @@ F1/E introduce, senza nuova authority:
 - freshness;
 - supersession;
 - negative knowledge retention;
-- next valid actions come informazione, non automazione.
+- next candidate actions come informazione, non automazione.
 
 ### Evoluzione successiva proposta
 
