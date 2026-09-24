@@ -35,17 +35,23 @@ jobs:
           test -s control-center/icons/icon-512.svg
           grep -q "TRAMA Control Center" control-center/index.html
           grep -q "SOLA LETTURA" control-center/index.html
-          grep -q "api.github.com" control-center/index.html
+          test -s control-center/data/ecosystem-snapshot.json
+          grep -q "SNAPSHOT_URL='./data/ecosystem-snapshot.json'" control-center/index.html
+          grep -q "Matrice di maturità" control-center/index.html
+          grep -q "Attenzione richiesta" control-center/index.html
+          grep -q "Ecosistema vivo" control-center/index.html
+          grep -q "Evidenze disponibili" control-center/index.html
           grep -q "manifest.webmanifest" control-center/index.html
           grep -q "serviceWorker" control-center/index.html
           grep -q '"display": "standalone"' control-center/manifest.webmanifest
-          grep -q "pointer:coarse" control-center/index.html
-          grep -q "max-width:980px" control-center/index.html
-          grep -q "mobile-prs" control-center/index.html
+          grep -q "max-width:700px" control-center/index.html
+          grep -q "prefers-reduced-motion:reduce" control-center/index.html
           grep -q "mobile-nav" control-center/index.html
-          grep -q "navigator.onLine" control-center/index.html
-          grep -q "Connessione attiva · GitHub non completamente aggiornato" control-center/index.html
-          grep -q "Dispositivo offline" control-center/index.html
+          grep -q "Offline · ultimo snapshot locale" control-center/index.html
+          if grep -Eq "(api\.github\.com|raw\.githubusercontent\.com)" control-center/index.html; then
+            echo "Direct GitHub fetch found in snapshot-first shell" >&2
+            exit 1
+          fi
           if grep -Eq "(ghp_|github_pat_|Authorization:|Bearer )" control-center/index.html; then
             echo "Secret-like token or authorization header found in static dashboard" >&2
             exit 1
@@ -64,3 +70,4 @@ jobs:
           new Function(sw)
           console.log('CONTROL_CENTER_SW_SYNTAX_PASS')
           NODE
+

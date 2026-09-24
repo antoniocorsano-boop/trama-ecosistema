@@ -1,0 +1,289 @@
+{
+  "$schema": "../../schemas/ecosystem-snapshot.schema.json",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-24T15:25:00+00:00",
+  "sourceState": {
+    "trama-status": {
+      "status": "FRESH",
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "ref": "STATUS.md"
+    },
+    "trama-roadmap": {
+      "status": "FRESH",
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "ref": "ROADMAP.md"
+    },
+    "ecosystem-status": {
+      "status": "FRESH",
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "ref": "status/ecosystem-status.json"
+    },
+    "decision-register": {
+      "status": "FRESH",
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "ref": "docs/decisions/decision-register.json"
+    }
+  },
+  "phases": [
+    {
+      "id": "R1",
+      "name": "Fondazione del governo",
+      "status": "COMPLETE",
+      "gateRefs": []
+    },
+    {
+      "id": "R2",
+      "name": "Pilota ECO-02/P1",
+      "status": "ACTIVE",
+      "gateRefs": [
+        "GATE-ECO02-HUMAN-FINAL"
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "Consolidamento Atlas",
+      "status": "ACTIVE",
+      "gateRefs": [
+        "GATE-R3-F0-EXIT"
+      ]
+    },
+    {
+      "id": "R4",
+      "name": "Esperienza professionale guidata",
+      "status": "PLANNED",
+      "gateRefs": []
+    },
+    {
+      "id": "R5",
+      "name": "Preparazione all'adozione",
+      "status": "PLANNED",
+      "gateRefs": []
+    }
+  ],
+  "areas": [
+    {
+      "id": "governance",
+      "name": "Governance e authority",
+      "ownerDomain": "TRAMA",
+      "confirmedLevel": 1,
+      "candidateLevel": 1,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [
+        "EV-SOURCE-TRAMA-STATUS",
+        "EV-SOURCE-TRAMA-ROADMAP",
+        "EV-SOURCE-ECOSYSTEM-STATUS",
+        "EV-SOURCE-DECISION-REGISTER",
+        "EV-TRAMA-ADR-014"
+      ],
+      "blockingGateRefs": [],
+      "dependencies": [],
+      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+    },
+    {
+      "id": "arena",
+      "name": "Arena",
+      "ownerDomain": "Arena",
+      "confirmedLevel": 0,
+      "candidateLevel": 0,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [],
+      "blockingGateRefs": [],
+      "dependencies": [
+        "governance"
+      ],
+      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "ownerDomain": "Atlas",
+      "confirmedLevel": 0,
+      "candidateLevel": 0,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [],
+      "blockingGateRefs": [
+        "GATE-R3-F0-EXIT"
+      ],
+      "dependencies": [
+        "governance",
+        "arena"
+      ],
+      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+    },
+    {
+      "id": "docente-os",
+      "name": "Docente OS",
+      "ownerDomain": "Docente OS",
+      "confirmedLevel": 0,
+      "candidateLevel": 0,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [],
+      "blockingGateRefs": [],
+      "dependencies": [
+        "governance",
+        "arena"
+      ],
+      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+    }
+  ],
+  "gates": [
+    {
+      "id": "GATE-ECO02-HUMAN-FINAL",
+      "area": "interoperability",
+      "type": "HUMAN",
+      "status": "OPEN",
+      "blocking": true,
+      "requiredEvidenceTypes": [
+        "REAL_CASE_VALIDATION",
+        "HUMAN_REVIEW"
+      ],
+      "decisionAuthority": "Human Review"
+    },
+    {
+      "id": "GATE-R3-F0-EXIT",
+      "area": "atlas",
+      "type": "HUMAN",
+      "status": "OPEN",
+      "blocking": true,
+      "requiredEvidenceTypes": [
+        "ACCESSIBILITY_GATE",
+        "HUMAN_REVIEW"
+      ],
+      "decisionAuthority": "TRAMA/Human Review"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EV-SOURCE-TRAMA-STATUS",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "CURRENT_STATE",
+      "status": "PASS",
+      "source": {
+        "path": "STATUS.md",
+        "ref": "STATUS.md"
+      },
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-TRAMA-ROADMAP",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "ROADMAP",
+      "status": "PASS",
+      "source": {
+        "path": "ROADMAP.md",
+        "ref": "ROADMAP.md"
+      },
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-ECOSYSTEM-STATUS",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "CAPABILITY_STATE",
+      "status": "PASS",
+      "source": {
+        "path": "status/ecosystem-status.json",
+        "ref": "status/ecosystem-status.json"
+      },
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-DECISION-REGISTER",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "DECISIONS",
+      "status": "PASS",
+      "source": {
+        "path": "docs/decisions/decision-register.json",
+        "ref": "docs/decisions/decision-register.json"
+      },
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-TRAMA-ADR-014",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "TRAMA-ADR-014",
+      "status": "PASS",
+      "source": {
+        "path": "docs/decisions/decision-register.json",
+        "ref": "TRAMA-ADR-014"
+      },
+      "observedAt": "2026-09-24T15:25:00+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    }
+  ],
+  "dependencies": [
+    {
+      "from": "Arena",
+      "to": "Docente OS",
+      "kind": "AUTHORITY",
+      "status": "ACTIVE"
+    },
+    {
+      "from": "Arena",
+      "to": "Atlas",
+      "kind": "DATA_FLOW",
+      "status": "GOVERNED"
+    },
+    {
+      "from": "Docente OS",
+      "to": "Atlas",
+      "kind": "FUTURE_NOT_AUTHORIZED",
+      "status": "NOT_AUTHORIZED"
+    }
+  ],
+  "expansionCandidates": [
+    {
+      "id": "R3-P2",
+      "name": "Curriculum pubblico",
+      "status": "PLANNED",
+      "dependencyRefs": [
+        "GATE-R3-F0-EXIT"
+      ]
+    },
+    {
+      "id": "R3-P5",
+      "name": "Smart Navigation",
+      "status": "PLANNED",
+      "dependencyRefs": [
+        "GATE-R3-F0-EXIT"
+      ]
+    }
+  ]
+}
