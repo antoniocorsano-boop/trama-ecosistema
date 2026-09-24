@@ -1,7 +1,7 @@
 {
   "name": "TRAMA Control Center",
   "short_name": "TRAMA",
-  "description": "Vista dinamica read-only dello stato GitHub dell'ecosistema TRAMA.",
+  "description": "TRAMA Control Center: stato, maturità, assurance ed evidenze in sola lettura.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -9,13 +9,34 @@
   "background_color": "#061b31",
   "theme_color": "#061b31",
   "lang": "it",
-  "categories": ["education", "productivity"],
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "icons": [
-    {"src":"./icons/icon-192.svg","sizes":"192x192","type":"image/svg+xml","purpose":"any"},
-    {"src":"./icons/icon-512.svg","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}
+    {
+      "src": "./icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ],
   "shortcuts": [
-    {"name":"Azioni","short_name":"Azioni","url":"./#actionsPanel"},
-    {"name":"Pull request","short_name":"PR","url":"./#pr"}
+    {
+      "name": "Assurance",
+      "short_name": "Assurance",
+      "url": "./#assurance"
+    },
+    {
+      "name": "Dossier stakeholder",
+      "short_name": "Dossier",
+      "url": "./reports/stakeholder-assurance.html"
+    }
   ]
 }
