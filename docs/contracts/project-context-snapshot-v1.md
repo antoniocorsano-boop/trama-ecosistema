@@ -35,7 +35,7 @@ Il contratto serve a rappresentare il contesto operativo corrente necessario per
   "knownConflicts": [],
   "recentlyCompleted": [],
   "knownRejectedApproaches": [],
-  "nextValidActions": [],
+  "nextCandidateActions": [],
   "knowledgeSources": []
 }
 ```
@@ -82,9 +82,9 @@ Per gate e review si riusano gli stati canonici già governati dal relativo domi
 6. Una decisione `SUPERSEDED` resta recuperabile con collegamento alla decisione sostitutiva.
 7. Un approccio `REJECTED` o `FAILURE_LEARNING` deve poter essere restituito quando una nuova proposta rischia di ripeterlo.
 
-## NextValidAction
+## NextCandidateAction
 
-`nextValidActions[]` descrive azioni consentite dal quadro corrente; non sono comandi automatici.
+`nextCandidateActions[]` descrive azioni candidate coerenti con il quadro corrente; non dichiara che siano autorizzate e non costituisce un comando automatico.
 
 Campi raccomandati:
 
