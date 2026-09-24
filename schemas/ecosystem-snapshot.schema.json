@@ -296,6 +296,13 @@
                   "null"
                 ],
                 "format": "date-time"
+              },
+              "reviewedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
               }
             },
             "required": [
@@ -315,6 +322,39 @@
             "items": {
               "type": "object"
             }
+          },
+          "binding": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "capabilityRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "releaseRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "exactHead": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "eventRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": true
