@@ -1,0 +1,23 @@
+[
+  {
+    "id": "EV-POS-BOUND-HUMAN",
+    "type": "HUMAN_REVIEW",
+    "area": "governance",
+    "subject": "positive fixture",
+    "status": "PASS",
+    "source": {
+      "ref": "fixture"
+    },
+    "observedAt": "2026-09-24T00:00:00+00:00",
+    "freshness": {
+      "policy": "EVENT_BOUND"
+    },
+    "confidence": "HIGH",
+    "supports": [],
+    "binding": {
+      "capabilityRef": "CC2-F1D",
+      "releaseRef": "PR-FIXTURE",
+      "exactHead": "0123456789abcdef0123456789abcdef01234567"
+    }
+  }
+]
