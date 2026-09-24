@@ -74,6 +74,11 @@ jobs:
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
           grep -q "trama-control-center-v5" control-center/sw.js
           grep -q "controllerchange" control-center/index.html
+          grep -q "overflow-x:hidden" control-center/index.html
+          grep -q "overscroll-behavior-inline:contain" control-center/index.html
+          grep -q "clampHorizontalViewport" control-center/index.html
+          ! grep -q "margin:0 -12px" control-center/index.html
+          ! grep -q "margin:0 -13px" control-center/index.html
           if grep -Eq "(api\.github\.com|raw\.githubusercontent\.com)" control-center/index.html; then
             echo "Direct GitHub fetch found in snapshot-first shell" >&2
             exit 1
