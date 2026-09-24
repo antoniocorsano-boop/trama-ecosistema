@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schemas/ecosystem-snapshot.schema.json",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-24T00:00:00Z",
+  "sourceState": {
+    "trama-status": { "status": "FRESH", "observedAt": "2026-09-24T00:00:00Z", "ref": "STATUS.md" }
+  },
+  "phases": [
+    { "id": "R1", "name": "Fondazione del governo", "status": "COMPLETE", "gateRefs": [] },
+    { "id": "R2", "name": "Pilota ECO-02/P1", "status": "ACTIVE", "gateRefs": ["GATE-ECO02-HUMAN-FINAL"] },
+    { "id": "R3", "name": "Consolidamento Atlas", "status": "ACTIVE", "gateRefs": ["GATE-ATLAS-F4","GATE-ATLAS-F5"] }
+  ],
+  "areas": [
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "ownerDomain": "Atlas",
+      "confirmedLevel": 3,
+      "candidateLevel": 4,
+      "confidence": "HIGH",
+      "status": "FRESH",
+      "evidenceRefs": ["EV-ATLAS-F3-INTEGRATED"],
+      "blockingGateRefs": ["GATE-ATLAS-F4","GATE-ATLAS-F5"],
+      "dependencies": [],
+      "lastEvaluatedAt": "2026-09-24T00:00:00Z"
+    }
+  ],
+  "gates": [
+    { "id": "GATE-ATLAS-F4", "area": "atlas", "type": "HUMAN", "status": "OPEN", "blocking": true, "requiredEvidenceTypes": ["ACCESSIBILITY_GATE","HUMAN_REVIEW"], "decisionAuthority": "TRAMA/Human Review" },
+    { "id": "GATE-ATLAS-F5", "area": "atlas", "type": "HUMAN", "status": "OPEN", "blocking": true, "requiredEvidenceTypes": ["HUMAN_REVIEW"], "decisionAuthority": "TRAMA/Human Review" },
+    { "id": "GATE-ECO02-HUMAN-FINAL", "area": "interoperability", "type": "HUMAN", "status": "OPEN", "blocking": true, "requiredEvidenceTypes": ["REAL_CASE_VALIDATION","HUMAN_REVIEW"], "decisionAuthority": "Human Review" }
+  ],
+  "evidence": [
+    {
+      "id": "EV-ATLAS-F3-INTEGRATED",
+      "type": "PR_EXACT_HEAD",
+      "area": "atlas",
+      "subject": "R3-F0/S3-V2 F3",
+      "status": "PASS",
+      "source": { "repository": "antoniocorsano-boop/Curriculum-Atlas", "ref": "2a0f88b64e5002197cceeb2f82b06a5efd1edaee" },
+      "observedAt": "2026-09-24T00:00:00Z",
+      "freshness": { "policy": "UNTIL_CHANGE", "expiresAt": null },
+      "confidence": "HIGH",
+      "supports": [{ "level": 3 }]
+    }
+  ],
+  "dependencies": [],
+  "expansionCandidates": [
+    { "id": "R3-P2", "name": "Curriculum pubblico", "status": "PLANNED", "dependencyRefs": ["GATE-ATLAS-F5"] }
+  ]
+}
