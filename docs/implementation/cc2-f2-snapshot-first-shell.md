@@ -42,3 +42,7 @@ La generazione/aggiornamento dello snapshot resta responsabilità del layer coll
 - Governance PASS;
 - review indipendente;
 - HUMAN EXACT-HEAD REVIEW — PASS.
+
+## View Architecture
+
+Le viste successive e i principi di progressive disclosure sono governati da `docs/design/trama-control-center-v2-view-architecture.md`. F2 resta intenzionalmente una Home di orientamento e non assorbe le funzioni specialistiche di F3–F6.
