@@ -102,3 +102,27 @@ jobs:
         run: |
           docker compose --env-file .env down -v --remove-orphans || true
           rm -f .env
+
+
+  mcp-read-only-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install MCP probe dependencies
+        working-directory: infrastructure/penpot/mcp-probe
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: P0/P1 read-only MCP probe
+        working-directory: infrastructure/penpot/mcp-probe
+        env:
+          PENPOT_MCP_URL: ${{ secrets.PENPOT_MCP_URL }}
+        run: |
+          if [ -z "$PENPOT_MCP_URL" ]; then
+            echo "::error::PENPOT_MCP_URL repository secret is missing"
+            exit 2
+          fi
+          node probe.mjs
