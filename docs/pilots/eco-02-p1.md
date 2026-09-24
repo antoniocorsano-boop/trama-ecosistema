@@ -126,3 +126,19 @@ Stato TRAMA: **IMPLEMENTED / BETA RECHECK REQUIRED**. La soluzione è nel prodot
 
 
 Chiarimento di reversibilità P9: uno scarto non blocca future proposte. La proposta scartata resta nello storico come `DISMISSED`, mentre una successiva richiesta del docente crea una nuova proposta distinta e soggetta allo stesso controllo umano.
+
+
+## Verifica correttiva 22 settembre 2026
+
+La prova mobile del 22 settembre ha verificato il lifecycle P9 fino all'uso effettivo in modalità lezione e la separazione fra TeachingSession e completamento didattico.
+
+La sessione **non vale come collaudo finale**, perché durante il percorso è stata applicata al Beta la migrazione canonica 0069 per correggere un drift schema rilevato dal test.
+
+Sono inoltre emersi:
+- due rilievi UX P9, in correzione con Docente OS #578;
+- un gap del Runtime Release Contract sul controllo della lineage migrazioni, in correzione con Docente OS #579;
+- tre assignment provvisori errati «Educazione civica 120 min/settimana» su 1C/2C/3C, rimossi dal solo Beta dopo verifica di assenza riferimenti.
+
+Evidenza completa: `docs/pilots/eco-02-p1-corrective-verification-2026-09-22.md`.
+
+Stato ECO-02/P1: **ACTIVE / FINAL CLEAN HUMAN COLLAUDO STILL REQUIRED**.
