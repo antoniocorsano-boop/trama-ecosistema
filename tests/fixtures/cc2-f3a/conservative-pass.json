@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0",
+  "claims": [
+    {
+      "requirementId": "POS-DOC-001",
+      "domain": "PRIVACY",
+      "claimType": "EVIDENCE_BACKED_CLAIM",
+      "scope": "Documented privacy-by-design constraint",
+      "status": "DOCUMENTED",
+      "evidenceRefs": [
+        "STATUS.md"
+      ],
+      "reviewAuthority": "TRAMA",
+      "assessor": null,
+      "standardRef": null,
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [
+        "Not a legal certification."
+      ],
+      "externalCertificateRef": null
+    }
+  ]
+}
