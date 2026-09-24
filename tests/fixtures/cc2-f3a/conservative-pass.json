@@ -7,6 +7,15 @@
       "claimType": "EVIDENCE_BACKED_CLAIM",
       "scope": "Documented privacy-by-design constraint",
       "status": "DOCUMENTED",
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "PRIVACY_REVIEW",
+        "INSTITUTIONAL_REVIEW"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
       "evidenceRefs": [
         "STATUS.md"
       ],
