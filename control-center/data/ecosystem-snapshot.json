@@ -306,7 +306,31 @@
         "Documented product constraint only.",
         "Not a DPIA, DPO opinion, legal assessment, or formal GDPR certification."
       ],
-      "externalCertificateRef": null
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "PRIVACY_REVIEW",
+        "INSTITUTIONAL_REVIEW",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "DOCUMENTED",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "PRIVACY_REVIEW",
+          "INSTITUTIONAL_REVIEW",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 4
+      }
     },
     {
       "requirementId": "ASSURE-ACC-001",
@@ -327,7 +351,31 @@
         "Target and review model documented; coverage is not universal certification.",
         "Each surface requires evidence bound to the tested version."
       ],
-      "externalCertificateRef": null
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "ACCESSIBILITY_AUDIT",
+        "HUMAN_REVIEW",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "PARTIAL",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "ACCESSIBILITY_AUDIT",
+          "HUMAN_REVIEW",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 4
+      }
     },
     {
       "requirementId": "ASSURE-USA-001",
@@ -348,7 +396,29 @@
         "No aggregate usability certification.",
         "Product-specific evidence must be collected and version-bound."
       ],
-      "externalCertificateRef": null
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "HUMAN_REVIEW",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "TO_VERIFY",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "HUMAN_REVIEW",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 3
+      }
     },
     {
       "requirementId": "ASSURE-SEC-001",
@@ -369,7 +439,29 @@
         "No ecosystem-wide security certification is asserted.",
         "Coverage must be established per product/version."
       ],
-      "externalCertificateRef": null
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "SECURITY_ASSESSMENT",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "TO_VERIFY",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "SECURITY_ASSESSMENT",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 3
+      }
     },
     {
       "requirementId": "ASSURE-NORM-001",
@@ -389,7 +481,29 @@
       "limitations": [
         "Presence of a normative source is not legal validation of the whole product."
       ],
-      "externalCertificateRef": null
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "INSTITUTIONAL_REVIEW",
+        "HUMAN_REVIEW"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "DOCUMENTED",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "INSTITUTIONAL_REVIEW",
+          "HUMAN_REVIEW"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 3
+      }
     },
     {
       "requirementId": "ASSURE-CERT-001",
@@ -408,7 +522,26 @@
         "No formal certification is recorded by this registry entry.",
         "FORMALLY_CERTIFIED is forbidden without an externalCertificateRef and assessor."
       ],
-      "externalCertificateRef": null
+      "externalCertificateRef": null,
+      "targetStatus": "FORMALLY_CERTIFIED",
+      "requiredEvidenceKinds": [
+        "INDEPENDENT_ASSESSMENT",
+        "EXTERNAL_CERTIFICATE",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [],
+      "readiness": {
+        "currentStatus": "TO_VERIFY",
+        "targetStatus": "FORMALLY_CERTIFIED",
+        "metEvidenceKinds": [],
+        "missingEvidenceKinds": [
+          "INDEPENDENT_ASSESSMENT",
+          "EXTERNAL_CERTIFICATE",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 0,
+        "requiredPrerequisites": 3
+      }
     }
   ]
 }
