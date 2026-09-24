@@ -300,3 +300,31 @@ La review umana finale deve scegliere una sola delle seguenti:
 - **STOP** — nessuna adozione.
 
 Nessuno di questi esiti è automatico.
+
+
+## 11. Repository-managed self-host baseline
+
+La PR di pilot include anche una baseline self-hosted governata in:
+
+`infrastructure/penpot/`
+
+Contenuti:
+
+- `docker-compose.yml` basato sulla topologia ufficiale Penpot;
+- immagini Penpot versionate tramite `PENPOT_VERSION`;
+- PostgreSQL 15 e Valkey 8.1 allineati alla baseline upstream esaminata;
+- servizio `penpot-mcp` incluso;
+- volume separato per asset e database;
+- template `.env.example` senza credenziali reali;
+- `.gitignore` per impedire il versionamento di segreti e backup;
+- validator deterministico;
+- workflow CI dedicato;
+- `design/penpot/manifest.json` come contratto non-autoritativo del file visuale.
+
+Questa baseline è **local-pilot only**: il frontend è vincolato a `127.0.0.1:9001` e i servizi stateful/MCP non pubblicano porte host.
+
+La configurazione locale usa temporaneamente `disable-email-verification` e `disable-secure-session-cookies`; una distribuzione remota richiede una distinta revisione di sicurezza con HTTPS, SMTP, session cookie sicuri, backup e rotazione dei segreti.
+
+Penpot resta un servizio separato dal `control-center/`: non deve essere pubblicato come sito statico né entrare nel runtime read-only del Control Center.
+
+**Stato:** REPOSITORY_BASELINE_READY / DEPLOYMENT_NOT_AUTHORIZED.
