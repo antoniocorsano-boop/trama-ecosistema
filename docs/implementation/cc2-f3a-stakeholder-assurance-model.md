@@ -1,7 +1,7 @@
 # CC2-F3A — Stakeholder Assurance Model
 
 **Data:** 24 settembre 2026  
-**Stato:** PLANNED / DESIGN & DATA MODEL / NO RUNTIME AUTHORIZATION
+**Stato:** ACTIVE / DATA MODEL IMPLEMENTED / NO RUNTIME AUTHORIZATION
 
 ## Scopo
 
@@ -103,3 +103,7 @@ Valori iniziali:
 - nessuna auto-certificazione;
 - review indipendente;
 - HUMAN EXACT-HEAD REVIEW prima dell’integrazione.
+
+## Implementazione F3A foundation
+
+Sono ora presenti schema del registry, registry conservativo iniziale, validator deterministico, fixture positive/negative, workflow dedicato e sezione `assuranceClaims` nello snapshot. La UI stakeholder resta esclusa da questa tranche.
