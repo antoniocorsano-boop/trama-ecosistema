@@ -49,7 +49,23 @@ jobs:
           PY
           python scripts/validate_stakeholder_assurance.py
       - name: Validate conservative positive fixture
-        run: python scripts/validate_stakeholder_assurance.py --registry tests/fixtures/cc2-f3a/conservative-pass.json
+        shell: bash
+        run: |
+          python scripts/validate_stakeholder_assurance.py --registry tests/fixtures/cc2-f3a/conservative-pass.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.validate_stakeholder_assurance import assurance_readiness
+
+          registry = json.loads(Path("tests/fixtures/cc2-f3a/conservative-pass.json").read_text(encoding="utf-8"))
+          readiness = assurance_readiness(registry["claims"][0])
+          assert readiness["currentStatus"] == "DOCUMENTED"
+          assert readiness["targetStatus"] == "VERIFIED"
+          assert readiness["metPrerequisites"] == 1
+          assert readiness["requiredPrerequisites"] == 3
+          assert readiness["missingEvidenceKinds"] == ["PRIVACY_REVIEW", "INSTITUTIONAL_REVIEW"]
+          print("TRAMA_ASSURANCE_READINESS_GAP_PASS")
+          PY
       - name: Reject false formal certification
         shell: bash
         run: |
