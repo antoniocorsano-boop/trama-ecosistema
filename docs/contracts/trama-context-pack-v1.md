@@ -40,7 +40,7 @@ Ogni Context Pack deve:
   "dependencies": [],
   "knownConflicts": [],
   "knownRejectedApproaches": [],
-  "nextValidActions": [],
+  "nextCandidateActions": [],
   "sourceRefs": []
 }
 ```
@@ -93,7 +93,7 @@ Il Context Pack deve consentire, senza ricostruzione manuale estesa, di risponde
 - Quali gate sono ancora aperti?
 - Esistono lavori paralleli in conflitto?
 - Quale approccio è già stato scartato?
-- Qual è la prossima azione compatibile con il quadro corrente?
+- Qual è la prossima azione candidata compatibile con il quadro corrente?
 
 ## Limiti
 
