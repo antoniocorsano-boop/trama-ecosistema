@@ -5,6 +5,8 @@ on:
     paths:
       - "config/control-center-snapshot-sources.json"
       - "config/maturity-area-definitions.json"
+      - "schemas/maturity-area-definitions.schema.json"
+      - "tests/fixtures/cc2-f1d/**"
       - "scripts/evaluate_maturity_definitions.py"
       - "scripts/build_ecosystem_snapshot.py"
       - "schemas/ecosystem-snapshot.schema.json"
@@ -18,6 +20,8 @@ on:
     paths:
       - "config/control-center-snapshot-sources.json"
       - "config/maturity-area-definitions.json"
+      - "schemas/maturity-area-definitions.schema.json"
+      - "tests/fixtures/cc2-f1d/**"
       - "scripts/evaluate_maturity_definitions.py"
       - "scripts/build_ecosystem_snapshot.py"
       - "schemas/ecosystem-snapshot.schema.json"
@@ -79,6 +83,53 @@ jobs:
               assert area["status"] == "PARTIAL", area
               assert area["confidence"] == "LOW", area
           print("TRAMA_MATURITY_WIRING_CONSERVATIVE_PASS")
+          PY
+      - name: Validate CC2-F1/D evidence hardening
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from jsonschema import Draft202012Validator
+
+          from scripts.evaluate_maturity_definitions import (
+              evaluate_area,
+              validate_definitions,
+              validate_evidence_record,
+          )
+
+          definitions = json.loads(Path("config/maturity-area-definitions.json").read_text(encoding="utf-8"))
+          definition_schema = json.loads(Path("schemas/maturity-area-definitions.schema.json").read_text(encoding="utf-8"))
+          Draft202012Validator.check_schema(definition_schema)
+          errors = list(Draft202012Validator(definition_schema).iter_errors(definitions))
+          assert not errors, [e.message for e in errors]
+          validate_definitions(definitions)
+
+          unbound = json.loads(Path("tests/fixtures/cc2-f1d/unbound-human-review.json").read_text(encoding="utf-8"))[0]
+          try:
+              validate_evidence_record(unbound)
+          except ValueError:
+              pass
+          else:
+              raise AssertionError("unbound strong evidence must be rejected")
+
+          bound = json.loads(Path("tests/fixtures/cc2-f1d/bound-human-review.json").read_text(encoding="utf-8"))[0]
+          validate_evidence_record(bound)
+
+          expired = json.loads(Path("tests/fixtures/cc2-f1d/expired-time-bound.json").read_text(encoding="utf-8"))
+          governance = next(area for area in definitions["areas"] if area["id"] == "governance")
+          result = evaluate_area(
+              governance,
+              expired,
+              now=datetime(2026, 9, 24, tzinfo=timezone.utc),
+          )
+          assert result["confirmedLevel"] == 0, result
+          assert result["currentEvidenceRefs"] == [], result
+
+          assert next(a for a in definitions["areas"] if a["id"] == "atlas")["dependencies"] == ["governance", "arena"]
+          print("TRAMA_CC2_F1D_EVIDENCE_HARDENING_PASS")
           PY
       - name: Validate read-only contract
         shell: bash
