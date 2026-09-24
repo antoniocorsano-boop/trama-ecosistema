@@ -29,7 +29,10 @@
           "verifiedAt",
           "expiresAt",
           "limitations",
-          "externalCertificateRef"
+          "externalCertificateRef",
+          "targetStatus",
+          "requiredEvidenceKinds",
+          "presentEvidenceKinds"
         ],
         "properties": {
           "requirementId": {
@@ -127,6 +130,52 @@
               "string",
               "null"
             ]
+          },
+          "targetStatus": {
+            "enum": [
+              "DOCUMENTED",
+              "IMPLEMENTED",
+              "VERIFIED",
+              "THIRD_PARTY_VERIFIED",
+              "FORMALLY_CERTIFIED"
+            ]
+          },
+          "requiredEvidenceKinds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
+          },
+          "presentEvidenceKinds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CANONICAL_DOCUMENTATION",
+                "VERSION_BOUND_TEST",
+                "HUMAN_REVIEW",
+                "INSTITUTIONAL_REVIEW",
+                "INDEPENDENT_ASSESSMENT",
+                "EXTERNAL_CERTIFICATE",
+                "RUNTIME_EVIDENCE",
+                "ACCESSIBILITY_AUDIT",
+                "SECURITY_ASSESSMENT",
+                "PRIVACY_REVIEW"
+              ]
+            }
           }
         },
         "additionalProperties": false
