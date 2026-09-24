@@ -51,6 +51,13 @@ jobs:
           grep -q "serviceWorker" control-center/index.html
           grep -q '"display": "standalone"' control-center/manifest.webmanifest
           grep -q "max-width:700px" control-center/index.html
+          grep -q "mobile-overview" control-center/index.html
+          grep -q "mobilePhaseCount" control-center/index.html
+          grep -q "mobileAssuranceGapCount" control-center/index.html
+          grep -q "phase:not(.is-active)" control-center/index.html
+          grep -q "scroll-snap-type:x mandatory" control-center/index.html
+          grep -q "min-height:44px" control-center/index.html
+          grep -q "bottom:84px" control-center/index.html
           grep -q "prefers-reduced-motion:reduce" control-center/index.html
           grep -q "aria-live=\"polite\"" control-center/index.html
           grep -q "focusin" control-center/index.html
