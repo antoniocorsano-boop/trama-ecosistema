@@ -51,7 +51,7 @@ flowchart LR
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
-| TRAMA Control Center v2 | **CC2-F0 INTEGRATED / CC2-F1 ACTIVE** | CC2-F1/A snapshot foundation integrata via #66; CC2-F1/B maturity definitions integrate via #67; avviato wiring conservativo delle aree nello snapshot |
+| TRAMA Control Center v2 | **CC2-F0 INTEGRATED / CC2-F1 ACTIVE** | CC2-F1/A–C integrate; CC2-F1/D evidence binding & freshness attivo in PR #69; CC2-F1/E Project Knowledge Foundation proposta su branch dedicata |
 
 ## TRAMA Control Center v2 — maturità ed evidenze
 
@@ -79,7 +79,23 @@ CC2-F0 è quindi integrato come baseline documentale e architetturale. Sono ora 
 - **CC2-F1/A** è integrato via PR #66, merge `4ab7baf9c6d0b8de900236753ec434f5a5bdb75e`: snapshot read-only, provenance, fasi, gate e validazione JSON Schema reale.
 - **CC2-F1/B** è integrato via PR #67, merge `91a97949792353193b22ec1bfa20687b4d11a3f8`: prime quattro aree Governance/Arena/Atlas/Docente OS con regole L0–L5 cumulative e evaluator deterministico.
 
-È avviato **CC2-F1/C**: collegamento conservativo delle definizioni allo snapshot. Finché la raccolta evidenze di dominio non è completa, le aree restano `PARTIAL` con confidenza `LOW` e `candidateLevel = confirmedLevel`; nessuna maturità viene promossa per inferenza o per assenza di evidenza.
+**CC2-F1/C** è integrato: collegamento conservativo delle definizioni allo snapshot, con aree `PARTIAL`, confidenza `LOW` e `candidateLevel = confirmedLevel`. È attivo **CC2-F1/D — Evidence Binding & Hardening** in PR #69: binding capability/release/exact-head per evidenze forti, freshness effettiva, dipendenze per-area, schema delle maturity definitions e fixture negative, senza promozioni automatiche.
+
+È inoltre proposta **CC2-F1/E — Project Knowledge Foundation** come slice successiva e separata: il Control Center può evolvere in memoria operativa governata e context provider read-only tramite `ProjectContextSnapshot`, `TRAMA Context Pack`, knowledge events, provenance, supersession e retention della negative knowledge. Questa proposta non crea una nuova authority e non modifica lo stato della PR #69.
+
+## Project Knowledge & Agent Context — proposta CC2-F1/E
+
+Documenti di riferimento:
+
+- `docs/architecture/trama-project-knowledge-agent-context-v1.md`;
+- `docs/contracts/project-context-snapshot-v1.md`;
+- `docs/contracts/trama-context-pack-v1.md`;
+- `docs/implementation/cc2-f1e-project-knowledge-foundation.md`;
+- `docs/decisions/trama-adr-015-project-knowledge-context-provider.md`.
+
+Principio operativo: **la memoria conversa; la knowledge base verifica**. Il Control Center può fornire il contesto corrente a persone e agenti, ma ogni informazione resta collegata alla propria fonte canonica e soggetta a freshness/version binding.
+
+La proposta conserva anche decisioni `SUPERSEDED`, `REJECTED`, `DEFERRED` e failure learning quando utili a evitare rilavorazioni. Nessun Context Pack equivale ad autorizzazione, approvazione o chiusura di gate.
 
 ## Baseline documentale dell’ecosistema — integrata
 
