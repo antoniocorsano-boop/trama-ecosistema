@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0.0",
+  "sources": [
+    {
+      "id": "trama-status",
+      "type": "DOCUMENT_CANONICAL",
+      "path": "STATUS.md",
+      "role": "CURRENT_STATE",
+      "freshnessPolicy": "UNTIL_CHANGE"
+    },
+    {
+      "id": "trama-roadmap",
+      "type": "DOCUMENT_CANONICAL",
+      "path": "ROADMAP.md",
+      "role": "ROADMAP",
+      "freshnessPolicy": "UNTIL_CHANGE"
+    },
+    {
+      "id": "ecosystem-status",
+      "type": "STRUCTURED_STATUS",
+      "path": "status/ecosystem-status.json",
+      "role": "CAPABILITY_STATE",
+      "freshnessPolicy": "UNTIL_CHANGE"
+    },
+    {
+      "id": "decision-register",
+      "type": "STRUCTURED_GOVERNANCE",
+      "path": "docs/decisions/decision-register.json",
+      "role": "DECISIONS",
+      "freshnessPolicy": "UNTIL_CHANGE"
+    }
+  ],
+  "phaseModel": [
+    {
+      "id": "R1",
+      "name": "Fondazione del governo",
+      "statusRule": "COMPLETE_IF_ECO01_CLOSED"
+    },
+    {
+      "id": "R2",
+      "name": "Pilota ECO-02/P1",
+      "statusRule": "FROM_ECO02_P1"
+    },
+    {
+      "id": "R3",
+      "name": "Consolidamento Atlas",
+      "statusRule": "FROM_R3_F0"
+    },
+    {
+      "id": "R4",
+      "name": "Esperienza professionale guidata",
+      "statusRule": "PLANNED_WHILE_R4_P1_NOT_ACTIVE"
+    },
+    {
+      "id": "R5",
+      "name": "Preparazione all'adozione",
+      "statusRule": "FROM_TRAMA_BRAND"
+    }
+  ]
+}
