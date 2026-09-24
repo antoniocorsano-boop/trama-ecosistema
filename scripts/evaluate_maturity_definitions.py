@@ -6,8 +6,50 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+ALLOWED_EVIDENCE_TYPES = {
+    "DOCUMENT_CANONICAL",
+    "CONTRACT_APPROVED",
+    "PR_EXACT_HEAD",
+    "AUTOMATED_TEST",
+    "SECURITY_GATE",
+    "ACCESSIBILITY_GATE",
+    "RUNTIME_CANARY",
+    "HUMAN_REVIEW",
+    "REAL_CASE_VALIDATION",
+    "PROMOTION_DECISION",
+    "REGRESSION_HISTORY",
+    "ADOPTION_EVIDENCE",
+}
+
 def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+def validate_definitions(definitions: dict) -> None:
+    areas = definitions.get("areas", [])
+    area_ids = [area.get("id") for area in areas]
+    if len(area_ids) != len(set(area_ids)):
+        raise ValueError("Duplicate maturity area id")
+
+    expected_levels = {str(i) for i in range(6)}
+    for area in areas:
+        levels = area.get("levels", {})
+        if set(levels) != expected_levels:
+            raise ValueError(f"{area.get('id')}: levels must be exactly 0..5")
+
+        if levels["0"].get("requiredEvidenceTypes") != []:
+            raise ValueError(f"{area['id']}: L0 must not require evidence")
+
+        previous = set()
+        for level in range(1, 6):
+            required = set(levels[str(level)].get("requiredEvidenceTypes", []))
+            unknown = required - ALLOWED_EVIDENCE_TYPES
+            if unknown:
+                raise ValueError(f"{area['id']} L{level}: unknown evidence types {sorted(unknown)}")
+            if not previous.issubset(required):
+                missing = sorted(previous - required)
+                raise ValueError(f"{area['id']} L{level}: non-cumulative requirements, missing {missing}")
+            previous = required
+
 
 def evaluate_area(area_def: dict, evidence: list[dict]) -> dict:
     area_id = area_def["id"]
@@ -39,6 +81,7 @@ def main() -> int:
 
     definitions = load_json(ROOT / args.definitions)
     evidence = load_json(ROOT / args.evidence)
+    validate_definitions(definitions)
     results = [evaluate_area(area, evidence) for area in definitions["areas"]]
 
     if args.expect:
