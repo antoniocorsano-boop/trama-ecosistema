@@ -51,7 +51,7 @@ flowchart LR
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
-| TRAMA Control Center v2 | **CC2-F0 INTEGRATED / CC2-F1 ACTIVE** | modello maturità/evidenze integrato via PR #65; avviata fondazione read-only dello snapshot, senza scoring automatico dei domini |
+| TRAMA Control Center v2 | **CC2-F0 INTEGRATED / CC2-F1 ACTIVE** | CC2-F1/A snapshot foundation integrata via #66; CC2-F1/B maturity definitions integrate via #67; avviato wiring conservativo delle aree nello snapshot |
 
 ## TRAMA Control Center v2 — maturità ed evidenze
 
@@ -74,7 +74,12 @@ CC2-F0 è quindi integrato come baseline documentale e architetturale. Sono ora 
 - schema `ecosystem-snapshot` e catalogo delle fonti;
 - TRAMA-ADR-014 resta **PROPOSED**: l'integrazione della baseline non la promuove automaticamente ad APPROVED.
 
-È ora avviato **CC2-F1 — Snapshot & Evidence Foundation**. Il primo slice resta deliberatamente conservativo: genera fasi, gate, provenance e stato delle fonti, ma **non assegna ancora livelli di maturità automatici ai domini** finché le regole L0–L5 per area non siano formalizzate, testate e sottoposte a review umana.
+È ora attivo **CC2-F1 — Snapshot & Evidence Foundation**.
+
+- **CC2-F1/A** è integrato via PR #66, merge `4ab7baf9c6d0b8de900236753ec434f5a5bdb75e`: snapshot read-only, provenance, fasi, gate e validazione JSON Schema reale.
+- **CC2-F1/B** è integrato via PR #67, merge `91a97949792353193b22ec1bfa20687b4d11a3f8`: prime quattro aree Governance/Arena/Atlas/Docente OS con regole L0–L5 cumulative e evaluator deterministico.
+
+È avviato **CC2-F1/C**: collegamento conservativo delle definizioni allo snapshot. Finché la raccolta evidenze di dominio non è completa, le aree restano `PARTIAL` con confidenza `LOW` e `candidateLevel = confirmedLevel`; nessuna maturità viene promossa per inferenza o per assenza di evidenza.
 
 ## Baseline documentale dell’ecosistema — integrata
 
