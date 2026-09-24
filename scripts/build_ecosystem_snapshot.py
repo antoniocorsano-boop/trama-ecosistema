@@ -84,7 +84,7 @@ def phase_status(capabilities: dict) -> list[dict]:
 
 
 def build_snapshot(root: Path) -> dict:
-    observed_at = observed_at
+    observed_at = datetime.now(timezone.utc).isoformat()
     config = load_json(root / "config/control-center-snapshot-sources.json")
     eco_status = load_json(root / "status/ecosystem-status.json")
     decisions = load_json(root / "docs/decisions/decision-register.json")
