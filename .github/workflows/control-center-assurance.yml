@@ -1,0 +1,74 @@
+name: Validate TRAMA Stakeholder Assurance
+
+on:
+  pull_request:
+    paths:
+      - "config/stakeholder-assurance-registry.json"
+      - "schemas/stakeholder-assurance-registry.schema.json"
+      - "scripts/validate_stakeholder_assurance.py"
+      - "tests/fixtures/cc2-f3a/**"
+      - ".github/workflows/control-center-assurance.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "config/stakeholder-assurance-registry.json"
+      - "schemas/stakeholder-assurance-registry.schema.json"
+      - "scripts/validate_stakeholder_assurance.py"
+      - "tests/fixtures/cc2-f3a/**"
+      - ".github/workflows/control-center-assurance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install schema validator
+        run: python -m pip install --disable-pip-version-check --quiet jsonschema
+      - name: Validate registry schema and semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator, FormatChecker
+
+          schema = json.loads(Path("schemas/stakeholder-assurance-registry.schema.json").read_text(encoding="utf-8"))
+          registry = json.loads(Path("config/stakeholder-assurance-registry.json").read_text(encoding="utf-8"))
+          Draft202012Validator.check_schema(schema)
+          errors = sorted(
+              Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(registry),
+              key=lambda e: list(e.absolute_path),
+          )
+          if errors:
+              raise SystemExit("\n".join(error.message for error in errors))
+          PY
+          python scripts/validate_stakeholder_assurance.py
+      - name: Validate conservative positive fixture
+        run: python scripts/validate_stakeholder_assurance.py --registry tests/fixtures/cc2-f3a/conservative-pass.json
+      - name: Reject false formal certification
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python scripts/validate_stakeholder_assurance.py --registry tests/fixtures/cc2-f3a/false-formal-certification.json; then
+            echo "False formal certification fixture unexpectedly passed" >&2
+            exit 1
+          fi
+      - name: Reject unbound verified claim
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python scripts/validate_stakeholder_assurance.py --registry tests/fixtures/cc2-f3a/unbound-verified-claim.json; then
+            echo "Unbound verified claim fixture unexpectedly passed" >&2
+            exit 1
+          fi
+      - name: Validate no self-certification write path
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -Eq "(requests\.(post|put|patch|delete)|Authorization:|Bearer |merge_pull_request|approve|authorize_runtime)" scripts/validate_stakeholder_assurance.py
+          ! grep -Eq '"status"[[:space:]]*:[[:space:]]*"FORMALLY_CERTIFIED"' config/stakeholder-assurance-registry.json
