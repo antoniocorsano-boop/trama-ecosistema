@@ -1,6 +1,18 @@
 name: Build TRAMA Control Center Bundle
 
 on:
+  pull_request:
+    paths:
+      - "control-center/**"
+      - "config/**"
+      - "status/**"
+      - "docs/decisions/**"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/generate_stakeholder_report.py"
+      - "scripts/validate_stakeholder_assurance.py"
+      - "STATUS.md"
+      - "ROADMAP.md"
+      - ".github/workflows/control-center-build.yml"
   push:
     branches: ["main"]
     paths:
