@@ -21,6 +21,43 @@ Esito atteso: una fonte comune leggibile e verificabile, senza duplicazione dell
 
 Esito atteso: dimostrazione del percorso curricolo verso preparazione verso lezione, con controllo docente.
 
+## CC2 — TRAMA Control Center v2
+
+Obiettivo: trasformare il Control Center in osservatorio read-only di maturità, evidenze e dipendenze e, progressivamente, in **Project Knowledge Base governata** e **Context Provider** per il lavoro umano e agentico.
+
+### CC2-F0 — baseline
+
+Integrata: modello di maturità, evidence model, architettura snapshot-first, UI/UX target e piano F0→F6.
+
+### CC2-F1 — Snapshot, Evidence & Project Knowledge Foundation
+
+- **F1/A** — snapshot foundation: integrata;
+- **F1/B** — maturity definitions: integrata;
+- **F1/C** — conservative maturity wiring: integrata;
+- **F1/D** — evidence binding & freshness hardening: attivo, separato;
+- **F1/E** — Project Knowledge Foundation: proposta documentale.
+
+F1/E introduce, senza nuova authority:
+
+- `ProjectContextSnapshot`;
+- `TRAMA Context Pack`;
+- knowledge events;
+- source/version binding;
+- freshness;
+- supersession;
+- negative knowledge retention;
+- next valid actions come informazione, non automazione.
+
+### Evoluzione successiva proposta
+
+- **CC2-F2** — collector governati dai repository;
+- **CC2-F3** — Context Pack generator;
+- **CC2-F4** — ricerca/interrogazione nel Control Center;
+- **CC2-F5** — interfaccia agentica read-only;
+- **CC2-F6** — audit, consolidamento e adozione.
+
+Regola: il Control Center può **spiegare e recuperare** il quadro corrente, ma non approva, non promuove, non chiude gate e non autorizza runtime.
+
 ## R3 Consolidamento Atlas
 
 Gli identificativi canonici di roadmap sono quelli **R3-***. Gli identificativi **ATLAS-*** sono alias di prodotto e non aprono una seconda sequenza di stato o maturità.
