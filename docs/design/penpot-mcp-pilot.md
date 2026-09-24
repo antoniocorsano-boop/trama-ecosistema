@@ -161,6 +161,27 @@ Pagine minime:
 
 **PASS** se client e plugin risultano connessi senza modifica del file.
 
+
+#### Procedura P0 — remote MCP ufficiale
+
+1. In Penpot aprire **Your account → Integrations → MCP Server** e abilitare lo stato.
+2. Generare la **MCP key**. È mostrata una sola volta e va trattata come una credenziale.
+3. Copiare il **server URL** fornito da Penpot. Nel SaaS ufficiale ha forma `https://design.penpot.app/mcp/stream?userToken=...`.
+4. Configurare un client MCP compatibile con quell'URL. La documentazione ufficiale propone anche `npx -y add-mcp -g -n penpot <URL>`.
+5. Aprire il file `TRAMA — Control Center v2`.
+6. Nel file Penpot usare **File → MCP Server → Connect**.
+7. Eseguire solo test read-only iniziali.
+
+Vincoli di sicurezza:
+
+- non inserire la MCP key nel repository;
+- non incollare URL contenenti `userToken` in issue, PR, log o screenshot;
+- se la chiave viene esposta, rigenerarla immediatamente;
+- il contesto MCP segue la **pagina Penpot attualmente in focus**;
+- una sola scheda browser può essere la scheda MCP attiva alla volta.
+
+**Nota operativa ChatGPT:** al momento non è disponibile nel catalogo collegato a questa conversazione un connettore Penpot diretto. Il collaudo P0/P1 richiede quindi un client MCP compatibile configurato dall'utente; una volta disponibile un connettore Penpot in ChatGPT, il pilot potrà essere eseguito direttamente da questa chat.
+
 ### P1 — read-only
 
 Prompt di prova:
