@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from evaluate_maturity_definitions import evaluate_area, validate_definitions
-from validate_stakeholder_assurance import validate_registry
+from validate_stakeholder_assurance import assurance_readiness, validate_registry
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -205,7 +205,10 @@ def build_snapshot(root: Path) -> dict:
             {"from": "Arena", "to": "Atlas", "kind": "DATA_FLOW", "status": "GOVERNED"},
             {"from": "Docente OS", "to": "Atlas", "kind": "FUTURE_NOT_AUTHORIZED", "status": "NOT_AUTHORIZED"},
         ],
-        "assuranceClaims": assurance_registry["claims"],
+        "assuranceClaims": [
+            {**claim, "readiness": assurance_readiness(claim)}
+            for claim in assurance_registry["claims"]
+        ],
         "expansionCandidates": [
             {"id": "R3-P2", "name": "Curriculum pubblico", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
             {"id": "R3-P5", "name": "Smart Navigation", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
