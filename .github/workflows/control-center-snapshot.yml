@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - "config/control-center-snapshot-sources.json"
+      - "config/maturity-area-definitions.json"
+      - "scripts/evaluate_maturity_definitions.py"
+      - "config/maturity-area-definitions.json"
+      - "scripts/evaluate_maturity_definitions.py"
       - "scripts/build_ecosystem_snapshot.py"
       - "schemas/ecosystem-snapshot.schema.json"
       - "status/ecosystem-status.json"
@@ -58,6 +62,23 @@ jobs:
               raise SystemExit(1)
 
           print("TRAMA_ECOSYSTEM_SNAPSHOT_SCHEMA_PASS")
+          PY
+      - name: Validate conservative maturity wiring
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          snapshot = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+          areas = {area["id"]: area for area in snapshot["areas"]}
+          expected = {"governance", "arena", "atlas", "docente-os"}
+          assert set(areas) == expected, set(areas)
+          for area in areas.values():
+              assert area["candidateLevel"] == area["confirmedLevel"], area
+              assert area["status"] == "PARTIAL", area
+              assert area["confidence"] == "LOW", area
+          print("TRAMA_MATURITY_WIRING_CONSERVATIVE_PASS")
           PY
       - name: Validate read-only contract
         shell: bash
