@@ -41,11 +41,19 @@ jobs:
           grep -q "Attenzione richiesta" control-center/index.html
           grep -q "Ecosistema vivo" control-center/index.html
           grep -q "Evidenze disponibili" control-center/index.html
+          grep -q "Stakeholder Assurance" control-center/index.html
+          grep -q "data-help-title" control-center/index.html
+          grep -q "helpPopover" control-center/index.html
+          grep -q "reports/stakeholder-assurance.html" control-center/index.html
+          test -s control-center/reports/stakeholder-assurance.html
+          test -s control-center/reports/stakeholder-assurance.md
           grep -q "manifest.webmanifest" control-center/index.html
           grep -q "serviceWorker" control-center/index.html
           grep -q '"display": "standalone"' control-center/manifest.webmanifest
           grep -q "max-width:700px" control-center/index.html
           grep -q "prefers-reduced-motion:reduce" control-center/index.html
+          grep -q "aria-live=\"polite\"" control-center/index.html
+          grep -q "focusin" control-center/index.html
           grep -q "mobile-nav" control-center/index.html
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           if grep -Eq "(api\.github\.com|raw\.githubusercontent\.com)" control-center/index.html; then
