@@ -328,3 +328,25 @@ La configurazione locale usa temporaneamente `disable-email-verification` e `dis
 Penpot resta un servizio separato dal `control-center/`: non deve essere pubblicato come sito statico né entrare nel runtime read-only del Control Center.
 
 **Stato:** REPOSITORY_BASELINE_READY / DEPLOYMENT_NOT_AUTHORIZED.
+
+
+## 12. Esito collaudo infrastrutturale
+
+**Exact head:** `381779809c23d06e6255b3a76d3c4d1aee0ceecb`
+
+Esito GitHub Actions:
+
+- Governance: **PASS**;
+- validatore configurazione Penpot: **PASS**;
+- parsing manifest JSON: **PASS**;
+- `docker compose config`: **PASS**;
+- avvio stack effimero: **PASS**;
+- frontend raggiungibile su `127.0.0.1:9001`: **PASS**;
+- container core `frontend/backend/mcp/exporter/postgres/valkey`: **RUNNING / PASS**;
+- teardown effimero: **PASS**.
+
+Questo risultato chiude il collaudo della **baseline infrastrutturale** e dimostra che la configurazione versionata nel repository è avviabile su un host Docker-capable.
+
+Non equivale ancora a P1 funzionale sul canvas: resta da verificare una sessione MCP con un file Penpot aperto e una ispezione read-only di pagine, componenti, token e struttura.
+
+**Stato aggiornato:** `INFRA_SMOKE_PASS / MCP_CANVAS_P1_PENDING / DEPLOYMENT_NOT_AUTHORIZED`.
