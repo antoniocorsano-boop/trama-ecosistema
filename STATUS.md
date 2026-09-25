@@ -52,6 +52,7 @@ flowchart LR
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
 | TRAMA Control Center v2 | **CC2-F0–F6 INTEGRATED** | Primo ciclo Control Center v2 integrato: snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system, Capability + Ecosystem Map, Evidence Explorer + Integrity, Timeline + Operational Path. ADR-015 resta PROPOSED. |
+| TRAMA Governed Forecast / CC3 | **CC3-F0 ACTIVE / HUMAN REVIEW PENDING** | Contratto e guardrail della previsione governata in costruzione. Forecast separato dallo stato canonico; confidence solo LOW/MEDIUM/HIGH; nessuna probability/score, auto-promotion, authority o runtime authorization. ADR-016 PROPOSED. |
 
 ## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 
@@ -147,6 +148,28 @@ La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strateg
 | TRAMA-SA-01 | Pilota assurance attivo | gate R3B HOLDOUT one-shot integrato; HOLDOUT non eseguito; TypeSafe resta advisory-only |
 | DOS-A1 | RUNTIME_DEFERRED | richiede una nuova autorizzazione esplicita; nessuna evidenza corrente lo attiva implicitamente |
 | Marca TRAMA | Nome di lavoro | verifiche giuridiche, digitali e di posizionamento ancora pendenti |
+
+## CC3 — Governed Forecast & Readiness
+
+CC3 è la nuova fase governata del Control Center successiva alla chiusura di CC2-F0–F6.
+
+Stato corrente: **CC3-F0 ACTIVE / HUMAN REVIEW PENDING**.
+
+CC3-F0 introduce soltanto contratto e guardrail:
+
+- forecast derivato e source-bound, mai stato canonico;
+- confidence esclusivamente `LOW | MEDIUM | HIGH`;
+- rationale e invalidators obbligatori;
+- scenario read-only e controfattuale;
+- ForecastReceipt previsto per calibrazione futura;
+- probabilità numeriche e score vietati fino a calibrazione e nuova decisione TRAMA;
+- nessuna mutazione di capability, gate o maturity;
+- nessuna authority, write cross-product o runtime authorization;
+- DOS-A1 resta `RUNTIME_DEFERRED`.
+
+Gate corrente: **GATE-CC3-F0-HUMAN — OPEN**.
+
+F1–F5 restano PLANNED e non vengono attivati da F0.
 
 ## ECO-02/P1 — stato reale consolidato
 
