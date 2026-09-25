@@ -79,6 +79,9 @@ jobs:
           assert committed["dependencies"] == generated["dependencies"]
           assert committed["expansionCandidates"] == generated["expansionCandidates"]
           assert committed["integrityChecks"] == generated["integrityChecks"]
+          assert committed["operationalPath"] == generated["operationalPath"]
+          assert committed["timelineEvents"] == generated["timelineEvents"]
+          assert committed["timelineCoverage"] == generated["timelineCoverage"]
 
           print("TRAMA_COMMITTED_SNAPSHOT_DRIFT_PASS")
           PY
