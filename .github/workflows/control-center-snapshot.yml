@@ -195,7 +195,7 @@ jobs:
           assert checks["INT-SOURCE-AVAILABILITY"]["status"] == "PASS", checks
           assert checks["INT-REFERENCE-RESOLUTION"]["status"] == "PASS", checks
           assert checks["INT-EVIDENCE-FRESHNESS"]["status"] == "PASS", checks
-          assert checks["INT-GATE-EVIDENCE-BINDING"]["status"] == "NOT_EVALUABLE", checks
+          assert checks["INT-GATE-EVIDENCE-BINDING"]["status"] == "PASS", checks
           assert checks["INT-RUNTIME-AUTHORIZATION"]["status"] == "PASS", checks
           assert checks["INT-CAPABILITY-EVIDENCE"]["status"] == "PASS", checks
           assert "overallScore" not in snapshot
@@ -219,8 +219,8 @@ jobs:
               "unmetDependencies",
           }, path
           assert any(item["ref"] == "DOS-A1" for item in path["explicitDefers"]), path
-          assert any(item["ref"] == "GATE-R3-F0-EXIT" for item in path["nextGates"]), path
-          assert any(item["subjectRef"] == "R3-P2" for item in path["unmetDependencies"]), path
+          assert not any(item["ref"] == "GATE-R3-F0-EXIT" for item in path["nextGates"]), path
+          assert not any(item["subjectRef"] == "R3-P2" for item in path["unmetDependencies"]), path
           assert snapshot["timelineCoverage"]["mode"] == "PARTIAL_EXPLICIT"
           assert snapshot["timelineCoverage"]["sourceRef"] == "status/governed-events.json"
           assert snapshot["timelineEvents"]

@@ -649,6 +649,39 @@ def build_snapshot(root: Path) -> dict:
         },
     ]
 
+    r3_closeout = next(
+        (event for event in governed_events.get("events", []) if event.get("id") == "EVT-R3-F0-S3V2-MERGE-32"),
+        None,
+    )
+    if r3_closeout:
+        for evidence_id, evidence_type, subject in (
+            ("EV-R3-F0-EXIT-ACCESSIBILITY", "ACCESSIBILITY_GATE", "R3-F0/S3-V2 mobile/LIM and exit evidence"),
+            ("EV-R3-F0-EXIT-HUMAN", "HUMAN_REVIEW", "R3-F0/S3-V2 human exact-head review"),
+        ):
+            evidence.append(
+                {
+                    "id": evidence_id,
+                    "type": evidence_type,
+                    "area": "atlas",
+                    "subject": subject,
+                    "status": "PASS",
+                    "source": {
+                        "path": "status/governed-events.json",
+                        "ref": r3_closeout["id"],
+                        "versionRef": r3_closeout.get("versionRef"),
+                    },
+                    "observedAt": r3_closeout["occurredAt"],
+                    "freshness": {"policy": "EVENT_BOUND", "expiresAt": None},
+                    "confidence": "HIGH",
+                    "supports": [{"gateRef": "GATE-R3-F0-EXIT"}],
+                    "binding": {
+                        "capabilityRef": "R3-F0",
+                        "releaseRef": "Curriculum-Atlas#32",
+                        "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+                    },
+                }
+            )
+
     adr014 = next((d for d in decisions.get("decisions", []) if d.get("id") == "TRAMA-ADR-014"), None)
     if adr014:
         evidence.append(

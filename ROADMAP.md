@@ -45,13 +45,13 @@ Obiettivi trasversali:
 
 ### R3-F0 / ATLAS-F0 — Product & Design Foundation
 
-Stato corrente: **ACTIVE / START GATE HUMAN REVIEW PASS / EXIT REVIEW PENDING**.
+Stato corrente: **CLOSED / START GATE PASS / EXIT GATE HUMAN REVIEW PASS**.
 
 Primo incremento integrato: **R3-F0/S1 — Information Architecture + Visual Grammar**, con HUMAN EXACT-HEAD REVIEW PASS; resta esclusivamente prodotto/design e `NO_RUNTIME`.
 
 Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives**, con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`.
 
-Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. **R3-F0/S3-V1 — Rendered Prototype Validation** resta valido come harness tecnico/accessibilità. La HUMAN PRODUCT REVIEW ha portato a **R3-F0/S3-V2 — Atlas Product Experience Prototype**. In V2 sono ora integrati **F0 Foundation**, **F1 Curricolo verticale d’istituto + Materiali pubblici di base**, **F2 Esplora relazionale** e **F3 Materiali+Risorse**; F2 include XYFlow/React Flow, zoom semantico, filtri, pannello contestuale, Mappa/Elenco equivalente e layout mobile dedicato. F3 è integrato in Curriculum-Atlas con merge `2a0f88b64e5002197cceeb2f82b06a5efd1edaee`. Restano **F4 Mobile+LIM e F5 Exit**. S3 resta ACTIVE fino alla chiusura verificata di V2. Il target F3–F5 incorpora ora **Mockup V2 — Vision Alignment**: Atlas deve rendere visibile il passaggio dal curricolo a lezioni, materiali, attività e percorsi, senza creare una nuova roadmap o modificare i confini di autorità.
+Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. **R3-F0/S3-V1 — Rendered Prototype Validation** resta valido come harness tecnico/accessibilità. **R3-F0/S3-V2 — Atlas Product Experience Prototype** è ora **CLOSED / HUMAN EXACT-HEAD REVIEW PASS**: F0 Foundation, F1 Curricolo verticale d’istituto + Materiali pubblici, F2 Esplora relazionale, F3 Materiali+Risorse, F4 Mobile+LIM e F5 Exit sono integrati. L’uscita finale è validata sull’exact head `bc11577eeeeeed9c43ad62ac43fb7561e1197246`, merge Atlas #32 `423444be9dd883f4c35c6c1c89e94f6b0e5405fa`. R3-F0 è quindi CLOSED; questa chiusura non autorizza R3-P4, DOS-A1 o runtime cross-product.
 
 - information architecture pubblica;
 - Visual Grammar of Curriculum;
@@ -273,7 +273,7 @@ Il piano dettagliato è in [docs/strategy/atomic-operating-plan-2026-09-22.md](d
 La roadmap deve essere letta con questa priorità:
 
 1. chiusura verificata di ECO-02/P1;
-2. chiusura R3-F0/S3;
+2. R3-F0/S3 — CLOSED;
    - in parallelo è consentita la sola progettazione NO_RUNTIME di R4-P2/S1 Professional Practice;
 3. R3-P2 Curriculum pubblico;
 4. R3-P5 Smart Navigation;

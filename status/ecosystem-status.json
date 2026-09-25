@@ -34,12 +34,12 @@
     {
       "id": "R3-F0",
       "label": "Atlas Product & Design Foundation",
-      "state": "ACTIVE",
+      "state": "CLOSED",
       "authority": "Atlas",
-      "humanReview": "PENDING",
+      "humanReview": "PASS",
       "reviewGates": {
         "start": "PASS",
-        "exit": "PENDING"
+        "exit": "PASS"
       }
     },
     {
