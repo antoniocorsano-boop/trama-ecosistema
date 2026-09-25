@@ -77,6 +77,9 @@ jobs:
           grep -q "overflow-x:hidden" control-center/index.html
           grep -q "overscroll-behavior-inline:contain" control-center/index.html
           grep -q "clampHorizontalViewport" control-center/index.html
+          grep -q "phasePagination" control-center/index.html
+          grep -q "scrollbar-width:none" control-center/index.html
+          grep -q "width:44px;height:44px" control-center/index.html
           ! grep -q "margin:0 -12px" control-center/index.html
           ! grep -q "margin:0 -13px" control-center/index.html
           if grep -Eq "(api\.github\.com|raw\.githubusercontent\.com)" control-center/index.html; then
