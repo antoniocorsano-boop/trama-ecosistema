@@ -60,6 +60,8 @@ Ogni relazione espone:
 
 `Docente OS → Atlas` resta esplicitamente `FUTURE_NOT_AUTHORIZED / NOT_AUTHORIZED`.
 
+Vincolo di rappresentazione: **nessun edge visuale può essere disegnato se non esiste una corrispondente relazione in `snapshot.dependencies[]`**. Contesto, prossimità grafica o ruolo di governo non possono creare relazioni sintetiche.
+
 ## UI
 
 La Home non viene trasformata in una vista onnivora.
