@@ -1,0 +1,128 @@
+name: Validate Penpot pilot infrastructure
+
+on:
+  pull_request:
+    paths:
+      - "infrastructure/penpot/**"
+      - "design/penpot/**"
+      - ".github/workflows/validate-penpot-infra.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "infrastructure/penpot/**"
+      - "design/penpot/**"
+      - ".github/workflows/validate-penpot-infra.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate governed Penpot configuration
+        run: python3 infrastructure/penpot/validation/validate_penpot_config.py
+
+      - name: Validate Penpot manifest JSON
+        run: python3 -m json.tool design/penpot/manifest.json > /dev/null
+
+      - name: Validate Docker Compose interpolation
+        working-directory: infrastructure/penpot
+        env:
+          PENPOT_SECRET_KEY: validation-only-secret
+          PENPOT_DATABASE_PASSWORD: validation-only-password
+        run: docker compose config --quiet
+
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate ephemeral pilot environment
+        working-directory: infrastructure/penpot
+        shell: bash
+        run: |
+          set -euo pipefail
+          secret="$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')"
+          dbpass="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
+          {
+            echo "PENPOT_VERSION=2.18"
+            echo "PENPOT_PUBLIC_URI=http://localhost:9001"
+            echo "PENPOT_SECRET_KEY=$secret"
+            echo "PENPOT_DATABASE_PASSWORD=$dbpass"
+            echo "PENPOT_FLAGS=disable-email-verification disable-secure-session-cookies enable-mcp"
+          } > .env
+
+      - name: Start Penpot pilot stack
+        working-directory: infrastructure/penpot
+        run: docker compose --env-file .env up -d
+
+      - name: Wait for Penpot frontend
+        working-directory: infrastructure/penpot
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:9001/ > /dev/null; then
+              echo "Penpot frontend is reachable"
+              docker compose --env-file .env ps
+              exit 0
+            fi
+            echo "Waiting for Penpot frontend ($attempt/60)"
+            sleep 5
+          done
+          echo "Penpot frontend did not become reachable"
+          docker compose --env-file .env ps || true
+          docker compose --env-file .env logs --no-color --tail=200 || true
+          exit 1
+
+      - name: Check core containers
+        working-directory: infrastructure/penpot
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose --env-file .env ps
+          test "$(docker compose --env-file .env ps --status running -q penpot-frontend | wc -l)" -eq 1
+          test "$(docker compose --env-file .env ps --status running -q penpot-backend | wc -l)" -eq 1
+          test "$(docker compose --env-file .env ps --status running -q penpot-mcp | wc -l)" -eq 1
+          test "$(docker compose --env-file .env ps --status running -q penpot-exporter | wc -l)" -eq 1
+          test "$(docker compose --env-file .env ps --status running -q penpot-postgres | wc -l)" -eq 1
+          test "$(docker compose --env-file .env ps --status running -q penpot-valkey | wc -l)" -eq 1
+
+      - name: Tear down ephemeral stack
+        if: always()
+        working-directory: infrastructure/penpot
+        run: |
+          docker compose --env-file .env down -v --remove-orphans || true
+          rm -f .env
+
+
+  mcp-read-only-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install MCP probe dependencies
+        working-directory: infrastructure/penpot/mcp-probe
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: P0/P1 read-only MCP probe
+        working-directory: infrastructure/penpot/mcp-probe
+        env:
+          PENPOT_MCP_URL: ${{ secrets.PENPOT_MCP_URL }}
+        run: |
+          if [ -z "$PENPOT_MCP_URL" ]; then
+            echo "::error::PENPOT_MCP_URL repository secret is missing"
+            exit 2
+          fi
+          node probe.mjs

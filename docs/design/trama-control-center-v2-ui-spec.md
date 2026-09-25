@@ -175,11 +175,20 @@ Non ammesso:
 
 Respect `prefers-reduced-motion`.
 
-## 9. Figma
+## 9. Specifica visuale eseguibile — Penpot pilot
 
-Figma è consigliato come specifica esecutiva visuale, non come fonte di stato.
+Penpot è il **candidato preferenziale per il pilot** della specifica visuale eseguibile del Control Center v2.
 
-File target:
+Non diventa fonte di stato, authority o governance. La fonte canonica resta nel repository TRAMA e negli snapshot governati. Il file Penpot serve a:
+
+- rappresentare componenti e stati;
+- verificare layout desktop/mobile/LIM;
+- mantenere token e varianti coerenti;
+- documentare interazioni;
+- favorire la corrispondenza 1:1 con i componenti React;
+- consentire workflow design↔code mediante MCP senza introdurre autorità runtime.
+
+Struttura target del file:
 
 - Foundations;
 - Tokens;
@@ -190,7 +199,16 @@ File target:
 - States;
 - Interaction notes.
 
-I componenti Figma devono mappare 1:1 ai componenti React principali.
+I componenti Penpot devono mappare 1:1 ai componenti React principali.
+
+Il pilot MCP procede in due fasi:
+
+1. **read-only**: elenco pagine, componenti, stili/token e ispezione della struttura;
+2. **write controllato**: creazione/modifica di token, componenti e viste, con verifica umana prima di qualunque promozione del flusso.
+
+Figma resta utilizzabile come riferimento o import/export visuale quando opportuno, ma non è requisito architetturale del Control Center.
+
+Riferimento operativo: `docs/design/penpot-mcp-pilot.md`.
 
 ## 10. Librerie
 

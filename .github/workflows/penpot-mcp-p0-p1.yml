@@ -1,0 +1,36 @@
+name: Penpot MCP P0-P1 read-only probe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Require protected MCP endpoint
+        shell: bash
+        env:
+          PENPOT_MCP_URL: ${{ secrets.PENPOT_MCP_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "$PENPOT_MCP_URL" ]; then
+            echo "::error::Repository secret PENPOT_MCP_URL is not configured."
+            exit 2
+          fi
+
+      - name: Install MCP probe dependencies
+        working-directory: infrastructure/penpot/mcp-probe
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Run P0/P1 read-only MCP probe
+        working-directory: infrastructure/penpot/mcp-probe
+        env:
+          PENPOT_MCP_URL: ${{ secrets.PENPOT_MCP_URL }}
+        run: node probe.mjs

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "name": "TRAMA Control Center v2 — Penpot",
+  "status": "PILOT_NON_CANONICAL",
+  "authority": "NONE",
+  "canonicalSources": [
+    "TRAMA repository",
+    "governed TRAMA snapshots"
+  ],
+  "designSurface": {
+    "tool": "Penpot",
+    "role": "visual specification and prototyping",
+    "runtimeAuthority": false,
+    "mayCloseGates": false,
+    "mayPromoteEvidence": false
+  },
+  "targetPages": [
+    "Foundations",
+    "Tokens",
+    "Components",
+    "Desktop 1440",
+    "Mobile 390",
+    "LIM 1920",
+    "States",
+    "Interaction notes"
+  ],
+  "reactMapping": "1:1 for primary UI components",
+  "responsiveBaselines": [
+    "1440x1024",
+    "1600x1000",
+    "390x844",
+    "412x915",
+    "1920x1080"
+  ],
+  "mcp": {
+    "enabledForPilot": true,
+    "initialMode": "READ_ONLY_THEN_CONTROLLED_WRITE",
+    "credentialsInRepository": false
+  }
+}
