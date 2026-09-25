@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+
+backups/*
+!backups/README.md
+
+*.dump
+*.sql
+*.tar
