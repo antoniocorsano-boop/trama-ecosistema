@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-09-25T00:00:00Z",
+  "capabilities": [
+    {
+      "id": "CAP-A",
+      "state": "ACTIVE",
+      "gateRefs": ["GATE-A"],
+      "evidenceRefs": ["EV-A"]
+    },
+    {
+      "id": "CAP-B",
+      "state": "PLANNED",
+      "gateRefs": [],
+      "evidenceRefs": ["EV-B"]
+    }
+  ],
+  "areas": [],
+  "expansionCandidates": [],
+  "gates": [
+    {
+      "id": "GATE-A",
+      "status": "OPEN",
+      "blocking": true
+    }
+  ],
+  "operationalPath": {
+    "unmetDependencies": [
+      {
+        "subjectRef": "CAP-B",
+        "dependencyRef": "CAP-A",
+        "dependencyKind": "CAPABILITY"
+      }
+    ]
+  }
+}

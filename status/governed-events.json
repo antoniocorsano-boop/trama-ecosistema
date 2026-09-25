@@ -129,6 +129,21 @@
         "Primo ciclo CC2-F0–F6 completato.",
         "Timeline semantica a copertura PARTIAL_EXPLICIT; Operational Path derivato da fonti governate."
       ]
+    },
+    {
+      "id": "EVT-CC3-F0-MERGE-88",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:49:30Z",
+      "label": "CC3-F0 Forecast Contract & Guardrails integrata",
+      "subjectRef": "CC3-F0",
+      "sourceRef": "github:pull/88",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "cfbec2f2aa806537d70a8c7ed885212bceff97cd",
+      "details": [
+        "Exact head 49c98322ac5f3bd8cfed9091034362b87d80ea1a autorizzato con HUMAN EXACT-HEAD REVIEW PASS.",
+        "Forecast contract e guardrail integrati; F1–F5 non autorizzati dal merge F0.",
+        "ADR-016 resta PROPOSED; nessuna authority o runtime authorization introdotta."
+      ]
     }
   ]
 }
