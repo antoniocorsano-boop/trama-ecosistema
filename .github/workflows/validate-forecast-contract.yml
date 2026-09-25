@@ -85,10 +85,15 @@ jobs:
           gates = {item["id"]: item for item in snapshot["gates"]}
 
           assert "CC3-F0" in capabilities, capabilities
-          assert capabilities["CC3-F0"]["state"] == "ACTIVE", capabilities["CC3-F0"]
+          assert capabilities["CC3-F0"]["state"] in {"ACTIVE", "CLOSED"}, capabilities["CC3-F0"]
           assert capabilities["CC3-F0"]["gateRefs"] == ["GATE-CC3-F0-HUMAN"], capabilities["CC3-F0"]
           assert "GATE-CC3-F0-HUMAN" in gates, gates
-          assert gates["GATE-CC3-F0-HUMAN"]["status"] == "OPEN", gates["GATE-CC3-F0-HUMAN"]
+          if capabilities["CC3-F0"]["state"] == "ACTIVE":
+              assert capabilities["CC3-F0"]["humanReview"] == "PENDING", capabilities["CC3-F0"]
+              assert gates["GATE-CC3-F0-HUMAN"]["status"] == "OPEN", gates["GATE-CC3-F0-HUMAN"]
+          else:
+              assert capabilities["CC3-F0"]["humanReview"] == "PASS", capabilities["CC3-F0"]
+              assert gates["GATE-CC3-F0-HUMAN"]["status"] == "PASS", gates["GATE-CC3-F0-HUMAN"]
           assert gates["GATE-CC3-F0-HUMAN"]["blocking"] is True
           assert gates["GATE-CC3-F0-HUMAN"]["decisionAuthority"] == "TRAMA/Human Review"
           print("TRAMA_CC3_F0_SNAPSHOT_WIRING_PASS")
