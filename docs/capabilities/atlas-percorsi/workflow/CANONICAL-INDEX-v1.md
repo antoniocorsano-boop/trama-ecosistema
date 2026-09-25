@@ -15,7 +15,8 @@ Single entry point for understanding current authority, experiments and open con
 | pathway constitution review contract | `governance/PATHWAY-CONSTITUTION-REVIEW-CONTRACT-v1.yaml` | CANONICAL G1 REVIEW CONTRACT — PROPOSED FOR REVIEW; structural checks never replace human judgement |
 | normalised evidence/provenance | `research/evidence-records-v1.yaml` | ACTIVE NORMALISATION; constitution mapping established, gaps explicit |
 | transfer/claim calibration evidence | `research/evidence/transfer-claim-calibration-records-v1.yaml` | ACTIVE NORMALISATION; C12/C13 structural provenance established; child-specific validation still open |
-| error / relational agents / emotion | `research/common/error-relational-agents-emotion-screening-v1.md` | ACTIVE SCREENING; C3/C16 strengthened, C11 retained as precautionary + evidence-informed stop pending stronger child-specific agent evidence |
+| error / relational agents / emotion screening | `research/common/error-relational-agents-emotion-screening-v1.md` | ACTIVE SCREENING |
+| C3/C11/C16 normalised evidence | `research/evidence/error-agent-emotion-records-v1.yaml` | ACTIVE NORMALISATION; C3/C16 strengthened; C11 precautionary + evidence-informed, direct child-agent evidence still weak |
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
@@ -33,7 +34,9 @@ The Child-Safe Learning & Experience Constitution consolidates the current non-n
 
 The Pathway Constitution Review Contract operationalises those constraints as declared, machine-checkable dossier fields while preserving mandatory human reviews. Structural validity is necessary but never sufficient for promotion.
 
-The normalised evidence layer maps bounded source inferences to constitutional rules and deliberately exposes weak provenance rather than filling gaps by intuition. C12/C13 now have dedicated structural provenance. C3 and C16 have been strengthened by a targeted screening. C11 remains deliberately conservative: privacy/no-sensitive-disclosure is strongly governed, while restrictions on anthropomorphic intimacy/dependency are classified as precautionary + evidence-informed until stronger child-specific LLM/agent evidence is normalised.
+The normalised evidence layer maps bounded source inferences to constitutional rules and deliberately exposes weak provenance rather than filling gaps by intuition. C12/C13 have dedicated structural provenance. C3/C11/C16 now also have dedicated normalised records.
+
+C3 is `STRENGTHENED_SUPPORTED`: feedback/error is treated as actionable information with recoverability, without a universal feedback formula. C16 is `STRENGTHENED_SUPPORTED`: bounded emotional practice is legitimate, while trait certification remains prohibited. C11 is `PRECAUTIONARY_EVIDENCE_INFORMED_STOP`: child-rights/privacy constraints are strong, while targeted literature searches still show insufficient direct child/teen LLM-agent evidence to quantify safe anthropomorphic intimacy, trust or disclosure thresholds.
 
 Automatic constitutional stops cover trait/psychological inference, coercive engagement, shame/humiliation/fear mechanisms, invasive sensitive disclosure, pseudo-therapy/dependency and privacy/profile violations. Automation may detect declarations/configurations; it cannot determine pedagogical quality or child safety by itself.
 
@@ -46,7 +49,7 @@ A source appearing in a register or search result is not automatically evidence 
 
 `QUESTION → SCREENED EVIDENCE → LIMITATIONS → INTERPRETATION → DESIGN CONSEQUENCE → TESTABLE HYPOTHESIS`
 
-Search ranking/citation count is never a promotion rule; targeted screening and bounded inference remain mandatory.
+Search ranking/citation count is never a promotion rule; targeted screening and bounded inference remain mandatory. Two targeted child-agent searches were retained as search-audit evidence because both returned substantial semantic noise and predominantly adult/general-agent research. Search scarcity/noise is not interpreted as evidence of safety or absence of risk.
 
 ## Error, agent and emotion boundary
 The preferred child-facing pattern is:
@@ -79,14 +82,15 @@ Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / A
 Nothing in this index, constitution, review contract or evidence normalisation authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
 ## Open consolidation queue
-1. Normalise C3/C11/C16 screened findings into evidence records; prioritise child-specific conversational-agent/LLM trust, disclosure and anthropomorphism evidence and school-age feedback/SEL meta-analytic evidence.
-2. Deepen child-specific transfer evidence and continue normalising the remaining human-readable evidence register.
-3. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract/evidence layer.
-4. Convert the shared-decision prototype family into a named pathway dossier, instantiate the review contract and run the first constitutional review against it.
-5. Identify inbound references before moving legacy root files.
-6. Add deterministic repository checks after schemas stabilise; checks may validate contract/evidence shape and prohibited configurations only.
-7. Delete accidental research branches when authorised branch deletion becomes available.
-8. Conduct accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review before constitutional promotion.
+1. Deepen direct child/teen LLM-agent evidence: trust, disclosure, anthropomorphism, parasociality/dependency and developmental differences; do not weaken C11 while evidence remains sparse.
+2. Separate and normalise primary/lower-secondary feedback evidence and higher-quality school-age SEL meta-analyses with implementation moderators.
+3. Deepen child-specific transfer evidence and continue normalising the remaining human-readable evidence register.
+4. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract/evidence layer.
+5. Convert the shared-decision prototype family into a named pathway dossier, instantiate the review contract and run the first constitutional review against it.
+6. Identify inbound references before moving legacy root files.
+7. Add deterministic repository checks after schemas stabilise; checks may validate contract/evidence shape and prohibited configurations only.
+8. Delete accidental research branches when authorised branch deletion becomes available.
+9. Conduct accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review before constitutional promotion.
 
 ## Backlog-zero rule
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
