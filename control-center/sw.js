@@ -1,5 +1,5 @@
-const CACHE='trama-control-center-v7';
-const SHELL=['./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./ecosystem.html','./evidence.html','./data/ecosystem-snapshot.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md'];
+const CACHE='trama-control-center-v8';
+const SHELL=['./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./ecosystem.html','./evidence.html','./operations.html','./data/ecosystem-snapshot.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));
