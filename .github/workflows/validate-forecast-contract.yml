@@ -9,6 +9,11 @@ on:
       - "tests/fixtures/cc3-f0/**"
       - "docs/decisions/trama-adr-016-governed-forecast.md"
       - "docs/decisions/decision-register.json"
+      - "status/ecosystem-status.json"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "STATUS.md"
+      - "ROADMAP.md"
+      - "docs/knowledge/source-registry.json"
       - ".github/workflows/validate-forecast-contract.yml"
   push:
     branches:
@@ -20,6 +25,11 @@ on:
       - "tests/fixtures/cc3-f0/**"
       - "docs/decisions/trama-adr-016-governed-forecast.md"
       - "docs/decisions/decision-register.json"
+      - "status/ecosystem-status.json"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "STATUS.md"
+      - "ROADMAP.md"
+      - "docs/knowledge/source-registry.json"
       - ".github/workflows/validate-forecast-contract.yml"
 
 permissions:
@@ -60,6 +70,28 @@ jobs:
               assert errors, f"{path} must fail schema validation"
 
           print("TRAMA_CC3_F0_SCHEMA_FIXTURES_PASS")
+          PY
+
+      - name: Validate CC3-F0 snapshot wiring
+        shell: bash
+        run: |
+          python scripts/build_ecosystem_snapshot.py --output /tmp/cc3-snapshot.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          snapshot = json.loads(Path("/tmp/cc3-snapshot.json").read_text(encoding="utf-8"))
+          capabilities = {item["id"]: item for item in snapshot["capabilities"]}
+          gates = {item["id"]: item for item in snapshot["gates"]}
+
+          assert "CC3-F0" in capabilities, capabilities
+          assert capabilities["CC3-F0"]["state"] == "ACTIVE", capabilities["CC3-F0"]
+          assert capabilities["CC3-F0"]["gateRefs"] == ["GATE-CC3-F0-HUMAN"], capabilities["CC3-F0"]
+          assert "GATE-CC3-F0-HUMAN" in gates, gates
+          assert gates["GATE-CC3-F0-HUMAN"]["status"] == "OPEN", gates["GATE-CC3-F0-HUMAN"]
+          assert gates["GATE-CC3-F0-HUMAN"]["blocking"] is True
+          assert gates["GATE-CC3-F0-HUMAN"]["decisionAuthority"] == "TRAMA/Human Review"
+          print("TRAMA_CC3_F0_SNAPSHOT_WIRING_PASS")
           PY
 
       - name: Guard forbidden forecast semantics
