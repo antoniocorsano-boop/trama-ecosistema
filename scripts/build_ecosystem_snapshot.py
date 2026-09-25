@@ -628,6 +628,15 @@ def build_snapshot(root: Path) -> dict:
             "requiredEvidenceTypes": ["ACCESSIBILITY_GATE", "HUMAN_REVIEW"],
             "decisionAuthority": "TRAMA/Human Review",
         },
+        {
+            "id": "GATE-CC3-F0-HUMAN",
+            "area": "governance",
+            "type": "HUMAN",
+            "status": "PASS" if caps.get("CC3-F0", {}).get("humanReview") == "PASS" else "OPEN",
+            "blocking": True,
+            "requiredEvidenceTypes": ["CONTRACT_APPROVED", "HUMAN_REVIEW"],
+            "decisionAuthority": "TRAMA/Human Review",
+        },
     ]
 
     adr014 = next((d for d in decisions.get("decisions", []) if d.get("id") == "TRAMA-ADR-014"), None)
