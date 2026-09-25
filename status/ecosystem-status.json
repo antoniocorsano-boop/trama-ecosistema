@@ -66,6 +66,13 @@
     {
       "id": "CC3-F0",
       "label": "Governed Forecast Contract & Guardrails",
+      "state": "CLOSED",
+      "authority": "TRAMA",
+      "humanReview": "PASS"
+    },
+    {
+      "id": "CC3-F1",
+      "label": "Next Transition Engine",
       "state": "ACTIVE",
       "authority": "TRAMA",
       "humanReview": "PENDING"
