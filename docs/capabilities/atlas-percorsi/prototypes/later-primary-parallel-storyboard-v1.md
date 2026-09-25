@@ -1,287 +1,146 @@
 # CAP-ATLAS-PERCORSI — Later Primary Parallel Storyboard v1
 
 **Gate:** G1 — Discovery  
-**Status:** LOW_FIDELITY_STORYBOARD / NOT_USER_VALIDATED  
-**Age band:** later primary, approx. 9–10 years  
-**Comparison:** Literal baseline ↔ Journey/Crossroads candidate  
+**Status:** LOW_FIDELITY_STORYBOARD_SPEC / NOT_USER_VALIDATED  
+**Age band:** later primary (approx. 9–10 years; not a diagnostic category)  
+**Comparison:** Literal baseline ↔ Journey/Crossroads  
 **Runtime:** NOT_AUTHORIZED
 
 ## Purpose
 
-Provide a frame-by-frame structural storyboard in which pedagogical content is held constant and only the contextual scaffold changes. The comparison is designed to reveal whether Journey/Crossroads adds orientation and continuity without adding metaphor dependency, answer bias or unnecessary visual load.
+Create the first frame-by-frame controlled comparison in which pedagogical content remains invariant and only the contextual metaphor changes.
 
-The storyboard is deliberately non-polished. Atmosphere, illustration style, sound and animation are deferred.
+The comparison is not intended to determine which version children prefer. It is intended to reveal whether Journey/Crossroads adds useful orientation, causal continuity, reconsideration and transfer without increasing ambiguity, emotional pressure or cognitive load.
 
-## Controlled variables
+## Global controls
 
-Across both columns, keep identical wherever possible:
+Both columns preserve the same fictional group and shared task, literal instructions, number and semantic content of choices, consequences, opportunity to revise, strategy statement and transfer situations.
 
-- wording and reading level;
-- fictional group and shared task;
-- number and order of choices;
-- consequence content;
-- learner actions;
-- feedback text;
-- timing controlled by learner;
-- absence of scoring/rewards;
-- local/ephemeral data state;
-- transfer tasks;
-- accessibility semantics.
+There is no personal disclosure, account/profile/tracking, automatic progression or visual difference without a documented rationale. Low-stimulation/reduced-motion meaning must remain complete.
 
-The Journey column may add only the minimum spatial/contextual scaffold needed to test continuity.
+## Frame 01 — Context
 
----
+**Literal:** four fictional classmates and a shared classroom task. Text: “The group must decide how to continue. One person has not shared an idea yet.”
 
-## Frame 1 — Context
+**Journey:** the same group and task occupy a restrained orientation place. A path is visible but not yet a choice. The same literal text remains visible.
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| **Instruction:** “Il gruppo sta lavorando insieme. Deve decidere come continuare.” A simple group/task panel. | Same literal instruction. Same group/task positions inside a restrained orientation space. A neutral route marker indicates that the activity will continue, but no choice is yet shown. |
+**Controlled difference:** only a minimal spatial orientation scaffold.
 
-**Dominant focus:** shared task.  
-**Stable anchors:** four fictional peers; shared task object; fixed spatial arrangement.  
-**Meaningful change:** none.  
-**Learner action:** continue when ready.  
-**Low-stimulation equivalent:** identical content with no spatial route graphic.  
-**Data:** none.  
-**Failure signal:** learner needs to infer the situation from facial expressions or scenery.
+**Question:** does the scaffold help the learner understand where they are without becoming scenery?
 
----
+## Frame 02 — Missing information
 
-## Frame 2 — Missing information
+**Literal:** four contribution positions; three contain ideas and one is explicitly marked “idea not yet heard”.
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| Four contribution slots are visible; three contain an idea and one is empty. Text: “Manca ancora un’idea.” | Same four contribution slots in the same positions. The route remains background orientation only. Text remains identical. |
+**Journey:** identical contribution structure in the same context; route remains background orientation.
 
-**Dominant focus:** missing contribution.  
-**Stable anchors:** all Frame 1 anchors.  
-**Single change:** one explicitly empty contribution slot becomes the focus.  
-**Learner action:** identify/acknowledge what is missing.  
-**Emotion:** no sadness/shyness/anxiety coding.  
-**Failure signal:** the road attracts more attention than the missing information.
+**Focus:** missing contribution, never facial-expression inference.
 
----
+**Question:** can the learner identify what is missing equally well in both versions?
 
-## Frame 3 — Decision point
+## Frame 03 — Decision point
 
-**Literal instruction in both conditions:** “Come potrebbe decidere il gruppo?”
+Both show the same three strategies: decide now; hear one idea from each person then decide; let the proposer decide.
 
-1. Decidere subito con le idee già disponibili.
-2. Ascoltare un’idea da ciascuno, poi decidere.
-3. Lasciare decidere chi ha proposto il lavoro.
+**Literal:** three equal text cards.
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| Three equal strategy cards. | Three equally weighted route branches, each carrying the exact same strategy text. |
+**Journey:** three neutral route branches carrying the exact same text.
 
-**Visual neutrality controls for Journey:** equal width; comparable visible length; no centre/default route; no brightness/saturation hierarchy; no destination icon; no progress/reward marker.  
-**Learner action:** choose one strategy.  
-**Feedback:** none yet beyond selection confirmation.  
-**Data:** ephemeral/local choice state only.  
-**Failure signal:** a child can guess the designer-preferred answer from route appearance.
+Branches cannot differ in brightness, apparent safety, width, destination attractiveness, animation or centrality in ways that imply correctness.
 
----
+**Question:** does spatial branching clarify consequence-bearing choice or bias it?
 
-## Frame 4 — Consequence
+## Frame 04 — Consequence
 
-Example branch under comparison: **“Ascoltare un’idea da ciascuno, poi decidere.”** Other branches must receive structurally equivalent treatment.
+**Literal:** chosen card remains visible beside a concise consequence.
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| Same group/task panel. Fourth contribution appears. Text: “Ora il gruppo ha un’informazione in più. Ha impiegato un po’ più di tempo prima di decidere.” | Same group/task panel and fourth contribution. The selected route advances only slightly; the junction remains visually retrievable. Same consequence text. |
+**Journey:** learner advances only a small distance on the selected branch; junction remains retrievable. Same consequence text.
 
-**Dominant focus:** causal relation between process and available information.  
-**Single change:** additional contribution + explicit time trade-off.  
-**No celebration:** no confetti, stars, smiling reward reaction or “bravo”.  
-**Learner action:** inspect consequence.  
-**Failure signal:** learner remembers “the green/right path” rather than the information/time relation.
+No new illustrated world is introduced.
 
----
+**Question:** does the learner connect choice and consequence more clearly, or mainly remember movement along the route?
 
-## Frame 5 — Reconsideration
+## Frame 05 — Reconsideration
 
-**Instruction in both:** “Ora che hai visto cosa è successo, manterresti questa scelta o proveresti un altro modo?”
+Both show neutral actions: **Keep this choice** / **Try another way**, with consequence still available.
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| Buttons: “Mantengo” / “Rivedo la scelta”. Previous consequence remains accessible. | Same buttons. The junction remains reachable as an orientation reference; returning has no backward/failure styling. |
+Journey may spatially represent return to the junction, but there is no red “back”, lost progress, crossed-out route, score reduction or disappointed character.
 
-**Learner action:** keep or revise.  
-**Feedback:** revision is accepted neutrally.  
-**No penalty:** no score/progress loss.  
-**Failure signal:** “Rivedo” visually resembles undoing an error rather than deliberate reconsideration.
+**Question:** is revision perceived as thinking rather than failure?
 
----
+## Frame 06 — Strategy recognition
 
-## Frame 6 — Strategy recognition
+Both show: **“Before a shared decision, check what useful information is still missing.”**
 
-**Instruction:** “Che cosa può essere utile controllare prima di una decisione condivisa?”
+Only now may Journey add a restrained strategy-tool marker. It is secondary, not collected, unlocked, ranked or rewarded.
 
-Candidate strategy statement:
+**Question:** can the learner explain the strategy without the icon?
 
-> “Controllare quali informazioni utili mancano ancora.”
+## Frame 07 — Changed social context
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| Strategy appears as a plain labelled card after the experience. | Same labelled card appears at the orientation point. A very restrained tool symbol may accompany it, but only as secondary reinforcement. |
+New task: distribute limited materials while one relevant fact about needs is missing.
 
-**Workshop/Tools annotation layer:** this is the first point at which a tool representation is pedagogically justified. It names an experienced strategy; it is not awarded.  
-**No inventory:** no collection count, lock/unlock, rarity, badge or reward animation.  
-**Learner action:** connect strategy to the consequence just observed.  
-**Failure signal:** learner treats the card/tool as the objective rather than its meaning.
+Literal and Journey use identical wording. Journey retains only a restrained orientation grammar; earlier strategy marker may be recalled but cannot reveal the answer.
 
----
+**Question:** does the learner retrieve the principle rather than repeat a visual cue?
 
-## Frame 7 — Changed context / retrieval
+## Frame 08 — Cross-domain transfer
 
-New situation: the group has limited materials for another task. Before distributing them, one relevant piece of information about needs is missing.
+New task: choose between information sources while one important fact about a source is unknown.
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| New task panel with new objects; earlier strategy text can be recalled on request, not shown as the answer. | A changed but restrained orientation space. A small stable orientation cue signals continuity, while route/icon position is changed so it cannot cue the answer. |
+Journey becomes more abstract—a restrained decision map, not a new adventure scene.
 
-**Instruction:** “Prima di decidere come distribuire i materiali, che cosa conviene fare?”  
-**Learner action:** retrieve/apply strategy.  
-**Critical control:** do not repeat the same branch position, icon or colour associated with the earlier response.  
-**Failure signal:** success collapses when visual cues are changed.
+**Question:** can the learner generalise from “hear a missing contribution” to “check relevant missing information”?
 
----
+## Frame 09 — Learner-controlled trace
 
-## Frame 8 — Cross-domain transfer
+Both produce the same compact local strategy card:
 
-Situation: two sources are available for a simple class inquiry; one important fact needed to judge them is not yet known.
+> Before I decide, I can check what important information is still missing.
 
-| Literal baseline | Journey/Crossroads |
-|---|---|
-| Source comparison panel. No social-group imagery. | Journey scaffold is reduced to a minimal orientation/decision marker. The source comparison remains dominant. |
+Actions: **Keep on this device** / **Discard**.
 
-**Instruction:** “Che cosa dovresti controllare prima di scegliere quale fonte usare?”  
-**Purpose:** test the general principle “identify relevant missing information before a consequential choice,” not the scripted rule “let everyone speak.”  
-**Failure signal:** Journey requires social/path imagery to make the principle understandable.
+No name, account, badge, score, cloud save, public-share prompt or automatic upload.
 
----
+## Low-stimulation equivalence
 
-## Frame 9 — Learner-controlled trace
+Every Journey frame must reduce to a static orientation line/junction, text labels, no character animation, no parallax, no auto-pan, no ambient audio and no decorative transition. Removing atmosphere cannot remove educational information.
 
-Same optional trace in both conditions:
+## Visual budget
 
-> “Prima di decidere, posso controllare quali informazioni importanti mancano ancora.”
+Each frame has one dominant pedagogical focus; at most one major new visual relation where feasible; stable anchors only while useful; no novelty solely to refresh attention; text remains authoritative; no emotion inferred from faces; no visual prestige for choices; learner controls progression.
 
-Controls:
+## Data state
 
-- **Tieni sul dispositivo**;
-- **Scarta**;
-- future **Scarica** only if separately governed.
+| Frame | Required learner data | Persistence |
+|---|---|---|
+| 01–02 | none | none |
+| 03 | selected strategy | ephemeral/local |
+| 04–05 | branch + revision state | ephemeral/local |
+| 06 | strategy recognition | ephemeral/local |
+| 07–08 | transfer response | ephemeral/local |
+| 09 | non-identifying strategy artefact | learner-controlled local |
 
-No name, score, badge, class identifier or automatic upload.
+No server-side student telemetry is required.
 
-**Journey treatment:** no “journey completed” ceremony. The trace is a reusable idea, not proof of personal growth.
+## Comparative review
 
----
+Later authorised evaluation should compare task comprehension, orientation, causal recall, legitimacy of revision, strategy retrieval, near and farther transfer, metaphor dependence, visual bias, attention residue, accessibility equivalence and age respectfulness.
 
-# Structural comparison checklist
+These observations must not become persistent individual profiles.
 
-For every paired frame reviewers must answer:
+## Decision rule
 
-1. Is the literal instruction exactly equivalent?
-2. Does Journey add information, or only orientation/context?
-3. If it adds information, is that addition pedagogically justified?
-4. Is any visual feature likely to imply correctness?
-5. Is the dominant focus the same in both conditions?
-6. Can the Journey graphic be removed without making the task unintelligible?
-7. Does the Journey condition introduce more simultaneous elements than necessary?
-8. Can reduced-motion/low-stimulation presentation preserve meaning?
-9. Does the learner control progression?
-10. Are data produced and retained identically in both conditions?
+Journey may advance only if it shows a defensible advantage in contextual orientation/continuity or transfer without lower literal comprehension, visual-answer bias, decorative dependency, extra data collection, emotional manipulation, reduced accessibility, age-inappropriate framing or disproportionate resource use.
 
-Any “no” to 1, 4, 6, 8, 9 or 10 blocks progression to polished visual design.
+If no meaningful advantage emerges, the literal baseline remains preferable. If only specific frames benefit, Journey may become a **local orientation device** rather than the global metaphor.
 
-# Attention budget
+## Non-binary outcomes
 
-For Frames 1–6 in the Journey condition:
+Evidence may support Journey as global contextual architecture; Journey only at decision/reconsideration transitions; Journey for primary with a more abstract map for lower secondary; literal architecture with strategy tools only; or literal baseline throughout.
 
-- one stable base scene;
-- maximum one dominant pedagogical change per frame where feasible;
-- route scaffold remains visually subordinate until Frame 3;
-- no full-scene replacement;
-- no autoplay;
-- no ambient decorative motion;
-- no expressive reaction animation;
-- previous consequence can be revisited;
-- strategy tool appears only in Frame 6.
+The architecture follows evidence, not attachment to the current hypothesis.
 
-# Age-respectful language and representation
+## Next step
 
-For later primary:
-
-- concrete but not babyish language;
-- no mascots required;
-- fictional peers are ordinary participants, not heroes/villains;
-- no fantasy quest vocabulary required;
-- context may be warm and inviting, but comprehension cannot depend on atmosphere;
-- choices show trade-offs rather than a moral binary.
-
-# Accessibility preconditions
-
-Before any polished rendering:
-
-- text/structure alone conveys the complete task;
-- route branches have explicit labels;
-- colour is redundant, never semantic by itself;
-- keyboard/touch order follows reading order;
-- no precision drag is required;
-- reflow/zoom does not separate labels from choices;
-- focus can return to consequence when reconsidering;
-- reduced-motion version is native, not an afterthought;
-- no emotion recognition from faces is required.
-
-# Privacy and child-safety preconditions
-
-The storyboard requires no:
-
-- login/account;
-- learner name;
-- persistent server profile;
-- personal emotional disclosure;
-- camera/microphone/location;
-- behavioural emotion inference;
-- public sharing;
-- social comparison;
-- individual engagement telemetry.
-
-Any future deviation requires a separate governed decision and cannot be inferred from this storyboard.
-
-# Sustainability preconditions
-
-Before richer atmosphere is considered:
-
-- test whether one stable scene composition can cover Frames 1–6;
-- prefer reusable vector/simple raster elements over scene-by-scene media generation where educationally equivalent;
-- no animation without a causal/orientation function;
-- no third-party call merely for decorative media;
-- design for caching/offline reuse where feasible;
-- keep learner trace compact and text-first.
-
-# Review outcome sought
-
-This storyboard does **not** ask “which version is prettier?”
-
-It prepares a later governed comparison around:
-
-- orientation;
-- causal understanding;
-- ability to reconsider;
-- retrieval;
-- transfer;
-- cognitive/visual burden;
-- accessibility;
-- age respectfulness;
-- privacy equivalence;
-- resource proportionality.
-
-## Current state
-
-**Ready for internal low-fidelity visual rendering/review.**
-
-Not ready for child-facing validation, canonical metaphor selection, production UI, animation or runtime implementation.
+Perform structured review against the evidence register, emotional-development safeguards, child-safe profile, accessibility requirements, attention/visual-memory safeguards and consequence-aware sustainability principle. Only then produce a restrained visual prototype.
