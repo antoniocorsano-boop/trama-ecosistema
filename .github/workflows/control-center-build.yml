@@ -52,7 +52,12 @@ jobs:
           set -euo pipefail
           test -s control-center/data/ecosystem-snapshot.json
           test -s control-center/evidence.html
+          test -s control-center/operations.html
           grep -q '"integrityChecks"' control-center/data/ecosystem-snapshot.json
+          grep -q '"operationalPath"' control-center/data/ecosystem-snapshot.json
+          grep -q '"timelineEvents"' control-center/data/ecosystem-snapshot.json
+          grep -q '"timelineCoverage"' control-center/data/ecosystem-snapshot.json
+          grep -q "Cronologia governata" control-center/operations.html
           grep -q "Evidence Explorer" control-center/evidence.html
           test -s control-center/reports/stakeholder-assurance.html
           test -s control-center/reports/stakeholder-assurance.md

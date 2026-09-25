@@ -51,7 +51,7 @@ flowchart LR
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
-| TRAMA Control Center v2 | **CC2-F0–F4 INTEGRATED / F5 ACTIVE** | Snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system e Capability + Ecosystem Map integrati. CC2-F5 Evidence Explorer + Integrity è attiva via #85; ADR-015 resta PROPOSED. |
+| TRAMA Control Center v2 | **CC2-F0–F5 INTEGRATED / F6 ACTIVE** | Snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system, Capability + Ecosystem Map ed Evidence Explorer + Integrity integrati. CC2-F6 Timeline + Operational Path è attiva; ADR-015 resta PROPOSED. |
 
 ## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 
@@ -71,7 +71,8 @@ Stato integrato corrente:
 - Penpot MCP pilot — #82, merge `262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25`;
 - TRAMA Penpot design system — #83, merge `5cfb09f94ea532dc1f64523f7e10da6629159843`;
 - **CC2-F4 Capability + Ecosystem Map** — #84, merge `93a3fadf78732979c4536cbb394744b9471e14da`;
-- **CC2-F5 Evidence Explorer + Integrity** — #85, ACTIVE / HUMAN REVIEW NOT YET GRANTED.
+- **CC2-F5 Evidence Explorer + Integrity** — #85, merge `21c43b3e092c3dc31e450d2c9b2e3bf24b8238fd`;
+- **CC2-F6 Timeline + Operational Path** — ACTIVE / HUMAN REVIEW NOT YET GRANTED.
 
 Restano invarianti:
 - il Control Center non approva, non promuove e non autorizza runtime;

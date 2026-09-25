@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071827">
+<meta name="description" content="TRAMA Control Center v2 — percorso operativo e cronologia governata, snapshot-first e read-only.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+<title>TRAMA · Percorso operativo e cronologia</title>
+<style>
+:root{--bg:#071827;--surface:#0b2235;--surface2:#0e2b42;--line:#1c4662;--text:#f4f8fb;--muted:#9fb9cb;--info:#58bff7;--ok:#55d79a;--warn:#f0b54a;--danger:#f37d87;--violet:#ae88ff}
+*{box-sizing:border-box}html{max-width:100%;overflow-x:hidden;scroll-behavior:smooth}body{margin:0;max-width:100%;overflow-x:hidden;background:radial-gradient(circle at 85% 0,#123750 0,transparent 32%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,a{font:inherit}a{color:inherit}.wrap{width:min(1180px,100%);margin:auto;padding:22px 24px 50px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding-bottom:18px;border-bottom:1px solid var(--line)}h1{font-size:29px;line-height:1.12;margin:4px 0}.lede{color:var(--muted);margin:4px 0 0}.back{min-height:44px;display:inline-flex;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;background:var(--surface)}.meta{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.pill{display:inline-flex;min-height:32px;align-items:center;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}.pill strong{color:var(--text)}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 12px}.tab{min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer}.tab[aria-selected="true"]{background:#163d58;border-color:#3c7b9d}.tab:focus-visible,.back:focus-visible{outline:2px solid var(--info);outline-offset:2px}.panel{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,var(--surface2),var(--surface));padding:16px;min-width:0}.panel[hidden]{display:none}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:12px}.section-head h2{margin:0;font-size:19px}.hint{color:var(--muted);font-size:12px}.path-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.block{border:1px solid #173d56;background:#091e30;border-radius:12px;padding:13px;min-width:0}.block h3{font-size:15px;margin:0 0 8px}.items{display:grid;gap:7px}.item{border:1px solid #173d56;border-radius:9px;padding:9px;background:#0b2235;min-width:0}.item strong{display:block;overflow-wrap:anywhere}.item small{display:block;color:var(--muted);overflow-wrap:anywhere}.badge{display:inline-flex;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:10px;font-weight:800;white-space:nowrap}.b-ok{color:#a5f3ca;border-color:#2b9568}.b-warn{color:#ffda89;border-color:#9c6d1d}.b-danger{color:#ffd0d5;border-color:#a74a55}.b-muted{color:#c6d3db}.b-violet{color:#decfff;border-color:#705ca8}.coverage{border:1px solid #75541d;background:#322813;border-radius:10px;padding:11px;margin-bottom:12px;color:#ead7a7}.timeline{position:relative;display:grid;gap:10px}.event{position:relative;border:1px solid #173d56;background:#091e30;border-radius:12px;padding:13px 13px 13px 18px}.event:before{content:"";position:absolute;left:0;top:16px;width:4px;height:calc(100% - 32px);border-radius:4px;background:var(--info)}.event-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.event-id{font-weight:900;color:var(--info);overflow-wrap:anywhere}.event h3{font-size:15px;margin:7px 0}.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.fact small{display:block;color:var(--muted)}.fact strong{display:block;overflow-wrap:anywhere}.details{margin:9px 0 0;padding-left:18px;color:#cddde6}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.empty{padding:18px;text-align:center;color:var(--muted)}.error{border:1px solid #733642;background:#32171d;color:#ffd0d5;border-radius:10px;padding:14px}.footer{margin-top:18px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:760px){body{font-size:15px}.wrap{padding:14px 12px 34px}.top{display:grid;gap:10px}h1{font-size:23px}.back{width:max-content}.path-grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.panel{padding:13px}.section-head{align-items:flex-start}.tabs{display:grid;grid-template-columns:1fr 1fr}.tab{width:100%}}
+@media(max-width:390px){.facts{grid-template-columns:1fr}.event-top{display:grid}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="top">
+  <div><div class="hint">TRAMA CONTROL CENTER V2 · READ_ONLY</div><h1>Percorso operativo e cronologia</h1><p class="lede">Dove siamo, cosa viene dopo e come siamo arrivati allo stato corrente — senza creare una roadmap parallela.</p></div>
+  <a class="back" href="./index.html">← Panoramica</a>
+</header>
+
+<div class="meta" aria-live="polite">
+  <span class="pill" id="snapshotState"><strong>Snapshot</strong>&nbsp; caricamento…</span>
+  <span class="pill"><strong id="currentCount">–</strong>&nbsp; attività correnti</span>
+  <span class="pill"><strong id="gateCount">–</strong>&nbsp; gate successivi</span>
+  <span class="pill"><strong id="eventCount">–</strong>&nbsp; eventi registrati</span>
+</div>
+
+<div class="tabs" role="tablist" aria-label="Vista operativa">
+  <button class="tab" id="tabPath" role="tab" aria-selected="true" aria-controls="panelPath" type="button">Percorso operativo</button>
+  <button class="tab" id="tabTimeline" role="tab" aria-selected="false" aria-controls="panelTimeline" type="button">Cronologia governata</button>
+</div>
+
+<section class="panel" id="panelPath" role="tabpanel" aria-labelledby="tabPath">
+  <div class="section-head"><div><h2>Dove siamo e cosa viene dopo?</h2><div class="hint">Proiezione derivata da fasi, gate, capability, espansioni e defer già presenti nello snapshot.</div></div></div>
+  <div class="path-grid">
+    <section class="block"><h3>Attività correnti</h3><div class="items" id="currentActivities"></div></section>
+    <section class="block"><h3>Prossimi gate</h3><div class="items" id="nextGates"></div></section>
+    <section class="block"><h3>Prossimi incrementi</h3><div class="items" id="nextIncrements"></div></section>
+    <section class="block"><h3>Defer espliciti</h3><div class="items" id="explicitDefers"></div></section>
+    <section class="block" style="grid-column:1/-1"><h3>Dipendenze non soddisfatte</h3><div class="items" id="unmetDependencies"></div></section>
+  </div>
+</section>
+
+<section class="panel" id="panelTimeline" role="tabpanel" aria-labelledby="tabTimeline" hidden>
+  <div class="section-head"><div><h2>Come siamo arrivati allo stato attuale?</h2><div class="hint">Timeline semantica con provenienza esplicita, non log GitHub.</div></div></div>
+  <div class="coverage" id="coverageBox">Copertura timeline: PARTIAL_EXPLICIT — verrà sostituita dai dati dello snapshot al caricamento.</div>
+  <div class="timeline" id="timelineList"></div>
+</section>
+
+<div id="errorBox"></div>
+<footer class="footer"><span>TRAMA · Operational Path + Governed Timeline · READ_ONLY</span><span id="updated">–</span></footer>
+</main>
+
+<script>
+const SNAPSHOT_URL='./data/ecosystem-snapshot.json';
+const CACHE_KEY='trama-cc2-snapshot';
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+let snapshot=null;
+
+function badgeClass(state){
+  const s=String(state||'').toUpperCase();
+  if(['PASS','COMPLETE','CLOSED'].includes(s))return 'b-ok';
+  if(['ACTIVE','OPEN','IN_PROGRESS','PLANNED'].includes(s))return 'b-warn';
+  if(['DEFERRED','NOT_AUTHORIZED','SUPERSESSION'].includes(s))return 'b-violet';
+  if(['FAIL','BLOCKED','UNRESOLVED'].includes(s))return 'b-danger';
+  return 'b-muted';
+}
+function fmtDate(value){if(!value)return 'non dichiarata';const d=new Date(value);return Number.isNaN(d.getTime())?String(value):d.toLocaleString('it-IT')}
+function saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
+function readSnapshot(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch{return null}}
+async function loadSnapshot(){
+  try{
+    const r=await fetch(SNAPSHOT_URL,{cache:'no-store'});
+    if(!r.ok)throw new Error('snapshot '+r.status);
+    const data=await r.json();saveSnapshot(data);render(data,'fresh');
+  }catch(err){
+    const cached=readSnapshot();
+    if(cached)render(cached,'offline');else fail();
+  }
+}
+function renderItems(target,items,renderer,empty){
+  target.innerHTML=items.length?items.map(renderer).join(''):'<div class="empty">'+esc(empty)+'</div>';
+}
+function render(data,mode){
+  snapshot=data;
+  snapshotState.innerHTML='<strong>Snapshot</strong>&nbsp; '+(mode==='fresh'?'disponibile':'offline · copia locale');
+  updated.textContent='Generato '+fmtDate(data.generatedAt);
+  const path=data.operationalPath||{};
+  currentCount.textContent=(path.currentActivities||[]).length;
+  gateCount.textContent=(path.nextGates||[]).length;
+  eventCount.textContent=(data.timelineEvents||[]).length;
+
+  renderItems(currentActivities,path.currentActivities||[],x=>'<div class="item"><strong>'+esc(x.ref+' · '+x.label)+'</strong><small>'+esc(x.kind)+' · '+esc(x.status)+'</small></div>','Nessuna attività corrente dichiarata.');
+  renderItems(nextGates,path.nextGates||[],x=>'<div class="item"><strong>'+esc(x.ref)+'</strong><small>'+esc(x.area)+' · '+esc(x.status)+' · autorità: '+esc(x.decisionAuthority||'non dichiarata')+'</small></div>','Nessun gate successivo dichiarato.');
+  renderItems(nextIncrements,path.nextIncrements||[],x=>'<div class="item"><strong>'+esc(x.ref+' · '+x.label)+'</strong><small>'+esc(x.status)+' · dipendenze: '+esc((x.dependencyRefs||[]).join(', ')||'nessuna')+'</small></div>','Nessun incremento successivo dichiarato.');
+  renderItems(explicitDefers,path.explicitDefers||[],x=>'<div class="item"><strong>'+esc(x.ref+' · '+x.label)+'</strong><small>'+esc(x.state)+' · runtime: '+esc(x.runtimeState||'non dichiarato')+'</small></div>','Nessun defer esplicito dichiarato.');
+  renderItems(unmetDependencies,path.unmetDependencies||[],x=>'<div class="item"><strong>'+esc(x.subjectRef+' ← '+x.dependencyRef)+'</strong><small>'+esc(x.dependencyKind)+' · '+esc(x.dependencyStatus)+'</small></div>','Nessuna dipendenza non soddisfatta rilevata.');
+
+  const cov=data.timelineCoverage||{};
+  coverageBox.innerHTML='<strong>Copertura timeline: '+esc(cov.mode||'non dichiarata')+'</strong><br>'+esc(cov.note||'')+'<br><span class="hint">Da: '+esc(cov.from||'—')+' · fonte: '+esc(cov.sourceRef||'—')+'</span>';
+
+  const events=[...(data.timelineEvents||[])].sort((a,b)=>String(b.occurredAt).localeCompare(String(a.occurredAt)));
+  timelineList.innerHTML=events.length?events.map(e=>'<article class="event"><div class="event-top"><span class="event-id">'+esc(e.id)+'</span><span class="badge '+badgeClass(e.eventType)+'">'+esc(e.eventType)+'</span></div><h3>'+esc(e.label)+'</h3><div class="facts"><div class="fact"><small>Quando</small><strong>'+esc(fmtDate(e.occurredAt))+'</strong></div><div class="fact"><small>Soggetto</small><strong>'+esc(e.subjectRef)+'</strong></div><div class="fact"><small>Authority</small><strong>'+esc(e.authority)+'</strong></div><div class="fact"><small>Fonte</small><strong>'+esc(e.sourceRef)+'</strong></div><div class="fact"><small>Versione</small><strong class="mono">'+esc(e.versionRef||'non dichiarata')+'</strong></div></div><ul class="details">'+(e.details||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></article>').join(''):'<div class="empty">Nessun evento semantico registrato.</div>';
+}
+function activate(which){
+  const path=which==='path';
+  tabPath.setAttribute('aria-selected',path?'true':'false');
+  tabTimeline.setAttribute('aria-selected',path?'false':'true');
+  panelPath.hidden=!path;panelTimeline.hidden=path;
+}
+function fail(){
+  snapshotState.innerHTML='<strong>Snapshot</strong>&nbsp; non disponibile';
+  errorBox.innerHTML='<div class="error">Impossibile mostrare percorso operativo e cronologia: snapshot assente e nessuna copia locale disponibile.</div>';
+}
+tabPath.addEventListener('click',()=>activate('path'));
+tabTimeline.addEventListener('click',()=>activate('timeline'));
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{}))}
+loadSnapshot();
+</script>
+</body>
+</html>

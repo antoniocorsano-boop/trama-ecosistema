@@ -6,6 +6,8 @@ Current responsibilities:
 - evaluate maturity conservatively from bound evidence;
 - project declared capabilities without inventing missing operational facts;
 - derive explicit integrity checks without producing an aggregate score;
+- derive the operational path from governed current state;
+- project semantic timeline events only from the explicit governed event registry;
 - emit a schema-compatible snapshot for the read-only Control Center;
 - avoid external API calls and writes to source systems.
 """
@@ -420,6 +422,149 @@ def build_integrity_checks(snapshot: dict, now: datetime) -> list[dict]:
     return checks
 
 
+def build_operational_path(snapshot: dict) -> dict:
+    phases = snapshot.get("phases", [])
+    gates = snapshot.get("gates", [])
+    capabilities = snapshot.get("capabilities", [])
+    dependencies = snapshot.get("dependencies", [])
+    expansions = snapshot.get("expansionCandidates", [])
+
+    gate_by_id = {item["id"]: item for item in gates}
+    capability_by_id = {item["id"]: item for item in capabilities}
+    dependency_by_id = {item["id"]: item for item in dependencies}
+
+    current_activities = [
+        {
+            "ref": phase["id"],
+            "kind": "PHASE",
+            "label": phase["name"],
+            "status": phase["status"],
+        }
+        for phase in phases
+        if str(phase.get("status", "")).upper() in {"ACTIVE", "IN_PROGRESS"}
+    ]
+    current_activities.extend(
+        {
+            "ref": capability["id"],
+            "kind": "CAPABILITY",
+            "label": capability["label"],
+            "status": capability["state"],
+        }
+        for capability in capabilities
+        if str(capability.get("state", "")).upper() == "ACTIVE"
+    )
+
+    next_gates = [
+        {
+            "ref": gate["id"],
+            "area": gate["area"],
+            "status": gate["status"],
+            "blocking": bool(gate.get("blocking")),
+            "decisionAuthority": gate.get("decisionAuthority"),
+        }
+        for gate in gates
+        if gate.get("blocking") and gate.get("status") != "PASS"
+    ]
+
+    next_increments = [
+        {
+            "ref": item["id"],
+            "label": item["name"],
+            "status": item["status"],
+            "dependencyRefs": list(item.get("dependencyRefs", [])),
+        }
+        for item in expansions
+        if item.get("status") in {"PLANNED", "ELIGIBLE_FOR_DESIGN", "BLOCKED"}
+    ]
+
+    explicit_defers = [
+        {
+            "ref": capability["id"],
+            "label": capability["label"],
+            "state": capability["state"],
+            "runtimeState": capability.get("runtimeState"),
+        }
+        for capability in capabilities
+        if str(capability.get("state", "")).upper() == "DEFERRED"
+        or str(capability.get("runtimeState", "")).upper() in {"DEFERRED", "RUNTIME_DEFERRED"}
+    ]
+
+    unmet_dependencies = []
+    for item in expansions:
+        for ref in item.get("dependencyRefs", []):
+            if ref in gate_by_id:
+                gate = gate_by_id[ref]
+                if gate.get("status") != "PASS":
+                    unmet_dependencies.append(
+                        {
+                            "subjectRef": item["id"],
+                            "dependencyRef": ref,
+                            "dependencyKind": "GATE",
+                            "dependencyStatus": str(gate.get("status") or "UNKNOWN"),
+                        }
+                    )
+            elif ref in capability_by_id:
+                capability = capability_by_id[ref]
+                if capability.get("state") != "CLOSED":
+                    unmet_dependencies.append(
+                        {
+                            "subjectRef": item["id"],
+                            "dependencyRef": ref,
+                            "dependencyKind": "CAPABILITY",
+                            "dependencyStatus": str(capability.get("state") or "UNKNOWN"),
+                        }
+                    )
+            elif ref in dependency_by_id:
+                dependency = dependency_by_id[ref]
+                if dependency.get("status") not in {"ACTIVE", "GOVERNED", "PASS"}:
+                    unmet_dependencies.append(
+                        {
+                            "subjectRef": item["id"],
+                            "dependencyRef": ref,
+                            "dependencyKind": "DEPENDENCY",
+                            "dependencyStatus": str(dependency.get("status") or "UNKNOWN"),
+                        }
+                    )
+            else:
+                unmet_dependencies.append(
+                    {
+                        "subjectRef": item["id"],
+                        "dependencyRef": ref,
+                        "dependencyKind": "UNKNOWN",
+                        "dependencyStatus": "UNRESOLVED",
+                    }
+                )
+
+    return {
+        "currentActivities": current_activities,
+        "nextGates": next_gates,
+        "nextIncrements": next_increments,
+        "explicitDefers": explicit_defers,
+        "unmetDependencies": unmet_dependencies,
+    }
+
+
+def timeline_projection(governed_events: dict) -> list[dict]:
+    """Project only explicit semantic events; never reconstruct history from current state."""
+    return sorted(
+        [
+            {
+                "id": item["id"],
+                "eventType": item["eventType"],
+                "occurredAt": item["occurredAt"],
+                "label": item["label"],
+                "subjectRef": item["subjectRef"],
+                "sourceRef": item["sourceRef"],
+                "authority": item["authority"],
+                "versionRef": item.get("versionRef"),
+                "details": list(item.get("details", [])),
+            }
+            for item in governed_events.get("events", [])
+        ],
+        key=lambda item: item["occurredAt"],
+    )
+
+
 def build_snapshot(root: Path) -> dict:
     observed_at = datetime.now(timezone.utc).isoformat()
     config = load_json(root / "config/control-center-snapshot-sources.json")
@@ -427,6 +572,7 @@ def build_snapshot(root: Path) -> dict:
     decisions = load_json(root / "docs/decisions/decision-register.json")
     maturity_definitions = load_json(root / "config/maturity-area-definitions.json")
     assurance_registry = load_json(root / "config/stakeholder-assurance-registry.json")
+    governed_events = load_json(root / "status/governed-events.json")
     validate_definitions(maturity_definitions)
     validate_registry(assurance_registry)
     caps = capability_map(eco_status)
@@ -564,7 +710,7 @@ def build_snapshot(root: Path) -> dict:
     ]
     snapshot = {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-        "schemaVersion": "1.2.0",
+        "schemaVersion": "1.3.0",
         "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),
@@ -579,7 +725,16 @@ def build_snapshot(root: Path) -> dict:
         ],
         "expansionCandidates": expansion_candidates,
         "integrityChecks": [],
+        "operationalPath": {},
+        "timelineEvents": timeline_projection(governed_events),
+        "timelineCoverage": {
+            "mode": governed_events["coverage"]["mode"],
+            "from": governed_events["coverage"]["from"],
+            "note": governed_events["coverage"].get("note", ""),
+            "sourceRef": "status/governed-events.json",
+        },
     }
+    snapshot["operationalPath"] = build_operational_path(snapshot)
     snapshot["integrityChecks"] = build_integrity_checks(
         snapshot,
         parse_timestamp(observed_at) or datetime.now(timezone.utc),
@@ -601,6 +756,9 @@ def validate(snapshot: dict) -> None:
         "assuranceClaims",
         "expansionCandidates",
         "integrityChecks",
+        "operationalPath",
+        "timelineEvents",
+        "timelineCoverage",
     }
     missing = sorted(required - snapshot.keys())
     if missing:
@@ -653,6 +811,25 @@ def validate(snapshot: dict) -> None:
     for check in snapshot["integrityChecks"]:
         if check["status"] not in valid_integrity_statuses:
             raise ValueError(f"Invalid integrity status {check['status']} for {check['id']}")
+
+    timeline_ids = {item["id"] for item in snapshot["timelineEvents"]}
+    if len(timeline_ids) != len(snapshot["timelineEvents"]):
+        raise ValueError("Duplicate timeline event id detected")
+    if any(not item.get("sourceRef") for item in snapshot["timelineEvents"]):
+        raise ValueError("Timeline event without sourceRef detected")
+
+    operational_path = snapshot["operationalPath"]
+    if not isinstance(operational_path, dict):
+        raise ValueError("operationalPath must be an object")
+    for key in {
+        "currentActivities",
+        "nextGates",
+        "nextIncrements",
+        "explicitDefers",
+        "unmetDependencies",
+    }:
+        if key not in operational_path:
+            raise ValueError(f"Missing operationalPath key: {key}")
 
     dependency_ids = {item["id"] for item in snapshot["dependencies"]}
     if len(dependency_ids) != len(snapshot["dependencies"]):

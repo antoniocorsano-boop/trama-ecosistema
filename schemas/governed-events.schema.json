@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/governed-events.schema.json",
+  "title": "TRAMA Governed Semantic Events",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "updatedAt",
+    "coverage",
+    "events"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "mode",
+        "from"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "PARTIAL_EXPLICIT"
+          ]
+        },
+        "from": {
+          "type": "string",
+          "format": "date"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "eventType",
+          "occurredAt",
+          "label",
+          "subjectRef",
+          "sourceRef",
+          "authority",
+          "details"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 3
+          },
+          "eventType": {
+            "enum": [
+              "HUMAN_REVIEW",
+              "MERGE",
+              "ADR_APPROVAL",
+              "GATE_PASS",
+              "CAPABILITY_PROMOTION",
+              "RUNTIME_AUTHORIZATION",
+              "DEPRECATION",
+              "SUPERSESSION"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 3
+          },
+          "subjectRef": {
+            "type": "string",
+            "minLength": 2
+          },
+          "sourceRef": {
+            "type": "string",
+            "minLength": 2
+          },
+          "authority": {
+            "type": "string",
+            "minLength": 2
+          },
+          "versionRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

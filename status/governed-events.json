@@ -1,0 +1,120 @@
+{
+  "$schema": "../schemas/governed-events.schema.json",
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-09-25",
+  "coverage": {
+    "mode": "PARTIAL_EXPLICIT",
+    "from": "2026-09-25",
+    "note": "Registro iniziale esplicito: non ricostruisce retroattivamente eventi non ancora registrati."
+  },
+  "events": [
+    {
+      "id": "EVT-CC2-F1E-MERGE-81",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:25:42Z",
+      "label": "CC2-F1/E Project Knowledge integrata",
+      "subjectRef": "CC2-F1/E",
+      "sourceRef": "github:pull/81",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "4a17766bc315340824b4ef44204f81a1487515ce",
+      "details": [
+        "Project Knowledge & Agent Context Foundation integrata.",
+        "ADR-015 resta PROPOSED."
+      ]
+    },
+    {
+      "id": "EVT-PENPOT-MCP-MERGE-82",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:31:39Z",
+      "label": "Penpot MCP pilot refresh integrato",
+      "subjectRef": "PENPOT-MCP-PILOT",
+      "sourceRef": "github:pull/82",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25",
+      "details": [
+        "Pilot tooling separato dal runtime di prodotto.",
+        "Nessuna nuova authority."
+      ]
+    },
+    {
+      "id": "EVT-PENPOT-DS-MERGE-83",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:36:59Z",
+      "label": "TRAMA Penpot design system integrato",
+      "subjectRef": "PENPOT-DESIGN-SYSTEM",
+      "sourceRef": "github:pull/83",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "5cfb09f94ea532dc1f64523f7e10da6629159843",
+      "details": [
+        "Design system mobile-first e gate accessibilità integrati."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F4-MERGE-84",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:58:23Z",
+      "label": "CC2-F4 Capability + Ecosystem Map integrata",
+      "subjectRef": "CC2-F4",
+      "sourceRef": "github:pull/84",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "93a3fadf78732979c4536cbb394744b9471e14da",
+      "details": [
+        "Capability projection conservativa.",
+        "Nessun edge sintetico fuori dallo snapshot."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F5-MERGE-85",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:14:33Z",
+      "label": "CC2-F5 Evidence Explorer + Integrity integrata",
+      "subjectRef": "CC2-F5",
+      "sourceRef": "github:pull/85",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "21c43b3e092c3dc31e450d2c9b2e3bf24b8238fd",
+      "details": [
+        "Integrity checks PASS / ISSUE / NOT_EVALUABLE.",
+        "Nessun overall score."
+      ]
+    },
+    {
+      "id": "EVT-PR70-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:52Z",
+      "label": "PR #70 superseded da #81",
+      "subjectRef": "github:pull/70",
+      "sourceRef": "github:pull/70",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "4a17766bc315340824b4ef44204f81a1487515ce",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-PR78-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:56Z",
+      "label": "PR #78 superseded da #82",
+      "subjectRef": "github:pull/78",
+      "sourceRef": "github:pull/78",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-PR79-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:59Z",
+      "label": "PR #79 superseded da #83",
+      "subjectRef": "github:pull/79",
+      "sourceRef": "github:pull/79",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "5cfb09f94ea532dc1f64523f7e10da6629159843",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    }
+  ]
+}

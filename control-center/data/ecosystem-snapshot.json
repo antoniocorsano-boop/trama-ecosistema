@@ -1,31 +1,37 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.2.0",
-  "generatedAt": "2026-09-25T03:07:02.212539+00:00",
+  "schemaVersion": "1.3.0",
+  "generatedAt": "2026-09-25T03:21:09.487289+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "ref": "STATUS.md",
-      "sha256": "896ba520636ae165d83c86303348d50b7e135130c979a522784e836511c183c3"
+      "sha256": "ac3d0fc114bcce5d999fd7bd9e2646e0b050eedfda8cb864b2a1b91a43754241"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "ref": "ROADMAP.md",
-      "sha256": "343e22d161803c1c8564a139b59de4aba51ef718de28ccdfc3aed488fbf59088"
+      "sha256": "034ebd492d35eff358fcd5b848181b578a4d66a31e4c993f59182393ca0fb020"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
+    },
+    "governed-events": {
+      "status": "FRESH",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "ref": "status/governed-events.json",
+      "sha256": "ff29d9db23bad53daf211fc6028f8ebbfedf0af5b66fdee6d63810007f8db6e4"
     }
   },
   "phases": [
@@ -78,11 +84,12 @@
         "EV-SOURCE-TRAMA-ROADMAP",
         "EV-SOURCE-ECOSYSTEM-STATUS",
         "EV-SOURCE-DECISION-REGISTER",
+        "EV-SOURCE-GOVERNED-EVENTS",
         "EV-TRAMA-ADR-014"
       ],
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
     },
     {
       "id": "arena",
@@ -97,7 +104,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
     },
     {
       "id": "atlas",
@@ -115,7 +122,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
     },
     {
       "id": "docente-os",
@@ -131,7 +138,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
     }
   ],
   "capabilities": [
@@ -311,9 +318,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "sha256": "896ba520636ae165d83c86303348d50b7e135130c979a522784e836511c183c3"
+        "sha256": "ac3d0fc114bcce5d999fd7bd9e2646e0b050eedfda8cb864b2a1b91a43754241"
       },
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -329,9 +336,9 @@
       "status": "PASS",
       "source": {
         "path": "ROADMAP.md",
-        "sha256": "343e22d161803c1c8564a139b59de4aba51ef718de28ccdfc3aed488fbf59088"
+        "sha256": "034ebd492d35eff358fcd5b848181b578a4d66a31e4c993f59182393ca0fb020"
       },
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -349,7 +356,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
       },
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -367,7 +374,25 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
       },
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-GOVERNED-EVENTS",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "SEMANTIC_TIMELINE",
+      "status": "PASS",
+      "source": {
+        "path": "status/governed-events.json",
+        "sha256": "ff29d9db23bad53daf211fc6028f8ebbfedf0af5b66fdee6d63810007f8db6e4"
+      },
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -386,7 +411,7 @@
         "ref": "TRAMA-ADR-014",
         "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
       },
-      "observedAt": "2026-09-25T03:07:02.212539+00:00",
+      "observedAt": "2026-09-25T03:21:09.487289+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -772,5 +797,211 @@
       "affectedRefs": [],
       "details": []
     }
-  ]
+  ],
+  "operationalPath": {
+    "currentActivities": [
+      {
+        "ref": "R2",
+        "kind": "PHASE",
+        "label": "Pilota ECO-02/P1",
+        "status": "ACTIVE"
+      },
+      {
+        "ref": "R3",
+        "kind": "PHASE",
+        "label": "Consolidamento Atlas",
+        "status": "ACTIVE"
+      },
+      {
+        "ref": "ECO-02-P1",
+        "kind": "CAPABILITY",
+        "label": "Pilota Tecnologia 2C",
+        "status": "ACTIVE"
+      },
+      {
+        "ref": "R3-F0",
+        "kind": "CAPABILITY",
+        "label": "Atlas Product & Design Foundation",
+        "status": "ACTIVE"
+      },
+      {
+        "ref": "TRAMA-SA-01",
+        "kind": "CAPABILITY",
+        "label": "TypeSafe semantic assurance pilot",
+        "status": "ACTIVE"
+      }
+    ],
+    "nextGates": [
+      {
+        "ref": "GATE-ECO02-HUMAN-FINAL",
+        "area": "interoperability",
+        "status": "OPEN",
+        "blocking": true,
+        "decisionAuthority": "Human Review"
+      },
+      {
+        "ref": "GATE-R3-F0-EXIT",
+        "area": "atlas",
+        "status": "OPEN",
+        "blocking": true,
+        "decisionAuthority": "TRAMA/Human Review"
+      }
+    ],
+    "nextIncrements": [
+      {
+        "ref": "R3-P2",
+        "label": "Curriculum pubblico",
+        "status": "PLANNED",
+        "dependencyRefs": [
+          "GATE-R3-F0-EXIT"
+        ]
+      },
+      {
+        "ref": "R3-P5",
+        "label": "Smart Navigation",
+        "status": "PLANNED",
+        "dependencyRefs": [
+          "GATE-R3-F0-EXIT"
+        ]
+      }
+    ],
+    "explicitDefers": [
+      {
+        "ref": "DOS-A1",
+        "label": "Integrazione operativa automatizzata",
+        "state": "DEFERRED",
+        "runtimeState": "DEFERRED"
+      }
+    ],
+    "unmetDependencies": [
+      {
+        "subjectRef": "R3-P2",
+        "dependencyRef": "GATE-R3-F0-EXIT",
+        "dependencyKind": "GATE",
+        "dependencyStatus": "OPEN"
+      },
+      {
+        "subjectRef": "R3-P5",
+        "dependencyRef": "GATE-R3-F0-EXIT",
+        "dependencyKind": "GATE",
+        "dependencyStatus": "OPEN"
+      }
+    ]
+  },
+  "timelineEvents": [
+    {
+      "id": "EVT-CC2-F1E-MERGE-81",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:25:42Z",
+      "label": "CC2-F1/E Project Knowledge integrata",
+      "subjectRef": "CC2-F1/E",
+      "sourceRef": "github:pull/81",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "4a17766bc315340824b4ef44204f81a1487515ce",
+      "details": [
+        "Project Knowledge & Agent Context Foundation integrata.",
+        "ADR-015 resta PROPOSED."
+      ]
+    },
+    {
+      "id": "EVT-PENPOT-MCP-MERGE-82",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:31:39Z",
+      "label": "Penpot MCP pilot refresh integrato",
+      "subjectRef": "PENPOT-MCP-PILOT",
+      "sourceRef": "github:pull/82",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25",
+      "details": [
+        "Pilot tooling separato dal runtime di prodotto.",
+        "Nessuna nuova authority."
+      ]
+    },
+    {
+      "id": "EVT-PENPOT-DS-MERGE-83",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:36:59Z",
+      "label": "TRAMA Penpot design system integrato",
+      "subjectRef": "PENPOT-DESIGN-SYSTEM",
+      "sourceRef": "github:pull/83",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "5cfb09f94ea532dc1f64523f7e10da6629159843",
+      "details": [
+        "Design system mobile-first e gate accessibilità integrati."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F4-MERGE-84",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:58:23Z",
+      "label": "CC2-F4 Capability + Ecosystem Map integrata",
+      "subjectRef": "CC2-F4",
+      "sourceRef": "github:pull/84",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "93a3fadf78732979c4536cbb394744b9471e14da",
+      "details": [
+        "Capability projection conservativa.",
+        "Nessun edge sintetico fuori dallo snapshot."
+      ]
+    },
+    {
+      "id": "EVT-PR70-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:52Z",
+      "label": "PR #70 superseded da #81",
+      "subjectRef": "github:pull/70",
+      "sourceRef": "github:pull/70",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "4a17766bc315340824b4ef44204f81a1487515ce",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-PR78-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:56Z",
+      "label": "PR #78 superseded da #82",
+      "subjectRef": "github:pull/78",
+      "sourceRef": "github:pull/78",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-PR79-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:59Z",
+      "label": "PR #79 superseded da #83",
+      "subjectRef": "github:pull/79",
+      "sourceRef": "github:pull/79",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "5cfb09f94ea532dc1f64523f7e10da6629159843",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F5-MERGE-85",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:14:33Z",
+      "label": "CC2-F5 Evidence Explorer + Integrity integrata",
+      "subjectRef": "CC2-F5",
+      "sourceRef": "github:pull/85",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "21c43b3e092c3dc31e450d2c9b2e3bf24b8238fd",
+      "details": [
+        "Integrity checks PASS / ISSUE / NOT_EVALUABLE.",
+        "Nessun overall score."
+      ]
+    }
+  ],
+  "timelineCoverage": {
+    "mode": "PARTIAL_EXPLICIT",
+    "from": "2026-09-25",
+    "note": "Registro iniziale esplicito: non ricostruisce retroattivamente eventi non ancora registrati.",
+    "sourceRef": "status/governed-events.json"
+  }
 }
