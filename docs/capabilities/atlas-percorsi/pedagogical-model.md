@@ -1,12 +1,12 @@
 # CAP-ATLAS-PERCORSI — Pedagogical Model
 
 **Gate:** G1 — Discovery  
-**Status:** WORKING_HYPOTHESIS  
+**Status:** WORKING_HYPOTHESIS / EVIDENCE_BOUND  
 **Approval:** NONE
 
 ## Purpose
 
-Preserve the pedagogical reasoning developed so far while keeping evidence, hypotheses and future decisions distinguishable.
+Preserve the pedagogical reasoning while keeping evidence, hypotheses and future decisions distinguishable.
 
 ## Core working hypothesis
 
@@ -16,7 +16,7 @@ Candidate cycle:
 
 `SELF-AWARENESS → CHOICE → ACTION → OBSERVATION → REFLECTION → TRANSFER`
 
-The cycle is not yet an approved specification.
+This cycle is not yet an approved specification. PED-001 supports a multidimensional self-regulation approach but does not prove this exact sequence.
 
 ## Candidate progression territories
 
@@ -27,7 +27,47 @@ The cycle is not yet an approved specification.
 5. **Me in the world** — responsibility, citizenship, sustainability, digital/information participation;
 6. **Me as a planner/agent** — goals, initiative, orientation and turning intention into action.
 
-These territories require evidence/framework mapping and age progression before adoption.
+These are organisational territories, not six fixed courses and not six psychological dimensions.
+
+## Evidence-bound age progression hypothesis
+
+Current evidence requires rejecting a simple `older = automatically more self-regulated` model. A 2026 systematic review of SRL development reports increasing executive-function/metacognitive sophistication through childhood but a decline in reported strategy use around the transition to secondary school. Therefore Atlas should scaffold differently rather than merely increasing difficulty.
+
+### Primary — earlier phase
+
+Candidate design implications, pending more age-specific evidence:
+
+- concrete situations and observable choices;
+- short reflection cycles;
+- visual/interactive supports;
+- limited introspective burden;
+- modelling and optional adult/teacher scaffolding;
+- metaphor that remains understandable without requiring abstract interpretation;
+- evidence expressed through actions/choices/artefacts rather than self-rating scales.
+
+### Primary — later phase
+
+Candidate design implications:
+
+- progressively explicit strategy naming;
+- compare alternative strategies;
+- connect action to consequence;
+- introduce planning/revision loops;
+- reflection can become more articulated but should remain contextual;
+- begin explicit transfer between school and other safe everyday contexts.
+
+### Lower-secondary
+
+Candidate design implications:
+
+- preserve scaffolding despite greater cognitive capacity;
+- increase authentic choice and agency rather than simply text complexity;
+- support motivation and strategy use during a transition where SRL use may decline;
+- permit more complex perspectives, trade-offs and planning;
+- use metaphor/narrative without infantilising tone;
+- favour evidence of strategy selection/transfer over global self-judgement.
+
+These bands are design hypotheses, not age norms or diagnostic expectations. They require validation against the Italian curriculum, accessibility/inclusion evidence and real usability testing.
 
 ## Candidate experience grammar
 
@@ -47,7 +87,7 @@ Names and durations are not frozen.
 
 Current direction: evidence/progression rather than numerical identity scoring.
 
-Candidate language of progression:
+Candidate language:
 
 - experienced;
 - beginning to recognise;
@@ -56,7 +96,11 @@ Candidate language of progression:
 - chooses when to use;
 - transfers to a new situation.
 
-This must be tested for developmental appropriateness, accessibility and compatibility with applicable competence frameworks.
+This is not a psychometric scale and must not be presented as a stable personal trait.
+
+## Narrative-development constraint
+
+Metaphor comprehension is developmentally sensitive and depends on multiple cognitive abilities. Therefore a single abstract metaphor cannot be assumed to work identically across the whole first cycle. Narrative design must be tested by age band and must always retain a literal, comprehensible interaction layer.
 
 ## Teacher and learner roles
 
@@ -77,8 +121,14 @@ Do not conflate:
 - engagement with manipulation;
 - completion with competence;
 - personalisation with personal-data profiling;
-- gamification with ranking/social comparison.
+- gamification with ranking/social comparison;
+- age with a deterministic competence level;
+- narrative immersion with learning quality.
 
-## Evidence still required
+## Evidence still required before G1 PASS
 
-See `research-evidence-register.md`. G1 cannot PASS until the model is mapped to stable scholarly and authoritative evidence, relevant frameworks, age progression, inclusion/accessibility and documented alternatives.
+- content-level mapping to the 2025 Italian National Guidelines and their gradual 2026/27 implementation;
+- additional child/adolescent evidence on agency, motivation, transfer and social competence;
+- inclusion/accessibility implications across age bands;
+- age-sensitive narrative/metaphor evidence and usability validation criteria;
+- alternatives and negative knowledge consolidated into the G1 review package.
