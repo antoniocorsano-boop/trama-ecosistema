@@ -716,3 +716,45 @@ La review umana deve verificare in particolare:
 - correttezza del ciclo CandidateArtifact → TeacherDecision → LessonArtifact → PublicationCandidate;
 - nessuna autorizzazione implicita di R3-P4 o DOS-A1;
 - sostenibilità futura rispetto a provider diversi da NotebookLM.
+
+
+## 22. Normative precedence and source alignment
+
+Questo documento è una **specifica architetturale proposta** e non prevale sulle fonti canoniche o normative già approvate.
+
+Ordine di precedenza applicabile:
+
+1. ADR e contratti approvati;
+2. `STATUS.md` per lo stato corrente;
+3. `ROADMAP.md` e piano operativo atomico per sequenza e priorità;
+4. contratti di prodotto implementati nei repository applicativi;
+5. questa specifica come proposta trasversale NO_RUNTIME.
+
+Fonti canoniche considerate nell'analisi:
+
+- `GOVERNANCE.md` — una sola authority per informazione, controllo umano, minimizzazione, reversibilità, nessuna autorizzazione implicita;
+- `STATUS.md` — ECO-02/P1 ACTIVE, R4-P1 PLANNED / NO_RUNTIME, R3-P4 NOT AUTHORIZED, DOS-A1 RUNTIME_DEFERRED;
+- `ROADMAP.md` — Officina materiali dopo consolidamento dei cantieri precedenti e con gate dedicato;
+- `TRAMA-ADR-010` — separazione Atlas / Docente OS / Officina e principio Riutilizza | Adatta | Crea nuova;
+- `TRAMA-ADR-013` — proposta Git-first per asset Atlas, ancora PROPOSED e non autorizzante runtime;
+- `ARENA_ATLAS_DOCENTE_OS_SURFACE_BOUNDARY_M4S4` — Arena GOVERN, Atlas NAVIGATE, Docente OS OPERATE;
+- `HUMAN_TASK_MODEL` — compito umano come centro dell'esperienza, intenti e modalità EXPLORE / GUIDED / FOCUSED;
+- `CLASS_WORKSPACE_CONTRACT` — continuità classe → prossima fase → Progetta senza duplicare dati canonici;
+- `UDA_CANONICAL_COVERAGE` — evidenza dell'attuale verticalizzazione concreta su Tecnologia.
+
+Se una futura implementazione richiedesse di contraddire una di queste fonti, la modifica dovrà essere trattata come **nuova decisione di governance**, non come semplice evoluzione tecnica.
+
+## 23. Design constraints for future prototypes
+
+Ogni prototipo derivato da questa specifica deve rispettare i seguenti vincoli UX:
+
+- nessuna schermata iniziale che richieda obbligatoriamente il caricamento di fonti;
+- nessuna duplicazione di Progetta, Conoscenza o Lesson Workspace sotto un nuovo "Studio";
+- provider e dettagli tecnici dietro divulgazione progressiva;
+- una sola azione primaria in modalità FOCUSED;
+- stato delle fonti e livello di grounding visibili ma non invasivi;
+- possibilità di iniziare con una singola lezione e risalire successivamente a sequenza/UDA/programmazione;
+- possibilità di partire da programmazione/UDA e derivare le lezioni;
+- nessun uso di codici interni come linguaggio principale;
+- nessun output del provider assunto come valido senza revisione;
+- nessuna perdita del contesto classe/ordine/disciplina attraversando fonti, materiali o provider.
