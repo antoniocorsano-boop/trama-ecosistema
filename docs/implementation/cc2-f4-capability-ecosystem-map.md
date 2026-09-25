@@ -28,7 +28,8 @@ Per ogni capability sono esposti:
 - gateRefs;
 - evidenceRefs;
 - lastSignificantChange;
-- sourceRef.
+- sourceRef;
+- sourceUpdatedAt, per distinguere la data dichiarata dal registro dalla semplice data di osservazione dello snapshot.
 
 ### Regola di non-inferenza
 
@@ -37,6 +38,7 @@ Un dato assente nella fonte non viene ricostruito per analogia.
 In particolare:
 
 - `lastSignificantChange = null` finché non esiste un registro capability-specific;
+- la UI mostra `sourceUpdatedAt` del registro capability per non confondere osservazione recente e contenuto aggiornato;
 - `runtimeState = null` salvo stato esplicitamente `DEFERRED`;
 - nessuna dependency capability-to-capability viene inventata;
 - maturity è collegata per area/owner, non trasformata in punteggio della capability.
