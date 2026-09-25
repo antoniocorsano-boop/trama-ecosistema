@@ -16,6 +16,8 @@ Single entry point for understanding current authority, experiments and open con
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
 | transfer/retrieval foundations | `research/common/foundations-transfer-retrieval-screening-v1.md` | ACTIVE SCREENING; no product-claim promotion |
+| retrieval/transfer synthesis | `research/common/retrieval-transfer-evidence-synthesis-v1.md` | ACTIVE EVIDENCE SYNTHESIS |
+| transfer of learning | `research/common/transfer-of-learning-screening-v1.md` | ACTIVE SCREENING; transfer promoted as explicit validation dimension, not competence certification |
 | experiential grammar registry | `grammars/registry.yaml` | CANONICAL registry; entries remain `research` |
 | pathway dossier | `templates/PATHWAY-DOSSIER-TEMPLATE.md` | CANONICAL template |
 | backlog control | `workflow/backlog-zero-consolidation-plan-v1.md` | CANONICAL active plan |
@@ -58,15 +60,13 @@ Research packets must classify implications as `SUPPORTED`, `UNCERTAIN`, `UNSUPP
 
 Current screening supports continued investigation of retrieval practice as a learning mechanism. It does **not** authorize a product rule equating quizzes, successful retrieval, activity completion or game completion with transversal competence.
 
-The next synthesis must distinguish:
+The synthesis distinguishes retention from transfer; near from far transfer; child/school evidence from university-heavy evidence; and knowledge retrieval from authentic performance in changed contexts.
 
-- retention from transfer;
-- near from far transfer;
-- evidence for primary/lower-secondary learners from university-heavy evidence;
-- effects/moderators including feedback, retrieval success, spacing, task/question type, prior knowledge and difficulty;
-- knowledge retrieval from authentic competence performance in changed contexts.
+### Transfer-of-learning review — controlled interpretation
 
-Until this synthesis is complete, implications for Atlas Percorsi remain research hypotheses.
+Transfer is now an explicit **design-and-validation dimension**. A pathway claiming transfer must define source context, target context, what changed, what structural relation remains invariant, support level, observable performance and the maximum claim permitted by that evidence.
+
+This does **not** certify a child's competence from pathway completion and does not authorize stable trait or psychological inference.
 
 ## Narrative authority rule
 
@@ -101,8 +101,8 @@ Nothing in this index authorizes child-facing runtime implementation or publicat
 
 ## Open consolidation queue
 
-1. Complete transfer/retrieval evidence synthesis with age/context separation.
-2. Normalise the existing evidence register into evidence packets/records.
+1. Screen cognitive load, working memory, attention and multimedia learning, explicitly considering developmental age and visual/narrative interfaces.
+2. Normalise the existing evidence register into evidence packets/records, including transfer-specific evidence classes.
 3. Reconcile `README.md` with the canonical architecture/workflow.
 4. Consolidate child-safety/privacy/accessibility/emotional/attention principles into a constitution layer without losing provenance.
 5. Convert the shared-decision prototype family into a named pathway dossier.
