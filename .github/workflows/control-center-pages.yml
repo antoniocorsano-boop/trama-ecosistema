@@ -29,6 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           test -s control-center/index.html
+          test -s control-center/ecosystem.html
           test -s control-center/manifest.webmanifest
           test -s control-center/sw.js
           test -s control-center/icons/icon-192.svg
@@ -40,6 +41,12 @@ jobs:
           grep -q "Matrice di maturità" control-center/index.html
           grep -q "Attenzione richiesta" control-center/index.html
           grep -q "Ecosistema vivo" control-center/index.html
+          grep -q "ecosystem.html" control-center/index.html
+          grep -q "Capability e mappa dell’ecosistema" control-center/ecosystem.html
+          grep -q "capabilityList" control-center/ecosystem.html
+          grep -q "relationList" control-center/ecosystem.html
+          grep -q "mapEdges" control-center/ecosystem.html
+          grep -q "aria-label=\"Elenco equivalente delle relazioni\"" control-center/ecosystem.html
           grep -q "Evidenze disponibili" control-center/index.html
           grep -q "Stakeholder Assurance" control-center/index.html
           grep -q "data-help-title" control-center/index.html
@@ -72,7 +79,8 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v5" control-center/sw.js
+          grep -q "trama-control-center-v6" control-center/sw.js
+          grep -q "\./ecosystem.html" control-center/sw.js
           grep -q "controllerchange" control-center/index.html
           grep -q "overflow-x:hidden" control-center/index.html
           grep -q "overscroll-behavior-inline:contain" control-center/index.html
@@ -95,11 +103,13 @@ jobs:
         run: |
           node - <<'NODE'
           const fs = require('fs')
-          const html = fs.readFileSync('control-center/index.html', 'utf8')
-          const match = html.match(/<script>([\s\S]*?)<\/script>/)
-          if (!match) throw new Error('Inline script not found')
-          new Function(match[1])
-          console.log('CONTROL_CENTER_JS_SYNTAX_PASS')
+          for (const file of ['control-center/index.html','control-center/ecosystem.html']) {
+            const html = fs.readFileSync(file, 'utf8')
+            const match = html.match(/<script>([\s\S]*?)<\/script>/)
+            if (!match) throw new Error('Inline script not found in '+file)
+            new Function(match[1])
+            console.log('CONTROL_CENTER_JS_SYNTAX_PASS '+file)
+          }
           const sw = fs.readFileSync('control-center/sw.js', 'utf8')
           new Function(sw)
           console.log('CONTROL_CENTER_SW_SYNTAX_PASS')
