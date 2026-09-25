@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.12.0",
-  "updatedAt": "2026-09-24",
+  "registerVersion": "1.13.0",
+  "updatedAt": "2026-09-25",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -199,6 +199,21 @@
         "Docente OS"
       ],
       "decision": "È proposto che il Control Center evolva in osservatorio read-only dell’ecosistema: livelli di maturità 0–5 basati su evidenze, confirmed/candidate level, confidence, gate, dipendenze, storico ed espansioni candidate. Lo strumento può calcolare e spiegare stati candidati ma non promuove, approva o autorizza runtime; STATUS e ROADMAP restano fonti canoniche e i confini di authority restano invariati.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-015",
+      "title": "Control Center come Project Knowledge Base e Context Provider read-only",
+      "status": "PROPOSED",
+      "date": "2026-09-25",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "È proposto che il Control Center mantenga una Project Knowledge Base read-only, derivata e governata, capace di produrre ProjectContextSnapshot e TRAMA Context Pack per il lavoro umano e agentico. Ogni fatto resta source-bound e, quando pertinente, version-bound; freshness e supersession sono obbligatorie e le decisioni SUPERSEDED, REJECTED, DEFERRED o fallite restano recuperabili come negative knowledge. La proiezione non sostituisce le fonti canoniche, non crea authority, non promuove stati e non autorizza runtime.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }

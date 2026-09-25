@@ -184,20 +184,40 @@ Riferimenti: `TRAMA-ADR-009`, `docs/assurance/typesafe-semantic-assurance.md`, `
 
 Sequenza governata del Control Center read-only:
 
-1. **CC2-F1 — Snapshot & Evidence Foundation** — integrata;
-2. **CC2-F2 — Snapshot-first Home** — in corso;
-3. **CC2-F3 — Decisioni & Gate** — pianificata;
-4. **CC2-F3A — Stakeholder Assurance Model** — pianificata in parallelo come modello dati/UX, senza claim automatici di compliance o certificazione;
-5. **CC2-F4 — Capability + Ecosystem Map** — pianificata;
-6. **CC2-F5 — Evidence Explorer + Integrity** — pianificata;
-7. **CC2-F6 — Timeline + Operational Path** — pianificata.
+1. **CC2-F0 — Baseline di maturità ed evidenze** — INTEGRATA via #65.
+2. **CC2-F1/A–D — Snapshot & Evidence Foundation** — INTEGRATA via #66–#69: snapshot deterministico, maturity definitions, wiring conservativo, binding delle evidenze e freshness.
+3. **CC2-F1/E — Project Knowledge & Agent Context Foundation** — RECOVERY SLICE ACTIVE / GOVERNANCE PROPOSED. La foundation viene ricostruita da `main` corrente; ADR-015 resta PROPOSED e non crea nuova authority.
+4. **CC2-F2 — Snapshot-first Home** — INTEGRATA via #71.
+5. **CC2-F3A — Stakeholder Assurance Model** — INTEGRATA via #72.
+6. **CC2-F3B — Stakeholder Summary, Contextual Help & Living Dossier** — INTEGRATA via #73.
+7. **CC2-F3C — Mobile-first Control Center** — INTEGRATA via #74, con hardening strutturale #75–#77 e rifinitura caroselli mobile #80.
+8. **CC2-F4 — Capability + Ecosystem Map** — PLANNED.
+9. **CC2-F5 — Evidence Explorer + Integrity** — PLANNED.
+10. **CC2-F6 — Timeline + Operational Path** — PLANNED.
 
-CC2-F3A introduce una vista destinata a dirigente scolastico, DPO, referente accessibilità, responsabili tecnici e altri stakeholder. Deve distinguere evidenza interna, assessment indipendente e certificazione formale, senza overall score e senza autocertificazione.
+### CC2-F1/E — Project Knowledge & Agent Context
+
+Obiettivo: rendere TRAMA utilizzabile come base di conoscenza verificabile per lavoro umano e agentico senza trasformare il Control Center in una nuova fonte autorevole.
+
+Principi vincolanti:
+- `READ_ONLY`;
+- `SOURCE_BOUND`;
+- `VERSION_BOUND` quando applicabile;
+- `FRESHNESS_AWARE`;
+- `NO_SYNTHETIC_AUTHORITY`;
+- conservazione di `SUPERSEDED`, `REJECTED`, `DEFERRED` e failure learning;
+- rationale preservation;
+- Context Pack derivato, non canonico;
+- nessuna promozione automatica di stato;
+- nessuna autorizzazione runtime;
+- `DOS-A1` resta `RUNTIME_DEFERRED`.
 
 Riferimenti:
-- `docs/design/trama-control-center-v2-view-architecture.md`;
-- `docs/implementation/cc2-f3a-stakeholder-assurance-model.md`.
-
+- `docs/architecture/trama-project-knowledge-agent-context-v1.md`;
+- `docs/contracts/project-context-snapshot-v1.md`;
+- `docs/contracts/trama-context-pack-v1.md`;
+- `docs/decisions/trama-adr-015-project-knowledge-context-provider.md`;
+- `docs/design/trama-control-center-v2-view-architecture.md`.
 
 ## R5 Preparazione all'adozione
 
