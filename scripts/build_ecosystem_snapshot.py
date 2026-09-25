@@ -5,6 +5,7 @@ Current responsibilities:
 - read declared canonical local sources;
 - evaluate maturity conservatively from bound evidence;
 - project declared capabilities without inventing missing operational facts;
+- derive explicit integrity checks without producing an aggregate score;
 - emit a schema-compatible snapshot for the read-only Control Center;
 - avoid external API calls and writes to source systems.
 """
