@@ -1,0 +1,114 @@
+schema: atlas.percorsi.evidence-records/c3-c11-c16-v1
+status: ACTIVE_NORMALISATION
+runtime_authorized: false
+screening_ref: ../common/error-relational-agents-emotion-screening-v1.md
+constitution_ref: ../../governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md
+
+method:
+  adoption_rule: "Search results are discovery candidates, never evidence by presence, ranking or citation count alone."
+  required_fields: [population, context, finding, limitation, permitted_inference, authority_type]
+  uncertainty_rule: "Where child-specific evidence is weak, preserve the safer constitutional boundary and label it precautionary rather than inventing an empirical certainty."
+
+records:
+  - id: FB-C3-001
+    constitution_support: [C3]
+    domain: [feedback, error, learning]
+    authority_type: evidence_informed_design_direction
+    evidence_state: SUPPORTED
+    population: school_and_learning_populations_mixed
+    finding: "Feedback can improve learning when it provides information usable to reduce the gap between current and intended performance; effects are heterogeneous and depend on task, timing, content and learner conditions."
+    limitation: "No universal feedback formula, attempt count, timing or explanation length follows from the literature."
+    permitted_inference: "Design error responses as actionable information and permit revision when pedagogically coherent."
+    prohibited_inference: "An error indicates a stable learner trait or justifies shame, blame or psychological classification."
+
+  - id: FB-C3-002
+    constitution_support: [C3, C5, C16]
+    domain: [error_recovery, developmental_design]
+    authority_type: constitutional_design_constraint
+    evidence_state: SUPPORTED
+    population: child_facing_pathways
+    finding: "Recoverable error is compatible with formative learning and avoids turning task performance into identity judgement."
+    limitation: "Recovery mechanics require pathway- and developmental-band validation."
+    permitted_inference: "Expose overlooked evidence, consequences, unmet constraints or alternative strategies before offering a recoverable next action."
+
+  - id: AG-C11-001
+    constitution_support: [C11, C14]
+    domain: [anthropomorphism, trust, disclosure]
+    authority_type: precautionary_evidence_informed
+    evidence_state: UNCERTAIN
+    population: predominantly_adult_human_agent_research
+    finding: "Anthropomorphic and social-presence cues can affect trust and willingness to disclose personal information in human-agent interaction."
+    limitation: "Much evidence is adult-focused, commercial or non-educational; it does not establish a child-specific harm threshold."
+    permitted_inference: "Do not optimise child-facing characters for intimacy, disclosure or relational dependency while child-specific evidence remains incomplete."
+    prohibited_inference: "Adult findings quantify risk for children or prove all anthropomorphic characters are harmful."
+
+  - id: AG-C11-002
+    constitution_support: [C11, C14]
+    domain: [children, conversational_agents, evidence_gap]
+    authority_type: evidence_gap_record
+    evidence_state: UNCERTAIN
+    population: children_and_adolescents
+    finding: "Targeted searches for child-specific conversational-agent trust/disclosure evidence return substantial semantic noise and many adult/general-agent studies."
+    limitation: "Search scarcity/noise is not evidence of absence or safety."
+    permitted_inference: "Maintain a conservative boundary and continue targeted child-specific screening before relaxing C11."
+
+  - id: AG-C11-003
+    constitution_support: [C11, C14, C16]
+    domain: [character_boundary, pseudo_therapy, privacy]
+    authority_type: precautionary_constitutional_stop
+    evidence_state: SUPPORTED
+    population: child_facing_atlas_percorsi
+    finding: "Child-rights/data-minimisation duties plus evidence that social cues influence trust/disclosure support a strict boundary against eliciting sensitive disclosure or simulating therapeutic/intimate dependency."
+    limitation: "The exact contribution of each relational cue in child educational LLM interaction remains under-researched."
+    permitted_inference: "Characters remain bounded educational/narrative entities; no secrets, diagnosis, exclusivity, simulated attachment or disclosure-seeking empathy."
+
+  - id: EM-C16-001
+    constitution_support: [C16]
+    domain: [social_emotional_learning, school]
+    authority_type: evidence_informed_design_direction
+    evidence_state: SUPPORTED
+    population: children_and_adolescents_in_school_programmes
+    finding: "School-based social-emotional interventions report benefits in some outcomes, with effects varying by programme, context, implementation, outcome and population."
+    limitation: "Programme-level findings do not validate an Atlas pathway or a universal SEL mechanism."
+    permitted_inference: "Atlas may create bounded opportunities to practise perspective-taking, decision-making, recovery and regulation strategies."
+    prohibited_inference: "Pathway completion proves empathy, resilience, emotional regulation or broad social-emotional competence."
+
+  - id: EM-C16-002
+    constitution_support: [C3, C16]
+    domain: [emotion_regulation, learning, emotional_safety]
+    authority_type: evidence_informed_design_direction
+    evidence_state: SUPPORTED
+    population: school_age_and_educational_contexts
+    finding: "Emotion regulation is related to learning and school functioning, but constructs, measures and intervention effects vary."
+    limitation: "Association does not justify diagnosing emotion from interaction traces."
+    permitted_inference: "Use bounded fictional/hypothetical challenge, recoverable error and non-punitive exit while keeping emotional tone separate from diagnosis."
+
+search_audit:
+  child_conversational_agent_query:
+    query: "children conversational agents disclosure trust"
+    result: "High semantic noise; top results dominated by general generative-agent, digital psychiatry, marketing, adult social-chatbot and broad AI literature."
+    decision: "No automatic promotion."
+  child_robot_query:
+    query: "children robots trust disclosure anthropomorphism"
+    result: "Again dominated by general social-presence, adult trust, service-robot and disclosure literature; useful for mechanism screening but insufficient for child-specific quantitative claims."
+    decision: "C11 remains precautionary + evidence-informed."
+  sel_search:
+    result: "School-based SEL/emotion-regulation literature contains reviews/meta-analyses across children/adolescents, but programme/context heterogeneity requires bounded inference."
+    decision: "C16 strengthened without trait certification."
+
+constitutional_status:
+  C3:
+    state: STRENGTHENED_SUPPORTED
+    open_work: "Separate primary/lower-secondary feedback evidence and implementation moderators."
+  C11:
+    state: PRECAUTIONARY_EVIDENCE_INFORMED_STOP
+    open_work: "Prioritise direct child/teen LLM-agent trust, disclosure, anthropomorphism, parasociality and dependency evidence."
+  C16:
+    state: STRENGTHENED_SUPPORTED
+    open_work: "Normalise higher-quality school-age meta-analyses and implementation moderators; preserve no-trait-inference boundary."
+
+non_negotiable_pattern:
+  allowed: "error -> informative consequence -> safe reconsideration -> task-bound reflection"
+  prohibited: "error -> emotional pressure -> agent intimacy/reassurance -> personal disclosure -> hidden trait inference"
+
+promotion_note: "These records strengthen provenance but do not authorise runtime or constitutional promotion. Human pedagogical, developmental, accessibility, privacy/child-safety and exact-head review remain mandatory."
