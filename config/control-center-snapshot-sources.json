@@ -28,6 +28,13 @@
       "path": "docs/decisions/decision-register.json",
       "role": "DECISIONS",
       "freshnessPolicy": "UNTIL_CHANGE"
+    },
+    {
+      "id": "governed-events",
+      "type": "STRUCTURED_HISTORY",
+      "path": "status/governed-events.json",
+      "role": "SEMANTIC_TIMELINE",
+      "freshnessPolicy": "UNTIL_CHANGE"
     }
   ],
   "phaseModel": [
