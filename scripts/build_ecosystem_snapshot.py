@@ -727,6 +727,12 @@ def build_snapshot(root: Path) -> dict:
         "integrityChecks": [],
         "operationalPath": {},
         "timelineEvents": timeline_projection(governed_events),
+        "timelineCoverage": {
+            "mode": governed_events["coverage"]["mode"],
+            "from": governed_events["coverage"]["from"],
+            "note": governed_events["coverage"].get("note", ""),
+            "sourceRef": "status/governed-events.json",
+        },
     }
     snapshot["operationalPath"] = build_operational_path(snapshot)
     snapshot["integrityChecks"] = build_integrity_checks(
@@ -752,6 +758,7 @@ def validate(snapshot: dict) -> None:
         "integrityChecks",
         "operationalPath",
         "timelineEvents",
+        "timelineCoverage",
     }
     missing = sorted(required - snapshot.keys())
     if missing:
