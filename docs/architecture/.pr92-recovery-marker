@@ -1,0 +1,1 @@
+PR92 recovery: restore the complete architecture document from the last verified healthy blob, then apply the approved ECO-02/P1 closure alignment. Temporary marker; remove after recovery verification.
