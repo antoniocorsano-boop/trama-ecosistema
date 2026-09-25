@@ -1,5 +1,5 @@
-const CACHE='trama-control-center-v5';
-const SHELL=['./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./data/ecosystem-snapshot.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md'];
+const CACHE='trama-control-center-v6';
+const SHELL=['./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./ecosystem.html','./data/ecosystem-snapshot.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));
@@ -32,7 +32,7 @@ self.addEventListener('fetch',event=>{
   if(request.method!=='GET'||u.origin!==self.location.origin)return;
 
   const isNavigation=request.mode==='navigate';
-  const isHtml=u.pathname.endsWith('/')||u.pathname.endsWith('/index.html');
+  const isHtml=u.pathname.endsWith('/')||u.pathname.endsWith('.html');
   const isSnapshot=u.pathname.endsWith('/data/ecosystem-snapshot.json');
 
   if(isNavigation||isHtml){

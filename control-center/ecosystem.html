@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071827">
+<meta name="description" content="TRAMA Control Center v2 — capability e mappa dell'ecosistema, snapshot-first e read-only.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+<title>TRAMA · Capability e mappa</title>
+<style>
+:root{--bg:#071827;--surface:#0b2235;--surface2:#0e2b42;--line:#1c4662;--text:#f4f8fb;--muted:#9fb9cb;--info:#58bff7;--ok:#55d79a;--warn:#f0b54a;--danger:#f37d87;--future:#ae88ff}
+*{box-sizing:border-box}html{max-width:100%;overflow-x:hidden;scroll-behavior:smooth}body{margin:0;max-width:100%;overflow-x:hidden;background:radial-gradient(circle at 85% 0,#123750 0,transparent 32%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,a,input,select{font:inherit}a{color:inherit}.wrap{width:min(1180px,100%);margin:auto;padding:22px 24px 50px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding-bottom:18px;border-bottom:1px solid var(--line)}h1{font-size:29px;line-height:1.12;margin:4px 0}.lede{color:var(--muted);margin:4px 0 0}.back{min-height:44px;display:inline-flex;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;background:var(--surface)}.meta{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.pill{display:inline-flex;min-height:32px;align-items:center;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}.pill strong{color:var(--text)}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 12px}.tab{min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer}.tab[aria-selected="true"]{background:#163d58;border-color:#3c7b9d}.tab:focus-visible,.back:focus-visible,.relation:focus-visible,.filter input:focus-visible,.filter select:focus-visible{outline:2px solid var(--info);outline-offset:2px}.panel{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,var(--surface2),var(--surface));padding:16px;min-width:0}.panel[hidden]{display:none}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:12px}.section-head h2{margin:0;font-size:19px}.hint{color:var(--muted);font-size:12px}.filters{display:grid;grid-template-columns:minmax(180px,1fr) 190px 190px;gap:8px;margin-bottom:12px}.filter label{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}.filter input,.filter select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:9px;background:#081d2d;color:var(--text);padding:8px 10px}.cap-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cap{border:1px solid #173d56;background:#091e30;border-radius:12px;padding:13px;min-width:0}.cap-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.cap-id{font-weight:900;color:var(--info)}.badge{display:inline-flex;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:10px;font-weight:800;white-space:nowrap}.b-ok{color:#a5f3ca;border-color:#2b9568}.b-warn{color:#ffda89;border-color:#9c6d1d}.b-future{color:#d7c6ff;border-color:#705ca8}.b-muted{color:#c6d3db}.cap h3{font-size:15px;margin:8px 0 10px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:7px}.fact{min-width:0}.fact small{display:block;color:var(--muted)}.fact strong{display:block;overflow-wrap:anywhere}.refs{margin-top:10px;padding-top:9px;border-top:1px solid #173d56;color:var(--muted);font-size:12px;overflow-wrap:anywhere}.empty{padding:20px;text-align:center;color:var(--muted)}.map-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.6fr);gap:12px}.map-card,.detail{border:1px solid #173d56;background:#091e30;border-radius:12px;padding:12px;min-width:0}.map-card svg{display:block;width:100%;height:auto;max-height:430px}.map-edge{cursor:pointer}.map-edge .hit{stroke:transparent;stroke-width:18}.map-edge:focus{outline:none}.map-edge:focus .visible,.map-edge.active .visible{stroke-width:5}.edge-label{font-size:11px;fill:#d8e6ee}.node rect{fill:#0e2b42;stroke:#2a607e;stroke-width:2}.node text{fill:var(--text);font-size:14px;font-weight:800}.relation-list{display:grid;gap:7px;margin-top:12px}.relation{width:100%;min-height:52px;text-align:left;border:1px solid #173d56;border-radius:10px;background:#0b2235;color:var(--text);padding:9px 11px;cursor:pointer}.relation strong{display:block}.relation small{color:var(--muted)}.relation[aria-current="true"]{border-color:#3c9bc2;background:#10324a}.detail h3{margin:0 0 6px;font-size:16px}.detail dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:7px 9px;margin:12px 0}.detail dt{color:var(--muted)}.detail dd{margin:0;overflow-wrap:anywhere}.legend{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 0}.legend span{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:11px}.legend i{width:16px;height:3px;border-radius:4px;background:var(--info)}.legend .authority{background:var(--ok)}.legend .data{background:var(--info)}.legend .future{background:var(--future)}.mobile-map-note{display:none;color:var(--muted);padding:8px 0}.error{border:1px solid #733642;background:#32171d;color:#ffd0d5;border-radius:10px;padding:14px}.footer{margin-top:18px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:760px){body{font-size:15px}.wrap{padding:14px 12px 34px}.top{display:grid;gap:10px}h1{font-size:23px}.back{width:max-content}.filters{grid-template-columns:1fr}.cap-grid{grid-template-columns:1fr}.map-layout{grid-template-columns:1fr}.map-card svg{display:none}.mobile-map-note{display:block}.panel{padding:13px}.facts{grid-template-columns:1fr 1fr}.detail dl{grid-template-columns:1fr}.detail dd{padding-bottom:6px}.section-head{align-items:flex-start}.tabs{display:grid;grid-template-columns:1fr 1fr}.tab{width:100%}}
+@media(max-width:360px){.facts{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="top">
+  <div><div class="hint">TRAMA CONTROL CENTER V2 · READ_ONLY</div><h1>Capability e mappa dell’ecosistema</h1><p class="lede">Cosa sa fare oggi l’ecosistema, chi ne è responsabile e quali relazioni sono governate.</p></div>
+  <a class="back" href="./index.html">← Panoramica</a>
+</header>
+
+<div class="meta" aria-live="polite">
+  <span class="pill" id="snapshotState"><strong>Snapshot</strong>&nbsp; caricamento…</span>
+  <span class="pill"><strong id="capCount">–</strong>&nbsp; capability dichiarate</span>
+  <span class="pill"><strong id="relCount">–</strong>&nbsp; relazioni governate</span>
+  <span class="pill">Registro capability&nbsp;<strong id="capSourceDate">–</strong></span>
+</div>
+
+<div class="tabs" role="tablist" aria-label="Vista specialistica">
+  <button class="tab" id="tabCapabilities" role="tab" aria-selected="true" aria-controls="panelCapabilities" type="button">Capability</button>
+  <button class="tab" id="tabMap" role="tab" aria-selected="false" aria-controls="panelMap" type="button">Mappa ecosistema</button>
+</div>
+
+<section class="panel" id="panelCapabilities" role="tabpanel" aria-labelledby="tabCapabilities">
+  <div class="section-head"><div><h2>Cosa sa fare oggi l’ecosistema?</h2><div class="hint">Dati proiettati dal registro capability governato; la copertura dipende dal registro e i campi mancanti non vengono completati per inferenza.</div></div></div>
+  <div class="filters">
+    <div class="filter"><label for="capSearch">Cerca capability</label><input id="capSearch" type="search" placeholder="ID o nome"></div>
+    <div class="filter"><label for="ownerFilter">Owner</label><select id="ownerFilter"><option value="">Tutti</option></select></div>
+    <div class="filter"><label for="stateFilter">Stato</label><select id="stateFilter"><option value="">Tutti</option></select></div>
+  </div>
+  <div class="cap-grid" id="capabilityList"></div>
+</section>
+
+<section class="panel" id="panelMap" role="tabpanel" aria-labelledby="tabMap" hidden>
+  <div class="section-head"><div><h2>Come sono collegate le parti?</h2><div class="hint">Le relazioni distinguono authority, flussi e ciò che resta esplicitamente non autorizzato.</div></div></div>
+  <div class="map-layout">
+    <div class="map-card">
+      <div class="mobile-map-note">Su schermi piccoli la rappresentazione grafica è sostituita dall’elenco equivalente sottostante.</div>
+      <svg viewBox="0 0 720 430" role="img" aria-labelledby="mapTitle mapDesc">
+        <title id="mapTitle">Mappa delle relazioni governate TRAMA</title>
+        <desc id="mapDesc">TRAMA è mostrato come contesto di governo. Solo le relazioni presenti nello snapshot sono disegnate e selezionabili; le stesse relazioni sono replicate nell’elenco accessibile.</desc>
+        <defs>
+          <marker id="arrInfo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#58bff7"/></marker>
+          <marker id="arrOk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#55d79a"/></marker>
+          <marker id="arrFuture" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#ae88ff"/></marker>
+        </defs>
+        <g class="node"><rect x="270" y="30" width="180" height="66" rx="14"/><text x="360" y="69" text-anchor="middle">TRAMA</text></g>
+        <g class="node"><rect x="45" y="260" width="170" height="66" rx="14"/><text x="130" y="299" text-anchor="middle">Arena</text></g>
+        <g class="node"><rect x="275" y="260" width="170" height="66" rx="14"/><text x="360" y="299" text-anchor="middle">Docente OS</text></g>
+        <g class="node"><rect x="505" y="260" width="170" height="66" rx="14"/><text x="590" y="299" text-anchor="middle">Atlas</text></g>
+        <g id="mapEdges"></g>
+      </svg>
+      <div class="legend" aria-label="Legenda relazioni"><span><i class="authority"></i>Authority</span><span><i class="data"></i>Data flow</span><span><i class="future"></i>Future not authorized</span></div>
+      <div class="relation-list" id="relationList" aria-label="Elenco equivalente delle relazioni"></div>
+    </div>
+    <aside class="detail" id="relationDetail" aria-live="polite">
+      <h3>Seleziona una relazione</h3>
+      <div class="hint">Il dettaglio mostra stato, riferimenti di governance, gate ed evidenze registrate nello snapshot.</div>
+    </aside>
+  </div>
+</section>
+
+<div id="errorBox"></div>
+<footer class="footer"><span>TRAMA · Capability + Ecosystem Map · READ_ONLY</span><span id="updated">–</span></footer>
+</main>
+
+<script>
+const SNAPSHOT_URL='./data/ecosystem-snapshot.json';
+const CACHE_KEY='trama-cc2-snapshot';
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+let snapshot=null;
+
+function badgeClass(state){
+  const s=String(state||'').toUpperCase();
+  if(['CLOSED','COMPLETE','PASS','ACTIVE'].includes(s))return s==='ACTIVE'?'b-warn':'b-ok';
+  if(['PLANNED','DEFERRED','NOT_AUTHORIZED'].includes(s))return s==='PLANNED'?'b-muted':'b-future';
+  return 'b-muted';
+}
+function formatDateOnly(value){if(!value)return 'non dichiarato';const p=String(value).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:String(value)}
+function saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
+function readSnapshot(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch{return null}}
+async function loadSnapshot(){
+  try{
+    const r=await fetch(SNAPSHOT_URL,{cache:'no-store'});
+    if(!r.ok)throw new Error('snapshot '+r.status);
+    const data=await r.json();saveSnapshot(data);render(data,'fresh');
+  }catch(err){
+    const cached=readSnapshot();
+    if(cached)render(cached,'offline');else fail();
+  }
+}
+function render(data,mode){
+  snapshot=data;
+  snapshotState.innerHTML='<strong>Snapshot</strong>&nbsp; '+(mode==='fresh'?'disponibile':'offline · copia locale');
+  updated.textContent='Generato '+new Date(data.generatedAt).toLocaleString('it-IT');
+  capCount.textContent=(data.capabilities||[]).length;
+  relCount.textContent=(data.dependencies||[]).length;
+  fillFilters(data.capabilities||[]);
+  renderCapabilities();
+  renderRelations();
+}
+function fillFilters(items){
+  const owners=[...new Set(items.map(x=>x.ownerDomain).filter(Boolean))].sort();
+  const states=[...new Set(items.map(x=>x.state).filter(Boolean))].sort();
+  ownerFilter.innerHTML='<option value="">Tutti</option>'+owners.map(x=>'<option>'+esc(x)+'</option>').join('');
+  stateFilter.innerHTML='<option value="">Tutti</option>'+states.map(x=>'<option>'+esc(x)+'</option>').join('');
+}
+function maturityFor(cap){
+  if(!snapshot)return null;
+  return (snapshot.areas||[]).find(a=>a.id===cap.maturityAreaRef)||null;
+}
+function renderCapabilities(){
+  if(!snapshot)return;
+  const q=capSearch.value.trim().toLowerCase(),owner=ownerFilter.value,state=stateFilter.value;
+  const items=(snapshot.capabilities||[]).filter(c=>{
+    const match=!q||(c.id+' '+c.label).toLowerCase().includes(q);
+    return match&&(!owner||c.ownerDomain===owner)&&(!state||c.state===state);
+  });
+  capabilityList.innerHTML=items.length?items.map(c=>{
+    const m=maturityFor(c);
+    const runtime=c.runtimeState||'NON_DICHIARATO';
+    const changed=formatDateOnly(c.lastSignificantChange);
+    const sourceUpdated=formatDateOnly(c.sourceUpdatedAt);
+    return '<article class="cap"><div class="cap-top"><span class="cap-id">'+esc(c.id)+'</span><span class="badge '+badgeClass(c.state)+'">'+esc(c.state)+'</span></div><h3>'+esc(c.label)+'</h3><div class="facts"><div class="fact"><small>Owner</small><strong>'+esc(c.ownerDomain)+'</strong></div><div class="fact"><small>Human review</small><strong>'+esc(c.humanReview||'NON_DICHIARATA')+'</strong></div><div class="fact"><small>Maturità collegata</small><strong>'+(m?'L'+esc(m.confirmedLevel)+' · '+esc(m.name):'non collegata')+'</strong></div><div class="fact"><small>Runtime</small><strong>'+esc(runtime)+'</strong></div><div class="fact"><small>Gate</small><strong>'+esc((c.gateRefs||[]).join(', ')||'nessuno registrato')+'</strong></div><div class="fact"><small>Dipendenze</small><strong>'+esc((c.dependencyRefs||[]).join(', ')||'nessuna dichiarata')+'</strong></div><div class="fact"><small>Ultima modifica significativa</small><strong>'+esc(changed)+'</strong></div></div><div class="refs">Evidenze: '+esc((c.evidenceRefs||[]).join(', ')||'nessuna registrata')+'<br>Fonte: '+esc(c.sourceRef)+' · registro aggiornato: '+esc(sourceUpdated)+'</div></article>';
+  }).join(''):'<div class="empty">Nessuna capability corrisponde ai filtri.</div>';
+}
+function edgeStyle(kind){
+  if(kind==='AUTHORITY')return {stroke:'#55d79a',marker:'url(#arrOk)'};
+  if(kind==='FUTURE_NOT_AUTHORIZED')return {stroke:'#ae88ff',marker:'url(#arrFuture)'};
+  return {stroke:'#58bff7',marker:'url(#arrInfo)'};
+}
+function edgeShape(edge){
+  if(edge.from==='Arena'&&edge.to==='Docente OS')return {x1:215,y1:293,x2:265,y2:293,lx:240,ly:278};
+  if(edge.from==='Arena'&&edge.to==='Atlas')return {path:'M 180 326 Q 360 405 540 326',lx:360,ly:392};
+  if(edge.from==='Docente OS'&&edge.to==='Atlas')return {x1:445,y1:293,x2:495,y2:293,lx:470,ly:278};
+  return null;
+}
+function renderRelations(){
+  if(!snapshot)return;
+  const deps=snapshot.dependencies||[];
+  relationList.innerHTML=deps.map((d,i)=>'<button class="relation" type="button" data-id="'+esc(d.id)+'" aria-current="'+(i===0?'true':'false')+'"><strong>'+esc(d.from)+' → '+esc(d.to)+'</strong><small>'+esc(d.kind)+' · '+esc(d.status||'—')+'</small></button>').join('');
+  mapEdges.innerHTML=deps.map((d,i)=>{
+    const p=edgeShape(d);if(!p)return '';
+    const st=edgeStyle(d.kind),active=i===0?' active':'';
+    const geometry=p.path
+      ? '<path class="hit" d="'+p.path+'"/><path class="visible" d="'+p.path+'" fill="none" stroke="'+st.stroke+'" stroke-width="3" marker-end="'+st.marker+'"/>'
+      : '<line class="hit" x1="'+p.x1+'" y1="'+p.y1+'" x2="'+p.x2+'" y2="'+p.y2+'"/><line class="visible" x1="'+p.x1+'" y1="'+p.y1+'" x2="'+p.x2+'" y2="'+p.y2+'" stroke="'+st.stroke+'" stroke-width="3" marker-end="'+st.marker+'"/>';
+    return '<g class="map-edge'+active+'" tabindex="0" role="button" aria-label="'+esc(d.from+' verso '+d.to+', '+d.kind)+'" data-id="'+esc(d.id)+'">'+geometry+'<text class="edge-label" x="'+p.lx+'" y="'+p.ly+'" text-anchor="middle">'+esc(d.kind.replaceAll('_',' '))+'</text></g>';
+  }).join('');
+  bindRelations();
+  if(deps[0])selectRelation(deps[0].id);
+}
+function bindRelations(){
+  document.querySelectorAll('[data-id].relation,[data-id].map-edge').forEach(el=>{
+    el.addEventListener('click',()=>selectRelation(el.dataset.id));
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRelation(el.dataset.id)}});
+  });
+}
+function selectRelation(id){
+  const d=(snapshot?.dependencies||[]).find(x=>x.id===id);if(!d)return;
+  document.querySelectorAll('.relation').forEach(el=>el.setAttribute('aria-current',el.dataset.id===id?'true':'false'));
+  document.querySelectorAll('.map-edge').forEach(el=>el.classList.toggle('active',el.dataset.id===id));
+  relationDetail.innerHTML='<h3>'+esc(d.from)+' → '+esc(d.to)+'</h3><span class="badge '+badgeClass(d.status)+'">'+esc(d.kind)+'</span><dl><dt>Stato</dt><dd>'+esc(d.status||'non dichiarato')+'</dd><dt>Governance</dt><dd>'+esc((d.governanceRefs||[]).join(', ')||'nessun riferimento registrato')+'</dd><dt>Gate</dt><dd>'+esc((d.gateRefs||[]).join(', ')||'nessuno registrato')+'</dd><dt>Evidenze</dt><dd>'+esc((d.evidenceRefs||[]).join(', ')||'nessuna registrata')+'</dd></dl>';
+}
+function activate(which){
+  const cap=which==='capabilities';
+  tabCapabilities.setAttribute('aria-selected',cap?'true':'false');
+  tabMap.setAttribute('aria-selected',cap?'false':'true');
+  panelCapabilities.hidden=!cap;panelMap.hidden=cap;
+}
+function fail(){
+  snapshotState.innerHTML='<strong>Snapshot</strong>&nbsp; non disponibile';
+  errorBox.innerHTML='<div class="error">Impossibile mostrare capability e relazioni: snapshot assente e nessuna copia locale disponibile.</div>';
+}
+[capSearch,ownerFilter,stateFilter].forEach(el=>el.addEventListener('input',renderCapabilities));
+tabCapabilities.addEventListener('click',()=>activate('capabilities'));
+tabMap.addEventListener('click',()=>activate('map'));
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{}))}
+loadSnapshot();
+</script>
+</body>
+</html>

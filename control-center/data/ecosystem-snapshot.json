@@ -1,27 +1,31 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-09-24T15:25:00+00:00",
+  "schemaVersion": "1.1.0",
+  "generatedAt": "2026-09-25T02:44:45.583910+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-24T15:25:00+00:00",
-      "ref": "STATUS.md"
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "ref": "STATUS.md",
+      "sha256": "6fd6226a69cb11c58386d34206b2ba5fe23704b4134acc6ab1b6c6f6aef47ce5"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-24T15:25:00+00:00",
-      "ref": "ROADMAP.md"
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "ref": "ROADMAP.md",
+      "sha256": "4ab27fecafa197001f1aea98ac71e35750605f3ba3c53d59ba1d1bea2989c973"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-24T15:25:00+00:00",
-      "ref": "status/ecosystem-status.json"
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "ref": "status/ecosystem-status.json",
+      "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-24T15:25:00+00:00",
-      "ref": "docs/decisions/decision-register.json"
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "ref": "docs/decisions/decision-register.json",
+      "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
     }
   },
   "phases": [
@@ -78,7 +82,7 @@
       ],
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
     },
     {
       "id": "arena",
@@ -93,7 +97,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
     },
     {
       "id": "atlas",
@@ -111,7 +115,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
     },
     {
       "id": "docente-os",
@@ -127,7 +131,149 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-24T15:25:00+00:00"
+      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "ECO-01",
+      "label": "Contratti e forma docente",
+      "ownerDomain": "TRAMA",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
+    },
+    {
+      "id": "EC-01-F4",
+      "label": "Arena trusted normative checker",
+      "ownerDomain": "Arena",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "arena",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
+    },
+    {
+      "id": "ECO-02-P1",
+      "label": "Pilota Tecnologia 2C",
+      "ownerDomain": "TRAMA",
+      "state": "ACTIVE",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-ECO02-HUMAN-FINAL"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
+    },
+    {
+      "id": "DOS-A1",
+      "label": "Integrazione operativa automatizzata",
+      "ownerDomain": "Docente OS",
+      "state": "DEFERRED",
+      "humanReview": "PENDING",
+      "runtimeState": "DEFERRED",
+      "maturityAreaRef": "docente-os",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
+    },
+    {
+      "id": "R3-F0",
+      "label": "Atlas Product & Design Foundation",
+      "ownerDomain": "Atlas",
+      "state": "ACTIVE",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "atlas",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-R3-F0-EXIT"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
+    },
+    {
+      "id": "R4-P1",
+      "label": "Officina materiali specialistica",
+      "ownerDomain": "TRAMA",
+      "state": "PLANNED",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
+    },
+    {
+      "id": "TRAMA-SA-01",
+      "label": "TypeSafe semantic assurance pilot",
+      "ownerDomain": "TRAMA",
+      "state": "ACTIVE",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
+    },
+    {
+      "id": "TRAMA-BRAND",
+      "label": "Nome e marchio definitivi",
+      "ownerDomain": "TRAMA",
+      "state": "PLANNED",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     }
   ],
   "gates": [
@@ -165,9 +311,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "ref": "STATUS.md"
+        "sha256": "6fd6226a69cb11c58386d34206b2ba5fe23704b4134acc6ab1b6c6f6aef47ce5"
       },
-      "observedAt": "2026-09-24T15:25:00+00:00",
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -183,9 +329,9 @@
       "status": "PASS",
       "source": {
         "path": "ROADMAP.md",
-        "ref": "ROADMAP.md"
+        "sha256": "4ab27fecafa197001f1aea98ac71e35750605f3ba3c53d59ba1d1bea2989c973"
       },
-      "observedAt": "2026-09-24T15:25:00+00:00",
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -201,9 +347,9 @@
       "status": "PASS",
       "source": {
         "path": "status/ecosystem-status.json",
-        "ref": "status/ecosystem-status.json"
+        "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
       },
-      "observedAt": "2026-09-24T15:25:00+00:00",
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -219,9 +365,9 @@
       "status": "PASS",
       "source": {
         "path": "docs/decisions/decision-register.json",
-        "ref": "docs/decisions/decision-register.json"
+        "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
       },
-      "observedAt": "2026-09-24T15:25:00+00:00",
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -239,7 +385,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-24T15:25:00+00:00",
+      "observedAt": "2026-09-25T02:44:45.583910+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -250,39 +396,47 @@
   ],
   "dependencies": [
     {
+      "id": "DEP-ARENA-DOS-AUTHORITY",
       "from": "Arena",
       "to": "Docente OS",
       "kind": "AUTHORITY",
-      "status": "ACTIVE"
-    },
-    {
-      "from": "Arena",
-      "to": "Atlas",
-      "kind": "DATA_FLOW",
-      "status": "GOVERNED"
-    },
-    {
-      "from": "Docente OS",
-      "to": "Atlas",
-      "kind": "FUTURE_NOT_AUTHORIZED",
-      "status": "NOT_AUTHORIZED"
-    }
-  ],
-  "expansionCandidates": [
-    {
-      "id": "R3-P2",
-      "name": "Curriculum pubblico",
-      "status": "PLANNED",
-      "dependencyRefs": [
-        "GATE-R3-F0-EXIT"
+      "status": "ACTIVE",
+      "governanceRefs": [
+        "TRAMA-ADR-002",
+        "TRAMA-ADR-006"
+      ],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-DECISION-REGISTER"
       ]
     },
     {
-      "id": "R3-P5",
-      "name": "Smart Navigation",
-      "status": "PLANNED",
-      "dependencyRefs": [
-        "GATE-R3-F0-EXIT"
+      "id": "DEP-ARENA-ATLAS-DATA",
+      "from": "Arena",
+      "to": "Atlas",
+      "kind": "DATA_FLOW",
+      "status": "GOVERNED",
+      "governanceRefs": [
+        "TRAMA-ADR-002",
+        "TRAMA-ADR-007"
+      ],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-DECISION-REGISTER"
+      ]
+    },
+    {
+      "id": "DEP-DOS-ATLAS-FUTURE",
+      "from": "Docente OS",
+      "to": "Atlas",
+      "kind": "FUTURE_NOT_AUTHORIZED",
+      "status": "NOT_AUTHORIZED",
+      "governanceRefs": [
+        "TRAMA-ADR-008"
+      ],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-DECISION-REGISTER"
       ]
     }
   ],
@@ -542,6 +696,24 @@
         "metPrerequisites": 0,
         "requiredPrerequisites": 3
       }
+    }
+  ],
+  "expansionCandidates": [
+    {
+      "id": "R3-P2",
+      "name": "Curriculum pubblico",
+      "status": "PLANNED",
+      "dependencyRefs": [
+        "GATE-R3-F0-EXIT"
+      ]
+    },
+    {
+      "id": "R3-P5",
+      "name": "Smart Navigation",
+      "status": "PLANNED",
+      "dependencyRefs": [
+        "GATE-R3-F0-EXIT"
+      ]
     }
   ]
 }
