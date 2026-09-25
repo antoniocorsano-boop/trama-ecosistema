@@ -118,6 +118,7 @@ def capability_projection(eco_status: dict, maturity_areas: list[dict]) -> list[
                 "evidenceRefs": ["EV-SOURCE-ECOSYSTEM-STATUS"],
                 "lastSignificantChange": None,
                 "sourceRef": "status/ecosystem-status.json",
+                "sourceUpdatedAt": eco_status.get("updatedAt"),
             }
         )
     return projected
