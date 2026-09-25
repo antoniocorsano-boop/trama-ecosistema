@@ -5,6 +5,7 @@ Current responsibilities:
 - read declared canonical local sources;
 - evaluate maturity conservatively from bound evidence;
 - project declared capabilities without inventing missing operational facts;
+- derive explicit integrity checks without producing an aggregate score;
 - emit a schema-compatible snapshot for the read-only Control Center;
 - avoid external API calls and writes to source systems.
 """
@@ -124,6 +125,301 @@ def capability_projection(eco_status: dict, maturity_areas: list[dict]) -> list[
     return projected
 
 
+def parse_timestamp(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def evidence_freshness_state(item: dict, now: datetime) -> str:
+    freshness = item.get("freshness") or {}
+    policy = freshness.get("policy")
+    if policy == "TIME_BOUND":
+        expires_at = parse_timestamp(freshness.get("expiresAt"))
+        if expires_at is None:
+            return "UNKNOWN"
+        return "EXPIRED" if expires_at < now else "CURRENT"
+    if policy in {"EVENT_BOUND", "UNTIL_CHANGE", "RUNTIME_BOUND", "MANUAL_REVIEW"}:
+        return "POLICY_BOUND"
+    return "UNKNOWN"
+
+
+def support_mentions_gate(item: dict, gate_id: str) -> bool:
+    for support in item.get("supports", []):
+        if not isinstance(support, dict):
+            continue
+        if support.get("gateRef") == gate_id:
+            return True
+        if gate_id in {str(value) for value in support.values() if value is not None}:
+            return True
+    return False
+
+
+def build_integrity_checks(snapshot: dict, now: datetime) -> list[dict]:
+    source_state = snapshot.get("sourceState", {})
+    evidence = snapshot.get("evidence", [])
+    gates = snapshot.get("gates", [])
+    areas = snapshot.get("areas", [])
+    capabilities = snapshot.get("capabilities", [])
+    dependencies = snapshot.get("dependencies", [])
+    expansions = snapshot.get("expansionCandidates", [])
+
+    evidence_ids = {item["id"] for item in evidence}
+    gate_ids = {item["id"] for item in gates}
+    area_ids = {item["id"] for item in areas}
+    capability_ids = {item["id"] for item in capabilities}
+    dependency_ids = {item["id"] for item in dependencies}
+
+    checks = []
+
+    unavailable_sources = sorted(
+        source_id
+        for source_id, state in source_state.items()
+        if state.get("status") != "FRESH"
+    )
+    blocked_sources = sorted(
+        source_id
+        for source_id, state in source_state.items()
+        if state.get("status") == "BLOCKED"
+    )
+    checks.append(
+        {
+            "id": "INT-SOURCE-AVAILABILITY",
+            "type": "SOURCE_AVAILABILITY",
+            "status": "ISSUE" if unavailable_sources else "PASS",
+            "severity": "ERROR" if blocked_sources else ("WARNING" if unavailable_sources else "INFO"),
+            "summary": (
+                "Fonti canoniche non pienamente disponibili."
+                if unavailable_sources
+                else "Tutte le fonti dichiarate sono disponibili nello snapshot."
+            ),
+            "affectedRefs": unavailable_sources,
+            "details": [
+                f"{source_id}: {source_state[source_id].get('status', 'UNKNOWN')}"
+                for source_id in unavailable_sources
+            ],
+        }
+    )
+
+    unresolved = []
+    for phase in snapshot.get("phases", []):
+        for ref in phase.get("gateRefs", []):
+            if ref not in gate_ids:
+                unresolved.append(f"{phase['id']} → gate:{ref}")
+    for area in areas:
+        for ref in area.get("evidenceRefs", []):
+            if ref not in evidence_ids:
+                unresolved.append(f"{area['id']} → evidence:{ref}")
+        for ref in area.get("blockingGateRefs", []):
+            if ref not in gate_ids:
+                unresolved.append(f"{area['id']} → gate:{ref}")
+        for ref in area.get("dependencies", []):
+            if ref not in area_ids:
+                unresolved.append(f"{area['id']} → area:{ref}")
+    for capability in capabilities:
+        area_ref = capability.get("maturityAreaRef")
+        if area_ref is not None and area_ref not in area_ids:
+            unresolved.append(f"{capability['id']} → area:{area_ref}")
+        for ref in capability.get("dependencyRefs", []):
+            if ref not in capability_ids:
+                unresolved.append(f"{capability['id']} → capability:{ref}")
+        for ref in capability.get("gateRefs", []):
+            if ref not in gate_ids:
+                unresolved.append(f"{capability['id']} → gate:{ref}")
+        for ref in capability.get("evidenceRefs", []):
+            if ref not in evidence_ids:
+                unresolved.append(f"{capability['id']} → evidence:{ref}")
+    for dependency in dependencies:
+        for ref in dependency.get("gateRefs", []):
+            if ref not in gate_ids:
+                unresolved.append(f"{dependency['id']} → gate:{ref}")
+        for ref in dependency.get("evidenceRefs", []):
+            if ref not in evidence_ids:
+                unresolved.append(f"{dependency['id']} → evidence:{ref}")
+    known_dependency_refs = gate_ids | capability_ids | dependency_ids
+    for expansion in expansions:
+        for ref in expansion.get("dependencyRefs", []):
+            if ref not in known_dependency_refs:
+                unresolved.append(f"{expansion['id']} → dependency:{ref}")
+    for item in evidence:
+        binding = item.get("binding") or {}
+        ref = binding.get("capabilityRef")
+        if ref is not None and ref not in capability_ids:
+            unresolved.append(f"{item['id']} → capability:{ref}")
+
+    unresolved = sorted(set(unresolved))
+    checks.append(
+        {
+            "id": "INT-REFERENCE-RESOLUTION",
+            "type": "REFERENCE_RESOLUTION",
+            "status": "ISSUE" if unresolved else "PASS",
+            "severity": "ERROR" if unresolved else "INFO",
+            "summary": (
+                "Sono presenti riferimenti interni non risolvibili."
+                if unresolved
+                else "I riferimenti interni verificati risultano risolvibili."
+            ),
+            "affectedRefs": unresolved,
+            "details": unresolved,
+        }
+    )
+
+    expired = sorted(
+        item["id"]
+        for item in evidence
+        if evidence_freshness_state(item, now) == "EXPIRED"
+    )
+    unknown_time_bound = sorted(
+        item["id"]
+        for item in evidence
+        if (item.get("freshness") or {}).get("policy") == "TIME_BOUND"
+        and evidence_freshness_state(item, now) == "UNKNOWN"
+    )
+    freshness_status = "ISSUE" if expired else ("NOT_EVALUABLE" if unknown_time_bound else "PASS")
+    freshness_refs = expired + [ref for ref in unknown_time_bound if ref not in expired]
+    checks.append(
+        {
+            "id": "INT-EVIDENCE-FRESHNESS",
+            "type": "EVIDENCE_FRESHNESS",
+            "status": freshness_status,
+            "severity": "WARNING" if freshness_status != "PASS" else "INFO",
+            "summary": (
+                "Sono presenti evidenze temporali scadute."
+                if expired
+                else (
+                    "Alcune evidenze TIME_BOUND non dichiarano una scadenza valutabile."
+                    if unknown_time_bound
+                    else "Nessuna evidenza TIME_BOUND risulta scaduta."
+                )
+            ),
+            "affectedRefs": freshness_refs,
+            "details": (
+                [f"Scaduta: {ref}" for ref in expired]
+                + [f"Scadenza non valutabile: {ref}" for ref in unknown_time_bound]
+            ),
+        }
+    )
+
+    pass_gates = [
+        gate
+        for gate in gates
+        if gate.get("status") == "PASS" and gate.get("requiredEvidenceTypes")
+    ]
+    missing_gate_evidence = []
+    for gate in pass_gates:
+        required_types = set(gate.get("requiredEvidenceTypes", []))
+        bound_types = {
+            item.get("type")
+            for item in evidence
+            if support_mentions_gate(item, gate["id"])
+        }
+        missing = sorted(required_types - bound_types)
+        if missing:
+            missing_gate_evidence.append(
+                f"{gate['id']} → mancano binding espliciti per: {', '.join(missing)}"
+            )
+    gate_status = (
+        "ISSUE"
+        if missing_gate_evidence
+        else ("PASS" if pass_gates else "NOT_EVALUABLE")
+    )
+    checks.append(
+        {
+            "id": "INT-GATE-EVIDENCE-BINDING",
+            "type": "GATE_EVIDENCE_BINDING",
+            "status": gate_status,
+            "severity": "ERROR" if missing_gate_evidence else "INFO",
+            "summary": (
+                "Uno o più gate PASS non hanno tutte le evidenze richieste esplicitamente bound."
+                if missing_gate_evidence
+                else (
+                    "I gate PASS verificati hanno binding evidenziali coerenti."
+                    if pass_gates
+                    else "Nessun gate PASS con evidenze richieste è disponibile per questo controllo."
+                )
+            ),
+            "affectedRefs": sorted(gate["id"] for gate in pass_gates if any(line.startswith(gate["id"] + " ") for line in missing_gate_evidence)),
+            "details": missing_gate_evidence,
+        }
+    )
+
+    active_runtime = [
+        cap
+        for cap in capabilities
+        if cap.get("runtimeState")
+        and str(cap.get("runtimeState")).upper()
+        not in {"DEFERRED", "RUNTIME_DEFERRED", "NOT_AUTHORIZED", "PLANNED", "NOT_APPLICABLE"}
+    ]
+    runtime_issues = []
+    for cap in active_runtime:
+        has_authorization = any(
+            item.get("type") == "PROMOTION_DECISION"
+            and (item.get("binding") or {}).get("capabilityRef") == cap["id"]
+            and item.get("status") == "PASS"
+            for item in evidence
+        )
+        if not has_authorization:
+            runtime_issues.append(f"{cap['id']} → runtime {cap.get('runtimeState')} senza PROMOTION_DECISION bound")
+    checks.append(
+        {
+            "id": "INT-RUNTIME-AUTHORIZATION",
+            "type": "RUNTIME_AUTHORIZATION",
+            "status": "ISSUE" if runtime_issues else "PASS",
+            "severity": "ERROR" if runtime_issues else "INFO",
+            "summary": (
+                "È dichiarato runtime attivo senza evidenza di autorizzazione bound."
+                if runtime_issues
+                else "Nessun runtime attivo privo di autorizzazione bound è dichiarato."
+            ),
+            "affectedRefs": sorted(cap["id"] for cap in active_runtime if any(line.startswith(cap["id"] + " ") for line in runtime_issues)),
+            "details": runtime_issues,
+        }
+    )
+
+    capability_mismatches = []
+    for cap in capabilities:
+        refs = cap.get("evidenceRefs", [])
+        if not refs:
+            capability_mismatches.append(f"{cap['id']} → nessuna evidenza dichiarata")
+        for evidence_ref in refs:
+            item = next((ev for ev in evidence if ev.get("id") == evidence_ref), None)
+            if item is None:
+                continue
+            bound_cap = (item.get("binding") or {}).get("capabilityRef")
+            if bound_cap is not None and bound_cap != cap["id"]:
+                capability_mismatches.append(
+                    f"{cap['id']} → {evidence_ref} bound a {bound_cap}"
+                )
+    checks.append(
+        {
+            "id": "INT-CAPABILITY-EVIDENCE",
+            "type": "CAPABILITY_EVIDENCE_ALIGNMENT",
+            "status": "ISSUE" if capability_mismatches else "PASS",
+            "severity": "WARNING" if capability_mismatches else "INFO",
+            "summary": (
+                "Sono presenti mismatch tra capability e set evidenziale dichiarato."
+                if capability_mismatches
+                else "Le capability hanno riferimenti evidenziali strutturalmente coerenti."
+            ),
+            "affectedRefs": sorted(
+                {
+                    line.split(" → ", 1)[0]
+                    for line in capability_mismatches
+                }
+            ),
+            "details": capability_mismatches,
+        }
+    )
+
+    return checks
+
+
 def build_snapshot(root: Path) -> dict:
     observed_at = datetime.now(timezone.utc).isoformat()
     config = load_json(root / "config/control-center-snapshot-sources.json")
@@ -229,17 +525,8 @@ def build_snapshot(root: Path) -> dict:
         for result in maturity_results
     ]
 
-    return {
-        "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-        "schemaVersion": "1.1.0",
-        "generatedAt": observed_at,
-        "sourceState": source_state,
-        "phases": phase_status(caps),
-        "areas": maturity_areas,
-        "capabilities": capability_projection(eco_status, maturity_areas),
-        "gates": gates,
-        "evidence": evidence,
-        "dependencies": [
+    capabilities = capability_projection(eco_status, maturity_areas)
+    dependencies = [
             {
                 "id": "DEP-ARENA-DOS-AUTHORITY",
                 "from": "Arena",
@@ -270,16 +557,34 @@ def build_snapshot(root: Path) -> dict:
                 "gateRefs": [],
                 "evidenceRefs": ["EV-SOURCE-DECISION-REGISTER"],
             },
-        ],
+    ]
+    expansion_candidates = [
+        {"id": "R3-P2", "name": "Curriculum pubblico", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
+        {"id": "R3-P5", "name": "Smart Navigation", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
+    ]
+    snapshot = {
+        "$schema": "../../schemas/ecosystem-snapshot.schema.json",
+        "schemaVersion": "1.2.0",
+        "generatedAt": observed_at,
+        "sourceState": source_state,
+        "phases": phase_status(caps),
+        "areas": maturity_areas,
+        "capabilities": capabilities,
+        "gates": gates,
+        "evidence": evidence,
+        "dependencies": dependencies,
         "assuranceClaims": [
             {**claim, "readiness": assurance_readiness(claim)}
             for claim in assurance_registry["claims"]
         ],
-        "expansionCandidates": [
-            {"id": "R3-P2", "name": "Curriculum pubblico", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
-            {"id": "R3-P5", "name": "Smart Navigation", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
-        ],
+        "expansionCandidates": expansion_candidates,
+        "integrityChecks": [],
     }
+    snapshot["integrityChecks"] = build_integrity_checks(
+        snapshot,
+        parse_timestamp(observed_at) or datetime.now(timezone.utc),
+    )
+    return snapshot
 
 
 def validate(snapshot: dict) -> None:
@@ -295,6 +600,7 @@ def validate(snapshot: dict) -> None:
         "dependencies",
         "assuranceClaims",
         "expansionCandidates",
+        "integrityChecks",
     }
     missing = sorted(required - snapshot.keys())
     if missing:
@@ -339,6 +645,14 @@ def validate(snapshot: dict) -> None:
         for evidence_ref in capability.get("evidenceRefs", []):
             if evidence_ref not in evidence_ids:
                 raise ValueError(f"Unresolved capability evidence reference: {evidence_ref}")
+
+    integrity_ids = {item["id"] for item in snapshot["integrityChecks"]}
+    if len(integrity_ids) != len(snapshot["integrityChecks"]):
+        raise ValueError("Duplicate integrity check id detected")
+    valid_integrity_statuses = {"PASS", "ISSUE", "NOT_EVALUABLE"}
+    for check in snapshot["integrityChecks"]:
+        if check["status"] not in valid_integrity_statuses:
+            raise ValueError(f"Invalid integrity status {check['status']} for {check['id']}")
 
     dependency_ids = {item["id"] for item in snapshot["dependencies"]}
     if len(dependency_ids) != len(snapshot["dependencies"]):

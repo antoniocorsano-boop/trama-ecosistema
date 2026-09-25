@@ -48,6 +48,36 @@ jobs:
         run: python scripts/build_ecosystem_snapshot.py --check
       - name: Build snapshot fixture
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
+      - name: Detect committed snapshot drift
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          generated = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+          committed = json.loads(Path("control-center/data/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+
+          assert committed["schemaVersion"] == generated["schemaVersion"], (
+              committed["schemaVersion"], generated["schemaVersion"]
+          )
+
+          for source_id, source in generated["sourceState"].items():
+              assert source_id in committed["sourceState"], source_id
+              assert committed["sourceState"][source_id].get("sha256") == source.get("sha256"), (
+                  source_id,
+                  committed["sourceState"][source_id].get("sha256"),
+                  source.get("sha256"),
+              )
+
+          assert committed["capabilities"] == generated["capabilities"]
+          assert committed["gates"] == generated["gates"]
+          assert committed["dependencies"] == generated["dependencies"]
+          assert committed["expansionCandidates"] == generated["expansionCandidates"]
+          assert committed["integrityChecks"] == generated["integrityChecks"]
+
+          print("TRAMA_COMMITTED_SNAPSHOT_DRIFT_PASS")
+          PY
       - name: Validate generated snapshot against JSON Schema
         shell: bash
         run: |
@@ -119,6 +149,33 @@ jobs:
           assert dependencies["DEP-DOS-ATLAS-FUTURE"]["status"] == "NOT_AUTHORIZED"
           print("TRAMA_CC2_F4_CAPABILITY_PROJECTION_PASS")
           PY
+      - name: Validate CC2-F5 integrity projection
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          snapshot = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+          checks = {item["id"]: item for item in snapshot["integrityChecks"]}
+          assert set(checks) == {
+              "INT-SOURCE-AVAILABILITY",
+              "INT-REFERENCE-RESOLUTION",
+              "INT-EVIDENCE-FRESHNESS",
+              "INT-GATE-EVIDENCE-BINDING",
+              "INT-RUNTIME-AUTHORIZATION",
+              "INT-CAPABILITY-EVIDENCE",
+          }, checks
+          assert checks["INT-SOURCE-AVAILABILITY"]["status"] == "PASS", checks
+          assert checks["INT-REFERENCE-RESOLUTION"]["status"] == "PASS", checks
+          assert checks["INT-EVIDENCE-FRESHNESS"]["status"] == "PASS", checks
+          assert checks["INT-GATE-EVIDENCE-BINDING"]["status"] == "NOT_EVALUABLE", checks
+          assert checks["INT-RUNTIME-AUTHORIZATION"]["status"] == "PASS", checks
+          assert checks["INT-CAPABILITY-EVIDENCE"]["status"] == "PASS", checks
+          assert "overallScore" not in snapshot
+          assert "score" not in snapshot
+          print("TRAMA_CC2_F5_INTEGRITY_PROJECTION_PASS")
+          PY
       - name: Validate CC2-F1/D evidence hardening
         shell: bash
         run: |
@@ -177,4 +234,6 @@ jobs:
           grep -q '"gates"' schemas/ecosystem-snapshot.schema.json
           grep -q '"capabilities"' schemas/ecosystem-snapshot.schema.json
           grep -q '"governanceRefs"' schemas/ecosystem-snapshot.schema.json
+          grep -q '"integrityChecks"' schemas/ecosystem-snapshot.schema.json
+          ! grep -Eq '"(overallScore|score)"' schemas/ecosystem-snapshot.schema.json
 

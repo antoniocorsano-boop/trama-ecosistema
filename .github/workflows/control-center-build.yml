@@ -51,6 +51,9 @@ jobs:
         run: |
           set -euo pipefail
           test -s control-center/data/ecosystem-snapshot.json
+          test -s control-center/evidence.html
+          grep -q '"integrityChecks"' control-center/data/ecosystem-snapshot.json
+          grep -q "Evidence Explorer" control-center/evidence.html
           test -s control-center/reports/stakeholder-assurance.html
           test -s control-center/reports/stakeholder-assurance.md
           grep -q "Dossier Stakeholder Assurance" control-center/reports/stakeholder-assurance.html

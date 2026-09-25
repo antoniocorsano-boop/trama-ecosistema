@@ -51,7 +51,7 @@ flowchart LR
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
-| TRAMA Control Center v2 | **CC2-F0–F3C INTEGRATED / F1E RECOVERY ACTIVE** | Snapshot/evidence, Home, Stakeholder Assurance, dossier/help e mobile-first integrati; hardening mobile #75–#77 e polish #80 LIVE. Project Knowledge F1/E in recovery governato; ADR-015 resta PROPOSED. |
+| TRAMA Control Center v2 | **CC2-F0–F4 INTEGRATED / F5 ACTIVE** | Snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system e Capability + Ecosystem Map integrati. CC2-F5 Evidence Explorer + Integrity è attiva via #85; ADR-015 resta PROPOSED. |
 
 ## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 
@@ -66,7 +66,12 @@ Stato integrato corrente:
 - **CC2-F3B** Stakeholder Summary, Contextual Help & Living Dossier — #73;
 - **CC2-F3C** Mobile-first Control Center — #74;
 - hardening mobile strutturale/PWA/overflow — #75, #76, #77;
-- mobile carousel polish — #80, merge `95e68b88b18d4d9b7ed2a98984a4f18ed14e8ca0`, pubblicato LIVE su Render.
+- mobile carousel polish — #80, merge `95e68b88b18d4d9b7ed2a98984a4f18ed14e8ca0`;
+- **CC2-F1/E Project Knowledge & Agent Context** — #81, merge `4a17766bc315340824b4ef44204f81a1487515ce`;
+- Penpot MCP pilot — #82, merge `262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25`;
+- TRAMA Penpot design system — #83, merge `5cfb09f94ea532dc1f64523f7e10da6629159843`;
+- **CC2-F4 Capability + Ecosystem Map** — #84, merge `93a3fadf78732979c4536cbb394744b9471e14da`;
+- **CC2-F5 Evidence Explorer + Integrity** — #85, ACTIVE / HUMAN REVIEW NOT YET GRANTED.
 
 Restano invarianti:
 - il Control Center non approva, non promuove e non autorizza runtime;
@@ -76,9 +81,9 @@ Restano invarianti:
 
 ### CC2-F1/E — Project Knowledge & Agent Context
 
-La precedente PR #70 è conservata solo come **salvage source** perché diverge dal `main` corrente. La nuova recovery slice ricostruisce la foundation sulla baseline aggiornata senza importare copie stale di `STATUS` o `ROADMAP`.
+La precedente PR #70 resta solo **salvage source**. La foundation recuperata è stata integrata tramite **#81** sulla baseline aggiornata, senza importare copie stale di `STATUS` o `ROADMAP`.
 
-Sono recuperati come proposta governata:
+Sono integrati come foundation governata, con ADR-015 ancora PROPOSED:
 - Project Knowledge & Agent Context Architecture v1;
 - `ProjectContextSnapshot v1`;
 - `TRAMA Context Pack v1`;

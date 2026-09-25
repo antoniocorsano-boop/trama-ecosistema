@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071827">
+<meta name="description" content="TRAMA Control Center v2 — Evidence Explorer e integrità dell'ecosistema, snapshot-first e read-only.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+<title>TRAMA · Evidenze e integrità</title>
+<style>
+:root{--bg:#071827;--surface:#0b2235;--surface2:#0e2b42;--line:#1c4662;--text:#f4f8fb;--muted:#9fb9cb;--info:#58bff7;--ok:#55d79a;--warn:#f0b54a;--danger:#f37d87;--violet:#ae88ff}
+*{box-sizing:border-box}html{max-width:100%;overflow-x:hidden;scroll-behavior:smooth}body{margin:0;max-width:100%;overflow-x:hidden;background:radial-gradient(circle at 85% 0,#123750 0,transparent 32%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,a,input,select{font:inherit}a{color:inherit}.wrap{width:min(1180px,100%);margin:auto;padding:22px 24px 50px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding-bottom:18px;border-bottom:1px solid var(--line)}h1{font-size:29px;line-height:1.12;margin:4px 0}.lede{color:var(--muted);margin:4px 0 0}.back{min-height:44px;display:inline-flex;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;background:var(--surface)}.meta{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.pill{display:inline-flex;min-height:32px;align-items:center;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}.pill strong{color:var(--text)}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 12px}.tab{min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer}.tab[aria-selected="true"]{background:#163d58;border-color:#3c7b9d}.tab:focus-visible,.back:focus-visible,.filter input:focus-visible,.filter select:focus-visible{outline:2px solid var(--info);outline-offset:2px}.panel{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,var(--surface2),var(--surface));padding:16px;min-width:0}.panel[hidden]{display:none}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:12px}.section-head h2{margin:0;font-size:19px}.hint{color:var(--muted);font-size:12px}.filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}.filter label{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}.filter input,.filter select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:9px;background:#081d2d;color:var(--text);padding:8px 10px}.evidence-list,.integrity-list{display:grid;gap:9px}.ev,.integrity{border:1px solid #173d56;background:#091e30;border-radius:12px;padding:13px;min-width:0}.ev-top,.integrity-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.ev-id,.check-id{font-weight:900;color:var(--info);overflow-wrap:anywhere}.badge{display:inline-flex;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:10px;font-weight:800;white-space:nowrap}.b-ok{color:#a5f3ca;border-color:#2b9568}.b-warn{color:#ffda89;border-color:#9c6d1d}.b-danger{color:#ffd0d5;border-color:#a74a55}.b-muted{color:#c6d3db}.b-violet{color:#decfff;border-color:#705ca8}.ev h3,.integrity h3{font-size:15px;margin:8px 0}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.fact{min-width:0}.fact small{display:block;color:var(--muted)}.fact strong{display:block;overflow-wrap:anywhere}.refs{margin-top:10px;padding-top:9px;border-top:1px solid #173d56;color:var(--muted);font-size:12px;overflow-wrap:anywhere}.empty{padding:20px;text-align:center;color:var(--muted)}.integrity-note{border:1px solid #75541d;background:#322813;border-radius:10px;padding:11px;margin-bottom:12px;color:#ead7a7}.integrity .details{margin:9px 0 0;padding-left:18px;color:#cddde6}.integrity .details:empty{display:none}.error{border:1px solid #733642;background:#32171d;color:#ffd0d5;border-radius:10px;padding:14px}.footer{margin-top:18px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:760px){body{font-size:15px}.wrap{padding:14px 12px 34px}.top{display:grid;gap:10px}h1{font-size:23px}.back{width:max-content}.filters{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}.panel{padding:13px}.section-head{align-items:flex-start}.tabs{display:grid;grid-template-columns:1fr 1fr}.tab{width:100%}}
+@media(max-width:390px){.facts{grid-template-columns:1fr}.ev-top,.integrity-top{display:grid}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="top">
+  <div><div class="hint">TRAMA CONTROL CENTER V2 · READ_ONLY</div><h1>Evidenze e integrità</h1><p class="lede">Quali evidenze sostengono lo stato dichiarato e quali incoerenze sono rilevabili senza inventare dati mancanti.</p></div>
+  <a class="back" href="./index.html">← Panoramica</a>
+</header>
+
+<div class="meta" aria-live="polite">
+  <span class="pill" id="snapshotState"><strong>Snapshot</strong>&nbsp; caricamento…</span>
+  <span class="pill"><strong id="evidenceCount">–</strong>&nbsp; evidenze</span>
+  <span class="pill"><strong id="issueCount">–</strong>&nbsp; anomalie</span>
+  <span class="pill"><strong id="notEvaluableCount">–</strong>&nbsp; non valutabili</span>
+</div>
+
+<div class="tabs" role="tablist" aria-label="Vista specialistica evidenze">
+  <button class="tab" id="tabEvidence" role="tab" aria-selected="true" aria-controls="panelEvidence" type="button">Evidence Explorer</button>
+  <button class="tab" id="tabIntegrity" role="tab" aria-selected="false" aria-controls="panelIntegrity" type="button">Integrità</button>
+</div>
+
+<section class="panel" id="panelEvidence" role="tabpanel" aria-labelledby="tabEvidence">
+  <div class="section-head"><div><h2>Su quali evidenze si basa lo stato?</h2><div class="hint">I filtri lavorano solo sullo snapshot governato; nessun dato viene recuperato direttamente da GitHub nel browser.</div></div></div>
+  <div class="filters">
+    <div class="filter"><label for="areaFilter">Ambito</label><select id="areaFilter"><option value="">Tutti</option></select></div>
+    <div class="filter"><label for="capabilityFilter">Capability</label><select id="capabilityFilter"><option value="">Tutte</option></select></div>
+    <div class="filter"><label for="typeFilter">Evidence type</label><select id="typeFilter"><option value="">Tutti</option></select></div>
+    <div class="filter"><label for="freshnessFilter">Freshness</label><select id="freshnessFilter"><option value="">Tutte</option><option>CURRENT</option><option>EXPIRED</option><option>POLICY_BOUND</option><option>UNKNOWN</option></select></div>
+    <div class="filter"><label for="statusFilter">Stato</label><select id="statusFilter"><option value="">Tutti</option></select></div>
+    <div class="filter"><label for="headFilter">Exact head</label><input id="headFilter" type="search" placeholder="SHA o prefisso"></div>
+  </div>
+  <div class="evidence-list" id="evidenceList"></div>
+</section>
+
+<section class="panel" id="panelIntegrity" role="tabpanel" aria-labelledby="tabIntegrity" hidden>
+  <div class="section-head"><div><h2>Ci sono incoerenze tra fonti, stato ed evidenze?</h2><div class="hint">Controlli deterministici derivati dallo stesso snapshot.</div></div></div>
+  <div class="integrity-note"><strong>Nessuno score complessivo.</strong> PASS significa solo che la regola indicata non ha rilevato incoerenze nei dati disponibili. NOT_EVALUABLE indica copertura insufficiente, non esito positivo.</div>
+  <div class="integrity-list" id="integrityList"></div>
+</section>
+
+<div id="errorBox"></div>
+<footer class="footer"><span>TRAMA · Evidence Explorer + Integrity · READ_ONLY</span><span id="updated">–</span></footer>
+</main>
+
+<script>
+const SNAPSHOT_URL='./data/ecosystem-snapshot.json';
+const CACHE_KEY='trama-cc2-snapshot';
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+let snapshot=null;
+
+function badgeClass(state){
+  const s=String(state||'').toUpperCase();
+  if(['PASS','CURRENT'].includes(s))return 'b-ok';
+  if(['ISSUE','FAIL','EXPIRED'].includes(s))return 'b-danger';
+  if(['PARTIAL','IN_PROGRESS','WARNING'].includes(s))return 'b-warn';
+  if(['NOT_EVALUABLE','POLICY_BOUND'].includes(s))return 'b-violet';
+  return 'b-muted';
+}
+function fmtDate(value){if(!value)return 'non dichiarata';const d=new Date(value);return Number.isNaN(d.getTime())?String(value):d.toLocaleString('it-IT')}
+function freshnessState(item){
+  const f=item.freshness||{},policy=f.policy;
+  if(policy==='TIME_BOUND'){
+    if(!f.expiresAt)return 'UNKNOWN';
+    const t=new Date(f.expiresAt).getTime();
+    const reference=new Date(snapshot?.generatedAt||'').getTime();
+    return Number.isNaN(t)||Number.isNaN(reference)?'UNKNOWN':(t<reference?'EXPIRED':'CURRENT');
+  }
+  if(['EVENT_BOUND','UNTIL_CHANGE','RUNTIME_BOUND','MANUAL_REVIEW'].includes(policy))return 'POLICY_BOUND';
+  return 'UNKNOWN';
+}
+function saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
+function readSnapshot(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch{return null}}
+async function loadSnapshot(){
+  try{
+    const r=await fetch(SNAPSHOT_URL,{cache:'no-store'});
+    if(!r.ok)throw new Error('snapshot '+r.status);
+    const data=await r.json();saveSnapshot(data);render(data,'fresh');
+  }catch(err){
+    const cached=readSnapshot();
+    if(cached)render(cached,'offline');else fail();
+  }
+}
+function linkedCapabilities(evidenceId){
+  if(!snapshot)return [];
+  const direct=(snapshot.evidence||[]).find(e=>e.id===evidenceId)?.binding?.capabilityRef;
+  const refs=(snapshot.capabilities||[]).filter(c=>(c.evidenceRefs||[]).includes(evidenceId)).map(c=>c.id);
+  if(direct)refs.push(direct);
+  return [...new Set(refs)].sort();
+}
+function fillFilters(){
+  const evidence=snapshot?.evidence||[];
+  const areas=[...new Set(evidence.map(x=>x.area).filter(Boolean))].sort();
+  const types=[...new Set(evidence.map(x=>x.type).filter(Boolean))].sort();
+  const statuses=[...new Set(evidence.map(x=>x.status).filter(Boolean))].sort();
+  areaFilter.innerHTML='<option value="">Tutti</option>'+areas.map(x=>'<option>'+esc(x)+'</option>').join('');
+  typeFilter.innerHTML='<option value="">Tutti</option>'+types.map(x=>'<option>'+esc(x)+'</option>').join('');
+  statusFilter.innerHTML='<option value="">Tutti</option>'+statuses.map(x=>'<option>'+esc(x)+'</option>').join('');
+  capabilityFilter.innerHTML='<option value="">Tutte</option>'+(snapshot.capabilities||[]).map(x=>'<option value="'+esc(x.id)+'">'+esc(x.id+' · '+x.label)+'</option>').join('');
+}
+function render(data,mode){
+  snapshot=data;
+  snapshotState.innerHTML='<strong>Snapshot</strong>&nbsp; '+(mode==='fresh'?'disponibile':'offline · copia locale');
+  updated.textContent='Generato '+fmtDate(data.generatedAt);
+  evidenceCount.textContent=(data.evidence||[]).length;
+  issueCount.textContent=(data.integrityChecks||[]).filter(x=>x.status==='ISSUE').length;
+  notEvaluableCount.textContent=(data.integrityChecks||[]).filter(x=>x.status==='NOT_EVALUABLE').length;
+  fillFilters();
+  renderEvidence();
+  renderIntegrity();
+}
+function renderEvidence(){
+  if(!snapshot)return;
+  const area=areaFilter.value,cap=capabilityFilter.value,type=typeFilter.value,fresh=freshnessFilter.value,status=statusFilter.value,head=headFilter.value.trim().toLowerCase();
+  const items=(snapshot.evidence||[]).filter(e=>{
+    const linked=linkedCapabilities(e.id);
+    const exact=String(e.binding?.exactHead||'').toLowerCase();
+    return (!area||e.area===area)&&(!cap||linked.includes(cap))&&(!type||e.type===type)&&(!fresh||freshnessState(e)===fresh)&&(!status||e.status===status)&&(!head||exact.includes(head));
+  });
+  evidenceList.innerHTML=items.length?items.map(e=>{
+    const fresh=freshnessState(e),linked=linkedCapabilities(e.id),binding=e.binding||{};
+    return '<article class="ev"><div class="ev-top"><span class="ev-id">'+esc(e.id)+'</span><span class="badge '+badgeClass(e.status)+'">'+esc(e.status)+'</span></div><h3>'+esc(e.subject)+'</h3><div class="facts"><div class="fact"><small>Tipo</small><strong>'+esc(e.type)+'</strong></div><div class="fact"><small>Ambito</small><strong>'+esc(e.area)+'</strong></div><div class="fact"><small>Freshness</small><strong><span class="badge '+badgeClass(fresh)+'">'+esc(fresh)+'</span></strong></div><div class="fact"><small>Capability</small><strong>'+esc(linked.join(', ')||'non associata')+'</strong></div><div class="fact"><small>Exact head</small><strong class="mono">'+esc(binding.exactHead||'non bound')+'</strong></div><div class="fact"><small>Confidenza</small><strong>'+esc(e.confidence||'non dichiarata')+'</strong></div></div><div class="refs">Fonte: '+esc(e.source?.ref||e.source?.path||'fonte governata')+' · osservata: '+esc(fmtDate(e.observedAt))+' · policy: '+esc(e.freshness?.policy||'non dichiarata')+'</div></article>';
+  }).join(''):'<div class="empty">Nessuna evidenza corrisponde ai filtri.</div>';
+}
+function renderIntegrity(){
+  if(!snapshot)return;
+  const checks=snapshot.integrityChecks||[];
+  integrityList.innerHTML=checks.length?checks.map(c=>'<article class="integrity"><div class="integrity-top"><span class="check-id">'+esc(c.id)+'</span><span class="badge '+badgeClass(c.status)+'">'+esc(c.status)+'</span></div><h3>'+esc(c.summary)+'</h3><div class="hint">'+esc(c.type)+' · severità '+esc(c.severity)+'</div>'+(c.affectedRefs?.length?'<div class="refs">Riferimenti: '+esc(c.affectedRefs.join(', '))+'</div>':'')+'<ul class="details">'+(c.details||[]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></article>').join(''):'<div class="empty">Nessun controllo di integrità disponibile nello snapshot.</div>';
+}
+function activate(which){
+  const evidence=which==='evidence';
+  tabEvidence.setAttribute('aria-selected',evidence?'true':'false');
+  tabIntegrity.setAttribute('aria-selected',evidence?'false':'true');
+  panelEvidence.hidden=!evidence;panelIntegrity.hidden=evidence;
+}
+function fail(){
+  snapshotState.innerHTML='<strong>Snapshot</strong>&nbsp; non disponibile';
+  errorBox.innerHTML='<div class="error">Impossibile mostrare evidenze e integrità: snapshot assente e nessuna copia locale disponibile.</div>';
+}
+[areaFilter,capabilityFilter,typeFilter,freshnessFilter,statusFilter,headFilter].forEach(el=>el.addEventListener('input',renderEvidence));
+tabEvidence.addEventListener('click',()=>activate('evidence'));
+tabIntegrity.addEventListener('click',()=>activate('integrity'));
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{}))}
+loadSnapshot();
+</script>
+</body>
+</html>

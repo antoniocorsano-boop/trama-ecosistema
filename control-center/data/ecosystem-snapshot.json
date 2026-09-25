@@ -1,29 +1,29 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.1.0",
-  "generatedAt": "2026-09-25T02:44:45.583910+00:00",
+  "schemaVersion": "1.2.0",
+  "generatedAt": "2026-09-25T03:07:02.212539+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "ref": "STATUS.md",
-      "sha256": "6fd6226a69cb11c58386d34206b2ba5fe23704b4134acc6ab1b6c6f6aef47ce5"
+      "sha256": "896ba520636ae165d83c86303348d50b7e135130c979a522784e836511c183c3"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "ref": "ROADMAP.md",
-      "sha256": "4ab27fecafa197001f1aea98ac71e35750605f3ba3c53d59ba1d1bea2989c973"
+      "sha256": "343e22d161803c1c8564a139b59de4aba51ef718de28ccdfc3aed488fbf59088"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
     }
@@ -82,7 +82,7 @@
       ],
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
     },
     {
       "id": "arena",
@@ -97,7 +97,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
     },
     {
       "id": "atlas",
@@ -115,7 +115,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
     },
     {
       "id": "docente-os",
@@ -131,7 +131,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T02:44:45.583910+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:07:02.212539+00:00"
     }
   ],
   "capabilities": [
@@ -311,9 +311,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "sha256": "6fd6226a69cb11c58386d34206b2ba5fe23704b4134acc6ab1b6c6f6aef47ce5"
+        "sha256": "896ba520636ae165d83c86303348d50b7e135130c979a522784e836511c183c3"
       },
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -329,9 +329,9 @@
       "status": "PASS",
       "source": {
         "path": "ROADMAP.md",
-        "sha256": "4ab27fecafa197001f1aea98ac71e35750605f3ba3c53d59ba1d1bea2989c973"
+        "sha256": "343e22d161803c1c8564a139b59de4aba51ef718de28ccdfc3aed488fbf59088"
       },
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -349,7 +349,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
       },
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -367,7 +367,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
       },
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -383,9 +383,10 @@
       "status": "PASS",
       "source": {
         "path": "docs/decisions/decision-register.json",
-        "ref": "TRAMA-ADR-014"
+        "ref": "TRAMA-ADR-014",
+        "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
       },
-      "observedAt": "2026-09-25T02:44:45.583910+00:00",
+      "observedAt": "2026-09-25T03:07:02.212539+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -714,6 +715,62 @@
       "dependencyRefs": [
         "GATE-R3-F0-EXIT"
       ]
+    }
+  ],
+  "integrityChecks": [
+    {
+      "id": "INT-SOURCE-AVAILABILITY",
+      "type": "SOURCE_AVAILABILITY",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Tutte le fonti dichiarate sono disponibili nello snapshot.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-REFERENCE-RESOLUTION",
+      "type": "REFERENCE_RESOLUTION",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "I riferimenti interni verificati risultano risolvibili.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-EVIDENCE-FRESHNESS",
+      "type": "EVIDENCE_FRESHNESS",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Nessuna evidenza TIME_BOUND risulta scaduta.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-GATE-EVIDENCE-BINDING",
+      "type": "GATE_EVIDENCE_BINDING",
+      "status": "NOT_EVALUABLE",
+      "severity": "INFO",
+      "summary": "Nessun gate PASS con evidenze richieste è disponibile per questo controllo.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-RUNTIME-AUTHORIZATION",
+      "type": "RUNTIME_AUTHORIZATION",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Nessun runtime attivo privo di autorizzazione bound è dichiarato.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-CAPABILITY-EVIDENCE",
+      "type": "CAPABILITY_EVIDENCE_ALIGNMENT",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Le capability hanno riferimenti evidenziali strutturalmente coerenti.",
+      "affectedRefs": [],
+      "details": []
     }
   ]
 }
