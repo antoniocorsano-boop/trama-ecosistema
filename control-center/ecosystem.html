@@ -26,7 +26,8 @@
 <div class="meta" aria-live="polite">
   <span class="pill" id="snapshotState"><strong>Snapshot</strong>&nbsp; caricamento…</span>
   <span class="pill"><strong id="capCount">–</strong>&nbsp; capability dichiarate</span>
-  <span class="pill"><strong id="relCount">–</strong>&nbsp; relazioni governate</span>\n  <span class="pill">Registro capability&nbsp;<strong id="capSourceDate">–</strong></span>
+  <span class="pill"><strong id="relCount">–</strong>&nbsp; relazioni governate</span>
+  <span class="pill">Registro capability&nbsp;<strong id="capSourceDate">–</strong></span>
 </div>
 
 <div class="tabs" role="tablist" aria-label="Vista specialistica">
@@ -89,7 +90,8 @@ function badgeClass(state){
   if(['PLANNED','DEFERRED','NOT_AUTHORIZED'].includes(s))return s==='PLANNED'?'b-muted':'b-future';
   return 'b-muted';
 }
-function formatDateOnly(value){if(!value)return 'non dichiarato';const p=String(value).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:String(value)}\nfunction saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
+function formatDateOnly(value){if(!value)return 'non dichiarato';const p=String(value).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:String(value)}
+function saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
 function readSnapshot(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch{return null}}
 async function loadSnapshot(){
   try{
