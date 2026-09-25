@@ -1,200 +1,176 @@
 # CAP-ATLAS-PERCORSI — Research & Evidence Register
 
 **Gate:** G1 — Discovery  
-**Status:** IN_PROGRESS / AUTHORITATIVE_BASELINE_STARTED  
+**Status:** IN_PROGRESS / AUTHORITATIVE_BASELINE_EXPANDED  
 **Rule:** research is evidence, not approval.
 
 ## Evidence record schema
 
-Every material source is recorded with:
+Every material source is recorded with: `EVIDENCE-ID`; authority/source; source type; date/version; stable reference; population/context; relevant finding; applicability; limitations/uncertainty; design/governance questions informed; decision link; freshness state.
 
-- `EVIDENCE-ID`;
-- source/title/author or issuing authority;
-- source type;
-- publication/version/date;
-- stable reference;
-- topic;
-- population/context;
-- relevant finding (paraphrased, not copied unnecessarily);
-- applicability to Atlas Percorsi;
-- limitations/uncertainty;
-- design/governance questions informed;
-- related candidate or approved D/SPEC/ADR;
-- review/freshness state.
+## Evidence quality rules
 
-## Authoritative baseline records
+1. Prefer primary legislation, official institutional frameworks and peer-reviewed synthesis/reviews.
+2. Never generalise evidence from adults/university students directly to children without an age/population limitation note.
+3. A framework name is not a design decision: record the specific implication it supports.
+4. Legal/supervisory material is evidence for G2 analysis, not an automatic legal conclusion.
+5. Narrative evidence supports experimentation; it does not justify decorative immersion or engagement maximisation.
+6. G1 PASS requires stable sources and explicit limitations, not bibliography volume.
+
+## Authoritative and scholarly records
 
 ### FRAME-001 — LifeComp
-
 - **Authority:** European Commission, Joint Research Centre.
-- **Title:** LifeComp: The European framework for the personal, social and learning to learn key competence.
-- **Type:** EU conceptual competence framework.
-- **Stable reference:** https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/lifecomp_en
-- **Context:** formal, informal and non-formal education; intended to establish shared understanding of personal, social and learning-to-learn competence.
-- **Finding:** LifeComp is explicitly non-prescriptive and describes nine learnable competences; the JRC states that it can serve as a basis for curricula and learning activities.
-- **Atlas applicability:** strong candidate reference for competence taxonomy and pathway design, especially self-regulation, social competence and learning-to-learn.
-- **Limitation:** it does not by itself define the age progression, assessment model, Italian curriculum alignment or Atlas interaction model.
-- **Informs:** pedagogical model; competence taxonomy; progression research.
-- **Decision state:** EVIDENCE_ONLY — no direct adoption yet.
-- **Freshness:** checked 2026-09-25.
+- **Reference:** https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/lifecomp_en
+- **Context/finding:** conceptual, non-prescriptive framework describing nine learnable personal, social and learning-to-learn competences and usable as a basis for curricula and learning activities.
+- **Atlas applicability:** strong candidate reference for competence taxonomy/pathway design.
+- **Limitation:** does not prescribe age progression, assessment, Italian alignment or Atlas UX.
+- **State:** VERIFIED_SOURCE; checked 2026-09-25.
 
-### FRAME-002 — EU Key Competences ecosystem
+### FRAME-002 — EU Key Competences Recommendation 2018
+- **Authority:** Council of the European Union / EUR-Lex.
+- **Reference:** https://eur-lex.europa.eu/legal-content/IT/ALL/?uri=CELEX:32018H0604(01)
+- **Finding:** Member States are invited to support development of key competences from an early age and throughout life, including personal, social and learning-to-learn competence.
+- **Atlas applicability:** establishes European policy context and supports early, progressive competence development.
+- **Limitation:** recommendation/framework, not an Atlas progression model or assessment rubric.
+- **State:** VERIFIED_SOURCE; checked 2026-09-25.
 
-- **Authority:** European Commission, Joint Research Centre.
-- **Title:** Key competences for lifelong learning.
-- **Type:** EU framework family/context page.
-- **Stable reference:** https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning_en
-- **Finding:** the JRC maintains competence frameworks including LifeComp, DigComp, GreenComp and EntreComp to support competence development and related educational work.
-- **Atlas applicability:** establishes the broader framework family in which Atlas Percorsi should map transversal experiences without collapsing distinct frameworks into one taxonomy.
-- **Limitation:** framework presence does not imply every framework is relevant to every pathway.
-- **Informs:** framework mapping and future source selection.
-- **Decision state:** EVIDENCE_ONLY.
-- **Freshness:** checked 2026-09-25.
+### FRAME-IT-001 — Italian National Curriculum Guidelines 2025/2026 transition
+- **Authority:** Ministero dell'Istruzione e del Merito; official publication in Gazzetta Ufficiale.
+- **Instrument:** Decreto 9 dicembre 2025, n. 221, Regolamento recante indicazioni nazionali per il curricolo della scuola dell'infanzia e del primo ciclo d'istruzione.
+- **Official reference:** https://www.gazzettaufficiale.it/eli/id/2026/01/27/26G00021/SG
+- **Finding:** the regulation adopts new national curriculum guidelines replacing those attached to D.M. 254/2012; from school year 2026/2027 schools adopt them beginning with first classes of primary and lower-secondary school, with gradual curriculum revision.
+- **Atlas applicability:** this is the current Italian first-cycle normative baseline that Atlas Percorsi must map against, while representing the transitional/gradual implementation correctly.
+- **Limitation:** G1 must still perform content-level mapping of the annexed Guidelines to candidate pathways; adoption timing must not be simplified into an all-classes-at-once assumption.
+- **Informs:** Italian curriculum mapping; age-band progression; Arena relationship at G2.
+- **State:** VERIFIED_PRIMARY_SOURCE; checked 2026-09-25.
+
+### PED-001 — Panadero 2017: Self-Regulated Learning models review
+- **Author:** Ernesto Panadero.
+- **Title:** A Review of Self-regulated Learning: Six Models and Four Directions for Research.
+- **Publication:** Frontiers in Psychology 8:422 (2017); DOI 10.3389/fpsyg.2017.00422.
+- **Reference:** https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2017.00422/full
+- **Finding:** SRL integrates cognitive, metacognitive, behavioural, motivational and emotional/affective dimensions; the review compares six major models and notes differential effects by developmental stage/educational level.
+- **Atlas applicability:** supports a multidimensional, reflective learning model and cautions against one undifferentiated pathway across ages.
+- **Limitation:** a review of SRL models is not evidence that the current Atlas cycle is uniquely correct; age-specific design requires further evidence/validation.
+- **Informs:** pedagogical cycle; age progression; evidence model.
+- **State:** VERIFIED_SCHOLARLY_SOURCE; checked 2026-09-25.
 
 ### CHILD-001 — Specific protection of children under GDPR
-
-- **Authority:** European Data Protection Board (EDPB).
-- **Title:** Children — key GDPR concepts.
-- **Type:** supervisory authority guidance/topic synthesis.
-- **Stable reference:** https://www.edpb.europa.eu/topics/key-gdpr-concepts/children_en
-- **Finding:** children receive specific protection; organisations should take extra care with children's personal data and provide information that is clear, easy to understand and age-appropriate, with visual support where useful.
-- **Atlas applicability:** supports CHILD-SAFE requirements for comprehensible notices, age-appropriate interaction and stronger default protection.
-- **Limitation:** this source is a high-level synthesis and does not replace assessment of specific processing or Italian implementation questions.
-- **Informs:** CHILD-SAFE profile; content/notice design; G2 privacy review.
-- **Decision state:** EVIDENCE_ONLY.
-- **Freshness:** checked 2026-09-25.
-
-### CHILD-002 — Age assurance proportionality and privacy
-
 - **Authority:** European Data Protection Board.
-- **Title:** Statement 1/2025 on Age Assurance.
-- **Date:** 12 February 2025.
-- **Stable reference:** https://www.edpb.europa.eu/our-work-tools/our-documents/statements/statement-12025-age-assurance_en
-- **Finding:** age-assurance processing must remain compatible with GDPR principles; the EDPB frames age assurance as a child-safety measure that itself requires data-protection safeguards and proportionality.
-- **Atlas applicability:** reinforces the design preference not to introduce identity/age-verification machinery unless the final experience actually requires an age threshold and the mechanism is necessary/proportionate.
-- **Limitation:** Atlas Percorsi has not yet established a need for age assurance; this source must not be read as requiring it.
-- **Informs:** negative knowledge against unnecessary identity collection; G2 assessment if age-gating is ever proposed.
-- **Decision state:** EVIDENCE_ONLY.
-- **Freshness:** checked 2026-09-25.
+- **Reference:** https://www.edpb.europa.eu/topics/key-gdpr-concepts/children_en
+- **Finding:** children receive specific protection; information should be clear, easy to understand and age-appropriate, with visual support where useful.
+- **Atlas applicability:** supports CHILD-SAFE requirements for comprehensible interaction and stronger default protection.
+- **Limitation:** high-level synthesis; does not replace processing-specific analysis.
+- **State:** VERIFIED_AUTHORITY_SOURCE; checked 2026-09-25.
 
-### PRIV-001 — GDPR authoritative text
+### CHILD-002 — EDPB Statement 1/2025 on Age Assurance
+- **Authority:** European Data Protection Board.
+- **Date:** 12 February 2025, with later minor corrections.
+- **Reference:** https://www.edpb.europa.eu/system/files/2025-04/edpb_statement_20250211ageassurance_v1-2_en.pdf
+- **Finding:** age assurance can be a child-safety measure but must itself respect data-protection principles and proportionality.
+- **Atlas applicability:** supports avoiding identity/age-verification machinery unless actually necessary.
+- **Limitation:** does not establish that Atlas Percorsi requires age assurance.
+- **State:** VERIFIED_AUTHORITY_SOURCE; checked 2026-09-25.
 
+### CHILD-003 — UN Committee on the Rights of the Child, General Comment No. 25
+- **Authority:** UN Committee on the Rights of the Child.
+- **Instrument:** General comment No. 25 (2021) on children's rights in relation to the digital environment, CRC/C/GC/25.
+- **Reference:** https://docstore.ohchr.org/SelfServices/FilesHandler.ashx?enc=6NryZJ6Nb2eroc9R7Z2SLdxkeoHPKm2F2XbXpOzFgtsvC20o6u%2FNdFYjfsfkqTMamCVcCjfICtEJ2W4uwn4SJQ%3D%3D
+- **Finding:** children's rights apply in the digital environment; digital inclusion, protection, participation and the child's best interests must be considered together.
+- **Atlas applicability:** CHILD-SAFE must not be reduced to privacy alone: access, participation, agency and protection must be balanced.
+- **Limitation:** rights framework, not a detailed Atlas technical specification.
+- **Informs:** child-rights impact lens; accessibility/inclusion; human agency.
+- **State:** VERIFIED_PRIMARY_INSTITUTIONAL_SOURCE; checked 2026-09-25.
+
+### PRIV-001 — GDPR principles and data minimisation
 - **Authority:** European Union / EUR-Lex.
-- **Title:** Regulation (EU) 2016/679 (General Data Protection Regulation).
-- **Type:** binding EU legislation.
-- **Stable reference:** https://eur-lex.europa.eu/eli/reg/2016/679/oj
-- **Relevant provisions to map in G2:** principles including data minimisation (Article 5), conditions concerning children's consent in relation to information-society services (Article 8), and data protection by design/default (Article 25).
-- **Atlas applicability:** authoritative legal baseline for any personal-data processing analysis. The architecture should first test whether personal-data processing can be avoided rather than inventing a legal basis for unnecessary collection.
-- **Limitation:** legal applicability depends on actual processing purposes, architecture and Italian context; G1 does not make a final legal determination.
-- **Informs:** Safety/Privacy document; CHILD-SAFE profile; G2 data-flow and necessity analysis.
-- **Decision state:** EVIDENCE_ONLY.
-- **Freshness:** checked 2026-09-25.
+- **Reference:** https://eur-lex.europa.eu/eli/reg/2016/679
+- **Relevant provisions:** Article 5 includes purpose limitation, data minimisation and storage limitation; Article 25 requires data protection by design/default.
+- **Atlas applicability:** authoritative baseline. Architecture should first test whether personal-data processing can be avoided instead of seeking a basis for unnecessary collection.
+- **Limitation:** final applicability depends on actual data flows, purposes and architecture.
+- **State:** VERIFIED_PRIMARY_LEGISLATION; checked 2026-09-25.
+
+### PRIV-IT-001 — Garante: Minori
+- **Authority:** Garante per la protezione dei dati personali.
+- **Reference:** https://www.garanteprivacy.it/temi/minori
+- **Finding:** minors merit specific protection; privacy information directed to them must be concise, transparent, intelligible, accessible and expressed in clear language appropriate to minors.
+- **Atlas applicability:** reinforces no-unnecessary-data direction and age-appropriate privacy communication.
+- **Limitation:** thematic guidance must be combined with GDPR and concrete processing analysis.
+- **State:** VERIFIED_ITALIAN_AUTHORITY_SOURCE; checked 2026-09-25.
+
+### PRIV-IT-002 — Garante: La scuola a prova di privacy
+- **Authority:** Garante per la protezione dei dati personali.
+- **Reference:** https://www.garanteprivacy.it/scuola
+- **Finding:** current school guidance addresses protection of personal data in educational contexts and digital technologies, including AI and online publication/disclosure risks.
+- **Atlas applicability:** useful Italian supervisory baseline for school-facing integration and teacher-mediated uses.
+- **Limitation:** Atlas public student use is not automatically identical to processing performed by a school as controller; roles must be resolved at G2.
+- **State:** VERIFIED_ITALIAN_AUTHORITY_SOURCE; checked 2026-09-25.
 
 ### A11Y-001 — WCAG 2.2
-
 - **Authority:** W3C Web Accessibility Initiative.
-- **Title:** Web Content Accessibility Guidelines (WCAG) 2.2.
-- **Status/date:** W3C Recommendation, 5 October 2023.
-- **Stable reference:** https://www.w3.org/TR/WCAG22/
-- **Finding:** WCAG 2.2 provides testable success criteria for accessible web content across desktop and mobile and addresses a broad range of disabilities, while explicitly noting that not all cognitive/language/learning needs are covered by conformance alone.
-- **Atlas applicability:** baseline for future G3/G4 acceptance criteria; narrative, animation and interaction cannot be considered accessible merely because a visual prototype works.
-- **Limitation:** WCAG conformance alone is insufficient for all cognitive and learning needs relevant to children.
-- **Informs:** accessibility acceptance criteria; narrative alternatives; mobile interaction.
-- **Decision state:** EVIDENCE_ONLY; conformance target to be fixed at G2/G3.
-- **Freshness:** checked 2026-09-25.
+- **Reference:** https://www.w3.org/TR/WCAG22/
+- **Finding:** testable accessibility baseline across desktop/mobile; conformance alone does not cover every cognitive/language/learning need.
+- **Atlas applicability:** future G3/G4 acceptance baseline.
+- **Limitation:** requires complementary cognitive and age-appropriate usability validation.
+- **State:** VERIFIED_STANDARDS_SOURCE; checked 2026-09-25.
 
-### A11Y-002 — Cognitive accessibility: clear and understandable content
+### A11Y-002 — W3C cognitive accessibility: clear content
+- **Authority:** W3C WAI supplemental guidance.
+- **Reference:** https://www.w3.org/WAI/WCAG2/supplemental/objectives/o3-clear-content/
+- **Finding:** clear words, short sentences, small blocks, unambiguous content, supportive visuals and clear layout improve comprehension.
+- **Atlas applicability:** directly constrains prompts, narrative text, instructions and notices.
+- **Limitation:** informative guidance, not a complete child usability standard.
+- **State:** VERIFIED_STANDARDS_GUIDANCE; checked 2026-09-25.
 
-- **Authority:** W3C WAI supplemental cognitive accessibility guidance.
-- **Stable reference:** https://www.w3.org/WAI/WCAG2/supplemental/objectives/o3-clear-content/
-- **Finding:** clear words, short sentences, small text blocks, unambiguous content, supportive visuals and clear layout improve access for people with cognitive and learning disabilities.
-- **Atlas applicability:** directly relevant to child-facing prompts, reflection instructions, narrative text and safety/privacy explanations.
-- **Limitation:** supplemental guidance is informative and goes beyond the normative WCAG success criteria.
-- **Informs:** narrative bible; age-appropriate language; G4 content review.
-- **Decision state:** EVIDENCE_ONLY.
-- **Freshness:** checked 2026-09-25.
+### NARR-001 — Wu & Chen systematic review of educational digital storytelling
+- **Authors:** Jing Wu, Der-Thanq Victor Chen.
+- **Publication:** Computers & Education; DOI 10.1016/j.compedu.2019.103786.
+- **Reference:** https://doi.org/10.1016/j.compedu.2019.103786
+- **Population/context:** systematic review of 57 educational digital storytelling studies across primary, secondary and higher education.
+- **Finding:** digital storytelling has been used with multiple pedagogical orientations and outcome types; the review also warns against an overly positive/undifferentiated interpretation of reported outcomes.
+- **Atlas applicability:** supports treating narrative as a pedagogical design candidate with multiple functions, not decoration.
+- **Limitation:** heterogeneous studies, contexts and outcomes; does not validate a particular Atlas metaphor or interface.
+- **State:** VERIFIED_SCHOLARLY_SYNTHESIS; checked 2026-09-25.
 
-### A11Y-003 — Cognitive accessibility: orientation and focus
+### NARR-002 — Recent systematic review/meta-analysis of educational digital storytelling (2014–2024)
+- **Type:** systematic review combining meta-analysis and meta-synthesis.
+- **Reference:** https://www.sciencedirect.com/org/science/article/abs/pii/S174156592500019X
+- **Population:** quantitative synthesis of 17 interventions/683 participants and qualitative synthesis of 48 studies/2,162 participants.
+- **Finding:** reported small-to-medium positive cognitive and affective effects, alongside benefits such as reflection/creativity/collaboration and practical challenges such as technical difficulty and production time.
+- **Atlas applicability:** supports careful prototyping of narrative experiences and measuring pedagogical value rather than assuming immersion is beneficial.
+- **Limitation:** heterogeneous educational populations/designs; publication/context limitations require caution; not an age-specific Atlas prescription.
+- **State:** VERIFIED_RECENT_SYNTHESIS; checked 2026-09-25.
 
-- **Authority:** W3C WAI supplemental cognitive accessibility guidance.
-- **Stable references:** https://www.w3.org/WAI/WCAG2/supplemental/objectives/o1-understandable/ ; https://www.w3.org/WAI/WCAG2/supplemental/objectives/o2-find/ ; https://www.w3.org/WAI/WCAG2/supplemental/objectives/o5-user-focus/
-- **Finding:** familiar patterns, clear hierarchy/signposting and limited distraction help users understand, orient and maintain focus.
-- **Atlas applicability:** narrative atmosphere must not become visual noise; exploration should retain clear orientation and predictable interaction.
-- **Limitation:** these are design principles, not a complete age-specific usability validation.
-- **Informs:** narrative/interaction grammar; future usability tests.
-- **Decision state:** EVIDENCE_ONLY.
-- **Freshness:** checked 2026-09-25.
+## Current evidence-to-design implications
 
-## Evidence families still to consolidate
+| Evidence | Finding | Current implication | Status |
+| --- | --- | --- | --- |
+| FRAME-IT-001 | new Italian Guidelines replace 2012 framework with gradual 2026/27 adoption | map Atlas against current framework and represent transition explicitly | G1 WORK |
+| PED-001 | SRL is multidimensional and developmentally sensitive | design age-band progression; do not freeze one universal interaction | G1 WORK |
+| CHILD-001/003 | minors require protection, comprehension, participation and inclusion | CHILD-SAFE is broader than privacy; preserve agency and accessibility | G1 WORK |
+| PRIV-001/IT-001 | minimisation/design-by-default + minor-specific safeguards | no-account/no-profile/local-first remains preferred architecture candidate | G2 DECISION PENDING |
+| A11Y-001/002 | standards + cognitive clarity needed | narrative cannot obscure task, orientation or comprehension | G3/G4 INPUT |
+| NARR-001/002 | narrative can support learning but evidence is heterogeneous | test metaphor pedagogically; do not optimise for spectacle/engagement | G1/G4 INPUT |
 
-### PED — Pedagogy and learning sciences
+## Negative-knowledge candidates strengthened by evidence
 
-Required exact scholarly records:
+- **NK-001 numerical identity scoring:** remains candidate rejection; competence development is not a stable personality label.
+- **NK-003 data-bearing personalisation:** strengthened; personalisation must not be equated with server-side identity/tracking.
+- **NK-004 library-first design:** strengthened; narrative evidence does not justify choosing a technical effect/library before pedagogical purpose.
+- **NK-005 age-uniform experience:** NEW candidate rejection. Do not assume one identical cognitive/narrative interaction is developmentally appropriate from early primary through lower secondary.
+- **NK-006 immersion-as-value:** NEW candidate rejection. Do not equate richer animation, sound or narrative density with better learning; atmosphere must prove pedagogical and accessibility value.
 
-- self-regulated learning and metacognition;
-- learner agency;
-- motivation and autonomy/competence/relatedness;
-- social-emotional competence development;
-- reflection and transfer;
-- authentic/situated learning;
-- transversal competence development and evidence of competence.
+## Remaining G1 evidence gaps
 
-Named starting points already surfaced include Panadero, Pintrich, Vansteenkiste/Ryan/Soenens and van Laar et al. Exact works, editions/DOIs/URLs, populations and applicability notes remain required before G1 PASS.
-
-### FRAME — Italian and additional EU mapping
-
-Still required:
-
-- applicable/current Italian first-cycle curriculum/guideline framework;
-- current civic education framework where materially relevant;
-- DigComp, GreenComp or EntreComp only for pathways where they add actual mapping value;
-- age/progression interpretation rather than framework-name accumulation.
-
-### CHILD/PRIV — Italian supervisory and implementation layer
-
-Still required:
-
-- applicable Garante per la protezione dei dati personali guidance;
-- Italian implementation details where material;
-- concrete data-flow/third-party analysis once G2 architecture candidates exist.
-
-### A11Y — inclusion and age-specific validation
-
-Still required:
-
-- Italian public-sector accessibility obligations applicable to the final Atlas deployment;
-- inclusive design evidence for different learning/communication needs;
-- reduced-motion, audio alternatives, keyboard/touch and assistive technology requirements;
-- validation with age-appropriate tasks rather than standards-only compliance.
-
-### NARR — Narrative/experiential design
-
-Research and benchmarks still required for:
-
-- narrative learning and experiential framing;
-- metaphor comprehension across age bands;
-- intrinsic rather than manipulative motivation;
-- interaction patterns that preserve agency;
-- visual/audio atmosphere without making content inaccessible;
-- progressive worlds/maps/artefacts as alternatives to scores and leaderboards.
-
-## Traceability table
-
-| Evidence ID | Domain | Finding | Atlas implication | Decision link | State |
-| --- | --- | --- | --- | --- | --- |
-| FRAME-001 | framework | LifeComp is non-prescriptive and supports curriculum/activity design | strong candidate competence reference | future D/SPEC | VERIFIED_SOURCE |
-| FRAME-002 | framework | EU competence frameworks form a related family | map selectively, do not merge indiscriminately | future D | VERIFIED_SOURCE |
-| CHILD-001 | child safety | children require specific protection and age-appropriate information | CHILD-SAFE content/privacy baseline | future D/SPEC | VERIFIED_SOURCE |
-| CHILD-002 | child safety/privacy | age assurance itself must be proportionate/privacy-preserving | avoid unnecessary age/identity machinery | NK / future ADR if proposed | VERIFIED_SOURCE |
-| PRIV-001 | privacy | GDPR supplies binding minimisation/design/default/children baseline | avoid unnecessary personal-data processing | future D/ADR | VERIFIED_SOURCE |
-| A11Y-001 | accessibility | WCAG 2.2 is testable baseline but not sufficient for all cognitive needs | standards + cognitive/usability validation | future SPEC | VERIFIED_SOURCE |
-| A11Y-002 | cognitive accessibility | clear/simple content improves comprehension | child-facing narrative/instructions must be concise and clear | future SPEC | VERIFIED_SOURCE |
-| A11Y-003 | cognitive accessibility | orientation, familiarity and focus matter | atmosphere cannot obscure navigation/task | future SPEC | VERIFIED_SOURCE |
-| PED-TBD | pedagogy | exact bibliography still required | do not freeze pedagogical model yet | — | OPEN |
-| FRAME-IT-TBD | Italian framework | authoritative mapping required | Italian curriculum alignment remains open | — | OPEN |
-| PRIV-IT-TBD | Italian privacy | supervisory/implementation mapping required | final G2 legal/privacy analysis remains open | — | OPEN |
-| NARR-TBD | narrative | research/benchmarks required | metaphor selection deferred | — | OPEN |
+1. **Age progression:** primary vs lower-secondary developmental/learning evidence, with particular attention to self-regulation, reflection, agency and metaphor comprehension.
+2. **Italian Guidelines content mapping:** inspect the annexed 2025 Guidelines at competence/discipline/profile level rather than citing only the adoption decree.
+3. **Civic education:** include current Italian framework only where a pathway materially touches citizenship/responsibility.
+4. **Accessibility law/deployment:** map Italian public-sector accessibility obligations to the eventual Atlas deployment model.
+5. **Narrative/metaphor by age:** find age-sensitive evidence and benchmarks; avoid extrapolating from university populations.
+6. **Local-first technical privacy:** at G2, model actual browser storage/export/reset/telemetry/third-party data flows before any legal conclusion.
+7. **Child-rights impact review:** convert CHILD-003 into a practical review checklist without inventing a new authority.
 
 ## G1 completion rule
 
-No open evidence family may be treated as satisfied merely because it was discussed in chat. G1 PASS requires stable, retrievable sources, applicability/limitations and traceability to the pedagogical/domain model or to an explicit open decision. Legal sources are recorded as evidence; final legal conclusions depend on the governed architecture and must not be inferred prematurely.
+G1 does not pass because sources have been collected. It passes only when the evidence is sufficient to support a reviewable pedagogical/domain model, age progression, child-safety/privacy constraints, accessibility/inclusion constraints, narrative decision criteria, documented alternatives/negative knowledge and explicit open questions. Any material conclusion must remain traceable to source, population/context, limitation and governed implication.
