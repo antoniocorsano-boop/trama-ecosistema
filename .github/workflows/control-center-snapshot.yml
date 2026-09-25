@@ -48,6 +48,36 @@ jobs:
         run: python scripts/build_ecosystem_snapshot.py --check
       - name: Build snapshot fixture
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
+      - name: Detect committed snapshot drift
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          generated = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+          committed = json.loads(Path("control-center/data/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+
+          assert committed["schemaVersion"] == generated["schemaVersion"], (
+              committed["schemaVersion"], generated["schemaVersion"]
+          )
+
+          for source_id, source in generated["sourceState"].items():
+              assert source_id in committed["sourceState"], source_id
+              assert committed["sourceState"][source_id].get("sha256") == source.get("sha256"), (
+                  source_id,
+                  committed["sourceState"][source_id].get("sha256"),
+                  source.get("sha256"),
+              )
+
+          assert committed["capabilities"] == generated["capabilities"]
+          assert committed["gates"] == generated["gates"]
+          assert committed["dependencies"] == generated["dependencies"]
+          assert committed["expansionCandidates"] == generated["expansionCandidates"]
+          assert committed["integrityChecks"] == generated["integrityChecks"]
+
+          print("TRAMA_COMMITTED_SNAPSHOT_DRIFT_PASS")
+          PY
       - name: Validate generated snapshot against JSON Schema
         shell: bash
         run: |
