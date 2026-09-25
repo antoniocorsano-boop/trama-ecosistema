@@ -1,0 +1,31 @@
+name: ECO-02 P1 Snapshot Artifact
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/eco02-p1-snapshot-artifact.yml"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "status/ecosystem-status.json"
+      - "status/governed-events.json"
+      - "docs/decisions/decision-register.json"
+      - "STATUS.md"
+      - "ROADMAP.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Generate canonical ecosystem snapshot
+        run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
+      - name: Upload canonical snapshot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eco02-p1-canonical-snapshot
+          path: /tmp/ecosystem-snapshot.json
+          if-no-files-found: error
+          retention-days: 1
