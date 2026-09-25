@@ -1,0 +1,36 @@
+name: Validate CC3 Next Transition Engine
+
+on:
+  pull_request:
+    paths:
+      - "scripts/build_next_transition_forecast.py"
+      - "docs/contracts/cc3-f1-next-transition-engine.md"
+      - "status/ecosystem-status.json"
+      - "status/governed-events.json"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "control-center/data/ecosystem-snapshot.json"
+      - "config/governed-forecast-policy.json"
+      - "schemas/governed-forecast.schema.json"
+      - ".github/workflows/validate-next-transition-engine.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate F0 guardrails
+        run: python scripts/validate_forecast_contract.py
+      - name: Validate snapshot foundation
+        run: python scripts/build_ecosystem_snapshot.py --check
+      - name: Validate deterministic F1 engine
+        run: python scripts/build_next_transition_forecast.py --check
+      - name: Validate read-only boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -Eq "(requests\.(post|put|patch|delete)|urllib\.request\.Request.*method=['\"](POST|PUT|PATCH|DELETE)|Authorization:|Bearer )" scripts/build_next_transition_forecast.py
+          ! grep -Eq '"(probability|likelihood|score|overallScore)"' docs/contracts/cc3-f1-next-transition-engine.md
