@@ -101,6 +101,7 @@ def capability_projection(eco_status: dict, maturity_areas: list[dict]) -> list[
     gate_refs = {
         "ECO-02-P1": ["GATE-ECO02-HUMAN-FINAL"],
         "R3-F0": ["GATE-R3-F0-EXIT"],
+        "CC3-F0": ["GATE-CC3-F0-HUMAN"],
     }
     projected = []
     for item in eco_status.get("capabilities", []):
