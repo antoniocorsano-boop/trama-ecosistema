@@ -13,6 +13,7 @@ Single entry point for understanding current authority, experiments and open con
 |---|---|---|
 | child-safe learning & experience constitution | `governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md` | CANONICAL G1 CONSTITUTION — PROPOSED FOR REVIEW; runtime not authorised |
 | pathway constitution review contract | `governance/PATHWAY-CONSTITUTION-REVIEW-CONTRACT-v1.yaml` | CANONICAL G1 REVIEW CONTRACT — PROPOSED FOR REVIEW; structural checks never replace human judgement |
+| normalised evidence/provenance | `research/evidence-records-v1.yaml` | ACTIVE NORMALISATION; constitution mapping established, gaps explicit |
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
@@ -30,14 +31,16 @@ The Child-Safe Learning & Experience Constitution consolidates the current non-n
 
 The Pathway Constitution Review Contract operationalises those constraints as declared, machine-checkable dossier fields while preserving mandatory human reviews. Structural validity is necessary but never sufficient for promotion.
 
+The first normalised evidence layer now maps bounded source inferences to constitutional rules. It deliberately exposes weak/empty provenance rather than filling gaps by intuition. Current priority gaps are C12 transfer, C13 claim calibration, stronger C3 feedback/error evidence, C11 relational-agent/pseudo-therapy evidence and C16 emotion/SEL evidence.
+
 Automatic constitutional stops cover trait/psychological inference, coercive engagement, shame/humiliation/fear mechanisms, invasive sensitive disclosure, pseudo-therapy/dependency and privacy/profile violations. Automation may detect declarations/configurations; it cannot determine pedagogical quality or child safety by itself.
 
 Neither constitution nor contract prescribes a universal metaphor, mascot, narrative world, interaction grammar or visual style. Creative/pathway diversity remains permitted inside the constitutional boundary.
 
-Both remain `PROPOSED FOR REVIEW` and cannot authorise production runtime. Promotion requires provenance normalisation plus accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review.
+Constitution and contract remain `PROPOSED FOR REVIEW` and cannot authorise production runtime. Promotion requires closing or explicitly governing provenance gaps plus accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review.
 
 ## Root-level legacy/current artefacts — census classification
-Existing root artefacts remain retained pending reconciliation and inbound-reference analysis. `pedagogical-model.md`, `research-evidence-register.md`, `emotional-development-safeguards.md` and `decision-rationale-sustainability.md` remain supporting material. Universal-metaphor interpretations in narrative/metaphor documents are superseded; experimental reasoning remains historical evidence.
+Existing root artefacts remain retained pending reconciliation and inbound-reference analysis. `research-evidence-register.md` remains the human-readable accumulated register; `research/evidence-records-v1.yaml` is the new normalised machine-readable layer and does not silently replace unnormalised records. Other legacy artefacts remain supporting/historical material pending reconciliation.
 
 ## Prototype family
 Everything under `prototypes/` remains **EXPERIMENTAL** unless explicitly promoted. Journey/Crossroads tests contextual continuity and decision/consequence representation; it is not an Atlas-wide visual template.
@@ -49,43 +52,27 @@ A source appearing in a register or search result is not automatically evidence 
 
 Research packets classify implications as `SUPPORTED`, `UNCERTAIN`, `UNSUPPORTED`, or `CONTRAINDICATED`.
 
-### Retrieval and transfer
-Retrieval practice remains a learning mechanism under investigation; quizzes, successful retrieval, activity/game completion do not establish transversal competence. Transfer is an explicit design-and-validation dimension: source/target context, changed dimensions, invariant structure, support level, observable performance and claim ceiling must be specified.
-
-### Cognitive load, attention and multimedia
-Atlas Percorsi must optimise for meaningful cognitive activity, not visual stimulation. G1 constraints include functional relevance of salient media, coherence, stable cognitive orientation, progressive scaffolding and controlled attentional demand. Multimedia, animation, characters, narrative and interaction are selected by function rather than presumed motivational value.
-
-Rapid succession of memorable but weakly integrated images remains an age-specific **design-risk hypothesis**, not a universal claim about children. Stable visual anchors, deliberate recurrence and restrained novelty are candidate safeguards. No fixed universal media quota, text limit, animation duration, interaction count or cognitive-load threshold is authorised.
-
-### Development, metacognition and emotion
-Transversal competences are treated as developing, context-sensitive performances—not fixed traits. G1 constraints include developmental appropriateness, external support for avoidable executive/memory demands, task-bound metacognitive reflection, revision/recovery after error, and emotional distance through fictional/hypothetical scenarios where useful.
-
-`Starting from the self` means learner agency within the task: notice, choose, inspect consequences, reconsider, explain/adapt. It does not mean collecting biography, inferring personality or constructing a psychological profile.
-
-Evidence describes task performance and support required. It must not be converted into stable labels. No hidden psychometric score is authorised.
-
-Candidate developmental bands (earlier primary, later primary, lower secondary) may guide hypotheses about complexity and reflection form, but are not fixed age norms or diagnostic expectations.
-
 ## Narrative authority rule
 There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
 
 ## Child-facing boundary
-No task may infer stable psychological/personality traits from a minor's choices or require sensitive personal disclosure. Attention capture must not become coercive engagement; dark patterns, artificial urgency, loss-framed streaks and manipulative continuation pressure are outside the intended design space. Characters must not act as pseudo-therapists or create simulated dependency/intimacy to retain the learner.
+No task may infer stable psychological/personality traits from a minor's choices or require sensitive personal disclosure. Attention capture must not become coercive engagement; characters must not act as pseudo-therapists or create simulated dependency/intimacy to retain the learner. No hidden psychometric score is authorised.
 
 ## Repository hygiene incident — 2026-09-25
-Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / ACCIDENTAL**. `capability/atlas-percorsi-g1-child-safe` remains the governed branch. Accidental refs must not be merged or used as bases and should be deleted when an authorised branch-management mechanism is available. Future writes resolve target branch and current blob/head before mutation.
+Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / ACCIDENTAL**. `capability/atlas-percorsi-g1-child-safe` remains the governed branch. Accidental refs must not be merged or used as bases and should be deleted when an authorised branch-management mechanism is available.
 
 ## Runtime boundary
-Nothing in this index, constitution or review contract authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
+Nothing in this index, constitution, review contract or evidence normalisation authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
 ## Open consolidation queue
-1. Normalise the evidence register into reusable evidence records/packets, including transfer, multimedia, developmental, accessibility and child-safety evidence classes; map constitution rules to provenance.
-2. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract.
-3. Convert the shared-decision prototype family into a named pathway dossier, instantiate the review contract and run the first constitutional review against it.
-4. Identify inbound references before moving legacy root files.
-5. Add deterministic repository checks after schemas stabilise; checks may validate contract shape and prohibited configurations only.
-6. Delete accidental research branches when authorised branch deletion becomes available.
-7. Conduct accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review before constitutional promotion.
+1. Close priority provenance gaps: normalise transfer/claim-calibration evidence for C12/C13, then strengthen C3, C11 and C16 evidence.
+2. Continue normalising the remaining human-readable evidence register without losing population/context/limitation metadata.
+3. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract/evidence layer.
+4. Convert the shared-decision prototype family into a named pathway dossier, instantiate the review contract and run the first constitutional review against it.
+5. Identify inbound references before moving legacy root files.
+6. Add deterministic repository checks after schemas stabilise; checks may validate contract/evidence shape and prohibited configurations only.
+7. Delete accidental research branches when authorised branch deletion becomes available.
+8. Conduct accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review before constitutional promotion.
 
 ## Backlog-zero rule
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
