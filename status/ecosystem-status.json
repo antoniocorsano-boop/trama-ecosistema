@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/ecosystem-status.schema.json",
   "schemaVersion": "1.1.0",
-  "updatedAt": "2026-09-22",
+  "updatedAt": "2026-09-25",
   "capabilities": [
     {
       "id": "ECO-01",
@@ -60,6 +60,13 @@
       "id": "TRAMA-BRAND",
       "label": "Nome e marchio definitivi",
       "state": "PLANNED",
+      "authority": "TRAMA",
+      "humanReview": "PENDING"
+    },
+    {
+      "id": "CC3-F0",
+      "label": "Governed Forecast Contract & Guardrails",
+      "state": "ACTIVE",
       "authority": "TRAMA",
       "humanReview": "PENDING"
     }
