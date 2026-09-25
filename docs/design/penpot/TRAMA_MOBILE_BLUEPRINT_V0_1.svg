@@ -35,7 +35,7 @@
   <text x="34" y="662" font-family="Inter,Arial" font-size="15" font-weight="700" fill="#F8FAFC">Maturità dell'ecosistema</text>
   <g fill="#172033"><rect x="34" y="678" width="322" height="22" rx="8"/><rect x="34" y="708" width="322" height="22" rx="8"/><rect x="34" y="738" width="322" height="22" rx="8"/></g>
 
-  <rect x="18" y="788" rx="16" width="354" height="42" fill="#111827" stroke="#243047"/>
+  <rect x="18" y="786" rx="16" width="354" height="44" fill="#111827" stroke="#243047"/>
   <g font-family="Inter,Arial" font-size="10" fill="#94A3B8">
     <text x="40" y="814">Panoramica</text><text x="130" y="814">Ecosistema</text><text x="224" y="814">Qualità</text><text x="316" y="814">Altro</text>
   </g>
