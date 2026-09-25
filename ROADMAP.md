@@ -229,7 +229,7 @@ CC3 estende il Control Center senza modificare la roadmap R1–R5 e senza introd
 
 Sequenza governata:
 
-1. **CC3-F0 — Forecast Contract & Guardrails** — ACTIVE / HUMAN REVIEW PENDING. Definisce ADR-016, policy, schema, confidence qualitativa, invalidators, scenario read-only e ForecastReceipt.
+1. **CC3-F0 — Forecast Contract & Guardrails** — INTEGRATA via #88 / HUMAN EXACT-HEAD REVIEW PASS. Definisce ADR-016, policy, schema, confidence qualitativa, invalidators, scenario read-only e ForecastReceipt. Il merge di F0 non autorizza F1–F5.
 2. **CC3-F1 — Next Transition Engine** — PLANNED. Derivazione deterministica delle transizioni possibili da gate e dipendenze correnti.
 3. **CC3-F2 — Scenario Explorer** — PLANNED. Simulazione controfattuale senza mutazione dello snapshot canonico.
 4. **CC3-F3 — Bottleneck & Dependency Forecast** — PLANNED. Individuazione dei colli di bottiglia senza ranking automatico di priorità.
