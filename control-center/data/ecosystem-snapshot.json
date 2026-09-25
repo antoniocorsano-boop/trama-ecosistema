@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "generatedAt": "2026-09-25T02:44:45.583910+00:00",
   "sourceState": {
     "trama-status": {
@@ -714,6 +714,62 @@
       "dependencyRefs": [
         "GATE-R3-F0-EXIT"
       ]
+    }
+  ],
+  "integrityChecks": [
+    {
+      "id": "INT-SOURCE-AVAILABILITY",
+      "type": "SOURCE_AVAILABILITY",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Tutte le fonti dichiarate sono disponibili nello snapshot.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-REFERENCE-RESOLUTION",
+      "type": "REFERENCE_RESOLUTION",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "I riferimenti interni verificati risultano risolvibili.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-EVIDENCE-FRESHNESS",
+      "type": "EVIDENCE_FRESHNESS",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Nessuna evidenza TIME_BOUND risulta scaduta.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-GATE-EVIDENCE-BINDING",
+      "type": "GATE_EVIDENCE_BINDING",
+      "status": "NOT_EVALUABLE",
+      "severity": "INFO",
+      "summary": "Nessun gate PASS con evidenze richieste è disponibile per questo controllo.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-RUNTIME-AUTHORIZATION",
+      "type": "RUNTIME_AUTHORIZATION",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Nessun runtime attivo privo di autorizzazione bound è dichiarato.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-CAPABILITY-EVIDENCE",
+      "type": "CAPABILITY_EVIDENCE_ALIGNMENT",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Le capability hanno riferimenti evidenziali strutturalmente coerenti.",
+      "affectedRefs": [],
+      "details": []
     }
   ]
 }
