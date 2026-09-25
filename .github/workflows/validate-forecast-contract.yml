@@ -1,0 +1,72 @@
+name: Validate CC3 Governed Forecast Contract
+
+on:
+  pull_request:
+    paths:
+      - "config/governed-forecast-policy.json"
+      - "schemas/governed-forecast.schema.json"
+      - "scripts/validate_forecast_contract.py"
+      - "tests/fixtures/cc3-f0/**"
+      - "docs/decisions/trama-adr-016-governed-forecast.md"
+      - "docs/decisions/decision-register.json"
+      - ".github/workflows/validate-forecast-contract.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "config/governed-forecast-policy.json"
+      - "schemas/governed-forecast.schema.json"
+      - "scripts/validate_forecast_contract.py"
+      - "tests/fixtures/cc3-f0/**"
+      - "docs/decisions/trama-adr-016-governed-forecast.md"
+      - "docs/decisions/decision-register.json"
+      - ".github/workflows/validate-forecast-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate policy and semantic guardrails
+        run: python3 scripts/validate_forecast_contract.py
+
+      - name: Validate JSON Schema and fixtures
+        shell: bash
+        run: |
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from jsonschema import Draft202012Validator, FormatChecker
+
+          schema = json.loads(Path("schemas/governed-forecast.schema.json").read_text(encoding="utf-8"))
+          Draft202012Validator.check_schema(schema)
+          validator = Draft202012Validator(schema, format_checker=FormatChecker())
+
+          valid = json.loads(Path("tests/fixtures/cc3-f0/valid-governed-forecast.json").read_text(encoding="utf-8"))
+          valid_errors = list(validator.iter_errors(valid))
+          assert not valid_errors, [e.message for e in valid_errors]
+
+          for path in (
+              "tests/fixtures/cc3-f0/invalid-numeric-probability.json",
+              "tests/fixtures/cc3-f0/invalid-state-field.json",
+          ):
+              invalid = json.loads(Path(path).read_text(encoding="utf-8"))
+              errors = list(validator.iter_errors(invalid))
+              assert errors, f"{path} must fail schema validation"
+
+          print("TRAMA_CC3_F0_SCHEMA_FIXTURES_PASS")
+          PY
+
+      - name: Guard forbidden forecast semantics
+        shell: bash
+        run: |
+          ! grep -Eq '"(probability|likelihood|score|overallScore)"[[:space:]]*:' schemas/governed-forecast.schema.json
+          grep -q '"canonicalStateImpact"' schemas/governed-forecast.schema.json
+          grep -q '"authorityImpact"' schemas/governed-forecast.schema.json
+          grep -q '"runtimeAuthorizationImpact"' schemas/governed-forecast.schema.json
+          grep -q '"const": "NONE"' schemas/governed-forecast.schema.json
