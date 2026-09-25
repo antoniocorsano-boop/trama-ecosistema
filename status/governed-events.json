@@ -11,7 +11,7 @@
     {
       "id": "EVT-CC2-F1E-MERGE-81",
       "eventType": "MERGE",
-      "occurredAt": "2026-09-25T02:25:00Z",
+      "occurredAt": "2026-09-25T02:25:42Z",
       "label": "CC2-F1/E Project Knowledge integrata",
       "subjectRef": "CC2-F1/E",
       "sourceRef": "github:pull/81",
@@ -39,7 +39,7 @@
     {
       "id": "EVT-PENPOT-DS-MERGE-83",
       "eventType": "MERGE",
-      "occurredAt": "2026-09-25T02:36:58Z",
+      "occurredAt": "2026-09-25T02:36:59Z",
       "label": "TRAMA Penpot design system integrato",
       "subjectRef": "PENPOT-DESIGN-SYSTEM",
       "sourceRef": "github:pull/83",
@@ -80,7 +80,7 @@
     {
       "id": "EVT-PR70-SUPERSEDED",
       "eventType": "SUPERSESSION",
-      "occurredAt": "2026-09-25T03:12:00Z",
+      "occurredAt": "2026-09-25T03:10:52Z",
       "label": "PR #70 superseded da #81",
       "subjectRef": "github:pull/70",
       "sourceRef": "github:pull/70",
@@ -93,7 +93,7 @@
     {
       "id": "EVT-PR78-SUPERSEDED",
       "eventType": "SUPERSESSION",
-      "occurredAt": "2026-09-25T03:12:00Z",
+      "occurredAt": "2026-09-25T03:10:56Z",
       "label": "PR #78 superseded da #82",
       "subjectRef": "github:pull/78",
       "sourceRef": "github:pull/78",
@@ -106,7 +106,7 @@
     {
       "id": "EVT-PR79-SUPERSEDED",
       "eventType": "SUPERSESSION",
-      "occurredAt": "2026-09-25T03:12:00Z",
+      "occurredAt": "2026-09-25T03:10:59Z",
       "label": "PR #79 superseded da #83",
       "subjectRef": "github:pull/79",
       "sourceRef": "github:pull/79",
