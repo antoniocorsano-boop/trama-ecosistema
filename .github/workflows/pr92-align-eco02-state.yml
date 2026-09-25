@@ -17,7 +17,7 @@ jobs:
         with:
           ref: docs/universal-didactic-planning-v1
       - name: Align historical ECO-02 references
-        shell: python
+        shell: python {0}
         run: |
           from pathlib import Path
           p = Path("docs/architecture/trama-universal-didactic-planning-artifact-orchestration-v1.md")
