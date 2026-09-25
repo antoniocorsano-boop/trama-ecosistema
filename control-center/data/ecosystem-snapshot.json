@@ -1,1 +1,1177 @@
-{"$schema":"../../schemas/ecosystem-snapshot.schema.json","schemaVersion":"1.3.0","generatedAt":"2026-09-25T12:46:58.127378+00:00","sourceState":{"trama-status":{"status":"FRESH","observedAt":"2026-09-25T12:46:58.127378+00:00","ref":"STATUS.md","sha256":"3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"},"trama-roadmap":{"status":"FRESH","observedAt":"2026-09-25T12:46:58.127378+00:00","ref":"ROADMAP.md","sha256":"71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"},"ecosystem-status":{"status":"FRESH","observedAt":"2026-09-25T12:46:58.127378+00:00","ref":"status/ecosystem-status.json","sha256":"1b3437540cdb0bb5dc59dc1af92d18d6015b4e202cf8939d679a1d1434f53cfe"},"decision-register":{"status":"FRESH","observedAt":"2026-09-25T12:46:58.127378+00:00","ref":"docs/decisions/decision-register.json","sha256":"d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"},"governed-events":{"status":"FRESH","observedAt":"2026-09-25T12:46:58.127378+00:00","ref":"status/governed-events.json","sha256":"5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"}},"phases":[{"id":"R1","name":"Fondazione del governo","status":"COMPLETE","gateRefs":[]},{"id":"R2","name":"Pilota ECO-02/P1","status":"CLOSED","gateRefs":[]},{"id":"R3","name":"Consolidamento Atlas","status":"CLOSED","gateRefs":[]},{"id":"R4","name":"Esperienza professionale guidata","status":"PLANNED","gateRefs":[]},{"id":"R5","name":"Preparazione all'adozione","status":"PLANNED","gateRefs":[]}],"areas":[{"id":"governance","name":"Governance e authority","ownerDomain":"TRAMA","confirmedLevel":1,"candidateLevel":1,"confidence":"LOW","status":"PARTIAL","evidenceRefs":["EV-SOURCE-TRAMA-STATUS","EV-SOURCE-TRAMA-ROADMAP","EV-SOURCE-ECOSYSTEM-STATUS","EV-SOURCE-DECISION-REGISTER","EV-SOURCE-GOVERNED-EVENTS","EV-TRAMA-ADR-014"],"blockingGateRefs":["GATE-CC3-F1-HUMAN"],"dependencies":[],"lastEvaluatedAt":"2026-09-25T12:46:58.127378+00:00"},{"id":"arena","name":"Arena","ownerDomain":"Arena","confirmedLevel":0,"candidateLevel":0,"confidence":"LOW","status":"PARTIAL","evidenceRefs":[],"blockingGateRefs":[],"dependencies":["governance"],"lastEvaluatedAt":"2026-09-25T12:46:58.127378+00:00"},{"id":"atlas","name":"Atlas","ownerDomain":"Atlas","confirmedLevel":0,"candidateLevel":0,"confidence":"LOW","status":"PARTIAL","evidenceRefs":["EV-R3-F0-EXIT-ACCESSIBILITY","EV-R3-F0-EXIT-HUMAN"],"blockingGateRefs":[],"dependencies":["governance","arena"],"lastEvaluatedAt":"2026-09-25T12:46:58.127378+00:00"},{"id":"docente-os","name":"Docente OS","ownerDomain":"Docente OS","confirmedLevel":0,"candidateLevel":0,"confidence":"LOW","status":"PARTIAL","evidenceRefs":[],"blockingGateRefs":[],"dependencies":["governance","arena"],"lastEvaluatedAt":"2026-09-25T12:46:58.127378+00:00"}],"capabilities":[{"id":"ECO-01","label":"Contratti e forma docente","ownerDomain":"TRAMA","state":"CLOSED","humanReview":"PASS","runtimeState":null,"maturityAreaRef":"governance","dependencyRefs":[],"gateRefs":[],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"EC-01-F4","label":"Arena trusted normative checker","ownerDomain":"Arena","state":"CLOSED","humanReview":"PASS","runtimeState":null,"maturityAreaRef":"arena","dependencyRefs":[],"gateRefs":[],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"ECO-02-P1","label":"Pilota Tecnologia 2C","ownerDomain":"TRAMA","state":"CLOSED","humanReview":"PASS","runtimeState":null,"maturityAreaRef":"governance","dependencyRefs":[],"gateRefs":["GATE-ECO02-HUMAN-FINAL"],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"DOS-A1","label":"Integrazione operativa automatizzata","ownerDomain":"Docente OS","state":"DEFERRED","humanReview":"PENDING","runtimeState":"DEFERRED","maturityAreaRef":"docente-os","dependencyRefs":[],"gateRefs":[],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"R3-F0","label":"Atlas Product & Design Foundation","ownerDomain":"Atlas","state":"CLOSED","humanReview":"PASS","runtimeState":null,"maturityAreaRef":"atlas","dependencyRefs":[],"gateRefs":["GATE-R3-F0-EXIT"],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"R4-P1","label":"Officina materiali specialistica","ownerDomain":"TRAMA","state":"PLANNED","humanReview":"PENDING","runtimeState":null,"maturityAreaRef":"governance","dependencyRefs":[],"gateRefs":[],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"TRAMA-SA-01","label":"TypeSafe semantic assurance pilot","ownerDomain":"TRAMA","state":"ACTIVE","humanReview":"PENDING","runtimeState":null,"maturityAreaRef":"governance","dependencyRefs":[],"gateRefs":[],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"TRAMA-BRAND","label":"Nome e marchio definitivi","ownerDomain":"TRAMA","state":"PLANNED","humanReview":"PENDING","runtimeState":null,"maturityAreaRef":"governance","dependencyRefs":[],"gateRefs":[],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"CC3-F0","label":"Governed Forecast Contract & Guardrails","ownerDomain":"TRAMA","state":"CLOSED","humanReview":"PASS","runtimeState":null,"maturityAreaRef":"governance","dependencyRefs":[],"gateRefs":["GATE-CC3-F0-HUMAN"],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"},{"id":"CC3-F1","label":"Next Transition Engine","ownerDomain":"TRAMA","state":"ACTIVE","humanReview":"PENDING","runtimeState":null,"maturityAreaRef":"governance","dependencyRefs":[],"gateRefs":["GATE-CC3-F1-HUMAN"],"evidenceRefs":["EV-SOURCE-ECOSYSTEM-STATUS"],"lastSignificantChange":null,"sourceRef":"status/ecosystem-status.json","sourceUpdatedAt":"2026-09-25"}],"gates":[{"id":"GATE-ECO02-HUMAN-FINAL","area":"interoperability","type":"HUMAN","status":"PASS","blocking":true,"requiredEvidenceTypes":["REAL_CASE_VALIDATION","HUMAN_REVIEW"],"decisionAuthority":"Human Review"},{"id":"GATE-R3-F0-EXIT","area":"atlas","type":"HUMAN","status":"PASS","blocking":true,"requiredEvidenceTypes":["ACCESSIBILITY_GATE","HUMAN_REVIEW"],"decisionAuthority":"TRAMA/Human Review"},{"id":"GATE-CC3-F0-HUMAN","area":"governance","type":"HUMAN","status":"PASS","blocking":true,"requiredEvidenceTypes":[],"decisionAuthority":"TRAMA/Human Review"},{"id":"GATE-CC3-F1-HUMAN","area":"governance","type":"HUMAN","status":"OPEN","blocking":true,"requiredEvidenceTypes":["HUMAN_REVIEW"],"decisionAuthority":"TRAMA/Human Review"}],"evidence":[{"id":"EV-SOURCE-TRAMA-STATUS","type":"DOCUMENT_CANONICAL","area":"governance","subject":"CURRENT_STATE","status":"PASS","source":{"path":"STATUS.md","sha256":"3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"},"observedAt":"2026-09-25T12:46:58.127378+00:00","freshness":{"policy":"UNTIL_CHANGE","expiresAt":null},"confidence":"HIGH","supports":[]},{"id":"EV-SOURCE-TRAMA-ROADMAP","type":"DOCUMENT_CANONICAL","area":"governance","subject":"ROADMAP","status":"PASS","source":{"path":"ROADMAP.md","sha256":"71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"},"observedAt":"2026-09-25T12:46:58.127378+00:00","freshness":{"policy":"UNTIL_CHANGE","expiresAt":null},"confidence":"HIGH","supports":[]},{"id":"EV-SOURCE-ECOSYSTEM-STATUS","type":"DOCUMENT_CANONICAL","area":"governance","subject":"CAPABILITY_STATE","status":"PASS","source":{"path":"status/ecosystem-status.json","sha256":"1b3437540cdb0bb5dc59dc1af92d18d6015b4e202cf8939d679a1d1434f53cfe"},"observedAt":"2026-09-25T12:46:58.127378+00:00","freshness":{"policy":"UNTIL_CHANGE","expiresAt":null},"confidence":"HIGH","supports":[]},{"id":"EV-SOURCE-DECISION-REGISTER","type":"DOCUMENT_CANONICAL","area":"governance","subject":"DECISIONS","status":"PASS","source":{"path":"docs/decisions/decision-register.json","sha256":"d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"},"observedAt":"2026-09-25T12:46:58.127378+00:00","freshness":{"policy":"UNTIL_CHANGE","expiresAt":null},"confidence":"HIGH","supports":[]},{"id":"EV-SOURCE-GOVERNED-EVENTS","type":"DOCUMENT_CANONICAL","area":"governance","subject":"SEMANTIC_TIMELINE","status":"PASS","source":{"path":"status/governed-events.json","sha256":"5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"},"observedAt":"2026-09-25T12:46:58.127378+00:00","freshness":{"policy":"UNTIL_CHANGE","expiresAt":null},"confidence":"HIGH","supports":[]},{"id":"EV-R3-F0-EXIT-ACCESSIBILITY","type":"ACCESSIBILITY_GATE","area":"atlas","subject":"R3-F0/S3-V2 mobile/LIM and exit evidence","status":"PASS","source":{"path":"status/governed-events.json","ref":"EVT-R3-F0-S3V2-MERGE-32","versionRef":"423444be9dd883f4c35c6c1c89e94f6b0e5405fa"},"observedAt":"2026-09-25T04:19:33Z","freshness":{"policy":"EVENT_BOUND","expiresAt":null},"confidence":"HIGH","supports":[{"gateRef":"GATE-R3-F0-EXIT"}],"binding":{"capabilityRef":"R3-F0","releaseRef":"Curriculum-Atlas#32","exactHead":"bc11577eeeeeed9c43ad62ac43fb7561e1197246"}},{"id":"EV-R3-F0-EXIT-HUMAN","type":"HUMAN_REVIEW","area":"atlas","subject":"R3-F0/S3-V2 human exact-head review","status":"PASS","source":{"path":"status/governed-events.json","ref":"EVT-R3-F0-S3V2-MERGE-32","versionRef":"423444be9dd883f4c35c6c1c89e94f6b0e5405fa"},"observedAt":"2026-09-25T04:19:33Z","freshness":{"policy":"EVENT_BOUND","expiresAt":null},"confidence":"HIGH","supports":[{"gateRef":"GATE-R3-F0-EXIT"}],"binding":{"capabilityRef":"R3-F0","releaseRef":"Curriculum-Atlas#32","exactHead":"bc11577eeeeeed9c43ad62ac43fb7561e1197246"}},{"id":"EV-TRAMA-ADR-014","type":"DOCUMENT_CANONICAL","area":"governance","subject":"TRAMA-ADR-014","status":"PASS","source":{"path":"docs/decisions/decision-register.json","ref":"TRAMA-ADR-014"},"observedAt":"2026-09-25T12:46:58.127378+00:00","freshness":{"policy":"UNTIL_CHANGE","expiresAt":null},"confidence":"HIGH","supports":[]}],"dependencies":[{"id":"DEP-ARENA-DOS-AUTHORITY","from":"Arena","to":"Docente OS","kind":"AUTHORITY","status":"ACTIVE","governanceRefs":["TRAMA-ADR-002","TRAMA-ADR-006"],"gateRefs":[],"evidenceRefs":["EV-SOURCE-DECISION-REGISTER"]},{"id":"DEP-ARENA-ATLAS-DATA","from":"Arena","to":"Atlas","kind":"DATA_FLOW","status":"GOVERNED","governanceRefs":["TRAMA-ADR-002","TRAMA-ADR-007"],"gateRefs":[],"evidenceRefs":["EV-SOURCE-DECISION-REGISTER"]},{"id":"DEP-DOS-ATLAS-FUTURE","from":"Docente OS","to":"Atlas","kind":"FUTURE_NOT_AUTHORIZED","status":"NOT_AUTHORIZED","governanceRefs":["TRAMA-ADR-008"],"gateRefs":[],"evidenceRefs":["EV-SOURCE-DECISION-REGISTER"]}],"assuranceClaims":[{"requirementId":"ASSURE-PRIV-001","domain":"PRIVACY","claimType":"EVIDENCE_BACKED_CLAIM","scope":"Atlas public student-facing surface: no required student account/profile/tracking by canonical product policy.","status":"DOCUMENTED","evidenceRefs":["STATUS.md"],"reviewAuthority":"TRAMA / institutional privacy review where required","assessor":null,"standardRef":"GDPR/privacy-by-design context; no general compliance claim","versionRef":null,"verifiedAt":null,"expiresAt":null,"limitations":["Documented product constraint only.","Not a DPIA, DPO opinion, legal assessment, or formal GDPR certification."],"externalCertificateRef":null,"targetStatus":"VERIFIED","requiredEvidenceKinds":["CANONICAL_DOCUMENTATION","PRIVACY_REVIEW","INSTITUTIONAL_REVIEW","VERSION_BOUND_TEST"],"presentEvidenceKinds":["CANONICAL_DOCUMENTATION"],"readiness":{"currentStatus":"DOCUMENTED","targetStatus":"VERIFIED","metEvidenceKinds":["CANONICAL_DOCUMENTATION"],"missingEvidenceKinds":["PRIVACY_REVIEW","INSTITUTIONAL_REVIEW","VERSION_BOUND_TEST"],"metPrerequisites":1,"requiredPrerequisites":4}},{"requirementId":"ASSURE-ACC-001","domain":"ACCESSIBILITY","claimType":"EVIDENCE_BACKED_CLAIM","scope":"Control Center and ecosystem product work target accessible interaction and WCAG-oriented review gates.","status":"PARTIAL","evidenceRefs":["docs/design/trama-control-center-v2-ui-spec.md"],"reviewAuthority":"Human accessibility review","assessor":null,"standardRef":"WCAG 2.2 AA target","versionRef":null,"verifiedAt":null,"expiresAt":null,"limitations":["Target and review model documented; coverage is not universal certification.","Each surface requires evidence bound to the tested version."],"externalCertificateRef":null,"targetStatus":"VERIFIED","requiredEvidenceKinds":["CANONICAL_DOCUMENTATION","ACCESSIBILITY_AUDIT","HUMAN_REVIEW","VERSION_BOUND_TEST"],"presentEvidenceKinds":["CANONICAL_DOCUMENTATION"],"readiness":{"currentStatus":"PARTIAL","targetStatus":"VERIFIED","metEvidenceKinds":["CANONICAL_DOCUMENTATION"],"missingEvidenceKinds":["ACCESSIBILITY_AUDIT","HUMAN_REVIEW","VERSION_BOUND_TEST"],"metPrerequisites":1,"requiredPrerequisites":4}},{"requirementId":"ASSURE-USA-001","domain":"USABILITY","claimType":"EVIDENCE_BACKED_CLAIM","scope":"Human-validation, responsive/mobile/LIM and perceptible-write quality signals.","status":"TO_VERIFY","evidenceRefs":["docs/design/trama-control-center-v2-view-architecture.md"],"reviewAuthority":"Human validation","assessor":null,"standardRef":null,"versionRef":null,"verifiedAt":null,"expiresAt":null,"limitations":["No aggregate usability certification.","Product-specific evidence must be collected and version-bound."],"externalCertificateRef":null,"targetStatus":"VERIFIED","requiredEvidenceKinds":["CANONICAL_DOCUMENTATION","HUMAN_REVIEW","VERSION_BOUND_TEST"],"presentEvidenceKinds":["CANONICAL_DOCUMENTATION"],"readiness":{"currentStatus":"TO_VERIFY","targetStatus":"VERIFIED","metEvidenceKinds":["CANONICAL_DOCUMENTATION"],"missingEvidenceKinds":["HUMAN_REVIEW","VERSION_BOUND_TEST"],"metPrerequisites":1,"requiredPrerequisites":3}},{"requirementId":"ASSURE-SEC-001","domain":"SECURITY","claimType":"EVIDENCE_BACKED_CLAIM","scope":"Security assurance signals may include automated gates and ASVS-oriented checks when evidenced by product/release.","status":"TO_VERIFY","evidenceRefs":["docs/design/trama-control-center-v2-view-architecture.md"],"reviewAuthority":"Product security review","assessor":null,"standardRef":"OWASP ASVS when explicitly evidenced","versionRef":null,"verifiedAt":null,"expiresAt":null,"limitations":["No ecosystem-wide security certification is asserted.","Coverage must be established per product/version."],"externalCertificateRef":null,"targetStatus":"VERIFIED","requiredEvidenceKinds":["CANONICAL_DOCUMENTATION","SECURITY_ASSESSMENT","VERSION_BOUND_TEST"],"presentEvidenceKinds":["CANONICAL_DOCUMENTATION"],"readiness":{"currentStatus":"TO_VERIFY","targetStatus":"VERIFIED","metEvidenceKinds":["CANONICAL_DOCUMENTATION"],"missingEvidenceKinds":["SECURITY_ASSESSMENT","VERSION_BOUND_TEST"],"metPrerequisites":1,"requiredPrerequisites":3}},{"requirementId":"ASSURE-NORM-001","domain":"NORMATIVE_GOVERNANCE","claimType":"EVIDENCE_BACKED_CLAIM","scope":"Normative sources, domain governance and institutional responsibility remain distinct assurance layers.","status":"DOCUMENTED","evidenceRefs":["ROADMAP.md"],"reviewAuthority":"TRAMA / competent institutional authority","assessor":null,"standardRef":null,"versionRef":null,"verifiedAt":null,"expiresAt":null,"limitations":["Presence of a normative source is not legal validation of the whole product."],"externalCertificateRef":null,"targetStatus":"VERIFIED","requiredEvidenceKinds":["CANONICAL_DOCUMENTATION","INSTITUTIONAL_REVIEW","HUMAN_REVIEW"],"presentEvidenceKinds":["CANONICAL_DOCUMENTATION"],"readiness":{"currentStatus":"DOCUMENTED","targetStatus":"VERIFIED","metEvidenceKinds":["CANONICAL_DOCUMENTATION"],"missingEvidenceKinds":["INSTITUTIONAL_REVIEW","HUMAN_REVIEW"],"metPrerequisites":1,"requiredPrerequisites":3}},{"requirementId":"ASSURE-CERT-001","domain":"EXTERNAL_CERTIFICATION","claimType":"FORMAL_CERTIFICATION","scope":"Formal external certifications for TRAMA ecosystem products.","status":"TO_VERIFY","evidenceRefs":[],"reviewAuthority":"External competent certification body","assessor":null,"standardRef":null,"versionRef":null,"verifiedAt":null,"expiresAt":null,"limitations":["No formal certification is recorded by this registry entry.","FORMALLY_CERTIFIED is forbidden without an externalCertificateRef and assessor."],"externalCertificateRef":null,"targetStatus":"FORMALLY_CERTIFIED","requiredEvidenceKinds":["INDEPENDENT_ASSESSMENT","EXTERNAL_CERTIFICATE","VERSION_BOUND_TEST"],"presentEvidenceKinds":[],"readiness":{"currentStatus":"TO_VERIFY","targetStatus":"FORMALLY_CERTIFIED","metEvidenceKinds":[],"missingEvidenceKinds":["INDEPENDENT_ASSESSMENT","EXTERNAL_CERTIFICATE","VERSION_BOUND_TEST"],"metPrerequisites":0,"requiredPrerequisites":3}}],"expansionCandidates":[{"id":"R3-P2","name":"Curriculum pubblico","status":"PLANNED","dependencyRefs":["GATE-R3-F0-EXIT"]},{"id":"R3-P5","name":"Smart Navigation","status":"PLANNED","dependencyRefs":["GATE-R3-F0-EXIT"]}],"integrityChecks":[{"id":"INT-SOURCE-AVAILABILITY","type":"SOURCE_AVAILABILITY","status":"PASS","severity":"INFO","summary":"Tutte le fonti dichiarate sono disponibili nello snapshot.","affectedRefs":[],"details":[]},{"id":"INT-REFERENCE-RESOLUTION","type":"REFERENCE_RESOLUTION","status":"PASS","severity":"INFO","summary":"I riferimenti interni verificati risultano risolvibili.","affectedRefs":[],"details":[]},{"id":"INT-EVIDENCE-FRESHNESS","type":"EVIDENCE_FRESHNESS","status":"PASS","severity":"INFO","summary":"Nessuna evidenza TIME_BOUND risulta scaduta.","affectedRefs":[],"details":[]},{"id":"INT-GATE-EVIDENCE-BINDING","type":"GATE_EVIDENCE_BINDING","status":"ISSUE","severity":"ERROR","summary":"Uno o più gate PASS non hanno tutte le evidenze richieste esplicitamente bound.","affectedRefs":["GATE-ECO02-HUMAN-FINAL"],"details":["GATE-ECO02-HUMAN-FINAL → mancano binding espliciti per: HUMAN_REVIEW, REAL_CASE_VALIDATION"]},{"id":"INT-RUNTIME-AUTHORIZATION","type":"RUNTIME_AUTHORIZATION","status":"PASS","severity":"INFO","summary":"Nessun runtime attivo privo di autorizzazione bound è dichiarato.","affectedRefs":[],"details":[]},{"id":"INT-CAPABILITY-EVIDENCE","type":"CAPABILITY_EVIDENCE_ALIGNMENT","status":"PASS","severity":"INFO","summary":"Le capability hanno riferimenti evidenziali strutturalmente coerenti.","affectedRefs":[],"details":[]}],"operationalPath":{"currentActivities":[{"ref":"TRAMA-SA-01","kind":"CAPABILITY","label":"TypeSafe semantic assurance pilot","status":"ACTIVE"},{"ref":"CC3-F1","kind":"CAPABILITY","label":"Next Transition Engine","status":"ACTIVE"}],"nextGates":[{"ref":"GATE-CC3-F1-HUMAN","area":"governance","status":"OPEN","blocking":true,"decisionAuthority":"TRAMA/Human Review"}],"nextIncrements":[{"ref":"R3-P2","label":"Curriculum pubblico","status":"PLANNED","dependencyRefs":["GATE-R3-F0-EXIT"]},{"ref":"R3-P5","label":"Smart Navigation","status":"PLANNED","dependencyRefs":["GATE-R3-F0-EXIT"]}],"explicitDefers":[{"ref":"DOS-A1","label":"Integrazione operativa automatizzata","state":"DEFERRED","runtimeState":"DEFERRED"}],"unmetDependencies":[]},"timelineEvents":[{"id":"EVT-CC2-F1E-MERGE-81","eventType":"MERGE","occurredAt":"2026-09-25T02:25:42Z","label":"CC2-F1/E Project Knowledge integrata","subjectRef":"CC2-F1/E","sourceRef":"github:pull/81","authority":"GitHub merge + HUMAN exact-head review","versionRef":"4a17766bc315340824b4ef44204f81a1487515ce","details":["Project Knowledge & Agent Context Foundation integrata.","ADR-015 resta PROPOSED."]},{"id":"EVT-PENPOT-MCP-MERGE-82","eventType":"MERGE","occurredAt":"2026-09-25T02:31:39Z","label":"Penpot MCP pilot refresh integrato","subjectRef":"PENPOT-MCP-PILOT","sourceRef":"github:pull/82","authority":"GitHub merge + HUMAN exact-head review","versionRef":"262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25","details":["Pilot tooling separato dal runtime di prodotto.","Nessuna nuova authority."]},{"id":"EVT-PENPOT-DS-MERGE-83","eventType":"MERGE","occurredAt":"2026-09-25T02:36:59Z","label":"TRAMA Penpot design system integrato","subjectRef":"PENPOT-DESIGN-SYSTEM","sourceRef":"github:pull/83","authority":"GitHub merge + HUMAN exact-head review","versionRef":"5cfb09f94ea532dc1f64523f7e10da6629159843","details":["Design system mobile-first e gate accessibilità integrati."]},{"id":"EVT-CC2-F4-MERGE-84","eventType":"MERGE","occurredAt":"2026-09-25T02:58:23Z","label":"CC2-F4 Capability + Ecosystem Map integrata","subjectRef":"CC2-F4","sourceRef":"github:pull/84","authority":"GitHub merge + HUMAN exact-head review","versionRef":"93a3fadf78732979c4536cbb394744b9471e14da","details":["Capability projection conservativa.","Nessun edge sintetico fuori dallo snapshot."]},{"id":"EVT-PR70-SUPERSEDED","eventType":"SUPERSESSION","occurredAt":"2026-09-25T03:10:52Z","label":"PR #70 superseded da #81","subjectRef":"github:pull/70","sourceRef":"github:pull/70","authority":"TRAMA housekeeping","versionRef":"4a17766bc315340824b4ef44204f81a1487515ce","details":["Salvage/history source conservata; nessun merge dalla branch stale."]},{"id":"EVT-PR78-SUPERSEDED","eventType":"SUPERSESSION","occurredAt":"2026-09-25T03:10:56Z","label":"PR #78 superseded da #82","subjectRef":"github:pull/78","sourceRef":"github:pull/78","authority":"TRAMA housekeeping","versionRef":"262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25","details":["Salvage/history source conservata; nessun merge dalla branch stale."]},{"id":"EVT-PR79-SUPERSEDED","eventType":"SUPERSESSION","occurredAt":"2026-09-25T03:10:59Z","label":"PR #79 superseded da #83","subjectRef":"github:pull/79","sourceRef":"github:pull/79","authority":"TRAMA housekeeping","versionRef":"5cfb09f94ea532dc1f64523f7e10da6629159843","details":["Salvage/history source conservata; nessun merge dalla branch stale."]},{"id":"EVT-CC2-F5-MERGE-85","eventType":"MERGE","occurredAt":"2026-09-25T03:14:33Z","label":"CC2-F5 Evidence Explorer + Integrity integrata","subjectRef":"CC2-F5","sourceRef":"github:pull/85","authority":"GitHub merge + HUMAN exact-head review","versionRef":"21c43b3e092c3dc31e450d2c9b2e3bf24b8238fd","details":["Integrity checks PASS / ISSUE / NOT_EVALUABLE.","Nessun overall score."]},{"id":"EVT-CC2-F6-MERGE-86","eventType":"MERGE","occurredAt":"2026-09-25T03:29:48Z","label":"CC2-F6 Timeline + Operational Path integrata","subjectRef":"CC2-F6","sourceRef":"github:pull/86","authority":"GitHub merge + HUMAN exact-head review","versionRef":"f3c4396a620e2b4c51beb3f2616ebeebf82a6342","details":["Primo ciclo CC2-F0–F6 completato.","Timeline semantica a copertura PARTIAL_EXPLICIT; Operational Path derivato da fonti governate."]},{"id":"EVT-CC3-F0-MERGE-88","eventType":"MERGE","occurredAt":"2026-09-25T03:49:30Z","label":"CC3-F0 Forecast Contract & Guardrails integrata","subjectRef":"CC3-F0","sourceRef":"github:pull/88","authority":"GitHub merge + HUMAN exact-head review","versionRef":"cfbec2f2aa806537d70a8c7ed885212bceff97cd","details":["Exact head 49c98322ac5f3bd8cfed9091034362b87d80ea1a autorizzato con HUMAN EXACT-HEAD REVIEW PASS.","Forecast contract e guardrail integrati; F1–F5 non autorizzati dal merge F0.","ADR-016 resta PROPOSED; nessuna authority o runtime authorization introdotta."]},{"id":"EVT-R3-F0-S3V2-MERGE-32","eventType":"MERGE","occurredAt":"2026-09-25T04:19:33Z","label":"R3-F0/S3-V2 Atlas Product Experience chiusa","subjectRef":"R3-F0","sourceRef":"github:Curriculum-Atlas/pull/32","authority":"Atlas merge + HUMAN exact-head review","versionRef":"423444be9dd883f4c35c6c1c89e94f6b0e5405fa","details":["Exact head bc11577eeeeeed9c43ad62ac43fb7561e1197246 validato con F4 Mobile/LIM, F5 Exit e TRAMA Perceptible Write PASS.","S3-V2 chiusa; R3-F0 exit gate soddisfatto.","Nessuna autorizzazione a R3-P4, DOS-A1 o runtime Docente OS → Atlas."]}],"timelineCoverage":{"mode":"PARTIAL_EXPLICIT","from":"2026-09-25","note":"Registro iniziale esplicito: non ricostruisce retroattivamente eventi non ancora registrati.","sourceRef":"status/governed-events.json"}}
+{
+  "$schema": "../../schemas/ecosystem-snapshot.schema.json",
+  "schemaVersion": "1.3.0",
+  "generatedAt": "2026-09-25T13:37:53.931373+00:00",
+  "sourceState": {
+    "trama-status": {
+      "status": "FRESH",
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "ref": "STATUS.md",
+      "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
+    },
+    "trama-roadmap": {
+      "status": "FRESH",
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "ref": "ROADMAP.md",
+      "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
+    },
+    "ecosystem-status": {
+      "status": "FRESH",
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "ref": "status/ecosystem-status.json",
+      "sha256": "1b3437540cdb0bb5dc59dc1af92d18d6015b4e202cf8939d679a1d1434f53cfe"
+    },
+    "decision-register": {
+      "status": "FRESH",
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "ref": "docs/decisions/decision-register.json",
+      "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
+    },
+    "governed-events": {
+      "status": "FRESH",
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "ref": "status/governed-events.json",
+      "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
+    }
+  },
+  "phases": [
+    {
+      "id": "R1",
+      "name": "Fondazione del governo",
+      "status": "COMPLETE",
+      "gateRefs": []
+    },
+    {
+      "id": "R2",
+      "name": "Pilota ECO-02/P1",
+      "status": "CLOSED",
+      "gateRefs": []
+    },
+    {
+      "id": "R3",
+      "name": "Consolidamento Atlas",
+      "status": "CLOSED",
+      "gateRefs": []
+    },
+    {
+      "id": "R4",
+      "name": "Esperienza professionale guidata",
+      "status": "PLANNED",
+      "gateRefs": []
+    },
+    {
+      "id": "R5",
+      "name": "Preparazione all'adozione",
+      "status": "PLANNED",
+      "gateRefs": []
+    }
+  ],
+  "areas": [
+    {
+      "id": "governance",
+      "name": "Governance e authority",
+      "ownerDomain": "TRAMA",
+      "confirmedLevel": 1,
+      "candidateLevel": 1,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [
+        "EV-SOURCE-TRAMA-STATUS",
+        "EV-SOURCE-TRAMA-ROADMAP",
+        "EV-SOURCE-ECOSYSTEM-STATUS",
+        "EV-SOURCE-DECISION-REGISTER",
+        "EV-SOURCE-GOVERNED-EVENTS",
+        "EV-TRAMA-ADR-014"
+      ],
+      "blockingGateRefs": [
+        "GATE-CC3-F1-HUMAN"
+      ],
+      "dependencies": [],
+      "lastEvaluatedAt": "2026-09-25T13:37:53.931373+00:00"
+    },
+    {
+      "id": "arena",
+      "name": "Arena",
+      "ownerDomain": "Arena",
+      "confirmedLevel": 0,
+      "candidateLevel": 0,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [],
+      "blockingGateRefs": [],
+      "dependencies": [
+        "governance"
+      ],
+      "lastEvaluatedAt": "2026-09-25T13:37:53.931373+00:00"
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "ownerDomain": "Atlas",
+      "confirmedLevel": 0,
+      "candidateLevel": 0,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [
+        "EV-R3-F0-EXIT-ACCESSIBILITY",
+        "EV-R3-F0-EXIT-HUMAN"
+      ],
+      "blockingGateRefs": [],
+      "dependencies": [
+        "governance",
+        "arena"
+      ],
+      "lastEvaluatedAt": "2026-09-25T13:37:53.931373+00:00"
+    },
+    {
+      "id": "docente-os",
+      "name": "Docente OS",
+      "ownerDomain": "Docente OS",
+      "confirmedLevel": 0,
+      "candidateLevel": 0,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [],
+      "blockingGateRefs": [],
+      "dependencies": [
+        "governance",
+        "arena"
+      ],
+      "lastEvaluatedAt": "2026-09-25T13:37:53.931373+00:00"
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "ECO-01",
+      "label": "Contratti e forma docente",
+      "ownerDomain": "TRAMA",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "EC-01-F4",
+      "label": "Arena trusted normative checker",
+      "ownerDomain": "Arena",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "arena",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "ECO-02-P1",
+      "label": "Pilota Tecnologia 2C",
+      "ownerDomain": "TRAMA",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-ECO02-HUMAN-FINAL"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "DOS-A1",
+      "label": "Integrazione operativa automatizzata",
+      "ownerDomain": "Docente OS",
+      "state": "DEFERRED",
+      "humanReview": "PENDING",
+      "runtimeState": "DEFERRED",
+      "maturityAreaRef": "docente-os",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "R3-F0",
+      "label": "Atlas Product & Design Foundation",
+      "ownerDomain": "Atlas",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "atlas",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-R3-F0-EXIT"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "R4-P1",
+      "label": "Officina materiali specialistica",
+      "ownerDomain": "TRAMA",
+      "state": "PLANNED",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "TRAMA-SA-01",
+      "label": "TypeSafe semantic assurance pilot",
+      "ownerDomain": "TRAMA",
+      "state": "ACTIVE",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "TRAMA-BRAND",
+      "label": "Nome e marchio definitivi",
+      "ownerDomain": "TRAMA",
+      "state": "PLANNED",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "CC3-F0",
+      "label": "Governed Forecast Contract & Guardrails",
+      "ownerDomain": "TRAMA",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-CC3-F0-HUMAN"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "CC3-F1",
+      "label": "Next Transition Engine",
+      "ownerDomain": "TRAMA",
+      "state": "ACTIVE",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-CC3-F1-HUMAN"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    }
+  ],
+  "gates": [
+    {
+      "id": "GATE-ECO02-HUMAN-FINAL",
+      "area": "interoperability",
+      "type": "HUMAN",
+      "status": "PASS",
+      "blocking": true,
+      "requiredEvidenceTypes": [
+        "REAL_CASE_VALIDATION",
+        "HUMAN_REVIEW"
+      ],
+      "decisionAuthority": "Human Review"
+    },
+    {
+      "id": "GATE-R3-F0-EXIT",
+      "area": "atlas",
+      "type": "HUMAN",
+      "status": "PASS",
+      "blocking": true,
+      "requiredEvidenceTypes": [
+        "ACCESSIBILITY_GATE",
+        "HUMAN_REVIEW"
+      ],
+      "decisionAuthority": "TRAMA/Human Review"
+    },
+    {
+      "id": "GATE-CC3-F0-HUMAN",
+      "area": "governance",
+      "type": "HUMAN",
+      "status": "PASS",
+      "blocking": true,
+      "requiredEvidenceTypes": [],
+      "decisionAuthority": "TRAMA/Human Review"
+    },
+    {
+      "id": "GATE-CC3-F1-HUMAN",
+      "area": "governance",
+      "type": "HUMAN",
+      "status": "OPEN",
+      "blocking": true,
+      "requiredEvidenceTypes": [
+        "HUMAN_REVIEW"
+      ],
+      "decisionAuthority": "TRAMA/Human Review"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EV-SOURCE-TRAMA-STATUS",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "CURRENT_STATE",
+      "status": "PASS",
+      "source": {
+        "path": "STATUS.md",
+        "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
+      },
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-TRAMA-ROADMAP",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "ROADMAP",
+      "status": "PASS",
+      "source": {
+        "path": "ROADMAP.md",
+        "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
+      },
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-ECOSYSTEM-STATUS",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "CAPABILITY_STATE",
+      "status": "PASS",
+      "source": {
+        "path": "status/ecosystem-status.json",
+        "sha256": "1b3437540cdb0bb5dc59dc1af92d18d6015b4e202cf8939d679a1d1434f53cfe"
+      },
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-DECISION-REGISTER",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "DECISIONS",
+      "status": "PASS",
+      "source": {
+        "path": "docs/decisions/decision-register.json",
+        "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
+      },
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-SOURCE-GOVERNED-EVENTS",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "SEMANTIC_TIMELINE",
+      "status": "PASS",
+      "source": {
+        "path": "status/governed-events.json",
+        "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
+      },
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-R3-F0-EXIT-ACCESSIBILITY",
+      "type": "ACCESSIBILITY_GATE",
+      "area": "atlas",
+      "subject": "R3-F0/S3-V2 mobile/LIM and exit evidence",
+      "status": "PASS",
+      "source": {
+        "path": "status/governed-events.json",
+        "ref": "EVT-R3-F0-S3V2-MERGE-32",
+        "versionRef": "423444be9dd883f4c35c6c1c89e94f6b0e5405fa"
+      },
+      "observedAt": "2026-09-25T04:19:33Z",
+      "freshness": {
+        "policy": "EVENT_BOUND",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "gateRef": "GATE-R3-F0-EXIT"
+        }
+      ],
+      "binding": {
+        "capabilityRef": "R3-F0",
+        "releaseRef": "Curriculum-Atlas#32",
+        "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246"
+      }
+    },
+    {
+      "id": "EV-R3-F0-EXIT-HUMAN",
+      "type": "HUMAN_REVIEW",
+      "area": "atlas",
+      "subject": "R3-F0/S3-V2 human exact-head review",
+      "status": "PASS",
+      "source": {
+        "path": "status/governed-events.json",
+        "ref": "EVT-R3-F0-S3V2-MERGE-32",
+        "versionRef": "423444be9dd883f4c35c6c1c89e94f6b0e5405fa"
+      },
+      "observedAt": "2026-09-25T04:19:33Z",
+      "freshness": {
+        "policy": "EVENT_BOUND",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "gateRef": "GATE-R3-F0-EXIT"
+        }
+      ],
+      "binding": {
+        "capabilityRef": "R3-F0",
+        "releaseRef": "Curriculum-Atlas#32",
+        "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246"
+      }
+    },
+    {
+      "id": "EV-TRAMA-ADR-014",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "TRAMA-ADR-014",
+      "status": "PASS",
+      "source": {
+        "path": "docs/decisions/decision-register.json",
+        "ref": "TRAMA-ADR-014"
+      },
+      "observedAt": "2026-09-25T13:37:53.931373+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-ECO02-P1-REAL-CASE",
+      "type": "REAL_CASE_VALIDATION",
+      "subject": "ECO-02/P1 final real-case end-to-end validation",
+      "area": "interoperability",
+      "status": "PASS",
+      "source": {
+        "path": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+        "sha256": "b2f78803248215232b5766211aea440e04d36b8053185fcf482085f779c74a34"
+      },
+      "observedAt": "2026-09-25T12:46:47Z",
+      "freshness": {
+        "policy": "EVENT_BOUND",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "gateRef": "GATE-ECO02-HUMAN-FINAL"
+        }
+      ],
+      "binding": {
+        "capabilityRef": "ECO-02-P1",
+        "releaseRef": "trama-ecosistema#93"
+      }
+    },
+    {
+      "id": "EV-ECO02-P1-HUMAN",
+      "type": "HUMAN_REVIEW",
+      "subject": "ECO-02/P1 final human acceptance",
+      "area": "interoperability",
+      "status": "PASS",
+      "source": {
+        "path": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+        "sha256": "b2f78803248215232b5766211aea440e04d36b8053185fcf482085f779c74a34"
+      },
+      "observedAt": "2026-09-25T12:46:47Z",
+      "freshness": {
+        "policy": "EVENT_BOUND",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "gateRef": "GATE-ECO02-HUMAN-FINAL"
+        }
+      ],
+      "binding": {
+        "capabilityRef": "ECO-02-P1",
+        "releaseRef": "trama-ecosistema#93"
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "DEP-ARENA-DOS-AUTHORITY",
+      "from": "Arena",
+      "to": "Docente OS",
+      "kind": "AUTHORITY",
+      "status": "ACTIVE",
+      "governanceRefs": [
+        "TRAMA-ADR-002",
+        "TRAMA-ADR-006"
+      ],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-DECISION-REGISTER"
+      ]
+    },
+    {
+      "id": "DEP-ARENA-ATLAS-DATA",
+      "from": "Arena",
+      "to": "Atlas",
+      "kind": "DATA_FLOW",
+      "status": "GOVERNED",
+      "governanceRefs": [
+        "TRAMA-ADR-002",
+        "TRAMA-ADR-007"
+      ],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-DECISION-REGISTER"
+      ]
+    },
+    {
+      "id": "DEP-DOS-ATLAS-FUTURE",
+      "from": "Docente OS",
+      "to": "Atlas",
+      "kind": "FUTURE_NOT_AUTHORIZED",
+      "status": "NOT_AUTHORIZED",
+      "governanceRefs": [
+        "TRAMA-ADR-008"
+      ],
+      "gateRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-DECISION-REGISTER"
+      ]
+    }
+  ],
+  "assuranceClaims": [
+    {
+      "requirementId": "ASSURE-PRIV-001",
+      "domain": "PRIVACY",
+      "claimType": "EVIDENCE_BACKED_CLAIM",
+      "scope": "Atlas public student-facing surface: no required student account/profile/tracking by canonical product policy.",
+      "status": "DOCUMENTED",
+      "evidenceRefs": [
+        "STATUS.md"
+      ],
+      "reviewAuthority": "TRAMA / institutional privacy review where required",
+      "assessor": null,
+      "standardRef": "GDPR/privacy-by-design context; no general compliance claim",
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [
+        "Documented product constraint only.",
+        "Not a DPIA, DPO opinion, legal assessment, or formal GDPR certification."
+      ],
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "PRIVACY_REVIEW",
+        "INSTITUTIONAL_REVIEW",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "DOCUMENTED",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "PRIVACY_REVIEW",
+          "INSTITUTIONAL_REVIEW",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 4
+      }
+    },
+    {
+      "requirementId": "ASSURE-ACC-001",
+      "domain": "ACCESSIBILITY",
+      "claimType": "EVIDENCE_BACKED_CLAIM",
+      "scope": "Control Center and ecosystem product work target accessible interaction and WCAG-oriented review gates.",
+      "status": "PARTIAL",
+      "evidenceRefs": [
+        "docs/design/trama-control-center-v2-ui-spec.md"
+      ],
+      "reviewAuthority": "Human accessibility review",
+      "assessor": null,
+      "standardRef": "WCAG 2.2 AA target",
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [
+        "Target and review model documented; coverage is not universal certification.",
+        "Each surface requires evidence bound to the tested version."
+      ],
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "ACCESSIBILITY_AUDIT",
+        "HUMAN_REVIEW",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "PARTIAL",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "ACCESSIBILITY_AUDIT",
+          "HUMAN_REVIEW",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 4
+      }
+    },
+    {
+      "requirementId": "ASSURE-USA-001",
+      "domain": "USABILITY",
+      "claimType": "EVIDENCE_BACKED_CLAIM",
+      "scope": "Human-validation, responsive/mobile/LIM and perceptible-write quality signals.",
+      "status": "TO_VERIFY",
+      "evidenceRefs": [
+        "docs/design/trama-control-center-v2-view-architecture.md"
+      ],
+      "reviewAuthority": "Human validation",
+      "assessor": null,
+      "standardRef": null,
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [
+        "No aggregate usability certification.",
+        "Product-specific evidence must be collected and version-bound."
+      ],
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "HUMAN_REVIEW",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "TO_VERIFY",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "HUMAN_REVIEW",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 3
+      }
+    },
+    {
+      "requirementId": "ASSURE-SEC-001",
+      "domain": "SECURITY",
+      "claimType": "EVIDENCE_BACKED_CLAIM",
+      "scope": "Security assurance signals may include automated gates and ASVS-oriented checks when evidenced by product/release.",
+      "status": "TO_VERIFY",
+      "evidenceRefs": [
+        "docs/design/trama-control-center-v2-view-architecture.md"
+      ],
+      "reviewAuthority": "Product security review",
+      "assessor": null,
+      "standardRef": "OWASP ASVS when explicitly evidenced",
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [
+        "No ecosystem-wide security certification is asserted.",
+        "Coverage must be established per product/version."
+      ],
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "SECURITY_ASSESSMENT",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "TO_VERIFY",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "SECURITY_ASSESSMENT",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 3
+      }
+    },
+    {
+      "requirementId": "ASSURE-NORM-001",
+      "domain": "NORMATIVE_GOVERNANCE",
+      "claimType": "EVIDENCE_BACKED_CLAIM",
+      "scope": "Normative sources, domain governance and institutional responsibility remain distinct assurance layers.",
+      "status": "DOCUMENTED",
+      "evidenceRefs": [
+        "ROADMAP.md"
+      ],
+      "reviewAuthority": "TRAMA / competent institutional authority",
+      "assessor": null,
+      "standardRef": null,
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [
+        "Presence of a normative source is not legal validation of the whole product."
+      ],
+      "externalCertificateRef": null,
+      "targetStatus": "VERIFIED",
+      "requiredEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION",
+        "INSTITUTIONAL_REVIEW",
+        "HUMAN_REVIEW"
+      ],
+      "presentEvidenceKinds": [
+        "CANONICAL_DOCUMENTATION"
+      ],
+      "readiness": {
+        "currentStatus": "DOCUMENTED",
+        "targetStatus": "VERIFIED",
+        "metEvidenceKinds": [
+          "CANONICAL_DOCUMENTATION"
+        ],
+        "missingEvidenceKinds": [
+          "INSTITUTIONAL_REVIEW",
+          "HUMAN_REVIEW"
+        ],
+        "metPrerequisites": 1,
+        "requiredPrerequisites": 3
+      }
+    },
+    {
+      "requirementId": "ASSURE-CERT-001",
+      "domain": "EXTERNAL_CERTIFICATION",
+      "claimType": "FORMAL_CERTIFICATION",
+      "scope": "Formal external certifications for TRAMA ecosystem products.",
+      "status": "TO_VERIFY",
+      "evidenceRefs": [],
+      "reviewAuthority": "External competent certification body",
+      "assessor": null,
+      "standardRef": null,
+      "versionRef": null,
+      "verifiedAt": null,
+      "expiresAt": null,
+      "limitations": [
+        "No formal certification is recorded by this registry entry.",
+        "FORMALLY_CERTIFIED is forbidden without an externalCertificateRef and assessor."
+      ],
+      "externalCertificateRef": null,
+      "targetStatus": "FORMALLY_CERTIFIED",
+      "requiredEvidenceKinds": [
+        "INDEPENDENT_ASSESSMENT",
+        "EXTERNAL_CERTIFICATE",
+        "VERSION_BOUND_TEST"
+      ],
+      "presentEvidenceKinds": [],
+      "readiness": {
+        "currentStatus": "TO_VERIFY",
+        "targetStatus": "FORMALLY_CERTIFIED",
+        "metEvidenceKinds": [],
+        "missingEvidenceKinds": [
+          "INDEPENDENT_ASSESSMENT",
+          "EXTERNAL_CERTIFICATE",
+          "VERSION_BOUND_TEST"
+        ],
+        "metPrerequisites": 0,
+        "requiredPrerequisites": 3
+      }
+    }
+  ],
+  "expansionCandidates": [
+    {
+      "id": "R3-P2",
+      "name": "Curriculum pubblico",
+      "status": "PLANNED",
+      "dependencyRefs": [
+        "GATE-R3-F0-EXIT"
+      ]
+    },
+    {
+      "id": "R3-P5",
+      "name": "Smart Navigation",
+      "status": "PLANNED",
+      "dependencyRefs": [
+        "GATE-R3-F0-EXIT"
+      ]
+    }
+  ],
+  "integrityChecks": [
+    {
+      "id": "INT-SOURCE-AVAILABILITY",
+      "type": "SOURCE_AVAILABILITY",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Tutte le fonti dichiarate sono disponibili nello snapshot.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-REFERENCE-RESOLUTION",
+      "type": "REFERENCE_RESOLUTION",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "I riferimenti interni verificati risultano risolvibili.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-EVIDENCE-FRESHNESS",
+      "type": "EVIDENCE_FRESHNESS",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Nessuna evidenza TIME_BOUND risulta scaduta.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-GATE-EVIDENCE-BINDING",
+      "type": "GATE_EVIDENCE_BINDING",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "I gate PASS verificati hanno binding evidenziali coerenti.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-RUNTIME-AUTHORIZATION",
+      "type": "RUNTIME_AUTHORIZATION",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Nessun runtime attivo privo di autorizzazione bound è dichiarato.",
+      "affectedRefs": [],
+      "details": []
+    },
+    {
+      "id": "INT-CAPABILITY-EVIDENCE",
+      "type": "CAPABILITY_EVIDENCE_ALIGNMENT",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "Le capability hanno riferimenti evidenziali strutturalmente coerenti.",
+      "affectedRefs": [],
+      "details": []
+    }
+  ],
+  "operationalPath": {
+    "currentActivities": [
+      {
+        "ref": "TRAMA-SA-01",
+        "kind": "CAPABILITY",
+        "label": "TypeSafe semantic assurance pilot",
+        "status": "ACTIVE"
+      },
+      {
+        "ref": "CC3-F1",
+        "kind": "CAPABILITY",
+        "label": "Next Transition Engine",
+        "status": "ACTIVE"
+      }
+    ],
+    "nextGates": [
+      {
+        "ref": "GATE-CC3-F1-HUMAN",
+        "area": "governance",
+        "status": "OPEN",
+        "blocking": true,
+        "decisionAuthority": "TRAMA/Human Review"
+      }
+    ],
+    "nextIncrements": [
+      {
+        "ref": "R3-P2",
+        "label": "Curriculum pubblico",
+        "status": "PLANNED",
+        "dependencyRefs": [
+          "GATE-R3-F0-EXIT"
+        ]
+      },
+      {
+        "ref": "R3-P5",
+        "label": "Smart Navigation",
+        "status": "PLANNED",
+        "dependencyRefs": [
+          "GATE-R3-F0-EXIT"
+        ]
+      }
+    ],
+    "explicitDefers": [
+      {
+        "ref": "DOS-A1",
+        "label": "Integrazione operativa automatizzata",
+        "state": "DEFERRED",
+        "runtimeState": "DEFERRED"
+      }
+    ],
+    "unmetDependencies": []
+  },
+  "timelineEvents": [
+    {
+      "id": "EVT-CC2-F1E-MERGE-81",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:25:42Z",
+      "label": "CC2-F1/E Project Knowledge integrata",
+      "subjectRef": "CC2-F1/E",
+      "sourceRef": "github:pull/81",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "4a17766bc315340824b4ef44204f81a1487515ce",
+      "details": [
+        "Project Knowledge & Agent Context Foundation integrata.",
+        "ADR-015 resta PROPOSED."
+      ]
+    },
+    {
+      "id": "EVT-PENPOT-MCP-MERGE-82",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:31:39Z",
+      "label": "Penpot MCP pilot refresh integrato",
+      "subjectRef": "PENPOT-MCP-PILOT",
+      "sourceRef": "github:pull/82",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25",
+      "details": [
+        "Pilot tooling separato dal runtime di prodotto.",
+        "Nessuna nuova authority."
+      ]
+    },
+    {
+      "id": "EVT-PENPOT-DS-MERGE-83",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:36:59Z",
+      "label": "TRAMA Penpot design system integrato",
+      "subjectRef": "PENPOT-DESIGN-SYSTEM",
+      "sourceRef": "github:pull/83",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "5cfb09f94ea532dc1f64523f7e10da6629159843",
+      "details": [
+        "Design system mobile-first e gate accessibilità integrati."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F4-MERGE-84",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T02:58:23Z",
+      "label": "CC2-F4 Capability + Ecosystem Map integrata",
+      "subjectRef": "CC2-F4",
+      "sourceRef": "github:pull/84",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "93a3fadf78732979c4536cbb394744b9471e14da",
+      "details": [
+        "Capability projection conservativa.",
+        "Nessun edge sintetico fuori dallo snapshot."
+      ]
+    },
+    {
+      "id": "EVT-PR70-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:52Z",
+      "label": "PR #70 superseded da #81",
+      "subjectRef": "github:pull/70",
+      "sourceRef": "github:pull/70",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "4a17766bc315340824b4ef44204f81a1487515ce",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-PR78-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:56Z",
+      "label": "PR #78 superseded da #82",
+      "subjectRef": "github:pull/78",
+      "sourceRef": "github:pull/78",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "262b7e4c8b908f4d3c39e2469c0e9d34e03a4e25",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-PR79-SUPERSEDED",
+      "eventType": "SUPERSESSION",
+      "occurredAt": "2026-09-25T03:10:59Z",
+      "label": "PR #79 superseded da #83",
+      "subjectRef": "github:pull/79",
+      "sourceRef": "github:pull/79",
+      "authority": "TRAMA housekeeping",
+      "versionRef": "5cfb09f94ea532dc1f64523f7e10da6629159843",
+      "details": [
+        "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F5-MERGE-85",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:14:33Z",
+      "label": "CC2-F5 Evidence Explorer + Integrity integrata",
+      "subjectRef": "CC2-F5",
+      "sourceRef": "github:pull/85",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "21c43b3e092c3dc31e450d2c9b2e3bf24b8238fd",
+      "details": [
+        "Integrity checks PASS / ISSUE / NOT_EVALUABLE.",
+        "Nessun overall score."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F6-MERGE-86",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:29:48Z",
+      "label": "CC2-F6 Timeline + Operational Path integrata",
+      "subjectRef": "CC2-F6",
+      "sourceRef": "github:pull/86",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "f3c4396a620e2b4c51beb3f2616ebeebf82a6342",
+      "details": [
+        "Primo ciclo CC2-F0–F6 completato.",
+        "Timeline semantica a copertura PARTIAL_EXPLICIT; Operational Path derivato da fonti governate."
+      ]
+    },
+    {
+      "id": "EVT-CC3-F0-MERGE-88",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:49:30Z",
+      "label": "CC3-F0 Forecast Contract & Guardrails integrata",
+      "subjectRef": "CC3-F0",
+      "sourceRef": "github:pull/88",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "cfbec2f2aa806537d70a8c7ed885212bceff97cd",
+      "details": [
+        "Exact head 49c98322ac5f3bd8cfed9091034362b87d80ea1a autorizzato con HUMAN EXACT-HEAD REVIEW PASS.",
+        "Forecast contract e guardrail integrati; F1–F5 non autorizzati dal merge F0.",
+        "ADR-016 resta PROPOSED; nessuna authority o runtime authorization introdotta."
+      ]
+    },
+    {
+      "id": "EVT-R3-F0-S3V2-MERGE-32",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T04:19:33Z",
+      "label": "R3-F0/S3-V2 Atlas Product Experience chiusa",
+      "subjectRef": "R3-F0",
+      "sourceRef": "github:Curriculum-Atlas/pull/32",
+      "authority": "Atlas merge + HUMAN exact-head review",
+      "versionRef": "423444be9dd883f4c35c6c1c89e94f6b0e5405fa",
+      "details": [
+        "Exact head bc11577eeeeeed9c43ad62ac43fb7561e1197246 validato con F4 Mobile/LIM, F5 Exit e TRAMA Perceptible Write PASS.",
+        "S3-V2 chiusa; R3-F0 exit gate soddisfatto.",
+        "Nessuna autorizzazione a R3-P4, DOS-A1 o runtime Docente OS → Atlas."
+      ]
+    }
+  ],
+  "timelineCoverage": {
+    "mode": "PARTIAL_EXPLICIT",
+    "from": "2026-09-25",
+    "note": "Registro iniziale esplicito: non ricostruisce retroattivamente eventi non ancora registrati.",
+    "sourceRef": "status/governed-events.json"
+  }
+}
