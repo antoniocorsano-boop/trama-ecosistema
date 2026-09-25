@@ -7,19 +7,19 @@
       "status": "FRESH",
       "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "STATUS.md",
-      "sha256": "583c579e8dda23b915f257399ac354a741bba360728f0fa9b20ea678c19b348d"
+      "sha256": "e34f8d4ad644eeb43c1d177339d139169bd148455276cca805336f9755c1fba5"
     },
     "trama-roadmap": {
       "status": "FRESH",
       "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "ROADMAP.md",
-      "sha256": "7b2d34ebff70ce07d6a67310ac7eb5621d46290a1b32a6a0ec402a7c4165a83a"
+      "sha256": "633298bf304840e3ff7602dea17cc810457f2f814e5ead01327073599150d573"
     },
     "ecosystem-status": {
       "status": "FRESH",
       "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "status/ecosystem-status.json",
-      "sha256": "5d4911a64f9b231a34f0b5ffd5728b405ffa1e70bef0afa0f50e5f72917a1f3d"
+      "sha256": "83fc474cc0915b6adbb076c05e17170ab9f018f06d1dad47c5b1578358c4d0e9"
     },
     "decision-register": {
       "status": "FRESH",
@@ -31,7 +31,7 @@
       "status": "FRESH",
       "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "status/governed-events.json",
-      "sha256": "0f47b8cb5762874707d7217e7e811e5d3e834bcc9e38af2130a719cc6463a452"
+      "sha256": "67820f49bf92de714cdb26c86b8201f862caee75f1065ab9e8089c5005ac7624"
     }
   },
   "phases": [
@@ -286,13 +286,32 @@
       "id": "CC3-F0",
       "label": "Governed Forecast Contract & Guardrails",
       "ownerDomain": "TRAMA",
+      "state": "CLOSED",
+      "humanReview": "PASS",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-CC3-F0-HUMAN"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "CC3-F1",
+      "label": "Next Transition Engine",
+      "ownerDomain": "TRAMA",
       "state": "ACTIVE",
       "humanReview": "PENDING",
       "runtimeState": null,
       "maturityAreaRef": "governance",
       "dependencyRefs": [],
       "gateRefs": [
-        "GATE-CC3-F0-HUMAN"
+        "GATE-CC3-F1-HUMAN"
       ],
       "evidenceRefs": [
         "EV-SOURCE-ECOSYSTEM-STATUS"
@@ -331,10 +350,18 @@
       "id": "GATE-CC3-F0-HUMAN",
       "area": "governance",
       "type": "HUMAN",
+      "status": "PASS",
+      "blocking": true,
+      "requiredEvidenceTypes": [],
+      "decisionAuthority": "TRAMA/Human Review"
+    },
+    {
+      "id": "GATE-CC3-F1-HUMAN",
+      "area": "governance",
+      "type": "HUMAN",
       "status": "OPEN",
       "blocking": true,
       "requiredEvidenceTypes": [
-        "CONTRACT_APPROVED",
         "HUMAN_REVIEW"
       ],
       "decisionAuthority": "TRAMA/Human Review"
@@ -862,9 +889,9 @@
         "status": "ACTIVE"
       },
       {
-        "ref": "CC3-F0",
+        "ref": "CC3-F1",
         "kind": "CAPABILITY",
-        "label": "Governed Forecast Contract & Guardrails",
+        "label": "Next Transition Engine",
         "status": "ACTIVE"
       }
     ],
@@ -884,7 +911,7 @@
         "decisionAuthority": "TRAMA/Human Review"
       },
       {
-        "ref": "GATE-CC3-F0-HUMAN",
+        "ref": "GATE-CC3-F1-HUMAN",
         "area": "governance",
         "status": "OPEN",
         "blocking": true,
@@ -1053,6 +1080,21 @@
       "details": [
         "Primo ciclo CC2-F0–F6 completato.",
         "Timeline semantica a copertura PARTIAL_EXPLICIT; Operational Path derivato da fonti governate."
+      ]
+    },
+    {
+      "id": "EVT-CC3-F0-MERGE-88",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:49:30Z",
+      "label": "CC3-F0 Forecast Contract & Guardrails integrata",
+      "subjectRef": "CC3-F0",
+      "sourceRef": "github:pull/88",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "cfbec2f2aa806537d70a8c7ed885212bceff97cd",
+      "details": [
+        "Exact head 49c98322ac5f3bd8cfed9091034362b87d80ea1a autorizzato con HUMAN EXACT-HEAD REVIEW PASS.",
+        "Forecast contract e guardrail integrati; F1–F5 non autorizzati dal merge F0.",
+        "ADR-016 resta PROPOSED; nessuna authority o runtime authorization introdotta."
       ]
     }
   ],
