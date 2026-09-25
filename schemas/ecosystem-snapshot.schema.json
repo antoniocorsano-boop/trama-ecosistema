@@ -18,7 +18,8 @@
     "expansionCandidates",
     "integrityChecks",
     "operationalPath",
-    "timelineEvents"
+    "timelineEvents",
+    "timelineCoverage"
   ],
   "properties": {
     "schemaVersion": {
@@ -1044,6 +1045,33 @@
               "type": "string"
             }
           }
+        }
+      }
+    },
+    "timelineCoverage": {
+      "type": "object",
+      "required": [
+        "mode",
+        "from",
+        "note",
+        "sourceRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "PARTIAL_EXPLICIT"
+          ]
+        },
+        "from": {
+          "type": "string",
+          "format": "date"
+        },
+        "note": {
+          "type": "string"
+        },
+        "sourceRef": {
+          "type": "string"
         }
       }
     }
