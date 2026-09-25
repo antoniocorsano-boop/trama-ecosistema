@@ -186,14 +186,18 @@ Sequenza governata del Control Center read-only:
 
 1. **CC2-F0 — Baseline di maturità ed evidenze** — INTEGRATA via #65.
 2. **CC2-F1/A–D — Snapshot & Evidence Foundation** — INTEGRATA via #66–#69: snapshot deterministico, maturity definitions, wiring conservativo, binding delle evidenze e freshness.
-3. **CC2-F1/E — Project Knowledge & Agent Context Foundation** — RECOVERY SLICE ACTIVE / GOVERNANCE PROPOSED. La foundation viene ricostruita da `main` corrente; ADR-015 resta PROPOSED e non crea nuova authority.
+3. **CC2-F1/E — Project Knowledge & Agent Context Foundation** — INTEGRATA via #81. ADR-015 resta PROPOSED e non crea nuova authority.
 4. **CC2-F2 — Snapshot-first Home** — INTEGRATA via #71.
 5. **CC2-F3A — Stakeholder Assurance Model** — INTEGRATA via #72.
 6. **CC2-F3B — Stakeholder Summary, Contextual Help & Living Dossier** — INTEGRATA via #73.
 7. **CC2-F3C — Mobile-first Control Center** — INTEGRATA via #74, con hardening strutturale #75–#77 e rifinitura caroselli mobile #80.
-8. **CC2-F4 — Capability + Ecosystem Map** — PLANNED.
-9. **CC2-F5 — Evidence Explorer + Integrity** — PLANNED.
+8. **CC2-F4 — Capability + Ecosystem Map** — INTEGRATA via #84.
+9. **CC2-F5 — Evidence Explorer + Integrity** — ACTIVE via #85; snapshot 1.2, filtri evidenziali e controlli di integrità PASS / ISSUE / NOT_EVALUABLE, senza overall score.
 10. **CC2-F6 — Timeline + Operational Path** — PLANNED.
+
+Baseline di design/tooling già integrata prima di F4/F5:
+- Penpot MCP pilot — INTEGRATO via #82;
+- TRAMA Penpot design system — INTEGRATO via #83.
 
 ### CC2-F1/E — Project Knowledge & Agent Context
 
