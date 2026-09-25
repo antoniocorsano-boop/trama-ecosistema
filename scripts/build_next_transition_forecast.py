@@ -176,7 +176,7 @@ def main() -> int:
     if policy.get("mode") != "ADVISORY_READ_ONLY":
         raise SystemExit("forecast policy must remain ADVISORY_READ_ONLY")
 
-    if args.self_test:
+    if args.self_test or args.check:
         self_test()
 
     snapshot = load(SNAPSHOT)
