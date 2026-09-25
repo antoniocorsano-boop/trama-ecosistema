@@ -88,6 +88,36 @@ jobs:
               assert area["confidence"] == "LOW", area
           print("TRAMA_MATURITY_WIRING_CONSERVATIVE_PASS")
           PY
+      - name: Validate CC2-F4 capability projection
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          snapshot = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+          source = json.loads(Path("status/ecosystem-status.json").read_text(encoding="utf-8"))
+          source_ids = {item["id"] for item in source["capabilities"]}
+          projected = {item["id"]: item for item in snapshot["capabilities"]}
+          assert set(projected) == source_ids, (set(projected), source_ids)
+          for item in projected.values():
+              assert item["sourceRef"] == "status/ecosystem-status.json", item
+              assert item["evidenceRefs"] == ["EV-SOURCE-ECOSYSTEM-STATUS"], item
+              assert item["lastSignificantChange"] is None, item
+          assert projected["DOS-A1"]["runtimeState"] == "DEFERRED"
+          for cap_id, item in projected.items():
+              if cap_id != "DOS-A1":
+                  assert item["runtimeState"] is None, item
+
+          dependencies = {item["id"]: item for item in snapshot["dependencies"]}
+          assert set(dependencies) == {
+              "DEP-ARENA-DOS-AUTHORITY",
+              "DEP-ARENA-ATLAS-DATA",
+              "DEP-DOS-ATLAS-FUTURE",
+          }, dependencies
+          assert dependencies["DEP-DOS-ATLAS-FUTURE"]["status"] == "NOT_AUTHORIZED"
+          print("TRAMA_CC2_F4_CAPABILITY_PROJECTION_PASS")
+          PY
       - name: Validate CC2-F1/D evidence hardening
         shell: bash
         run: |
@@ -144,4 +174,6 @@ jobs:
           grep -q '"candidateLevel"' schemas/ecosystem-snapshot.schema.json
           grep -q '"evidence"' schemas/ecosystem-snapshot.schema.json
           grep -q '"gates"' schemas/ecosystem-snapshot.schema.json
+          grep -q '"capabilities"' schemas/ecosystem-snapshot.schema.json
+          grep -q '"governanceRefs"' schemas/ecosystem-snapshot.schema.json
 
