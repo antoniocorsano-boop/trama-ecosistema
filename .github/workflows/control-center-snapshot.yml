@@ -201,7 +201,7 @@ jobs:
           assert checks["INT-SOURCE-AVAILABILITY"]["status"] == "PASS", checks
           assert checks["INT-REFERENCE-RESOLUTION"]["status"] == "PASS", checks
           assert checks["INT-EVIDENCE-FRESHNESS"]["status"] == "PASS", checks
-          assert checks["INT-GATE-EVIDENCE-BINDING"]["status"] == "NOT_EVALUABLE", checks
+          assert checks["INT-GATE-EVIDENCE-BINDING"]["status"] == "PASS", checks
           assert checks["INT-RUNTIME-AUTHORIZATION"]["status"] == "PASS", checks
           assert checks["INT-CAPABILITY-EVIDENCE"]["status"] == "PASS", checks
           assert "overallScore" not in snapshot
