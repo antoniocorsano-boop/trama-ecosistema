@@ -10,6 +10,7 @@
     "sourceState",
     "phases",
     "areas",
+    "capabilities",
     "gates",
     "evidence",
     "dependencies",
@@ -366,6 +367,7 @@
       "items": {
         "type": "object",
         "required": [
+          "id",
           "from",
           "to",
           "kind"
@@ -392,6 +394,27 @@
               "string",
               "null"
             ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "governanceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "gateRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": true
@@ -636,6 +659,86 @@
               }
             },
             "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "ownerDomain",
+          "state",
+          "humanReview",
+          "runtimeState",
+          "maturityAreaRef",
+          "dependencyRefs",
+          "gateRefs",
+          "evidenceRefs",
+          "lastSignificantChange",
+          "sourceRef"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "ownerDomain": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "humanReview": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "runtimeState": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "maturityAreaRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dependencyRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "gateRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lastSignificantChange": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sourceRef": {
+            "type": "string"
           }
         },
         "additionalProperties": false
