@@ -1,0 +1,4 @@
+1. Restore docs/architecture/trama-universal-didactic-planning-artifact-orchestration-v1.md from verified blob a433d0b6d168a1c111ca9e9cd984cab8fb90e980.
+2. Apply only approved ECO-02/P1 closure wording in sections 16, 18 criterion 11, and 22.
+3. Remove all .pr92-recovery-* markers.
+4. Verify PR diff and CI before review/merge.
