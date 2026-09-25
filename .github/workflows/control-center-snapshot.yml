@@ -52,6 +52,12 @@ jobs:
         run: python scripts/build_ecosystem_snapshot.py --check
       - name: Build snapshot fixture
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
+      - name: Export generated snapshot for governed refresh
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-ecosystem-snapshot
+          path: /tmp/ecosystem-snapshot.json
+          if-no-files-found: error
       - name: Detect committed snapshot drift
         shell: bash
         run: |
@@ -219,8 +225,8 @@ jobs:
               "unmetDependencies",
           }, path
           assert any(item["ref"] == "DOS-A1" for item in path["explicitDefers"]), path
-          assert any(item["ref"] == "GATE-R3-F0-EXIT" for item in path["nextGates"]), path
-          assert any(item["subjectRef"] == "R3-P2" for item in path["unmetDependencies"]), path
+          assert not any(item["ref"] == "GATE-R3-F0-EXIT" for item in path["nextGates"]), path
+          assert not any(item["subjectRef"] == "R3-P2" for item in path["unmetDependencies"]), path
           assert snapshot["timelineCoverage"]["mode"] == "PARTIAL_EXPLICIT"
           assert snapshot["timelineCoverage"]["sourceRef"] == "status/governed-events.json"
           assert snapshot["timelineEvents"]
