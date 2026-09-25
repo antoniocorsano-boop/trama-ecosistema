@@ -102,6 +102,7 @@ jobs:
           assert set(projected) == source_ids, (set(projected), source_ids)
           for item in projected.values():
               assert item["sourceRef"] == "status/ecosystem-status.json", item
+              assert item["sourceUpdatedAt"] == source["updatedAt"], item
               assert item["evidenceRefs"] == ["EV-SOURCE-ECOSYSTEM-STATUS"], item
               assert item["lastSignificantChange"] is None, item
           assert projected["DOS-A1"]["runtimeState"] == "DEFERRED"
