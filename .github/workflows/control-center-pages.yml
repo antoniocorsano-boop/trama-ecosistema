@@ -30,6 +30,7 @@ jobs:
           set -euo pipefail
           test -s control-center/index.html
           test -s control-center/ecosystem.html
+          test -s control-center/evidence.html
           test -s control-center/manifest.webmanifest
           test -s control-center/sw.js
           test -s control-center/icons/icon-192.svg
@@ -42,6 +43,7 @@ jobs:
           grep -q "Attenzione richiesta" control-center/index.html
           grep -q "Ecosistema vivo" control-center/index.html
           grep -q "ecosystem.html" control-center/index.html
+          grep -q "evidence.html" control-center/index.html
           grep -q "Capability e mappa dell’ecosistema" control-center/ecosystem.html
           grep -q "capabilityList" control-center/ecosystem.html
           grep -q "relationList" control-center/ecosystem.html
@@ -54,6 +56,11 @@ jobs:
           ! grep -q 'x1="360" y1="96" x2="360" y2="250"' control-center/ecosystem.html
           ! grep -q 'x1="360" y1="96" x2="590" y2="250"' control-center/ecosystem.html
           grep -q "aria-label=\"Elenco equivalente delle relazioni\"" control-center/ecosystem.html
+          grep -q "Evidenze e integrità" control-center/evidence.html
+          grep -q "Evidence Explorer" control-center/evidence.html
+          grep -q "integrityChecks" control-center/evidence.html
+          grep -q "NOT_EVALUABLE" control-center/evidence.html
+          grep -q "Nessuno score complessivo" control-center/evidence.html
           grep -q "Evidenze disponibili" control-center/index.html
           grep -q "Stakeholder Assurance" control-center/index.html
           grep -q "data-help-title" control-center/index.html
@@ -86,8 +93,9 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v6" control-center/sw.js
+          grep -q "trama-control-center-v7" control-center/sw.js
           grep -q "\./ecosystem.html" control-center/sw.js
+          grep -q "\./evidence.html" control-center/sw.js
           grep -q "controllerchange" control-center/index.html
           grep -q "overflow-x:hidden" control-center/index.html
           grep -q "overscroll-behavior-inline:contain" control-center/index.html
@@ -97,20 +105,22 @@ jobs:
           grep -q "width:44px;height:44px" control-center/index.html
           ! grep -q "margin:0 -12px" control-center/index.html
           ! grep -q "margin:0 -13px" control-center/index.html
-          if grep -Eq "(api\.github\.com|raw\.githubusercontent\.com)" control-center/index.html; then
-            echo "Direct GitHub fetch found in snapshot-first shell" >&2
-            exit 1
-          fi
-          if grep -Eq "(ghp_|github_pat_|Authorization:|Bearer )" control-center/index.html; then
-            echo "Secret-like token or authorization header found in static dashboard" >&2
-            exit 1
-          fi
+          for file in control-center/index.html control-center/ecosystem.html control-center/evidence.html; do
+            if grep -Eq "(api\.github\.com|raw\.githubusercontent\.com)" "$file"; then
+              echo "Direct GitHub fetch found in snapshot-first shell: $file" >&2
+              exit 1
+            fi
+            if grep -Eq "(ghp_|github_pat_|Authorization:|Bearer )" "$file"; then
+              echo "Secret-like token or authorization header found in static dashboard: $file" >&2
+              exit 1
+            fi
+          done
       - name: Validate browser JavaScript syntax
         shell: bash
         run: |
           node - <<'NODE'
           const fs = require('fs')
-          for (const file of ['control-center/index.html','control-center/ecosystem.html']) {
+          for (const file of ['control-center/index.html','control-center/ecosystem.html','control-center/evidence.html']) {
             const html = fs.readFileSync(file, 'utf8')
             const match = html.match(/<script>([\s\S]*?)<\/script>/)
             if (!match) throw new Error('Inline script not found in '+file)
