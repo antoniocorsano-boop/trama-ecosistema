@@ -680,7 +680,8 @@
           "gateRefs",
           "evidenceRefs",
           "lastSignificantChange",
-          "sourceRef"
+          "sourceRef",
+          "sourceUpdatedAt"
         ],
         "properties": {
           "id": {
@@ -739,6 +740,12 @@
           },
           "sourceRef": {
             "type": "string"
+          },
+          "sourceUpdatedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "additionalProperties": false
