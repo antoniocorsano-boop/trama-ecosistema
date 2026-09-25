@@ -107,7 +107,7 @@ Target minimo:
 - WCAG 2.2 AA;
 - contrasto verificato;
 - focus chiaramente visibile;
-- target interattivi adeguati;
+- target interattivi **minimo 44 × 44 px**; l'icona o il segno visivo può essere più piccolo purché l'area attivabile resti almeno 44 × 44 px;
 - significato non affidato al solo colore;
 - equivalenza tra interazione con mouse, tastiera e touch;
 - grafici accompagnati da equivalente testuale o tabellare.
