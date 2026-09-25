@@ -1,6 +1,6 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 24 settembre 2026.
+Aggiornato al 25 settembre 2026.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -51,35 +51,41 @@ flowchart LR
 | DOS-A1 | **DEFERRED** | Nessuna automazione operativa autonoma autorizzata |
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
-| TRAMA Control Center v2 | **CC2-F0 INTEGRATED / CC2-F1 ACTIVE** | CC2-F1/A snapshot foundation integrata via #66; CC2-F1/B maturity definitions integrate via #67; avviato wiring conservativo delle aree nello snapshot |
+| TRAMA Control Center v2 | **CC2-F0–F3C INTEGRATED / F1E RECOVERY ACTIVE** | Snapshot/evidence, Home, Stakeholder Assurance, dossier/help e mobile-first integrati; hardening mobile #75–#77 e polish #80 LIVE. Project Knowledge F1/E in recovery governato; ADR-015 resta PROPOSED. |
 
-## TRAMA Control Center v2 — maturità ed evidenze
+## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 
-La PR **#65 — TRAMA Control Center v2 — maturity, evidence and ecosystem intelligence** è stata integrata su `main` con merge commit:
+Il Control Center v2 è operativo come osservatorio **snapshot-first, read-only e senza overall score**.
 
-`d23e6f8443ab6b7316696809327aba8249e6b01a`
+Stato integrato corrente:
 
-Exact head sottoposto a HUMAN EXACT-HEAD REVIEW — PASS:
+- **CC2-F0** baseline di maturità/evidenze — #65, merge `d23e6f8443ab6b7316696809327aba8249e6b01a`;
+- **CC2-F1/A–D** snapshot, maturity definitions, wiring conservativo, evidence binding e freshness — #66–#69;
+- **CC2-F2** Snapshot-first Home — #71;
+- **CC2-F3A** Stakeholder Assurance Model — #72;
+- **CC2-F3B** Stakeholder Summary, Contextual Help & Living Dossier — #73;
+- **CC2-F3C** Mobile-first Control Center — #74;
+- hardening mobile strutturale/PWA/overflow — #75, #76, #77;
+- mobile carousel polish — #80, merge `95e68b88b18d4d9b7ed2a98984a4f18ed14e8ca0`, pubblicato LIVE su Render.
 
-`f5ce0f770471b366bbe1a2959bb476c9b2179fa0`
+Restano invarianti:
+- il Control Center non approva, non promuove e non autorizza runtime;
+- `STATUS.md` e `ROADMAP.md` restano fonti canoniche di stato e sequenza;
+- evidenza automatica, assessment indipendente e certificazione formale restano distinti;
+- nessun claim di compliance generale o certificazione è derivato automaticamente.
 
-CC2-F0 è quindi integrato come baseline documentale e architetturale. Sono ora governati:
+### CC2-F1/E — Project Knowledge & Agent Context
 
-- modello di maturità L0–L5 basato su evidenze;
-- distinzione tra livello confermato e livello candidato;
-- evidence registry, freshness e gate;
-- architettura snapshot-first e read-only;
-- target UI/UX desktop, mobile e LIM;
-- piano CC2-F0→F6;
-- schema `ecosystem-snapshot` e catalogo delle fonti;
-- TRAMA-ADR-014 resta **PROPOSED**: l'integrazione della baseline non la promuove automaticamente ad APPROVED.
+La precedente PR #70 è conservata solo come **salvage source** perché diverge dal `main` corrente. La nuova recovery slice ricostruisce la foundation sulla baseline aggiornata senza importare copie stale di `STATUS` o `ROADMAP`.
 
-È ora attivo **CC2-F1 — Snapshot & Evidence Foundation**.
+Sono recuperati come proposta governata:
+- Project Knowledge & Agent Context Architecture v1;
+- `ProjectContextSnapshot v1`;
+- `TRAMA Context Pack v1`;
+- `TRAMA-ADR-015` — **PROPOSED**;
+- registrazione della proiezione `project-knowledge-projection`.
 
-- **CC2-F1/A** è integrato via PR #66, merge `4ab7baf9c6d0b8de900236753ec434f5a5bdb75e`: snapshot read-only, provenance, fasi, gate e validazione JSON Schema reale.
-- **CC2-F1/B** è integrato via PR #67, merge `91a97949792353193b22ec1bfa20687b4d11a3f8`: prime quattro aree Governance/Arena/Atlas/Docente OS con regole L0–L5 cumulative e evaluator deterministico.
-
-**CC2-F1/C** e **CC2-F1/D** sono integrati: wiring conservativo, binding delle evidenze forti, freshness effettiva, dipendenze per-area, schema e fixture negative. **CC2-F2 — Snapshot-first Control Center shell**, **CC2-F3A — Stakeholder Assurance Model** e **CC2-F3B — Stakeholder Summary, Contextual Help & Living Dossier** sono integrati. È ora attivo **CC2-F3C — Mobile-first Control Center**: priorità operative sopra la piega, maturity/assurance a progressive disclosure, help mobile-native e touch target controllati, senza modificare authority o runtime.
+Vincoli: `READ_ONLY`, source-bound, version-bound quando pertinente, freshness-aware, no synthetic authority, retention della negative knowledge, rationale preservation, nessuna auto-promotion e nessuna autorizzazione runtime. `DOS-A1` resta `RUNTIME_DEFERRED`.
 
 ## Baseline documentale dell’ecosistema — integrata
 
