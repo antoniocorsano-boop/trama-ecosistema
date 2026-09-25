@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Build the TRAMA Control Center v2 ecosystem snapshot.
+"""Build the TRAMA Control Center v2 governed ecosystem snapshot.
 
-CC2-F1 foundation only:
-- reads declared canonical local sources;
-- emits a schema-compatible snapshot;
-- does not infer maturity levels yet;
-- does not call external APIs;
-- does not write to any source system.
+Current responsibilities:
+- read declared canonical local sources;
+- evaluate maturity conservatively from bound evidence;
+- project declared capabilities without inventing missing operational facts;
+- emit a schema-compatible snapshot for the read-only Control Center;
+- avoid external API calls and writes to source systems.
 """
 
 from __future__ import annotations
