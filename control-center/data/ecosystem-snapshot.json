@@ -1,35 +1,35 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-09-25T04:26:53.749947+00:00",
+  "generatedAt": "2026-09-25T13:50:24.083753+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "ref": "STATUS.md",
       "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "ref": "ROADMAP.md",
       "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "ref": "status/ecosystem-status.json",
-      "sha256": "cf6dedbcd27be0e93f8e2c16aa051c80e482b2da5c408f86769f018a583ef211"
+      "sha256": "1b3437540cdb0bb5dc59dc1af92d18d6015b4e202cf8939d679a1d1434f53cfe"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "ref": "status/governed-events.json",
       "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
     }
@@ -44,10 +44,8 @@
     {
       "id": "R2",
       "name": "Pilota ECO-02/P1",
-      "status": "ACTIVE",
-      "gateRefs": [
-        "GATE-ECO02-HUMAN-FINAL"
-      ]
+      "status": "CLOSED",
+      "gateRefs": []
     },
     {
       "id": "R3",
@@ -89,7 +87,7 @@
         "GATE-CC3-F1-HUMAN"
       ],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-25T04:26:53.749947+00:00"
+      "lastEvaluatedAt": "2026-09-25T13:50:24.083753+00:00"
     },
     {
       "id": "arena",
@@ -104,7 +102,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-25T04:26:53.749947+00:00"
+      "lastEvaluatedAt": "2026-09-25T13:50:24.083753+00:00"
     },
     {
       "id": "atlas",
@@ -123,7 +121,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T04:26:53.749947+00:00"
+      "lastEvaluatedAt": "2026-09-25T13:50:24.083753+00:00"
     },
     {
       "id": "docente-os",
@@ -139,7 +137,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T04:26:53.749947+00:00"
+      "lastEvaluatedAt": "2026-09-25T13:50:24.083753+00:00"
     }
   ],
   "capabilities": [
@@ -181,8 +179,8 @@
       "id": "ECO-02-P1",
       "label": "Pilota Tecnologia 2C",
       "ownerDomain": "TRAMA",
-      "state": "ACTIVE",
-      "humanReview": "PENDING",
+      "state": "CLOSED",
+      "humanReview": "PASS",
       "runtimeState": null,
       "maturityAreaRef": "governance",
       "dependencyRefs": [],
@@ -327,7 +325,7 @@
       "id": "GATE-ECO02-HUMAN-FINAL",
       "area": "interoperability",
       "type": "HUMAN",
-      "status": "OPEN",
+      "status": "PASS",
       "blocking": true,
       "requiredEvidenceTypes": [
         "REAL_CASE_VALIDATION",
@@ -379,7 +377,7 @@
         "path": "STATUS.md",
         "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
       },
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -397,7 +395,7 @@
         "path": "ROADMAP.md",
         "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
       },
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -413,9 +411,9 @@
       "status": "PASS",
       "source": {
         "path": "status/ecosystem-status.json",
-        "sha256": "cf6dedbcd27be0e93f8e2c16aa051c80e482b2da5c408f86769f018a583ef211"
+        "sha256": "1b3437540cdb0bb5dc59dc1af92d18d6015b4e202cf8939d679a1d1434f53cfe"
       },
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -433,7 +431,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
       },
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -451,26 +449,7 @@
         "path": "status/governed-events.json",
         "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
       },
-      "observedAt": "2026-09-25T04:26:53.749947+00:00",
-      "freshness": {
-        "policy": "UNTIL_CHANGE",
-        "expiresAt": null
-      },
-      "confidence": "HIGH",
-      "supports": []
-    },
-    {
-      "id": "EV-TRAMA-ADR-014",
-      "type": "DOCUMENT_CANONICAL",
-      "area": "governance",
-      "subject": "TRAMA-ADR-014",
-      "status": "PASS",
-      "source": {
-        "path": "docs/decisions/decision-register.json",
-        "ref": "TRAMA-ADR-014",
-        "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
-      },
-      "observedAt": "2026-09-25T03:45:39.277887+00:00",
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -532,6 +511,76 @@
         "capabilityRef": "R3-F0",
         "releaseRef": "Curriculum-Atlas#32",
         "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246"
+      }
+    },
+    {
+      "id": "EV-TRAMA-ADR-014",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "TRAMA-ADR-014",
+      "status": "PASS",
+      "source": {
+        "path": "docs/decisions/decision-register.json",
+        "ref": "TRAMA-ADR-014"
+      },
+      "observedAt": "2026-09-25T13:50:24.083753+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-ECO02-P1-REAL-CASE",
+      "type": "REAL_CASE_VALIDATION",
+      "subject": "ECO-02/P1 final real-case end-to-end validation",
+      "area": "interoperability",
+      "status": "PASS",
+      "source": {
+        "path": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+        "sha256": "b2f78803248215232b5766211aea440e04d36b8053185fcf482085f779c74a34"
+      },
+      "observedAt": "2026-09-25T12:46:47Z",
+      "freshness": {
+        "policy": "EVENT_BOUND",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "gateRef": "GATE-ECO02-HUMAN-FINAL"
+        }
+      ],
+      "binding": {
+        "capabilityRef": "ECO-02-P1",
+        "releaseRef": "trama-ecosistema#93"
+      }
+    },
+    {
+      "id": "EV-ECO02-P1-HUMAN",
+      "type": "HUMAN_REVIEW",
+      "subject": "ECO-02/P1 final human acceptance",
+      "area": "interoperability",
+      "status": "PASS",
+      "source": {
+        "path": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+        "sha256": "b2f78803248215232b5766211aea440e04d36b8053185fcf482085f779c74a34"
+      },
+      "observedAt": "2026-09-25T12:46:47Z",
+      "freshness": {
+        "policy": "EVENT_BOUND",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "gateRef": "GATE-ECO02-HUMAN-FINAL"
+        }
+      ],
+      "binding": {
+        "capabilityRef": "ECO-02-P1",
+        "releaseRef": "trama-ecosistema#93"
       }
     }
   ],
@@ -916,18 +965,6 @@
   "operationalPath": {
     "currentActivities": [
       {
-        "ref": "R2",
-        "kind": "PHASE",
-        "label": "Pilota ECO-02/P1",
-        "status": "ACTIVE"
-      },
-      {
-        "ref": "ECO-02-P1",
-        "kind": "CAPABILITY",
-        "label": "Pilota Tecnologia 2C",
-        "status": "ACTIVE"
-      },
-      {
         "ref": "TRAMA-SA-01",
         "kind": "CAPABILITY",
         "label": "TypeSafe semantic assurance pilot",
@@ -941,13 +978,6 @@
       }
     ],
     "nextGates": [
-      {
-        "ref": "GATE-ECO02-HUMAN-FINAL",
-        "area": "interoperability",
-        "status": "OPEN",
-        "blocking": true,
-        "decisionAuthority": "Human Review"
-      },
       {
         "ref": "GATE-CC3-F1-HUMAN",
         "area": "governance",
