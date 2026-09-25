@@ -1,37 +1,37 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-09-25T03:21:09.487289+00:00",
+  "generatedAt": "2026-09-25T03:30:56.740876+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "ref": "STATUS.md",
-      "sha256": "ac3d0fc114bcce5d999fd7bd9e2646e0b050eedfda8cb864b2a1b91a43754241"
+      "sha256": "50edc5763ee9ec7adc515158835b049bb3cc23b419b3c5e3ea32288f8e2b932a"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "ref": "ROADMAP.md",
-      "sha256": "034ebd492d35eff358fcd5b848181b578a4d66a31e4c993f59182393ca0fb020"
+      "sha256": "fc8e2e06caf0a9ae5541cf0108d2aa9288e118fa2ea1280e8633df814e16f2fc"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "ref": "status/governed-events.json",
-      "sha256": "ff29d9db23bad53daf211fc6028f8ebbfedf0af5b66fdee6d63810007f8db6e4"
+      "sha256": "0f47b8cb5762874707d7217e7e811e5d3e834bcc9e38af2130a719cc6463a452"
     }
   },
   "phases": [
@@ -89,7 +89,7 @@
       ],
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
     },
     {
       "id": "arena",
@@ -104,7 +104,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
     },
     {
       "id": "atlas",
@@ -122,7 +122,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
     },
     {
       "id": "docente-os",
@@ -138,7 +138,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:21:09.487289+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
     }
   ],
   "capabilities": [
@@ -318,9 +318,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "sha256": "ac3d0fc114bcce5d999fd7bd9e2646e0b050eedfda8cb864b2a1b91a43754241"
+        "sha256": "50edc5763ee9ec7adc515158835b049bb3cc23b419b3c5e3ea32288f8e2b932a"
       },
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -336,9 +336,9 @@
       "status": "PASS",
       "source": {
         "path": "ROADMAP.md",
-        "sha256": "034ebd492d35eff358fcd5b848181b578a4d66a31e4c993f59182393ca0fb020"
+        "sha256": "fc8e2e06caf0a9ae5541cf0108d2aa9288e118fa2ea1280e8633df814e16f2fc"
       },
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -356,7 +356,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
       },
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -374,7 +374,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
       },
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -390,9 +390,9 @@
       "status": "PASS",
       "source": {
         "path": "status/governed-events.json",
-        "sha256": "ff29d9db23bad53daf211fc6028f8ebbfedf0af5b66fdee6d63810007f8db6e4"
+        "sha256": "0f47b8cb5762874707d7217e7e811e5d3e834bcc9e38af2130a719cc6463a452"
       },
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -411,7 +411,7 @@
         "ref": "TRAMA-ADR-014",
         "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
       },
-      "observedAt": "2026-09-25T03:21:09.487289+00:00",
+      "observedAt": "2026-09-25T03:30:56.740876+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -995,6 +995,20 @@
       "details": [
         "Integrity checks PASS / ISSUE / NOT_EVALUABLE.",
         "Nessun overall score."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F6-MERGE-86",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:29:48Z",
+      "label": "CC2-F6 Timeline + Operational Path integrata",
+      "subjectRef": "CC2-F6",
+      "sourceRef": "github:pull/86",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "f3c4396a620e2b4c51beb3f2616ebeebf82a6342",
+      "details": [
+        "Primo ciclo CC2-F0–F6 completato.",
+        "Timeline semantica a copertura PARTIAL_EXPLICIT; Operational Path derivato da fonti governate."
       ]
     }
   ],
