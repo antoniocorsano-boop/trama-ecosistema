@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844">
+  <rect width="390" height="844" fill="#0B1220"/>
+  <text x="18" y="36" font-family="Inter,Arial" font-size="20" font-weight="700" fill="#F8FAFC">TRAMA</text>
+  <circle cx="350" cy="28" r="16" fill="#172033" stroke="#3B82F6"/>
+  <text x="18" y="82" font-family="Inter,Arial" font-size="24" font-weight="700" fill="#F8FAFC">TRAMA Control Center</text>
+  <text x="18" y="104" font-family="Inter,Arial" font-size="12" fill="#94A3B8">Stato, maturità e lavoro in corso</text>
+
+  <rect x="18" y="124" rx="14" width="354" height="52" fill="#111827" stroke="#243047"/>
+  <text x="34" y="146" font-family="Inter,Arial" font-size="12" fill="#22C55E">● Dati aggiornati</text>
+  <text x="34" y="164" font-family="Inter,Arial" font-size="10" fill="#94A3B8">ultimo aggiornamento disponibile</text>
+
+  <rect x="18" y="192" rx="14" width="354" height="72" fill="#111827" stroke="#243047"/>
+  <text x="34" y="216" font-family="Inter,Arial" font-size="13" font-weight="600" fill="#F8FAFC">Roadmap e fasi</text>
+  <line x1="48" y1="242" x2="338" y2="242" stroke="#334155" stroke-width="3"/>
+  <circle cx="62" cy="242" r="9" fill="#22C55E"/><circle cx="132" cy="242" r="9" fill="#22C55E"/><circle cx="202" cy="242" r="9" fill="#3B82F6"/><circle cx="272" cy="242" r="9" fill="#475569"/><circle cx="338" cy="242" r="9" fill="#475569"/>
+
+  <g fill="#111827" stroke="#243047">
+    <rect x="18" y="282" rx="14" width="170" height="92"/>
+    <rect x="202" y="282" rx="14" width="170" height="92"/>
+    <rect x="18" y="388" rx="14" width="170" height="92"/>
+    <rect x="202" y="388" rx="14" width="170" height="92"/>
+  </g>
+  <g font-family="Inter,Arial">
+    <text x="34" y="306" font-size="11" fill="#94A3B8">Aree mature</text><text x="34" y="346" font-size="26" font-weight="700" fill="#F8FAFC">6 / 9</text>
+    <text x="218" y="306" font-size="11" fill="#94A3B8">Gate aperti</text><text x="218" y="346" font-size="26" font-weight="700" fill="#F8FAFC">3</text>
+    <text x="34" y="412" font-size="11" fill="#94A3B8">Evidenze</text><text x="34" y="452" font-size="26" font-weight="700" fill="#F8FAFC">12</text>
+    <text x="218" y="412" font-size="11" fill="#94A3B8">Espansioni</text><text x="218" y="452" font-size="26" font-weight="700" fill="#F8FAFC">4</text>
+  </g>
+
+  <rect x="18" y="500" rx="14" width="354" height="120" fill="#111827" stroke="#243047"/>
+  <text x="34" y="526" font-family="Inter,Arial" font-size="15" font-weight="700" fill="#F8FAFC">Attenzione richiesta</text>
+  <rect x="34" y="542" width="322" height="26" rx="8" fill="#172033"/><rect x="34" y="576" width="322" height="26" rx="8" fill="#172033"/>
+
+  <rect x="18" y="636" rx="14" width="354" height="136" fill="#111827" stroke="#243047"/>
+  <text x="34" y="662" font-family="Inter,Arial" font-size="15" font-weight="700" fill="#F8FAFC">Maturità dell'ecosistema</text>
+  <g fill="#172033"><rect x="34" y="678" width="322" height="22" rx="8"/><rect x="34" y="708" width="322" height="22" rx="8"/><rect x="34" y="738" width="322" height="22" rx="8"/></g>
+
+  <rect x="18" y="786" rx="16" width="354" height="44" fill="#111827" stroke="#243047"/>
+  <g font-family="Inter,Arial" font-size="10" fill="#94A3B8">
+    <text x="40" y="814">Panoramica</text><text x="130" y="814">Ecosistema</text><text x="224" y="814">Qualità</text><text x="316" y="814">Altro</text>
+  </g>
+</svg>
