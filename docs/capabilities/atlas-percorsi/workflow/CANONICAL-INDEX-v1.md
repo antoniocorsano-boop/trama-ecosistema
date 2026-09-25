@@ -12,6 +12,7 @@ Single entry point for understanding current authority, experiments and open con
 | Area | Canonical reference | State |
 |---|---|---|
 | child-safe learning & experience constitution | `governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md` | CANONICAL G1 CONSTITUTION — PROPOSED FOR REVIEW; runtime not authorised |
+| pathway constitution review contract | `governance/PATHWAY-CONSTITUTION-REVIEW-CONTRACT-v1.yaml` | CANONICAL G1 REVIEW CONTRACT — PROPOSED FOR REVIEW; structural checks never replace human judgement |
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
@@ -25,11 +26,15 @@ Single entry point for understanding current authority, experiments and open con
 | backlog control | `workflow/backlog-zero-consolidation-plan-v1.md` | CANONICAL active plan |
 
 ## Constitutional layer
-The Child-Safe Learning & Experience Constitution now consolidates the current non-negotiable G1 boundary across competence-as-contextual-performance, learner agency, recoverable error, task-bound reflection, developmental appropriateness, executive-demand reduction, attention/coherence, cognitive continuity, consequential interaction, functional narrative, character boundaries, transfer validation, calibrated claims, privacy, accessibility, emotional safety and teacher pedagogical sovereignty.
+The Child-Safe Learning & Experience Constitution consolidates the current non-negotiable G1 boundary across competence-as-contextual-performance, learner agency, recoverable error, task-bound reflection, developmental appropriateness, executive-demand reduction, attention/coherence, cognitive continuity, consequential interaction, functional narrative, character boundaries, transfer validation, calibrated claims, privacy, accessibility, emotional safety and teacher pedagogical sovereignty.
 
-It deliberately does **not** prescribe a universal metaphor, mascot, narrative world, interaction grammar or visual style. Creative/pathway diversity remains permitted inside the constitutional boundary.
+The Pathway Constitution Review Contract operationalises those constraints as declared, machine-checkable dossier fields while preserving mandatory human reviews. Structural validity is necessary but never sufficient for promotion.
 
-Constitutional status is `PROPOSED FOR REVIEW`: it governs new G1 work as the current consolidation target but cannot authorise production runtime. Promotion requires provenance normalisation plus accessibility, privacy/child-safety, pedagogical and human exact-head review.
+Automatic constitutional stops cover trait/psychological inference, coercive engagement, shame/humiliation/fear mechanisms, invasive sensitive disclosure, pseudo-therapy/dependency and privacy/profile violations. Automation may detect declarations/configurations; it cannot determine pedagogical quality or child safety by itself.
+
+Neither constitution nor contract prescribes a universal metaphor, mascot, narrative world, interaction grammar or visual style. Creative/pathway diversity remains permitted inside the constitutional boundary.
+
+Both remain `PROPOSED FOR REVIEW` and cannot authorise production runtime. Promotion requires provenance normalisation plus accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review.
 
 ## Root-level legacy/current artefacts — census classification
 Existing root artefacts remain retained pending reconciliation and inbound-reference analysis. `pedagogical-model.md`, `research-evidence-register.md`, `emotional-development-safeguards.md` and `decision-rationale-sustainability.md` remain supporting material. Universal-metaphor interpretations in narrative/metaphor documents are superseded; experimental reasoning remains historical evidence.
@@ -71,17 +76,16 @@ No task may infer stable psychological/personality traits from a minor's choices
 Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / ACCIDENTAL**. `capability/atlas-percorsi-g1-child-safe` remains the governed branch. Accidental refs must not be merged or used as bases and should be deleted when an authorised branch-management mechanism is available. Future writes resolve target branch and current blob/head before mutation.
 
 ## Runtime boundary
-Nothing in this index or constitution authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
+Nothing in this index, constitution or review contract authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
 ## Open consolidation queue
-1. Create the **Pathway Constitution Review Contract**: machine-checkable dossier declarations plus explicit human-review fields; automation may check structure/prohibited configurations but cannot replace pedagogical or child-safety judgement.
-2. Normalise the evidence register into reusable evidence records/packets, including transfer, multimedia, developmental, accessibility and child-safety evidence classes; map constitution rules to provenance.
-3. Reconcile `README.md` with canonical architecture/workflow/constitution.
-4. Convert the shared-decision prototype family into a named pathway dossier and run the first constitutional review against it.
-5. Identify inbound references before moving legacy root files.
-6. Add deterministic repository checks after schemas stabilise.
-7. Delete accidental research branches when authorised branch deletion becomes available.
-8. Conduct accessibility, privacy/child-safety, pedagogical and human exact-head review before constitutional promotion.
+1. Normalise the evidence register into reusable evidence records/packets, including transfer, multimedia, developmental, accessibility and child-safety evidence classes; map constitution rules to provenance.
+2. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract.
+3. Convert the shared-decision prototype family into a named pathway dossier, instantiate the review contract and run the first constitutional review against it.
+4. Identify inbound references before moving legacy root files.
+5. Add deterministic repository checks after schemas stabilise; checks may validate contract shape and prohibited configurations only.
+6. Delete accidental research branches when authorised branch deletion becomes available.
+7. Conduct accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review before constitutional promotion.
 
 ## Backlog-zero rule
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
