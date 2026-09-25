@@ -69,6 +69,7 @@ Stato: **PRONTO PER COSTRUZIONE IN PENPOT**
 - nessun componente duplicato per testo o icona;
 - colore di modulo separato da colore di stato;
 - focus sempre visibile;
+- ogni controllo interattivo deve avere un target minimo di **44 × 44 px**, anche quando l'icona visiva è più piccola;
 - nessun significato affidato al solo colore;
 - mobile progettato autonomamente;
 - nessun overflow orizzontale non intenzionale;
