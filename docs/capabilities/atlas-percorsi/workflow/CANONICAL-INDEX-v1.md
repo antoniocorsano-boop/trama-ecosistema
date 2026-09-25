@@ -14,6 +14,7 @@ Single entry point for understanding current authority, experiments and open con
 | child-safe learning & experience constitution | `governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md` | CANONICAL G1 CONSTITUTION — PROPOSED FOR REVIEW; runtime not authorised |
 | pathway constitution review contract | `governance/PATHWAY-CONSTITUTION-REVIEW-CONTRACT-v1.yaml` | CANONICAL G1 REVIEW CONTRACT — PROPOSED FOR REVIEW; structural checks never replace human judgement |
 | normalised evidence/provenance | `research/evidence-records-v1.yaml` | ACTIVE NORMALISATION; constitution mapping established, gaps explicit |
+| transfer/claim calibration evidence | `research/evidence/transfer-claim-calibration-records-v1.yaml` | ACTIVE NORMALISATION; C12/C13 structural provenance established; child-specific validation still open |
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
@@ -31,7 +32,11 @@ The Child-Safe Learning & Experience Constitution consolidates the current non-n
 
 The Pathway Constitution Review Contract operationalises those constraints as declared, machine-checkable dossier fields while preserving mandatory human reviews. Structural validity is necessary but never sufficient for promotion.
 
-The first normalised evidence layer now maps bounded source inferences to constitutional rules. It deliberately exposes weak/empty provenance rather than filling gaps by intuition. Current priority gaps are C12 transfer, C13 claim calibration, stronger C3 feedback/error evidence, C11 relational-agent/pseudo-therapy evidence and C16 emotion/SEL evidence.
+The normalised evidence layer maps bounded source inferences to constitutional rules and deliberately exposes weak provenance rather than filling gaps by intuition. C12 (transfer) and C13 (claim calibration) now have a dedicated normalised evidence packet. Their **structural provenance gap is closed**, but child-specific primary/lower-secondary validation remains open and no competence-certification threshold is authorised.
+
+A governed claim ladder now distinguishes activity completion, local supported performance, local independent performance, changed-context performance and multi-context transfer evidence. The ladder is an Atlas governance model for claim discipline, not a psychometric scale.
+
+Remaining priority evidence gaps are stronger C3 feedback/error evidence, C11 relational-agent/pseudo-therapy evidence and C16 emotion/SEL evidence, plus deeper child-specific transfer evidence.
 
 Automatic constitutional stops cover trait/psychological inference, coercive engagement, shame/humiliation/fear mechanisms, invasive sensitive disclosure, pseudo-therapy/dependency and privacy/profile violations. Automation may detect declarations/configurations; it cannot determine pedagogical quality or child safety by itself.
 
@@ -39,18 +44,21 @@ Neither constitution nor contract prescribes a universal metaphor, mascot, narra
 
 Constitution and contract remain `PROPOSED FOR REVIEW` and cannot authorise production runtime. Promotion requires closing or explicitly governing provenance gaps plus accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review.
 
-## Root-level legacy/current artefacts — census classification
-Existing root artefacts remain retained pending reconciliation and inbound-reference analysis. `research-evidence-register.md` remains the human-readable accumulated register; `research/evidence-records-v1.yaml` is the new normalised machine-readable layer and does not silently replace unnormalised records. Other legacy artefacts remain supporting/historical material pending reconciliation.
-
-## Prototype family
-Everything under `prototypes/` remains **EXPERIMENTAL** unless explicitly promoted. Journey/Crossroads tests contextual continuity and decision/consequence representation; it is not an Atlas-wide visual template.
-
 ## Research authority rule
 A source appearing in a register or search result is not automatically evidence adopted by Atlas:
 
 `QUESTION → SCREENED EVIDENCE → LIMITATIONS → INTERPRETATION → DESIGN CONSEQUENCE → TESTABLE HYPOTHESIS`
 
 Research packets classify implications as `SUPPORTED`, `UNCERTAIN`, `UNSUPPORTED`, or `CONTRAINDICATED`.
+
+Broad bibliographic searches for transfer have demonstrated severe semantic noise. Search ranking/citation count is therefore never used as a promotion rule; targeted screening and bounded inference remain mandatory.
+
+## Claim discipline
+Atlas Percorsi must preserve the distinction between:
+
+`completion → local supported performance → local independent performance → changed-context performance → multi-context transfer evidence`
+
+No step automatically implies the next. None authorises a stable personality or psychological label. Support level and sampled contexts remain part of the evidence, not metadata that can be discarded in reporting.
 
 ## Narrative authority rule
 There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
@@ -65,7 +73,7 @@ Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / A
 Nothing in this index, constitution, review contract or evidence normalisation authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
 ## Open consolidation queue
-1. Close priority provenance gaps: normalise transfer/claim-calibration evidence for C12/C13, then strengthen C3, C11 and C16 evidence.
+1. Strengthen C3 feedback/error evidence, C11 relational-agent/pseudo-therapy evidence and C16 emotion/SEL evidence; deepen child-specific transfer evidence.
 2. Continue normalising the remaining human-readable evidence register without losing population/context/limitation metadata.
 3. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract/evidence layer.
 4. Convert the shared-decision prototype family into a named pathway dossier, instantiate the review contract and run the first constitutional review against it.
