@@ -1,0 +1,207 @@
+schema: atlas.percorsi.pathway-constitution-review/v1
+status: PROPOSED_FOR_REVIEW
+runtime_authorized: false
+constitution_ref: governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md
+purpose: >-
+  Machine-checkable declaration contract for pathway dossiers. Structural checks
+  support review but never replace pedagogical, accessibility, privacy, child-safety
+  or human governance judgement.
+
+review_states:
+  - NOT_REVIEWED
+  - PASS
+  - CHANGES_REQUIRED
+  - BLOCKED
+
+claim_states:
+  - DESIGN_HYPOTHESIS
+  - PROTOTYPE_OBSERVATION
+  - ATLAS_VALIDATED_LOCAL_EFFECT
+  - TRANSFER_EVIDENCE
+  - NOT_ESTABLISHED
+
+evidence_states:
+  - SUPPORTED
+  - UNCERTAIN
+  - UNSUPPORTED
+  - CONTRAINDICATED
+
+required:
+  pathway:
+    id: string
+    title: string
+    dossier_ref: string
+    gate: string
+    status: string
+    intended_developmental_band:
+      enum: [EARLIER_PRIMARY, LATER_PRIMARY, LOWER_SECONDARY, MULTI_BAND]
+    runtime_authorized:
+      const: false
+
+  competence:
+    target: string
+    observable_task_performances:
+      type: array
+      min_items: 1
+    prohibited_trait_inferences:
+      type: array
+      min_items: 1
+    claim_state:
+      enum_ref: claim_states
+    claim_ceiling: string
+
+  learner_agency:
+    meaningful_choice_present: boolean
+    revision_or_recovery_supported: boolean
+    coercive_engagement_patterns:
+      const: []
+    human_review_required: true
+
+  reflection:
+    task_bound: true
+    sensitive_personal_disclosure_required:
+      const: false
+    fictional_or_hypothetical_option: boolean
+    age_appropriate_form_declared: true
+
+  cognitive_demand:
+    task_demand: string
+    representation_demand: string
+    navigation_demand: string
+    narrative_demand: string
+    avoidable_memory_load_externalised: boolean
+    speed_used_as_default_competence_proxy:
+      const: false
+    stable_anchors_declared: true
+
+  media:
+    salient_assets_classified: true
+    allowed_function_classes:
+      - STRUCTURAL
+      - ORIENTING
+      - NARRATIVE_CAUSAL
+      - AFFECTIVE_SAFE
+      - ACCESSIBILITY
+      - ATMOSPHERIC
+      - DECORATIVE
+    decorative_assets_justified: boolean
+    motion_necessity_declared: true
+    cognitive_continuity_reviewed: true
+
+  narrative:
+    universal_metaphor_required:
+      const: false
+    character_used: boolean
+    pseudo_therapeutic_role:
+      const: false
+    simulated_dependency_or_exclusive_intimacy:
+      const: false
+    confidential_disclosure_solicited:
+      const: false
+
+  transfer:
+    claimed: boolean
+    if_claimed_require:
+      - source_context
+      - target_context
+      - changed_dimensions
+      - invariant_structure
+      - support_level
+      - observable_action
+      - claim_ceiling
+    completion_alone_used_as_transfer_evidence:
+      const: false
+
+  privacy:
+    student_account_required:
+      const: false
+    real_name_required:
+      const: false
+    personal_biography_required:
+      const: false
+    behavioural_profile_created:
+      const: false
+    cross_pathway_psychological_dossier:
+      const: false
+    hidden_psychometric_score:
+      const: false
+    server_side_telemetry:
+      enum: [NONE, SEPARATELY_GOVERNED]
+    data_inventory_ref: string
+
+  accessibility:
+    essential_meaning_single_sensory_channel:
+      const: false
+    colour_only_essential_signal:
+      const: false
+    reduced_motion_reviewed: true
+    alternative_representation_declared: true
+    construct_equivalence_human_review_required: true
+
+  emotional_safety:
+    shame_or_humiliation_mechanism:
+      const: false
+    fear_as_performance_mechanism:
+      const: false
+    punitive_exit:
+      const: false
+    error_recovery_declared: true
+    uncomfortable_scenario_exit_declared: true
+
+  teacher_sovereignty:
+    autonomous_diagnosis:
+      const: false
+    autonomous_psychological_remediation:
+      const: false
+    task_evidence_and_inference_distinguished: true
+    provenance_and_limits_visible_to_teacher: true
+
+  evidence:
+    evidence_register_ref: string
+    reasoning_chain_present: true
+    evidence_state:
+      enum_ref: evidence_states
+    falsification_or_change_condition_present: true
+
+  human_reviews:
+    pedagogical:
+      required: true
+      state:
+        enum_ref: review_states
+    child_safety_privacy:
+      required: true
+      state:
+        enum_ref: review_states
+    accessibility:
+      required: true
+      state:
+        enum_ref: review_states
+    developmental:
+      required: true
+      state:
+        enum_ref: review_states
+    exact_head:
+      required_before_promotion: true
+      reviewed_commit: null
+      state:
+        enum_ref: review_states
+
+automatic_constitutional_stops:
+  - code: C1_TRAIT_INFERENCE
+    when: prohibited trait/psychological inference is configured or produced
+  - code: C2_COERCIVE_ENGAGEMENT
+    when: dark pattern, artificial urgency, loss-framed streak, manipulative scarcity or dependency mechanism is configured
+  - code: C3_HUMILIATION
+    when: shame, humiliation or fear is used as a performance mechanism
+  - code: C4_INVASIVE_DISCLOSURE
+    when: sensitive personal disclosure is required for pathway operation or reflection
+  - code: C11_PSEUDO_THERAPY
+    when: a character/system diagnoses, solicits confidential disclosure or simulates therapeutic/intimate dependency
+  - code: C14_PRIVACY
+    when: account, real identity, behavioural profile, cross-pathway psychological dossier or hidden psychometric score is required without separately approved governance
+
+promotion_rule: >-
+  A structurally valid contract is necessary but never sufficient. Promotion requires
+  all mandatory human reviews PASS, exact-head review PASS, no constitutional stop,
+  evidence/provenance traceability, and explicit runtime authority from the correct
+  governance process. This contract itself never grants runtime authority.
