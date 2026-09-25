@@ -66,9 +66,9 @@
     {
       "id": "CC3-F0",
       "label": "Governed Forecast Contract & Guardrails",
-      "state": "ACTIVE",
+      "state": "CLOSED",
       "authority": "TRAMA",
-      "humanReview": "PENDING"
+      "humanReview": "PASS"
     }
   ]
 }
