@@ -133,7 +133,7 @@ function renderCapabilities(){
   capabilityList.innerHTML=items.length?items.map(c=>{
     const m=maturityFor(c);
     const runtime=c.runtimeState||'NON_DICHIARATO';
-    const changed=c.lastSignificantChange||'non registrata';
+    const changed=formatDateOnly(c.lastSignificantChange);
     return '<article class="cap"><div class="cap-top"><span class="cap-id">'+esc(c.id)+'</span><span class="badge '+badgeClass(c.state)+'">'+esc(c.state)+'</span></div><h3>'+esc(c.label)+'</h3><div class="facts"><div class="fact"><small>Owner</small><strong>'+esc(c.ownerDomain)+'</strong></div><div class="fact"><small>Human review</small><strong>'+esc(c.humanReview||'NON_DICHIARATA')+'</strong></div><div class="fact"><small>Maturità collegata</small><strong>'+(m?'L'+esc(m.confirmedLevel)+' · '+esc(m.name):'non collegata')+'</strong></div><div class="fact"><small>Runtime</small><strong>'+esc(runtime)+'</strong></div><div class="fact"><small>Gate</small><strong>'+esc((c.gateRefs||[]).join(', ')||'nessuno registrato')+'</strong></div><div class="fact"><small>Dipendenze</small><strong>'+esc((c.dependencyRefs||[]).join(', ')||'nessuna dichiarata')+'</strong></div><div class="fact"><small>Ultima modifica significativa</small><strong>'+esc(changed)+'</strong></div></div><div class="refs">Evidenze: '+esc((c.evidenceRefs||[]).join(', ')||'nessuna registrata')+'<br>Fonte: '+esc(c.sourceRef)+'</div></article>';
   }).join(''):'<div class="empty">Nessuna capability corrisponde ai filtri.</div>';
 }
