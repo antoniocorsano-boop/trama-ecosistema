@@ -11,7 +11,7 @@ CHILD-SAFE adds mandatory evidence and design constraints when a TRAMA capabilit
 
 ## Core rule
 
-A public minor-facing capability must be useful without requiring the minor to disclose personal data to Atlas. Data protection, child rights, safety, accessibility, inclusion, agency and age-appropriate comprehension are design inputs, not end-stage compliance checks.
+A public minor-facing capability must be useful without requiring the minor to disclose personal data to Atlas. Data protection, child rights, safety, accessibility, inclusion, agency, cognitive accessibility and age-appropriate comprehension are design inputs, not end-stage compliance checks.
 
 ## Mandatory G1 evidence domains
 
@@ -22,10 +22,11 @@ Before G1 PASS, the capability record must contain retrievable evidence for:
 3. children's rights and safeguards relevant to the digital experience;
 4. privacy, data minimisation and protection-by-design/default;
 5. accessibility, inclusion and age-appropriate language;
-6. risks created by free text, uploads, external links, sharing or other disclosure surfaces;
-7. teacher/adult mediation boundaries where applicable;
-8. age-band differences relevant to interaction, reflection and narrative comprehension;
-9. alternatives considered and negative knowledge.
+6. attention, working-memory/cognitive-load and multimedia risks where the experience is visually or interactively rich;
+7. risks created by free text, uploads, external links, sharing or other disclosure surfaces;
+8. teacher/adult mediation boundaries where applicable;
+9. age-band differences relevant to interaction, reflection and narrative comprehension;
+10. alternatives considered and negative knowledge.
 
 Every source must record what design or governance question it informs. A bibliography without traceability is insufficient.
 
@@ -38,7 +39,8 @@ For a minor-facing capability, review together:
 - protection from avoidable risks;
 - privacy and data protection;
 - participation and agency appropriate to the experience;
-- understandable information and choices.
+- understandable information and choices;
+- cognitive accessibility, attention and freedom from manipulative engagement patterns.
 
 A safety measure that unnecessarily excludes, identifies or removes meaningful agency requires justification and review.
 
@@ -80,6 +82,26 @@ Review must include browser/local storage, telemetry, logs, error reporting, CDN
 - unsafe or unsuitable outbound content is not embedded merely because it is publicly reachable;
 - metaphor/narrative never becomes necessary to understand a safety-critical choice.
 
+## Cognitive and visual safety baseline
+
+A minor-facing learning experience must not optimise for attention capture at the expense of comprehension, reflection or self-regulation.
+
+Default constraints:
+
+- one dominant pedagogical focus per state unless comparison/integration requires more;
+- avoid decorative/seductive visual details that compete with the learning target;
+- avoid rapid automatic replacement of learning-critical imagery;
+- prefer learner-controlled pacing for learning-critical transitions;
+- use signaling/cueing to show relevant relationships rather than making all elements visually salient;
+- preserve stable visual anchors when recurrence supports meaning and memory;
+- follow salient imagery with a meaningful cognitive action (retrieve, choose, explain, connect, compare, predict, reflect or transfer);
+- provide pause, revisit and reorientation without penalty;
+- preserve meaning under reduced-motion/no-audio/low-stimulation presentation;
+- do not infer understanding or competence from visual attraction, clicks, dwell time or image recall alone;
+- validate with intended age bands and diverse attention/learning needs before publication.
+
+These constraints are educational/accessibility safeguards, not clinical claims or diagnostic rules.
+
 ## Mandatory design surfaces review
 
 Before G4 PASS, explicitly review:
@@ -95,7 +117,11 @@ Before G4 PASS, explicitly review:
 - error messages and logs;
 - third-party scripts/services;
 - age assurance, if proposed;
-- reduced-motion/no-audio/non-visual alternatives.
+- reduced-motion/no-audio/non-visual alternatives;
+- visual density and competing focal points;
+- automatic transitions/autoplay;
+- decorative animation and interactive hotspots;
+- reorientation/recovery after distraction.
 
 `NOT_APPLICABLE` requires rationale.
 
@@ -110,13 +136,18 @@ For experiential minor-facing capabilities, narrative design is a first-class pr
 - subject/premise;
 - narrative arc;
 - recurring places, guides or symbols;
+- stable visual anchors and visual-attention budget;
 - interaction grammar;
 - tone and vocabulary;
 - progression rituals and representation of achievement;
 - accessibility equivalents for animation, sound and visual metaphor;
-- boundaries preventing manipulation, disclosure pressure or obscured choices.
+- boundaries preventing manipulation, disclosure pressure, cognitive overload or obscured choices.
 
-Narrative quality does not override privacy, accessibility, child rights or human control.
+Narrative quality does not override privacy, accessibility, child rights, cognitive safety or human control.
+
+## Child participation in validation
+
+Where children participate in design/usability validation, the process itself must be governed and CHILD-SAFE. Participation should be meaningful but bounded to the design question, minimise data collection, avoid soliciting unnecessary personal histories, include appropriate adult/institutional mediation where required and document how feedback changes the design. A small participant group must not be treated as representative of all children.
 
 ## Evidence-to-decision traceability
 
@@ -128,4 +159,4 @@ Research findings remain evidence until a governed decision adopts them.
 
 ## Publication condition
 
-A CHILD-SAFE capability cannot be publication-ready solely because code and UI are complete. Relevant lifecycle gates must contain current evidence for pedagogy, child rights, safety/privacy, accessibility/inclusion, age-appropriate narrative/content review where applicable, data-flow verification and human validation on the exact release candidate.
+A CHILD-SAFE capability cannot be publication-ready solely because code and UI are complete. Relevant lifecycle gates must contain current evidence for pedagogy, child rights, safety/privacy, accessibility/inclusion, cognitive/visual safety, age-appropriate narrative/content review where applicable, data-flow verification and human validation on the exact release candidate.
