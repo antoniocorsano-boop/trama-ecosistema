@@ -5,7 +5,6 @@
 **Runtime:** NOT_AUTHORIZED
 
 ## Purpose
-
 Single entry point for understanding current authority, experiments and open consolidation work without chat history.
 
 ## Current canonical direction
@@ -17,99 +16,56 @@ Single entry point for understanding current authority, experiments and open con
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
 | transfer/retrieval foundations | `research/common/foundations-transfer-retrieval-screening-v1.md` | ACTIVE SCREENING; no product-claim promotion |
 | retrieval/transfer synthesis | `research/common/retrieval-transfer-evidence-synthesis-v1.md` | ACTIVE EVIDENCE SYNTHESIS |
-| transfer of learning | `research/common/transfer-of-learning-screening-v1.md` | ACTIVE SCREENING; transfer promoted as explicit validation dimension, not competence certification |
+| transfer of learning | `research/common/transfer-of-learning-screening-v1.md` | ACTIVE SCREENING; transfer explicit validation dimension |
+| cognitive load / attention / multimedia | `research/common/cognitive-load-attention-multimedia-screening-v1.md` | ACTIVE SCREENING; functional relevance and controlled attentional demand promoted as G1 constraints |
 | experiential grammar registry | `grammars/registry.yaml` | CANONICAL registry; entries remain `research` |
 | pathway dossier | `templates/PATHWAY-DOSSIER-TEMPLATE.md` | CANONICAL template |
 | backlog control | `workflow/backlog-zero-consolidation-plan-v1.md` | CANONICAL active plan |
 
 ## Root-level legacy/current artefacts — census classification
-
-The following existing files predate the newer information architecture. They are retained in place during census; physical moves are deferred until inbound-reference analysis.
-
-| File | Classification | Current interpretation/action |
-|---|---|---|
-| `README.md` | NEEDS_REVIEW | capability entry point; must be reconciled with this index |
-| `pedagogical-model.md` | SUPPORTING / NEEDS_EVIDENCE_REVIEW | pedagogical hypotheses remain useful; evidence-first review governs promotion |
-| `research-evidence-register.md` | SUPPORTING / NEEDS_NORMALISATION | accumulated evidence; convert toward screened evidence records/packets |
-| `emotional-development-safeguards.md` | SUPPORTING / CANDIDATE_CONSTITUTION | retain safeguards; reconcile with mature evidence and constitution structure |
-| `decision-rationale-sustainability.md` | SUPPORTING / CANDIDATE_CONSTITUTION | retain consequence-aware sustainability reasoning; avoid invented quantitative claims |
-| `narrative-experience-bible.md` | EXPERIMENTAL / PARTLY_SUPERSEDED | useful narrative reasoning; universal narrative identity superseded by pathway-specific architecture |
-| `curriculum-metaphor-matrix.md` | EXPERIMENTAL / HISTORICAL | metaphor exploration retained as design evidence; not canonical selection mechanism |
-| `metaphor-comparative-assessment.md` | EXPERIMENTAL / HISTORICAL | comparison evidence retained; universal-metaphor premise superseded |
+Existing root artefacts remain retained pending reconciliation and inbound-reference analysis. `pedagogical-model.md`, `research-evidence-register.md`, `emotional-development-safeguards.md` and `decision-rationale-sustainability.md` remain supporting material. Universal-metaphor interpretations in narrative/metaphor documents are superseded; experimental reasoning remains historical evidence.
 
 ## Prototype family
-
-All files under `prototypes/` are **EXPERIMENTAL** unless explicitly promoted by a later governed decision.
-
-Current interpretation:
-
-- Journey/Crossroads experiments test contextual continuity and decision/consequence representation;
-- they are not Atlas-wide visual templates;
-- the shared-decision sequence is to become a concrete decision/collaboration pathway experiment;
-- generated visual artefacts cannot become specification without scenario-fidelity and safeguard review.
+Everything under `prototypes/` remains **EXPERIMENTAL** unless explicitly promoted. Journey/Crossroads tests contextual continuity and decision/consequence representation; it is not an Atlas-wide visual template.
 
 ## Research authority rule
-
-A source appearing in a register or search result is not automatically evidence adopted by Atlas. The canonical research process is:
+A source appearing in a register or search result is not automatically evidence adopted by Atlas:
 
 `QUESTION → SCREENED EVIDENCE → LIMITATIONS → INTERPRETATION → DESIGN CONSEQUENCE → TESTABLE HYPOTHESIS`
 
-Research packets must classify implications as `SUPPORTED`, `UNCERTAIN`, `UNSUPPORTED`, or `CONTRAINDICATED`.
+Research packets classify implications as `SUPPORTED`, `UNCERTAIN`, `UNSUPPORTED`, or `CONTRAINDICATED`.
 
-### Retrieval-practice review — controlled interpretation
+### Retrieval and transfer
+Retrieval practice remains a learning mechanism under investigation; quizzes, successful retrieval, activity/game completion do not establish transversal competence. Transfer is an explicit design-and-validation dimension: source/target context, changed dimensions, invariant structure, support level, observable performance and claim ceiling must be specified.
 
-Current screening supports continued investigation of retrieval practice as a learning mechanism. It does **not** authorize a product rule equating quizzes, successful retrieval, activity completion or game completion with transversal competence.
+### Cognitive load, attention and multimedia
+Atlas Percorsi must optimise for meaningful cognitive activity, not visual stimulation. G1 constraints now include functional relevance of salient media, coherence, stable cognitive orientation, progressive scaffolding and controlled attentional demand. Multimedia, animation, characters, narrative and interaction are selected by function rather than presumed motivational value.
 
-The synthesis distinguishes retention from transfer; near from far transfer; child/school evidence from university-heavy evidence; and knowledge retrieval from authentic performance in changed contexts.
+A specific child-facing design risk is now tracked: rapid succession of memorable but weakly integrated images may disrupt stable mental-model construction. This remains an age-specific **design-risk hypothesis**, not a universal claim about children. Stable visual anchors, deliberate recurrence and restrained novelty are candidate safeguards.
 
-### Transfer-of-learning review — controlled interpretation
-
-Transfer is now an explicit **design-and-validation dimension**. A pathway claiming transfer must define source context, target context, what changed, what structural relation remains invariant, support level, observable performance and the maximum claim permitted by that evidence.
-
-This does **not** certify a child's competence from pathway completion and does not authorize stable trait or psychological inference.
+No fixed universal media quota, text limit, animation duration, interaction count or cognitive-load threshold is authorised.
 
 ## Narrative authority rule
+There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
 
-There is no universal Atlas Percorsi metaphor at present.
-
-Canonical G1 direction:
-
-- common constitution/safeguards;
-- common functional narrative grammar;
-- pathway-specific narrative identity;
-- local devices selected for cognitive function;
-- evidence before grammar promotion.
-
-Therefore Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions are research/design resources—not defaults.
+## Child-facing boundary
+No task may infer stable psychological/personality traits from a minor's choices or require sensitive personal disclosure. Attention capture must not become coercive engagement; dark patterns, artificial urgency, loss-framed streaks and manipulative continuation pressure are outside the intended design space.
 
 ## Repository hygiene incident — 2026-09-25
-
-During evidence-review work an automated operation accidentally created multiple `research/atlas-percorsi-*` branch refs without governed content. These refs are **NON-CANONICAL / ACCIDENTAL** and must not be used as evidence, product state or continuation points.
-
-The currently available GitHub connector does not expose branch deletion. Corrective rule:
-
-1. `capability/atlas-percorsi-g1-child-safe` remains the governed Percorsi branch;
-2. accidental refs must not be merged or used as bases;
-3. they should be deleted later through an authorized branch-management mechanism;
-4. future writes must resolve the exact target branch and current blob/head before mutation; branch creation is not a retry mechanism.
-
-The incident is retained here so repository state is reconstructible without chat history.
+Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / ACCIDENTAL**. `capability/atlas-percorsi-g1-child-safe` remains the governed branch. Accidental refs must not be merged or used as bases and should be deleted when an authorised branch-management mechanism is available. Future writes resolve target branch and current blob/head before mutation.
 
 ## Runtime boundary
-
-Nothing in this index authorizes child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains the governing state for this G1 capability work.
+Nothing in this index authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
 ## Open consolidation queue
-
-1. Screen cognitive load, working memory, attention and multimedia learning, explicitly considering developmental age and visual/narrative interfaces.
-2. Normalise the existing evidence register into evidence packets/records, including transfer-specific evidence classes.
-3. Reconcile `README.md` with the canonical architecture/workflow.
+1. Screen developmental evidence: executive functions, metacognition/self-regulation, emotion and age-appropriate reflection in primary/lower-secondary learners.
+2. Normalise the evidence register into reusable evidence records/packets, including transfer and multimedia evidence classes.
+3. Reconcile `README.md` with canonical architecture/workflow.
 4. Consolidate child-safety/privacy/accessibility/emotional/attention principles into a constitution layer without losing provenance.
 5. Convert the shared-decision prototype family into a named pathway dossier.
 6. Identify inbound references before moving legacy root files.
-7. Add deterministic repository checks only after schemas stabilise.
-8. Delete accidental research branches when an authorized branch-deletion mechanism is available.
+7. Add deterministic repository checks after schemas stabilise.
+8. Delete accidental research branches when authorised branch deletion becomes available.
 
 ## Backlog-zero rule
-
-Any new meaningful artefact must be linked or classified here (or in a successor canonical index) in the same work cycle. Superseded documents must name their replacement; unresolved research must remain visible.
+Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
