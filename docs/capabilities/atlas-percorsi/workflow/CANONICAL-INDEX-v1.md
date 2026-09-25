@@ -18,6 +18,7 @@ Single entry point for understanding current authority, experiments and open con
 | retrieval/transfer synthesis | `research/common/retrieval-transfer-evidence-synthesis-v1.md` | ACTIVE EVIDENCE SYNTHESIS |
 | transfer of learning | `research/common/transfer-of-learning-screening-v1.md` | ACTIVE SCREENING; transfer explicit validation dimension |
 | cognitive load / attention / multimedia | `research/common/cognitive-load-attention-multimedia-screening-v1.md` | ACTIVE SCREENING; functional relevance and controlled attentional demand promoted as G1 constraints |
+| development / executive functions / metacognition / emotion | `research/common/development-executive-metacognition-emotion-screening-v1.md` | ACTIVE SCREENING; developmental appropriateness, task-bound reflection and no-trait-inference promoted as G1 constraints |
 | experiential grammar registry | `grammars/registry.yaml` | CANONICAL registry; entries remain `research` |
 | pathway dossier | `templates/PATHWAY-DOSSIER-TEMPLATE.md` | CANONICAL template |
 | backlog control | `workflow/backlog-zero-consolidation-plan-v1.md` | CANONICAL active plan |
@@ -39,17 +40,24 @@ Research packets classify implications as `SUPPORTED`, `UNCERTAIN`, `UNSUPPORTED
 Retrieval practice remains a learning mechanism under investigation; quizzes, successful retrieval, activity/game completion do not establish transversal competence. Transfer is an explicit design-and-validation dimension: source/target context, changed dimensions, invariant structure, support level, observable performance and claim ceiling must be specified.
 
 ### Cognitive load, attention and multimedia
-Atlas Percorsi must optimise for meaningful cognitive activity, not visual stimulation. G1 constraints now include functional relevance of salient media, coherence, stable cognitive orientation, progressive scaffolding and controlled attentional demand. Multimedia, animation, characters, narrative and interaction are selected by function rather than presumed motivational value.
+Atlas Percorsi must optimise for meaningful cognitive activity, not visual stimulation. G1 constraints include functional relevance of salient media, coherence, stable cognitive orientation, progressive scaffolding and controlled attentional demand. Multimedia, animation, characters, narrative and interaction are selected by function rather than presumed motivational value.
 
-A specific child-facing design risk is now tracked: rapid succession of memorable but weakly integrated images may disrupt stable mental-model construction. This remains an age-specific **design-risk hypothesis**, not a universal claim about children. Stable visual anchors, deliberate recurrence and restrained novelty are candidate safeguards.
+Rapid succession of memorable but weakly integrated images remains an age-specific **design-risk hypothesis**, not a universal claim about children. Stable visual anchors, deliberate recurrence and restrained novelty are candidate safeguards. No fixed universal media quota, text limit, animation duration, interaction count or cognitive-load threshold is authorised.
 
-No fixed universal media quota, text limit, animation duration, interaction count or cognitive-load threshold is authorised.
+### Development, metacognition and emotion
+Transversal competences are treated as developing, context-sensitive performances—not fixed traits. G1 constraints now include developmental appropriateness, external support for avoidable executive/memory demands, task-bound metacognitive reflection, revision/recovery after error, and emotional distance through fictional/hypothetical scenarios where useful.
+
+`Starting from the self` means learner agency within the task: notice, choose, inspect consequences, reconsider, explain/adapt. It does not mean collecting biography, inferring personality or constructing a psychological profile.
+
+Evidence describes task performance and support required. It must not be converted into stable labels such as impulsive, empathetic, resilient, anxious, mature or poor collaborator. No hidden psychometric score is authorised.
+
+Candidate developmental bands (earlier primary, later primary, lower secondary) may guide hypotheses about complexity and reflection form, but are not fixed age norms or diagnostic expectations.
 
 ## Narrative authority rule
 There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
 
 ## Child-facing boundary
-No task may infer stable psychological/personality traits from a minor's choices or require sensitive personal disclosure. Attention capture must not become coercive engagement; dark patterns, artificial urgency, loss-framed streaks and manipulative continuation pressure are outside the intended design space.
+No task may infer stable psychological/personality traits from a minor's choices or require sensitive personal disclosure. Attention capture must not become coercive engagement; dark patterns, artificial urgency, loss-framed streaks and manipulative continuation pressure are outside the intended design space. Characters must not act as pseudo-therapists or create simulated dependency/intimacy to retain the learner.
 
 ## Repository hygiene incident — 2026-09-25
 Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / ACCIDENTAL**. `capability/atlas-percorsi-g1-child-safe` remains the governed branch. Accidental refs must not be merged or used as bases and should be deleted when an authorised branch-management mechanism is available. Future writes resolve target branch and current blob/head before mutation.
@@ -58,14 +66,13 @@ Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / A
 Nothing in this index authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
 ## Open consolidation queue
-1. Screen developmental evidence: executive functions, metacognition/self-regulation, emotion and age-appropriate reflection in primary/lower-secondary learners.
-2. Normalise the evidence register into reusable evidence records/packets, including transfer and multimedia evidence classes.
+1. Build the **Child-Safe Learning & Experience Constitution** by consolidating transfer, cognitive-load/multimedia, developmental, privacy, accessibility, emotional and attention constraints with provenance.
+2. Normalise the evidence register into reusable evidence records/packets, including transfer, multimedia, developmental and child-safety evidence classes.
 3. Reconcile `README.md` with canonical architecture/workflow.
-4. Consolidate child-safety/privacy/accessibility/emotional/attention principles into a constitution layer without losing provenance.
-5. Convert the shared-decision prototype family into a named pathway dossier.
-6. Identify inbound references before moving legacy root files.
-7. Add deterministic repository checks after schemas stabilise.
-8. Delete accidental research branches when authorised branch deletion becomes available.
+4. Convert the shared-decision prototype family into a named pathway dossier under the constitution.
+5. Identify inbound references before moving legacy root files.
+6. Add deterministic repository checks after schemas stabilise.
+7. Delete accidental research branches when authorised branch deletion becomes available.
 
 ## Backlog-zero rule
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
