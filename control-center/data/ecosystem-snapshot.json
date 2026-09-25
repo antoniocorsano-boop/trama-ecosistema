@@ -149,7 +149,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     },
     {
       "id": "EC-01-F4",
@@ -165,7 +166,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     },
     {
       "id": "ECO-02-P1",
@@ -183,7 +185,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     },
     {
       "id": "DOS-A1",
@@ -199,7 +202,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     },
     {
       "id": "R3-F0",
@@ -217,7 +221,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     },
     {
       "id": "R4-P1",
@@ -233,7 +238,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     },
     {
       "id": "TRAMA-SA-01",
@@ -249,7 +255,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     },
     {
       "id": "TRAMA-BRAND",
@@ -265,7 +272,8 @@
         "EV-SOURCE-ECOSYSTEM-STATUS"
       ],
       "lastSignificantChange": null,
-      "sourceRef": "status/ecosystem-status.json"
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-22"
     }
   ],
   "gates": [
