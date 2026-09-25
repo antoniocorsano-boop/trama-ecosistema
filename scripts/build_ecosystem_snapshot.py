@@ -86,6 +86,43 @@ def phase_status(capabilities: dict) -> list[dict]:
     ]
 
 
+def capability_projection(eco_status: dict, maturity_areas: list[dict]) -> list[dict]:
+    """Project declared capabilities without inventing missing operational facts."""
+    maturity_by_owner = {
+        "TRAMA": "governance",
+        "Arena": "arena",
+        "Atlas": "atlas",
+        "Docente OS": "docente-os",
+    }
+    known_areas = {area["id"] for area in maturity_areas}
+    gate_refs = {
+        "ECO-02-P1": ["GATE-ECO02-HUMAN-FINAL"],
+        "R3-F0": ["GATE-R3-F0-EXIT"],
+    }
+    projected = []
+    for item in eco_status.get("capabilities", []):
+        area_ref = maturity_by_owner.get(item.get("authority"))
+        if area_ref not in known_areas:
+            area_ref = None
+        projected.append(
+            {
+                "id": item["id"],
+                "label": item["label"],
+                "ownerDomain": item["authority"],
+                "state": item["state"],
+                "humanReview": item.get("humanReview"),
+                "runtimeState": "DEFERRED" if item.get("state") == "DEFERRED" else None,
+                "maturityAreaRef": area_ref,
+                "dependencyRefs": [],
+                "gateRefs": gate_refs.get(item["id"], []),
+                "evidenceRefs": ["EV-SOURCE-ECOSYSTEM-STATUS"],
+                "lastSignificantChange": None,
+                "sourceRef": "status/ecosystem-status.json",
+            }
+        )
+    return projected
+
+
 def build_snapshot(root: Path) -> dict:
     observed_at = datetime.now(timezone.utc).isoformat()
     config = load_json(root / "config/control-center-snapshot-sources.json")
@@ -193,17 +230,45 @@ def build_snapshot(root: Path) -> dict:
 
     return {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "1.1.0",
         "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),
         "areas": maturity_areas,
+        "capabilities": capability_projection(eco_status, maturity_areas),
         "gates": gates,
         "evidence": evidence,
         "dependencies": [
-            {"from": "Arena", "to": "Docente OS", "kind": "AUTHORITY", "status": "ACTIVE"},
-            {"from": "Arena", "to": "Atlas", "kind": "DATA_FLOW", "status": "GOVERNED"},
-            {"from": "Docente OS", "to": "Atlas", "kind": "FUTURE_NOT_AUTHORIZED", "status": "NOT_AUTHORIZED"},
+            {
+                "id": "DEP-ARENA-DOS-AUTHORITY",
+                "from": "Arena",
+                "to": "Docente OS",
+                "kind": "AUTHORITY",
+                "status": "ACTIVE",
+                "governanceRefs": ["TRAMA-ADR-002", "TRAMA-ADR-006"],
+                "gateRefs": [],
+                "evidenceRefs": ["EV-SOURCE-DECISION-REGISTER"],
+            },
+            {
+                "id": "DEP-ARENA-ATLAS-DATA",
+                "from": "Arena",
+                "to": "Atlas",
+                "kind": "DATA_FLOW",
+                "status": "GOVERNED",
+                "governanceRefs": ["TRAMA-ADR-002", "TRAMA-ADR-007"],
+                "gateRefs": [],
+                "evidenceRefs": ["EV-SOURCE-DECISION-REGISTER"],
+            },
+            {
+                "id": "DEP-DOS-ATLAS-FUTURE",
+                "from": "Docente OS",
+                "to": "Atlas",
+                "kind": "FUTURE_NOT_AUTHORIZED",
+                "status": "NOT_AUTHORIZED",
+                "governanceRefs": ["TRAMA-ADR-008"],
+                "gateRefs": [],
+                "evidenceRefs": ["EV-SOURCE-DECISION-REGISTER"],
+            },
         ],
         "assuranceClaims": [
             {**claim, "readiness": assurance_readiness(claim)}
@@ -223,6 +288,7 @@ def validate(snapshot: dict) -> None:
         "sourceState",
         "phases",
         "areas",
+        "capabilities",
         "gates",
         "evidence",
         "dependencies",
@@ -256,6 +322,33 @@ def validate(snapshot: dict) -> None:
     evidence_ids = {item["id"] for item in snapshot["evidence"]}
     if len(evidence_ids) != len(snapshot["evidence"]):
         raise ValueError("Duplicate evidence id detected")
+
+    area_ids = {area["id"] for area in snapshot["areas"]}
+    capability_ids = {item["id"] for item in snapshot["capabilities"]}
+    if len(capability_ids) != len(snapshot["capabilities"]):
+        raise ValueError("Duplicate capability id detected")
+
+    for capability in snapshot["capabilities"]:
+        area_ref = capability.get("maturityAreaRef")
+        if area_ref is not None and area_ref not in area_ids:
+            raise ValueError(f"Unresolved maturity area reference: {area_ref}")
+        for gate_ref in capability.get("gateRefs", []):
+            if gate_ref not in gate_ids:
+                raise ValueError(f"Unresolved capability gate reference: {gate_ref}")
+        for evidence_ref in capability.get("evidenceRefs", []):
+            if evidence_ref not in evidence_ids:
+                raise ValueError(f"Unresolved capability evidence reference: {evidence_ref}")
+
+    dependency_ids = {item["id"] for item in snapshot["dependencies"]}
+    if len(dependency_ids) != len(snapshot["dependencies"]):
+        raise ValueError("Duplicate dependency id detected")
+    for dependency in snapshot["dependencies"]:
+        for gate_ref in dependency.get("gateRefs", []):
+            if gate_ref not in gate_ids:
+                raise ValueError(f"Unresolved dependency gate reference: {gate_ref}")
+        for evidence_ref in dependency.get("evidenceRefs", []):
+            if evidence_ref not in evidence_ids:
+                raise ValueError(f"Unresolved dependency evidence reference: {evidence_ref}")
 
 
 def main() -> int:
