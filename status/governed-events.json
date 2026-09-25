@@ -144,6 +144,21 @@
         "Forecast contract e guardrail integrati; F1–F5 non autorizzati dal merge F0.",
         "ADR-016 resta PROPOSED; nessuna authority o runtime authorization introdotta."
       ]
+    },
+    {
+      "id": "EVT-R3-F0-S3V2-MERGE-32",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T04:19:33Z",
+      "label": "R3-F0/S3-V2 Atlas Product Experience chiusa",
+      "subjectRef": "R3-F0",
+      "sourceRef": "github:Curriculum-Atlas/pull/32",
+      "authority": "Atlas merge + HUMAN exact-head review",
+      "versionRef": "423444be9dd883f4c35c6c1c89e94f6b0e5405fa",
+      "details": [
+        "Exact head bc11577eeeeeed9c43ad62ac43fb7561e1197246 validato con F4 Mobile/LIM, F5 Exit e TRAMA Perceptible Write PASS.",
+        "S3-V2 chiusa; R3-F0 exit gate soddisfatto.",
+        "Nessuna autorizzazione a R3-P4, DOS-A1 o runtime Docente OS → Atlas."
+      ]
     }
   ]
 }
