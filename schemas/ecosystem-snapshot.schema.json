@@ -15,7 +15,8 @@
     "evidence",
     "dependencies",
     "assuranceClaims",
-    "expansionCandidates"
+    "expansionCandidates",
+    "integrityChecks"
   ],
   "properties": {
     "schemaVersion": {
@@ -746,6 +747,67 @@
               "string",
               "null"
             ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "integrityChecks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "status",
+          "severity",
+          "summary",
+          "affectedRefs",
+          "details"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "SOURCE_AVAILABILITY",
+              "REFERENCE_RESOLUTION",
+              "EVIDENCE_FRESHNESS",
+              "GATE_EVIDENCE_BINDING",
+              "RUNTIME_AUTHORIZATION",
+              "CAPABILITY_EVIDENCE_ALIGNMENT"
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "ISSUE",
+              "NOT_EVALUABLE"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "INFO",
+              "WARNING",
+              "ERROR"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "affectedRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": false
