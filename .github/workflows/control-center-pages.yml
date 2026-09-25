@@ -47,6 +47,8 @@ jobs:
           grep -q "relationList" control-center/ecosystem.html
           grep -q "mapEdges" control-center/ecosystem.html
           grep -q "dependencyRefs" control-center/ecosystem.html
+          grep -q "sourceUpdatedAt" control-center/ecosystem.html
+          grep -q "registro aggiornato" control-center/ecosystem.html
           grep -q "Solo le relazioni presenti nello snapshot" control-center/ecosystem.html
           ! grep -q 'x1="360" y1="96" x2="130" y2="250"' control-center/ecosystem.html
           ! grep -q 'x1="360" y1="96" x2="360" y2="250"' control-center/ecosystem.html
