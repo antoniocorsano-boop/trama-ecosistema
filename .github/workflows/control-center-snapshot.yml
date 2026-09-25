@@ -52,12 +52,6 @@ jobs:
         run: python scripts/build_ecosystem_snapshot.py --check
       - name: Build snapshot fixture
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
-      - name: Export generated snapshot for governed refresh
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-ecosystem-snapshot
-          path: /tmp/ecosystem-snapshot.json
-          if-no-files-found: error
       - name: Detect committed snapshot drift
         shell: bash
         run: |
