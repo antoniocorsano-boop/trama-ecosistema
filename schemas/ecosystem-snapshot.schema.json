@@ -16,7 +16,9 @@
     "dependencies",
     "assuranceClaims",
     "expansionCandidates",
-    "integrityChecks"
+    "integrityChecks",
+    "operationalPath",
+    "timelineEvents"
   ],
   "properties": {
     "schemaVersion": {
@@ -811,6 +813,238 @@
           }
         },
         "additionalProperties": false
+      }
+    },
+    "operationalPath": {
+      "type": "object",
+      "required": [
+        "currentActivities",
+        "nextGates",
+        "nextIncrements",
+        "explicitDefers",
+        "unmetDependencies"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "currentActivities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ref",
+              "kind",
+              "label",
+              "status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "PHASE",
+                  "CAPABILITY"
+                ]
+              },
+              "label": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "nextGates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ref",
+              "area",
+              "status",
+              "blocking",
+              "decisionAuthority"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "area": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "blocking": {
+                "type": "boolean"
+              },
+              "decisionAuthority": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "nextIncrements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ref",
+              "label",
+              "status",
+              "dependencyRefs"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "dependencyRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "explicitDefers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ref",
+              "label",
+              "state",
+              "runtimeState"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "runtimeState": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "unmetDependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "subjectRef",
+              "dependencyRef",
+              "dependencyKind",
+              "dependencyStatus"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "subjectRef": {
+                "type": "string"
+              },
+              "dependencyRef": {
+                "type": "string"
+              },
+              "dependencyKind": {
+                "enum": [
+                  "GATE",
+                  "CAPABILITY",
+                  "DEPENDENCY",
+                  "UNKNOWN"
+                ]
+              },
+              "dependencyStatus": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "timelineEvents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "eventType",
+          "occurredAt",
+          "label",
+          "subjectRef",
+          "sourceRef",
+          "authority",
+          "versionRef",
+          "details"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eventType": {
+            "enum": [
+              "HUMAN_REVIEW",
+              "MERGE",
+              "ADR_APPROVAL",
+              "GATE_PASS",
+              "CAPABILITY_PROMOTION",
+              "RUNTIME_AUTHORIZATION",
+              "DEPRECATION",
+              "SUPERSESSION"
+            ]
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "label": {
+            "type": "string"
+          },
+          "subjectRef": {
+            "type": "string"
+          },
+          "sourceRef": {
+            "type": "string"
+          },
+          "authority": {
+            "type": "string"
+          },
+          "versionRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
       }
     }
   },
