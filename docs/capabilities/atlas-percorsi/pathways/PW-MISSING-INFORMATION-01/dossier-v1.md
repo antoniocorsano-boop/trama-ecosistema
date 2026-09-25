@@ -1,34 +1,32 @@
 # PW-MISSING-INFORMATION-01 — Prima di decidere, cosa manca?
 
 **Gate:** G1 — constitutional prototype review  
-**Status:** REVIEW_CANDIDATE / NOT_RUNTIME_AUTHORIZED  
+**Status:** REVIEW_CANDIDATE_V2 / NOT_RUNTIME_AUTHORIZED  
 **Developmental band:** LATER_PRIMARY  
 **Source prototype:** `prototypes/journey-multiscene-prototype-v1.md`  
+**Prior review:** `constitutional-review-g1-v1.md` — CHANGES_REQUIRED  
 **Runtime:** NOT_AUTHORIZED
 
 ## 1. Pathway brief
-
 ### Competence target
 Reason about consequential choices by identifying relevant missing information before deciding, inspecting consequences, and revising when warranted.
 
-Observable task performances:
-- notices that relevant information is absent;
-- compares decision processes rather than personalities;
-- predicts or inspects a consequence;
-- keeps or revises a choice with task-based reasoning;
-- recognises the strategy in a changed context;
-- attempts application beyond the original social surface.
+Observable performances: notice missing relevant information; compare decision processes rather than people; inspect/predict consequence; keep/revise a choice for task reasons; recognise the strategy in a changed context; attempt application beyond the original social surface.
 
 ### Claim ceiling
-Completion establishes only pathway completion. Correct performance in one scene supports only local task-performance claims. Transfer requires changed-context evidence and must not be inferred from completion, route choice or character liking.
+Completion means completion only. One-scene success supports local task-performance claims only. Transfer requires changed-context evidence and is never inferred from completion, route choice or character liking.
 
 ### Prohibited inferences
 No inference about empathy, kindness, maturity, personality, social worth, anxiety, shyness, leadership, emotional type or psychological state.
 
-## 2. Educational need
-Shared decisions often require noticing which relevant information has not yet been gathered. The pathway externalises this reasoning through ordinary fictional situations without asking the learner to disclose personal conflict or biography.
+## 2. Educational need and reasoning chain
+Shared decisions can require noticing relevant information not yet gathered. The pathway externalises this reasoning through ordinary fictional situations without asking the learner to disclose personal conflict or biography.
 
-## 3. Evidence and reasoning references
+`missing information → bounded fictional choice → inspect consequence → reconsider → name strategy → changed context → transfer probe`
+
+Evidence does not establish Journey/Crossroads as an optimal metaphor, a universally correct route, or a stable transversal trait from successful performance.
+
+## 3. Evidence/governance references
 - `research/evidence-records-v1.yaml`
 - `research/evidence/transfer-claim-calibration-records-v1.yaml`
 - `research/evidence/error-agent-emotion-records-v1.yaml`
@@ -37,108 +35,134 @@ Shared decisions often require noticing which relevant information has not yet b
 - `governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md`
 - `governance/PATHWAY-CONSTITUTION-REVIEW-CONTRACT-v1.yaml`
 
-Reasoning chain:
-`missing information problem → bounded fictional choice → inspect consequence → reconsider → name strategy → changed context → transfer probe`
+## 4. Narrative and character boundary
+Journey/Crossroads is a controlled candidate for continuity, never essential meaning. A complete literal/non-metaphorical baseline exists. Atmosphere is calm, exploratory, non-competitive and non-judgmental: no urgency, reward economy, spectacle or emotional escalation.
 
-Evidence does not establish that Journey/Crossroads is the optimal metaphor, that one route is universally correct, or that successful performance proves a stable transversal trait.
+Characters are fictional task participants, not companions/confidants. They do not claim privileged understanding, request biography or persist across pathways to build a relationship. No autonomous conversational agent is required; dialogue is fixed/scripted and task-bound.
 
-## 4. Narrative concept
-The learner observes a fictional group facing a shared decision. The journey/crossroads representation is a controlled candidate for contextual continuity, never the source of essential meaning. Literal text remains complete and a non-metaphorical baseline exists.
+## 5. Safeguard/data-flow profile
+No account, real name, sensitive disclosure, behavioural profile, hidden score, server telemetry, automatic persistent trace, free text or learner-response network call is required. Bounded choices exist in local session state only. Optional strategy trace is fixed/generated text saved locally only if the learner explicitly chooses; keep and discard must have equal salience and effort.
 
-Atmosphere: calm, exploratory, non-competitive, non-judgmental. No urgency, spectacle, reward economy or emotional escalation.
+| Interaction | Input | Processing | Server | Retention |
+|---|---|---|---|---|
+| Observe | none | client | no | none |
+| A/B/C choice | enum | local | no | session |
+| Keep/revise | enum | local | no | session |
+| Strategy match | bounded | local | no | session |
+| Changed-context choice | bounded | local | no | session |
+| Transfer probe | bounded | local | no | session |
+| Strategy trace | fixed text | local device | no | learner-controlled |
 
-## 5. Character boundary
-Characters are fictional task participants, not companions or confidants. They do not address the learner as intimate social agents, claim inner understanding of the learner, request biography, or persist across pathways as relationship-building entities.
+Any analytics, synchronisation, cloud persistence, individual-choice dashboard, free text, adaptive profiling or generative agent is a material governance change and reopens review.
 
-No autonomous conversational agent is required for this version. Character dialogue, if rendered, is fixed/scripted and task-bound.
+## 6. Final-candidate prompt/developmental matrix — R1
+Wording remains subject to human developmental review; this matrix fixes the intended language envelope and prevents later silent complexity growth.
 
-## 6. Safeguard profile
-- sensitive personal disclosure required: **NO**;
-- student account: **NO**;
-- real name: **NO**;
-- behavioural profile: **NO**;
-- hidden score: **NO**;
-- server telemetry: **NONE** for prototype candidate;
-- persistent learner trace: **NO automatic persistence**;
-- optional strategy trace: local-only keep/discard candidate;
-- adult mediation: not intrinsically required for the fictional task, but human validation remains required before public runtime.
-
-## 7. Data-flow declaration
-
-| Interaction | Input | Processing | Server | Retention | Sensitive-data risk |
+| ID | Learner-facing candidate wording | Demand / concepts | Prior knowledge | Support / alternative | LATER_PRIMARY review |
 |---|---|---|---|---|---|
-| Observe scenes | none | client presentation | no | none | none |
-| Choose A/B/C | bounded enum | local state | no | session only | none intended |
-| Keep/revise | bounded enum | local state | no | session only | none intended |
-| Strategy match | bounded choice | local state | no | session only | none intended |
-| Changed-context choice | bounded choice | local state | no | session only | none intended |
-| Transfer probe | bounded choice in v1 | local state | no | session only | none intended |
-| Strategy trace | generated fixed text | local device only if learner chooses | no | learner-controlled | none intended |
+| Q01 | “Osserva la situazione. Che cosa sta succedendo?” | one situation; orientation | ordinary group decision | scene summary in plain text | PENDING_HUMAN |
+| Q02 | “Prima di decidere, quale informazione manca?” | identify one relevant absence | meaning of information | highlight facts already known, not answer | PENDING_HUMAN |
+| Q03 | “Quale modo di decidere vuoi provare?” | compare max 3 processes | none beyond scene | each option one short sentence | PENDING_HUMAN |
+| Q04 | “Che cosa cambia dopo questa scelta?” | cause/consequence | scene state | before/after literal summary | PENDING_HUMAN |
+| Q05 | “Vuoi tenere questa scelta o provarne un’altra?” | revision | none | both actions equal prominence | PENDING_HUMAN |
+| Q06 | “Quale strategia aiuta a controllare ciò che mancava?” | strategy/consequence link | prior scenes | one strategy at a time | PENDING_HUMAN |
+| Q07 | “La stessa strategia può servire anche qui?” | changed-context comparison | strategy just named | literal restatement available | PENDING_HUMAN |
+| Q08 | “Prima di decidere, che cosa conviene controllare?” | abstract relation in new surface | no domain-specialist knowledge | bounded evidence choices | PENDING_HUMAN |
+| Q09 | “Vuoi conservare questa traccia sul tuo dispositivo o eliminarla?” | local-file control | basic device action | explain: nothing is sent to Atlas | PENDING_HUMAN |
 
-**Free text:** NONE in v1.  
-**Accidental sensitive disclosure channel:** absent by design.  
-**Network calls required for learner responses:** none.
+Language constraints: one instructional action per prompt; avoid idioms, moral labels, personality adjectives and unnecessary subordinate clauses; essential instructions must not rely on metaphor. Final wording requires developmental review before implementation.
 
-## 8. Question-function inventory
+## 7. Question-function inventory
+Q01 TASK_ORIENTATION; Q02/Q08 EVIDENCE_INSPECTION; Q03 STRATEGY_SELECTION; Q04 CONSEQUENCE_PREDICTION; Q05/Q09 REVISION; Q06 TASK_BOUND_REFLECTION; Q07 COMPARISON. All responses are bounded; personal/sensitive data are neither needed nor requested. Abstract-function review: PASS. Final-literal wording review: PENDING_HUMAN.
 
-| ID | Prompt/function | Class | Response | Personal data possible | Sensitive data possible | Review state |
+## 8. Scene-level cognitive-demand matrix — R3
+
+| Scene | Task demand | Representation | Navigation | Narrative | Externalised memory / stable anchor | Single meaningful change |
 |---|---|---|---|---|---|---|
-| Q01 | Observe the fictional situation and continue | TASK_ORIENTATION | action | no | no | NOT_REVIEWED |
-| Q02 | Identify what information is missing | EVIDENCE_INSPECTION | bounded selection | no | no | NOT_REVIEWED |
-| Q03 | Choose one decision process A/B/C | STRATEGY_SELECTION | enum | no | no | NOT_REVIEWED |
-| Q04 | Identify what changed after the choice | CONSEQUENCE_PREDICTION | bounded selection | no | no | NOT_REVIEWED |
-| Q05 | Keep this way or try another? | REVISION | enum | no | no | NOT_REVIEWED |
-| Q06 | Match strategy to the consequence it addresses | TASK_BOUND_REFLECTION | bounded match | no | no | NOT_REVIEWED |
-| Q07 | Is the earlier strategy useful in the changed situation? | COMPARISON | bounded choice | no | no | NOT_REVIEWED |
-| Q08 | What should be checked before deciding? | EVIDENCE_INSPECTION | bounded choice in v1 | no | no | NOT_REVIEWED |
-| Q09 | Keep or discard the fixed strategy trace | REVISION | enum | no | no | NOT_REVIEWED |
+| 1 | understand shared decision | group + known facts | continue | low | persistent fact panel | situation introduced |
+| 2 | detect missing information | known/missing contrast | one bounded choice | low | known-facts panel persists | missing-information relation foregrounded |
+| 3 | compare decision processes | max 3 equal options | select one | moderate | option labels remain visible | process selected |
+| 4 | inspect consequence | before/after | continue | moderate | previous choice visible | consequence appears |
+| 5 | keep/revise | binary | two equal controls | low | consequence remains visible | revision opportunity |
+| 6 | name strategy | match/selection | one task | low | concise strategy card | abstraction named |
+| 7 | recognise relation in changed context | new surface, same structure | bounded choice | moderate | strategy card available on request | surface context changes |
+| 8 | probe beyond social surface | information/source scenario | bounded evidence choice | low | literal question + known facts | domain surface changes |
+| 9 | control local trace | fixed strategy summary | keep/discard | none | explicit local-only notice | persistence choice only |
 
-No question asks about the learner's own exclusion, friendships, family, health, distress, secrets, identity or emotional history.
+No scene should add simultaneous decorative novelty. If a visual change is not needed for orientation, causal understanding, safe affect or accessibility, it is removable by default.
 
-## 9. Cognitive/media controls
-Stable composition is preserved across the first decision cycle. Visual change is local and pedagogically meaningful. No automatic transitions, decorative animation, reward symbol, moral colour coding or visual novelty solely for attention capture. Literal meaning remains available without the Journey layer.
+## 9. Accessibility verification matrix — R2
+This is a specification-level matrix, not a conformance claim.
 
-## 10. Accessibility equivalence
-A literal baseline reproduces all nine pedagogical functions without journey imagery. Essential meaning must not depend on colour, motion, sound or metaphor. Reduced-motion mode therefore changes no construct. Final accessibility review remains NOT_REVIEWED.
+| Requirement | Specification | Current state |
+|---|---|---|
+| Keyboard | all actions operable sequentially without pointer | SPECIFIED / TEST_PENDING |
+| Visible focus | persistent high-visibility focus indicator | SPECIFIED / TEST_PENDING |
+| Semantic names | controls expose action/purpose, not route colour/position | SPECIFIED / TEST_PENDING |
+| Screen-reader order | heading → scene facts → question → options → feedback/navigation | SPECIFIED / TEST_PENDING |
+| Colour independence | no essential distinction by colour alone | SPECIFIED / TEST_PENDING |
+| Contrast | text/controls/assets to be measured against governing accessibility baseline | MEASUREMENT_PENDING |
+| Text zoom/reflow | no horizontal task loss at supported zoom/reflow | TEST_PENDING |
+| Touch targets | target sizing/spacing checked on mobile implementation | TEST_PENDING |
+| Reduced motion | no essential motion; reduced/no-motion changes no construct | SPECIFIED / TEST_PENDING |
+| Literal equivalent | all nine functions available without Journey metaphor | SPECIFIED / CONTENT_TEST_PENDING |
+| Cognitive-language clarity | one action/prompt; short options; stable labels; no hidden instructions | SPECIFIED / HUMAN_TEST_PENDING |
 
-## 11. Emotional safety
-The fictional situation uses ordinary uncertainty rather than intense interpersonal conflict. No sadness/shyness motive is assigned. No shame, fear, punitive exit or moral-worth feedback is used. Reconsideration is explicitly legitimate.
+No WCAG/AgID conformance claim is authorised until an implementation is tested.
 
-## 12. Transfer and claim calibration
-Scene 7 changes surface context while preserving the underlying relation: relevant information is missing before a decision. Scene 8 moves beyond the social participation surface to source/information evaluation.
+## 10. Cognitive/media and emotional controls
+Stable composition is preserved through the first decision cycle. Visual change is local and pedagogically meaningful. No automatic transition, decorative animation, reward symbol, moral colour coding or novelty solely for attention capture. Route geometry, contrast and character expression must not reveal a preferred answer.
 
-These are **transfer probes**, not proof of durable transfer. Multi-context performance would still require governed validation. No stable competence certification is authorised.
+The fictional situation uses ordinary uncertainty rather than intense interpersonal conflict. No sadness/shyness motive, shame, fear, punitive exit or moral-worth feedback. Reconsideration is legitimate. Final scripts must keep consequence feedback informational rather than moralising.
+
+## 11. Transfer/claim calibration
+Scene 7 changes surface context while preserving the relation “relevant information is missing before decision”. Scene 8 moves beyond social participation to information/source evaluation. These are transfer probes, not proof of durable transfer. Scene 8 must not reuse answer position, colour or route cues from earlier scenes. Multi-context performance still requires governed validation.
+
+## 12. Teacher/use-context note — R4
+Before use, the teacher/adult-facing layer must state:
+- **target:** noticing relevant missing information before consequential choice and reconsidering on evidence;
+- **evidence available:** bounded task performance in the presented contexts;
+- **not evidenced:** empathy, maturity, personality, emotional state or durable general competence;
+- **transfer ceiling:** changed-context success is a probe; durable transfer requires further evidence;
+- **mediation:** optional clarification/orientation is permitted but must not reveal a preferred moral route;
+- **data:** v1 sends no learner response to a server and creates no individual profile;
+- **interpretation:** route choice is never a learner trait or grade by itself.
+
+Teacher-facing provenance and limits must remain visible wherever the pathway is assigned or reviewed.
 
 ## 13. Consequence review
-
-| Consequence/risk | Status | Control |
-|---|---|---|
-| Learner follows visual route rather than reasoning | plausible | equal route weighting + literal baseline + changed-context probe |
-| Consultation is interpreted as moral correctness | plausible | trade-offs shown; no reward/punishment; no good-person language |
-| Images replace rather than support memory | plausible | stable anchors + restrained change + literal retrieval checks |
-| Social scenario triggers personal disclosure | low in v1 | no free text; no personal prompt; fictional distance |
-| Route choice becomes profile signal | prohibited | no persistence/profile; explicit no-trait-inference rule |
-| Metaphor becomes required for understanding | testable risk | literal baseline comparison; reject metaphor if clarity/transfer worsens |
+Plausible risks and controls: route-following rather than reasoning → equal weighting/literal baseline/transfer probe; consultation mistaken for moral correctness → trade-offs/no praise or punishment; images replacing memory → stable anchors/retrieval checks; disclosure → no free text/personal prompt; profiling → no persistence/profile; metaphor dependence → literal comparison and rejection if clarity/transfer worsens.
 
 ## 14. Sustainability/resource proportionality
-Reuse one stable composition where feasible. Motion is unnecessary. Learner interaction can operate without network calls. Generated visual assets must be justified by orientation or causal/narrative function. No environmental quantity is claimed without measurement.
+Reuse stable composition where feasible; motion unnecessary; learner interaction can operate without network calls; visual assets require orientation/causal/narrative/accessibility justification. No environmental quantity is claimed without measurement.
 
-## 15. Constitutional review snapshot
+## 15. Material-change/review trigger — R5
+The relevant constitutional dimensions MUST be reopened if any of these changes:
+- learner-facing wording or number/complexity of options;
+- route geometry, salience, colour, character expression or motion;
+- metaphor becomes necessary for essential meaning;
+- free text, microphone/camera or personal prompt is introduced;
+- local/session data become persistent, synchronised, transmitted or visible in an individual dashboard;
+- analytics, profiling, adaptation or scoring is introduced;
+- conversational/generative agent behaviour is introduced;
+- teacher interpretation/claim ceiling changes;
+- developmental band changes.
 
-- structural contract mapping: **PARTIAL PASS — instantiated**;
-- C1 trait inference: **PASS by design declaration**;
-- C2 coercive engagement: **PASS by design declaration**;
-- C3 error/emotional pressure: **PASS by design declaration**;
-- C4 invasive disclosure: **PASS by design declaration**;
-- C11 child-agent boundary: **PASS for v1 design because no conversational agent/free text is required; question inventory still awaits human review**;
-- C14 privacy: **PASS by design declaration; no server response data**;
-- C15 accessibility: **NOT_REVIEWED**;
-- pedagogical human review: **NOT_REVIEWED**;
-- developmental human review: **NOT_REVIEWED**;
-- child-safety/privacy human review: **NOT_REVIEWED**;
-- exact-head human review: **NOT_REVIEWED**.
+A change that introduces personal/sensitive disclosure, relational retention, hidden profiling or pseudo-therapeutic behaviour triggers the corresponding constitutional stop rather than ordinary review.
 
-## 16. Decision
-This dossier is a **review candidate**, not a production specification. It deliberately removes unnecessary conversational-agent and free-text surfaces from the first governed pathway because the competence task does not require them. This is data minimisation and relational-risk elimination by architecture, not merely moderation after collection.
+## 16. Review state after R1–R5 remediation
+- R1 developmental-language matrix: **IMPLEMENTED IN SPEC / HUMAN REVIEW PENDING**;
+- R2 accessibility matrix: **IMPLEMENTED IN SPEC / IMPLEMENTATION TEST PENDING**;
+- R3 cognitive-demand table: **IMPLEMENTED**;
+- R4 teacher/use-context note: **IMPLEMENTED**;
+- R5 material-change trigger: **IMPLEMENTED**;
+- question inventory abstract functions: **PASS**;
+- privacy/data-flow document design: **PASS conditional on implementation fidelity**;
+- developmental human review: **PENDING**;
+- accessibility implementation review: **PENDING**;
+- pedagogical human review: **PENDING**;
+- child-safety/privacy human review: **PENDING**;
+- exact-head human review: **PENDING**.
 
-Promotion is blocked until mandatory human reviews and exact-head review pass and runtime authority is explicitly granted.
+## 17. Decision
+This remains a review candidate, not a production specification. R1–R5 from the first constitutional review are now instantiated at specification/document level. A second constitutional document review is required on this exact revision. Runtime remains NOT_AUTHORIZED.
