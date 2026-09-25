@@ -193,7 +193,7 @@ Sequenza governata del Control Center read-only:
 7. **CC2-F3C — Mobile-first Control Center** — INTEGRATA via #74, con hardening strutturale #75–#77 e rifinitura caroselli mobile #80.
 8. **CC2-F4 — Capability + Ecosystem Map** — INTEGRATA via #84.
 9. **CC2-F5 — Evidence Explorer + Integrity** — INTEGRATA via #85; snapshot 1.2, filtri evidenziali e controlli di integrità PASS / ISSUE / NOT_EVALUABLE, senza overall score.
-10. **CC2-F6 — Timeline + Operational Path** — ACTIVE; snapshot 1.3, percorso operativo derivato e timeline semantica a copertura PARTIAL_EXPLICIT.
+10. **CC2-F6 — Timeline + Operational Path** — INTEGRATA via #86; snapshot 1.3, percorso operativo derivato e timeline semantica a copertura PARTIAL_EXPLICIT.
 
 Baseline di design/tooling già integrata prima di F4/F5:
 - Penpot MCP pilot — INTEGRATO via #82;
