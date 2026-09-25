@@ -64,20 +64,6 @@
       ]
     },
     {
-      "id": "EVT-CC2-F5-MERGE-85",
-      "eventType": "MERGE",
-      "occurredAt": "2026-09-25T03:14:33Z",
-      "label": "CC2-F5 Evidence Explorer + Integrity integrata",
-      "subjectRef": "CC2-F5",
-      "sourceRef": "github:pull/85",
-      "authority": "GitHub merge + HUMAN exact-head review",
-      "versionRef": "21c43b3e092c3dc31e450d2c9b2e3bf24b8238fd",
-      "details": [
-        "Integrity checks PASS / ISSUE / NOT_EVALUABLE.",
-        "Nessun overall score."
-      ]
-    },
-    {
       "id": "EVT-PR70-SUPERSEDED",
       "eventType": "SUPERSESSION",
       "occurredAt": "2026-09-25T03:10:52Z",
@@ -114,6 +100,34 @@
       "versionRef": "5cfb09f94ea532dc1f64523f7e10da6629159843",
       "details": [
         "Salvage/history source conservata; nessun merge dalla branch stale."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F5-MERGE-85",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:14:33Z",
+      "label": "CC2-F5 Evidence Explorer + Integrity integrata",
+      "subjectRef": "CC2-F5",
+      "sourceRef": "github:pull/85",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "21c43b3e092c3dc31e450d2c9b2e3bf24b8238fd",
+      "details": [
+        "Integrity checks PASS / ISSUE / NOT_EVALUABLE.",
+        "Nessun overall score."
+      ]
+    },
+    {
+      "id": "EVT-CC2-F6-MERGE-86",
+      "eventType": "MERGE",
+      "occurredAt": "2026-09-25T03:29:48Z",
+      "label": "CC2-F6 Timeline + Operational Path integrata",
+      "subjectRef": "CC2-F6",
+      "sourceRef": "github:pull/86",
+      "authority": "GitHub merge + HUMAN exact-head review",
+      "versionRef": "f3c4396a620e2b4c51beb3f2616ebeebf82a6342",
+      "details": [
+        "Primo ciclo CC2-F0–F6 completato.",
+        "Timeline semantica a copertura PARTIAL_EXPLICIT; Operational Path derivato da fonti governate."
       ]
     }
   ]
