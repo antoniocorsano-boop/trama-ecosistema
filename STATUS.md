@@ -52,7 +52,7 @@ flowchart LR
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
 | TRAMA Control Center v2 | **CC2-F0–F6 INTEGRATED** | Primo ciclo Control Center v2 integrato: snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system, Capability + Ecosystem Map, Evidence Explorer + Integrity, Timeline + Operational Path. ADR-015 resta PROPOSED. |
-| TRAMA Governed Forecast / CC3 | **CC3-F0 ACTIVE / HUMAN REVIEW PENDING** | Contratto e guardrail della previsione governata in costruzione. Forecast separato dallo stato canonico; confidence solo LOW/MEDIUM/HIGH; nessuna probability/score, auto-promotion, authority o runtime authorization. ADR-016 PROPOSED. |
+| TRAMA Governed Forecast / CC3 | **CC3-F0 INTEGRATED / CC3-F1 ACTIVE** | F0 integrata con HUMAN EXACT-HEAD REVIEW PASS (#88). F1 avvia il Next Transition Engine deterministico e read-only. Nessuna probability/score, ranking, auto-promotion, authority o runtime authorization. ADR-016 resta PROPOSED. |
 
 ## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 
@@ -153,7 +153,7 @@ La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strateg
 
 CC3 è la nuova fase governata del Control Center successiva alla chiusura di CC2-F0–F6.
 
-Stato corrente: **CC3-F0 ACTIVE / HUMAN REVIEW PENDING**.
+Stato corrente: **CC3-F0 INTEGRATA / HUMAN EXACT-HEAD REVIEW PASS; CC3-F1 ACTIVE / HUMAN REVIEW PENDING**.
 
 CC3-F0 introduce soltanto contratto e guardrail:
 
@@ -167,9 +167,11 @@ CC3-F0 introduce soltanto contratto e guardrail:
 - nessuna authority, write cross-product o runtime authorization;
 - DOS-A1 resta `RUNTIME_DEFERRED`.
 
-Gate corrente: **GATE-CC3-F0-HUMAN — OPEN**.
+Gate F0: **GATE-CC3-F0-HUMAN — PASS**.
 
-F1–F5 restano PLANNED e non vengono attivati da F0.
+**CC3-F1 — Next Transition Engine** è ora il solo incremento attivo. Deriva in modo deterministico transizioni possibili esclusivamente da gate, dipendenze e stato governato già presenti nello snapshot. Non predice quale esito si verificherà, non assegna probabilità o priorità e non modifica alcuna fonte canonica. **GATE-CC3-F1-HUMAN — OPEN**.
+
+F2–F5 restano PLANNED.
 
 ## ECO-02/P1 — stato reale consolidato
 
