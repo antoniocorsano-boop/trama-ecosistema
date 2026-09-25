@@ -223,6 +223,29 @@ Riferimenti:
 - `docs/decisions/trama-adr-015-project-knowledge-context-provider.md`;
 - `docs/design/trama-control-center-v2-view-architecture.md`.
 
+## CC3 Governed Forecast & Readiness
+
+CC3 estende il Control Center senza modificare la roadmap R1–R5 e senza introdurre una nuova authority.
+
+Sequenza governata:
+
+1. **CC3-F0 — Forecast Contract & Guardrails** — ACTIVE / HUMAN REVIEW PENDING. Definisce ADR-016, policy, schema, confidence qualitativa, invalidators, scenario read-only e ForecastReceipt.
+2. **CC3-F1 — Next Transition Engine** — PLANNED. Derivazione deterministica delle transizioni possibili da gate e dipendenze correnti.
+3. **CC3-F2 — Scenario Explorer** — PLANNED. Simulazione controfattuale senza mutazione dello snapshot canonico.
+4. **CC3-F3 — Bottleneck & Dependency Forecast** — PLANNED. Individuazione dei colli di bottiglia senza ranking automatico di priorità.
+5. **CC3-F4 — Adoption Readiness Forecast** — PLANNED. Prerequisiti verso R5 senza percentuali non calibrate.
+6. **CC3-F5 — Forecast Calibration & Backtesting** — PLANNED. Confronto forecast/esiti tramite ForecastReceipt prima di qualunque futura metrica quantitativa.
+
+Vincoli permanenti:
+
+- forecast ≠ stato canonico;
+- confidence ≠ probabilità;
+- nessun overall score;
+- nessuna auto-promotion;
+- nessuna runtime authorization;
+- nessuna modifica delle authority Arena / Atlas / Docente OS;
+- DOS-A1 resta `RUNTIME_DEFERRED`.
+
 ## R5 Preparazione all'adozione
 
 - verifica del nome TRAMA;
