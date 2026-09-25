@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/governed-forecast.schema.json",
+  "title": "TRAMA Governed Forecast",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "sourceSnapshotRef",
+    "sourceSnapshotGeneratedAt",
+    "policyRef",
+    "forecasts",
+    "scenarios",
+    "receipts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sourceSnapshotRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceSnapshotGeneratedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "policyRef": {
+      "const": "config/governed-forecast-policy.json"
+    },
+    "forecasts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "subjectRef",
+          "currentState",
+          "candidateTransition",
+          "blockingGateRefs",
+          "dependencyRefs",
+          "evidenceRefs",
+          "confidence",
+          "confidenceRationale",
+          "invalidators",
+          "scenarioRef",
+          "generatedAt",
+          "sourceSnapshotGeneratedAt",
+          "canonicalStateImpact",
+          "authorityImpact",
+          "runtimeAuthorizationImpact"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FC-[A-Z0-9-]+$"
+          },
+          "subjectRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "currentState": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidateTransition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blockingGateRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "dependencyRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "confidence": {
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          },
+          "confidenceRationale": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "invalidators": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "scenarioRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sourceSnapshotGeneratedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "canonicalStateImpact": {
+            "const": "NONE"
+          },
+          "authorityImpact": {
+            "const": "NONE"
+          },
+          "runtimeAuthorizationImpact": {
+            "const": "NONE"
+          }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "mode",
+          "label",
+          "assumptionRefs",
+          "forecastRefs",
+          "mutationImpact"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^SCN-[A-Z0-9-]+$"
+          },
+          "mode": {
+            "enum": [
+              "BASE",
+              "CONSERVATIVE",
+              "EXPANSION",
+              "COUNTERFACTUAL"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 3
+          },
+          "assumptionRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "forecastRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "mutationImpact": {
+            "const": "NONE"
+          }
+        }
+      }
+    },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "forecastRef",
+          "outcome",
+          "outcomeEventRef",
+          "evaluatedAt",
+          "calibrationNotes",
+          "promotionImpact"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^FCR-[A-Z0-9-]+$"
+          },
+          "forecastRef": {
+            "type": "string"
+          },
+          "outcome": {
+            "enum": [
+              "CONFIRMED",
+              "PARTIAL",
+              "INVALIDATED",
+              "NOT_YET_OBSERVABLE"
+            ]
+          },
+          "outcomeEventRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evaluatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "calibrationNotes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "promotionImpact": {
+            "const": "NONE"
+          }
+        }
+      }
+    }
+  }
+}

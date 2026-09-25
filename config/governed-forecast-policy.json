@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "CC3-F0",
+  "mode": "ADVISORY_READ_ONLY",
+  "confidenceMode": "QUALITATIVE_ONLY",
+  "allowedConfidence": [
+    "LOW",
+    "MEDIUM",
+    "HIGH"
+  ],
+  "numericProbability": "FORBIDDEN_UNTIL_CALIBRATED_AND_REAUTHORIZED",
+  "aggregateScore": "FORBIDDEN",
+  "canonicalStateMutation": "FORBIDDEN",
+  "gateMutation": "FORBIDDEN",
+  "autoPromotion": "FORBIDDEN",
+  "runtimeAuthorization": "FORBIDDEN",
+  "crossProductWrite": "FORBIDDEN",
+  "scenarioMutation": "FORBIDDEN",
+  "dosA1Activation": "FORBIDDEN",
+  "minimumEvidenceRefs": 1,
+  "minimumInvalidators": 1,
+  "forecastFreshnessPolicy": "SNAPSHOT_BOUND",
+  "receiptOutcomes": [
+    "CONFIRMED",
+    "PARTIAL",
+    "INVALIDATED",
+    "NOT_YET_OBSERVABLE"
+  ],
+  "requiredSourceKinds": [
+    "ECOSYSTEM_SNAPSHOT"
+  ],
+  "notes": [
+    "Forecast e scenario non sono fonti canoniche.",
+    "Confidence qualitativa non equivale a probabilità.",
+    "Ogni forecast deve dichiarare rationale e invalidators.",
+    "Un ForecastReceipt serve alla calibrazione e non promuove stati."
+  ]
+}

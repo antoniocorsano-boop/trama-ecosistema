@@ -1,35 +1,35 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-09-25T03:30:56.740876+00:00",
+  "generatedAt": "2026-09-25T03:45:39.277887+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "STATUS.md",
-      "sha256": "50edc5763ee9ec7adc515158835b049bb3cc23b419b3c5e3ea32288f8e2b932a"
+      "sha256": "583c579e8dda23b915f257399ac354a741bba360728f0fa9b20ea678c19b348d"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "ROADMAP.md",
-      "sha256": "fc8e2e06caf0a9ae5541cf0108d2aa9288e118fa2ea1280e8633df814e16f2fc"
+      "sha256": "7b2d34ebff70ce07d6a67310ac7eb5621d46290a1b32a6a0ec402a7c4165a83a"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "status/ecosystem-status.json",
-      "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
+      "sha256": "5d4911a64f9b231a34f0b5ffd5728b405ffa1e70bef0afa0f50e5f72917a1f3d"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "docs/decisions/decision-register.json",
-      "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
+      "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "ref": "status/governed-events.json",
       "sha256": "0f47b8cb5762874707d7217e7e811e5d3e834bcc9e38af2130a719cc6463a452"
     }
@@ -89,7 +89,7 @@
       ],
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:45:39.277887+00:00"
     },
     {
       "id": "arena",
@@ -104,7 +104,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:45:39.277887+00:00"
     },
     {
       "id": "atlas",
@@ -122,7 +122,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:45:39.277887+00:00"
     },
     {
       "id": "docente-os",
@@ -138,7 +138,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-25T03:30:56.740876+00:00"
+      "lastEvaluatedAt": "2026-09-25T03:45:39.277887+00:00"
     }
   ],
   "capabilities": [
@@ -157,7 +157,7 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
     },
     {
       "id": "EC-01-F4",
@@ -174,7 +174,7 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
     },
     {
       "id": "ECO-02-P1",
@@ -193,7 +193,7 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
     },
     {
       "id": "DOS-A1",
@@ -210,7 +210,7 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
     },
     {
       "id": "R3-F0",
@@ -229,7 +229,7 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
     },
     {
       "id": "R4-P1",
@@ -246,7 +246,7 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
     },
     {
       "id": "TRAMA-SA-01",
@@ -263,7 +263,7 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
     },
     {
       "id": "TRAMA-BRAND",
@@ -280,7 +280,26 @@
       ],
       "lastSignificantChange": null,
       "sourceRef": "status/ecosystem-status.json",
-      "sourceUpdatedAt": "2026-09-22"
+      "sourceUpdatedAt": "2026-09-25"
+    },
+    {
+      "id": "CC3-F0",
+      "label": "Governed Forecast Contract & Guardrails",
+      "ownerDomain": "TRAMA",
+      "state": "ACTIVE",
+      "humanReview": "PENDING",
+      "runtimeState": null,
+      "maturityAreaRef": "governance",
+      "dependencyRefs": [],
+      "gateRefs": [
+        "GATE-CC3-F0-HUMAN"
+      ],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "lastSignificantChange": null,
+      "sourceRef": "status/ecosystem-status.json",
+      "sourceUpdatedAt": "2026-09-25"
     }
   ],
   "gates": [
@@ -307,6 +326,18 @@
         "HUMAN_REVIEW"
       ],
       "decisionAuthority": "TRAMA/Human Review"
+    },
+    {
+      "id": "GATE-CC3-F0-HUMAN",
+      "area": "governance",
+      "type": "HUMAN",
+      "status": "OPEN",
+      "blocking": true,
+      "requiredEvidenceTypes": [
+        "CONTRACT_APPROVED",
+        "HUMAN_REVIEW"
+      ],
+      "decisionAuthority": "TRAMA/Human Review"
     }
   ],
   "evidence": [
@@ -318,9 +349,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "sha256": "50edc5763ee9ec7adc515158835b049bb3cc23b419b3c5e3ea32288f8e2b932a"
+        "sha256": "583c579e8dda23b915f257399ac354a741bba360728f0fa9b20ea678c19b348d"
       },
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -336,9 +367,9 @@
       "status": "PASS",
       "source": {
         "path": "ROADMAP.md",
-        "sha256": "fc8e2e06caf0a9ae5541cf0108d2aa9288e118fa2ea1280e8633df814e16f2fc"
+        "sha256": "7b2d34ebff70ce07d6a67310ac7eb5621d46290a1b32a6a0ec402a7c4165a83a"
       },
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -354,9 +385,9 @@
       "status": "PASS",
       "source": {
         "path": "status/ecosystem-status.json",
-        "sha256": "3e94f8dfe9df98f44b3a520a6db126622f45b3679c8c941b5dca0cdfd8f05b67"
+        "sha256": "5d4911a64f9b231a34f0b5ffd5728b405ffa1e70bef0afa0f50e5f72917a1f3d"
       },
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -372,9 +403,9 @@
       "status": "PASS",
       "source": {
         "path": "docs/decisions/decision-register.json",
-        "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
+        "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
       },
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -392,7 +423,7 @@
         "path": "status/governed-events.json",
         "sha256": "0f47b8cb5762874707d7217e7e811e5d3e834bcc9e38af2130a719cc6463a452"
       },
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -409,9 +440,9 @@
       "source": {
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014",
-        "sha256": "fa8681583b6764caab49369b331748c2e326885d6cefa4c7a278d87b153d4336"
+        "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
       },
-      "observedAt": "2026-09-25T03:30:56.740876+00:00",
+      "observedAt": "2026-09-25T03:45:39.277887+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -829,6 +860,12 @@
         "kind": "CAPABILITY",
         "label": "TypeSafe semantic assurance pilot",
         "status": "ACTIVE"
+      },
+      {
+        "ref": "CC3-F0",
+        "kind": "CAPABILITY",
+        "label": "Governed Forecast Contract & Guardrails",
+        "status": "ACTIVE"
       }
     ],
     "nextGates": [
@@ -842,6 +879,13 @@
       {
         "ref": "GATE-R3-F0-EXIT",
         "area": "atlas",
+        "status": "OPEN",
+        "blocking": true,
+        "decisionAuthority": "TRAMA/Human Review"
+      },
+      {
+        "ref": "GATE-CC3-F0-HUMAN",
+        "area": "governance",
         "status": "OPEN",
         "blocking": true,
         "decisionAuthority": "TRAMA/Human Review"

@@ -1,5 +1,5 @@
 {
-  "registryVersion": "1.4.0",
+  "registryVersion": "1.5.0",
   "updatedAt": "2026-09-25",
   "sources": [
     {
@@ -12,7 +12,9 @@
         "ecosystem-status",
         "ecosystem-baseline",
         "project-page",
-        "documentation-maintenance"
+        "documentation-maintenance",
+        "governed-forecast-policy",
+        "forecast-contracts"
       ],
       "drivePolicy": "HUMAN_READABLE_COPY_ONLY"
     },
@@ -110,7 +112,9 @@
         "knowledge-events",
         "source-bindings",
         "supersession-links",
-        "negative-knowledge"
+        "negative-knowledge",
+        "forecast-projections",
+        "forecast-receipts"
       ],
       "drivePolicy": "HUMAN_READABLE_REPORT_ONLY"
     }

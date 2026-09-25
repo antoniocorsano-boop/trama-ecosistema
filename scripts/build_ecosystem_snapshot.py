@@ -101,6 +101,7 @@ def capability_projection(eco_status: dict, maturity_areas: list[dict]) -> list[
     gate_refs = {
         "ECO-02-P1": ["GATE-ECO02-HUMAN-FINAL"],
         "R3-F0": ["GATE-R3-F0-EXIT"],
+        "CC3-F0": ["GATE-CC3-F0-HUMAN"],
     }
     projected = []
     for item in eco_status.get("capabilities", []):
@@ -625,6 +626,15 @@ def build_snapshot(root: Path) -> dict:
             "status": normalize_gate_status(caps.get("R3-F0", {}).get("reviewGates", {}).get("exit")),
             "blocking": True,
             "requiredEvidenceTypes": ["ACCESSIBILITY_GATE", "HUMAN_REVIEW"],
+            "decisionAuthority": "TRAMA/Human Review",
+        },
+        {
+            "id": "GATE-CC3-F0-HUMAN",
+            "area": "governance",
+            "type": "HUMAN",
+            "status": "PASS" if caps.get("CC3-F0", {}).get("humanReview") == "PASS" else "OPEN",
+            "blocking": True,
+            "requiredEvidenceTypes": ["CONTRACT_APPROVED", "HUMAN_REVIEW"],
             "decisionAuthority": "TRAMA/Human Review",
         },
     ]

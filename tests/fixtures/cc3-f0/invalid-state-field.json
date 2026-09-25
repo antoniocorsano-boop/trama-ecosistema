@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-09-25T04:00:00Z",
+  "sourceSnapshotRef": "control-center/data/ecosystem-snapshot.json",
+  "sourceSnapshotGeneratedAt": "2026-09-25T03:30:56Z",
+  "policyRef": "config/governed-forecast-policy.json",
+  "forecasts": [
+    {
+      "id": "FC-EXAMPLE-NEXT-TRANSITION",
+      "subjectRef": "R3-F0",
+      "currentState": "ACTIVE",
+      "candidateTransition": "EXIT_REVIEW_ELIGIBLE",
+      "blockingGateRefs": [
+        "GATE-R3-F0-EXIT"
+      ],
+      "dependencyRefs": [],
+      "evidenceRefs": [
+        "EV-SOURCE-ECOSYSTEM-STATUS"
+      ],
+      "confidence": "HIGH",
+      "confidenceRationale": [
+        "Blocking gate and current capability state are explicitly present in the source snapshot."
+      ],
+      "invalidators": [
+        "The source snapshot changes or the blocking gate fails."
+      ],
+      "scenarioRef": "SCN-BASE-EXAMPLE",
+      "generatedAt": "2026-09-25T04:00:00Z",
+      "sourceSnapshotGeneratedAt": "2026-09-25T03:30:56Z",
+      "canonicalStateImpact": "NONE",
+      "authorityImpact": "NONE",
+      "runtimeAuthorizationImpact": "NONE",
+      "state": "PASS"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-BASE-EXAMPLE",
+      "mode": "BASE",
+      "label": "Baseline without hypothetical state mutation",
+      "assumptionRefs": [],
+      "forecastRefs": [
+        "FC-EXAMPLE-NEXT-TRANSITION"
+      ],
+      "mutationImpact": "NONE"
+    }
+  ],
+  "receipts": []
+}
