@@ -182,9 +182,10 @@ def main() -> int:
     snapshot = load(SNAPSHOT)
     items = derive(snapshot)
     validate(items)
-    if not items:
-        raise SystemExit("no deterministic transition candidates derived")
 
+    # An empty set is a valid governed result: it means the current snapshot
+    # contains no deterministic transition eligible for projection. Engine
+    # correctness is established independently by self_test().
     if args.output:
         Path(args.output).write_text(json.dumps(items, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     if args.check:

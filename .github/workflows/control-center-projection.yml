@@ -1,0 +1,38 @@
+name: Regenerate TRAMA Ecosystem Snapshot
+
+on:
+  pull_request:
+    paths:
+      - "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md"
+      - "status/ecosystem-status.json"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/build_ecosystem_snapshot_core.py"
+      - ".github/workflows/control-center-projection.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  regenerate:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Regenerate governed projection in workspace
+        run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
+
+      - name: Validate canonical snapshot and projection drift
+        run: python scripts/build_ecosystem_snapshot.py --check
+
+      - name: Assert read-only CI contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ github.token }}" != ""
+          test -z "$(git status --porcelain)"
+          echo "TRAMA_PROJECTION_CI_READ_ONLY_PASS"

@@ -73,9 +73,9 @@
     {
       "id": "CC3-F1",
       "label": "Next Transition Engine",
-      "state": "ACTIVE",
+      "state": "CLOSED",
       "authority": "TRAMA",
-      "humanReview": "PENDING"
+      "humanReview": "PASS"
     }
   ]
 }
