@@ -10,23 +10,28 @@ This slice turns the approved evidence contract into inspectable implementation 
 
 ## Included
 
-- Draft 2020-12 JSON Schema for `ui-evidence.manifest.json`.
-- Valid minimal fixture.
-- Invalid fixture proving that an aggregate PASS cannot hide an open blocking accessibility finding and that an untrusted producer is rejected semantically.
-- Semantic Stage A validator for aggregate impact, S/M/L/LIM completeness, producer allow-list seed, immutable binding, exact-head freshness, accessibility blockers and protected runtime/DOS-A1 boundaries.
+- Draft 2020-12 JSON Schema for `ui-evidence.manifest.json`, with closed responsive evidence and conditional `exceptionId` requirement.
+- Dependency-free Stage A structural validation equivalent for the schema constraints used by this slice, followed by semantic cross-field/context validation.
+- Versioned machine-readable producer policy: `policies/ui-evidence-producers.v1.json`.
+- Exact-head validation with zero SHA permitted only under `fixtures/ui-evidence/` and only for producer `stage-a-fixture`.
+- Positive fixture plus negative corpus for hidden accessibility blocker, aggregate mismatch, stale head, untrusted producer, missing responsive evidence, incomplete accepted exception and protected-boundary mutation.
+- Executable contract suite `scripts/test-ui-evidence-validator.mjs` asserting expected exit status and failure reason, including rejection of zero SHA outside the governed fixture root.
+- GitHub Actions workflow `UI Evidence Stage A` running the contract suite on relevant pull-request changes.
+
+## Validation separation
+
+Structural constraints that can be expressed locally are enforced before semantic checks: required/closed objects, manifest identity/version, SHA form, evidence shape, responsive condition shape, immutable binding and accepted-exception integrity. Semantic validation remains responsible for aggregate derivation, responsive evidence completeness, producer trust, exact-head/fixture context, accessibility blockers and protected runtime/DOS-A1 boundaries.
+
+Stage A intentionally remains dependency-free. Before Stage B, the canonical JSON Schema must additionally be executed through a pinned Draft 2020-12 implementation; the Stage A structural validator is not represented as a substitute for that Stage B requirement.
 
 ## Explicitly not included
 
 - No production runtime or persistence.
 - No student telemetry/account/tracking.
 - No blocking Stage B gate.
-- No claim that the producer allow-list is final.
 - No activation of DOS-A1.
+- No release-certification claim: Stage A output is diagnostic only.
 
-## Review targets
+## Independent-review remediation
 
-1. JSON Schema structure must faithfully represent TRAMA-UI-EVIDENCE-01.
-2. Semantic validator must reject hidden blockers, untrusted self-certification and stale-head evidence.
-3. Fixture SHA `000…000` is permitted only for repository fixtures; real evidence must bind to the exact head.
-4. Before Stage B, schema validation must be wired to a pinned validator implementation and the exception registry must gain a versioned machine-readable schema.
-5. Stage A output is diagnostic only and must not be represented as release certification.
+The six findings raised on PR #103 exact head `b7a7be25ed26d6eee44c81eb4707d2b23a129331` are addressed by this revision: executable structural validation; expanded negative corpus; fixture-only zero SHA; governed producer policy; automated expected-result runner; and stronger schema invariants.
