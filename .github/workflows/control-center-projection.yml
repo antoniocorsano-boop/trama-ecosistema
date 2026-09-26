@@ -10,35 +10,46 @@ on:
       - ".github/workflows/control-center-projection.yml"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   regenerate:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR head
+      - name: Checkout exact PR head
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Regenerate governed projection
-        run: python scripts/build_ecosystem_snapshot.py
+      - name: Regenerate governed projection in workspace
+        run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
 
-      - name: Validate regenerated projection
+      - name: Validate canonical generator
         run: python scripts/build_ecosystem_snapshot.py --check
 
-      - name: Commit projection only when changed
+      - name: Verify committed projection is current
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- control-center/data/ecosystem-snapshot.json; then
-            echo "TRAMA_SNAPSHOT_ALREADY_CURRENT"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add control-center/data/ecosystem-snapshot.json
-          git commit -m "chore: regenerate governed ecosystem snapshot"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          generated = json.loads(Path('/tmp/ecosystem-snapshot.json').read_text(encoding='utf-8'))
+          committed = json.loads(Path('control-center/data/ecosystem-snapshot.json').read_text(encoding='utf-8'))
+          if committed != generated:
+              raise SystemExit(
+                  'TRAMA_SNAPSHOT_DRIFT: regenerate control-center/data/ecosystem-snapshot.json '
+                  'with scripts/build_ecosystem_snapshot.py before updating the PR head'
+              )
+          print('TRAMA_SNAPSHOT_PROJECTION_CURRENT')
+          PY
+
+      - name: Assert read-only CI contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${{ github.token }}" != ""
+          echo "TRAMA_PROJECTION_CI_READ_ONLY_PASS"
