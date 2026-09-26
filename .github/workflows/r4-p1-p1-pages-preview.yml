@@ -1,0 +1,75 @@
+name: R4-P1 P1 Pages Preview
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "prototypes/r4-p1-p1/**"
+      - ".github/workflows/r4-p1-p1-pages-preview.yml"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "r4-p1-p1-pages-preview"
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify NO_RUNTIME preview contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s prototypes/r4-p1-p1/index.html
+          test -s prototypes/r4-p1-p1/README.md
+          grep -q "NO_RUNTIME" prototypes/r4-p1-p1/index.html
+          grep -q "PUBLICATION_NOT_EXECUTED_NO_RUNTIME" prototypes/r4-p1-p1/index.html
+          grep -q "LINK_SIMULATED" prototypes/r4-p1-p1/index.html
+          grep -q "PUBLICATION_PROPOSAL_SIMULATED" prototypes/r4-p1-p1/index.html
+          if grep -Eiq "fetch[[:space:]]*\(|XMLHttpRequest|WebSocket|EventSource|https?://|localStorage|sessionStorage|indexedDB|Authorization:|Bearer |ghp_|github_pat_" prototypes/r4-p1-p1/index.html; then
+            echo "NO_RUNTIME violation or external dependency found" >&2
+            exit 1
+          fi
+      - name: Validate browser JavaScript syntax
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs=require('fs')
+          const html=fs.readFileSync('prototypes/r4-p1-p1/index.html','utf8')
+          const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+          if(!scripts.length) throw new Error('Inline script not found')
+          for(const [,src] of scripts) new Function(src)
+          console.log('R4_P1_P1_JS_SYNTAX_PASS')
+          NODE
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch'
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Prepare isolated static site
+        shell: bash
+        run: |
+          mkdir -p _site
+          cp prototypes/r4-p1-p1/index.html _site/index.html
+          cp prototypes/r4-p1-p1/README.md _site/README.md
+          touch _site/.nojekyll
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
