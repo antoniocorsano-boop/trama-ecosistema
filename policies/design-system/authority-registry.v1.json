@@ -1,0 +1,10 @@
+{
+  "registryId": "TRAMA-DESIGN-AUTHORITY-REGISTRY",
+  "version": "1.0.0",
+  "authorities": {
+    "TRAMA-GOVERNANCE": {"scope": ["ecosystem-policy", "TRAMA_CONTROL_CENTER"]},
+    "ARENA": {"scope": ["ARENA"]},
+    "ATLAS": {"scope": ["ATLAS"]},
+    "DOCENTE_OS": {"scope": ["DOCENTE_OS"]}
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "policyId": "TRAMA-DESIGN-SYSTEM",
+  "version": "1.0.0",
+  "contract": "TRAMA-DESIGN-TOKENS-01",
+  "owner": "TRAMA-GOVERNANCE",
+  "authorityRegistry": {"registryId":"TRAMA-DESIGN-AUTHORITY-REGISTRY","version":"1.0.0"},
+  "mode": "STAGE_A_OBSERVE",
+  "semanticChange": "ADDITIVE",
+  "layers": ["primitive", "ecosystem-semantic", "product-alias"],
+  "responsivePolicy": {
+    "policyId": "TRAMA-RESPONSIVE",
+    "version": "1.0.0",
+    "conditions": {
+      "S": {"minWidth":320,"maxWidth":599},
+      "M": {"minWidth":600,"maxWidth":1023},
+      "L": {"minWidth":1024},
+      "LIM": {"kind":"LIMITED_REFLOW","maxInlineSize":320,"zoom":4,"requiresReflow":true,"evidenceDimensionsRequired":true}
+    }
+  },
+  "tokens": {
+    "surface.canvas":{"type":"color","role":"canvas","layer":"ecosystem-semantic"},
+    "surface.primary":{"type":"color","role":"primary-surface","layer":"ecosystem-semantic"},
+    "text.primary":{"type":"color","role":"primary-text","layer":"ecosystem-semantic"},
+    "text.muted":{"type":"color","role":"muted-text","layer":"ecosystem-semantic"},
+    "border.default":{"type":"color","role":"border","layer":"ecosystem-semantic"},
+    "action.primary":{"type":"color","role":"primary-action","layer":"ecosystem-semantic"},
+    "focus.visible":{"type":"color","role":"focus-indicator","layer":"ecosystem-semantic"},
+    "feedback.info":{"type":"color","role":"information","layer":"ecosystem-semantic"},
+    "feedback.success":{"type":"color","role":"success","layer":"ecosystem-semantic"},
+    "feedback.warning":{"type":"color","role":"warning","layer":"ecosystem-semantic"},
+    "feedback.error":{"type":"color","role":"error","layer":"ecosystem-semantic"},
+    "space.page":{"type":"dimension","role":"page-spacing","layer":"ecosystem-semantic","scalable":true},
+    "space.section":{"type":"dimension","role":"section-spacing","layer":"ecosystem-semantic","scalable":true},
+    "type.body":{"type":"typography","role":"body","layer":"ecosystem-semantic","scalable":true},
+    "type.heading":{"type":"typography","role":"heading","layer":"ecosystem-semantic","scalable":true},
+    "motion.standard":{"type":"duration","role":"standard-motion","layer":"ecosystem-semantic","reducedMotion":"remove-or-reduce"}
+  },
+  "interactionStates":["default","hover","focus-visible","active","pressed","selected","disabled","pending","loading"],
+  "presentationModes":["light","dark","system","forced-colors"],
+  "products": {
+    "ARENA": {"owner":"ARENA","pvipVersion":"1.0.0","identity":{"voice":{"applicable":true,"value":"authoritative-curricular"},"paletteTonalCharacter":{"applicable":true,"value":"restrained-authoritative"},"typographicVoice":{"applicable":true,"value":"document-evidence-led"},"densitySpatialRhythm":{"applicable":true,"value":"medium-high-structured"},"shapeElevation":{"applicable":true,"value":"restrained-hierarchy"},"composition":{"applicable":true,"value":"structured-evidence-oriented"},"navigation":{"applicable":true,"value":"provenance-and-review-led"},"dataVisualisation":{"applicable":true,"value":"evidence-first-low-decoration"},"motionCharacter":{"applicable":true,"value":"minimal-state-oriented"},"iconographyIllustration":{"applicable":true,"value":"functional-institutional"}},"aliases":{"primarySurface":"surface.primary","primaryAction":"action.primary","bodyText":"text.primary"}},
+    "ATLAS": {"owner":"ATLAS","pvipVersion":"1.0.0","identity":{"voice":{"applicable":true,"value":"public-exploratory"},"paletteTonalCharacter":{"applicable":true,"value":"open-readable-exploratory"},"typographicVoice":{"applicable":true,"value":"public-readable-generous"},"densitySpatialRhythm":{"applicable":true,"value":"low-medium-spacious"},"shapeElevation":{"applicable":true,"value":"welcoming-layered"},"composition":{"applicable":true,"value":"spacious-discovery-oriented"},"navigation":{"applicable":true,"value":"curriculum-exploration-led"},"dataVisualisation":{"applicable":true,"value":"relational-explanatory"},"motionCharacter":{"applicable":true,"value":"orientation-supporting"},"iconographyIllustration":{"applicable":true,"value":"exploratory-educational"}},"aliases":{"primarySurface":"surface.primary","primaryAction":"action.primary","bodyText":"text.primary"}},
+    "DOCENTE_OS": {"owner":"DOCENTE_OS","pvipVersion":"1.0.0","identity":{"voice":{"applicable":true,"value":"teacher-focused-operational"},"paletteTonalCharacter":{"applicable":true,"value":"calm-focus-oriented"},"typographicVoice":{"applicable":true,"value":"compact-readable-operational"},"densitySpatialRhythm":{"applicable":true,"value":"medium-task-rhythm"},"shapeElevation":{"applicable":true,"value":"clear-action-hierarchy"},"composition":{"applicable":true,"value":"task-focused-low-noise"},"navigation":{"applicable":true,"value":"continuity-of-work-led"},"dataVisualisation":{"applicable":false,"reason":"not a primary identity dimension in the Stage A teacher-workspace seed"},"motionCharacter":{"applicable":true,"value":"fast-perceptible-feedback"},"iconographyIllustration":{"applicable":true,"value":"functional-teacher-tooling"}},"aliases":{"primarySurface":"surface.primary","primaryAction":"action.primary","bodyText":"text.primary"}},
+    "TRAMA_CONTROL_CENTER": {"owner":"TRAMA-GOVERNANCE","pvipVersion":"1.0.0","identity":{"voice":{"applicable":true,"value":"analytical-observability"},"paletteTonalCharacter":{"applicable":true,"value":"status-neutral-analytical"},"typographicVoice":{"applicable":true,"value":"dense-comparative-readable"},"densitySpatialRhythm":{"applicable":true,"value":"medium-high-dashboard"},"shapeElevation":{"applicable":true,"value":"layered-monitoring"},"composition":{"applicable":true,"value":"evidence-comparison-oriented"},"navigation":{"applicable":true,"value":"state-and-progression-led"},"dataVisualisation":{"applicable":true,"value":"comparative-evidence-rich"},"motionCharacter":{"applicable":true,"value":" restrained-status-transition"},"iconographyIllustration":{"applicable":true,"value":"system-status-functional"}},"aliases":{"primarySurface":"surface.primary","primaryAction":"action.primary","bodyText":"text.primary"}}
+  },
+  "boundaries":{"runtimeImpact":"NONE","persistence":"NONE","studentAccountTracking":"NONE","dosA1":"RUNTIME_DEFERRED"}
+}
