@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/trama-component-pattern-01.schema.json",
+  "title": "TRAMA-COMPONENT-PATTERN-01 Stage A",
+  "type": "object",
+  "required": ["id","version","kind","owner","status","intent","products","semanticContract","nativeFirst","states","accessibility","responsive","content","privacyTrust","composition","supportEvidence","extensions"],
+  "properties": {
+    "id": {"type":"string","pattern":"^[A-Z0-9][A-Z0-9._-]+$"},
+    "version": {"type":"string","minLength":1},
+    "kind": {"enum":["COMPONENT","PATTERN","TEMPLATE"]},
+    "owner": {"type":"string","minLength":1},
+    "status": {"enum":["PROPOSED","TRIAL","STABLE","DEPRECATED","RETIRED"]},
+    "intent": {"type":"string","minLength":1},
+    "products": {"type":"array","minItems":1,"uniqueItems":true,"items":{"enum":["ARENA","ATLAS","DOCENTE_OS","CONTROL_CENTER"]}},
+    "pvipBinding": {"type":"string"},
+    "semanticContract": {"type":"string","minLength":1},
+    "nativeFirst": {"type":"object","required":["required"],"properties":{"required":{"type":"boolean"},"nativeControl":{"type":["string","null"]},"apgPattern":{"type":["string","null"]},"deviationRationale":{"type":["string","null"]}},"additionalProperties":false},
+    "states": {"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string"}},
+    "keyboardFocus": {"type":"string"},
+    "accessibility": {"type":"array","minItems":1,"items":{"type":"string","minLength":1}},
+    "responsive": {"type":"object","required":["S","M","L","LIM"],"properties":{"S":{"type":"string"},"M":{"type":"string"},"L":{"type":"string"},"LIM":{"type":"string"}},"additionalProperties":false},
+    "content": {"type":"object","required":["localisation","resilience"],"properties":{"localisation":{"type":"string"},"resilience":{"type":"string"},"empty":{"type":"string"},"overflow":{"type":"string"}},"additionalProperties":false},
+    "feedback": {"type":"object","properties":{"mutatesState":{"type":"boolean"},"perceptibleOutcome":{"type":"string"}},"additionalProperties":false},
+    "privacyTrust": {"type":"object","required":["dataClass","contentTrust"],"properties":{"dataClass":{"type":"string"},"contentTrust":{"enum":["TRUSTED_CONTRACT","UNTRUSTED","MIXED"]},"sanitisation":{"type":"string"}},"additionalProperties":false},
+    "dependencies": {"type":"array","uniqueItems":true,"items":{"type":"string"}},
+    "composition": {"type":"object","required":["slots","allowedChildren","cardinality","responsibilities"],"properties":{"slots":{"type":"array","items":{"type":"string"}},"allowedChildren":{"type":"array","items":{"type":"string"}},"cardinality":{"type":"string"},"nestingConstraints":{"type":"string"},"responsibilities":{"type":"string"}},"additionalProperties":false},
+    "supportEvidence": {"type":"object","required":["riskClass","matrix"],"properties":{"riskClass":{"enum":["LOW","MEDIUM","HIGH"]},"matrix":{"type":"array","minItems":1,"items":{"type":"string"}},"evidenceRefs":{"type":"array","items":{"type":"string"}}},"additionalProperties":false},
+    "extensions": {"type":"object","required":["allowed","forbiddenOverrides"],"properties":{"allowed":{"type":"array","items":{"type":"string"}},"forbiddenOverrides":{"type":"array","minItems":1,"items":{"type":"string"}}},"additionalProperties":false},
+    "deprecation": {"type":"object","properties":{"replacement":{"type":["string","null"]},"rationale":{"type":["string","null"]}},"additionalProperties":false}
+  },
+  "allOf": [
+    {"if":{"properties":{"feedback":{"properties":{"mutatesState":{"const":true}},"required":["mutatesState"]}},"required":["feedback"]},"then":{"properties":{"feedback":{"required":["perceptibleOutcome"]}}}},
+    {"if":{"properties":{"status":{"const":"DEPRECATED"}}},"then":{"required":["deprecation"]}}
+  ],
+  "additionalProperties": false
+}
