@@ -21,12 +21,25 @@ R4-P1 è una capacità professionale **teacher-first**. Il presente documento au
 
 1. **Contesto didattico** — Docente OS prepara un brief esplicito, modificabile dal docente, collegabile alla lezione e alla baseline curricolare disponibile.
 2. **Ricerca prima della generazione** — il sistema propone la ricerca in Atlas e rende esplicite le alternative **Riutilizza | Adatta | Crea nuova**.
-3. **Produzione specialistica** — soltanto dopo la scelta del docente, il materiale può essere prodotto mediante un motore adeguato al tipo di artefatto.
+3. **Produzione specialistica** — soltanto dopo la scelta del docente, il materiale può essere prodotto mediante un motore adeguato al tipo di artefatto e conforme al contratto minimo di cui alla sezione 4.
 4. **Anteprima e confronto** — il risultato è mostrato prima di qualsiasi collegamento o pubblicazione; il docente può modificarlo, rigenerarlo, sostituirlo o scartarlo.
 5. **Collegamento alla lezione** — avviene soltanto dopo conferma esplicita e con feedback visibile di avanzamento, successo o errore.
 6. **Pubblicazione separata** — l'eventuale pubblicazione in Atlas segue un atto distinto, governato da `LessonPublicationManifest` e `PublicationReceipt`.
 
-## 4. Invarianti teacher-first
+## 4. Contratto minimo del motore specialistico
+
+Qualunque motore specialistico futuro deve rispettare un boundary esplicito e verificabile. Il presente contratto non ne autorizza l'esecuzione runtime, ma stabilisce i requisiti minimi dell'interfaccia:
+
+- **input tipizzato**: brief didattico, tipo di artefatto richiesto, eventuali riferimenti curricolari e risorse sorgente devono essere distinguibili e validabili;
+- **output tipizzato**: artefatto proposto, metadati tecnici, provenance e avvertenze devono essere separabili dalla decisione del docente;
+- **provenance dichiarata**: il motore deve restituire o preservare i riferimenti necessari a ricostruire fonti, asset, trasformazioni e condizioni di riuso quando applicabili;
+- **failure e cancellation semantics**: errore, annullamento e risultato incompleto non possono essere rappresentati come completamento riuscito e devono lasciare il controllo al docente;
+- **no direct writes**: il motore non può collegare direttamente un materiale a una lezione, pubblicarlo in Atlas, modificare Arena o produrre una decisione editoriale vincolante;
+- **authority neutrality**: la scelta o sostituzione del motore non modifica authority, stato curricolare o autorizzazioni runtime.
+
+L'integrazione concreta di uno o più motori richiede un contratto tecnico successivo e un gate distinto.
+
+## 5. Invarianti teacher-first
 
 - nessuna generazione equivale ad approvazione;
 - nessun materiale è collegato silenziosamente a una lezione;
@@ -37,7 +50,17 @@ R4-P1 è una capacità professionale **teacher-first**. Il presente documento au
 - nessun dato personale dello studente è richiesto per la produzione o la pubblicazione ordinaria;
 - la scelta del motore specialistico non modifica authority, provenance o stato curricolare.
 
-## 5. Rapporto con Atlas e ATLAS-MAT-PUB-01
+## 6. Lineage di riuso, adattamento e creazione
+
+Le tre decisioni **Riutilizza | Adatta | Crea nuova** hanno semantica distinta e devono restare ricostruibili:
+
+- **Riutilizza** conserva l'identità e il riferimento della risorsa sorgente, insieme alle condizioni di licenza/riuso applicabili;
+- **Adatta** crea un artefatto derivato con riferimento esplicito alla sorgente e conserva lineage, attribuzione e condizioni di licenza richieste; una trasformazione non può azzerare silenziosamente la provenance;
+- **Crea nuova** produce una nuova identità di lavoro, ma registra comunque le fonti, gli asset o i riferimenti effettivamente incorporati quando presenti.
+
+Se provenance o licenza non sono determinabili, il materiale può restare bozza ma non può essere dichiarato pubblicabile finché il relativo gate non è risolto.
+
+## 7. Rapporto con Atlas e ATLAS-MAT-PUB-01
 
 R4-P1 può riusare pattern, profili di oggetto di apprendimento e design profile Atlas quando pertinenti. Può inoltre riusare `ATLAS-MAT-PUB-01` come infrastruttura tecnica Git-first per normalizzazione, manifest, commit, deploy, smoke test e ricevuta tecnica.
 
@@ -45,7 +68,9 @@ Questo riuso **non attribuisce all'Officina capacità editoriale autonoma**. La 
 
 Il canale canonico verso Atlas resta il contratto di pubblicazione governato; non sono ammessi canali paralleli che aggirino `LessonPublicationManifest` / `PublicationReceipt`.
 
-## 6. Provenienza, diritti, accessibilità e qualità
+L'handoff eredita le regole vigenti di **identità, versione e idempotenza** della pubblicazione. Un nuovo tentativo tecnico riferito alla stessa decisione editoriale non deve creare una pubblicazione parallela o una seconda decisione implicita. `PublicationReceipt` documenta l'esito tecnico e resta distinta dalla decisione editoriale del docente.
+
+## 8. Provenienza, diritti, accessibilità e qualità
 
 Prima che un materiale possa essere considerato pubblicabile devono essere verificabili almeno:
 
@@ -56,9 +81,21 @@ Prima che un materiale possa essere considerato pubblicabile devono essere verif
 - assenza di dati personali non necessari;
 - binding curricolare esplicito quando il materiale dichiara un collegamento al curricolo Arena.
 
-Un gate non superato impedisce la pubblicazione ma non deve distruggere il lavoro del docente: il materiale può restare bozza modificabile con motivazione comprensibile.
+Un gate non superato impedisce la pubblicazione ma non deve distruggere il lavoro del docente: il materiale resta recuperabile come bozza modificabile, con motivazione comprensibile e possibilità di correzione, sostituzione o nuovo tentativo. Questa è un'invariante di prodotto; la strategia di persistenza concreta richiede una successiva decisione tecnica e non è autorizzata dal presente documento.
 
-## 7. Feedback e stati percepibili
+## 9. Bozza, recupero e nuovi tentativi
+
+Lo stato di lavoro deve distinguere almeno il contenuto prodotto dall'esito delle operazioni successive. In particolare:
+
+- un errore di generazione non può trasformare un risultato incompleto in materiale approvato;
+- un errore di collegamento o pubblicazione non deve cancellare una bozza già disponibile;
+- il docente deve poter correggere, sostituire o riprovare senza perdere il contenuto valido già prodotto;
+- un nuovo tentativo conserva il riferimento all'operazione precedente quando necessario per idempotenza e diagnosi;
+- il recupero della bozza non equivale a collegamento alla lezione né a pubblicazione.
+
+Questi requisiti definiscono la semantica governata; non prescrivono ancora database, storage o altro runtime.
+
+## 10. Feedback e stati percepibili
 
 Le azioni asincrone o potenzialmente fallibili devono rendere percepibili almeno gli stati:
 
@@ -66,7 +103,7 @@ Le azioni asincrone o potenzialmente fallibili devono rendere percepibili almeno
 
 Il feedback deve indicare che cosa è avvenuto e quale azione è disponibile. Il solo cambio visivo non testuale non è sufficiente per operazioni decisive.
 
-## 8. Non autorizzazioni esplicite
+## 11. Non autorizzazioni esplicite
 
 Il presente contratto non autorizza:
 
@@ -79,22 +116,26 @@ Il presente contratto non autorizza:
 - introduzione di account studente;
 - modifica dell'autorità di Arena, Atlas, Docente OS o TRAMA.
 
-## 9. Gate di ingresso a implementazione
+## 12. Gate di ingresso a implementazione
 
 Prima di qualsiasi implementazione runtime R4-P1 deve esistere una revisione umana governata che verifichi almeno:
 
 1. coerenza con governance e contratti vigenti;
 2. percorso teacher-first completo e reversibile;
-3. feedback percepibile per conferma, avanzamento, errore e completamento;
-4. separazione fra collegamento alla lezione e pubblicazione;
-5. binding corretto ad Arena e Atlas;
-6. gate provenance/diritti/accessibilità/qualità;
-7. privacy-first e assenza di dati personali studente non necessari;
-8. conferma che DOS-A1 resta `RUNTIME_DEFERRED`.
+3. boundary del motore specialistico tipizzato e privo di direct writes;
+4. lineage verificabile per riuso/adattamento/creazione;
+5. feedback percepibile per conferma, avanzamento, errore e completamento;
+6. recuperabilità della bozza e semantica dei nuovi tentativi;
+7. separazione fra collegamento alla lezione e pubblicazione;
+8. identità/versione/idempotenza della pubblicazione e distinzione della receipt tecnica;
+9. binding corretto ad Arena e Atlas;
+10. gate provenance/diritti/accessibilità/qualità;
+11. privacy-first e assenza di dati personali studente non necessari;
+12. conferma che DOS-A1 resta `RUNTIME_DEFERRED`.
 
 Esito possibile: `PASS`, `CHANGES REQUIRED` oppure `NOT EVALUABLE`.
 
-## 10. Criterio di uscita della fase di ingresso
+## 13. Criterio di uscita della fase di ingresso
 
 La fase di ingresso è completata soltanto quando:
 
