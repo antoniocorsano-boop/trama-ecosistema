@@ -1,0 +1,16 @@
+{
+  "schemaVersion":"1.0.0",
+  "contract":{"id":"TRAMA-UI-EVIDENCE-01","version":"1"},
+  "product":{"id":"ATLAS","profile":"ATLAS-PUBLIC","profileVersion":"1"},
+  "change":{"aggregateUiImpact":"CHANGED","surfaces":[{"id":"curriculum/lesson-materials","uiImpact":"CHANGED","journeys":["student-browse-materials"]}]},
+  "responsive":{"conditions":{"S":{"applicable":true},"M":{"applicable":true},"L":{"applicable":true},"LIM":{"applicable":false,"reason":"journey-not-intended-for-lim"}},"evidence":[
+    {"evidenceId":"resp-s","type":"responsive","result":"PASS","commitSha":"0000000000000000000000000000000000000000","producer":"stage-a-fixture","reference":"artifact:resp-s","immutableRunId":"fixture-run","condition":"S","policyId":"TRAMA-RESP","policyVersion":"1","width":390,"height":844},
+    {"evidenceId":"resp-m","type":"responsive","result":"PASS","commitSha":"0000000000000000000000000000000000000000","producer":"stage-a-fixture","reference":"artifact:resp-m","immutableRunId":"fixture-run","condition":"M","policyId":"TRAMA-RESP","policyVersion":"1","width":768,"height":1024},
+    {"evidenceId":"resp-l","type":"responsive","result":"PASS","commitSha":"0000000000000000000000000000000000000000","producer":"stage-a-fixture","reference":"artifact:resp-l","immutableRunId":"fixture-run","condition":"L","policyId":"TRAMA-RESP","policyVersion":"1","width":1440,"height":900}
+  ]},
+  "accessibility":{"evidence":[{"evidenceId":"a11y-auto","type":"accessibility-automated","result":"PASS","commitSha":"0000000000000000000000000000000000000000","producer":"stage-a-fixture","reference":"artifact:a11y","immutableRunId":"fixture-run"}],"findings":[]},
+  "perceptibleWrite":{"classification":"NON_MUTATIVE","evidence":[]},
+  "designSystem":{"tokens":["semantic.surface"],"components":["Card"],"newComponents":[]},
+  "boundaries":{"authorityImpact":"NONE","privacyImpact":"NONE","runtimeImpact":"NONE","dosA1":"RUNTIME_DEFERRED"},
+  "exceptions":[]
+}
