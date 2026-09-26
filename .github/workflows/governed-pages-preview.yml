@@ -1,0 +1,80 @@
+name: Governed Pages Preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Exact commit SHA or governed branch to preview"
+        required: true
+        default: "166878427237d274e120a70c32546e342c5cc14d"
+      prototype_path:
+        description: "Repository path containing the static prototype"
+        required: true
+        default: "prototypes/r4-p1-p1"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: governed-pages-preview
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout requested exact ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+      - name: Verify requested prototype is static NO_RUNTIME
+        shell: bash
+        env:
+          PROTOTYPE_PATH: ${{ inputs.prototype_path }}
+        run: |
+          set -euo pipefail
+          case "$PROTOTYPE_PATH" in
+            prototypes/*) ;;
+            *) echo "prototype_path must stay under prototypes/" >&2; exit 1 ;;
+          esac
+          test -s "$PROTOTYPE_PATH/index.html"
+          grep -q "NO_RUNTIME" "$PROTOTYPE_PATH/index.html"
+          if grep -Eiq "fetch[[:space:]]*\(|XMLHttpRequest|WebSocket|EventSource|https?://|localStorage|sessionStorage|indexedDB|Authorization:|Bearer |ghp_|github_pat_" "$PROTOTYPE_PATH/index.html"; then
+            echo "NO_RUNTIME violation or external dependency found" >&2
+            exit 1
+          fi
+          node - "$PROTOTYPE_PATH/index.html" <<'NODE'
+          const fs=require('fs')
+          const html=fs.readFileSync(process.argv[2],'utf8')
+          const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+          if(!scripts.length) throw new Error('Inline script not found')
+          for(const [,src] of scripts) new Function(src)
+          console.log('STATIC_PREVIEW_JS_SYNTAX_PASS')
+          NODE
+      - name: Prepare isolated site artifact
+        shell: bash
+        env:
+          PROTOTYPE_PATH: ${{ inputs.prototype_path }}
+        run: |
+          mkdir -p _site
+          cp -R "$PROTOTYPE_PATH"/. _site/
+          touch _site/.nojekyll
+      - name: Upload verified Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy verified artifact
+        id: deployment
+        uses: actions/deploy-pages@v4
