@@ -1,45 +1,18 @@
 import fs from 'node:fs';
-
-const catalogPath = 'governance/component-pattern/catalog.stage-a.json';
-const matrixPath = 'governance/component-pattern/support-matrix.stage-a.json';
-const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-const matrix = JSON.parse(fs.readFileSync(matrixPath, 'utf8'));
-const errors = [];
-const required = ['id','version','kind','owner','status','intent','products','semanticContract','nativeFirst','states','accessibility','responsive','content','privacyTrust','composition','supportEvidence','extensions'];
-const statuses = new Set(['PROPOSED','TRIAL','STABLE','DEPRECATED','RETIRED']);
-const kinds = new Set(['COMPONENT','PATTERN','TEMPLATE']);
-const products = new Set(['ARENA','ATLAS','DOCENTE_OS','CONTROL_CENTER']);
-
-if (catalog.contractId !== 'TRAMA-COMPONENT-PATTERN-01') errors.push('wrong contractId');
-if (catalog.stage !== 'A') errors.push('catalog stage must be A');
-if (catalog.runtimeMigration !== false) errors.push('Stage A runtimeMigration must be false');
-if (!Array.isArray(catalog.entries) || catalog.entries.length === 0) errors.push('catalog entries required');
-
-const ids = new Set();
-for (const [i,e] of (catalog.entries || []).entries()) {
-  const p = `entries[${i}]`;
-  for (const key of required) if (!(key in e)) errors.push(`${p}: missing ${key}`);
-  if (ids.has(e.id)) errors.push(`${p}: duplicate id ${e.id}`); else ids.add(e.id);
-  if (!kinds.has(e.kind)) errors.push(`${p}: invalid kind`);
-  if (!statuses.has(e.status)) errors.push(`${p}: invalid status`);
-  if (e.status === 'STABLE') errors.push(`${p}: Stage A cannot introduce STABLE entries`);
-  if (!Array.isArray(e.products) || e.products.some(x => !products.has(x))) errors.push(`${p}: invalid products`);
-  for (const size of ['S','M','L','LIM']) if (!e.responsive?.[size]) errors.push(`${p}: responsive.${size} required`);
-  if (!Array.isArray(e.composition?.slots) || !Array.isArray(e.composition?.allowedChildren) || !e.composition?.cardinality || !e.composition?.responsibilities) errors.push(`${p}: incomplete composition contract`);
-  if (!['LOW','MEDIUM','HIGH'].includes(e.supportEvidence?.riskClass) || !Array.isArray(e.supportEvidence?.matrix) || e.supportEvidence.matrix.length === 0) errors.push(`${p}: incomplete support evidence`);
-  if (e.feedback?.mutatesState === true && !e.feedback?.perceptibleOutcome) errors.push(`${p}: mutating action requires perceptibleOutcome`);
-  if (!Array.isArray(e.extensions?.forbiddenOverrides) || e.extensions.forbiddenOverrides.length === 0) errors.push(`${p}: forbiddenOverrides required`);
-}
-
-if (matrix.contractId !== catalog.contractId || matrix.stage !== 'A') errors.push('support matrix identity mismatch');
-if (matrix.policy?.runtimeMigration !== false) errors.push('support matrix must forbid runtime migration');
-if (matrix.policy?.stablePromotionAllowed !== false) errors.push('Stage A must forbid STABLE promotion');
-if (matrix.policy?.dosA1 !== 'RUNTIME_DEFERRED') errors.push('DOS-A1 must remain RUNTIME_DEFERRED');
-if (!Array.isArray(matrix.negativeCases) || matrix.negativeCases.length < 5) errors.push('negative cases insufficient');
-
-if (errors.length) {
-  console.error('TRAMA-COMPONENT-PATTERN-01 Stage A: FAIL');
-  for (const error of errors) console.error(`- ${error}`);
-  process.exit(1);
-}
-console.log(`TRAMA-COMPONENT-PATTERN-01 Stage A: PASS (${catalog.entries.length} entries; ${matrix.negativeCases.length} negative cases declared)`);
+const catalog=JSON.parse(fs.readFileSync('governance/component-pattern/catalog.stage-a.json','utf8'));
+const matrix=JSON.parse(fs.readFileSync('governance/component-pattern/support-matrix.stage-a.json','utf8'));
+const schema=JSON.parse(fs.readFileSync('governance/component-pattern/trama-component-pattern-01.schema.json','utf8'));
+const required=schema.required, allowed=new Set(Object.keys(schema.properties));
+const statuses=new Set(['PROPOSED','TRIAL','STABLE','DEPRECATED','RETIRED']);
+const kinds=new Set(['COMPONENT','PATTERN','TEMPLATE']);
+const products=new Set(['ARENA','ATLAS','DOCENTE_OS','CONTROL_CENTER']);
+const clone=x=>structuredClone(x);
+function validate(c,m){const errors=[];
+ if(c.contractId!=='TRAMA-COMPONENT-PATTERN-01')errors.push('wrong contractId'); if(c.stage!=='A')errors.push('stage must be A'); if(c.runtimeMigration!==false)errors.push('runtimeMigration must be false'); if(!Array.isArray(c.entries)||!c.entries.length)errors.push('entries required');
+ const ids=new Set(); for(const [i,e] of (c.entries||[]).entries()){const p=`entries[${i}]`; for(const k of required)if(!(k in e))errors.push(`${p}: missing ${k}`); for(const k of Object.keys(e))if(!allowed.has(k))errors.push(`${p}: unknown property ${k}`); if(ids.has(e.id))errors.push(`${p}: duplicate id`); else ids.add(e.id); if(!kinds.has(e.kind))errors.push(`${p}: invalid kind`); if(!statuses.has(e.status))errors.push(`${p}: invalid status`); if(e.status==='STABLE')errors.push(`${p}: STABLE forbidden in Stage A`); if(!Array.isArray(e.products)||!e.products.length||e.products.some(x=>!products.has(x)))errors.push(`${p}: invalid products`); for(const s of ['S','M','L','LIM'])if(!e.responsive?.[s])errors.push(`${p}: responsive.${s} required`); if(!Array.isArray(e.composition?.slots)||!Array.isArray(e.composition?.allowedChildren)||!e.composition?.cardinality||!e.composition?.responsibilities)errors.push(`${p}: incomplete composition`); if(!['LOW','MEDIUM','HIGH'].includes(e.supportEvidence?.riskClass)||!Array.isArray(e.supportEvidence?.matrix)||!e.supportEvidence.matrix.length)errors.push(`${p}: incomplete support evidence`); if(e.feedback?.mutatesState===true&&!e.feedback?.perceptibleOutcome)errors.push(`${p}: perceptibleOutcome required`); if(!Array.isArray(e.extensions?.forbiddenOverrides)||!e.extensions.forbiddenOverrides.length)errors.push(`${p}: forbiddenOverrides required`); }
+ if(m.contractId!==c.contractId||m.stage!=='A')errors.push('matrix identity mismatch'); if(m.policy?.runtimeMigration!==false)errors.push('matrix runtime migration forbidden'); if(m.policy?.stablePromotionAllowed!==false)errors.push('STABLE promotion forbidden'); if(m.policy?.dosA1!=='RUNTIME_DEFERRED')errors.push('DOS-A1 must remain deferred'); if(!Array.isArray(m.negativeCases)||m.negativeCases.length<10)errors.push('10 negative cases required'); return errors; }
+const mutations={
+ 'NEG-001':(c,m)=>{c.entries[0].undeclared=true},'NEG-002':(c,m)=>{c.entries[0].status='CANONICAL'},'NEG-003':(c,m)=>{delete c.entries[0].responsive.LIM},'NEG-004':(c,m)=>{c.entries[0].feedback={mutatesState:true}},'NEG-005':(c,m)=>{delete c.entries[0].composition.cardinality},'NEG-006':(c,m)=>{delete c.entries[0].supportEvidence.matrix},'NEG-007':(c,m)=>{c.runtimeMigration=true},'NEG-008':(c,m)=>{c.entries[0].status='STABLE'},'NEG-009':(c,m)=>{m.policy.dosA1='ACTIVE'},'NEG-010':(c,m)=>{c.entries[0].extensions.forbiddenOverrides=[]}};
+const errors=validate(catalog,matrix), declared=new Set((matrix.negativeCases||[]).map(x=>x.id));
+for(const [id,mutate] of Object.entries(mutations)){if(!declared.has(id)){errors.push(`${id}: not declared`);continue}const c=clone(catalog),m=clone(matrix);mutate(c,m);if(validate(c,m).length===0)errors.push(`${id}: negative mutation accepted`)} for(const id of declared)if(!mutations[id])errors.push(`${id}: no executable mutation`);
+if(errors.length){console.error('TRAMA-COMPONENT-PATTERN-01 Stage A: FAIL');for(const e of errors)console.error(`- ${e}`);process.exit(1)} console.log(`TRAMA-COMPONENT-PATTERN-01 Stage A: PASS (${catalog.entries.length} entries; ${declared.size} negative cases executed)`);
