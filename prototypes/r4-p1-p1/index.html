@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TRAMA — Officina materiali P1</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#172033;background:#f6f7f9}*{box-sizing:border-box}body{margin:0}.shell{max-width:960px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center}.badge{border:1px solid #687386;border-radius:999px;padding:6px 10px;font-size:.8rem}.card{background:white;border:1px solid #d8dde6;border-radius:16px;padding:18px;margin:14px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}button,textarea{font:inherit}button{padding:11px 14px;border:1px solid #536078;border-radius:10px;background:white;cursor:pointer}button.primary{background:#172033;color:white}.muted{color:#596579}.status{border-left:4px solid #536078;padding:10px 12px;background:#eef1f5}.actions{display:flex;flex-wrap:wrap;gap:8px}textarea{width:100%;min-height:90px;padding:10px}.hidden{display:none}.meta{font-size:.85rem;background:#f3f5f8;padding:10px;border-radius:8px;overflow-wrap:anywhere}@media(max-width:620px){.shell{padding:12px}.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}button{width:100%}.actions{display:grid;grid-template-columns:1fr;width:100%}}
+</style>
+</head>
+<body><main class="shell">
+<div class="top"><div><strong>TRAMA · Officina materiali</strong><div class="muted">R4-P1/P1 · prototipo locale NO_RUNTIME</div></div><span class="badge">Fixture locali · zero rete</span></div>
+<section class="card" aria-labelledby="ctx"><h1 id="ctx">Prepara un materiale per la lezione</h1><p><strong>2C · Tecnologia</strong> — Agricoltura come sistema tecnologico</p><label for="brief">Brief didattico</label><textarea id="brief">Rappresentare input, trasformazioni, output e feedback di un sistema agricolo con un materiale chiaro e modificabile.</textarea></section>
+<section class="card" aria-labelledby="search"><h2 id="search">1. Cerca prima in Atlas</h2><p class="muted">La ricerca è simulata con fixture locali. Puoi rifiutare ogni proposta senza effetti.</p><div class="actions"><button id="find">Cerca materiali</button><button id="none">Simula nessun risultato</button></div><div id="results" class="hidden"><div class="grid"><article class="card"><strong>Schema del sistema agricolo</strong><p>Infografica · CC BY 4.0</p><div class="actions"><button data-mode="reuse">Riutilizza</button><button data-mode="adapt">Adatta</button><button id="reject">Non adatto</button></div></article></div></div></section>
+<section class="card" aria-labelledby="choice"><h2 id="choice">2. Scegli come procedere</h2><div class="actions"><button class="primary" data-mode="create">Crea nuova</button></div><p id="choiceHint" class="muted">Crea nuova resta disponibile anche senza risultati Atlas.</p></section>
+<section id="work" class="card hidden" aria-labelledby="preview"><h2 id="preview">3. Anteprima della bozza</h2><p id="draftText"></p><div id="lineage" class="meta"></div><div class="actions"><button id="retry">Rigenera simulatamente</button><button id="fail">Simula errore recuperabile</button><button id="cancel">Annulla lavorazione</button></div><hr><p><strong>Decidi tu cosa fare della bozza.</strong></p><div class="actions"><button id="link">Collega alla lezione</button><button id="publish">Proponi per la pubblicazione</button><button id="discard">Scarta</button></div></section>
+<div id="status" class="status" role="status" aria-live="polite">READY — Nessuna operazione eseguita.</div>
+</main><script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);let seq=0;let state={scenarioId:'P1-TECH-2C',fixtureId:null,sourceRef:null,license:null,workItemId:null,requestId:null,parentRequestId:null,publicationRequestId:null,mode:null,draft:null};
+const say=(s,m)=>{$('status').textContent=s+' — '+m};
+function ids(mode){if(!state.workItemId)state.workItemId='WORK-P1-001';state.parentRequestId=state.requestId;state.requestId='REQ-P1-'+String(++seq).padStart(3,'0');state.mode=mode}
+function render(){ $('work').classList.remove('hidden'); $('draftText').textContent=state.draft; $('lineage').textContent=JSON.stringify({scenarioId:state.scenarioId,fixtureId:state.fixtureId,sourceRef:state.sourceRef,license:state.license,workItemId:state.workItemId,requestId:state.requestId,parentRequestId:state.parentRequestId,publicationRequestId:state.publicationRequestId,mode:state.mode},null,2)}
+function work(mode){ids(mode);const fromAtlas=mode!=='create';state.fixtureId=fromAtlas?'FIX-ATLAS-001':'FIX-NEW-001';state.sourceRef=fromAtlas?'ATLAS:FIX-ATLAS-001':null;state.license=fromAtlas?'CC BY 4.0':null;state.draft=mode==='reuse'?'Bozza: schema Atlas riutilizzato senza modifiche.':mode==='adapt'?'Bozza derivata: schema Atlas adattato al brief della lezione.':'Nuova bozza: infografica sul sistema agricolo costruita dal brief.';render();say('PREVIEW','Bozza pronta. Nessun collegamento o pubblicazione è stato eseguito.')}
+$('find').onclick=()=>{say('SEARCHING','Ricerca Atlas simulata in corso.');$('results').classList.remove('hidden');say('NEEDS_DECISION','Trovata una fixture Atlas. Puoi riutilizzarla, adattarla, rifiutarla o creare una nuova risorsa.')};
+$('none').onclick=()=>{$('results').classList.add('hidden');say('NEEDS_DECISION','Nessun risultato adatto. Crea nuova resta disponibile.')};
+$('reject').onclick=()=>{$('results').classList.add('hidden');say('NEEDS_DECISION','Risorsa rifiutata senza effetti. Puoi modificare il brief, cercare ancora o creare nuova.')};
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>work(b.dataset.mode));
+$('retry').onclick=()=>{let old=state.requestId;ids(state.mode);state.parentRequestId=old;render();say('PREVIEW','Nuovo tentativo simulato completato; workItemId invariato e lineage conservato.')};
+$('fail').onclick=()=>{say('ERROR','Errore simulato. La bozza e il lineage restano disponibili; puoi riprovare o cambiare strategia.')};
+$('cancel').onclick=()=>{say('CANCELLED','Lavorazione annullata. La bozza disponibile non è stata collegata né pubblicata.')};
+$('link').onclick=()=>say('LINK_SIMULATED','Collegamento simulato soltanto. Nessuna scrittura in Docente OS.');
+$('publish').onclick=()=>{if(!state.publicationRequestId)state.publicationRequestId='PUB-P1-001';render();say('PUBLICATION_PROPOSAL_SIMULATED','PUBLICATION_NOT_EXECUTED_NO_RUNTIME — nessuna pubblicazione Atlas eseguita.')};
+$('discard').onclick=()=>{state={scenarioId:'P1-TECH-2C',fixtureId:null,sourceRef:null,license:null,workItemId:null,requestId:null,parentRequestId:null,publicationRequestId:null,mode:null,draft:null};$('work').classList.add('hidden');say('READY','Bozza scartata localmente. Nessun effetto esterno.')};
+})();
+</script></body></html>
