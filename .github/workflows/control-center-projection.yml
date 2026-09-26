@@ -26,30 +26,13 @@ jobs:
       - name: Regenerate governed projection in workspace
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
 
-      - name: Validate canonical generator
+      - name: Validate canonical snapshot and projection drift
         run: python scripts/build_ecosystem_snapshot.py --check
-
-      - name: Verify committed projection is current
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          generated = json.loads(Path('/tmp/ecosystem-snapshot.json').read_text(encoding='utf-8'))
-          committed = json.loads(Path('control-center/data/ecosystem-snapshot.json').read_text(encoding='utf-8'))
-          if committed != generated:
-              raise SystemExit(
-                  'TRAMA_SNAPSHOT_DRIFT: regenerate control-center/data/ecosystem-snapshot.json '
-                  'with scripts/build_ecosystem_snapshot.py before updating the PR head'
-              )
-          print('TRAMA_SNAPSHOT_PROJECTION_CURRENT')
-          PY
 
       - name: Assert read-only CI contract
         shell: bash
         run: |
           set -euo pipefail
           test "${{ github.token }}" != ""
+          test -z "$(git status --porcelain)"
           echo "TRAMA_PROJECTION_CI_READ_ONLY_PASS"
