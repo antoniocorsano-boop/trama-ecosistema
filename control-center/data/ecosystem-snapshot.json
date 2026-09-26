@@ -1,35 +1,35 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-09-26T04:38:21.710776+00:00",
+  "generatedAt": "2026-09-26T04:38:48.920122+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "ref": "STATUS.md",
       "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "ref": "ROADMAP.md",
       "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "ref": "status/governed-events.json",
       "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
     }
@@ -85,7 +85,7 @@
       ],
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-26T04:38:21.710776+00:00"
+      "lastEvaluatedAt": "2026-09-26T04:38:48.920122+00:00"
     },
     {
       "id": "arena",
@@ -100,7 +100,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-26T04:38:21.710776+00:00"
+      "lastEvaluatedAt": "2026-09-26T04:38:48.920122+00:00"
     },
     {
       "id": "atlas",
@@ -119,7 +119,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-26T04:38:21.710776+00:00"
+      "lastEvaluatedAt": "2026-09-26T04:38:48.920122+00:00"
     },
     {
       "id": "docente-os",
@@ -135,7 +135,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-26T04:38:21.710776+00:00"
+      "lastEvaluatedAt": "2026-09-26T04:38:48.920122+00:00"
     }
   ],
   "capabilities": [
@@ -375,7 +375,7 @@
         "path": "STATUS.md",
         "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
       },
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -393,7 +393,7 @@
         "path": "ROADMAP.md",
         "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
       },
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -411,7 +411,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -429,7 +429,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
       },
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -447,7 +447,7 @@
         "path": "status/governed-events.json",
         "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
       },
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -521,7 +521,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-26T04:38:21.710776+00:00",
+      "observedAt": "2026-09-26T04:38:48.920122+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
