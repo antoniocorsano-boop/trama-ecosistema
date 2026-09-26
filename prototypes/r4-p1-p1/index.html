@@ -16,11 +16,11 @@
 <div id="status" class="status" role="status" aria-live="polite">READY — Nessuna operazione eseguita.</div>
 </main><script>
 (()=>{'use strict';
-const $=id=>document.getElementById(id);let seq=0;let state={scenarioId:'P1-TECH-2C',fixtureId:null,workItemId:null,requestId:null,parentRequestId:null,publicationRequestId:null,mode:null,draft:null};
+const $=id=>document.getElementById(id);let seq=0;let state={scenarioId:'P1-TECH-2C',fixtureId:null,sourceRef:null,license:null,workItemId:null,requestId:null,parentRequestId:null,publicationRequestId:null,mode:null,draft:null};
 const say=(s,m)=>{$('status').textContent=s+' — '+m};
 function ids(mode){if(!state.workItemId)state.workItemId='WORK-P1-001';state.parentRequestId=state.requestId;state.requestId='REQ-P1-'+String(++seq).padStart(3,'0');state.mode=mode}
-function render(){ $('work').classList.remove('hidden'); $('draftText').textContent=state.draft; $('lineage').textContent=JSON.stringify({scenarioId:state.scenarioId,fixtureId:state.fixtureId,workItemId:state.workItemId,requestId:state.requestId,parentRequestId:state.parentRequestId,publicationRequestId:state.publicationRequestId,mode:state.mode},null,2)}
-function work(mode){ids(mode);state.fixtureId=mode==='create'?'FIX-NEW-001':'FIX-ATLAS-001';state.draft=mode==='reuse'?'Bozza: schema Atlas riutilizzato senza modifiche.':mode==='adapt'?'Bozza derivata: schema Atlas adattato al brief della lezione.':'Nuova bozza: infografica sul sistema agricolo costruita dal brief.';render();say('PREVIEW','Bozza pronta. Nessun collegamento o pubblicazione è stato eseguito.')}
+function render(){ $('work').classList.remove('hidden'); $('draftText').textContent=state.draft; $('lineage').textContent=JSON.stringify({scenarioId:state.scenarioId,fixtureId:state.fixtureId,sourceRef:state.sourceRef,license:state.license,workItemId:state.workItemId,requestId:state.requestId,parentRequestId:state.parentRequestId,publicationRequestId:state.publicationRequestId,mode:state.mode},null,2)}
+function work(mode){ids(mode);const fromAtlas=mode!=='create';state.fixtureId=fromAtlas?'FIX-ATLAS-001':'FIX-NEW-001';state.sourceRef=fromAtlas?'ATLAS:FIX-ATLAS-001':null;state.license=fromAtlas?'CC BY 4.0':null;state.draft=mode==='reuse'?'Bozza: schema Atlas riutilizzato senza modifiche.':mode==='adapt'?'Bozza derivata: schema Atlas adattato al brief della lezione.':'Nuova bozza: infografica sul sistema agricolo costruita dal brief.';render();say('PREVIEW','Bozza pronta. Nessun collegamento o pubblicazione è stato eseguito.')}
 $('find').onclick=()=>{say('SEARCHING','Ricerca Atlas simulata in corso.');$('results').classList.remove('hidden');say('NEEDS_DECISION','Trovata una fixture Atlas. Puoi riutilizzarla, adattarla, rifiutarla o creare una nuova risorsa.')};
 $('none').onclick=()=>{$('results').classList.add('hidden');say('NEEDS_DECISION','Nessun risultato adatto. Crea nuova resta disponibile.')};
 $('reject').onclick=()=>{$('results').classList.add('hidden');say('NEEDS_DECISION','Risorsa rifiutata senza effetti. Puoi modificare il brief, cercare ancora o creare nuova.')};
@@ -30,6 +30,6 @@ $('fail').onclick=()=>{say('ERROR','Errore simulato. La bozza e il lineage resta
 $('cancel').onclick=()=>{say('CANCELLED','Lavorazione annullata. La bozza disponibile non è stata collegata né pubblicata.')};
 $('link').onclick=()=>say('LINK_SIMULATED','Collegamento simulato soltanto. Nessuna scrittura in Docente OS.');
 $('publish').onclick=()=>{if(!state.publicationRequestId)state.publicationRequestId='PUB-P1-001';render();say('PUBLICATION_PROPOSAL_SIMULATED','PUBLICATION_NOT_EXECUTED_NO_RUNTIME — nessuna pubblicazione Atlas eseguita.')};
-$('discard').onclick=()=>{state={scenarioId:'P1-TECH-2C',fixtureId:null,workItemId:null,requestId:null,parentRequestId:null,publicationRequestId:null,mode:null,draft:null};$('work').classList.add('hidden');say('READY','Bozza scartata localmente. Nessun effetto esterno.')};
+$('discard').onclick=()=>{state={scenarioId:'P1-TECH-2C',fixtureId:null,sourceRef:null,license:null,workItemId:null,requestId:null,parentRequestId:null,publicationRequestId:null,mode:null,draft:null};$('work').classList.add('hidden');say('READY','Bozza scartata localmente. Nessun effetto esterno.')};
 })();
 </script></body></html>
