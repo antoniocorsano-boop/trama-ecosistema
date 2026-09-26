@@ -1,0 +1,101 @@
+schemaVersion: 1
+status: research
+policy:
+  defaultStatus: research
+  promotionRequires:
+    - screened_evidence_packet
+    - pathway_specific_rationale
+    - safeguard_review
+    - validation_plan
+  note: >-
+    Registry entries are candidate experiential grammars, not approved effects or
+    universal templates. Evidence and pathway validation govern promotion.
+
+grammars:
+  - id: sequential-visual-narrative
+    name: Sequential visual narrative
+    traditions: [comics, manga, picture-sequence]
+    cognitiveActions: [sequence, inference, continuity, viewpoint]
+    candidateFit: [communication, perspective-taking, causal-reasoning]
+    risks: [visual-overload, ellipsis-too-demanding, style-dominates-content]
+    evidenceStatus: research
+
+  - id: audiovisual-temporal-narrative
+    name: Audiovisual temporal narrative
+    traditions: [animation, anime, film]
+    cognitiveActions: [temporal-sequencing, viewpoint, atmosphere, causal-continuity]
+    candidateFit: [communication, causal-reasoning]
+    risks: [externally-imposed-pacing, motion-overload, sound-dependence]
+    evidenceStatus: research
+
+  - id: branching-consequence
+    name: Branching and consequence narrative
+    traditions: [interactive-fiction, scenario-based-learning]
+    cognitiveActions: [compare-alternatives, anticipate-consequences, reconsider]
+    candidateFit: [decision-responsibility, citizenship]
+    risks: [false-binary-choices, moral-coding, path-as-correct-life-route]
+    evidenceStatus: research
+
+  - id: inquiry-evidence
+    name: Inquiry and evidence
+    traditions: [inquiry-learning, mystery, investigation]
+    cognitiveActions: [notice-gaps, formulate-hypotheses, evaluate-evidence, revise]
+    candidateFit: [critical-thinking, information-literacy]
+    risks: [clue-as-answer-cue, excessive-working-memory-demand]
+    evidenceStatus: research
+
+  - id: construction-workshop
+    name: Construction and workshop
+    traditions: [constructionism, making, design]
+    cognitiveActions: [build, test, inspect-effects, revise]
+    candidateFit: [problem-solving, collaboration, design-thinking]
+    risks: [activity-without-reflection, tool-fetishism]
+    evidenceStatus: research
+
+  - id: simulation-microworld
+    name: Simulation and microworld
+    traditions: [simulation, microworld]
+    cognitiveActions: [manipulate-system, observe-relations, test-model, adapt]
+    candidateFit: [systems-thinking, problem-solving]
+    risks: [model-misconception, hidden-rules, cognitive-overload]
+    evidenceStatus: research
+
+  - id: viewpoint-theatre
+    name: Viewpoint and theatre
+    traditions: [role-play, theatre, multi-perspective-narrative]
+    cognitiveActions: [perspective-shift, compare-information, communicate]
+    candidateFit: [communication, collaboration, perspective-taking]
+    risks: [forced-self-disclosure, stereotype-role, emotion-inference]
+    evidenceStatus: research
+
+  - id: reflective-notebook
+    name: Reflective notebook
+    traditions: [learning-journal, reflective-practice, visual-notebook]
+    cognitiveActions: [notice-strategy, compare, reframe, retrieve]
+    candidateFit: [metacognition, self-regulation]
+    risks: [sensitive-disclosure, introspection-as-assessment]
+    evidenceStatus: research
+
+  - id: map-exploration
+    name: Map and exploration
+    traditions: [concept-map, spatial-navigation, exploratory-interface]
+    cognitiveActions: [orient, relate, compare, navigate-options]
+    candidateFit: [systems-thinking, decision-making, knowledge-organisation]
+    risks: [spatial-metaphor-bias, navigation-overhead]
+    evidenceStatus: research
+
+  - id: shared-construction
+    name: Shared construction
+    traditions: [collaborative-learning, co-construction]
+    cognitiveActions: [coordinate-contributions, negotiate, integrate]
+    candidateFit: [collaboration, communication]
+    risks: [social-norm-coding, simulated-consensus-as-correctness]
+    evidenceStatus: research
+
+  - id: environmental-storytelling
+    name: Environmental storytelling
+    traditions: [environmental-narrative, object-based-storytelling]
+    cognitiveActions: [observe-context, infer, connect-clues]
+    candidateFit: [critical-thinking, observation, causal-reasoning]
+    risks: [decorative-noise, inference-depends-on-cultural-cues]
+    evidenceStatus: research
