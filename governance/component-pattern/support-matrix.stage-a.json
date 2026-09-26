@@ -1,7 +1,7 @@
 {
   "contractId":"TRAMA-COMPONENT-PATTERN-01",
   "stage":"A",
-  "policy":{"runtimeMigration":false,"stablePromotionAllowed":false,"dosA1":"RUNTIME_DEFERRED"},
+  "policy":{"runtimeMigration":false,"stablePromotionAllowed":false,"dosA1":"RUNTIME_DEFERRED","authorityRegistry":"policies/design-system/authority-registry.v1.json"},
   "supportMatrix":{
     "LOW":["schema","content resilience","S/M/L/LIM"],
     "MEDIUM":["LOW","keyboard","focus","semantic accessibility","zoom/reflow"],
@@ -17,6 +17,11 @@
     {"id":"NEG-007","expect":"GOVERNANCE_FAIL","rule":"Stage A cannot authorize runtime migration","mutation":"runtimeMigration=true"},
     {"id":"NEG-008","expect":"GOVERNANCE_FAIL","rule":"Stage A cannot promote entries to STABLE","mutation":"entry.status=STABLE without governed evidence transition"},
     {"id":"NEG-009","expect":"GOVERNANCE_FAIL","rule":"DOS-A1 remains deferred","mutation":"dosA1 != RUNTIME_DEFERRED"},
-    {"id":"NEG-010","expect":"GOVERNANCE_FAIL","rule":"Shared semantics cannot be overridden by product extension","mutation":"extensions remove semantic role from forbiddenOverrides"}
+    {"id":"NEG-010","expect":"GOVERNANCE_FAIL","rule":"Shared semantics cannot be overridden by product extension","mutation":"extensions remove semantic role from forbiddenOverrides"},
+    {"id":"NEG-011","expect":"FAIL","rule":"PVIP binding is mandatory","mutation":"remove pvipBinding"},
+    {"id":"NEG-012","expect":"FAIL","rule":"Product identifiers use canonical vocabulary","mutation":"products contains CONTROL_CENTER"},
+    {"id":"NEG-013","expect":"GOVERNANCE_FAIL","rule":"Owner must exist in governed authority registry","mutation":"owner=UNKNOWN_AUTHORITY"},
+    {"id":"NEG-014","expect":"FAIL","rule":"Dependencies resolve to catalog entries","mutation":"dependency=TRAMA.MISSING_COMPONENT"},
+    {"id":"NEG-015","expect":"FAIL","rule":"Risk-class support profile is complete","mutation":"HIGH matrix omits inherited and required evidence"}
   ]
 }
