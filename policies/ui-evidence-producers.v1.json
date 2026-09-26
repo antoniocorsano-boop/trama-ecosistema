@@ -1,0 +1,8 @@
+{
+  "policyId":"TRAMA-UI-EVIDENCE-PRODUCERS",
+  "version":"1.0.0",
+  "mode":"STAGE_A_OBSERVE",
+  "producers":["github-actions","playwright","axe","human-governance-review","stage-a-fixture"],
+  "fixtureProducer":"stage-a-fixture",
+  "fixtureRoot":"fixtures/ui-evidence/"
+}
