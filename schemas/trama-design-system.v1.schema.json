@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/trama-design-system.v1.schema.json",
+  "title": "TRAMA Design System Stage A Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["policyId","version","contract","owner","authorityRegistry","mode","semanticChange","layers","responsivePolicy","tokens","interactionStates","presentationModes","products","boundaries"],
+  "properties": {
+    "policyId": {"const":"TRAMA-DESIGN-SYSTEM"},
+    "version": {"type":"string","pattern":"^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "contract": {"const":"TRAMA-DESIGN-TOKENS-01"},
+    "owner": {"type":"string","minLength":1},
+    "authorityRegistry": {"type":"object","additionalProperties":false,"required":["registryId","version"],"properties":{"registryId":{"const":"TRAMA-DESIGN-AUTHORITY-REGISTRY"},"version":{"type":"string"}}},
+    "mode": {"const":"STAGE_A_OBSERVE"},
+    "semanticChange": {"enum":["NONE","VALUE_ONLY","ADDITIVE","BREAKING"]},
+    "layers": {"type":"array","uniqueItems":true,"contains":{"const":"ecosystem-semantic"}},
+    "responsivePolicy": {"type":"object","additionalProperties":false,"required":["policyId","version","conditions"],"properties":{"policyId":{"const":"TRAMA-RESPONSIVE"},"version":{"type":"string"},"conditions":{"type":"object","additionalProperties":false,"required":["S","M","L","LIM"],"properties":{"S":{"$ref":"#/$defs/range"},"M":{"$ref":"#/$defs/range"},"L":{"type":"object","additionalProperties":false,"required":["minWidth"],"properties":{"minWidth":{"type":"integer","minimum":1}}},"LIM":{"type":"object","additionalProperties":false,"required":["kind","maxInlineSize","zoom","requiresReflow","evidenceDimensionsRequired"],"properties":{"kind":{"const":"LIMITED_REFLOW"},"maxInlineSize":{"type":"integer","minimum":1},"zoom":{"type":"number","minimum":1},"requiresReflow":{"const":true},"evidenceDimensionsRequired":{"const":true}}}}}}},
+    "tokens": {"type":"object","minProperties":1,"additionalProperties":{"type":"object","additionalProperties":true,"required":["type","role"],"properties":{"type":{"type":"string"},"role":{"type":"string"},"layer":{"enum":["primitive","ecosystem-semantic","product-alias"]},"aliasOf":{"type":"string"},"scalable":{"type":"boolean"}}}},
+    "interactionStates":{"type":"array","uniqueItems":true,"items":{"type":"string"}},
+    "presentationModes":{"type":"array","uniqueItems":true,"items":{"type":"string"}},
+    "products":{"type":"object","additionalProperties":false,"required":["ARENA","ATLAS","DOCENTE_OS","TRAMA_CONTROL_CENTER"],"properties":{"ARENA":{"$ref":"#/$defs/product"},"ATLAS":{"$ref":"#/$defs/product"},"DOCENTE_OS":{"$ref":"#/$defs/product"},"TRAMA_CONTROL_CENTER":{"$ref":"#/$defs/product"}}},
+    "boundaries":{"type":"object","additionalProperties":false,"required":["runtimeImpact","persistence","studentAccountTracking","dosA1"],"properties":{"runtimeImpact":{"const":"NONE"},"persistence":{"const":"NONE"},"studentAccountTracking":{"const":"NONE"},"dosA1":{"const":"RUNTIME_DEFERRED"}}}
+  },
+  "$defs": {
+    "range":{"type":"object","additionalProperties":false,"required":["minWidth","maxWidth"],"properties":{"minWidth":{"type":"integer","minimum":1},"maxWidth":{"type":"integer","minimum":1}}},
+    "dimension":{"type":"object","additionalProperties":false,"required":["applicable"],"properties":{"applicable":{"type":"boolean"},"value":{"type":"string","minLength":1},"reason":{"type":"string","minLength":1}},"allOf":[{"if":{"properties":{"applicable":{"const":true}}},"then":{"required":["value"]}},{"if":{"properties":{"applicable":{"const":false}}},"then":{"required":["reason"]}}]},
+    "identity":{"type":"object","additionalProperties":false,"required":["voice","paletteTonalCharacter","typographicVoice","densitySpatialRhythm","shapeElevation","composition","navigation","dataVisualisation","motionCharacter","iconographyIllustration"],"properties":{"voice":{"$ref":"#/$defs/dimension"},"paletteTonalCharacter":{"$ref":"#/$defs/dimension"},"typographicVoice":{"$ref":"#/$defs/dimension"},"densitySpatialRhythm":{"$ref":"#/$defs/dimension"},"shapeElevation":{"$ref":"#/$defs/dimension"},"composition":{"$ref":"#/$defs/dimension"},"navigation":{"$ref":"#/$defs/dimension"},"dataVisualisation":{"$ref":"#/$defs/dimension"},"motionCharacter":{"$ref":"#/$defs/dimension"},"iconographyIllustration":{"$ref":"#/$defs/dimension"}}},
+    "product":{"type":"object","additionalProperties":false,"required":["owner","pvipVersion","identity","aliases"],"properties":{"owner":{"type":"string"},"pvipVersion":{"type":"string"},"identity":{"$ref":"#/$defs/identity"},"aliases":{"type":"object","additionalProperties":{"type":"string"}}}}
+  }
+}
