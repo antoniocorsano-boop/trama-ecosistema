@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"1.0.0",
+  "contract":{"id":"TRAMA-UI-EVIDENCE-01","version":"1"},
+  "product":{"id":"ATLAS","profile":"ATLAS-PUBLIC","profileVersion":"1"},
+  "change":{"aggregateUiImpact":"CHANGED","surfaces":[{"id":"example","uiImpact":"CHANGED"}]},
+  "responsive":{"conditions":{"S":{"applicable":false,"reason":"fixture"},"M":{"applicable":false,"reason":"fixture"},"L":{"applicable":false,"reason":"fixture"},"LIM":{"applicable":false,"reason":"fixture"}},"evidence":[]},
+  "accessibility":{"evidence":[{"evidenceId":"aggregate","type":"accessibility-aggregate","result":"PASS","commitSha":"0000000000000000000000000000000000000000","producer":"untrusted-self-assertion","reference":"self:pass","immutableRunId":"fixture-run"}],"findings":[{"findingId":"A11Y-1","criterion":"keyboard-focus","blockingClass":"BLOCKING","status":"OPEN","surfaceId":"example","evidenceRef":"aggregate"}]},
+  "perceptibleWrite":{"classification":"NON_MUTATIVE","evidence":[]},
+  "designSystem":{"tokens":[],"components":[],"newComponents":[]},
+  "boundaries":{"authorityImpact":"NONE","privacyImpact":"NONE","runtimeImpact":"NONE","dosA1":"RUNTIME_DEFERRED"},
+  "exceptions":[]
+}

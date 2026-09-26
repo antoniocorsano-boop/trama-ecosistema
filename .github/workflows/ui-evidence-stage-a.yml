@@ -1,0 +1,23 @@
+name: UI Evidence Stage A
+on:
+  pull_request:
+    paths:
+      - 'schemas/ui-evidence.manifest.schema.json'
+      - 'policies/ui-evidence-producers.v1.json'
+      - 'scripts/validate-ui-evidence.mjs'
+      - 'scripts/test-ui-evidence-validator.mjs'
+      - 'fixtures/ui-evidence/**'
+      - 'docs/contracts/trama-ui-evidence-stage-a-implementation.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validator-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run Stage A validator contract suite
+        run: node scripts/test-ui-evidence-validator.mjs
