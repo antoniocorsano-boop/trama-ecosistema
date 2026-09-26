@@ -1,0 +1,66 @@
+{
+  "policyId": "TRAMA-DESIGN-SYSTEM",
+  "version": "1.0.0",
+  "contract": "TRAMA-DESIGN-TOKENS-01",
+  "owner": "TRAMA-GOVERNANCE",
+  "mode": "STAGE_A_OBSERVE",
+  "semanticChange": "ADDITIVE",
+  "layers": ["primitive", "ecosystem-semantic", "product-alias"],
+  "responsivePolicy": {
+    "policyId": "TRAMA-RESPONSIVE",
+    "version": "1.0.0",
+    "conditions": {
+      "S": {"minWidth": 320, "maxWidth": 599},
+      "M": {"minWidth": 600, "maxWidth": 1023},
+      "L": {"minWidth": 1024},
+      "LIM": {"description": "limited-space/reflow verification context; concrete evidence dimensions are recorded per run"}
+    }
+  },
+  "tokens": {
+    "surface.canvas": {"type": "color", "role": "canvas"},
+    "surface.primary": {"type": "color", "role": "primary-surface"},
+    "text.primary": {"type": "color", "role": "primary-text"},
+    "text.muted": {"type": "color", "role": "muted-text"},
+    "border.default": {"type": "color", "role": "border"},
+    "action.primary": {"type": "color", "role": "primary-action"},
+    "focus.visible": {"type": "color", "role": "focus-indicator"},
+    "feedback.info": {"type": "color", "role": "information"},
+    "feedback.success": {"type": "color", "role": "success"},
+    "feedback.warning": {"type": "color", "role": "warning"},
+    "feedback.error": {"type": "color", "role": "error"},
+    "space.page": {"type": "dimension", "role": "page-spacing", "scalable": true},
+    "space.section": {"type": "dimension", "role": "section-spacing", "scalable": true},
+    "type.body": {"type": "typography", "role": "body", "scalable": true},
+    "type.heading": {"type": "typography", "role": "heading", "scalable": true},
+    "motion.standard": {"type": "duration", "role": "standard-motion", "reducedMotion": "remove-or-reduce"}
+  },
+  "interactionStates": ["default", "hover", "focus-visible", "active", "pressed", "selected", "disabled", "pending", "loading"],
+  "presentationModes": ["light", "dark", "system", "forced-colors"],
+  "products": {
+    "ARENA": {
+      "owner": "ARENA",
+      "pvipVersion": "1.0.0",
+      "identity": {"voice": "authoritative-curricular", "density": "medium-high", "composition": "structured-evidence-oriented", "navigation": "provenance-and-review-led"},
+      "aliases": {"primarySurface": "surface.primary", "primaryAction": "action.primary", "bodyText": "text.primary"}
+    },
+    "ATLAS": {
+      "owner": "ATLAS",
+      "pvipVersion": "1.0.0",
+      "identity": {"voice": "public-exploratory", "density": "low-medium", "composition": "spacious-discovery-oriented", "navigation": "curriculum-exploration-led"},
+      "aliases": {"primarySurface": "surface.primary", "primaryAction": "action.primary", "bodyText": "text.primary"}
+    },
+    "DOCENTE_OS": {
+      "owner": "DOCENTE_OS",
+      "pvipVersion": "1.0.0",
+      "identity": {"voice": "teacher-focused-operational", "density": "medium", "composition": "task-focused-low-noise", "navigation": "continuity-of-work-led"},
+      "aliases": {"primarySurface": "surface.primary", "primaryAction": "action.primary", "bodyText": "text.primary"}
+    },
+    "TRAMA_CONTROL_CENTER": {
+      "owner": "TRAMA-GOVERNANCE",
+      "pvipVersion": "1.0.0",
+      "identity": {"voice": "analytical-observability", "density": "medium-high", "composition": "evidence-comparison-oriented", "navigation": "state-and-progression-led"},
+      "aliases": {"primarySurface": "surface.primary", "primaryAction": "action.primary", "bodyText": "text.primary"}
+    }
+  },
+  "boundaries": {"runtimeImpact": "NONE", "persistence": "NONE", "studentAccountTracking": "NONE", "dosA1": "RUNTIME_DEFERRED"}
+}
