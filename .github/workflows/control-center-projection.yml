@@ -1,0 +1,44 @@
+name: Regenerate TRAMA Ecosystem Snapshot
+
+on:
+  pull_request:
+    paths:
+      - "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md"
+      - "status/ecosystem-status.json"
+      - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/build_ecosystem_snapshot_core.py"
+      - ".github/workflows/control-center-projection.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Regenerate governed projection
+        run: python scripts/build_ecosystem_snapshot.py
+
+      - name: Validate regenerated projection
+        run: python scripts/build_ecosystem_snapshot.py --check
+
+      - name: Commit projection only when changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- control-center/data/ecosystem-snapshot.json; then
+            echo "TRAMA_SNAPSHOT_ALREADY_CURRENT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add control-center/data/ecosystem-snapshot.json
+          git commit -m "chore: regenerate governed ecosystem snapshot"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
