@@ -1,0 +1,14 @@
+{
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "stage": "A.2",
+  "candidateId": "TRAMA.REVIEW_DECIDE_CONFIRM",
+  "receiptPolicy": "Each receipt binds a classification or runtime observation to an immutable repository commit and blob. Receipts prove only the stated observation; they do not upgrade PARTIAL or UNQUALIFIED cells.",
+  "receipts": [
+    {"receiptId":"RDC-A2-ARENA-001","product":"ARENA","kind":"TARGET_RUNTIME_EVIDENCE","repository":"antoniocorsano-boop/CurManLight_arena","commit":"9da1cf65ae86ff5a3a65888636bf04f3a7312a7b","path":"src/ui/components/UiConfirmDialog.tsx","blobSha":"f822f20304f80d13632e2255e6f8252c12436a58","observations":["explicit confirm and cancel callbacks","modal dialog exposes title and message context","keyboard cancellation and focus return are implemented"],"doesNotProve":["pending duplicate guard","stale-state binding","error/conflict recovery"]},
+    {"receiptId":"RDC-A2-DOS-001","product":"DOCENTE_OS","kind":"TARGET_RUNTIME_EVIDENCE","repository":"antoniocorsano-boop/docente-os-2026-27","commit":"f0b7e5c01620d4cc87587081859cbf270cc1d033","path":"product/src/app/impostazioni/actions.ts","blobSha":"7781d4d81e01132e59cf36e5e52afed9d861ce40","observations":["explicit confirmSettingsSection action transitions section to CONFERMATA","explicit confirmSettingsTeachingAssignment action transitions assignment to CONFIRMED","reopen action preserves an explicit reverse transition to PROVISIONAL","mutations are scoped to current workspace and academic year context"],"doesNotProve":["complete UI review context","universal duplicate guard","complete stale/conflict protection"]},
+    {"receiptId":"RDC-A2-ATLAS-001","product":"ATLAS","kind":"APPLICABILITY_EVIDENCE","repository":"antoniocorsano-boop/trama-ecosistema","commit":"220629e0dfec5ba0683574b099242dc5230b887d","path":"governance/component-pattern/catalog-coverage.stage-a1.json","blobSha":"634f03cf5b05003f0707874f09d2fd3d15b0653c","observations":["Stage A.1 classifies Atlas as PRODUCT_SPECIFIC for TRAMA.REVIEW_DECIDE_CONFIRM","Stage A catalog does not target Atlas for this pattern"],"classification":"NOT_TARGETED_CURRENT_PRODUCT_AUTHORITY"},
+    {"receiptId":"RDC-A2-CC-001","product":"TRAMA_CONTROL_CENTER","kind":"APPLICABILITY_EVIDENCE","repository":"antoniocorsano-boop/trama-ecosistema","commit":"220629e0dfec5ba0683574b099242dc5230b887d","path":"control-center/ecosystem.html","blobSha":"6aa299715e5d67253f61263bfc546ef0a18c3be3","observations":["surface identifies itself as TRAMA CONTROL CENTER V2 READ_ONLY","current controls filter or navigate read-only capability and relation data rather than commit consequential product decisions"],"classification":"NOT_APPLICABLE_CURRENT_RUNTIME_READ_ONLY"}
+  ],
+  "status": "RECEIPT_BOUND",
+  "failClosed": true
+}
