@@ -3,7 +3,7 @@
   "stage": "A.2",
   "baseline": "e3e40de1c6e7575309140d786cab047f4f0caaf0",
   "candidateId": "TRAMA.STATUS_MESSAGE",
-  "decision": "QUALIFICATION_CANDIDATE",
+  "decision": "QUALIFIED",
   "runtimeMigration": false,
   "dosA1": "RUNTIME_DEFERRED",
   "evidencePolicy": "Qualification evidence MUST be immutable and receipt-bound: repository + commit SHA + path + verified Git blob SHA. Qualification does not authorize runtime adoption or catalog STABLE promotion.",
@@ -26,7 +26,7 @@
     "receiptBinding": "PASS",
     "semanticCoreExtractableWithoutPVIPOverride": "PASS",
     "runtimeMigrationRequiredForQualification": "NO",
-    "humanIndependentReview": "PENDING"
+    "humanIndependentReview": "PASS"
   },
   "promotionRule": "QUALIFIED may be recorded only after validator PASS and independent exact-head review. STABLE remains forbidden in Stage A.2. Runtime adoption requires a separately governed Stage B."
 }
