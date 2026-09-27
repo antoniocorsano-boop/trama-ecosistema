@@ -1,0 +1,13 @@
+{
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "stage": "A.2",
+  "candidateId": "TRAMA.ERROR_RECOVERY",
+  "baseline": "0b88eaf0d56a31ceb6e10b3825f4b9508c5cae92",
+  "digestKind": "GIT_BLOB_SHA1",
+  "receipts": [
+    {"receiptId":"ERR-A2-ARENA-001","product":"ARENA","repository":"antoniocorsano-boop/CurManLight_arena","commit":"9da1cf65ae86ff5a3a65888636bf04f3a7312a7b","path":"src/components/ui/ErrorBoundary.tsx","gitBlobSha":"317bc731586c75c0698da2f7e258305d972d6dde"},
+    {"receiptId":"ERR-A2-ATLAS-001","product":"ATLAS","repository":"antoniocorsano-boop/Curriculum-Atlas","commit":"4350fe43d9274e555c23fcc79ef0311aacedec5f","path":"src/components/atlas/activity-prototype.tsx","gitBlobSha":"2d33585d5cecaca542a7dbaeaba0a95b0dc89409"},
+    {"receiptId":"ERR-A2-DOS-001","product":"DOCENTE_OS","repository":"antoniocorsano-boop/docente-os-2026-27","commit":"f0b7e5c01620d4cc87587081859cbf270cc1d033","path":"product/src/core/presentation/product-language.ts","gitBlobSha":"961df206845862b782273ab42768f5e5f2cbf726"},
+    {"receiptId":"ERR-A2-CC-001","product":"TRAMA_CONTROL_CENTER","repository":"antoniocorsano-boop/trama-ecosistema","commit":"0b88eaf0d56a31ceb6e10b3825f4b9508c5cae92","path":"control-center/ecosystem.html","gitBlobSha":"6aa299715e5d67253f61263bfc546ef0a18c3be3"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "stage": "A.2",
+  "baseline": "0b88eaf0d56a31ceb6e10b3825f4b9508c5cae92",
+  "candidateId": "TRAMA.ERROR_RECOVERY",
+  "decision": "QUALIFIED",
+  "runtimeMigration": false,
+  "dosA1": "RUNTIME_DEFERRED",
+  "model": "CAPABILITY_BASED",
+  "evidenceReceiptRef": "governance/component-pattern/error-recovery-evidence-receipts.stage-a2.json",
+  "semanticCore": {
+    "sequence": ["DETECT", "COMMUNICATE", "PRESERVE_WHEN_POSSIBLE", "RECOVER_WHEN_AVAILABLE", "NEVER_REPORT_FALSE_SUCCESS"],
+    "required": ["failure must not be represented as success","failure must become perceptible when it affects the user","last valid state or content must be preserved when technically and semantically possible","a recovery action or degraded continuation must be offered or executed when safely available","recovery must not create product authority or silently approve content"],
+    "optionalCapabilities": ["CONTAIN"],
+    "forbidden": ["requiring a framework-specific ErrorBoundary across products","discarding valid user content merely because a later operation failed","silent failure after a consequential action","false success confirmation","automatic authority escalation during recovery"]
+  },
+  "coverage": {
+    "ARENA": {"CONTAIN":"EVIDENCED","COMMUNICATE":"PARTIAL_EVIDENCE","PRESERVE":"UNQUALIFIED","RECOVER":"UNQUALIFIED","receiptId":"ERR-A2-ARENA-001"},
+    "ATLAS": {"CONTAIN":"UNQUALIFIED","COMMUNICATE":"PARTIAL_EVIDENCE","PRESERVE":"UNQUALIFIED","RECOVER":"EVIDENCED","receiptId":"ERR-A2-ATLAS-001"},
+    "DOCENTE_OS": {"CONTAIN":"UNQUALIFIED","COMMUNICATE":"EVIDENCED","PRESERVE":"EVIDENCED","RECOVER":"EVIDENCED","receiptId":"ERR-A2-DOS-001"},
+    "TRAMA_CONTROL_CENTER": {"CONTAIN":"LOCAL_EXCEPTION_HANDLING","COMMUNICATE":"EVIDENCED","PRESERVE":"EVIDENCED","RECOVER":"EVIDENCED_DEGRADED_FALLBACK","receiptId":"ERR-A2-CC-001"}
+  },
+  "evidenceStatus": "RECEIPT_BOUND",
+  "qualificationGates": {
+    "semanticCoreExtracted": "PASS",
+    "frameworkNeutral": "PASS",
+    "crossProductCapabilityEvidence": "PASS_WITH_PARTIAL_CELLS",
+    "immutableEvidenceReceipts": "PASS",
+    "validator": "PASS",
+    "humanIndependentReview": "PASS"
+  },
+  "promotionRule": "QUALIFIED is permitted only after immutable evidence receipts, fail-closed validation and independent exact-head review all PASS. STABLE remains forbidden in Stage A.2. Runtime adoption requires separately governed Stage B."
+}
