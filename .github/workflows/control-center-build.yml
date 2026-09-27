@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: "trama-control-center-build-${{ github.ref }}"
@@ -29,6 +29,8 @@ concurrency:
 jobs:
   synchronize:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout real PR head
@@ -57,6 +59,8 @@ jobs:
   build:
     needs: [synchronize]
     if: always() && (needs.synchronize.result == 'success' || needs.synchronize.result == 'skipped')
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout synchronized state
