@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schema/cc-mss-01-1.4.0-draft.schema.json",
+  "title": "TRAMA Control Center CC-MSS-01 additive contract",
+  "type": "object",
+  "required": ["schemaVersion"],
+  "properties": {
+    "schemaVersion": {"type": "string"},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+    "workstreams": {"type": "array", "items": {"$ref": "#/$defs/workstream"}},
+    "relations": {"type": "array", "items": {"$ref": "#/$defs/relation"}},
+    "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}},
+    "transitions": {"type": "array", "items": {"$ref": "#/$defs/transition"}},
+    "repositoryEnrollment": {"type": "array", "items": {"$ref": "#/$defs/enrollment"}},
+    "attentionRequired": {"type": "array", "items": {"$ref": "#/$defs/attention"}},
+    "collisionCandidates": {"type": "array", "items": {"$ref": "#/$defs/collision"}}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "entity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id","kind","name","lifecycleState","ownerDomain","decisionAuthority","sourceRefs"],
+      "properties": {
+        "id":{"type":"string","pattern":"^entity:"}, "kind":{"type":"string","minLength":1}, "name":{"type":"string","minLength":1},
+        "lifecycleState":{"type":"string","minLength":1}, "ownerDomain":{"type":"string","minLength":1}, "decisionAuthority":{"type":"string","minLength":1},
+        "sourceRefs":{"$ref":"#/$defs/refs"}
+      }
+    },
+    "workstream": {
+      "type":"object", "additionalProperties":false,
+      "required":["id","title","state","entityRefs","repository","changeRef","exactHead","observedHead","lastActivityAt","observedAt","freshnessStatus","decisionAuthority","runtimeAuthorization","blockedByRefs","nextTransitionRefs","evidenceRefs","sourceRefs"],
+      "properties": {
+        "id":{"type":"string","pattern":"^workstream:"}, "title":{"type":"string","minLength":1},
+        "state":{"enum":["ACTIVE","DRAFT","WAITING_HUMAN","BLOCKED","CLOSED","UNKNOWN"]},
+        "entityRefs":{"$ref":"#/$defs/refs"}, "repository":{"type":["string","null"]}, "changeRef":{"type":["string","null"]},
+        "exactHead":{"type":["string","null"]}, "observedHead":{"type":["string","null"]}, "lastActivityAt":{"type":["string","null"]}, "observedAt":{"type":["string","null"]},
+        "freshnessStatus":{"enum":["FRESH","STALE","UNKNOWN"]}, "decisionAuthority":{"type":"string","minLength":1},
+        "runtimeAuthorization":{"enum":["AUTHORIZED","NOT_AUTHORIZED","DEFERRED","NOT_APPLICABLE","UNKNOWN"]},
+        "blockedByRefs":{"$ref":"#/$defs/refs"}, "nextTransitionRefs":{"$ref":"#/$defs/refs"}, "evidenceRefs":{"$ref":"#/$defs/refs"}, "sourceRefs":{"$ref":"#/$defs/refs"}
+      }
+    },
+    "relation": {
+      "type":"object","additionalProperties":false,"required":["id","type","fromRef","toRef","sourceRefs"],
+      "properties":{"id":{"type":"string","pattern":"^relation:"},"type":{"enum":["depends_on","publishes_to","governed_by","implements","blocks","supersedes","evidenced_by","works_on"]},"fromRef":{"type":"string","minLength":1},"toRef":{"type":"string","minLength":1},"sourceRefs":{"$ref":"#/$defs/refs"}}
+    },
+    "decision": {
+      "type":"object","additionalProperties":false,"required":["id","state","authority","subjectRefs","rationaleRef","evidenceRefs","sourceRefs","decidedAt"],
+      "properties":{"id":{"type":"string","pattern":"^decision:"},"state":{"enum":["PROPOSED","PENDING_HUMAN","APPROVED","REJECTED","SUPERSEDED","UNKNOWN"]},"authority":{"type":"string","minLength":1},"subjectRefs":{"$ref":"#/$defs/refs"},"rationaleRef":{"type":["string","null"]},"evidenceRefs":{"$ref":"#/$defs/refs"},"sourceRefs":{"$ref":"#/$defs/refs"},"decidedAt":{"type":["string","null"]}}
+    },
+    "transition": {
+      "type":"object","additionalProperties":false,"required":["id","subjectRef","fromState","toState","status","gateRefs","blockedByRefs","decisionAuthority","evidenceRefs","sourceRefs"],
+      "properties":{"id":{"type":"string","pattern":"^transition:"},"subjectRef":{"type":"string","minLength":1},"fromState":{"type":"string"},"toState":{"type":"string"},"status":{"enum":["ALLOWED","BLOCKED","REQUIRES_HUMAN","DEFERRED","UNKNOWN"]},"gateRefs":{"$ref":"#/$defs/refs"},"blockedByRefs":{"$ref":"#/$defs/refs"},"decisionAuthority":{"type":"string","minLength":1},"evidenceRefs":{"$ref":"#/$defs/refs"},"sourceRefs":{"$ref":"#/$defs/refs"}}
+    },
+    "enrollment": {
+      "type":"object","additionalProperties":false,"required":["id","repository","ecosystemRole","authorityRef","defaultBranch","discoveryPolicy","sourceRefs","state"],
+      "properties":{"id":{"type":"string","pattern":"^enrollment:"},"repository":{"type":"string","minLength":1},"ecosystemRole":{"enum":["CONTROL_PLANE","CURRICULUM_AUTHORITY","PUBLICATION_SURFACE","TEACHER_OPERATIONAL_SURFACE"]},"authorityRef":{"type":"string","minLength":1},"defaultBranch":{"type":"string","minLength":1},"discoveryPolicy":{"type":"string","minLength":1},"sourceRefs":{"$ref":"#/$defs/refs"},"state":{"enum":["ENROLLED","SUSPENDED","UNKNOWN"]}}
+    },
+    "attention": {
+      "type":"object","additionalProperties":false,"required":["id","reasonCode","subjectRefs","evidenceRefs","sourceRefs","status","observedAt"],
+      "properties":{"id":{"type":"string","pattern":"^attention:"},"reasonCode":{"enum":["HEAD_MISMATCH","STALE_SOURCE","UNKNOWN_SOURCE","BLOCKING_GATE","WAITING_HUMAN","RUNTIME_NOT_AUTHORIZED","COLLISION_CANDIDATE","UNSUPPORTED_ASSERTION","UNRESOLVED_REF"]},"subjectRefs":{"$ref":"#/$defs/refs"},"evidenceRefs":{"$ref":"#/$defs/refs"},"sourceRefs":{"$ref":"#/$defs/refs"},"status":{"enum":["OPEN","CLEARED","UNKNOWN"]},"observedAt":{"type":["string","null"]}}
+    },
+    "collision": {
+      "type":"object","additionalProperties":false,"required":["id","ruleId","workstreamRefs","subjectRefs","evidenceRefs","sourceRefs","status"],
+      "properties":{"id":{"type":"string","pattern":"^collision:"},"ruleId":{"enum":["C01_SAME_GOVERNED_SUBJECT","C02_DEPENDENCY_MUTATION","C03_INCOMPATIBLE_TRANSITION"]},"workstreamRefs":{"type":"array","minItems":2,"items":{"type":"string","pattern":"^workstream:"},"uniqueItems":true},"subjectRefs":{"$ref":"#/$defs/refs"},"evidenceRefs":{"$ref":"#/$defs/refs"},"sourceRefs":{"$ref":"#/$defs/refs"},"status":{"enum":["CANDIDATE","CLEARED","UNKNOWN"]}}
+    }
+  }
+}

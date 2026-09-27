@@ -1,0 +1,1 @@
+{"expected":"COLLISION_HEURISTIC_FORBIDDEN","snapshot":{"collisionCandidates":[{"id":"collision:c","ruleId":"C01_SAME_GOVERNED_SUBJECT","workstreamRefs":["workstream:a","workstream:b"],"subjectRefs":[],"evidenceRefs":["evidence:x"],"sourceRefs":["evidence:x"],"status":"CANDIDATE","derivation":"TEXT_SIMILARITY"}],"evidence":[{"id":"evidence:x"}]}}

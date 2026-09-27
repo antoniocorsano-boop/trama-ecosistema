@@ -1,0 +1,1 @@
+{"expected":"UNSUPPORTED_ASSERTION","snapshot":{"repositoryEnrollment":[{"id":"enrollment:r","repository":"org/r","ecosystemRole":"CONTROL_PLANE","authorityRef":"decision:d","defaultBranch":"main","discoveryPolicy":"allowlist","sourceRefs":[],"state":"ENROLLED"}]}}

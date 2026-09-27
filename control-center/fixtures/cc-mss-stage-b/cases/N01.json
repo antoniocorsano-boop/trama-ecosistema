@@ -1,0 +1,1 @@
+{"expected":"OPEN_WORKSTREAM_OMITTED","snapshot":{"repositoryEnrollment":[{"id":"enrollment:r","repository":"org/repo","state":"ENROLLED"}],"observedChanges":[{"repository":"org/repo","changeRef":"PR#1","governed":true,"state":"OPEN"}],"workstreams":[]}}

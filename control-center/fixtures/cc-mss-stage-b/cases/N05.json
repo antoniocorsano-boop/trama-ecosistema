@@ -1,0 +1,1 @@
+{"expected":"CI_IS_NOT_HUMAN_APPROVAL","snapshot":{"evidence":[{"id":"evidence:x"}],"decisions":[{"id":"decision:d","state":"APPROVED","authority":"human","approvalBasis":"CI_ONLY","subjectRefs":[],"rationaleRef":null,"evidenceRefs":["evidence:x"],"sourceRefs":["evidence:x"],"decidedAt":null}]}}

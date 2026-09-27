@@ -1,0 +1,1 @@
+{"expected":"PASS","snapshot":{"evidence":[{"id":"evidence:x"}],"entities":[{"id":"entity:e","kind":"cap","name":"E","lifecycleState":"ACTIVE","ownerDomain":"T","decisionAuthority":"human","sourceRefs":["evidence:x"]}],"relations":[{"id":"relation:r","type":"works_on","fromRef":"entity:e","toRef":"entity:e","sourceRefs":["evidence:x"]}]}}

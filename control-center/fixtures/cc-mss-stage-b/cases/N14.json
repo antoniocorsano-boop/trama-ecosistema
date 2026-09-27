@@ -1,0 +1,1 @@
+{"expected":"UNPROVEN_APPROVAL","snapshot":{"decisions":[{"id":"decision:d","state":"APPROVED","authority":"human","subjectRefs":[],"rationaleRef":null,"evidenceRefs":[],"sourceRefs":["source:x"],"decidedAt":null}]}}

@@ -1,0 +1,1 @@
+{"expected":"PASS","snapshot":{"evidence":[{"id":"evidence:x"}],"collisionCandidates":[{"id":"collision:c","ruleId":"C01_SAME_GOVERNED_SUBJECT","workstreamRefs":["workstream:a","workstream:b"],"subjectRefs":["entity:e"],"evidenceRefs":["evidence:x"],"sourceRefs":["evidence:x"],"status":"CANDIDATE"}]}}

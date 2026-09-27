@@ -1,0 +1,1 @@
+{"expected":"DUPLICATE_ID","snapshot":{"entities":[{"id":"entity:x","kind":"a","name":"A","lifecycleState":"A","ownerDomain":"T","decisionAuthority":"h","sourceRefs":["evidence:e"]},{"id":"entity:x","kind":"b","name":"B","lifecycleState":"A","ownerDomain":"T","decisionAuthority":"h","sourceRefs":["evidence:e"]}],"evidence":[{"id":"evidence:e"}]}}

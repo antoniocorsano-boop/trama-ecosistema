@@ -1,0 +1,1 @@
+{"expected":"SOURCE_OUTAGE_FAIL_CLOSED","snapshot":{"sourceObservations":[{"id":"source:x","reachable":false,"normalizedState":"PASS"}]}}

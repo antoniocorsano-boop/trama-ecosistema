@@ -1,0 +1,1 @@
+{"mode":"idempotence","expected":"SEMANTIC_IDEMPOTENCE","left":{"schemaVersion":"1.4","value":"A","generatedAt":"2026-01-01"},"right":{"schemaVersion":"1.4","value":"B","generatedAt":"2026-01-02"}}

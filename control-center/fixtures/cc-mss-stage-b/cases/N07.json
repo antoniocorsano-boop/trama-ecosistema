@@ -1,0 +1,1 @@
+{"expected":"UNSUPPORTED_ASSERTION","snapshot":{"relations":[{"id":"relation:r","type":"works_on","fromRef":"entity:a","toRef":"entity:b","sourceRefs":[]}]}}

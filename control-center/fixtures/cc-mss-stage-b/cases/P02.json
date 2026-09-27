@@ -1,0 +1,1 @@
+{"mode":"idempotence","expected":"PASS","left":{"schemaVersion":"1.4","value":"A","generatedAt":"2026-01-01","observedAt":"2026-01-01"},"right":{"schemaVersion":"1.4","value":"A","generatedAt":"2026-01-02","observedAt":"2026-01-02"}}
