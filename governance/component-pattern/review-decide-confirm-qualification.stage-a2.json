@@ -3,7 +3,7 @@
   "stage": "A.2",
   "baseline": "220629e0dfec5ba0683574b099242dc5230b887d",
   "candidateId": "TRAMA.REVIEW_DECIDE_CONFIRM",
-  "decision": "QUALIFICATION_CANDIDATE",
+  "decision": "QUALIFIED",
   "risk": "HIGH",
   "runtimeMigration": false,
   "stablePromotionAllowed": false,
@@ -26,5 +26,5 @@
   "evidenceStatus": "RECEIPT_BOUND",
   "qualificationGates": {"semanticCoreExtracted":"PASS","humanAgencyBoundaryExplicit":"PASS","productApplicabilityExplicit":"PASS","crossProductCapabilityEvidence":"PASS_WITH_PARTIAL_CELLS","immutableEvidenceReceipts":"PASS","negativeHighRiskCases":"PASS","validator":"PASS","humanIndependentReview":"PASS"},
   "reviewEvidence": {"reviewedHead":"6de12abee2a78db977d054445c2225cbcb2bd634","reviewId":5329797728,"result":"PASS"},
-  "promotionRule": "QUALIFIED is forbidden until immutable evidence receipts for targeted evidence and applicability evidence, fail-closed validation and independent exact-head review all PASS. Partial or unqualified runtime cells must remain explicit. STABLE remains forbidden in Stage A.2. Runtime adoption requires separately governed Stage B."
+  "promotionRule": "QUALIFIED records Stage A.2 qualification only. Partial or unqualified runtime cells remain explicit. STABLE remains forbidden in Stage A.2. Runtime adoption requires separately governed Stage B."
 }
