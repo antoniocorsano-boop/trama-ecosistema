@@ -1,0 +1,11 @@
+{
+  "contractId":"TRAMA-COMPONENT-PATTERN-01",
+  "stage":"A.2",
+  "candidateId":"TRAMA.LOADING_PENDING_PROGRESS",
+  "receipts":[
+    {"receiptId":"LPP-A2-ARENA-001","product":"ARENA","repository":"antoniocorsano-boop/CurManLight_arena","commit":"9da1cf65ae86ff5a3a65888636bf04f3a7312a7b","path":"src/ui/components/UiButton.tsx","gitBlobSha":"07fa024b8b290b223514e6eb70db87ad60c0cf4a","supports":["PENDING","INDETERMINATE_LOADING"]},
+    {"receiptId":"LPP-A2-ATLAS-001","product":"ATLAS","repository":"antoniocorsano-boop/Curriculum-Atlas","commit":"4350fe43d9274e555c23fcc79ef0311aacedec5f","path":"ops/trama-perceptible-write.json","gitBlobSha":"a3fafcfe28be7a58360f151d57deac84a7533efd","supports":["PENDING"]},
+    {"receiptId":"LPP-A2-DOS-001","product":"DOCENTE_OS","repository":"antoniocorsano-boop/docente-os-2026-27","commit":"f0b7e5c01620d4cc87587081859cbf270cc1d033","path":"product/src/app/loading.tsx","gitBlobSha":"7924c4649181ca78669e10a56d0a7f8ed7827844","supports":["PENDING","INDETERMINATE_LOADING","PERCEPTIBLE_STATE"]},
+    {"receiptId":"LPP-A2-CC-001","product":"TRAMA_CONTROL_CENTER","repository":"antoniocorsano-boop/trama-ecosistema","commit":"24be69c2dfbb8bb7bcb75b15cefb6d650e164a7a","path":"control-center/ecosystem.html","gitBlobSha":"6aa299715e5d67253f61263bfc546ef0a18c3be3","supports":["PENDING","INDETERMINATE_LOADING","PERCEPTIBLE_STATE"]}
+  ]
+}
