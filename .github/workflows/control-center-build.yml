@@ -15,17 +15,6 @@ on:
       - ".github/workflows/control-center-build.yml"
   push:
     branches: ["main"]
-    paths:
-      - "control-center/**"
-      - "config/**"
-      - "status/**"
-      - "docs/decisions/**"
-      - "scripts/build_ecosystem_snapshot.py"
-      - "scripts/generate_stakeholder_report.py"
-      - "scripts/validate_stakeholder_assurance.py"
-      - "STATUS.md"
-      - "ROADMAP.md"
-      - ".github/workflows/control-center-build.yml"
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
@@ -34,7 +23,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: "trama-control-center-build"
+  group: "trama-control-center-build-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -42,11 +31,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Regenerate governed snapshot
-        run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.json
+        run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.generated.json
+      - name: Validate canonical snapshot parity
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          canonical = Path('control-center/data/ecosystem-snapshot.json')
+          generated = Path('control-center/data/ecosystem-snapshot.generated.json')
+          if not canonical.exists():
+              raise SystemExit('CANONICAL_SNAPSHOT_MISSING')
+
+          old = json.loads(canonical.read_text(encoding='utf-8'))
+          new = json.loads(generated.read_text(encoding='utf-8'))
+          # generatedAt is observational; all governed content must otherwise match.
+          old.pop('generatedAt', None)
+          new.pop('generatedAt', None)
+          if old != new:
+              raise SystemExit('CANONICAL_SNAPSHOT_STALE: regenerate control-center/data/ecosystem-snapshot.json and commit it')
+          print('CANONICAL_SNAPSHOT_PARITY_PASS')
+          PY
+      - name: Promote generated snapshot for bundle
+        shell: bash
+        run: mv control-center/data/ecosystem-snapshot.generated.json control-center/data/ecosystem-snapshot.json
       - name: Regenerate stakeholder dossier
         run: python scripts/generate_stakeholder_report.py
-      - name: Verify bundle
+      - name: Verify bundle and machine contract
         shell: bash
         run: |
           set -euo pipefail
@@ -63,6 +80,7 @@ jobs:
           test -s control-center/reports/stakeholder-assurance.md
           grep -q "Dossier Stakeholder Assurance" control-center/reports/stakeholder-assurance.html
           grep -q "Non costituisce certificazione" control-center/reports/stakeholder-assurance.html
+          python scripts/build_ecosystem_snapshot.py --check
       - name: Package deployable Control Center
         uses: actions/upload-artifact@v4
         with:
