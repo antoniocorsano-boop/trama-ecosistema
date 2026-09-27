@@ -24,5 +24,7 @@ jobs:
         run: node scripts/validate-component-pattern-stage-a1.mjs
       - name: Validate component and pattern Stage A.2 qualification
         run: node scripts/validate-component-pattern-stage-a2.mjs
+      - name: Validate ERROR_RECOVERY Stage A.2 qualification
+        run: node scripts/validate-error-recovery-stage-a2.mjs
       - name: Run tests
         run: python3 -m unittest discover -s tests -v
