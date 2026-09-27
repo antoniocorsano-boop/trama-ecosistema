@@ -1,0 +1,68 @@
+{
+  "auditId": "TRAMA-COMPONENT-PATTERN-STAGE-A2-EXIT-R2",
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "baseline": "4d679a6a6e0fc2f80b4026fa4000a65dba083001",
+  "auditType": "GOVERNED_EXIT_READINESS",
+  "runtimeMigration": false,
+  "stablePromotionAllowed": false,
+  "dosA1": "RUNTIME_DEFERRED",
+  "stageBAuthorized": false,
+  "qualifiedCore": [
+    "TRAMA.STATUS_MESSAGE",
+    "TRAMA.ERROR_RECOVERY",
+    "TRAMA.LOADING_PENDING_PROGRESS",
+    "TRAMA.REVIEW_DECIDE_CONFIRM"
+  ],
+  "remainingFamilies": [
+    {
+      "id": "TRAMA.EMPTY_STATE",
+      "state": "NOT_YET_QUALIFIED",
+      "exitRole": "DEFERRABLE",
+      "rule": "May remain deferred if the first Stage B slice does not depend on governed empty-state semantics."
+    },
+    {
+      "id": "TRAMA.OFFLINE_DEGRADED",
+      "state": "NOT_YET_QUALIFIED",
+      "exitRole": "CONDITIONAL_BLOCKER",
+      "rule": "Must be qualified before any Stage B slice that claims offline, degraded-connectivity or resilient continuity semantics."
+    }
+  ],
+  "stageA2ExitAssessment": {
+    "coreSemanticQualification": "PASS",
+    "highRiskHumanAgencyQualification": "PASS",
+    "runtimeBoundaryPreserved": "PASS",
+    "allFamiliesQualified": "NO_NOT_REQUIRED_FOR_CONDITIONAL_EXIT",
+    "offlineDependencyResolved": "PENDING_STAGE_B_SLICE_SELECTION",
+    "firstStageBSliceDefined": "NO",
+    "decision": "CONDITIONALLY_READY_FOR_STAGE_B_PLANNING_NOT_ADOPTION"
+  },
+  "stageBPlanningGate": {
+    "requiredBeforeAuthorization": [
+      "define one bounded first runtime adoption slice",
+      "declare target product and exact surface",
+      "declare which qualified patterns the slice consumes",
+      "declare whether offline/degraded continuity is in scope",
+      "if offline/degraded continuity is in scope, qualify TRAMA.OFFLINE_DEGRADED first",
+      "define product-specific PVIP preservation constraints",
+      "define rollback and observable success/failure criteria",
+      "define accessibility, responsive and perceptible-write acceptance checks",
+      "obtain independent review of the Stage B plan before runtime changes"
+    ],
+    "forbidden": [
+      "ecosystem-wide component replacement",
+      "implicit normalization of Arena, Atlas, Docente OS and Control Center identities",
+      "runtime migration before a bounded Stage B slice is approved",
+      "using QUALIFIED as equivalent to STABLE",
+      "activating DOS-A1",
+      "claiming offline resilience without a qualified OFFLINE_DEGRADED contract"
+    ]
+  },
+  "recommendedNextAction": {
+    "id": "STAGE-B-PLAN-01",
+    "action": "DESIGN_FIRST_BOUNDED_ADOPTION_SLICE",
+    "authorization": "PLANNING_ONLY",
+    "selectionRule": "Prefer a low-blast-radius surface that already exhibits the qualified semantics, can be rolled back independently, preserves the product PVIP, and does not require OFFLINE_DEGRADED unless that family is qualified first."
+  },
+  "auditDecision": "A2_CONDITIONAL_EXIT_TO_STAGE_B_PLANNING",
+  "humanReview": "PENDING"
+}
