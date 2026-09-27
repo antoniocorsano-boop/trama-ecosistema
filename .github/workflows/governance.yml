@@ -22,5 +22,7 @@ jobs:
         run: node scripts/validate-component-pattern-stage-a.mjs
       - name: Validate component and pattern Stage A.1 coverage
         run: node scripts/validate-component-pattern-stage-a1.mjs
+      - name: Validate component and pattern Stage A.2 qualification
+        run: node scripts/validate-component-pattern-stage-a2.mjs
       - name: Run tests
         run: python3 -m unittest discover -s tests -v
