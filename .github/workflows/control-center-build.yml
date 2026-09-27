@@ -35,6 +35,14 @@ jobs:
           fetch-depth: 1
       - name: Regenerate governed snapshot
         run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.generated.json
+      - name: Preserve generated snapshot evidence
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trama-generated-canonical-snapshot
+          path: control-center/data/ecosystem-snapshot.generated.json
+          if-no-files-found: error
+          retention-days: 3
       - name: Validate canonical snapshot parity
         if: github.event_name == 'pull_request'
         shell: bash
