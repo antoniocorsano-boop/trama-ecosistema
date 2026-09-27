@@ -1,0 +1,32 @@
+{
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "stage": "A.2",
+  "baseline": "e3e40de1c6e7575309140d786cab047f4f0caaf0",
+  "candidateId": "TRAMA.STATUS_MESSAGE",
+  "decision": "QUALIFIED",
+  "runtimeMigration": false,
+  "dosA1": "RUNTIME_DEFERRED",
+  "evidencePolicy": "Qualification evidence MUST be immutable and receipt-bound: repository + commit SHA + path + verified Git blob SHA. Qualification does not authorize runtime adoption or catalog STABLE promotion.",
+  "evidenceReceiptRef": "governance/component-pattern/status-feedback-evidence-receipts.stage-a2.json",
+  "semanticCore": {
+    "purpose": "Make state, outcome, warning or error perceptible without relying on color alone.",
+    "required": ["human-readable message","semantic urgency appropriate to the event","no color-only meaning","no unnecessary focus theft","mutating actions expose a perceptible outcome","product PVIP remains authoritative for visual expression"],
+    "allowedVariation": ["visual treatment","placement","product vocabulary","polite versus assertive announcement when semantically justified"],
+    "forbiddenVariation": ["silent mutation outcome","meaning conveyed only by color","automatic focus transfer without interaction need","product-specific override of semantic role"]
+  },
+  "evidence": [
+    {"product":"ARENA","repository":"antoniocorsano-boop/CurManLight_arena","commit":"9da1cf65ae86ff5a3a65888636bf04f3a7312a7b","path":"tools/trama-perceptible-write/lib.mjs","gitBlobSha":"683ec368c8da93010953d4d8f169b9904f98e81b","classification":"GOVERNANCE_ENFORCEMENT_EVIDENCE","supports":["aria-live/status/alert recognition","mutation feedback detection","persistent feedback detection"]},
+    {"product":"ATLAS","repository":"antoniocorsano-boop/Curriculum-Atlas","commit":"4350fe43d9274e555c23fcc79ef0311aacedec5f","path":"src/components/atlas/resource-catalog.tsx","gitBlobSha":"4c9ec211fa47da764f6c24dd89e4a2162ae182d7","classification":"RUNTIME_IMPLEMENTATION_EVIDENCE","supports":["polite live region for dynamically filtered resource results","textual status labels independent of icon/color"]},
+    {"product":"DOCENTE_OS","repository":"antoniocorsano-boop/docente-os-2026-27","commit":"52c2e029b8ac1d889b87fc46b4c60387f9ee2053","path":"product/src/app/loading.tsx","gitBlobSha":"7924c4649181ca78669e10a56d0a7f8ed7827844","classification":"RUNTIME_IMPLEMENTATION_EVIDENCE","supports":["role=status","aria-live=polite","aria-busy=true","screen-reader-only contextual loading message"]},
+    {"product":"TRAMA_CONTROL_CENTER","repository":"antoniocorsano-boop/trama-ecosistema","commit":"e3e40de1c6e7575309140d786cab047f4f0caaf0","path":"control-center/ecosystem.html","gitBlobSha":"6aa299715e5d67253f61263bfc546ef0a18c3be3","classification":"RUNTIME_IMPLEMENTATION_EVIDENCE","supports":["polite snapshot state announcement","polite relation-detail updates","explicit fresh/offline snapshot text"]}
+  ],
+  "qualificationGates": {
+    "crossProductEvidence": "PASS",
+    "immutableEvidenceBinding": "PASS",
+    "receiptBinding": "PASS",
+    "semanticCoreExtractableWithoutPVIPOverride": "PASS",
+    "runtimeMigrationRequiredForQualification": "NO",
+    "humanIndependentReview": "PASS"
+  },
+  "promotionRule": "QUALIFIED may be recorded only after validator PASS and independent exact-head review. STABLE remains forbidden in Stage A.2. Runtime adoption requires a separately governed Stage B."
+}
