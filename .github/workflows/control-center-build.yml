@@ -15,17 +15,6 @@ on:
       - ".github/workflows/control-center-build.yml"
   push:
     branches: ["main"]
-    paths:
-      - "control-center/**"
-      - "config/**"
-      - "status/**"
-      - "docs/decisions/**"
-      - "scripts/build_ecosystem_snapshot.py"
-      - "scripts/generate_stakeholder_report.py"
-      - "scripts/validate_stakeholder_assurance.py"
-      - "STATUS.md"
-      - "ROADMAP.md"
-      - ".github/workflows/control-center-build.yml"
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
@@ -34,19 +23,124 @@ permissions:
   contents: read
 
 concurrency:
-  group: "trama-control-center-build"
+  group: "trama-control-center-build-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
-  build:
+  synchronize:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout real PR head
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+      - name: Regenerate candidate snapshot on PR head
+        run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.generated.json
+      - name: Promote only semantic changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          canonical = Path('control-center/data/ecosystem-snapshot.json')
+          generated = Path('control-center/data/ecosystem-snapshot.generated.json')
+
+          def semantic_view(snapshot):
+              value = json.loads(json.dumps(snapshot))
+              value.pop('generatedAt', None)
+              for state in value.get('sourceState', {}).values():
+                  state.pop('observedAt', None)
+              for area in value.get('areas', []):
+                  area.pop('lastEvaluatedAt', None)
+              for evidence in value.get('evidence', []):
+                  if evidence.get('type') == 'DOCUMENT_CANONICAL':
+                      evidence.pop('observedAt', None)
+              return value
+
+          old = semantic_view(json.loads(canonical.read_text(encoding='utf-8'))) if canonical.exists() else None
+          new = semantic_view(json.loads(generated.read_text(encoding='utf-8')))
+          if old == new:
+              generated.unlink()
+              print('CANONICAL_SNAPSHOT_SEMANTICALLY_CURRENT')
+          else:
+              generated.replace(canonical)
+              print('CANONICAL_SNAPSHOT_SEMANTIC_CHANGE_PROMOTED')
+          PY
+      - name: Commit snapshot only when semantically changed
+        shell: bash
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- control-center/data/ecosystem-snapshot.json; then
+            echo "CANONICAL_SNAPSHOT_ALREADY_SYNCHRONIZED"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add control-center/data/ecosystem-snapshot.json
+          git commit -m "chore(control-center): synchronize canonical snapshot"
+          git push origin "HEAD:${HEAD_REF}"
+
+  build:
+    needs: [synchronize]
+    if: always() && (needs.synchronize.result == 'success' || needs.synchronize.result == 'skipped')
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout synchronized state
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.sha }}
+          fetch-depth: 1
       - name: Regenerate governed snapshot
-        run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.json
+        run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.generated.json
+      - name: Preserve generated snapshot evidence
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trama-generated-canonical-snapshot
+          path: control-center/data/ecosystem-snapshot.generated.json
+          if-no-files-found: error
+          retention-days: 3
+      - name: Validate canonical snapshot parity
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          canonical = Path('control-center/data/ecosystem-snapshot.json')
+          generated = Path('control-center/data/ecosystem-snapshot.generated.json')
+          if not canonical.exists():
+              raise SystemExit('CANONICAL_SNAPSHOT_MISSING')
+          def semantic_view(snapshot):
+              value = json.loads(json.dumps(snapshot))
+              value.pop('generatedAt', None)
+              for state in value.get('sourceState', {}).values(): state.pop('observedAt', None)
+              for area in value.get('areas', []): area.pop('lastEvaluatedAt', None)
+              for evidence in value.get('evidence', []):
+                  if evidence.get('type') == 'DOCUMENT_CANONICAL': evidence.pop('observedAt', None)
+              return value
+          old = semantic_view(json.loads(canonical.read_text(encoding='utf-8')))
+          new = semantic_view(json.loads(generated.read_text(encoding='utf-8')))
+          if old != new:
+              raise SystemExit('CANONICAL_SNAPSHOT_STALE')
+          print('CANONICAL_SNAPSHOT_PARITY_PASS')
+          PY
+      - name: Promote generated snapshot for bundle
+        run: mv control-center/data/ecosystem-snapshot.generated.json control-center/data/ecosystem-snapshot.json
       - name: Regenerate stakeholder dossier
         run: python scripts/generate_stakeholder_report.py
-      - name: Verify bundle
+      - name: Verify bundle and machine contract
         shell: bash
         run: |
           set -euo pipefail
@@ -63,6 +157,7 @@ jobs:
           test -s control-center/reports/stakeholder-assurance.md
           grep -q "Dossier Stakeholder Assurance" control-center/reports/stakeholder-assurance.html
           grep -q "Non costituisce certificazione" control-center/reports/stakeholder-assurance.html
+          python scripts/build_ecosystem_snapshot.py --check
       - name: Package deployable Control Center
         uses: actions/upload-artifact@v4
         with:
