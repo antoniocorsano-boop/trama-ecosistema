@@ -1,0 +1,86 @@
+{
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "stage": "A.2",
+  "baseline": "220629e0dfec5ba0683574b099242dc5230b887d",
+  "candidateId": "TRAMA.REVIEW_DECIDE_CONFIRM",
+  "decision": "QUALIFICATION_CANDIDATE",
+  "risk": "HIGH",
+  "runtimeMigration": false,
+  "stablePromotionAllowed": false,
+  "dosA1": "RUNTIME_DEFERRED",
+  "model": "HUMAN_AGENCY_CAPABILITY_BASED",
+  "semanticCore": {
+    "sequence": ["REVIEW_CONTEXT", "EXPLICIT_DECISION", "ENTER_PENDING_IF_ASYNC", "BIND_DECISION_TO_CURRENT_STATE", "REPORT_OUTCOME"],
+    "required": [
+      "the user can inspect the relevant context before a consequential decision",
+      "approval, rejection, confirmation or equivalent consequential choice requires an explicit user action",
+      "the interface must not represent an unrecorded or failed decision as successful",
+      "asynchronous decisions expose a perceptible pending state and prevent accidental duplicate activation where duplication is consequential",
+      "the decision is bound to the state or revision actually reviewed when stale state would change its meaning",
+      "a changed governed exact head invalidates a previous exact-head PASS unless the governing process explicitly classifies the change as non-impacting",
+      "success, failure and conflict/stale outcomes are perceptible and lead to an understandable next state",
+      "recovery must preserve human authority and must not silently retry into approval"
+    ],
+    "capabilities": [
+      "REVIEW_CONTEXT",
+      "EXPLICIT_DECISION",
+      "PENDING_AND_DUPLICATE_GUARD",
+      "DECISION_BINDING_AND_STALE_PROTECTION",
+      "PERCEPTIBLE_OUTCOME",
+      "ERROR_CONFLICT_RECOVERY"
+    ],
+    "forbidden": [
+      "automatic approval",
+      "hidden confirmation",
+      "preselected consequential consent that removes a meaningful choice",
+      "double submission that can create duplicate consequential effects",
+      "carrying an exact-head PASS across a changed head without governed non-impact classification",
+      "silent conflict overwrite",
+      "false success confirmation",
+      "recovery that creates product authority or approves on behalf of the user"
+    ]
+  },
+  "productApplicability": {
+    "ARENA": "TARGET_RUNTIME_EVIDENCE",
+    "DOCENTE_OS": "TARGET_RUNTIME_EVIDENCE",
+    "ATLAS": "NOT_TARGETED_CURRENT_PRODUCT_AUTHORITY",
+    "TRAMA_CONTROL_CENTER": "NOT_APPLICABLE_CURRENT_RUNTIME_READ_ONLY"
+  },
+  "coverage": {
+    "ARENA": {
+      "REVIEW_CONTEXT": "PARTIAL_EVIDENCE",
+      "EXPLICIT_DECISION": "EVIDENCED",
+      "PENDING_AND_DUPLICATE_GUARD": "UNQUALIFIED",
+      "DECISION_BINDING_AND_STALE_PROTECTION": "GOVERNANCE_EVIDENCED",
+      "PERCEPTIBLE_OUTCOME": "PARTIAL_EVIDENCE",
+      "ERROR_CONFLICT_RECOVERY": "UNQUALIFIED"
+    },
+    "DOCENTE_OS": {
+      "REVIEW_CONTEXT": "EVIDENCED",
+      "EXPLICIT_DECISION": "EVIDENCED",
+      "PENDING_AND_DUPLICATE_GUARD": "PARTIAL_EVIDENCE",
+      "DECISION_BINDING_AND_STALE_PROTECTION": "PARTIAL_EVIDENCE",
+      "PERCEPTIBLE_OUTCOME": "EVIDENCED",
+      "ERROR_CONFLICT_RECOVERY": "PARTIAL_EVIDENCE"
+    },
+    "ATLAS": {
+      "status": "NOT_TARGETED",
+      "reason": "Current Atlas evidence includes human pedagogical review but does not establish equivalent application authority for consequential approval/confirmation."
+    },
+    "TRAMA_CONTROL_CENTER": {
+      "status": "NOT_APPLICABLE_CURRENT_RUNTIME",
+      "reason": "Current Control Center is explicitly READ_ONLY and exposes no state-changing decision flow."
+    }
+  },
+  "evidenceStatus": "DISCOVERED_NOT_RECEIPT_BOUND",
+  "qualificationGates": {
+    "semanticCoreExtracted": "PASS",
+    "humanAgencyBoundaryExplicit": "PASS",
+    "productApplicabilityExplicit": "PASS",
+    "crossProductCapabilityEvidence": "PASS_WITH_PARTIAL_CELLS",
+    "immutableEvidenceReceipts": "PENDING",
+    "validator": "PENDING",
+    "humanIndependentReview": "PENDING"
+  },
+  "promotionRule": "QUALIFIED is forbidden until immutable evidence receipts for targeted evidence and applicability evidence, fail-closed validation and independent exact-head review all PASS. Partial or unqualified runtime cells must remain explicit. STABLE remains forbidden in Stage A.2. Runtime adoption requires separately governed Stage B."
+}
