@@ -1,0 +1,133 @@
+{
+  "planId": "STAGE-B-PLAN-01",
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "sourceAudit": "TRAMA-COMPONENT-PATTERN-STAGE-A2-EXIT-R2",
+  "sourceBaseline": "4d679a6a6e0fc2f80b4026fa4000a65dba083001",
+  "planType": "BOUNDED_RUNTIME_ADOPTION",
+  "authorization": "PLANNING_ONLY",
+  "runtimeChangeAuthorized": false,
+  "selectedSlice": {
+    "product": "DOCENTE_OS",
+    "surface": "SETTINGS_CONFIRMATION_FEEDBACK",
+    "scope": "Only the existing teacher-facing settings confirmation/reopen interaction and its perceptible outcome states; no navigation, lesson workflow, calendar, curriculum intake, database contract or product-wide shell migration.",
+    "selectionRationale": [
+      "Existing runtime evidence already demonstrates explicit confirmation actions, reducing semantic invention.",
+      "The surface is bounded and teacher-facing, so human authority can be tested directly.",
+      "It can consume the qualified REVIEW_DECIDE_CONFIRM, STATUS_MESSAGE, LOADING_PENDING_PROGRESS and ERROR_RECOVERY semantics without requiring ecosystem-wide replacement.",
+      "The slice does not require an offline/degraded continuity claim; OFFLINE_DEGRADED therefore remains outside the authorization path for this slice.",
+      "Rollback can be isolated to the settings interaction without changing curriculum authority or lesson preparation contracts."
+    ]
+  },
+  "qualifiedPatternsConsumed": [
+    "TRAMA.REVIEW_DECIDE_CONFIRM",
+    "TRAMA.STATUS_MESSAGE",
+    "TRAMA.LOADING_PENDING_PROGRESS",
+    "TRAMA.ERROR_RECOVERY"
+  ],
+  "explicitlyOutOfScope": [
+    "TRAMA.EMPTY_STATE",
+    "TRAMA.OFFLINE_DEGRADED",
+    "Arena runtime",
+    "Atlas runtime",
+    "TRAMA Control Center runtime",
+    "Docente OS lesson preparation",
+    "Docente OS calendar",
+    "curriculum intake or authority",
+    "database schema or persistence contract changes",
+    "PWA/offline guarantees",
+    "DOS-A1 activation",
+    "product-wide visual normalization"
+  ],
+  "pvipPreservation": {
+    "productIdentity": "DOCENTE_OS_TEACHER_FIRST",
+    "mustPreserve": [
+      "teacher remains the explicit decision authority",
+      "existing Docente OS information architecture and local product identity",
+      "confirmation is never inferred from navigation, timeout or default selection",
+      "feedback is perceptible and attributable to the action just taken",
+      "partial/unqualified capabilities are not presented as ecosystem-wide guarantees"
+    ],
+    "forbidden": [
+      "generic TRAMA shell replacement",
+      "copying Arena or Atlas visual identity into Docente OS",
+      "automatic approval",
+      "silent retry into success",
+      "false success state",
+      "new server-side user identity dependency"
+    ]
+  },
+  "implementationEnvelope": {
+    "allowed": [
+      "adapter or wrapper around the existing settings confirmation interaction",
+      "qualified status/pending/error semantics limited to the selected surface",
+      "local styling through Docente OS PVIP/token mapping",
+      "surface-specific automated tests and accessibility checks"
+    ],
+    "forbidden": [
+      "changing business authority rules",
+      "changing persistence semantics",
+      "migrating unrelated components",
+      "introducing a parallel confirmation channel",
+      "broad refactor justified only by design-system adoption"
+    ]
+  },
+  "acceptance": {
+    "functional": [
+      "explicit confirmation remains required",
+      "reopen/reverse transition remains explicit where currently supported",
+      "duplicate consequential activation is prevented or rendered harmless for this surface",
+      "failure never renders success",
+      "stale/conflict conditions do not silently overwrite a newer state"
+    ],
+    "perceptibility": [
+      "pending state is visible when an asynchronous transition is in progress",
+      "success and failure are announced perceptibly",
+      "focus is restored or advanced predictably after modal/confirmation completion"
+    ],
+    "accessibilityResponsive": [
+      "keyboard-only completion",
+      "screen-reader semantics for decision, pending and outcome states",
+      "200 percent zoom/reflow without horizontal interaction loss",
+      "smartphone viewport without clipped primary actions",
+      "touch targets remain usable"
+    ],
+    "privacy": [
+      "no new student data",
+      "no new tracking",
+      "no new server-side teacher profile dependency"
+    ]
+  },
+  "observability": {
+    "successCriteria": [
+      "all surface-specific automated tests pass",
+      "qualified pattern semantics are traceable to the Stage A.2 contracts",
+      "no regression in existing settings confirmation/reopen behavior",
+      "human verification passes on desktop and smartphone"
+    ],
+    "failureCriteria": [
+      "any automatic or ambiguous confirmation",
+      "duplicate consequential mutation",
+      "false success or silent failure",
+      "loss of keyboard or screen-reader operability",
+      "unexpected change outside the selected surface"
+    ]
+  },
+  "rollback": {
+    "unit": "SELECTED_SURFACE_ONLY",
+    "rule": "The Stage B implementation must be independently revertible without reverting Stage A governance artifacts or unrelated Docente OS changes.",
+    "trigger": "Any acceptance failure or scope escape blocks adoption and requires rollback before further expansion."
+  },
+  "offlineDecision": {
+    "requiredForThisSlice": false,
+    "rule": "No offline/degraded resilience claim may be introduced by this slice. If implementation discovers such a dependency, Stage B authorization stops and TRAMA.OFFLINE_DEGRADED must be qualified first."
+  },
+  "nextGates": [
+    "independent review of this plan",
+    "human approval of exact plan head",
+    "separate Stage B runtime implementation branch in Docente OS",
+    "runtime evidence and acceptance tests",
+    "human verification before any expansion"
+  ],
+  "decision": "PLAN_CANDIDATE",
+  "humanReview": "PENDING"
+}
