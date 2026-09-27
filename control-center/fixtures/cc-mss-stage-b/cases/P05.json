@@ -1,0 +1,1 @@
+{"expected":"PASS","snapshot":{"evidence":[{"id":"evidence:x"}],"decisions":[{"id":"decision:d","state":"APPROVED","authority":"human","approvalBasis":"HUMAN_REVIEW","subjectRefs":[],"rationaleRef":null,"evidenceRefs":["evidence:x"],"sourceRefs":["evidence:x"],"decidedAt":"2026-09-27"}],"ciStatus":"PASS"}}
