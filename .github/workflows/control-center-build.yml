@@ -59,8 +59,10 @@ jobs:
     if: always() && (needs.synchronize.result == 'success' || needs.synchronize.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout synchronized state
+        uses: actions/checkout@v6
         with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.sha }}
           fetch-depth: 1
       - name: Regenerate governed snapshot
         run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.generated.json
