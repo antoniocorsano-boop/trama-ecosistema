@@ -1,0 +1,37 @@
+{
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "stage": "A.2",
+  "candidateId": "TRAMA.STATUS_MESSAGE",
+  "digestScheme": "git-blob-sha1",
+  "receiptSemantics": "Each gitBlobSha was returned by a verified GitHub contents fetch at the exact repository + commit + path tuple. Git blob IDs are content-addressed and therefore bind the receipt to the fetched file content.",
+  "receipts": [
+    {
+      "product": "ARENA",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "commit": "9da1cf65ae86ff5a3a65888636bf04f3a7312a7b",
+      "path": "tools/trama-perceptible-write/lib.mjs",
+      "gitBlobSha": "683ec368c8da93010953d4d8f169b9904f98e81b"
+    },
+    {
+      "product": "ATLAS",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "commit": "4350fe43d9274e555c23fcc79ef0311aacedec5f",
+      "path": "src/components/atlas/resource-catalog.tsx",
+      "gitBlobSha": "4c9ec211fa47da764f6c24dd89e4a2162ae182d7"
+    },
+    {
+      "product": "DOCENTE_OS",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "commit": "52c2e029b8ac1d889b87fc46b4c60387f9ee2053",
+      "path": "product/src/app/loading.tsx",
+      "gitBlobSha": "7924c4649181ca78669e10a56d0a7f8ed7827844"
+    },
+    {
+      "product": "TRAMA_CONTROL_CENTER",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "commit": "e3e40de1c6e7575309140d786cab047f4f0caaf0",
+      "path": "control-center/ecosystem.html",
+      "gitBlobSha": "6aa299715e5d67253f61263bfc546ef0a18c3be3"
+    }
+  ]
+}
