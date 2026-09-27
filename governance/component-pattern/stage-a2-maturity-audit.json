@@ -1,0 +1,95 @@
+{
+  "auditId": "TRAMA-COMPONENT-PATTERN-STAGE-A2-MATURITY-01",
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "auditType": "GOVERNED_MATURITY_CHECKPOINT",
+  "baseline": "220629e0dfec5ba0683574b099242dc5230b887d",
+  "runtimeMigration": false,
+  "stablePromotionAllowed": false,
+  "dosA1": "RUNTIME_DEFERRED",
+  "stageBAuthorized": false,
+  "historicalRecordsPolicy": "Stage A, A.1 and A.2 records remain immutable historical evidence. This audit reconciles them through a derived canonical view and does not rewrite their original decisions.",
+  "canonicalFamilyView": [
+    {
+      "id": "TRAMA.STATUS_MESSAGE",
+      "stageAOrigin": "PROPOSED",
+      "stageA1Observed": true,
+      "stageA2State": "QUALIFIED",
+      "exitRole": "CORE_PREREQUISITE",
+      "reason": "Perceptible outcomes are a dependency for consequential interaction and recovery semantics."
+    },
+    {
+      "id": "TRAMA.ERROR_RECOVERY",
+      "stageAOrigin": "A1_DISCOVERED_CANDIDATE",
+      "stageA1Observed": true,
+      "stageA2State": "QUALIFIED",
+      "exitRole": "CORE_PREREQUISITE",
+      "reason": "Failure must remain perceptible, preserve valid state where possible and never report false success."
+    },
+    {
+      "id": "TRAMA.LOADING_PENDING_PROGRESS",
+      "stageAOrigin": "A1_DISCOVERED_CANDIDATE",
+      "stageA1Observed": true,
+      "stageA2State": "QUALIFIED",
+      "exitRole": "CORE_PREREQUISITE",
+      "reason": "Asynchronous consequential flows require governed pending/loading semantics before runtime adoption planning."
+    },
+    {
+      "id": "TRAMA.REVIEW_DECIDE_CONFIRM",
+      "stageAOrigin": "PROPOSED",
+      "stageA1Observed": true,
+      "stageA2State": "NOT_YET_QUALIFIED",
+      "exitRole": "BLOCKING_FOR_STAGE_B_ENTRY",
+      "reason": "This is the high-risk human-agency pattern and already depends on TRAMA.STATUS_MESSAGE; Stage B must not begin before its contract is qualified."
+    },
+    {
+      "id": "TRAMA.EMPTY_STATE",
+      "stageAOrigin": "A1_DISCOVERED_CANDIDATE",
+      "stageA1Observed": true,
+      "stageA2State": "NOT_YET_QUALIFIED",
+      "exitRole": "DEFERRABLE",
+      "reason": "Useful cross-product UX semantics, but not a prerequisite for safe Stage B entry if no Stage B slice depends on it."
+    },
+    {
+      "id": "TRAMA.OFFLINE_DEGRADED",
+      "stageAOrigin": "A1_DISCOVERED_CANDIDATE",
+      "stageA1Observed": true,
+      "stageA2State": "NOT_YET_QUALIFIED",
+      "exitRole": "CONDITIONAL_BLOCKER",
+      "reason": "Must be qualified before any Stage B slice that claims offline/degraded continuity; otherwise it may remain deferred."
+    }
+  ],
+  "dependencyAssessment": {
+    "qualifiedCore": ["TRAMA.STATUS_MESSAGE", "TRAMA.ERROR_RECOVERY", "TRAMA.LOADING_PENDING_PROGRESS"],
+    "blockingGap": ["TRAMA.REVIEW_DECIDE_CONFIRM"],
+    "conditionalGap": ["TRAMA.OFFLINE_DEGRADED"],
+    "deferrableGap": ["TRAMA.EMPTY_STATE"],
+    "stageBEntryDecision": "NOT_READY"
+  },
+  "exitCriteria": [
+    {"id":"EXIT-A2-01","criterion":"Canonical reconciliation of Stage A/A.1/A.2 exists without rewriting historical records","status":"PASS"},
+    {"id":"EXIT-A2-02","criterion":"All core prerequisite patterns are QUALIFIED","status":"PASS"},
+    {"id":"EXIT-A2-03","criterion":"High-risk human-agency decision pattern REVIEW_DECIDE_CONFIRM is QUALIFIED","status":"FAIL_BLOCKING"},
+    {"id":"EXIT-A2-04","criterion":"Any offline/degraded capability claimed by the first Stage B slice has a qualified contract","status":"DEFERRED_CONDITIONAL"},
+    {"id":"EXIT-A2-05","criterion":"Stage B scope, adoption order, rollback and product-specific PVIP preservation are separately reviewed","status":"NOT_STARTED"},
+    {"id":"EXIT-A2-06","criterion":"No Stage A.2 audit or qualification implicitly authorizes runtime migration, STABLE promotion or DOS-A1 activation","status":"PASS"}
+  ],
+  "duplicationAssessment": {
+    "finding": "Qualification records and evidence receipts are intentionally pattern-specific; they should not be collapsed into one mutable source. A derived index may reduce navigation cost without weakening provenance.",
+    "action": "Introduce a generated/derived Stage A.2 index only after its validator proves it cannot override source qualification records."
+  },
+  "recommendedNextGovernedAction": {
+    "id": "A2-NEXT-01",
+    "action": "QUALIFY_TRAMA.REVIEW_DECIDE_CONFIRM",
+    "constraints": [
+      "no runtime migration",
+      "preserve explicit human agency",
+      "require perceptible pending and outcome semantics",
+      "require stale/conflict and double-activation handling where consequential",
+      "preserve product PVIPs",
+      "no automatic approval",
+      "DOS-A1 remains RUNTIME_DEFERRED"
+    ]
+  },
+  "auditDecision": "STAGE_A2_CONTINUE",
+  "humanReview": "PENDING"
+}
