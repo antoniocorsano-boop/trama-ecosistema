@@ -1,0 +1,32 @@
+{
+  "contract": "CC-MSS-01-STAGE-B",
+  "note": "Deterministic offline qualification cases. Each case is an executable semantic assertion; no network or collector is used.",
+  "cases": [
+    {"id":"N01","kind":"rule","expected":"OPEN_WORKSTREAM_OMITTED"},
+    {"id":"N02","kind":"rule","expected":"DOS_A1_UNAUTHORIZED"},
+    {"id":"N03","kind":"rule","expected":"BLOCKING_GATE_NOT_PASS"},
+    {"id":"N04","kind":"rule","expected":"HEAD_MISMATCH_UNFLAGGED"},
+    {"id":"N05","kind":"rule","expected":"CI_IS_NOT_HUMAN_APPROVAL"},
+    {"id":"N06","kind":"rule","expected":"UNSUPPORTED_ASSERTION"},
+    {"id":"N07","kind":"rule","expected":"UNSUPPORTED_ASSERTION"},
+    {"id":"N08","kind":"rule","expected":"SEMANTIC_IDEMPOTENCE"},
+    {"id":"N09","kind":"rule","expected":"CANONICAL_SOURCE_DIVERGENCE"},
+    {"id":"N10","kind":"rule","expected":"TRANSITION_AUTHORITY_MISSING"},
+    {"id":"N11","kind":"rule","expected":"SOURCE_OUTAGE_FAIL_CLOSED"},
+    {"id":"N12","kind":"rule","expected":"UNENROLLED_REPOSITORY"},
+    {"id":"N13","kind":"rule","expected":"COLLISION_HEURISTIC_FORBIDDEN"},
+    {"id":"N14","kind":"rule","expected":"UNPROVEN_APPROVAL"},
+    {"id":"N15","kind":"rule","expected":"UNSUPPORTED_ASSERTION"},
+    {"id":"P01","kind":"control","expected":"PASS"},
+    {"id":"P02","kind":"control","expected":"PASS"},
+    {"id":"P03","kind":"control","expected":"PASS"},
+    {"id":"P04","kind":"control","expected":"PASS"},
+    {"id":"P05","kind":"control","expected":"PASS"},
+    {"id":"RI-P01","kind":"structural","expected":"PASS"},
+    {"id":"RI-N01","kind":"structural","expected":"DUPLICATE_ID"},
+    {"id":"RI-N02","kind":"structural","expected":"DANGLING_REF"},
+    {"id":"RI-N03","kind":"structural","expected":"REF_KIND_MISMATCH"},
+    {"id":"BC-P01","kind":"backward","expected":"PASS"},
+    {"id":"BC-N01","kind":"backward","expected":"BACKWARD_SEMANTIC_BREAK"}
+  ]
+}
