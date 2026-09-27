@@ -1,0 +1,18 @@
+{
+  "contract": "CC-MSS-01-STAGE-B",
+  "network": "FORBIDDEN",
+  "collectors": "NOT_AUTHORIZED",
+  "negativeFixtures": [
+    ["N01","OPEN_WORKSTREAM_OMITTED"],["N02","DOS_A1_UNAUTHORIZED"],["N03","BLOCKING_GATE_NOT_PASS"],["N04","HEAD_MISMATCH_UNFLAGGED"],["N05","CI_IS_NOT_HUMAN_APPROVAL"],["N06","UNSUPPORTED_ASSERTION"],["N07","UNSUPPORTED_ASSERTION"],["N08","SEMANTIC_IDEMPOTENCE"],["N09","CANONICAL_SOURCE_DIVERGENCE"],["N10","TRANSITION_AUTHORITY_MISSING"],["N11","SOURCE_OUTAGE_FAIL_CLOSED"],["N12","UNENROLLED_REPOSITORY"],["N13","COLLISION_HEURISTIC_FORBIDDEN"],["N14","UNPROVEN_APPROVAL"],["N15","UNSUPPORTED_ASSERTION"]
+  ],
+  "positiveFixtures": ["P01","P02","P03","P04","P05"],
+  "structuralFixtures": [
+    ["RI-P01","PASS"],["RI-N01","DUPLICATE_ID"],["RI-N02","DANGLING_REF"],["RI-N03","REF_KIND_MISMATCH"],["BC-P01","PASS"],["BC-N01","BACKWARD_SEMANTIC_BREAK"]
+  ],
+  "realFixtureContract": {
+    "id": "TRAMA-PR-96-ATLAS-PERCORSI-G1",
+    "refreshAtStage": "D",
+    "frozenAsTruth": false,
+    "requiredDistinctions": ["workstream_state","human_approval","runtime_authorization","observed_vs_qualified_head","constraints_vs_recommendations","DOS-A1_not_implicitly_activated"]
+  }
+}
