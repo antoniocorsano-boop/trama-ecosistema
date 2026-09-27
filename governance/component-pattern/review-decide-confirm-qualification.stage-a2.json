@@ -24,6 +24,7 @@
   },
   "evidenceReceiptRef": "governance/component-pattern/review-decide-confirm-evidence-receipts.stage-a2.json",
   "evidenceStatus": "RECEIPT_BOUND",
-  "qualificationGates": {"semanticCoreExtracted":"PASS","humanAgencyBoundaryExplicit":"PASS","productApplicabilityExplicit":"PASS","crossProductCapabilityEvidence":"PASS_WITH_PARTIAL_CELLS","immutableEvidenceReceipts":"PASS","negativeHighRiskCases":"PASS","validator":"PASS","humanIndependentReview":"PENDING"},
+  "qualificationGates": {"semanticCoreExtracted":"PASS","humanAgencyBoundaryExplicit":"PASS","productApplicabilityExplicit":"PASS","crossProductCapabilityEvidence":"PASS_WITH_PARTIAL_CELLS","immutableEvidenceReceipts":"PASS","negativeHighRiskCases":"PASS","validator":"PASS","humanIndependentReview":"PASS"},
+  "reviewEvidence": {"reviewedHead":"6de12abee2a78db977d054445c2225cbcb2bd634","reviewId":5329797728,"result":"PASS"},
   "promotionRule": "QUALIFIED is forbidden until immutable evidence receipts for targeted evidence and applicability evidence, fail-closed validation and independent exact-head review all PASS. Partial or unqualified runtime cells must remain explicit. STABLE remains forbidden in Stage A.2. Runtime adoption requires separately governed Stage B."
 }
