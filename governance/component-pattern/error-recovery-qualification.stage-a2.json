@@ -3,7 +3,7 @@
   "stage": "A.2",
   "baseline": "0b88eaf0d56a31ceb6e10b3825f4b9508c5cae92",
   "candidateId": "TRAMA.ERROR_RECOVERY",
-  "decision": "QUALIFICATION_CANDIDATE",
+  "decision": "QUALIFIED",
   "runtimeMigration": false,
   "dosA1": "RUNTIME_DEFERRED",
   "model": "CAPABILITY_BASED",
@@ -26,8 +26,8 @@
     "frameworkNeutral": "PASS",
     "crossProductCapabilityEvidence": "PASS_WITH_PARTIAL_CELLS",
     "immutableEvidenceReceipts": "PASS",
-    "validator": "PENDING",
-    "humanIndependentReview": "PENDING"
+    "validator": "PASS",
+    "humanIndependentReview": "PASS"
   },
-  "promotionRule": "QUALIFIED is forbidden until immutable evidence receipts, fail-closed validation and independent exact-head review all PASS. STABLE remains forbidden in Stage A.2. Runtime adoption requires separately governed Stage B."
+  "promotionRule": "QUALIFIED is permitted only after immutable evidence receipts, fail-closed validation and independent exact-head review all PASS. STABLE remains forbidden in Stage A.2. Runtime adoption requires separately governed Stage B."
 }
