@@ -1,133 +1,95 @@
 {
   "planId": "STAGE-B-PLAN-01",
+  "revision": "R2",
   "contractId": "TRAMA-COMPONENT-PATTERN-01",
   "sourceAudit": "TRAMA-COMPONENT-PATTERN-STAGE-A2-EXIT-R2",
   "sourceBaseline": "4d679a6a6e0fc2f80b4026fa4000a65dba083001",
   "planType": "BOUNDED_RUNTIME_ADOPTION",
   "authorization": "PLANNING_ONLY",
   "runtimeChangeAuthorized": false,
+  "independentReviewR1": "CHANGES_REQUIRED",
   "selectedSlice": {
     "product": "DOCENTE_OS",
-    "surface": "SETTINGS_CONFIRMATION_FEEDBACK",
-    "scope": "Only the existing teacher-facing settings confirmation/reopen interaction and its perceptible outcome states; no navigation, lesson workflow, calendar, curriculum intake, database contract or product-wide shell migration.",
+    "route": "/impostazioni",
+    "area": "CATTEDRA",
+    "aggregate": "TeachingAssignment",
+    "surface": "SINGLE_TEACHING_ASSIGNMENT_CONFIRM_REOPEN",
+    "includedActions": ["confirmSettingsTeachingAssignment", "reopenSettingsTeachingAssignment"],
+    "excludedNearbyActions": ["confirmSettingsSection", "updateSettingsTeachingAssignment", "addSettingsTeachingAssignment", "setTeachingDisciplineState"],
+    "scope": "Only confirmation of one existing PROVISIONAL TeachingAssignment to CONFIRMED and explicit reopening of that same assignment from CONFIRMED to PROVISIONAL, including pending, success, failure and stale/conflict feedback for those two transitions.",
     "selectionRationale": [
-      "Existing runtime evidence already demonstrates explicit confirmation actions, reducing semantic invention.",
-      "The surface is bounded and teacher-facing, so human authority can be tested directly.",
-      "It can consume the qualified REVIEW_DECIDE_CONFIRM, STATUS_MESSAGE, LOADING_PENDING_PROGRESS and ERROR_RECOVERY semantics without requiring ecosystem-wide replacement.",
-      "The slice does not require an offline/degraded continuity claim; OFFLINE_DEGRADED therefore remains outside the authorization path for this slice.",
-      "Rollback can be isolated to the settings interaction without changing curriculum authority or lesson preparation contracts."
+      "The current runtime exposes explicit confirm and reopen actions for TeachingAssignment.",
+      "The slice is narrower than the Settings page and excludes class confirmation and weekly-minute editing.",
+      "It exercises the four qualified Stage A.2 patterns while preserving Docente OS teacher-first authority.",
+      "It requires no offline/degraded continuity claim.",
+      "Rollback can be limited to the TeachingAssignment confirm/reopen interaction."
     ]
   },
-  "qualifiedPatternsConsumed": [
-    "TRAMA.REVIEW_DECIDE_CONFIRM",
-    "TRAMA.STATUS_MESSAGE",
-    "TRAMA.LOADING_PENDING_PROGRESS",
-    "TRAMA.ERROR_RECOVERY"
-  ],
-  "explicitlyOutOfScope": [
-    "TRAMA.EMPTY_STATE",
-    "TRAMA.OFFLINE_DEGRADED",
-    "Arena runtime",
-    "Atlas runtime",
-    "TRAMA Control Center runtime",
-    "Docente OS lesson preparation",
-    "Docente OS calendar",
-    "curriculum intake or authority",
-    "database schema or persistence contract changes",
-    "PWA/offline guarantees",
-    "DOS-A1 activation",
-    "product-wide visual normalization"
-  ],
+  "runtimeFactsObserved": {
+    "ui": [
+      "A PROVISIONAL assignment renders an explicit Conferma submit action.",
+      "A CONFIRMED assignment renders an explicit Rimetti da controllare submit action.",
+      "Current page rendering shows status labels but does not by itself prove transition-scoped pending/success/error announcements."
+    ],
+    "server": [
+      "confirmSettingsTeachingAssignment delegates to setSettingsTeachingAssignmentStatus with CONFIRMED.",
+      "reopenSettingsTeachingAssignment delegates to setSettingsTeachingAssignmentStatus with PROVISIONAL.",
+      "setAssignmentStatus currently updates by assignmentId + workspaceId + academicYearId and desired status.",
+      "TeachingAssignment exposes updatedAt in the domain mapping, but current setAssignmentStatus does not condition the update on expected prior status or expected updatedAt."
+    ],
+    "notProven": [
+      "optimistic concurrency or stale-state rejection",
+      "transition-scoped duplicate-submit protection",
+      "perceptible pending state",
+      "perceptible success/error/conflict announcement",
+      "idempotency under concurrent repeated requests"
+    ]
+  },
+  "qualifiedPatternsConsumed": ["TRAMA.REVIEW_DECIDE_CONFIRM","TRAMA.STATUS_MESSAGE","TRAMA.LOADING_PENDING_PROGRESS","TRAMA.ERROR_RECOVERY"],
+  "explicitlyOutOfScope": ["class confirmation","weekly-minute editing","adding/removing assignments","TRAMA.EMPTY_STATE","TRAMA.OFFLINE_DEGRADED","Arena runtime","Atlas runtime","TRAMA Control Center runtime","lesson preparation","calendar","curriculum intake or authority","PWA/offline guarantees","DOS-A1 activation","product-wide visual normalization"],
+  "transitionContract": {
+    "reviewState": "Before submit, the rendered assignment identity, weekly minutes, current status and a concurrency token representing the reviewed state must be available to the transition.",
+    "explicitDecision": "Only activation of Conferma or Rimetti da controllare initiates the corresponding transition; navigation, rendering, timeout, default state or retry cannot decide for the teacher.",
+    "pending": "Immediately after activation, that assignment transition enters a perceptible pending state and its consequential trigger is disabled until a terminal outcome is received.",
+    "binding": "The mutation must be conditional on the state actually reviewed. The implementation must use a governed compare-and-set equivalent based on expected prior status plus a reliable revision token such as updatedAt, or a stronger database-enforced mechanism. A plain unconditional update is not acceptable.",
+    "success": "Success is rendered only after the repository confirms the conditional mutation. The resulting CONFIRMED or PROVISIONAL state is perceptible and associated with the affected assignment.",
+    "staleConflict": "If expected status/revision no longer matches, no overwrite occurs. The teacher receives a perceptible conflict/stale message and is offered a fresh review of the current assignment state before any new decision.",
+    "failure": "Repository/network/application failure never renders success and does not silently retry into a consequential mutation.",
+    "duplicate": "Repeated activation while pending must not create additional consequential mutations. Server-side behavior must also be safe against repeated/concurrent requests; client disabling alone is insufficient.",
+    "recovery": "Recovery may refresh/reload the current assignment state but cannot automatically confirm or reopen it."
+  },
+  "persistenceBoundary": {
+    "schemaChangeAssumed": false,
+    "rule": "Prefer using existing status and updatedAt only if atomic compare-and-set can be demonstrated with the existing persistence layer. If a schema, RPC, trigger, unique request token or other persistence-contract change is required, implementation must stop and return for separate governance approval; this plan does not pre-authorize it.",
+    "noInference": "The existence of updatedAt is not evidence that optimistic concurrency is currently enforced."
+  },
   "pvipPreservation": {
     "productIdentity": "DOCENTE_OS_TEACHER_FIRST",
-    "mustPreserve": [
-      "teacher remains the explicit decision authority",
-      "existing Docente OS information architecture and local product identity",
-      "confirmation is never inferred from navigation, timeout or default selection",
-      "feedback is perceptible and attributable to the action just taken",
-      "partial/unqualified capabilities are not presented as ecosystem-wide guarantees"
-    ],
-    "forbidden": [
-      "generic TRAMA shell replacement",
-      "copying Arena or Atlas visual identity into Docente OS",
-      "automatic approval",
-      "silent retry into success",
-      "false success state",
-      "new server-side user identity dependency"
-    ]
+    "mustPreserve": ["teacher remains explicit decision authority","existing Docente OS information architecture and local product identity","feedback is attributable to the affected TeachingAssignment","no ecosystem-wide capability claim is inferred from this slice"],
+    "forbidden": ["generic TRAMA shell replacement","copying Arena or Atlas visual identity into Docente OS","automatic approval","silent retry into success","false success state","new server-side user identity dependency"]
   },
   "implementationEnvelope": {
-    "allowed": [
-      "adapter or wrapper around the existing settings confirmation interaction",
-      "qualified status/pending/error semantics limited to the selected surface",
-      "local styling through Docente OS PVIP/token mapping",
-      "surface-specific automated tests and accessibility checks"
-    ],
-    "forbidden": [
-      "changing business authority rules",
-      "changing persistence semantics",
-      "migrating unrelated components",
-      "introducing a parallel confirmation channel",
-      "broad refactor justified only by design-system adoption"
-    ]
+    "allowed": ["surface-local client interaction boundary for confirm/reopen","conditional repository operation that preserves existing business authority","qualified pending/status/error semantics for this assignment only","local Docente OS PVIP/token mapping","surface-specific automated and accessibility tests"],
+    "forbidden": ["unconditional state overwrite presented as conflict-safe","changing class confirmation","changing weekly-minute persistence","migrating unrelated components","parallel confirmation channel","broad design-system refactor","schema/persistence-contract change without separate governance"]
   },
   "acceptance": {
-    "functional": [
-      "explicit confirmation remains required",
-      "reopen/reverse transition remains explicit where currently supported",
-      "duplicate consequential activation is prevented or rendered harmless for this surface",
-      "failure never renders success",
-      "stale/conflict conditions do not silently overwrite a newer state"
-    ],
-    "perceptibility": [
-      "pending state is visible when an asynchronous transition is in progress",
-      "success and failure are announced perceptibly",
-      "focus is restored or advanced predictably after modal/confirmation completion"
-    ],
-    "accessibilityResponsive": [
-      "keyboard-only completion",
-      "screen-reader semantics for decision, pending and outcome states",
-      "200 percent zoom/reflow without horizontal interaction loss",
-      "smartphone viewport without clipped primary actions",
-      "touch targets remain usable"
-    ],
-    "privacy": [
-      "no new student data",
-      "no new tracking",
-      "no new server-side teacher profile dependency"
-    ]
+    "functional": ["PROVISIONAL can become CONFIRMED only through explicit Conferma","CONFIRMED can become PROVISIONAL only through explicit Rimetti da controllare","mutation is atomically bound to expected prior state/revision","stale state produces no overwrite","duplicate/concurrent requests cannot create an incorrect consequential result","failure never renders success"],
+    "perceptibility": ["pending is visible and announced for the affected assignment","success is announced only after committed mutation","failure and stale/conflict are announced and distinguishable","focus after terminal outcome is predictable and remains in the affected assignment context"],
+    "accessibilityResponsive": ["keyboard-only completion","screen-reader semantics for decision, pending and terminal states","200 percent zoom/reflow without horizontal interaction loss","smartphone viewport without clipped primary actions","usable touch targets","pending/disabled state is not conveyed by color alone"],
+    "privacy": ["no new student data","no new tracking","no new server-side teacher profile dependency"]
+  },
+  "requiredTests": {
+    "positive": ["confirm from matching PROVISIONAL revision","reopen from matching CONFIRMED revision","success feedback after committed transition"],
+    "negative": ["confirm against already changed revision is rejected as stale","reopen against already changed revision is rejected as stale","double click while pending causes one effective transition","two concurrent requests with same reviewed revision cannot both perform conflicting transitions","repository failure yields error and no success UI","stale recovery refreshes state without automatic resubmission","tampered assignment outside workspace/year cannot mutate","unexpected status/token is fail-closed"],
+    "scopeRegression": ["class confirmation unchanged","weekly-minute editing unchanged","lesson/calendar/curriculum flows unchanged"]
   },
   "observability": {
-    "successCriteria": [
-      "all surface-specific automated tests pass",
-      "qualified pattern semantics are traceable to the Stage A.2 contracts",
-      "no regression in existing settings confirmation/reopen behavior",
-      "human verification passes on desktop and smartphone"
-    ],
-    "failureCriteria": [
-      "any automatic or ambiguous confirmation",
-      "duplicate consequential mutation",
-      "false success or silent failure",
-      "loss of keyboard or screen-reader operability",
-      "unexpected change outside the selected surface"
-    ]
+    "successCriteria": ["all required tests pass","qualified pattern semantics trace to Stage A.2 contracts","no regression in existing Cattedra behavior outside confirm/reopen","human verification passes on desktop and smartphone"],
+    "failureCriteria": ["automatic or ambiguous confirmation","unconditional stale overwrite","duplicate consequential mutation","false success or silent failure","loss of keyboard/screen-reader operability","unexpected change outside selected slice"]
   },
-  "rollback": {
-    "unit": "SELECTED_SURFACE_ONLY",
-    "rule": "The Stage B implementation must be independently revertible without reverting Stage A governance artifacts or unrelated Docente OS changes.",
-    "trigger": "Any acceptance failure or scope escape blocks adoption and requires rollback before further expansion."
-  },
-  "offlineDecision": {
-    "requiredForThisSlice": false,
-    "rule": "No offline/degraded resilience claim may be introduced by this slice. If implementation discovers such a dependency, Stage B authorization stops and TRAMA.OFFLINE_DEGRADED must be qualified first."
-  },
-  "nextGates": [
-    "independent review of this plan",
-    "human approval of exact plan head",
-    "separate Stage B runtime implementation branch in Docente OS",
-    "runtime evidence and acceptance tests",
-    "human verification before any expansion"
-  ],
-  "decision": "PLAN_CANDIDATE",
+  "rollback": {"unit":"SINGLE_TEACHING_ASSIGNMENT_CONFIRM_REOPEN","rule":"Implementation must be independently revertible without reverting Stage A governance artifacts or unrelated Docente OS changes.","trigger":"Any acceptance failure, persistence-boundary escape or scope escape blocks adoption and requires rollback before expansion."},
+  "offlineDecision": {"requiredForThisSlice":false,"rule":"No offline/degraded resilience claim may be introduced. Discovery of such a dependency stops Stage B authorization until TRAMA.OFFLINE_DEGRADED is qualified."},
+  "nextGates": ["second independent review of R2 against current Docente OS runtime","human approval of exact plan head","separate Stage B implementation branch in Docente OS","runtime evidence plus required tests","human desktop/smartphone verification before expansion"],
+  "decision": "PLAN_CANDIDATE_R2",
   "humanReview": "PENDING"
 }
