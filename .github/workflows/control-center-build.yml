@@ -57,11 +57,22 @@ jobs:
           if not canonical.exists():
               raise SystemExit('CANONICAL_SNAPSHOT_MISSING')
 
-          old = json.loads(canonical.read_text(encoding='utf-8'))
-          new = json.loads(generated.read_text(encoding='utf-8'))
-          # generatedAt is observational; all governed content must otherwise match.
-          old.pop('generatedAt', None)
-          new.pop('generatedAt', None)
+          def semantic_view(snapshot):
+              value = json.loads(json.dumps(snapshot))
+              # These fields record when this projection was observed/evaluated.
+              # They are not governed state and necessarily change on every build.
+              value.pop('generatedAt', None)
+              for state in value.get('sourceState', {}).values():
+                  state.pop('observedAt', None)
+              for area in value.get('areas', []):
+                  area.pop('lastEvaluatedAt', None)
+              for evidence in value.get('evidence', []):
+                  if evidence.get('type') == 'DOCUMENT_CANONICAL':
+                      evidence.pop('observedAt', None)
+              return value
+
+          old = semantic_view(json.loads(canonical.read_text(encoding='utf-8')))
+          new = semantic_view(json.loads(generated.read_text(encoding='utf-8')))
           if old != new:
               raise SystemExit('CANONICAL_SNAPSHOT_STALE: regenerate control-center/data/ecosystem-snapshot.json and commit it')
           print('CANONICAL_SNAPSHOT_PARITY_PASS')
