@@ -1,0 +1,76 @@
+{
+  "contractId": "TRAMA-COMPONENT-PATTERN-01",
+  "stage": "A.1",
+  "baseline": "301e16c5086b936865972f25bbe4668002ca9696",
+  "runtimeMigration": false,
+  "evidencePolicy": "Coverage records observations only. ABSENT_EVIDENCE is not equivalent to MISSING. No runtime adoption is authorized by this matrix.",
+  "repositories": {
+    "ARENA": "antoniocorsano-boop/CurManLight_arena",
+    "ATLAS": "antoniocorsano-boop/Curriculum-Atlas",
+    "DOCENTE_OS": "antoniocorsano-boop/docente-os-2026-27",
+    "TRAMA_CONTROL_CENTER": "antoniocorsano-boop/trama-ecosistema"
+  },
+  "statuses": ["PRESENT", "PARTIAL", "ABSENT_EVIDENCE", "PRODUCT_SPECIFIC"],
+  "families": [
+    {
+      "id": "TRAMA.STATUS_MESSAGE",
+      "catalogStatus": "PROPOSED",
+      "coverage": {
+        "ARENA": {"status":"PARTIAL","evidence":["tools/trama-perceptible-write/lib.mjs","docs/04_product_design/13_INTERACTION_MODEL.md"],"note":"Governed perceptible-write detection and documented status semantics exist; historical accessibility documentation also records gaps, so runtime-wide conformance is not inferred."},
+        "ATLAS": {"status":"PRESENT","evidence":["src/components/atlas/resource-catalog.tsx","src/components/atlas/activity-prototype.tsx"],"note":"aria-live/status semantics are present in current UI code."},
+        "DOCENTE_OS": {"status":"PARTIAL","evidence":["product/src/app/loading.tsx"],"note":"Perceptible loading status is present; this sample does not establish a general notification component."},
+        "TRAMA_CONTROL_CENTER": {"status":"PARTIAL","evidence":["control-center/ecosystem.html"],"note":"Snapshot state uses aria-live; this sample does not establish a reusable component."}
+      }
+    },
+    {
+      "id": "TRAMA.EMPTY_STATE",
+      "catalogStatus": "CANDIDATE",
+      "coverage": {
+        "ARENA": {"status":"PRESENT","evidence":["src/components/ui/EmptyState.tsx","docs/CML_632A_SYSTEM_AREA_INVENTORY.md"],"note":"Reusable EmptyState is implemented and inventoried."},
+        "ATLAS": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No implementation evidence established by the Stage A.1 sampling yet."},
+        "DOCENTE_OS": {"status":"PARTIAL","evidence":["docs/design/DESIGN_SYSTEM_V1.md"],"note":"Empty-state behavior is specified in the product design system; implementation evidence remains to be mapped."},
+        "TRAMA_CONTROL_CENTER": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No implementation evidence established by the Stage A.1 sampling yet."}
+      }
+    },
+    {
+      "id": "TRAMA.ERROR_RECOVERY",
+      "catalogStatus": "CANDIDATE",
+      "coverage": {
+        "ARENA": {"status":"PRESENT","evidence":["src/components/ui/ErrorBoundary.tsx","src/components/ui/index.ts"],"note":"Reusable ErrorBoundary exists; recovery semantics still require contract-level review before catalog promotion."},
+        "ATLAS": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."},
+        "DOCENTE_OS": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."},
+        "TRAMA_CONTROL_CENTER": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."}
+      }
+    },
+    {
+      "id": "TRAMA.LOADING_PENDING_PROGRESS",
+      "catalogStatus": "CANDIDATE",
+      "coverage": {
+        "ARENA": {"status":"PRESENT","evidence":["src/components/ui/index.ts","docs/CML_632A_SYSTEM_AREA_INVENTORY.md"],"note":"Spinner/Progress primitives are inventoried."},
+        "ATLAS": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."},
+        "DOCENTE_OS": {"status":"PRESENT","evidence":["product/src/app/loading.tsx"],"note":"Route loading exposes aria-busy and polite live status."},
+        "TRAMA_CONTROL_CENTER": {"status":"PARTIAL","evidence":["control-center/ecosystem.html"],"note":"Loading state is perceptible for snapshot acquisition; reusable progress semantics are not inferred."}
+      }
+    },
+    {
+      "id": "TRAMA.OFFLINE_DEGRADED",
+      "catalogStatus": "CANDIDATE",
+      "coverage": {
+        "ARENA": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."},
+        "ATLAS": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."},
+        "DOCENTE_OS": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."},
+        "TRAMA_CONTROL_CENTER": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"No evidence established by the current sample."}
+      }
+    },
+    {
+      "id": "TRAMA.REVIEW_DECIDE_CONFIRM",
+      "catalogStatus": "PROPOSED",
+      "coverage": {
+        "ARENA": {"status":"PARTIAL","evidence":["src/components/ui/index.ts"],"note":"ConfirmDialog is exported, but the full review-decision-confirm pattern is not inferred from a component export."},
+        "ATLAS": {"status":"PRODUCT_SPECIFIC","evidence":[],"note":"The Stage A catalog does not currently target Atlas for this pattern."},
+        "DOCENTE_OS": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"Target product, but implementation mapping is not yet established."},
+        "TRAMA_CONTROL_CENTER": {"status":"ABSENT_EVIDENCE","evidence":[],"note":"Target product, but implementation mapping is not yet established."}
+      }
+    }
+  ]
+}
