@@ -20,8 +20,12 @@ jobs:
         run: python3 scripts/validate_governance.py
       - name: Qualify CC-MSS-01 Stage B offline matrix
         run: python3 scripts/qualify_cc_mss_stage_b.py
-      - name: Qualify CC-MSS-01 Stage C1 offline fixtures
+      - name: Audit CC-MSS-01 Stage C1 mutation surface
+        run: python3 scripts/audit_cc_mss_stage_c1_surface.py
+      - name: Qualify CC-MSS-01 Stage C1 offline fixtures with network guard
         run: python3 scripts/qualify_cc_mss_stage_c1.py
+      - name: Run CC-MSS-01 Stage C1 adversarial tests
+        run: python3 -m unittest tests.test_cc_mss_stage_c1_adversarial -v
       - name: Validate component and pattern Stage A
         run: node scripts/validate-component-pattern-stage-a.mjs
       - name: Validate component and pattern Stage A.1 coverage

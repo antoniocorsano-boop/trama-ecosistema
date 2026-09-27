@@ -1,1 +1,1 @@
-{"kind":"provenance","expected":"PASS","data":{"provenanceRefs":["source:x"],"canonicalizationVersion":"cc-mss-c1-v1","payloadDigest":"sha256:x"}}
+{"kind":"provenance","expected":"PASS","data":{"provenanceRefs":["source:x"],"canonicalizationVersion":"cc-mss-c1-v1","payload":{"state":"OPEN","head":"abc"},"payloadDigest":"3efbfeef183af1c2a55a14fdd5f2e3a65a83977b152d5bcdf4bfbf85528d705e"}}

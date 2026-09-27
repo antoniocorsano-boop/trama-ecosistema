@@ -1,1 +1,1 @@
-{"kind":"provenance","expected":"PROVENANCE_INCOMPLETE","data":{"provenanceRefs":[],"canonicalizationVersion":"cc-mss-c1-v1","payloadDigest":null}}
+{"kind":"provenance","expected":"PROVENANCE_INCOMPLETE","data":{"provenanceRefs":[],"canonicalizationVersion":"cc-mss-c1-v1","payload":{"state":"OPEN"},"payloadDigest":null}}
