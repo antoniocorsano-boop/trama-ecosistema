@@ -23,6 +23,10 @@ assert s.authorize(repo,"pr.read").operation=="pr.read"\nfor op in ("repo.write"
  try:s.authorize(repo,op);raise AssertionError("write/unknown operation accepted")
  except m.AnonymousReadOnlyError:pass
 
+for op in ("repo.write","issues.write","admin",""):
+ try:s.authorize(repo,op);raise AssertionError("write/unknown operation accepted")
+ except m.AnonymousReadOnlyError:pass
+
 try:s.authorize("owner/not-enrolled","repo.read");raise AssertionError("unenrolled accepted")
 except m.AnonymousReadOnlyError:pass
 
