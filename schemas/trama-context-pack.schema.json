@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/trama-context-pack.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "subject",
+    "asOf",
+    "status",
+    "facts",
+    "decisions",
+    "activeInvariants",
+    "evidence",
+    "exactHeads",
+    "blockingGates",
+    "dependencies",
+    "knownConflicts",
+    "knownRejectedApproaches",
+    "nextCandidateActions",
+    "sourceRefs"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "CURRENT",
+        "PARTIAL"
+      ]
+    },
+    "facts": {
+      "type": "array"
+    },
+    "decisions": {
+      "type": "array"
+    },
+    "activeInvariants": {
+      "type": "array"
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "exactHeads": {
+      "type": "array"
+    },
+    "blockingGates": {
+      "type": "array"
+    },
+    "dependencies": {
+      "type": "array"
+    },
+    "knownConflicts": {
+      "type": "array"
+    },
+    "knownRejectedApproaches": {
+      "type": "array"
+    },
+    "nextCandidateActions": {
+      "type": "array"
+    },
+    "sourceRefs": {
+      "type": "array"
+    }
+  }
+}
