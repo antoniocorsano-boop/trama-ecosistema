@@ -20,9 +20,10 @@ def main():
     args=ap.parse_args()
     enrollment=load("config/repository-enrollment.json")
     repos=[x for x in enrollment["repositories"] if x["state"]=="ENROLLED"]
-    budget=t.Budget(remaining=len(repos)*4+1,reserve=1)
+    budget=t.Budget(remaining=len(repos)*5+1,reserve=1)
     observed_at=now()
     repository_rows=[]
+    pull_request_rows=[]
     source_refs=[]
     for item in repos:
         repo=item["repository"]; ref=item["defaultBranch"]
@@ -33,6 +34,23 @@ def main():
         if not open_sha or len(open_sha)!=40: raise RuntimeError("HEAD_UNAVAILABLE")
         commit=t.anonymous_get(t.build_url(repo,"commit.read",sha=open_sha),budget)
         if commit.get("sha")!=open_sha: raise RuntimeError("COMMIT_BINDING_MISMATCH")
+        prs=t.anonymous_get(t.build_url(repo,"pr.read"),budget,max_bytes=1500000)
+        if not isinstance(prs,list): raise RuntimeError("PR_RESPONSE_INVALID")
+        if len(prs)>=100: raise RuntimeError("INCOMPLETE_PAGINATION")
+        for pr in prs:
+            pr_sha=pr.get("head",{}).get("sha")
+            number=pr.get("number")
+            if not isinstance(number,int) or not pr_sha or len(pr_sha)!=40: raise RuntimeError("PR_IDENTITY_INVALID")
+            pull_request_rows.append({
+              "repository":repo,
+              "number":number,
+              "state":"OPEN",
+              "draft":bool(pr.get("draft",False)),
+              "merged":False,
+              "observedHead":pr_sha,
+              "observedAt":observed_at,
+              "sourceRefs":[f"github-public-api:{repo}:pull/{number}@{pr_sha}"]
+            })
         close_ref=t.anonymous_get(t.build_url(repo,"ref.read",ref=ref),budget, max_bytes=256000)
         close_sha=close_ref.get("object",{}).get("sha")
         if close_sha!=open_sha: raise RuntimeError("ANCHOR_CHANGED")
@@ -52,7 +70,7 @@ def main():
       "observedAt":observed_at,
       "status":"COMPLETE",
       "repositories":repository_rows,
-      "pullRequests":[],
+      "pullRequests":pull_request_rows,
       "sourceRefs":source_refs
     }
     out=ROOT/args.output;out.parent.mkdir(parents=True,exist_ok=True)
