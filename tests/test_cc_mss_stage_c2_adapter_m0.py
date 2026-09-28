@@ -23,12 +23,23 @@ class T(unittest.TestCase):
  def test_bounded_compressed_bomb(self):
   b=zlib.compress(json.dumps({'x':'z'*5000}).encode())
   with self.assertRaisesRegex(m.M0Error,'SOURCE_RESOURCE_LIMIT_EXCEEDED'):m.bounded_json([b],m.Limits(1000,100,1000,32),True)
+ def test_truncated_compressed_rejected(self):
+  b=zlib.compress(b'{"a":1}')
+  with self.assertRaisesRegex(m.M0Error,'MALFORMED_RESPONSE'):m.bounded_json([b[:-1]],compressed=True)
+ def test_complete_compressed_accepted(self):
+  b=zlib.compress(b'{"a":1}');self.assertEqual(m.bounded_json([b],compressed=True),{'a':1})
  def test_malformed(self):
   with self.assertRaisesRegex(m.M0Error,'MALFORMED_RESPONSE'):m.bounded_json([b'{bad'])
  def test_depth(self):
   x='0'
   for _ in range(8):x='['+x+']'
   with self.assertRaisesRegex(m.M0Error,'SOURCE_RESOURCE_LIMIT_EXCEEDED'):m.bounded_json([x.encode()],m.Limits(1000,1000,1000,3))
+ def test_invalid_limits(self):
+  for lim in (m.Limits(0,1,1,1),m.Limits(1,-1,1,1),m.Limits(1,1,0,1),m.Limits(1,1,1,0)):
+   with self.assertRaisesRegex(m.M0Error,'RESOURCE_POLICY_INVALID'):m.bounded_json([b'{}'],lim)
+ def test_session_budget_cumulative(self):
+  s=m.SessionBudget(12);lim=m.Limits(100,100,12,32);m.bounded_json([b'{"a":1}'],lim,session=s)
+  with self.assertRaisesRegex(m.M0Error,'SOURCE_RESOURCE_LIMIT_EXCEEDED'):m.bounded_json([b'{"b":2}'],lim,session=s)
  def test_permission_source_is_protocol(self):self.assertTrue(hasattr(m.PermissionSource,'observed_permissions'))
  def test_transport_is_protocol(self):self.assertTrue(hasattr(m.Transport,'execute'))
 if __name__=='__main__':unittest.main()

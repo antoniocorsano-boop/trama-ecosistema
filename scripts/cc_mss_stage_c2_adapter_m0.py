@@ -29,6 +29,17 @@ def request(operation,owner,repo,credential_ref,ref=None,sha=None):
 @dataclass(frozen=True)
 class Limits:
  max_compressed:int=65536;max_decompressed:int=262144;max_session:int=524288;max_depth:int=32
+ def validate(self):
+  if any(not isinstance(v,int) or isinstance(v,bool) or v<=0 for v in (self.max_compressed,self.max_decompressed,self.max_session,self.max_depth)):die('RESOURCE_POLICY_INVALID')
+  return self
+class SessionBudget:
+ def __init__(self,maximum):
+  if not isinstance(maximum,int) or isinstance(maximum,bool) or maximum<=0:die('RESOURCE_POLICY_INVALID')
+  self.maximum=maximum;self.used=0
+ def consume(self,n):
+  if not isinstance(n,int) or isinstance(n,bool) or n<0:die('RESOURCE_POLICY_INVALID')
+  if self.used+n>self.maximum:die('SOURCE_RESOURCE_LIMIT_EXCEEDED')
+  self.used+=n
 class PermissionSource(Protocol):
  def observed_permissions(self,repository:str)->dict:...
 class Transport(Protocol):
@@ -38,19 +49,23 @@ def depth(x,n=0):
  if isinstance(x,dict):return max([n]+[depth(v,n+1) for v in x.values()])
  if isinstance(x,list):return max([n]+[depth(v,n+1) for v in x])
  return n
-def bounded_json(chunks,limits=Limits(),compressed=False):
+def bounded_json(chunks,limits=Limits(),compressed=False,session=None):
+ limits.validate();session=session or SessionBudget(limits.max_session)
  total=0;out=bytearray();dec=zlib.decompressobj() if compressed else None
- for chunk in chunks:
-  if not isinstance(chunk,(bytes,bytearray)):die('RESPONSE_CHUNK_INVALID')
-  total+=len(chunk)
-  if total>limits.max_compressed:die('SOURCE_RESOURCE_LIMIT_EXCEEDED')
-  part=dec.decompress(chunk,max(0,limits.max_decompressed+1-len(out))) if dec else chunk
-  out.extend(part)
-  if len(out)>limits.max_decompressed or (dec and dec.unconsumed_tail):die('SOURCE_RESOURCE_LIMIT_EXCEEDED')
- if dec:
-  try:out.extend(dec.flush(max(0,limits.max_decompressed+1-len(out))))
-  except zlib.error:die('MALFORMED_RESPONSE')
- if len(out)>limits.max_decompressed or len(out)>limits.max_session:die('SOURCE_RESOURCE_LIMIT_EXCEEDED')
+ try:
+  for chunk in chunks:
+   if not isinstance(chunk,(bytes,bytearray)):die('RESPONSE_CHUNK_INVALID')
+   total+=len(chunk)
+   if total>limits.max_compressed:die('SOURCE_RESOURCE_LIMIT_EXCEEDED')
+   part=dec.decompress(chunk,max(0,limits.max_decompressed+1-len(out))) if dec else chunk
+   out.extend(part)
+   if len(out)>limits.max_decompressed or (dec and dec.unconsumed_tail):die('SOURCE_RESOURCE_LIMIT_EXCEEDED')
+  if dec:
+   out.extend(dec.flush(max(0,limits.max_decompressed+1-len(out))))
+   if not dec.eof:die('MALFORMED_RESPONSE')
+ except zlib.error:die('MALFORMED_RESPONSE')
+ if len(out)>limits.max_decompressed:die('SOURCE_RESOURCE_LIMIT_EXCEEDED')
+ session.consume(len(out))
  try:x=json.loads(out.decode('utf-8'))
  except (UnicodeDecodeError,json.JSONDecodeError):die('MALFORMED_RESPONSE')
  if depth(x)>limits.max_depth:die('SOURCE_RESOURCE_LIMIT_EXCEEDED')

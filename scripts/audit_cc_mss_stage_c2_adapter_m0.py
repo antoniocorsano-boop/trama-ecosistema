@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 import ast,sys
 from pathlib import Path
-p=Path(__file__).resolve().parents[1]/'scripts/cc_mss_stage_c2_adapter_m0.py';t=ast.parse(p.read_text());bad=[]
-FORBIDDEN_IMPORT={'socket','requests','urllib','http','httpx','aiohttp','subprocess','os'}
-FORBIDDEN_CALL={'post','put','patch','delete','merge','dispatch','upload','publish','remote_put','system','popen','getenv'}
-FORBIDDEN_TEXT={'authorization','bearer ','github_token','gh_token','secret store','os.environ'}
-for n in ast.walk(t):
- if isinstance(n,(ast.Import,ast.ImportFrom)):
-  ns=[a.name.split('.')[0] for a in n.names] if isinstance(n,ast.Import) else [str(n.module or '').split('.')[0]]
-  for x in ns:
-   if x in FORBIDDEN_IMPORT:bad.append('forbidden import '+x)
- if isinstance(n,ast.Call):
-  leaf=(n.func.attr if isinstance(n.func,ast.Attribute) else n.func.id if isinstance(n.func,ast.Name) else '').lower()
-  if leaf in FORBIDDEN_CALL:bad.append('forbidden call '+leaf)
-text=p.read_text().lower()
-for x in FORBIDDEN_TEXT:
- if x in text:bad.append('forbidden credential/network surface '+x)
+ROOT=Path(__file__).resolve().parents[1];TARGETS=sorted((ROOT/'scripts').glob('*cc_mss_stage_c2_adapter_m0*.py'));bad=[]
+FI={'socket','requests','urllib','http','httpx','aiohttp','subprocess','os','importlib'};FC={'post','put','patch','delete','merge','dispatch','upload','publish','remote_put','system','popen','getenv','__import__','eval','exec'};FT={'authorization','bearer ','github_token','gh_token','secret store','os.environ'}
+for p in TARGETS:
+ text=p.read_text();t=ast.parse(text)
+ for n in ast.walk(t):
+  if isinstance(n,(ast.Import,ast.ImportFrom)):
+   ns=[a.name.split('.')[0] for a in n.names] if isinstance(n,ast.Import) else [str(n.module or '').split('.')[0]]
+   for x in ns:
+    if x in FI:bad.append(f'{p.name}: forbidden import {x}')
+  if isinstance(n,ast.Call):
+   leaf=(n.func.attr if isinstance(n.func,ast.Attribute) else n.func.id if isinstance(n.func,ast.Name) else '').lower()
+   if leaf in FC:bad.append(f'{p.name}: forbidden call {leaf}')
+  if isinstance(n,ast.ClassDef):
+   bases={(b.id if isinstance(b,ast.Name) else b.attr if isinstance(b,ast.Attribute) else '') for b in n.bases}
+   if bases&{'Transport','PermissionSource'}:bad.append(f'{p.name}: concrete protocol implementation {n.name}')
+ low=text.lower()
+ for x in FT:
+  if x in low:bad.append(f'{p.name}: forbidden credential/network surface {x}')
+if not TARGETS:bad.append('M0 target surface missing')
 if bad:print('\n'.join(sorted(set(bad))));sys.exit(1)
-print('C2_ADAPTER_M0_SURFACE: PASS — inert; no network/subprocess/credential-loader/remote-write surface')
+print(f'C2_ADAPTER_M0_SURFACE: PASS — {len(TARGETS)} M0 script(s) inert; no concrete protocol/network/subprocess/dynamic-import/credential-loader/remote-write surface')
