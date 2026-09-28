@@ -27,4 +27,5 @@ jobs:
           grep -q 'GITHUB_TOKEN: ""' .github/workflows/public-anonymous-live-one-shot.yml
           grep -q 'GH_TOKEN: ""' .github/workflows/public-anonymous-live-one-shot.yml
           grep -q 'run_attempt' .github/workflows/public-anonymous-live-one-shot.yml
+          grep -q 'refs/heads/main' .github/workflows/public-anonymous-live-one-shot.yml
           grep -q 'AUTHORIZE_LIVE_ONE_SHOT' .github/workflows/public-anonymous-live-one-shot.yml
