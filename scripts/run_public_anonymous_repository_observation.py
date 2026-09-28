@@ -26,10 +26,7 @@ def canonical_pr_snapshot(prs):
         rows.append((number,pr_sha,bool(pr.get("draft",False))))
     return tuple(sorted(rows))
 
-def main():
-    ap=argparse.ArgumentParser()
-    ap.add_argument("--output",default="control-center/data/repository-observation.live.json")
-    args=ap.parse_args()
+def collect(output="control-center/data/repository-observation.live.json"):
     enrollment=load("config/repository-enrollment.json")
     repos=[x for x in enrollment["repositories"] if x["state"]=="ENROLLED"]
     budget=t.Budget(remaining=len(repos)*6,reserve=2)
@@ -96,8 +93,15 @@ def main():
         raise RuntimeError("REPOSITORY_OBSERVATION_SCHEMA_INVALID: "+errors[0].message)
     if budget.remaining!=0:
         raise RuntimeError("REQUEST_BUDGET_NOT_FULLY_ACCOUNTED")
-    out=ROOT/args.output;out.parent.mkdir(parents=True,exist_ok=True)
+    out=ROOT/output;out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    return out,result
+
+def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--output",default="control-center/data/repository-observation.live.json")
+    args=ap.parse_args()
+    out,_=collect(args.output)
     print(out)
 
 if __name__=="__main__":
