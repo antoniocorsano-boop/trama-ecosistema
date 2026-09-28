@@ -37,5 +37,13 @@
     "projectionAuthority": "DERIVED_READ_ONLY",
     "chatAsCanonicalSource": false,
     "preserveNegativeKnowledge": true
-  }
+  },
+  "optionalSources": [
+    {
+      "id": "repository-observation",
+      "path": "control-center/data/repository-observation.json",
+      "role": "VERSION_BOUND_REMOTE_OBSERVATION",
+      "absenceStatus": "PARTIAL"
+    }
+  ]
 }
