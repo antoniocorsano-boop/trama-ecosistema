@@ -86,7 +86,7 @@ The permission-bootstrap endpoint/operation MUST be explicitly declared in the M
 `UNKNOWN`, incomplete proof, write capability present, identity mismatch, missing provenance, digest mismatch or expiry terminates the claimed session as FAILED. A successful GET is never permission proof.
 
 ## 6. Credential context and confused-deputy protection
-M1-B may introduce a concrete credential source only as a separately reviewed component. The provider contract MUST return a request-scoped secret context plus a non-secret stable principal/install/account reference or fingerprint suitable for equality checking; the secret itself is never included in a digest.
+For credentialed modes, M1-B may introduce a concrete credential source only as a separately reviewed component. In `PUBLIC_ANONYMOUS_READ_ONLY`, credential materialization is forbidden: credentialRef=`NONE`, principalRef=`PUBLIC_ANONYMOUS`, and the public-repository proof replaces credential permission bootstrap. The provider contract MUST return a request-scoped secret context plus a non-secret stable principal/install/account reference or fingerprint suitable for equality checking; the secret itself is never included in a digest.
 
 Requirements:
 - opaque credential reference in descriptors/evidence;
@@ -110,7 +110,7 @@ A close/anchor reserve MUST be protected. No dependent request may begin if doin
 Budget exhaustion is terminal and fail-closed.
 
 ## 8. Operation and destination scope
-Only the closed-world operations carried forward from M0/M1-A are eligible: `repo.read`, `ref.read`, `commit.read`, and only if explicitly named in the authorization receipt. The permission-bootstrap operation is not implicitly one of these operations and must be separately declared and authorized as described in section 5.
+Only the closed-world operations eligible for the public anonymous repository observation are: `repo.read`, `ref.read`, `commit.read`, `pr.read`, and only if explicitly named in the authorization receipt. `pr.read` is limited to the bounded open-PR listing required by `RepositoryObservation v1`; saturation/incomplete pagination fails closed. The permission-bootstrap operation is not implicitly one of these operations and must be separately declared and authorized as described in section 5.
 
 Each operation maps internally to GET + predetermined path template. No arbitrary URL, host, port, method, header, SNI, proxy or redirect is accepted from runtime input.
 
