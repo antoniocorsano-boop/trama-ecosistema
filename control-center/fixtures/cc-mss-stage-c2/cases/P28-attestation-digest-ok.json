@@ -1,0 +1,1 @@
+{"kind":"attestation-digest","expected":"PASS","data":{"version":"cc-mss-c1-v1","payload":{"attestationStatus":"VERIFIED_READ_ONLY","requiredReadSet":["contents:read"]},"digest":"75f660ae9f879e155cf3bb124fcf21c43a3b81a6e1ca11e885cb9284f680c9d2"}}
