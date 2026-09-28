@@ -20,6 +20,8 @@ MODE="LIVE_ONE_SHOT"
 @dataclass(frozen=True)
 class HumanAuthorization:
     authorization_ref:str
+    runtime_mode:str
+    credential_ref:str
     exact_sha:str
     repositories:tuple[str,...]
     operations:tuple[str,...]
@@ -37,6 +39,8 @@ class Invocation:
 class ExecutableReceipt:
     receipt_ref:str
     authorization_ref:str
+    runtime_mode:str
+    credential_ref:str
     run_id:str
     run_attempt:int
     exact_sha:str
@@ -53,6 +57,8 @@ def _utc(value:str)->datetime:
 
 def admit(a:HumanAuthorization,current_sha:str,enrolled:tuple[str,...],now:datetime,invocation:Invocation)->ExecutableReceipt:
     if not a.authorization_ref:die("AUTHORIZATION_REF_MISSING")
+    if a.runtime_mode!=MODE:die("RUNTIME_MODE_INVALID")
+    if a.credential_ref!="NONE":die("CREDENTIAL_REF_INVALID")
     if not invocation.run_id or not str(invocation.run_id).isdigit():die("RUN_ID_INVALID")
     if invocation.run_attempt!=1:die("WORKFLOW_RERUN_FORBIDDEN")
     if a.exact_sha!=current_sha or len(current_sha)!=40:die("EXACT_HEAD_MISMATCH")
@@ -66,7 +72,7 @@ def admit(a:HumanAuthorization,current_sha:str,enrolled:tuple[str,...],now:datet
     if not issued<=n<expires:die("AUTHORIZATION_EXPIRED")
     if (expires-issued).total_seconds()>1800:die("AUTHORIZATION_WINDOW_TOO_LARGE")
     receipt_ref=f"{a.authorization_ref}--gha-{invocation.run_id}"
-    return ExecutableReceipt(receipt_ref,a.authorization_ref,str(invocation.run_id),invocation.run_attempt,a.exact_sha,a.repositories,a.operations,a.principal_ref,a.evidence_destination)
+    return ExecutableReceipt(receipt_ref,a.authorization_ref,a.runtime_mode,a.credential_ref,str(invocation.run_id),invocation.run_attempt,a.exact_sha,a.repositories,a.operations,a.principal_ref,a.evidence_destination)
 
 class LocalAtomicClaim:
     """Intra-run concurrency/replay guard; cross-run identity is the GitHub run_id."""
