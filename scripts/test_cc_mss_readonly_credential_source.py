@@ -26,6 +26,7 @@ try:m.GovernedAnonymousReadOnlySource(Verify(False),enrollment).authorize(repo,"
 except m.AnonymousReadOnlyError:pass
 for bad in (
  "https://api.github.com/repos/"+repo,
+ "/repos/"+repo+"/pulls",
  "/repos/other/repo",
  "/repos/"+repo+"#frag",
  "/repos/"+repo+"/pulls?access_token=secret",
