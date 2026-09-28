@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.repository-observation-promotion-event/v1",
-  "eventId": "rope-0000000000000000000000000000000000000000000000000000000000000000",
+  "eventId": "rope-6173cf9d3267e6b926102c8b149812658d05d834916fd23f7451c48c888147ab",
   "proposalId": "rop-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "observationDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "previousObservationDigest": null,
