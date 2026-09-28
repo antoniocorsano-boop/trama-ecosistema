@@ -5,7 +5,6 @@ on:
       - 'scripts/public_anonymous_transport.py'
       - 'scripts/run_public_anonymous_repository_observation.py'
       - 'scripts/test_public_anonymous_transport.py'
-      - '.github/workflows/public-anonymous-live-one-shot.yml'
       - '.github/workflows/public-anonymous-transport-qualification.yml'
 jobs:
   validate:
