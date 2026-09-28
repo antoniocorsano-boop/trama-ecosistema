@@ -4,7 +4,7 @@ import json, ssl, urllib.request, urllib.error
 from dataclasses import dataclass
 
 AUTHORITY="api.github.com"
-ALLOWED_OPS={"repo.read","ref.read","commit.read"}
+ALLOWED_OPS={"repo.read","ref.read","commit.read","pr.read"}
 
 class TransportError(RuntimeError): pass
 def die(code): raise TransportError(code)
@@ -23,6 +23,7 @@ def build_url(repository,operation,ref="main",sha=None):
     base=f"https://{AUTHORITY}/repos/{repository}"
     if operation=="repo.read": return base
     if operation=="ref.read": return f"{base}/git/ref/heads/{ref}"
+    if operation=="pr.read": return f"{base}/pulls?state=open&per_page=100"
     if not sha: die("COMMIT_SHA_REQUIRED")
     return f"{base}/commits/{sha}"
 
