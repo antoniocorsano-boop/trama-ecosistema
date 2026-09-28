@@ -1,0 +1,1 @@
+{"kind":"budget","expected":"REQUEST_BUDGET_INSUFFICIENT","data":{"attempts":1,"retries":0,"pages":1,"attestation":1,"anchorOpen":1,"anchorClose":0,"maxRequests":4,"dependentNext":true,"reservedClose":1}}
