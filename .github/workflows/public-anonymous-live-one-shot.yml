@@ -18,10 +18,13 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Reject reruns
+      - name: Reject reruns and non-main refs
         env:
           RUN_ATTEMPT: ${{ github.run_attempt }}
-        run: test "$RUN_ATTEMPT" = "1"
+          RUN_REF: ${{ github.ref }}
+        run: |
+          test "$RUN_ATTEMPT" = "1"
+          test "$RUN_REF" = "refs/heads/main"
       - name: Checkout exact workflow revision
         uses: actions/checkout@v4
         with:
