@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/repository-observation-promotion-proposal.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "proposalId",
+    "state",
+    "observationDigest",
+    "sourceRunId",
+    "sourceReceiptRef",
+    "collectorExactSha",
+    "promotionPolicyVersion",
+    "promotionPolicyDigest",
+    "repositoryEnrollmentDigest",
+    "previousObservationDigest",
+    "candidateObservedAt",
+    "candidateRepositories",
+    "candidateOpenPullRequests",
+    "validationVerdict",
+    "supersessionVerdict",
+    "proposedChanges",
+    "sourceRefs"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.repository-observation-promotion-proposal/v1"
+    },
+    "proposalId": {
+      "type": "string",
+      "pattern": "^rop-[0-9a-f]{64}$"
+    },
+    "state": {
+      "enum": [
+        "PROPOSED",
+        "REJECTED",
+        "READY_FOR_HUMAN_REVIEW"
+      ]
+    },
+    "observationDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sourceRunId": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "sourceReceiptRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "collectorExactSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "promotionPolicyVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "promotionPolicyDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "repositoryEnrollmentDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "previousObservationDigest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "candidateObservedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "candidateRepositories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "repository",
+          "observedHead"
+        ],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observedHead": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          }
+        }
+      }
+    },
+    "candidateOpenPullRequests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "repository",
+          "number",
+          "observedHead",
+          "draft"
+        ],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "observedHead": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "draft": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "validationVerdict": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "supersessionVerdict": {
+      "enum": [
+        "NEW_STATE",
+        "NO_OP_ALREADY_PROMOTED",
+        "NO_OP_SEMANTIC_EQUIVALENT",
+        "OLDER_THAN_CURRENT",
+        "CONFLICT"
+      ]
+    },
+    "proposedChanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "action"
+        ],
+        "properties": {
+          "path": {
+            "enum": [
+              "control-center/data/repository-observation.json",
+              "control-center/data/project-context-snapshot.json",
+              "status/project-knowledge-events.json"
+            ]
+          },
+          "action": {
+            "enum": [
+              "CREATE",
+              "UPDATE",
+              "NO_OP"
+            ]
+          },
+          "sha256": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}
