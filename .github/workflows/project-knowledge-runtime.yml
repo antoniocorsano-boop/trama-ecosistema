@@ -17,6 +17,7 @@ on:
       - 'schemas/repository-observation-promotion-event.schema.json'
       - 'scripts/repository_observation_promotion_canonical.py'
       - 'scripts/test_repository_observation_promotion_canonical.py'
+      - 'scripts/validate_repository_observation_promotion_semantics.py'
       - 'control-center/fixtures/project-knowledge/**'
       - 'scripts/validate_project_knowledge_schemas.py'
       - 'control-center/data/project-context-snapshot.json'
@@ -39,6 +40,7 @@ jobs:
           python scripts/test_repository_observation_projection.py
           python scripts/validate_cc_mss_live_predecision.py
           python scripts/test_repository_observation_promotion_canonical.py
+          python scripts/validate_repository_observation_promotion_semantics.py
       - name: Install schema validator
         run: python -m pip install jsonschema
       - name: Materialize derived outputs
