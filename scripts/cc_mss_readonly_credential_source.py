@@ -11,7 +11,7 @@ class AnonymousReadOnlyError(RuntimeError): pass
 def die(code:str): raise AnonymousReadOnlyError(code)
 
 PUBLIC_AUTHORITY="api.github.com"
-ALLOWED_OPERATIONS={"repo.read","ref.read","commit.read"}
+ALLOWED_OPERATIONS={"repo.read","ref.read","commit.read","pr.read"}
 
 @dataclass(frozen=True)
 class AnonymousPrincipal:
