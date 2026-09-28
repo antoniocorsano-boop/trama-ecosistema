@@ -62,6 +62,13 @@ def validate_encoding(value:str|None)->str:
  if "," in v or v not in ALLOWED_ENCODINGS: die("CONTENT_ENCODING_REJECTED")
  return v
 
+def _owned_raw_stream(resp:httpx.Response):
+ """Yield raw bytes while retaining response ownership until iteration ends/aborts."""
+ try:
+  yield from resp.iter_raw()
+ finally:
+  resp.close()
+
 class M1ATransport:
  """HTTPX client exists, but execute() is interlocked before any send/DNS/socket."""
  def __init__(self, injected_transport:httpx.BaseTransport, credential_provider:CredentialProvider, permit:LiveExecutionPermit|None=None, policy:ClientPolicy=ClientPolicy()):
@@ -78,8 +85,11 @@ class M1ATransport:
   url="https://"+AUTHORITY+r["path"]
   req=self._client.build_request("GET",url,headers=_headers(secret))
   resp=self._client.send(req,stream=True,follow_redirects=False)
-  status=classify_status(resp.status_code)
-  if status!="OK":
-   resp.close(); die(status)
-  enc=validate_encoding(resp.headers.get("content-encoding"))
-  return resp.status_code,enc,resp.iter_raw()
+  try:
+   status=classify_status(resp.status_code)
+   if status!="OK": die(status)
+   enc=validate_encoding(resp.headers.get("content-encoding"))
+  except BaseException:
+   resp.close()
+   raise
+  return resp.status_code,enc,_owned_raw_stream(resp)
