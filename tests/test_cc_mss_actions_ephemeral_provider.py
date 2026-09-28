@@ -1,0 +1,25 @@
+import copy, importlib.util, json, unittest
+from pathlib import Path
+SPEC=importlib.util.spec_from_file_location("v",Path("scripts/validate_cc_mss_actions_ephemeral_provider.py"));v=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(v)
+BASE=json.loads(Path("config/cc-mss-01-credential-provider-actions-ephemeral.json").read_text())
+class T(unittest.TestCase):
+ def bad(self, mutate, reason):
+  d=copy.deepcopy(BASE);mutate(d)
+  with self.assertRaisesRegex(ValueError,reason):v.validate(d)
+ def test_baseline(self): self.assertTrue(v.validate(copy.deepcopy(BASE)))
+ def test_live_authorization_rejected(self): self.bad(lambda d:d.update(live="AUTHORIZED"),"LIVE_MUST")
+ def test_cross_repo_rejected(self): self.bad(lambda d:d.update(scope="MULTI_REPOSITORY"),"SCOPE_INVALID")
+ def test_pat_origin_rejected(self): self.bad(lambda d:d.update(tokenOrigin="PAT"),"TOKEN_ORIGIN_INVALID")
+ def test_secret_input_rejected(self): self.bad(lambda d:d.update(acceptedSecretInputs=["GITHUB_TOKEN"]),"SECRET_INPUT_FORBIDDEN")
+ def test_credential_material_rejected(self): self.bad(lambda d:d.update(decisionPackageCredentialMaterial=True),"CREDENTIAL_MATERIAL_FORBIDDEN")
+ def test_write_operation_rejected(self): self.bad(lambda d:d.update(operations=["repo.read","repo.write"]),"OPERATIONS_INVALID")
+ def test_post_rejected(self): self.bad(lambda d:d.update(httpMethod="POST"),"METHOD_INVALID")
+ def test_remote_evidence_rejected(self): self.bad(lambda d:d.update(evidenceDestination="ARTIFACT"),"EVIDENCE_INVALID")
+ def test_write_permission_rejected(self): self.bad(lambda d:d.update(requiredWorkflowPermissions={"contents":"write","metadata":"read"}),"PERMISSIONS_INVALID")
+ def test_pull_request_target_guard_required(self): self.bad(lambda d:d.update(prohibitedTriggers=[]),"TRIGGER_GUARD_INVALID")
+ def test_dispatch_live_probe_must_remain_prohibited(self): self.bad(lambda d:d.update(prohibitedCapabilities=[x for x in d["prohibitedCapabilities"] if x!="workflow-dispatch-live-probe"]),"PROHIBITED_CAPABILITY_MISSING")
+ def test_reusable_context_rejected(self): self.bad(lambda d:d["credentialLifecycle"].update(reusableContext=True),"LIFECYCLE_INVALID")
+ def test_materialize_before_claim_rejected(self): self.bad(lambda d:d["credentialLifecycle"].update(materializeAfterAtomicClaim=False),"LIFECYCLE_INVALID")
+ def test_failure_invalidation_required(self): self.bad(lambda d:d["credentialLifecycle"].update(invalidateOnFailure=False),"LIFECYCLE_INVALID")
+ def test_human_authorization_required(self): self.bad(lambda d:d.update(humanAuthorizationRequired=False),"HUMAN_AUTH_REQUIRED")
+if __name__=="__main__":unittest.main()
