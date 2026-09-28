@@ -29,6 +29,29 @@ def canon(value):
 def digest(value):
  return "sha256:"+hashlib.sha256(canon(value).encode()).hexdigest()
 
+POLICY_DESCRIPTOR={
+ "mode":MODE,
+ "authority":AUTHORITY,
+ "scheme":"https",
+ "method":"GET",
+ "redirect":"DENY",
+ "trustEnv":False,
+ "http2":False,
+ "authorizationHeader":"FORBIDDEN",
+ "callerHeaders":"FORBIDDEN",
+}
+RESOURCE_DESCRIPTOR={
+ "connectTimeoutSeconds":5,
+ "readTimeoutSeconds":10,
+ "writeTimeoutSeconds":5,
+ "poolTimeoutSeconds":5,
+ "maxConnections":1,
+ "maxKeepaliveConnections":1,
+ "responseEncoding":"identity",
+}
+POLICY_DIGEST=digest(POLICY_DESCRIPTOR)
+RESOURCE_DIGEST=digest(RESOURCE_DESCRIPTOR)
+
 @dataclass(frozen=True)
 class AnonymousReceipt:
  ref:str
@@ -87,6 +110,14 @@ class ReceiptBoundPermit:
 class PublicVisibilitySource(Protocol):
  def attest(self,repository:str)->dict: ...
 
+def validate_receipt(r,exact_sha):
+ if r.mode!=MODE: die("MODE_MISMATCH")
+ if not re.fullmatch(r"[0-9a-f]{40}",r.exact_sha): die("IMPLEMENTATION_SHA_INVALID")
+ if r.exact_sha!=exact_sha: die("RECEIPT_BINDING_MISMATCH")
+ if r.policy_digest!=POLICY_DIGEST: die("POLICY_DIGEST_MISMATCH")
+ if r.resource_digest!=RESOURCE_DIGEST: die("RESOURCE_DIGEST_MISMATCH")
+ if not r.operations or any(op not in OPS for op in r.operations): die("OPERATION_NOT_AUTHORIZED")
+
 def validate_time(r,now):
  if now.tzinfo is None or now.utcoffset() is None: die("CLOCK_INVALID")
  now=now.astimezone(timezone.utc)
@@ -135,7 +166,11 @@ def validate_request(request):
  return request
 
 def anonymous_headers():
- return {"Accept":"application/vnd.github+json","User-Agent":"trama-control-center-public-anonymous"}
+ return {
+  "Accept":"application/vnd.github+json",
+  "Accept-Encoding":"identity",
+  "User-Agent":"trama-control-center-public-anonymous",
+ }
 
 def assert_no_secret_headers(headers):
  lowered={k.lower():v for k,v in headers.items()}
@@ -164,12 +199,16 @@ class AnonymousHTTPTransport:
  def __init__(self,injected_transport:httpx.BaseTransport,permit:LiveExecutionPermit|None=None):
   if injected_transport is None: die("INJECTED_TRANSPORT_REQUIRED")
   self._permit=permit or DisabledPermit()
+  timeout=httpx.Timeout(connect=5.0,read=10.0,write=5.0,pool=5.0)
+  limits=httpx.Limits(max_connections=1,max_keepalive_connections=1)
   self._client=httpx.Client(
    transport=injected_transport,
    trust_env=False,
    follow_redirects=False,
    http2=False,
    verify=True,
+   timeout=timeout,
+   limits=limits,
    headers={}
   )
  def close(self): self._client.close()
@@ -187,6 +226,8 @@ class AnonymousHTTPTransport:
   try:
    if 300<=resp.status_code<400: die("SOURCE_BOUNDARY_VIOLATION")
    if resp.status_code!=200: die("SOURCE_UNAVAILABLE")
+   encoding=(resp.headers.get("content-encoding") or "identity").strip().lower()
+   if encoding!="identity": die("CONTENT_ENCODING_REJECTED")
    return resp.status_code,_owned_stream(resp),dict(resp.headers)
   except BaseException:
    resp.close()
@@ -207,9 +248,8 @@ class AnonymousOneShotSession:
  def prepare(self,receipt_ref,probe_id,enrollment,branch):
   r=self.store.claim(receipt_ref,probe_id,self.exact_sha)
   try:
+   validate_receipt(r,self.exact_sha)
    validate_time(r,self.clock.now())
-   if r.mode!=MODE: die("MODE_MISMATCH")
-   if not r.operations or any(op not in OPS for op in r.operations): die("OPERATION_NOT_AUTHORIZED")
    validate_enrollment(enrollment,r.repository,branch)
    att=self.visibility_source.attest(r.repository)
    validate_visibility(att,r.repository,branch)
