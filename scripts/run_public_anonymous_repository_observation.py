@@ -20,7 +20,7 @@ def main():
     args=ap.parse_args()
     enrollment=load("config/repository-enrollment.json")
     repos=[x for x in enrollment["repositories"] if x["state"]=="ENROLLED"]
-    budget=t.Budget(remaining=1+len(repos)*3+1,reserve=1)
+    budget=t.Budget(remaining=len(repos)*4+1,reserve=1)
     observed_at=now()
     repository_rows=[]
     source_refs=[]
