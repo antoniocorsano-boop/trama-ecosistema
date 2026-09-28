@@ -1,0 +1,26 @@
+name: CC-MSS Public Anonymous Read-Only
+on:
+  pull_request:
+    paths:
+      - 'docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-READONLY.md'
+      - 'scripts/cc_mss_public_anonymous_source.py'
+      - 'scripts/test_cc_mss_public_anonymous_source.py'
+      - 'scripts/audit_cc_mss_public_anonymous_surface.py'
+      - '.github/workflows/cc-mss-public-anonymous-readonly.yml'
+      - 'config/repository-enrollment.json'
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      metadata: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check "httpx==0.28.1"
+      - name: Audit anonymous capability surface
+        run: python scripts/audit_cc_mss_public_anonymous_surface.py
+      - name: Qualify anonymous source offline
+        run: python scripts/test_cc_mss_public_anonymous_source.py
