@@ -31,6 +31,6 @@ for bad in (
  "/repos/"+repo+"?access_token=secret",
  "/repos/"+repo+"/pulls?state=all&per_page=100"
 ):
- try:m.request_descriptor(prp if "pulls?" in bad else p,bad);raise AssertionError("bad path accepted")
+ try:m.request_descriptor(prp if "/pulls?" in bad else p,bad);raise AssertionError("bad path accepted")
  except m.AnonymousReadOnlyError:pass
 print("TRAMA_PUBLIC_ANONYMOUS_READ_ONLY_PASS")
