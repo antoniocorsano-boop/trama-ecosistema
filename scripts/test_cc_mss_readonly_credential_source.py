@@ -16,6 +16,7 @@ p=s.authorize(repo,"repo.read")
 assert p.principal_ref=="PUBLIC_ANONYMOUS"
 r=m.request_descriptor(p,"/repos/antoniocorsano-boop/Curriculum-Atlas")
 assert r["method"]=="GET" and r["host"]=="api.github.com"
+assert s.authorize(repo,"pr.read").operation=="pr.read"
 assert r["authorizationHeader"]=="ABSENT" and r["cookieHeader"]=="ABSENT" and r["proxyPolicy"]=="DISABLED"
 
 for op in ("repo.write","issues.write","admin",""):
