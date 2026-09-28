@@ -73,6 +73,30 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED",
+      "type": "DEFERMENT",
+      "subject": "project-knowledge-live-collector",
+      "statement": "LIVE_ONE_SHOT remains blocked until a real credential principal and authoritative read-only permission attestation are bound to the frozen candidate.",
+      "status": "CURRENT",
+      "rationale": "Stage C and the Second Brain projection are integrated, but the human decision gate requires a concrete principal/permission envelope before any live network execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-LIVE-ONE-SHOT-DECISION-GATE.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-ADAPTER-M1B-LIVE-ONE-SHOT-CONTRACT.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:45:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ]
 }
