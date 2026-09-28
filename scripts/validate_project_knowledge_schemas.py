@@ -16,4 +16,6 @@ def validate(schema_path,data_path):
 validate(Path('schemas/project-context-snapshot.schema.json'),Path('control-center/data/project-context-snapshot.json'))
 validate(Path('schemas/trama-context-pack.schema.json'),Path('control-center/data/context-packs/atlas-percorsi.json'))
 validate(Path('schemas/trama-context-pack.schema.json'),Path('control-center/data/context-packs/project-knowledge.json'))
-print('TRAMA_PROJECT_KNOWLEDGE_SCHEMA_PASS')
+validate(Path('schemas/repository-observation.schema.json'),Path('control-center/fixtures/project-knowledge/repository-observation-complete.json'))
+validate(Path('schemas/repository-observation.schema.json'),Path('control-center/fixtures/project-knowledge/repository-observation-partial.json'))
+print('TRAMA_PROJECT_KNOWLEDGE_AND_REPOSITORY_OBSERVATION_SCHEMA_PASS')
