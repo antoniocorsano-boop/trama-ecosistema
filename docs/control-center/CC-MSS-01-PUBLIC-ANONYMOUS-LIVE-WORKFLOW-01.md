@@ -6,7 +6,7 @@ The executable workflow composes the qualified source, transport, collector and 
 
 The GitHub `workflow_dispatch` event is itself the human issuance event. No caller-supplied reusable authorizationRef exists. The executable receipt reference is derived from the unique GitHub Actions `run_id`.
 
-A rerun has `run_attempt > 1` and is denied before checkout. Every fresh dispatch is a new human decision and a new issuance event.
+A rerun has `run_attempt > 1` and is denied before checkout. The dispatch is also denied unless `github.ref == refs/heads/main`. Every accepted fresh dispatch on main is a new human decision and a new issuance event.
 
 ## Bootstrap versus collector egress
 
@@ -28,7 +28,7 @@ The workflow checks out `github.sha` explicitly and verifies `git rev-parse HEAD
 
 ## Lifecycle
 
-1. reject `run_attempt != 1`;
+1. reject `run_attempt != 1` and any ref other than `refs/heads/main`;
 2. checkout exact workflow revision without persisted credentials;
 3. verify exact head and absence of GitHub credential extraheader;
 4. require `AUTHORIZE_LIVE_ONE_SHOT`;
