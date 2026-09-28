@@ -58,7 +58,8 @@ def load_registry(path=REGISTRY):
 
 def validate(data, now=None, registered_repositories=None):
     now = now or datetime.now(timezone.utc)
-    registered_repositories = registered_repositories or load_registry()
+    if registered_repositories is None:
+        registered_repositories = load_registry()
     if data.get("contract") != "CC-MSS-01-LIVE-ONE-SHOT-DECISION-PACKAGE-v1": die("CONTRACT_INVALID")
     repository = data.get("repository")
     if repository not in registered_repositories: die("REPOSITORY_NOT_IN_ECOSYSTEM_REGISTRY")
