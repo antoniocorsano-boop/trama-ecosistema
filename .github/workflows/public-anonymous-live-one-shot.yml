@@ -14,7 +14,7 @@ jobs:
       ALL_PROXY: ""
       NO_PROXY: ""
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4\n        with:\n          persist-credentials: false
       - name: Offline transport qualification
         run: python scripts/test_public_anonymous_transport.py
       - name: Run anonymous one-shot collector
