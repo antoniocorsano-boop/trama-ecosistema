@@ -27,7 +27,7 @@ enrollment=next(x for x in enrollment_doc["repositories"] if x["repository"]=="a
 now=datetime(2026,9,28,20,0,0,tzinfo=timezone.utc)
 receipt=m.AnonymousReceipt(
  ref="receipt:anon:1",probe_id="probe:anon:1",repository=enrollment["repository"],
- exact_sha="a"*40,operations=("repo.read","ref.read","commit.read"),
+ exact_sha="a"*40,operations=("repo.read","ref.read","commit.read","pr.read"),
  issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=10),
  policy_digest=m.POLICY_DIGEST,resource_digest=m.RESOURCE_DIGEST
 )
@@ -124,3 +124,10 @@ t=m.AnonymousHTTPTransport(httpx.MockTransport(encoded),ctx["permit"])
 try:t.execute({"method":"GET","scheme":"https","host":"api.github.com","redirect":"DENY","operation":"repo.read","repository":enrollment["repository"]});raise AssertionError("gzip accepted")
 except m.AnonymousSourceError as e:assert str(e)=="CONTENT_ENCODING_REJECTED"
 t.close()
+
+# bounded PR pagination path
+pr_path=m.build_path({"operation":"pr.read","repository":enrollment["repository"]},"main",None,1)
+assert pr_path.endswith("/pulls?state=open&per_page=100&page=1")
+for page in (0,11,True,"1"):
+ try:m.build_path({"operation":"pr.read","repository":enrollment["repository"]},"main",None,page);raise AssertionError("bad page accepted")
+ except m.AnonymousSourceError:pass
