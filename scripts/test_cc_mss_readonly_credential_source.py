@@ -3,7 +3,10 @@ import importlib.util,json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("ro",ROOT/"scripts/cc_mss_readonly_credential_source.py")
-m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+m=importlib.util.module_from_spec(spec)
+import sys
+sys.modules[spec.name]=m
+spec.loader.exec_module(m)
 enrollment=json.loads((ROOT/"config/repository-enrollment.json").read_text())
 
 class Ctx:
