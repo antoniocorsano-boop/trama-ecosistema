@@ -1,0 +1,1 @@
+{"kind":"budget","expected":"REQUEST_BUDGET_EXHAUSTED","data":{"attempts":3,"retries":1,"pages":2,"attestation":1,"anchorOpen":1,"anchorClose":0,"maxRequests":5,"dependentNext":false,"reservedClose":1}}

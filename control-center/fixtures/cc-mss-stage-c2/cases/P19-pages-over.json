@@ -1,0 +1,1 @@
+{"kind":"resource","expected":"SOURCE_RESOURCE_LIMIT_EXCEEDED","data":{"limits":{"compressedBytes":1000,"decompressedBytes":5000,"items":100,"pages":10,"sessionBytes":10000,"depth":20},"observed":{"compressedBytes":500,"decompressedBytes":2000,"items":50,"pages":11,"sessionBytes":3000,"depth":5}}}

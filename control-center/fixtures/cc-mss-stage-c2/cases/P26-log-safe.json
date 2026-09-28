@@ -1,0 +1,1 @@
+{"kind":"logging","expected":"PASS","data":{"message":"pr.read repo=x status=200 digest=abc"}}

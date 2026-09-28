@@ -1,0 +1,1 @@
+{"kind":"provenance","expected":"PASS","data":{"provenanceRefs":["source:x"],"canonicalizationVersion":"cc-mss-c1-v1","payload":{"state":"OPEN","head":"abc"},"payloadDigest":"68affc09c15b044628bb8493ce369385e152c611d910ef17c713b4fda599ab5c"}}

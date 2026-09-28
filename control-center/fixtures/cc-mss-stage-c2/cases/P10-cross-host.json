@@ -1,0 +1,1 @@
+{"kind":"boundary","expected":"SOURCE_BOUNDARY_VIOLATION","data":{"scheme":"https","host":"evil.example","redirect":true,"credentialForwarding":false}}

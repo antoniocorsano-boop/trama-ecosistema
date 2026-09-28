@@ -1,0 +1,1 @@
+{"kind":"digest-equal","expected":"PASS","data":{"left":{"observedAt":"a","items":[{"id":"2","v":"b"},{"id":"1","v":"a"}]},"right":{"observedAt":"b","items":[{"id":"1","v":"a"},{"id":"2","v":"b"}]}}}
