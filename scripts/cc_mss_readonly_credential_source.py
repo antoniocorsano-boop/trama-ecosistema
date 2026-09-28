@@ -44,8 +44,18 @@ class GovernedAnonymousReadOnlySource:
 def request_descriptor(principal:AnonymousPrincipal,path:str)->dict:
     principal.validate()
     base="/repos/"+principal.repository
-    if not isinstance(path,str) or not (path==base or path.startswith(base+"/")): die("PATH_BINDING_MISMATCH")
+    if not isinstance(path,str): die("PATH_INVALID")
     if "://" in path or any(x in path for x in ("\r","\n","#","?access_token=","?token=")): die("PATH_INVALID")
+    op=principal.operation
+    if op=="repo.read" and path!=base: die("PATH_BINDING_MISMATCH")
+    if op=="pr.read" and path!=base+"/pulls?state=open&per_page=100": die("PATH_BINDING_MISMATCH")
+    if op=="ref.read":
+        prefix=base+"/git/ref/heads/"
+        if not path.startswith(prefix) or "?" in path: die("PATH_BINDING_MISMATCH")
+    if op=="commit.read":
+        prefix=base+"/commits/"
+        sha=path[len(prefix):] if path.startswith(prefix) else ""
+        if len(sha)!=40 or any(ch not in "0123456789abcdef" for ch in sha): die("PATH_BINDING_MISMATCH")
     return {
       "method":"GET",
       "scheme":"https",
