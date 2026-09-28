@@ -36,6 +36,9 @@ store=m.ReceiptStore();store.issue(receipt)
 session=m.AnonymousOneShotSession(store,Visibility(),receipt.exact_sha,Clock(now))
 ctx=session.prepare(receipt.ref,receipt.probe_id,enrollment,"main")
 assert ctx["visibilityAttestation"]["visibility"]=="public"
+assert ctx["permit"].authorize({"repository":enrollment["repository"],"operation":"repo.read"}) is True
+assert ctx["permit"].authorize({"repository":"other/repo","operation":"repo.read"}) is False
+assert ctx["permit"].authorize({"repository":enrollment["repository"],"operation":"unknown"}) is False
 assert store.state(receipt.ref)=="CLAIMED"
 session.complete(ctx)
 assert store.state(receipt.ref)=="CONSUMED"
@@ -64,7 +67,7 @@ seen=[]
 def handler(req):
  seen.append(req)
  return httpx.Response(200,stream=httpx.ByteStream(b'{"ok":true}'),request=req)
-transport=m.AnonymousHTTPTransport(httpx.MockTransport(handler),Permit(True))
+transport=m.AnonymousHTTPTransport(httpx.MockTransport(handler),ctx["permit"])
 status,stream,_=transport.execute({"method":"GET","scheme":"https","host":"api.github.com","redirect":"DENY","operation":"repo.read","repository":enrollment["repository"]})
 assert status==200
 b=b"".join(stream);assert b
@@ -96,3 +99,12 @@ assert not calls
 t.close()
 
 print("CC_MSS_PUBLIC_ANONYMOUS_READ_ONLY_PASS")
+
+# path hardening
+for branch in ("../main","main?x","", "/main"):
+ try:m.build_path({"operation":"ref.read","repository":enrollment["repository"]},branch,None);raise AssertionError("bad branch accepted")
+ except m.AnonymousSourceError:pass
+for head in ("HEAD","abc","g"*40,"a"*39):
+ try:m.build_path({"operation":"commit.read","repository":enrollment["repository"]},"main",head);raise AssertionError("bad head accepted")
+ except m.AnonymousSourceError:pass
+assert m.build_path({"operation":"commit.read","repository":enrollment["repository"]},"main","a"*40).endswith("/"+"a"*40)
