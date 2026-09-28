@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "trama.cc-mss.live-one-shot-predecision/v1",
+  "candidate": {
+    "repository": "antoniocorsano-boop/trama-ecosistema",
+    "exactCandidateSha": "11deec0be3353c9e12dd5642d32df9068aaa6eb1",
+    "operations": [
+      "repo.read",
+      "ref.read",
+      "commit.read"
+    ],
+    "authority": "https://api.github.com",
+    "evidenceDestination": "LOCAL_EPHEMERAL_ONLY",
+    "canonicalizationVersion": "cc-mss-c1-v1"
+  },
+  "decisionState": "BLOCKED_MISSING_PRINCIPAL_ATTESTATION",
+  "liveAuthorized": false,
+  "resolved": {
+    "runtimeMode": "LIVE_ONE_SHOT",
+    "requestBudget": {
+      "maxRequests": 5,
+      "reservedClose": 1
+    },
+    "retryPolicy": {
+      "maxRetries": 0
+    },
+    "resourcePolicyRef": "scripts/cc_mss_stage_c2_adapter_m0.py",
+    "safetyPolicyRef": "scripts/cc_mss_stage_c2_safety.py",
+    "independentReviewRef": "review:5343715114"
+  },
+  "unresolved": [
+    "CREDENTIAL_REFERENCE",
+    "EXPECTED_PRINCIPAL_REFERENCE",
+    "AUTHORITATIVE_PERMISSION_ATTESTATION",
+    "PERMISSION_ATTESTATION_DIGEST",
+    "AUTHORIZATION_RECEIPT_REF",
+    "PROBE_RUN_ID",
+    "ISSUED_AT_UTC",
+    "EXPIRES_AT_UTC",
+    "CLOCK_SKEW_CEILING",
+    "EXPLICIT_HUMAN_AUTHORIZE_LIVE_ONE_SHOT"
+  ],
+  "rule": "No live execution, credential materialization or network access is permitted while unresolved is non-empty."
+}
