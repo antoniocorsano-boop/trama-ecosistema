@@ -97,6 +97,28 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-DEVELOPMENT-CONTINUITY-PROTOCOL",
+      "type": "DECISION",
+      "subject": "development-continuity",
+      "statement": "Start work from governed Context Packs and canonical sources; verify only volatile facts, then use a continuous end-to-end implementation/test/review cycle unless authority, contract, security, privacy, write autonomy, approval semantics or irreversible decisions change.",
+      "status": "CURRENT",
+      "rationale": "Prevents repeated reconstruction from chat while preserving strengthened governance at real decision boundaries.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 120,
+          "exactHead": "18b2f5d0b77bc4abf368b6439e7f2806992a5000",
+          "ref": "docs/process/trama-development-continuity-protocol-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:42:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ]
 }
