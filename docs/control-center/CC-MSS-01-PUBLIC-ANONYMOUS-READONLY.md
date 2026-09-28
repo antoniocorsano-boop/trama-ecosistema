@@ -101,3 +101,19 @@ This tranche may implement and qualify the anonymous source offline with injecte
 Current normative state remains:
 
 live=NOT_AUTHORIZED
+
+
+## Minimal live operation surface
+
+For Project Knowledge repository observation, anonymous mode is limited to:
+
+- repo.read;
+- ref.read;
+- commit.read;
+- pr.read.
+
+pr.read is the only extension beyond the initial M0 minimal surface and is already a recognized Stage C1 read operation. Its live authorization must be explicit in the new exact-head receipt.
+
+pr.read maps only to the fixed GitHub endpoint for open pull requests, with per_page=100 and bounded page numbers 1..10. Arbitrary query parameters are forbidden.
+
+A RepositoryObservation may claim COMPLETE only when pagination is proven complete and the anchor head is unchanged at close.
