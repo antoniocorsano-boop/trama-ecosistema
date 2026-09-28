@@ -1,0 +1,22 @@
+name: TRAMA Public Anonymous Transport Qualification
+on:
+  pull_request:
+    paths:
+      - 'scripts/public_anonymous_transport.py'
+      - 'scripts/run_public_anonymous_repository_observation.py'
+      - 'scripts/test_public_anonymous_transport.py'
+      - '.github/workflows/public-anonymous-live-one-shot.yml'
+      - '.github/workflows/public-anonymous-transport-qualification.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/test_public_anonymous_transport.py
+      - name: Capability audit
+        run: |
+          ! grep -En 'Authorization|Bearer|GITHUB_TOKEN|GH_TOKEN|subprocess|requests\.|httpx\.|socket|os\.environ' scripts/public_anonymous_transport.py scripts/run_public_anonymous_repository_observation.py
+          grep -q 'api.github.com' scripts/public_anonymous_transport.py
+          grep -q 'method="GET"' scripts/public_anonymous_transport.py
