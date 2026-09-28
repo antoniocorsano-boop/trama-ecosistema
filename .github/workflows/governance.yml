@@ -32,6 +32,10 @@ jobs:
         run: python3 scripts/qualify_cc_mss_stage_c2_pre_live.py
       - name: Run CC-MSS-01 Stage C2 adversarial tests
         run: python3 -m unittest tests.test_cc_mss_stage_c2_adversarial -v
+      - name: Audit CC-MSS-01 Stage C2 live-probe simulation surface
+        run: python3 scripts/audit_cc_mss_stage_c2_live_sim_surface.py
+      - name: Run CC-MSS-01 Stage C2 live-probe offline simulation
+        run: python3 -m unittest tests.test_cc_mss_stage_c2_live_probe_sim -v
       - name: Validate component and pattern Stage A
         run: node scripts/validate-component-pattern-stage-a.mjs
       - name: Validate component and pattern Stage A.1 coverage
