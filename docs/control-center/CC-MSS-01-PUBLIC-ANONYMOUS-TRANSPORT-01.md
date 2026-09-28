@@ -14,12 +14,12 @@ Properties:
 - environment proxies cleared;
 - redirects rejected;
 - bounded timeout and response size;
-- finite request budget;\n- governed read-only operations: repo.read, ref.read, commit.read, pr.read;
+- finite request budget sized for 6 requests per enrolled repository plus protected reserve;\n- governed read-only operations: repo.read, ref.read, commit.read, pr.read;
 - repository enrollment allowlist;
-- open/ref/commit/pr-list/close anchor sequence;
+- repo identity/public check + open-ref/commit + PR-list/open + close-ref + PR-list/close sequence;
 - PR observation is required before the collection can be COMPLETE/CURRENT;
 - PR pagination is bounded to one page of <100 open PRs per repository; saturation fails closed as INCOMPLETE_PAGINATION;
-- anchor change invalidates the run;
+- default-branch anchor change or PR-set/head/draft change invalidates the run;
 - output remains only in the ephemeral job filesystem/stdout; no artifact upload or remote persistence;
 - no commit, PR comment, check publication, workflow mutation or remote write.
 
