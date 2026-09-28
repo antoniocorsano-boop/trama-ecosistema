@@ -72,6 +72,7 @@ assert len(seen)==1 and seen[0].method=="GET"
 headers={k.lower():v for k,v in seen[0].headers.items()}
 for h in ("authorization","cookie","proxy-authorization","forwarded","x-forwarded-for"):
  assert h not in headers
+assert headers.get("host")=="api.github.com"
 transport.close()
 
 for request in [
