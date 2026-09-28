@@ -14,3 +14,7 @@ for _ in range(4): b.consume()
 try:b.consume();raise AssertionError
 except m.TransportError:pass
 print("TRAMA_PUBLIC_ANONYMOUS_TRANSPORT_OFFLINE_PASS")
+
+assert isinstance(m._opener().handlers[0], __import__("urllib.request",fromlist=["ProxyHandler"]).ProxyHandler)
+op=m._opener()
+assert any(h.__class__.__name__=="_NoRedirect" for h in op.handlers)
