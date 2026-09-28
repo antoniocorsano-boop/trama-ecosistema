@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "trama.project-knowledge-events/v1",
+  "updatedAt": "2026-09-28T19:20:00Z",
+  "events": [
+    {
+      "eventId": "TRAMA-EVT-PERCORSI-PR96-RECOVERY",
+      "type": "KNOWLEDGE_RECOVERY",
+      "subject": "atlas-percorsi",
+      "statement": "Recovered TRAMA PR #96 as the authoritative G1 knowledge package for Atlas Percorsi; fixed-eight student pathway reconstruction is invalid.",
+      "status": "CURRENT",
+      "rationale": "PR #96 contains the canonical index, backlog-zero plan, productive workflow, grammar registry, dossier template, pedagogical model, child-safe constitution, evidence records, dossier and implementation spec for PW-MISSING-INFORMATION-01.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 96,
+          "exactHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+          "ref": "docs/capabilities/atlas-percorsi/workflow/CANONICAL-INDEX-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:20:00Z",
+      "supersedes": [
+        "ATLAS-PERCORSI-FIXED-EIGHT-RECONSTRUCTION"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-KB-SECOND-BRAIN-FOUNDATION",
+      "type": "DECISION",
+      "subject": "project-knowledge",
+      "statement": "Use TRAMA Project Knowledge Base and Context Packs as the primary operational memory; conversational memory is only a pointer, never technical authority.",
+      "status": "CURRENT",
+      "rationale": "Implements CC2-F1/E and ADR-015 to avoid repeated reconstruction from chats.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/architecture/trama-project-knowledge-agent-context-v1.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/contracts/project-context-snapshot-v1.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/contracts/trama-context-pack-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:20:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-NEGATIVE-CHAT-AS-STATE",
+      "type": "REJECTION",
+      "subject": "project-knowledge",
+      "statement": "Do not use chat history or assistant memory as the canonical source of technical state.",
+      "status": "CURRENT",
+      "rationale": "Chat context can be incomplete or unavailable; strong facts must resolve to governed repository/control-center sources.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/implementation/cc2-f1e-project-knowledge-foundation.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:20:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    }
+  ]
+}

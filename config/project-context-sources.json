@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "trama.project-context-sources/v1",
+  "requiredSources": [
+    {
+      "id": "ecosystem-snapshot",
+      "path": "control-center/data/ecosystem-snapshot.json",
+      "role": "LIVE_DERIVED_STATE"
+    },
+    {
+      "id": "source-registry",
+      "path": "docs/knowledge/source-registry.json",
+      "role": "AUTHORITY_MAP"
+    },
+    {
+      "id": "decision-register",
+      "path": "docs/decisions/decision-register.json",
+      "role": "DECISIONS"
+    },
+    {
+      "id": "ecosystem-status",
+      "path": "status/ecosystem-status.json",
+      "role": "CAPABILITY_STATE"
+    },
+    {
+      "id": "governed-events",
+      "path": "status/governed-events.json",
+      "role": "HISTORY"
+    },
+    {
+      "id": "project-knowledge-events",
+      "path": "status/project-knowledge-events.json",
+      "role": "OPERATIONAL_MEMORY"
+    }
+  ],
+  "policy": {
+    "missingRequiredSource": "FAIL_CLOSED",
+    "projectionAuthority": "DERIVED_READ_ONLY",
+    "chatAsCanonicalSource": false,
+    "preserveNegativeKnowledge": true
+  }
+}

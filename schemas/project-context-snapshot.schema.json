@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/project-context-snapshot.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "project",
+    "status",
+    "currentPhase",
+    "activeCapabilities",
+    "canonicalDecisions",
+    "activeInvariants",
+    "repositories",
+    "openPullRequests",
+    "activeExactHeads",
+    "blockingGates",
+    "pendingHumanReviews",
+    "dependencies",
+    "knownConflicts",
+    "recentlyCompleted",
+    "knownRejectedApproaches",
+    "nextCandidateActions",
+    "knowledgeEvents",
+    "knowledgeSources"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "project": {
+      "const": "TRAMA"
+    },
+    "status": {
+      "enum": [
+        "CURRENT",
+        "PARTIAL"
+      ]
+    },
+    "currentPhase": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "activeCapabilities": {
+      "type": "array"
+    },
+    "canonicalDecisions": {
+      "type": "array"
+    },
+    "activeInvariants": {
+      "type": "array"
+    },
+    "repositories": {
+      "type": "array"
+    },
+    "openPullRequests": {
+      "type": "array"
+    },
+    "activeExactHeads": {
+      "type": "array"
+    },
+    "blockingGates": {
+      "type": "array"
+    },
+    "pendingHumanReviews": {
+      "type": "array"
+    },
+    "dependencies": {
+      "type": "array"
+    },
+    "knownConflicts": {
+      "type": "array"
+    },
+    "recentlyCompleted": {
+      "type": "array"
+    },
+    "knownRejectedApproaches": {
+      "type": "array"
+    },
+    "nextCandidateActions": {
+      "type": "array"
+    },
+    "knowledgeEvents": {
+      "type": "array"
+    },
+    "knowledgeSources": {
+      "type": "array"
+    }
+  }
+}

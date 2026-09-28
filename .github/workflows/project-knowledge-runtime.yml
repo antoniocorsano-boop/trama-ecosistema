@@ -1,0 +1,40 @@
+name: TRAMA Project Knowledge Runtime
+on:
+  pull_request:
+    paths:
+      - 'config/project-context-sources.json'
+      - 'status/project-knowledge-events.json'
+      - 'schemas/project-context-snapshot.schema.json'
+      - 'schemas/trama-context-pack.schema.json'
+      - 'scripts/build_project_context_snapshot.py'
+      - 'scripts/build_trama_context_pack.py'
+      - 'scripts/test_project_knowledge_runtime.py'
+      - 'scripts/validate_project_knowledge_schemas.py'
+      - 'control-center/data/project-context-snapshot.json'
+      - 'control-center/data/context-packs/**'
+      - 'docs/knowledge/TRAMA-SECOND-BRAIN-OPERATING-MODEL.md'
+      - '.github/workflows/project-knowledge-runtime.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check ProjectContextSnapshot
+        run: python scripts/build_project_context_snapshot.py --check
+      - name: Run Project Knowledge tests
+        run: python scripts/test_project_knowledge_runtime.py
+      - name: Install schema validator
+        run: python -m pip install jsonschema
+      - name: Materialize derived outputs
+        run: |
+          python scripts/build_project_context_snapshot.py
+          python scripts/build_trama_context_pack.py atlas-percorsi --output control-center/data/context-packs/atlas-percorsi.json
+          python scripts/build_trama_context_pack.py project-knowledge --output control-center/data/context-packs/project-knowledge.json
+          test -s control-center/data/project-context-snapshot.json
+          test -s control-center/data/context-packs/atlas-percorsi.json
+          test -s control-center/data/context-packs/project-knowledge.json
+      - name: Validate generated outputs against JSON Schema
+        run: python scripts/validate_project_knowledge_schemas.py
