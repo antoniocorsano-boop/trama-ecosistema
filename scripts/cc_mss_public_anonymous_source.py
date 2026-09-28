@@ -18,8 +18,8 @@ OPS={
  "ref.read":"/repos/{repository}/git/ref/heads/{branch}",
  "commit.read":"/repos/{repository}/commits/{head}",
 }
-FORBIDDEN_HEADER_NAMES={
- "authorization","cookie","proxy-authorization","host","forwarded",
+FORBIDDEN_SECRET_HEADER_NAMES={
+ "authorization","cookie","proxy-authorization","forwarded",
  "x-forwarded-for","x-forwarded-host","x-forwarded-proto"
 }
 
@@ -129,7 +129,7 @@ def anonymous_headers():
 
 def assert_no_secret_headers(headers):
  lowered={k.lower():v for k,v in headers.items()}
- if any(k in lowered for k in FORBIDDEN_HEADER_NAMES): die("CREDENTIAL_SURFACE_DETECTED")
+ if any(k in lowered for k in FORBIDDEN_SECRET_HEADER_NAMES): die("CREDENTIAL_SURFACE_DETECTED")
  if any("bearer " in str(v).lower() or "token " in str(v).lower() for v in lowered.values()):
   die("CREDENTIAL_SURFACE_DETECTED")
 
@@ -159,6 +159,7 @@ class AnonymousHTTPTransport:
   url="https://"+AUTHORITY+path
   req=self._client.build_request("GET",url,headers=headers)
   assert_no_secret_headers(dict(req.headers))
+  if req.headers.get("host")!=AUTHORITY: die("SOURCE_BOUNDARY_VIOLATION")
   resp=self._client.send(req,stream=True,follow_redirects=False)
   try:
    if 300<=resp.status_code<400: die("SOURCE_BOUNDARY_VIOLATION")
