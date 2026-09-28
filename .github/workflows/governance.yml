@@ -33,6 +33,15 @@ jobs:
       - {name: Audit CC-MSS-01 Stage C2 Adapter M1-B offline surface, run: python3 scripts/audit_cc_mss_stage_c2_adapter_m1b.py}
       - {name: Run CC-MSS-01 Stage C2 Adapter M1-B audit adversarial tests, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1b_audit -v}
       - {name: Run CC-MSS-01 Stage C2 Adapter M1-B offline qualification, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1b -v}
+      - {name: Validate CC-MSS-01 LIVE_ONE_SHOT decision package fail-closed, run: python3 scripts/validate_cc_mss_live_decision_package.py}
+      - {name: Run CC-MSS-01 LIVE_ONE_SHOT decision package adversarial tests, run: python3 -m unittest tests.test_cc_mss_live_decision_package -v}
+      - {name: Audit CC-MSS-01 LIVE_ONE_SHOT binding materializer offline surface, run: python3 scripts/audit_cc_mss_live_binding_materializer.py}
+      - {name: Run CC-MSS-01 LIVE_ONE_SHOT binding materializer adversarial tests, run: python3 -m unittest tests.test_cc_mss_live_binding_materializer -v}
+      - {name: Validate TRAMA Control Center GitHub App profile, run: python3 scripts/validate_trama_control_center_github_app_profile.py}
+      - {name: Run TRAMA Control Center GitHub App profile adversarial tests, run: python3 -m unittest tests.test_trama_control_center_github_app_profile -v}
+      - {name: Audit CC-MSS-01 Actions ephemeral provider offline surface, run: python3 scripts/audit_cc_mss_actions_ephemeral_provider.py}
+      - {name: Validate CC-MSS-01 Actions ephemeral provider profile, run: python3 scripts/validate_cc_mss_actions_ephemeral_provider.py}
+      - {name: Run CC-MSS-01 Actions ephemeral provider adversarial tests, run: python3 -m unittest tests.test_cc_mss_actions_ephemeral_provider -v}
       - {name: Validate component and pattern Stage A, run: node scripts/validate-component-pattern-stage-a.mjs}
       - {name: Validate component and pattern Stage A.1 coverage, run: node scripts/validate-component-pattern-stage-a1.mjs}
       - {name: Validate component and pattern Stage A.2 qualification, run: node scripts/validate-component-pattern-stage-a2.mjs}
