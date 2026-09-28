@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
+      - {name: Install governed M1-A HTTP dependency, run: python3 -m pip install --disable-pip-version-check "httpx==0.28.1"}
       - {name: Validate governance, run: python3 scripts/validate_governance.py}
       - {name: Qualify CC-MSS-01 Stage B offline matrix, run: python3 scripts/qualify_cc_mss_stage_b.py}
       - {name: Audit CC-MSS-01 Stage C1 mutation surface, run: python3 scripts/audit_cc_mss_stage_c1_surface.py}
@@ -26,6 +27,9 @@ jobs:
       - {name: Audit CC-MSS-01 Stage C2 Adapter M0 inert surface, run: python3 scripts/audit_cc_mss_stage_c2_adapter_m0.py}
       - {name: Run CC-MSS-01 Stage C2 Adapter M0 audit adversarial tests, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m0_audit -v}
       - {name: Run CC-MSS-01 Stage C2 Adapter M0 qualification, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m0 -v}
+      - {name: Audit CC-MSS-01 Stage C2 Adapter M1-A capability surface, run: python3 scripts/audit_cc_mss_stage_c2_adapter_m1a.py}
+      - {name: Run CC-MSS-01 Stage C2 Adapter M1-A audit adversarial tests, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1a_audit -v}
+      - {name: Run CC-MSS-01 Stage C2 Adapter M1-A offline qualification, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1a -v}
       - {name: Validate component and pattern Stage A, run: node scripts/validate-component-pattern-stage-a.mjs}
       - {name: Validate component and pattern Stage A.1 coverage, run: node scripts/validate-component-pattern-stage-a1.mjs}
       - {name: Validate component and pattern Stage A.2 qualification, run: node scripts/validate-component-pattern-stage-a2.mjs}
