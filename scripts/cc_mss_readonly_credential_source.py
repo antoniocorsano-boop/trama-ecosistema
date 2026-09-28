@@ -43,8 +43,8 @@ class GovernedAnonymousReadOnlySource:
 
 def request_descriptor(principal:AnonymousPrincipal,path:str)->dict:
     principal.validate()
-    expected_prefix="/repos/"+principal.repository+"/"
-    if not isinstance(path,str) or not path.startswith(expected_prefix): die("PATH_BINDING_MISMATCH")
+    base="/repos/"+principal.repository
+    if not isinstance(path,str) or not (path==base or path.startswith(base+"/")): die("PATH_BINDING_MISMATCH")
     if "://" in path or any(x in path for x in ("\r","\n","#","?access_token=","?token=")): die("PATH_INVALID")
     return {
       "method":"GET",
