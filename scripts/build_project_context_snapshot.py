@@ -22,7 +22,38 @@ def source_ref(item):
 def repo_ref(authority):
     return {"TRAMA":"trama-ecosistema","Arena":"CurManLight_arena","Atlas":"Curriculum-Atlas","Docente OS":"docente-os-2026-27"}.get(authority,authority)
 
-def build():
+def load_repository_observation(path=None):
+    path = Path(path or "control-center/data/repository-observation.json")
+    full = ROOT / path
+    if not full.exists():
+        return None
+    data = json.loads(full.read_text(encoding="utf-8"))
+    if data.get("schemaVersion") != "trama.repository-observation/v1":
+        raise RuntimeError("invalid repository observation schemaVersion")
+    return data
+
+def repository_projection(observation):
+    if observation is None:
+        return {"status":"PARTIAL","openPullRequests":[],"repositories":[],"observedHeads":[]}
+    repositories=observation.get("repositories",[])
+    complete=(observation.get("status")=="COMPLETE" and repositories and all(
+        r.get("availabilityStatus")=="AVAILABLE" and r.get("freshnessStatus")=="FRESH" and r.get("completenessStatus")=="COMPLETE"
+        for r in repositories
+    ))
+    open_prs=[]
+    observed_heads=[]
+    for pr in observation.get("pullRequests",[]):
+        if pr.get("state")=="OPEN" and not pr.get("merged"):
+            open_prs.append({
+                "repository":pr["repository"],"number":pr["number"],"draft":pr["draft"],
+                "observedHead":pr["observedHead"],"observedAt":pr["observedAt"],"sourceRefs":pr["sourceRefs"]
+            })
+    for r in repositories:
+        if r.get("observedHead"):
+            observed_heads.append({"subject":"repository-head","repository":r["repository"],"observedHead":r["observedHead"],"sourceRefs":r["sourceRefs"]})
+    return {"status":"CURRENT" if complete else "PARTIAL","openPullRequests":open_prs,"repositories":repositories,"observedHeads":observed_heads}
+
+def build(repository_observation_path=None):
     cfg=load(Path("config/project-context-sources.json"))
     missing=[x["path"] for x in cfg["requiredSources"] if not (ROOT/x["path"]).exists()]
     if missing:
@@ -32,6 +63,8 @@ def build():
     knowledge=load(Path("status/project-knowledge-events.json"))
     source_registry=load(Path("docs/knowledge/source-registry.json"))
     generated=now()
+    repository_observation=load_repository_observation(repository_observation_path)
+    repo_projection=repository_projection(repository_observation)
 
     phases=eco.get("phases",[])
     current_phase=next((p for p in phases if p.get("status") not in {"COMPLETE","CLOSED","PASS"}), phases[-1] if phases else None)
@@ -53,21 +86,33 @@ def build():
 
     authorities=sorted({s.get("authority") for s in source_registry.get("sources",[]) if s.get("authority")})
     repositories=[{"authority":a,"repositoryRef":repo_ref(a)} for a in authorities]
+    observed_by_repo={r["repository"]:r for r in repo_projection["repositories"]}
+    for item in repositories:
+        full_ref=item["repositoryRef"]
+        if "/" not in full_ref and full_ref not in {"Drive"}:
+            full_ref="antoniocorsano-boop/"+full_ref
+        observed=observed_by_repo.get(full_ref)
+        if observed:
+            item["observation"]={
+              "availabilityStatus":observed["availabilityStatus"],
+              "freshnessStatus":observed["freshnessStatus"],
+              "completenessStatus":observed["completenessStatus"],
+              "observedHead":observed["observedHead"],
+              "sourceRefs":observed["sourceRefs"]
+            }
 
-    # Remote PR/workflow collection is not yet version-bound in this slice.
-    # Therefore the projection is explicitly PARTIAL rather than synthetic.
     return {
       "schemaVersion":"1.0.0",
       "generatedAt":generated,
       "project":"TRAMA",
-      "status":"PARTIAL",
+      "status":repo_projection["status"],
       "currentPhase":current_phase,
       "activeCapabilities":active,
       "canonicalDecisions":canonical_decisions,
       "activeInvariants":invariants,
       "repositories":repositories,
-      "openPullRequests":[],
-      "activeExactHeads":exact_heads,
+      "openPullRequests":repo_projection["openPullRequests"],
+      "activeExactHeads":exact_heads + repo_projection["observedHeads"],
       "blockingGates":blocking,
       "pendingHumanReviews":pending_reviews,
       "dependencies":eco.get("dependencies",[]),
@@ -96,8 +141,9 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--output",default="control-center/data/project-context-snapshot.json")
     ap.add_argument("--check",action="store_true")
+    ap.add_argument("--repository-observation")
     args=ap.parse_args()
-    snapshot=build()
+    snapshot=build(args.repository_observation)
     validate(snapshot)
     if args.check:
         print("TRAMA_PROJECT_CONTEXT_SNAPSHOT_CHECK_PASS")
