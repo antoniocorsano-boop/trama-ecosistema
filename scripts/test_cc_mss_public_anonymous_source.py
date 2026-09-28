@@ -29,7 +29,7 @@ receipt=m.AnonymousReceipt(
  ref="receipt:anon:1",probe_id="probe:anon:1",repository=enrollment["repository"],
  exact_sha="a"*40,operations=("repo.read","ref.read","commit.read"),
  issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=10),
- policy_digest="sha256:"+"b"*64,resource_digest="sha256:"+"c"*64
+ policy_digest=m.POLICY_DIGEST,resource_digest=m.RESOURCE_DIGEST
 )
 
 store=m.ReceiptStore();store.issue(receipt)
@@ -50,14 +50,14 @@ except m.AnonymousSourceError: pass
 
 # private/unknown visibility fail closed
 for vis in ("private","internal","unknown"):
- r=m.AnonymousReceipt(ref="receipt:"+vis,probe_id="p:"+vis,repository=enrollment["repository"],exact_sha="a"*40,operations=("repo.read",),issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=10),policy_digest="p",resource_digest="r")
+ r=m.AnonymousReceipt(ref="receipt:"+vis,probe_id="p:"+vis,repository=enrollment["repository"],exact_sha="a"*40,operations=("repo.read",),issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=10),policy_digest=m.POLICY_DIGEST,resource_digest=m.RESOURCE_DIGEST)
  s=m.ReceiptStore();s.issue(r)
  try:m.AnonymousOneShotSession(s,Visibility(vis),r.exact_sha,Clock(now)).prepare(r.ref,r.probe_id,enrollment,"main");raise AssertionError(vis+" accepted")
  except m.AnonymousSourceError:assert s.state(r.ref)=="FAILED"
 
 # enrollment mismatch
 bad=dict(enrollment);bad["state"]="SUSPENDED"
-r=m.AnonymousReceipt(ref="receipt:suspended",probe_id="p:suspended",repository=enrollment["repository"],exact_sha="a"*40,operations=("repo.read",),issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=10),policy_digest="p",resource_digest="r")
+r=m.AnonymousReceipt(ref="receipt:suspended",probe_id="p:suspended",repository=enrollment["repository"],exact_sha="a"*40,operations=("repo.read",),issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=10),policy_digest=m.POLICY_DIGEST,resource_digest=m.RESOURCE_DIGEST)
 s=m.ReceiptStore();s.issue(r)
 try:m.AnonymousOneShotSession(s,Visibility(),r.exact_sha,Clock(now)).prepare(r.ref,r.probe_id,bad,"main");raise AssertionError("suspended accepted")
 except m.AnonymousSourceError:pass
@@ -108,3 +108,19 @@ for head in ("HEAD","abc","g"*40,"a"*39):
  try:m.build_path({"operation":"commit.read","repository":enrollment["repository"]},"main",head);raise AssertionError("bad head accepted")
  except m.AnonymousSourceError:pass
 assert m.build_path({"operation":"commit.read","repository":enrollment["repository"]},"main","a"*40).endswith("/"+"a"*40)
+
+# receipt policy/resource binding
+for field in ("policy","resource"):
+ kwargs=dict(ref="receipt:mismatch:"+field,probe_id="p:mismatch:"+field,repository=enrollment["repository"],exact_sha="a"*40,operations=("repo.read",),issued_at=now-timedelta(minutes=1),expires_at=now+timedelta(minutes=10),policy_digest=m.POLICY_DIGEST,resource_digest=m.RESOURCE_DIGEST)
+ kwargs["policy_digest" if field=="policy" else "resource_digest"]="sha256:"+"0"*64
+ rr=m.AnonymousReceipt(**kwargs);ss=m.ReceiptStore();ss.issue(rr)
+ try:m.AnonymousOneShotSession(ss,Visibility(),rr.exact_sha,Clock(now)).prepare(rr.ref,rr.probe_id,enrollment,"main");raise AssertionError("digest mismatch accepted")
+ except m.AnonymousSourceError:assert ss.state(rr.ref)=="FAILED"
+
+# non-identity response encoding rejected
+def encoded(req):
+ return httpx.Response(200,headers={"Content-Encoding":"gzip"},stream=httpx.ByteStream(b"x"),request=req)
+t=m.AnonymousHTTPTransport(httpx.MockTransport(encoded),ctx["permit"])
+try:t.execute({"method":"GET","scheme":"https","host":"api.github.com","redirect":"DENY","operation":"repo.read","repository":enrollment["repository"]});raise AssertionError("gzip accepted")
+except m.AnonymousSourceError as e:assert str(e)=="CONTENT_ENCODING_REJECTED"
+t.close()
