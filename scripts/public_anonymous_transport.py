@@ -26,10 +26,14 @@ def build_url(repository,operation,ref="main",sha=None):
     if not sha: die("COMMIT_SHA_REQUIRED")
     return f"{base}/commits/{sha}"
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self,req,fp,code,msg,headers,newurl):
+        return None
+
 def _opener():
     ctx=ssl.create_default_context()
-    handler=urllib.request.HTTPSHandler(context=ctx)
-    opener=urllib.request.build_opener(handler)
+    https=urllib.request.HTTPSHandler(context=ctx)
+    opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),_NoRedirect(),https)
     opener.addheaders=[
       ("Accept","application/vnd.github+json"),
       ("User-Agent","trama-public-anonymous-readonly")
