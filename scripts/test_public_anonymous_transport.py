@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import importlib.util,sys
+import importlib.util,sys,urllib.request
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("transport",ROOT/"scripts/public_anonymous_transport.py")
@@ -15,6 +15,6 @@ try:b.consume();raise AssertionError
 except m.TransportError:pass
 print("TRAMA_PUBLIC_ANONYMOUS_TRANSPORT_OFFLINE_PASS")
 
-assert isinstance(m._opener().handlers[0], __import__("urllib.request",fromlist=["ProxyHandler"]).ProxyHandler)
 op=m._opener()
+assert any(isinstance(h,urllib.request.ProxyHandler) and h.proxies=={} for h in op.handlers)
 assert any(h.__class__.__name__=="_NoRedirect" for h in op.handlers)
