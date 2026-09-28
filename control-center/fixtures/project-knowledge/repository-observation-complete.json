@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "trama.repository-observation/v1",
+  "collectionId": "fixture-complete",
+  "observedAt": "2026-09-28T19:40:00Z",
+  "status": "COMPLETE",
+  "repositories": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "enrollmentRef": "enrollment:trama",
+      "availabilityStatus": "AVAILABLE",
+      "freshnessStatus": "FRESH",
+      "completenessStatus": "COMPLETE",
+      "observedHead": "aa1f8b045bb1ccc1be4cc00e8d721da09cfc028e",
+      "sourceRefs": [
+        "fixture:trama"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "enrollmentRef": "enrollment:atlas",
+      "availabilityStatus": "AVAILABLE",
+      "freshnessStatus": "FRESH",
+      "completenessStatus": "COMPLETE",
+      "observedHead": "f68be1d9913fed77483685158e38848d3d0a19b2",
+      "sourceRefs": [
+        "fixture:atlas"
+      ]
+    }
+  ],
+  "pullRequests": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "number": 96,
+      "state": "OPEN",
+      "draft": true,
+      "merged": false,
+      "observedHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+      "observedAt": "2026-09-28T19:40:00Z",
+      "sourceRefs": [
+        "fixture:pr96"
+      ]
+    }
+  ],
+  "sourceRefs": [
+    "fixture:collection"
+  ]
+}
