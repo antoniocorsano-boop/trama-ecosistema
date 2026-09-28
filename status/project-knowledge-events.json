@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-09-28T19:20:00Z",
+  "updatedAt": "2026-09-28T20:54:45Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-PERCORSI-PR96-RECOVERY",
@@ -79,7 +79,7 @@
       "type": "DEFERMENT",
       "subject": "project-knowledge-live-collector",
       "statement": "LIVE_ONE_SHOT remains blocked until a real credential principal and authoritative read-only permission attestation are bound to the frozen candidate.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "Stage C and the Second Brain projection are integrated, but the human decision gate requires a concrete principal/permission envelope before any live network execution.",
       "sourceRefs": [
         {
@@ -93,7 +93,9 @@
       ],
       "validFrom": "2026-09-28T19:45:00Z",
       "supersedes": [],
-      "invalidatedBy": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+      ],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -115,6 +117,50 @@
       ],
       "validFrom": "2026-09-28T19:42:00Z",
       "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED",
+      "type": "CLOSURE",
+      "subject": "project-knowledge-live-collector",
+      "statement": "PUBLIC_ANONYMOUS_READ_ONLY LIVE_ONE_SHOT is qualified and has completed one governed run successfully on main; the receipt terminated CONSUMED and RepositoryObservation terminated COMPLETE.",
+      "status": "CURRENT",
+      "rationale": "The credentialed-path blocker was removed by the approved public-anonymous source model. PRs #126, #128, #129 and #130 established source, transport, single-use binding and executable workflow. Workflow run 36482487361 executed once on exact main baseline 895aac7c31d2e8388b22b01ac45408102ad6ff1c with run_attempt=1; 4 enrolled repositories were observed, 8 open PRs were reported, no artifact was published, and the receipt gha-dispatch-36482487361--gha-36482487361 closed CONSUMED.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 126,
+          "ref": "docs/control-center/CC-MSS-01-READ-ONLY-CREDENTIAL-SOURCE-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 128,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-TRANSPORT-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 129,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-BINDING-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 130,
+          "exactHead": "bcca546e7e30ca5bf94acf96844f347b8ffb78aa",
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-WORKFLOW-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+          "ref": "github-actions:workflow-run/36482487361"
+        }
+      ],
+      "validFrom": "2026-09-28T20:54:45Z",
+      "supersedes": [
+        "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED"
+      ],
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
