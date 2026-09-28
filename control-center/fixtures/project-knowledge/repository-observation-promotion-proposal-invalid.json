@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "trama.repository-observation-promotion-proposal/v1",
+  "proposalId": "rop-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "state": "AUTO_APPROVED",
+  "observationDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "sourceRunId": "36482487361",
+  "sourceReceiptRef": "gha-dispatch-36482487361--gha-36482487361",
+  "collectorExactSha": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+  "promotionPolicyVersion": "1.0.0",
+  "promotionPolicyDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "repositoryEnrollmentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "previousObservationDigest": null,
+  "candidateObservedAt": "2026-09-28T20:54:45Z",
+  "candidateRepositories": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "observedHead": "1111111111111111111111111111111111111111"
+    },
+    {
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "observedHead": "2222222222222222222222222222222222222222"
+    },
+    {
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "observedHead": "3333333333333333333333333333333333333333"
+    },
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "observedHead": "4444444444444444444444444444444444444444"
+    }
+  ],
+  "candidateOpenPullRequests": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "number": 131,
+      "observedHead": "5555555555555555555555555555555555555555",
+      "draft": true
+    }
+  ],
+  "validationVerdict": "PASS",
+  "supersessionVerdict": "NEW_STATE",
+  "proposedChanges": [
+    {
+      "path": "control-center/data/repository-observation.json",
+      "action": "UPDATE",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    {
+      "path": "control-center/data/project-context-snapshot.json",
+      "action": "UPDATE",
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    {
+      "path": "status/project-knowledge-events.json",
+      "action": "UPDATE",
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  ],
+  "sourceRefs": [
+    "github-actions:workflow-run/36482487361",
+    "receipt:gha-dispatch-36482487361--gha-36482487361"
+  ]
+}
