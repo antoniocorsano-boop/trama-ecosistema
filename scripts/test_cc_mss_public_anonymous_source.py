@@ -63,7 +63,7 @@ except m.AnonymousSourceError:pass
 seen=[]
 def handler(req):
  seen.append(req)
- return httpx.Response(200,json={"ok":True},request=req)
+ return httpx.Response(200,stream=httpx.ByteStream(b'{"ok":true}'),request=req)
 transport=m.AnonymousHTTPTransport(httpx.MockTransport(handler),Permit(True))
 status,stream,_=transport.execute({"method":"GET","scheme":"https","host":"api.github.com","redirect":"DENY","operation":"repo.read","repository":enrollment["repository"]})
 assert status==200
