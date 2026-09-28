@@ -28,7 +28,7 @@ for bad in (
  "https://api.github.com/repos/"+repo,
  "/repos/other/repo",
  "/repos/"+repo+"#frag",
- "/repos/"+repo+"?access_token=secret",
+ "/repos/"+repo+"/pulls?access_token=secret",
  "/repos/"+repo+"/pulls?state=all&per_page=100"
 ):
  try:m.request_descriptor(prp if "/pulls?" in bad else p,bad);raise AssertionError("bad path accepted")
