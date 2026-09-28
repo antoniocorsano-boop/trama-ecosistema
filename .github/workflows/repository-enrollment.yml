@@ -1,0 +1,28 @@
+name: TRAMA Repository Enrollment
+on:
+  pull_request:
+    paths:
+      - 'config/repository-enrollment.json'
+      - 'schemas/repository-enrollment.schema.json'
+      - 'scripts/test_repository_enrollment.py'
+      - '.github/workflows/repository-enrollment.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/test_repository_enrollment.py
+      - run: python -m pip install jsonschema
+      - name: Validate schema
+        run: |
+          python - <<'PY'
+          import json
+          from jsonschema import Draft202012Validator,FormatChecker
+          s=json.load(open('schemas/repository-enrollment.schema.json'))
+          d=json.load(open('config/repository-enrollment.json'))
+          errors=list(Draft202012Validator(s,format_checker=FormatChecker()).iter_errors(d))
+          assert not errors, [e.message for e in errors]
+          print('TRAMA_REPOSITORY_ENROLLMENT_SCHEMA_PASS')
+          PY
