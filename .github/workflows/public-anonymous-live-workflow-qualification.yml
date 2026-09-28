@@ -1,0 +1,30 @@
+name: TRAMA Public Anonymous Live Workflow Qualification
+on:
+  pull_request:
+    paths:
+      - 'scripts/run_public_anonymous_live_one_shot.py'
+      - 'scripts/run_public_anonymous_repository_observation.py'
+      - 'scripts/test_public_anonymous_live_workflow.py'
+      - '.github/workflows/public-anonymous-live-one-shot.yml'
+      - '.github/workflows/public-anonymous-live-workflow-qualification.yml'
+      - 'docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-WORKFLOW-01.md'
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python scripts/test_public_anonymous_live_workflow.py
+      - run: python scripts/test_public_anonymous_transport.py
+      - run: python scripts/test_cc_mss_public_anonymous_live_binding.py
+      - name: Capability audit
+        run: |
+          ! grep -En 'Bearer|github_pat_|ghp_|secrets\\.|actions/upload-artifact|git push|gh pr|curl .*-[Xx].*(POST|PUT|PATCH|DELETE)' .github/workflows/public-anonymous-live-one-shot.yml scripts/run_public_anonymous_live_one_shot.py
+          grep -q 'persist-credentials: false' .github/workflows/public-anonymous-live-one-shot.yml
+          grep -q 'GITHUB_TOKEN: ""' .github/workflows/public-anonymous-live-one-shot.yml
+          grep -q 'GH_TOKEN: ""' .github/workflows/public-anonymous-live-one-shot.yml
+          grep -q 'run_attempt' .github/workflows/public-anonymous-live-one-shot.yml
+          grep -q 'AUTHORIZE_LIVE_ONE_SHOT' .github/workflows/public-anonymous-live-one-shot.yml
