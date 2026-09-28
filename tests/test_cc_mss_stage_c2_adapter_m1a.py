@@ -2,11 +2,17 @@ import importlib.util,unittest,httpx
 from pathlib import Path
 R=Path(__file__).resolve().parents[1];s=importlib.util.spec_from_file_location('m1',R/'scripts/cc_mss_stage_c2_adapter_m1a.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 REQ={'operation':'repo.read','method':'GET','scheme':'https','host':'api.github.com','path':'/repos/o/r','redirect':'DENY','credentialRef':'fixture:1'}
+class FixtureStream(httpx.SyncByteStream):
+ def __init__(self,body=b'{}'):self.body=body;self.closed=False
+ def __iter__(self):
+  if self.closed:raise RuntimeError('fixture stream closed')
+  yield self.body
+ def close(self):self.closed=True
 class CountingTransport(httpx.BaseTransport):
- def __init__(self):self.calls=0
+ def __init__(self):self.calls=0;self.last_stream=None
  def handle_request(self,request):
-  self.calls+=1
-  return httpx.Response(200,headers={'content-type':'application/json'},content=b'{}',request=request)
+  self.calls+=1;self.last_stream=FixtureStream()
+  return httpx.Response(200,headers={'content-type':'application/json'},stream=self.last_stream,request=request)
 class Allow:
  def authorize(self,r):return True
 class T(unittest.TestCase):
@@ -16,6 +22,8 @@ class T(unittest.TestCase):
   self.assertEqual(t.calls,0);x.close()
  def test_injected_mock_only_can_exercise_composition(self):
   t=CountingTransport();x=m.M1ATransport(t,m.OfflineCredentialProvider(),Allow());status,enc,chunks=x.execute(REQ);self.assertEqual(status,200);self.assertEqual(enc,'identity');self.assertEqual(b''.join(chunks),b'{}');self.assertEqual(t.calls,1);x.close()
+ def test_fixture_models_unconsumed_stream(self):
+  t=CountingTransport();x=m.M1ATransport(t,m.OfflineCredentialProvider(),Allow());_,_,chunks=x.execute(REQ);self.assertFalse(t.last_stream.closed);self.assertEqual(b''.join(chunks),b'{}');x.close();self.assertTrue(t.last_stream.closed)
  def test_boundary_mutations(self):
   for k,v in [('method','POST'),('scheme','http'),('host','evil.example'),('redirect','FOLLOW')]:
    r=dict(REQ);r[k]=v
