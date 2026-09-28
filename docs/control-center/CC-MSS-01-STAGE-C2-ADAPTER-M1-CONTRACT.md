@@ -43,6 +43,8 @@ The M1-A transport MUST:
 - reject unexpected content encoding/media type before parsing where applicable;
 - close response/socket resources deterministically on success and failure.
 
+The concrete HTTP library and version MUST be declared as a governed dependency before implementation. Security-critical client configuration MUST be constructed internally by the M1 transport and MUST NOT be accepted as arbitrary caller configuration. Method, scheme, host, TLS verification, hostname verification, redirect policy, proxy policy, automatic decompression policy and timeout bounds are invariants.
+
 ## 4. Network execution interlock
 M1-A MUST be fail-closed by construction.
 
@@ -59,33 +61,69 @@ Absence, mismatch, expiry or unknown state of any field MUST fail before DNS/soc
 
 CI MUST install a network guard that fails if DNS/socket/HTTP egress is attempted.
 
-## 5. Credential boundary
+## 5. Destination, DNS, proxy and SSRF boundary
+The logical destination is closed-world: `https://api.github.com` plus the validated descriptor path.
+
+M1-A MUST enforce:
+- no caller-provided absolute URL, authority, port, Host header or SNI value;
+- no proxy discovery from environment variables, system configuration or caller input;
+- no HTTP(S)/SOCKS proxy unless a future separately governed contract explicitly authorizes one;
+- DNS resolution only as a consequence of connecting to the internally fixed hostname `api.github.com`;
+- TLS hostname verification and SNI remain `api.github.com`; neither may be derived from resolved address or caller input;
+- no direct-IP destination and no Host/SNI override;
+- no alternate service discovery, URL rewrite or redirect path that can change authority;
+- resolved addresses MUST NOT be pinned in this contract: GitHub address ranges can legitimately change.
+
+Offline qualification MUST exercise proxy-variable/config injection, absolute-URL injection, Host override and SNI override attempts and prove they cannot alter the destination. DNS/socket creation remains blocked by the M1-A execution interlock and CI network guard.
+
+## 6. Credential and outbound-header boundary
 M1-A MUST NOT load a real credential.
 
 The implementation may define a `CredentialProvider` protocol and an authorization-header constructor that accepts only a secret value supplied by an injected provider during isolated tests. The provider used by CI MUST be fake and deterministic.
 
-Requirements:
+Outbound headers are closed-world. The transport MUST construct them internally from a fixed allowlist. Caller-supplied arbitrary headers are forbidden. At minimum:
+- `Host` is controlled by the HTTP/TLS destination and cannot be overridden;
+- `Authorization`, when exercised in isolated tests, is produced only from the injected fake provider and is never caller-supplied;
+- `Proxy-Authorization`, `Cookie`, `Forwarded`, `X-Forwarded-*` and equivalent routing/authentication headers are forbidden;
+- CR/LF and other control characters in all header names/values are rejected before the transport boundary;
+- sensitive headers are excluded from serialization, evidence, snapshots and exception rendering.
+
+Additional credential requirements:
 - no `os.environ`, `.env`, filesystem token, Git credential helper, CLI credential lookup, OAuth exchange or secret-store integration in M1-A;
 - token values never appear in exception text, evidence, snapshots or logs;
 - authorization header is created as late as possible and is never copied into request/evidence serialization;
-- cross-host credential forwarding is impossible because redirects are denied and host is fixed;
+- cross-host credential forwarding is impossible because redirects are denied and authority is fixed;
 - credential memory lifetime is limited to the request scope as far as the language/runtime permits.
 
 A concrete real credential provider is a separate reviewed step.
 
-## 6. TLS and redirect qualification
+## 7. TLS, redirect and connection-state qualification
 Offline/mocked tests MUST prove:
 - certificate verification cannot be disabled by configuration;
 - hostname verification cannot be disabled;
 - HTTP downgrade is impossible;
 - redirect responses (301, 302, 303, 307, 308) are rejected without following `Location`;
 - redirect to another host never receives credentials;
-- destination host remains exactly `api.github.com`.
+- destination host and SNI remain exactly `api.github.com`;
+- no proxy configuration can be inherited or injected;
+- cookie jar is disabled/not present;
+- authentication cache and cross-host connection state are disabled/not present;
+- any connection pool is restricted to the single authorized authority and cannot broaden destination scope;
+- response/connection resources are closed deterministically on success, rejection, timeout and bounded-processing abort;
+- one-shot/session shutdown clears transport state as far as the chosen library permits.
 
 No test may contact an external host.
 
-## 7. Streaming and decompression qualification
+## 8. Streaming, content encoding and decompression ownership
 The transport and M0 bounded processor MUST be composed end-to-end under offline fixtures.
+
+There MUST be exactly one governed decompression owner. M1-A MUST configure the HTTP client so that response-body automatic decompression does not invisibly occur before compressed-byte accounting. Wire/compressed bytes are counted before decompression and the explicit, validated content encoding is then handed to the bounded processor.
+
+Initial encoding policy is closed-world:
+- identity/no encoding: allowed;
+- a single explicitly supported compressed encoding: allowed only when the bounded processor implements and tests it;
+- unknown, multiple, stacked or syntactically ambiguous content encodings: fail closed;
+- content type/media type must match the operation contract before JSON parsing where applicable.
 
 Tests MUST include:
 - response delivered in many small chunks;
@@ -93,12 +131,14 @@ Tests MUST include:
 - compressed-small/decompressed-large bomb;
 - truncated compressed stream;
 - malformed UTF-8/JSON;
+- unknown/multiple/stacked content encoding;
+- proof that automatic client decompression is disabled;
 - single-response compressed/decompressed ceilings;
 - cumulative session ceiling across multiple operations;
 - early abort before complete body materialization when a ceiling is crossed;
 - deterministic cleanup after abort.
 
-## 8. Status, retry and rate-limit semantics
+## 9. Status, retry and rate-limit semantics
 M1-A MUST classify HTTP outcomes fail-closed.
 
 Initial policy:
@@ -116,7 +156,7 @@ Retry rules:
 - `Retry-After`, if supported, is parsed with a bounded maximum delay and is testable without sleeping in CI;
 - retries never broaden host, operation or credential scope.
 
-## 9. Permission derivation
+## 10. Permission derivation
 M1-A MUST NOT treat successful GET as permission proof.
 
 A future concrete `PermissionSource` must derive observed permissions from an authoritative GitHub source and bind the resulting attestation to:
@@ -129,7 +169,7 @@ A future concrete `PermissionSource` must derive observed permissions from an au
 
 Until that concrete source is separately implemented and reviewed, M1-A remains non-live.
 
-## 10. Evidence and logging
+## 11. Evidence and logging
 Evidence remains local/ephemeral during M1-A.
 
 Allowed evidence:
@@ -143,36 +183,50 @@ Allowed evidence:
 - attestation/authorization receipt references.
 
 Forbidden evidence/log content:
-- tokens or authorization headers;
+- tokens, authorization headers, cookies or proxy credentials;
 - raw credential provider output;
 - arbitrary response bodies;
 - secret-bearing exception objects;
+- raw outbound header maps;
 - remote upload destinations.
 
-## 11. Capability-surface audit
+## 12. Connection/session state
+M1-A MUST be stateless across independently authorized one-shot sessions except for explicit non-secret counters/evidence state.
+
+The chosen HTTP client MUST NOT expose an implicit cookie jar, authentication cache, proxy-auth cache or cross-authority connection pool to M1-A. If pooling is used internally, it is restricted to `api.github.com`, contains no caller-controlled authority, and is closed deterministically at session end. Tests MUST prove that simulated sensitive state from one request is not reused or emitted in a later request.
+
+## 13. Capability-surface and dependency audit
 M1-A introduces a deliberately narrow network capability, so the M0 blanket network prohibition is replaced only for the explicitly declared M1 transport module.
 
-The audit MUST enforce a closed-world runtime manifest and fail on:
+The audit MUST enforce a closed-world runtime manifest and a governed HTTP dependency/version. It MUST fail on:
 - additional undeclared network-capable modules;
+- undeclared or changed HTTP client dependency/version;
 - subprocess/shell execution;
 - dynamic imports/eval/exec;
-- environment/filesystem/CLI credential discovery;
+- environment/filesystem/CLI credential or proxy discovery;
 - generic URL fetchers;
 - methods other than GET;
+- caller-overridable scheme/host/port/SNI/Host/proxy/TLS/redirect/auto-decompression settings;
 - redirect-following configuration;
-- TLS verification bypass;
+- TLS or hostname-verification bypass;
+- automatic response decompression before bounded accounting;
+- cookie jar/auth cache/cross-host state;
 - remote persistence/upload/publish/comment/merge/dispatch surfaces;
 - concrete PermissionSource or real CredentialProvider implementations not separately authorized.
 
-The audit itself and tests are outside the runtime manifest but require adversarial detector tests.
+The audit itself and tests are outside the runtime manifest but require adversarial detector tests specific to the selected HTTP library and its configuration API.
 
-## 12. Required M1-A negative tests
+## 14. Required M1-A negative tests
 At minimum:
 - raw/absolute URL rejected;
 - non-GET rejected;
-- host/scheme mutation rejected;
+- host/scheme/port/SNI mutation rejected;
+- proxy environment/configuration injection cannot affect destination;
+- arbitrary outbound headers, Host override, Proxy-Authorization, Cookie, Forwarded/X-Forwarded-* and CR/LF injection rejected;
 - redirect rejected and not followed;
-- TLS verification bypass attempt rejected;
+- TLS/hostname verification bypass attempt rejected;
+- automatic decompression cannot be enabled;
+- unknown/multiple content encoding rejected;
 - missing/expired/mismatched LiveExecutionPermit rejected before network boundary;
 - no real credential provider available;
 - permission unknown/write-present rejected;
@@ -181,23 +235,26 @@ At minimum:
 - rate-limit classification deterministic;
 - streaming/decompression/session limits enforced;
 - malformed/truncated response rejected;
+- connection/cookie/auth state does not leak across simulated requests/sessions;
 - secret redaction tests for logs/exceptions/evidence;
 - network guard proves CI makes zero real egress;
-- mutation and remote persistence surfaces absent.
+- mutation and remote persistence surfaces absent;
+- dependency/configuration audit proves the governed client version and immutable security settings.
 
-## 13. Qualification gate
+## 15. Qualification gate
 M1-A can be called `QUALIFIED_OFFLINE` only when all are true:
 1. M0 regression remains green;
 2. M1-A unit/integration/negative tests PASS;
-3. capability-surface audit PASS;
+3. capability/dependency-surface audit PASS;
 4. adversarial tests of the audit PASS;
 5. CI network guard proves zero egress;
 6. workflow permissions remain read-only;
-7. independent adversarial review PASS on the exact implementation head.
+7. selected HTTP dependency/version is explicitly governed and security configuration is internally constructed/non-overridable;
+8. independent adversarial review PASS on the exact implementation head.
 
 Any remediation to security-relevant M1-A code after review requires another independent review.
 
-## 14. Explicit non-authorization
+## 16. Explicit non-authorization
 M1-A qualification does **not** authorize:
 - a real credential provider;
 - a real PermissionSource;
