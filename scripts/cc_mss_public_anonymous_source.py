@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from threading import Lock
 from typing import Protocol, Iterable
-import hashlib, json
+import hashlib, json, re
 import httpx
 
 class AnonymousSourceError(RuntimeError): pass
@@ -74,6 +74,16 @@ class LiveExecutionPermit(Protocol):
 class DisabledPermit:
  def authorize(self,request): return False
 
+class ReceiptBoundPermit:
+ def __init__(self,receipt):
+  self._receipt=receipt
+ def authorize(self,request):
+  return (
+   request.get("repository")==self._receipt.repository
+   and request.get("operation") in self._receipt.operations
+   and self._receipt.mode==MODE
+  )
+
 class PublicVisibilitySource(Protocol):
  def attest(self,repository:str)->dict: ...
 
@@ -133,8 +143,21 @@ def assert_no_secret_headers(headers):
  if any("bearer " in str(v).lower() or "token " in str(v).lower() for v in lowered.values()):
   die("CREDENTIAL_SURFACE_DETECTED")
 
+def _validate_branch(branch):
+ if not isinstance(branch,str) or not branch or branch.startswith("/") or branch.endswith("/") or ".." in branch or any(x in branch for x in ("?","#","\r","\n")):
+  die("BRANCH_INVALID")
+ if not re.fullmatch(r"[A-Za-z0-9._/-]+",branch): die("BRANCH_INVALID")
+ return branch
+
+def _validate_head(head):
+ if not isinstance(head,str) or not re.fullmatch(r"[0-9a-f]{40}",head): die("HEAD_INVALID")
+ return head
+
 def build_path(request,branch,head):
  op=request["operation"]
+ branch=_validate_branch(branch)
+ if op=="commit.read":
+  head=_validate_head(head)
  return OPS[op].format(repository=request["repository"],branch=branch,head=head or "HEAD")
 
 class AnonymousHTTPTransport:
@@ -190,7 +213,7 @@ class AnonymousOneShotSession:
    validate_enrollment(enrollment,r.repository,branch)
    att=self.visibility_source.attest(r.repository)
    validate_visibility(att,r.repository,branch)
-   return {"receipt":r,"visibilityAttestation":att,"evidenceState":"IN_PROGRESS"}
+   return {"receipt":r,"visibilityAttestation":att,"permit":ReceiptBoundPermit(r),"evidenceState":"IN_PROGRESS"}
   except BaseException:
    self.store.finish(receipt_ref,"FAILED")
    raise
