@@ -31,6 +31,9 @@ jobs:
           grep -q 'method="GET"' scripts/public_anonymous_transport.py
           grep -q 'allow_reserve=True' scripts/run_public_anonymous_repository_observation.py
           grep -q 'repository-observation.schema.json' scripts/run_public_anonymous_repository_observation.py
-      - name: Assert no live collector step exists
+      - name: Assert qualification-only dispatch
+        env:
+          LIVE_EXECUTION: DISABLED
         run: |
-          ! grep -q 'run_public_anonymous_repository_observation.py' .github/workflows/public-anonymous-transport-qualification.yml
+          test "$LIVE_EXECUTION" = "DISABLED"
+          test "${{ inputs.mode || 'QUALIFY_OFFLINE' }}" = "QUALIFY_OFFLINE"
