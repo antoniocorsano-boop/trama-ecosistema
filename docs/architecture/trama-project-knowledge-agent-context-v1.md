@@ -258,7 +258,41 @@ La riduzione di token è un effetto della **selezione del contesto**, non della 
 - R3-P4 resta soggetto ai propri gate;
 - Arena, Atlas e Docente OS conservano le rispettive authority.
 
-## 14. Evoluzione
+## 14. Promotion architecture per osservazioni runtime
+
+Le osservazioni remote prodotte dai collector non entrano direttamente nella Project Knowledge Base.
+
+Per `RepositoryObservation` vale il pipeline governato:
+
+```text
+collector read-only
+→ evidence normalizzata
+→ Promotion Proposal deterministica
+→ write actor separato
+→ pull request
+→ Human Review
+→ merge
+→ materialized Project Knowledge views
+```
+
+Sono entità distinte:
+
+- **RepositoryObservationEvidence**: evidenza runtime senza authority;
+- **RepositoryObservationPromotionProposal**: candidata idempotente e version-bound;
+- **RepositoryObservationPromotionEvent**: evento append-only che registra la decisione di promozione;
+- **materialized views**: `repository-observation.json`, `ProjectContextSnapshot`, Context Pack e proiezioni UI.
+
+La chiave di idempotenza è il digest SHA-256 della rappresentazione JSON canonica dell'osservazione. Stesso digest già promosso = `NO_OP`; stesso run con digest diverso = fail-closed; uno stato `PARTIAL/UNKNOWN` non può sostituire automaticamente uno stato `CURRENT`.
+
+Il write actor è separato dal collector, può modificare solo path governati, crea una PR e non può auto-approvare o fare merge. Rollback e supersession sono nuovi eventi governati: la storia non viene cancellata.
+
+Riferimenti:
+- `docs/architecture/trama-repository-observation-promotion-v1.md`;
+- `docs/adr/TRAMA-ADR-016-project-knowledge-observation-promotion.md`.
+
+Questa architettura recepisce pattern maturi di protected promotion, catalog ingestion/processing, metadata change proposals, versioned change events e provenance exact-run/source senza introdurre una piattaforma esterna come nuova authority.
+
+## 15. Evoluzione
 
 La foundation viene introdotta come **CC2-F1/E** dopo l'hardening evidenziale di CC2-F1/D.
 
@@ -272,6 +306,6 @@ Sequenza proposta:
 - F5 — interfaccia agentica read-only;
 - F6 — consolidamento, audit e adozione.
 
-## 15. Criterio di successo
+## 16. Criterio di successo
 
 Il sistema è efficace quando una nuova sessione può rispondere a “dove siamo e cosa governa questa attività?” leggendo un pacchetto ristretto, verificabile e aggiornato, senza ricostruire manualmente la storia del progetto.
