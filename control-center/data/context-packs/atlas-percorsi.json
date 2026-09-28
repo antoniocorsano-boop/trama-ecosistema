@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0.0",
+  "subject": "atlas-percorsi",
+  "asOf": "2026-09-28T19:30:00Z",
+  "status": "PARTIAL",
+  "facts": [
+    {
+      "eventId": "TRAMA-EVT-PERCORSI-PR96-RECOVERY",
+      "type": "KNOWLEDGE_RECOVERY",
+      "subject": "atlas-percorsi",
+      "statement": "Recovered TRAMA PR #96 as the authoritative G1 knowledge package for Atlas Percorsi; fixed-eight student pathway reconstruction is invalid.",
+      "status": "CURRENT",
+      "rationale": "PR #96 contains the canonical index, backlog-zero plan, productive workflow, grammar registry, dossier template, pedagogical model, child-safe constitution, evidence records, dossier and implementation spec for PW-MISSING-INFORMATION-01.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 96,
+          "exactHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+          "ref": "docs/capabilities/atlas-percorsi/workflow/CANONICAL-INDEX-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:20:00Z",
+      "supersedes": [
+        "ATLAS-PERCORSI-FIXED-EIGHT-RECONSTRUCTION"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      }
+    }
+  ],
+  "decisions": [],
+  "activeInvariants": [],
+  "evidence": [
+    {
+      "eventId": "TRAMA-EVT-PERCORSI-PR96-RECOVERY",
+      "type": "KNOWLEDGE_RECOVERY",
+      "subject": "atlas-percorsi",
+      "statement": "Recovered TRAMA PR #96 as the authoritative G1 knowledge package for Atlas Percorsi; fixed-eight student pathway reconstruction is invalid.",
+      "status": "CURRENT",
+      "rationale": "PR #96 contains the canonical index, backlog-zero plan, productive workflow, grammar registry, dossier template, pedagogical model, child-safe constitution, evidence records, dossier and implementation spec for PW-MISSING-INFORMATION-01.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 96,
+          "exactHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+          "ref": "docs/capabilities/atlas-percorsi/workflow/CANONICAL-INDEX-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:20:00Z",
+      "supersedes": [
+        "ATLAS-PERCORSI-FIXED-EIGHT-RECONSTRUCTION"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      }
+    }
+  ],
+  "exactHeads": [
+    {
+      "subject": "atlas-percorsi",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 96,
+      "exactHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+      "sourceEvent": "TRAMA-EVT-PERCORSI-PR96-RECOVERY"
+    }
+  ],
+  "blockingGates": [],
+  "dependencies": [],
+  "knownConflicts": [],
+  "knownRejectedApproaches": [],
+  "nextCandidateActions": [],
+  "sourceRefs": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 96,
+      "exactHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+      "ref": "docs/capabilities/atlas-percorsi/workflow/CANONICAL-INDEX-v1.md"
+    }
+  ]
+}
