@@ -1,58 +1,52 @@
-# CC-MSS-01 — READ-ONLY-CREDENTIAL-SOURCE-01
+# CC-MSS-01 — PUBLIC_ANONYMOUS_READ_ONLY SOURCE
 
-Status: CANDIDATE / NO SECRET / NO LIVE AUTHORIZATION
+Status: CANDIDATE / NO SECRET / NO TOKEN / NO LIVE AUTHORIZATION
 
-## Purpose
+## Decision
 
-Provide the concrete capability boundary required by Stage C2 M1-B for a GitHub credential that is provably read-only before probe execution.
+GitHub App and personal/access tokens are excluded for this collector path.
 
-## Provider model
+The enrolled ecosystem repositories are public. The governed source model is therefore:
 
-The production credential MUST be provider-managed and repository-scoped. Preferred binding: a dedicated GitHub App installation configured only for the enrolled TRAMA ecosystem repositories.
+PUBLIC_ANONYMOUS_READ_ONLY
 
-The repository stores only an opaque reference of the form:
+No credential material is required or permitted.
 
-github-app-installation:<stable-principal-ref>
+## Boundary
 
-No private key, installation token or bearer token is stored in TRAMA.
+A valid anonymous observation requires:
 
-## Required permissions
+- repository is explicitly ENROLLED;
+- repository is verified public immediately before observation;
+- provider identity is fixed to github-public-anonymous;
+- principalRef is PUBLIC_ANONYMOUS;
+- authority is api.github.com over HTTPS;
+- method is GET only;
+- operation is one of repo.read, ref.read, commit.read;
+- path is predetermined and bound to the enrolled repository;
+- redirects are DENY;
+- Authorization header is absent;
+- Cookie header is absent;
+- environment proxy inheritance is disabled;
+- no token, secret, Git credential helper, .env, shell or subprocess is used.
 
-The materialized principal must attest at least contents:read. Additional read-only metadata permissions may be admitted only if explicitly required by a governed operation.
+## Fail-closed conditions
 
-Any write-capable permission fails closed. This includes admin, maintain, push and any permission ending in :write.
+Observation is denied on:
 
-## Binding
+- non-public or unverifiable repository state;
+- repository not enrolled;
+- operation outside the read-only allowlist;
+- arbitrary URL/path injection;
+- any Authorization/cookie/proxy capability;
+- redirect;
+- mutation/write operation;
+- source ambiguity.
 
-A credential context is valid only when:
+## Relation to M1-A / M1-B
 
-- repository is present and ENROLLED in config/repository-enrollment.json;
-- credential reference uses the governed GitHub App installation namespace;
-- provider is github;
-- principalRef is non-empty and stable;
-- attested repository equals requested repository;
-- provenance is present;
-- contents:read is present;
-- no write capability is present.
+This source reuses the already qualified M1-A transport constraints and the Stage C repository enrollment allowlist.
 
-## Secret lifecycle
+M1-B receipt, exact-head binding, request budget, resource limits, anchor open/close and evidence lifecycle remain mandatory for a LIVE_ONE_SHOT.
 
-The backend may materialize the secret only after the M1-B receipt is atomically claimed.
-
-The secret:
-- is request/session scoped;
-- is never serialized into Project Knowledge, Control Center snapshots, logs or evidence;
-- is never accepted from .env, shell, subprocess, Git credential helper or caller raw input;
-- must be invalidated on mismatch, failure and session termination.
-
-## Non-authorization
-
-This tranche does not create a GitHub App, private key or installation token and does not execute network traffic.
-
-It qualifies the boundary that a separately configured provider-managed read-only credential must satisfy.
-
-A future live one-shot still requires:
-1. an actually configured read-only provider principal;
-2. authoritative permission attestation;
-3. a fresh single-use LIVE_ONE_SHOT receipt;
-4. all Stage C2 M1-B exact-head and budget gates.
+This tranche does not execute network traffic and does not authorize live operation.
