@@ -17,6 +17,7 @@ OPS={
  "repo.read":"/repos/{repository}",
  "ref.read":"/repos/{repository}/git/ref/heads/{branch}",
  "commit.read":"/repos/{repository}/commits/{head}",
+ "pr.read":"/repos/{repository}/pulls?state=open&per_page=100&page={page}",
 }
 FORBIDDEN_SECRET_HEADER_NAMES={
  "authorization","cookie","proxy-authorization","forwarded",
@@ -188,12 +189,18 @@ def _validate_head(head):
  if not isinstance(head,str) or not re.fullmatch(r"[0-9a-f]{40}",head): die("HEAD_INVALID")
  return head
 
-def build_path(request,branch,head):
+def _validate_page(page):
+ if not isinstance(page,int) or isinstance(page,bool) or page<1 or page>10: die("PAGE_INVALID")
+ return page
+
+def build_path(request,branch,head,page=1):
  op=request["operation"]
  branch=_validate_branch(branch)
  if op=="commit.read":
   head=_validate_head(head)
- return OPS[op].format(repository=request["repository"],branch=branch,head=head or "HEAD")
+ if op=="pr.read":
+  page=_validate_page(page)
+ return OPS[op].format(repository=request["repository"],branch=branch,head=head or "HEAD",page=page)
 
 class AnonymousHTTPTransport:
  def __init__(self,injected_transport:httpx.BaseTransport,permit:LiveExecutionPermit|None=None):
@@ -212,12 +219,12 @@ class AnonymousHTTPTransport:
    headers={}
   )
  def close(self): self._client.close()
- def execute(self,request,branch="main",head=None)->tuple[int,Iterable[bytes],dict]:
+ def execute(self,request,branch="main",head=None,page=1)->tuple[int,Iterable[bytes],dict]:
   r=validate_request(request)
   if not self._permit.authorize(r): die("LIVE_NOT_AUTHORIZED")
   headers=anonymous_headers()
   assert_no_secret_headers(headers)
-  path=build_path(r,branch,head)
+  path=build_path(r,branch,head,page)
   url="https://"+AUTHORITY+path
   req=self._client.build_request("GET",url,headers=headers)
   assert_no_secret_headers(dict(req.headers))
