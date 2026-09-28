@@ -7,6 +7,12 @@ from pathlib import Path
 SPEC = importlib.util.spec_from_file_location("validator", Path("scripts/validate_cc_mss_live_decision_package.py"))
 v = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(v)
 NOW = datetime(2026, 9, 28, 15, 0, tzinfo=timezone.utc)
+ECOSYSTEM = {
+ "antoniocorsano-boop/trama-ecosistema",
+ "antoniocorsano-boop/CurManLight_arena",
+ "antoniocorsano-boop/Curriculum-Atlas",
+ "antoniocorsano-boop/docente-os-2026-27",
+}
 
 def incomplete():
     import json
@@ -25,8 +31,20 @@ def complete():
     return d
 
 class TestDecisionPackage(unittest.TestCase):
+ def test_registry_contains_four_governed_systems(self):
+  self.assertEqual(v.load_registry(), frozenset(ECOSYSTEM))
  def test_template_is_not_ready_and_not_authorized(self):
   r=v.validate(incomplete(),NOW); self.assertEqual(r["state"],"NOT_READY"); self.assertEqual(r["live"],"NOT_AUTHORIZED")
+ def test_each_registered_repository_is_valid_probe_target(self):
+  for repo in ECOSYSTEM:
+   d=complete();d["repository"]=repo
+   r=v.validate(d,NOW,ECOSYSTEM);self.assertEqual(r["repository"],repo);self.assertEqual(r["live"],"NOT_AUTHORIZED")
+ def test_unregistered_repository_denied(self):
+  d=complete();d["repository"]="antoniocorsano-boop/unregistered"
+  with self.assertRaisesRegex(ValueError,"REPOSITORY_NOT_IN_ECOSYSTEM_REGISTRY"):v.validate(d,NOW,ECOSYSTEM)
+ def test_empty_registry_denies_target(self):
+  d=complete()
+  with self.assertRaisesRegex(ValueError,"REPOSITORY_NOT_IN_ECOSYSTEM_REGISTRY"):v.validate(d,NOW,frozenset())
  def test_incomplete_cannot_claim_ready(self):
   d=incomplete();d["state"]="READY_FOR_HUMAN_DECISION"
   with self.assertRaisesRegex(ValueError,"INCOMPLETE_PACKAGE_MUST_FAIL_CLOSED"):v.validate(d,NOW)
@@ -38,9 +56,6 @@ class TestDecisionPackage(unittest.TestCase):
  def test_write_operation_denied(self):
   d=complete();d["operations"].append("pr.merge")
   with self.assertRaisesRegex(ValueError,"OPERATIONS_INVALID"):v.validate(d,NOW)
- def test_wrong_repository_denied(self):
-  d=complete();d["repository"]="other/repo"
-  with self.assertRaisesRegex(ValueError,"REPOSITORY_INVALID"):v.validate(d,NOW)
  def test_wrong_authority_denied(self):
   d=complete();d["authority"]="https://example.com"
   with self.assertRaisesRegex(ValueError,"AUTHORITY_INVALID"):v.validate(d,NOW)
