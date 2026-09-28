@@ -1,51 +1,48 @@
 #!/usr/bin/env python3
-import importlib.util,json
+import importlib.util,json,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location("ro",ROOT/"scripts/cc_mss_readonly_credential_source.py")
-m=importlib.util.module_from_spec(spec)
-import sys
-sys.modules[spec.name]=m
-spec.loader.exec_module(m)
+m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=m;spec.loader.exec_module(m)
 enrollment=json.loads((ROOT/"config/repository-enrollment.json").read_text())
+repo="antoniocorsano-boop/Curriculum-Atlas";ref="github-app-installation:atlas-reader";principal="github-installation:123"
 
 class Ctx:
- def __init__(self,p): self._p=p;self.invalidated=False
+ def __init__(self,p):self._p=p;self.invalidated=False
  @property
- def principal(self): return self._p
+ def principal(self):return self._p
  def authorization_header(self):
-  if self.invalidated: raise RuntimeError("invalidated")
+  if self.invalidated:raise RuntimeError("invalidated")
   return "Bearer fixture-secret"
- def invalidate(self): self.invalidated=True
-
+ def invalidate(self):self.invalidated=True
 class Backend:
- def __init__(self,p): self.p=p;self.calls=0;self.last=None
- def materialize(self,ref,repository):
-  self.calls+=1;self.last=Ctx(self.p);return self.last
+ def __init__(self,p):self.p=p;self.last=None
+ def materialize(self,credential_ref,repository):self.last=Ctx(self.p);return self.last
+class Perm:
+ def __init__(self,a):self.a=a;self.calls=0
+ def attest(self,repository,credential_ref,principal_ref):self.calls+=1;return self.a
 
-repo="antoniocorsano-boop/Curriculum-Atlas"
-good=m.PrincipalDescriptor("github","github-app-installation:atlas-reader",repo,("contents:read","metadata:read"),"github-app-installation-permission-attestation")
-b=Backend(good);s=m.GovernedReadOnlyCredentialSource(b,enrollment)
-ctx=s.materialize("github-app-installation:atlas-reader",repo)
-a=m.permission_attestation(ctx,repo)
-assert a["principalRef"]=="github-app-installation:atlas-reader"
-assert set(a["permissions"])=={"contents:read","metadata:read"}
+p=m.CredentialPrincipal("github",principal,repo,ref)
+good=m.PermissionAttestation(repo,ref,principal,("contents:read","metadata:read"),"github-app-installation-permissions-api/v1","VERIFIED")
+b=Backend(p);s=m.GovernedReadOnlyCredentialSource(b,Perm(good),enrollment)
+ctx=s.materialize(ref,repo);a=s.attest(ctx,repo)
+assert a["state"]=="VERIFIED" and set(a["permissions"])=={"contents:read","metadata:read"}
+
+cases=[
+ m.PermissionAttestation(repo,ref,principal,("contents:read","contents:write"),"github-app-installation-permissions-api/v1","VERIFIED"),
+ m.PermissionAttestation(repo,ref,principal,("contents:read",),"self-asserted","VERIFIED"),
+ m.PermissionAttestation(repo,ref,principal,("contents:read",),"github-app-installation-permissions-api/v1","UNKNOWN"),
+ m.PermissionAttestation(repo,"github-app-installation:other",principal,("contents:read",),"github-app-installation-permissions-api/v1","VERIFIED"),
+ m.PermissionAttestation(repo,ref,"other-principal",("contents:read",),"github-app-installation-permissions-api/v1","VERIFIED")
+]
+for bad in cases:
+ bb=Backend(p);ss=m.GovernedReadOnlyCredentialSource(bb,Perm(bad),enrollment)
+ try:ss.materialize(ref,repo);raise AssertionError("bad attestation accepted")
+ except m.ReadOnlyCredentialError:assert bb.last.invalidated
 
 for badref in ("fixture:x","env:GITHUB_TOKEN","ghp_secret",""):
  try:s.materialize(badref,repo);raise AssertionError("bad ref accepted")
  except m.ReadOnlyCredentialError:pass
-
-try:s.materialize("github-app-installation:x","owner/not-enrolled");raise AssertionError("unenrolled accepted")
+try:s.materialize(ref,"owner/not-enrolled");raise AssertionError("unenrolled accepted")
 except m.ReadOnlyCredentialError:pass
-
-write=m.PrincipalDescriptor("github","writer",repo,("contents:read","contents:write"),"attestation")
-b2=Backend(write);s2=m.GovernedReadOnlyCredentialSource(b2,enrollment)
-try:s2.materialize("github-app-installation:writer",repo);raise AssertionError("write accepted")
-except m.ReadOnlyCredentialError:assert b2.last.invalidated
-
-mismatch=m.PrincipalDescriptor("github","reader","antoniocorsano-boop/trama-ecosistema",("contents:read",),"attestation")
-b3=Backend(mismatch);s3=m.GovernedReadOnlyCredentialSource(b3,enrollment)
-try:s3.materialize("github-app-installation:reader",repo);raise AssertionError("mismatch accepted")
-except m.ReadOnlyCredentialError:assert b3.last.invalidated
-
 print("TRAMA_READONLY_CREDENTIAL_SOURCE_PASS")
