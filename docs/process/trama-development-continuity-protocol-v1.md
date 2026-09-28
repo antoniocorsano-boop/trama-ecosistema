@@ -149,6 +149,10 @@ Un elemento entra nella Project Knowledge Base quando soddisfa almeno una condiz
 
 Dettagli effimeri, tentativi locali e diagnostica transitoria restano nelle evidenze tecniche o nella cronologia della PR.
 
+Per evidenze runtime provenienti da collector, in particolare `RepositoryObservation`, la promozione segue obbligatoriamente l'architettura `evidence -> Promotion Proposal -> governed write actor -> PR -> Human Review -> merge -> materialized views`. Il collector non può scrivere direttamente nella Project Knowledge Base. La persistenza di uno stato osservato è quindi una decisione di governance separata dalla sua raccolta.
+
+Riferimenti fondanti: `docs/architecture/trama-repository-observation-promotion-v1.md` e `docs/adr/TRAMA-ADR-016-project-knowledge-observation-promotion.md`.
+
 ## 9. Knowledge Event minimo
 
 Per decisioni di processo persistenti usare un evento strutturato equivalente a:

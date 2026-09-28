@@ -49,6 +49,21 @@ Documento: `docs/process/trama-development-continuity-protocol-v1.md`.
 
 Definisce il protocollo con cui una nuova sessione deve riprendere il lavoro dal contesto corrente, verificare soltanto gli elementi volatili e applicare un ciclo continuo end-to-end allo sviluppo ordinario. La governance rafforzata resta riservata ai cambiamenti di authority, contratti, sicurezza, privacy, semantiche di approvazione o decisioni irreversibili.
 
+### D7 — Governed Observation Promotion
+
+Documenti:
+
+- `docs/architecture/trama-repository-observation-promotion-v1.md`;
+- `docs/adr/TRAMA-ADR-016-project-knowledge-observation-promotion.md`.
+
+Definisce il passaggio governato da evidenza osservativa read-only a memoria progettuale persistente. La regola fondante è:
+
+`collector read-only -> evidence -> deterministic promotion proposal -> governed write actor -> PR -> Human Review -> merge -> materialized views`.
+
+Il collector non acquisisce mai capacità di write né authority. `RepositoryObservation`, `ProjectContextSnapshot`, Context Pack e viste del Control Center restano proiezioni/materialized views; la promozione diventa persistente soltanto tramite evento governato e merge umano.
+
+La progettazione adotta pattern consolidati da GitLab, Backstage, DataHub, OpenMetadata e GitHub senza introdurre tali piattaforme come dipendenze runtime o nuove authority.
+
 ## Lavoro tecnico successivo
 
 Questa slice documentale non introduce ancora collector o API.
