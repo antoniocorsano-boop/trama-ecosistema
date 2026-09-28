@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/repository-enrollment.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "updatedAt",
+    "policy",
+    "repositories"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.repository-enrollment/v1"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "discovery",
+        "wildcards",
+        "organizationEnumeration",
+        "networkAuthorizationImplied"
+      ],
+      "properties": {
+        "discovery": {
+          "const": "EXPLICIT_ALLOWLIST_ONLY"
+        },
+        "wildcards": {
+          "const": false
+        },
+        "organizationEnumeration": {
+          "const": false
+        },
+        "networkAuthorizationImplied": {
+          "const": false
+        }
+      }
+    },
+    "repositories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "repository",
+          "ecosystemRole",
+          "authorityRef",
+          "defaultBranch",
+          "discoveryPolicy",
+          "sourceRefs",
+          "state"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^enrollment:"
+          },
+          "repository": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+          },
+          "ecosystemRole": {
+            "enum": [
+              "CONTROL_PLANE",
+              "CURRICULUM_AUTHORITY",
+              "PUBLICATION_SURFACE",
+              "TEACHER_OPERATIONAL_SURFACE"
+            ]
+          },
+          "authorityRef": {
+            "type": "string",
+            "pattern": "^TRAMA-ADR-[0-9]{3}$"
+          },
+          "defaultBranch": {
+            "type": "string",
+            "minLength": 1
+          },
+          "discoveryPolicy": {
+            "const": "allowlist"
+          },
+          "sourceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "state": {
+            "enum": [
+              "ENROLLED",
+              "SUSPENDED",
+              "UNKNOWN"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

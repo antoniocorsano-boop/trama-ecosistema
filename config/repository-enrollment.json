@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "trama.repository-enrollment/v1",
+  "updatedAt": "2026-09-28T19:42:00Z",
+  "policy": {
+    "discovery": "EXPLICIT_ALLOWLIST_ONLY",
+    "wildcards": false,
+    "organizationEnumeration": false,
+    "networkAuthorizationImplied": false
+  },
+  "repositories": [
+    {
+      "id": "enrollment:trama",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "ecosystemRole": "CONTROL_PLANE",
+      "authorityRef": "TRAMA-ADR-001",
+      "defaultBranch": "main",
+      "discoveryPolicy": "allowlist",
+      "sourceRefs": [
+        "docs/knowledge/source-registry.json#ecosystem-governance"
+      ],
+      "state": "ENROLLED"
+    },
+    {
+      "id": "enrollment:arena",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "ecosystemRole": "CURRICULUM_AUTHORITY",
+      "authorityRef": "TRAMA-ADR-002",
+      "defaultBranch": "main",
+      "discoveryPolicy": "allowlist",
+      "sourceRefs": [
+        "docs/knowledge/source-registry.json#curriculum"
+      ],
+      "state": "ENROLLED"
+    },
+    {
+      "id": "enrollment:atlas",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "ecosystemRole": "PUBLICATION_SURFACE",
+      "authorityRef": "TRAMA-ADR-007",
+      "defaultBranch": "main",
+      "discoveryPolicy": "allowlist",
+      "sourceRefs": [
+        "docs/knowledge/source-registry.json#learning-resources",
+        "docs/knowledge/source-registry.json#atlas-publication"
+      ],
+      "state": "ENROLLED"
+    },
+    {
+      "id": "enrollment:docente-os",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "ecosystemRole": "TEACHER_OPERATIONAL_SURFACE",
+      "authorityRef": "TRAMA-ADR-006",
+      "defaultBranch": "main",
+      "discoveryPolicy": "allowlist",
+      "sourceRefs": [
+        "docs/knowledge/source-registry.json#teacher-context"
+      ],
+      "state": "ENROLLED"
+    }
+  ]
+}
