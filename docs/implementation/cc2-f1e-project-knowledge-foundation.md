@@ -43,6 +43,12 @@ Il registro delle fonti deve includere il dominio `project-knowledge-projection`
 
 Deve essere specificato un output minimo per richieste focalizzate, con provenance e `asOf`.
 
+### D6 — Development Continuity Protocol
+
+Documento: `docs/process/trama-development-continuity-protocol-v1.md`.
+
+Definisce il protocollo con cui una nuova sessione deve riprendere il lavoro dal contesto corrente, verificare soltanto gli elementi volatili e applicare un ciclo continuo end-to-end allo sviluppo ordinario. La governance rafforzata resta riservata ai cambiamenti di authority, contratti, sicurezza, privacy, semantiche di approvazione o decisioni irreversibili.
+
 ## Lavoro tecnico successivo
 
 Questa slice documentale non introduce ancora collector o API.
