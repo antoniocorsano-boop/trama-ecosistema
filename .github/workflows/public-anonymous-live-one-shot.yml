@@ -1,0 +1,61 @@
+name: TRAMA Public Anonymous LIVE_ONE_SHOT
+run-name: "LIVE_ONE_SHOT ${{ github.run_id }} @ ${{ github.sha }}"
+on:
+  workflow_dispatch:
+    inputs:
+      decision:
+        description: 'Explicit human decision'
+        required: true
+        type: choice
+        options:
+          - AUTHORIZE_LIVE_ONE_SHOT
+concurrency:
+  group: trama-public-anonymous-live-one-shot
+  cancel-in-progress: false
+jobs:
+  live-one-shot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Reject reruns and non-main refs
+        env:
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          RUN_REF: ${{ github.ref }}
+        run: |
+          test "$RUN_ATTEMPT" = "1"
+          test "$RUN_REF" = "refs/heads/main"
+      - name: Checkout exact workflow revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify checkout exact head
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -z "$(git config --get-all http.https://github.com/.extraheader || true)"
+      - name: Execute governed anonymous one-shot
+        env:
+          GITHUB_TOKEN: ""
+          GH_TOKEN: ""
+          HTTP_PROXY: ""
+          HTTPS_PROXY: ""
+          ALL_PROXY: ""
+          NO_PROXY: ""
+          EXPECTED_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          HUMAN_DECISION: ${{ inputs.decision }}
+        run: |
+          python scripts/run_public_anonymous_live_one_shot.py \
+            --exact-sha "$EXPECTED_SHA" \
+            --run-id "$RUN_ID" \
+            --run-attempt "$RUN_ATTEMPT" \
+            --decision "$HUMAN_DECISION"
+      - name: Assert no credential persistence
+        if: always()
+        run: |
+          test -z "$(git config --get-all http.https://github.com/.extraheader || true)"
