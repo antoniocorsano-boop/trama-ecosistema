@@ -19,7 +19,7 @@ assert r["method"]=="GET" and r["host"]=="api.github.com"
 assert s.authorize(repo,"pr.read").operation=="pr.read"
 assert r["authorizationHeader"]=="ABSENT" and r["cookieHeader"]=="ABSENT" and r["proxyPolicy"]=="DISABLED"
 
-for op in ("repo.write","issues.write","admin",""):
+assert s.authorize(repo,"pr.read").operation=="pr.read"\nfor op in ("repo.write","issues.write","admin",""):
  try:s.authorize(repo,op);raise AssertionError("write/unknown operation accepted")
  except m.AnonymousReadOnlyError:pass
 
