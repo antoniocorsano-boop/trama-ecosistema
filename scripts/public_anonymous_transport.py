@@ -48,9 +48,9 @@ def _opener():
     ]
     return opener
 
-def anonymous_get(url,budget:Budget,resources:ResourceBudget,max_bytes=512000):
+def anonymous_get(url,budget:Budget,resources:ResourceBudget,max_bytes=512000,allow_reserve=False):
     if not url.startswith(f"https://{AUTHORITY}/repos/"): die("SOURCE_BOUNDARY_VIOLATION")
-    budget.consume()
+    budget.consume(allow_reserve=allow_reserve)
     req=urllib.request.Request(url,method="GET",headers={
       "Accept":"application/vnd.github+json",
       "User-Agent":"trama-public-anonymous-readonly"
