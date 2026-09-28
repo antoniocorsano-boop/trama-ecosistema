@@ -7,7 +7,7 @@ spec=importlib.util.spec_from_file_location("b",ROOT/"scripts/cc_mss_public_anon
 NOW=datetime(2026,9,28,22,0,tzinfo=timezone.utc);SHA="a"*40
 REPOS=("antoniocorsano-boop/trama-ecosistema","antoniocorsano-boop/CurManLight_arena","antoniocorsano-boop/Curriculum-Atlas","antoniocorsano-boop/docente-os-2026-27")
 def auth(**kw):
- d=dict(authorization_ref="auth-001",exact_sha=SHA,repositories=REPOS,operations=m.ALLOWED_OPS,principal_ref=m.PRINCIPAL,evidence_destination="LOCAL_EPHEMERAL_ONLY",issued_at=(NOW-timedelta(minutes=1)).isoformat(),expires_at=(NOW+timedelta(minutes=10)).isoformat());d.update(kw);return m.HumanAuthorization(**d)
+ d=dict(authorization_ref="auth-001",runtime_mode=m.MODE,credential_ref="NONE",exact_sha=SHA,repositories=REPOS,operations=m.ALLOWED_OPS,principal_ref=m.PRINCIPAL,evidence_destination="LOCAL_EPHEMERAL_ONLY",issued_at=(NOW-timedelta(minutes=1)).isoformat(),expires_at=(NOW+timedelta(minutes=10)).isoformat());d.update(kw);return m.HumanAuthorization(**d)
 inv=m.Invocation("123456789",1)
 r=m.admit(auth(),SHA,REPOS,NOW,inv)
 assert r.receipt_ref=="auth-001--gha-123456789" and r.run_attempt==1
@@ -22,6 +22,8 @@ for bad_inv,code in [(m.Invocation("123456789",2),"WORKFLOW_RERUN_FORBIDDEN"),(m
 r2=m.admit(auth(authorization_ref="auth-002"),SHA,REPOS,NOW,m.Invocation("987654321",1))
 assert r2.receipt_ref!=r.receipt_ref
 for bad,code in [
+ (auth(runtime_mode="RECURRING"),"RUNTIME_MODE_INVALID"),
+ (auth(credential_ref="github-token"),"CREDENTIAL_REF_INVALID"),
  (auth(exact_sha="b"*40),"EXACT_HEAD_MISMATCH"),
  (auth(principal_ref="something"),"PRINCIPAL_MISMATCH"),
  (auth(operations=("repo.read",)),"OPERATION_BINDING_MISMATCH"),
