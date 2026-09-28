@@ -8,7 +8,6 @@ from typing import Protocol
 
 class M1BError(RuntimeError): pass
 def die(code): raise M1BError(code)
-
 TERMINAL={"CONSUMED","FAILED"}
 
 class Clock(Protocol):
@@ -27,6 +26,13 @@ class ReceiptStore:
   with self._lock:
    if r.ref in self._state: die("RECEIPT_EXISTS")
    self._state[r.ref]=(r,"ISSUED")
+ def preflight(self,ref):
+  """Return immutable receipt only while it is ISSUED; never claims it."""
+  with self._lock:
+   item=self._state.get(ref)
+   if not item: die("RECEIPT_UNKNOWN")
+   if item[1]!="ISSUED": die("RECEIPT_NOT_CLAIMABLE")
+   return item[0]
  def claim(self,ref,probe_id,exact_sha):
   with self._lock:
    item=self._state.get(ref)
@@ -43,17 +49,26 @@ class ReceiptStore:
  def state(self,ref):
   with self._lock:return self._state.get(ref,(None,"UNKNOWN"))[1]
 
+class FakeCredentialContext:
+ """Observable fixture lifecycle; secret is never copied into the session dict."""
+ def __init__(self,secret,principal):self._secret=secret;self.principal=principal;self.invalidated=False
+ def secret_for_fixture(self):
+  if self.invalidated:die("CREDENTIAL_CONTEXT_INVALIDATED")
+  return self._secret
+ def invalidate(self):
+  self._secret=None;self.invalidated=True
+
 class FakeCredentialSource:
- def __init__(self,principal="fixture-principal",secret="offline-fixture-secret"):self.principal=principal;self.secret=secret;self.calls=0
+ def __init__(self,principal="fixture-principal",secret="offline-fixture-secret"):self.principal=principal;self.secret=secret;self.calls=0;self.last_context=None
  def materialize(self,ref):
   if not ref.startswith("fixture:"):die("REAL_CREDENTIAL_FORBIDDEN")
-  self.calls+=1;return self.secret,self.principal
+  self.calls+=1;self.last_context=FakeCredentialContext(self.secret,self.principal);return self.last_context
 
 class FakePermissionSource:
- def __init__(self,principal="fixture-principal",permissions=("contents:read",)):self.principal=principal;self.permissions=permissions;self.calls=0
+ def __init__(self,principal="fixture-principal",permissions=("contents:read",),provenance="fixture:permission-source"):self.principal=principal;self.permissions=permissions;self.provenance=provenance;self.calls=0
  def attest(self,repository,credential_ref):
   self.calls+=1
-  return {"repository":repository,"credentialRef":credential_ref,"principalRef":self.principal,"permissions":self.permissions,"provenance":"fixture:permission-source"}
+  return {"repository":repository,"credentialRef":credential_ref,"principalRef":self.principal,"permissions":self.permissions,"provenance":self.provenance}
 
 class RequestBudget:
  def __init__(self,total:int,close_reserve:int=1):
@@ -83,29 +98,33 @@ class M1BOfflineSession:
  def __init__(self,store,clock,credential_source,permission_source,exact_sha):
   self.store=store;self.clock=clock;self.credentials=credential_source;self.permissions=permission_source;self.exact_sha=exact_sha
  def prepare(self,receipt_ref,probe_id,budget:RequestBudget):
-  # Non-secret validation precedes claim and credential materialization.
-  item=self.store._state.get(receipt_ref)
-  if not item:die("RECEIPT_UNKNOWN")
-  validate_time(item[0],self.clock.now())
+  # Public non-secret preflight precedes atomic claim and credential materialization.
+  candidate=self.store.preflight(receipt_ref)
+  validate_time(candidate,self.clock.now())
   r=self.store.claim(receipt_ref,probe_id,self.exact_sha)
+  credential_ctx=None
   try:
    validate_time(r,self.clock.now())
    budget.consume() # permission bootstrap request budget, simulated only
-   secret,principal=self.credentials.materialize(r.credential_ref)
+   credential_ctx=self.credentials.materialize(r.credential_ref)
+   principal=credential_ctx.principal
    if principal!=r.principal_ref:die("PRINCIPAL_MISMATCH")
    validate_time(r,self.clock.now())
    att=self.permissions.attest(r.repository,r.credential_ref)
    validate_attestation(att,r,principal)
-   return {"receipt":r,"principal":principal,"secret":secret,"attestation":att,"evidenceState":"IN_PROGRESS"}
+   return {"receipt":r,"principal":principal,"credentialContext":credential_ctx,"attestation":att,"evidenceState":"IN_PROGRESS"}
   except BaseException:
+   if credential_ctx is not None:credential_ctx.invalidate()
    self.store.finish(receipt_ref,"FAILED");raise
  def complete(self,ctx,budget:RequestBudget,anchor_same=True):
-  r=ctx["receipt"]
+  r=ctx["receipt"];credential_ctx=ctx["credentialContext"]
   try:
    validate_time(r,self.clock.now());budget.consume(allow_reserve=True)
    if not anchor_same:die("ANCHOR_CHANGED")
-   ctx["evidenceState"]="VALID";self.store.finish(r.ref,"CONSUMED");ctx["secret"]=None;return ctx
+   ctx["evidenceState"]="VALID";self.store.finish(r.ref,"CONSUMED");return ctx
   except BaseException:
-   ctx["evidenceState"]="INVALID/INCOMPLETE";ctx["secret"]=None
+   ctx["evidenceState"]="INVALID/INCOMPLETE"
    if self.store.state(r.ref)=="CLAIMED":self.store.finish(r.ref,"FAILED")
    raise
+  finally:
+   credential_ctx.invalidate()
