@@ -30,6 +30,9 @@ jobs:
       - {name: Audit CC-MSS-01 Stage C2 Adapter M1-A capability surface, run: python3 scripts/audit_cc_mss_stage_c2_adapter_m1a.py}
       - {name: Run CC-MSS-01 Stage C2 Adapter M1-A audit adversarial tests, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1a_audit -v}
       - {name: Run CC-MSS-01 Stage C2 Adapter M1-A offline qualification, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1a -v}
+      - {name: Audit CC-MSS-01 Stage C2 Adapter M1-B offline surface, run: python3 scripts/audit_cc_mss_stage_c2_adapter_m1b.py}
+      - {name: Run CC-MSS-01 Stage C2 Adapter M1-B audit adversarial tests, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1b_audit -v}
+      - {name: Run CC-MSS-01 Stage C2 Adapter M1-B offline qualification, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m1b -v}
       - {name: Validate component and pattern Stage A, run: node scripts/validate-component-pattern-stage-a.mjs}
       - {name: Validate component and pattern Stage A.1 coverage, run: node scripts/validate-component-pattern-stage-a1.mjs}
       - {name: Validate component and pattern Stage A.2 qualification, run: node scripts/validate-component-pattern-stage-a2.mjs}
