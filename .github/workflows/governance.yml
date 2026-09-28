@@ -23,6 +23,9 @@ jobs:
       - {name: Audit CC-MSS-01 Stage C2 live-probe simulation surface, run: python3 scripts/audit_cc_mss_stage_c2_live_sim_surface.py}
       - {name: Run C2 live-sim audit adversarial tests, run: python3 -m unittest tests.test_cc_mss_stage_c2_live_sim_audit_adversarial -v}
       - {name: Run CC-MSS-01 Stage C2 live-probe offline simulation, run: python3 -m unittest tests.test_cc_mss_stage_c2_live_probe_sim -v}
+      - {name: Audit CC-MSS-01 Stage C2 Adapter M0 inert surface, run: python3 scripts/audit_cc_mss_stage_c2_adapter_m0.py}
+      - {name: Run CC-MSS-01 Stage C2 Adapter M0 audit adversarial tests, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m0_audit -v}
+      - {name: Run CC-MSS-01 Stage C2 Adapter M0 qualification, run: python3 -m unittest tests.test_cc_mss_stage_c2_adapter_m0 -v}
       - {name: Validate component and pattern Stage A, run: node scripts/validate-component-pattern-stage-a.mjs}
       - {name: Validate component and pattern Stage A.1 coverage, run: node scripts/validate-component-pattern-stage-a1.mjs}
       - {name: Validate component and pattern Stage A.2 qualification, run: node scripts/validate-component-pattern-stage-a2.mjs}
