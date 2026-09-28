@@ -22,7 +22,7 @@ A valid anonymous observation requires:
 - principalRef is PUBLIC_ANONYMOUS;
 - authority is api.github.com over HTTPS;
 - method is GET only;
-- operation is one of repo.read, ref.read, commit.read;
+- operation is one of repo.read, ref.read, commit.read, pr.read;
 - path is predetermined and bound to the enrolled repository;
 - redirects are DENY;
 - Authorization header is absent;
