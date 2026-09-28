@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import argparse,json
+from jsonschema import Draft202012Validator,FormatChecker
 from datetime import datetime,timezone
 from pathlib import Path
 import importlib.util,sys
@@ -31,7 +32,7 @@ def main():
     args=ap.parse_args()
     enrollment=load("config/repository-enrollment.json")
     repos=[x for x in enrollment["repositories"] if x["state"]=="ENROLLED"]
-    budget=t.Budget(remaining=len(repos)*6+1,reserve=1)
+    budget=t.Budget(remaining=len(repos)*6,reserve=2)
     resources=t.ResourceBudget(remaining_bytes=8_000_000)
     observed_at=now()
     repository_rows=[]
@@ -63,10 +64,10 @@ def main():
               "observedAt":observed_at,
               "sourceRefs":[f"github-public-api:{repo}:pull/{number}@{pr_sha}"]
             })
-        close_ref=t.anonymous_get(t.build_url(repo,"ref.read",ref=ref),budget,resources,max_bytes=256000)
+        close_ref=t.anonymous_get(t.build_url(repo,"ref.read",ref=ref),budget,resources,max_bytes=256000,allow_reserve=True)
         close_sha=close_ref.get("object",{}).get("sha")
         if close_sha!=open_sha: raise RuntimeError("ANCHOR_CHANGED")
-        prs_close=t.anonymous_get(t.build_url(repo,"pr.read"),budget,resources,max_bytes=1500000)
+        prs_close=t.anonymous_get(t.build_url(repo,"pr.read"),budget,resources,max_bytes=1500000,allow_reserve=True)
         if not isinstance(prs_close,list): raise RuntimeError("PR_RESPONSE_INVALID")
         if len(prs_close)>=100: raise RuntimeError("INCOMPLETE_PAGINATION")
         if canonical_pr_snapshot(prs_close)!=first_pr_snapshot: raise RuntimeError("PR_ANCHOR_CHANGED")
@@ -89,6 +90,12 @@ def main():
       "pullRequests":pull_request_rows,
       "sourceRefs":source_refs
     }
+    schema=load("schemas/repository-observation.schema.json")
+    errors=sorted(Draft202012Validator(schema,format_checker=FormatChecker()).iter_errors(result),key=lambda e:list(e.path))
+    if errors:
+        raise RuntimeError("REPOSITORY_OBSERVATION_SCHEMA_INVALID: "+errors[0].message)
+    if budget.remaining!=0:
+        raise RuntimeError("REQUEST_BUDGET_NOT_FULLY_ACCOUNTED")
     out=ROOT/args.output;out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(out)
