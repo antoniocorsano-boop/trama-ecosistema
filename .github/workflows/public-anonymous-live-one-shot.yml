@@ -14,7 +14,9 @@ jobs:
       ALL_PROXY: ""
       NO_PROXY: ""
     steps:
-      - uses: actions/checkout@v4\n        with:\n          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Offline transport qualification
         run: python scripts/test_public_anonymous_transport.py
       - name: Run anonymous one-shot collector
@@ -40,10 +42,18 @@ jobs:
           assert d['status']=='CURRENT',d['status']
           print('PROJECT_CONTEXT_CURRENT_PASS')
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: trama-live-one-shot-observation
-          path: |
-            control-center/data/repository-observation.live.json
-            control-center/data/project-context-snapshot.live.json
-          retention-days: 1
+      - name: Emit non-secret evidence summary
+        run: |
+          python - <<'PY'
+          import json
+          o=json.load(open('control-center/data/repository-observation.live.json'))
+          s=json.load(open('control-center/data/project-context-snapshot.live.json'))
+          print(json.dumps({
+            'collectionId':o['collectionId'],
+            'observedAt':o['observedAt'],
+            'status':o['status'],
+            'repositories':[{'repository':r['repository'],'observedHead':r['observedHead']} for r in o['repositories']],
+            'openPullRequests':len(o['pullRequests']),
+            'projectContextStatus':s['status']
+          },sort_keys=True))
+          PY
