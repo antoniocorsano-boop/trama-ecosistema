@@ -1,0 +1,22 @@
+name: TRAMA Public Anonymous Live Binding Qualification
+on:
+  pull_request:
+    paths:
+      - 'scripts/cc_mss_public_anonymous_live_binding.py'
+      - 'scripts/test_cc_mss_public_anonymous_live_binding.py'
+      - 'docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-BINDING-01.md'
+      - '.github/workflows/public-anonymous-live-binding-qualification.yml'
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/test_cc_mss_public_anonymous_live_binding.py
+      - name: Capability audit
+        run: |
+          ! grep -En 'urllib|httpx|requests|socket|subprocess|Authorization|Bearer|GITHUB_TOKEN|GH_TOKEN' scripts/cc_mss_public_anonymous_live_binding.py
+          grep -q 'O_EXCL' scripts/cc_mss_public_anonymous_live_binding.py
+          grep -q 'PUBLIC_ANONYMOUS' scripts/cc_mss_public_anonymous_live_binding.py
+          grep -q 'LOCAL_EPHEMERAL_ONLY' scripts/cc_mss_public_anonymous_live_binding.py
