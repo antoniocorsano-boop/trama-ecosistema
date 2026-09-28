@@ -1,0 +1,40 @@
+{
+  "contract": "TRAMA-CONTROL-CENTER-SYSTEM-REGISTRY-v1",
+  "defaultDeny": true,
+  "authority": "https://api.github.com",
+  "systems": [
+    {
+      "systemId": "trama-governance",
+      "displayName": "TRAMA / Governance",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "authoritativeBranch": "main",
+      "role": "ecosystem-governance",
+      "monitoring": "ENABLED"
+    },
+    {
+      "systemId": "arena",
+      "displayName": "Arena",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "authoritativeBranch": "main",
+      "role": "curriculum-authority",
+      "monitoring": "ENABLED"
+    },
+    {
+      "systemId": "atlas",
+      "displayName": "Atlas",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "authoritativeBranch": "main",
+      "role": "publication-navigation",
+      "monitoring": "ENABLED"
+    },
+    {
+      "systemId": "docente-os",
+      "displayName": "Docente OS",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "authoritativeBranch": "main",
+      "role": "teacher-first-runtime",
+      "monitoring": "ENABLED"
+    }
+  ],
+  "notes": "Registry defines the observable TRAMA ecosystem. Credential installation may cover registered repositories, while every probe remains separately scoped and authorized. Unregistered repositories are denied by default."
+}

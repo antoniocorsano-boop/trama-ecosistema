@@ -1,0 +1,48 @@
+{
+  "contract": "TRAMA-CONTROL-CENTER-GITHUB-APP-PROFILE-v1",
+  "state": "PROVISIONING_NOT_STARTED",
+  "live": "NOT_AUTHORIZED",
+  "appPurpose": "Read-only observation of the governed TRAMA ecosystem for Control Center",
+  "installationScope": "SELECTED_REPOSITORIES_ONLY",
+  "repositoryRegistry": "config/trama-control-center-system-registry.json",
+  "repositoryPermissions": {
+    "metadata": "read",
+    "contents": "read",
+    "pullRequests": "read",
+    "actions": "read",
+    "checks": "read"
+  },
+  "organizationPermissions": {},
+  "accountPermissions": {},
+  "webhooks": {
+    "enabled": false,
+    "events": []
+  },
+  "prohibitedCapabilities": [
+    "repository-write",
+    "contents-write",
+    "pull-request-write",
+    "actions-write",
+    "checks-write",
+    "issues-write",
+    "administration",
+    "secrets-read",
+    "secrets-write",
+    "workflow-dispatch",
+    "remote-evidence-persistence"
+  ],
+  "credentialBoundary": {
+    "privateKeyInRepository": false,
+    "privateKeyInDecisionPackage": false,
+    "installationTokenInRepository": false,
+    "installationTokenInDecisionPackage": false,
+    "acceptedRuntimeBinding": "OPAQUE_REFERENCE_ONLY"
+  },
+  "probeBoundary": {
+    "oneRepositoryPerLiveOneShot": true,
+    "operations": ["repo.read", "ref.read", "commit.read"],
+    "evidenceDestination": "LOCAL_EPHEMERAL_ONLY",
+    "separateHumanAuthorizationRequired": true
+  },
+  "notes": "The App may be installed only on repositories present in the governed ecosystem registry. Installation scope does not itself authorize any LIVE_ONE_SHOT probe."
+}
