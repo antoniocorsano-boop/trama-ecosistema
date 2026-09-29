@@ -1,6 +1,6 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 25 settembre 2026.
+Aggiornato al 29 settembre 2026.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -17,7 +17,7 @@ flowchart LR
 
   ARENA --> ECO01["ECO-01 · CLOSED"]
   ARENA --> ECF4["EC-01/Arena-F4 · CLOSED / INTEGRATED"]
-  ARENA --> ECO02["ECO-02/P1 · ACTIVE · collaudo umano finale pendente"]
+  ARENA --> ECO02["ECO-02/P1 · CLOSED_VERIFIED / HUMAN REVIEW PASS"]
 
   DOS --> DOSBASE["Baseline + preparazione + TeachingSession · OPERATIVE"]
   DOS --> DOSA1["DOS-A1 · DEFERRED"]
@@ -44,7 +44,7 @@ flowchart LR
 | Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati; TRAMA-PW-01 integrato; baseline documentale ecosistema integrata via PR #62 |
 | Arena | **OPERATIVA** | Fonte curricolare autorevole; EC-01/Arena-F4 integrato |
 | Docente OS | **OPERATIVO / CANARY PASS** | Preparazione, contesto, decisione docente e registrazione lezione disponibili; post-merge Product CI, P6 Performance Runtime e HVA Runtime PASS sul Beta reale |
-| ECO-02/P1 | **ACTIVE** | È il principale gate reale ancora da chiudere: collaudo umano integrato Tecnologia 2C |
+| ECO-02/P1 | **CLOSED_VERIFIED / HUMAN REVIEW PASS** | Collaudo reale Tecnologia 2C chiuso; nessuna autorizzazione implicita a DOS-A1 |
 | Atlas R3-F0 | **CLOSED / HUMAN REVIEW PASS** | S3-V2 F0-F5 integrata; F4 Mobile+LIM e F5 Exit PASS su exact head `bc11577eeeeeed9c43ad62ac43fb7561e1197246`, merge Atlas #32 `423444be9dd883f4c35c6c1c89e94f6b0e5405fa` |
 | Runtime Docente OS → Atlas | **NON AUTORIZZATO** | Nessuna pubblicazione automatica cross-product |
 | Officina materiali | **PLANNED** | Architettura approvata; runtime ancora da progettare/autorizzare |
@@ -52,7 +52,7 @@ flowchart LR
 | TypeSafe | **ACTIVE / ADVISORY** | HOLDOUT one-shot non eseguito; nessun potere decisionale |
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
 | TRAMA Control Center v2 | **CC2-F0–F6 INTEGRATED** | Primo ciclo Control Center v2 integrato: snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system, Capability + Ecosystem Map, Evidence Explorer + Integrity, Timeline + Operational Path. ADR-015 resta PROPOSED. |
-| TRAMA Governed Forecast / CC3 | **CC3-F0 INTEGRATED / CC3-F1 ACTIVE** | F0 integrata con HUMAN EXACT-HEAD REVIEW PASS (#88). F1 avvia il Next Transition Engine deterministico e read-only. Nessuna probability/score, ranking, auto-promotion, authority o runtime authorization. ADR-016 resta PROPOSED. |
+| TRAMA Governed Forecast / CC3 | **CC3-F0 CLOSED / CC3-F1 CLOSED** | F0 e F1 hanno HUMAN EXACT-HEAD REVIEW PASS. F2–F5 restano pianificati; nessuna probability/score, ranking, auto-promotion, authority o runtime authorization. ADR-016 resta PROPOSED. |
 
 ## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 
@@ -126,12 +126,13 @@ L’integrazione non autorizza R3-P4, DOS-A1, pubblicazione automatica o altri r
 
 La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md).
 
-1. **Chiudere ECO-02/P1** con un caso reale integrato Tecnologia 2C senza correzioni tecniche durante il percorso.
-2. **R3-F0/S3-V2 — Atlas Product Experience è CLOSED / HUMAN REVIEW PASS**: F0–F5 integrati e validati; il gate R3-F0 Exit è soddisfatto.
-3. **Consolidare Atlas prima di ampliarlo**: R3-P2 Curriculum pubblico e R3-P5 Smart Navigation restano successivi alla chiusura verificata di S3-V2.
-4. **Ridurre l'attrito del percorso docente** mantenendo Arena → Docente OS diretto e Atlas opzionale, non obbligatorio.
-5. Solo dopo superfici Atlas mature, valutare R3-P4 Docente OS → Atlas con un nuovo gate umano/runtime.
-6. Mantenere **DOS-A1 deferred**, Officina runtime non autorizzata e Atlas privacy-first.
+1. **R3-P2 — Curriculum pubblico** come prossimo incremento Atlas, ora che ECO-02/P1 e R3-F0 sono chiusi e verificati.
+2. **R3-P5 — Smart Navigation / Percorsi** mantenendo separata la promozione runtime dalla presenza di prototipi governati.
+3. **Ridurre l'attrito del percorso docente** mantenendo Arena → Docente OS diretto e Atlas opzionale, non obbligatorio.
+4. **R4-P1 — Officina materiali** soltanto dopo evidenze e gate dedicati; R4-P2/S1 può proseguire NO_RUNTIME.
+5. **R3-P3 — Learning Hub**; successivamente R3-P4 solo con nuova autorizzazione umana/runtime e R3-P6.
+6. **R5 — adozione** con nome/marca, privacy dossier, assistenza, costi e pilota d'istituto.
+7. Mantenere **DOS-A1 deferred**, pubblicazione autonoma non autorizzata e Atlas privacy-first.
 
 
 | Area | Stato | Evidenza o prossimo controllo |
@@ -140,7 +141,7 @@ La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strateg
 | Educazione civica / EC-01 | Governance approvata / implementazione separata | contratto primo ciclo approvato; Arena = quadro approvato, Docente OS = attuazione, Atlas = consultazione; nessuna autorizzazione runtime |
 | EC-01/Arena-F4 | **Integrato** | trusted normative checker integrato in Arena su merge `f0cc66a4795af90e85eacf5f32b5a91e88c7c1d8`; Edge Function validata ma non deployata; nessun fingerprint reale seedato automaticamente |
 | ECO-01 | Chiuso | forma docente e contratti cross-product validati |
-| ECO-02/P1 | Pilota controllato attivo | percorso reale Arena → Docente OS consolidato fino a P9; registrazione lezione verificata in Beta; collaudo umano integrato finale ancora pendente |
+| ECO-02/P1 | **CLOSED_VERIFIED / HUMAN REVIEW PASS** | caso reale integrato Tecnologia 2C chiuso con receipt finale; DOS-A1 resta deferred |
 | Atlas / R3 | **R3-F0 / S3-V2 CLOSED** | F0–F5 integrati e validati in Curriculum-Atlas; HUMAN EXACT-HEAD REVIEW PASS; NO cross-product runtime |
 | Docente OS | Operativo nel proprio dominio | baseline persistente, preparazione, proposte teacher-editable, registrazione lezione e runtime release contract verificati |
 | Officina materiali / R4-P1 | Architettura approvata / runtime non autorizzato | separazione tra regia didattica e produzione specialistica approvata da ADR-010; implementazione ancora da progettare |
@@ -153,7 +154,7 @@ La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strateg
 
 CC3 è la nuova fase governata del Control Center successiva alla chiusura di CC2-F0–F6.
 
-Stato corrente: **CC3-F0 INTEGRATA / HUMAN EXACT-HEAD REVIEW PASS; CC3-F1 ACTIVE / HUMAN REVIEW PENDING**.
+Stato corrente: **CC3-F0 CLOSED / HUMAN EXACT-HEAD REVIEW PASS; CC3-F1 CLOSED / HUMAN EXACT-HEAD REVIEW PASS**.
 
 CC3-F0 introduce soltanto contratto e guardrail:
 
@@ -169,13 +170,13 @@ CC3-F0 introduce soltanto contratto e guardrail:
 
 Gate F0: **GATE-CC3-F0-HUMAN — PASS**.
 
-**CC3-F1 — Next Transition Engine** è ora il solo incremento attivo. Deriva in modo deterministico transizioni possibili esclusivamente da gate, dipendenze e stato governato già presenti nello snapshot. Non predice quale esito si verificherà, non assegna probabilità o priorità e non modifica alcuna fonte canonica. **GATE-CC3-F1-HUMAN — OPEN**.
+**CC3-F1 — Next Transition Engine** è chiuso con HUMAN EXACT-HEAD REVIEW PASS. Deriva in modo deterministico transizioni possibili esclusivamente da gate, dipendenze e stato governato già presenti nello snapshot. Non predice quale esito si verificherà, non assegna probabilità o priorità e non modifica alcuna fonte canonica. **GATE-CC3-F1-HUMAN — PASS**.
 
 F2–F5 restano PLANNED.
 
 ## ECO-02/P1 — stato reale consolidato
 
-Il pilota resta **ACTIVE**. Non viene chiuso automaticamente dall'avanzamento tecnico.
+Il pilota è **CLOSED_VERIFIED / HUMAN REVIEW PASS**. La chiusura deriva dalla prova reale e dalla decisione umana finale, non dal solo avanzamento tecnico.
 
 Sono già recepiti o verificati:
 
