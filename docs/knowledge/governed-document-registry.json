@@ -474,6 +474,29 @@
         "COMPONENT_DIRECTORY_CHANGE",
         "DESIGN_SYSTEM_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-DIRECTORY-INV01",
+      "path": "docs/inventory/trama-component-directories-inv01.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "component-inventory",
+        "component-directories",
+        "ui-supply-chain",
+        "design-system"
+      ],
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-INVENTORY",
+        "DOC-TRAMA-COMPONENT-STRATEGY"
+      ],
+      "updateTriggers": [
+        "COMPONENT_DIRECTORY_CHANGE",
+        "UI_RUNTIME_STACK_CHANGE",
+        "COMPONENT_LIBRARY_ADOPTION_CHANGE",
+        "INV02_FINDING"
+      ]
     }
   ]
 }
