@@ -80,9 +80,11 @@ Expected confirmed maturity: **L4**.
 Bound:
 - canonical curriculum authority in Source Registry;
 - TRAMA-ADR-002;
-- Arena PR #341 exact head;
-- Product CI run 36608209228;
-- explicit Human Review PASS comment bound to the same exact head.
+- Arena ECO-01/S3 PR #312 exact head;
+- Product CI run 35512448131;
+- HUMAN CROSS-REVIEW PASS bound to the same exact head.
+
+Arena PR #341 remains component evidence and is not used as the product-area Human Review.
 
 Expected confirmed maturity: **L4**.
 
