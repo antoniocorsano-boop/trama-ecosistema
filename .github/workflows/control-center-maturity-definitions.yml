@@ -5,6 +5,10 @@ on:
     paths:
       - "config/maturity-area-definitions.json"
       - "scripts/evaluate_maturity_definitions.py"
+      - "scripts/test_maturity_evidence_binding.py"
+      - "scripts/validate_maturity_evidence_registry.py"
+      - "governance/maturity/trama-maturity-evidence-registry-v1.json"
+      - "schemas/maturity-evidence-registry.schema.json"
       - "docs/assurance/fixtures/maturity-evidence-pass-partial.json"
       - "docs/assurance/fixtures/maturity-expected-levels.json"
       - ".github/workflows/control-center-maturity-definitions.yml"
@@ -13,6 +17,10 @@ on:
     paths:
       - "config/maturity-area-definitions.json"
       - "scripts/evaluate_maturity_definitions.py"
+      - "scripts/test_maturity_evidence_binding.py"
+      - "scripts/validate_maturity_evidence_registry.py"
+      - "governance/maturity/trama-maturity-evidence-registry-v1.json"
+      - "schemas/maturity-evidence-registry.schema.json"
       - "docs/assurance/fixtures/maturity-evidence-pass-partial.json"
       - "docs/assurance/fixtures/maturity-expected-levels.json"
       - ".github/workflows/control-center-maturity-definitions.yml"
@@ -26,6 +34,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Install registry schema validator
+        run: python -m pip install --disable-pip-version-check --quiet jsonschema
+      - name: Validate governed maturity evidence registry
+        run: |
+          python scripts/validate_maturity_evidence_registry.py
+          python scripts/test_maturity_evidence_binding.py
       - name: Validate deterministic level evaluation
         run: |
           python scripts/evaluate_maturity_definitions.py             --evidence docs/assurance/fixtures/maturity-evidence-pass-partial.json             --expect docs/assurance/fixtures/maturity-expected-levels.json
