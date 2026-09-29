@@ -35,6 +35,13 @@
       "path": "status/governed-events.json",
       "role": "SEMANTIC_TIMELINE",
       "freshnessPolicy": "UNTIL_CHANGE"
+    },
+    {
+      "id": "component-evidence-registry",
+      "type": "STRUCTURED_GOVERNANCE",
+      "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "role": "COMPONENT_EVIDENCE",
+      "freshnessPolicy": "UNTIL_CHANGE"
     }
   ],
   "phaseModel": [
