@@ -83,16 +83,18 @@ Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / A
 ## Runtime boundary
 Nothing in this index, constitution, review contract or evidence normalisation authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
+## Recently completed consolidation
+- `PW-MISSING-INFORMATION-01` now has a named dossier, question inventory and child-agent/data-flow declaration; `constitutional-review-g1-v2.md` records the second constitutional document review as `DOCUMENT_PASS / HUMAN_VALIDATION_PENDING`. Do not repeat this document-remediation step unless a material-change trigger reopens it.
+
 ## Open consolidation queue
-1. Instantiate the strengthened contract against the shared-decision prototype: create its named pathway dossier, question inventory and child-agent/data-flow declaration, then run the first constitutional review.
-2. Deepen direct child/teen generative-agent evidence: LLMs, text/voice agents, calibrated trust, disclosure, parasociality/dependency, longitudinal exposure and lower-secondary developmental differences.
-3. Separate and normalise primary/lower-secondary feedback evidence and higher-quality school-age SEL meta-analyses with implementation moderators.
-4. Deepen child-specific transfer evidence and continue normalising the remaining human-readable evidence register.
-5. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract/evidence layer.
-6. Identify inbound references before moving legacy root files.
-7. Add deterministic repository checks after schemas stabilise; checks may validate contract/evidence shape and prohibited configurations only.
-8. Delete accidental research branches when authorised branch deletion becomes available.
-9. Conduct accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review before constitutional promotion.
+1. Deepen direct child/teen generative-agent evidence: LLMs, text/voice agents, calibrated trust, disclosure, parasociality/dependency, longitudinal exposure and lower-secondary developmental differences.
+2. Separate and normalise primary/lower-secondary feedback evidence and higher-quality school-age SEL meta-analyses with implementation moderators.
+3. Deepen child-specific transfer evidence and continue normalising the remaining human-readable evidence register.
+4. Reconcile `README.md` with canonical architecture/workflow/constitution/review contract/evidence layer.
+5. Identify inbound references before moving legacy root files.
+6. Add deterministic repository checks after schemas stabilise; checks may validate contract/evidence shape and prohibited configurations only.
+7. Delete accidental research branches when authorised branch deletion becomes available.
+8. Conduct accessibility, privacy/child-safety, pedagogical, developmental and human exact-head review before constitutional promotion.
 
 ## Backlog-zero rule
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
