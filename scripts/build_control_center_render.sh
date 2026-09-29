@@ -16,7 +16,7 @@ fi
 
 live_ready=1
 if ! python3 -c 'import jsonschema' >/dev/null 2>&1; then
-  if ! python3 -m pip install --disable-pip-version-check --quiet --user jsonschema; then
+  if ! python3 -m pip install --disable-pip-version-check --quiet jsonschema; then
     live_ready=0
     echo "TRAMA_RENDER_LIVE_CONTEXT_DEPENDENCY_UNAVAILABLE"
   fi

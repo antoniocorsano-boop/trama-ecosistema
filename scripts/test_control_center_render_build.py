@@ -17,6 +17,9 @@ required = [
 for token in required:
     assert token in text, token
 
+assert "python3 -m pip install --disable-pip-version-check --quiet jsonschema" in text
+assert "--user" not in text
+
 for forbidden in [
     "gh auth",
     "GITHUB_TOKEN",
