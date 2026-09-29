@@ -268,6 +268,30 @@
         "E3_RECEIPT_CHANGE",
         "E3_EVIDENCE_REQUIREMENT_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-STAGE-E3A-PUBLIC-HUMAN-USE-SURFACE",
+      "path": "docs/validation/trama-stage-e3a-public-human-use-surface-v1.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "human-use-validation",
+        "stage-e3",
+        "public-validation"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E3-HUMAN-USE-PROTOCOL",
+        "DOC-STAGE-E2-PROJECT-KNOWLEDGE-UI"
+      ],
+      "updateTriggers": [
+        "E3_PUBLIC_SURFACE_CHANGE",
+        "E3_HUMAN_USE_FINDING",
+        "E2_IMPLEMENTATION_CHANGE"
+      ]
     }
   ]
 }
