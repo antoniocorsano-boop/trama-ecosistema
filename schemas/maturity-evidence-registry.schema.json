@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/maturity-evidence-registry.schema.json",
+  "title": "TRAMA Maturity Evidence Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "updatedAt",
+    "policy",
+    "evidence"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.maturity-evidence-registry/v1"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectionReadOnly",
+        "automaticPromotion",
+        "acceptedDecisionStatuses"
+      ],
+      "properties": {
+        "projectionReadOnly": {
+          "const": true
+        },
+        "automaticPromotion": {
+          "const": false
+        },
+        "acceptedDecisionStatuses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "APPROVED",
+              "IMPLEMENTED"
+            ]
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "area",
+          "subject",
+          "status",
+          "source",
+          "observedAt",
+          "freshness",
+          "confidence",
+          "supports"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^EV-MAT-"
+          },
+          "type": {
+            "enum": [
+              "DOCUMENT_CANONICAL",
+              "CONTRACT_APPROVED",
+              "PR_EXACT_HEAD",
+              "AUTOMATED_TEST",
+              "SECURITY_GATE",
+              "ACCESSIBILITY_GATE",
+              "RUNTIME_CANARY",
+              "HUMAN_REVIEW",
+              "REAL_CASE_VALIDATION",
+              "PROMOTION_DECISION",
+              "REGRESSION_HISTORY",
+              "ADOPTION_EVIDENCE"
+            ]
+          },
+          "area": {
+            "enum": [
+              "governance",
+              "arena",
+              "atlas",
+              "docente-os"
+            ]
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "const": "PASS"
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ref"
+            ],
+            "properties": {
+              "ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "repository": {
+                "type": "string"
+              },
+              "prNumber": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "runId": {
+                "type": [
+                  "string",
+                  "integer"
+                ]
+              },
+              "commentId": {
+                "type": [
+                  "string",
+                  "integer"
+                ]
+              },
+              "decisionRef": {
+                "type": "string"
+              },
+              "decisionStatus": {
+                "type": "string"
+              },
+              "mergeCommit": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              }
+            }
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "freshness": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "policy"
+            ],
+            "properties": {
+              "policy": {
+                "enum": [
+                  "EVENT_BOUND",
+                  "UNTIL_CHANGE",
+                  "TIME_BOUND",
+                  "RUNTIME_BOUND",
+                  "MANUAL_REVIEW"
+                ]
+              },
+              "expiresAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "reviewedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            }
+          },
+          "confidence": {
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          },
+          "supports": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "binding": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "capabilityRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "areaRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "releaseRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "exactHead": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "eventRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
