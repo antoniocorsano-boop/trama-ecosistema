@@ -406,6 +406,27 @@
         "E3_L0_RECEIPT_CHANGE",
         "E3_L0_EVIDENCE_REQUIREMENT_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-UI-DEVELOPMENT-MODEL",
+      "path": "docs/contracts/trama-ui-development-model-v1.md",
+      "kind": "OPERATING_MODEL",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "ui-development",
+        "design-system",
+        "component-strategy",
+        "accessibility",
+        "human-validation"
+      ],
+      "dependsOn": [],
+      "updateTriggers": [
+        "UI_DEVELOPMENT_PROCESS_CHANGE",
+        "COMPONENT_STRATEGY_CHANGE",
+        "DESIGN_SYSTEM_CHANGE",
+        "UI_LIBRARY_ADOPTION_CHANGE"
+      ]
     }
   ]
 }
