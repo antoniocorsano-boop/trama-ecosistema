@@ -6,45 +6,167 @@
   "runtimeImpact": "NONE",
   "entries": [
     {
-      "componentId": "ARENA.DIALOG_CONFIRM.FAMILY",
+      "componentId": "ARENA.DIALOG_CONFIRM.LEGACY",
       "product": "ARENA",
-      "target": "ConfirmDialog / UiConfirmDialog",
+      "target": "src/components/ui/ConfirmDialog.tsx",
       "lifecycle": "LEGACY",
       "sourceClass": "PRODUCT_OWNED",
-      "relatedFindings": ["INV02-F01","INV03-F01"],
+      "relatedFindings": [
+        "INV02-F01",
+        "INV03-F01"
+      ],
       "evidence": [
-        {"type":"ISOLATED","status":"PARTIAL","ref":"docs/inventory/trama-component-evidence-coverage-inv03.md"},
-        {"type":"BEHAVIOURAL","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"ACCESSIBILITY","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"LIFECYCLE","status":"PRESENT","ref":"governance/ui-development/trama-component-evidence-registry-v1.json"}
+        {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
       ]
     },
     {
-      "componentId": "ARENA.TABS.FAMILY",
+      "componentId": "ARENA.DIALOG_CONFIRM.GOVERNED",
       "product": "ARENA",
-      "target": "Tabs / UiTabs",
-      "lifecycle": "LEGACY",
+      "target": "src/ui/components/UiConfirmDialog.tsx",
+      "lifecycle": "TRIAL",
       "sourceClass": "PRODUCT_OWNED",
-      "relatedFindings": ["INV02-F02","INV03-F01"],
+      "relatedFindings": [
+        "INV02-F01",
+        "INV03-F01"
+      ],
       "evidence": [
-        {"type":"ISOLATED","status":"PARTIAL","ref":"docs/inventory/trama-component-evidence-coverage-inv03.md"},
-        {"type":"BEHAVIOURAL","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"ACCESSIBILITY","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"LIFECYCLE","status":"PRESENT","ref":"governance/ui-development/trama-component-evidence-registry-v1.json"}
+        {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
       ]
     },
     {
-      "componentId": "ARENA.TOOLTIP.FAMILY",
+      "componentId": "ARENA.TABS.LEGACY",
       "product": "ARENA",
-      "target": "Tooltip",
+      "target": "src/components/ui/Tabs.tsx",
       "lifecycle": "LEGACY",
       "sourceClass": "PRODUCT_OWNED",
-      "relatedFindings": ["INV02-F03","INV03-F01"],
+      "relatedFindings": [
+        "INV02-F02",
+        "INV03-F01"
+      ],
       "evidence": [
-        {"type":"ISOLATED","status":"NOT_OBSERVED"},
-        {"type":"BEHAVIOURAL","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"ACCESSIBILITY","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"LIFECYCLE","status":"PRESENT","ref":"governance/ui-development/trama-component-evidence-registry-v1.json"}
+        {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
+      ]
+    },
+    {
+      "componentId": "ARENA.TABS.GOVERNED",
+      "product": "ARENA",
+      "target": "src/ui/components/UiTabs.tsx",
+      "lifecycle": "TRIAL",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F02",
+        "INV03-F01"
+      ],
+      "evidence": [
+        {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
+      ]
+    },
+    {
+      "componentId": "ARENA.TOOLTIP.LEGACY",
+      "product": "ARENA",
+      "target": "src/components/ui/Tooltip.tsx",
+      "lifecycle": "LEGACY",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F03",
+        "INV03-F01"
+      ],
+      "evidence": [
+        {
+          "type": "ISOLATED",
+          "status": "NOT_OBSERVED"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
       ]
     },
     {
@@ -53,13 +175,35 @@
       "target": "contextual help popover/dialog",
       "lifecycle": "TRIAL",
       "sourceClass": "PRODUCT_OWNED",
-      "relatedFindings": ["INV02-F08","INV03-F04"],
+      "relatedFindings": [
+        "INV02-F08",
+        "INV03-F04"
+      ],
       "evidence": [
-        {"type":"ISOLATED","status":"NOT_OBSERVED"},
-        {"type":"BEHAVIOURAL","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"RESPONSIVE_VISUAL","status":"PARTIAL","ref":"docs/inventory/trama-component-evidence-coverage-inv03.md"},
-        {"type":"ACCESSIBILITY","status":"PARTIAL","ref":"docs/inventory/trama-interaction-duplication-inv02.md"},
-        {"type":"LIFECYCLE","status":"PRESENT","ref":"governance/ui-development/trama-component-evidence-registry-v1.json"}
+        {
+          "type": "ISOLATED",
+          "status": "NOT_OBSERVED"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
       ]
     }
   ],
