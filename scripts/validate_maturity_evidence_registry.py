@@ -5,8 +5,6 @@ import json
 from pathlib import Path
 import sys
 
-from jsonschema import Draft202012Validator, FormatChecker
-
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
@@ -23,7 +21,9 @@ def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def validate_registry(registry: dict) -> None:
+def validate_schema(registry: dict) -> None:
+    from jsonschema import Draft202012Validator, FormatChecker
+
     schema = load(SCHEMA_PATH)
     Draft202012Validator.check_schema(schema)
     errors = sorted(
@@ -33,6 +33,13 @@ def validate_registry(registry: dict) -> None:
     if errors:
         path = ".".join(str(p) for p in errors[0].absolute_path) or "<root>"
         raise ValueError(f"registry schema invalid at {path}: {errors[0].message}")
+
+
+def validate_registry(registry: dict) -> None:
+    if registry.get("schemaVersion") != "trama.maturity-evidence-registry/v1":
+        raise ValueError("invalid maturity evidence registry schemaVersion")
+    if not isinstance(registry.get("evidence"), list) or not registry["evidence"]:
+        raise ValueError("maturity evidence registry requires evidence")
 
     evidence = registry["evidence"]
     ids = [item["id"] for item in evidence]
@@ -90,6 +97,7 @@ def validate_registry(registry: dict) -> None:
 
 def main() -> int:
     registry = load(REGISTRY_PATH)
+    validate_schema(registry)
     validate_registry(registry)
     print("TRAMA_MATURITY_EVIDENCE_REGISTRY_PASS")
     return 0
