@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from evaluate_maturity_definitions import evaluate_area, validate_definitions
+from project_component_maturity import project_components, validate_projection as validate_component_projection
 from validate_stakeholder_assurance import assurance_readiness, validate_registry
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -171,6 +172,7 @@ def build_integrity_checks(snapshot: dict, now: datetime) -> list[dict]:
     gates = snapshot.get("gates", [])
     areas = snapshot.get("areas", [])
     capabilities = snapshot.get("capabilities", [])
+    components = snapshot.get("components", [])
     dependencies = snapshot.get("dependencies", [])
     expansions = snapshot.get("expansionCandidates", [])
 
@@ -421,6 +423,47 @@ def build_integrity_checks(snapshot: dict, now: datetime) -> list[dict]:
         }
     )
 
+    component_issues = []
+    component_ids = [item.get("componentId") for item in components]
+    if len(component_ids) != len(set(component_ids)):
+        component_issues.append("componentId duplicati nella proiezione")
+    for component in components:
+        component_id = component.get("componentId") or "UNKNOWN"
+        maturity = component.get("maturity") or {}
+        if not component.get("sourceRef"):
+            component_issues.append(f"{component_id} → sourceRef mancante")
+        if maturity.get("model") != "TRAMA_COMPONENT_MATURITY_V1":
+            component_issues.append(f"{component_id} → modello maturità non riconosciuto")
+        if set((component.get("evidenceStatus") or {}).keys()) != {
+            "ISOLATED",
+            "BEHAVIOURAL",
+            "RESPONSIVE_VISUAL",
+            "ACCESSIBILITY",
+        }:
+            component_issues.append(f"{component_id} → evidenceStatus incompleto")
+
+    checks.append(
+        {
+            "id": "INT-COMPONENT-EVIDENCE-PROJECTION",
+            "type": "COMPONENT_EVIDENCE_PROJECTION",
+            "status": "ISSUE" if component_issues else "PASS",
+            "severity": "ERROR" if component_issues else "INFO",
+            "summary": (
+                "La proiezione delle evidenze componenti presenta incoerenze."
+                if component_issues
+                else "La proiezione delle evidenze componenti è strutturalmente coerente."
+            ),
+            "affectedRefs": sorted(
+                {
+                    line.split(" → ", 1)[0]
+                    for line in component_issues
+                    if " → " in line
+                }
+            ),
+            "details": component_issues,
+        }
+    )
+
     return checks
 
 
@@ -575,8 +618,11 @@ def build_snapshot(root: Path) -> dict:
     maturity_definitions = load_json(root / "config/maturity-area-definitions.json")
     assurance_registry = load_json(root / "config/stakeholder-assurance-registry.json")
     governed_events = load_json(root / "status/governed-events.json")
+    component_registry = load_json(root / "governance/ui-development/trama-component-evidence-registry-v1.json")
     validate_definitions(maturity_definitions)
     validate_registry(assurance_registry)
+    components = project_components(component_registry)
+    validate_component_projection(components)
     caps = capability_map(eco_status)
 
     source_state = {}
@@ -763,12 +809,13 @@ def build_snapshot(root: Path) -> dict:
     ]
     snapshot = {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-        "schemaVersion": "1.3.0",
+        "schemaVersion": "1.4.0",
         "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),
         "areas": maturity_areas,
         "capabilities": capabilities,
+        "components": components,
         "gates": gates,
         "evidence": evidence,
         "dependencies": dependencies,
@@ -803,6 +850,7 @@ def validate(snapshot: dict) -> None:
         "phases",
         "areas",
         "capabilities",
+        "components",
         "gates",
         "evidence",
         "dependencies",
@@ -845,6 +893,8 @@ def validate(snapshot: dict) -> None:
     capability_ids = {item["id"] for item in snapshot["capabilities"]}
     if len(capability_ids) != len(snapshot["capabilities"]):
         raise ValueError("Duplicate capability id detected")
+
+    validate_component_projection(snapshot["components"])
 
     for capability in snapshot["capabilities"]:
         area_ref = capability.get("maturityAreaRef")
