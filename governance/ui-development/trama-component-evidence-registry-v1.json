@@ -51,7 +51,7 @@
       "evidence": [
         {
           "type": "ISOLATED",
-          "status": "PRESENT",
+          "status": "PARTIAL",
           "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
         },
         {
