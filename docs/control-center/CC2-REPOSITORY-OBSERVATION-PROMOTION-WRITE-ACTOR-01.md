@@ -39,9 +39,9 @@ Forbidden:
 
 ## Exact-head and idempotency
 
-The actor verifies that current main equals bundle.baseExactSha before any mutation.
+The actor verifies that current main equals bundle.baseExactSha before any mutation and rechecks main immediately before PR creation. If main moves during the write sequence, PR creation is denied and a fresh bundle/base-bound branch is required.
 
-The branch name is deterministic from proposalId. If it exists:
+The branch name is deterministic from proposalId + baseExactSha. This prevents an interrupted attempt on an obsolete baseline from being reused for a later baseline. If it exists:
 - only the three allowlisted paths may differ from the bound base;
 - unexpected changed paths fail closed;
 - already-correct file content is left untouched;
