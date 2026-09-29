@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "trama.maturity-reconciliation/v1",
+  "updatedAt": "2026-09-29",
+  "policy": {
+    "evidenceBoundOnly": true,
+    "noSyntheticPromotion": true,
+    "l5RequiresObservedStability": true
+  },
+  "areas": [
+    {
+      "area": "governance",
+      "observedLevel": 1,
+      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "nextWork": [
+        "bind approved-contract evidence",
+        "bind exact-head evidence",
+        "bind human-review evidence"
+      ],
+      "l5Gap": [
+        "REGRESSION_HISTORY"
+      ]
+    },
+    {
+      "area": "arena",
+      "observedLevel": 0,
+      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "nextWork": [
+        "bind DOCUMENT_CANONICAL",
+        "bind CONTRACT_APPROVED",
+        "bind PR_EXACT_HEAD",
+        "bind AUTOMATED_TEST",
+        "bind HUMAN_REVIEW"
+      ],
+      "l5Gap": [
+        "REGRESSION_HISTORY"
+      ]
+    },
+    {
+      "area": "atlas",
+      "observedLevel": 0,
+      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "nextWork": [
+        "bind DOCUMENT_CANONICAL",
+        "bind CONTRACT_APPROVED",
+        "bind PR_EXACT_HEAD",
+        "bind AUTOMATED_TEST",
+        "retain existing ACCESSIBILITY_GATE",
+        "retain existing HUMAN_REVIEW"
+      ],
+      "l5Gap": [
+        "REGRESSION_HISTORY",
+        "ADOPTION_EVIDENCE"
+      ]
+    },
+    {
+      "area": "docente-os",
+      "observedLevel": 0,
+      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "nextWork": [
+        "model active development ref separately from default branch",
+        "bind DOCUMENT_CANONICAL",
+        "bind CONTRACT_APPROVED",
+        "bind PR_EXACT_HEAD",
+        "bind AUTOMATED_TEST",
+        "bind RUNTIME_CANARY",
+        "bind HUMAN_REVIEW"
+      ],
+      "l5Gap": [
+        "REGRESSION_HISTORY",
+        "ADOPTION_EVIDENCE"
+      ]
+    }
+  ],
+  "components": {
+    "currentRegistryCount": 6,
+    "missingProductCoverage": [
+      "ATLAS",
+      "DOCENTE_OS"
+    ],
+    "nextTargets": [
+      "ARENA.DIALOG_CONFIRM.GOVERNED:RESPONSIVE_VISUAL",
+      "ARENA.DIALOG_CONFIRM.GOVERNED:ACCESSIBILITY",
+      "ARENA.TABS.GOVERNED:RESPONSIVE_VISUAL",
+      "ARENA.TABS.GOVERNED:ACCESSIBILITY",
+      "CONTROL_CENTER.CONTEXT_HELP.FAMILY:ISOLATED",
+      "CONTROL_CENTER.CONTEXT_HELP.FAMILY:BEHAVIOURAL",
+      "CONTROL_CENTER.CONTEXT_HELP.FAMILY:RESPONSIVE_VISUAL",
+      "CONTROL_CENTER.CONTEXT_HELP.FAMILY:ACCESSIBILITY",
+      "ATLAS:REUSABLE_PRIMITIVE_ADDRESSABILITY",
+      "DOCENTE_OS:APPSHELL_DIALOG_ALERT_TIMETABLE"
+    ]
+  },
+  "functionalSequence": [
+    "R3-P2",
+    "R3-P5",
+    "CROSS_PRODUCT_CONTINUITY",
+    "R4-P1",
+    "R3-P3",
+    "R3-P4_REQUIRES_NEW_AUTHORIZATION",
+    "R3-P6",
+    "R5"
+  ],
+  "invariants": [
+    "DOS-A1=RUNTIME_DEFERRED",
+    "Atlas is optional to ordinary Arena→Docente OS preparation",
+    "maturity != lifecycle != quality score",
+    "L0 may mean unbound evidence",
+    "no overall score or percentage"
+  ]
+}

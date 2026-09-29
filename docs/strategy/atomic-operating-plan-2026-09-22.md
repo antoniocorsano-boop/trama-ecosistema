@@ -1,7 +1,8 @@
 # TRAMA — Piano operativo atomico
 
 **Data:** 22 settembre 2026  
-**Stato:** PROPOSTA OPERATIVA DA VALIDARE / NO NUOVA AUTORIZZAZIONE RUNTIME  
+**Aggiornamento di stato:** 29 settembre 2026  
+**Stato:** PIANO OPERATIVO GOVERNATO / RICONCILIATO / NO NUOVA AUTORIZZAZIONE RUNTIME  
 **Perimetro:** TRAMA · Arena · Atlas · Docente OS
 
 ## 1. Scopo
@@ -51,20 +52,22 @@ Questo ampliamento è documentato come **design direction non normativa** in [Ev
 - Perceptible Write Contract v1;
 - assurance deterministica e ricevute verificabili.
 
-### Parziale
+### Foundation chiuse / ampliamento ancora da completare
 
 **Atlas**
-- fondazione prodotto/design attiva;
-- information architecture e visual grammar integrate;
-- primitive accessibili integrate;
-- journey prototype e mappa 2D in validazione;
+- R3-F0 Product & Design Foundation chiusa con HUMAN REVIEW PASS;
+- information architecture, visual grammar e primitive accessibili integrate;
+- mobile/desktop/LIM e accessibilità del foundation verificate;
 - ruolo pubblico e didattico approvato a livello di governance;
+- R3-P2 Curriculum pubblico e R3-P5 Smart Navigation sono i successivi cantieri funzionali;
 - runtime di pubblicazione Docente OS → Atlas non ancora autorizzato.
+
+**ECO-02/P1**
+- caso reale Tecnologia 2C chiuso come CLOSED_VERIFIED / HUMAN REVIEW PASS;
+- la chiusura non autorizza DOS-A1.
 
 ### Non ancora completato
 
-- chiusura umana finale di ECO-02/P1;
-- chiusura R3-F0/S3 Atlas;
 - continuità d'esperienza senza attriti tra curricolo, risorse e preparazione;
 - ricerca/conoscenza più unificata e affidabile;
 - Officina materiali in runtime;
@@ -87,11 +90,13 @@ Non si apre un nuovo asse di prodotto finché il precedente non produce:
 
 ## 4. Sequenza operativa canonica
 
-### Fase A — Chiudere ciò che è già quasi pronto
+### Fase A — Baseline chiusa e verificata
 
-**Obiettivo:** trasformare il lavoro recente in una baseline stabile.
+**Stato al 29 settembre:** A1 ECO-02/P1 e A2 Atlas R3-F0/S3 sono chiusi e verificati. A3 TRAMA-PW-01 resta una verifica trasversale continua e non riapre i gate già chiusi.
 
-#### A1. ECO-02/P1 — chiusura del pilota reale
+**Obiettivo raggiunto:** trasformare il lavoro recente in una baseline stabile.
+
+#### A1. ECO-02/P1 — CLOSED_VERIFIED / HUMAN REVIEW PASS
 Gate:
 - caso reale Tecnologia 2C;
 - preparazione → decisione materiali → uso → registrazione;
@@ -103,7 +108,7 @@ Esito:
 - ECO-02/P1 = CLOSED_VERIFIED;
 - nessuna autorizzazione implicita a DOS-A1.
 
-#### A2. Atlas R3-F0/S3 — chiusura Product Foundation
+#### A2. Atlas R3-F0/S3 — CLOSED / HUMAN REVIEW PASS
 Gate:
 - review visuale umana;
 - tastiera;
@@ -318,16 +323,17 @@ Per evitare dispersione e rilavoro:
 
 ## 8. Ordine di investimento raccomandato
 
-1. **chiusura ECO-02/P1**;
-2. **chiusura Atlas R3-F0/S3**;
-3. **Atlas R3-P2 + R3-P5**;
-4. **continuità Docente OS ↔ Arena ↔ Atlas senza attriti**;
-5. **Officina materiali**;
-6. **R3-P3**;
-7. **R3-P4 solo dopo nuovo gate umano e runtime**;
-8. **R3-P6**;
-9. **identità prodotto + pilota d'istituto**;
-10. solo dopo evidenze sufficienti, valutazione separata di capacità autonome oggi escluse.
+Prerequisiti completati: **ECO-02/P1** e **Atlas R3-F0/S3-V2**.
+
+1. **Atlas R3-P2 — Curriculum pubblico**;
+2. **Atlas R3-P5 — Smart Navigation / Percorsi**;
+3. **continuità Docente OS ↔ Arena ↔ Atlas senza attriti**;
+4. **Officina materiali R4-P1**, mantenendo R4-P2/S1 NO_RUNTIME in parallelo quando non conflittuale;
+5. **R3-P3 Learning Hub**;
+6. **R3-P4 solo dopo nuovo gate umano e runtime**;
+7. **R3-P6 Curriculum Health**;
+8. **identità prodotto + pilota d'istituto / R5**;
+9. solo dopo evidenze sufficienti, valutazione separata di capacità autonome oggi escluse.
 
 ## 9. Definizione di successo
 

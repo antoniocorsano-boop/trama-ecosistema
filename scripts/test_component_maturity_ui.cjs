@@ -17,7 +17,10 @@ assert.match(maturity,/senza score o percentuali/);
 assert.match(maturity,/aria-live="polite"/);
 assert.match(maturity,/grid-template-areas:"list" "detail" "map"/);
 assert.match(maturity,/deferSelection:window\.matchMedia/);
-assert.match(sw,/trama-control-center-v12/);
+assert.match(maturity,/Un livello basso può indicare prove non ancora bound/);
+assert.match(maturity,/Prove bound/);
+assert.match(maturity,/nextRequiredEvidenceTypes/);
+assert.match(sw,/trama-control-center-v13/);
 assert.match(sw,/\.\/maturity\.html/);
 assert.match(sw,/\.\/component-maturity\.js/);
 

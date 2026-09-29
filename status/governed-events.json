@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/governed-events.schema.json",
   "schemaVersion": "1.0.0",
-  "updatedAt": "2026-09-25",
+  "updatedAt": "2026-09-29",
   "coverage": {
     "mode": "PARTIAL_EXPLICIT",
     "from": "2026-09-25",
@@ -158,6 +158,36 @@
         "Exact head bc11577eeeeeed9c43ad62ac43fb7561e1197246 validato con F4 Mobile/LIM, F5 Exit e TRAMA Perceptible Write PASS.",
         "S3-V2 chiusa; R3-F0 exit gate soddisfatto.",
         "Nessuna autorizzazione a R3-P4, DOS-A1 o runtime Docente OS → Atlas."
+      ]
+    },
+    {
+      "id": "EVT-ECO02-P1-FINAL-HUMAN-PASS",
+      "eventType": "HUMAN_REVIEW",
+      "occurredAt": "2026-09-25T12:46:47Z",
+      "label": "ECO-02/P1 chiuso con accettazione umana finale",
+      "subjectRef": "ECO-02-P1",
+      "sourceRef": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+      "authority": "TRAMA / Human Review",
+      "versionRef": "02cfe7accee9abe63dc7c7d936ce1f3e0b7b8d7d",
+      "details": [
+        "CLOSED_VERIFIED / HUMAN REVIEW PASS.",
+        "Caso reale docente concluso senza riaprire DOS-A1.",
+        "La chiusura non autorizza nuovo runtime cross-product."
+      ]
+    },
+    {
+      "id": "EVT-CC3-F1-HUMAN-PASS",
+      "eventType": "HUMAN_REVIEW",
+      "occurredAt": "2026-09-26T00:00:00Z",
+      "label": "CC3-F1 Next Transition Engine chiuso con Human Review PASS",
+      "subjectRef": "CC3-F1",
+      "sourceRef": "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md",
+      "authority": "TRAMA / Human Review",
+      "versionRef": "686fe01b91b5e5b38a9956198e79c5ff713b0b8f",
+      "details": [
+        "GATE-CC3-F1-HUMAN PASS.",
+        "Motore deterministico e read-only confermato.",
+        "Nessuna probabilità, ranking, auto-promotion o runtime authorization."
       ]
     }
   ]

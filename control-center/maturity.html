@@ -114,7 +114,7 @@ h1{margin:3px 0 4px;font-size:30px}
 <body>
 <main>
 <header class="top">
-  <div><div class="eyebrow">TRAMA CONTROL CENTER · VISTA SPECIALISTICA</div><h1>Maturità</h1><p class="lede">Stadi confermati, candidati ed evidenze mancanti. Il ciclo di vita dei componenti resta separato dalla maturità.</p></div>
+  <div><div class="eyebrow">TRAMA CONTROL CENTER · VISTA SPECIALISTICA</div><h1>Maturità</h1><p class="lede">I livelli riflettono esclusivamente evidenze governate e collegate. Un livello basso può indicare prove non ancora bound, non assenza di funzionalità o qualità del prodotto. Il ciclo di vita dei componenti resta separato dalla maturità.</p></div>
   <a class="back" href="./index.html">← Torna alla sintesi</a>
 </header>
 
@@ -128,7 +128,7 @@ h1{margin:3px 0 4px;font-size:30px}
 </section>
 
 <section class="panel" aria-labelledby="areasHeading">
-  <div class="section-head"><div><h2 id="areasHeading">Aree di maturità</h2><span class="hint">livello confermato e candidato</span></div></div>
+  <div class="section-head"><div><h2 id="areasHeading">Aree di maturità</h2><span class="hint">livelli da evidenze bound · nessuno score di qualità</span></div></div>
   <div id="areaGrid" class="area-grid"></div>
 </section>
 
@@ -167,7 +167,22 @@ const CACHE_KEY='trama-cc2-snapshot';
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
 function readSnapshot(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch{return null}}
-function confidenceLabel(v){return ({HIGH:'Alta',MEDIUM:'Media',LOW:'Bassa'})[String(v||'').toUpperCase()]||String(v||'—')}
+const EVIDENCE_TYPE_LABELS={
+  DOCUMENT_CANONICAL:'documento canonico',
+  CONTRACT_APPROVED:'contratto approvato',
+  PR_EXACT_HEAD:'exact head qualificato',
+  AUTOMATED_TEST:'test automatico',
+  SECURITY_GATE:'gate sicurezza',
+  ACCESSIBILITY_GATE:'gate accessibilità',
+  RUNTIME_CANARY:'canary runtime',
+  HUMAN_REVIEW:'review umana',
+  REAL_CASE_VALIDATION:'caso reale',
+  PROMOTION_DECISION:'decisione di promozione',
+  REGRESSION_HISTORY:'storia di regressione',
+  ADOPTION_EVIDENCE:'evidenza di adozione'
+};
+function bindingLabel(v){return ({NONE:'Non collegate',PARTIAL:'Parziali',COMPLETE:'Complete'})[String(v||'').toUpperCase()]||String(v||'—')}
+function evidenceTypeLabel(v){return EVIDENCE_TYPE_LABELS[v]||String(v||'').replaceAll('_',' ').toLowerCase()}
 function render(data,mode){
   updated.textContent=(mode==='offline'?'Offline · ':'Aggiornato · ')+new Date(data.generatedAt).toLocaleString('it-IT');
   const areas=data.areas||[],components=data.components||[];
@@ -175,7 +190,11 @@ function render(data,mode){
   componentCount.textContent=components.length;
   const source=data.sourceState?.['component-evidence-registry'];
   componentSourceState.textContent=source?.status==='FRESH'?'Aggiornata':(source?.status||'Non disponibile');
-  areaGrid.innerHTML=areas.map(a=>'<article class="area-row"><div class="area-name"><strong>'+esc(a.name)+'</strong><small>'+esc(a.ownerDomain||'')+'</small></div><div class="levels">'+[0,1,2,3,4,5].map(n=>'<span class="lv '+(n<=a.confirmedLevel?'on':'')+'">L'+n+'</span>').join('')+'</div><div><small class="hint">Confermato</small><br><b>L'+a.confirmedLevel+'</b></div><div><small class="hint">Candidato</small><br><b>L'+a.candidateLevel+'</b></div><div><span class="badge low">'+esc(confidenceLabel(a.confidence))+'</span></div></article>').join('');
+  areaGrid.innerHTML=areas.map(a=>{
+    const next=(a.nextRequiredEvidenceTypes||[]).map(evidenceTypeLabel);
+    const nextText=a.nextTargetLevel===null?'Catena L5 completa':('Per L'+a.nextTargetLevel+': '+(next.join(', ')||'nessuna prova aggiuntiva'));
+    return '<article class="area-row"><div class="area-name"><strong>'+esc(a.name)+'</strong><small>'+esc(a.ownerDomain||'')+'</small><small class="hint">'+esc(nextText)+'</small></div><div class="levels">'+[0,1,2,3,4,5].map(n=>'<span class="lv '+(n<=a.confirmedLevel?'on':'')+'">L'+n+'</span>').join('')+'</div><div><small class="hint">Confermato</small><br><b>L'+a.confirmedLevel+'</b></div><div><small class="hint">Candidato</small><br><b>L'+a.candidateLevel+'</b></div><div><small class="hint">Prove bound</small><br><b>'+esc(bindingLabel(a.evidenceBindingStatus))+'</b></div></article>';
+  }).join('');
   if(window.matchMedia('(max-width:760px)').matches)componentMapDisclosure.removeAttribute('open');
   if(window.TRAMAMaturityMap&&typeof window.TRAMAMaturityMap.render==='function'){
     window.TRAMAMaturityMap.render({

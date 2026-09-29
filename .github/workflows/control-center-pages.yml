@@ -45,6 +45,8 @@ jobs:
           ! grep -q 'id="componentMaturityMap"' control-center/index.html
           grep -q "TRAMA Control Center · Maturità" control-center/maturity.html
           grep -q "Aree di maturità" control-center/maturity.html
+          grep -q "Un livello basso può indicare prove non ancora bound" control-center/maturity.html
+          grep -q "Prove bound" control-center/maturity.html
           grep -q 'id="componentMaturityMap"' control-center/maturity.html
           grep -q "Elenco equivalente della maturità dei componenti" control-center/maturity.html
           test -s control-center/component-maturity.js
@@ -107,7 +109,7 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v12" control-center/sw.js
+          grep -q "trama-control-center-v13" control-center/sw.js
           grep -q "\./maturity.html" control-center/sw.js
           grep -q "\./component-maturity.js" control-center/sw.js
           test -s control-center/project-knowledge-state.js

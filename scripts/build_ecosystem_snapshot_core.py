@@ -749,6 +749,30 @@ def build_snapshot(root: Path) -> dict:
         evaluate_area(area_def, evidence)
         for area_def in maturity_definitions["areas"]
     ]
+    definition_by_id = {area["id"]: area for area in maturity_definitions["areas"]}
+
+    def maturity_binding_projection(result: dict) -> dict:
+        confirmed = result["confirmedLevel"]
+        refs = result["currentEvidenceRefs"]
+        available = set(result.get("availableEvidenceTypes", []))
+        if confirmed >= 5:
+            next_target = None
+            next_required = []
+            binding_status = "COMPLETE"
+        else:
+            next_target = confirmed + 1
+            required = set(
+                definition_by_id[result["id"]]["levels"][str(next_target)]["requiredEvidenceTypes"]
+            )
+            next_required = sorted(required - available)
+            binding_status = "PARTIAL" if refs else "NONE"
+        return {
+            "evidenceBindingStatus": binding_status,
+            "nextTargetLevel": next_target,
+            "nextRequiredEvidenceTypes": next_required,
+            "interpretation": "BOUND_EVIDENCE_ONLY",
+        }
+
     maturity_areas = [
         {
             "id": result["id"],
@@ -759,6 +783,7 @@ def build_snapshot(root: Path) -> dict:
             "confidence": "LOW",
             "status": "PARTIAL",
             "evidenceRefs": result["currentEvidenceRefs"],
+            **maturity_binding_projection(result),
             "blockingGateRefs": [
                 gate["id"]
                 for gate in gates
@@ -809,7 +834,7 @@ def build_snapshot(root: Path) -> dict:
     ]
     snapshot = {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-        "schemaVersion": "1.4.0",
+        "schemaVersion": "1.5.0",
         "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),

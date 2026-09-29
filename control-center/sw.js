@@ -1,4 +1,4 @@
-const CACHE='trama-control-center-v12';
+const CACHE='trama-control-center-v13';
 const SHELL=['./index.html','./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./maturity.html','./ecosystem.html','./evidence.html','./operations.html','./project-knowledge-state.js','./component-maturity.js','./data/ecosystem-snapshot.json','./data/context-packs/project-knowledge.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md','./e3/index.html'];
 
 self.addEventListener('install',event=>{

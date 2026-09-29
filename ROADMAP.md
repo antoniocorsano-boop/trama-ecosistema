@@ -12,6 +12,8 @@ Esito atteso: una fonte comune leggibile e verificabile, senza duplicazione dell
 
 ## R2 Pilota ECO-02/P1
 
+Stato corrente: **CLOSED_VERIFIED / HUMAN REVIEW PASS**. Il caso reale Tecnologia 2C è chiuso; la chiusura non autorizza DOS-A1.
+
 - prova reale controllata in Tecnologia 2C;
 - vincolo con classe, data e collocazione oraria;
 - provenienza del curricolo Arena;
@@ -223,6 +225,23 @@ Riferimenti:
 - `docs/decisions/trama-adr-015-project-knowledge-context-provider.md`;
 - `docs/design/trama-control-center-v2-view-architecture.md`.
 
+## Maturity reconciliation — 2026-09-29
+
+Il maturity engine misura **evidenze bound**, non qualità percepita o quantità di funzionalità.
+
+Conseguenze operative:
+- un livello L0 può significare che le prove non sono ancora collegate all'area;
+- un'evidenza successiva non può saltare un prerequisito precedente;
+- product-area maturity, component maturity e lifecycle restano assi distinti;
+- L4 è il primo target operativo serio;
+- L5 richiede regression history e, dove previsto, adoption evidence.
+
+La baseline e il backlog governato sono:
+- `docs/analysis/trama-maturity-reconciliation-2026-09-29.md`;
+- `governance/maturity/trama-maturity-reconciliation-v1.json`.
+
+La prima tranche riconcilia stato canonico e semantica della maturità senza promuovere livelli. La tranche successiva collegherà solo evidenze già governate e version-bound.
+
 ## CC3 Governed Forecast & Readiness
 
 CC3 estende il Control Center senza modificare la roadmap R1–R5 e senza introdurre una nuova authority.
@@ -230,7 +249,7 @@ CC3 estende il Control Center senza modificare la roadmap R1–R5 e senza introd
 Sequenza governata:
 
 1. **CC3-F0 — Forecast Contract & Guardrails** — INTEGRATA / HUMAN EXACT-HEAD REVIEW PASS via #88. Definisce ADR-016, policy, schema, confidence qualitativa, invalidators, scenario read-only e ForecastReceipt. ADR-016 resta PROPOSED.
-2. **CC3-F1 — Next Transition Engine** — ACTIVE / HUMAN REVIEW PENDING. Derivazione deterministica delle sole transizioni possibili da gate e dipendenze correnti; nessuna previsione di esito, ranking o mutazione.
+2. **CC3-F1 — Next Transition Engine** — CLOSED / HUMAN EXACT-HEAD REVIEW PASS. Derivazione deterministica delle sole transizioni possibili da gate e dipendenze correnti; nessuna previsione di esito, ranking o mutazione.
 3. **CC3-F2 — Scenario Explorer** — PLANNED. Simulazione controfattuale senza mutazione dello snapshot canonico.
 4. **CC3-F3 — Bottleneck & Dependency Forecast** — PLANNED. Individuazione dei colli di bottiglia senza ranking automatico di priorità.
 5. **CC3-F4 — Adoption Readiness Forecast** — PLANNED. Prerequisiti verso R5 senza percentuali non calibrate.
@@ -272,17 +291,17 @@ Il piano dettagliato è in [docs/strategy/atomic-operating-plan-2026-09-22.md](d
 
 La roadmap deve essere letta con questa priorità:
 
-1. chiusura verificata di ECO-02/P1;
-2. R3-F0/S3 — CLOSED;
-   - in parallelo è consentita la sola progettazione NO_RUNTIME di R4-P2/S1 Professional Practice;
-3. R3-P2 Curriculum pubblico;
-4. R3-P5 Smart Navigation;
-5. continuità d'esperienza Docente OS ↔ Arena ↔ Atlas senza rendere Atlas un passaggio obbligatorio;
-6. R4-P1 Officina materiali;
-7. R3-P3 Learning Hub;
-8. R3-P4 solo dopo superfici Atlas mature e nuova autorizzazione;
-9. R3-P6 Curriculum Health;
-10. identità prodotto, adozione e pilota di istituto.
+Prerequisiti già chiusi: **ECO-02/P1** e **R3-F0/S3-V2**.
+
+1. R3-P2 Curriculum pubblico;
+2. R3-P5 Smart Navigation / Percorsi;
+3. continuità d'esperienza Docente OS ↔ Arena ↔ Atlas senza rendere Atlas un passaggio obbligatorio;
+4. R4-P1 Officina materiali;
+   - in parallelo resta consentita la progettazione NO_RUNTIME di R4-P2/S1 Professional Practice;
+5. R3-P3 Learning Hub;
+6. R3-P4 solo dopo superfici Atlas mature e una nuova autorizzazione umana/runtime;
+7. R3-P6 Curriculum Health;
+8. identità prodotto, adozione e pilota di istituto.
 
 ### Regola di portafoglio
 
