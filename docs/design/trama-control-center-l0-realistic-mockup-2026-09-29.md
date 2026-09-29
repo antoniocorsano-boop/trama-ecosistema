@@ -67,3 +67,25 @@ Il mockup è stato tradotto in un prototipo navigabile che riusa i token e i pat
 `docs/prototypes/TRAMA-CONTROL-CENTER-L0-REALISTIC.html`
 
 Il prototipo non sostituisce la Home pubblica e serve a validare fattibilità, gerarchia e comportamento responsive prima dell'implementazione runtime.
+## Orientation review outcome — 2026-09-29
+
+La successiva verifica percettiva ha mostrato che il prototipo derivato dal mockup è troppo verticale e frammentato per essere considerato target finale.
+
+Finding:
+**ORIENTATION / EXCESSIVE VERTICAL DECOMPOSITION — HIGH**
+
+Effetto osservato:
+- i singoli blocchi sono comprensibili;
+- la posizione dell’utente e la gerarchia complessiva si perdono durante lo scroll;
+- la Home viene percepita come report più che come superficie di orientamento.
+
+Il mockup originario resta utile come riferimento di semplicità. Il prossimo artefatto deve essere **L0 v2** con:
+- shell persistente;
+- un solo stato dominante;
+- relazione Arena → Atlas → Docente OS;
+- massimo tre destinazioni principali;
+- spostamento di verifiche, cronologia e dettagli fuori dalla lunga Home verticale.
+
+Riferimento di ricerca:
+`docs/research/trama-control-center-orientation-state-of-art-2026-09-29.md`
+
