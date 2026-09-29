@@ -29,6 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           test -s control-center/index.html
+          test -s control-center/maturity.html
           test -s control-center/ecosystem.html
           test -s control-center/evidence.html
           test -s control-center/operations.html
@@ -40,10 +41,12 @@ jobs:
           grep -q "SOLA LETTURA" control-center/index.html
           test -s control-center/data/ecosystem-snapshot.json
           grep -q "SNAPSHOT_URL='./data/ecosystem-snapshot.json'" control-center/index.html
-          grep -q "Matrice di maturità" control-center/index.html
-          grep -q "Maturità dei componenti" control-center/index.html
-          grep -q "componentMaturityMap" control-center/index.html
-          grep -q "Elenco equivalente della maturità dei componenti" control-center/index.html
+          grep -q "Apri la vista Maturità" control-center/index.html
+          ! grep -q 'id="componentMaturityMap"' control-center/index.html
+          grep -q "TRAMA Control Center · Maturità" control-center/maturity.html
+          grep -q "Aree di maturità" control-center/maturity.html
+          grep -q 'id="componentMaturityMap"' control-center/maturity.html
+          grep -q "Elenco equivalente della maturità dei componenti" control-center/maturity.html
           test -s control-center/component-maturity.js
           node scripts/test_component_maturity_ui.cjs
           grep -q "Attenzione richiesta" control-center/index.html
@@ -78,7 +81,6 @@ jobs:
           grep -q "helpPopover" control-center/index.html
           grep -q "helpAttr(claim.requirementId" control-center/index.html
           grep -q "'assurance-card'" control-center/index.html
-          grep -q "'area'" control-center/index.html
           grep -q "'alert'" control-center/index.html
           grep -q "'dep'" control-center/index.html
           grep -q "'exp-item'" control-center/index.html
@@ -104,7 +106,8 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v11" control-center/sw.js
+          grep -q "trama-control-center-v12" control-center/sw.js
+          grep -q "\./maturity.html" control-center/sw.js
           grep -q "\./component-maturity.js" control-center/sw.js
           test -s control-center/project-knowledge-state.js
           test -s control-center/e3/index.html
@@ -130,7 +133,7 @@ jobs:
           grep -q "width:44px;height:44px" control-center/index.html
           ! grep -q "margin:0 -12px" control-center/index.html
           ! grep -q "margin:0 -13px" control-center/index.html
-          for file in control-center/index.html control-center/ecosystem.html control-center/evidence.html control-center/operations.html; do
+          for file in control-center/index.html control-center/maturity.html control-center/ecosystem.html control-center/evidence.html control-center/operations.html; do
             if grep -Eq "(api\.github\.com|raw\.githubusercontent\.com)" "$file"; then
               echo "Direct GitHub fetch found in snapshot-first shell: $file" >&2
               exit 1
@@ -145,7 +148,7 @@ jobs:
         run: |
           node - <<'NODE'
           const fs = require('fs')
-          for (const file of ['control-center/index.html','control-center/ecosystem.html','control-center/evidence.html','control-center/operations.html','control-center/e3/index.html','control-center/preview/l0/index.html']) {
+          for (const file of ['control-center/index.html','control-center/maturity.html','control-center/ecosystem.html','control-center/evidence.html','control-center/operations.html','control-center/e3/index.html','control-center/preview/l0/index.html']) {
             const html = fs.readFileSync(file, 'utf8')
             const match = html.match(/<script>([\s\S]*?)<\/script>/)
             if (!match) throw new Error('Inline script not found in '+file)
