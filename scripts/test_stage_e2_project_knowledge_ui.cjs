@@ -89,6 +89,22 @@ const blocked=api.derive(pack({
 assert.equal(blocked.kind,'blocked');
 assert.equal(blocked.actionRequired,true);
 
+const noaccess=api.derive(pack({
+  governedAsOf:'2026-09-29T06:42:00Z',
+  liveObservedAt:'2026-09-29T06:58:00Z',
+  governedKnowledgeStatus:'CURRENT',
+  liveObservationStatus:'FRESH',
+  semanticDriftStatus:'NONE',
+  effectiveContextStatus:'USABLE',
+  accessStatus:'NO_ACCESS',
+  promotionRequired:false,
+  liveFacts:[],
+  sourceRefs:[]
+}));
+assert.equal(noaccess.kind,'noaccess');
+assert.equal(noaccess.actionRequired,false);
+assert.equal(noaccess.technical.restricted,true);
+
 const offline=api.derive(pack(),'offline-cache');
 assert.equal(offline.kind,'offline');
 assert.match(offline.title,/ultimo stato disponibile/i);
@@ -96,7 +112,7 @@ assert.match(offline.title,/ultimo stato disponibile/i);
 const invalid=api.derive({subject:'other'});
 assert.equal(invalid.kind,'error');
 
-for(const view of [current,normal,empty,partial,review,blocked,offline]){
+for(const view of [current,normal,empty,partial,review,blocked,noaccess,offline]){
   const primary=[view.title,view.summary,view.verifiedTitle,view.verifiedText,view.updatesTitle,view.updatesText,view.notice||''].join(' ').toLowerCase();
   for(const forbidden of ['semantic drift','repository head mismatch','promotionrequired']){
     assert.equal(primary.includes(forbidden),false,forbidden+' leaked to primary copy');
