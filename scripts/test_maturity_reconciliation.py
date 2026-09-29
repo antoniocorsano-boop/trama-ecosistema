@@ -63,6 +63,10 @@ assert backlog["components"]["currentRegistryCount"]==6
 assert set(backlog["components"]["missingProductCoverage"])=={"ATLAS","DOCENTE_OS"}
 assert backlog["functionalSequence"][:2]==["R3-P2","R3-P5"]
 
+timeline={item["id"] for item in snapshot["timelineEvents"]}
+assert "EVT-ECO02-P1-FINAL-HUMAN-PASS" in timeline
+assert "EVT-CC3-F1-HUMAN-PASS" in timeline
+
 ui=(ROOT/"control-center/maturity.html").read_text(encoding="utf-8")
 assert "Un livello basso può indicare prove non ancora bound" in ui
 assert "Prove bound" in ui
