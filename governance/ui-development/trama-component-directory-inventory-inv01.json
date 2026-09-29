@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "trama.component-directory-inventory/v1",
+  "sliceId": "INV-01",
+  "status": "PROPOSED",
+  "runtimeImpact": "NONE",
+  "baseline": {
+    "trama": "a95468204bbdd732483bada6dd671ac74a360f24",
+    "arena": "9da1cf65ae86ff5a3a65888636bf04f3a7312a7b",
+    "atlas": "1295f2817b640f3bcb9c5da9053a4f85b027cc71",
+    "docenteOs": "f0b7e5c01620d4cc87587081859cbf270cc1d033"
+  },
+  "products": [
+    {
+      "id": "ARENA",
+      "genericComponentDirs": [
+        "src/components/ui",
+        "src/ui/components"
+      ],
+      "genericTsxCount": 24,
+      "domainTsxCount": 73,
+      "storyCount": 5,
+      "findings": [
+        "INV01-F01"
+      ],
+      "classification": "PARALLEL_UI_FOUNDATIONS"
+    },
+    {
+      "id": "ATLAS",
+      "genericComponentDirs": [
+        "src/components/ui"
+      ],
+      "domainComponentDirs": [
+        "src/components/atlas"
+      ],
+      "genericTsxCount": 1,
+      "domainTsxCount": 7,
+      "storyCount": 0,
+      "findings": [
+        "INV01-F02"
+      ],
+      "classification": "MINIMAL_GENERIC_HIGH_DOMAIN_COMPOSITION"
+    },
+    {
+      "id": "DOCENTE_OS",
+      "genericComponentDirs": [
+        "product/src/components/ui"
+      ],
+      "domainComponentDirs": [
+        "product/src/components/app-shell",
+        "product/src/components/assistant",
+        "product/src/components/experience-feedback"
+      ],
+      "genericTsxCount": 6,
+      "domainTsxCount": 4,
+      "storyCount": 0,
+      "findings": [
+        "INV01-F03"
+      ],
+      "classification": "INTENTIONAL_OPEN_CODE_FOUNDATION"
+    },
+    {
+      "id": "TRAMA_CONTROL_CENTER",
+      "genericComponentDirs": [],
+      "pageSurfaces": [
+        "control-center/index.html",
+        "control-center/ecosystem.html",
+        "control-center/evidence.html",
+        "control-center/operations.html",
+        "control-center/e3/index.html"
+      ],
+      "findings": [
+        "INV01-F04"
+      ],
+      "classification": "MONOLITHIC_STATIC_UI_COMPOSITION"
+    }
+  ],
+  "findings": [
+    {
+      "id": "INV01-F01",
+      "severity": "HIGH",
+      "subject": "ARENA",
+      "summary": "Parallel generic UI foundations coexist."
+    },
+    {
+      "id": "INV01-F02",
+      "severity": "MEDIUM",
+      "subject": "ATLAS",
+      "summary": "Minimal generic primitive layer; domain composition carries most UI behavior."
+    },
+    {
+      "id": "INV01-F03",
+      "severity": "LOW",
+      "subject": "DOCENTE_OS",
+      "summary": "Intentional open-code product-local foundation; evidence/lifecycle mapping is the main follow-up."
+    },
+    {
+      "id": "INV01-F04",
+      "severity": "HIGH",
+      "subject": "TRAMA_CONTROL_CENTER",
+      "summary": "Static UI is page-monolithic and lacks an explicit reusable semantic component layer."
+    }
+  ],
+  "nextSlice": "INV-02",
+  "migrationAuthorized": false,
+  "dependencyAdoptionAuthorized": false
+}
