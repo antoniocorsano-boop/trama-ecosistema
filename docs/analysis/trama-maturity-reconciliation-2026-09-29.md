@@ -210,7 +210,24 @@ L5 requires evidence that cannot be manufactured by more implementation work alo
 
 Therefore L5 should be reached through stable use, not by weakening the maturity model.
 
-## 10. Non-authorizations
+## 10. Materialized reconciliation checkpoint
+
+After deterministic regeneration on this slice, the snapshot is `1.5.0` and preserves the conservative levels:
+
+- Governance: L1, evidence binding PARTIAL, next missing type `CONTRACT_APPROVED`;
+- Arena: L0, evidence binding NONE, next missing type `DOCUMENT_CANONICAL`;
+- Atlas: L0, evidence binding PARTIAL, next missing type `DOCUMENT_CANONICAL`;
+- Docente OS: L0, evidence binding NONE, next missing type `DOCUMENT_CANONICAL`.
+
+This is the intended reconciliation result. No product maturity level was promoted.
+
+The semantic timeline now explicitly includes:
+- ECO-02/P1 final human closeout;
+- CC3-F1 human closeout.
+
+All snapshot integrity checks remain PASS at materialization time.
+
+## 11. Non-authorizations
 
 This analysis and reconciliation do not authorize:
 
