@@ -43,7 +43,7 @@ def main():
     preview=PREVIEW.read_text(encoding="utf-8")
     if canon != preview: fail("preview parity")
     for token in [
-        "participant=1",
+        "query.get('participant')==='1'",
         "data-participant",
         "Versione di prova",
         "['normal','attention','decision','offline']"
