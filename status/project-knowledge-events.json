@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-09-28T20:54:45Z",
+  "updatedAt": "2026-09-29T04:06:39Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-PERCORSI-PR96-RECOVERY",
@@ -164,6 +164,48 @@
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-REPOSITORY-OBSERVATION-PROMOTION-10d676389d0bfc1f",
+      "type": "PROMOTION",
+      "subject": "project-knowledge-repository-state",
+      "statement": "A governed RepositoryObservation was promoted into the current Project Knowledge repository-state projection.",
+      "status": "CURRENT",
+      "rationale": "Promotion is bound to proposal rop-6b6169c41668a4e9ede0359c869bef28f2d48f3561ce0abfd684a5bc216136b4, source run 36520123613, exact collector and actor revisions, policy digest and enrollment digest.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "github-actions:workflow-run/36520123613"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "receipt:gha-dispatch-36520123613--gha-36520123613"
+        }
+      ],
+      "validFrom": "2026-09-29T04:06:39Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "promotionEvent": {
+        "schemaVersion": "trama.repository-observation-promotion-event/v1",
+        "eventId": "rope-10d676389d0bfc1f19c5bcd2413c19888f495858d5dd773df4d12eb490023b41",
+        "proposalId": "rop-6b6169c41668a4e9ede0359c869bef28f2d48f3561ce0abfd684a5bc216136b4",
+        "observationDigest": "6b6169c41668a4e9ede0359c869bef28f2d48f3561ce0abfd684a5bc216136b4",
+        "previousObservationDigest": null,
+        "recordedAt": "2026-09-29T04:06:39Z",
+        "recordedBy": "gha-dispatch-36520123613",
+        "sourceRunId": "36520123613",
+        "sourceReceiptRef": "gha-dispatch-36520123613--gha-36520123613",
+        "collectorExactSha": "9b114eccfe3d67cfafdc480be6fa32682c18dbf8",
+        "promotionActorExactSha": "9b114eccfe3d67cfafdc480be6fa32682c18dbf8",
+        "promotionPolicyDigest": "70c58675a75c3436dd81b01f8bc6694af9fb2e0ae646ea14a5ca0b284c0c1616",
+        "repositoryEnrollmentDigest": "ebedf9e82e75ff1bb0a110510ce669c4b5bf627af0113998808dddc2dc2ec54d",
+        "result": "PROMOTED",
+        "sourceRefs": [
+          "github-actions:workflow-run/36520123613",
+          "receipt:gha-dispatch-36520123613--gha-36520123613"
+        ],
+        "supersedes": []
       }
     }
   ]
