@@ -67,10 +67,12 @@ def _semantic_drift_status(overlay):
         return "DETECTED"
     return "NONE"
 
-def _effective_status(governed,live):
+def _effective_status(governed,live,semantic_drift):
     if governed=="UNKNOWN" and live in {"UNAVAILABLE","PARTIAL"}:
         return "BLOCKED"
     if live in {"UNAVAILABLE","PARTIAL","STALE"}:
+        return "DEGRADED"
+    if semantic_drift=="DETECTED":
         return "DEGRADED"
     return "USABLE"
 
@@ -100,7 +102,7 @@ def compose_effective_project_context(governed_snapshot,live_overlay,governed_sn
     governed=_governed_status(governed_snapshot)
     live=_live_status(live_overlay)
     drift=_semantic_drift_status(live_overlay)
-    effective=_effective_status(governed,live)
+    effective=_effective_status(governed,live,drift)
 
     facts=[]
     for repository,head in sorted(repos.items()):
