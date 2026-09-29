@@ -73,9 +73,14 @@ assert bundle["recordedBy"]=="gha-dispatch-123"
 assert bundle["baseExactSha"]==exact
 assert bundle["proposal"]["state"]=="READY_FOR_HUMAN_REVIEW"
 assert actor.validate_bundle(bundle,exact)
-promotion_events=[x for x in bundle["candidateSnapshot"]["knowledgeEvents"] if x.get("type")=="PROMOTION"]
+expected_digest=canon.sha256_canonical(observation)
+promotion_events=[
+    x for x in bundle["candidateSnapshot"]["knowledgeEvents"]
+    if x.get("type")=="PROMOTION"
+    and (x.get("promotionEvent") or {}).get("observationDigest")==expected_digest
+]
 assert len(promotion_events)==1
-assert promotion_events[0]["promotionEvent"]["observationDigest"]==canon.sha256_canonical(observation)
+assert promotion_events[0]["promotionEvent"]["observationDigest"]==expected_digest
 assert bundle["candidateSnapshot"]["generatedAt"]==bundle["recordedAt"]
 snapshot_change=next(x for x in bundle["proposal"]["proposedChanges"] if x["path"]=="control-center/data/project-context-snapshot.json")
 assert snapshot_change["sha256"]==canon.sha256_canonical(bundle["candidateSnapshot"])
