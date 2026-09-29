@@ -10,6 +10,9 @@ on:
       - "scripts/build_ecosystem_snapshot.py"
       - "scripts/generate_stakeholder_report.py"
       - "scripts/validate_stakeholder_assurance.py"
+      - "scripts/materialize_live_project_knowledge_bundle.py"
+      - "scripts/test_materialize_live_project_knowledge_bundle.py"
+      - "scripts/compose_effective_project_context.py"
       - "STATUS.md"
       - "ROADMAP.md"
       - ".github/workflows/control-center-build.yml"
@@ -138,6 +141,31 @@ jobs:
           PY
       - name: Promote generated snapshot for bundle
         run: mv control-center/data/ecosystem-snapshot.generated.json control-center/data/ecosystem-snapshot.json
+      - name: Qualify live Project Knowledge bundle materialization
+        if: github.event_name == 'pull_request'
+        run: python scripts/test_materialize_live_project_knowledge_bundle.py
+
+      - name: Materialize live read-only Project Knowledge for deploy bundle
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          live_overlay=/tmp/trama-live-repository-overlay.json
+
+          if python scripts/run_live_repository_overlay.py --pretty > "$live_overlay"; then
+            python scripts/materialize_live_project_knowledge_bundle.py \
+              --overlay "$live_overlay" \
+              --output control-center/data/context-packs/project-knowledge.json
+            rm -f "$live_overlay"
+            echo "TRAMA_LIVE_EFFECTIVE_CONTEXT_BUNDLE_PASS"
+          else
+            rm -f "$live_overlay"
+            python scripts/build_trama_context_pack.py project-knowledge \
+              --output control-center/data/context-packs/project-knowledge.json
+            echo "TRAMA_LIVE_EFFECTIVE_CONTEXT_UNAVAILABLE_GOVERNED_FALLBACK"
+          fi
+
       - name: Regenerate stakeholder dossier
         run: python scripts/generate_stakeholder_report.py
       - name: Verify bundle and machine contract
