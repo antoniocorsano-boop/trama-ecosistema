@@ -25,4 +25,6 @@ validate(Path('schemas/repository-observation-promotion-proposal.schema.json'),P
 validate(Path('schemas/repository-observation-promotion-proposal.schema.json'),Path('control-center/fixtures/project-knowledge/repository-observation-promotion-proposal-invalid.json'),expect_valid=False)
 validate(Path('schemas/repository-observation-promotion-event.schema.json'),Path('control-center/fixtures/project-knowledge/repository-observation-promotion-event-valid.json'))
 validate(Path('schemas/repository-observation-promotion-event.schema.json'),Path('control-center/fixtures/project-knowledge/repository-observation-promotion-event-invalid.json'),expect_valid=False)
+validate(Path('schemas/repository-observation-promotion-write-bundle.schema.json'),Path('control-center/fixtures/project-knowledge/repository-observation-promotion-write-bundle-valid.json'))
+validate(Path('schemas/repository-observation-promotion-write-bundle.schema.json'),Path('control-center/fixtures/project-knowledge/repository-observation-promotion-write-bundle-invalid.json'),expect_valid=False)
 print('TRAMA_PROJECT_KNOWLEDGE_REPOSITORY_OBSERVATION_AND_PROMOTION_SCHEMA_PASS')
