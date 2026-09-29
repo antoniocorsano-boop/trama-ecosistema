@@ -101,7 +101,8 @@ except actor.ActorError as e: assert str(e)=="OBSERVATION_BINDING_MISMATCH"
 source=(ROOT/"scripts/repository_observation_promotion_write_actor.py").read_text()
 for forbidden in ["/merges","/merge","DELETE","PATCH","git push","subprocess","os.system","requests.","httpx."]:
  assert forbidden not in source, forbidden
-for required in ["BRANCH_CONTAINS_UNEXPECTED_PATHS","BASE_HEAD_MISMATCH","MULTIPLE_PROMOTION_PRS","PATH_ALLOWLIST_MISMATCH"]:
+assert actor.branch_name(proposal["proposalId"],bundle["baseExactSha"]).endswith("-"+bundle["baseExactSha"][:12])
+for required in ["BRANCH_CONTAINS_UNEXPECTED_PATHS","BRANCH_BASE_MISMATCH","BRANCH_HISTORY_INVALID","BASE_HEAD_MISMATCH","BASE_MOVED_DURING_WRITE","MULTIPLE_PROMOTION_PRS","PATH_ALLOWLIST_MISMATCH"]:
  assert required in source, required
 
 print("TRAMA_REPOSITORY_OBSERVATION_PROMOTION_WRITE_ACTOR_PASS")
