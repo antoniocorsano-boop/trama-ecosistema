@@ -62,6 +62,7 @@ Each evidence reference MUST include:
 - `type`: one of `ISOLATED | BEHAVIOURAL | RESPONSIVE_VISUAL | ACCESSIBILITY | LIFECYCLE`;
 - `status`: `PRESENT | PARTIAL | DOCUMENTED_ONLY | NOT_OBSERVED | NOT_APPLICABLE`;
 - `ref`: stable repository-relative path, governed document ID, or immutable run/review reference when evidence is present;
+- `repository`: required when `ref` points to evidence outside the TRAMA repository;
 - `exactHead` or immutable build/run identity when evidence proves executable behavior.
 
 A registry entry MUST NOT manufacture evidence by declaring `PRESENT` without a reference. For evidence types other than `LIFECYCLE`, `PRESENT` means executable or otherwise immutable proof and therefore MUST also carry `exactHead` or an immutable build/run identity. `LIFECYCLE` is governance state and MAY be attested by the governed registry itself.
