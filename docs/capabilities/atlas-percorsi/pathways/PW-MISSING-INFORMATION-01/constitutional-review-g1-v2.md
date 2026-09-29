@@ -1,14 +1,19 @@
 # PW-MISSING-INFORMATION-01 — Constitutional Review G1 v2
 
-**Reviewed commit:** `96e6d1b498d7119248e8f9ec4e61fbba622e47af`  
+**Review binding:** immutable Git blob package (the original working commit is not used as audit authority)  
 **Reviewed dossier blob:** `046b7740f7ce6c96c9aca11e846b49e2ee714a9e`  
+**Reviewed constitution blob:** `e5ac20c603c71852ff3625101e63fe62a6eebb81`  
+**Reviewed review-contract blob:** `dad20b441af615145dc1b7ddeb9ab18c901cb1b1`  
+**Reviewed core evidence blob:** `7218a804134d7ae16cef27448b8844dfc29db484`  
+**Reviewed transfer evidence blob:** `9af25297b1e645cc8ed904500d497746d48377cc`  
+**Reviewed error/agent/emotion evidence blob:** `352250cf43b9dba6472cb751f2dcf7e749d2641d`  
 **Date:** 2026-09-25  
 **Runtime:** NOT_AUTHORIZED
 
 ## Result
 **G1 CONSTITUTIONAL DOCUMENT REVIEW v2: DOCUMENT_PASS / HUMAN_VALIDATION_PENDING**
 
-R1–R5 from v1 are materially addressed at specification/document level. No automatic constitutional stop is observed in the reviewed dossier. This PASS means the written design is coherent enough to advance to human/implementation validation; it is not a runtime, accessibility-conformance, pedagogical-effectiveness or child-safety certification.
+R1–R5 from v1 are materially addressed at specification/document level. The review package is reconstructible from the immutable blob bindings above; no unreachable branch/commit is required to reproduce the reviewed inputs. No automatic constitutional stop is observed in the reviewed dossier. This PASS means the written design is coherent enough to advance to human/implementation validation; it is not a runtime, accessibility-conformance, pedagogical-effectiveness or child-safety certification.
 
 ## Verification of required changes
 - **R1 developmental-language review framework:** PASS AT SPEC LEVEL — final wording envelope, demand, prior knowledge and support are explicit; human developmental review remains pending.
