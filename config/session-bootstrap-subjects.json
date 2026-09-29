@@ -36,7 +36,8 @@
         "control-center-ui",
         "project-knowledge",
         "human-communication",
-        "information-architecture"
+        "information-architecture",
+        "control-center-architecture"
       ]
     },
     {
@@ -55,7 +56,10 @@
         "control-center-ui",
         "component-evidence",
         "component-lifecycle",
-        "project-knowledge"
+        "project-knowledge",
+        "maturity",
+        "visualization",
+        "ecosystem-graph"
       ]
     },
     {
