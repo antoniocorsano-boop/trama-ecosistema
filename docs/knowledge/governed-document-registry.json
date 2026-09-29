@@ -745,7 +745,7 @@
     {
       "id": "DOC-CC-ORIENTATION-REMEDIATION-01",
       "path": "docs/implementation/cc-orientation-remediation-01.md",
-      "kind": "IMPLEMENTATION_GUIDE",
+      "kind": "GUIDE",
       "status": "PROPOSED",
       "priority": "NORMATIVE",
       "subjects": [
