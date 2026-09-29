@@ -70,6 +70,32 @@
     },
     "sourceRefs": {
       "type": "array"
+    },
+    "effectiveContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "governedAsOf",
+        "liveObservedAt",
+        "governedKnowledgeStatus",
+        "liveObservationStatus",
+        "semanticDriftStatus",
+        "effectiveContextStatus",
+        "promotionRequired",
+        "liveFacts",
+        "sourceRefs"
+      ],
+      "properties": {
+        "governedAsOf": {"type": "string", "format": "date-time"},
+        "liveObservedAt": {"type": ["string", "null"], "format": "date-time"},
+        "governedKnowledgeStatus": {"enum": ["CURRENT", "SUPERSEDED", "UNKNOWN"]},
+        "liveObservationStatus": {"enum": ["FRESH", "STALE", "UNAVAILABLE", "PARTIAL"]},
+        "semanticDriftStatus": {"enum": ["NONE", "DETECTED", "REVIEW_REQUIRED"]},
+        "effectiveContextStatus": {"enum": ["USABLE", "DEGRADED", "BLOCKED"]},
+        "promotionRequired": {"type": "boolean"},
+        "liveFacts": {"type": "array"},
+        "sourceRefs": {"type": "array"}
+      }
     }
   }
 }
