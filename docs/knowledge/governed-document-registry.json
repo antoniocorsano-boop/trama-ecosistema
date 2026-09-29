@@ -621,6 +621,76 @@
         "CONTEXT_PACK_SCHEMA_CHANGE",
         "DEVELOPMENT_CONTINUITY_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-V2-ARCHITECTURE",
+      "path": "docs/architecture/trama-control-center-v2-architecture.md",
+      "kind": "ARCHITECTURE",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "control-center-architecture",
+        "maturity",
+        "visualization",
+        "ecosystem-graph"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [],
+      "updateTriggers": [
+        "CONTROL_CENTER_ARCHITECTURE_CHANGE",
+        "MATURITY_MODEL_CHANGE",
+        "VISUALIZATION_STACK_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-V2-UI-SPEC",
+      "path": "docs/design/trama-control-center-v2-ui-spec.md",
+      "kind": "UI_CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "maturity",
+        "visualization",
+        "ecosystem-graph",
+        "accessibility",
+        "design-system"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_UI_CHANGE",
+        "MATURITY_VISUALIZATION_CHANGE",
+        "VISUALIZATION_STACK_CHANGE",
+        "ACCESSIBILITY_REQUIREMENT_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-CC2-F4-CAPABILITY-ECOSYSTEM-MAP",
+      "path": "docs/implementation/cc2-f4-capability-ecosystem-map.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "maturity",
+        "ecosystem-map",
+        "ecosystem-graph",
+        "capability"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-V2-UI-SPEC"
+      ],
+      "updateTriggers": [
+        "CAPABILITY_MAP_CHANGE",
+        "ECOSYSTEM_RELATION_CHANGE",
+        "MATURITY_VISUALIZATION_CHANGE"
+      ]
     }
   ]
 }
