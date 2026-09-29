@@ -769,6 +769,55 @@
         "MOBILE_NAVIGATION_CHANGE",
         "PROJECT_KNOWLEDGE_LIVE_CONTEXT_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-MATURITY-RECONCILIATION-ANALYSIS",
+      "path": "docs/analysis/trama-maturity-reconciliation-2026-09-29.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "maturity",
+        "roadmap",
+        "evidence",
+        "component-evidence",
+        "product-readiness",
+        "development-continuity"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-MATURITY-PROJECTION",
+        "DOC-TRAMA-COMPONENT-EVIDENCE-REGISTRY",
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE"
+      ],
+      "updateTriggers": [
+        "MATURITY_BINDING_CHANGE",
+        "ROADMAP_STATE_CHANGE",
+        "COMPONENT_EVIDENCE_COVERAGE_CHANGE",
+        "PRODUCT_ADOPTION_EVIDENCE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-TRAMA-MATURITY-RECONCILIATION-BACKLOG",
+      "path": "governance/maturity/trama-maturity-reconciliation-v1.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "maturity",
+        "evidence-binding",
+        "component-evidence",
+        "roadmap"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-MATURITY-RECONCILIATION-ANALYSIS"
+      ],
+      "updateTriggers": [
+        "MATURITY_BINDING_CHANGE",
+        "COMPONENT_EVIDENCE_COVERAGE_CHANGE",
+        "FUNCTIONAL_SEQUENCE_CHANGE"
+      ]
     }
   ]
 }
