@@ -401,6 +401,12 @@
                   "string",
                   "null"
                 ]
+              },
+              "areaRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
               }
             },
             "additionalProperties": false
