@@ -178,6 +178,7 @@ jobs:
           grep -q "Stato delle informazioni" control-center/index.html
           node scripts/test_stage_e2_project_knowledge_ui.cjs
           node scripts/test_stage_e3_public_validation_surface.cjs
+          node scripts/test_component_maturity_ui.cjs
           test -s control-center/e3/index.html
           test -s control-center/evidence.html
           test -s control-center/operations.html
@@ -185,6 +186,8 @@ jobs:
           grep -q '"operationalPath"' control-center/data/ecosystem-snapshot.json
           grep -q '"timelineEvents"' control-center/data/ecosystem-snapshot.json
           grep -q '"timelineCoverage"' control-center/data/ecosystem-snapshot.json
+          grep -q '"components"' control-center/data/ecosystem-snapshot.json
+          test -s control-center/component-maturity.js
           grep -q "Cronologia governata" control-center/operations.html
           grep -q "Evidence Explorer" control-center/evidence.html
           test -s control-center/reports/stakeholder-assurance.html
