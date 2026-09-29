@@ -32,7 +32,7 @@ assert adapter.validate_overlay(overlay) is True
 effective=composer.compose_effective_project_context(governed,overlay)
 assert effective["semanticDriftStatus"]=="DETECTED"
 assert effective["promotionRequired"] is False
-assert effective["effectiveContextStatus"]=="USABLE"
+assert effective["effectiveContextStatus"]=="DEGRADED"
 
 # Adapter must preserve repository/PR source provenance.
 for row in overlay["repositories"]:
