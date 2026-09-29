@@ -24,10 +24,27 @@ module = load_module(
 )
 
 with tempfile.TemporaryDirectory(prefix="trama-live-pack-") as tmp:
-    output = Path(tmp) / "project-knowledge.json"
+    tmp = Path(tmp)
+    output = tmp / "project-knowledge.json"
+    overlay_path = tmp / "live-overlay.json"
+    overlay = json.loads(
+        (ROOT / "control-center/fixtures/project-knowledge/live-overlay-head-drift.json").read_text(encoding="utf-8")
+    )
+    overlay["pullRequests"] = [{
+        "repository": "antoniocorsano-boop/Curriculum-Atlas",
+        "number": 57,
+        "state": "open",
+        "draft": False,
+        "merged": False,
+        "observedHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "observedAt": overlay["observedAt"],
+        "sourceRefs": ["fixture:pull-request-57"]
+    }]
+    overlay_path.write_text(json.dumps(overlay), encoding="utf-8")
+
     pack = module.materialize(
         ROOT / "control-center/data/project-context-snapshot.json",
-        ROOT / "control-center/fixtures/project-knowledge/live-overlay-head-drift.json",
+        overlay_path,
         output,
     )
     assert output.exists()
@@ -42,5 +59,20 @@ assert effective["effectiveContextStatus"] == "USABLE"
 assert effective["promotionRequired"] is False
 assert pack["status"] == "CURRENT"
 assert pack["subject"] == "project-knowledge"
+pull_request_facts = [
+    fact for fact in effective["liveFacts"]
+    if fact.get("subject") == "pull-request"
+]
+assert pull_request_facts == [{
+    "class": "VOLATILE",
+    "subject": "pull-request",
+    "repository": "antoniocorsano-boop/Curriculum-Atlas",
+    "number": 57,
+    "state": "open",
+    "draft": False,
+    "merged": False,
+    "observedHead": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observedAt": "2026-09-29T06:30:00Z"
+}]
 
 print("TRAMA live Project Knowledge bundle materialization: PASS")
