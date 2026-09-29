@@ -864,6 +864,29 @@
         "EXACT_HEAD_REQUALIFICATION",
         "RUNTIME_CANARY_EVIDENCE_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-MATURITY-EVIDENCE-MODEL",
+      "path": "docs/assurance/trama-maturity-evidence-model.md",
+      "kind": "POLICY",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "maturity",
+        "evidence",
+        "evidence-binding",
+        "governance"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE",
+        "DOC-TRAMA-MATURITY-EVIDENCE-BINDING"
+      ],
+      "updateTriggers": [
+        "MATURITY_MODEL_CHANGE",
+        "MATURITY_EVIDENCE_BINDING_CHANGE",
+        "EVIDENCE_TYPE_CHANGE"
+      ]
     }
   ]
 }
