@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+import importlib.util
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def load_module(name, rel):
+    spec = importlib.util.spec_from_file_location(name, ROOT / rel)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+projection = load_module("component_maturity", "scripts/project_component_maturity.py")
+registry = json.loads(
+    (ROOT / "governance/ui-development/trama-component-evidence-registry-v1.json").read_text(
+        encoding="utf-8"
+    )
+)
+
+components = projection.project_components(registry)
+projection.validate_projection(components)
+by_id = {item["componentId"]: item for item in components}
+
+assert set(by_id) == {item["componentId"] for item in registry["entries"]}
+
+governed_dialog = by_id["ARENA.DIALOG_CONFIRM.GOVERNED"]
+assert governed_dialog["lifecycle"] == "TRIAL"
+assert governed_dialog["maturity"]["confirmedStage"] == "BEHAVIOURAL"
+assert governed_dialog["maturity"]["candidateStage"] == "BEHAVIOURAL"
+assert governed_dialog["maturity"]["qualificationStatus"] == "PARTIAL"
+assert "RESPONSIVE_VISUAL" in governed_dialog["maturity"]["remainingEvidenceTypes"]
+assert governed_dialog["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PARTIAL"
+
+legacy_dialog = by_id["ARENA.DIALOG_CONFIRM.LEGACY"]
+assert legacy_dialog["lifecycle"] == "LEGACY"
+assert legacy_dialog["maturity"]["confirmedStage"] == "REGISTERED"
+assert legacy_dialog["maturity"]["candidateStage"] == "BEHAVIOURAL"
+
+tooltip = by_id["ARENA.TOOLTIP.LEGACY"]
+assert tooltip["maturity"]["confirmedStage"] == "REGISTERED"
+assert tooltip["maturity"]["candidateStage"] == "REGISTERED"
+
+context_help = by_id["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]
+assert context_help["maturity"]["confirmedStage"] == "REGISTERED"
+assert context_help["maturity"]["candidateStage"] == "REGISTERED"
+assert context_help["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PARTIAL"
+
+synthetic = {
+    "componentId": "TEST.STABLE.WITHOUT.EVIDENCE",
+    "product": "TEST",
+    "target": "test",
+    "lifecycle": "STABLE",
+    "sourceClass": "PRODUCT_OWNED",
+    "evidence": [
+        {
+            "type": "LIFECYCLE",
+            "status": "PRESENT",
+            "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
+        }
+    ],
+}
+synthetic_projection = projection.project_component(
+    synthetic,
+    "governance/ui-development/trama-component-evidence-registry-v1.json",
+)
+assert synthetic_projection["maturity"]["confirmedStage"] == "REGISTERED"
+assert synthetic_projection["maturity"]["candidateStage"] == "REGISTERED"
+
+leap = {
+    "componentId": "TEST.LEAP",
+    "product": "TEST",
+    "target": "test",
+    "lifecycle": "TRIAL",
+    "sourceClass": "PRODUCT_OWNED",
+    "evidence": [
+        {"type": "ISOLATED", "status": "PRESENT", "ref": "run:1", "runId": "1"},
+        {"type": "ACCESSIBILITY", "status": "PRESENT", "ref": "run:2", "runId": "2"},
+    ],
+}
+leap_projection = projection.project_component(leap, "registry")
+assert leap_projection["maturity"]["confirmedStage"] == "ISOLATED"
+
+print("TRAMA_CC_MAT_COMP_01_PROJECTION_PASS")
