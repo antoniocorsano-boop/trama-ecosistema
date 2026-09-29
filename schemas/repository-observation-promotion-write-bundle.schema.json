@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/repository-observation-promotion-write-bundle.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "targetRepository",
+    "baseBranch",
+    "baseExactSha",
+    "proposal",
+    "candidateObservation",
+    "candidateSnapshot",
+    "promotedAt",
+    "promotedBy",
+    "sourceRefs"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.repository-observation-promotion-write-bundle/v1"
+    },
+    "targetRepository": {
+      "const": "antoniocorsano-boop/trama-ecosistema"
+    },
+    "baseBranch": {
+      "const": "main"
+    },
+    "baseExactSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "proposal": {
+      "type": "object"
+    },
+    "candidateObservation": {
+      "type": "object"
+    },
+    "candidateSnapshot": {
+      "type": "object"
+    },
+    "promotedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "promotedBy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

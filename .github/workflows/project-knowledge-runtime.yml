@@ -20,6 +20,10 @@ on:
       - 'scripts/validate_repository_observation_promotion_semantics.py'
       - 'scripts/repository_observation_promotion_planner.py'
       - 'scripts/test_repository_observation_promotion_planner.py'
+      - 'schemas/repository-observation-promotion-write-bundle.schema.json'
+      - 'scripts/repository_observation_promotion_write_actor.py'
+      - 'scripts/test_repository_observation_promotion_write_actor.py'
+      - 'docs/control-center/CC2-REPOSITORY-OBSERVATION-PROMOTION-WRITE-ACTOR-01.md'
       - 'control-center/fixtures/project-knowledge/**'
       - 'scripts/validate_project_knowledge_schemas.py'
       - 'control-center/data/project-context-snapshot.json'
@@ -44,10 +48,17 @@ jobs:
           python scripts/test_repository_observation_promotion_canonical.py
           python scripts/validate_repository_observation_promotion_semantics.py
           python scripts/test_repository_observation_promotion_planner.py
+          python scripts/test_repository_observation_promotion_write_actor.py
       - name: Audit promotion planner read-only surface
         run: |
           ! grep -En 'urllib|httpx|requests|socket|subprocess|os\.system|Popen|git push|gh pr' scripts/repository_observation_promotion_planner.py
           ! grep -En '\.write_text\(|\.write_bytes\(|open\(' scripts/repository_observation_promotion_planner.py
+      - name: Audit promotion write actor capability boundary
+        run: |
+          ! grep -En '/merges|/merge|DELETE|PATCH|git push|subprocess|os\.system|requests\.|httpx\.' scripts/repository_observation_promotion_write_actor.py
+          grep -F 'TARGET_REPOSITORY="antoniocorsano-boop/trama-ecosistema"' scripts/repository_observation_promotion_write_actor.py
+          grep -F 'BRANCH_CONTAINS_UNEXPECTED_PATHS' scripts/repository_observation_promotion_write_actor.py
+          grep -F 'BASE_HEAD_MISMATCH' scripts/repository_observation_promotion_write_actor.py
       - name: Install schema validator
         run: python -m pip install jsonschema
       - name: Materialize derived outputs

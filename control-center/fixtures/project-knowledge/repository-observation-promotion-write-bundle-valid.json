@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "trama.repository-observation-promotion-write-bundle/v1",
+  "targetRepository": "antoniocorsano-boop/trama-ecosistema",
+  "baseBranch": "main",
+  "baseExactSha": "4444444444444444444444444444444444444444",
+  "proposal": {},
+  "candidateObservation": {},
+  "candidateSnapshot": {},
+  "promotedAt": "2026-09-29T03:31:00Z",
+  "promotedBy": "human-review:test",
+  "sourceRefs": [
+    "review:test"
+  ]
+}
