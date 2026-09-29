@@ -100,6 +100,10 @@
               "SUSPENDED",
               "UNKNOWN"
             ]
+          },
+          "activeDevelopmentRef": {
+            "type": "string",
+            "minLength": 1
           }
         }
       }
