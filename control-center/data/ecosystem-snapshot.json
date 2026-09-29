@@ -1,37 +1,43 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.3.0",
-  "generatedAt": "2026-09-29T06:51:32.603803+00:00",
+  "schemaVersion": "1.4.0",
+  "generatedAt": "2026-09-29T19:33:44Z",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "ref": "STATUS.md",
       "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "ref": "ROADMAP.md",
       "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "ref": "status/governed-events.json",
       "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
+    },
+    "component-evidence-registry": {
+      "status": "FRESH",
+      "observedAt": "2026-09-29T19:33:44Z",
+      "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
     }
   },
   "phases": [
@@ -81,11 +87,12 @@
         "EV-SOURCE-ECOSYSTEM-STATUS",
         "EV-SOURCE-DECISION-REGISTER",
         "EV-SOURCE-GOVERNED-EVENTS",
-        "EV-TRAMA-ADR-014"
+        "EV-TRAMA-ADR-014",
+        "EV-SOURCE-COMPONENT-EVIDENCE-REGISTRY"
       ],
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-29T06:51:32.603803+00:00"
+      "lastEvaluatedAt": "2026-09-29T19:33:44Z"
     },
     {
       "id": "arena",
@@ -100,7 +107,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-29T06:51:32.603803+00:00"
+      "lastEvaluatedAt": "2026-09-29T19:33:44Z"
     },
     {
       "id": "atlas",
@@ -119,7 +126,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T06:51:32.603803+00:00"
+      "lastEvaluatedAt": "2026-09-29T19:33:44Z"
     },
     {
       "id": "docente-os",
@@ -135,7 +142,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T06:51:32.603803+00:00"
+      "lastEvaluatedAt": "2026-09-29T19:33:44Z"
     }
   ],
   "capabilities": [
@@ -375,7 +382,7 @@
         "path": "STATUS.md",
         "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
       },
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -393,7 +400,7 @@
         "path": "ROADMAP.md",
         "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
       },
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -411,7 +418,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -429,7 +436,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
       },
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -447,7 +454,7 @@
         "path": "status/governed-events.json",
         "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
       },
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -521,7 +528,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-29T06:51:32.603803+00:00",
+      "observedAt": "2026-09-29T19:33:44Z",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -607,6 +614,24 @@
         "releaseRef": "trama-ecosistema#97",
         "exactHead": "686fe01b91b5e5b38a9956198e79c5ff713b0b8f"
       }
+    },
+    {
+      "id": "EV-SOURCE-COMPONENT-EVIDENCE-REGISTRY",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "COMPONENT_EVIDENCE",
+      "status": "PASS",
+      "source": {
+        "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
+        "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
+      },
+      "observedAt": "2026-09-29T19:33:44Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
     }
   ],
   "dependencies": [
@@ -985,6 +1010,15 @@
       "summary": "Le capability hanno riferimenti evidenziali strutturalmente coerenti.",
       "affectedRefs": [],
       "details": []
+    },
+    {
+      "id": "INT-COMPONENT-EVIDENCE-PROJECTION",
+      "type": "COMPONENT_EVIDENCE_PROJECTION",
+      "status": "PASS",
+      "severity": "INFO",
+      "summary": "La proiezione delle evidenze componenti è strutturalmente coerente.",
+      "affectedRefs": [],
+      "details": []
     }
   ],
   "operationalPath": {
@@ -1184,5 +1218,290 @@
     "from": "2026-09-25",
     "note": "Registro iniziale esplicito: non ricostruisce retroattivamente eventi non ancora registrati.",
     "sourceRef": "status/governed-events.json"
-  }
+  },
+  "components": [
+    {
+      "componentId": "ARENA.DIALOG_CONFIRM.LEGACY",
+      "product": "ARENA",
+      "target": "src/components/ui/ConfirmDialog.tsx",
+      "semanticPattern": null,
+      "lifecycle": "LEGACY",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F01",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
+    },
+    {
+      "componentId": "ARENA.DIALOG_CONFIRM.GOVERNED",
+      "product": "ARENA",
+      "target": "src/ui/components/UiConfirmDialog.tsx",
+      "semanticPattern": null,
+      "lifecycle": "TRIAL",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F01",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "BEHAVIOURAL",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
+          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "src/__tests__/cml611-dialogs-confirmations.test.tsx",
+          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
+    },
+    {
+      "componentId": "ARENA.TABS.LEGACY",
+      "product": "ARENA",
+      "target": "src/components/ui/Tabs.tsx",
+      "semanticPattern": null,
+      "lifecycle": "LEGACY",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F02",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
+    },
+    {
+      "componentId": "ARENA.TABS.GOVERNED",
+      "product": "ARENA",
+      "target": "src/ui/components/UiTabs.tsx",
+      "semanticPattern": null,
+      "lifecycle": "TRIAL",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F02",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "BEHAVIOURAL",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
+          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
+    },
+    {
+      "componentId": "ARENA.TOOLTIP.LEGACY",
+      "product": "ARENA",
+      "target": "src/components/ui/Tooltip.tsx",
+      "semanticPattern": null,
+      "lifecycle": "LEGACY",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F03",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "REGISTERED",
+        "qualificationStatus": "REGISTERED_ONLY",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "NOT_OBSERVED"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
+    },
+    {
+      "componentId": "CONTROL_CENTER.CONTEXT_HELP.FAMILY",
+      "product": "TRAMA_CONTROL_CENTER",
+      "target": "contextual help popover/dialog",
+      "semanticPattern": null,
+      "lifecycle": "TRIAL",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F08",
+        "INV03-F04"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "REGISTERED",
+        "qualificationStatus": "REGISTERED_ONLY",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "NOT_OBSERVED"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
+    }
+  ]
 }
