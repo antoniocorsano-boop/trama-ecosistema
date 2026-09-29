@@ -427,6 +427,29 @@
         "DESIGN_SYSTEM_CHANGE",
         "UI_LIBRARY_ADOPTION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-STRATEGY",
+      "path": "docs/strategy/trama-component-strategy-v1.md",
+      "kind": "POLICY",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "component-strategy",
+        "design-system",
+        "ui-supply-chain",
+        "accessibility",
+        "product-identity"
+      ],
+      "dependsOn": [
+        "DOC-TRAMA-UI-DEVELOPMENT-MODEL"
+      ],
+      "updateTriggers": [
+        "COMPONENT_LIBRARY_ADOPTION_CHANGE",
+        "UI_RUNTIME_STACK_CHANGE",
+        "COMPONENT_INVENTORY_CHANGE",
+        "DESIGN_SYSTEM_CHANGE"
+      ]
     }
   ]
 }
