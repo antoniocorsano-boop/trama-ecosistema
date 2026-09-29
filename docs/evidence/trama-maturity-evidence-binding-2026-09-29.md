@@ -239,3 +239,22 @@ The deterministic snapshot was regenerated after this correction and preserves:
 - all integrity checks PASS.
 
 This correction strengthens evidence scope without changing any maturity definition or product authority.
+
+
+## 9. Event-time normalization
+
+A final provenance review binds `observedAt` to the verified event represented by each version-bound record rather than reusing a later review timestamp.
+
+Verified event times:
+
+- Arena PR #312 merge: `2026-09-20T13:13:36Z`;
+- Arena Product CI run 35512448131 completion: `2026-09-20T13:06:15Z`;
+- Arena Human Cross-Review comment 5750603947: `2026-09-20T15:03:40Z`;
+- Atlas PR #32 merge: `2026-09-25T04:19:33Z`;
+- Atlas F5 Exit run 36093494130 completion: `2026-09-25T04:13:56Z`;
+- Docente OS PR #579 merge: `2026-09-22T17:41:37Z`;
+- Docente OS Product CI run 35760485652 completion: `2026-09-22T17:27:37Z`.
+
+The Docente OS final Human Review remains bound to the governed ECO-02/P1 closeout event on 2026-09-25.
+
+This normalization changes provenance timestamps only; it does not alter maturity definitions or expected levels.
