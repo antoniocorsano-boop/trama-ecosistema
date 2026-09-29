@@ -340,6 +340,72 @@
         "E3_L0_FINDING",
         "DESIGN_SYSTEM_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-STAGE-E3-L0-HUMAN-USE",
+      "path": "docs/validation/trama-stage-e3-l0-human-use-v1.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "human-use-validation",
+        "stage-e3",
+        "l0-summary"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-HUMAN-READABLE-IA",
+        "DOC-STAGE-E3-HUMAN-USE-PROTOCOL"
+      ],
+      "updateTriggers": [
+        "E3_L0_PROTOCOL_CHANGE",
+        "E3_L0_FINDING",
+        "CONTROL_CENTER_HOME_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-STAGE-E3-L0-USE-CASE-CATALOG",
+      "path": "governance/human-use/stage-e3-l0-use-case-catalog.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "human-use-validation",
+        "stage-e3",
+        "l0-summary"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E3-L0-HUMAN-USE"
+      ],
+      "updateTriggers": [
+        "E3_L0_USE_CASE_CHANGE",
+        "E3_L0_FINDING"
+      ]
+    },
+    {
+      "id": "DOC-STAGE-E3-L0-RECEIPT-SCHEMA",
+      "path": "governance/human-use/stage-e3-l0-human-use-receipt.schema.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "human-use-validation",
+        "stage-e3",
+        "evidence"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E3-L0-HUMAN-USE",
+        "DOC-STAGE-E3-L0-USE-CASE-CATALOG"
+      ],
+      "updateTriggers": [
+        "E3_L0_RECEIPT_CHANGE",
+        "E3_L0_EVIDENCE_REQUIREMENT_CHANGE"
+      ]
     }
   ]
 }
