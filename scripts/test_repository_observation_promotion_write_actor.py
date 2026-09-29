@@ -65,8 +65,8 @@ bundle={
  "proposal":proposal,
  "candidateObservation":observation,
  "candidateSnapshot":snapshot,
- "promotedAt":"2026-09-29T03:31:00Z",
- "promotedBy":"human-review:test",
+ "recordedAt":"2026-09-29T03:31:00Z",
+ "recordedBy":"human-review:test",
  "sourceRefs":["review:test"]
 }
 events={"schemaVersion":"trama.project-knowledge-events/v1","updatedAt":"2026-09-29T03:00:00Z","events":[]}
