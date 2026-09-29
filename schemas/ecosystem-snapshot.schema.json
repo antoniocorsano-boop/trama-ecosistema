@@ -107,7 +107,11 @@
           "evidenceRefs",
           "blockingGateRefs",
           "dependencies",
-          "lastEvaluatedAt"
+          "lastEvaluatedAt",
+          "evidenceBindingStatus",
+          "nextTargetLevel",
+          "nextRequiredEvidenceTypes",
+          "interpretation"
         ],
         "properties": {
           "id": {
@@ -169,6 +173,44 @@
           "lastEvaluatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "evidenceBindingStatus": {
+            "enum": [
+              "NONE",
+              "PARTIAL",
+              "COMPLETE"
+            ]
+          },
+          "nextTargetLevel": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 5
+          },
+          "nextRequiredEvidenceTypes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "DOCUMENT_CANONICAL",
+                "CONTRACT_APPROVED",
+                "PR_EXACT_HEAD",
+                "AUTOMATED_TEST",
+                "SECURITY_GATE",
+                "ACCESSIBILITY_GATE",
+                "RUNTIME_CANARY",
+                "HUMAN_REVIEW",
+                "REAL_CASE_VALIDATION",
+                "PROMOTION_DECISION",
+                "REGRESSION_HISTORY",
+                "ADOPTION_EVIDENCE"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "interpretation": {
+            "const": "BOUND_EVIDENCE_ONLY"
           }
         },
         "additionalProperties": false
