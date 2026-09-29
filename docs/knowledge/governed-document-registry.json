@@ -597,6 +597,30 @@
         "E3_L0_FINDING",
         "NAVIGATION_SHELL_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-SESSION-BOOTSTRAP",
+      "path": "docs/contracts/trama-session-bootstrap-v1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "project-knowledge",
+        "development-continuity",
+        "session-bootstrap",
+        "context-pack"
+      ],
+      "decisionRef": "TRAMA-ADR-015",
+      "dependsOn": [
+        "DOC-SECOND-BRAIN-OPERATING-MODEL",
+        "DOC-CONTEXT-PACK-V1"
+      ],
+      "updateTriggers": [
+        "SESSION_BOOTSTRAP_CONTRACT_CHANGE",
+        "SUBJECT_RESOLUTION_CHANGE",
+        "CONTEXT_PACK_SCHEMA_CHANGE",
+        "DEVELOPMENT_CONTINUITY_CHANGE"
+      ]
     }
   ]
 }
