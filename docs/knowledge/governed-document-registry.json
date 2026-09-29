@@ -202,6 +202,72 @@
         "E3_HUMAN_USE_FINDING",
         "LIVE_OVERLAY_ACTIVATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-STAGE-E3-HUMAN-USE-PROTOCOL",
+      "path": "docs/validation/trama-stage-e3-human-use-validation-v1.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "human-use-validation",
+        "stage-e3"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E2-PROJECT-KNOWLEDGE-UI",
+        "DOC-STAGE-E0-HUMAN-COMMUNICATION"
+      ],
+      "updateTriggers": [
+        "E3_PROTOCOL_CHANGE",
+        "E3_HUMAN_USE_FINDING",
+        "E2_IMPLEMENTATION_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-STAGE-E3-USE-CASE-CATALOG",
+      "path": "governance/human-use/stage-e3-use-case-catalog.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "human-use-validation",
+        "stage-e3"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E3-HUMAN-USE-PROTOCOL"
+      ],
+      "updateTriggers": [
+        "E3_USE_CASE_CHANGE",
+        "E3_HUMAN_USE_FINDING"
+      ]
+    },
+    {
+      "id": "DOC-STAGE-E3-RECEIPT-SCHEMA",
+      "path": "governance/human-use/stage-e3-human-use-receipt.schema.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "human-use-validation",
+        "evidence"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E3-HUMAN-USE-PROTOCOL",
+        "DOC-STAGE-E3-USE-CASE-CATALOG"
+      ],
+      "updateTriggers": [
+        "E3_RECEIPT_CHANGE",
+        "E3_EVIDENCE_REQUIREMENT_CHANGE"
+      ]
     }
   ]
 }
