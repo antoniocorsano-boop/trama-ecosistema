@@ -28,6 +28,7 @@ jobs:
       - {name: Validate TRAMA component INV-01, run: python3 scripts/validate_trama_component_inv01.py}
       - {name: Validate TRAMA component INV-02, run: python3 scripts/validate_trama_component_inv02.py}
       - {name: Validate TRAMA component INV-03, run: python3 scripts/validate_trama_component_inv03.py}
+      - {name: Validate TRAMA component evidence registry, run: python3 scripts/validate_trama_component_evidence_registry.py}
       - {name: Qualify CC-MSS-01 Stage B offline matrix, run: python3 scripts/qualify_cc_mss_stage_b.py}
       - {name: Audit CC-MSS-01 Stage C1 mutation surface, run: python3 scripts/audit_cc_mss_stage_c1_surface.py}
       - {name: Qualify CC-MSS-01 Stage C1 offline fixtures with network guard, run: python3 scripts/qualify_cc_mss_stage_c1.py}
