@@ -166,7 +166,7 @@
         "prNumber": 312,
         "mergeCommit": "0d931c2c20a2c47c7a72c077faacf499feda6908"
       },
-      "observedAt": "2026-09-20T15:03:40Z",
+      "observedAt": "2026-09-20T13:13:36Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
@@ -195,7 +195,7 @@
         "prNumber": 312,
         "runId": "35512448131"
       },
-      "observedAt": "2026-09-20T15:03:40Z",
+      "observedAt": "2026-09-20T13:06:15Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
@@ -330,7 +330,7 @@
         "prNumber": 32,
         "runId": "36093494130"
       },
-      "observedAt": "2026-09-25T04:19:33Z",
+      "observedAt": "2026-09-25T04:13:56Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
@@ -404,7 +404,7 @@
         "prNumber": 579,
         "mergeCommit": "0e0916445bf5eb729aab883275d62e5968ad7601"
       },
-      "observedAt": "2026-09-25T12:46:47Z",
+      "observedAt": "2026-09-22T17:41:37Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
@@ -433,7 +433,7 @@
         "prNumber": 579,
         "runId": "35760485652"
       },
-      "observedAt": "2026-09-25T12:46:47Z",
+      "observedAt": "2026-09-22T17:27:37Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
