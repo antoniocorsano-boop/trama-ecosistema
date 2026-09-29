@@ -65,11 +65,17 @@ bundle={
  "proposal":proposal,
  "candidateObservation":observation,
  "candidateSnapshot":snapshot,
- "promotedAt":"2026-09-29T03:31:00Z",
- "promotedBy":"human-review:test",
+ "recordedAt":"2026-09-29T03:31:00Z",
+ "recordedBy":"human-review:test",
  "sourceRefs":["review:test"]
 }
 events={"schemaVersion":"trama.project-knowledge-events/v1","updatedAt":"2026-09-29T03:00:00Z","events":[]}
+event0=actor.promotion_event(bundle,actor_sha)
+wrapper0=actor.knowledge_event_from_promotion(event0,bundle)
+bundle["candidateSnapshot"]=actor.finalize_snapshot(bundle["candidateSnapshot"],wrapper0,bundle["recordedAt"])
+for item in bundle["proposal"]["proposedChanges"]:
+ if item["path"]==actor.ALLOWED_PATHS[1]:
+  item["sha256"]=canon.sha256_canonical(bundle["candidateSnapshot"])
 
 assert actor.validate_bundle(bundle,actor_sha)
 files,event=actor.materialize(bundle,events,actor_sha)

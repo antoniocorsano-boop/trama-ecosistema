@@ -18,6 +18,7 @@ def main():
     ap.add_argument("--decision",required=True)
     ap.add_argument("--output",default="control-center/data/repository-observation.live.json")
     ap.add_argument("--claim-dir",default=".trama-live-claims")
+    ap.add_argument("--summary-output")
     args=ap.parse_args()
     if args.decision!="AUTHORIZE_LIVE_ONE_SHOT": raise RuntimeError("HUMAN_DECISION_INVALID")
     if len(args.exact_sha)!=40 or any(ch not in "0123456789abcdef" for ch in args.exact_sha): raise RuntimeError("EXACT_SHA_INVALID")
@@ -35,7 +36,12 @@ def main():
     try:
         _,observation=c.collect(args.output)
         store.finish(receipt,"CONSUMED")
-        print(json.dumps({"result":"CONSUMED","receiptRef":receipt.receipt_ref,"runId":receipt.run_id,"exactSha":receipt.exact_sha,"repositoryCount":len(observation["repositories"]),"openPullRequestCount":len(observation["pullRequests"]),"observationStatus":observation["status"]},sort_keys=True))
+        summary={"result":"CONSUMED","receiptState":"CONSUMED","receiptRef":receipt.receipt_ref,"runId":receipt.run_id,"exactSha":receipt.exact_sha,"repositoryCount":len(observation["repositories"]),"openPullRequestCount":len(observation["pullRequests"]),"observationStatus":observation["status"],"collectorIntegrated":True}
+        if args.summary_output:
+            summary_path=ROOT/args.summary_output
+            summary_path.parent.mkdir(parents=True,exist_ok=True)
+            summary_path.write_text(json.dumps(summary,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+        print(json.dumps(summary,sort_keys=True))
     except BaseException:
         if out.exists(): out.unlink()
         try: store.finish(receipt,"FAILED")

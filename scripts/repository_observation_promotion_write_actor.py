@@ -49,7 +49,6 @@ def validate_bundle(bundle,actor_exact_sha):
  observation=bundle.get("candidateObservation") or {}
  snapshot=bundle.get("candidateSnapshot") or {}
  observation_digest=canon.sha256_canonical(observation)
- snapshot_digest=canon.sha256_canonical(snapshot)
  if proposal.get("observationDigest")!=observation_digest or proposal.get("proposalId")!=canon.proposal_id(observation_digest):
   die("OBSERVATION_BINDING_MISMATCH")
  changes={item.get("path"):item for item in proposal.get("proposedChanges",[])}
@@ -57,11 +56,17 @@ def validate_bundle(bundle,actor_exact_sha):
   die("PATH_ALLOWLIST_MISMATCH")
  if changes[ALLOWED_PATHS[0]].get("sha256")!=observation_digest:
   die("OBSERVATION_CHANGE_DIGEST_MISMATCH")
+ event=promotion_event(bundle,actor_exact_sha)
+ wrapper=knowledge_event_from_promotion(event,bundle)
+ expected_snapshot=finalize_snapshot(snapshot,wrapper,bundle["recordedAt"])
+ if expected_snapshot!=snapshot:
+  die("SNAPSHOT_PROMOTION_EVENT_MISSING")
+ snapshot_digest=canon.sha256_canonical(snapshot)
  if changes[ALLOWED_PATHS[1]].get("sha256")!=snapshot_digest:
   die("SNAPSHOT_CHANGE_DIGEST_MISMATCH")
  if changes[ALLOWED_PATHS[2]].get("sha256") is not None:
   die("EVENTS_DIGEST_MUST_BE_ACTOR_DERIVED")
- if not bundle.get("promotedAt") or not bundle.get("promotedBy") or not bundle.get("sourceRefs"):
+ if not bundle.get("recordedAt") or not bundle.get("recordedBy") or not bundle.get("sourceRefs"):
   die("PROMOTION_METADATA_MISSING")
  return True
 
@@ -73,8 +78,8 @@ def promotion_event(bundle,actor_exact_sha):
   "proposalId":proposal["proposalId"],
   "observationDigest":proposal["observationDigest"],
   "previousObservationDigest":proposal.get("previousObservationDigest"),
-  "promotedAt":bundle["promotedAt"],
-  "promotedBy":bundle["promotedBy"],
+  "recordedAt":bundle["recordedAt"],
+  "recordedBy":bundle["recordedBy"],
   "sourceRunId":proposal["sourceRunId"],
   "sourceReceiptRef":proposal["sourceReceiptRef"],
   "collectorExactSha":proposal["collectorExactSha"],
@@ -96,11 +101,27 @@ def knowledge_event_from_promotion(event,bundle):
   "status":"CURRENT",
   "rationale":"Promotion is bound to proposal "+event["proposalId"]+", source run "+event["sourceRunId"]+", exact collector and actor revisions, policy digest and enrollment digest.",
   "sourceRefs":[{"repository":TARGET_REPOSITORY,"ref":ref} for ref in event["sourceRefs"]],
-  "validFrom":bundle["promotedAt"],
+  "validFrom":bundle["recordedAt"],
   "supersedes":[],
   "invalidatedBy":[],
   "promotionEvent":event
  }
+
+def finalize_snapshot(snapshot,wrapper,recorded_at):
+ output=json.loads(json.dumps(snapshot))
+ if output.get("schemaVersion")!="1.0.0" or output.get("project")!="TRAMA":
+  die("PROJECT_CONTEXT_SNAPSHOT_IDENTITY")
+ events=output.get("knowledgeEvents")
+ if not isinstance(events,list):
+  die("PROJECT_CONTEXT_KNOWLEDGE_EVENTS_INVALID")
+ matches=[item for item in events if item.get("eventId")==wrapper["eventId"]]
+ if matches:
+  if matches[0]!=wrapper:
+   die("SNAPSHOT_EVENT_COLLISION")
+ else:
+  events.append(wrapper)
+ output["generatedAt"]=recorded_at
+ return output
 
 def update_events(current,bundle,actor_exact_sha):
  output=json.loads(json.dumps(current))
@@ -114,7 +135,7 @@ def update_events(current,bundle,actor_exact_sha):
    die("EVENT_ID_COLLISION")
   return output,event,False
  output.setdefault("events",[]).append(wrapper)
- output["updatedAt"]=bundle["promotedAt"]
+ output["updatedAt"]=bundle["recordedAt"]
  return output,event,True
 
 def materialize(bundle,current_events,actor_exact_sha):

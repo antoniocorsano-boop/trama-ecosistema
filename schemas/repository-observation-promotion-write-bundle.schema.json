@@ -11,8 +11,8 @@
     "proposal",
     "candidateObservation",
     "candidateSnapshot",
-    "promotedAt",
-    "promotedBy",
+    "recordedAt",
+    "recordedBy",
     "sourceRefs"
   ],
   "properties": {
@@ -38,11 +38,11 @@
     "candidateSnapshot": {
       "type": "object"
     },
-    "promotedAt": {
+    "recordedAt": {
       "type": "string",
       "format": "date-time"
     },
-    "promotedBy": {
+    "recordedBy": {
       "type": "string",
       "minLength": 1
     },

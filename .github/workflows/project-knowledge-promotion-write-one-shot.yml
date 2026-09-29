@@ -1,0 +1,106 @@
+name: TRAMA Project Knowledge Promotion WRITE_ONE_SHOT
+run-name: "PROMOTION_WRITE_ONE_SHOT ${{ github.run_id }} @ ${{ github.sha }}"
+on:
+  workflow_dispatch:
+    inputs:
+      decision:
+        description: 'Explicit human decision'
+        required: true
+        type: choice
+        options:
+          - AUTHORIZE_PROMOTION_WRITE_ONE_SHOT
+
+concurrency:
+  group: trama-project-knowledge-promotion-write-one-shot
+  cancel-in-progress: false
+
+jobs:
+  promotion-write-one-shot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Reject reruns and non-main refs
+        env:
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          RUN_REF: ${{ github.ref }}
+          HUMAN_DECISION: ${{ inputs.decision }}
+        run: |
+          test "$RUN_ATTEMPT" = "1"
+          test "$RUN_REF" = "refs/heads/main"
+          test "$HUMAN_DECISION" = "AUTHORIZE_PROMOTION_WRITE_ONE_SHOT"
+
+      - name: Checkout exact activation revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Verify exact activation head and no persisted credential
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -z "$(git config --get-all http.https://github.com/.extraheader || true)"
+
+      - name: Collect fresh anonymous RepositoryObservation
+        env:
+          GITHUB_TOKEN: ""
+          GH_TOKEN: ""
+          HTTP_PROXY: ""
+          HTTPS_PROXY: ""
+          ALL_PROXY: ""
+          NO_PROXY: ""
+          EXPECTED_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          env -i PATH="$PATH" HOME="$HOME" \
+            python scripts/run_public_anonymous_live_one_shot.py \
+              --exact-sha "$EXPECTED_SHA" \
+              --run-id "$RUN_ID" \
+              --run-attempt "$RUN_ATTEMPT" \
+              --decision AUTHORIZE_LIVE_ONE_SHOT \
+              --output .trama-promotion/repository-observation.json \
+              --summary-output .trama-promotion/collector-summary.json
+
+      - name: Prepare promotion write bundle without credentials
+        env:
+          GITHUB_TOKEN: ""
+          GH_TOKEN: ""
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          env -i PATH="$PATH" HOME="$HOME" \
+            python scripts/prepare_repository_observation_promotion_write_bundle.py \
+              --observation .trama-promotion/repository-observation.json \
+              --collector-summary .trama-promotion/collector-summary.json \
+              --base-exact-sha "$EXPECTED_SHA" \
+              --actor-exact-sha "$EXPECTED_SHA" \
+              --output .trama-promotion/write-bundle.json
+
+      - name: Execute governed write actor only when bundle is promotable
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ""
+          HTTP_PROXY: ""
+          HTTPS_PROXY: ""
+          ALL_PROXY: ""
+          NO_PROXY: ""
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          if test -f .trama-promotion/write-bundle.json; then
+            python scripts/repository_observation_promotion_write_actor.py \
+              --bundle .trama-promotion/write-bundle.json \
+              --actor-exact-sha "$EXPECTED_SHA" \
+              --execute
+          else
+            echo "NO_PROMOTABLE_CHANGE"
+          fi
+
+      - name: Assert no credential persistence and remove ephemeral handoff
+        if: always()
+        run: |
+          test -z "$(git config --get-all http.https://github.com/.extraheader || true)"
+          rm -rf .trama-promotion .trama-live-claims
