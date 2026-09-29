@@ -12,7 +12,7 @@
 
 Map the evidence actually available for reusable UI components and interaction patterns across Arena, Atlas, Docente OS and TRAMA Control Center.
 
-INV-03 distinguishes four evidence classes:
+INV-03 distinguishes five evidence classes:
 - **ISOLATED** — component story/lab/catalogue evidence;
 - **BEHAVIOURAL** — keyboard, focus and interaction evidence;
 - **RESPONSIVE_VISUAL** — viewport/reflow/screenshot evidence;
