@@ -11,6 +11,7 @@
     "phases",
     "areas",
     "capabilities",
+    "components",
     "gates",
     "evidence",
     "dependencies",
@@ -779,7 +780,8 @@
               "EVIDENCE_FRESHNESS",
               "GATE_EVIDENCE_BINDING",
               "RUNTIME_AUTHORIZATION",
-              "CAPABILITY_EVIDENCE_ALIGNMENT"
+              "CAPABILITY_EVIDENCE_ALIGNMENT",
+              "COMPONENT_EVIDENCE_PROJECTION"
             ]
           },
           "status": {
@@ -1072,6 +1074,313 @@
         },
         "sourceRef": {
           "type": "string"
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "componentId",
+          "product",
+          "target",
+          "semanticPattern",
+          "lifecycle",
+          "sourceClass",
+          "relatedFindings",
+          "maturity",
+          "evidenceStatus",
+          "sourceRef"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "componentId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "product": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "target": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "semanticPattern": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lifecycle": {
+            "enum": [
+              "PROPOSED",
+              "TRIAL",
+              "STABLE",
+              "LEGACY",
+              "DEPRECATED",
+              "RETIRED",
+              "SPECIALIST",
+              "NATIVE"
+            ]
+          },
+          "sourceClass": {
+            "enum": [
+              "NATIVE_PLATFORM",
+              "PRODUCT_OWNED",
+              "TRAMA_SHARED_SEMANTIC",
+              "EXTERNAL_PRIMITIVE",
+              "SPECIALIST_LIBRARY"
+            ]
+          },
+          "relatedFindings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "maturity": {
+            "type": "object",
+            "required": [
+              "model",
+              "confirmedStage",
+              "candidateStage",
+              "qualificationStatus",
+              "remainingEvidenceTypes"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "model": {
+                "const": "TRAMA_COMPONENT_MATURITY_V1"
+              },
+              "confirmedStage": {
+                "enum": [
+                  "REGISTERED",
+                  "ISOLATED",
+                  "BEHAVIOURAL",
+                  "RESPONSIVE_VISUAL",
+                  "ACCESSIBILITY"
+                ]
+              },
+              "candidateStage": {
+                "enum": [
+                  "REGISTERED",
+                  "ISOLATED",
+                  "BEHAVIOURAL",
+                  "RESPONSIVE_VISUAL",
+                  "ACCESSIBILITY"
+                ]
+              },
+              "qualificationStatus": {
+                "enum": [
+                  "REGISTERED_ONLY",
+                  "PARTIAL",
+                  "QUALIFIED"
+                ]
+              },
+              "remainingEvidenceTypes": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "ISOLATED",
+                    "BEHAVIOURAL",
+                    "RESPONSIVE_VISUAL",
+                    "ACCESSIBILITY"
+                  ]
+                },
+                "uniqueItems": true
+              }
+            }
+          },
+          "evidenceStatus": {
+            "type": "object",
+            "required": [
+              "ISOLATED",
+              "BEHAVIOURAL",
+              "RESPONSIVE_VISUAL",
+              "ACCESSIBILITY"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "ISOLATED": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "status"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "ISOLATED",
+                      "BEHAVIOURAL",
+                      "RESPONSIVE_VISUAL",
+                      "ACCESSIBILITY"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "PRESENT",
+                      "PARTIAL",
+                      "DOCUMENTED_ONLY",
+                      "NOT_OBSERVED",
+                      "NOT_APPLICABLE"
+                    ]
+                  },
+                  "ref": {
+                    "type": "string"
+                  },
+                  "repository": {
+                    "type": "string"
+                  },
+                  "exactHead": {
+                    "type": "string"
+                  },
+                  "runId": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "additionalProperties": true
+              },
+              "BEHAVIOURAL": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "status"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "ISOLATED",
+                      "BEHAVIOURAL",
+                      "RESPONSIVE_VISUAL",
+                      "ACCESSIBILITY"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "PRESENT",
+                      "PARTIAL",
+                      "DOCUMENTED_ONLY",
+                      "NOT_OBSERVED",
+                      "NOT_APPLICABLE"
+                    ]
+                  },
+                  "ref": {
+                    "type": "string"
+                  },
+                  "repository": {
+                    "type": "string"
+                  },
+                  "exactHead": {
+                    "type": "string"
+                  },
+                  "runId": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "additionalProperties": true
+              },
+              "RESPONSIVE_VISUAL": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "status"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "ISOLATED",
+                      "BEHAVIOURAL",
+                      "RESPONSIVE_VISUAL",
+                      "ACCESSIBILITY"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "PRESENT",
+                      "PARTIAL",
+                      "DOCUMENTED_ONLY",
+                      "NOT_OBSERVED",
+                      "NOT_APPLICABLE"
+                    ]
+                  },
+                  "ref": {
+                    "type": "string"
+                  },
+                  "repository": {
+                    "type": "string"
+                  },
+                  "exactHead": {
+                    "type": "string"
+                  },
+                  "runId": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "additionalProperties": true
+              },
+              "ACCESSIBILITY": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "status"
+                ],
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "ISOLATED",
+                      "BEHAVIOURAL",
+                      "RESPONSIVE_VISUAL",
+                      "ACCESSIBILITY"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "PRESENT",
+                      "PARTIAL",
+                      "DOCUMENTED_ONLY",
+                      "NOT_OBSERVED",
+                      "NOT_APPLICABLE"
+                    ]
+                  },
+                  "ref": {
+                    "type": "string"
+                  },
+                  "repository": {
+                    "type": "string"
+                  },
+                  "exactHead": {
+                    "type": "string"
+                  },
+                  "runId": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "additionalProperties": true
+              }
+            }
+          },
+          "sourceRef": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     }
