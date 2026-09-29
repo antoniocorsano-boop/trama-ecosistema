@@ -11,8 +11,12 @@ on:
       - 'scripts/build_trama_context_pack.py'
       - 'scripts/test_project_knowledge_runtime.py'
       - 'scripts/test_repository_observation_projection.py'
+      - 'scripts/test_project_knowledge_dual_speed_stage_a.py'
       - 'scripts/validate_cc_mss_live_predecision.py'
       - 'schemas/repository-observation.schema.json'
+      - 'schemas/live-repository-overlay.schema.json'
+      - 'schemas/effective-project-context.schema.json'
+      - 'schemas/source-registry.schema.json'
       - 'schemas/repository-observation-promotion-proposal.schema.json'
       - 'schemas/repository-observation-promotion-event.schema.json'
       - 'scripts/repository_observation_promotion_canonical.py'
@@ -48,6 +52,7 @@ jobs:
         run: |
           python scripts/test_project_knowledge_runtime.py
           python scripts/test_repository_observation_projection.py
+          python scripts/test_project_knowledge_dual_speed_stage_a.py
           python scripts/validate_cc_mss_live_predecision.py
           python scripts/test_repository_observation_promotion_canonical.py
           python scripts/validate_repository_observation_promotion_semantics.py

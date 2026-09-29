@@ -1,0 +1,29 @@
+{
+  "schemaVersion":"trama.live-repository-overlay/v1",
+  "observedAt":"2026-09-29T06:31:00Z",
+  "status":"COMPLETE",
+  "repositories":[
+    {
+      "repository":"antoniocorsano-boop/Curriculum-Atlas",
+      "availabilityStatus":"AVAILABLE",
+      "freshnessStatus":"FRESH",
+      "completenessStatus":"COMPLETE",
+      "observedHead":"1295f2817b640f3bcb9c5da9053a4f85b027cc71",
+      "sourceRefs":["github-public-api:antoniocorsano-boop/Curriculum-Atlas@1295f2817b640f3bcb9c5da9053a4f85b027cc71"]
+    }
+  ],
+  "pullRequests":[],
+  "workflows":[],
+  "semanticAnchors":[
+    {
+      "repository":"antoniocorsano-boop/Curriculum-Atlas",
+      "domain":"atlas-publication",
+      "path":"governance/publication-policy.json",
+      "role":"SEMANTIC_AUTHORITY",
+      "fingerprintStatus":"CHANGED",
+      "governedFingerprint":"1111111111111111111111111111111111111111",
+      "observedFingerprint":"2222222222222222222222222222222222222222",
+      "sourceRefs":["github-public-api:anchor"]
+    }
+  ]
+}
