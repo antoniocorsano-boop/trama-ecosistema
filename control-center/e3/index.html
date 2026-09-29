@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071827">
+<title>TRAMA · Validazione E3</title>
+<style>
+:root{color-scheme:dark;--bg:#071827;--panel:#0d2639;--line:#25475c;--text:#eef7fb;--muted:#9eb5c3;--ok:#63c29d;--warn:#d6b35b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#071827,#08131d);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.tag{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--ok)}
+h1{font-size:clamp(24px,5vw,40px);margin:5px 0}.lede{color:var(--muted);max-width:68ch}.notice,.panel{border:1px solid var(--line);background:rgba(13,38,57,.92);border-radius:14px;padding:16px;margin:14px 0}
+.notice{border-color:#6f5d22;background:#2b2615}.notice strong{display:block}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.scenario{display:block;min-height:92px;border:1px solid var(--line);border-radius:12px;padding:13px;text-decoration:none;color:var(--text);background:#0a2031}.scenario:hover,.scenario:focus{outline:2px solid #7fc7ea;outline-offset:2px}.scenario small{display:block;color:var(--muted);margin-top:5px}
+label{display:grid;gap:6px;font-weight:700}input,select,textarea,button{width:100%;font:inherit;color:var(--text);background:#071827;border:1px solid var(--line);border-radius:9px;padding:10px;min-height:44px}textarea{min-height:86px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}button{cursor:pointer;background:#12364e;font-weight:800}button.primary{background:#185173;border-color:#347aa2}.hint{font-size:12px;color:var(--muted)}.status{min-height:24px;color:#cfe7f3}
+@media(max-width:700px){.top{display:grid}.grid,.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><div><div class="tag">TRAMA · E3 HUMAN-USE</div><h1>Pannello moderatore</h1><p class="lede">Apri uno scenario sulla Home reale del Control Center, conduci il compito senza suggerire la risposta e registra solo l'esito necessario alla validazione.</p></div><a href="../" style="color:#bfe7fb">← Control Center</a></div>
+<div class="notice"><strong>Solo scenari sintetici, nessun dato reale viene modificato.</strong><span class="hint">La scheda resta nel browser. Non viene inviata telemetria e non vengono raccolti nomi, email o account.</span></div>
+
+<section class="panel">
+<h2>1. Apri lo scenario</h2>
+<div class="grid" id="scenarioGrid"></div>
+</section>
+
+<section class="panel">
+<h2>2. Registra l'osservazione</h2>
+<form id="receiptForm">
+<div class="form-grid">
+<label>Profilo anonimo<input id="profileId" required pattern="[A-Z0-9_-]+" placeholder="NONTECH-01"></label>
+<label>Coorte<select id="cohort"><option value="NON_TECHNICAL">Utente non tecnico</option><option value="TECHNICAL_ASSURANCE">Tecnico / assurance</option><option value="INCLUSION_ACCESSIBILITY">Inclusione / accessibilità</option></select></label>
+<label>Confidenza digitale<select id="confidence"><option>LOW</option><option selected>MEDIUM</option><option>HIGH</option><option>NOT_RECORDED</option></select></label>
+<label>Dispositivo<select id="device"><option value="DESKTOP">Desktop</option><option value="SMARTPHONE">Smartphone</option><option value="TABLET">Tablet</option><option value="ASSISTIVE_TECH">Tecnologia assistiva</option><option value="MIXED">Misto</option></select></label>
+<label class="full">Use case<select id="useCase"></select></label>
+<label>Compito completato<select id="taskCompleted"><option>YES</option><option>WITH_HELP</option><option>NO</option></select></label>
+<label>Interpretazione corretta<select id="interpretationCorrect"><option>YES</option><option>PARTIAL</option><option>NO</option></select></label>
+<label>Decisione sull'azione<select id="actionDecisionCorrect"><option>YES</option><option>NO</option><option>NOT_APPLICABLE</option></select></label>
+<label>Intervento moderatore<select id="facilitatorIntervention"><option>NONE</option><option>CLARIFICATION</option><option>SUBSTANTIAL_HELP</option></select></label>
+<label class="full">Osservazioni anonime<textarea id="notes" placeholder="Es. ha interpretato 'parzialmente aggiornate' come errore. Non inserire nomi o dati personali."></textarea></label>
+<label>Severità eventuale finding<select id="severity"><option value="">Nessun finding</option><option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></label>
+<label>Esito sessione<select id="result"><option>KEEP</option><option>REVISE</option><option>REJECT</option><option>PARTIAL</option></select></label>
+<div class="full"><button class="primary" type="submit">Genera receipt JSON</button></div>
+</div>
+</form>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+</section>
+</main>
+<script>
+const scenarios=[
+ ['normal','NORMAL','Stato ordinario'],
+ ['loading','LOADING','Controllo in corso'],
+ ['empty','EMPTY','Nessun aggiornamento'],
+ ['partial','PARTIAL','Aggiornamenti incompleti'],
+ ['review','REVIEW_REQUIRED','Verifica necessaria'],
+ ['blocked','BLOCKED','Azione sospesa'],
+ ['noaccess','NO_ACCESS','Dettagli non accessibili'],
+ ['offline','OFFLINE_CACHED','Ultimo stato disponibile'],
+ ['unavailable','UNAVAILABLE','Aggiornamenti non disponibili']
+];
+const useCases=[
+ ['E3-UC-01','NORMAL · comprensione'],['E3-UC-02','LOADING · comprensione'],['E3-UC-03','EMPTY · comprensione'],
+ ['E3-UC-04','PARTIAL · comprensione'],['E3-UC-05','REVIEW_REQUIRED · comprensione'],['E3-UC-06','BLOCKED · comprensione'],
+ ['E3-UC-07','NO_ACCESS · comprensione'],['E3-UC-08','OFFLINE_CACHED · comprensione'],['E3-UC-09','Progressive disclosure'],
+ ['E3-UC-10','Corrente vs storico'],['E3-UC-11','Responsive mobile'],['E3-UC-12','Tastiera e focus'],
+ ['E3-UC-13','Tecnologia assistiva'],['E3-UC-14','Bassa confidenza digitale']
+];
+const params=new URLSearchParams(location.search);
+const head=params.get('head')||'';
+const isHead=/^[0-9a-f]{40}$/.test(head);
+scenarioGrid.innerHTML=scenarios.map(([id,label,desc])=>{
+ const href='../?validation=e3&scenario='+encodeURIComponent(id)+'#projectKnowledge';
+ return '<a class="scenario" target="_blank" rel="noopener" href="'+href+'"><strong>'+label+'</strong><small>'+desc+' · apre la Home reale</small></a>';
+}).join('');
+useCase.innerHTML=useCases.map(([id,label])=>'<option value="'+id+'">'+id+' — '+label+'</option>').join('');
+if(!isHead)status.textContent='Apri questa pagina dal link governato con exact head per generare una receipt valida.';
+receiptForm.addEventListener('submit',event=>{
+ event.preventDefault();
+ if(!isHead){status.textContent='Exact head mancante: usa il link governato fornito per questa tornata E3.';return}
+ const note=notes.value.trim();
+ const sev=severity.value;
+ const findingId=sev?'E3-F-'+Date.now():'';
+ const uc={
+  useCaseId:useCase.value,
+  taskCompleted:taskCompleted.value,
+  interpretationCorrect:interpretationCorrect.value,
+  actionDecisionCorrect:actionDecisionCorrect.value,
+  technicalDetailNeededUnexpectedly:false,
+  facilitatorIntervention:facilitatorIntervention.value,
+  hesitationOrDetour:note||null,
+  observedMisinterpretations:[],
+  accessibilityIssues:[],
+  responsiveIssues:[],
+  anonymousUserWording:[],
+  findingIds:findingId?[findingId]:[]
+ };
+ const receipt={
+  schemaVersion:'trama.stage-e3-human-use-receipt/v1',
+  sessionId:'E3-'+Date.now(),
+  subject:'project-knowledge-ui',
+  testedExactHead:head,
+  buildRef:'render:trama-control-center',
+  conductedAt:new Date().toISOString(),
+  participantProfile:{
+   profileId:profileId.value.trim().toUpperCase(),
+   cohort:cohort.value,
+   roleClass:null,
+   digitalConfidence:confidence.value,
+   deviceMode:device.value,
+   accessMode:null
+  },
+  useCases:[uc],
+  findings:sev?[{
+   findingId,severity:sev,category:'OTHER',status:'OPEN',
+   summary:note||'Finding osservato durante la sessione E3.',
+   useCaseRefs:[useCase.value],evidenceRef:null,requiredChange:null
+  }]:[],
+  result:result.value,
+  notes:note||null,
+  privacy:{containsDirectIdentifiers:false,containsUngovernedRecording:false}
+ };
+ const blob=new Blob([JSON.stringify(receipt,null,2)+'\n'],{type:'application/json'});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download=receipt.sessionId+'.json';
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+ status.textContent='Receipt generata localmente. Nessun dato è stato inviato.';
+});
+</script>
+</body>
+</html>
