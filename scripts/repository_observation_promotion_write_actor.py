@@ -86,17 +86,34 @@ def promotion_event(bundle,actor_exact_sha):
   "supersedes":[]
  }
 
+def knowledge_event_from_promotion(event,bundle):
+ short=event["eventId"].split("-",1)[1][:16]
+ return {
+  "eventId":"TRAMA-EVT-REPOSITORY-OBSERVATION-PROMOTION-"+short,
+  "type":"PROMOTION",
+  "subject":"project-knowledge-repository-state",
+  "statement":"A governed RepositoryObservation was promoted into the current Project Knowledge repository-state projection.",
+  "status":"CURRENT",
+  "rationale":"Promotion is bound to proposal "+event["proposalId"]+", source run "+event["sourceRunId"]+", exact collector and actor revisions, policy digest and enrollment digest.",
+  "sourceRefs":[{"repository":TARGET_REPOSITORY,"ref":ref} for ref in event["sourceRefs"]],
+  "validFrom":bundle["promotedAt"],
+  "supersedes":[],
+  "invalidatedBy":[],
+  "promotionEvent":event
+ }
+
 def update_events(current,bundle,actor_exact_sha):
  output=json.loads(json.dumps(current))
  if output.get("schemaVersion")!="trama.project-knowledge-events/v1":
   die("KNOWLEDGE_EVENTS_SCHEMA")
  event=promotion_event(bundle,actor_exact_sha)
- existing=[item for item in output.get("events",[]) if item.get("eventId")==event["eventId"]]
+ wrapper=knowledge_event_from_promotion(event,bundle)
+ existing=[item for item in output.get("events",[]) if item.get("eventId")==wrapper["eventId"]]
  if existing:
-  if existing[0]!=event:
+  if existing[0]!=wrapper:
    die("EVENT_ID_COLLISION")
   return output,event,False
- output.setdefault("events",[]).append(event)
+ output.setdefault("events",[]).append(wrapper)
  output["updatedAt"]=bundle["promotedAt"]
  return output,event,True
 
@@ -158,6 +175,8 @@ class GitHubClient:
   if existing_sha:
    payload["sha"]=existing_sha
   return self.request("PUT","/repos/"+TARGET_REPOSITORY+"/contents/"+urllib.parse.quote(path,safe="/"),payload)
+ def compare(self,base,head):
+  return self.request("GET","/repos/"+TARGET_REPOSITORY+"/compare/"+urllib.parse.quote(base,safe="")+"..."+urllib.parse.quote(head,safe=""))
  def list_prs(self,head):
   query=urllib.parse.urlencode({"state":"open","head":"antoniocorsano-boop:"+head,"base":BASE_BRANCH})
   return self.request("GET","/repos/"+TARGET_REPOSITORY+"/pulls?"+query)
@@ -192,6 +211,11 @@ def execute(bundle,actor_exact_sha,token):
   client.create_branch(name,base)
  elif branch["object"]["sha"]==base:
   pass
+ else:
+  comparison=client.compare(base,name)
+  changed={item.get("filename") for item in comparison.get("files",[])}
+  if not changed.issubset(set(ALLOWED_PATHS)):
+   die("BRANCH_CONTAINS_UNEXPECTED_PATHS")
  for path in ALLOWED_PATHS:
   existing=client.get_file(path,name)
   if existing and existing.get("encoding")=="base64":
