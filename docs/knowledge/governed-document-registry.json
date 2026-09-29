@@ -454,7 +454,7 @@
     {
       "id": "DOC-TRAMA-COMPONENT-INVENTORY",
       "path": "docs/inventory/trama-component-supply-chain-inventory-v1.md",
-      "kind": "INVENTORY",
+      "kind": "GUIDE",
       "status": "PROPOSED",
       "priority": "SUPPORTING",
       "subjects": [
