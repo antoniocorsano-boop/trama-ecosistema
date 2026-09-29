@@ -1,0 +1,447 @@
+{
+  "schemaVersion": "trama.stage-e3-human-use-catalog/v1",
+  "stage": "E3",
+  "subject": "project-knowledge-ui",
+  "purpose": "Observable human-use validation of comprehension, actionability, uncertainty handling, progressive disclosure, responsive use and accessibility.",
+  "nonGoals": [
+    "Statistical usability benchmarking",
+    "Product popularity or satisfaction scoring",
+    "Automated promotion or approval",
+    "Live-overlay activation",
+    "Individual user profiling"
+  ],
+  "dimensions": [
+    {
+      "id": "COMPREHENSION",
+      "label": "Comprensione",
+      "question": "L'utente comprende correttamente lo stato senza aprire i dettagli tecnici?"
+    },
+    {
+      "id": "ACTIONABILITY",
+      "label": "Azionabilità",
+      "question": "L'utente sa se deve agire e quale conseguenza ha lo stato?"
+    },
+    {
+      "id": "UNCERTAINTY",
+      "label": "Incertezza",
+      "question": "L'utente distingue informazione incompleta, non aggiornata, da verificare ed errore?"
+    },
+    {
+      "id": "TRUST_PROVENANCE",
+      "label": "Fiducia e provenienza",
+      "question": "L'utente distingue informazioni verificate, aggiornamenti recenti e dettaglio tecnico?"
+    },
+    {
+      "id": "AUTHORITY",
+      "label": "Authority",
+      "question": "L'utente non attribuisce al Control Center capacità decisionali o di scrittura che non possiede?"
+    },
+    {
+      "id": "MOBILE",
+      "label": "Mobile",
+      "question": "La stessa semantica è comprensibile su smartphone senza dipendere dal layout desktop?"
+    },
+    {
+      "id": "ACCESSIBILITY",
+      "label": "Accessibilità",
+      "question": "Stato, disclosure e navigazione sono comprensibili e operabili con modalità alternative?"
+    },
+    {
+      "id": "COGNITIVE_LOAD",
+      "label": "Carico cognitivo",
+      "question": "L'utente trova la risposta senza decodificare gergo o informazioni secondarie?"
+    }
+  ],
+  "severityPolicy": {
+    "CRITICAL": "Misinterpretation can cause false trust, false alarm, false authority, or acting when the interface says not to.",
+    "HIGH": "Task cannot be completed independently or the user misses a required action.",
+    "MEDIUM": "Task completes with avoidable hesitation, detour, or terminology confusion.",
+    "LOW": "Cosmetic or preference issue with no material effect on comprehension or task completion."
+  },
+  "resultPolicy": {
+    "KEEP": "No open CRITICAL finding and core comprehension tasks are completed without facilitator correction.",
+    "REVISE": "Core model remains valid but one or more HIGH/MEDIUM findings require copy, hierarchy, interaction or responsive changes.",
+    "REJECT": "The communication model systematically produces a CRITICAL misunderstanding or cannot be corrected without changing the core model.",
+    "PARTIAL": "Required cohort/device/accessibility evidence is incomplete; no full E3 closure claim is allowed."
+  },
+  "useCases": [
+    {
+      "id": "E3-UC-01",
+      "type": "STATE_COMPREHENSION",
+      "state": "NORMAL",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "COMPREHENSION",
+        "ACTIONABILITY",
+        "TRUST_PROVENANCE"
+      ],
+      "taskPrompt": "Guarda questa schermata come se stessi controllando lo stato del progetto. Dimmi che cosa sai con certezza e se devi fare qualcosa.",
+      "expectedOutcome": [
+        "Reference information is understood as valid",
+        "Recent updates are understood as available and non-problematic",
+        "No action is inferred"
+      ],
+      "criticalMisinterpretations": [
+        "User believes a verification is required",
+        "User believes the state is uncertain or broken",
+        "User opens technical details because primary copy is insufficient"
+      ],
+      "passCriteria": [
+        "Answers reference validity correctly",
+        "Answers action required = no",
+        "Does not need technical detail for the answer"
+      ]
+    },
+    {
+      "id": "E3-UC-02",
+      "type": "STATE_COMPREHENSION",
+      "state": "LOADING",
+      "priority": "HIGH",
+      "dimensions": [
+        "COMPREHENSION",
+        "UNCERTAINTY",
+        "ACTIONABILITY"
+      ],
+      "taskPrompt": "Il sistema sta facendo un controllo. Che cosa puoi usare adesso e che cosa non sai ancora?",
+      "expectedOutcome": [
+        "Verified information remains usable",
+        "Recent check is understood as in progress",
+        "No failure is inferred"
+      ],
+      "criticalMisinterpretations": [
+        "User believes all information is unusable",
+        "User treats loading as error"
+      ],
+      "passCriteria": [
+        "States verified information remains usable",
+        "Recognizes recent result is not yet available"
+      ]
+    },
+    {
+      "id": "E3-UC-03",
+      "type": "STATE_COMPREHENSION",
+      "state": "EMPTY",
+      "priority": "HIGH",
+      "dimensions": [
+        "COMPREHENSION",
+        "UNCERTAINTY"
+      ],
+      "taskPrompt": "Qui non compaiono aggiornamenti recenti. Che cosa significa secondo te?",
+      "expectedOutcome": [
+        "No recent update is distinguished from error or missing data"
+      ],
+      "criticalMisinterpretations": [
+        "User believes data failed to load",
+        "User believes reference information is absent"
+      ],
+      "passCriteria": [
+        "Explains that there are simply no recent updates",
+        "Does not infer system failure"
+      ]
+    },
+    {
+      "id": "E3-UC-04",
+      "type": "STATE_COMPREHENSION",
+      "state": "PARTIAL",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "COMPREHENSION",
+        "UNCERTAINTY",
+        "ACTIONABILITY",
+        "TRUST_PROVENANCE"
+      ],
+      "taskPrompt": "Alcuni aggiornamenti non sono completi. Che cosa consideri ancora utilizzabile? Devi fare qualcosa adesso?",
+      "expectedOutcome": [
+        "Verified information remains usable",
+        "Recent information is understood as incomplete",
+        "No action is inferred unless specifically stated"
+      ],
+      "criticalMisinterpretations": [
+        "User discards valid reference information",
+        "User treats partial as confirmed live state",
+        "User invents a required action"
+      ],
+      "passCriteria": [
+        "Separates verified base from incomplete recent updates",
+        "States action required = no"
+      ]
+    },
+    {
+      "id": "E3-UC-05",
+      "type": "STATE_COMPREHENSION",
+      "state": "REVIEW_REQUIRED",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "COMPREHENSION",
+        "ACTIONABILITY",
+        "UNCERTAINTY",
+        "AUTHORITY"
+      ],
+      "taskPrompt": "È stato rilevato un cambiamento. Che cosa resta valido e che cosa deve succedere prima che il cambiamento sia considerato confermato?",
+      "expectedOutcome": [
+        "Existing verified information remains usable",
+        "Change requires human verification",
+        "Control Center itself is not understood as approving the change"
+      ],
+      "criticalMisinterpretations": [
+        "User treats change as automatically approved",
+        "User treats all previous information as invalid",
+        "User believes Control Center can approve/write"
+      ],
+      "passCriteria": [
+        "Identifies verification requirement",
+        "Keeps previous verified information distinct",
+        "Does not attribute approval authority to Control Center"
+      ]
+    },
+    {
+      "id": "E3-UC-06",
+      "type": "STATE_COMPREHENSION",
+      "state": "BLOCKED",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "COMPREHENSION",
+        "ACTIONABILITY",
+        "AUTHORITY"
+      ],
+      "taskPrompt": "In questo stato, che cosa non puoi fare e che cosa puoi ancora consultare?",
+      "expectedOutcome": [
+        "Blocked action is distinguished from readable information",
+        "Human verification is understood as prerequisite"
+      ],
+      "criticalMisinterpretations": [
+        "User thinks the whole system is unavailable",
+        "User proceeds as if blocked action were allowed",
+        "User assumes Control Center can remove the block"
+      ],
+      "passCriteria": [
+        "Names blocked consequence",
+        "Names what remains consultable",
+        "Identifies human verification as required"
+      ]
+    },
+    {
+      "id": "E3-UC-07",
+      "type": "STATE_COMPREHENSION",
+      "state": "NO_ACCESS",
+      "priority": "HIGH",
+      "dimensions": [
+        "COMPREHENSION",
+        "UNCERTAINTY",
+        "TRUST_PROVENANCE"
+      ],
+      "taskPrompt": "Non puoi vedere i dettagli tecnici. Che cosa puoi comunque sapere? È un errore del sistema?",
+      "expectedOutcome": [
+        "Outcome remains understandable",
+        "No-access is distinguished from failure or data loss"
+      ],
+      "criticalMisinterpretations": [
+        "User equates permission boundary with system failure",
+        "User assumes evidence is missing because details are hidden"
+      ],
+      "passCriteria": [
+        "Distinguishes access boundary from failure",
+        "Can state the visible outcome"
+      ]
+    },
+    {
+      "id": "E3-UC-08",
+      "type": "STATE_COMPREHENSION",
+      "state": "OFFLINE_CACHED",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "COMPREHENSION",
+        "UNCERTAINTY",
+        "TRUST_PROVENANCE",
+        "MOBILE"
+      ],
+      "taskPrompt": "Sei senza connessione. Quali informazioni stai vedendo e quanto sono recenti?",
+      "expectedOutcome": [
+        "Cached/last-known state is recognized",
+        "No claim of fresh/live verification is inferred",
+        "Timestamp is discoverable"
+      ],
+      "criticalMisinterpretations": [
+        "User treats cached data as just verified",
+        "User believes offline means all information is invalid"
+      ],
+      "passCriteria": [
+        "Identifies last-known/cached nature",
+        "Finds or reports last-check time",
+        "Does not call it live"
+      ]
+    },
+    {
+      "id": "E3-UC-09",
+      "type": "PROGRESSIVE_DISCLOSURE",
+      "state": "ANY",
+      "priority": "HIGH",
+      "dimensions": [
+        "TRUST_PROVENANCE",
+        "COGNITIVE_LOAD"
+      ],
+      "taskPrompt": "Senza aprire dettagli tecnici, dimmi lo stato. Poi trova il riferimento tecnico che useresti per un controllo approfondito.",
+      "expectedOutcome": [
+        "Primary answer is possible without technical detail",
+        "Technical details are discoverable on request"
+      ],
+      "criticalMisinterpretations": [
+        "Primary task requires SHA/enums",
+        "Technical details are mistaken for primary user guidance"
+      ],
+      "passCriteria": [
+        "Completes first answer before opening disclosure",
+        "Finds technical detail when explicitly asked"
+      ]
+    },
+    {
+      "id": "E3-UC-10",
+      "type": "CURRENT_VS_HISTORY",
+      "state": "ANY",
+      "priority": "HIGH",
+      "dimensions": [
+        "COMPREHENSION",
+        "TRUST_PROVENANCE"
+      ],
+      "taskPrompt": "Un problema compare nella cronologia ma non nello stato corrente. È ancora un problema attivo?",
+      "expectedOutcome": [
+        "Historical event is not confused with current state"
+      ],
+      "criticalMisinterpretations": [
+        "User treats historical issue as currently active"
+      ],
+      "passCriteria": [
+        "Separates current state from history without facilitator correction"
+      ]
+    },
+    {
+      "id": "E3-UC-11",
+      "type": "RESPONSIVE_MOBILE",
+      "state": "PARTIAL",
+      "priority": "HIGH",
+      "dimensions": [
+        "MOBILE",
+        "COMPREHENSION",
+        "COGNITIVE_LOAD"
+      ],
+      "taskPrompt": "Su smartphone, trova prima ciò che è affidabile, poi dimmi se è richiesta un'azione.",
+      "expectedOutcome": [
+        "Primary hierarchy survives mobile layout",
+        "No horizontal scanning is required"
+      ],
+      "criticalMisinterpretations": [
+        "Mobile ordering changes meaning",
+        "Critical state is hidden behind technical detail"
+      ],
+      "passCriteria": [
+        "Finds verified/reference state first",
+        "Answers action requirement correctly",
+        "No horizontal page scrolling is needed"
+      ]
+    },
+    {
+      "id": "E3-UC-12",
+      "type": "KEYBOARD_FOCUS",
+      "state": "REVIEW_REQUIRED",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "ACCESSIBILITY",
+        "ACTIONABILITY"
+      ],
+      "taskPrompt": "Usa soltanto la tastiera per raggiungere la sezione, leggere lo stato e aprire/chiudere i dettagli tecnici.",
+      "expectedOutcome": [
+        "Visible focus is maintained",
+        "Disclosure is operable",
+        "Dynamic state does not steal focus"
+      ],
+      "criticalMisinterpretations": [
+        "Required information cannot be reached",
+        "Focus is lost or trapped"
+      ],
+      "passCriteria": [
+        "All required controls are reachable",
+        "Focus remains visible",
+        "Details disclosure opens and closes from keyboard"
+      ]
+    },
+    {
+      "id": "E3-UC-13",
+      "type": "ASSISTIVE_TECH_STATUS",
+      "state": "REVIEW_REQUIRED",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "ACCESSIBILITY",
+        "COMPREHENSION",
+        "ACTIONABILITY"
+      ],
+      "taskPrompt": "Con la tecnologia assistiva abituale, individua lo stato della sezione e dimmi se richiede un'azione.",
+      "expectedOutcome": [
+        "Status message is exposed with meaningful semantics",
+        "Heading/disclosure structure is understandable"
+      ],
+      "criticalMisinterpretations": [
+        "Dynamic state is not announced/discoverable",
+        "User cannot distinguish review-required from error"
+      ],
+      "passCriteria": [
+        "Status is discoverable without visual color cues",
+        "Action requirement is understood",
+        "Technical detail remains optional"
+      ]
+    },
+    {
+      "id": "E3-UC-14",
+      "type": "LOW_DIGITAL_CONFIDENCE",
+      "state": "UNAVAILABLE",
+      "priority": "CRITICAL",
+      "dimensions": [
+        "COMPREHENSION",
+        "UNCERTAINTY",
+        "AUTHORITY",
+        "COGNITIVE_LOAD"
+      ],
+      "taskPrompt": "Non sono disponibili aggiornamenti recenti. Spiegami con parole tue se le informazioni che vedi sono utilizzabili e se devi intervenire.",
+      "expectedOutcome": [
+        "Reference information remains understood as usable",
+        "Absence of live context is not treated as error",
+        "No action is invented"
+      ],
+      "criticalMisinterpretations": [
+        "User assumes system is broken",
+        "User assumes all information is old/unusable",
+        "User searches for a non-existent approval action"
+      ],
+      "passCriteria": [
+        "Explains usable reference information",
+        "Explains recent updates are unavailable",
+        "States no action is required"
+      ]
+    }
+  ],
+  "coverageRules": {
+    "requiredStateCoverage": [
+      "NORMAL",
+      "LOADING",
+      "EMPTY",
+      "PARTIAL",
+      "REVIEW_REQUIRED",
+      "BLOCKED",
+      "NO_ACCESS",
+      "OFFLINE_CACHED",
+      "UNAVAILABLE"
+    ],
+    "requiredDimensions": [
+      "COMPREHENSION",
+      "ACTIONABILITY",
+      "UNCERTAINTY",
+      "TRUST_PROVENANCE",
+      "AUTHORITY",
+      "MOBILE",
+      "ACCESSIBILITY",
+      "COGNITIVE_LOAD"
+    ],
+    "maximumTasksPerParticipant": 5,
+    "criticalFindingTolerance": 0,
+    "statisticalBenchmarking": false
+  }
+}
