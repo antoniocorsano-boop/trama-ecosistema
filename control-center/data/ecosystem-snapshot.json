@@ -1,41 +1,41 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.4.0",
-  "generatedAt": "2026-09-29T19:37:32.845819+00:00",
+  "schemaVersion": "1.5.0",
+  "generatedAt": "2026-09-29T20:47:42.300778+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "ref": "STATUS.md",
-      "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
+      "sha256": "42349199d860f001899fcf09ecaebd677c6b3dc52877cc0f04d1178ebf63c206"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "ref": "ROADMAP.md",
-      "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
+      "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "ref": "status/governed-events.json",
-      "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
+      "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
     }
@@ -90,9 +90,15 @@
         "EV-SOURCE-COMPONENT-EVIDENCE-REGISTRY",
         "EV-TRAMA-ADR-014"
       ],
+      "evidenceBindingStatus": "PARTIAL",
+      "nextTargetLevel": 2,
+      "nextRequiredEvidenceTypes": [
+        "CONTRACT_APPROVED"
+      ],
+      "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-29T19:37:32.845819+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
     },
     {
       "id": "arena",
@@ -103,11 +109,17 @@
       "confidence": "LOW",
       "status": "PARTIAL",
       "evidenceRefs": [],
+      "evidenceBindingStatus": "NONE",
+      "nextTargetLevel": 1,
+      "nextRequiredEvidenceTypes": [
+        "DOCUMENT_CANONICAL"
+      ],
+      "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-29T19:37:32.845819+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
     },
     {
       "id": "atlas",
@@ -121,12 +133,18 @@
         "EV-R3-F0-EXIT-ACCESSIBILITY",
         "EV-R3-F0-EXIT-HUMAN"
       ],
+      "evidenceBindingStatus": "PARTIAL",
+      "nextTargetLevel": 1,
+      "nextRequiredEvidenceTypes": [
+        "DOCUMENT_CANONICAL"
+      ],
+      "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T19:37:32.845819+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
     },
     {
       "id": "docente-os",
@@ -137,12 +155,18 @@
       "confidence": "LOW",
       "status": "PARTIAL",
       "evidenceRefs": [],
+      "evidenceBindingStatus": "NONE",
+      "nextTargetLevel": 1,
+      "nextRequiredEvidenceTypes": [
+        "DOCUMENT_CANONICAL"
+      ],
+      "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T19:37:32.845819+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
     }
   ],
   "capabilities": [
@@ -665,9 +689,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "sha256": "3986bdbe46db8d976af45c11e11e9c5fec53a02c8fbeca913ed515b1dcd32750"
+        "sha256": "42349199d860f001899fcf09ecaebd677c6b3dc52877cc0f04d1178ebf63c206"
       },
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -683,9 +707,9 @@
       "status": "PASS",
       "source": {
         "path": "ROADMAP.md",
-        "sha256": "71e7ff553bb26e977c619f3716e729a0b64ece1e85fe87c5c0eaf899faee30b7"
+        "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
       },
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -703,7 +727,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -721,7 +745,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
       },
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -737,9 +761,9 @@
       "status": "PASS",
       "source": {
         "path": "status/governed-events.json",
-        "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
+        "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -757,7 +781,7 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
       },
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -831,7 +855,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-29T19:37:32.845819+00:00",
+      "observedAt": "2026-09-29T20:47:42.300778+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1495,6 +1519,36 @@
         "Exact head bc11577eeeeeed9c43ad62ac43fb7561e1197246 validato con F4 Mobile/LIM, F5 Exit e TRAMA Perceptible Write PASS.",
         "S3-V2 chiusa; R3-F0 exit gate soddisfatto.",
         "Nessuna autorizzazione a R3-P4, DOS-A1 o runtime Docente OS → Atlas."
+      ]
+    },
+    {
+      "id": "EVT-ECO02-P1-FINAL-HUMAN-PASS",
+      "eventType": "HUMAN_REVIEW",
+      "occurredAt": "2026-09-25T12:46:47Z",
+      "label": "ECO-02/P1 chiuso con accettazione umana finale",
+      "subjectRef": "ECO-02-P1",
+      "sourceRef": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+      "authority": "TRAMA / Human Review",
+      "versionRef": "02cfe7accee9abe63dc7c7d936ce1f3e0b7b8d7d",
+      "details": [
+        "CLOSED_VERIFIED / HUMAN REVIEW PASS.",
+        "Caso reale docente concluso senza riaprire DOS-A1.",
+        "La chiusura non autorizza nuovo runtime cross-product."
+      ]
+    },
+    {
+      "id": "EVT-CC3-F1-HUMAN-PASS",
+      "eventType": "HUMAN_REVIEW",
+      "occurredAt": "2026-09-26T00:00:00Z",
+      "label": "CC3-F1 Next Transition Engine chiuso con Human Review PASS",
+      "subjectRef": "CC3-F1",
+      "sourceRef": "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md",
+      "authority": "TRAMA / Human Review",
+      "versionRef": "686fe01b91b5e5b38a9956198e79c5ff713b0b8f",
+      "details": [
+        "GATE-CC3-F1-HUMAN PASS.",
+        "Motore deterministico e read-only confermato.",
+        "Nessuna probabilità, ranking, auto-promotion o runtime authorization."
       ]
     }
   ],
