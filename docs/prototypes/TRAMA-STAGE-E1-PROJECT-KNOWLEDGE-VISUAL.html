@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>TRAMA Stage E1 — Project Knowledge Visual Prototype</title>
+<style>
+:root{
+  --bg:#071827;--surface:#0b2235;--surface2:#0e2b42;--line:#1c4662;
+  --text:#f4f8fb;--muted:#9fb9cb;--info:#58bff7;--ok:#55d79a;
+  --warn:#f0b54a;--danger:#f37d87;--focus:#8fd7ff;
+  --radius:14px;--space:16px
+}
+*{box-sizing:border-box}
+html{max-width:100%;overflow-x:hidden}
+body{
+  margin:0;max-width:100%;overflow-x:hidden;
+  background:radial-gradient(circle at 85% 0,#123750 0,transparent 32%),var(--bg);
+  color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif
+}
+button,summary{font:inherit}
+button{color:inherit}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.app{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh}
+aside{position:sticky;top:0;height:100vh;padding:24px 16px;border-right:1px solid var(--line);background:#081a2a}
+.brand{font-weight:900;letter-spacing:.18em;font-size:22px}
+.strap{margin:4px 0 26px;color:var(--info);font-size:10px;letter-spacing:.12em}
+.prototype{font-size:12px;color:var(--muted);padding:10px;border:1px dashed var(--line);border-radius:10px}
+.scenario-nav{display:grid;gap:6px;margin-top:18px}
+.scenario-nav button{
+  min-height:44px;text-align:left;padding:10px 12px;border-radius:10px;
+  border:1px solid transparent;background:transparent;color:#c5d8e4;cursor:pointer
+}
+.scenario-nav button:hover,.scenario-nav button[aria-current="true"]{background:#123550;border-color:#2b6687}
+main{width:min(1120px,100%);margin:auto;padding:28px 30px 60px}
+header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;padding-bottom:18px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:30px;line-height:1.15}
+.lede{margin:7px 0 0;color:#b8d0df;max-width:760px}
+.readonly{white-space:nowrap;color:var(--muted);font-size:12px}
+.readonly b{color:var(--ok)}
+.state-summary{
+  margin-top:22px;padding:18px;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--surface2),var(--surface))
+}
+.state-summary h2{font-size:20px;margin:0 0 5px}
+.state-summary p{margin:0;color:#c8dae5;max-width:820px}
+.state-summary[data-tone="attention"]{border-color:#76571f;background:linear-gradient(180deg,#332a15,#1d211f)}
+.state-summary[data-tone="blocked"]{border-color:#7d3f49;background:linear-gradient(180deg,#321b23,#201b22)}
+.state-summary[data-tone="quiet"]{border-color:#28526d}
+.action{
+  display:none;margin-top:12px;padding:13px 14px;border:1px solid #9c6d1d;border-radius:12px;background:#302713
+}
+.action.visible{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.action strong{display:block}
+.action small{display:block;color:#dec78e;margin-top:2px}
+.action button{
+  min-height:44px;padding:9px 14px;border-radius:10px;border:1px solid #b88424;background:#554014;cursor:pointer;white-space:nowrap
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.card{padding:17px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface2),var(--surface));min-width:0}
+.card h3{margin:0 0 6px;font-size:16px}
+.card p{margin:0;color:#c5d6e1}
+.meta{margin-top:12px;color:var(--muted);font-size:12px}
+.marker{display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:12px;margin-bottom:9px}
+.marker::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--info)}
+.marker.verified::before{background:var(--ok)}
+.marker.pending::before{background:var(--warn)}
+.marker.blocked::before{background:var(--danger)}
+.notice{
+  display:none;margin-top:12px;padding:14px;border:1px solid #76571f;border-radius:12px;background:#302713
+}
+.notice.visible{display:block}
+.notice h3{margin:0 0 4px;font-size:15px}
+.notice p{margin:0;color:#decfa8}
+.status-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid #173d56}
+.status-row:last-child{border-bottom:0}
+.status-row span:last-child{color:#c8d8e2;font-weight:700}
+details{margin-top:16px;border:1px solid var(--line);border-radius:var(--radius);background:#081f31}
+summary{cursor:pointer;min-height:48px;display:flex;align-items:center;padding:12px 15px;font-weight:800}
+.details-body{padding:0 15px 15px}
+.tech-grid{display:grid;grid-template-columns:180px 1fr;gap:7px 12px}
+.tech-grid dt{color:var(--muted)}
+.tech-grid dd{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}
+.history{margin-top:16px;padding:15px;border:1px solid var(--line);border-radius:var(--radius);background:#091e30}
+.history h3{margin:0 0 8px;font-size:15px}
+.history p{margin:0;color:var(--muted)}
+.footer{margin-top:20px;color:var(--muted);font-size:12px}
+.skeleton{display:none;gap:7px;margin-top:10px}
+.skeleton.visible{display:grid}
+.skeleton span{height:11px;border-radius:99px;background:#1a4059}
+.skeleton span:nth-child(2){width:78%}
+.skeleton span:nth-child(3){width:55%}
+@media(max-width:850px){
+  .app{grid-template-columns:1fr}
+  aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:14px 12px}
+  .brand,.strap,.prototype{display:none}
+  .scenario-nav{display:flex;overflow-x:auto;margin:0;gap:6px;padding-bottom:2px}
+  .scenario-nav button{flex:0 0 auto;white-space:nowrap}
+  main{padding:18px 13px 44px}
+  header{display:grid;gap:10px}
+  h1{font-size:24px}
+  .readonly{white-space:normal}
+  .grid{grid-template-columns:1fr}
+  .action.visible{display:grid}
+  .tech-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside aria-label="Scenari del prototipo">
+  <div class="brand">TRAMA</div>
+  <div class="strap">STAGE E1 · VISUAL PROTOTYPE</div>
+  <div class="prototype">Artefatto isolato. Dati sintetici. Nessun runtime, fetch o telemetria.</div>
+  <nav class="scenario-nav" aria-label="Seleziona scenario">
+    <button type="button" data-scenario="normal" aria-current="true">Normale</button>
+    <button type="button" data-scenario="loading">Controllo in corso</button>
+    <button type="button" data-scenario="empty">Nessun aggiornamento</button>
+    <button type="button" data-scenario="partial">Aggiornamenti parziali</button>
+    <button type="button" data-scenario="review">Da verificare</button>
+    <button type="button" data-scenario="blocked">Blocco</button>
+    <button type="button" data-scenario="noaccess">Dettagli non accessibili</button>
+    <button type="button" data-scenario="offline">Offline / ultimo dato</button>
+  </nav>
+</aside>
+
+<main>
+<header>
+  <div>
+    <h1>Stato delle informazioni</h1>
+    <p class="lede">Una lettura semplice di ciò che è verificato, di ciò che è stato controllato di recente e di ciò che richiede attenzione.</p>
+  </div>
+  <div class="readonly"><b>●</b> SOLA LETTURA<br>prototipo E1</div>
+</header>
+
+<section class="state-summary" id="summary" data-tone="quiet" role="status" aria-live="polite" aria-atomic="true">
+  <h2 id="summaryTitle">Le informazioni di riferimento sono valide</h2>
+  <p id="summaryText">Gli aggiornamenti recenti non richiedono attenzione.</p>
+</section>
+
+<section class="action" id="actionBox" aria-labelledby="actionTitle">
+  <div>
+    <strong id="actionTitle">Serve una verifica</strong>
+    <small id="actionText">Controlla le informazioni prima di continuare.</small>
+  </div>
+  <button type="button" id="actionButton">Verifica le informazioni</button>
+</section>
+
+<div class="grid">
+  <section class="card" aria-labelledby="verifiedTitle">
+    <div class="marker verified">Informazioni verificate</div>
+    <h3 id="verifiedTitle">Base di riferimento</h3>
+    <p id="verifiedText">Le decisioni e le regole di riferimento restano valide.</p>
+    <div class="meta" id="verifiedMeta">Verificate il 29 settembre alle 08:42</div>
+  </section>
+
+  <section class="card" aria-labelledby="updatesTitle">
+    <div class="marker" id="updatesMarker">Aggiornamenti recenti</div>
+    <h3 id="updatesTitle">Ultimo controllo</h3>
+    <p id="updatesText">Controllato pochi minuti fa. Nessuna modifica che richieda attenzione.</p>
+    <div class="skeleton" id="loadingSkeleton" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="meta" id="updatesMeta">Ultimo controllo: oggi alle 08:58</div>
+  </section>
+</div>
+
+<section class="notice" id="reviewNotice" aria-labelledby="reviewTitle">
+  <h3 id="reviewTitle">Da verificare</h3>
+  <p id="reviewText">Alcune informazioni recenti non sono ancora state verificate.</p>
+</section>
+
+<details id="technicalDetails">
+  <summary>Dettagli tecnici</summary>
+  <div class="details-body">
+    <dl class="tech-grid">
+      <dt>Stato interno</dt><dd id="techEffective">USABLE</dd>
+      <dt>Conoscenza governata</dt><dd id="techGoverned">CURRENT</dd>
+      <dt>Osservazione recente</dt><dd id="techLive">FRESH</dd>
+      <dt>Verifica semantica</dt><dd id="techDrift">NONE</dd>
+      <dt>Repository</dt><dd>antoniocorsano-boop/trama-ecosistema</dd>
+      <dt>Exact head dimostrativo</dt><dd>0123456789abcdef0123456789abcdef01234567</dd>
+      <dt>governedAsOf</dt><dd>2026-09-29T06:42:00Z</dd>
+      <dt>liveObservedAt</dt><dd id="techObserved">2026-09-29T06:58:00Z</dd>
+    </dl>
+  </div>
+</details>
+
+<section class="history" aria-labelledby="historyTitle">
+  <h3 id="historyTitle">Cronologia</h3>
+  <p>Lo storico è separato dallo stato corrente. Gli eventi precedenti restano consultabili senza apparire come problemi ancora attivi.</p>
+</section>
+
+<p class="footer">Stage E1 · prototipo visuale con dati sintetici · nessun collegamento al runtime del Control Center.</p>
+</main>
+</div>
+
+<script>
+const scenarios={
+  normal:{
+    tone:"quiet",title:"Le informazioni di riferimento sono valide",
+    text:"Gli aggiornamenti recenti non richiedono attenzione.",
+    updates:"Controllato pochi minuti fa. Nessuna modifica che richieda attenzione.",
+    meta:"Ultimo controllo: oggi alle 08:58",action:false,notice:false,
+    effective:"USABLE",governed:"CURRENT",live:"FRESH",drift:"NONE",observed:"2026-09-29T06:58:00Z"
+  },
+  loading:{
+    tone:"quiet",title:"Sto controllando gli aggiornamenti più recenti",
+    text:"Puoi continuare a consultare le informazioni già verificate mentre il controllo è in corso.",
+    updates:"Controllo in corso…",meta:"Ultimo stato verificato disponibile",action:false,notice:false,loading:true,
+    effective:"USABLE",governed:"CURRENT",live:"STALE",drift:"DETECTED",observed:"2026-09-29T06:54:00Z"
+  },
+  empty:{
+    tone:"quiet",title:"Nessun aggiornamento da mostrare",
+    text:"Le informazioni di riferimento sono valide e non ci sono cambiamenti recenti che richiedono attenzione.",
+    updates:"Nessun aggiornamento recente.",meta:"Ultimo controllo: oggi alle 08:58",action:false,notice:false,
+    effective:"USABLE",governed:"CURRENT",live:"FRESH",drift:"NONE",observed:"2026-09-29T06:58:00Z"
+  },
+  partial:{
+    tone:"attention",title:"Informazioni parzialmente aggiornate",
+    text:"Puoi continuare a consultare le informazioni verificate; alcuni aggiornamenti recenti non sono disponibili.",
+    updates:"L'ultimo controllo non ha recuperato tutte le informazioni previste.",meta:"Ultimo controllo completo: oggi alle 08:42",action:false,notice:true,
+    noticeText:"Non è richiesta alcuna azione. Il prossimo controllo potrà completare gli aggiornamenti.",
+    effective:"DEGRADED",governed:"CURRENT",live:"PARTIAL",drift:"DETECTED",observed:"2026-09-29T06:54:00Z"
+  },
+  review:{
+    tone:"attention",title:"Alcune informazioni sono cambiate",
+    text:"Devono essere verificate prima di essere considerate confermate.",
+    updates:"È stato rilevato un cambiamento in una fonte di riferimento.",meta:"Cambiamento osservato oggi alle 08:56",action:true,notice:true,
+    actionTitle:"Serve una verifica",actionText:"Una persona autorizzata deve controllare il cambiamento.",
+    actionButton:"Verifica le informazioni",noticeText:"Le informazioni già verificate restano consultabili fino alla conclusione della verifica.",
+    effective:"USABLE",governed:"CURRENT",live:"FRESH",drift:"REVIEW_REQUIRED",observed:"2026-09-29T06:56:00Z"
+  },
+  blocked:{
+    tone:"blocked",title:"Serve una verifica prima di continuare",
+    text:"L'azione richiesta resta sospesa finché una persona autorizzata non completa la verifica.",
+    updates:"Le informazioni recenti sono disponibili, ma una decisione non può ancora essere presa.",meta:"Blocco rilevato oggi alle 08:57",action:true,notice:true,
+    actionTitle:"Azione bloccata",actionText:"La verifica deve essere completata dal responsabile della decisione.",
+    actionButton:"Apri la verifica",noticeText:"Puoi continuare a consultare le informazioni e lo storico; non puoi completare l'azione bloccata.",
+    effective:"BLOCKED",governed:"UNKNOWN",live:"FRESH",drift:"REVIEW_REQUIRED",observed:"2026-09-29T06:57:00Z"
+  },
+  noaccess:{
+    tone:"quiet",title:"Le informazioni di riferimento sono disponibili",
+    text:"Non hai accesso ai dettagli tecnici di questa verifica, ma puoi vedere il suo esito comprensibile.",
+    updates:"Il controllo più recente è stato completato.",meta:"Ultimo controllo: oggi alle 08:58",action:false,notice:true,
+    noticeText:"L'assenza di accesso ai dettagli tecnici non indica un errore o una perdita di dati.",
+    effective:"USABLE",governed:"CURRENT",live:"FRESH",drift:"NONE",observed:"2026-09-29T06:58:00Z",noaccess:true
+  },
+  offline:{
+    tone:"attention",title:"Stai vedendo l'ultimo stato disponibile",
+    text:"Non è stato possibile controllare aggiornamenti più recenti. Le informazioni verificate restano consultabili.",
+    updates:"Connessione non disponibile. Nessun dato viene presentato come appena verificato.",meta:"Ultimo controllo riuscito: oggi alle 08:42",action:false,notice:true,
+    noticeText:"Quando la connessione tornerà disponibile, potrà essere eseguito un nuovo controllo.",
+    effective:"DEGRADED",governed:"CURRENT",live:"UNAVAILABLE",drift:"DETECTED",observed:"2026-09-29T06:42:00Z"
+  }
+};
+
+const els={
+  summary:document.getElementById("summary"),title:document.getElementById("summaryTitle"),text:document.getElementById("summaryText"),
+  updates:document.getElementById("updatesText"),meta:document.getElementById("updatesMeta"),
+  action:document.getElementById("actionBox"),actionTitle:document.getElementById("actionTitle"),actionText:document.getElementById("actionText"),actionButton:document.getElementById("actionButton"),
+  notice:document.getElementById("reviewNotice"),noticeText:document.getElementById("reviewText"),
+  skeleton:document.getElementById("loadingSkeleton"),details:document.getElementById("technicalDetails"),
+  effective:document.getElementById("techEffective"),governed:document.getElementById("techGoverned"),live:document.getElementById("techLive"),drift:document.getElementById("techDrift"),observed:document.getElementById("techObserved")
+};
+
+function setScenario(name){
+  const s=scenarios[name];
+  if(!s)return;
+  els.summary.dataset.tone=s.tone;
+  els.title.textContent=s.title;els.text.textContent=s.text;els.updates.textContent=s.updates;els.meta.textContent=s.meta;
+  els.action.classList.toggle("visible",!!s.action);
+  els.notice.classList.toggle("visible",!!s.notice);
+  els.skeleton.classList.toggle("visible",!!s.loading);
+  if(s.actionTitle)els.actionTitle.textContent=s.actionTitle;
+  if(s.actionText)els.actionText.textContent=s.actionText;
+  if(s.actionButton)els.actionButton.textContent=s.actionButton;
+  if(s.noticeText)els.noticeText.textContent=s.noticeText;
+  els.effective.textContent=s.effective;els.governed.textContent=s.governed;els.live.textContent=s.live;els.drift.textContent=s.drift;els.observed.textContent=s.observed;
+  els.details.hidden=!!s.noaccess;
+  document.querySelectorAll("[data-scenario]").forEach(b=>b.setAttribute("aria-current",String(b.dataset.scenario===name)));
+}
+document.querySelectorAll("[data-scenario]").forEach(b=>b.addEventListener("click",()=>setScenario(b.dataset.scenario)));
+</script>
+</body>
+</html>
