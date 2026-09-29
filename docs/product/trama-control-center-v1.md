@@ -74,13 +74,19 @@ Le priorità vengono lette da `STATUS.md`, sezione **Priorità canonica corrente
 
 ## Hosting
 
-La superficie è pubblicata tramite **Render Static Site** dal contenuto di `control-center/` sul ramo `main`.
+La superficie è pubblicata tramite **Render Static Site** dal ramo `main`.
 
 URL pubblico:
 
 `https://trama-control-center.onrender.com`
 
 Il deploy è automatico a ogni commit su `main`.
+
+Il build canonico Render è:
+
+`bash scripts/build_control_center_render.sh`
+
+Il build copia `control-center/` nella directory pubblicata e tenta di materializzare nel solo artefatto di deploy un **Effective Context read-only** usando il collector pubblico anonimo già governato. Non usa GitHub App o token GitHub e non scrive nel repository. Se il controllo live non è disponibile, resta il pacchetto Project Knowledge governato incluso nel repository e la UI deve indicare esplicitamente che gli aggiornamenti recenti non sono disponibili.
 
 ## Sicurezza
 

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071827">
+<meta name="description" content="TRAMA Control Center — vista specialistica della maturità di aree e componenti.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml">
+<title>TRAMA Control Center · Maturità</title>
+<style>
+:root{--bg:#071827;--surface:#0b2235;--surface2:#0e2b42;--line:#1c4662;--text:#f4f8fb;--muted:#9fb9cb;--info:#58bff7;--ok:#55d79a;--warn:#f0b54a;--danger:#f37d87}
+*{box-sizing:border-box}
+html{max-width:100%;overflow-x:hidden;scroll-behavior:smooth}
+body{margin:0;max-width:100%;overflow-x:hidden;background:radial-gradient(circle at 85% 0,#123750 0,transparent 32%),var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a,button{font:inherit;color:inherit}
+a{text-decoration:none}
+main{width:min(1280px,100%);margin:auto;padding:24px 24px 92px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.eyebrow{color:var(--info);font-size:11px;font-weight:800;letter-spacing:.08em}
+h1{margin:3px 0 4px;font-size:30px}
+.lede{margin:0;color:#b8d0df;max-width:780px}
+.back{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #2f6687;border-radius:10px}
+.panel{margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(180deg,var(--surface2),var(--surface))}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:12px}
+.section-head h2{margin:0;font-size:18px}
+.hint{color:var(--muted);font-size:12px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.summary-card{padding:12px;border:1px solid #173d56;border-radius:12px;background:#091e30}
+.summary-card small{display:block;color:var(--muted)}
+.summary-card strong{display:block;margin-top:3px;font-size:22px}
+.area-grid{display:grid;gap:8px}
+.area-row{display:grid;grid-template-columns:minmax(180px,1fr) minmax(280px,1.7fr) 90px 90px 90px;align-items:center;gap:10px;padding:11px;border:1px solid #173d56;border-radius:11px;background:#091e30}
+.area-name strong,.area-name small{display:block}
+.area-name small{color:var(--muted)}
+.levels{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.lv{height:30px;border-radius:7px;border:1px solid #1b4763;background:#102d43;color:#7897aa;display:grid;place-items:center;font-size:10px}
+.lv.on{background:#1c5a79;color:#fff;border-color:#3c9bc2}
+.badge{display:inline-flex;align-items:center;justify-content:center;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font-size:10px;font-weight:800}
+.badge.low{color:#ffda89;border-color:#9c6d1d}
+.component-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.component-filters{display:flex;flex-wrap:wrap;gap:6px}
+.component-filters button{appearance:none;min-height:44px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#0a2032;color:#c8d9e3;cursor:pointer}
+.component-filters button[aria-pressed="true"]{border-color:var(--info);background:#123550;color:#fff}
+.component-filters button:focus-visible{outline:2px solid var(--info);outline-offset:2px}
+.component-workspace{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.7fr);grid-template-areas:"map detail" "list detail";gap:12px;margin-top:12px;align-items:start}
+.map-disclosure{grid-area:map;border:1px solid #173d56;border-radius:14px;background:linear-gradient(180deg,#091f31,#071a29);overflow:hidden}
+.map-disclosure summary{display:none;cursor:pointer;min-height:44px;padding:11px 13px;font-weight:800}
+.map-scroll{overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin}
+.component-map{display:block;width:100%;min-width:820px;height:auto}
+.component-map-bg{fill:#081d2d}
+.component-stage-line{stroke:#244a62;stroke-width:1;stroke-dasharray:4 6}
+.component-stage-label{fill:#9fb9cb;font-size:12px;font-weight:700}
+.component-lane-line{stroke:#17384f;stroke-width:1}
+.component-lane-label{fill:#dce8ef;font-size:12px;font-weight:800}
+.component-candidate-link{stroke:#f0b54a;stroke-width:2;stroke-dasharray:5 5;opacity:.9}
+.component-node{cursor:pointer;outline:none}
+.component-node-label{fill:#e8f1f6;font-size:11px;font-weight:700;paint-order:stroke;stroke:#071827;stroke-width:3px;stroke-linejoin:round}
+.component-node-shape{transition:stroke-width .14s ease}
+.component-node:hover .component-node-shape,.component-node:focus .component-node-shape,.component-node.is-selected .component-node-shape{stroke:#fff;stroke-width:4}
+.component-detail{grid-area:detail;min-height:220px;padding:14px;border:1px solid #1c4662;border-radius:14px;background:#0a2032}
+.component-detail h3{margin:0 0 5px;font-size:17px}
+.component-detail-meta{color:var(--muted);font-size:11px;margin-bottom:12px;overflow-wrap:anywhere}
+.component-detail-stage{display:grid;grid-template-columns:1fr auto;gap:5px 10px;padding:10px 0;border-block:1px solid #17384f;margin-bottom:12px}
+.component-detail-stage span{color:var(--muted)}
+.component-evidence-mini{list-style:none;margin:8px 0 10px;padding:0;display:grid;gap:5px}
+.component-evidence-mini li{display:flex;justify-content:space-between;gap:10px;padding:6px 8px;border-radius:8px;background:#081b2a}
+.component-evidence-mini li span{color:#c7d7e1}
+.component-evidence-mini li b{font-size:10px}
+.component-evidence-mini li[data-status="PRESENT"] b{color:#a5f3ca}
+.component-evidence-mini li[data-status="PARTIAL"] b,.component-evidence-mini li[data-status="DOCUMENTED_ONLY"] b{color:#ffda89}
+.component-evidence-mini li[data-status="NOT_OBSERVED"] b{color:#b7c7d1}
+.component-detail-gaps{color:#d7c28c;font-size:12px}
+.component-source{display:block;color:var(--muted);margin:10px 0;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.report-link{display:inline-flex;align-items:center;min-height:44px;padding:8px 10px;border:1px solid #2f6687;border-radius:9px}
+.component-equivalent{grid-area:list;min-width:0}
+.component-equivalent-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+.component-equivalent-head span{color:var(--muted);font-size:11px}
+.component-equivalent-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.component-equivalent-item{appearance:none;width:100%;min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:9px 10px;border:1px solid #173d56;border-radius:10px;background:#091e30;color:inherit;cursor:pointer}
+.component-equivalent-item>span:first-child{min-width:0}
+.component-equivalent-item strong,.component-equivalent-item small{display:block;overflow-wrap:anywhere}
+.component-equivalent-item small{color:var(--muted)}
+.component-equivalent-stage{text-align:right;flex:0 0 auto}
+.component-equivalent-item:hover,.component-equivalent-item:focus-visible,.component-equivalent-item.is-selected{border-color:#3c9bc2;background:#0d2940;outline:none}
+.empty,.error{padding:18px;text-align:center;color:var(--muted)}
+.error{color:#ffd0d5;border:1px solid #733642;background:#32171d;border-radius:10px}
+.footer{margin-top:18px;color:var(--muted);font-size:11px}
+.mobile-nav{display:none}
+@media(max-width:760px){
+  body{padding-bottom:76px;font-size:15px}
+  main{width:100%;max-width:100vw;padding:14px 12px 30px}
+  .top{display:grid;gap:10px}
+  h1{font-size:24px;line-height:1.15}
+  .back{width:max-content}
+  .summary{grid-template-columns:1fr}
+  .area-row{grid-template-columns:1fr auto auto;gap:7px}
+  .area-row .levels{grid-column:1/-1;order:4}
+  .area-row>div:nth-of-type(4){display:none}
+  .component-workspace{grid-template-columns:1fr;grid-template-areas:"list" "detail" "map"}
+  .component-equivalent-list{grid-template-columns:1fr}
+  .component-equivalent-head{display:grid;gap:2px}
+  .map-disclosure summary{display:flex;align-items:center;justify-content:space-between}
+  .map-disclosure:not([open]) .map-scroll{display:none}
+  .component-map{min-width:760px}
+  .component-detail{min-height:0}
+  .mobile-nav{display:grid;position:fixed;left:0;right:0;bottom:0;z-index:20;grid-template-columns:repeat(5,1fr);padding:7px 6px calc(7px + env(safe-area-inset-bottom));background:#081a2af2;border-top:1px solid var(--line);backdrop-filter:blur(12px)}
+  .mobile-nav a{min-height:44px;display:grid;place-items:center;text-align:center;color:#c8d9e3;font-size:11px;border-radius:8px}
+  .mobile-nav a[aria-current="page"],.mobile-nav a:focus-visible{background:#123550}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.component-node-shape{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<header class="top">
+  <div><div class="eyebrow">TRAMA CONTROL CENTER · VISTA SPECIALISTICA</div><h1>Maturità</h1><p class="lede">Stadi confermati, candidati ed evidenze mancanti. Il ciclo di vita dei componenti resta separato dalla maturità.</p></div>
+  <a class="back" href="./index.html">← Torna alla sintesi</a>
+</header>
+
+<section class="panel" aria-labelledby="summaryHeading">
+  <div class="section-head"><div><h2 id="summaryHeading">Quadro disponibile</h2><span class="hint">dallo snapshot governato</span></div></div>
+  <div class="summary">
+    <div class="summary-card"><small>Aree osservate</small><strong id="areaCount">–</strong></div>
+    <div class="summary-card"><small>Componenti tracciati</small><strong id="componentCount">–</strong></div>
+    <div class="summary-card"><small>Fonte componenti</small><strong id="componentSourceState" style="font-size:16px">–</strong></div>
+  </div>
+</section>
+
+<section class="panel" aria-labelledby="areasHeading">
+  <div class="section-head"><div><h2 id="areasHeading">Aree di maturità</h2><span class="hint">livello confermato e candidato</span></div></div>
+  <div id="areaGrid" class="area-grid"></div>
+</section>
+
+<section class="panel" aria-labelledby="componentsHeading">
+  <div class="section-head"><div><h2 id="componentsHeading">Componenti</h2><span class="hint">evidenze ordinate, senza score o percentuali</span></div></div>
+  <div class="component-toolbar">
+    <div id="componentMaturityFilters" class="component-filters" role="group" aria-label="Filtra componenti per prodotto"></div>
+    <span class="hint">Seleziona un componente per leggere il dettaglio.</span>
+  </div>
+  <div class="component-workspace">
+    <details id="componentMapDisclosure" class="map-disclosure" open>
+      <summary>Mostra mappa grafica <span aria-hidden="true">↕</span></summary>
+      <div class="map-scroll" tabindex="0" aria-label="Mappa scorrevole della maturità dei componenti">
+        <svg id="componentMaturityMap" class="component-map" role="group" aria-label="Mappa interattiva della maturità dei componenti"></svg>
+      </div>
+    </details>
+    <aside id="componentMaturityDetail" class="component-detail" aria-live="polite" aria-label="Dettaglio componente"><p class="hint">Seleziona un componente nell’elenco.</p></aside>
+    <div id="componentMaturityEquivalent" class="component-equivalent" aria-label="Elenco equivalente della maturità dei componenti"></div>
+  </div>
+</section>
+
+<div id="errorBox"></div>
+<footer class="footer"><span>TRAMA · Control Center · READ_ONLY</span> · <span id="updated">–</span></footer>
+</main>
+<nav class="mobile-nav" aria-label="Navigazione principale">
+  <a href="./index.html">Sintesi</a>
+  <a href="./maturity.html" aria-current="page">Maturità</a>
+  <a href="./ecosystem.html">Ecosistema</a>
+  <a href="./evidence.html">Verifiche</a>
+  <a href="./operations.html">Cronologia</a>
+</nav>
+<script src="./component-maturity.js"></script>
+<script>
+const SNAPSHOT_URL='./data/ecosystem-snapshot.json';
+const CACHE_KEY='trama-cc2-snapshot';
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
+function readSnapshot(){try{return JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch{return null}}
+function confidenceLabel(v){return ({HIGH:'Alta',MEDIUM:'Media',LOW:'Bassa'})[String(v||'').toUpperCase()]||String(v||'—')}
+function render(data,mode){
+  updated.textContent=(mode==='offline'?'Offline · ':'Aggiornato · ')+new Date(data.generatedAt).toLocaleString('it-IT');
+  const areas=data.areas||[],components=data.components||[];
+  areaCount.textContent=areas.length;
+  componentCount.textContent=components.length;
+  const source=data.sourceState?.['component-evidence-registry'];
+  componentSourceState.textContent=source?.status==='FRESH'?'Aggiornata':(source?.status||'Non disponibile');
+  areaGrid.innerHTML=areas.map(a=>'<article class="area-row"><div class="area-name"><strong>'+esc(a.name)+'</strong><small>'+esc(a.ownerDomain||'')+'</small></div><div class="levels">'+[0,1,2,3,4,5].map(n=>'<span class="lv '+(n<=a.confirmedLevel?'on':'')+'">L'+n+'</span>').join('')+'</div><div><small class="hint">Confermato</small><br><b>L'+a.confirmedLevel+'</b></div><div><small class="hint">Candidato</small><br><b>L'+a.candidateLevel+'</b></div><div><span class="badge low">'+esc(confidenceLabel(a.confidence))+'</span></div></article>').join('');
+  if(window.matchMedia('(max-width:760px)').matches)componentMapDisclosure.removeAttribute('open');
+  if(window.TRAMAMaturityMap&&typeof window.TRAMAMaturityMap.render==='function'){
+    window.TRAMAMaturityMap.render({
+      components,
+      svg:componentMaturityMap,
+      filters:componentMaturityFilters,
+      detail:componentMaturityDetail,
+      equivalent:componentMaturityEquivalent,
+      deferSelection:window.matchMedia('(max-width:760px)').matches
+    });
+  }else{
+    componentMaturityDetail.innerHTML='<div class="error">La vista dei componenti non è disponibile.</div>';
+  }
+}
+async function load(){
+  try{
+    const r=await fetch(SNAPSHOT_URL,{cache:'no-store'});
+    if(!r.ok)throw new Error('snapshot '+r.status);
+    const data=await r.json();saveSnapshot(data);render(data,'fresh');
+  }catch(err){
+    const cached=readSnapshot();
+    if(cached)render(cached,'offline');
+    else errorBox.innerHTML='<div class="error">Snapshot non disponibile e nessuna copia locale presente.</div>';
+  }
+}
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(r=>r.update()).catch(()=>{}));
+load();
+</script>
+</body>
+</html>
