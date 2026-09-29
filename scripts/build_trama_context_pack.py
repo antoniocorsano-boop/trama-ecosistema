@@ -28,7 +28,24 @@ def source_refs(items):
                 out.append(ref)
     return out
 
-def build(subject,snapshot):
+def _effective_envelope(effective_context):
+    if effective_context is None:
+        return None
+    if effective_context.get("schemaVersion")!="trama.effective-project-context/v1":
+        raise RuntimeError("EFFECTIVE_CONTEXT_IDENTITY_INVALID")
+    return {
+      "governedAsOf":effective_context["governedAsOf"],
+      "liveObservedAt":effective_context.get("liveObservedAt"),
+      "governedKnowledgeStatus":effective_context["governedKnowledgeStatus"],
+      "liveObservationStatus":effective_context["liveObservationStatus"],
+      "semanticDriftStatus":effective_context["semanticDriftStatus"],
+      "effectiveContextStatus":effective_context["effectiveContextStatus"],
+      "promotionRequired":bool(effective_context["promotionRequired"]),
+      "liveFacts":[x for x in effective_context.get("facts",[]) if x.get("class") in {"VOLATILE","BOUNDARY_SIGNAL"}],
+      "sourceRefs":list(effective_context.get("sourceRefs",[]))
+    }
+
+def build(subject,snapshot,effective_context=None):
     events=select(snapshot.get("knowledgeEvents",[]),subject)
     caps=select(snapshot.get("activeCapabilities",[]),subject)
     completed=select(snapshot.get("recentlyCompleted",[]),subject)
@@ -42,11 +59,15 @@ def build(subject,snapshot):
     actions=select(snapshot.get("nextCandidateActions",[]),subject)
     refs=source_refs(events+decisions+invariants+rejected)
     refs += [{"snapshotSource":x["path"],"sha256":x["sha256"]} for x in snapshot.get("knowledgeSources",[])]
-    return {
+    effective=_effective_envelope(effective_context)
+    status=snapshot["status"]
+    if effective is not None and effective["effectiveContextStatus"]!="USABLE":
+        status="PARTIAL"
+    result={
       "schemaVersion":"1.0.0",
       "subject":subject,
       "asOf":snapshot["generatedAt"],
-      "status":snapshot["status"],
+      "status":status,
       "facts":caps+completed+events,
       "decisions":decisions,
       "activeInvariants":invariants,
@@ -59,15 +80,20 @@ def build(subject,snapshot):
       "nextCandidateActions":actions,
       "sourceRefs":refs
     }
+    if effective is not None:
+        result["effectiveContext"]=effective
+    return result
 
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("subject")
     ap.add_argument("--snapshot",default="control-center/data/project-context-snapshot.json")
     ap.add_argument("--output")
+    ap.add_argument("--effective-context")
     args=ap.parse_args()
     snapshot=load(Path(args.snapshot))
-    pack=build(args.subject,snapshot)
+    effective=load(Path(args.effective_context)) if args.effective_context else None
+    pack=build(args.subject,snapshot,effective)
     body=json.dumps(pack,ensure_ascii=False,indent=2)+"\n"
     if args.output:
         out=ROOT/args.output
