@@ -180,6 +180,28 @@
         "E1_PROTOTYPE_CHANGE",
         "E1_REVIEW_FINDING"
       ]
+    },
+    {
+      "id": "DOC-STAGE-E2-PROJECT-KNOWLEDGE-UI",
+      "path": "docs/implementation/trama-stage-e2-project-knowledge-ui-v1.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "stage-e2"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E1-VISUAL-SPEC",
+        "DOC-STAGE-E0-HUMAN-COMMUNICATION"
+      ],
+      "updateTriggers": [
+        "E2_IMPLEMENTATION_CHANGE",
+        "E3_HUMAN_USE_FINDING",
+        "LIVE_OVERLAY_ACTIVATION_CHANGE"
+      ]
     }
   ]
 }
