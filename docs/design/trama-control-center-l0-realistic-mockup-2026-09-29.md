@@ -59,3 +59,11 @@ Deve essere usato come input per la successiva review visuale e il prototipo rea
 5. mappatura precisa mockup → componenti implementabili;
 6. E3-L0 human-use validation su prototipo funzionante.
 
+
+## Prototipo implementabile
+
+Il mockup è stato tradotto in un prototipo navigabile che riusa i token e i pattern reali del Control Center corrente:
+
+`docs/prototypes/TRAMA-CONTROL-CENTER-L0-REALISTIC.html`
+
+Il prototipo non sostituisce la Home pubblica e serve a validare fattibilità, gerarchia e comportamento responsive prima dell'implementazione runtime.

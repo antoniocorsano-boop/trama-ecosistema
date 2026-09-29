@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071827">
+<title>TRAMA Control Center · Prototipo Sintesi L0</title>
+<style>
+:root{--bg:#071827;--surface:#0b2235;--surface2:#0e2b42;--line:#1c4662;--text:#f4f8fb;--muted:#9fb9cb;--info:#58bff7;--ok:#55d79a;--warn:#f0b54a;--danger:#f37d87;--arena:#5dd39e;--atlas:#ae88ff;--dos:#ffc45a}
+*{box-sizing:border-box}html{scroll-behavior:smooth;max-width:100%;overflow-x:hidden}body{margin:0;max-width:100%;overflow-x:hidden;background:radial-gradient(circle at 85% 0,#123750 0,transparent 32%),var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,a{font:inherit}a{color:inherit;text-decoration:none}.app{display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh}.side{position:sticky;top:0;height:100vh;padding:24px 16px;border-right:1px solid var(--line);background:#081a2a}.brand{font-weight:900;letter-spacing:.18em;font-size:22px}.strap{margin:4px 0 28px;color:var(--info);font-size:10px;letter-spacing:.12em}.nav{display:grid;gap:5px}.nav a{padding:10px 12px;border-radius:9px;color:#c3d5e0}.nav a[aria-current="page"],.nav a:hover,.nav a:focus-visible{background:#123550;outline:2px solid transparent}.readonly{position:absolute;left:20px;bottom:22px;color:var(--muted);font-size:11px}.readonly b{color:var(--ok)}main{width:min(1320px,100%);padding:24px 28px 48px;margin:auto}.prototype-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;padding:10px 12px;border:1px dashed #46708b;border-radius:10px;background:#0a2031}.prototype-bar strong{color:#ccecff}.prototype-controls{display:flex;gap:8px;flex-wrap:wrap}.prototype-controls button{min-height:36px;border:1px solid #2f6687;border-radius:8px;background:#0d2b42;color:var(--text);padding:7px 10px;cursor:pointer}.prototype-controls button[aria-pressed="true"]{background:#185173;border-color:#58bff7}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}h1{font-size:30px;margin:0}.lede{margin:4px 0 0;color:#b8d0df;max-width:760px}.freshness{display:flex;align-items:center;gap:8px;color:var(--muted);white-space:nowrap;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#0a2031}.dot{width:9px;height:9px;border-radius:50%;background:var(--ok)}.section{margin-top:18px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:10px}.section h2{font-size:18px;margin:0}.hint{color:var(--muted);font-size:12px}.summary{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.7fr);gap:12px}.panel,.status-card,.cap-card,.verification-card,.change-row{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:14px}.status-card{padding:18px}.status-card h2{font-size:24px;margin:0 0 6px}.status-card p{margin:0;color:#c7d9e4;max-width:70ch}.status-card[data-tone="attention"]{border-color:#75541d;background:linear-gradient(180deg,#332813,#1e211e)}.status-card[data-tone="blocked"]{border-color:#733642;background:linear-gradient(180deg,#32171d,#211b20)}.status-card[data-tone="offline"]{border-color:#4c6070;background:linear-gradient(180deg,#202c34,#16212a)}.summary-side{padding:15px;display:grid;gap:10px;align-content:start}.summary-side strong{font-size:13px}.summary-side .time{font-size:19px;font-weight:900}.scope{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font-size:10px;font-weight:800;color:#cfe4ef}.scope.public{border-color:#2b9568;color:#a5f3ca}.scope.pilot{border-color:#9c6d1d;color:#ffda89}.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.cap-card{padding:15px;min-height:170px;display:grid;grid-template-rows:auto auto 1fr auto}.cap-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.product{font-size:11px;font-weight:900;letter-spacing:.08em}.product.arena{color:var(--arena)}.product.atlas{color:var(--atlas)}.product.dos{color:var(--dos)}.cap-card h3{font-size:16px;margin:10px 0 5px}.cap-card p{margin:0;color:#c7d7e1}.cap-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}.text-link{color:#bfe8ff;font-weight:800}.attention-list{display:grid;gap:8px}.attention-item{padding:13px;border:1px solid #75541d;border-radius:11px;background:#322813}.attention-item strong{display:block}.attention-item p{margin:3px 0 0;color:#ddc58e}.attention-meta{margin-top:9px;display:flex;gap:10px;flex-wrap:wrap;color:#e7d6a7;font-size:12px}.empty-attention{padding:14px;border:1px solid #265f4a;border-radius:11px;background:#102a22;color:#c8f0dd}.verification-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.verification-card{padding:14px}.verification-card h3{font-size:14px;margin:0 0 5px}.verification-card p{margin:0;color:#c7d7e1}.verification-meta{margin-top:10px;color:var(--muted);font-size:11px}.state{display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:12px}.state::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--info)}.state.ok::before{background:var(--ok)}.state.warn::before{background:var(--warn)}.changes{display:grid;gap:0}.change-row{border-radius:0;border-left:0;border-right:0;border-bottom:0;padding:11px 0;display:grid;grid-template-columns:100px minmax(0,1fr) auto;gap:12px;align-items:center;background:none}.change-row:first-child{border-top:0}.change-row time{color:var(--muted);font-size:12px}.change-row a{color:#bfe8ff}.section-actions{display:flex;gap:8px;flex-wrap:wrap}.section-actions a{min-height:40px;display:inline-flex;align-items:center;border:1px solid #2f6687;border-radius:9px;padding:8px 11px;color:#d9f1ff}.mobile-nav{display:none}.panel{padding:15px}.footer{margin-top:24px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between}
+@media(max-width:1100px){.app{grid-template-columns:1fr}.side{display:none}.summary{grid-template-columns:1fr}.cap-grid,.verification-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){body{padding-bottom:78px;font-size:15px}main{width:100%;max-width:100vw;overflow-x:hidden;padding:14px 12px 34px}.prototype-bar{display:grid;gap:8px}.prototype-controls{display:grid;grid-template-columns:1fr 1fr}.prototype-controls button{min-height:44px}.top{display:grid;gap:10px;padding-bottom:12px}h1{font-size:24px;line-height:1.15}.lede{font-size:13px}.freshness{white-space:normal}.section{margin-top:14px}.section-head{align-items:center}.summary{gap:8px}.status-card{padding:15px}.status-card h2{font-size:20px}.cap-grid,.verification-grid{grid-template-columns:1fr}.cap-card{min-height:0}.change-row{grid-template-columns:1fr auto;gap:4px 10px}.change-row time{grid-column:1/-1}.footer{display:grid;gap:4px}.mobile-nav{display:grid;position:fixed;left:0;right:0;bottom:0;z-index:20;grid-template-columns:repeat(5,1fr);padding:7px 6px calc(7px + env(safe-area-inset-bottom));background:#081a2af2;border-top:1px solid var(--line);backdrop-filter:blur(12px)}.mobile-nav a{min-height:44px;display:grid;place-items:center;text-align:center;color:#c8d9e3;font-size:11px;border-radius:8px}.mobile-nav a[aria-current="page"],.mobile-nav a:focus-visible{background:#123550}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">TRAMA</div>
+  <div class="strap">CONTROL CENTER · PROTOTIPO L0</div>
+  <nav class="nav" aria-label="Navigazione principale">
+    <a href="#summary" aria-current="page">Sintesi</a>
+    <a href="#ecosystem">Ecosistema</a>
+    <a href="#attention">Attenzione</a>
+    <a href="#verification">Verifiche</a>
+    <a href="#changes">Cronologia</a>
+    <a href="#technical">Tecnico</a>
+  </nav>
+  <div class="readonly"><b>●</b> SOLA LETTURA<br>prototipo, nessuna authority</div>
+</aside>
+<main>
+<div class="prototype-bar" role="note">
+  <div><strong>Prototipo realistico · non è la Home pubblica</strong><div class="hint">Usa gli stessi token e pattern visuali del Control Center attuale.</div></div>
+  <div class="prototype-controls" aria-label="Anteprima stati">
+    <button type="button" data-state="normal" aria-pressed="true">Normale</button>
+    <button type="button" data-state="attention" aria-pressed="false">Attenzione</button>
+    <button type="button" data-state="decision" aria-pressed="false">Decisione</button>
+    <button type="button" data-state="offline" aria-pressed="false">Offline</button>
+  </div>
+</div>
+
+<header class="top">
+  <div>
+    <h1>Stato dell’ecosistema TRAMA</h1>
+    <p class="lede">TRAMA coordina il curricolo, la pubblicazione dei contenuti e gli strumenti di lavoro dell’ecosistema Arena · Atlas · Docente OS.</p>
+  </div>
+  <div class="freshness"><span class="dot" id="freshDot"></span><span id="freshText">Ultimo controllo: oggi alle 10:15</span></div>
+</header>
+
+<section class="section" id="summary">
+  <div class="summary">
+    <article class="status-card" id="statusCard" data-tone="quiet" role="status" aria-live="polite" aria-atomic="true">
+      <h2 id="statusTitle">Situazione regolare</h2>
+      <p id="statusText">Le principali capacità dell’ecosistema sono disponibili nel perimetro indicato. Non risultano decisioni urgenti.</p>
+    </article>
+    <aside class="panel summary-side" aria-label="Sintesi disponibilità">
+      <strong>Come leggere questa sintesi</strong>
+      <div class="time">Stato + perimetro</div>
+      <div class="hint">Ogni funzione indica se è disponibile e per chi, senza confondere disponibilità, verifica e autorizzazione.</div>
+    </aside>
+  </div>
+</section>
+
+<section class="section" id="ecosystem">
+  <div class="section-head">
+    <div><h2>Cosa è disponibile oggi</h2><div class="hint">Funzioni comprensibili prima dei nomi tecnici.</div></div>
+    <div class="section-actions"><a href="#technical">Vedi ecosistema completo →</a></div>
+  </div>
+  <div class="cap-grid">
+    <article class="cap-card">
+      <div class="cap-head"><span class="product arena">ARENA</span><span class="scope">Fonte di riferimento</span></div>
+      <h3>Curricolo e governance</h3>
+      <p>La fonte autorevole per struttura, obiettivi, competenze e decisioni curricolari.</p>
+      <div class="cap-foot"><span class="state ok">Disponibile</span><a class="text-link" href="#technical">Dettagli →</a></div>
+    </article>
+    <article class="cap-card">
+      <div class="cap-head"><span class="product atlas">ATLAS</span><span class="scope public">Pubblico</span></div>
+      <h3>Esplorazione e materiali</h3>
+      <p>Consultazione pubblica del curricolo, delle relazioni e delle risorse pubblicate.</p>
+      <div class="cap-foot"><span class="state ok">Disponibile</span><a class="text-link" href="#technical">Dettagli →</a></div>
+    </article>
+    <article class="cap-card">
+      <div class="cap-head"><span class="product dos">DOCENTE OS</span><span class="scope pilot">Uso docente</span></div>
+      <h3>Lavoro del docente</h3>
+      <p>Preparazione, organizzazione e supporto operativo alle attività del docente.</p>
+      <div class="cap-foot"><span class="state ok">Disponibile</span><a class="text-link" href="#technical">Dettagli →</a></div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="attention">
+  <div class="section-head">
+    <div><h2>Attenzione</h2><div class="hint">Solo ciò che può cambiare una decisione, un uso o un’adozione.</div></div>
+  </div>
+  <div id="attentionContent"></div>
+</section>
+
+<section class="section" id="verification">
+  <div class="section-head">
+    <div><h2>Verifiche rilevanti</h2><div class="hint">Sintesi delle verifiche con impatto per comprensione o adozione.</div></div>
+    <div class="section-actions"><a href="#technical">Apri tutte le verifiche →</a></div>
+  </div>
+  <div class="verification-grid">
+    <article class="verification-card">
+      <h3>Accessibilità</h3>
+      <p>Desktop e smartphone verificati; la prova con tecnologia assistiva resta da completare.</p>
+      <div class="verification-meta"><span class="state warn">Copertura parziale</span></div>
+    </article>
+    <article class="verification-card">
+      <h3>Privacy e dati</h3>
+      <p>La superficie pubblica non richiede account studente né tracking individuale.</p>
+      <div class="verification-meta"><span class="state ok">Impostazione documentata</span></div>
+    </article>
+    <article class="verification-card">
+      <h3>Sicurezza</h3>
+      <p>Controlli automatici attivi; il dettaglio tecnico resta disponibile nel livello specialistico.</p>
+      <div class="verification-meta"><span class="state ok">Controlli attivi</span></div>
+    </article>
+  </div>
+</section>
+
+<section class="section panel" id="changes">
+  <div class="section-head">
+    <div><h2>Cosa è cambiato</h2><div class="hint">Solo cambiamenti significativi, non il rumore dei commit.</div></div>
+    <div class="section-actions"><a href="#technical">Cronologia completa →</a></div>
+  </div>
+  <div class="changes">
+    <div class="change-row"><time datetime="2026-09-29T10:15:00+02:00">Oggi · 10:15</time><span>Verificata la nuova modalità pubblica per la validazione human-use.</span><a href="#technical">Dettagli</a></div>
+    <div class="change-row"><time datetime="2026-09-29T09:40:00+02:00">Oggi · 09:40</time><span>Consolidata l’architettura informativa human-readable del Control Center.</span><a href="#technical">Dettagli</a></div>
+  </div>
+</section>
+
+<section class="section panel" id="technical">
+  <div class="section-head">
+    <div><h2>Approfondimenti</h2><div class="hint">Dettagli specialistici separati dalla Sintesi.</div></div>
+  </div>
+  <div class="section-actions">
+    <a href="#">Ecosistema e capacità</a>
+    <a href="#">Verifiche e copertura</a>
+    <a href="#">Cronologia governata</a>
+    <a href="#">Dettagli tecnici</a>
+  </div>
+</section>
+
+<footer class="footer"><span>TRAMA · Control Center · prototipo L0</span><span>READ_ONLY · nessuna modifica al runtime</span></footer>
+</main>
+
+<nav class="mobile-nav" aria-label="Navigazione rapida">
+  <a href="#summary" aria-current="page">Sintesi</a>
+  <a href="#ecosystem">Ecosistema</a>
+  <a href="#attention">Attenzione</a>
+  <a href="#verification">Verifiche</a>
+  <a href="#technical">Altro</a>
+</nav>
+</div>
+
+<script>
+const states={
+  normal:{
+    tone:'quiet',
+    title:'Situazione regolare',
+    text:'Le principali capacità dell’ecosistema sono disponibili nel perimetro indicato. Non risultano decisioni urgenti.',
+    fresh:'Ultimo controllo: oggi alle 10:15',
+    dot:'var(--ok)',
+    attention:'<div class="empty-attention"><strong>Nessuna azione richiesta in questo momento.</strong><div class="hint">Le informazioni già pubblicate restano utilizzabili.</div></div>'
+  },
+  attention:{
+    tone:'attention',
+    title:'Ci sono elementi da verificare',
+    text:'Le parti già verificate restano utilizzabili. Un elemento richiede attenzione prima di essere considerato confermato.',
+    fresh:'Ultimo controllo: oggi alle 10:15',
+    dot:'var(--warn)',
+    attention:'<div class="attention-list"><article class="attention-item"><strong>Pubblicazione del curricolo di istituto</strong><p>Alcuni contenuti risultano ancora in verifica prima della pubblicazione definitiva.</p><div class="attention-meta"><span>Chi interviene: governance di istituto</span><span>Ciò che è già verificato resta consultabile</span></div></article></div>'
+  },
+  decision:{
+    tone:'blocked',
+    title:'Serve una decisione prima di proseguire',
+    text:'Una specifica attività resta sospesa finché la decisione prevista non viene registrata. Le altre capacità restano disponibili nel proprio perimetro.',
+    fresh:'Ultimo controllo: oggi alle 10:15',
+    dot:'var(--danger)',
+    attention:'<div class="attention-list"><article class="attention-item"><strong>Decisione istituzionale richiesta</strong><p>La prossima promozione non può avanzare finché non viene completata la review prevista.</p><div class="attention-meta"><span>Responsabile: soggetto indicato dalla governance</span><span>Nessuna approvazione automatica</span></div></article></div>'
+  },
+  offline:{
+    tone:'offline',
+    title:'Stai vedendo l’ultimo stato disponibile',
+    text:'Non è stato possibile controllare una versione più recente. Le informazioni già verificate restano consultabili.',
+    fresh:'Ultimo stato disponibile: oggi alle 10:15',
+    dot:'#8ea5b5',
+    attention:'<div class="empty-attention"><strong>Nessuna azione richiesta.</strong><div class="hint">Quando la connessione tornerà disponibile, il Control Center potrà verificare uno stato più recente.</div></div>'
+  }
+};
+function setState(name){
+  const s=states[name]||states.normal;
+  statusCard.dataset.tone=s.tone;
+  statusTitle.textContent=s.title;
+  statusText.textContent=s.text;
+  freshText.textContent=s.fresh;
+  freshDot.style.background=s.dot;
+  attentionContent.innerHTML=s.attention;
+  document.querySelectorAll('[data-state]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.state===name)));
+}
+document.querySelectorAll('[data-state]').forEach(b=>b.addEventListener('click',()=>setState(b.dataset.state)));
+setState('normal');
+</script>
+</body>
+</html>

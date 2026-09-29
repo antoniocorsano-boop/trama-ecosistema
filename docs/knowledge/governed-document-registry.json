@@ -317,6 +317,29 @@
         "E3_HUMAN_USE_FINDING",
         "STAKEHOLDER_VIEW_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-L0-REALISTIC-PROTOTYPE",
+      "path": "docs/prototypes/TRAMA-CONTROL-CENTER-L0-REALISTIC.html",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "prototype",
+        "l0-summary",
+        "responsive",
+        "human-communication"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-HUMAN-READABLE-IA"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_HOME_CHANGE",
+        "E3_L0_FINDING",
+        "DESIGN_SYSTEM_CHANGE"
+      ]
     }
   ]
 }
