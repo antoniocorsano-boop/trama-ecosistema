@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "trama.ui-development-model/v1",
+  "modelId": "TRAMA-UI-DEVELOPMENT-01",
+  "status": "PROPOSED",
+  "scope": [
+    "ARENA",
+    "ATLAS",
+    "DOCENTE_OS",
+    "TRAMA_CONTROL_CENTER"
+  ],
+  "runtimeImpact": "NONE",
+  "dosA1": "RUNTIME_DEFERRED",
+  "sequence": [
+    "USER_NEED",
+    "INFORMATION_MODEL",
+    "ORIENTATION",
+    "BENCHMARK",
+    "BUILD_BORROW_DECISION",
+    "COMPONENT_MAPPING",
+    "VISUAL_COMPOSITION",
+    "PROTOTYPE",
+    "EVIDENCE",
+    "HUMAN_VALIDATION",
+    "PROMOTION"
+  ],
+  "sourceClasses": [
+    "NATIVE_PLATFORM",
+    "TRAMA_SHARED",
+    "PRODUCT_LOCAL",
+    "THIRD_PARTY_PRIMITIVE",
+    "THIRD_PARTY_PATTERN_REFERENCE"
+  ],
+  "buildBorrowOrder": [
+    "NATIVE",
+    "BORROW_PRIMITIVE",
+    "ADAPT_PATTERN",
+    "TRAMA_DISTINCTIVE",
+    "PRODUCT_SPECIFIC"
+  ],
+  "prototypeLevels": [
+    "P0_STRUCTURAL",
+    "P1_REALISTIC",
+    "P2_INTERACTIVE",
+    "P3_RELEASE_CANDIDATE"
+  ],
+  "externalDependencyRequiredFields": [
+    "project",
+    "versionRange",
+    "license",
+    "maintenanceState",
+    "frameworkRequirement",
+    "accessibilityModel",
+    "customizationMechanism",
+    "runtimeCost",
+    "owner",
+    "updatePolicy",
+    "exitPath"
+  ],
+  "distinctiveExamples": [
+    "EcosystemRail",
+    "SystemStateBand",
+    "EvidenceTrail",
+    "AuthorityPath",
+    "ChangeLine",
+    "AttentionEntry"
+  ],
+  "antiPatterns": [
+    "CARD_FIRST_DEFAULT",
+    "VISUAL_KIT_IDENTITY_LOCK_IN",
+    "GENERIC_BEHAVIOR_REIMPLEMENTED_AD_HOC",
+    "DESKTOP_STACKED_AS_MOBILE",
+    "PROTOTYPE_PROMOTED_BY_APPEARANCE",
+    "ACCESSIBILITY_INFERRED_FROM_LIBRARY_ONLY"
+  ],
+  "invariants": {
+    "nativeFirst": true,
+    "behaviorBeforeVisualKit": true,
+    "productVisualIdentityPreserved": true,
+    "mobileIndependentComposition": true,
+    "humanValidationWhenMaterial": true,
+    "thirdPartyPopularityNotAdoptionCriterion": true,
+    "runtimeMigrationAuthorized": false
+  }
+}
