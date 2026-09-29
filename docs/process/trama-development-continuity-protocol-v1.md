@@ -1,6 +1,6 @@
 # TRAMA Development Continuity Protocol v1
 
-**Data:** 28 settembre 2026  
+**Data:** 29 settembre 2026  
 **Stato:** PROPOSED / PROCESS GOVERNANCE / NO_RUNTIME_AUTHORIZATION  
 **Perimetro:** TRAMA · Arena · Atlas · Docente OS  
 **Collegato a:** TRAMA-ADR-015 · ProjectContextSnapshot v1 · TRAMA Context Pack v1
@@ -51,6 +51,34 @@ Prima di proporre nuove fasi o nuova architettura, l'agente deve:
 7. creare nuova governance solo se emerge un cambiamento reale di contratto, authority, confine di sicurezza o decisione irreversibile.
 
 È un errore di processo ricominciare da una nuova analisi generale quando il workstream dispone già di stato, vincoli e next action verificabili.
+
+
+### 4.1 Bootstrap eseguibile
+
+Il protocollo di avvio non è soltanto una regola documentale. Per il lavoro TRAMA deve essere reso eseguibile tramite **TRAMA-SESSION-BOOTSTRAP-01**.
+
+Prima di avviare una nuova analisi generale su un filone esistente, l'agente o lo strumento di sviluppo deve poter produrre una **Session Bootstrap Receipt** che dimostri almeno:
+
+- soggetto o workstream risolto;
+- Project Knowledge e Context Pack interrogati;
+- documenti governati pertinenti recuperati;
+- negative knowledge controllata;
+- stato di freshness/live verification esplicito;
+- provenance delle fonti;
+- assenza di authority di write, runtime o promotion.
+
+La regola pratica è **retrieve before discover**: prima recuperare ciò che è già conosciuto e governato, poi verificare soltanto gli elementi volatili o realmente mancanti.
+
+Gli stati ammessi del bootstrap sono:
+
+- `READY`;
+- `READY_LIVE_CHECK_REQUIRED`;
+- `PARTIAL_CONTEXT`;
+- `BLOCKED`.
+
+Un bootstrap parziale non viene mascherato come contesto completo. Se il soggetto non è riconosciuto, il resolver conserva il contesto minimo di continuità ma richiede esplicitamente ulteriore risoluzione/verifica.
+
+Riferimento: `docs/contracts/trama-session-bootstrap-v1.md`.
 
 ## 5. Modalità di sviluppo ordinaria
 
