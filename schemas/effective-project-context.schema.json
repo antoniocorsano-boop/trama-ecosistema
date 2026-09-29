@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/effective-project-context.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion","governedSnapshotRef","governedAsOf","liveObservedAt",
+    "governedKnowledgeStatus","liveObservationStatus","semanticDriftStatus",
+    "effectiveContextStatus","promotionRequired","facts","sourceRefs"
+  ],
+  "properties": {
+    "schemaVersion":{"const":"trama.effective-project-context/v1"},
+    "governedSnapshotRef":{"type":"string","minLength":1},
+    "governedAsOf":{"type":"string","format":"date-time"},
+    "liveObservedAt":{"type":["string","null"],"format":"date-time"},
+    "governedKnowledgeStatus":{"enum":["CURRENT","SUPERSEDED","UNKNOWN"]},
+    "liveObservationStatus":{"enum":["FRESH","STALE","UNAVAILABLE","PARTIAL"]},
+    "semanticDriftStatus":{"enum":["NONE","DETECTED","REVIEW_REQUIRED"]},
+    "effectiveContextStatus":{"enum":["USABLE","DEGRADED","BLOCKED"]},
+    "promotionRequired":{"type":"boolean"},
+    "facts":{"type":"array"},
+    "sourceRefs":{"type":"array","items":{"type":"string","minLength":1}}
+  }
+}
