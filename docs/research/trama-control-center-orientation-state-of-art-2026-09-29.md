@@ -88,7 +88,15 @@ Observed pattern:
 - this model is distinct from the navigation itself.
 
 Adaptation for TRAMA:
-Arena → Atlas → Docente OS should be shown as a relationship, not three unrelated cards.
+the ecosystem relationship must preserve the canonical branching model rather than imply that Atlas is a mandatory intermediary:
+
+```text
+Arena ──→ Atlas
+  └────→ Docente OS
+Atlas ──→ Docente OS only for published resources/proposals where explicitly authorized
+```
+
+Arena remains the curriculum authority. Docente OS can receive governed curriculum context directly from Arena; Atlas is the public exploration/publication layer and is not a mandatory transit point for Docente OS.
 
 This provides an immediate answer to:
 “What am I looking at?”
@@ -116,10 +124,11 @@ Purpose:
 Fits substantially within the first viewport on desktop and should be understandable within one screen plus minimal scroll on smartphone.
 
 Contains only:
-1. current situation;
-2. freshness;
-3. ecosystem relationship;
-4. max three high-value destinations.
+1. one-sentence product definition — “TRAMA coordina le fonti, la pubblicazione e il lavoro operativo dell’ecosistema Arena · Atlas · Docente OS, senza sostituire le autorità dei singoli sistemi”;
+2. current situation;
+3. freshness;
+4. ecosystem relationship;
+5. max three high-value destinations.
 
 Purpose:
 - comprehension.
@@ -226,8 +235,9 @@ Desktop:
 
 - persistent shell/header;
 - page label: Sintesi;
+- one-sentence TRAMA definition;
 - dominant state panel;
-- compact Arena → Atlas → Docente OS relationship;
+- compact branching relationship showing Arena → Atlas and Arena → Docente OS, with any Atlas → Docente OS resource path explicitly non-authoritative/conditional;
 - three destinations:
   - Attenzione / decisioni;
   - Verifiche;
@@ -236,8 +246,9 @@ Desktop:
 Mobile:
 
 - compact shell;
+- one-sentence TRAMA definition;
 - dominant state panel;
-- one-line ecosystem relationship, horizontally adapted without forcing page overflow;
+- compact branching ecosystem relationship, horizontally adapted without forcing page overflow;
 - three stacked or 2+1 destination controls;
 - no inline specialist matrix.
 
