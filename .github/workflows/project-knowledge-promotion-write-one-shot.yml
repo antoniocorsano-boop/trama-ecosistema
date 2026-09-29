@@ -57,7 +57,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
-          env -u GITHUB_TOKEN -u GH_TOKEN \
+          env -i PATH="$PATH" HOME="$HOME" \
             python scripts/run_public_anonymous_live_one_shot.py \
               --exact-sha "$EXPECTED_SHA" \
               --run-id "$RUN_ID" \
@@ -72,7 +72,7 @@ jobs:
           GH_TOKEN: ""
           EXPECTED_SHA: ${{ github.sha }}
         run: |
-          env -u GITHUB_TOKEN -u GH_TOKEN \
+          env -i PATH="$PATH" HOME="$HOME" \
             python scripts/prepare_repository_observation_promotion_write_bundle.py \
               --observation .trama-promotion/repository-observation.json \
               --collector-summary .trama-promotion/collector-summary.json \
@@ -81,7 +81,6 @@ jobs:
               --output .trama-promotion/write-bundle.json
 
       - name: Execute governed write actor only when bundle is promotable
-        if: ${{ hashFiles('.trama-promotion/write-bundle.json') != '' }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           GH_TOKEN: ""
@@ -91,10 +90,14 @@ jobs:
           NO_PROXY: ""
           EXPECTED_SHA: ${{ github.sha }}
         run: |
-          python scripts/repository_observation_promotion_write_actor.py \
-            --bundle .trama-promotion/write-bundle.json \
-            --actor-exact-sha "$EXPECTED_SHA" \
-            --execute
+          if test -f .trama-promotion/write-bundle.json; then
+            python scripts/repository_observation_promotion_write_actor.py \
+              --bundle .trama-promotion/write-bundle.json \
+              --actor-exact-sha "$EXPECTED_SHA" \
+              --execute
+          else
+            echo "NO_PROMOTABLE_CHANGE"
+          fi
 
       - name: Assert no credential persistence and remove ephemeral handoff
         if: always()
