@@ -1,41 +1,41 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.5.0",
-  "generatedAt": "2026-09-29T20:47:42.300778+00:00",
+  "generatedAt": "2026-09-29T20:49:36.155015+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "ref": "STATUS.md",
-      "sha256": "42349199d860f001899fcf09ecaebd677c6b3dc52877cc0f04d1178ebf63c206"
+      "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "ref": "ROADMAP.md",
       "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
     }
@@ -98,7 +98,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
     },
     {
       "id": "arena",
@@ -119,7 +119,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
     },
     {
       "id": "atlas",
@@ -144,7 +144,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
     },
     {
       "id": "docente-os",
@@ -166,7 +166,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T20:47:42.300778+00:00"
+      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
     }
   ],
   "capabilities": [
@@ -689,9 +689,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "sha256": "42349199d860f001899fcf09ecaebd677c6b3dc52877cc0f04d1178ebf63c206"
+        "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
       },
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -709,7 +709,7 @@
         "path": "ROADMAP.md",
         "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
       },
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -727,7 +727,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -745,7 +745,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
       },
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -763,7 +763,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -781,7 +781,7 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
       },
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -855,7 +855,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-29T20:47:42.300778+00:00",
+      "observedAt": "2026-09-29T20:49:36.155015+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
