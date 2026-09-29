@@ -16,7 +16,9 @@ pack_mod=load_module('context_pack','scripts/build_trama_context_pack.py')
 snapshot=snapshot_mod.build()
 snapshot_mod.validate(snapshot)
 assert snapshot['project']=='TRAMA'
-assert snapshot['status']=='PARTIAL'
+assert snapshot['status'] in {'PARTIAL','CURRENT'}
+if snapshot['status']=='CURRENT':
+    assert any(r.get('observation',{}).get('completenessStatus')=='COMPLETE' for r in snapshot['repositories'])
 assert any(e.get('eventId')=='TRAMA-EVT-PERCORSI-PR96-RECOVERY' for e in snapshot['knowledgeEvents'])
 assert any(h.get('exactHead')=='dfb5b106708bee88016907c13ee0d104c093e7ca' for h in snapshot['activeExactHeads'])
 assert snapshot['knowledgeSources']
