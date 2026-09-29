@@ -99,7 +99,13 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v8" control-center/sw.js
+          grep -q "trama-control-center-v9" control-center/sw.js
+          test -s control-center/project-knowledge-state.js
+          test -s control-center/data/context-packs/project-knowledge.json
+          grep -q "Stato delle informazioni" control-center/index.html
+          grep -q "PROJECT_KNOWLEDGE_URL='./data/context-packs/project-knowledge.json'" control-center/index.html
+          grep -q "\./project-knowledge-state.js" control-center/sw.js
+          grep -q "\./data/context-packs/project-knowledge.json" control-center/sw.js
           grep -q "\./ecosystem.html" control-center/sw.js
           grep -q "\./evidence.html" control-center/sw.js
           grep -q "\./operations.html" control-center/sw.js
