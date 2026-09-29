@@ -132,7 +132,20 @@ The current registry must produce conservative results including:
 
 These results follow the evidence chain and do not infer missing responsive/accessibility evidence.
 
-## 10. Boundaries
+## 10. Snapshot synchronization and exact-head qualification
+
+The canonical snapshot synchronizer may commit a regenerated snapshot to a pull-request branch.
+
+When that commit is authored by GitHub Actions, GitHub recursion protection can prevent dependent workflows from running again from the workflow token. Therefore:
+
+- the bot-authored synchronization commit is not by itself sufficient final qualification;
+- the resulting pull-request head must receive a subsequent human/connector-authored commit or otherwise be explicitly re-triggered through an allowed mechanism;
+- final technical review binds only to an exact head on which the required validation workflows actually executed;
+- a prior green head must not be reused after snapshot synchronization changes the head.
+
+This rule prevents a generated materialized view from silently invalidating the evidence chain used for final review.
+
+## 11. Boundaries
 
 CC-MAT-COMP-01 does not authorize:
 
