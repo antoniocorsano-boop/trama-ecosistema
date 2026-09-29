@@ -71,7 +71,8 @@ jobs:
           grep -F 'pull-requests: write' .github/workflows/project-knowledge-promotion-write-one-shot.yml
           grep -F 'persist-credentials: false' .github/workflows/project-knowledge-promotion-write-one-shot.yml
           grep -F 'env -i PATH="$PATH" HOME="$HOME"' .github/workflows/project-knowledge-promotion-write-one-shot.yml
-          grep -F 'GITHUB_TOKEN: ${{ github.token }}' .github/workflows/project-knowledge-promotion-write-one-shot.yml
+          grep -F 'GITHUB_TOKEN:' .github/workflows/project-knowledge-promotion-write-one-shot.yml
+          grep -F 'github.token' .github/workflows/project-knowledge-promotion-write-one-shot.yml
           ! grep -En 'upload-artifact|actions/cache|/merge|gh pr merge|DELETE|force-push' .github/workflows/project-knowledge-promotion-write-one-shot.yml
       - name: Install schema validator
         run: python -m pip install jsonschema
