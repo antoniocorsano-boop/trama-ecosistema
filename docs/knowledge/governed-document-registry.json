@@ -691,6 +691,31 @@
         "ECOSYSTEM_RELATION_CHANGE",
         "MATURITY_VISUALIZATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-MATURITY-PROJECTION",
+      "path": "docs/contracts/trama-component-maturity-projection-v1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "maturity",
+        "component-evidence",
+        "component-lifecycle",
+        "visualization"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-V2-UI-SPEC",
+        "DOC-TRAMA-COMPONENT-EVIDENCE-REGISTRY"
+      ],
+      "updateTriggers": [
+        "COMPONENT_MATURITY_MODEL_CHANGE",
+        "COMPONENT_EVIDENCE_SCHEMA_CHANGE",
+        "MATURITY_VISUALIZATION_CHANGE"
+      ]
     }
   ]
 }
