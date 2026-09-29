@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trama.stage-e3-l0-human-use-receipt/v1",
+  "title": "TRAMA Stage E3-L0 Human-use Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sessionId",
+    "subject",
+    "testedExactHead",
+    "conductedAt",
+    "participantProfile",
+    "useCases",
+    "findings",
+    "result",
+    "privacy"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.stage-e3-l0-human-use-receipt/v1"
+    },
+    "sessionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject": {
+      "const": "control-center-l0"
+    },
+    "testedExactHead": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "buildRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conductedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "participantProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profileId",
+        "cohort",
+        "digitalConfidence",
+        "deviceMode"
+      ],
+      "properties": {
+        "profileId": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_-]+$"
+        },
+        "cohort": {
+          "enum": [
+            "NON_TECHNICAL",
+            "TECHNICAL_ASSURANCE",
+            "INCLUSION_ACCESSIBILITY"
+          ]
+        },
+        "digitalConfidence": {
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "NOT_RECORDED"
+          ]
+        },
+        "deviceMode": {
+          "enum": [
+            "DESKTOP",
+            "SMARTPHONE",
+            "TABLET",
+            "ASSISTIVE_TECH",
+            "MIXED"
+          ]
+        },
+        "accessMode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "useCases": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "useCaseId",
+          "taskCompleted",
+          "interpretationCorrect",
+          "actionDecisionCorrect",
+          "facilitatorIntervention"
+        ],
+        "properties": {
+          "useCaseId": {
+            "type": "string",
+            "pattern": "^E3-L0-UC-[0-9]{2}$"
+          },
+          "taskCompleted": {
+            "enum": [
+              "YES",
+              "WITH_HELP",
+              "NO"
+            ]
+          },
+          "interpretationCorrect": {
+            "enum": [
+              "YES",
+              "PARTIAL",
+              "NO"
+            ]
+          },
+          "actionDecisionCorrect": {
+            "enum": [
+              "YES",
+              "NO",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "facilitatorIntervention": {
+            "enum": [
+              "NONE",
+              "CLARIFICATION",
+              "SUBSTANTIAL_HELP"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "findingId",
+          "severity",
+          "status",
+          "summary",
+          "useCaseRefs"
+        ],
+        "properties": {
+          "findingId": {
+            "type": "string",
+            "pattern": "^E3-L0-F-[A-Z0-9_-]+$"
+          },
+          "severity": {
+            "enum": [
+              "CRITICAL",
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          },
+          "status": {
+            "enum": [
+              "OPEN",
+              "RESOLVED",
+              "ACCEPTED_EXCEPTION"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "useCaseRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^E3-L0-UC-[0-9]{2}$"
+            }
+          }
+        }
+      }
+    },
+    "result": {
+      "enum": [
+        "KEEP",
+        "REVISE",
+        "REJECT",
+        "PARTIAL"
+      ]
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "containsDirectIdentifiers",
+        "containsUngovernedRecording"
+      ],
+      "properties": {
+        "containsDirectIdentifiers": {
+          "const": false
+        },
+        "containsUngovernedRecording": {
+          "const": false
+        }
+      }
+    }
+  }
+}

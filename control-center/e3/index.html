@@ -22,7 +22,13 @@ label{display:grid;gap:6px;font-weight:700}input,select,textarea,button{width:10
 <div class="notice"><strong>Solo scenari sintetici, nessun dato reale viene modificato.</strong><span class="hint">La scheda resta nel browser. Non viene inviata telemetria e non vengono raccolti nomi, email o account.</span></div>
 
 <section class="panel">
-<h2>1. Apri lo scenario</h2>
+<h2>E3-L0 · Sintesi universale</h2>
+<p class="hint">Il partecipante vede soltanto la Sintesi, senza codici o controlli di scenario.</p>
+<div class="grid" id="l0ScenarioGrid"></div>
+</section>
+
+<section class="panel">
+<h2>Scenari Project Knowledge</h2>
 <div class="grid" id="scenarioGrid"></div>
 </section>
 
@@ -49,6 +55,12 @@ label{display:grid;gap:6px;font-weight:700}input,select,textarea,button{width:10
 </section>
 </main>
 <script>
+const l0Scenarios=[
+ ['normal','E3-L0-UC-01','Situazione regolare','Capire disponibilità, azione richiesta e aggiornamento'],
+ ['attention','E3-L0-UC-02','Attenzione','Capire cosa resta utilizzabile e chi deve intervenire'],
+ ['decision','E3-L0-UC-03','Decisione richiesta','Capire cosa è bloccato e cosa resta disponibile'],
+ ['offline','E3-L0-UC-04','Ultimo stato disponibile','Distinguere dato disponibile da dato appena verificato']
+];
 const scenarios=[
  ['normal','NORMAL','Stato ordinario'],
  ['loading','LOADING','Controllo in corso'],
@@ -61,6 +73,10 @@ const scenarios=[
  ['unavailable','UNAVAILABLE','Aggiornamenti non disponibili']
 ];
 const useCases=[
+ ['E3-L0-UC-01','L0 · situazione regolare'],
+ ['E3-L0-UC-02','L0 · attenzione'],
+ ['E3-L0-UC-03','L0 · decisione richiesta'],
+ ['E3-L0-UC-04','L0 · ultimo stato disponibile'],
  ['E3-UC-01','NORMAL · comprensione'],['E3-UC-02','LOADING · comprensione'],['E3-UC-03','EMPTY · comprensione'],
  ['E3-UC-04','PARTIAL · comprensione'],['E3-UC-05','REVIEW_REQUIRED · comprensione'],['E3-UC-06','BLOCKED · comprensione'],
  ['E3-UC-07','NO_ACCESS · comprensione'],['E3-UC-08','OFFLINE_CACHED · comprensione'],['E3-UC-09','Progressive disclosure'],
@@ -70,6 +86,11 @@ const useCases=[
 const params=new URLSearchParams(location.search);
 const head=params.get('head')||'';
 const isHead=/^[0-9a-f]{40}$/.test(head);
+l0ScenarioGrid.innerHTML=l0Scenarios.map(([state,uc,label,desc])=>{
+ const href='../preview/l0/?participant=1&state='+encodeURIComponent(state);
+ return '<a class="scenario" target="_blank" rel="noopener" data-usecase="'+uc+'" href="'+href+'"><strong>'+label+'</strong><small>'+desc+' · apre la versione partecipante</small></a>';
+}).join('');
+l0ScenarioGrid.querySelectorAll('[data-usecase]').forEach(link=>link.addEventListener('click',()=>{useCase.value=link.dataset.usecase;}));
 scenarioGrid.innerHTML=scenarios.map(([id,label,desc])=>{
  const href='../?validation=e3&scenario='+encodeURIComponent(id)+'#projectKnowledge';
  return '<a class="scenario" target="_blank" rel="noopener" href="'+href+'"><strong>'+label+'</strong><small>'+desc+' · apre la Home reale</small></a>';
@@ -96,7 +117,38 @@ receiptForm.addEventListener('submit',event=>{
   anonymousUserWording:[],
   findingIds:findingId?[findingId]:[]
  };
- const receipt={
+ const isL0=useCase.value.startsWith('E3-L0-');
+ const receipt=isL0?{
+  schemaVersion:'trama.stage-e3-l0-human-use-receipt/v1',
+  sessionId:'E3-L0-'+Date.now(),
+  subject:'control-center-l0',
+  testedExactHead:head,
+  buildRef:'render:trama-control-center:/preview/l0/',
+  conductedAt:new Date().toISOString(),
+  participantProfile:{
+   profileId:profileId.value.trim().toUpperCase(),
+   cohort:cohort.value,
+   digitalConfidence:confidence.value,
+   deviceMode:device.value,
+   accessMode:null
+  },
+  useCases:[{
+   useCaseId:useCase.value,
+   taskCompleted:taskCompleted.value,
+   interpretationCorrect:interpretationCorrect.value,
+   actionDecisionCorrect:actionDecisionCorrect.value,
+   facilitatorIntervention:facilitatorIntervention.value,
+   notes:note||null
+  }],
+  findings:sev?[{
+   findingId:'E3-L0-F-'+Date.now(),
+   severity:sev,status:'OPEN',
+   summary:note||'Finding osservato durante la sessione E3-L0.',
+   useCaseRefs:[useCase.value]
+  }]:[],
+  result:result.value,
+  privacy:{containsDirectIdentifiers:false,containsUngovernedRecording:false}
+ }:{
   schemaVersion:'trama.stage-e3-human-use-receipt/v1',
   sessionId:'E3-'+Date.now(),
   subject:'project-knowledge-ui',
