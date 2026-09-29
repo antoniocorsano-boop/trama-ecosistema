@@ -36,6 +36,8 @@ def main():
                 fail(cid+" evidence ref")
             if e.get("status")=="PRESENT" and e.get("type")!="LIFECYCLE" and not (e.get("exactHead") or e.get("runId")):
                 fail(cid+" unbound PRESENT evidence")
+            if e.get("repository") is not None and not str(e.get("repository")).strip():
+                fail(cid+" repository")
             if e.get("exactHead") and len(e.get("exactHead",""))!=40:
                 fail(cid+" exactHead")
     if len(ids)!=len(set(ids)): fail("duplicate componentId")
