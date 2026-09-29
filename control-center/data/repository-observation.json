@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "trama.repository-observation/v1",
+  "collectionId": "live-one-shot-public-anonymous-20260929T040636Z",
+  "observedAt": "2026-09-29T04:06:36Z",
+  "status": "COMPLETE",
+  "repositories": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "enrollmentRef": "enrollment:trama",
+      "availabilityStatus": "AVAILABLE",
+      "freshnessStatus": "FRESH",
+      "completenessStatus": "COMPLETE",
+      "observedHead": "9b114eccfe3d67cfafdc480be6fa32682c18dbf8",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/trama-ecosistema@9b114eccfe3d67cfafdc480be6fa32682c18dbf8"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "enrollmentRef": "enrollment:arena",
+      "availabilityStatus": "AVAILABLE",
+      "freshnessStatus": "FRESH",
+      "completenessStatus": "COMPLETE",
+      "observedHead": "9da1cf65ae86ff5a3a65888636bf04f3a7312a7b",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/CurManLight_arena@9da1cf65ae86ff5a3a65888636bf04f3a7312a7b"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "enrollmentRef": "enrollment:atlas",
+      "availabilityStatus": "AVAILABLE",
+      "freshnessStatus": "FRESH",
+      "completenessStatus": "COMPLETE",
+      "observedHead": "f68be1d9913fed77483685158e38848d3d0a19b2",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/Curriculum-Atlas@f68be1d9913fed77483685158e38848d3d0a19b2"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "enrollmentRef": "enrollment:docente-os",
+      "availabilityStatus": "AVAILABLE",
+      "freshnessStatus": "FRESH",
+      "completenessStatus": "COMPLETE",
+      "observedHead": "f0b7e5c01620d4cc87587081859cbf270cc1d033",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/docente-os-2026-27@f0b7e5c01620d4cc87587081859cbf270cc1d033"
+      ]
+    }
+  ],
+  "pullRequests": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "number": 96,
+      "state": "OPEN",
+      "draft": true,
+      "merged": false,
+      "observedHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/trama-ecosistema:pull/96@dfb5b106708bee88016907c13ee0d104c093e7ca"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "number": 136,
+      "state": "OPEN",
+      "draft": true,
+      "merged": false,
+      "observedHead": "5fb3c8fd4127f0daa4456b0759bacfacdcddb212",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/trama-ecosistema:pull/136@5fb3c8fd4127f0daa4456b0759bacfacdcddb212"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "number": 207,
+      "state": "OPEN",
+      "draft": true,
+      "merged": false,
+      "observedHead": "99ea576f8bab68ef904d5d264a687bcb490490fd",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/CurManLight_arena:pull/207@99ea576f8bab68ef904d5d264a687bcb490490fd"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "number": 304,
+      "state": "OPEN",
+      "draft": false,
+      "merged": false,
+      "observedHead": "3c0c3541145352f65e178cfa52aa166571df7d80",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/CurManLight_arena:pull/304@3c0c3541145352f65e178cfa52aa166571df7d80"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "number": 57,
+      "state": "OPEN",
+      "draft": true,
+      "merged": false,
+      "observedHead": "3880964b79119cc9e4ca995f4b476ffab2ce689d",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/Curriculum-Atlas:pull/57@3880964b79119cc9e4ca995f4b476ffab2ce689d"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "number": 384,
+      "state": "OPEN",
+      "draft": true,
+      "merged": false,
+      "observedHead": "c0417da40549a197a69a72f6861a682e622d09b1",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/docente-os-2026-27:pull/384@c0417da40549a197a69a72f6861a682e622d09b1"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "number": 628,
+      "state": "OPEN",
+      "draft": true,
+      "merged": false,
+      "observedHead": "1dad7de9d8811315347af14318374bb4dc5ae7c0",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/docente-os-2026-27:pull/628@1dad7de9d8811315347af14318374bb4dc5ae7c0"
+      ]
+    }
+  ],
+  "sourceRefs": [
+    "github-public-api:antoniocorsano-boop/trama-ecosistema",
+    "github-public-api:antoniocorsano-boop/CurManLight_arena",
+    "github-public-api:antoniocorsano-boop/Curriculum-Atlas",
+    "github-public-api:antoniocorsano-boop/docente-os-2026-27"
+  ]
+}
