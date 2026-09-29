@@ -183,8 +183,8 @@ class GitHubClient:
  def create_pr(self,head,title,body):
   return self.request("POST","/repos/"+TARGET_REPOSITORY+"/pulls",{"title":title,"head":head,"base":BASE_BRANCH,"body":body,"draft":True})
 
-def branch_name(proposal_id):
- return "project-knowledge/promotion/"+proposal_id[:20]
+def branch_name(proposal_id,base_exact_sha):
+ return "project-knowledge/promotion/"+proposal_id[:20]+"-"+base_exact_sha[:12]
 
 def execute(bundle,actor_exact_sha,token):
  validate_bundle(bundle,actor_exact_sha)
@@ -197,7 +197,7 @@ def execute(bundle,actor_exact_sha,token):
   die("KNOWLEDGE_EVENTS_UNAVAILABLE")
  current_events=json.loads(base64.b64decode(events_file["content"]).decode())
  files,event=materialize(bundle,current_events,actor_exact_sha)
- name=branch_name(bundle["proposal"]["proposalId"])
+ name=branch_name(bundle["proposal"]["proposalId"],bundle["baseExactSha"])
  try:
   branch=client.ref(name)
   branch_exists=True
@@ -213,6 +213,10 @@ def execute(bundle,actor_exact_sha,token):
   pass
  else:
   comparison=client.compare(base,name)
+  if (comparison.get("merge_base_commit") or {}).get("sha")!=base:
+   die("BRANCH_BASE_MISMATCH")
+  if comparison.get("status") not in {"ahead","identical"}:
+   die("BRANCH_HISTORY_INVALID")
   changed={item.get("filename") for item in comparison.get("files",[])}
   if not changed.issubset(set(ALLOWED_PATHS)):
    die("BRANCH_CONTAINS_UNEXPECTED_PATHS")
@@ -226,6 +230,9 @@ def execute(bundle,actor_exact_sha,token):
   else:
    file_sha=None
   client.put_file(path,name,"chore(project-knowledge): promote "+bundle["proposal"]["proposalId"],files[path],file_sha)
+ final_base=client.ref(BASE_BRANCH)["object"]["sha"]
+ if final_base!=bundle["baseExactSha"]:
+  die("BASE_MOVED_DURING_WRITE")
  prs=client.list_prs(name)
  if len(prs)>1:
   die("MULTIPLE_PROMOTION_PRS")
@@ -251,7 +258,7 @@ def main():
    die("CURRENT_EVENTS_REQUIRED_FOR_DRY_RUN")
   current=json.loads(Path(args.current_events).read_text())
   files,event=materialize(bundle,current,args.actor_exact_sha)
-  result={"result":"DRY_RUN_VALID","branch":branch_name(bundle["proposal"]["proposalId"]),"paths":list(files),"eventId":event["eventId"],"digests":{path:raw_sha256(value) for path,value in files.items()}}
+  result={"result":"DRY_RUN_VALID","branch":branch_name(bundle["proposal"]["proposalId"],bundle["baseExactSha"]),"paths":list(files),"eventId":event["eventId"],"digests":{path:raw_sha256(value) for path,value in files.items()}}
  print(json.dumps(result,sort_keys=True))
 
 if __name__=="__main__":
