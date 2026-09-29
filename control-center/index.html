@@ -11,6 +11,14 @@
 <style>
 :root{--bg:#071827;--surface:#0b2235;--surface2:#0e2b42;--line:#1c4662;--text:#f4f8fb;--muted:#9fb9cb;--info:#58bff7;--ok:#55d79a;--warn:#f0b54a;--danger:#f37d87;--arena:#5dd39e;--atlas:#ae88ff;--dos:#ffc45a}
 *{box-sizing:border-box}html{scroll-behavior:smooth;max-width:100%;overflow-x:hidden}body{margin:0;max-width:100%;overflow-x:hidden;background:radial-gradient(circle at 85% 0,#123750 0,transparent 32%),var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,a{font:inherit}a{color:inherit;text-decoration:none}.app{display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh}.side{position:sticky;top:0;height:100vh;padding:24px 16px;border-right:1px solid var(--line);background:#081a2a}.brand{font-weight:900;letter-spacing:.18em;font-size:22px}.strap{margin:4px 0 28px;color:var(--info);font-size:10px;letter-spacing:.12em}.nav{display:grid;gap:5px}.nav a{padding:10px 12px;border-radius:9px;color:#c3d5e0}.nav a:hover,.nav a:focus-visible{background:#123550;outline:2px solid transparent}.readonly{position:absolute;left:20px;bottom:22px;color:var(--muted);font-size:11px}.readonly b{color:var(--ok)}main{width:min(1540px,100%);padding:24px 28px 48px;margin:auto}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding-bottom:18px;border-bottom:1px solid var(--line)}h1{font-size:30px;margin:0}.lede{margin:4px 0 0;color:#b8d0df}.health{display:flex;align-items:center;gap:8px;color:var(--muted);white-space:nowrap}.dot{width:9px;height:9px;border-radius:50%;background:var(--ok)}.section{margin-top:18px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:10px}.section h2{font-size:17px;margin:0}.hint{color:var(--muted);font-size:12px}.rail{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.phase,.card,.panel{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line);border-radius:14px}.phase{padding:14px;min-height:120px}.phase-top{display:flex;justify-content:space-between;gap:8px}.phase-id{font-weight:900;color:var(--info)}.phase h3{font-size:14px;margin:12px 0 4px}.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:10px;font-weight:800}.b-ok{color:#a5f3ca;border-color:#2b9568}.b-warn{color:#ffda89;border-color:#9c6d1d}.b-muted{color:#b7c7d1}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.card{padding:14px}.card .k{font-size:28px;font-weight:900;margin:3px 0}.card .label{color:#c7d7e1;font-weight:700}.card small{color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(310px,.8fr);gap:12px}.panel{padding:15px}.matrix{display:grid;gap:9px}
+.maturity-summary{display:grid;gap:10px}
+.maturity-summary p{margin:0;color:#c7d7e1}
+.maturity-summary-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.maturity-summary-stat{padding:10px;border:1px solid #173d56;border-radius:10px;background:#091e30}
+.maturity-summary-stat small{display:block;color:var(--muted)}
+.maturity-summary-stat strong{display:block;font-size:21px;margin-top:2px}
+.maturity-summary-link{width:max-content;min-height:44px;margin:0;align-items:center}
+.phase-mobile-empty{display:none}
 .component-maturity{overflow:hidden}
 .component-maturity-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
 .component-filters{display:flex;gap:6px;flex-wrap:wrap}
@@ -89,6 +97,10 @@
   .layout{display:flex;flex-direction:column;gap:10px}
   #attention{order:-1}
   .panel{padding:13px;border-radius:12px}
+  .maturity-summary-stats{grid-template-columns:1fr 1fr}
+  .maturity-summary-link{width:100%;justify-content:center}
+  .phase-mobile-empty{display:block;flex:0 0 100%;padding:14px;border:1px solid #173d56;border-radius:12px;background:#091e30;color:var(--muted)}
+
   .matrix{display:flex;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;gap:8px;margin:0;padding:0 0 8px;scrollbar-width:none;-ms-overflow-style:none}
   .component-maturity-layout{grid-template-columns:1fr}
   .component-map-scroll{margin:0;max-width:100%}
@@ -135,7 +147,7 @@
 </head>
 <body>
 <div class="app">
-<aside class="side"><div class="brand">TRAMA</div><div class="strap">CONTROL CENTER V2</div><nav class="nav"><a href="#projectKnowledge">Informazioni</a><a href="#phases">Fasi</a><a href="#maturity">Maturità</a><a href="#attention">Attenzione</a><a href="#assurance">Assurance</a><a href="#evidence">Evidenze</a><a href="#dependencies">Dipendenze</a><a href="#expansion">Espansioni</a></nav><div class="readonly"><b>●</b> SOLA LETTURA<br>snapshot governato</div></aside>
+<aside class="side"><div class="brand">TRAMA</div><div class="strap">CONTROL CENTER V2</div><nav class="nav"><a href="#projectKnowledge">Informazioni</a><a href="#phases">Fasi</a><a href="./maturity.html">Maturità</a><a href="#attention">Attenzione</a><a href="#assurance">Assurance</a><a href="#evidence">Evidenze</a><a href="#dependencies">Dipendenze</a><a href="#expansion">Espansioni</a></nav><div class="readonly"><b>●</b> SOLA LETTURA<br>snapshot governato</div></aside>
 <main>
 <div class="validation-banner" id="e3ValidationBanner" role="note" aria-label="Modalità di validazione E3">
   <div><strong>Modalità validazione E3</strong><small>Scenario sintetico per una prova con utenti. Non rappresenta lo stato reale del progetto.</small></div>
@@ -199,35 +211,9 @@
 </div></section>
 
 <div class="layout section">
-<section class="panel" id="maturity"><div class="section-head"><h2>Matrice di maturità</h2><span class="hint">L0–L5 · confermato ≠ candidato</span></div><div class="matrix" id="matrix"></div></section>
+<section class="panel" id="maturitySummary"><div class="section-head"><div><h2>Maturità</h2><span class="hint">sintesi; dettaglio nella vista dedicata</span></div></div><div class="maturity-summary"><p>Lo stato di sviluppo è disponibile in una vista dedicata, con livelli confermati, candidati e prove dei componenti.</p><div class="maturity-summary-stats"><div class="maturity-summary-stat"><small>Aree osservate</small><strong id="maturityAreaSummary">–</strong></div><div class="maturity-summary-stat"><small>Componenti tracciati</small><strong id="maturityComponentSummary">–</strong></div></div><a class="report-link maturity-summary-link" href="./maturity.html">Apri la vista Maturità →</a></div></section>
 <section class="panel" id="attention"><div class="section-head"><h2>Attenzione richiesta</h2><span class="hint">gate bloccanti</span></div><div class="attention" id="attentionList"></div></section>
 </div>
-
-<section class="section panel component-maturity" id="componentMaturity" aria-labelledby="componentMaturityHeading">
-  <div class="section-head">
-    <div><h2 id="componentMaturityHeading">Maturità dei componenti</h2><span class="hint">evidenze ordinate · lifecycle separato dalla maturità</span></div>
-    <div class="component-legend" aria-label="Legenda mappa componenti">
-      <span><i></i>stadio confermato</span>
-      <span class="candidate"><i></i>candidato</span>
-      <span class="legacy"><i></i>lifecycle legacy/deprecato</span>
-    </div>
-  </div>
-  <div class="component-maturity-toolbar">
-    <div class="component-filters" id="componentMaturityFilters" role="group" aria-label="Filtra componenti per prodotto"></div>
-    <span class="hint">Nessuna percentuale: la posizione indica uno stadio evidenziale discreto.</span>
-  </div>
-  <div class="component-maturity-layout">
-    <div class="component-map-shell">
-      <div class="component-map-scroll" tabindex="0" aria-label="Mappa scorrevole della maturità dei componenti">
-        <svg id="componentMaturityMap" class="component-map" role="group" aria-label="Mappa interattiva della maturità dei componenti"></svg>
-      </div>
-    </div>
-    <aside id="componentMaturityDetail" class="component-detail" aria-live="polite" aria-label="Dettaglio componente">
-      <p class="hint">Caricamento componenti…</p>
-    </aside>
-  </div>
-  <div id="componentMaturityEquivalent" class="component-equivalent" aria-label="Elenco equivalente della maturità dei componenti"></div>
-</section>
 
 <section class="section panel" id="assurance">
 <div class="section-head"><h2 class="helpable" tabindex="0" data-help-title="Stakeholder Assurance" data-help="Mostra, per ciascun requisito, ciò che è documentato oggi, il target di verifica o certificazione e le evidenze ancora mancanti. Non è un punteggio di conformità.">Stakeholder Assurance</h2><span class="hint">stato → target → gap evidenziali</span></div>
@@ -243,11 +229,10 @@
 <div id="errorBox"></div>
 <footer class="footer"><span>TRAMA · Control Center v2 · READ_ONLY</span><span id="updated">–</span></footer>
 </main>
-<nav class="mobile-nav" aria-label="Navigazione rapida"><a href="#mobileOverview">Ora</a><a href="#attention">Gate</a><a href="#maturity">Maturità</a><a href="#assurance">Assurance</a><a href="#evidence">Evidenze</a></nav>
+<nav class="mobile-nav" aria-label="Navigazione rapida"><a href="#mobileOverview">Ora</a><a href="#attention">Gate</a><a href="./maturity.html">Maturità</a><a href="#assurance">Assurance</a><a href="#evidence">Evidenze</a></nav>
 </div>
 <div id="helpPopover" class="help-popover" role="dialog" aria-live="polite" aria-label="Informazioni contestuali"><button id="helpClose" aria-label="Chiudi">×</button><strong id="helpTitle"></strong><div id="helpText"></div></div>
 <script src="./project-knowledge-state.js"></script>
-<script src="./component-maturity.js"></script>
 <script>
 const PROJECT_KNOWLEDGE_URL='./data/context-packs/project-knowledge.json';
 const PROJECT_KNOWLEDGE_CACHE_KEY='trama-cc2-project-knowledge';
@@ -260,6 +245,20 @@ const CACHE_KEY='trama-cc2-snapshot';
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const badge=s=>{const u=String(s||'').toUpperCase();return u==='COMPLETE'||u==='PASS'||u==='FRESH'?['b-ok',u]:u==='ACTIVE'||u==='OPEN'||u==='PARTIAL'?['b-warn',u]:['b-muted',u||'—']};
 function assuranceLabel(x){return String(x||'').replaceAll('_',' ')}
+const UI_LABELS={
+  AUTHORITY:'Autorità',
+  DATA_FLOW:'Flusso dati',
+  FUTURE_NOT_AUTHORIZED:'Futuro non autorizzato',
+  ACTIVE:'Attivo',
+  GOVERNED:'Governato',
+  NOT_AUTHORIZED:'Non autorizzato',
+  PLANNED:'Pianificata',
+  CURRENT_STATE:'Stato corrente',
+  ROADMAP:'Roadmap',
+  DOCUMENT_CANONICAL:'Documento canonico',
+  UNTIL_CHANGE:'Valido fino a modifica'
+};
+function uiLabel(x){const k=String(x||'');return UI_LABELS[k]||k.replaceAll('_',' ')}
 function helpAttr(title,text,classes=''){const cls=('helpable '+classes).trim();return ' class="'+esc(cls)+'" tabindex="0" data-help-title="'+esc(title)+'" data-help="'+esc(text)+'"'}
 
 
@@ -370,21 +369,12 @@ function render(data,mode){
   mobileGateCount.textContent=openGates.length;
   mobileAssuranceGapCount.textContent=assuranceWithGaps.length;
   areaCount.textContent=(data.areas||[]).length;gateCount.textContent=openGates.length;evidenceCount.textContent=currentEvidence.length;freshCount.textContent=freshSources;expansionCount.textContent=(data.expansionCandidates||[]).length;
+  maturityAreaSummary.textContent=(data.areas||[]).length;
+  maturityComponentSummary.textContent=(data.components||[]).length;
   assuranceGrid.innerHTML=(data.assuranceClaims||[]).map(claim=>{const r=claim.readiness||{},required=Math.max(1,r.requiredPrerequisites||1),met=r.metPrerequisites||0;const steps=Array.from({length:required},(_,i)=>'<span class="readiness-step '+(i<met?'met':'')+'" title="'+esc(i<met?'Prerequisito soddisfatto':'Prerequisito mancante')+'"></span>').join('');const missing=(r.missingEvidenceKinds||[]).slice(0,3);return '<article'+helpAttr(claim.requirementId,claim.scope+' Stato attuale: '+claim.status+'. Target: '+claim.targetStatus+'. Evidenze mancanti: '+((r.missingEvidenceKinds||[]).join(', ')||'nessuna')+'.','assurance-card')+'><div class="hint">'+esc(claim.domain)+'</div><h3>'+esc(claim.requirementId)+'</h3><div><strong>'+esc(assuranceLabel(claim.status))+'</strong> → '+esc(assuranceLabel(claim.targetStatus))+'</div><div class="readiness-track" style="grid-template-columns:repeat('+required+',1fr)" aria-label="'+esc(met+' prerequisiti soddisfatti su '+required)+'">'+steps+'</div><div class="hint">'+esc(met+' / '+required+' prerequisiti evidenziali')+'</div>'+(missing.length?'<ul class="gap-list">'+missing.map(x=>'<li>'+esc(assuranceLabel(x))+'</li>').join('')+'</ul>':'<div class="hint">Nessun gap evidenziale</div>')+'</article>'}).join('');
   phaseRail.innerHTML=(data.phases||[]).map(p=>{const [cl,label]=badge(p.status);return '<article class="phase '+(['ACTIVE','IN_PROGRESS'].includes(String(p.status||'').toUpperCase())?'is-active':'')+'" tabindex="0" data-help-title="'+esc(p.id+' · '+p.name)+'" data-help="'+esc('Fase della roadmap TRAMA. Stato: '+p.status+'. Gate associati: '+((p.gateRefs||[]).join(', ')||'nessuno')+'.')+'"><div class="phase-top"><span class="phase-id">'+esc(p.id)+'</span><span class="badge '+cl+'">'+esc(label)+'</span></div><h3>'+esc(p.name)+'</h3><small class="hint">'+(p.gateRefs?.length?esc(p.gateRefs.join(', ')):'Nessun gate associato')+'</small></article>'}).join('');
+  if(!activePhases.length)phaseRail.insertAdjacentHTML('beforeend','<div class="phase-mobile-empty">Nessuna fase attiva in questo momento. Il percorso completo resta disponibile in Cronologia.</div>');
   setupPhasePagination();
-  matrix.innerHTML=(data.areas||[]).map(a=>'<div'+helpAttr(a.name,'Livello confermato L'+a.confirmedLevel+', candidato L'+a.candidateLevel+', confidenza '+a.confidence+'. Dipendenze: '+((a.dependencies||[]).join(', ')||'nessuna')+'.','area')+'><div class="area-name"><strong>'+esc(a.name)+'</strong><small>'+esc(a.ownerDomain||'')+'</small></div><div class="levels">'+[0,1,2,3,4,5].map(n=>'<span class="lv '+(n<=a.confirmedLevel?'on':'')+'">L'+n+'</span>').join('')+'</div><div><small class="hint">Confermato</small><br><b>L'+a.confirmedLevel+'</b></div><div><small class="hint">Candidato</small><br><b>L'+a.candidateLevel+'</b></div><div><span class="badge b-warn">'+esc(a.confidence)+'</span></div></div>').join('');
-  if(window.TRAMAMaturityMap&&typeof window.TRAMAMaturityMap.render==='function'){
-    window.TRAMAMaturityMap.render({
-      components:data.components||[],
-      svg:document.getElementById('componentMaturityMap'),
-      filters:document.getElementById('componentMaturityFilters'),
-      detail:document.getElementById('componentMaturityDetail'),
-      equivalent:document.getElementById('componentMaturityEquivalent')
-    });
-  }else{
-    componentMaturityDetail.innerHTML='<div class="error">La vista grafica dei componenti non è disponibile. Lo snapshot resta consultabile nelle altre superfici.</div>';
-  }
   attentionList.innerHTML=openGates.length?openGates.map(g=>'<div'+helpAttr(g.id,'Gate '+g.type+' bloccante. Stato: '+g.status+'. Autorità decisionale: '+(g.decisionAuthority||'non specificata')+'.','alert')+'><strong>'+esc(g.id)+'</strong><small>'+esc(g.area)+' · '+esc(g.type)+' · autorità: '+esc(g.decisionAuthority||'—')+'</small></div>').join(''):'<div class="empty">Nessun gate bloccante aperto.</div>';
   depList.innerHTML=(data.dependencies||[]).map(d=>'<div'+helpAttr(d.from+' → '+d.to,'Relazione '+d.kind+' tra '+d.from+' e '+d.to+'. Stato: '+(d.status||'non specificato')+'.','dep')+'><div><strong>'+esc(d.from)+'</strong></div><div class="arrow">→<div class="kind">'+esc(d.kind)+'</div></div><div><strong>'+esc(d.to)+'</strong><div class="kind">'+esc(d.status||'')+'</div></div></div>').join('');
   expList.innerHTML=(data.expansionCandidates||[]).map(x=>'<div'+helpAttr(x.id,'Espansione candidata '+x.name+'. Stato '+x.status+'. Dipendenze: '+((x.dependencyRefs||[]).join(', ')||'nessuna')+'.','exp-item')+'><strong>'+esc(x.id)+' · '+esc(x.name)+'</strong><span class="badge b-muted">'+esc(x.status)+'</span><div class="hint">Dipendenze: '+esc((x.dependencyRefs||[]).join(', ')||'nessuna')+'</div></div>').join('');
