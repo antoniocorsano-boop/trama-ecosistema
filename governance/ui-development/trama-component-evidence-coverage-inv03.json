@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "trama.component-evidence-coverage/v1",
+  "sliceId": "INV-03",
+  "status": "PROPOSED",
+  "runtimeImpact": "NONE",
+  "baseline": "eb6d3301fcb1a4dfaf6b544a6efc8f8a54701f46",
+  "coverageVocabulary": ["PRESENT","PARTIAL","DOCUMENTED_ONLY","NOT_OBSERVED","NOT_APPLICABLE"],
+  "products": [
+    {
+      "product": "ARENA",
+      "isolated": "PRESENT",
+      "keyboardFocus": "PARTIAL",
+      "responsiveVisual": "PRESENT",
+      "accessibility": "PARTIAL",
+      "lifecycle": "PARTIAL"
+    },
+    {
+      "product": "ATLAS",
+      "isolated": "NOT_OBSERVED",
+      "keyboardFocus": "PRESENT",
+      "responsiveVisual": "PRESENT",
+      "accessibility": "PARTIAL",
+      "lifecycle": "NOT_OBSERVED"
+    },
+    {
+      "product": "DOCENTE_OS",
+      "isolated": "NOT_OBSERVED",
+      "keyboardFocus": "PARTIAL",
+      "responsiveVisual": "PARTIAL",
+      "accessibility": "DOCUMENTED_ONLY",
+      "lifecycle": "PARTIAL"
+    },
+    {
+      "product": "TRAMA_CONTROL_CENTER",
+      "isolated": "NOT_OBSERVED",
+      "keyboardFocus": "PARTIAL",
+      "responsiveVisual": "PRESENT",
+      "accessibility": "PARTIAL",
+      "lifecycle": "NOT_OBSERVED"
+    }
+  ],
+  "findings": [
+    {"id":"INV03-F01","product":"ARENA","severity":"MEDIUM","topic":"COMPONENT_LEVEL_EVIDENCE_BASELINE"},
+    {"id":"INV03-F02","product":"ATLAS","severity":"MEDIUM","topic":"JOURNEY_STRONG_COMPONENT_ISOLATION_LIGHT"},
+    {"id":"INV03-F03","product":"DOCENTE_OS","severity":"HIGH","topic":"COMPONENT_EVIDENCE_GAP"},
+    {"id":"INV03-F04","product":"TRAMA_CONTROL_CENTER","severity":"HIGH","topic":"INFRASTRUCTURE_WITHOUT_COMPONENT_ADDRESSABILITY"},
+    {"id":"INV03-F05","product":"ECOSYSTEM","severity":"HIGH","topic":"LIFECYCLE_NOT_MACHINE_ADDRESSABLE"},
+    {"id":"INV03-F06","product":"ECOSYSTEM","severity":"HIGH","topic":"EVIDENCE_TYPE_MUST_BE_EXPLICIT"},
+    {"id":"INV03-F07","product":"ECOSYSTEM","severity":"LOW","topic":"NO_MANDATORY_STORYBOOK"}
+  ],
+  "requiredEvidenceTypes": [
+    "ISOLATED",
+    "BEHAVIOURAL",
+    "RESPONSIVE_VISUAL",
+    "ACCESSIBILITY",
+    "LIFECYCLE"
+  ],
+  "nextActions": [
+    "DEFINE_COMPONENT_EVIDENCE_REGISTRY",
+    "BIND_INV02_HIGH_RISK_TARGETS",
+    "DOCENTE_OS_BOUNDED_COMPONENT_EVIDENCE",
+    "CONTROL_CENTER_CS_S1_PER_CANDIDATE_EVIDENCE"
+  ],
+  "migrationAuthorized": false,
+  "dependencyAdoptionAuthorized": false,
+  "runtimeChangeAuthorized": false
+}
