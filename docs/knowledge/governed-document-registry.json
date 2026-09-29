@@ -741,6 +741,34 @@
         "CONTROL_CENTER_RUNTIME_CHANGE",
         "ACCESSIBILITY_REQUIREMENT_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CC-ORIENTATION-REMEDIATION-01",
+      "path": "docs/implementation/cc-orientation-remediation-01.md",
+      "kind": "IMPLEMENTATION_GUIDE",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "orientation",
+        "mobile",
+        "maturity",
+        "project-knowledge",
+        "render",
+        "pwa"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-V2-UI-SPEC",
+        "DOC-TRAMA-COMPONENT-MATURITY-VISUALIZATION",
+        "DOC-TRAMA-SESSION-BOOTSTRAP"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_HOME_ARCHITECTURE_CHANGE",
+        "RENDER_DEPLOYMENT_CHANGE",
+        "MOBILE_NAVIGATION_CHANGE",
+        "PROJECT_KNOWLEDGE_LIVE_CONTEXT_CHANGE"
+      ]
     }
   ]
 }
