@@ -716,6 +716,31 @@
         "COMPONENT_EVIDENCE_SCHEMA_CHANGE",
         "MATURITY_VISUALIZATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-MATURITY-VISUALIZATION",
+      "path": "docs/contracts/trama-component-maturity-visualization-v1.md",
+      "kind": "UI_CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "maturity",
+        "component-evidence",
+        "visualization",
+        "accessibility",
+        "pwa"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-MATURITY-PROJECTION",
+        "DOC-CONTROL-CENTER-V2-UI-SPEC"
+      ],
+      "updateTriggers": [
+        "COMPONENT_MATURITY_VISUAL_CHANGE",
+        "CONTROL_CENTER_RUNTIME_CHANGE",
+        "ACCESSIBILITY_REQUIREMENT_CHANGE"
+      ]
     }
   ]
 }
