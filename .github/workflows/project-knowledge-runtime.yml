@@ -26,6 +26,10 @@ on:
       - 'scripts/test_project_knowledge_dual_speed_stage_d.py'
       - 'scripts/validate_cc_mss_live_predecision.py'
       - 'schemas/repository-observation.schema.json'
+      - 'scripts/test_repository_active_development_ref.py'
+      - 'scripts/run_public_anonymous_repository_observation.py'
+      - 'schemas/repository-enrollment.schema.json'
+      - 'config/repository-enrollment.json'
       - 'schemas/live-repository-overlay.schema.json'
       - 'schemas/effective-project-context.schema.json'
       - 'schemas/source-registry.schema.json'
@@ -65,6 +69,7 @@ jobs:
           python scripts/test_project_knowledge_runtime.py
           python scripts/test_session_bootstrap.py
           python scripts/test_repository_observation_projection.py
+          python scripts/test_repository_active_development_ref.py
           python scripts/test_project_knowledge_dual_speed_stage_a.py
           python scripts/test_project_knowledge_dual_speed_stage_b.py
           python scripts/test_project_knowledge_dual_speed_stage_c.py
