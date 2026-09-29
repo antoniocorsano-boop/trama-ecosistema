@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "trama.session-bootstrap-subjects/v1",
+  "defaultContextSubjects": [
+    "project-knowledge",
+    "development-continuity"
+  ],
+  "rules": [
+    {
+      "id": "project-knowledge",
+      "aliases": [
+        "project knowledge",
+        "second brain",
+        "second-brain",
+        "knowledge base",
+        "kb",
+        "memoria progettuale",
+        "memoria operativa",
+        "continuita",
+        "continuità"
+      ],
+      "contextSubjects": [
+        "project-knowledge",
+        "development-continuity",
+        "context-pack"
+      ]
+    },
+    {
+      "id": "control-center",
+      "aliases": [
+        "control center",
+        "command center",
+        "centro di controllo",
+        "cruscotto"
+      ],
+      "contextSubjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "human-communication",
+        "information-architecture"
+      ]
+    },
+    {
+      "id": "maturity",
+      "aliases": [
+        "maturita",
+        "maturità",
+        "maturity",
+        "livello di maturita",
+        "livello di maturità",
+        "maturity matrix",
+        "matrice di maturita",
+        "matrice di maturità"
+      ],
+      "contextSubjects": [
+        "control-center-ui",
+        "component-evidence",
+        "component-lifecycle",
+        "project-knowledge"
+      ]
+    },
+    {
+      "id": "components",
+      "aliases": [
+        "componenti",
+        "component",
+        "components",
+        "component strategy",
+        "design system",
+        "ui components",
+        "pattern",
+        "patterns",
+        "primitive",
+        "primitive ui"
+      ],
+      "contextSubjects": [
+        "component-strategy",
+        "component-inventory",
+        "component-evidence",
+        "component-lifecycle",
+        "ui-development",
+        "design-system",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "atlas-percorsi",
+      "aliases": [
+        "atlas percorsi",
+        "percorsi",
+        "attivita smart",
+        "attività smart",
+        "smart activities"
+      ],
+      "contextSubjects": [
+        "atlas-percorsi",
+        "project-knowledge"
+      ]
+    },
+    {
+      "id": "atlas",
+      "aliases": [
+        "atlas",
+        "curriculum atlas"
+      ],
+      "contextSubjects": [
+        "Atlas",
+        "project-knowledge"
+      ]
+    },
+    {
+      "id": "arena",
+      "aliases": [
+        "arena",
+        "curmanlight arena"
+      ],
+      "contextSubjects": [
+        "Arena",
+        "component-evidence",
+        "project-knowledge"
+      ]
+    },
+    {
+      "id": "docente-os",
+      "aliases": [
+        "docente os",
+        "docenteos",
+        "teacher os"
+      ],
+      "contextSubjects": [
+        "Docente OS",
+        "project-knowledge"
+      ]
+    },
+    {
+      "id": "schedule",
+      "aliases": [
+        "orario",
+        "orario scolastico",
+        "schedule",
+        "timetable",
+        "importazione orario"
+      ],
+      "contextSubjects": [
+        "Docente OS",
+        "development-continuity",
+        "project-knowledge"
+      ]
+    },
+    {
+      "id": "pwa",
+      "aliases": [
+        "pwa",
+        "progressive web app",
+        "installazione",
+        "installabile",
+        "offline"
+      ],
+      "contextSubjects": [
+        "control-center-ui",
+        "project-knowledge"
+      ]
+    }
+  ]
+}
