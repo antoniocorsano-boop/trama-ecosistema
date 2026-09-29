@@ -11,6 +11,27 @@
   },
   "evidence": [
     {
+      "id": "EV-MAT-GOV-DOC",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "TRAMA ecosystem governance source registry",
+      "status": "PASS",
+      "source": {
+        "ref": "source-registry:ecosystem-governance",
+        "path": "docs/knowledge/source-registry.json"
+      },
+      "observedAt": "2026-09-25T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 1
+        }
+      ]
+    },
+    {
       "id": "EV-MAT-GOV-CONTRACT-ADR001",
       "type": "CONTRACT_APPROVED",
       "area": "governance",
