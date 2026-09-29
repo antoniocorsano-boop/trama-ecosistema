@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "trama.interaction-duplication-inventory/v1",
+  "sliceId": "INV-02",
+  "status": "PROPOSED",
+  "runtimeImpact": "NONE",
+  "baseline": "83c6fe9388bf283267a3931b012e40d1aadab925",
+  "findings": [
+    {
+      "id": "INV02-F01",
+      "product": "ARENA",
+      "family": "DIALOG_CONFIRM",
+      "severity": "HIGH",
+      "decision": "CONSOLIDATE_LOCAL_MAP_TRAMA_SHARED"
+    },
+    {
+      "id": "INV02-F02",
+      "product": "ARENA",
+      "family": "TABS",
+      "severity": "HIGH",
+      "decision": "CONSOLIDATE_LOCAL"
+    },
+    {
+      "id": "INV02-F03",
+      "product": "ARENA",
+      "family": "TOOLTIP",
+      "severity": "HIGH",
+      "decision": "TRIAL_EXTERNAL_OR_NATIVE_PATTERN"
+    },
+    {
+      "id": "INV02-F04",
+      "product": "ARENA",
+      "family": "DISCLOSURE",
+      "severity": "MEDIUM",
+      "decision": "KEEP_NATIVE_CONSOLIDATE_LOCAL"
+    },
+    {
+      "id": "INV02-F05",
+      "product": "ARENA",
+      "family": "STATUS_LOADING",
+      "severity": "MEDIUM",
+      "decision": "MAP_TO_TRAMA_SHARED"
+    },
+    {
+      "id": "INV02-F06",
+      "product": "ATLAS",
+      "family": "GENERIC_INTERACTIONS",
+      "severity": "LOW",
+      "decision": "KEEP_NATIVE_KEEP_PRODUCT_LOCAL"
+    },
+    {
+      "id": "INV02-F07",
+      "product": "DOCENTE_OS",
+      "family": "COMPLEX_INTERACTIONS",
+      "severity": "LOW",
+      "decision": "KEEP_EXISTING_RUNTIME_PRIMITIVES"
+    },
+    {
+      "id": "INV02-F08",
+      "product": "TRAMA_CONTROL_CENTER",
+      "family": "DIALOG_POPOVER",
+      "severity": "HIGH",
+      "decision": "TRIAL_EXTERNAL_PRIMITIVE"
+    },
+    {
+      "id": "INV02-F09",
+      "product": "TRAMA_CONTROL_CENTER",
+      "family": "STATUS_PRESENTATION",
+      "severity": "MEDIUM",
+      "decision": "MAP_TO_TRAMA_SHARED_EXTRACT_DISTINCTIVE"
+    }
+  ],
+  "positivePatterns": [
+    {
+      "product": "ATLAS",
+      "pattern": "NATIVE_DETAILS_SUMMARY"
+    },
+    {
+      "product": "DOCENTE_OS",
+      "pattern": "RADIX_DIALOG_CMDK_PRODUCT_OWNED_EXPRESSION"
+    },
+    {
+      "product": "DOCENTE_OS",
+      "pattern": "STATUS_VS_ALERT_URGENCY_SEMANTICS"
+    },
+    {
+      "product": "DOCENTE_OS",
+      "pattern": "ROUTE_LOADING_SEPARATE_FROM_SKELETON"
+    }
+  ],
+  "nextActions": [
+    "ARENA_USAGE_MAP_CONFIRM_TABS",
+    "ARENA_UITABS_KEYBOARD_QUALIFICATION",
+    "ARENA_TOOLTIP_REMEDIATION",
+    "CONTROL_CENTER_CS_S1_CONTEXT_HELP",
+    "INV_03_EVIDENCE_COVERAGE"
+  ],
+  "migrationAuthorized": false,
+  "dependencyAdoptionAuthorized": false
+}

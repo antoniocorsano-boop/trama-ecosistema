@@ -497,6 +497,30 @@
         "COMPONENT_LIBRARY_ADOPTION_CHANGE",
         "INV02_FINDING"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-INTERACTION-DUPLICATION-INV02",
+      "path": "docs/inventory/trama-interaction-duplication-inv02.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "component-inventory",
+        "interaction-duplication",
+        "accessibility",
+        "ui-supply-chain"
+      ],
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-INVENTORY",
+        "DOC-TRAMA-COMPONENT-DIRECTORY-INV01",
+        "DOC-TRAMA-COMPONENT-STRATEGY"
+      ],
+      "updateTriggers": [
+        "INTERACTION_PATTERN_CHANGE",
+        "COMPONENT_LIBRARY_ADOPTION_CHANGE",
+        "ACCESSIBILITY_FINDING",
+        "INV03_FINDING"
+      ]
     }
   ]
 }
