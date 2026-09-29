@@ -16,6 +16,7 @@ jobs:
       - {name: Validate governance, run: python3 scripts/validate_governance.py}
       - {name: Validate governed document registry, run: python3 scripts/validate_governed_document_registry.py}
       - {name: Validate Stage E1 visual prototype, run: python3 scripts/validate_stage_e1_visual_prototype.py}
+      - {name: Test Stage E2 project knowledge UI mapping, run: node scripts/test_stage_e2_project_knowledge_ui.cjs}
       - {name: Qualify CC-MSS-01 Stage B offline matrix, run: python3 scripts/qualify_cc_mss_stage_b.py}
       - {name: Audit CC-MSS-01 Stage C1 mutation surface, run: python3 scripts/audit_cc_mss_stage_c1_surface.py}
       - {name: Qualify CC-MSS-01 Stage C1 offline fixtures with network guard, run: python3 scripts/qualify_cc_mss_stage_c1.py}
