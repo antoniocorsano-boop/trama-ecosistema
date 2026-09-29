@@ -1,0 +1,49 @@
+const fs=require('fs');
+const assert=require('assert');
+const path=require('path');
+
+const api=require('../control-center/component-maturity.js');
+const snapshot=JSON.parse(fs.readFileSync(path.join(__dirname,'../control-center/data/ecosystem-snapshot.json'),'utf8'));
+
+assert.deepEqual(api.STAGES,['REGISTERED','ISOLATED','BEHAVIOURAL','RESPONSIVE_VISUAL','ACCESSIBILITY']);
+assert(Array.isArray(snapshot.components),'snapshot components missing');
+assert(snapshot.components.length>=1,'snapshot has no components');
+
+const model=api.buildModel(snapshot.components);
+assert.equal(model.nodes.length,snapshot.components.length);
+assert(model.products.includes('ARENA'),'Arena lane missing');
+assert(model.products.includes('TRAMA_CONTROL_CENTER'),'Control Center lane missing');
+
+for(const node of model.nodes){
+  assert(api.STAGES.includes(node.confirmed),'invalid confirmed stage');
+  assert(api.STAGES.includes(node.candidate),'invalid candidate stage');
+  assert(node.candidateX>=node.x,'candidate must not render behind confirmed stage');
+  const description=api.componentDescription(node.component);
+  assert.match(description,/Maturità confermata:/);
+  assert.match(description,/Lifecycle:/);
+  assert(!/%/.test(description),'percentage leaked into maturity description');
+  assert(!/score/i.test(description),'score leaked into maturity description');
+}
+
+const arena=api.buildModel(snapshot.components,'ARENA');
+assert(arena.nodes.length>0,'Arena filter empty');
+assert(arena.nodes.every(n=>n.product==='ARENA'),'Arena filter leaked other products');
+
+const governed=snapshot.components.find(c=>c.componentId==='ARENA.DIALOG_CONFIRM.GOVERNED');
+assert(governed,'governed dialog missing');
+const governedNode=model.nodes.find(n=>n.component.componentId===governed.componentId);
+assert.equal(governedNode.confirmed,'BEHAVIOURAL');
+
+const legacy=snapshot.components.find(c=>c.componentId==='ARENA.DIALOG_CONFIRM.LEGACY');
+assert(legacy,'legacy dialog missing');
+const legacyNode=model.nodes.find(n=>n.component.componentId===legacy.componentId);
+assert.equal(legacyNode.confirmed,'REGISTERED');
+assert.equal(legacyNode.candidate,'BEHAVIOURAL');
+assert(legacyNode.candidateX>legacyNode.x,'candidate connector should be visible');
+
+const source=fs.readFileSync(path.join(__dirname,'../control-center/component-maturity.js'),'utf8');
+for(const forbidden of ['api.github.com','raw.githubusercontent.com','Authorization:','Bearer ','fetch(']){
+  assert.equal(source.includes(forbidden),false,'forbidden capability in component maturity module: '+forbidden);
+}
+
+console.log('TRAMA_CC_MAT_VIZ_01_PASS');
