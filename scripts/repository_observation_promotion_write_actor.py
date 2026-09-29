@@ -61,7 +61,7 @@ def validate_bundle(bundle,actor_exact_sha):
   die("SNAPSHOT_CHANGE_DIGEST_MISMATCH")
  if changes[ALLOWED_PATHS[2]].get("sha256") is not None:
   die("EVENTS_DIGEST_MUST_BE_ACTOR_DERIVED")
- if not bundle.get("promotedAt") or not bundle.get("promotedBy") or not bundle.get("sourceRefs"):
+ if not bundle.get("recordedAt") or not bundle.get("recordedBy") or not bundle.get("sourceRefs"):
   die("PROMOTION_METADATA_MISSING")
  return True
 
@@ -73,8 +73,8 @@ def promotion_event(bundle,actor_exact_sha):
   "proposalId":proposal["proposalId"],
   "observationDigest":proposal["observationDigest"],
   "previousObservationDigest":proposal.get("previousObservationDigest"),
-  "promotedAt":bundle["promotedAt"],
-  "promotedBy":bundle["promotedBy"],
+  "recordedAt":bundle["recordedAt"],
+  "recordedBy":bundle["recordedBy"],
   "sourceRunId":proposal["sourceRunId"],
   "sourceReceiptRef":proposal["sourceReceiptRef"],
   "collectorExactSha":proposal["collectorExactSha"],
@@ -96,7 +96,7 @@ def knowledge_event_from_promotion(event,bundle):
   "status":"CURRENT",
   "rationale":"Promotion is bound to proposal "+event["proposalId"]+", source run "+event["sourceRunId"]+", exact collector and actor revisions, policy digest and enrollment digest.",
   "sourceRefs":[{"repository":TARGET_REPOSITORY,"ref":ref} for ref in event["sourceRefs"]],
-  "validFrom":bundle["promotedAt"],
+  "validFrom":bundle["recordedAt"],
   "supersedes":[],
   "invalidatedBy":[],
   "promotionEvent":event
@@ -114,7 +114,7 @@ def update_events(current,bundle,actor_exact_sha):
    die("EVENT_ID_COLLISION")
   return output,event,False
  output.setdefault("events",[]).append(wrapper)
- output["updatedAt"]=bundle["promotedAt"]
+ output["updatedAt"]=bundle["recordedAt"]
  return output,event,True
 
 def materialize(bundle,current_events,actor_exact_sha):
