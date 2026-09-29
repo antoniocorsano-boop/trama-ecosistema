@@ -4,6 +4,9 @@
 **Stato:** PRODUCT / UX ANALYSIS — GOVERNED DESIGN INPUT  
 **Ambito:** Control Center v2, viste successive a CC2-F2
 
+
+> **Refinement 2026-09-29:** la gerarchia di presentazione, il vocabolario primario e la navigazione cross-audience sono ulteriormente specificati in `docs/design/trama-control-center-human-readable-information-architecture-v1.md`. Le viste specialistiche qui definite restano valide, ma la Home e la navigazione primaria devono usare il livello human-readable prima dei termini tecnici.
+
 ## Principio
 
 La Home del Control Center non deve diventare una dashboard onnivora.
