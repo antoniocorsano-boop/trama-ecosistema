@@ -292,6 +292,31 @@
         "E3_HUMAN_USE_FINDING",
         "E2_IMPLEMENTATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-HUMAN-READABLE-IA",
+      "path": "docs/design/trama-control-center-human-readable-information-architecture-v1.md",
+      "kind": "ARCHITECTURE",
+      "status": "PROPOSED",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "control-center-ui",
+        "information-architecture",
+        "human-communication",
+        "stakeholder-view",
+        "progressive-disclosure"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E0-HUMAN-COMMUNICATION",
+        "DOC-STAGE-E2-PROJECT-KNOWLEDGE-UI"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_HOME_CHANGE",
+        "CONTROL_CENTER_NAVIGATION_CHANGE",
+        "E3_HUMAN_USE_FINDING",
+        "STAKEHOLDER_VIEW_CHANGE"
+      ]
     }
   ]
 }
