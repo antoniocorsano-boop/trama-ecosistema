@@ -17,6 +17,30 @@
     'DOCENTE OS':'Docente OS',
     TRAMA_CONTROL_CENTER:'Control Center'
   };
+  const LIFECYCLE_LABELS={
+    PROPOSED:'Proposto',
+    TRIAL:'In prova',
+    STABLE:'Stabile',
+    LEGACY:'Legacy',
+    DEPRECATED:'Deprecato',
+    RETIRED:'Ritirato',
+    SPECIALIST:'Specialistico',
+    NATIVE:'Nativo'
+  };
+  const SOURCE_LABELS={
+    NATIVE_PLATFORM:'Piattaforma nativa',
+    PRODUCT_OWNED:'Componente del prodotto',
+    TRAMA_SHARED_SEMANTIC:'Semantica condivisa TRAMA',
+    EXTERNAL_PRIMITIVE:'Primitiva esterna',
+    SPECIALIST_LIBRARY:'Libreria specialistica'
+  };
+  const EVIDENCE_STATUS_LABELS={
+    PRESENT:'Presente',
+    PARTIAL:'Parziale',
+    DOCUMENTED_ONLY:'Solo documentata',
+    NOT_OBSERVED:'Non osservata',
+    NOT_APPLICABLE:'Non applicabile'
+  };
   const PRODUCT_COLORS={
     ARENA:'#5dd39e',
     ATLAS:'#ae88ff',
@@ -36,6 +60,18 @@
 
   function productColor(product){
     return PRODUCT_COLORS[product]||'#9fb9cb';
+  }
+
+  function lifecycleLabel(value){
+    return LIFECYCLE_LABELS[value]||String(value||'—').replaceAll('_',' ');
+  }
+
+  function sourceLabel(value){
+    return SOURCE_LABELS[value]||String(value||'—').replaceAll('_',' ');
+  }
+
+  function evidenceStatusLabel(value){
+    return EVIDENCE_STATUS_LABELS[value]||String(value||'—').replaceAll('_',' ');
   }
 
   function shortName(component){
@@ -66,7 +102,7 @@
       'Prodotto: '+productLabel(component.product)+'.',
       'Maturità confermata: '+(STAGE_LABELS[m.confirmedStage]||m.confirmedStage||'non disponibile')+'.',
       'Candidata: '+(STAGE_LABELS[m.candidateStage]||m.candidateStage||'non disponibile')+'.',
-      'Lifecycle: '+String(component.lifecycle||'—')+'.',
+      'Ciclo di vita: '+lifecycleLabel(component.lifecycle)+'.',
       remaining.length?'Evidenze ancora richieste: '+remaining.join(', ')+'.':'Catena evidenziale completa.'
     ].join(' ');
   }
@@ -155,7 +191,7 @@
     title.textContent=shortName(component);
     const meta=document.createElement('div');
     meta.className='component-detail-meta';
-    meta.textContent=productLabel(component.product)+' · '+String(component.lifecycle||'—')+' · '+String(component.sourceClass||'—').replaceAll('_',' ');
+    meta.textContent=productLabel(component.product)+' · '+lifecycleLabel(component.lifecycle)+' · '+sourceLabel(component.sourceClass);
     const stage=document.createElement('div');
     stage.className='component-detail-stage';
     stage.innerHTML='<span>Confermato</span><strong></strong><span>Candidato</span><strong></strong>';
@@ -170,7 +206,7 @@
       const status=component.evidenceStatus?.[type]?.status||'NOT_OBSERVED';
       item.innerHTML='<span></span><b></b>';
       item.children[0].textContent=evidenceGapLabel(type);
-      item.children[1].textContent=status.replaceAll('_',' ');
+      item.children[1].textContent=evidenceStatusLabel(status);
       item.dataset.status=status;
       evidence.appendChild(item);
     });
@@ -212,7 +248,7 @@
       const main=document.createElement('span');
       main.innerHTML='<strong></strong><small></small>';
       main.children[0].textContent=shortName(component);
-      main.children[1].textContent=productLabel(component.product)+' · '+String(component.lifecycle||'—');
+      main.children[1].textContent=productLabel(component.product)+' · '+lifecycleLabel(component.lifecycle);
       const stage=document.createElement('span');
       stage.className='component-equivalent-stage';
       stage.innerHTML='<small>Confermato</small><b></b>';
@@ -290,7 +326,8 @@
     if(!svg||!filters||!detail||!equivalent)return {destroy(){}};
 
     let filter='ALL';
-    let selected=components[0]||null;
+    const deferSelection=Boolean(options.deferSelection);
+    let selected=deferSelection?null:(components[0]||null);
 
     function select(component,pinned){
       selected=component;
@@ -309,7 +346,8 @@
       renderMap(svg,model,select);
       const visible=model.nodes.map(n=>n.component);
       renderEquivalent(equivalent,visible,select);
-      if(!selected||!visible.some(c=>c.componentId===selected.componentId))selected=visible[0]||null;
+      if(selected&&!visible.some(c=>c.componentId===selected.componentId))selected=null;
+      if(!selected&&!deferSelection)selected=visible[0]||null;
       renderDetail(detail,selected);
       if(selected)select(selected,false);
       filters.querySelectorAll('button').forEach(btn=>btn.setAttribute('aria-pressed',btn.dataset.product===filter?'true':'false'));
@@ -331,7 +369,7 @@
     return {redraw,select,getFilter:()=>filter};
   }
 
-  const api={STAGES,STAGE_LABELS,buildModel,componentDescription,productLabel,shortName,render};
+  const api={STAGES,STAGE_LABELS,LIFECYCLE_LABELS,SOURCE_LABELS,EVIDENCE_STATUS_LABELS,buildModel,componentDescription,productLabel,lifecycleLabel,sourceLabel,evidenceStatusLabel,shortName,render};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.TRAMAMaturityMap=api;
 })(typeof window!=='undefined'?window:globalThis);
