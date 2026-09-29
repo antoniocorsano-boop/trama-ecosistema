@@ -96,6 +96,12 @@ jobs:
                   source.get("sha256"),
               )
 
+          def semantic_area(item):
+              return {k:v for k,v in item.items() if k != "lastEvaluatedAt"}
+
+          assert [semantic_area(x) for x in committed["areas"]] == [
+              semantic_area(x) for x in generated["areas"]
+          ]
           assert committed["capabilities"] == generated["capabilities"]
           assert committed["components"] == generated["components"]
           assert committed["gates"] == generated["gates"]
