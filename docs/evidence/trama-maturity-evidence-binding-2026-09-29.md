@@ -39,31 +39,33 @@ Repository:
 
 Verified PR:
 
-`#341 — TRAMA evidence: qualify Arena dialog and tabs`
+`#312 — ECO-01/S3 — validate Technology I/II/III curriculum-source profile`
 
 Exact head:
 
-`bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea`
+`65a7f5b820b344ec61f8e09d7559012aae521bbc`
 
 Merge commit:
 
-`dc1046a98192854b7f7310cc4274c948e377bc5a`
+`0d931c2c20a2c47c7a72c077faacf499feda6908`
 
 Exact-head workflow evidence:
-- CurManLight Product CI — run `36608209228` — PASS;
-- Beta Release Contract — run `36608209150` — PASS;
-- TRAMA Perceptible Write — run `36608209140` — PASS.
+- CurManLight Product CI — run `35512448131` — PASS;
+- Beta Release Contract — run `35512448242` — PASS.
 
-Explicit human review:
-- GitHub issue comment `5895735894`;
+Explicit human cross-review:
+- GitHub issue comment `5750603947`;
 - author: `antoniocorsano-boop`;
-- text includes `HUMAN REVIEW — PASS`;
-- review explicitly binds to exact head `bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea`.
+- text records `HUMAN CROSS-REVIEW PASS`;
+- review is explicitly rebound to Arena exact head `65a7f5b820b344ec61f8e09d7559012aae521bbc`;
+- the reviewed scope confirms Arena curriculum authority and the Technology I/II/III source profile while keeping DOS-A1 deferred.
 
 This set is eligible to support:
 - `PR_EXACT_HEAD`;
 - `AUTOMATED_TEST`;
 - `HUMAN_REVIEW`.
+
+Arena PR #341 remains valuable component-level evidence for Dialog/Tabs but is intentionally **not** used as the product-area Human Review in this registry.
 
 The canonical product authority and approved contract evidence are supplied by:
 - `docs/knowledge/source-registry.json#curriculum`;
