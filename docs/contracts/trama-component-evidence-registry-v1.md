@@ -64,7 +64,7 @@ Each evidence reference MUST include:
 - `ref`: stable repository-relative path, governed document ID, or immutable run/review reference when evidence is present;
 - `exactHead` or immutable build/run identity when evidence proves executable behavior.
 
-A registry entry MUST NOT manufacture evidence by declaring `PRESENT` without a reference.
+A registry entry MUST NOT manufacture evidence by declaring `PRESENT` without a reference. For evidence types other than `LIFECYCLE`, `PRESENT` means executable or otherwise immutable proof and therefore MUST also carry `exactHead` or an immutable build/run identity. `LIFECYCLE` is governance state and MAY be attested by the governed registry itself.
 
 Human assistive-technology evidence MUST remain distinct from automated accessibility checks.
 
@@ -99,7 +99,7 @@ The governed registry validator MUST reject:
 - unknown lifecycle/source/evidence vocabularies;
 - duplicate `componentId`;
 - `PRESENT` evidence without `ref`;
-- evidence references that claim executable proof without exact-head/build/run binding;
+- non-lifecycle `PRESENT` evidence without exact-head/build/run binding;
 - any authorization flags set to true.
 
 ## 10. Next use
