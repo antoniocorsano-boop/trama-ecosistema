@@ -109,7 +109,6 @@
   </div>
   <div class="pk-notice" id="pkNotice">
     <p id="pkNoticeText"></p>
-    <button type="button" id="pkAction" hidden>Verifica le informazioni</button>
   </div>
   <details class="pk-details" id="pkDetails">
     <summary>Dettagli tecnici</summary>
@@ -189,8 +188,6 @@ function renderProjectKnowledge(pack,mode='fresh'){
   const notice=document.getElementById('pkNotice');
   notice.classList.toggle('visible',Boolean(view.notice));
   pkNoticeText.textContent=view.notice||'';
-  pkAction.hidden=!view.actionRequired;
-  pkAction.textContent=view.actionLabel||'Verifica le informazioni';
   const t=view.technical||{};
   pkTechEffective.textContent=t.effectiveContextStatus||'—';
   pkTechGoverned.textContent=t.governedKnowledgeStatus||'—';
