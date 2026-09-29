@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "trama.component-inventory/v1",
+  "inventoryId": "TRAMA-COMPONENT-INVENTORY-01",
+  "status": "PROPOSED",
+  "runtimeImpact": "NONE",
+  "dosA1": "RUNTIME_DEFERRED",
+  "products": [
+    {
+      "id": "ARENA",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "evidenceClass": [
+        "DIRECT_RUNTIME"
+      ],
+      "stack": {
+        "framework": "React",
+        "frameworkVersion": "18.3.1",
+        "appRuntime": "Vite 6",
+        "styling": [
+          "Tailwind 3.4"
+        ],
+        "icons": [
+          "lucide-react"
+        ]
+      },
+      "componentSupply": [
+        "LOCAL_REACT_COMPONENTS",
+        "STORYBOOK"
+      ],
+      "thirdPartyPrimitives": [],
+      "specialist": [
+        "Storybook 10",
+        "Chromatic",
+        "Playwright/Vitest"
+      ],
+      "disposition": "INVENTORY_REQUIRED"
+    },
+    {
+      "id": "ATLAS",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "evidenceClass": [
+        "DIRECT_RUNTIME"
+      ],
+      "stack": {
+        "framework": "Next.js",
+        "frameworkVersion": "15.5.2",
+        "react": "19.1.1",
+        "styling": [
+          "Tailwind 4",
+          "CVA",
+          "clsx",
+          "tailwind-merge"
+        ],
+        "icons": [
+          "lucide-react"
+        ]
+      },
+      "componentSupply": [
+        "RADIX_FAMILY_FOOTPRINT",
+        "LOCAL_OPEN_CODE_COMPONENTS"
+      ],
+      "thirdPartyPrimitives": [
+        "@radix-ui/react-slot"
+      ],
+      "specialist": [
+        "@xyflow/react"
+      ],
+      "disposition": "PRESERVE_AND_CLASSIFY"
+    },
+    {
+      "id": "DOCENTE_OS",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "evidenceClass": [
+        "INDEXED_RUNTIME",
+        "ARCHITECTURE_DOC"
+      ],
+      "stack": {
+        "framework": "Next.js",
+        "frameworkVersion": "16.3.1",
+        "react": "19.2.8",
+        "styling": [
+          "Tailwind 4",
+          "CVA",
+          "clsx",
+          "tailwind-merge"
+        ],
+        "icons": [
+          "lucide-react"
+        ]
+      },
+      "componentSupply": [
+        "SHADCN_STYLE_OPEN_CODE",
+        "PRODUCT_LOCAL"
+      ],
+      "thirdPartyPrimitives": [
+        "@radix-ui/react-dialog",
+        "cmdk"
+      ],
+      "specialist": [
+        "@assistant-ui/react"
+      ],
+      "disposition": "PRESERVE_AND_CLASSIFY"
+    },
+    {
+      "id": "TRAMA_CONTROL_CENTER",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "evidenceClass": [
+        "DIRECT_RUNTIME",
+        "OBSERVED_SURFACE"
+      ],
+      "stack": {
+        "framework": "STATIC_HTML_CSS_JS",
+        "styling": [
+          "LOCAL_SEMANTIC_CSS_TOKENS"
+        ]
+      },
+      "componentSupply": [
+        "NATIVE_PLATFORM",
+        "TRAMA_LOCAL"
+      ],
+      "thirdPartyPrimitives": [],
+      "specialist": [],
+      "disposition": "STANDARDS_FIRST"
+    }
+  ],
+  "commonGround": [
+    "SEMANTIC_HTML",
+    "RESPONSIVE_DESIGN",
+    "ACCESSIBILITY_TESTING",
+    "PRODUCT_TOKENS"
+  ],
+  "risks": [
+    "UNCLEAR_COMPONENT_OWNERSHIP",
+    "GENERIC_INTERACTION_DUPLICATION_UNKNOWN",
+    "SEMANTIC_CONTRACT_MAPPING_INCOMPLETE",
+    "ISOLATED_EVIDENCE_COVERAGE_INCONSISTENT"
+  ],
+  "nextSlices": [
+    "INV-01_COMPONENT_DIRECTORIES",
+    "INV-02_INTERACTION_DUPLICATION",
+    "INV-03_EVIDENCE_COVERAGE",
+    "INV-04_DISTINCTIVE_COMPONENT_OPPORTUNITY"
+  ],
+  "adoptionAuthorized": false
+}

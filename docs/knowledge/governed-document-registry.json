@@ -450,6 +450,30 @@
         "COMPONENT_INVENTORY_CHANGE",
         "DESIGN_SYSTEM_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-INVENTORY",
+      "path": "docs/inventory/trama-component-supply-chain-inventory-v1.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "component-inventory",
+        "ui-supply-chain",
+        "design-system",
+        "accessibility",
+        "product-stack"
+      ],
+      "dependsOn": [
+        "DOC-TRAMA-UI-DEVELOPMENT-MODEL",
+        "DOC-TRAMA-COMPONENT-STRATEGY"
+      ],
+      "updateTriggers": [
+        "UI_RUNTIME_STACK_CHANGE",
+        "COMPONENT_LIBRARY_ADOPTION_CHANGE",
+        "COMPONENT_DIRECTORY_CHANGE",
+        "DESIGN_SYSTEM_CHANGE"
+      ]
     }
   ]
 }
