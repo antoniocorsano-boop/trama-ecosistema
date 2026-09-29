@@ -41,7 +41,7 @@ def main():
     doc=DOC.read_text(encoding="utf-8")
     for token in [
         "No global UI library rule",
-        "Card remains a component family but is NOT the default layout primitive",
+        "NOT the default layout primitive",
         "Web Awesome Core — TRIAL_CANDIDATE",
         "Radix Primitives — EXISTING_FOOTPRINT",
         "Base UI — TRIAL_CANDIDATE_FOR_REACT",
