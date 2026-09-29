@@ -139,6 +139,47 @@
       "updateTriggers": [
         "UI_COMMUNICATION_GOVERNANCE_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-STAGE-E1-VISUAL-SPEC",
+      "path": "docs/design/trama-stage-e1-project-knowledge-visual-prototype-v1.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "visual-prototype"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E0-HUMAN-COMMUNICATION"
+      ],
+      "updateTriggers": [
+        "E1_PROTOTYPE_CHANGE",
+        "E0_COMMUNICATION_CHANGE",
+        "E2_IMPLEMENTATION_FINDING"
+      ]
+    },
+    {
+      "id": "DOC-STAGE-E1-VISUAL-PROTOTYPE",
+      "path": "docs/prototypes/TRAMA-STAGE-E1-PROJECT-KNOWLEDGE-VISUAL.html",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "project-knowledge",
+        "visual-prototype"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E1-VISUAL-SPEC"
+      ],
+      "updateTriggers": [
+        "E1_PROTOTYPE_CHANGE",
+        "E1_REVIEW_FINDING"
+      ]
     }
   ]
 }
