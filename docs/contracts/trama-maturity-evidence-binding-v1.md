@@ -1,0 +1,175 @@
+# TRAMA Maturity Evidence Binding v1
+
+**Contract ID:** TRAMA-MATURITY-EVIDENCE-BINDING-01  
+**Date:** 2026-09-29  
+**Status:** IMPLEMENTATION SLICE / READ_ONLY PROJECTION / HUMAN REVIEW REQUIRED  
+**Parent:** TRAMA-MATURITY-RECONCILIATION-01 · TRAMA-ADR-014  
+**Runtime authority:** NONE  
+**DOS-A1:** RUNTIME_DEFERRED
+
+## 1. Purpose
+
+Bind already-existing, version-bound evidence to the product maturity model without manufacturing maturity and without changing product authority.
+
+The authoritative structured input for this slice is:
+
+`governance/maturity/trama-maturity-evidence-registry-v1.json`
+
+The registry is governed evidence metadata. It does not approve, merge, deploy, promote lifecycle, or authorize runtime.
+
+## 2. Evidence source hierarchy
+
+Evidence may come from:
+
+1. canonical TRAMA documents and source registry;
+2. approved or implemented TRAMA decisions;
+3. exact repository heads and workflow runs;
+4. explicit human-review receipts;
+5. governed semantic timeline events.
+
+External repository observations used by this first binding pass are durably summarized in:
+
+`docs/evidence/trama-maturity-evidence-binding-2026-09-29.md`
+
+## 3. Strong evidence binding
+
+Strong evidence types require:
+
+- exactly one target:
+  - `capabilityRef`, or
+  - `areaRef`;
+- `releaseRef`;
+- 40-hex `exactHead`.
+
+Strong evidence types are:
+
+- PR_EXACT_HEAD;
+- AUTOMATED_TEST;
+- SECURITY_GATE;
+- ACCESSIBILITY_GATE;
+- RUNTIME_CANARY;
+- HUMAN_REVIEW.
+
+An `areaRef` is used when the proof qualifies the product area but no canonical capability should be invented merely to satisfy the evidence schema.
+
+An `areaRef` MUST equal the evidence `area`.
+
+## 4. Contract evidence
+
+`CONTRACT_APPROVED` may be bound only to a decision in the canonical decision register whose current status is one of:
+
+- APPROVED;
+- IMPLEMENTED.
+
+The registry must record both the decision reference and the observed decision status. The validator rejects disagreement with the canonical register.
+
+## 5. Product evidence bound in v1
+
+### Governance
+
+Bound:
+- canonical governance document;
+- TRAMA-ADR-001;
+- CC3-F1 reviewed exact head;
+- CC3-F1 Human Review PASS.
+
+Expected confirmed maturity: **L4**.
+
+### Arena
+
+Bound:
+- canonical curriculum authority in Source Registry;
+- TRAMA-ADR-002;
+- Arena PR #341 exact head;
+- Product CI run 36608209228;
+- explicit Human Review PASS comment bound to the same exact head.
+
+Expected confirmed maturity: **L4**.
+
+### Atlas
+
+Bound:
+- canonical Atlas resource/publication authority;
+- TRAMA-ADR-007;
+- Atlas PR #32 exact head;
+- F5 Exit workflow run 36093494130.
+
+The existing governed R3-F0 closeout projection continues to supply:
+- ACCESSIBILITY_GATE;
+- HUMAN_REVIEW.
+
+Expected confirmed maturity: **L4**.
+
+### Docente OS
+
+Bound:
+- canonical teacher-context authority;
+- TRAMA-ADR-006, status IMPLEMENTED;
+- PR #579 Runtime Release lineage exact head;
+- Product CI run 35760485652;
+- final ECO-02/P1 Human Review bound to PR #600 exact head.
+
+No RUNTIME_CANARY is added by this slice because the historical P6/HVA/Runtime Health signals could not be reconstructed with a sufficiently certain exact-head binding during this verification pass.
+
+Expected confirmed maturity: **L3**.
+
+The next missing evidence for L4 must therefore include `RUNTIME_CANARY`.
+
+## 6. Default branch versus active development branch
+
+Repository identity and active development are separate facts.
+
+For Docente OS:
+
+- default/canonical GitHub branch remains `main`;
+- active development branch is `develop`.
+
+The repository enrollment may declare an optional `activeDevelopmentRef`. The anonymous read-only collector may observe this additional ref, but it MUST NOT replace or falsify the repository default branch.
+
+The collector must anchor both refs before and after collection and fail closed if either changes.
+
+## 7. Maturity computation
+
+The registry is appended to the evidence projection before maturity evaluation.
+
+The existing cumulative level definitions remain unchanged.
+
+No evidence type can leapfrog a missing prerequisite.
+
+No overall score or percentage is introduced.
+
+## 8. Freshness and history
+
+Historical exact-head evidence remains valid for the event/head it proves.
+
+Current repository heads are live development context and do not automatically supersede historical maturity evidence.
+
+L5 remains intentionally unavailable until regression history and, where required, adoption evidence are present.
+
+## 9. Integrity
+
+Validation rejects:
+
+- duplicate evidence IDs;
+- unknown maturity areas;
+- unknown capability refs;
+- invalid or mismatched area refs;
+- missing local source paths;
+- unsupported decision states;
+- decision status disagreement;
+- weakly bound strong evidence;
+- malformed exact heads;
+- any policy enabling automatic promotion.
+
+## 10. Non-authorizations
+
+This slice does not authorize:
+
+- DOS-A1;
+- Docente OS → Atlas runtime publication;
+- new product runtime capability;
+- automatic maturity promotion;
+- component lifecycle promotion;
+- adoption evidence;
+- regression-history evidence;
+- product merge or publication.
