@@ -1,7 +1,28 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-09-29T04:34:20Z",
+  "updatedAt": "2026-09-29T17:35:00Z",
   "events": [
+    {
+      "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
+      "type": "DECISION",
+      "subject": "development-continuity",
+      "statement": "During CI qualification, freeze the exact head under review and use a separate safe parallel track for reversible, non-conflicting preparation of the next step; promote that work only after the qualified baseline is known and revalidated.",
+      "status": "CURRENT",
+      "rationale": "Turns CI waiting time into productive work without causing unnecessary reruns, baseline churn, or premature coupling between unfinished workstreams.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "b35ed9242d2b0574219c04c88f5a6a858203727c",
+          "ref": "docs/process/trama-development-continuity-protocol-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-29T17:35:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
     {
       "eventId": "TRAMA-EVT-PERCORSI-PR96-RECOVERY",
       "type": "KNOWLEDGE_RECOVERY",

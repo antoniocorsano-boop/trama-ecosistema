@@ -77,6 +77,52 @@ Durante questo ciclo:
 - correggere nello stesso ciclo i rilievi non strutturali;
 - interrompere il flusso solo per blocker reali, ambiguità di authority, rischio di perdita dati, modifica di contratto o decisione umana sostanziale.
 
+## 5.1 Uso del tempo durante la qualificazione CI
+
+Quando una PR entra in qualificazione sull'exact head che si intende revisionare, il lavoro non si ferma ma si divide in due corsie coordinate.
+
+### Corsia A — exact head congelato
+
+La PR in qualificazione resta immutata salvo:
+- failure reale di test, typecheck, lint, build o gate;
+- rilievo tecnico che richiede una correzione;
+- collisione sopravvenuta con la baseline o con un lavoro parallelo;
+- cambiamento esplicito di requisito o governance.
+
+Non sono ammessi commit cosmetici, micro-refactor, documentazione non necessaria o test aggiuntivi che non correggano un rischio concreto, perché invalidano inutilmente la qualificazione e fanno ripartire la CI.
+
+### Corsia B — lavoro parallelo sicuro
+
+Durante l'attesa è possibile proseguire, senza mutare l'exact head in qualificazione, con attività reversibili e non conflittuali:
+- review tecnica del delta già congelato;
+- verifica di collisioni e lavori paralleli;
+- analisi e contratto della fase successiva;
+- progettazione dei test e delle fixture;
+- ricerca tecnica e confronto con soluzioni mature;
+- aggiornamento di documentazione o knowledge su un ramo separato;
+- preparazione di adapter, spike o proof-of-concept non collegati al runtime;
+- verifica di deployment, ambienti e dipendenze esterne in sola lettura.
+
+### Regola di promozione
+
+Il lavoro della Corsia B non entra automaticamente nella baseline. Deve essere promosso solo dopo che:
+1. la PR della Corsia A ha concluso la qualificazione;
+2. il nuovo lavoro è stato riallineato alla baseline risultante;
+3. sono state riverificate collisioni e assunzioni;
+4. il nuovo delta passa i propri gate.
+
+### Regola di arresto
+
+La Corsia B si interrompe o viene ricalibrata se la Corsia A produce:
+- un failure che cambia il contratto o l'architettura;
+- una remediation strutturale;
+- una nuova baseline incompatibile;
+- una decisione umana che modifica il next valid action.
+
+### Obiettivo
+
+Il tempo di attesa della CI deve diventare tempo produttivo senza creare churn sulla PR in qualificazione. L'indicatore di correttezza è semplice: la Corsia A non riparte senza motivo, mentre la Corsia B prepara lavoro riusabile ma non anticipa decisioni non ancora consolidate.
+
 ## 6. Quando è richiesta governance rafforzata
 
 Una nuova fase governata o una Human Review intermedia è giustificata quando cambia almeno uno dei seguenti elementi:
