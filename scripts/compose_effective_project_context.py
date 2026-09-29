@@ -57,7 +57,10 @@ def _live_status(overlay):
     return "FRESH"
 
 def _semantic_drift_status(overlay):
-    states=[a.get("fingerprintStatus") for a in overlay.get("semanticAnchors",[])]
+    anchors=overlay.get("semanticAnchors",[])
+    if not anchors:
+        return "DETECTED"
+    states=[a.get("fingerprintStatus") for a in anchors]
     if any(s=="CHANGED" for s in states):
         return "REVIEW_REQUIRED"
     if any(s in {"UNKNOWN","UNAVAILABLE"} for s in states):
