@@ -154,19 +154,19 @@
       ]
     },
     {
-      "id": "EV-MAT-ARENA-PR341-HEAD",
+      "id": "EV-MAT-ARENA-PR312-HEAD",
       "type": "PR_EXACT_HEAD",
       "area": "arena",
-      "subject": "Arena component evidence qualified exact head",
+      "subject": "Arena ECO-01/S3 curriculum-source profile exact head",
       "status": "PASS",
       "source": {
-        "ref": "github:CurManLight_arena/pull/341",
+        "ref": "github:CurManLight_arena/pull/312",
         "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
         "repository": "antoniocorsano-boop/CurManLight_arena",
-        "prNumber": 341,
-        "mergeCommit": "dc1046a98192854b7f7310cc4274c948e377bc5a"
+        "prNumber": 312,
+        "mergeCommit": "0d931c2c20a2c47c7a72c077faacf499feda6908"
       },
-      "observedAt": "2026-09-29T17:58:45Z",
+      "observedAt": "2026-09-20T15:03:40Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
@@ -178,53 +178,56 @@
       ],
       "binding": {
         "areaRef": "arena",
-        "releaseRef": "CurManLight_arena#341",
-        "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea"
+        "releaseRef": "CurManLight_arena#312",
+        "exactHead": "65a7f5b820b344ec61f8e09d7559012aae521bbc"
       }
     },
     {
-      "id": "EV-MAT-ARENA-PR341-CI",
+      "id": "EV-MAT-ARENA-PR312-CI",
       "type": "AUTOMATED_TEST",
       "area": "arena",
-      "subject": "Arena Product CI on qualified component evidence head",
+      "subject": "Arena Product CI for ECO-01/S3 curriculum-source profile",
       "status": "PASS",
       "source": {
-        "ref": "github-actions:CurManLight_arena/run/36608209228",
+        "ref": "github-actions:CurManLight_arena/run/35512448131",
         "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
         "repository": "antoniocorsano-boop/CurManLight_arena",
-        "prNumber": 341,
-        "runId": "36608209228"
+        "prNumber": 312,
+        "runId": "35512448131"
       },
-      "observedAt": "2026-09-29T17:58:45Z",
+      "observedAt": "2026-09-20T15:03:40Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
       "confidence": "HIGH",
       "supports": [
         {
+          "level": 3
+        },
+        {
           "level": 4
         }
       ],
       "binding": {
         "areaRef": "arena",
-        "releaseRef": "CurManLight_arena#341",
-        "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea"
+        "releaseRef": "CurManLight_arena#312",
+        "exactHead": "65a7f5b820b344ec61f8e09d7559012aae521bbc"
       }
     },
     {
-      "id": "EV-MAT-ARENA-PR341-HUMAN",
+      "id": "EV-MAT-ARENA-PR312-HUMAN",
       "type": "HUMAN_REVIEW",
       "area": "arena",
-      "subject": "Arena component evidence human exact-head review",
+      "subject": "Arena ECO-01/S3 human cross-review",
       "status": "PASS",
       "source": {
-        "ref": "github:CurManLight_arena/pull/341#issuecomment-5895735894",
+        "ref": "github:CurManLight_arena/pull/312#issuecomment-5750603947",
         "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
         "repository": "antoniocorsano-boop/CurManLight_arena",
-        "prNumber": 341,
-        "commentId": "5895735894"
+        "prNumber": 312,
+        "commentId": "5750603947"
       },
-      "observedAt": "2026-09-29T17:58:45Z",
+      "observedAt": "2026-09-20T15:03:40Z",
       "freshness": {
         "policy": "EVENT_BOUND"
       },
@@ -236,8 +239,8 @@
       ],
       "binding": {
         "areaRef": "arena",
-        "releaseRef": "CurManLight_arena#341",
-        "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea"
+        "releaseRef": "CurManLight_arena#312",
+        "exactHead": "65a7f5b820b344ec61f8e09d7559012aae521bbc"
       }
     },
     {
