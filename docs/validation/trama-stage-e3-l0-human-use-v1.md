@@ -1,6 +1,6 @@
 # TRAMA Stage E3-L0 — Human-use validation of the universal summary
 
-**Status:** PROPOSED / HUMAN VALIDATION / READ_ONLY  
+**Status:** PROPOSED / VALIDATION TARGET UNDER REVISION / READ_ONLY  
 **Date:** 2026-09-29  
 **Surface:** TRAMA Control Center · L0 universal summary  
 **Public preview:** `/preview/l0/`  
@@ -13,11 +13,14 @@ E3-L0 validates whether a person who does not know TRAMA internals can understan
 
 The participant must be able to determine, without repository or DevOps vocabulary:
 
-1. what is available now;
-2. whether anything requires attention;
-3. whether a decision blocks a specific activity;
-4. what remains usable;
-5. how fresh the information is.
+1. where they are and what TRAMA is in one sentence;
+2. what is available now;
+3. whether anything requires attention;
+4. whether a decision blocks a specific activity;
+5. what remains usable;
+6. how fresh the information is;
+7. how Arena, Atlas and Docente OS relate without treating Atlas as a mandatory intermediary;
+8. where to go for more detail.
 
 ## Participant mode
 
@@ -59,8 +62,32 @@ Required cases:
 - E3-L0-UC-02 ATTENTION
 - E3-L0-UC-03 DECISION
 - E3-L0-UC-04 OFFLINE
+- E3-L0-UC-05 ORIENTATION
 
-All are critical comprehension cases.
+All are critical comprehension cases. UC-05 uses the normal state but tests product identity, the canonical branching ecosystem relationship and destination discovery rather than state semantics.
+
+
+## Validation hold — orientation finding
+
+Formal E3-L0 participant sessions on the current v1 preview are **on hold**.
+
+Reason:
+- the v1 surface has demonstrated sufficient technical feasibility;
+- however, its vertical decomposition creates an orientation risk before user testing;
+- running formal sessions now would spend participants on a target already known to require structural refinement.
+
+The current preview remains a **design probe** and may be used for internal comparison only.
+
+Formal E3-L0 validation resumes on **L0 v2**, after the following are present:
+1. persistent orientation shell;
+2. first-screen current state + freshness;
+3. explicit branching relationship preserving both Arena → Atlas and Arena → Docente OS, without implying Atlas is mandatory;
+4. maximum three primary destinations;
+5. specialist material moved to destination pages rather than stacked below L0;
+6. mobile composition designed independently rather than as desktop stacking.
+
+Research reference:
+`docs/research/trama-control-center-orientation-state-of-art-2026-09-29.md`
 
 ## Closure
 

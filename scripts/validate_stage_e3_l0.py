@@ -21,11 +21,16 @@ def main():
     if catalog.get("schemaVersion")!="trama.stage-e3-l0-use-case-catalog/v1": fail("catalog schema")
     if catalog.get("subject")!="control-center-l0": fail("catalog subject")
     cases=catalog.get("useCases",[])
-    if [x.get("id") for x in cases] != ["E3-L0-UC-01","E3-L0-UC-02","E3-L0-UC-03","E3-L0-UC-04"]:
+    if [x.get("id") for x in cases] != ["E3-L0-UC-01","E3-L0-UC-02","E3-L0-UC-03","E3-L0-UC-04","E3-L0-UC-05"]:
         fail("unexpected L0 use-case set")
     if any(x.get("priority")!="CRITICAL" for x in cases): fail("all L0 cases must be CRITICAL")
     states={x.get("state") for x in cases}
     if states != {"NORMAL","ATTENTION","DECISION","OFFLINE"}: fail("state coverage")
+    orientation=next((x for x in cases if x.get("id")=="E3-L0-UC-05"),None)
+    if not orientation or orientation.get("state")!="NORMAL": fail("orientation case state")
+    orientation_text=json.dumps(orientation,ensure_ascii=False).lower()
+    for token in ["trama","arena","atlas","docente os","approfond"]:
+        if token not in orientation_text: fail("orientation case missing "+token)
     rules=catalog.get("closureRules",{})
     if rules.get("criticalFindingTolerance")!=0: fail("critical tolerance")
     if rules.get("mobileEvidenceRequired") is not True: fail("mobile evidence rule")

@@ -633,3 +633,38 @@ Questa architettura:
 8. mantenere E3-L3 come verifica esperta separata.
 
 Nessun big bang e nessuna duplicazione della verità.
+## 22. Refinement — orientation-first architecture (2026-09-29)
+
+La ricerca `docs/research/trama-control-center-orientation-state-of-art-2026-09-29.md` modifica il modo in cui L0 deve essere composto, senza cambiare la base informativa governata.
+
+### Decisione aggiuntiva
+
+L0 NON SHOULD essere una lunga sequenza verticale di sezioni progressive.
+
+L0 SHOULD essere composto come:
+
+1. **shell persistente** — identità del prodotto + area corrente + navigazione stabile;
+2. **overview breve** — situazione corrente + freshness;
+3. **modello dell’ecosistema** — relazione percepibile Arena → Atlas → Docente OS;
+4. **massimo tre destinazioni primarie** verso aree specialistiche;
+5. **progressive navigation** verso Ecosistema, Verifiche, Cronologia/Tecnico;
+6. progressive disclosure solo per il dettaglio dell’oggetto corrente.
+
+### Conseguenza sul prototipo L0 v1
+
+Il prototipo `docs/prototypes/TRAMA-CONTROL-CENTER-L0-REALISTIC.html` resta una prova di fattibilità visuale con il design esistente, ma è classificato come **design probe**. Non è il target finale per E3-L0.
+
+Il prossimo target progettuale è **L0 v2**, più vicino alla semplicità del mockup originario e con orientamento leggibile nel primo viewport.
+
+### Criterio first-screen
+
+Prima di esplorare, una persona non tecnica deve poter rispondere a:
+- dove sono;
+- che cos’è TRAMA;
+- qual è la situazione corrente;
+- quanto sono recenti le informazioni;
+- come si collegano Arena, Atlas e Docente OS;
+- dove andare per approfondire.
+
+Se servono più sezioni verticali per rispondere, L0 non è ancora conforme all’architettura.
+

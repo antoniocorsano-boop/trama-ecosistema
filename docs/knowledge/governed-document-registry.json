@@ -333,7 +333,8 @@
       ],
       "decisionRef": "TRAMA-ADR-018",
       "dependsOn": [
-        "DOC-CONTROL-CENTER-HUMAN-READABLE-IA"
+        "DOC-CONTROL-CENTER-HUMAN-READABLE-IA",
+        "DOC-CONTROL-CENTER-ORIENTATION-RESEARCH"
       ],
       "updateTriggers": [
         "CONTROL_CENTER_HOME_CHANGE",
@@ -356,7 +357,8 @@
       "decisionRef": "TRAMA-ADR-018",
       "dependsOn": [
         "DOC-CONTROL-CENTER-HUMAN-READABLE-IA",
-        "DOC-STAGE-E3-HUMAN-USE-PROTOCOL"
+        "DOC-STAGE-E3-HUMAN-USE-PROTOCOL",
+        "DOC-CONTROL-CENTER-ORIENTATION-RESEARCH"
       ],
       "updateTriggers": [
         "E3_L0_PROTOCOL_CHANGE",
@@ -569,6 +571,31 @@
         "COMPONENT_LIFECYCLE_CHANGE",
         "CS_S1_FINDING",
         "HIGH_RISK_INTERACTION_EVIDENCE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-ORIENTATION-RESEARCH",
+      "path": "docs/research/trama-control-center-orientation-state-of-art-2026-09-29.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "orientation",
+        "information-architecture",
+        "navigation",
+        "l0-summary",
+        "mobile"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-HUMAN-READABLE-IA"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_ORIENTATION_CHANGE",
+        "CONTROL_CENTER_HOME_CHANGE",
+        "E3_L0_FINDING",
+        "NAVIGATION_SHELL_CHANGE"
       ]
     }
   ]

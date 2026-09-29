@@ -5,6 +5,8 @@
 **Ambito:** Control Center v2, viste successive a CC2-F2
 
 
+> **Refinement 2026-09-29 — orientation state-of-art:** la Home deve essere trattata come **overview/launch point**, non come report verticale. La shell persistente mantiene identità e posizione; Ecosistema, Verifiche e Cronologia sono destinazioni separate. La progressive navigation è un requisito esplicito e completa la progressive disclosure. Riferimento: `docs/research/trama-control-center-orientation-state-of-art-2026-09-29.md`.
+
 > **Refinement 2026-09-29:** la gerarchia di presentazione, il vocabolario primario e la navigazione cross-audience sono ulteriormente specificati in `docs/design/trama-control-center-human-readable-information-architecture-v1.md`. Le viste specialistiche qui definite restano valide, ma la Home e la navigazione primaria devono usare il livello human-readable prima dei termini tecnici.
 
 ## Principio

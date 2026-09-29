@@ -87,6 +87,30 @@
         "Does not call it current/live",
         "Understands verified information remains usable"
       ]
+    },
+    {
+      "id": "E3-L0-UC-05",
+      "state": "NORMAL",
+      "priority": "CRITICAL",
+      "taskPrompt": "Senza aprire i dettagli tecnici, dimmi dove ti trovi, che cosa fa TRAMA in una frase, come sono collegati Arena, Atlas e Docente OS e dove andresti per approfondire.",
+      "expectedOutcome": [
+        "Identifies the surface as TRAMA Control Center",
+        "Explains TRAMA purpose in one non-technical sentence",
+        "Recognizes Arena as curriculum/governance authority",
+        "Recognizes both Arena to Atlas and Arena to Docente OS relationships without treating Atlas as mandatory",
+        "Identifies an appropriate destination for further detail"
+      ],
+      "criticalMisinterpretations": [
+        "Cannot explain what TRAMA is",
+        "Treats Atlas as the mandatory intermediary between Arena and Docente OS",
+        "Attributes curriculum authority to Atlas or the Control Center",
+        "Cannot identify where to go for more detail"
+      ],
+      "passCriteria": [
+        "Explains TRAMA purpose without repository or DevOps vocabulary",
+        "Describes the branching ecosystem relationship correctly",
+        "Identifies a relevant destination for further detail"
+      ]
     }
   ],
   "closureRules": {
