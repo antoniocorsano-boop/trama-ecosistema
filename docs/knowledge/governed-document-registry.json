@@ -546,6 +546,30 @@
         "COMPONENT_LIFECYCLE_CHANGE",
         "CS_S1_FINDING"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-EVIDENCE-REGISTRY",
+      "path": "docs/contracts/trama-component-evidence-registry-v1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "component-evidence",
+        "component-lifecycle",
+        "accessibility",
+        "ui-governance"
+      ],
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-EVIDENCE-INV03",
+        "DOC-TRAMA-INTERACTION-DUPLICATION-INV02",
+        "DOC-TRAMA-COMPONENT-STRATEGY"
+      ],
+      "updateTriggers": [
+        "COMPONENT_EVIDENCE_SCHEMA_CHANGE",
+        "COMPONENT_LIFECYCLE_CHANGE",
+        "CS_S1_FINDING",
+        "HIGH_RISK_INTERACTION_EVIDENCE_CHANGE"
+      ]
     }
   ]
 }
