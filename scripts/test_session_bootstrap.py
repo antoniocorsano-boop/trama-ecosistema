@@ -23,7 +23,7 @@ snapshot = load("control-center/data/project-context-snapshot.json")
 registry = load("docs/knowledge/governed-document-registry.json")
 resolver = load("config/session-bootstrap-subjects.json")
 
-query = "rappresentazione grafica della maturità dei componenti nel Control Center"
+query = "rappresentazione grafica della maturità, dei componenti nel Control Center"
 receipt = bootstrap.build_receipt(query, snapshot, registry, resolver)
 bootstrap.validate_receipt(receipt)
 
@@ -37,6 +37,9 @@ assert "project-knowledge" in subjects
 doc_ids = {x["id"] for x in receipt["governedContext"]["governedDocuments"]}
 assert "DOC-TRAMA-COMPONENT-EVIDENCE-REGISTRY" in doc_ids
 assert "DOC-CONTROL-CENTER-HUMAN-READABLE-IA" in doc_ids
+assert "DOC-CONTROL-CENTER-V2-ARCHITECTURE" in doc_ids
+assert "DOC-CONTROL-CENTER-V2-UI-SPEC" in doc_ids
+assert "DOC-CC2-F4-CAPABILITY-ECOSYSTEM-MAP" in doc_ids
 assert receipt["governedContext"]["negativeKnowledgeChecked"] is True
 assert receipt["liveVerification"]["required"] is True
 assert receipt["authority"]["authorizesWrite"] is False
