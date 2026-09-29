@@ -24,6 +24,11 @@ on:
       - "docs/decisions/decision-register.json"
       - "STATUS.md"
       - "ROADMAP.md"
+      - "control-center/maturity.html"
+      - "docs/strategy/atomic-operating-plan-2026-09-22.md"
+      - "docs/analysis/trama-maturity-reconciliation-2026-09-29.md"
+      - "governance/maturity/trama-maturity-reconciliation-v1.json"
+      - "scripts/test_maturity_reconciliation.py"
       - ".github/workflows/control-center-snapshot.yml"
   push:
     branches: ["main"]
@@ -49,6 +54,11 @@ on:
       - "docs/decisions/decision-register.json"
       - "STATUS.md"
       - "ROADMAP.md"
+      - "control-center/maturity.html"
+      - "docs/strategy/atomic-operating-plan-2026-09-22.md"
+      - "docs/analysis/trama-maturity-reconciliation-2026-09-29.md"
+      - "governance/maturity/trama-maturity-reconciliation-v1.json"
+      - "scripts/test_maturity_reconciliation.py"
       - ".github/workflows/control-center-snapshot.yml"
   workflow_dispatch:
 
@@ -155,8 +165,18 @@ jobs:
               assert area["candidateLevel"] == area["confirmedLevel"], area
               assert area["status"] == "PARTIAL", area
               assert area["confidence"] == "LOW", area
+              assert area["interpretation"] == "BOUND_EVIDENCE_ONLY", area
+              assert area["evidenceBindingStatus"] in {"NONE","PARTIAL","COMPLETE"}, area
+              assert isinstance(area["nextRequiredEvidenceTypes"], list), area
+          assert areas["arena"]["evidenceBindingStatus"] == "NONE", areas["arena"]
+          assert areas["docente-os"]["evidenceBindingStatus"] == "NONE", areas["docente-os"]
+          assert areas["atlas"]["evidenceBindingStatus"] == "PARTIAL", areas["atlas"]
           print("TRAMA_MATURITY_WIRING_CONSERVATIVE_PASS")
           PY
+      - name: Validate TRAMA-MATURITY-RECONCILIATION-01
+        shell: bash
+        run: |
+          python scripts/test_maturity_reconciliation.py
       - name: Validate CC2-F4 capability projection
         shell: bash
         run: |
@@ -200,7 +220,7 @@ jobs:
           source = json.loads(Path("governance/ui-development/trama-component-evidence-registry-v1.json").read_text(encoding="utf-8"))
           projected = {item["componentId"]: item for item in snapshot["components"]}
           assert set(projected) == {item["componentId"] for item in source["entries"]}, projected
-          assert snapshot["schemaVersion"] == "1.4.0", snapshot["schemaVersion"]
+          assert snapshot["schemaVersion"] == "1.5.0", snapshot["schemaVersion"]
           assert snapshot["sourceState"]["component-evidence-registry"]["status"] == "FRESH"
           assert projected["ARENA.DIALOG_CONFIRM.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"
           assert projected["ARENA.TABS.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"
