@@ -4,6 +4,17 @@ const path=require('path');
 
 const api=require('../control-center/component-maturity.js');
 const snapshot=JSON.parse(fs.readFileSync(path.join(__dirname,'../control-center/data/ecosystem-snapshot.json'),'utf8'));
+const home=fs.readFileSync(path.join(__dirname,'../control-center/index.html'),'utf8');
+const sw=fs.readFileSync(path.join(__dirname,'../control-center/sw.js'),'utf8');
+
+assert.match(home,/Maturità dei componenti/);
+assert.match(home,/id="componentMaturityMap"/);
+assert.match(home,/aria-label="Elenco equivalente della maturità dei componenti"/);
+assert.match(home,/\.\/component-maturity\.js/);
+assert.match(home,/Nessuna percentuale/);
+assert.match(home,/aria-live="polite"/);
+assert.match(sw,/trama-control-center-v11/);
+assert.match(sw,/\.\/component-maturity\.js/);
 
 assert.deepEqual(api.STAGES,['REGISTERED','ISOLATED','BEHAVIOURAL','RESPONSIVE_VISUAL','ACCESSIBILITY']);
 assert(Array.isArray(snapshot.components),'snapshot components missing');
