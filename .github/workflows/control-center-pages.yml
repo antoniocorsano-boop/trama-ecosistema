@@ -41,6 +41,11 @@ jobs:
           test -s control-center/data/ecosystem-snapshot.json
           grep -q "SNAPSHOT_URL='./data/ecosystem-snapshot.json'" control-center/index.html
           grep -q "Matrice di maturità" control-center/index.html
+          grep -q "Maturità dei componenti" control-center/index.html
+          grep -q "componentMaturityMap" control-center/index.html
+          grep -q "Elenco equivalente della maturità dei componenti" control-center/index.html
+          test -s control-center/component-maturity.js
+          node scripts/test_component_maturity_ui.cjs
           grep -q "Attenzione richiesta" control-center/index.html
           grep -q "Ecosistema vivo" control-center/index.html
           grep -q "ecosystem.html" control-center/index.html
@@ -99,7 +104,8 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v10" control-center/sw.js
+          grep -q "trama-control-center-v11" control-center/sw.js
+          grep -q "\./component-maturity.js" control-center/sw.js
           test -s control-center/project-knowledge-state.js
           test -s control-center/e3/index.html
           test -s control-center/preview/l0/index.html
@@ -146,6 +152,9 @@ jobs:
             new Function(match[1])
             console.log('CONTROL_CENTER_JS_SYNTAX_PASS '+file)
           }
+          const maturity = fs.readFileSync('control-center/component-maturity.js', 'utf8')
+          new Function(maturity)
+          console.log('CONTROL_CENTER_COMPONENT_MATURITY_JS_SYNTAX_PASS')
           const sw = fs.readFileSync('control-center/sw.js', 'utf8')
           new Function(sw)
           console.log('CONTROL_CENTER_SW_SYNTAX_PASS')
