@@ -4,6 +4,10 @@ on:
     paths:
       - 'scripts/public_anonymous_transport.py'
       - 'scripts/run_public_anonymous_repository_observation.py'
+      - 'scripts/test_repository_active_development_ref.py'
+      - 'schemas/repository-observation.schema.json'
+      - 'schemas/repository-enrollment.schema.json'
+      - 'config/repository-enrollment.json'
       - 'scripts/test_public_anonymous_transport.py'
       - '.github/workflows/public-anonymous-transport-qualification.yml'
   workflow_dispatch:
@@ -23,7 +27,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - run: python scripts/test_public_anonymous_transport.py
+      - run: |
+          python scripts/test_public_anonymous_transport.py
+          python scripts/test_repository_active_development_ref.py
       - name: Capability audit
         run: |
           ! grep -En 'Authorization|Bearer|GITHUB_TOKEN|GH_TOKEN|subprocess|requests\.|httpx\.|socket|os\.environ' scripts/public_anonymous_transport.py scripts/run_public_anonymous_repository_observation.py
@@ -31,6 +37,8 @@ jobs:
           grep -q 'method="GET"' scripts/public_anonymous_transport.py
           grep -q 'allow_reserve=True' scripts/run_public_anonymous_repository_observation.py
           grep -q 'repository-observation.schema.json' scripts/run_public_anonymous_repository_observation.py
+          grep -q 'activeDevelopmentRef' scripts/run_public_anonymous_repository_observation.py
+          grep -q 'ACTIVE_DEVELOPMENT_ANCHOR_CHANGED' scripts/run_public_anonymous_repository_observation.py
       - name: Assert qualification-only dispatch
         env:
           LIVE_EXECUTION: DISABLED
