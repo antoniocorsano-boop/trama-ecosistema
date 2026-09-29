@@ -120,15 +120,15 @@ A proposal is never canonical state.
 
 ### C. RepositoryObservationPromotionEvent
 
-Append-only governed event created only by the write/promotion actor and merged through a PR.
+Append-only governed event prepared by the write/promotion actor and made authoritative only when its PR is merged by human decision.
 
 Required fields:
 - eventId;
 - proposalId;
 - observationDigest;
 - previousObservationDigest;
-- promotedAt;
-- promotedBy;
+- recordedAt;
+- recordedBy;
 - source runId;
 - source receiptRef;
 - collector exact SHA;
@@ -139,8 +139,8 @@ Required fields:
 - sourceRefs;
 - supersedes.
 
-Authority: TRAMA governance for the fact that the observation was promoted.
-It does not become curriculum/product authority for Arena, Atlas or Docente OS.
+Authority: once merged to `main`, TRAMA governance for the fact that the observation was promoted.
+`recordedAt` / `recordedBy` describe preparation of the event record, not the later merge timestamp. It does not become curriculum/product authority for Arena, Atlas or Docente OS.
 
 ### D. Materialized current views
 
