@@ -138,6 +138,55 @@ jobs:
           PY
       - name: Promote generated snapshot for bundle
         run: mv control-center/data/ecosystem-snapshot.generated.json control-center/data/ecosystem-snapshot.json
+      - name: Materialize live read-only Project Knowledge for deploy bundle
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          live_overlay=/tmp/trama-live-repository-overlay.json
+          effective_context=/tmp/trama-effective-project-context.json
+
+          if python scripts/run_live_repository_overlay.py --pretty > "$live_overlay"; then
+            python - "$live_overlay" "$effective_context" <<'PY'
+          import importlib.util
+          import json
+          import sys
+          from pathlib import Path
+
+          root = Path.cwd()
+          overlay_path = Path(sys.argv[1])
+          output_path = Path(sys.argv[2])
+
+          spec = importlib.util.spec_from_file_location(
+              "trama_effective_context",
+              root / "scripts/compose_effective_project_context.py",
+          )
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+
+          governed = json.loads(
+              (root / "control-center/data/project-context-snapshot.json").read_text(encoding="utf-8")
+          )
+          overlay = json.loads(overlay_path.read_text(encoding="utf-8"))
+          effective = module.compose_effective_project_context(governed, overlay)
+          output_path.write_text(
+              json.dumps(effective, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+            python scripts/build_trama_context_pack.py project-knowledge \
+              --effective-context "$effective_context" \
+              --output control-center/data/context-packs/project-knowledge.json
+
+            rm -f "$live_overlay" "$effective_context"
+            echo "TRAMA_LIVE_EFFECTIVE_CONTEXT_BUNDLE_PASS"
+          else
+            rm -f "$live_overlay" "$effective_context"
+            echo "TRAMA_LIVE_EFFECTIVE_CONTEXT_UNAVAILABLE_GOVERNED_FALLBACK"
+          fi
+
       - name: Regenerate stakeholder dossier
         run: python scripts/generate_stakeholder_report.py
       - name: Verify bundle and machine contract
