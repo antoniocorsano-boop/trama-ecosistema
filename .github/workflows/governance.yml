@@ -20,6 +20,7 @@ jobs:
       - {name: Validate Stage E3 human-use catalog, run: python3 scripts/validate_stage_e3_human_use.py}
       - {name: Validate Stage E3 public human-use surface, run: node scripts/test_stage_e3_public_validation_surface.cjs}
       - {name: Validate Control Center L0 realistic prototype, run: python3 scripts/validate_control_center_l0_realistic_prototype.py}
+      - {name: Validate Control Center L0 Render preview, run: python3 scripts/validate_control_center_l0_render_preview.py}
       - {name: Qualify CC-MSS-01 Stage B offline matrix, run: python3 scripts/qualify_cc_mss_stage_b.py}
       - {name: Audit CC-MSS-01 Stage C1 mutation surface, run: python3 scripts/audit_cc_mss_stage_c1_surface.py}
       - {name: Qualify CC-MSS-01 Stage C1 offline fixtures with network guard, run: python3 scripts/qualify_cc_mss_stage_c1.py}
