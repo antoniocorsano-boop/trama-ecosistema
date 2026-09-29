@@ -18,6 +18,25 @@ def _repo_index(overlay):
         seen[name]=head
     return seen
 
+def _pr_index(overlay):
+    seen={}
+    for item in overlay.get("pullRequests",[]):
+        repository=item.get("repository")
+        number=item.get("number")
+        if not repository or not isinstance(number,int) or number < 1:
+            raise EffectiveContextError("PULL_REQUEST_IDENTITY_INVALID")
+        key=(repository,number)
+        state=(
+            item.get("state"),
+            bool(item.get("draft")),
+            bool(item.get("merged")),
+            item.get("observedHead")
+        )
+        if key in seen and seen[key]!=state:
+            raise EffectiveContextError("CONTRADICTORY_PULL_REQUEST_IDENTITY")
+        seen[key]=state
+    return seen
+
 def _anchor_index(overlay):
     seen={}
     for item in overlay.get("semanticAnchors",[]):
@@ -94,7 +113,11 @@ def compose_effective_project_context(governed_snapshot,live_overlay,governed_sn
         raise EffectiveContextError("LIVE_OBSERVED_AT_MISSING")
 
     repos=_repo_index(live_overlay)
+    pull_requests=_pr_index(live_overlay)
     anchors=_anchor_index(live_overlay)
+    for repository,number in pull_requests:
+        if repository not in repos:
+            raise EffectiveContextError("PULL_REQUEST_REPOSITORY_NOT_OBSERVED")
     for repository,domain,path,role in anchors:
         if repository not in repos:
             raise EffectiveContextError("SEMANTIC_ANCHOR_REPOSITORY_NOT_OBSERVED")
@@ -111,6 +134,18 @@ def compose_effective_project_context(governed_snapshot,live_overlay,governed_sn
             "subject":"repository-head",
             "repository":repository,
             "observedHead":head
+        })
+    for item in sorted(live_overlay.get("pullRequests",[]),key=lambda x:(x["repository"],x["number"])):
+        facts.append({
+            "class":"VOLATILE",
+            "subject":"pull-request",
+            "repository":item["repository"],
+            "number":item["number"],
+            "state":item["state"],
+            "draft":bool(item["draft"]),
+            "merged":bool(item["merged"]),
+            "observedHead":item["observedHead"],
+            "observedAt":item.get("observedAt")
         })
     for anchor in sorted(live_overlay.get("semanticAnchors",[]),key=lambda x:(x["repository"],x["domain"],x["path"],x["role"])):
         facts.append({
