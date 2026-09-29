@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-09-28T19:30:00Z",
+  "generatedAt": "2026-09-29T04:06:39Z",
   "project": "TRAMA",
-  "status": "PARTIAL",
+  "status": "CURRENT",
   "currentPhase": {
     "id": "R4",
     "name": "Esperienza professionale guidata",
@@ -325,16 +325,56 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-DEVELOPMENT-CONTINUITY-PROTOCOL",
+      "type": "DECISION",
+      "subject": "development-continuity",
+      "statement": "Start work from governed Context Packs and canonical sources; verify only volatile facts, then use a continuous end-to-end implementation/test/review cycle unless authority, contract, security, privacy, write autonomy, approval semantics or irreversible decisions change.",
+      "status": "CURRENT",
+      "rationale": "Prevents repeated reconstruction from chat while preserving strengthened governance at real decision boundaries.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 120,
+          "exactHead": "18b2f5d0b77bc4abf368b6439e7f2806992a5000",
+          "ref": "docs/process/trama-development-continuity-protocol-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:42:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ],
   "repositories": [
     {
       "authority": "CurManLight_arena",
-      "repositoryRef": "CurManLight_arena"
+      "repositoryRef": "CurManLight_arena",
+      "observation": {
+        "availabilityStatus": "AVAILABLE",
+        "freshnessStatus": "FRESH",
+        "completenessStatus": "COMPLETE",
+        "observedHead": "9da1cf65ae86ff5a3a65888636bf04f3a7312a7b",
+        "sourceRefs": [
+          "github-public-api:antoniocorsano-boop/CurManLight_arena@9da1cf65ae86ff5a3a65888636bf04f3a7312a7b"
+        ]
+      }
     },
     {
       "authority": "Curriculum-Atlas",
-      "repositoryRef": "Curriculum-Atlas"
+      "repositoryRef": "Curriculum-Atlas",
+      "observation": {
+        "availabilityStatus": "AVAILABLE",
+        "freshnessStatus": "FRESH",
+        "completenessStatus": "COMPLETE",
+        "observedHead": "f68be1d9913fed77483685158e38848d3d0a19b2",
+        "sourceRefs": [
+          "github-public-api:antoniocorsano-boop/Curriculum-Atlas@f68be1d9913fed77483685158e38848d3d0a19b2"
+        ]
+      }
     },
     {
       "authority": "Drive",
@@ -342,14 +382,103 @@
     },
     {
       "authority": "docente-os-2026-27",
-      "repositoryRef": "docente-os-2026-27"
+      "repositoryRef": "docente-os-2026-27",
+      "observation": {
+        "availabilityStatus": "AVAILABLE",
+        "freshnessStatus": "FRESH",
+        "completenessStatus": "COMPLETE",
+        "observedHead": "f0b7e5c01620d4cc87587081859cbf270cc1d033",
+        "sourceRefs": [
+          "github-public-api:antoniocorsano-boop/docente-os-2026-27@f0b7e5c01620d4cc87587081859cbf270cc1d033"
+        ]
+      }
     },
     {
       "authority": "trama-ecosistema",
-      "repositoryRef": "trama-ecosistema"
+      "repositoryRef": "trama-ecosistema",
+      "observation": {
+        "availabilityStatus": "AVAILABLE",
+        "freshnessStatus": "FRESH",
+        "completenessStatus": "COMPLETE",
+        "observedHead": "9b114eccfe3d67cfafdc480be6fa32682c18dbf8",
+        "sourceRefs": [
+          "github-public-api:antoniocorsano-boop/trama-ecosistema@9b114eccfe3d67cfafdc480be6fa32682c18dbf8"
+        ]
+      }
     }
   ],
-  "openPullRequests": [],
+  "openPullRequests": [
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "number": 96,
+      "draft": true,
+      "observedHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/trama-ecosistema:pull/96@dfb5b106708bee88016907c13ee0d104c093e7ca"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "number": 136,
+      "draft": true,
+      "observedHead": "5fb3c8fd4127f0daa4456b0759bacfacdcddb212",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/trama-ecosistema:pull/136@5fb3c8fd4127f0daa4456b0759bacfacdcddb212"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "number": 207,
+      "draft": true,
+      "observedHead": "99ea576f8bab68ef904d5d264a687bcb490490fd",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/CurManLight_arena:pull/207@99ea576f8bab68ef904d5d264a687bcb490490fd"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "number": 304,
+      "draft": false,
+      "observedHead": "3c0c3541145352f65e178cfa52aa166571df7d80",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/CurManLight_arena:pull/304@3c0c3541145352f65e178cfa52aa166571df7d80"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "number": 57,
+      "draft": true,
+      "observedHead": "3880964b79119cc9e4ca995f4b476ffab2ce689d",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/Curriculum-Atlas:pull/57@3880964b79119cc9e4ca995f4b476ffab2ce689d"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "number": 384,
+      "draft": true,
+      "observedHead": "c0417da40549a197a69a72f6861a682e622d09b1",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/docente-os-2026-27:pull/384@c0417da40549a197a69a72f6861a682e622d09b1"
+      ]
+    },
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "number": 628,
+      "draft": true,
+      "observedHead": "1dad7de9d8811315347af14318374bb4dc5ae7c0",
+      "observedAt": "2026-09-29T04:06:36Z",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/docente-os-2026-27:pull/628@1dad7de9d8811315347af14318374bb4dc5ae7c0"
+      ]
+    }
+  ],
   "activeExactHeads": [
     {
       "subject": "atlas-percorsi",
@@ -357,6 +486,59 @@
       "pullRequest": 96,
       "exactHead": "dfb5b106708bee88016907c13ee0d104c093e7ca",
       "sourceEvent": "TRAMA-EVT-PERCORSI-PR96-RECOVERY"
+    },
+    {
+      "subject": "development-continuity",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 120,
+      "exactHead": "18b2f5d0b77bc4abf368b6439e7f2806992a5000",
+      "sourceEvent": "TRAMA-EVT-DEVELOPMENT-CONTINUITY-PROTOCOL"
+    },
+    {
+      "subject": "project-knowledge-live-collector",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 130,
+      "exactHead": "bcca546e7e30ca5bf94acf96844f347b8ffb78aa",
+      "sourceEvent": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+    },
+    {
+      "subject": "project-knowledge-live-collector",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+      "sourceEvent": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+    },
+    {
+      "subject": "repository-head",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "observedHead": "9b114eccfe3d67cfafdc480be6fa32682c18dbf8",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/trama-ecosistema@9b114eccfe3d67cfafdc480be6fa32682c18dbf8"
+      ]
+    },
+    {
+      "subject": "repository-head",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "observedHead": "9da1cf65ae86ff5a3a65888636bf04f3a7312a7b",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/CurManLight_arena@9da1cf65ae86ff5a3a65888636bf04f3a7312a7b"
+      ]
+    },
+    {
+      "subject": "repository-head",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "observedHead": "f68be1d9913fed77483685158e38848d3d0a19b2",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/Curriculum-Atlas@f68be1d9913fed77483685158e38848d3d0a19b2"
+      ]
+    },
+    {
+      "subject": "repository-head",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "observedHead": "f0b7e5c01620d4cc87587081859cbf270cc1d033",
+      "sourceRefs": [
+        "github-public-api:antoniocorsano-boop/docente-os-2026-27@f0b7e5c01620d4cc87587081859cbf270cc1d033"
+      ]
     }
   ],
   "blockingGates": [],
@@ -684,6 +866,140 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED",
+      "type": "DEFERMENT",
+      "subject": "project-knowledge-live-collector",
+      "statement": "LIVE_ONE_SHOT remains blocked until a real credential principal and authoritative read-only permission attestation are bound to the frozen candidate.",
+      "status": "SUPERSEDED",
+      "rationale": "Stage C and the Second Brain projection are integrated, but the human decision gate requires a concrete principal/permission envelope before any live network execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-LIVE-ONE-SHOT-DECISION-GATE.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-ADAPTER-M1B-LIVE-ONE-SHOT-CONTRACT.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:45:00Z",
+      "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-DEVELOPMENT-CONTINUITY-PROTOCOL",
+      "type": "DECISION",
+      "subject": "development-continuity",
+      "statement": "Start work from governed Context Packs and canonical sources; verify only volatile facts, then use a continuous end-to-end implementation/test/review cycle unless authority, contract, security, privacy, write autonomy, approval semantics or irreversible decisions change.",
+      "status": "CURRENT",
+      "rationale": "Prevents repeated reconstruction from chat while preserving strengthened governance at real decision boundaries.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 120,
+          "exactHead": "18b2f5d0b77bc4abf368b6439e7f2806992a5000",
+          "ref": "docs/process/trama-development-continuity-protocol-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:42:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED",
+      "type": "CLOSURE",
+      "subject": "project-knowledge-live-collector",
+      "statement": "PUBLIC_ANONYMOUS_READ_ONLY LIVE_ONE_SHOT is qualified and has completed one governed run successfully on main; the receipt terminated CONSUMED and RepositoryObservation terminated COMPLETE.",
+      "status": "CURRENT",
+      "rationale": "The credentialed-path blocker was removed by the approved public-anonymous source model. PRs #126, #128, #129 and #130 established source, transport, single-use binding and executable workflow. Workflow run 36482487361 executed once on exact main baseline 895aac7c31d2e8388b22b01ac45408102ad6ff1c with run_attempt=1; 4 enrolled repositories were observed, 8 open PRs were reported, no artifact was published, and the receipt gha-dispatch-36482487361--gha-36482487361 closed CONSUMED.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 126,
+          "ref": "docs/control-center/CC-MSS-01-READ-ONLY-CREDENTIAL-SOURCE-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 128,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-TRANSPORT-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 129,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-BINDING-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 130,
+          "exactHead": "bcca546e7e30ca5bf94acf96844f347b8ffb78aa",
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-WORKFLOW-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+          "ref": "github-actions:workflow-run/36482487361"
+        }
+      ],
+      "validFrom": "2026-09-28T20:54:45Z",
+      "supersedes": [
+        "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-REPOSITORY-OBSERVATION-PROMOTION-10d676389d0bfc1f",
+      "type": "PROMOTION",
+      "subject": "project-knowledge-repository-state",
+      "statement": "A governed RepositoryObservation was promoted into the current Project Knowledge repository-state projection.",
+      "status": "CURRENT",
+      "rationale": "Promotion is bound to proposal rop-6b6169c41668a4e9ede0359c869bef28f2d48f3561ce0abfd684a5bc216136b4, source run 36520123613, exact collector and actor revisions, policy digest and enrollment digest.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "github-actions:workflow-run/36520123613"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "receipt:gha-dispatch-36520123613--gha-36520123613"
+        }
+      ],
+      "validFrom": "2026-09-29T04:06:39Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "promotionEvent": {
+        "schemaVersion": "trama.repository-observation-promotion-event/v1",
+        "eventId": "rope-10d676389d0bfc1f19c5bcd2413c19888f495858d5dd773df4d12eb490023b41",
+        "proposalId": "rop-6b6169c41668a4e9ede0359c869bef28f2d48f3561ce0abfd684a5bc216136b4",
+        "observationDigest": "6b6169c41668a4e9ede0359c869bef28f2d48f3561ce0abfd684a5bc216136b4",
+        "previousObservationDigest": null,
+        "recordedAt": "2026-09-29T04:06:39Z",
+        "recordedBy": "gha-dispatch-36520123613",
+        "sourceRunId": "36520123613",
+        "sourceReceiptRef": "gha-dispatch-36520123613--gha-36520123613",
+        "collectorExactSha": "9b114eccfe3d67cfafdc480be6fa32682c18dbf8",
+        "promotionActorExactSha": "9b114eccfe3d67cfafdc480be6fa32682c18dbf8",
+        "promotionPolicyDigest": "70c58675a75c3436dd81b01f8bc6694af9fb2e0ae646ea14a5ca0b284c0c1616",
+        "repositoryEnrollmentDigest": "ebedf9e82e75ff1bb0a110510ce669c4b5bf627af0113998808dddc2dc2ec54d",
+        "result": "PROMOTED",
+        "sourceRefs": [
+          "github-actions:workflow-run/36520123613",
+          "receipt:gha-dispatch-36520123613--gha-36520123613"
+        ],
+        "supersedes": []
+      }
     }
   ],
   "knowledgeSources": [
@@ -691,37 +1007,37 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "DERIVED_AT_BUILD"
+      "sha256": "c2ab1a319cb1751528125ebe7b2a602d0388e74d3c4a75e3242ec24c3e3fa365"
     },
     {
       "id": "source-registry",
       "path": "docs/knowledge/source-registry.json",
       "role": "AUTHORITY_MAP",
-      "sha256": "DERIVED_AT_BUILD"
+      "sha256": "46c40d24c648053198543a8c01af5ed65922f633719bc019fb6ed1a809332502"
     },
     {
       "id": "decision-register",
       "path": "docs/decisions/decision-register.json",
       "role": "DECISIONS",
-      "sha256": "DERIVED_AT_BUILD"
+      "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
     },
     {
       "id": "ecosystem-status",
       "path": "status/ecosystem-status.json",
       "role": "CAPABILITY_STATE",
-      "sha256": "DERIVED_AT_BUILD"
+      "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     {
       "id": "governed-events",
       "path": "status/governed-events.json",
       "role": "HISTORY",
-      "sha256": "DERIVED_AT_BUILD"
+      "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
     },
     {
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "DERIVED_AT_BUILD"
+      "sha256": "73f2ec40abed82478079afe6793228f53c4f285123150f7c6a26279266a7ad94"
     }
   ]
 }
