@@ -11,6 +11,10 @@ on:
       - "tests/fixtures/cc2-f1d/**"
       - "scripts/evaluate_maturity_definitions.py"
       - "scripts/build_ecosystem_snapshot.py"
+      - "docs/contracts/trama-component-maturity-projection-v1.md"
+      - "scripts/test_component_maturity_projection.py"
+      - "scripts/project_component_maturity.py"
+      - "governance/ui-development/trama-component-evidence-registry-v1.json"
       - "schemas/ecosystem-snapshot.schema.json"
       - "status/ecosystem-status.json"
       - "status/governed-events.json"
@@ -75,6 +79,7 @@ jobs:
               )
 
           assert committed["capabilities"] == generated["capabilities"]
+          assert committed["components"] == generated["components"]
           assert committed["gates"] == generated["gates"]
           assert committed["dependencies"] == generated["dependencies"]
           assert committed["expansionCandidates"] == generated["expansionCandidates"]
@@ -175,6 +180,28 @@ jobs:
           assert dependencies["DEP-DOS-ATLAS-FUTURE"]["status"] == "NOT_AUTHORIZED"
           print("TRAMA_CC2_F4_CAPABILITY_PROJECTION_PASS")
           PY
+      - name: Validate CC-MAT-COMP-01 component maturity projection
+        shell: bash
+        run: |
+          python scripts/test_component_maturity_projection.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          snapshot = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
+          source = json.loads(Path("governance/ui-development/trama-component-evidence-registry-v1.json").read_text(encoding="utf-8"))
+          projected = {item["componentId"]: item for item in snapshot["components"]}
+          assert set(projected) == {item["componentId"] for item in source["entries"]}, projected
+          assert snapshot["schemaVersion"] == "1.4.0", snapshot["schemaVersion"]
+          assert snapshot["sourceState"]["component-evidence-registry"]["status"] == "FRESH"
+          assert projected["ARENA.DIALOG_CONFIRM.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"
+          assert projected["ARENA.TABS.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"
+          assert projected["ARENA.DIALOG_CONFIRM.LEGACY"]["maturity"]["confirmedStage"] == "REGISTERED"
+          assert projected["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]["maturity"]["confirmedStage"] == "REGISTERED"
+          assert "overallScore" not in snapshot
+          assert all("score" not in item.get("maturity", {}) for item in snapshot["components"])
+          print("TRAMA_CC_MAT_COMP_01_SNAPSHOT_PROJECTION_PASS")
+          PY
       - name: Validate CC2-F5 integrity projection
         shell: bash
         run: |
@@ -191,6 +218,7 @@ jobs:
               "INT-GATE-EVIDENCE-BINDING",
               "INT-RUNTIME-AUTHORIZATION",
               "INT-CAPABILITY-EVIDENCE",
+              "INT-COMPONENT-EVIDENCE-PROJECTION",
           }, checks
           assert checks["INT-SOURCE-AVAILABILITY"]["status"] == "PASS", checks
           assert checks["INT-REFERENCE-RESOLUTION"]["status"] == "PASS", checks
@@ -198,6 +226,7 @@ jobs:
           assert checks["INT-GATE-EVIDENCE-BINDING"]["status"] == "PASS", checks
           assert checks["INT-RUNTIME-AUTHORIZATION"]["status"] == "PASS", checks
           assert checks["INT-CAPABILITY-EVIDENCE"]["status"] == "PASS", checks
+          assert checks["INT-COMPONENT-EVIDENCE-PROJECTION"]["status"] == "PASS", checks
           assert "overallScore" not in snapshot
           assert "score" not in snapshot
           print("TRAMA_CC2_F5_INTEGRITY_PROJECTION_PASS")
@@ -287,6 +316,7 @@ jobs:
           grep -q '"evidence"' schemas/ecosystem-snapshot.schema.json
           grep -q '"gates"' schemas/ecosystem-snapshot.schema.json
           grep -q '"capabilities"' schemas/ecosystem-snapshot.schema.json
+          grep -q '"components"' schemas/ecosystem-snapshot.schema.json
           grep -q '"governanceRefs"' schemas/ecosystem-snapshot.schema.json
           grep -q '"integrityChecks"' schemas/ecosystem-snapshot.schema.json
           grep -q '"operationalPath"' schemas/ecosystem-snapshot.schema.json
