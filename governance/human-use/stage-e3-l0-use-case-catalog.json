@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "trama.stage-e3-l0-use-case-catalog/v1",
+  "stage": "E3-L0",
+  "subject": "control-center-l0",
+  "purpose": "Human-use validation of the universal Control Center summary.",
+  "useCases": [
+    {
+      "id": "E3-L0-UC-01",
+      "state": "NORMAL",
+      "priority": "CRITICAL",
+      "taskPrompt": "Guarda questa pagina come se stessi controllando lo stato del sistema. Dimmi che cosa è disponibile, se devi fare qualcosa e quanto sono recenti le informazioni.",
+      "expectedOutcome": [
+        "Understands the current situation as regular",
+        "Recognizes available capabilities and their scope",
+        "Understands no action is required",
+        "Can identify recency without technical detail"
+      ],
+      "criticalMisinterpretations": [
+        "Believes a decision or intervention is required",
+        "Treats availability as certification or approval",
+        "Needs technical detail to understand the summary"
+      ],
+      "passCriteria": [
+        "Correctly states no action is required",
+        "Identifies what is available in plain language",
+        "Identifies freshness correctly"
+      ]
+    },
+    {
+      "id": "E3-L0-UC-02",
+      "state": "ATTENTION",
+      "priority": "CRITICAL",
+      "taskPrompt": "Guarda questa pagina. Che cosa resta utilizzabile? C'è qualcosa che richiede attenzione? Chi dovrebbe intervenire?",
+      "expectedOutcome": [
+        "Understands verified parts remain usable",
+        "Identifies the item requiring attention",
+        "Identifies action ownership correctly"
+      ],
+      "criticalMisinterpretations": [
+        "Believes the whole ecosystem is blocked",
+        "Believes the reader is necessarily the responsible actor",
+        "Treats attention as an error"
+      ],
+      "passCriteria": [
+        "Separates usable information from item requiring attention",
+        "States who owns the action",
+        "Does not infer a global failure"
+      ]
+    },
+    {
+      "id": "E3-L0-UC-03",
+      "state": "DECISION",
+      "priority": "CRITICAL",
+      "taskPrompt": "Guarda questa pagina. Che cosa non può avanzare e che cosa invece resta disponibile?",
+      "expectedOutcome": [
+        "Understands a specific activity is blocked pending a decision",
+        "Understands other capabilities remain available",
+        "Does not attribute approval authority to the Control Center"
+      ],
+      "criticalMisinterpretations": [
+        "Believes the whole system is unavailable",
+        "Believes the Control Center can approve or remove the block",
+        "Believes the blocked activity may proceed"
+      ],
+      "passCriteria": [
+        "Names the blocked consequence",
+        "Names what remains available",
+        "Does not attribute decision authority to the interface"
+      ]
+    },
+    {
+      "id": "E3-L0-UC-04",
+      "state": "OFFLINE",
+      "priority": "CRITICAL",
+      "taskPrompt": "Guarda questa pagina. Quanto sono recenti le informazioni che vedi e puoi ancora usarle?",
+      "expectedOutcome": [
+        "Recognizes the view as the last known state",
+        "Does not interpret it as freshly checked",
+        "Understands verified information remains consultable"
+      ],
+      "criticalMisinterpretations": [
+        "Treats cached information as live",
+        "Believes all information is invalid because the latest check is unavailable"
+      ],
+      "passCriteria": [
+        "Identifies last-known nature of the state",
+        "Does not call it current/live",
+        "Understands verified information remains usable"
+      ]
+    }
+  ],
+  "closureRules": {
+    "criticalFindingTolerance": 0,
+    "allUseCasesRequired": true,
+    "mobileEvidenceRequired": true,
+    "participantModeMustHideScenarioControls": true
+  }
+}
