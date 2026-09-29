@@ -109,3 +109,33 @@ Il Context Pack:
 ## Criterio di qualità
 
 Un buon Context Pack deve essere **sufficientemente piccolo da essere riusabile**, ma **sufficientemente completo da evitare una ricostruzione del contesto**.
+
+
+## Estensione dual-speed Project Knowledge v2
+
+Quando è disponibile un `EffectiveProjectContext v1`, il Context Pack può includere un oggetto opzionale `effectiveContext`.
+
+L'estensione è retrocompatibile: in assenza di EffectiveProjectContext il Context Pack mantiene esattamente il comportamento v1 precedente.
+
+L'envelope dual-speed espone separatamente:
+
+- `governedAsOf`: timestamp della conoscenza governata;
+- `liveObservedAt`: timestamp dell'osservazione live, se disponibile;
+- `governedKnowledgeStatus`;
+- `liveObservationStatus`;
+- `semanticDriftStatus`;
+- `effectiveContextStatus`;
+- `promotionRequired`;
+- `liveFacts`;
+- `sourceRefs`.
+
+Regole vincolanti:
+
+- i `liveFacts` non sostituiscono né riscrivono `decisions`, `activeInvariants`, `evidence` o altri contenuti governati;
+- gli exact head governati restano distinti dai repository head live;
+- un Effective Context `DEGRADED` o `BLOCKED` porta il Context Pack a `PARTIAL`, ma non cancella la conoscenza governata disponibile;
+- semantic drift non implica automaticamente promotion;
+- il Context Pack non autorizza runtime, publication, merge, review o write;
+- nessuna assenza di semantic anchor può essere interpretata come `NONE`.
+
+Questa estensione soddisfa il requisito v2 di esporre nello stesso pacchetto sia il tempo governato sia il tempo live senza trasformare l'osservazione volatile in autorità.
