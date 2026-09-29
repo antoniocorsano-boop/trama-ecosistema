@@ -298,7 +298,7 @@
       "path": "docs/design/trama-control-center-human-readable-information-architecture-v1.md",
       "kind": "ARCHITECTURE",
       "status": "PROPOSED",
-      "priority": "FOUNDATIONAL",
+      "priority": "NORMATIVE",
       "subjects": [
         "control-center-ui",
         "information-architecture",
