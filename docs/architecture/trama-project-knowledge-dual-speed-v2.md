@@ -346,14 +346,36 @@ No write actor, no PR, no promotion.
 
 Context Pack reads EffectiveProjectContext rather than treating promoted RepositoryObservation as the only current-state source.
 
-### Stage E — UI
+### Stage E — Human communication and UI
 
-Show three separate signals:
+Stage E MUST follow the governed sequence:
+
+- **E0 — Human Communication & Interaction Contract**: vocabulary, mental model, information hierarchy, benchmark, accessibility baseline and acceptance criteria;
+- **E1 — Visual prototype**: realistic desktop/mobile states, including normal, partial, review-required, blocked and offline/stale;
+- **E2 — Implementation**: components integrated with EffectiveProjectContext;
+- **E3 — Human-use validation**: comprehension and usability validation with users who are not assumed to have repository/DevOps expertise.
+
+The primary UI MUST translate, not expose, internal technical state.
+
+Internally TRAMA still distinguishes:
 - Governed knowledge;
 - Live state;
 - Semantic drift.
 
+User-facing communication instead answers:
+- can I trust these reference informations?
+- how recent are the latest updates?
+- do I need to do anything?
+
+Technical identifiers and internal enums use progressive disclosure under a dedicated technical-details surface.
+
 Never label a promoted checkpoint as stale merely because an ordinary repository head moved.
+Never present missing evidence as an error by default.
+Never rely on a single traffic-light state to compress authority, freshness and review need.
+
+Normative Stage E0 reference:
+- `docs/architecture/trama-stage-e0-human-communication-ui-contract-v1.md`;
+- `docs/decisions/trama-adr-018-human-readable-system-state-ui.md`.
 
 ### Stage F — Promotion simplification
 
@@ -383,7 +405,9 @@ The architecture is qualified when all are true:
 7. the existing one-shot promotion path remains usable for intentional checkpoints;
 8. no GitHub App is introduced;
 9. no automatic merge/review/promotion is introduced;
-10. tests demonstrate absence of the infinite refresh loop.
+10. tests demonstrate absence of the infinite refresh loop;
+11. Stage E primary UI can be understood without repository/DevOps terminology;
+12. governed validity, live freshness and review need remain distinguishable without relying on color alone.
 
 ## 16. Operational consequence
 

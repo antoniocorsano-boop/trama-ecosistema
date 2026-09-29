@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.14.0",
-  "updatedAt": "2026-09-25",
+  "registerVersion": "1.16.0",
+  "updatedAt": "2026-09-29",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -229,6 +229,34 @@
         "Docente OS"
       ],
       "decision": "Il Control Center può produrre forecast source-bound e advisory su possibili transizioni future, ma tali forecast restano separati dallo stato canonico, non modificano capability/gate/maturity, non autorizzano runtime o write e non possono attivare DOS-A1. La confidence iniziale è solo LOW/MEDIUM/HIGH; probabilità numeriche o score sono vietati finché non esiste calibrazione sufficiente e una nuova decisione TRAMA.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-017",
+      "title": "Project Knowledge dual-speed: Governed Core + Live Overlay",
+      "status": "PROPOSED",
+      "date": "2026-09-29",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "È proposto che Project Knowledge separi conoscenza governata durevole, osservazione live effimera read-only e vista di contesto derivata, così che normali variazioni di repository, PR o CI non richiedano promotion governata; il semantic drift resta un segnale di riverifica e non crea authority o promotion automatica.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-018",
+      "title": "Stato di sistema leggibile e dettaglio tecnico progressivo",
+      "status": "PROPOSED",
+      "date": "2026-09-29",
+      "scope": [
+        "TRAMA",
+        "Control Center"
+      ],
+      "decision": "È proposto che la UI primaria del Control Center traduca gli stati tecnici in linguaggio comprensibile anche a utenti non tecnici, separi stato e gravità, distingua aggiornamento, incertezza e blocco, preservi l'ultimo dato governato valido e renda repository, SHA, provenance ed enum interni disponibili solo tramite dettaglio tecnico progressivo.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }

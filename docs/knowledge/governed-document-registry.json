@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "trama.governed-document-registry/v1",
+  "updatedAt": "2026-09-29",
+  "policy": {
+    "purpose": "Durable index of foundational and normative TRAMA documents used by Project Knowledge and development continuity.",
+    "chatIsAuthority": false,
+    "requiresExistingFile": true,
+    "requiresRegisteredDecisionForAdr": true,
+    "orphanFoundationalDocumentsAllowed": false
+  },
+  "documents": [
+    {
+      "id": "DOC-SECOND-BRAIN-OPERATING-MODEL",
+      "path": "docs/knowledge/TRAMA-SECOND-BRAIN-OPERATING-MODEL.md",
+      "kind": "OPERATING_MODEL",
+      "status": "CURRENT",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "project-knowledge",
+        "development-continuity"
+      ],
+      "decisionRef": "TRAMA-ADR-015",
+      "dependsOn": [],
+      "updateTriggers": [
+        "PROJECT_KNOWLEDGE_PROCESS_CHANGE",
+        "DOCUMENTATION_GOVERNANCE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-PROJECT-KNOWLEDGE-ADR-015",
+      "path": "docs/decisions/trama-adr-015-project-knowledge-context-provider.md",
+      "kind": "ADR",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "project-knowledge"
+      ],
+      "decisionRef": "TRAMA-ADR-015",
+      "dependsOn": [
+        "DOC-SECOND-BRAIN-OPERATING-MODEL"
+      ],
+      "updateTriggers": [
+        "PROJECT_KNOWLEDGE_AUTHORITY_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-PROJECT-KNOWLEDGE-ADR-017",
+      "path": "docs/decisions/trama-adr-017-project-knowledge-dual-speed.md",
+      "kind": "ADR",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "project-knowledge",
+        "live-observation"
+      ],
+      "decisionRef": "TRAMA-ADR-017",
+      "dependsOn": [
+        "DOC-PROJECT-KNOWLEDGE-ADR-015"
+      ],
+      "updateTriggers": [
+        "DUAL_SPEED_ARCHITECTURE_CHANGE",
+        "LIVE_OBSERVATION_CONTRACT_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-PROJECT-KNOWLEDGE-DUAL-SPEED-V2",
+      "path": "docs/architecture/trama-project-knowledge-dual-speed-v2.md",
+      "kind": "ARCHITECTURE",
+      "status": "CURRENT",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "project-knowledge",
+        "live-observation",
+        "effective-context"
+      ],
+      "decisionRef": "TRAMA-ADR-017",
+      "dependsOn": [
+        "DOC-PROJECT-KNOWLEDGE-ADR-017"
+      ],
+      "updateTriggers": [
+        "DUAL_SPEED_ARCHITECTURE_CHANGE",
+        "STAGE_PLAN_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-CONTEXT-PACK-V1",
+      "path": "docs/contracts/trama-context-pack-v1.md",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "project-knowledge",
+        "context-pack"
+      ],
+      "decisionRef": "TRAMA-ADR-015",
+      "dependsOn": [
+        "DOC-PROJECT-KNOWLEDGE-DUAL-SPEED-V2"
+      ],
+      "updateTriggers": [
+        "CONTEXT_PACK_SCHEMA_CHANGE",
+        "EFFECTIVE_CONTEXT_INTEGRATION_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-STAGE-E0-HUMAN-COMMUNICATION",
+      "path": "docs/architecture/trama-stage-e0-human-communication-ui-contract-v1.md",
+      "kind": "UI_CONTRACT",
+      "status": "PROPOSED",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "control-center-ui",
+        "human-communication",
+        "project-knowledge"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-PROJECT-KNOWLEDGE-DUAL-SPEED-V2"
+      ],
+      "updateTriggers": [
+        "UI_STATE_COMMUNICATION_CHANGE",
+        "E1_PROTOTYPE_FINDING",
+        "HUMAN_USE_VALIDATION_FINDING"
+      ]
+    },
+    {
+      "id": "DOC-STAGE-E0-ADR-018",
+      "path": "docs/decisions/trama-adr-018-human-readable-system-state-ui.md",
+      "kind": "ADR",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "human-communication"
+      ],
+      "decisionRef": "TRAMA-ADR-018",
+      "dependsOn": [
+        "DOC-STAGE-E0-HUMAN-COMMUNICATION"
+      ],
+      "updateTriggers": [
+        "UI_COMMUNICATION_GOVERNANCE_CHANGE"
+      ]
+    }
+  ]
+}
