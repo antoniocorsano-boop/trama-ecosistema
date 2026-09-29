@@ -39,9 +39,11 @@ def main():
     if len(ids)!=len(set(ids)): fail("duplicate componentId")
 
     required={
-      "ARENA.DIALOG_CONFIRM.FAMILY",
-      "ARENA.TABS.FAMILY",
-      "ARENA.TOOLTIP.FAMILY",
+      "ARENA.DIALOG_CONFIRM.LEGACY",
+      "ARENA.DIALOG_CONFIRM.GOVERNED",
+      "ARENA.TABS.LEGACY",
+      "ARENA.TABS.GOVERNED",
+      "ARENA.TOOLTIP.LEGACY",
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY"
     }
     if not required.issubset(set(ids)): fail("missing initial high-priority binding")
