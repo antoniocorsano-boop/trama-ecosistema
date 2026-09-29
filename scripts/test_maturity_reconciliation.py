@@ -19,6 +19,8 @@ for stale in [
     "CC3-F1 ACTIVE",
     "CC3-F1 ACTIVE / HUMAN REVIEW PENDING",
     "GATE-CC3-F1-HUMAN — OPEN",
+    "Gate residuo per chiudere ECO-02/P1",
+    "Prima della chiusura devono risultare insieme",
 ]:
     assert stale not in status_text, stale
 
