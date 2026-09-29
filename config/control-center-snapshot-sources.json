@@ -42,6 +42,13 @@
       "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "role": "COMPONENT_EVIDENCE",
       "freshnessPolicy": "UNTIL_CHANGE"
+    },
+    {
+      "id": "maturity-evidence-registry",
+      "type": "STRUCTURED_GOVERNANCE",
+      "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
+      "role": "MATURITY_EVIDENCE",
+      "freshnessPolicy": "UNTIL_CHANGE"
     }
   ],
   "phaseModel": [
