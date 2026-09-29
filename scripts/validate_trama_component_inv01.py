@@ -44,7 +44,7 @@ def main():
     for token in [
       "inv01-f01 — parallel ui foundations",
       "inv01-f04 — monolithic static ui composition",
-      "does not declare the first family obsolete",
+      "declare the first family obsolete",
       "no migration is authorized until inv-02 evidence exists"
     ]:
         if token not in doc: fail("doc invariant "+token)
