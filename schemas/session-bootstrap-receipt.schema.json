@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/session-bootstrap-receipt.schema.json",
+  "title": "TRAMA Session Bootstrap Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "bootstrapStatus",
+    "subjectResolution",
+    "governedContext",
+    "liveVerification",
+    "sourceRefs",
+    "authority"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "trama.session-bootstrap-receipt/v1"},
+    "bootstrapStatus": {
+      "enum": ["READY", "READY_LIVE_CHECK_REQUIRED", "PARTIAL_CONTEXT", "BLOCKED"]
+    },
+    "subjectResolution": {
+      "type": "object",
+      "required": ["status", "query", "matchedRules", "contextSubjects"],
+      "properties": {
+        "status": {"enum": ["RESOLVED", "PARTIAL"]},
+        "query": {"type": "string", "minLength": 1},
+        "explicitSubject": {"type": ["string", "null"]},
+        "matchedRules": {"type": "array"},
+        "contextSubjects": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "governedContext": {
+      "type": "object",
+      "required": [
+        "snapshotRef",
+        "snapshotGeneratedAt",
+        "snapshotStatus",
+        "governedDocuments",
+        "facts",
+        "decisions",
+        "activeInvariants",
+        "evidence",
+        "exactHeads",
+        "blockingGates",
+        "dependencies",
+        "knownConflicts",
+        "knownRejectedApproaches",
+        "nextCandidateActions",
+        "negativeKnowledgeChecked"
+      ],
+      "properties": {
+        "snapshotRef": {"type": "string"},
+        "snapshotGeneratedAt": {"type": "string"},
+        "snapshotStatus": {"enum": ["CURRENT", "PARTIAL"]},
+        "governedDocuments": {"type": "array"},
+        "facts": {"type": "array"},
+        "decisions": {"type": "array"},
+        "activeInvariants": {"type": "array"},
+        "evidence": {"type": "array"},
+        "exactHeads": {"type": "array"},
+        "blockingGates": {"type": "array"},
+        "dependencies": {"type": "array"},
+        "knownConflicts": {"type": "array"},
+        "knownRejectedApproaches": {"type": "array"},
+        "nextCandidateActions": {"type": "array"},
+        "negativeKnowledgeChecked": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "liveVerification": {
+      "type": "object",
+      "required": [
+        "provided",
+        "required",
+        "reason",
+        "effectiveContextStatus",
+        "liveObservationStatus",
+        "semanticDriftStatus"
+      ],
+      "properties": {
+        "provided": {"type": "boolean"},
+        "required": {"type": "boolean"},
+        "reason": {"type": "string"},
+        "effectiveContextStatus": {
+          "type": ["string", "null"],
+          "enum": ["USABLE", "DEGRADED", "BLOCKED", null]
+        },
+        "liveObservationStatus": {
+          "type": ["string", "null"],
+          "enum": ["FRESH", "STALE", "PARTIAL", "UNAVAILABLE", null]
+        },
+        "semanticDriftStatus": {
+          "type": ["string", "null"],
+          "enum": ["NONE", "DETECTED", "REVIEW_REQUIRED", null]
+        },
+        "liveObservedAt": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "sourceRefs": {"type": "array", "minItems": 1},
+    "authority": {
+      "type": "object",
+      "required": [
+        "readOnly",
+        "createsAuthority",
+        "authorizesWrite",
+        "authorizesRuntime",
+        "authorizesPromotion"
+      ],
+      "properties": {
+        "readOnly": {"const": true},
+        "createsAuthority": {"const": false},
+        "authorizesWrite": {"const": false},
+        "authorizesRuntime": {"const": false},
+        "authorizesPromotion": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  }
+}
