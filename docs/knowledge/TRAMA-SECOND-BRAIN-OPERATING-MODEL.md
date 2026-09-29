@@ -87,3 +87,51 @@ Nessuna decisione importante deve rimanere solo nella chat.
 Il prossimo incremento deve aggiungere un collector remoto read-only e version-bound per repository, PR e workflow dichiarati. Il collector deve aggiornare una RepositoryObservation derivata, non le authority dei domini.
 
 Solo dopo quel collector il ProjectContextSnapshot potrà dichiarare CURRENT invece di PARTIAL.
+
+
+## Protocollo di consolidamento documentale governato
+
+Una ricerca, analisi o decisione significativa non è considerata stabilmente consolidata soltanto perché compare in una chat o in un commento di PR.
+
+Quando il lavoro produce un riferimento riusabile, il ciclo documentale è:
+
+1. **distillare** il risultato nel documento autorevole o fondante appropriato;
+2. **collegare** il documento a una decisione registrata quando esiste un confine ADR/governance;
+3. **registrare** il riferimento in `docs/knowledge/governed-document-registry.json` quando è fondante, normativo o necessario alla continuità;
+4. dichiarare nel registro i **subject**, le dipendenze e gli **updateTriggers** che indicano quando il documento deve essere rivalutato;
+5. eseguire la Governance CI, che verifica automaticamente esistenza, unicità, dipendenze e decisionRef;
+6. aggiornare un KnowledgeEvent soltanto quando il significato duraturo deve entrare anche nella memoria operativa del Project Knowledge.
+
+Il registro documentale è un **indice**, non una nuova authority. L'autorità resta nel documento/fonte di dominio indicato e nelle decisioni esistenti.
+
+### Regola anti-orfano
+
+Un documento fondante non deve esistere senza:
+- identificatore stabile;
+- percorso canonico;
+- subject;
+- stato;
+- dipendenze dichiarate;
+- trigger di aggiornamento;
+- decisionRef quando applicabile.
+
+### Regola anti-duplicazione
+
+Prima di creare un nuovo documento:
+1. cercare nel governed document registry;
+2. aggiornare un riferimento esistente quando il perimetro semantico coincide;
+3. creare un nuovo documento solo se introduce un contratto, una decisione o un dominio distinto.
+
+### Automazione
+
+Il validatore:
+`scripts/validate_governed_document_registry.py`
+
+è parte della Governance CI e deve fallire se:
+- un file registrato non esiste;
+- ID o path sono duplicati;
+- una dipendenza documentale è inesistente;
+- un ADR registrato punta a una decisione assente dal decision register;
+- un documento fondante risulta orfano.
+
+Questo rende la costruzione documentale parte del processo di sviluppo, non un'attività separata affidata alla memoria della conversazione.
