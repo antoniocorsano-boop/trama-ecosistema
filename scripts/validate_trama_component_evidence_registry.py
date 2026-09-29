@@ -34,6 +34,8 @@ def main():
             if e.get("status") not in STATUS: fail(cid+" evidence status")
             if e.get("status") in {"PRESENT","PARTIAL","DOCUMENTED_ONLY"} and not e.get("ref"):
                 fail(cid+" evidence ref")
+            if e.get("status")=="PRESENT" and e.get("type")!="LIFECYCLE" and not (e.get("exactHead") or e.get("runId")):
+                fail(cid+" unbound PRESENT evidence")
             if e.get("exactHead") and len(e.get("exactHead",""))!=40:
                 fail(cid+" exactHead")
     if len(ids)!=len(set(ids)): fail("duplicate componentId")
