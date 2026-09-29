@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "trama.repository-observation-promotion-event/v1",
+  "eventId": "rope-6173cf9d3267e6b926102c8b149812658d05d834916fd23f7451c48c888147ab",
+  "proposalId": "rop-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "observationDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "previousObservationDigest": null,
+  "promotedAt": "2026-09-28T21:00:00Z",
+  "promotedBy": "human-review",
+  "sourceRunId": "36482487361",
+  "sourceReceiptRef": "gha-dispatch-36482487361--gha-36482487361",
+  "collectorExactSha": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+  "promotionActorExactSha": "6666666666666666666666666666666666666666",
+  "promotionPolicyDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "repositoryEnrollmentDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "result": "PROMOTED",
+  "sourceRefs": [
+    "github-actions:workflow-run/36482487361"
+  ],
+  "supersedes": []
+}
