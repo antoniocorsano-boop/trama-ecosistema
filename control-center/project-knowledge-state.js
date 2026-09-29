@@ -73,6 +73,21 @@
       };
     }
 
+    if(effective?.accessStatus==='NO_ACCESS'){
+      return {
+        kind:'noaccess',tone:'quiet',
+        title:'Lo stato è disponibile',
+        summary:'Puoi comprendere l’esito anche se i dettagli tecnici non sono disponibili per questo profilo.',
+        verifiedTitle,verifiedText,verifiedMeta,
+        updatesTitle:'Aggiornamenti recenti',
+        updatesText:'L’esito del controllo resta leggibile senza mostrare dettagli tecnici riservati.',
+        updatesMeta:tech.liveObservedAt?'Ultimo controllo: '+localTime(tech.liveObservedAt):'Ultimo controllo disponibile',
+        notice:'L’assenza dei dettagli tecnici non indica un errore né la perdita delle informazioni.',
+        actionRequired:false,actionLabel:null,
+        technical:{...tech,restricted:true}
+      };
+    }
+
     if(!effective){
       return {
         kind:'unavailable',tone:'attention',
