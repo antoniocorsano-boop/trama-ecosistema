@@ -190,19 +190,19 @@ Sono già recepiti o verificati:
 - Runtime Release Contract in Docente OS con replay DB selettivo, schema watermark, fail-fast e Runtime Health;
 - trasferimento manuale .cml-handoff.json mantenuto soltanto come interoperabilità, pilota o ripiego.
 
-Il fatto che singoli sottoflussi siano stati verificati non equivale ancora al collaudo umano finale del pilota 2C.
+La prova integrata finale è stata completata e registrata nella receipt `docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md`.
 
-Il runbook canonico del collaudo finale è ora integrato e richiede una prova reale senza interventi tecnici correttivi durante il percorso.
+## Evidenze di chiusura ECO-02/P1 — soddisfatte
 
-## Gate residuo per chiudere ECO-02/P1
+Nello stesso caso reale integrato sono state verificate:
 
-Prima della chiusura devono risultare insieme, nello **stesso caso reale integrato**:
+1. collocazione della lezione nel dominio Docente OS;
+2. decisione docente sulle risorse proposte;
+3. uso mobile delle superfici di proposta e modifica;
+4. percorso preparazione → decisione materiali → uso → registrazione lezione;
+5. rapporto umano finale e chiusura del blocker sull'apertura dei materiali.
 
-1. lezione pilota 2C identificata con data e collocazione coerente nel dominio Docente OS;
-2. decisione docente registrata sulla risorsa Atlas proposta: riutilizzo, adattamento, sostituzione o esclusione;
-3. verifica mobile P9 della singola superficie di proposta, modifica esplicita e nuova conferma dopo una modifica;
-4. percorso completo preparazione → decisione materiali → uso → registrazione lezione senza interventi tecnici correttivi durante il test;
-5. rapporto umano finale su comprensibilità, tempo, controllo, qualità didattica e criticità residue.
+Esito: **CLOSED_VERIFIED / HUMAN REVIEW PASS**.
 
 La chiusura del pilota non autorizza DOS-A1.
 
@@ -252,7 +252,7 @@ TypeSafe non blocca l'avvio di R3-F0 Atlas.
 ## Semaforo di ecosistema
 
 - **Verde**: governo delle autorità, baseline Arena, controllo docente, contratti di pubblicazione, hardening runtime Docente OS.
-- **Giallo**: chiusura ECO-02/P1, Officina materiali, TypeSafe HOLDOUT, marca e adozione. R3-F0 Atlas Product Foundation è chiusa.
+- **Giallo**: Officina materiali, TypeSafe HOLDOUT, binding completo delle evidenze di maturità, marca e adozione. ECO-02/P1 e R3-F0 Atlas Product Foundation sono chiusi.
 - **Rosso / escluso dall'architettura**: autenticazione/account studente, profili o tracking individuale in Atlas. **Rosso / non autorizzato**: adozione o pubblicazione autonoma, DOS-A1, esiti individuali verso Atlas.
 
 ## Vincoli attivi
