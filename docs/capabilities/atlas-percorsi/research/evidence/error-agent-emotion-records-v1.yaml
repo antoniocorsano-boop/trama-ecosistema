@@ -1,0 +1,199 @@
+schema: atlas.percorsi.evidence-records/c3-c11-c16-v1
+status: ACTIVE_NORMALISATION
+runtime_authorized: false
+screening_ref: ../common/error-relational-agents-emotion-screening-v1.md
+constitution_ref: ../../governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md
+
+method:
+  adoption_rule: "Search results are discovery candidates, never evidence by presence, ranking or citation count alone."
+  required_fields: [population, context, finding, limitation, permitted_inference, authority_type]
+  uncertainty_rule: "Where child-specific evidence is weak, preserve the safer constitutional boundary and label it precautionary rather than inventing an empirical certainty."
+  reasoning_preservation_rule: "Research reasoning, negative searches, uncertainty and the transition from evidence to design constraint are durable governance artefacts and must be saved in the same work cycle."
+  source_hierarchy: [peer_reviewed_primary_child_study, peer_reviewed_child_synthesis, institutional_child_rights_source, indirect_adult_or_general_agent_evidence]
+
+records:
+  - id: FB-C3-001
+    constitution_support: [C3]
+    domain: [feedback, error, learning]
+    authority_type: evidence_informed_design_direction
+    evidence_state: SUPPORTED
+    population: school_and_learning_populations_mixed
+    finding: "Feedback can improve learning when it provides information usable to reduce the gap between current and intended performance; effects are heterogeneous and depend on task, timing, content and learner conditions."
+    limitation: "No universal feedback formula, attempt count, timing or explanation length follows from the literature."
+    permitted_inference: "Design error responses as actionable information and permit revision when pedagogically coherent."
+    prohibited_inference: "An error indicates a stable learner trait or justifies shame, blame or psychological classification."
+
+  - id: FB-C3-002
+    constitution_support: [C3, C5, C16]
+    domain: [error_recovery, developmental_design]
+    authority_type: constitutional_design_constraint
+    evidence_state: SUPPORTED
+    population: child_facing_pathways
+    finding: "Recoverable error is compatible with formative learning and avoids turning task performance into identity judgement."
+    limitation: "Recovery mechanics require pathway- and developmental-band validation."
+    permitted_inference: "Expose overlooked evidence, consequences, unmet constraints or alternative strategies before offering a recoverable next action."
+
+  - id: AG-C11-001
+    constitution_support: [C11, C14]
+    domain: [anthropomorphism, trust, disclosure]
+    authority_type: indirect_support
+    evidence_state: SUPPORTED_WITH_LIMITS
+    population: predominantly_adult_human_agent_research
+    finding: "Anthropomorphic and social-presence cues can affect trust and willingness to disclose personal information in human-agent interaction."
+    limitation: "Adult/general-agent evidence does not quantify child risk and cannot substitute for direct child evidence."
+    permitted_inference: "Use only as mechanism context; do not derive child-specific thresholds."
+
+  - id: AG-C11-002
+    constitution_support: [C11, C14]
+    domain: [children, conversational_agents, evidence_gap]
+    authority_type: search_audit_record
+    evidence_state: SUPERSEDED_IN_PART
+    population: children_and_adolescents
+    finding: "Initial broad searches produced substantial semantic noise and many adult/general-agent studies."
+    limitation: "Search scarcity/noise was never evidence of absence or safety. Citation chaining and targeted title/author searches subsequently located direct child-robot studies."
+    permitted_inference: "Preserve negative-search history as methodological evidence; do not use it to claim that direct child evidence is absent."
+
+  - id: AG-C11-004
+    constitution_support: [C11, C14]
+    domain: [children, robot_question_asking, trust, perspective_taking]
+    authority_type: peer_reviewed_primary_child_study
+    evidence_state: SUPPORTED
+    population: "293 children aged 7-10"
+    context: "science-museum interaction with NAO social robot; 2x2 experiment"
+    source:
+      title: "On sharing and caring: Investigating the effects of a robot's self-disclosure and question-asking on children's robot perceptions and child-robot relationship formation"
+      venue: "Computers in Human Behavior 129 (2022) 107135"
+      doi: "10.1016/j.chb.2021.107135"
+    finding: "Robot question-asking increased children's trust and perceived cognitive perspective-taking; post-hoc mediation linked question-asking to trust through perceived cognitive perspective-taking. Robot self-disclosure did not uniformly increase relationship measures."
+    limitation: "Single museum encounter, ages 7-10, one embodied robot and self-report outcomes; does not show that all questions or all conversational agents increase trust, nor that trust is harmful."
+    permitted_inference: "Treat a child-facing agent's questions as potentially relationship-shaping, not interaction-neutral. Keep questions task-bound and review whether they unnecessarily increase perceived psychological understanding."
+    prohibited_inference: "Questions must be removed, or question-asking itself proves manipulation."
+
+  - id: AG-C11-005
+    constitution_support: [C11, C14, C16]
+    domain: [children, self_disclosure, relationship_formation, reciprocity]
+    authority_type: peer_reviewed_primary_child_studies
+    evidence_state: SUPPORTED
+    population: "two studies: N=30 and N=75, children aged 8-11"
+    context: "autonomous socially assistive robot; getting-acquainted interaction; Dutch school children used for prototype validation"
+    source:
+      title: "Getting acquainted: First steps for child-robot relationship formation"
+      venue: "Frontiers in Robotics and AI 9 (2022)"
+      doi: "10.3389/frobt.2022.853665"
+    finding: "Conversational patterns and reciprocity were explicitly designed to facilitate child self-disclosure and relationship formation. Intimacy of self-disclosure predicted relationship-formation success; perceived similarity to the robot increased disclosure intimacy."
+    limitation: "The work studies how to facilitate a supportive child-robot relationship; it does not establish harm from such relationships and is not an educational LLM study. Healthy school children were used for prototype testing although the broader application concerned socially assistive robotics."
+    permitted_inference: "Self-disclosure and relational closeness can be intentionally shaped by agent design. Atlas therefore must not use disclosure-eliciting or reciprocal-intimacy patterns as engagement mechanics."
+    prohibited_inference: "All child-agent relationship formation is harmful or all reciprocal dialogue is prohibited."
+
+  - id: AG-C11-006
+    constitution_support: [C11, C14]
+    domain: [children, transparency, anthropomorphism, trust, closeness]
+    authority_type: peer_reviewed_primary_child_study
+    evidence_state: SUPPORTED
+    population: "276 children aged 8-10"
+    context: "between-subject experiment with social robot"
+    source:
+      title: "Transparent robots: How children perceive and relate to a social robot that acknowledges its lack of human psychological capacities and machine status"
+      venue: "International Journal of Human-Computer Studies 177 (2023) 103063"
+      doi: "10.1016/j.ijhcs.2023.103063"
+    finding: "A robot's explicit information about its machine status and lack of human psychological capacities reduced children's closeness and trust. Anthropomorphism mediated effects on closeness and trust."
+    limitation: "One age band, one robot and one experimental framing; reduced trust/closeness is not itself proof of improved safety or learning."
+    permitted_inference: "Ontological transparency is a meaningful design variable. Child-facing agents should not imply human psychological capacities they do not possess, and transparency should be tested for comprehension by developmental band."
+    prohibited_inference: "A disclosure statement alone guarantees calibrated trust or safety."
+
+  - id: AG-C11-007
+    constitution_support: [C11, C14, C16]
+    domain: [children, emotion_learning, self_disclosure, question_asking]
+    authority_type: recent_peer_reviewed_child_study
+    evidence_state: EMERGING_SUPPORTED
+    population: children
+    context: "educational robot interaction during emotion learning"
+    source:
+      title: "Unlocking Emotions: The Impact of Robot Question-Asking and Reciprocal Sharing on Self-Disclosure during Emotion Learning"
+      venue: "ACM/IEEE HRI 2026"
+      doi: "10.1145/3757279.3785542"
+    finding: "Direct question-asking was reported as more effective than reciprocal self-disclosure for eliciting child disclosure; children perceiving the robot as kinder disclosed more, while those viewing it as more real disclosed less."
+    limitation: "Very recent study; full design, sample and outcome details require deeper source-level review before quantitative use. It concerns an educational robot, not an LLM pathway character."
+    permitted_inference: "Direct questioning and perceived relational qualities can affect disclosure even in an educational/emotion-learning context; sensitive/personal questions require a stronger boundary than ordinary task questions."
+    prohibited_inference: "The study establishes a universal causal rule for all child-facing AI."
+
+  - id: AG-C11-003
+    constitution_support: [C11, C14, C16]
+    domain: [character_boundary, pseudo_therapy, privacy]
+    authority_type: precautionary_constitutional_stop_supported_by_direct_child_evidence
+    evidence_state: STRENGTHENED_SUPPORTED
+    population: child_facing_atlas_percorsi
+    finding: "Direct child-robot studies show that question-asking can alter trust, disclosure intimacy can be intentionally facilitated through conversational/reciprocity design, perceived similarity can increase disclosure intimacy, and ontological transparency can alter anthropomorphism, trust and closeness. Combined with child-rights and data-minimisation duties, this supports a strict Atlas boundary against disclosure-seeking intimacy, pseudo-therapy and dependency-oriented engagement."
+    limitation: "Evidence is concentrated in embodied social robots, mainly ages 7-11; it does not establish harm thresholds for text/voice LLM agents, adolescents, every narrative character or every relational cue."
+    permitted_inference: "Characters remain bounded educational/narrative entities. No secrets, sensitive disclosure solicitation, diagnosis, exclusivity, simulated attachment, or empathy/intimacy engineered to retain the child. Task-bound questions and pedagogical warmth remain possible subject to developmental review and transparency."
+    prohibited_inference: "Anthropomorphism, warmth, characters or questions are inherently unsafe."
+
+  - id: EM-C16-001
+    constitution_support: [C16]
+    domain: [social_emotional_learning, school]
+    authority_type: evidence_informed_design_direction
+    evidence_state: SUPPORTED
+    population: children_and_adolescents_in_school_programmes
+    finding: "School-based social-emotional interventions report benefits in some outcomes, with effects varying by programme, context, implementation, outcome and population."
+    limitation: "Programme-level findings do not validate an Atlas pathway or a universal SEL mechanism."
+    permitted_inference: "Atlas may create bounded opportunities to practise perspective-taking, decision-making, recovery and regulation strategies."
+    prohibited_inference: "Pathway completion proves empathy, resilience, emotional regulation or broad social-emotional competence."
+
+  - id: EM-C16-002
+    constitution_support: [C3, C16]
+    domain: [emotion_regulation, learning, emotional_safety]
+    authority_type: evidence_informed_design_direction
+    evidence_state: SUPPORTED
+    population: school_age_and_educational_contexts
+    finding: "Emotion regulation is related to learning and school functioning, but constructs, measures and intervention effects vary."
+    limitation: "Association does not justify diagnosing emotion from interaction traces."
+    permitted_inference: "Use bounded fictional/hypothetical challenge, recoverable error and non-punitive exit while keeping emotional tone separate from diagnosis."
+
+research_reasoning:
+  - id: RR-C11-001
+    question: "Can child-facing characters/agents be designed as socially warm narrative entities without creating inappropriate relational pressure?"
+    reasoning: "Direct evidence does not support a blanket ban on anthropomorphic or warm characters. It does show that specific conversational and representational cues can alter trust, perceived psychological capacity, disclosure and relationship formation. Therefore the governed variable is not 'character vs no character' but the function of relational cues and the data/behaviour they seek to produce."
+    design_consequence: "Permit warmth, continuity, humour and narrative identity when they serve the learning task; prohibit disclosure-seeking intimacy, exclusivity, dependency and false psychological authority."
+
+  - id: RR-C11-002
+    question: "Should ontological transparency be mandatory?"
+    reasoning: "The transparency experiment demonstrates that explicit machine-status/psychological-capacity information changes child trust/closeness and anthropomorphism. It does not prove a single disclosure sentence is sufficient or optimal."
+    design_consequence: "Require comprehensible non-deceptive identity boundaries and developmental testing; do not rely on a one-time disclaimer as a safety control."
+
+  - id: RR-C11-003
+    question: "Are agent questions neutral interface controls?"
+    reasoning: "No. In direct child evidence, question-asking changed trust and perceived perspective-taking, and recent educational-robot work reports effects on disclosure. Yet questions are pedagogically indispensable in many tasks."
+    design_consequence: "Classify questions by function: task/evidence/reasoning questions are permitted; biography, secrets, intimate feelings, health/family/relationship disclosure or questions whose function is relational bonding are prohibited or require a separately governed context outside Atlas Percorsi."
+
+  - id: RR-C11-004
+    question: "Does the evidence justify calling child-agent relationships harmful?"
+    reasoning: "No. Several studies intentionally study beneficial/supportive relationship formation. Atlas's restriction follows from its public educational purpose, data-minimisation commitment and the avoidability of intimate disclosure for its learning goals, not from a claim that every child-agent relationship causes harm."
+    design_consequence: "Use proportional language in governance and preserve the distinction between empirical findings, precautionary boundaries and product-purpose choices."
+
+search_audit:
+  initial_broad_searches:
+    result: "High semantic noise; adult/general-agent literature dominated."
+    decision: "No automatic promotion; preserve as negative-search history."
+  targeted_citation_chain:
+    result: "Located direct peer-reviewed child-robot studies on question-asking/trust, disclosure/relationship formation and transparency/anthropomorphism, mainly ages 7-11."
+    decision: "Upgrade C11 provenance from predominantly indirect/precautionary to precautionary constitutional stop supported by direct child evidence, while retaining modality/age limitations."
+  current_gap:
+    result: "Direct evidence remains thinner for generative LLM agents, voice/text-only agents, longitudinal exposure and early adolescents/lower-secondary pupils."
+    decision: "Do not extrapolate robot findings quantitatively to LLMs; maintain targeted research queue."
+
+constitutional_status:
+  C3:
+    state: STRENGTHENED_SUPPORTED
+    open_work: "Separate primary/lower-secondary feedback evidence and implementation moderators."
+  C11:
+    state: PRECAUTIONARY_CONSTITUTIONAL_STOP_DIRECT_CHILD_EVIDENCE_SUPPORTED
+    open_work: "Prioritise direct child/teen generative-agent and LLM evidence, longitudinal exposure, parasociality, calibrated trust and lower-secondary age bands."
+  C16:
+    state: STRENGTHENED_SUPPORTED
+    open_work: "Normalise higher-quality school-age meta-analyses and implementation moderators; preserve no-trait-inference boundary."
+
+non_negotiable_pattern:
+  allowed: "error -> informative consequence -> safe reconsideration -> task-bound reflection"
+  prohibited: "error -> emotional pressure -> agent intimacy/reassurance -> personal disclosure -> hidden trait inference"
+
+promotion_note: "These records strengthen provenance but do not authorise runtime or constitutional promotion. Human pedagogical, developmental, accessibility, privacy/child-safety and exact-head review remain mandatory."
