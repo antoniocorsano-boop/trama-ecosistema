@@ -1,0 +1,207 @@
+schema: atlas.percorsi.evidence-packet/v1
+status: ACTIVE_NORMALISATION
+runtime_authorized: false
+constitutional_scope: [C12, C13]
+parent_register: ../evidence-records-v1.yaml
+screening_sources:
+  - ../common/transfer-of-learning-screening-v1.md
+  - ../common/retrieval-transfer-evidence-synthesis-v1.md
+method_note: >-
+  Broad bibliographic search for 'far transfer' produced severe semantic noise.
+  Targeted searches were therefore used to identify transfer taxonomies, transfer
+  limitations and domain-specific instructional work. Search-result presence is
+  discovery evidence only; bounded inferences below are the governed unit.
+
+records:
+  - id: TRANSFER-001
+    domain: [transfer, taxonomy, measurement]
+    evidence_basis: "Barnett & Ceci transfer-taxonomy tradition and subsequent transfer literature"
+    population: mixed
+    finding: >-
+      Transfer is multidimensional: source and target may differ in knowledge domain,
+      physical/social context, temporal context, functional context and modality.
+      A single near/far label can conceal materially different transfer distances.
+    limitation: >-
+      Taxonomic work structures description and measurement; it does not prove that
+      a given Atlas intervention causes transfer.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      Every Atlas transfer claim must declare source context, target context and the
+      dimensions that changed rather than using 'far transfer' as an undefined label.
+    constitution_support: [C12, C13]
+
+  - id: TRANSFER-002
+    domain: [transfer, similarity, structural_relations]
+    evidence_basis: "transfer and analogical-learning research traditions"
+    population: mixed
+    finding: >-
+      Transfer is facilitated when learners can detect relevant structural relations;
+      superficial similarity can help retrieval but does not itself demonstrate
+      abstraction or generalisation.
+    limitation: >-
+      The size and reliability of effects vary by task, prior knowledge, prompting and
+      instructional design.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      Changed-context tasks should preserve the intended deep relation while varying
+      selected surface/context features deliberately.
+    constitution_support: [C12]
+
+  - id: TRANSFER-003
+    domain: [far_transfer, cognitive_training, limits]
+    evidence_basis: "meta-analytic and methodological literature on cognitive training and far transfer"
+    population: mixed_including_child_and_adult_literatures
+    finding: >-
+      Broad far-transfer effects from practising a narrow cognitive activity are often
+      small, inconsistent or vulnerable to design and methodological limitations.
+    limitation: >-
+      Cognitive-training findings do not map directly onto authentic curricular
+      competence pathways; null broad transfer in one intervention family does not
+      establish impossibility of all educational transfer.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      Atlas must not infer broad transversal competence merely from repeated success
+      on a trained task or closely repeated interaction.
+    constitution_support: [C12, C13]
+
+  - id: TRANSFER-004
+    domain: [critical_thinking, instructional_design, near_far_transfer]
+    evidence_basis: "critical-thinking instructional and transfer literature"
+    population: education_mixed_secondary_and_higher_education_overrepresented
+    finding: >-
+      Explicit attention to reasoning processes, opportunities for application and
+      systematic instructional design can support critical-thinking outcomes, while
+      transfer remains sensitive to domain knowledge and target-task design.
+    limitation: >-
+      Evidence is heterogeneous and much is not specific to primary/lower-secondary
+      learners; it does not justify a context-free critical-thinking score.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      A transversal pathway should combine competence-relevant reasoning with
+      meaningful content/context and explicitly test changed-context application.
+    constitution_support: [C12, C13]
+
+  - id: CLAIM-001
+    domain: [claim_calibration, measurement_validity]
+    evidence_basis: "measurement logic plus transfer-specific screening"
+    population: not_population_specific
+    finding: >-
+      Evidence supports claims only at the level represented by the task and measure.
+      Performance on one task does not logically establish a stable general trait or
+      broad competence across unobserved contexts.
+    limitation: >-
+      The exact generalisation boundary depends on sampling of tasks, contexts,
+      occasions and supports.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      Atlas reports should describe observed task performance first and state the
+      claim ceiling explicitly; broader claims require broader evidence.
+    constitution_support: [C13, C1]
+
+  - id: CLAIM-002
+    domain: [claim_calibration, completion, engagement]
+    evidence_basis: "retrieval/transfer synthesis and learning-measurement distinction"
+    population: not_population_specific
+    finding: >-
+      Completion, time-on-task, points, interaction count and repeated accuracy in an
+      unchanged task are process/performance indicators, not direct evidence of
+      changed-context competence transfer.
+    limitation: >-
+      Such indicators may still have local diagnostic or usability value when their
+      interpretation is explicitly bounded.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      Never promote engagement or completion metrics to competence evidence without
+      an independently justified measurement link.
+    constitution_support: [C9, C12, C13]
+
+  - id: CLAIM-003
+    domain: [claim_calibration, support_level, independence]
+    evidence_basis: "transfer and scaffolding logic"
+    population: mixed
+    finding: >-
+      Successful performance with prompts, hints or scaffolds is not equivalent to
+      independent selection and application of a strategy.
+    limitation: >-
+      Supported performance can be educationally valuable and may represent a valid
+      developmental stage.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      Transfer records must preserve support level, and reports must not erase the
+      distinction between supported and independent performance.
+    constitution_support: [C12, C13]
+
+  - id: CLAIM-004
+    domain: [claim_calibration, repeated_measurement, robustness]
+    evidence_basis: "generalisation logic in educational measurement"
+    population: not_population_specific
+    finding: >-
+      Broader interpretations become more defensible when performance is sampled
+      across meaningfully varied tasks/contexts rather than a single instance.
+    limitation: >-
+      No universal number of tasks or contexts can be specified independent of the
+      construct and intended claim.
+    evidence_state: SUPPORTED
+    permitted_inference: >-
+      Atlas may accumulate bounded evidence across varied contexts, but must not use
+      an arbitrary completion count as a universal competence threshold.
+    constitution_support: [C12, C13]
+
+claim_ladder:
+  - level: L0
+    name: ACTIVITY_COMPLETION
+    permits: "The learner completed the activity."
+    forbids: "Any learning or competence conclusion from completion alone."
+  - level: L1
+    name: LOCAL_SUPPORTED_PERFORMANCE
+    permits: "The learner performed the specified action in this task with recorded support."
+    forbids: "Independent or cross-context competence claim."
+  - level: L2
+    name: LOCAL_INDEPENDENT_PERFORMANCE
+    permits: "The learner performed the specified action independently in this task."
+    forbids: "Transfer beyond the observed task."
+  - level: L3
+    name: CHANGED_CONTEXT_PERFORMANCE
+    permits: "The learner adapted/applied the target strategy in the declared changed context."
+    forbids: "Broad trait or universal transversal-competence claim."
+  - level: L4
+    name: MULTI_CONTEXT_TRANSFER_EVIDENCE
+    permits: >-
+      A bounded statement that the learner has demonstrated the target performance
+      across the sampled contexts, with conditions/supports stated.
+    forbids: >-
+      Stable personality labels, context-free psychometric claims or predictions
+      beyond the evidence sample.
+
+transfer_record_required_fields:
+  - source_context
+  - target_context
+  - changed_dimensions
+  - invariant_structure
+  - prior_knowledge_assumptions
+  - support_level
+  - observable_action
+  - outcome
+  - claim_ladder_level
+  - claim_ceiling
+  - alternative_explanations
+
+constitutional_mapping:
+  C12:
+    status: PROVENANCE_NORMALISED_V1
+    records: [TRANSFER-001, TRANSFER-002, TRANSFER-003, TRANSFER-004, CLAIM-002, CLAIM-003, CLAIM-004]
+  C13:
+    status: PROVENANCE_NORMALISED_V1
+    records: [TRANSFER-001, TRANSFER-003, TRANSFER-004, CLAIM-001, CLAIM-002, CLAIM-003, CLAIM-004]
+
+remaining_limits:
+  - "Child-specific primary/lower-secondary transfer studies remain underrepresented and must be strengthened."
+  - "The claim ladder is an Atlas governance model derived from evidence/measurement logic; it is not itself a published psychometric scale."
+  - "No threshold for competence certification is authorised."
+  - "No transfer claim may be generated from completion alone."
+
+current_decision: >-
+  C12 and C13 no longer have empty provenance. Their first normalised evidence packet
+  supports explicit changed-context measurement and calibrated claim ceilings. This
+  closes the structural provenance gap but does not complete age-specific validation
+  or authorise runtime/certification.

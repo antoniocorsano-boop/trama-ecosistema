@@ -1,0 +1,243 @@
+schema: atlas.percorsi.evidence-records/v1
+status: ACTIVE_NORMALISATION
+runtime_authorized: false
+source_register: ../research-evidence-register.md
+constitution_ref: ../governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md
+rule: "A source supports only the bounded inference recorded here; source presence never equals product approval."
+
+records:
+  - id: PED-001
+    domain: [metacognition, self_regulated_learning, development]
+    source_type: scholarly_review
+    population: developmental_and_educational_stages
+    finding: "SRL integrates cognitive, metacognitive, behavioural, motivational and emotional dimensions; application differs by developmental/educational stage."
+    limitation: "Does not define an Atlas pathway, individual norm or psychometric classification."
+    evidence_state: SUPPORTED
+    permitted_inference: "Different developmental bands require differentiated scaffolding and reflection."
+    constitution_support: [C4, C5, C17]
+
+  - id: PED-002
+    domain: [self_regulated_learning, development, executive_functions]
+    source_type: recent_scholarly_synthesis
+    population: childhood_to_adolescence
+    finding: "Executive functions and metacognitive knowledge develop across childhood; strategy-use trajectories are not simply linear with age."
+    limitation: "Heterogeneous constructs and measures; no individual developmental norm."
+    evidence_state: SUPPORTED
+    permitted_inference: "Scaffolding should vary by developmental band and should not disappear automatically with age."
+    constitution_support: [C5, C6]
+
+  - id: PED-VIS-001
+    domain: [cognitive_load, multimedia]
+    source_type: systematic_review
+    population: mixed_higher_education_overrepresented
+    finding: "Presentation format, modality, seductive details and signalling are recurrent determinants of extraneous cognitive load."
+    limitation: "Evidence base is not child-dominant."
+    evidence_state: SUPPORTED
+    permitted_inference: "Visual and motion layers require functional justification and cognitive-load review."
+    constitution_support: [C6, C7, C8, C9]
+
+  - id: PED-VIS-002
+    domain: [seductive_details, attention, multimedia]
+    source_type: meta_analysis
+    population: mixed
+    finding: "Interesting but instructionally irrelevant details can impair retention or transfer in some designs."
+    limitation: "Context-dependent; does not justify banning illustration or narrative detail."
+    evidence_state: SUPPORTED
+    permitted_inference: "Decorative novelty is not automatically beneficial and should be removable when it competes with the learning target."
+    constitution_support: [C7, C8]
+
+  - id: PED-VIS-003
+    domain: [signalling, multimedia, comprehension]
+    source_type: meta_analysis
+    population: mixed_not_child_exclusive
+    finding: "Signalling relevant text-picture correspondences can improve comprehension/transfer, especially for lower prior knowledge."
+    limitation: "Effects depend on signalling quality and context."
+    evidence_state: SUPPORTED
+    permitted_inference: "Use hierarchy and cues to direct attention to meaningful relations rather than visual search through competing elements."
+    constitution_support: [C6, C7, C8]
+
+  - id: PED-VIS-004
+    domain: [children, multimedia, attention, signalling]
+    source_type: child_specific_scholarly_source
+    population: "children mean age 9.35; one science-themed task context"
+    finding: "Interactive/multimedia elements can support learning but also distract; explicit visual signalling reduced cognitive-load problems in the studied context."
+    limitation: "Single age range and task; not a universal interface prescription."
+    evidence_state: SUPPORTED
+    permitted_inference: "Child-facing interaction should guide attention to the pedagogically relevant object and restrain irrelevant interactivity."
+    constitution_support: [C5, C7, C8, C9]
+
+  - id: PED-VIS-005
+    domain: [executive_functions, development]
+    source_type: scholarly_review
+    population: childhood_and_adolescence
+    finding: "Inhibition, working memory and shifting continue developing through childhood and adolescence with differing trajectories."
+    limitation: "Developmental review; not diagnostic and not an Atlas intervention study."
+    evidence_state: SUPPORTED
+    permitted_inference: "Avoid treating executive control as adult-stable; reduce simultaneous avoidable demands and support reorientation."
+    constitution_support: [C5, C6]
+
+  - id: CHILD-001
+    domain: [child_rights, privacy, communication]
+    source_type: data_protection_authority
+    population: children
+    finding: "Children receive specific protection and information should be clear, understandable and age-appropriate."
+    limitation: "Data-protection authority guidance; not pedagogical-effectiveness evidence."
+    evidence_state: SUPPORTED
+    permitted_inference: "Child-facing privacy/information design must be age-appropriate and understandable."
+    constitution_support: [C5, C14]
+
+  - id: CHILD-002
+    domain: [age_assurance, privacy, proportionality]
+    source_type: data_protection_authority
+    population: children
+    finding: "Age assurance may support safety but must itself respect data-protection principles and proportionality."
+    limitation: "Does not establish a need for age verification in Atlas."
+    evidence_state: SUPPORTED
+    permitted_inference: "Do not introduce age verification merely because users are minors; necessity must be separately established."
+    constitution_support: [C14]
+
+  - id: CHILD-003
+    domain: [child_rights, digital_environment]
+    source_type: primary_institutional_source
+    population: children
+    finding: "Children's rights apply in digital environments; protection, participation, inclusion/access and best interests must be considered together."
+    limitation: "Rights framework, not an instructional-effectiveness study."
+    evidence_state: SUPPORTED
+    permitted_inference: "Child-safe design must include agency, access and participation as well as protection/privacy."
+    constitution_support: [C2, C5, C14, C15, C16]
+
+  - id: CHILD-004
+    domain: [best_interests, child_rights, governance]
+    source_type: institutional_guidance
+    population: children
+    finding: "Digital design should consider best interests while balancing protection, privacy and participation; impact review is relevant governance practice."
+    limitation: "Governance guidance, not pedagogical-effectiveness evidence."
+    evidence_state: SUPPORTED
+    permitted_inference: "Use a child-rights/child-safety review before publication rather than a late compliance-only check."
+    constitution_support: [C2, C14, C15, C16, C17]
+
+  - id: CHILD-005
+    domain: [child_participation, digital_design, governance]
+    source_type: recent_institutional_consultation
+    population: "children consulted across seven countries plus youth/experts"
+    finding: "Children report both benefits and safety/inclusion/fairness concerns in digital environments; meaningful participation is recommended."
+    limitation: "Consultation evidence is not representative of all children and cannot define universal preferences."
+    evidence_state: SUPPORTED
+    permitted_inference: "Include safeguarded age-band usability/experience validation without unnecessary personal-data collection."
+    constitution_support: [C2, C5, C14, C15]
+
+  - id: PRIV-001
+    domain: [privacy, data_minimisation, privacy_by_design]
+    source_type: primary_legislation
+    population: data_subjects_including_children
+    finding: "Purpose limitation, minimisation, storage limitation and data protection by design/default are binding principles."
+    limitation: "Specific role/legal-basis analysis remains deployment-dependent."
+    evidence_state: SUPPORTED
+    permitted_inference: "First ask whether processing can be avoided; do not collect data merely because processing might be legally possible."
+    constitution_support: [C4, C11, C14]
+
+  - id: PRIV-IT-001
+    domain: [privacy, minors, communication]
+    source_type: italian_data_protection_authority
+    population: minors
+    finding: "Minors merit specific protection and child-facing information must be intelligible and age-appropriate."
+    limitation: "Does not by itself determine all Atlas controller/processor roles."
+    evidence_state: SUPPORTED
+    permitted_inference: "Use intelligible age-appropriate notices and minimise child data."
+    constitution_support: [C5, C14]
+
+  - id: PRIV-IT-002
+    domain: [privacy, school, digital_context]
+    source_type: italian_data_protection_authority
+    population: school_context
+    finding: "Current guidance addresses personal-data protection in school and digital contexts, including online disclosure and AI."
+    limitation: "Public Atlas use and institutional school processing must not be assumed identical."
+    evidence_state: SUPPORTED
+    permitted_inference: "Keep deployment/legal-role analysis separate and avoid unnecessary disclosure in school-facing designs."
+    constitution_support: [C14, C17]
+
+  - id: A11Y-001
+    domain: [accessibility, web_standard]
+    source_type: standard
+    population: web_users
+    finding: "WCAG 2.2 provides a testable web-accessibility baseline."
+    limitation: "Conformance does not cover every cognitive, language or learning need."
+    evidence_state: SUPPORTED
+    permitted_inference: "Treat accessibility as a correctness baseline while adding cognitive/developmental review."
+    constitution_support: [C15]
+
+  - id: A11Y-002
+    domain: [cognitive_accessibility, clear_content]
+    source_type: standards_guidance
+    population: users_with_cognitive_and_learning_needs
+    finding: "Clear words, short sentences, manageable blocks, supportive visuals and clear layout can improve comprehension."
+    limitation: "Supplemental guidance; pathway construct must still be preserved."
+    evidence_state: SUPPORTED
+    permitted_inference: "Constrain prompts, narrative and notices for clarity without changing the competence being exercised."
+    constitution_support: [C5, C6, C15]
+
+  - id: A11Y-003
+    domain: [cognitive_accessibility, attention, reorientation]
+    source_type: standards_guidance
+    population: users_with_cognitive_and_learning_needs
+    finding: "Distractions can impede task completion and reorientation; limiting interruptions and supporting recovery is recommended."
+    limitation: "Guidance is broader than Atlas-specific empirical validation."
+    evidence_state: SUPPORTED
+    permitted_inference: "Provide clear focal tasks, persistent orientation and recoverable state; avoid non-essential interruptions."
+    constitution_support: [C6, C7, C8, C15]
+
+  - id: A11Y-IT-001
+    domain: [accessibility, italy, public_sector]
+    source_type: italian_institutional_guidance
+    population: public_administration_digital_services
+    finding: "AgID guidance defines accessibility requirements, verification and feedback mechanisms for relevant PA websites/apps."
+    limitation: "Exact legal applicability depends on deployment/ownership and must be determined rather than assumed."
+    evidence_state: SUPPORTED
+    permitted_inference: "Use as an Italian institutional baseline and perform deployment-specific applicability analysis."
+    constitution_support: [C15, C17]
+
+  - id: NARR-001
+    domain: [narrative, digital_storytelling, education]
+    source_type: scholarly_systematic_review
+    population: primary_secondary_higher_education
+    finding: "Educational digital storytelling spans multiple pedagogical orientations/outcomes; undifferentiated positive interpretation is unwarranted."
+    limitation: "Does not identify one universal narrative grammar or style."
+    evidence_state: SUPPORTED
+    permitted_inference: "Treat narrative as a functional pedagogical candidate, not decoration or a universal default."
+    constitution_support: [C7, C9, C10]
+
+constitution_provenance_summary:
+  C1: [PED-001, PED-002, CHILD-003]
+  C2: [CHILD-003, CHILD-004, CHILD-005]
+  C3: [PED-001, CHILD-003]
+  C4: [PED-001, PRIV-001]
+  C5: [PED-001, PED-002, PED-VIS-004, PED-VIS-005, CHILD-001, CHILD-003, A11Y-002]
+  C6: [PED-002, PED-VIS-001, PED-VIS-003, PED-VIS-005, A11Y-002, A11Y-003]
+  C7: [PED-VIS-001, PED-VIS-002, PED-VIS-003, PED-VIS-004, A11Y-003, NARR-001]
+  C8: [PED-VIS-001, PED-VIS-002, PED-VIS-003, PED-VIS-004, A11Y-003]
+  C9: [PED-VIS-001, PED-VIS-004, NARR-001]
+  C10: [NARR-001, PED-VIS-001, PED-VIS-002]
+  C11: [PRIV-001, CHILD-003]
+  C12: []
+  C13: []
+  C14: [PRIV-001, PRIV-IT-001, PRIV-IT-002, CHILD-001, CHILD-002, CHILD-003, CHILD-004, CHILD-005]
+  C15: [A11Y-001, A11Y-002, A11Y-003, A11Y-IT-001, CHILD-003, CHILD-005]
+  C16: [CHILD-003, CHILD-004, PED-001]
+  C17: [FRAME-IT-002, PRIV-IT-002, CHILD-004, A11Y-IT-001]
+
+provenance_gaps:
+  - constitution_rule: C12
+    gap: "Transfer-specific screened records must be normalised from the transfer research packets before constitutional promotion."
+  - constitution_rule: C13
+    gap: "Claim-calibration and transfer-measurement evidence must be normalised explicitly."
+  - constitution_rule: C3
+    gap: "Direct evidence on educational feedback/error framing and emotional safety should be strengthened."
+  - constitution_rule: C11
+    gap: "Direct child-safety evidence on anthropomorphic agents, relational framing and pseudo-therapeutic interaction should be added."
+  - constitution_rule: C16
+    gap: "Emotion-regulation/SEL evidence needs dedicated normalised records with implementation and age limitations."
+
+normalisation_rule: >-
+  Empty or weak provenance is visible debt, not permission to fill gaps by intuition.
+  A constitutional rule may remain precautionary/governance-based while evidence is
+  strengthened, but its authority type and limitation must remain explicit.
