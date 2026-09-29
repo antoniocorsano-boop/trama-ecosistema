@@ -84,7 +84,29 @@
           "sourceRefs": {
             "type": "array",
             "minItems": 1
+          },
+          "activeDevelopmentRef": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "observedActiveDevelopmentHead": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
           }
+        },
+        "dependentRequired": {
+          "activeDevelopmentRef": [
+            "observedActiveDevelopmentHead"
+          ],
+          "observedActiveDevelopmentHead": [
+            "activeDevelopmentRef"
+          ]
         }
       }
     },
