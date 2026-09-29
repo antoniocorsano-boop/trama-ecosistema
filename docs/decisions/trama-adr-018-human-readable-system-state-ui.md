@@ -42,6 +42,11 @@ Technical identifiers SHALL use progressive disclosure.
 6. Valid governed information MUST remain visibly usable when live observation is partial or unavailable.
 7. Technical details MUST remain accessible to expert users without being required for primary comprehension.
 8. Internal enums MUST NOT be copied directly into user-facing labels without an explicit communication mapping.
+9. Status and severity MUST remain separate concepts; incomplete or uncertain state does not automatically imply high severity.
+10. Loading, empty, unavailable, no-access and not-configured states MUST be distinguishable.
+11. A state that requires action MUST identify a meaningful next step and must not become a dead-end warning.
+12. Dynamic status messages MUST be accessible without unnecessary focus interruption.
+13. Current state and history MUST be visually and semantically distinct.
 
 ## Required Stage E sequence
 
@@ -61,7 +66,11 @@ Significant Stage E patterns SHALL be compared with mature products and document
 Baseline references:
 - GitHub Status Checks and Deployments;
 - GitLab Environments, Deployments and Deployment Approvals;
-- Backstage Well-known Statuses and Entity Presentation.
+- Backstage Well-known Statuses and Entity Presentation;
+- PatternFly Status and Severity / Alert patterns;
+- GOV.UK Notification Banner guidance;
+- W3C WCAG 2.2 Status Messages and cognitive-accessibility guidance;
+- Carbon Notification accessibility guidance.
 
 TRAMA adopts the information architecture patterns while translating them into a less technical language appropriate to its user population.
 
@@ -104,8 +113,13 @@ Before E2 implementation:
 4. non-technical comprehension test criteria defined;
 5. accessibility semantics defined;
 6. technical-details disclosure defined;
-7. independent review;
-8. HUMAN EXACT-HEAD REVIEW — PASS.
+7. loading/empty/unavailable/no-access/offline states defined;
+8. status-versus-severity semantics defined;
+9. dynamic notification/focus semantics defined;
+10. action ownership/permissions behavior defined;
+11. human-use validation tasks defined;
+12. independent review;
+13. HUMAN EXACT-HEAD REVIEW — PASS.
 
 ## References
 
