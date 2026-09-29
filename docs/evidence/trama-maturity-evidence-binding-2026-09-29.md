@@ -217,3 +217,25 @@ This receipt does not:
 - change component lifecycle;
 - create adoption evidence;
 - create regression-history evidence.
+
+
+## 8. Adversarial evidence correction checkpoint
+
+A final evidence-scope review rejected Arena PR #341 as the product-area Human Review because its reviewed scope is intentionally limited to Dialog/Tabs component evidence.
+
+Arena product-area maturity is instead bound to ECO-01/S3 PR #312, which is a curriculum-source/cross-product review and therefore matches the Arena maturity area:
+
+- exact head: `65a7f5b820b344ec61f8e09d7559012aae521bbc`;
+- Product CI run `35512448131`: PASS;
+- Beta Release Contract run `35512448242`: PASS;
+- HUMAN CROSS-REVIEW PASS comment `5750603947`, explicitly bound to the same Arena exact head.
+
+The deterministic snapshot was regenerated after this correction and preserves:
+- Governance L4;
+- Arena L4;
+- Atlas L4;
+- Docente OS L3;
+- no Docente OS RUNTIME_CANARY;
+- all integrity checks PASS.
+
+This correction strengthens evidence scope without changing any maturity definition or product authority.
