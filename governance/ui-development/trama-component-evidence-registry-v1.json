@@ -52,16 +52,18 @@
         {
           "type": "ISOLATED",
           "status": "PRESENT",
-          "ref": "antoniocorsano-boop/CurManLight_arena:src/ui/stories/UiConfirmDialog.stories.tsx",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
           "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228"
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         {
           "type": "BEHAVIOURAL",
           "status": "PRESENT",
-          "ref": "antoniocorsano-boop/CurManLight_arena:src/__tests__/cml611-dialogs-confirmations.test.tsx",
+          "ref": "src/__tests__/cml611-dialogs-confirmations.test.tsx",
           "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228"
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         {
           "type": "ACCESSIBILITY",
@@ -122,16 +124,18 @@
         {
           "type": "ISOLATED",
           "status": "PRESENT",
-          "ref": "antoniocorsano-boop/CurManLight_arena:src/ui/stories/UiTabs.stories.tsx",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
           "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228"
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         {
           "type": "BEHAVIOURAL",
           "status": "PRESENT",
-          "ref": "antoniocorsano-boop/CurManLight_arena:src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
           "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228"
+          "runId": "36608209228",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         {
           "type": "ACCESSIBILITY",
