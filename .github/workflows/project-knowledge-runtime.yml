@@ -12,6 +12,8 @@ on:
       - 'scripts/test_project_knowledge_runtime.py'
       - 'scripts/test_repository_observation_projection.py'
       - 'scripts/test_project_knowledge_dual_speed_stage_a.py'
+      - 'scripts/compose_effective_project_context.py'
+      - 'scripts/test_project_knowledge_dual_speed_stage_b.py'
       - 'scripts/validate_cc_mss_live_predecision.py'
       - 'schemas/repository-observation.schema.json'
       - 'schemas/live-repository-overlay.schema.json'
@@ -53,12 +55,17 @@ jobs:
           python scripts/test_project_knowledge_runtime.py
           python scripts/test_repository_observation_projection.py
           python scripts/test_project_knowledge_dual_speed_stage_a.py
+          python scripts/test_project_knowledge_dual_speed_stage_b.py
           python scripts/validate_cc_mss_live_predecision.py
           python scripts/test_repository_observation_promotion_canonical.py
           python scripts/validate_repository_observation_promotion_semantics.py
           python scripts/test_repository_observation_promotion_planner.py
           python scripts/test_repository_observation_promotion_write_actor.py
           python scripts/test_repository_observation_promotion_prepare.py
+      - name: Audit dual-speed Stage B composer purity
+        run: |
+          ! grep -En 'urllib|httpx|requests|socket|subprocess|os\.system|Popen|git |gh |fetch\(|open\(|write_text|write_bytes|unlink|mkdir' scripts/compose_effective_project_context.py
+          ! grep -En 'promotion_write_actor|repository_observation_promotion_write_actor' scripts/compose_effective_project_context.py
       - name: Audit promotion planner read-only surface
         run: |
           ! grep -En 'urllib|httpx|requests|socket|subprocess|os\.system|Popen|git push|gh pr' scripts/repository_observation_promotion_planner.py
