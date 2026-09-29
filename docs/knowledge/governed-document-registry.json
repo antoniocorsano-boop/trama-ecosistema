@@ -521,6 +521,31 @@
         "ACCESSIBILITY_FINDING",
         "INV03_FINDING"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-EVIDENCE-INV03",
+      "path": "docs/inventory/trama-component-evidence-coverage-inv03.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "component-inventory",
+        "evidence-coverage",
+        "accessibility",
+        "ui-supply-chain"
+      ],
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-INVENTORY",
+        "DOC-TRAMA-COMPONENT-DIRECTORY-INV01",
+        "DOC-TRAMA-INTERACTION-DUPLICATION-INV02",
+        "DOC-TRAMA-COMPONENT-STRATEGY"
+      ],
+      "updateTriggers": [
+        "COMPONENT_EVIDENCE_CHANGE",
+        "ACCESSIBILITY_EVIDENCE_CHANGE",
+        "COMPONENT_LIFECYCLE_CHANGE",
+        "CS_S1_FINDING"
+      ]
     }
   ]
 }
