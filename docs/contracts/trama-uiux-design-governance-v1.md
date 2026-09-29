@@ -7,6 +7,8 @@
 **Runtime impact:** NONE  
 **DOS-A1:** RUNTIME_DEFERRED
 
+> **Operational model:** `TRAMA-UI-DEVELOPMENT-01` (`docs/contracts/trama-ui-development-model-v1.md`) defines the reusable day-to-day sequence that operationalizes this contract from user need through component sourcing, prototype, evidence and human validation. It does not replace or weaken this contract.
+
 ## 1. Purpose
 
 TRAMA-UIUX-01 makes interface quality a governed ecosystem property rather than a late visual review. A feature is not complete merely because its functional contract passes: its user-facing surface must also satisfy a stable, evidence-backed interaction and visual-quality contract.
