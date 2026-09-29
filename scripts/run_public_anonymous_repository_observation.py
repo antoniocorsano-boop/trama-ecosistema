@@ -29,7 +29,13 @@ def canonical_pr_snapshot(prs):
 def collect(output="control-center/data/repository-observation.live.json"):
     enrollment=load("config/repository-enrollment.json")
     repos=[x for x in enrollment["repositories"] if x["state"]=="ENROLLED"]
-    budget=t.Budget(remaining=len(repos)*6,reserve=2)
+    active_ref_calls=sum(
+        3
+        for item in repos
+        if item.get("activeDevelopmentRef")
+        and item.get("activeDevelopmentRef") != item["defaultBranch"]
+    )
+    budget=t.Budget(remaining=len(repos)*6+active_ref_calls,reserve=2)
     resources=t.ResourceBudget(remaining_bytes=8_000_000)
     observed_at=now()
     repository_rows=[]
@@ -46,6 +52,14 @@ def collect(output="control-center/data/repository-observation.live.json"):
         if not open_sha or len(open_sha)!=40: raise RuntimeError("HEAD_UNAVAILABLE")
         commit=t.anonymous_get(t.build_url(repo,"commit.read",sha=open_sha),budget,resources)
         if commit.get("sha")!=open_sha: raise RuntimeError("COMMIT_BINDING_MISMATCH")
+        active_ref=item.get("activeDevelopmentRef")
+        active_sha=None
+        if active_ref and active_ref != ref:
+            active_open=t.anonymous_get(t.build_url(repo,"ref.read",ref=active_ref),budget,resources)
+            active_sha=active_open.get("object",{}).get("sha")
+            if not active_sha or len(active_sha)!=40: raise RuntimeError("ACTIVE_DEVELOPMENT_HEAD_UNAVAILABLE")
+            active_commit=t.anonymous_get(t.build_url(repo,"commit.read",sha=active_sha),budget,resources)
+            if active_commit.get("sha")!=active_sha: raise RuntimeError("ACTIVE_DEVELOPMENT_COMMIT_BINDING_MISMATCH")
         prs=t.anonymous_get(t.build_url(repo,"pr.read"),budget,resources,max_bytes=1500000)
         if not isinstance(prs,list): raise RuntimeError("PR_RESPONSE_INVALID")
         if len(prs)>=100: raise RuntimeError("INCOMPLETE_PAGINATION")
@@ -64,10 +78,17 @@ def collect(output="control-center/data/repository-observation.live.json"):
         close_ref=t.anonymous_get(t.build_url(repo,"ref.read",ref=ref),budget,resources,max_bytes=256000,allow_reserve=True)
         close_sha=close_ref.get("object",{}).get("sha")
         if close_sha!=open_sha: raise RuntimeError("ANCHOR_CHANGED")
+        if active_ref and active_ref != ref:
+            active_close=t.anonymous_get(t.build_url(repo,"ref.read",ref=active_ref),budget,resources,max_bytes=256000,allow_reserve=True)
+            if active_close.get("object",{}).get("sha")!=active_sha:
+                raise RuntimeError("ACTIVE_DEVELOPMENT_ANCHOR_CHANGED")
         prs_close=t.anonymous_get(t.build_url(repo,"pr.read"),budget,resources,max_bytes=1500000,allow_reserve=True)
         if not isinstance(prs_close,list): raise RuntimeError("PR_RESPONSE_INVALID")
         if len(prs_close)>=100: raise RuntimeError("INCOMPLETE_PAGINATION")
         if canonical_pr_snapshot(prs_close)!=first_pr_snapshot: raise RuntimeError("PR_ANCHOR_CHANGED")
+        repository_source_refs=[f"github-public-api:{repo}@{open_sha}"]
+        if active_sha:
+            repository_source_refs.append(f"github-public-api:{repo}:ref/{active_ref}@{active_sha}")
         repository_rows.append({
           "repository":repo,
           "enrollmentRef":item["id"],
@@ -75,9 +96,13 @@ def collect(output="control-center/data/repository-observation.live.json"):
           "freshnessStatus":"FRESH",
           "completenessStatus":"COMPLETE",
           "observedHead":open_sha,
-          "sourceRefs":[f"github-public-api:{repo}@{open_sha}"]
+          "activeDevelopmentRef":active_ref if active_ref and active_ref != ref else None,
+          "observedActiveDevelopmentHead":active_sha,
+          "sourceRefs":repository_source_refs
         })
         source_refs.append(f"github-public-api:{repo}")
+        if active_sha:
+            source_refs.append(f"github-public-api:{repo}:ref/{active_ref}")
     result={
       "schemaVersion":"trama.repository-observation/v1",
       "collectionId":"live-one-shot-public-anonymous-"+observed_at.replace(":","").replace("-",""),
