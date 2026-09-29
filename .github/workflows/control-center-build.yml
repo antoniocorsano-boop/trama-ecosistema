@@ -145,6 +145,10 @@ jobs:
         run: |
           set -euo pipefail
           test -s control-center/data/ecosystem-snapshot.json
+          test -s control-center/data/context-packs/project-knowledge.json
+          test -s control-center/project-knowledge-state.js
+          grep -q "Stato delle informazioni" control-center/index.html
+          node scripts/test_stage_e2_project_knowledge_ui.cjs
           test -s control-center/evidence.html
           test -s control-center/operations.html
           grep -q '"integrityChecks"' control-center/data/ecosystem-snapshot.json

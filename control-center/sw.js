@@ -1,5 +1,5 @@
-const CACHE='trama-control-center-v8';
-const SHELL=['./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./ecosystem.html','./evidence.html','./operations.html','./data/ecosystem-snapshot.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md'];
+const CACHE='trama-control-center-v9';
+const SHELL=['./index.html','./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./ecosystem.html','./evidence.html','./operations.html','./project-knowledge-state.js','./data/ecosystem-snapshot.json','./data/context-packs/project-knowledge.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));
@@ -34,13 +34,14 @@ self.addEventListener('fetch',event=>{
   const isNavigation=request.mode==='navigate';
   const isHtml=u.pathname.endsWith('/')||u.pathname.endsWith('.html');
   const isSnapshot=u.pathname.endsWith('/data/ecosystem-snapshot.json');
+  const isProjectKnowledge=u.pathname.endsWith('/data/context-packs/project-knowledge.json');
 
   if(isNavigation||isHtml){
     event.respondWith(networkFirst(request,'./index.html'));
     return;
   }
 
-  if(isSnapshot){
+  if(isSnapshot||isProjectKnowledge){
     event.respondWith(networkFirst(request));
     return;
   }
