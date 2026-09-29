@@ -1,0 +1,13 @@
+{
+  "schemaVersion":"trama.effective-project-context/v1",
+  "governedSnapshotRef":"control-center/data/project-context-snapshot.json@checkpoint",
+  "governedAsOf":"2026-09-29T04:34:20Z",
+  "liveObservedAt":"2026-09-29T06:31:00Z",
+  "governedKnowledgeStatus":"CURRENT",
+  "liveObservationStatus":"FRESH",
+  "semanticDriftStatus":"REVIEW_REQUIRED",
+  "effectiveContextStatus":"USABLE",
+  "promotionRequired":false,
+  "facts":[],
+  "sourceRefs":["fixture:semantic-drift"]
+}
