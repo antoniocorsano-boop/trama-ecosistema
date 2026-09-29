@@ -390,13 +390,229 @@ E0 non:
 - definisce estetica finale;
 - sostituisce la human-use validation.
 
-## 19. Decisione operativa
+## 19. Stato vs gravità
+
+TRAMA MUST distinguish **status** from **severity**.
+
+- **Status** answers: what state is this information/system in?
+- **Severity** answers: how much impact does the problem have?
+
+A non-current or partial state is not automatically severe.
+A changed source is not automatically critical.
+A blocking problem may be severe even if the underlying live observation is fresh.
+
+User-facing components MUST therefore avoid using warning/critical visual language solely because a status is PARTIAL, STALE or DETECTED.
+
+This follows the mature PatternFly distinction between status and severity and prevents false alarm semantics.
+
+## 20. Notification and interruption policy
+
+Status communication MUST be proportional to user impact.
+
+Rules:
+- normal state does not generate banners or toasts;
+- informational changes remain inline when possible;
+- use a prominent banner only when the message affects the page/task as a whole;
+- avoid multiple simultaneous global banners; prefer the highest-priority message plus grouped detail;
+- dynamic status changes MUST be announced accessibly without stealing focus unless immediate action is required;
+- do not repeatedly re-announce unchanged state;
+- dismissible notifications MUST NOT hide a still-active blocking condition permanently.
+
+Accessibility:
+- use semantic live regions/status roles appropriate to impact;
+- reserve assertive interruption for true urgent/blocking conditions;
+- status updates that do not change context should be programmatically exposed to assistive technology.
+
+This aligns with W3C status-message guidance and mature notification systems such as GOV.UK and Carbon.
+
+## 21. Empty, loading, unavailable and no-access states
+
+These states MUST remain distinct.
+
+### Loading
+
+Meaning:
+> data is being obtained and no result is available yet.
+
+Do not show an error or empty-state message while a request is still pending.
+
+### Empty
+
+Meaning:
+> the request completed successfully and there is currently nothing to show.
+
+Example:
+> **Nessun aggiornamento da mostrare**  
+> Non ci sono cambiamenti recenti che richiedono attenzione.
+
+### Unavailable
+
+Meaning:
+> the latest information could not be obtained.
+
+Example:
+> **Aggiornamenti non disponibili**  
+> Le informazioni verificate restano consultabili.
+
+### No access
+
+Meaning:
+> the user is not permitted to see a detail.
+
+Do not represent lack of permission as missing data or system failure.
+
+### Not configured / not enrolled
+
+Meaning:
+> a source or feature has not yet been configured.
+
+State what must be done next rather than blaming the user.
+
+These distinctions MUST be represented in E1 prototypes.
+
+## 22. Actionability, responsibility and permissions
+
+Every state that requires action MUST identify:
+
+1. what action is required;
+2. who can perform it, when relevant;
+3. whether the current user can perform it;
+4. what remains possible before the action is completed;
+5. the consequence of not acting.
+
+Avoid dead-end warnings.
+
+If the current user cannot perform the action, show a useful next step such as:
+- who/which role can intervene;
+- where the relevant review is located;
+- whether no action is required from the current user.
+
+Buttons MUST describe the action:
+- prefer “Verifica le informazioni”;
+- avoid generic “OK”, “Continua” or “Risolvi” where the actual action is more specific.
+
+## 23. Change transparency and history
+
+A high-quality state UI MUST answer not only “what is the state now?” but, when relevant, “what changed?”.
+
+For review-required or blocking states, the detail layer SHOULD expose:
+- what changed;
+- when it was first observed;
+- what source is involved;
+- whether the change is operational or semantic;
+- whether a previous verified state remains usable;
+- what review/action occurred afterwards.
+
+The primary UI should summarize the consequence, not dump the technical diff.
+
+History MUST remain separate from current state so old incidents do not appear active.
+
+## 24. Provenance and trust explanation
+
+The primary UI may use concise trust language such as “Informazioni verificate”, but the user MUST be able to inspect why that statement is justified.
+
+Progressive detail SHOULD provide:
+- source;
+- verification time;
+- authority/owner when meaningful;
+- current/previous status;
+- provenance references;
+- technical identifiers only in the technical-detail tier.
+
+Do not use vague confidence percentages unless a governed model actually defines and validates them.
+
+## 25. Localizzazione, tempo e linguaggio
+
+User-facing dates/times MUST respect the user's locale and timezone.
+
+Rules:
+- relative time is useful for immediacy (“5 minuti fa”);
+- exact local date/time remains available for audit;
+- never show a relative time that can be mistaken for a current live observation after reconnect/offline reuse;
+- avoid untranslated internal English enums in Italian UI;
+- labels, punctuation, capitalization and terminology MUST follow one controlled glossary;
+- localization must preserve meaning, not merely translate strings literally.
+
+## 26. Content quality and cognitive accessibility
+
+The copy layer MUST use:
+- common words;
+- short sentences;
+- one idea per sentence where practical;
+- short blocks;
+- explicit subjects and actions;
+- consistent terminology;
+- minimal abbreviations;
+- no avoidable jargon.
+
+A technical term may appear in the primary UI only when the target user reasonably needs it to act.
+
+Where a technical concept has no simple equivalent, explain the consequence first and expose the term secondarily.
+
+This is consistent with W3C cognitive-accessibility guidance for clear, understandable content.
+
+## 27. Component-role mapping for E1
+
+E1 MUST prototype at least these presentation roles:
+
+| Need | Preferred presentation role |
+|---|---|
+| normal/current information | inline summary / quiet status |
+| supporting context | inline text / disclosure |
+| non-blocking uncertainty | inline notice |
+| page-wide important condition | single banner |
+| action-required condition | prominent action block |
+| blocking error | blocking message with clear next action |
+| no data | empty state |
+| loading | progress/skeleton with accessible status |
+| technical detail | expandable detail panel |
+| history | timeline/activity view separate from current status |
+
+Exact components are not selected by E0; E1 selects them from the ecosystem design system after comparison with mature libraries.
+
+## 28. Human-use validation protocol
+
+E3 MUST use observable comprehension tasks, not only subjective visual approval.
+
+Minimum tasks for a non-technical participant:
+- identify whether reference information is still valid;
+- identify whether recent information is complete;
+- identify whether action is required;
+- identify the next action, if any;
+- distinguish “not verified yet” from “error”;
+- find technical/source detail only when asked;
+- recognize when displayed information is cached/offline.
+
+Minimum acceptance evidence:
+- users can answer the three core questions without opening technical details;
+- no critical task depends on interpreting color alone;
+- uncertainty is not systematically mistaken for failure;
+- users do not treat ordinary head/change activity as a blocking problem;
+- participants can identify the required action in action-required states;
+- screen-reader/keyboard validation covers dynamic status messages and disclosures.
+
+Quantitative thresholds SHOULD be chosen during the E1/E3 test-plan design, not invented in E0 without evidence.
+
+## 29. Extended benchmark baseline
+
+In addition to GitHub, GitLab and Backstage, Stage E SHOULD consult:
+
+- PatternFly status/severity and alert patterns for explicit separation of current state and impact;
+- GOV.UK notification guidance for restrained, task-relevant banners;
+- W3C WCAG 2.2 / Status Messages and cognitive-accessibility guidance;
+- Carbon notification accessibility for keyboard/screen-reader behavior and dynamic messages.
+
+These are benchmark references, not mandatory component libraries.
+
+## 30. Decisione operativa
 
 Stage E non può passare direttamente all'implementazione UI.
 
 La sequenza obbligatoria è:
 
 `E0 communication contract -> E1 visual prototype -> E2 implementation -> E3 human-use validation`.
+
+E1 non può essere considerato completo finché non copre almeno: normal, loading, empty, partial/unavailable, review-required, blocked, no-access e offline/cached state.
 
 Il criterio guida resta:
 
