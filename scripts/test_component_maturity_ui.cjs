@@ -5,15 +5,20 @@ const path=require('path');
 const api=require('../control-center/component-maturity.js');
 const snapshot=JSON.parse(fs.readFileSync(path.join(__dirname,'../control-center/data/ecosystem-snapshot.json'),'utf8'));
 const home=fs.readFileSync(path.join(__dirname,'../control-center/index.html'),'utf8');
+const maturity=fs.readFileSync(path.join(__dirname,'../control-center/maturity.html'),'utf8');
 const sw=fs.readFileSync(path.join(__dirname,'../control-center/sw.js'),'utf8');
 
-assert.match(home,/Maturità dei componenti/);
-assert.match(home,/id="componentMaturityMap"/);
-assert.match(home,/aria-label="Elenco equivalente della maturità dei componenti"/);
-assert.match(home,/\.\/component-maturity\.js/);
-assert.match(home,/Nessuna percentuale/);
-assert.match(home,/aria-live="polite"/);
-assert.match(sw,/trama-control-center-v11/);
+assert.match(home,/Apri la vista Maturità/);
+assert.doesNotMatch(home,/id="componentMaturityMap"/);
+assert.match(maturity,/id="componentMaturityMap"/);
+assert.match(maturity,/aria-label="Elenco equivalente della maturità dei componenti"/);
+assert.match(maturity,/\.\/component-maturity\.js/);
+assert.match(maturity,/senza score o percentuali/);
+assert.match(maturity,/aria-live="polite"/);
+assert.match(maturity,/grid-template-areas:"list" "detail" "map"/);
+assert.match(maturity,/deferSelection:window\.matchMedia/);
+assert.match(sw,/trama-control-center-v12/);
+assert.match(sw,/\.\/maturity\.html/);
 assert.match(sw,/\.\/component-maturity\.js/);
 
 assert.deepEqual(api.STAGES,['REGISTERED','ISOLATED','BEHAVIOURAL','RESPONSIVE_VISUAL','ACCESSIBILITY']);
@@ -31,7 +36,7 @@ for(const node of model.nodes){
   assert(node.candidateX>=node.x,'candidate must not render behind confirmed stage');
   const description=api.componentDescription(node.component);
   assert.match(description,/Maturità confermata:/);
-  assert.match(description,/Lifecycle:/);
+  assert.match(description,/Ciclo di vita:/);
   assert(!/%/.test(description),'percentage leaked into maturity description');
   assert(!/score/i.test(description),'score leaked into maturity description');
 }
@@ -57,4 +62,8 @@ for(const forbidden of ['api.github.com','raw.githubusercontent.com','Authorizat
   assert.equal(source.includes(forbidden),false,'forbidden capability in component maturity module: '+forbidden);
 }
 
-console.log('TRAMA_CC_MAT_VIZ_01_PASS');
+assert.equal(api.lifecycleLabel('TRIAL'),'In prova');
+assert.equal(api.sourceLabel('PRODUCT_OWNED'),'Componente del prodotto');
+assert.equal(api.evidenceStatusLabel('NOT_OBSERVED'),'Non osservata');
+
+console.log('TRAMA_CC_MAT_VIZ_01_ORIENTATION_PASS');
