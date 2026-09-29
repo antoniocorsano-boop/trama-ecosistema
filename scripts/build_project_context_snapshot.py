@@ -53,7 +53,7 @@ def repository_projection(observation):
             observed_heads.append({"subject":"repository-head","repository":r["repository"],"observedHead":r["observedHead"],"sourceRefs":r["sourceRefs"]})
     return {"status":"CURRENT" if complete else "PARTIAL","openPullRequests":open_prs,"repositories":repositories,"observedHeads":observed_heads}
 
-def build(repository_observation_path=None):
+def build(repository_observation_path=None, repository_observation_data=None, generated_at=None):
     cfg=load(Path("config/project-context-sources.json"))
     missing=[x["path"] for x in cfg["requiredSources"] if not (ROOT/x["path"]).exists()]
     if missing:
@@ -62,8 +62,8 @@ def build(repository_observation_path=None):
     decisions=load(Path("docs/decisions/decision-register.json"))
     knowledge=load(Path("status/project-knowledge-events.json"))
     source_registry=load(Path("docs/knowledge/source-registry.json"))
-    generated=now()
-    repository_observation=load_repository_observation(repository_observation_path)
+    generated=generated_at or now()
+    repository_observation=repository_observation_data if repository_observation_data is not None else load_repository_observation(repository_observation_path)
     repo_projection=repository_projection(repository_observation)
 
     phases=eco.get("phases",[])
