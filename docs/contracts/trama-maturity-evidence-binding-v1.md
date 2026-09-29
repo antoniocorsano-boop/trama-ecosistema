@@ -173,3 +173,22 @@ This slice does not authorize:
 - adoption evidence;
 - regression-history evidence;
 - product merge or publication.
+
+
+## 11. Materialized checkpoint
+
+The deterministic snapshot regeneration for this slice materializes schema `1.6.0` with the following confirmed evidence-bound levels:
+
+- Governance: **L4**; next target L5; missing `REGRESSION_HISTORY`;
+- Arena: **L4**; next target L5; missing `REGRESSION_HISTORY`;
+- Atlas: **L4**; next target L5; missing `REGRESSION_HISTORY` and `ADOPTION_EVIDENCE`;
+- Docente OS: **L3**; next target L4; missing only `RUNTIME_CANARY`.
+
+The maturity-evidence registry is projected as a declared FRESH source.
+
+At this checkpoint:
+- no Docente OS `RUNTIME_CANARY` record exists;
+- all snapshot integrity checks are PASS;
+- product maturity remains cumulative and evidence-bound;
+- component maturity remains a separate model;
+- default branch and active development branch remain separate facts.
