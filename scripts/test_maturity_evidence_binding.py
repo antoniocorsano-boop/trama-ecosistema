@@ -23,7 +23,7 @@ validate_registry(registry)
 validate_definitions(definitions)
 
 # Strong product evidence can bind to an area without inventing a capability.
-arena_head = next(x for x in registry["evidence"] if x["id"] == "EV-MAT-ARENA-PR341-HEAD")
+arena_head = next(x for x in registry["evidence"] if x["id"] == "EV-MAT-ARENA-PR312-HEAD")
 validate_evidence_record(arena_head)
 assert arena_head["binding"]["areaRef"] == "arena"
 assert "capabilityRef" not in arena_head["binding"]
@@ -71,7 +71,7 @@ receipt = (ROOT / "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md")
     encoding="utf-8"
 )
 assert "no `RUNTIME_CANARY` evidence is promoted by this slice" in receipt
-assert "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea" in receipt
+assert "65a7f5b820b344ec61f8e09d7559012aae521bbc" in receipt
 assert "bc11577eeeeeed9c43ad62ac43fb7561e1197246" in receipt
 assert "06410a7360ccd7eb55e049154c0c3657e6a24714" in receipt
 
