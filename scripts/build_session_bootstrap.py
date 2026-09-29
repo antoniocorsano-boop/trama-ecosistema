@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import re
 import unicodedata
 from pathlib import Path
 
@@ -33,7 +34,15 @@ def load_pack_builder():
 def normalize(value: str) -> str:
     text = unicodedata.normalize("NFKD", value or "")
     text = "".join(ch for ch in text if not unicodedata.combining(ch))
-    return " ".join(text.lower().replace("_", " ").replace("-", " ").split())
+    text = re.sub(r"[^a-zA-Z0-9]+", " ", text.lower())
+    return " ".join(text.split())
+
+
+def contains_phrase(normalized_query: str, alias: str) -> bool:
+    normalized_alias = normalize(alias)
+    if not normalized_alias:
+        return False
+    return f" {normalized_alias} " in f" {normalized_query} "
 
 
 def unique_strings(values):
@@ -71,7 +80,7 @@ def resolve_subjects(query: str, resolver: dict, explicit_subject: str | None = 
         aliases = rule.get("aliases", [])
         matched_aliases = [
             alias for alias in aliases
-            if normalize(alias) and normalize(alias) in normalized_query
+            if contains_phrase(normalized_query, alias)
         ]
         if matched_aliases:
             matched_rules.append({
