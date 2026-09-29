@@ -9,6 +9,13 @@ on:
       - 'schemas/trama-context-pack.schema.json'
       - 'scripts/build_project_context_snapshot.py'
       - 'scripts/build_trama_context_pack.py'
+      - 'config/session-bootstrap-subjects.json'
+      - 'schemas/session-bootstrap-receipt.schema.json'
+      - 'scripts/build_session_bootstrap.py'
+      - 'scripts/test_session_bootstrap.py'
+      - 'docs/contracts/trama-session-bootstrap-v1.md'
+      - 'docs/process/trama-development-continuity-protocol-v1.md'
+      - 'docs/knowledge/governed-document-registry.json'
       - 'scripts/test_project_knowledge_runtime.py'
       - 'scripts/test_repository_observation_projection.py'
       - 'scripts/test_project_knowledge_dual_speed_stage_a.py'
@@ -56,6 +63,7 @@ jobs:
       - name: Run Project Knowledge tests
         run: |
           python scripts/test_project_knowledge_runtime.py
+          python scripts/test_session_bootstrap.py
           python scripts/test_repository_observation_projection.py
           python scripts/test_project_knowledge_dual_speed_stage_a.py
           python scripts/test_project_knowledge_dual_speed_stage_b.py
@@ -67,6 +75,13 @@ jobs:
           python scripts/test_repository_observation_promotion_planner.py
           python scripts/test_repository_observation_promotion_write_actor.py
           python scripts/test_repository_observation_promotion_prepare.py
+      - name: Audit session bootstrap read-only boundary
+        run: |
+          ! grep -En 'urllib|httpx|requests|socket|subprocess|os\.system|Popen|git push|gh pr|/merge' scripts/build_session_bootstrap.py
+          grep -F '"readOnly": True' scripts/build_session_bootstrap.py
+          grep -F '"authorizesWrite": False' scripts/build_session_bootstrap.py
+          grep -F '"authorizesRuntime": False' scripts/build_session_bootstrap.py
+          grep -F '"authorizesPromotion": False' scripts/build_session_bootstrap.py
       - name: Audit dual-speed Stage C ephemeral adapter boundary
         run: |
           grep -F 'tempfile.TemporaryDirectory' scripts/run_live_repository_overlay.py
