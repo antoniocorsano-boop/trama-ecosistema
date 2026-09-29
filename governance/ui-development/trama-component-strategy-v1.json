@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "trama.component-strategy/v1",
+  "strategyId": "TRAMA-COMPONENT-STRATEGY-01",
+  "parentModel": "TRAMA-UI-DEVELOPMENT-01",
+  "status": "PROPOSED",
+  "runtimeImpact": "NONE",
+  "dosA1": "RUNTIME_DEFERRED",
+  "principles": {
+    "nativeFirst": true,
+    "borrowBehaviorOwnExpression": true,
+    "noGlobalVisualLibrary": true,
+    "noCardFirstDefault": true,
+    "noFrameworkRewriteByStrategy": true,
+    "adapterForGovernedSemantics": true
+  },
+  "candidates": [
+    {
+      "id": "NATIVE_WEB_PLATFORM",
+      "class": "NATIVE_PLATFORM",
+      "stacks": [
+        "STANDARDS_FIRST",
+        "REACT"
+      ],
+      "disposition": "PREFERRED",
+      "allowedUse": [
+        "basic-actions",
+        "content-semantics",
+        "forms-basic",
+        "simple-disclosure",
+        "layout"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "WEB_AWESOME_CORE",
+      "class": "THIRD_PARTY_PRIMITIVE",
+      "stacks": [
+        "STANDARDS_FIRST"
+      ],
+      "disposition": "TRIAL_CANDIDATE",
+      "allowedUse": [
+        "dialog",
+        "drawer",
+        "menu",
+        "popover",
+        "toggletip",
+        "tooltip",
+        "complex-form-control"
+      ],
+      "constraints": [
+        "SELF_HOST_RELEASE",
+        "SELECTIVE_IMPORTS",
+        "NO_VISUAL_THEME_ADOPTION",
+        "NO_CARD_LAYOUT_DEFAULT"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "SPECTRUM_WEB_COMPONENTS",
+      "class": "THIRD_PARTY_PRIMITIVE",
+      "stacks": [
+        "STANDARDS_FIRST"
+      ],
+      "disposition": "REFERENCE_OR_BOUNDED_CANDIDATE",
+      "allowedUse": [
+        "interaction-benchmark",
+        "bounded-complex-control-spike"
+      ],
+      "constraints": [
+        "NO_SPECTRUM_IDENTITY_ADOPTION"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "RADIX_PRIMITIVES",
+      "class": "THIRD_PARTY_PRIMITIVE",
+      "stacks": [
+        "REACT"
+      ],
+      "disposition": "EXISTING_FOOTPRINT_EVALUATE_FIRST",
+      "allowedUse": [
+        "complex-interaction-primitives"
+      ],
+      "constraints": [
+        "PRODUCT_SPECIFIC_DECISION",
+        "NO_DUPLICATE_PRIMITIVE_FAMILY_WITHOUT_REASON"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "BASE_UI",
+      "class": "THIRD_PARTY_PRIMITIVE",
+      "stacks": [
+        "REACT"
+      ],
+      "disposition": "TRIAL_CANDIDATE",
+      "allowedUse": [
+        "complex-interaction-primitives"
+      ],
+      "constraints": [
+        "BOUNDED_COMPARATIVE_SPIKE",
+        "NO_PARALLEL_EQUIVALENT_FAMILY_WITHOUT_DECISION"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "SHADCN_UI",
+      "class": "THIRD_PARTY_PATTERN_REFERENCE",
+      "stacks": [
+        "REACT"
+      ],
+      "disposition": "OPEN_CODE_REFERENCE_ONLY",
+      "allowedUse": [
+        "composition-reference",
+        "implementation-study"
+      ],
+      "constraints": [
+        "NO_VISUAL_IDENTITY_ADOPTION",
+        "COPIED_CODE_BECOMES_LOCAL_OWNED"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "REACT_FLOW",
+      "class": "SPECIALIST_LIBRARY",
+      "stacks": [
+        "REACT"
+      ],
+      "disposition": "SPECIALIST_EXISTING_ATLAS",
+      "allowedUse": [
+        "interactive-node-map",
+        "pan-zoom-graph"
+      ],
+      "constraints": [
+        "NO_CONTROL_CENTER_REACT_MIGRATION_FOR_SIMPLE_RAIL"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "CARBON",
+      "class": "THIRD_PARTY_PATTERN_REFERENCE",
+      "stacks": [
+        "ANY"
+      ],
+      "disposition": "PATTERN_REFERENCE_ONLY",
+      "allowedUse": [
+        "shell",
+        "orientation",
+        "navigation",
+        "enterprise-ia"
+      ],
+      "runtimeAdoptionAuthorized": false
+    },
+    {
+      "id": "PATTERNFLY",
+      "class": "THIRD_PARTY_PATTERN_REFERENCE",
+      "stacks": [
+        "ANY"
+      ],
+      "disposition": "PATTERN_REFERENCE_ONLY",
+      "allowedUse": [
+        "data-dense-patterns",
+        "navigation",
+        "component-lifecycle"
+      ],
+      "runtimeAdoptionAuthorized": false
+    }
+  ],
+  "distinctiveComponents": [
+    "ContextShell",
+    "SystemStateBand",
+    "EcosystemRail",
+    "AttentionEntry",
+    "EvidenceTrail",
+    "AuthorityPath",
+    "ChangeLine"
+  ],
+  "spikes": [
+    "CS-S1_CONTROL_CENTER_PRIMITIVES",
+    "CS-S2_CONTROL_CENTER_L0_V2",
+    "CS-S3_ATLAS_REACT_PRIMITIVE_COMPARISON",
+    "CS-S4_COMPONENT_EVIDENCE_SURFACE"
+  ],
+  "unresolvedInventory": [
+    "ARENA_RUNTIME_SUPPLY_CHAIN",
+    "DOCENTE_OS_RUNTIME_SUPPLY_CHAIN"
+  ]
+}

@@ -7,6 +7,8 @@
 **Runtime impact:** NONE  
 **DOS-A1:** RUNTIME_DEFERRED
 
+> **Sourcing strategy:** `TRAMA-COMPONENT-STRATEGY-01` (`docs/strategy/trama-component-strategy-v1.md`) governs how native controls, third-party primitives, TRAMA-shared components and product-local components are selected before they enter this catalog. It does not alter this catalog's lifecycle or evidence requirements.
+
 ## 1. Purpose
 
 Define a governed catalog of reusable UI components and user-task patterns for Arena, Atlas, Docente OS and TRAMA Control Center. Shared behavior, semantics, accessibility and evidence are standardized; visual expression remains governed by each product PVIP.
