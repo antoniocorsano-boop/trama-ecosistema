@@ -51,7 +51,7 @@ Risponde a:
 
 L'unità primaria è la **capacità comprensibile**, non il repository.
 
-### L2 — Verifiche, garanzie e decisioni
+### L2 — Verifiche, copertura e decisioni
 
 Serve a stakeholder, responsabili e valutatori.
 
@@ -63,6 +63,8 @@ Risponde a:
 - quali limiti impediscono un claim più forte.
 
 Il termine “assurance” può comparire nel dettaglio specialistico, non deve essere il nome primario della funzione.
+
+Il termine **garanzia** non deve essere usato come sinonimo generale di assurance: può suggerire una certificazione o una certezza che il sistema non possiede. Nel livello primario usare **verifiche**, **copertura**, **limiti** e **decisioni richieste**.
 
 ### L3 — Dettaglio tecnico
 
@@ -94,7 +96,7 @@ La navigazione deve quindi essere costruita sulle domande:
 
 - **Sintesi**
 - **Ecosistema**
-- **Da verificare**
+- **Attenzione**
 - **Verifiche**
 - **Cronologia**
 - **Dettagli tecnici**
@@ -114,6 +116,14 @@ Descrizione breve:
 > Stato dell'ecosistema TRAMA: cosa è disponibile, cosa è stato verificato e cosa richiede ancora attenzione.
 
 La descrizione non deve presupporre che l'utente sappia cosa siano maturity, assurance, gate o evidence.
+
+### 4.1.1 Spiegazione pubblica
+
+Per una persona che arriva senza contesto deve essere disponibile, nello stesso primo schermo o immediatamente sotto, una spiegazione di una frase:
+
+> **TRAMA coordina il curricolo, la pubblicazione dei contenuti e gli strumenti di lavoro dell'ecosistema Arena · Atlas · Docente OS.**
+
+La formulazione finale va validata con utenti reali. L'obiettivo è evitare che “ecosistema TRAMA” sia un prerequisito di comprensione.
 
 ### 4.2 Situazione attuale
 
@@ -175,6 +185,13 @@ Domini primari:
 - Usabilità;
 - Affidabilità operativa.
 
+La Home non deve mostrare necessariamente cinque card permanenti. Nel livello L0 deve evidenziare solo:
+- verifiche con impatto rilevante per la comprensione o l'adozione;
+- limiti aperti;
+- cambiamenti recenti significativi.
+
+La matrice completa dei domini appartiene a L2. Questo evita che la Sintesi torni a essere una dashboard specialistica.
+
 Per ciascuno, massimo:
 - stato comprensibile;
 - ultima verifica;
@@ -234,7 +251,7 @@ Queste informazioni restano disponibili nei livelli L2/L3.
 
 1. Sintesi
 2. Ecosistema
-3. Da verificare
+3. Attenzione
 4. Verifiche
 5. Cronologia
 6. Tecnico
@@ -244,7 +261,7 @@ Queste informazioni restano disponibili nei livelli L2/L3.
 Bottom navigation stabile, massimo 5 elementi:
 - Sintesi
 - Ecosistema
-- Da verificare
+- Attenzione
 - Verifiche
 - Altro
 
@@ -253,7 +270,9 @@ Bottom navigation stabile, massimo 5 elementi:
 - Dettagli tecnici;
 - documenti/report.
 
-La voce “Da verificare” può mostrare un indicatore numerico solo quando il numero ha significato azionabile.
+La voce **Attenzione** può mostrare un indicatore numerico solo quando il numero ha significato azionabile.
+
+Ogni elemento deve dichiarare esplicitamente **chi** è chiamato ad agire. “Richiede attenzione” non equivale automaticamente a “richiede un'azione da parte di chi sta leggendo”.
 
 ## 7. Vocabolario primario
 
@@ -261,7 +280,9 @@ Preferire:
 
 | Tecnico/interno | Primario |
 |---|---|
-| maturity | stato di sviluppo / disponibilità |
+| maturity | maturità / livello di sviluppo (solo nel dettaglio quando serve) |
+| functional availability | disponibile ora / non ancora disponibile |
+| verification state | verificato / parziale / da verificare |
 | assurance | verifiche e garanzie |
 | evidence | prove / verifiche disponibili |
 | gate | condizione da completare |
@@ -286,6 +307,16 @@ Il sito/app è raggiungibile e funziona.
 ### Disponibilità funzionale
 Una capacità esiste ed è utilizzabile.
 
+Ogni stato di disponibilità deve indicare il **perimetro** quando rilevante:
+- pubblico;
+- pilota;
+- beta;
+- preview;
+- interno;
+- non ancora autorizzato.
+
+“Disponibile” senza scope non deve essere usato quando potrebbe far credere che una funzione sia disponibile a tutti.
+
 ### Stato di verifica
 Una capacità è stata verificata rispetto a requisiti definiti.
 
@@ -293,6 +324,8 @@ Una capacità è stata verificata rispetto a requisiti definiti.
 Una decisione/autorizzazione richiesta è stata o non è stata concessa.
 
 Queste dimensioni non devono essere fuse.
+
+La **maturità** è una quinta dimensione, utile soprattutto a L2/L3. Non deve essere usata come sinonimo né di disponibilità né di verifica. Una funzione può essere disponibile in pilota ma non matura; una funzione matura può non essere autorizzata in un determinato perimetro.
 
 “Il sito è online” non significa “la funzione è approvata”.
 “Il test è PASS” non significa “il prodotto è certificato”.
@@ -333,6 +366,14 @@ Solo per:
 - non riapparire automaticamente durante lo scroll.
 
 Il comportamento osservato con il popover “Gap assurance” persistente è un anti-pattern da correggere: interferisce con la lettura e trasforma un'informazione secondaria in ostacolo permanente.
+
+Su mobile:
+- nessun popover persistente deve coprire il contenuto durante lo scroll;
+- la bottom navigation deve lasciare spazio sufficiente al contenuto e rispettare safe-area;
+- il focus da tastiera/tecnologia assistiva non deve finire dietro elementi sticky;
+- help e disclosure devono essere prevedibili e facilmente chiudibili.
+
+Questi requisiti sono coerenti con WCAG 2.2 **Focus Not Obscured** e con la guidance W3C sulla riduzione delle interruzioni.
 
 ## 11. Superficie E3
 
@@ -416,7 +457,66 @@ senza leggere codici tecnici.
 
 Uno sviluppatore SHOULD poter raggiungere l'exact head e la relativa evidenza con un percorso breve dal dettaglio della stessa informazione, senza cercare in una dashboard separata.
 
-## 14. Benchmark e adattamento
+## 14. Terza lettura multiprofessionale — criteri integrati
+
+La presente architettura è sottoposta a una lettura indipendente da più prospettive. I criteri non sono intercambiabili.
+
+### Product / Information Architecture
+
+Valuta:
+- se la Home risponde a bisogni reali e non replica la struttura interna;
+- se l'information scent porta al livello successivo corretto;
+- se la progressive disclosure riduce complessità senza nascondere informazioni essenziali.
+
+### Dirigente / stakeholder istituzionale
+
+Valuta:
+- chiarezza di disponibilità, limiti e decisioni;
+- distinzione tra evidenza interna, review indipendente e certificazione;
+- ownership delle azioni richieste;
+- possibilità di capire il perimetro senza leggere dettagli DevOps.
+
+### Docente / utente operativo
+
+Valuta:
+- comprensione delle funzioni realmente disponibili;
+- chiarezza di cosa cambia per il lavoro;
+- assenza di sovrapposizione con Docente OS;
+- terminologia scolastica comprensibile.
+
+### Accessibilità / cognitive accessibility
+
+Valuta:
+- orientamento;
+- gerarchia;
+- chiarezza lessicale;
+- riduzione delle interruzioni;
+- prevedibilità dei controlli;
+- focus non oscurato;
+- equivalenza semantica mobile/desktop.
+
+### Privacy / security / governance
+
+Valuta:
+- minimizzazione;
+- assenza di dati non pubblicabili;
+- separazione fra presentation boundary e authorization boundary;
+- assenza di claim di conformità/certificazione non dimostrati;
+- nessuna nuova authority introdotta dalla UI.
+
+### Sviluppatore / auditor tecnico
+
+Valuta:
+- tracciabilità claim → evidence → exact version;
+- provenienza;
+- freshness;
+- reversibilità del drill-down;
+- stabilità degli identificatori tecnici;
+- possibilità di diagnosticare senza contaminare L0.
+
+Una review multiprofessionale è PASS solo se non esiste un rilievo bloccante in nessuna di queste prospettive.
+
+## 15. Benchmark e adattamento
 
 ### Atlassian Statuspage
 Pattern osservato:
@@ -465,7 +565,53 @@ Adattamento TRAMA:
 - niente gergo come requisito di comprensione;
 - aiuto contestuale non invasivo.
 
-## 15. Impatto sui documenti esistenti
+## 16. Confine pubblico e sicurezza
+
+La progressive disclosure è un pattern di presentazione, **non un controllo di accesso**.
+
+Se L3 è pubblicamente raggiungibile:
+- nessun dato sensibile, segreto o personale deve entrare nello snapshot o nel bundle pubblico;
+- nascondere un campo nella UI non costituisce protezione;
+- i dati non pubblicabili devono essere esclusi a monte dalla pipeline;
+- eventuali future superfici riservate richiedono un vero confine di autorizzazione separato.
+
+L'assenza di telemetria e credenziali nel browser resta un vincolo del Control Center pubblico.
+
+## 17. Tracciabilità bidirezionale
+
+Ogni claim human-readable rilevante SHOULD avere un percorso di approfondimento verso:
+- scope;
+- versione;
+- data/freshness;
+- evidenza;
+- authority/reviewer;
+- limiti.
+
+In senso inverso, il dettaglio tecnico SHOULD indicare quale claim umano supporta.
+
+Questa relazione evita due rischi:
+- una Home semplice ma non auditabile;
+- un dettaglio tecnico corretto ma scollegato dal significato mostrato all'utente.
+
+## 18. Perimetro del docente
+
+Il Control Center può spiegare a un docente **quali capacità dell'ecosistema sono disponibili e verificate**, ma non deve diventare il suo ambiente operativo quotidiano.
+
+Calendario, preparazione della lezione, attività, materiali e flussi di lavoro appartengono a Docente OS/Atlas secondo i rispettivi confini.
+
+Il Control Center resta una superficie di orientamento, stato e verificabilità dell'ecosistema.
+
+## 19. Obiettivi temporali di lettura da validare
+
+Non sono SLA né risultati già dimostrati. Sono target per la ricerca E3:
+
+- **colpo d'occhio:** capire se esiste qualcosa di rilevante/critico senza scorrere una dashboard tecnica;
+- **circa un minuto:** capire cosa è disponibile, cosa richiede attenzione e quanto è recente l'informazione;
+- **approfondimento:** raggiungere verifiche o dettaglio tecnico senza perdere il contesto.
+
+I tempi finali devono essere misurati, non presunti.
+
+## 20. Impatto sui documenti esistenti
 
 Questa architettura:
 - rafforza `trama-control-center-v2-view-architecture.md`;
@@ -475,7 +621,7 @@ Questa architettura:
 - non abilita Live Overlay;
 - non modifica DOS-A1.
 
-## 16. Sequenza proposta
+## 21. Sequenza proposta
 
 1. approvare questa architettura informativa;
 2. produrre wireframe mobile/desktop della nuova Sintesi;
