@@ -63,6 +63,35 @@ assert partial["governedKnowledgeStatus"]=="CURRENT"
 assert partial["effectiveContextStatus"]=="DEGRADED"
 assert partial["promotionRequired"] is False
 
+# Active development head is a distinct volatile fact and never replaces the default head.
+active_overlay=fixture("live-overlay-head-drift.json")
+active_overlay["repositories"][0]["activeDevelopmentRef"]="develop"
+active_overlay["repositories"][0]["observedActiveDevelopmentHead"]="cccccccccccccccccccccccccccccccccccccccc"
+active_context=composer.compose_effective_project_context(governed,active_overlay)
+assert any(
+    fact.get("subject")=="repository-head"
+    and fact.get("repository")==active_overlay["repositories"][0]["repository"]
+    and fact.get("observedHead")==active_overlay["repositories"][0]["observedHead"]
+    for fact in active_context["facts"]
+)
+assert any(
+    fact.get("subject")=="active-development-head"
+    and fact.get("repository")==active_overlay["repositories"][0]["repository"]
+    and fact.get("ref")=="develop"
+    and fact.get("observedHead")=="cccccccccccccccccccccccccccccccccccccccc"
+    for fact in active_context["facts"]
+)
+
+# Duplicate repository identity with contradictory active development head fails closed.
+bad_active=copy.deepcopy(active_overlay)
+bad_active["repositories"].append(copy.deepcopy(active_overlay["repositories"][0]))
+bad_active["repositories"][-1]["observedActiveDevelopmentHead"]="dddddddddddddddddddddddddddddddddddddddd"
+try:
+    composer.compose_effective_project_context(governed,bad_active)
+    raise AssertionError("contradictory active development identity accepted")
+except composer.EffectiveContextError as e:
+    assert str(e)=="CONTRADICTORY_ACTIVE_DEVELOPMENT_IDENTITY"
+
 # Duplicate repository identity with contradictory head fails closed.
 bad_repo=fixture("live-overlay-head-drift.json")
 bad_repo["repositories"].append(copy.deepcopy(bad_repo["repositories"][0]))
