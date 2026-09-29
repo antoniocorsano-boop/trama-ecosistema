@@ -3,44 +3,184 @@
   "$id": "https://trama.local/schemas/live-repository-overlay.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion","observedAt","status","repositories","pullRequests","workflows","semanticAnchors"],
+  "required": [
+    "schemaVersion",
+    "observedAt",
+    "status",
+    "repositories",
+    "pullRequests",
+    "workflows",
+    "semanticAnchors"
+  ],
   "properties": {
-    "schemaVersion": {"const":"trama.live-repository-overlay/v1"},
-    "observedAt": {"type":"string","format":"date-time"},
-    "status": {"enum":["COMPLETE","PARTIAL","UNAVAILABLE"]},
+    "schemaVersion": {
+      "const": "trama.live-repository-overlay/v1"
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "UNAVAILABLE"
+      ]
+    },
     "repositories": {
-      "type":"array",
-      "items":{
-        "type":"object",
-        "additionalProperties":false,
-        "required":["repository","availabilityStatus","freshnessStatus","completenessStatus","observedHead","sourceRefs"],
-        "properties":{
-          "repository":{"type":"string","minLength":1},
-          "availabilityStatus":{"enum":["AVAILABLE","UNAVAILABLE","UNKNOWN"]},
-          "freshnessStatus":{"enum":["FRESH","STALE","UNKNOWN"]},
-          "completenessStatus":{"enum":["COMPLETE","PARTIAL","UNKNOWN"]},
-          "observedHead":{"type":["string","null"],"pattern":"^[0-9a-f]{40}$"},
-          "sourceRefs":{"type":"array","items":{"type":"string","minLength":1}}
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "repository",
+          "availabilityStatus",
+          "freshnessStatus",
+          "completenessStatus",
+          "observedHead",
+          "sourceRefs"
+        ],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "availabilityStatus": {
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE",
+              "UNKNOWN"
+            ]
+          },
+          "freshnessStatus": {
+            "enum": [
+              "FRESH",
+              "STALE",
+              "UNKNOWN"
+            ]
+          },
+          "completenessStatus": {
+            "enum": [
+              "COMPLETE",
+              "PARTIAL",
+              "UNKNOWN"
+            ]
+          },
+          "observedHead": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "activeDevelopmentRef": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "observedActiveDevelopmentHead": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
+          }
+        },
+        "dependentRequired": {
+          "activeDevelopmentRef": [
+            "observedActiveDevelopmentHead"
+          ],
+          "observedActiveDevelopmentHead": [
+            "activeDevelopmentRef"
+          ]
         }
       }
     },
-    "pullRequests":{"type":"array","items":{"type":"object"}},
-    "workflows":{"type":"array","items":{"type":"object"}},
-    "semanticAnchors":{
-      "type":"array",
-      "items":{
-        "type":"object",
-        "additionalProperties":false,
-        "required":["repository","domain","path","role","fingerprintStatus","governedFingerprint","observedFingerprint","sourceRefs"],
-        "properties":{
-          "repository":{"type":"string","minLength":1},
-          "domain":{"type":"string","minLength":1},
-          "path":{"type":"string","minLength":1},
-          "role":{"enum":["SEMANTIC_AUTHORITY","SEMANTIC_STATUS","SEMANTIC_CONTRACT"]},
-          "fingerprintStatus":{"enum":["MATCH","CHANGED","UNKNOWN","UNAVAILABLE"]},
-          "governedFingerprint":{"type":["string","null"],"pattern":"^[0-9a-f]{40,64}$"},
-          "observedFingerprint":{"type":["string","null"],"pattern":"^[0-9a-f]{40,64}$"},
-          "sourceRefs":{"type":"array","items":{"type":"string","minLength":1}}
+    "pullRequests": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "workflows": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "semanticAnchors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "repository",
+          "domain",
+          "path",
+          "role",
+          "fingerprintStatus",
+          "governedFingerprint",
+          "observedFingerprint",
+          "sourceRefs"
+        ],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "domain": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "SEMANTIC_AUTHORITY",
+              "SEMANTIC_STATUS",
+              "SEMANTIC_CONTRACT"
+            ]
+          },
+          "fingerprintStatus": {
+            "enum": [
+              "MATCH",
+              "CHANGED",
+              "UNKNOWN",
+              "UNAVAILABLE"
+            ]
+          },
+          "governedFingerprint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40,64}$"
+          },
+          "observedFingerprint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40,64}$"
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       }
     }
