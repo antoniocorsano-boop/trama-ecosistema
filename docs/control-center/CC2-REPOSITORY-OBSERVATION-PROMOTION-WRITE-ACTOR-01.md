@@ -79,3 +79,7 @@ Merging the actor qualifies code capability only. A later activation tranche mus
 - post-run evidence and failure recovery.
 
 Human review remains mandatory before merge of every promotion PR.
+
+## Event timestamp semantics
+
+`recordedAt` / `recordedBy` identify when and by which governed invocation the promotion record was prepared. They do not claim that promotion already occurred. The promotion event becomes governed current state only if the Draft PR containing it is merged by human decision.
