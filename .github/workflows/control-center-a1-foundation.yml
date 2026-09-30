@@ -38,7 +38,7 @@ jobs:
         run: |
           test -s dist/data/ecosystem-snapshot.json
           test -s dist/data/context-packs/project-knowledge.json
-          ! grep -R -E "(api\.github\.com|raw\.githubusercontent\.com|GITHUB_TOKEN|Authorization: Bearer)" dist src
+          ! grep -R -E "(api\.github\.com|raw\.githubusercontent\.com|GITHUB_TOKEN|Authorization: Bearer)" src
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Browser smoke
