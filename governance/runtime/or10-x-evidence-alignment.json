@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "trama.or10-x-evidence-alignment/v1",
+  "id": "OR-10-X-CROSS-PRODUCT-EVIDENCE-ALIGNMENT",
+  "status": "NO_RUNTIME",
+  "products": [
+    {
+      "product": "ARENA",
+      "slice": "OR-10-A",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "pr": 345,
+      "head": "d7c2575260de6fb58aae58c12a82caf76440e823",
+      "mode": "READ_ONLY",
+      "capabilityRole": "CURRICULUM_AUTHORITY_CONTEXT",
+      "authority": "ARENA"
+    },
+    {
+      "product": "DOCENTE_OS",
+      "slice": "OR-10-D",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "pr": 645,
+      "head": "984abbd06fd43bd0e726936f9da6188fb9e52ec0",
+      "mode": "PROPOSE_ONLY",
+      "capabilityRole": "TEACHER_DECISION_SURFACE",
+      "authority": "TEACHER"
+    },
+    {
+      "product": "ATLAS",
+      "slice": "OR-10-T",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "pr": 66,
+      "head": "fe3b70d750e9cfab489518187935b4e8bca3aa13",
+      "mode": "READ_ONLY",
+      "capabilityRole": "OPTIONAL_RESOURCE_SOURCE",
+      "authority": "NONE_FOR_CURRICULUM"
+    }
+  ],
+  "invariants": {
+    "arenaAuthorityPreserved": true,
+    "atlasOptional": true,
+    "docenteOsTeacherFirst": true,
+    "controlCenterReadOnly": true,
+    "runtimeLive": false,
+    "writeAuthorityAdded": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  }
+}
