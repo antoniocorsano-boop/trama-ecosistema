@@ -29,11 +29,21 @@ assert set(by_id) == {item["componentId"] for item in registry["entries"]}
 
 governed_dialog = by_id["ARENA.DIALOG_CONFIRM.GOVERNED"]
 assert governed_dialog["lifecycle"] == "TRIAL"
-assert governed_dialog["maturity"]["confirmedStage"] == "BEHAVIOURAL"
-assert governed_dialog["maturity"]["candidateStage"] == "BEHAVIOURAL"
-assert governed_dialog["maturity"]["qualificationStatus"] == "PARTIAL"
-assert "RESPONSIVE_VISUAL" in governed_dialog["maturity"]["remainingEvidenceTypes"]
-assert governed_dialog["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PARTIAL"
+assert governed_dialog["maturity"]["confirmedStage"] == "ACCESSIBILITY"
+assert governed_dialog["maturity"]["candidateStage"] == "ACCESSIBILITY"
+assert governed_dialog["maturity"]["qualificationStatus"] == "QUALIFIED"
+assert governed_dialog["maturity"]["remainingEvidenceTypes"] == []
+assert governed_dialog["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PRESENT"
+assert governed_dialog["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PRESENT"
+
+governed_tabs = by_id["ARENA.TABS.GOVERNED"]
+assert governed_tabs["lifecycle"] == "TRIAL"
+assert governed_tabs["maturity"]["confirmedStage"] == "ACCESSIBILITY"
+assert governed_tabs["maturity"]["candidateStage"] == "ACCESSIBILITY"
+assert governed_tabs["maturity"]["qualificationStatus"] == "QUALIFIED"
+assert governed_tabs["maturity"]["remainingEvidenceTypes"] == []
+assert governed_tabs["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PRESENT"
+assert governed_tabs["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PRESENT"
 
 legacy_dialog = by_id["ARENA.DIALOG_CONFIRM.LEGACY"]
 assert legacy_dialog["lifecycle"] == "LEGACY"
