@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "trama.control-center-a7-public-browser-certification/v1",
+  "id": "TRAMA-CC-A7-PUBLIC-BROWSER-CERTIFICATION-2026-09-30",
+  "generatedAt": "2026-09-30T17:25:00+02:00",
+  "subject": "TRAMA Control Center public A7 deployment",
+  "publicUrl": "https://trama-control-center.onrender.com",
+  "repository": "antoniocorsano-boop/trama-ecosistema",
+  "service": {
+    "provider": "Render",
+    "workspaceId": "tea-d4qbl9be5dus73eku8rg",
+    "serviceId": "srv-dape3shsrm7s73f5krpg",
+    "serviceName": "trama-control-center",
+    "branch": "main",
+    "buildCommand": "bash scripts/build_control_center_render.sh",
+    "publishPath": "public",
+    "deployId": "dep-daui5gjbc2fs73cn5ug0",
+    "deployedCommit": "41bc34c37ecdda577aab6c9b2d226ff44b3d16b0",
+    "deployStatus": "live"
+  },
+  "invariants": {
+    "readOnly": true,
+    "browserGithubAuthority": false,
+    "automaticMaturityPromotion": false,
+    "dosA1": "RUNTIME_DEFERRED",
+    "legacyFallback": "/legacy/"
+  },
+  "results": {
+    "PUBLIC_FUNCTIONAL_SMOKE": "PASS",
+    "PUBLIC_DEPLOY_INTEGRITY": "PASS",
+    "PUBLIC_PWA_BUILD": "PASS",
+    "A6_BROWSER_QUALIFICATION": "PASS",
+    "PUBLIC_LIVE_DEVTOOLS_REPLAY": "NOT_VERIFIABLE",
+    "overall": "PUBLIC_BROWSER_CERTIFICATION_INCOMPLETE"
+  },
+  "verified": {
+    "publicRootModularApp": true,
+    "primarySections": [
+      "Overview",
+      "Maturity",
+      "Ecosystem",
+      "Evidence",
+      "Operations",
+      "Assurance"
+    ],
+    "legacyFallbackReachable": true,
+    "manifestGeneratedOnPublicDeploy": true,
+    "serviceWorkerGeneratedOnPublicDeploy": true,
+    "pwaPrecacheEntries": 11,
+    "pwaPrecacheSizeKiB": 668.38,
+    "governedSnapshotMaterialized": true,
+    "projectKnowledgeMaterialized": true,
+    "projectKnowledgeObservedState": [
+      "DEGRADED",
+      "FRESH",
+      "DETECTED"
+    ],
+    "a6OfflineBrowserQualification": true,
+    "a6Reflow320Qualification": true,
+    "a6AccessibilityQualification": true,
+    "a6ZeroExternalRuntimeRequestsQualification": true
+  },
+  "unresolvedChecks": [
+    {
+      "id": "LIVE_BROWSER_REPLAY",
+      "status": "NOT_VERIFIABLE",
+      "scope": [
+        "public-domain browser DevTools console",
+        "public-domain network trace",
+        "public-domain offline replay",
+        "exact live viewport replay at 320, 390, 768 and 1440 CSS px"
+      ],
+      "reason": "The browser/runtime available in the verification session could not resolve the public Render domain. No product defect was reproduced."
+    }
+  ],
+  "defects": {
+    "blocking": [],
+    "nonBlocking": [
+      {
+        "id": "PROJECT_KNOWLEDGE_DEGRADED",
+        "classification": "GOVERNED_DATA_STATE",
+        "blocking": false,
+        "evidence": "Render build log: TRAMA_LIVE_PROJECT_KNOWLEDGE_BUNDLE DEGRADED FRESH DETECTED",
+        "note": "The bundle was successfully materialized; this is not an application loading failure."
+      }
+    ]
+  },
+  "decision": {
+    "productChangeRequired": false,
+    "renderChangeRequired": false,
+    "nextAction": "Run LIVE_BROWSER_REPLAY from an Internet-capable Chromium/Playwright environment. Do not reopen A7 implementation unless that replay reproduces a defect."
+  }
+}
