@@ -276,8 +276,9 @@ jobs:
           assert projected["DOCENTE_OS.APPSHELL.FAMILY"]["maturity"]["confirmedStage"] == "REGISTERED"
           assert projected["DOCENTE_OS.APPSHELL.FAMILY"]["maturity"]["candidateStage"] == "ACCESSIBILITY"
           assert projected["DOCENTE_OS.ALERT.STATUS"]["maturity"]["candidateStage"] == "BEHAVIOURAL"
-          assert projected["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]["maturity"]["confirmedStage"] == "REGISTERED"
-          assert {item["componentId"] for item in snapshot["components"] if item["maturity"]["qualificationStatus"] == "QUALIFIED"} == {"ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED"}
+          assert projected["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]["maturity"]["confirmedStage"] == "ACCESSIBILITY"
+          assert projected["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]["maturity"]["qualificationStatus"] == "QUALIFIED"
+          assert {item["componentId"] for item in snapshot["components"] if item["maturity"]["qualificationStatus"] == "QUALIFIED"} == {"ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED","CONTROL_CENTER.CONTEXT_HELP.FAMILY"}
           assert "overallScore" not in snapshot
           assert all("score" not in item.get("maturity", {}) for item in snapshot["components"])
           print("TRAMA_CC_MAT_COMP_01_SNAPSHOT_PROJECTION_PASS")
