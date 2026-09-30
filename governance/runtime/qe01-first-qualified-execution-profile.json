@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "trama.qe01-execution-profile/v1",
+  "executionId": "QE-01",
+  "state": "AUTHORIZED_PENDING_PROVIDER_QUALIFICATION",
+  "authorityDecisionRef": "TRAMA-QE-DECISION-2026-09-30",
+  "capability": {
+    "id": "lesson.preparation.observe",
+    "version": "1.0.0",
+    "mode": "PROPOSE_ONLY"
+  },
+  "decisionOwner": "DOCENTE_OS",
+  "runtime": {
+    "providerType": null,
+    "providerId": null,
+    "adapterId": null,
+    "adapterVersion": null,
+    "runtimeProfileRef": null,
+    "networkPolicy": "DENY_UNTIL_PROVIDER_QUALIFIED",
+    "allowedEndpoints": [],
+    "maxRetries": 0,
+    "timeoutMs": 30000,
+    "oneShot": true
+  },
+  "dataPolicy": {
+    "personalStudentData": false,
+    "studentProfiles": false,
+    "studentTracking": false,
+    "secretsPersisted": false,
+    "evidenceMayContainSecrets": false
+  },
+  "authorityBoundaries": {
+    "arenaWrite": false,
+    "atlasPublish": false,
+    "docenteOsAutoAdopt": false,
+    "diaryWrite": false,
+    "controlCenterReadOnly": true,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "gates": {
+    "HUMAN_DECISION": true,
+    "PROVIDER_REAL_QUALIFIED": false,
+    "ADAPTER_REAL_QUALIFIED": false,
+    "EXECUTION_PROFILE_FROZEN": false,
+    "NETWORK_SECRET_POLICY": false,
+    "PRIVACY_DATA_MINIMIZATION": false,
+    "TIMEOUT_CANCEL_CLEANUP": false,
+    "NO_MUTATION": false,
+    "EVIDENCE_RECEIPT": false,
+    "STALE_FAILURE_NORMALIZATION": false,
+    "CONTROL_CENTER_OBSERVE_ONLY": false,
+    "MANUAL_FALLBACK": false,
+    "HUMAN_EXACT_HEAD_REVIEW": false
+  },
+  "executable": false
+}
