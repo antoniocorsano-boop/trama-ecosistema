@@ -238,3 +238,44 @@ This evidence does not prove that a clean-room generated XLS or an edited copy i
 - [ ] unmodified round-trip import;
 - [ ] duplicate/update behavior;
 - [ ] minimally modified-copy compatibility.
+
+
+## E-009 — Official Argo web documentation corroboration
+
+**Source:** official Argo didUP manual and official historical Argo documentation retrieved from `argosoft.it` / `argosoftware.it` on 2026-09-30  
+**Evidence status:** OFFICIAL_PUBLIC_DOCUMENTATION / CORROBORATING
+
+### Supported facts
+
+- `Num Ordine` is exposed for modules and arguments;
+- module description is documented with a 200-character limit;
+- official didUP examples show numeric module/argument orders;
+- the three documented execution states are:
+  - `Svolto`;
+  - `Parzialmente Svolto`;
+  - `Non Svolto`;
+- official examples show user-facing dates in `DD-MM-YYYY` form;
+- import from another class may select the entire program or selected modules;
+- selected imported modules are added to modules already present;
+- XLS export/import exists, while modification of the original didUP XLS is strongly discouraged.
+
+### Important distinction
+
+Web documentation establishes **UI/domain semantics**, not the BIFF cell storage type or a stable binary import schema. Those remain bound to real-file and round-trip evidence.
+
+### Evidence gaps reduced
+
+- [x] state literal set corroborated;
+- [x] user-facing date format corroborated;
+- [x] order semantics corroborated at UI/domain level;
+- [x] module description max length corroborated;
+- [x] additive selective native import corroborated.
+
+### Still unresolved
+
+- [ ] binary date representation;
+- [ ] binary order variability;
+- [ ] exact duplicate handling;
+- [ ] update-vs-append behavior for equivalent items;
+- [ ] unmodified round-trip semantics;
+- [ ] acceptance of reconstructed/minimally modified XLS.
