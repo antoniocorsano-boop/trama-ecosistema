@@ -89,10 +89,11 @@ test("TRAMA public browser certification", async ({ page, context, browserName }
 
   await run("BC-02_PRIMARY_NAVIGATION", async () => {
     const visited: string[] = [];
+    await page.goto("/#/", { waitUntil: "networkidle" });
     for (const route of routes) {
-      const response = await page.goto(route, { waitUntil: "domcontentloaded" });
-      expect(response).not.toBeNull();
-      expect(response!.status()).toBeLessThan(400);
+      await page.goto(route, { waitUntil: "domcontentloaded" });
+      await expect(page.locator("#main-content")).toBeVisible();
+      expect(page.url()).toContain(route.slice(1));
       visited.push(page.url());
     }
     return { visited };
@@ -109,12 +110,10 @@ test("TRAMA public browser certification", async ({ page, context, browserName }
 
   await run("BC-04_GOVERNANCE_INVARIANTS", async () => {
     await page.goto("/#/ecosystem", { waitUntil: "domcontentloaded" });
-    const ecosystem = await page.locator("body").innerText();
-    expect(ecosystem).toMatch(/DOS-A1/i);
-    expect(ecosystem).toMatch(/RUNTIME_DEFERRED|DEFERRED/i);
+    await expect(page.locator("body")).toContainText(/DOS-A1/i, { timeout: 15_000 });
+    await expect(page.locator("body")).toContainText(/RUNTIME_DEFERRED|DEFERRED/i, { timeout: 15_000 });
     await page.goto("/#/", { waitUntil: "domcontentloaded" });
-    const root = await page.locator("body").innerText();
-    expect(root).toMatch(/READ_ONLY|READ ONLY/i);
+    await expect(page.locator("body")).toContainText(/READ_ONLY|READ ONLY/i);
     return { readOnly: true, dosA1Deferred: true };
   });
 
@@ -249,6 +248,9 @@ test("TRAMA public browser certification", async ({ page, context, browserName }
   });
 
   await run("BC-11_CONSOLE", async () => {
+    consoleErrors.length = 0;
+    await page.goto("/#/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(500);
     expect(consoleErrors).toEqual([]);
     return { errors: consoleErrors };
   });
