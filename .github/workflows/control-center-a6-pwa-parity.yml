@@ -39,7 +39,7 @@ jobs:
       - name: Verify CSP-compatible static output
         run: |
           test -s dist/sw.js
-          test -s dist/manifest.webmanifest
+          test -s dist/manifest.json
           ! grep -R -E "(api\.github\.com|raw\.githubusercontent\.com|GITHUB_TOKEN|Authorization: Bearer|dangerouslySetInnerHTML|eval\()" src
           ! grep -E '<script(>|[^>]*>)[[:space:]]*[^<]' dist/index.html
           ! grep -R -E 'new Function\(|eval\(' dist/assets/*.js
