@@ -44,10 +44,44 @@ tooltip = by_id["ARENA.TOOLTIP.LEGACY"]
 assert tooltip["maturity"]["confirmedStage"] == "REGISTERED"
 assert tooltip["maturity"]["candidateStage"] == "REGISTERED"
 
+relation = by_id["ATLAS.RELATION_EXPLORER.FAMILY"]
+assert relation["maturity"]["confirmedStage"] == "REGISTERED"
+assert relation["maturity"]["candidateStage"] == "ACCESSIBILITY"
+assert relation["evidenceStatus"]["ISOLATED"]["status"] == "DOCUMENTED_ONLY"
+assert relation["evidenceStatus"]["BEHAVIOURAL"]["status"] == "PRESENT"
+assert relation["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PRESENT"
+
+tree = by_id["ATLAS.CURRICULUM_TREE.DISCLOSURE"]
+assert tree["sourceClass"] == "NATIVE_PLATFORM"
+assert tree["maturity"]["confirmedStage"] == "REGISTERED"
+assert tree["maturity"]["candidateStage"] == "ACCESSIBILITY"
+
+appshell = by_id["DOCENTE_OS.APPSHELL.FAMILY"]
+assert appshell["maturity"]["confirmedStage"] == "REGISTERED"
+assert appshell["maturity"]["candidateStage"] == "ACCESSIBILITY"
+assert appshell["evidenceStatus"]["BEHAVIOURAL"]["status"] == "PRESENT"
+assert appshell["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PRESENT"
+assert appshell["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PRESENT"
+
+alert = by_id["DOCENTE_OS.ALERT.STATUS"]
+assert alert["maturity"]["confirmedStage"] == "REGISTERED"
+assert alert["maturity"]["candidateStage"] == "BEHAVIOURAL"
+assert alert["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "NOT_OBSERVED"
+
+timetable = by_id["DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS"]
+assert timetable["maturity"]["confirmedStage"] == "REGISTERED"
+assert timetable["maturity"]["candidateStage"] == "ACCESSIBILITY"
+assert timetable["evidenceStatus"]["BEHAVIOURAL"]["status"] == "PARTIAL"
+assert timetable["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PRESENT"
+assert timetable["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PRESENT"
+
 context_help = by_id["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]
 assert context_help["maturity"]["confirmedStage"] == "REGISTERED"
 assert context_help["maturity"]["candidateStage"] == "REGISTERED"
 assert context_help["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PARTIAL"
+
+assert len(by_id) == 11
+assert {item["product"] for item in components} == {"ARENA","ATLAS","DOCENTE_OS","TRAMA_CONTROL_CENTER"}
 
 synthetic = {
     "componentId": "TEST.STABLE.WITHOUT.EVIDENCE",
