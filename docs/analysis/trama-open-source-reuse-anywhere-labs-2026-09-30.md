@@ -203,18 +203,26 @@ Output completato:
 
 Prima implementazione candidata: DSH adapter. Codex resta seconda verifica di portabilità.
 
-### OR-04 — Control Center observation integration
+### OR-04 — Control Center observation integration — **IMPLEMENTED / VERIFYING**
 **Obiettivo:** consentire al Control Center di rappresentare connector/runtime come **osservazioni**, senza comando operativo.
 
-Output minimo:
+Output implementato nella vista `Operazioni` della app modulare:
 - runtime availability;
 - adapter/version;
-- last qualified evidence;
 - health;
-- capability declaration;
-- DEFERRED/AVAILABLE/QUALIFIED state.
+- capability declaration `supported / available / authorized`;
+- evidence refs;
+- stato adapter `DEFERRED`;
+- source esplicita `contract-mock`;
+- nessun controllo operativo.
 
-Nessun pulsante operativo finché l'authority non viene deliberata.
+File principali:
+- `apps/control-center/src/domain/runtimeObservation/model.ts`;
+- `apps/control-center/src/domain/runtimeObservation/model.test.ts`;
+- `apps/control-center/src/features/operations/OperationsPage.tsx`;
+- `apps/control-center/src/features/operations/operations.css`.
+
+La fixture è deliberatamente contract-compliant e non viene presentata come runtime live. `DOS-A1` resta `RUNTIME_DEFERRED`. Nessun pulsante operativo è introdotto.
 
 ### OR-05 — UI component reuse
 **Obiettivo:** ridurre componenti custom usando librerie mature già validate nell'ecosistema esterno.
@@ -369,6 +377,24 @@ Il Pilot viene riclassificato come candidato adapter e non come piattaforma cent
 
 DEFER espliciti: implementazione concreta DSH, adapter Codex di portabilità, gestione credenziali, retry > 0, recovery mutativo, validazione KPI su misura reale. Nessun backlog analitico implicito resta aperto per OR-03.
 
-## 15. Primo prossimo passo
+## 15. Stato OR-04
 
-Eseguire **OR-04 — Control Center Observation Integration** come slice read-only: proiettare dati contract-compliant (anche mock) nel Control Center per availability, adapter/version, health, capability state ed evidence refs. Nessun comando operativo, nessuna mutazione, nessuna promozione automatica.
+**IMPLEMENTED / VERIFYING.**
+
+Scelta di integrazione: nessuna nuova route. La proiezione runtime vive in **Operazioni**, accanto allo stato governato già esistente.
+
+Vincoli verificabili introdotti:
+- fixture marcata `contract-mock`;
+- adapter state `DEFERRED`;
+- availability e health non falsificate come live;
+- mutation capability `authorized=false`;
+- nessun comando operativo;
+- evidence refs ai tre contratti OR-01/02/03;
+- test di dominio che impedisce authorization mutativa accidentale;
+- layout responsive nella stessa superficie Operazioni.
+
+Backlog OR-04: **nessun tema analitico implicito**. L'unico passo residuo è la verifica CI/build/browser della modifica corrente.
+
+## 16. Primo prossimo passo
+
+Dopo PASS dei gate, **OR-05 — UI component reuse** può procedere come inventario/adozione mirata dei primitive maturi già identificati, senza duplicare la Component Strategy esistente. OR-06 resta il proof end-to-end read-only successivo.
