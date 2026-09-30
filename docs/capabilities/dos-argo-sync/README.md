@@ -510,6 +510,8 @@ Non autorizza runtime, persistenza, automazione di Argo, nuove write authority o
 - `research-evidence-register.md` — evidenze, assunzioni, lacune e negative knowledge;
 - `canonical-didactic-model-candidate-v1.md` — modello canonico candidato, separato dai formati XLS/XLSX/CSV;
 - `delta-contract-candidate-v1.md` — contratto candidato per confronto incrementale, idempotenza, conflitti e baseline advancement;
-- `g1-delta-test-matrix-v1.md` — matrice di 35 casi G1 per delta, idempotenza, duplicati, rimozioni, lineage e baseline.
+- `g1-delta-test-matrix-v1.md` — matrice di 35 casi G1 per delta, idempotenza, duplicati, rimozioni, lineage e baseline;
+- `g1-reference-oracle-v1.md` — oracolo deterministico indipendente dall’implementazione;
+- `fixtures/g1-delta-reference-cases-v1.json` — fixture di riferimento macchina-leggibili per i casi core.
 
 Questi artefatti restano **G1 candidate** e non autorizzano persistenza o runtime.
