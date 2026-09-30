@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import { AppShell } from "./AppShell";
 import { RouteErrorBoundary } from "./RouteErrorBoundary";
@@ -10,7 +11,7 @@ import { OperationsPage } from "../features/operations/OperationsPage";
 import { AssurancePage } from "../features/assurance/AssurancePage";
 import "../features/maturity/maturity.css";
 
-const guarded = (label: string, node: React.ReactNode) => (
+const guarded = (label: string, node: ReactNode) => (
   <RouteErrorBoundary label={label}>{node}</RouteErrorBoundary>
 );
 
