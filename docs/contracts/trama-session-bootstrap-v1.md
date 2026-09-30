@@ -33,6 +33,8 @@ request -> subject resolution -> governed context retrieval -> governed document
 
 The process principle is **retrieve before discover**.
 
+When multiple governed documents match the same subject, `CURRENT` references are presented before `PROPOSED` and `SUPERSEDED` references. Superseded documents remain available as historical context but must not outrank the current canonical reference.
+
 Discovery, repository inspection and external research remain available after bootstrap, but should be used to verify volatile facts or fill real gaps rather than reconstruct already governed knowledge.
 
 ## 4. Subject resolution
