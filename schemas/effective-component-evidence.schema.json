@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/effective-component-evidence.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "governedRegistryRef",
+    "liveObservedAt",
+    "liveObservationStatus",
+    "promotionRequired",
+    "humanReviewRequired",
+    "components",
+    "liveBindings"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.effective-component-evidence/v1"
+    },
+    "governedRegistryRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "liveObservedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "liveObservationStatus": {
+      "enum": [
+        "FRESH",
+        "PARTIAL",
+        "UNAVAILABLE",
+        "GOVERNED_ONLY"
+      ]
+    },
+    "promotionRequired": {
+      "const": false
+    },
+    "humanReviewRequired": {
+      "const": false
+    },
+    "components": {
+      "type": "array"
+    },
+    "liveBindings": {
+      "type": "array"
+    }
+  }
+}
