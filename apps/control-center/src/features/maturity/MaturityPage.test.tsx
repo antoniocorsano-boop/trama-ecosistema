@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { MaturityView } from "./MaturityPage";
 import type { MaturitySnapshot } from "../../domain/maturity/model";
@@ -95,7 +95,8 @@ describe("MaturityView", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Atlas" }));
+    const filters = screen.getByRole("group", { name: "Filtra componenti per prodotto" });
+    fireEvent.click(within(filters).getByRole("button", { name: "Atlas" }));
     expect(onProductChange).toHaveBeenCalledWith("ATLAS");
   });
 });
