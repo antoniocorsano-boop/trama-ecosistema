@@ -40,16 +40,20 @@ No runtime or persistence has been authorized.
 
 ### B1 — Format variability
 
-One sample cannot establish that all didUP exports use the same:
+Official Argo documentation now corroborates:
+- order fields and numeric semantics at UI level;
+- all three execution-state literals;
+- user-facing date format `DD-MM-YYYY`;
+- selective/additive import behavior at module level.
+
+One real XLS sample still cannot establish binary/profile stability across exports:
 - workbook profile;
 - sheet name;
-- headers;
+- exact headers;
 - row grammar;
-- state literals;
-- date representation;
-- ordering representation.
+- BIFF storage type for dates/order.
 
-**Evidence required:** at least one richer independent export.
+**Evidence required:** preferably one richer independent export, or equivalent structural evidence.
 
 ### B2 — Round-trip/import semantics
 
@@ -64,15 +68,14 @@ The manual documents import/export but not:
 
 ## Recommended next evidence package
 
-A second export should ideally contain:
+A second export is still the strongest low-risk evidence, but its purpose is now narrower: verify **binary/profile variability**, not rediscover domain semantics already documented officially.
 
+It should ideally contain:
 - at least 2 modules;
 - at least 2 arguments per module;
-- explicit module and argument order values;
-- at least one `Svolto` and one `Non svolto` argument;
+- non-empty order values;
+- at least one performed state;
 - at least one non-empty `DATA SVOLGIMENTO`.
-
-This gives maximum information while remaining non-sensitive.
 
 ## Round-trip sequence candidate
 
