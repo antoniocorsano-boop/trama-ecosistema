@@ -129,6 +129,22 @@ def relevant_documents(registry: dict, subjects: list[str]):
                 "decisionRef": doc.get("decisionRef"),
                 "dependsOn": doc.get("dependsOn", []),
             })
+    status_rank = {
+        "CURRENT": 0,
+        "PROPOSED": 1,
+        "SUPERSEDED": 2,
+        "RETIRED": 3,
+    }
+    priority_rank = {
+        "FOUNDATIONAL": 0,
+        "NORMATIVE": 1,
+        "SUPPORTING": 2,
+    }
+    docs.sort(key=lambda doc: (
+        status_rank.get(doc.get("status"), 9),
+        priority_rank.get(doc.get("priority"), 9),
+        doc.get("id") or "",
+    ))
     return docs
 
 
