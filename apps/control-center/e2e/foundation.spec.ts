@@ -10,7 +10,7 @@ test("A1 candidate loads governed snapshot without external runtime requests", a
     }
   });
 
-  await page.goto("/");
+  await page.goto("/#/foundation");
 
   await expect(page.getByRole("heading", { name: "Control Center" })).toBeVisible();
   await expect(page.getByLabel("Modalità sola lettura")).toHaveText("READ_ONLY");
