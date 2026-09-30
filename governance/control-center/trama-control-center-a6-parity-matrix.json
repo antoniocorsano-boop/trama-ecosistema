@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.control-center.a6-parity-matrix/v1",
   "id": "TRAMA-CC-APP-A6-PARITY-01",
-  "status": "CANDIDATE",
+  "status": "TECHNICALLY_QUALIFIED",
   "baseline": "61e0a1d61dbb983ebf1fd3717d7c0c69114bbe1f",
   "surfaces": [
     {
@@ -90,5 +90,7 @@
     "publicCutoverAuthorized": false,
     "dosA1": "RUNTIME_DEFERRED"
   },
-  "humanReviewRequired": "PRODUCT_PARITY"
+  "humanReviewRequired": "PRODUCT_PARITY",
+  "technicalQualifiedHead": "21e0b42d943806f1fb3a8a28acaf88985a6b4fff",
+  "humanReview": "AWAITING_PRODUCT_PARITY_HUMAN_REVIEW"
 }
