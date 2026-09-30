@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.control-center-a0-architecture-lock/v1",
   "id": "TRAMA-CC-APP-A0-LOCK-01",
-  "status": "AWAITING_HUMAN_REVIEW",
+  "status": "LOCKED",
   "baseline": {
     "repository": "antoniocorsano-boop/trama-ecosistema",
     "commit": "c9c3031e022cab6b571b1ea323c938ab6090c353"
@@ -43,5 +43,10 @@
     "ANALYTICS_TRACKING"
   ],
   "dosA1": "RUNTIME_DEFERRED",
-  "legacyBaselineDataRef": "governance/control-center/trama-control-center-a0-legacy-baseline.json"
+  "legacyBaselineDataRef": "governance/control-center/trama-control-center-a0-legacy-baseline.json",
+  "humanReview": {
+    "decision": "APPROVED",
+    "approvedAt": "2026-09-30",
+    "approvedFor": "A0_ARCHITECTURE_LOCK"
+  }
 }
