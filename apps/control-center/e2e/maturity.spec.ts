@@ -9,7 +9,7 @@ const governedSnapshot = JSON.parse(
 test("Maturity candidate preserves governed semantics across canonical viewports", async ({ page }, testInfo) => {
   await page.goto("/#/maturity");
 
-  await expect(page.getByRole("heading", { name: "Maturità" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Maturità", exact: true })).toBeVisible();
   await expect(page.getByText("Aree di maturità")).toBeVisible();
   await expect(page.getByText("Componenti", { exact: true })).toBeVisible();
   await expect(page.getByText("READ_ONLY")).toBeVisible();
@@ -52,7 +52,8 @@ test("Maturity candidate renders LIVE_VERIFIED evidence without lifecycle promot
   });
 
   await page.goto("/#/maturity");
-  await page.getByRole("button", { name: "Atlas" }).click();
+  const filters = page.getByRole("group", { name: "Filtra componenti per prodotto" });
+  await filters.getByRole("button", { name: "Atlas", exact: true }).click();
   await page.getByRole("button", { name: /relation-explorer/i }).click();
 
   await expect(page.getByText("Presente · live verificata")).toBeVisible();
