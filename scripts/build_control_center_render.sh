@@ -23,8 +23,21 @@ if ! python3 -c 'import jsonschema' >/dev/null 2>&1; then
 fi
 
 overlay="$(mktemp -t trama-live-overlay.XXXXXX.json)"
-cleanup(){ rm -f "$overlay"; }
+component_overlay="$(mktemp -t trama-live-component-evidence.XXXXXX.json)"
+cleanup(){ rm -f "$overlay" "$component_overlay"; }
 trap cleanup EXIT
+
+if [[ "$live_ready" == "1" ]] && python3 "$ROOT/scripts/collect_atlas_live_component_evidence_r1.py" > "$component_overlay"; then
+  if python3 "$ROOT/scripts/build_ecosystem_snapshot.py" \
+      --live-component-overlay "$component_overlay" \
+      --output "$OUT/data/ecosystem-snapshot.json"; then
+    echo "TRAMA_RENDER_LIVE_COMPONENT_EVIDENCE_MATERIALIZED"
+  else
+    echo "TRAMA_RENDER_LIVE_COMPONENT_EVIDENCE_FALLBACK_MATERIALIZATION_FAILED"
+  fi
+else
+  echo "TRAMA_RENDER_LIVE_COMPONENT_EVIDENCE_GOVERNED_FALLBACK"
+fi
 
 if [[ "$live_ready" == "1" ]] && python3 "$ROOT/scripts/run_live_repository_overlay.py" --pretty > "$overlay"; then
   if python3 "$ROOT/scripts/materialize_live_project_knowledge_bundle.py"       --overlay "$overlay"       --output "$OUT/data/context-packs/project-knowledge.json"; then
