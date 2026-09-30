@@ -31,7 +31,7 @@ assert.match(fixture,/Context Help isolated fixture/);
 assert.match(fixture,/role="tooltip"/);
 assert.match(fixture,/popover="manual"/);
 assert.match(fixture,/\.\.\/context-help\.js/);
-assert.match(fixture,/390/); // viewport meta / compact fixture remains mobile-capable
+assert.match(fixture,/@media\(max-width:700px\)/);
 
 assert.match(sw,/trama-control-center-v16/);
 assert.match(sw,/\.\/context-help\.js/);
