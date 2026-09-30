@@ -135,3 +135,34 @@ Il validatore:
 - un documento fondante risulta orfano.
 
 Questo rende la costruzione documentale parte del processo di sviluppo, non un'attività separata affidata alla memoria della conversazione.
+## Documentation closure gate
+
+A significant work item is not operationally complete until its durable knowledge has been closed into the project knowledge system.
+
+The closure check SHALL ask:
+
+1. Did the work produce a reusable architectural, strategic, contractual, process, design or validation result?
+2. If yes, does an existing canonical document already own that subject?
+3. If yes, update that document rather than create a duplicate.
+4. If no, create the smallest appropriate canonical document.
+5. If the document is foundational, normative or continuity-critical, register it in the Governed Document Registry.
+6. If it changes execution order or portfolio direction, update the canonical roadmap/plan.
+7. If it changes a governed decision boundary, update or create the appropriate decision record.
+8. If future sessions need the result for continuity, ensure its subjects/updateTriggers make it retrievable by Project Knowledge / Session Bootstrap.
+9. Run the relevant deterministic validators before considering the documentation closed.
+
+A chat summary, pull-request description, review comment or assistant memory is not sufficient durable closure.
+
+### Closure states
+
+- `NOT_APPLICABLE` — no reusable durable knowledge was created;
+- `UPDATED_EXISTING` — an existing canonical reference was updated;
+- `CREATED_AND_REGISTERED` — a new canonical reference was created and indexed;
+- `BLOCKED` — durable knowledge exists but cannot yet be canonically placed or validated.
+
+A workstream with closure state `BLOCKED` may continue technically when safe, but SHALL be reported as documentation debt and SHALL NOT be described as fully consolidated.
+
+### Process ownership
+
+The person requesting the work is not responsible for remembering this gate. It is part of the TRAMA development process and should be applied by the working agent/process whenever a significant reusable result is produced.
+
