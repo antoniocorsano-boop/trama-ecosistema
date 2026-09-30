@@ -337,7 +337,11 @@ A UI slice is complete only when:
 - accessibility checks pass;
 - human-use validation is complete where required;
 - no prototype-only assumptions remain;
-- documentation/catalogue entries are updated.
+- documentation/catalogue entries are updated;
+- reusable architecture/design/process findings are consolidated into the existing canonical document or a new governed reference;
+- the Governed Document Registry is updated when the result is foundational, normative or continuity-critical;
+- roadmap/decision records are updated when execution order or authority boundaries changed;
+- documentation closure is not BLOCKED.
 
 ## 18. Reuse across products
 
