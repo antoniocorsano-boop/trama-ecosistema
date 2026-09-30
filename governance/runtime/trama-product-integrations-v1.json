@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "trama.product-integrations/v1",
+  "id": "TRAMA-OR-10-PRODUCT-INTEGRATIONS",
+  "status": "PROPOSED_NO_RUNTIME",
+  "date": "2026-09-30",
+  "authorityChange": "NONE",
+  "dosA1": "RUNTIME_DEFERRED",
+  "slices": [
+    {
+      "id": "OR-10-A",
+      "product": "ARENA",
+      "mode": "READ_ONLY",
+      "purpose": "CURRICULUM_CONTEXT_ADAPTER"
+    },
+    {
+      "id": "OR-10-D",
+      "product": "DOCENTE_OS",
+      "mode": "PROPOSE_ONLY",
+      "purpose": "LESSON_PREPARATION_SURFACE"
+    },
+    {
+      "id": "OR-10-T",
+      "product": "ATLAS",
+      "mode": "READ_ONLY",
+      "purpose": "OPTIONAL_RESOURCE_ADAPTER"
+    },
+    {
+      "id": "OR-10-X",
+      "product": "TRAMA",
+      "mode": "READ_ONLY",
+      "purpose": "CROSS_PRODUCT_EVIDENCE_ALIGNMENT"
+    }
+  ],
+  "invariants": [
+    "PI-01_PRODUCT_OWNERSHIP_PRESERVED",
+    "PI-02_ARENA_AUTHORITY_PRESERVED",
+    "PI-03_ATLAS_OPTIONALITY_PRESERVED",
+    "PI-04_TEACHER_DECISION_PRESERVED",
+    "PI-05_SHARED_LAYER_NO_DOMAIN_AUTHORITY",
+    "PI-06_PROVENANCE_VISIBLE",
+    "PI-07_FAILURE_ISOLATION",
+    "PI-08_CONTROL_CENTER_NON_AUTHORITY",
+    "PI-09_NO_RUNTIME_IN_V0",
+    "PI-10_DOS_A1_UNCHANGED"
+  ]
+}
