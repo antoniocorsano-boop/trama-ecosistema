@@ -1602,6 +1602,50 @@
         "QUALIFICATION_STATE_CHANGE",
         "AUTHORITY_DECISION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-OR-10-PRODUCT-INTEGRATIONS",
+      "path": "docs/contracts/trama-product-integrations-contract-v0.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "product-integrations",
+        "arena",
+        "atlas",
+        "docente-os",
+        "shared-capability-layer",
+        "no-runtime"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-09-QUALIFIED-EXECUTION-READINESS"
+      ],
+      "updateTriggers": [
+        "PRODUCT_INTEGRATION_CHANGE",
+        "AUTHORITY_BOUNDARY_CHANGE",
+        "RUNTIME_AUTHORIZATION_CHANGE",
+        "DOS_A1_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-OR-10-PRODUCT-INTEGRATIONS-MANIFEST",
+      "path": "governance/runtime/trama-product-integrations-v1.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "product-integrations",
+        "machine-readable-contract"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-10-PRODUCT-INTEGRATIONS"
+      ],
+      "updateTriggers": [
+        "PRODUCT_INTEGRATION_CHANGE",
+        "QUALIFICATION_STATE_CHANGE"
+      ]
     }
   ]
 }
