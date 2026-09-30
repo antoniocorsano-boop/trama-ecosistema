@@ -26,7 +26,7 @@ Exit:
 
 ### A0 materialized baseline
 
-State: **AWAITING_HUMAN_REVIEW**.
+State: **LOCKED — Human Review APPROVED 2026-09-30**.
 
 Materialized outputs:
 
@@ -39,7 +39,7 @@ Materialized outputs:
 
 Governance now fails closed on unacknowledged legacy baseline drift or architecture-boundary escalation.
 
-A0 becomes `LOCKED` only after explicit Human Review. No A1 runtime or product shell is authorized by merely materializing these files.
+A0 is `LOCKED` after explicit Human Review. This authorizes entry into A1 foundation work only; it does not authorize public cutover, product runtime changes, or DOS-A1.
 
 ## A1 — Application foundation
 
