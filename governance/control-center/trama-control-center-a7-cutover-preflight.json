@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.control-center-a7-cutover-preflight/v1",
   "id": "TRAMA-CC-APP-A7-CUTOVER-01",
-  "status": "PREFLIGHT",
+  "status": "TECHNICALLY_READY_FOR_REQUALIFICATION",
   "publicCutoverAuthorized": false,
   "renderEnvironmentBound": true,
   "sourceBaseline": {
@@ -12,14 +12,14 @@
   "requiredEvidence": {
     "renderServiceIdentity": "BOUND",
     "currentProductionEntrypoint": "BOUND",
-    "targetModularBuild": "IN_PROGRESS",
-    "legacyFallback": "IN_PROGRESS",
-    "rollbackProcedure": "IN_PROGRESS",
-    "exactHeadBinding": "IN_PROGRESS",
+    "targetModularBuild": "DEFINED",
+    "legacyFallback": "DEFINED",
+    "rollbackProcedure": "DEFINED",
+    "exactHeadBinding": "BOUND",
     "preCutoverSmokePlan": "DEFINED",
     "postCutoverSmokePlan": "DEFINED",
-    "deployReceipt": "PENDING",
-    "rollbackReceipt": "PENDING"
+    "deployReceipt": "SCHEMA_DEFINED",
+    "rollbackReceipt": "SCHEMA_DEFINED"
   },
   "invariants": {
     "controlCenterReadOnly": true,
@@ -46,5 +46,33 @@
     "publicUrl": "https://trama-control-center.onrender.com",
     "currentLiveDeployId": "dep-daugbrbrjlhs73crlbsg",
     "currentLiveCommit": "fffefc16f287bd1e63b0e3dde2e117e24be3ac8a"
+  },
+  "candidateHead": "178f38f8dd71f18a3ae81b5547c5bb1c2c10ff38",
+  "rollback": {
+    "legacyBuildCommand": "bash scripts/build_control_center_render.sh",
+    "publishPath": "public",
+    "legacyFallbackPath": "/legacy/",
+    "lastKnownGoodDeployId": "dep-daugbrbrjlhs73crlbsg",
+    "lastKnownGoodCommit": "fffefc16f287bd1e63b0e3dde2e117e24be3ac8a"
+  },
+  "receiptContract": {
+    "deploy": [
+      "candidateHead",
+      "serviceId",
+      "deployId",
+      "deployedCommit",
+      "publicUrl",
+      "buildCommand",
+      "publishPath",
+      "smokeResults",
+      "humanReviewRef",
+      "timestamp"
+    ],
+    "rollback": [
+      "failedSmokeCondition",
+      "rollbackTargetDeployOrCommit",
+      "rollbackCompletionState",
+      "timestamp"
+    ]
   }
 }
