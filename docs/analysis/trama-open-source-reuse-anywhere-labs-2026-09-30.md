@@ -162,7 +162,7 @@ Esito: il pattern di generazione, ownership, `release()` idempotente, process-tr
 
 **Preferenza confermata:** adattare concetti e API; evitare Electron.
 
-### OR-02 — Local connector contract
+### OR-02 — Local connector contract — **PASS documentale**
 **Obiettivo:** definire il confine locale tra TRAMA e runtime.
 
 Input di riferimento:
@@ -170,14 +170,19 @@ Input di riferimento:
 - `contracts/runtime-control`;
 - `connector/`.
 
-Output:
-- `TRAMA Local Connector Contract v0`;
-- transport-neutral API;
-- read-only observation subset;
+Output completato:
+- `docs/contracts/trama-local-connector-contract-v0.md`;
+- API trasporto-indipendente;
+- discovery e observation read-only;
+- identità separate `runtimeType` / `runtimeId`;
+- capability state con `supported` / `available` / `authorized`;
+- health ed evidence normalizzati;
+- failure isolation;
+- freshness/stale semantics;
 - explicit mutation boundary;
-- provenance/evidence fields.
+- registro DEFER esplicito.
 
-**Vincolo:** nessun runtime attivato.
+**Vincolo confermato:** nessun runtime attivato.
 
 ### OR-03 — Runtime adapter contract
 **Obiettivo:** trasformare il Harness Pilot in candidato adapter, non piattaforma centrale.
@@ -329,6 +334,23 @@ Invarianti consolidate:
 - observation non crea authority;
 - recovery mutativa resta disabilitata nel perimetro corrente.
 
-## 13. Primo prossimo passo
+## 13. Stato OR-02
 
-Eseguire **OR-02 — Local Connector Contract** come nuova slice documentale: definire il confine trasporto-indipendente tra Control Center e RuntimeGeneration, con sottoinsieme read-only, capability declaration, health/observation ed explicit mutation boundary. Agents Anywhere resta fonte concettuale `REFERENCE_ONLY`, salvo `dsh-bridge/` MIT.
+**PASS documentale.** Creato `docs/contracts/trama-local-connector-contract-v0.md`.
+
+Decisioni consolidate:
+- separazione immutabile tra tipo runtime e istanza;
+- discovery read-only;
+- capability dichiarative separate dall'authority;
+- stato live distinto da persisted/stale;
+- health non promuove maturità;
+- errori isolati per richiesta/provider;
+- ownership locale senza segreti nei record condivisi;
+- trasporto non ancora scelto;
+- tutte le mutazioni restano non autorizzate.
+
+DEFER espliciti e non bloccanti: trasporto, autenticazione/pairing, formato machine-state concreto, controllo remoto multi-host, mutation API. Nessun backlog analitico implicito resta aperto per OR-02.
+
+## 14. Primo prossimo passo
+
+Eseguire **OR-03 — Runtime Adapter Contract** come slice documentale conclusiva del livello di astrazione runtime: trasformare l'Harness Pilot in candidato adapter dietro `RuntimeGeneration` e `Local Connector`, con capability, lifecycle, observation/evidence e unsupported operations esplicite. Nessuna esecuzione reale del runtime in questa fase.
