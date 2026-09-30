@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "trama.qualified-execution-decision/v1",
+  "id": "TRAMA-QE-DECISION-2026-09-30",
+  "status": "PENDING_HUMAN_DECISION",
+  "date": "2026-09-30",
+  "liveRuntimeAuthorized": false,
+  "dosA1": "RUNTIME_DEFERRED",
+  "options": [
+    "MAINTAIN_DEFERRED",
+    "AUTHORIZE_LIMITED_FIRST_QUALIFIED_EXECUTION"
+  ],
+  "candidate": {
+    "capabilityId": "lesson.preparation.observe",
+    "mode": "PROPOSE_ONLY",
+    "decisionOwner": "DOCENTE_OS",
+    "mutation": false,
+    "personalStudentData": false,
+    "retryMax": 0
+  },
+  "explicitNonAuthorization": [
+    "ARENA_AUTOMATIC_WRITE",
+    "ATLAS_AUTOMATIC_PUBLICATION",
+    "DIARY_AUTOMATIC_WRITE",
+    "AUTO_APPROVAL",
+    "MUTATIVE_CAPABILITY",
+    "GENERAL_DOS_A1_ACTIVATION"
+  ]
+}

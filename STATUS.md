@@ -1,6 +1,6 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 29 settembre 2026.
+Aggiornato al 30 settembre 2026.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -53,6 +53,37 @@ flowchart LR
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
 | TRAMA Control Center v2 | **CC2-F0–F6 INTEGRATED** | Primo ciclo Control Center v2 integrato: snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system, Capability + Ecosystem Map, Evidence Explorer + Integrity, Timeline + Operational Path. ADR-015 resta PROPOSED. |
 | TRAMA Governed Forecast / CC3 | **CC3-F0 CLOSED / CC3-F1 CLOSED** | F0 e F1 hanno HUMAN EXACT-HEAD REVIEW PASS. F2–F5 restano pianificati; nessuna probability/score, ranking, auto-promotion, authority o runtime authorization. ADR-016 resta PROPOSED. |
+
+## OR-07 → OR-10 — capability condivise, portabilità e integrazioni prodotto
+
+Stato corrente: **CLOSED / HUMAN REVIEW PASS / INTEGRATED / NO_RUNTIME**.
+
+Il pacchetto governato OR-07→OR-10 è stato integrato tramite Human Review finale **#210**, merge TRAMA:
+
+`6c61e001992c2696496cddee00d668abf2da7fe3`
+
+Sono integrati:
+
+- **OR-07 — Shared Capability Layer**: contratto provider-neutral e proof offline deterministico;
+- **OR-08 — Runtime Portability**: stessa capability/request contract su adapter distinti, qualifica `PORTABLE_CONTRACT`;
+- **OR-09 — Qualified Execution Readiness**: readiness pre-autorizzativa, stato massimo `AWAITING_HUMAN_AUTHORIZATION`;
+- **OR-10 — Product Integrations**: confini Arena/Atlas/Docente OS e allineamento cross-product delle evidenze.
+
+Slice prodotto integrate:
+- Arena #345 → `7d0e9d1e30af25e29b5a3366d0570f149c17a6f4`;
+- Docente OS #645 → `97580b1b0b6bc024690275bb227c6551e30d6341`;
+- Atlas #66 → `db3fed294fe7695b33042192fd4551d6d36bdc68`.
+
+Invarianti confermate:
+- Arena resta autorità curricolare;
+- Atlas resta opzionale e non-authority curricolare;
+- Docente OS resta teacher-first;
+- Shared Capability Layer non è un domain store né una nuova authority;
+- Control Center resta READ_ONLY;
+- nessun runtime live, rete, secret usage o capability mutativa è autorizzato;
+- `DOS-A1 = RUNTIME_DEFERRED`.
+
+Il filone OR non ha ulteriori slice automatiche. Qualunque passaggio a esecuzione reale richiede un nuovo dossier e una nuova Human Review separata.
 
 ## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 

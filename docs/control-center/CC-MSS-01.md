@@ -271,3 +271,24 @@ Findings remediated in this revision:
 - extend negative cases for source outage, accidental repository discovery, unsupported collision and unproven approval.
 
 Review disposition after remediation: READY FOR RE-CHECK; Stage B remains NOT AUTHORIZED until the remediated exact head passes review.
+
+
+## 14. OR-07 → OR-10 integrated capability state
+
+Post-merge canonical state as of 2026-09-30:
+
+- OR-07 Shared Capability Layer: `CLOSED / INTEGRATED`;
+- OR-08 Runtime Portability: `CLOSED / INTEGRATED / PORTABLE_CONTRACT`;
+- OR-09 Qualified Execution Readiness: `CLOSED / PRE_AUTHORIZATION_ONLY`;
+- OR-10 Product Integrations: `CLOSED / INTEGRATED / NO_RUNTIME`;
+- Human Review seal: TRAMA #210 → merge `6c61e001992c2696496cddee00d668abf2da7fe3`;
+- Arena #345, Docente OS #645 and Atlas #66 are integrated product-local boundaries;
+- `DOS-A1 = RUNTIME_DEFERRED`;
+- live runtime authorization: `NOT_AUTHORIZED`.
+
+Control Center presentation MUST distinguish:
+1. capability contract/portability readiness;
+2. product integration readiness;
+3. human runtime authorization.
+
+A CLOSED/INTEGRATED OR workstream MUST NOT be displayed as runtime-authorized merely because its technical gates are PASS.

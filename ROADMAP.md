@@ -308,15 +308,19 @@ Vincoli:
 
 Dopo la qualificazione del livello contrattuale runtime, i proof devono tornare ai flussi di ecosistema.
 
-Sequenza OR corretta:
+Sequenza OR completata:
 
-1. OR-04 — runtime observation read-only;
-2. OR-05 — ecosystem component reuse;
-3. OR-06 — cross-ecosystem read-only proof;
-4. OR-07 — shared capability layer;
-5. OR-08 — runtime portability;
-6. OR-09 — qualified execution, soltanto dopo nuova decisione di authority;
-7. OR-10 — product integrations Arena / Atlas / Docente OS.
+1. OR-04 — runtime observation read-only — **CLOSED**;
+2. OR-05 — ecosystem component reuse — **CLOSED**;
+3. OR-06 — cross-ecosystem read-only proof — **CLOSED**;
+4. OR-07 — shared capability layer — **CLOSED / INTEGRATED**;
+5. OR-08 — runtime portability — **CLOSED / INTEGRATED / PORTABLE_CONTRACT**;
+6. OR-09 — qualified execution readiness — **CLOSED / PRE-AUTHORIZATION ONLY**;
+7. OR-10 — product integrations Arena / Atlas / Docente OS — **CLOSED / INTEGRATED / NO_RUNTIME**.
+
+Human Review finale: TRAMA #210, merge `6c61e001992c2696496cddee00d668abf2da7fe3`.
+
+La sequenza OR è quindi **conclusa nel perimetro NO_RUNTIME**. Il passo successivo non è OR-11 automatico: qualunque prima esecuzione reale richiede una nuova decisione di authority e una Human Review dedicata. `DOS-A1` resta `RUNTIME_DEFERRED`.
 
 Un proof runtime-only può qualificare infrastruttura ma non dimostra, da solo, valore di ecosistema.
 
