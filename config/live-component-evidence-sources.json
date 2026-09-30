@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "trama.live-component-evidence-sources/v1",
+  "sources": [
+    {
+      "id": "ATLAS-RELATION-ISOLATED",
+      "componentId": "ATLAS.RELATION_EXPLORER.FAMILY",
+      "evidenceType": "ISOLATED",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "defaultBranch": "main",
+      "workflowName": "TRAMA Atlas Component Isolation R1",
+      "artifactPrefix": "atlas-component-isolation-"
+    },
+    {
+      "id": "ATLAS-CURRICULUM-TREE-ISOLATED",
+      "componentId": "ATLAS.CURRICULUM_TREE.DISCLOSURE",
+      "evidenceType": "ISOLATED",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "defaultBranch": "main",
+      "workflowName": "TRAMA Atlas Component Isolation R1",
+      "artifactPrefix": "atlas-component-isolation-"
+    }
+  ]
+}
