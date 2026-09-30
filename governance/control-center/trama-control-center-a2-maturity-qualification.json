@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "trama.control-center-a2-maturity-qualification/v1",
+  "id": "TRAMA-CC-APP-A2-QUAL-01",
+  "status": "QUALIFIED",
+  "qualifiedAt": "2026-09-30",
+  "repository": "antoniocorsano-boop/trama-ecosistema",
+  "qualifiedHead": "40729ee87af01ebd1ac3fda71324c28582f5674e",
+  "workflow": {
+    "name": "Control Center A2 Maturity",
+    "runId": 36691092829,
+    "conclusion": "SUCCESS"
+  },
+  "artifact": {
+    "id": 11085593330,
+    "name": "control-center-a2-maturity-40729ee87af01ebd1ac3fda71324c28582f5674e",
+    "digest": "sha256:d2f3b79238fe1ba8892b0e14585f78f8acfafca8e1ecc2b8b544169081c1354c"
+  },
+  "gates": {
+    "npmCi": "PASS",
+    "typecheck": "PASS",
+    "unitComponentTests": {
+      "status": "PASS",
+      "passed": 8,
+      "total": 8
+    },
+    "build": "PASS",
+    "bundleBudget": {
+      "status": "PASS",
+      "initialJsGzipBytes": 125577,
+      "limitGzipBytes": 184320
+    },
+    "governedArtifactSecurityBoundary": "PASS",
+    "chromiumInstall": "PASS",
+    "browserQualification": {
+      "status": "PASS",
+      "passed": 6,
+      "total": 6
+    },
+    "axe": "PASS",
+    "overflowCanonicalViewports": "PASS",
+    "liveVerifiedScenario": "PASS",
+    "canonicalViewports": [
+      "desktop-1440x900",
+      "phone-pixel7",
+      "lim-1920x1080"
+    ],
+    "a1Regression": {
+      "status": "PASS",
+      "runId": 36691092762
+    },
+    "governance": {
+      "status": "PASS",
+      "runId": 36691092784
+    },
+    "projectKnowledgeRuntime": {
+      "status": "PASS",
+      "runId": 36691092801
+    }
+  },
+  "boundaries": {
+    "legacyMaturityModified": false,
+    "legacyComponentMaturityModuleModified": false,
+    "legacyServiceWorkerModified": false,
+    "publicCutoverAuthorized": false,
+    "renderProductionModified": false,
+    "browserGithubAuthority": false,
+    "repositoryWriteCapability": false,
+    "automaticLifecyclePromotion": false,
+    "automaticMaturityPromotion": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "nextStage": "A3_OVERVIEW_NAVIGATION"
+}

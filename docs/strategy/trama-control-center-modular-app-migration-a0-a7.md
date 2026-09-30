@@ -98,6 +98,29 @@ Acceptance:
 - keyboard/axe;
 - accessible structured alternative.
 
+### A2 materialized Maturity feature
+
+State: **QUALIFIED — exact head `40729ee87af01ebd1ac3fda71324c28582f5674e` / run `36691092829` PASS**.
+
+Reference:
+- `docs/implementation/trama-control-center-a2-maturity.md`;
+- `governance/control-center/trama-control-center-a2-maturity-qualification.json`.
+
+Materialized:
+- typed maturity domain adapter/model;
+- modular `/maturity` route;
+- confirmed/candidate maturity separation;
+- lifecycle independence;
+- `LIVE_VERIFIED` presentation;
+- product filters and structured component detail;
+- native accessible stage rails instead of a specialist graph dependency;
+- axe browser qualification;
+- desktop / phone / LIM evidence;
+- bundle guardrail;
+- A1 regression PASS.
+
+Legacy production remains unchanged.
+
 ## A3 — Overview + navigation
 
 Migrate:

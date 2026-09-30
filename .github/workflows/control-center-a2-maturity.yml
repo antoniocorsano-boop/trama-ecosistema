@@ -1,0 +1,55 @@
+name: Control Center A2 Maturity
+on:
+  pull_request:
+    paths:
+      - "apps/control-center/**"
+      - "control-center/data/ecosystem-snapshot.json"
+      - "schemas/ecosystem-snapshot.schema.json"
+      - "docs/implementation/trama-control-center-a2-maturity.md"
+      - "docs/knowledge/governed-document-registry.json"
+      - ".github/workflows/control-center-a2-maturity.yml"
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/control-center
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/control-center/package-lock.json
+      - name: Install from lockfile
+        run: npm ci --ignore-scripts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit and component tests
+        run: npm run test
+      - name: Build candidate
+        run: npm run build
+      - name: Bundle report
+        run: node scripts/report-bundle-size.mjs > a2-bundle-report.json
+      - name: Enforce A2 JS budget
+        run: node scripts/check-a2-bundle-budget.mjs a2-bundle-report.json
+      - name: Verify governed artifacts and browser authority boundary
+        run: |
+          test -s dist/data/ecosystem-snapshot.json
+          test -s dist/data/context-packs/project-knowledge.json
+          ! grep -R -E "(api\.github\.com|raw\.githubusercontent\.com|GITHUB_TOKEN|Authorization: Bearer)" src
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Maturity browser qualification
+        run: npx playwright test e2e/maturity.spec.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: control-center-a2-maturity-${{ github.event.pull_request.head.sha }}
+          path: |
+            apps/control-center/a2-bundle-report.json
+            apps/control-center/test-results
+            apps/control-center/playwright-report
+          if-no-files-found: warn

@@ -42,7 +42,9 @@ button, a { font: inherit; }
   border-radius: 0.625rem;
   text-decoration: none;
 }
-.primary-nav a { background: var(--cc-surface-raised); border: 1px solid var(--cc-line); }
+.primary-nav a { border: 1px solid transparent; }
+.primary-nav a.active { background: var(--cc-surface-raised); border-color: var(--cc-line); }
+.primary-nav a:hover { border-color: var(--cc-line); }
 .primary-nav span { color: var(--cc-muted); }
 .foundation { display: grid; gap: var(--cc-space-8); padding: var(--cc-space-8) 0; }
 .foundation h2 { max-width: 22ch; font-size: clamp(1.5rem, 4vw, 2.25rem); margin: 0 0 var(--cc-space-3); }
