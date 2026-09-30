@@ -4,11 +4,19 @@ on:
   pull_request:
     paths:
       - "control-center/**"
+      - "scripts/test_component_evidence_expansion.py"
+      - "scripts/test_component_maturity_projection.py"
+      - "scripts/project_component_maturity.py"
+      - "governance/ui-development/trama-component-evidence-registry-v1.json"
       - ".github/workflows/control-center-pages.yml"
   push:
     branches: ["main"]
     paths:
       - "control-center/**"
+      - "scripts/test_component_evidence_expansion.py"
+      - "scripts/test_component_maturity_projection.py"
+      - "scripts/project_component_maturity.py"
+      - "governance/ui-development/trama-component-evidence-registry-v1.json"
       - ".github/workflows/control-center-pages.yml"
   workflow_dispatch:
 
