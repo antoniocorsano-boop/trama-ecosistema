@@ -1,8 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { MaturityView } from "./MaturityPage";
+import type { MaturitySnapshot } from "../../domain/maturity/model";
 
-const model = {
+const model: MaturitySnapshot = {
   schemaVersion: "1.6.0",
   generatedAt: "2026-09-30T08:00:00Z",
   areas: [
