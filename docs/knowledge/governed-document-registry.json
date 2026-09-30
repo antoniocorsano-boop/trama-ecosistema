@@ -1168,6 +1168,33 @@
         "CONTROL_CENTER_NAVIGATION_CHANGE",
         "A3_QUALIFICATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A4-ECOSYSTEM-EVIDENCE",
+      "path": "docs/implementation/trama-control-center-a4-ecosystem-evidence.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "ecosystem-graph",
+        "evidence",
+        "integrity",
+        "accessibility"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION",
+        "DOC-CONTROL-CENTER-A3-OVERVIEW"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_A4_ECOSYSTEM_CHANGE",
+        "CONTROL_CENTER_A4_EVIDENCE_CHANGE",
+        "ECOSYSTEM_RELATION_CHANGE",
+        "EVIDENCE_MODEL_CHANGE",
+        "A4_QUALIFICATION_CHANGE"
+      ]
     }
   ]
 }
