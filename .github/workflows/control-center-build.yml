@@ -13,6 +13,18 @@ on:
       - "scripts/materialize_live_project_knowledge_bundle.py"
       - "scripts/test_materialize_live_project_knowledge_bundle.py"
       - "scripts/compose_effective_project_context.py"
+      - "config/live-component-evidence-sources.json"
+      - "schemas/live-component-evidence-sources.schema.json"
+      - "schemas/live-component-evidence-overlay.schema.json"
+      - "schemas/effective-component-evidence.schema.json"
+      - "scripts/run_live_component_evidence_overlay.py"
+      - "scripts/compose_effective_component_evidence.py"
+      - "scripts/materialize_live_component_evidence.py"
+      - "scripts/test_live_component_evidence_lane_v2.py"
+      - "scripts/test_live_component_evidence_collector_v2.py"
+      - "control-center/data/effective-component-evidence.json"
+      - "control-center/fixtures/component-evidence/**"
+      - "docs/contracts/trama-live-component-evidence-lane-v2.md"
       - "scripts/build_control_center_render.sh"
       - "scripts/test_control_center_render_build.py"
       - "scripts/test_control_center_orientation_home.cjs"
@@ -177,6 +189,44 @@ jobs:
             echo "TRAMA_LIVE_EFFECTIVE_CONTEXT_UNAVAILABLE_GOVERNED_FALLBACK"
           fi
 
+      - name: Qualify deterministic component evidence composition
+        if: github.event_name == 'pull_request'
+        run: |
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          python scripts/test_live_component_evidence_collector_v2.py
+          python scripts/test_live_component_evidence_lane_v2.py
+          python scripts/materialize_live_component_evidence.py             --overlay control-center/fixtures/component-evidence/live-atlas-isolation-r1.json             --output /tmp/effective-component-evidence.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          value=json.loads(Path('/tmp/effective-component-evidence.json').read_text(encoding='utf-8'))
+          by_id={x['componentId']:x for x in value['components']}
+          assert by_id['ATLAS.RELATION_EXPLORER.FAMILY']['maturity']['confirmedStage']=='REGISTERED'
+          assert by_id['ATLAS.RELATION_EXPLORER.FAMILY']['observedMaturity']['confirmedStage']=='RESPONSIVE_VISUAL'
+          assert by_id['ATLAS.CURRICULUM_TREE.DISCLOSURE']['maturity']['confirmedStage']=='REGISTERED'
+          assert by_id['ATLAS.CURRICULUM_TREE.DISCLOSURE']['observedMaturity']['confirmedStage']=='ISOLATED'
+          assert value['promotionRequired'] is False
+          assert value['humanReviewRequired'] is False
+          print('TRAMA_LIVE_COMPONENT_EVIDENCE_PR_PROJECTION_PASS')
+          PY
+
+      - name: Materialize live read-only component evidence for deploy bundle
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          component_overlay=/tmp/trama-live-component-evidence.json
+          if python scripts/run_live_component_evidence_overlay.py --pretty > "$component_overlay"; then
+            python scripts/materialize_live_component_evidence.py               --overlay "$component_overlay"               --output control-center/data/effective-component-evidence.json
+            rm -f "$component_overlay"
+            echo "TRAMA_LIVE_COMPONENT_EVIDENCE_BUNDLE_PASS"
+          else
+            rm -f "$component_overlay"
+            python scripts/materialize_live_component_evidence.py               --output control-center/data/effective-component-evidence.json
+            echo "TRAMA_LIVE_COMPONENT_EVIDENCE_UNAVAILABLE_GOVERNED_FALLBACK"
+          fi
+
       - name: Regenerate stakeholder dossier
         run: python scripts/generate_stakeholder_report.py
       - name: Verify bundle and machine contract
@@ -202,6 +252,9 @@ jobs:
           grep -q '"timelineCoverage"' control-center/data/ecosystem-snapshot.json
           grep -q '"components"' control-center/data/ecosystem-snapshot.json
           test -s control-center/component-maturity.js
+          test -s control-center/data/effective-component-evidence.json
+          grep -q '"promotionRequired": false' control-center/data/effective-component-evidence.json
+          grep -q '"humanReviewRequired": false' control-center/data/effective-component-evidence.json
           grep -q "Cronologia governata" control-center/operations.html
           grep -q "Evidence Explorer" control-center/evidence.html
           test -s control-center/reports/stakeholder-assurance.html
