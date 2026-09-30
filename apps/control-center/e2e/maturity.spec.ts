@@ -1,6 +1,10 @@
+import { readFileSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import governedSnapshot from "../../../control-center/data/ecosystem-snapshot.json";
+
+const governedSnapshot = JSON.parse(
+  readFileSync(new URL("../../../control-center/data/ecosystem-snapshot.json", import.meta.url), "utf-8"),
+);
 
 test("Maturity candidate preserves governed semantics across canonical viewports", async ({ page }, testInfo) => {
   await page.goto("/#/maturity");
