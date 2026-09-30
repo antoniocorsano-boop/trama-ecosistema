@@ -1,0 +1,1076 @@
+{
+  "schemaVersion": "trama.effective-component-evidence/v1",
+  "governedRegistryRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+  "liveObservedAt": null,
+  "liveObservationStatus": "GOVERNED_ONLY",
+  "promotionRequired": false,
+  "humanReviewRequired": false,
+  "components": [
+    {
+      "componentId": "ARENA.DIALOG_CONFIRM.LEGACY",
+      "product": "ARENA",
+      "target": "src/components/ui/ConfirmDialog.tsx",
+      "semanticPattern": null,
+      "lifecycle": "LEGACY",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F01",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "ARENA.DIALOG_CONFIRM.GOVERNED",
+      "product": "ARENA",
+      "target": "src/ui/components/UiConfirmDialog.tsx",
+      "semanticPattern": null,
+      "lifecycle": "TRIAL",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F01",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "ARENA.TABS.LEGACY",
+      "product": "ARENA",
+      "target": "src/components/ui/Tabs.tsx",
+      "semanticPattern": null,
+      "lifecycle": "LEGACY",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F02",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "ARENA.TABS.GOVERNED",
+      "product": "ARENA",
+      "target": "src/ui/components/UiTabs.tsx",
+      "semanticPattern": null,
+      "lifecycle": "TRIAL",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F02",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
+          "repository": "antoniocorsano-boop/CurManLight_arena"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "ARENA.TOOLTIP.LEGACY",
+      "product": "ARENA",
+      "target": "src/components/ui/Tooltip.tsx",
+      "semanticPattern": null,
+      "lifecycle": "LEGACY",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F03",
+        "INV03-F01"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "REGISTERED",
+        "qualificationStatus": "REGISTERED_ONLY",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "NOT_OBSERVED"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "NOT_OBSERVED"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "REGISTERED",
+        "qualificationStatus": "REGISTERED_ONLY",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "CONTROL_CENTER.CONTEXT_HELP.FAMILY",
+      "product": "TRAMA_CONTROL_CENTER",
+      "target": "contextual help popover",
+      "semanticPattern": null,
+      "lifecycle": "TRIAL",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F08",
+        "INV03-F04"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-control-center-cs-s1-v1.json",
+          "exactHead": "903404953465a526408939ebd31eae40f57a57a6",
+          "runId": "36657296405",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11072203230",
+          "artifactDigest": "sha256:0dd4f602bc1cab17dfbab4ec32a42e573dfba3123004e29a362bd9a64255e1d9"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-control-center-cs-s1-v1.json",
+          "exactHead": "903404953465a526408939ebd31eae40f57a57a6",
+          "runId": "36657296405",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11072203230",
+          "artifactDigest": "sha256:0dd4f602bc1cab17dfbab4ec32a42e573dfba3123004e29a362bd9a64255e1d9"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "ATLAS.RELATION_EXPLORER.FAMILY",
+      "product": "ATLAS",
+      "target": "src/components/atlas/relation-explorer.tsx",
+      "semanticPattern": "ATLAS.RELATION_EXPLORER",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F06",
+        "INV03-F02"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/S3-V2-F2-ESPLORA.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "scripts/s3-v2-exit-check.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494130",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-f4-visual.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494414",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/S3-V2-F5-EXIT.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/S3-V2-F2-ESPLORA.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "scripts/s3-v2-exit-check.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494130",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-f4-visual.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494414",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/S3-V2-F5-EXIT.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "ATLAS.CURRICULUM_TREE.DISCLOSURE",
+      "product": "ATLAS",
+      "target": "src/components/atlas/curriculum-tree.tsx",
+      "semanticPattern": "NATIVE_DISCLOSURE",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "NATIVE_PLATFORM",
+      "relatedFindings": [
+        "INV02-F06",
+        "INV03-F02"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "src/components/atlas/curriculum-tree.tsx",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "src/components/atlas/curriculum-tree.tsx",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-f4-visual.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494414",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/S3-V2-F5-EXIT.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "src/components/atlas/curriculum-tree.tsx",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "src/components/atlas/curriculum-tree.tsx",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-f4-visual.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494414",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/S3-V2-F5-EXIT.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "DOCENTE_OS.APPSHELL.FAMILY",
+      "product": "DOCENTE_OS",
+      "target": "product/src/components/app-shell/app-shell.tsx",
+      "semanticPattern": "DOCENTE_OS.PROFESSIONAL_APPSHELL",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F07",
+        "INV03-F03"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/architecture/X2_PROFESSIONAL_APPSHELL.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/surfaces.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/architecture/X2_PROFESSIONAL_APPSHELL.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/surfaces.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "DOCENTE_OS.ALERT.STATUS",
+      "product": "DOCENTE_OS",
+      "target": "product/src/components/ui/alert.tsx",
+      "semanticPattern": "TRAMA.STATUS_MESSAGE",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F07",
+        "INV03-F03"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "product/src/components/ui/alert.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "product/src/components/ui/alert.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "product/design/ACCESSIBILITY-RULES.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "product/src/components/ui/alert.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "product/src/components/ui/alert.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "product/design/ACCESSIBILITY-RULES.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "BEHAVIOURAL",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    },
+    {
+      "componentId": "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS",
+      "product": "DOCENTE_OS",
+      "target": "product/src/app/orario/TimetableGrid.tsx",
+      "semanticPattern": "DOCENTE_OS.TIMETABLE_INTERACTION",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV03-F03"
+      ],
+      "maturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "evidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/architecture/TIMETABLE_CANONICAL_SPEC.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "product/src/app/orario/TimetableGrid.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/surfaces.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        }
+      },
+      "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json",
+      "governedEvidenceStatus": {
+        "ISOLATED": {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/architecture/TIMETABLE_CANONICAL_SPEC.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "BEHAVIOURAL": {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "product/src/app/orario/TimetableGrid.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "RESPONSIVE_VISUAL": {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/surfaces.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        "ACCESSIBILITY": {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        }
+      },
+      "observedMaturity": {
+        "model": "TRAMA_COMPONENT_MATURITY_V1",
+        "confirmedStage": "REGISTERED",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "PARTIAL",
+        "remainingEvidenceTypes": [
+          "ISOLATED",
+          "BEHAVIOURAL",
+          "RESPONSIVE_VISUAL",
+          "ACCESSIBILITY"
+        ]
+      },
+      "liveEvidenceRefs": []
+    }
+  ],
+  "liveBindings": []
+}
