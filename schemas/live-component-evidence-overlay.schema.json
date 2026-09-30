@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/live-component-evidence-overlay.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "observedAt",
+    "status",
+    "evidence",
+    "sourceRefs"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.live-component-evidence-overlay/v1"
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "UNAVAILABLE"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sourceId",
+          "componentId",
+          "evidenceType",
+          "status",
+          "repository",
+          "defaultBranch",
+          "observedMainHead",
+          "workflowName",
+          "exactHead",
+          "runId",
+          "artifactId",
+          "artifactName",
+          "artifactDigest",
+          "artifactExpiresAt",
+          "integrationStatus",
+          "sourceRefs"
+        ],
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "componentId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceType": {
+            "enum": [
+              "ISOLATED",
+              "BEHAVIOURAL",
+              "RESPONSIVE_VISUAL",
+              "ACCESSIBILITY"
+            ]
+          },
+          "status": {
+            "const": "PRESENT"
+          },
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "defaultBranch": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observedMainHead": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "workflowName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "exactHead": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "runId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "artifactId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "artifactName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifactDigest": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "artifactExpiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "integrationStatus": {
+            "const": "INTEGRATED_IN_DEFAULT_BRANCH"
+          },
+          "sourceRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}
