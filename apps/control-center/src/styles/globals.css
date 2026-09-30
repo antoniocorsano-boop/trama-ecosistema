@@ -109,3 +109,14 @@ button, a { font: inherit; }
     transition-duration: 0.01ms !important;
   }
 }
+
+.skip-link{position:absolute;left:var(--cc-space-3);top:-5rem;z-index:1000;background:var(--cc-text);color:#061b31;padding:.65rem .9rem;border-radius:.55rem;font-weight:800}
+.skip-link:focus{top:var(--cc-space-3)}
+#main-content:focus{outline:none}
+#main-content:focus-visible{outline:2px solid var(--cc-focus);outline-offset:6px}
+.runtime-status{margin:.55rem 0 0;font-size:.78rem;font-weight:700}
+.runtime-status.is-current{color:var(--cc-ok)}
+.runtime-status.is-offline{color:#f0cf82}
+.route-error{border:1px solid var(--cc-danger);border-radius:var(--cc-radius);padding:var(--cc-space-5);margin-block:var(--cc-space-5);background:#311821}
+.route-error h2{margin:.2rem 0 .5rem}
+@media(max-width:320px){.app-shell{padding-inline:.65rem}.primary-nav{gap:.3rem}.primary-nav a,.primary-nav span{min-height:44px;padding:.45rem .55rem}.app-header{gap:.7rem}}

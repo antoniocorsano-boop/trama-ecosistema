@@ -1222,6 +1222,35 @@
         "ASSURANCE_CLAIM_CHANGE",
         "A5_QUALIFICATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A6-PWA-PARITY",
+      "path": "docs/implementation/trama-control-center-a6-pwa-parity.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "pwa",
+        "offline",
+        "csp",
+        "accessibility",
+        "visual-regression",
+        "product-parity"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION",
+        "DOC-CONTROL-CENTER-A5-OPERATIONS-ASSURANCE"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_A6_PWA_CHANGE",
+        "CONTROL_CENTER_A6_SECURITY_CHANGE",
+        "CONTROL_CENTER_A6_ACCESSIBILITY_CHANGE",
+        "CONTROL_CENTER_A6_PARITY_CHANGE",
+        "A6_HUMAN_REVIEW_CHANGE"
+      ]
     }
   ]
 }

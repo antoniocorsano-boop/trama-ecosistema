@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "trama.control-center-a6-pwa-parity-qualification/v1",
+  "id": "TRAMA-CC-APP-A6-QUAL-01",
+  "status": "TECHNICALLY_QUALIFIED",
+  "humanReview": "AWAITING_PRODUCT_PARITY_HUMAN_REVIEW",
+  "qualifiedAt": "2026-09-30",
+  "repository": "antoniocorsano-boop/trama-ecosistema",
+  "technicalQualifiedHead": "21e0b42d943806f1fb3a8a28acaf88985a6b4fff",
+  "workflow": {
+    "name": "Control Center A6 PWA Parity",
+    "runId": 36701873581,
+    "conclusion": "SUCCESS"
+  },
+  "artifact": {
+    "id": 11089799540,
+    "name": "control-center-a6-pwa-parity-21e0b42d943806f1fb3a8a28acaf88985a6b4fff",
+    "digest": "sha256:699146cdc9c673fbb13a389d2d9dcc7e783348f2e92321d36b5657d3b8f16897"
+  },
+  "gates": {
+    "unitComponentTests": {
+      "status": "PASS",
+      "passed": 23,
+      "total": 23
+    },
+    "browserPwaParity": {
+      "status": "PASS",
+      "passed": 10,
+      "total": 10
+    },
+    "visualRegression": {
+      "status": "PASS",
+      "passed": 24,
+      "total": 24,
+      "baselineCount": 24,
+      "maxDiffPixelRatio": 0.005
+    },
+    "a1Regression": "PASS",
+    "a2Regression": "PASS",
+    "a3Regression": "PASS",
+    "a4Regression": "PASS",
+    "a5Regression": "PASS",
+    "governance": "PASS",
+    "injectManifest": "PASS",
+    "manifest": "PASS",
+    "serviceWorker": "PASS",
+    "strictCsp": "PASS",
+    "offlineGovernedDataMarker": "PASS",
+    "reflow320": "PASS",
+    "axe": "PASS",
+    "zeroExternalRuntimeRequests": "PASS",
+    "bundle": {
+      "entryJsGzipBytes": 106991,
+      "entryLimitGzipBytes": 184320,
+      "graphJsGzipBytes": 57387,
+      "graphLimitGzipBytes": 256000,
+      "cssGzipBytes": 7495,
+      "cssLimitGzipBytes": 51200
+    }
+  },
+  "pwa": {
+    "strategy": "INJECT_MANIFEST",
+    "precacheEntries": 11,
+    "precacheKiB": 668.14,
+    "governedDataPolicy": "NETWORK_FIRST_WITH_EXPLICIT_OFFLINE_CACHE_MARKER"
+  },
+  "csp": {
+    "unsafeEval": false,
+    "inlineExecutableScript": false,
+    "ajvValidation": "BUILD_TIME_STANDALONE"
+  },
+  "dependencies": [
+    {
+      "name": "vite-plugin-pwa",
+      "version": "1.3.0",
+      "license": "MIT",
+      "scope": "BUILD_DEV"
+    },
+    {
+      "name": "workbox-precaching",
+      "version": "7.4.1",
+      "license": "MIT",
+      "scope": "BUILD_DEV"
+    }
+  ],
+  "parityMatrixRef": "governance/control-center/trama-control-center-a6-parity-matrix.json",
+  "boundaries": {
+    "legacyProductionModified": false,
+    "legacyServiceWorkerModified": false,
+    "legacyManifestModified": false,
+    "publicCutoverAuthorized": false,
+    "browserGithubAuthority": false,
+    "repositoryWriteCapability": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "nextStage": "A7_PUBLIC_CUTOVER_BLOCKED_PENDING_PRODUCT_PARITY_HUMAN_REVIEW"
+}

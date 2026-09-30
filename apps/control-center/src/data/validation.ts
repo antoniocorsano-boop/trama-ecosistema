@@ -1,14 +1,16 @@
-import Ajv2020 from "ajv/dist/2020";
-import ecosystemSnapshotSchema from "../../../../schemas/ecosystem-snapshot.schema.json";
+import validate from "virtual:trama-ecosystem-validator";
 import type { EcosystemSnapshot } from "../domain/snapshot/types";
 
-const ajv = new Ajv2020({
-  allErrors: true,
-  strict: false,
-  validateFormats: false,
-});
+type ValidationIssue = {
+  instancePath?: string;
+  message?: string;
+};
 
-const validate = ajv.compile(ecosystemSnapshotSchema);
+type StandaloneValidator = ((value: unknown) => boolean) & {
+  errors?: ValidationIssue[] | null;
+};
+
+const validateSnapshot = validate as StandaloneValidator;
 
 export class SnapshotValidationError extends Error {
   readonly issues: string[];
@@ -21,8 +23,8 @@ export class SnapshotValidationError extends Error {
 }
 
 export function parseEcosystemSnapshot(value: unknown): EcosystemSnapshot {
-  if (!validate(value)) {
-    const issues = (validate.errors ?? []).map(
+  if (!validateSnapshot(value)) {
+    const issues = (validateSnapshot.errors ?? []).map(
       (error) => `${error.instancePath || "/"} ${error.message ?? "schema error"}`,
     );
     throw new SnapshotValidationError(issues);
