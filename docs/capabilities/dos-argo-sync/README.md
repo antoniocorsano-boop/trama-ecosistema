@@ -539,3 +539,14 @@ La documentazione pubblica ufficiale Argo ha ridotto ulteriormente le lacune G1:
 - conferma del canale XLS e della raccomandazione di non modificare l'originale didUP.
 
 Queste fonti corroborano la **semantica applicativa**, ma non trasformano il formato BIFF in un contratto pubblico stabile e non chiariscono duplicati, round-trip o update-vs-append.
+
+
+## 29. Protocollo di round-trip controllato
+
+È stato definito `controlled-roundtrip-protocol-v1.md`, che separa:
+
+- **R1** — reimportazione manuale dello stesso XLS originale, non modificato;
+- **R2** — secondo export più ricco per verificare la stabilità del profilo;
+- **R3** — copia minimamente modificata, esplicitamente **non ancora autorizzata**.
+
+Il protocollo non introduce automazione, credenziali o write authority. Serve esclusivamente a produrre evidenza umana riproducibile sul comportamento reale di importazione.
