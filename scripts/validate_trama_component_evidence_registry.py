@@ -66,9 +66,17 @@ def validate_registry(x, root=ROOT):
       "ARENA.TABS.LEGACY",
       "ARENA.TABS.GOVERNED",
       "ARENA.TOOLTIP.LEGACY",
+      "ATLAS.RELATION_EXPLORER.FAMILY",
+      "ATLAS.CURRICULUM_TREE.DISCLOSURE",
+      "DOCENTE_OS.APPSHELL.FAMILY",
+      "DOCENTE_OS.ALERT.STATUS",
+      "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS",
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY"
     }
-    if not required.issubset(set(ids)): invalid("missing initial high-priority binding")
+    if not required.issubset(set(ids)): invalid("missing required component evidence target")
+    products={entry.get("product") for entry in x.get("entries",[])}
+    for product in {"ARENA","ATLAS","DOCENTE_OS","TRAMA_CONTROL_CENTER"}:
+        if product not in products: invalid("missing product coverage "+product)
 
 def fail(msg):
     raise SystemExit("TRAMA_COMPONENT_EVIDENCE_REGISTRY_INVALID: "+msg)
