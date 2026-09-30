@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/live-component-evidence-overlay.schema.json",
+  "title": "TRAMA Live Component Evidence Overlay v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "observedAt", "status", "items"],
+  "properties": {
+    "schemaVersion": {"const": "trama.live-component-evidence-overlay/v1"},
+    "observedAt": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["COMPLETE", "PARTIAL", "UNAVAILABLE"]},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "componentId", "evidenceType", "status", "repository", "exactHead",
+          "sourceRef", "runId", "runConclusion"
+        ],
+        "properties": {
+          "componentId": {"type": "string", "minLength": 1},
+          "evidenceType": {"enum": ["ISOLATED", "BEHAVIOURAL", "RESPONSIVE_VISUAL", "ACCESSIBILITY"]},
+          "status": {"const": "PRESENT"},
+          "repository": {"type": "string", "minLength": 1},
+          "exactHead": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "sourceRef": {"type": "string", "minLength": 1},
+          "runId": {"type": "string", "minLength": 1},
+          "runConclusion": {"const": "SUCCESS"},
+          "artifactId": {"type": "string", "minLength": 1},
+          "artifactDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+        },
+        "allOf": [
+          {
+            "if": {"required": ["artifactId"]},
+            "then": {"required": ["artifactDigest"]}
+          }
+        ]
+      }
+    }
+  }
+}
