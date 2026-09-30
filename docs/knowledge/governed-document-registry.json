@@ -1555,6 +1555,53 @@
         "QUALIFICATION_STATE_CHANGE",
         "ADAPTER_BINDING_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-OR-09-QUALIFIED-EXECUTION-READINESS",
+      "path": "docs/contracts/trama-qualified-execution-readiness-contract-v0.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "qualified-execution",
+        "runtime-readiness",
+        "human-review",
+        "provider-portability",
+        "security",
+        "privacy"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-08-RUNTIME-PORTABILITY"
+      ],
+      "updateTriggers": [
+        "EXECUTION_READINESS_CHANGE",
+        "AUTHORITY_DECISION_CHANGE",
+        "NETWORK_POLICY_CHANGE",
+        "MUTATION_POLICY_CHANGE",
+        "DOS_A1_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-OR-09-QUALIFIED-EXECUTION-READINESS-MANIFEST",
+      "path": "governance/runtime/trama-qualified-execution-readiness-v1.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "qualified-execution",
+        "machine-readable-contract",
+        "human-review"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-09-QUALIFIED-EXECUTION-READINESS"
+      ],
+      "updateTriggers": [
+        "EXECUTION_READINESS_CHANGE",
+        "QUALIFICATION_STATE_CHANGE",
+        "AUTHORITY_DECISION_CHANGE"
+      ]
     }
   ]
 }
