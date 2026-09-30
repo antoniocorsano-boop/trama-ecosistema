@@ -486,3 +486,27 @@ Decisioni consolidate:
 - `DOS-A1 = RUNTIME_DEFERRED`.
 
 Next slice: **OR-08-P1 — deterministic portability matrix**.
+
+
+## 19. Stato OR-09
+
+**PASS documentale / pre-authorization ready.**
+
+Creati:
+- `docs/contracts/trama-qualified-execution-readiness-contract-v0.md`;
+- `governance/runtime/trama-qualified-execution-readiness-v1.json`.
+
+Decisioni consolidate:
+- nessun PASS tecnico equivale ad autorizzazione runtime;
+- ogni futura esecuzione richiede un execution profile exact/versionato;
+- rete negata per default;
+- mutation esclusa da OR-09 v0;
+- evidence package obbligatorio prima dell'esecuzione;
+- timeout, cancellazione e cleanup devono essere qualificati;
+- provider e adapter restano espliciti;
+- Control Center resta READ_ONLY;
+- stato massimo raggiungibile automaticamente: `AWAITING_HUMAN_AUTHORIZATION`;
+- `AUTHORIZED_FOR_QUALIFIED_EXECUTION` richiede Human Review separata;
+- `DOS-A1 = RUNTIME_DEFERRED`.
+
+Next slice: **OR-09-P1 — deterministic readiness package validator**.
