@@ -23,6 +23,10 @@ for component_id in (
     assert component["maturity"]["confirmedStage"] == "REGISTERED"
     assert component["maturity"]["candidateStage"] == "ACCESSIBILITY"
 
+collector_source = (ROOT / "scripts/collect_atlas_live_component_evidence_r1.py").read_text(encoding="utf-8")
+for forbidden in ("github.token", "GITHUB_TOKEN", "GH_TOKEN", "git push", "gh pr", "contents: write", "pull-requests: write", "/merge"):
+    assert forbidden not in collector_source, f"forbidden live collector capability: {forbidden}"
+
 assert snapshot["integrityChecks"]
 assert all(item["status"] != "ISSUE" or item["id"] != "INT-COMPONENT-EVIDENCE-PROJECTION" for item in snapshot["integrityChecks"])
 print("TRAMA_CONTROL_CENTER_LIVE_COMPONENT_EVIDENCE_R1_PASS")
