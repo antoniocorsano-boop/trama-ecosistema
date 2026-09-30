@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "trama.control-center-a4-ecosystem-evidence-qualification/v1",
+  "id": "TRAMA-CC-APP-A4-QUAL-01",
+  "status": "QUALIFIED",
+  "qualifiedAt": "2026-09-30",
+  "repository": "antoniocorsano-boop/trama-ecosistema",
+  "qualifiedHead": "601e552389b7cec6c33d4963bde637557dc9baa0",
+  "workflow": {
+    "name": "Control Center A4 Ecosystem Evidence",
+    "runId": 36696727967,
+    "conclusion": "SUCCESS"
+  },
+  "artifact": {
+    "id": 11087854631,
+    "name": "control-center-a4-ecosystem-evidence-601e552389b7cec6c33d4963bde637557dc9baa0",
+    "digest": "sha256:07de7861191be0b5ba712afd5d04c4f34d01c4c9f4bf8db7615ce1610da667dd"
+  },
+  "gates": {
+    "npmCi": "PASS",
+    "typecheck": "PASS",
+    "unitComponentTests": {
+      "status": "PASS",
+      "passed": 17,
+      "total": 17
+    },
+    "build": "PASS",
+    "bundleBudget": {
+      "status": "PASS",
+      "entryJsGzipBytes": 130532,
+      "entryLimitGzipBytes": 184320,
+      "graphJsGzipBytes": 57386,
+      "graphLimitGzipBytes": 256000,
+      "cssGzipBytes": 6703,
+      "cssLimitGzipBytes": 51200,
+      "graphLazy": true
+    },
+    "governedArtifactSecurityBoundary": "PASS",
+    "browserQualification": {
+      "status": "PASS",
+      "passed": 6,
+      "total": 6
+    },
+    "axe": "PASS",
+    "overflowCanonicalViewports": "PASS",
+    "zeroExternalRuntimeRequests": "PASS",
+    "canonicalViewports": [
+      "desktop-1440x900",
+      "phone-pixel7",
+      "lim-1920x1080"
+    ],
+    "a1Regression": {
+      "status": "PASS",
+      "runId": 36696727902
+    },
+    "a2Regression": {
+      "status": "PASS",
+      "runId": 36696727919
+    },
+    "a3Regression": {
+      "status": "PASS",
+      "runId": 36696727904
+    },
+    "governance": {
+      "status": "PASS",
+      "runId": 36696727845
+    }
+  },
+  "dependencyAdmission": {
+    "package": "@xyflow/react",
+    "version": "12.11.6",
+    "license": "MIT",
+    "purpose": "LAZY_READ_ONLY_ECOSYSTEM_GRAPH",
+    "runtimeExternalRequests": false,
+    "accessibleEquivalent": "RELATION_LIST_AND_DETAIL",
+    "tanstackTable": "DEFERRED_NOT_JUSTIFIED"
+  },
+  "boundaries": {
+    "legacyEcosystemModified": false,
+    "legacyEvidenceModified": false,
+    "legacyServiceWorkerModified": false,
+    "publicCutoverAuthorized": false,
+    "renderProductionModified": false,
+    "browserGithubAuthority": false,
+    "repositoryWriteCapability": false,
+    "overallScore": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "nextStage": "A5_OPERATIONS_ASSURANCE"
+}
