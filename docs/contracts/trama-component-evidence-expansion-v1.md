@@ -148,3 +148,22 @@ No projected component is QUALIFIED by this slice.
 All ecosystem-snapshot integrity checks, including `INT-COMPONENT-EVIDENCE-PROJECTION`, are PASS at this checkpoint.
 
 This checkpoint confirms materialization only. It does not create new evidence or authorize lifecycle/runtime changes.
+
+
+## 11. Post-expansion qualification checkpoint — Arena R1
+
+After the original addressability slice, Arena PR #343 executed the missing component-specific responsive and accessibility evidence on exact head `6a04455139a9a2161c723fdcef5358161aff66c4`.
+
+The registry now binds for both governed Dialog and Tabs:
+- ISOLATED = PRESENT;
+- BEHAVIOURAL = PRESENT;
+- RESPONSIVE_VISUAL = PRESENT;
+- ACCESSIBILITY = PRESENT.
+
+The deterministic maturity projection therefore yields:
+- `ARENA.DIALOG_CONFIRM.GOVERNED` → confirmed ACCESSIBILITY / QUALIFIED;
+- `ARENA.TABS.GOVERNED` → confirmed ACCESSIBILITY / QUALIFIED.
+
+Their lifecycle remains `TRIAL`. Qualification does not imply lifecycle promotion, product certification, migration approval, or stability history.
+
+Control Center Context Help remains confirmed REGISTERED in the deployed-component registry. CS-S1 has qualified a native Popover candidate in isolation, but runtime remediation has not yet been integrated.
