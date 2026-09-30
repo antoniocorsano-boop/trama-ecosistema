@@ -71,8 +71,10 @@ assert backlog["policy"]["evidenceBoundOnly"] is True
 assert {x["area"]:x["observedLevel"] for x in backlog["areas"]}=={
     "governance":4,"arena":4,"atlas":4,"docente-os":3
 }
-assert backlog["components"]["currentRegistryCount"]==6
-assert set(backlog["components"]["missingProductCoverage"])=={"ATLAS","DOCENTE_OS"}
+assert backlog["components"]["currentRegistryCount"]==11
+assert backlog["components"]["missingProductCoverage"]==[]
+assert backlog["components"]["coverageState"]=="ALL_PRODUCTS_MACHINE_ADDRESSABLE"
+assert backlog["components"]["qualificationState"]=="PARTIAL"
 assert backlog["functionalSequence"][:2]==["R3-P2","R3-P5"]
 
 timeline={item["id"] for item in snapshot["timelineEvents"]}

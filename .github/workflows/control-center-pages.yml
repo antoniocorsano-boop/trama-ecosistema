@@ -4,11 +4,19 @@ on:
   pull_request:
     paths:
       - "control-center/**"
+      - "scripts/test_component_evidence_expansion.py"
+      - "scripts/test_component_maturity_projection.py"
+      - "scripts/project_component_maturity.py"
+      - "governance/ui-development/trama-component-evidence-registry-v1.json"
       - ".github/workflows/control-center-pages.yml"
   push:
     branches: ["main"]
     paths:
       - "control-center/**"
+      - "scripts/test_component_evidence_expansion.py"
+      - "scripts/test_component_maturity_projection.py"
+      - "scripts/project_component_maturity.py"
+      - "governance/ui-development/trama-component-evidence-registry-v1.json"
       - ".github/workflows/control-center-pages.yml"
   workflow_dispatch:
 
@@ -109,7 +117,7 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v14" control-center/sw.js
+          grep -q "trama-control-center-v15" control-center/sw.js
           grep -q "\./maturity.html" control-center/sw.js
           grep -q "\./component-maturity.js" control-center/sw.js
           test -s control-center/project-knowledge-state.js

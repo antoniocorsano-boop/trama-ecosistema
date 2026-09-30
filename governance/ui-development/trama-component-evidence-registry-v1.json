@@ -2,7 +2,7 @@
   "schemaVersion": "trama.component-evidence-registry/v1",
   "contractId": "TRAMA-COMPONENT-EVIDENCE-REGISTRY-01",
   "status": "PROPOSED",
-  "baseline": "f890e170fc2d9bce124c80f3cd396a0f22051a2d",
+  "baseline": "9a1bf342f89b2e05d5fe70b86ce96fa845f4e258",
   "runtimeImpact": "NONE",
   "entries": [
     {
@@ -210,6 +210,245 @@
           "type": "ACCESSIBILITY",
           "status": "PARTIAL",
           "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
+      ]
+    },
+    {
+      "componentId": "ATLAS.RELATION_EXPLORER.FAMILY",
+      "product": "ATLAS",
+      "target": "src/components/atlas/relation-explorer.tsx",
+      "semanticPattern": "ATLAS.RELATION_EXPLORER",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F06",
+        "INV03-F02"
+      ],
+      "evidence": [
+        {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/S3-V2-F2-ESPLORA.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "scripts/s3-v2-exit-check.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494130",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-f4-visual.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494414",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/S3-V2-F5-EXIT.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
+      ]
+    },
+    {
+      "componentId": "ATLAS.CURRICULUM_TREE.DISCLOSURE",
+      "product": "ATLAS",
+      "target": "src/components/atlas/curriculum-tree.tsx",
+      "semanticPattern": "NATIVE_DISCLOSURE",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "NATIVE_PLATFORM",
+      "relatedFindings": [
+        "INV02-F06",
+        "INV03-F02"
+      ],
+      "evidence": [
+        {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "src/components/atlas/curriculum-tree.tsx",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "src/components/atlas/curriculum-tree.tsx",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-f4-visual.mjs",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "runId": "36093494414",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PARTIAL",
+          "ref": "docs/S3-V2-F5-EXIT.md",
+          "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+          "repository": "antoniocorsano-boop/Curriculum-Atlas"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
+      ]
+    },
+    {
+      "componentId": "DOCENTE_OS.APPSHELL.FAMILY",
+      "product": "DOCENTE_OS",
+      "target": "product/src/components/app-shell/app-shell.tsx",
+      "semanticPattern": "DOCENTE_OS.PROFESSIONAL_APPSHELL",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F07",
+        "INV03-F03"
+      ],
+      "evidence": [
+        {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/architecture/X2_PROFESSIONAL_APPSHELL.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/surfaces.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
+      ]
+    },
+    {
+      "componentId": "DOCENTE_OS.ALERT.STATUS",
+      "product": "DOCENTE_OS",
+      "target": "product/src/components/ui/alert.tsx",
+      "semanticPattern": "TRAMA.STATUS_MESSAGE",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV02-F07",
+        "INV03-F03"
+      ],
+      "evidence": [
+        {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "product/src/components/ui/alert.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "product/src/components/ui/alert.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "NOT_OBSERVED"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "product/design/ACCESSIBILITY-RULES.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "LIFECYCLE",
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-component-evidence-registry-v1.json"
+        }
+      ]
+    },
+    {
+      "componentId": "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS",
+      "product": "DOCENTE_OS",
+      "target": "product/src/app/orario/TimetableGrid.tsx",
+      "semanticPattern": "DOCENTE_OS.TIMETABLE_INTERACTION",
+      "lifecycle": "PROPOSED",
+      "sourceClass": "PRODUCT_OWNED",
+      "relatedFindings": [
+        "INV03-F03"
+      ],
+      "evidence": [
+        {
+          "type": "ISOLATED",
+          "status": "DOCUMENTED_ONLY",
+          "ref": "docs/architecture/TIMETABLE_CANONICAL_SPEC.md",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "BEHAVIOURAL",
+          "status": "PARTIAL",
+          "ref": "product/src/app/orario/TimetableGrid.tsx",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/surfaces.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
+        },
+        {
+          "type": "ACCESSIBILITY",
+          "status": "PRESENT",
+          "ref": "product/e2e/experience/accessibility.spec.mjs",
+          "exactHead": "4138d25c9011769794903e4d898f7a34e924ca91",
+          "runId": "35830251069",
+          "repository": "antoniocorsano-boop/docente-os-2026-27"
         },
         {
           "type": "LIFECYCLE",

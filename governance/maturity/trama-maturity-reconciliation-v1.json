@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.maturity-reconciliation/v1",
-  "updatedAt": "2026-09-29",
+  "updatedAt": "2026-09-30",
   "policy": {
     "evidenceBoundOnly": true,
     "noSyntheticPromotion": true,
@@ -59,11 +59,8 @@
     }
   ],
   "components": {
-    "currentRegistryCount": 6,
-    "missingProductCoverage": [
-      "ATLAS",
-      "DOCENTE_OS"
-    ],
+    "currentRegistryCount": 11,
+    "missingProductCoverage": [],
     "nextTargets": [
       "ARENA.DIALOG_CONFIRM.GOVERNED:RESPONSIVE_VISUAL",
       "ARENA.DIALOG_CONFIRM.GOVERNED:ACCESSIBILITY",
@@ -73,9 +70,14 @@
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY:BEHAVIOURAL",
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY:RESPONSIVE_VISUAL",
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY:ACCESSIBILITY",
-      "ATLAS:REUSABLE_PRIMITIVE_ADDRESSABILITY",
-      "DOCENTE_OS:APPSHELL_DIALOG_ALERT_TIMETABLE"
-    ]
+      "DOCENTE_OS.APPSHELL.FAMILY:ISOLATED",
+      "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS:ISOLATED",
+      "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS:BEHAVIOURAL",
+      "ATLAS.RELATION_EXPLORER.FAMILY:ISOLATED",
+      "ATLAS.CURRICULUM_TREE.DISCLOSURE:ISOLATED"
+    ],
+    "coverageState": "ALL_PRODUCTS_MACHINE_ADDRESSABLE",
+    "qualificationState": "PARTIAL"
   },
   "functionalSequence": [
     "R3-P2",

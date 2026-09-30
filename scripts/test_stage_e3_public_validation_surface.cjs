@@ -26,7 +26,7 @@ for(const forbidden of ['api.github.com','raw.githubusercontent.com','Authorizat
   assert.equal(e3.includes(forbidden),false,'forbidden public E3 capability: '+forbidden);
 }
 
-assert.match(sw,/trama-control-center-v14/);
+assert.match(sw,/trama-control-center-v15/);
 assert.match(sw,/\.\/e3\/index\.html/);
 
 const inline=[...e3.matchAll(/<script>([\s\S]*?)<\/script>/g)];
