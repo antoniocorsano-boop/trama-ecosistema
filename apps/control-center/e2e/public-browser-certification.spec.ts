@@ -33,7 +33,7 @@ test("TRAMA public browser certification", async ({ page, context, browserName }
   const consoleErrors: string[] = [];
   const blockedMutations: Array<{ method: string; url: string }> = [];
 
-  await context.route("**/*", async (route) => {
+  const readOnlyRoute = async (route: Parameters<typeof context.route>[1] extends (arg: infer R) => unknown ? R : never) => {
     const req = route.request();
     const method = req.method().toUpperCase();
     if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
@@ -42,7 +42,9 @@ test("TRAMA public browser certification", async ({ page, context, browserName }
       return;
     }
     await route.continue();
-  });
+  };
+
+  await context.route("**/*", readOnlyRoute);
 
   page.on("console", (message) => {
     if (message.type() === "error") consoleErrors.push(message.text());
@@ -182,17 +184,27 @@ test("TRAMA public browser certification", async ({ page, context, browserName }
     await page.goto("/#/", { waitUntil: "networkidle" });
     await page.evaluate(async () => {
       await navigator.serviceWorker.ready;
-      await fetch("/#/", { cache: "reload", credentials: "omit" }).catch(() => undefined);
     });
 
+    const controlled = await page.evaluate(() => Boolean(navigator.serviceWorker.controller));
+    if (!controlled) {
+      await page.reload({ waitUntil: "networkidle" });
+    }
+    expect(await page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+
+    // Playwright routing is removed only while the browser is physically offline.
+    // This lets the service worker satisfy navigation without route interception.
+    // No network mutation can escape because Chromium is offline for this interval.
+    await context.unroute("**/*", readOnlyRoute);
     await context.setOffline(true);
     try {
       await page.reload({ waitUntil: "domcontentloaded", timeout: 20_000 });
       const text = await page.locator("body").innerText();
       expect(text).toMatch(/TRAMA/i);
-      return { shellAvailable: true, url: page.url() };
+      return { shellAvailable: true, controlled: true, url: page.url() };
     } finally {
       await context.setOffline(false);
+      await context.route("**/*", readOnlyRoute);
     }
   });
 
