@@ -935,6 +935,31 @@
         "EXACT_HEAD_REQUALIFICATION",
         "COMPONENT_EVIDENCE_COVERAGE_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-QUALIFICATION-ARENA-R1",
+      "path": "docs/evidence/trama-component-qualification-arena-r1-2026-09-30.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "component-evidence",
+        "component-maturity",
+        "arena",
+        "accessibility",
+        "responsive",
+        "exact-head"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-EVIDENCE-EXPANSION",
+        "DOC-TRAMA-COMPONENT-MATURITY-PROJECTION"
+      ],
+      "updateTriggers": [
+        "ARENA_COMPONENT_EVIDENCE_CHANGE",
+        "EXACT_HEAD_REQUALIFICATION",
+        "COMPONENT_QUALIFICATION_CHANGE"
+      ]
     }
   ]
 }
