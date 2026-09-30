@@ -4,6 +4,8 @@ import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import Ajv2020 from "ajv/dist/2020.js";
+import standaloneCode from "ajv/dist/standalone/index.js";
 
 const CSP = [
   "default-src 'self'",
@@ -17,6 +19,34 @@ const CSP = [
   "base-uri 'none'",
   "frame-ancestors 'none'",
 ].join("; ");
+
+function standaloneSnapshotValidatorPlugin(): Plugin {
+  const root = resolve(import.meta.dirname, "../..");
+  const virtualId = "virtual:trama-ecosystem-validator";
+  const resolvedId = "\0" + virtualId;
+
+  return {
+    name: "trama-standalone-snapshot-validator",
+    resolveId(id) {
+      return id === virtualId ? resolvedId : null;
+    },
+    load(id) {
+      if (id !== resolvedId) return null;
+
+      const schema = JSON.parse(
+        readFileSync(resolve(root, "schemas/ecosystem-snapshot.schema.json"), "utf8"),
+      );
+      const ajv = new Ajv2020({
+        allErrors: true,
+        strict: false,
+        validateFormats: false,
+        code: { source: true, esm: true },
+      });
+      const validate = ajv.compile(schema);
+      return standaloneCode(ajv, validate);
+    },
+  };
+}
 
 function governedDataPlugin(): Plugin {
   const root = resolve(import.meta.dirname, "../..");
@@ -50,6 +80,7 @@ export default defineConfig({
   base: "./",
   plugins: [
     react(),
+    standaloneSnapshotValidatorPlugin(),
     governedDataPlugin(),
     VitePWA({
       strategies: "injectManifest",
@@ -76,6 +107,7 @@ export default defineConfig({
         ],
       },
       injectManifest: {
+        rollupFormat: "iife",
         globPatterns: ["**/*.{js,css,html,svg,webmanifest}"],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
       },
