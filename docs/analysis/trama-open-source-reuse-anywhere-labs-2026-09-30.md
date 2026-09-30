@@ -47,35 +47,43 @@ Il criterio generale è: **adottare o adattare contratti e componenti prima di c
   - `server/`
   - `web-next/`
 
-## 3. Risultato architetturale principale
+## 3. Risultato architetturale principale — CORRETTO ECOSYSTEM-FIRST
 
-Il modello di riferimento che emerge è:
+La catena runtime definita da OR-01/OR-04 resta valida, ma NON è il centro dell'ecosistema.
+
+Il modello di riferimento è:
 
 ```text
-TRAMA Control Center
-        |
-        v
-TRAMA Agent Control Contract
-        |
-        v
-Local Connector
-        |
-        v
-Runtime Adapter
-        |
-        +--> DSH
-        +--> Codex
-        +--> altri runtime qualificati
+                         TRAMA
+                 governance / contratti
+                         |
+          +--------------+--------------+
+          |              |              |
+        ARENA          ATLAS        DOCENTE OS
+     authority        public /        teacher-first
+    curriculum       navigation
+          |              |              |
+          +--------------+--------------+
+                         |
+                capability services
+                         |
+        Project Knowledge / Connector / Runtime
+                         |
+                  DSH / Codex / altri
 ```
 
-Il TRAMA Harness Pilot non deve diventare il centro architetturale dell'ecosistema. Deve poter diventare **un adattatore qualificato** dietro un contratto stabile.
+La catena tecnica:
+`Control Center -> Local Connector -> Runtime Adapter -> RuntimeGeneration -> provider`
+è infrastruttura subordinata.
 
-Questa impostazione:
-- preserva la neutralità rispetto al runtime;
-- impedisce lock-in su DSH;
-- consente di mantenere `DOS-A1 = RUNTIME_DEFERRED`;
-- separa Control Center, connettore locale e runtime;
-- mantiene Human Review e authority TRAMA sopra il runtime.
+Riferimento normativo: `TRAMA-ADR-019`.
+
+Conseguenze:
+- Arena, Atlas e Docente OS determinano bisogni e workflow;
+- il Control Center osserva, non orchestra authority;
+- Harness/DSH/Codex sono adapter/provider sostituibili;
+- nessun proof runtime-only dimostra da solo valore di ecosistema;
+- DOS-A1 resta RUNTIME_DEFERRED.
 
 ## 4. Matrice ADOPT / ADAPT / REFERENCE / REJECT
 
@@ -224,28 +232,36 @@ File principali:
 
 La fixture è deliberatamente contract-compliant e non viene presentata come runtime live. `DOS-A1` resta `RUNTIME_DEFERRED`. Nessun pulsante operativo è introdotto.
 
-### OR-05 — UI component reuse
-**Obiettivo:** ridurre componenti custom usando librerie mature già validate nell'ecosistema esterno.
+### OR-05 — Ecosystem component reuse
+**Obiettivo:** ridurre componenti custom usando primitive mature e una strategia coerente attraverso Arena, Atlas, Docente OS e Control Center, senza uniformare forzatamente i prodotti.
 
-Ordine:
-1. Dialog/Popover/Tooltip/Tabs;
-2. command palette;
-3. resizable panels;
-4. terminal/code viewers solo se richiesti;
-5. diagrammi/stato.
+Priorità:
+1. primitive accessibili comuni (Dialog/Popover/Tooltip/Tabs);
+2. pattern di feedback/stato/provenance;
+3. command/search dove pertinente;
+4. resizable/data viewers solo nei prodotti che ne hanno bisogno;
+5. diagrammi/stato con semantica coerente.
 
-**Principio:** dipendenza upstream originale + design token TRAMA.
+**Principio:** upstream originale + design token/pattern TRAMA + identità di prodotto preservata.
 
-### OR-06 — Minimal proof
-**Obiettivo:** una sola prova end-to-end non mutativa:
+### OR-06 — Cross-ecosystem read-only proof
+**Obiettivo:** una sola prova end-to-end non mutativa che attraversi un workflow reale dell'ecosistema.
 
 ```text
-Control Center READ_ONLY
-  -> Local Connector mock/qualified
-  -> Runtime Adapter
-  -> Harness read-only snapshot
-  -> evidence back to Control Center
+Arena authority context
+   -> Atlas and/or Docente OS governed context
+   -> shared capability / Runtime Adapter
+   -> read-only result/evidence
+   -> Docente OS or Atlas presentation
+   -> Control Center observation
 ```
+
+Il proof deve dimostrare che:
+- Arena resta authority;
+- Atlas resta superficie pubblica/navigazione quando coinvolto;
+- Docente OS resta teacher-first e decision owner;
+- Control Center resta READ_ONLY;
+- il provider runtime è sostituibile.
 
 Nessuna autenticazione remota, installazione plugin o mutazione runtime in questo step.
 
@@ -253,9 +269,15 @@ Nessuna autenticazione remota, installazione plugin o mutazione runtime in quest
 
 Ordine vincolante per ridurre spreco:
 
-`OR-00 -> OR-01 -> OR-02 -> OR-03 -> OR-04 -> OR-05 -> OR-06`
+`OR-00 -> OR-01 -> OR-02 -> OR-03 -> OR-04 -> OR-05 -> OR-06 -> OR-07 -> OR-08 -> OR-09 -> OR-10`
 
-OR-05 può avanzare in parallelo solo per componenti UI già indipendenti dal runtime.
+OR-05 può avanzare in parallelo solo dove non altera authority o flussi di prodotto.
+
+Dopo OR-06:
+- **OR-07 — Shared capability layer**;
+- **OR-08 — Runtime portability**;
+- **OR-09 — Qualified execution**, soggetta a nuova authority decision;
+- **OR-10 — Product integrations** Arena/Atlas/Docente OS orientate ai workflow utente.
 
 ## 8. Decisioni da non prendere ancora
 
