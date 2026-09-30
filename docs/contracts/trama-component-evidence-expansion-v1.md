@@ -121,3 +121,30 @@ No component migration occurs.
 No lifecycle is promoted automatically.
 No product write/publication authority is changed.
 DOS-A1 remains deferred.
+
+
+## 10. Materialized qualification checkpoint
+
+The deterministic snapshot synchronization for this slice materializes **11** component/pattern targets across all four product lanes:
+
+- ARENA;
+- ATLAS;
+- DOCENTE_OS;
+- TRAMA_CONTROL_CENTER.
+
+Materialized projection:
+
+- Arena governed Dialog — confirmed BEHAVIOURAL / candidate BEHAVIOURAL;
+- Arena governed Tabs — confirmed BEHAVIOURAL / candidate BEHAVIOURAL;
+- Atlas RelationExplorer — confirmed REGISTERED / candidate ACCESSIBILITY;
+- Atlas CurriculumTree Disclosure — confirmed REGISTERED / candidate ACCESSIBILITY;
+- Docente OS AppShell — confirmed REGISTERED / candidate ACCESSIBILITY;
+- Docente OS Alert/status — confirmed REGISTERED / candidate BEHAVIOURAL;
+- Docente OS Timetable Interactive Cells — confirmed REGISTERED / candidate ACCESSIBILITY;
+- Control Center Context Help — confirmed REGISTERED / candidate REGISTERED.
+
+No projected component is QUALIFIED by this slice.
+
+All ecosystem-snapshot integrity checks, including `INT-COMPONENT-EVIDENCE-PROJECTION`, are PASS at this checkpoint.
+
+This checkpoint confirms materialization only. It does not create new evidence or authorize lifecycle/runtime changes.
