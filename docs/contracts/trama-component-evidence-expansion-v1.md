@@ -167,3 +167,26 @@ The deterministic maturity projection therefore yields:
 Their lifecycle remains `TRIAL`. Qualification does not imply lifecycle promotion, product certification, migration approval, or stability history.
 
 Control Center Context Help remains confirmed REGISTERED in the deployed-component registry. CS-S1 has qualified a native Popover candidate in isolation, but runtime remediation has not yet been integrated.
+
+
+## 12. Post-runtime qualification checkpoint — Control Center Context Help R1
+
+TRAMA PR #176 integrated the previously qualified native Popover candidate into the deployed Control Center runtime on exact head `183690acce0ed404d863a92d713709f25a5bfdd7`.
+
+The registry now binds two distinct evidence sources:
+
+- isolated candidate evidence from TRAMA PR #174 / run `36657296405`;
+- deployed runtime evidence from TRAMA PR #176 / run `36660084169`.
+
+For `CONTROL_CENTER.CONTEXT_HELP.FAMILY` the ordered chain is now:
+
+- ISOLATED = PRESENT;
+- BEHAVIOURAL = PRESENT;
+- RESPONSIVE_VISUAL = PRESENT;
+- ACCESSIBILITY = PRESENT.
+
+The deterministic projection therefore yields:
+
+- `CONTROL_CENTER.CONTEXT_HELP.FAMILY` → confirmed ACCESSIBILITY / QUALIFIED.
+
+Lifecycle remains `TRIAL`. This checkpoint binds evidence only and does not authorize lifecycle promotion, dependency adoption, further runtime change, or DOS-A1.
