@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "trama.control-center-a7-cutover-preflight/v1",
+  "id": "TRAMA-CC-APP-A7-CUTOVER-01",
+  "status": "PREFLIGHT",
+  "publicCutoverAuthorized": false,
+  "renderEnvironmentBound": false,
+  "sourceBaseline": {
+    "main": "fffefc16f287bd1e63b0e3dde2e117e24be3ac8a",
+    "a6Integrated": true,
+    "a6HumanReview": "PASS"
+  },
+  "requiredEvidence": {
+    "renderServiceIdentity": "PENDING",
+    "currentProductionEntrypoint": "PENDING",
+    "targetModularBuild": "PENDING",
+    "legacyFallback": "PENDING",
+    "rollbackProcedure": "PENDING",
+    "exactHeadBinding": "PENDING",
+    "preCutoverSmokePlan": "DEFINED",
+    "postCutoverSmokePlan": "DEFINED",
+    "deployReceipt": "PENDING",
+    "rollbackReceipt": "PENDING"
+  },
+  "invariants": {
+    "controlCenterReadOnly": true,
+    "browserGithubAuthority": false,
+    "automaticMaturityPromotion": false,
+    "dosA1": "RUNTIME_DEFERRED",
+    "legacyRemovalInScope": false
+  },
+  "humanGate": {
+    "name": "PUBLIC_CUTOVER_HUMAN_REVIEW",
+    "status": "PENDING",
+    "requiredBeforeRenderMutation": true
+  }
+}
