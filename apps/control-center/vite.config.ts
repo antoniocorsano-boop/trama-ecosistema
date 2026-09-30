@@ -89,6 +89,7 @@ export default defineConfig({
       injectRegister: false,
       registerType: "autoUpdate",
       includeAssets: ["icons/icon-192.svg", "icons/icon-512.svg"],
+      manifestFilename: "manifest.json",
       manifest: {
         name: "TRAMA Control Center",
         short_name: "TRAMA",
