@@ -66,15 +66,18 @@ test("A6 service worker serves governed data offline only with explicit stale ma
   await page.goto("/#/maturity");
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
-    if (!navigator.serviceWorker.controller) {
-      await new Promise<void>((resolve) => {
-        navigator.serviceWorker.addEventListener("controllerchange", () => resolve(), { once: true });
-        location.reload();
-      });
-    }
   });
 
-  await page.reload();
+  const controlled = await page.evaluate(() => Boolean(navigator.serviceWorker.controller));
+  if (!controlled) {
+    await page.reload({ waitUntil: "domcontentloaded" });
+  }
+
+  await expect.poll(
+    () => page.evaluate(() => Boolean(navigator.serviceWorker.controller)),
+    { message: "service worker should control the candidate page" },
+  ).toBe(true);
+
   await expect(page.getByRole("heading", { name: "Maturità", exact: true })).toBeVisible();
 
   const warm = await page.evaluate(async () => {
