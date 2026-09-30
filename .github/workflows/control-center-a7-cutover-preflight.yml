@@ -7,6 +7,10 @@ on:
       - "governance/control-center/trama-control-center-a7-cutover-preflight.json"
       - "scripts/validate_control_center_a7_cutover_preflight.py"
       - "scripts/build_control_center_a7_candidate.sh"
+      - "scripts/build_control_center_render.sh"
+      - "scripts/build_control_center_render_legacy.sh"
+      - "scripts/validate_control_center_a7_public_switch.py"
+      - "governance/control-center/trama-control-center-a7-public-switch.json"
       - "apps/control-center/**"
       - "control-center/**"
       - ".github/workflows/control-center-a7-cutover-preflight.yml"
@@ -34,3 +38,9 @@ jobs:
         env:
           TRAMA_RENDER_SKIP_LIVE: "1"
         run: bash scripts/build_control_center_a7_candidate.sh
+      - name: Validate A7 public switch contract
+        run: python scripts/validate_control_center_a7_public_switch.py
+      - name: Build exact Render public switch without live network overlays
+        env:
+          TRAMA_RENDER_SKIP_LIVE: "1"
+        run: bash scripts/build_control_center_render.sh

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "trama.control-center-a7-public-switch/v1",
+  "id": "TRAMA-CC-APP-A7-PUBLIC-SWITCH-01",
+  "status": "CANDIDATE",
+  "publicCutoverHumanReview": "PASS",
+  "preflightMerge": "b6d8b250278f064fefed3a6a286d80bc9728a4fe",
+  "render": {
+    "serviceId": "srv-dape3shsrm7s73f5krpg",
+    "serviceName": "trama-control-center",
+    "branch": "main",
+    "autoDeploy": true,
+    "configuredBuildCommand": "bash scripts/build_control_center_render.sh",
+    "publishPath": "public"
+  },
+  "switch": {
+    "wrapper": "scripts/build_control_center_render.sh",
+    "target": "scripts/build_control_center_a7_candidate.sh",
+    "output": "public",
+    "legacyFallbackPath": "/legacy/",
+    "legacyBuilder": "scripts/build_control_center_render_legacy.sh"
+  },
+  "rollback": {
+    "primary": "REVERT_PUBLIC_SWITCH_MERGE_ON_MAIN",
+    "secondary": "SERVE_LEGACY_FALLBACK_PATH",
+    "knownGoodPreSwitchMain": "b6d8b250278f064fefed3a6a286d80bc9728a4fe"
+  },
+  "invariants": {
+    "controlCenterReadOnly": true,
+    "browserGithubAuthority": false,
+    "automaticMaturityPromotion": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  }
+}
