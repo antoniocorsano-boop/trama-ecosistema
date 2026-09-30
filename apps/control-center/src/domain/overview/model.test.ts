@@ -1,4 +1,4 @@
-import currentSnapshot from "../../../../control-center/data/ecosystem-snapshot.json";
+import currentSnapshot from "../../../../../control-center/data/ecosystem-snapshot.json";
 import { describe, expect, it } from "vitest";
 import { toOverviewModel } from "./model";
 
