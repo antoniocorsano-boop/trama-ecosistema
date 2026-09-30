@@ -55,7 +55,7 @@ function formatDate(value?:string){if(!value)return "non dichiarata";const d=new
 
 
 function RuntimeObservationPanel({items}:{items:RuntimeObservation[]}){
- return <section className="runtime-observation" aria-labelledby="runtime-observation-title">
+ return <section className="runtime-observation" data-testid="runtime-observation" aria-labelledby="runtime-observation-title">
   <header><div><p className="section-kicker">OR-04 · RUNTIME OBSERVATION</p><h3 id="runtime-observation-title">Osservazione runtime</h3></div><strong className="runtime-readonly">READ_ONLY</strong></header>
   <p className="runtime-observation-note">Proiezione contract-compliant di collaudo. Non rappresenta un runtime attivo e non espone comandi operativi.</p>
   {items.map(item=><article key={item.runtimeId} className="runtime-observation-card">
