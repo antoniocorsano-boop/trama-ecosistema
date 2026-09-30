@@ -58,6 +58,9 @@ jobs:
           grep -q 'id="componentMaturityMap"' control-center/maturity.html
           grep -q "Elenco equivalente della maturità dei componenti" control-center/maturity.html
           test -s control-center/component-maturity.js
+          test -s control-center/context-help.js
+          test -s control-center/fixtures/context-help.html
+          node scripts/test_control_center_context_help.cjs
           node scripts/test_component_maturity_ui.cjs
           node scripts/test_control_center_orientation_home.cjs
           grep -q "Attenzione richiesta" control-center/index.html
@@ -117,7 +120,7 @@ jobs:
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
           grep -q "networkFirst(request,'./index.html')" control-center/sw.js
-          grep -q "trama-control-center-v15" control-center/sw.js
+          grep -q "trama-control-center-v16" control-center/sw.js
           grep -q "\./maturity.html" control-center/sw.js
           grep -q "\./component-maturity.js" control-center/sw.js
           test -s control-center/project-knowledge-state.js
@@ -169,6 +172,9 @@ jobs:
           const maturity = fs.readFileSync('control-center/component-maturity.js', 'utf8')
           new Function(maturity)
           console.log('CONTROL_CENTER_COMPONENT_MATURITY_JS_SYNTAX_PASS')
+          const contextHelp = fs.readFileSync('control-center/context-help.js', 'utf8')
+          new Function(contextHelp)
+          console.log('CONTROL_CENTER_CONTEXT_HELP_JS_SYNTAX_PASS')
           const sw = fs.readFileSync('control-center/sw.js', 'utf8')
           new Function(sw)
           console.log('CONTROL_CENTER_SW_SYNTAX_PASS')
