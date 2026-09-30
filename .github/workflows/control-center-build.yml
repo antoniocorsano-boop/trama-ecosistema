@@ -16,6 +16,10 @@ on:
       - "scripts/build_control_center_render.sh"
       - "scripts/test_control_center_render_build.py"
       - "scripts/test_control_center_orientation_home.cjs"
+      - ".github/workflows/control-center-context-help.yml"
+      - "docs/contracts/trama-control-center-context-help-cs-s1.md"
+      - "scripts/capture_control_center_context_help.mjs"
+      - "scripts/test_control_center_context_help.cjs"
       - "docs/evidence/trama-component-evidence-expansion-2026-09-30.md"
       - "docs/contracts/trama-component-evidence-expansion-v1.md"
       - "scripts/validate_trama_component_evidence_registry.py"
@@ -190,6 +194,7 @@ jobs:
           node scripts/test_stage_e3_public_validation_surface.cjs
           node scripts/test_component_maturity_ui.cjs
           node scripts/test_control_center_orientation_home.cjs
+          node scripts/test_control_center_context_help.cjs
           python scripts/test_control_center_render_build.py
           test -s control-center/e3/index.html
           test -s control-center/maturity.html
