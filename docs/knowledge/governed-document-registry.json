@@ -935,6 +935,32 @@
         "EXACT_HEAD_REQUALIFICATION",
         "COMPONENT_EVIDENCE_COVERAGE_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CC-CONTEXT-HELP-CS-S1",
+      "path": "docs/contracts/trama-control-center-context-help-cs-s1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "context-help",
+        "component-evidence",
+        "accessibility",
+        "responsive",
+        "native-popover"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-EVIDENCE-REGISTRY",
+        "DOC-TRAMA-COMPONENT-EVIDENCE-EXPANSION",
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE"
+      ],
+      "updateTriggers": [
+        "CONTEXT_HELP_PRIMITIVE_CHANGE",
+        "CONTEXT_HELP_EVIDENCE_CHANGE",
+        "CONTROL_CENTER_INTERACTION_CHANGE"
+      ]
     }
   ]
 }
