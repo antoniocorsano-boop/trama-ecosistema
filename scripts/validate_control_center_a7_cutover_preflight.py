@@ -31,7 +31,7 @@ for k in (
     "deployReceipt",
     "rollbackReceipt",
 ):
-    assert required[k] in {"PENDING", "IN_PROGRESS", "DEFINED", "BOUND"}
+    assert required[k] in {"PENDING", "IN_PROGRESS", "DEFINED", "BOUND", "SCHEMA_DEFINED"}
 
 assert required["preCutoverSmokePlan"] == "DEFINED"
 assert required["targetModularBuild"] == "DEFINED"
