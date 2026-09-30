@@ -192,17 +192,20 @@ test("TRAMA public browser certification", async ({ page, context, browserName }
     }
     expect(await page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
 
-    // Playwright routing is removed only while the browser is physically offline.
-    // This lets the service worker satisfy navigation without route interception.
-    // No network mutation can escape because Chromium is offline for this interval.
+    // Use a fresh page for the offline navigation. Playwright can surface ERR_FAILED
+    // on reload even when an already-rendered document remains visible, which is not
+    // a reliable proof of service-worker navigation fallback.
     await context.unroute("**/*", readOnlyRoute);
     await context.setOffline(true);
+    const offlinePage = await context.newPage();
     try {
-      await page.reload({ waitUntil: "domcontentloaded", timeout: 20_000 });
-      const text = await page.locator("body").innerText();
+      await offlinePage.goto(baseURL + "/#/", { waitUntil: "domcontentloaded", timeout: 20_000 });
+      const text = await offlinePage.locator("body").innerText();
       expect(text).toMatch(/TRAMA/i);
-      return { shellAvailable: true, controlled: true, url: page.url() };
+      expect(await offlinePage.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+      return { shellAvailable: true, controlled: true, url: offlinePage.url() };
     } finally {
+      await offlinePage.close().catch(() => undefined);
       await context.setOffline(false);
       await context.route("**/*", readOnlyRoute);
     }
