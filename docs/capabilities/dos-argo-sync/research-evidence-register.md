@@ -195,3 +195,46 @@ The XLS is an interoperability artifact, not the canonical editable source. Reco
 ### Design consequence
 
 The sync model must distinguish structural changes from execution-state changes and preserve a dedicated performed-state lineage.
+
+
+## E-008 — Real didUP XLS sample
+
+**Source:** `Programma_2026_48591.xls` supplied by the user  
+**SHA-256:** `6f6f83570fecc3b295586dae2a110c48acfe2dd26bedc5b411e14418d6f7925d`  
+**Evidence status:** DIRECT_BINARY_INSPECTION / READ_ONLY
+
+### Established facts
+
+- file container is CDFV2;
+- workbook format is BIFF8;
+- one visible sheet named `Dati`;
+- six observed columns:
+  - `ORD. MODULO`
+  - `MODULO`
+  - `ORD. ARGOMENTO`
+  - `ARGOMENTO`
+  - `STATO SVOLGIMENTO`
+  - `DATA SVOLGIMENTO`
+- sample rows demonstrate separate module and argument rows;
+- all sample table cells are shared-string cells;
+- no formulas, data validations or merged cells were observed;
+- semantic mapping to module/argument fields is feasible.
+
+### Important limitation
+
+This evidence does not prove that a clean-room generated XLS or an edited copy is accepted by didUP. It also does not establish format variability or import merge semantics.
+
+### Closed evidence gaps
+
+- [x] real XLS exported from didUP inspected;
+- [x] initial semantic mapping feasibility demonstrated.
+
+### Remaining gaps
+
+- [ ] second richer export;
+- [ ] format variability;
+- [ ] non-empty date representation;
+- [ ] complete performed-state literal set;
+- [ ] unmodified round-trip import;
+- [ ] duplicate/update behavior;
+- [ ] minimally modified-copy compatibility.
