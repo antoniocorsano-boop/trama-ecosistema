@@ -9,20 +9,20 @@
 
 | Surface | Blob SHA | Bytes | Lines | Current role |
 |---|---|---:|---:|---|
-| `control-center/index.html` | `89c4be3f0ade7522895743bcd20fdc51eb0ebf40` | 37,451 | 403 | Overview / Project Knowledge / assurance / attention / navigation |
-| `control-center/maturity.html` | `a5301b684f3d09cc5d7cbc34a85cf7951aaee510` | 15,763 | 227 | Product and component maturity |
-| `control-center/ecosystem.html` | `6aa299715e5d67253f61263bfc546ef0a18c3be3` | 18,962 | 197 | Capability / ecosystem map |
-| `control-center/evidence.html` | `7f757c081d8e3639df1f7fe0fe53ef9a77ee9cc8` | 15,133 | 163 | Evidence Explorer / integrity |
-| `control-center/operations.html` | `53e907d34f9dd75c3637b3d13050b63ac59dc1ae` | 12,832 | 127 | Operational path / governed timeline |
+| `control-center/index.html` | `89c4be3f0ade7522895743bcd20fdc51eb0ebf40` | 37,573 | 403 | Overview / Project Knowledge / assurance / attention / navigation |
+| `control-center/maturity.html` | `a5301b684f3d09cc5d7cbc34a85cf7951aaee510` | 15,804 | 227 | Product and component maturity |
+| `control-center/ecosystem.html` | `6aa299715e5d67253f61263bfc546ef0a18c3be3` | 19,005 | 197 | Capability / ecosystem map |
+| `control-center/evidence.html` | `7f757c081d8e3639df1f7fe0fe53ef9a77ee9cc8` | 15,163 | 163 | Evidence Explorer / integrity |
+| `control-center/operations.html` | `53e907d34f9dd75c3637b3d13050b63ac59dc1ae` | 12,877 | 127 | Operational path / governed timeline |
 
 Supporting production assets:
 
 | Asset | Blob SHA | Bytes | Lines | Role |
 |---|---|---:|---:|---|
-| `component-maturity.js` | `f26cb6f93f07b063d1ceb0089d107318b409af2f` | 15,687 | 382 | extracted maturity presentation logic |
-| `project-knowledge-state.js` | `0d99b47c1d999861866eb3f77d41e0a267b106b7` | 9,354 | 179 | Project Knowledge state mapping |
+| `component-maturity.js` | `f26cb6f93f07b063d1ceb0089d107318b409af2f` | 15,714 | 382 | extracted maturity presentation logic |
+| `project-knowledge-state.js` | `0d99b47c1d999861866eb3f77d41e0a267b106b7` | 9,389 | 179 | Project Knowledge state mapping |
 | `sw.js` | `e51209ae7603d9c4a873aa28b269be1ccf4c3f61` | 2,111 | 57 | manual PWA cache/runtime strategy |
-| `manifest.webmanifest` | `8e40ab750f6a21cd4e81fdac399bfde12679f40d` | 926 | 43 | installability metadata |
+| `manifest.webmanifest` | `8e40ab750f6a21cd4e81fdac399bfde12679f40d` | 927 | 43 | installability metadata |
 
 ## 2. Build/deploy baseline
 
