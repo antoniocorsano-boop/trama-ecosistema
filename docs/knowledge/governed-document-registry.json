@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.governed-document-registry/v1",
-  "updatedAt": "2026-09-29",
+  "updatedAt": "2026-09-30",
   "policy": {
     "purpose": "Durable index of foundational and normative TRAMA documents used by Project Knowledge and development continuity.",
     "chatIsAuthority": false,
@@ -886,6 +886,54 @@
         "MATURITY_MODEL_CHANGE",
         "MATURITY_EVIDENCE_BINDING_CHANGE",
         "EVIDENCE_TYPE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-EVIDENCE-EXPANSION",
+      "path": "docs/contracts/trama-component-evidence-expansion-v1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "component-evidence",
+        "component-maturity",
+        "atlas",
+        "docente-os",
+        "ui-development"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-EVIDENCE-REGISTRY",
+        "DOC-TRAMA-COMPONENT-MATURITY-PROJECTION",
+        "DOC-TRAMA-COMPONENT-EVIDENCE-INV03"
+      ],
+      "updateTriggers": [
+        "COMPONENT_EVIDENCE_COVERAGE_CHANGE",
+        "COMPONENT_EVIDENCE_QUALIFICATION_CHANGE",
+        "PRODUCT_UI_COMPONENT_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-EVIDENCE-EXPANSION-RECEIPT",
+      "path": "docs/evidence/trama-component-evidence-expansion-2026-09-30.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "component-evidence",
+        "exact-head",
+        "atlas",
+        "docente-os",
+        "accessibility",
+        "responsive"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-EVIDENCE-EXPANSION"
+      ],
+      "updateTriggers": [
+        "EXACT_HEAD_REQUALIFICATION",
+        "COMPONENT_EVIDENCE_COVERAGE_CHANGE"
       ]
     }
   ]
