@@ -1,21 +1,21 @@
 # TRAMA Human Review Package — OR-05 / OR-06
 
-**Stato:** AWAITING_HUMAN_DECISION  
+**Stato:** HUMAN_APPROVED / INTEGRATED  
 **Data:** 2026-09-30  
 **Scope:** OR-05-I1 · OR-05-I2 · OR-06-P1  
 **Merge automatico:** VIETATO  
 **DOS-A1:** RUNTIME_DEFERRED  
 **Authority change:** NONE
 
-## 1. Decisione richiesta
+## 1. Decisione umana
 
-La Human Review deve decidere separatamente se integrare:
+La Human Review ha autorizzato l'integrazione delle seguenti slice:
 
 1. **Arena #344 — OR-05-I2 dead legacy UI removal**
 2. **Docente OS #644 — OR-05-I1 Radix dialog mechanics reuse**
 3. **TRAMA #200 — OR-06-P1 deterministic cross-ecosystem read-only proof**
 
-Le tre slice sono tecnicamente indipendenti sul piano prodotto; #200 è parte di una catena stacked TRAMA e richiede il mantenimento dell'ordine dei parent #198 → #199 → #200.
+Le tre slice sono state integrate rispettando i confini di prodotto e l'ordine stacked TRAMA. La decisione umana è stata eseguita il 30 settembre 2026.
 
 ## 2. Arena #344
 
@@ -24,7 +24,8 @@ Le tre slice sono tecnicamente indipendenti sul piano prodotto; #200 è parte di
 - base: `main@a89553c0a3daa71555b6a9ec3a07c3edbf19a176`
 - changed files: 3
 - diff: **0 additions / 93 deletions**
-- stato: Draft / mergeable=true
+- stato al momento della decisione: Draft / mergeable=true
+- merge commit: `ac04058b689075a607fba050c706a8f222d0cca1`
 - open review threads: 0
 - review submissions: 0
 
@@ -61,7 +62,8 @@ Mitigazione: Product CI PASS + ricerca repository + rimozione limitata a dead co
 - exact head: `caa76dd01dc448c14e97dbc6fb5bd38eefba786e`
 - base: `develop@1d8c4ee7c1209f624b412db1b11e666c2de25aaa`
 - changed files: 1
-- stato: Draft / mergeable=true
+- stato al momento della decisione: Draft / mergeable=true
+- merge commit: `18fe45cb88989bddf2666560ecc17b3cc0025f02`
 - open review threads: 0
 - review submissions: 0
 - visual classification: **COMPATIBLE**
@@ -103,7 +105,8 @@ Mitigazione: Radix è già supply chain del prodotto; Browser Certification e HV
 - exact head: `4a2247a9a52bc5310f6c2afd9a069b53faa27156`
 - base: branch OR-06 contract (#199)
 - changed files: 4
-- stato: Draft / mergeable=true
+- stato al momento della decisione: Draft / mergeable=true
+- merge commit: `2bca36fdb5b70683cb95a27e6540e4a39ac3cf70`
 - open review threads: 0
 - review submissions: 0
 
@@ -163,38 +166,37 @@ Mitigazione: il contratto dichiara esplicitamente che P1 qualifica soltanto la *
 | Nuove write authority | NO | NO | NO |
 | DOS-A1 | DEFERRED | DEFERRED | DEFERRED |
 
-## 6. Ordine di integrazione proposto
+## 6. Ordine di integrazione eseguito
 
 ### Product-local
-Arena #344 e Docente OS #644 possono essere valutate indipendentemente.
+- Arena #344 → `ac04058b689075a607fba050c706a8f222d0cca1`
+- Docente OS #644 → `18fe45cb88989bddf2666560ecc17b3cc0025f02`
 
 ### TRAMA stacked
-Per la linea TRAMA l'ordine deve restare:
-1. #197 — baseline OR + ecosystem-first;
-2. #198 — OR-05 ecosystem component reuse;
-3. #199 — OR-06 proof contract;
-4. #200 — OR-06-P1 implementation.
-
-Nessun child deve essere integrato prima del parent da cui dipende.
+Per la linea TRAMA l'ordine è stato rispettato:
+1. #197 → `013fc443e3caa85e3ffd9cacfc270899a35e61ad`;
+2. #198 → `c3d09aaacde88417508bbde7a47b36fd513ef574`;
+3. #199 → `f52520ddc2aa3353b110bf5599b9db99302def6b`;
+4. #200 → `2bca36fdb5b70683cb95a27e6540e4a39ac3cf70`.
 
 ## 7. Human Review checklist
 
 Per ciascuna PR:
-- [ ] exact head coincide con quello indicato;
-- [ ] tutti i gate richiesti sono PASS;
-- [ ] nessun thread aperto;
-- [ ] nessuna authority drift;
-- [ ] nessuna capability mutativa introdotta;
-- [ ] diff coerente con il perimetro dichiarato.
+- [x] exact head coincide con quello indicato;
+- [x] tutti i gate richiesti sono PASS;
+- [x] nessun thread aperto;
+- [x] nessuna authority drift;
+- [x] nessuna capability mutativa introdotta;
+- [x] diff coerente con il perimetro dichiarato.
 
 Per la catena TRAMA:
-- [ ] ADR-019 ecosystem-first accettabile;
-- [ ] OR-05 no-global-UI-library accettabile;
-- [ ] OR-06 lesson-preparation read-only proof rappresenta correttamente un workflow reale;
-- [ ] P1 resta qualificazione offline e non viene interpretato come runtime readiness.
+- [x] ADR-019 ecosystem-first accettabile;
+- [x] OR-05 no-global-UI-library accettabile;
+- [x] OR-06 lesson-preparation read-only proof rappresenta correttamente un workflow reale;
+- [x] P1 resta qualificazione offline e non viene interpretato come runtime readiness.
 
 ## 8. Stato finale del pacchetto
 
-**READY FOR HUMAN INTEGRATION DECISION.**
+**HUMAN APPROVED / INTEGRATION EXECUTED.**
 
-Questo pacchetto non approva, non promuove e non integra automaticamente alcuna PR.
+La decisione umana è stata eseguita senza introdurre nuove authority, senza attivare DOS-A1 e senza promuovere runtime reali. Restano invariati i confini ecosystem-first.
