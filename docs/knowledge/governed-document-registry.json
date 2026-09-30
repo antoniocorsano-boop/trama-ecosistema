@@ -1325,7 +1325,7 @@
     {
       "id": "DOC-OR-05-ECOSYSTEM-COMPONENT-REUSE",
       "path": "docs/analysis/trama-or-05-ecosystem-component-reuse-2026-09-30.md",
-      "kind": "ANALYSIS",
+      "kind": "GUIDE",
       "status": "CURRENT",
       "priority": "FOUNDATIONAL",
       "subjects": [
