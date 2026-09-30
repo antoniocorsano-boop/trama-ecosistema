@@ -41,7 +41,7 @@ test("mobile navigation keeps only migrated destinations actionable", async ({ p
   const primaryNav = page.getByRole("navigation", { name: "Navigazione principale candidate" });
   await expect(primaryNav.getByRole("link", { name: "Overview" })).toBeVisible();
   await expect(primaryNav.getByRole("link", { name: "Maturità" })).toBeVisible();
-  await expect(primaryNav.getByText("Ecosistema")).toHaveAttribute("aria-disabled", "true");
-  await expect(primaryNav.getByText("Evidenze")).toHaveAttribute("aria-disabled", "true");
+  await expect(primaryNav.getByRole("link", { name: "Ecosistema" })).toBeVisible();
+  await expect(primaryNav.getByRole("link", { name: "Evidenze" })).toBeVisible();
   await expect(primaryNav.getByText("Operazioni")).toHaveAttribute("aria-disabled", "true");
 });
