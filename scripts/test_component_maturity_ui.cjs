@@ -4,6 +4,7 @@ const path=require('path');
 
 const api=require('../control-center/component-maturity.js');
 const snapshot=JSON.parse(fs.readFileSync(path.join(__dirname,'../control-center/data/ecosystem-snapshot.json'),'utf8'));
+const effectiveComponents=JSON.parse(fs.readFileSync(path.join(__dirname,'../control-center/data/effective-component-evidence.json'),'utf8'));
 const home=fs.readFileSync(path.join(__dirname,'../control-center/index.html'),'utf8');
 const maturity=fs.readFileSync(path.join(__dirname,'../control-center/maturity.html'),'utf8');
 const sw=fs.readFileSync(path.join(__dirname,'../control-center/sw.js'),'utf8');
@@ -19,8 +20,10 @@ assert.match(maturity,/grid-template-areas:"list" "detail" "map"/);
 assert.match(maturity,/deferSelection:window\.matchMedia/);
 assert.match(maturity,/Un livello basso può indicare prove non ancora bound/);
 assert.match(maturity,/Prove bound/);
+assert.match(maturity,/LIVE_COMPONENT_URL='\.\/data\/effective-component-evidence\.json'/);
 assert.match(maturity,/nextRequiredEvidenceTypes/);
-assert.match(sw,/trama-control-center-v15/);
+assert.match(sw,/trama-control-center-v16/);
+assert.match(sw,/\.\/data\/effective-component-evidence\.json/);
 assert.match(sw,/\.\/maturity\.html/);
 assert.match(sw,/\.\/component-maturity\.js/);
 
@@ -40,7 +43,7 @@ for(const node of model.nodes){
   assert(api.STAGES.includes(node.candidate),'invalid candidate stage');
   assert(node.candidateX>=node.x,'candidate must not render behind confirmed stage');
   const description=api.componentDescription(node.component);
-  assert.match(description,/Maturità confermata:/);
+  assert.match(description,/Maturità governata:/);
   assert.match(description,/Ciclo di vita:/);
   assert(!/%/.test(description),'percentage leaked into maturity description');
   assert(!/score/i.test(description),'score leaked into maturity description');
@@ -65,6 +68,14 @@ const relation=snapshot.components.find(c=>c.componentId==='ATLAS.RELATION_EXPLO
 assert(relation,'Atlas RelationExplorer missing');
 assert.equal(relation.maturity.confirmedStage,'REGISTERED');
 assert.equal(relation.maturity.candidateStage,'ACCESSIBILITY');
+
+assert.equal(effectiveComponents.schemaVersion,'trama.effective-component-evidence/v1');
+assert.equal(effectiveComponents.promotionRequired,false);
+assert.equal(effectiveComponents.humanReviewRequired,false);
+const effectiveRelation=effectiveComponents.components.find(c=>c.componentId==='ATLAS.RELATION_EXPLORER.FAMILY');
+assert(effectiveRelation,'effective Atlas RelationExplorer missing');
+assert.equal(effectiveRelation.maturity.confirmedStage,'REGISTERED');
+assert(effectiveRelation.observedMaturity,'observed maturity missing');
 
 const appshell=snapshot.components.find(c=>c.componentId==='DOCENTE_OS.APPSHELL.FAMILY');
 assert(appshell,'Docente OS AppShell missing');
