@@ -41,7 +41,7 @@ jobs:
             echo "Runtime remediation must not adopt a repository dependency." >&2
             exit 1
           fi
-          if grep -E '^control-center/' /tmp/context-help-runtime-files.txt | grep -Ev '^control-center/index[.]html$' | grep -q .; then
+          if grep -E '^control-center/' /tmp/context-help-runtime-files.txt | grep -Ev '^control-center/index\.html$' | grep -q .; then
             echo "Runtime remediation may change only control-center/index.html under control-center/." >&2
             exit 1
           fi
