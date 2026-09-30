@@ -65,9 +65,9 @@ assert timetable_evidence["BEHAVIOURAL"]["status"]=="PARTIAL"
 assert timetable_evidence["RESPONSIVE_VISUAL"]["status"]=="PRESENT"
 assert timetable_evidence["ACCESSIBILITY"]["status"]=="PRESENT"
 
-# Qualification is evidence-bound: only the two governed Arena primitives have a complete PRESENT chain.
+# Qualification is evidence-bound: Arena governed primitives and deployed Control Center Context Help have complete PRESENT chains.
 qualified={item["componentId"] for item in components if item["maturity"]["qualificationStatus"]=="QUALIFIED"}
-assert qualified=={"ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED"},qualified
+assert qualified=={"ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED","CONTROL_CENTER.CONTEXT_HELP.FAMILY"},qualified
 
 arena_dialog=by_id["ARENA.DIALOG_CONFIRM.GOVERNED"]
 arena_tabs=by_id["ARENA.TABS.GOVERNED"]
@@ -76,8 +76,21 @@ assert arena_dialog["maturity"]["confirmedStage"]=="ACCESSIBILITY"
 assert arena_tabs["maturity"]["confirmedStage"]=="ACCESSIBILITY"
 assert arena_dialog["maturity"]["qualificationStatus"]=="QUALIFIED"
 assert arena_tabs["maturity"]["qualificationStatus"]=="QUALIFIED"
-assert context_help["maturity"]["confirmedStage"]=="REGISTERED"
-assert context_help["maturity"]["qualificationStatus"]=="REGISTERED_ONLY"
+assert context_help["maturity"]["confirmedStage"]=="ACCESSIBILITY"
+assert context_help["maturity"]["candidateStage"]=="ACCESSIBILITY"
+assert context_help["maturity"]["qualificationStatus"]=="QUALIFIED"
+assert context_help["maturity"]["remainingEvidenceTypes"]==[]
+
+context_entry=next(x for x in registry["entries"] if x["componentId"]=="CONTROL_CENTER.CONTEXT_HELP.FAMILY")
+context_evidence={x["type"]:x for x in context_entry["evidence"]}
+for evidence_type in ["ISOLATED","BEHAVIOURAL","RESPONSIVE_VISUAL","ACCESSIBILITY"]:
+    assert context_evidence[evidence_type]["status"]=="PRESENT"
+assert context_evidence["ISOLATED"]["exactHead"]=="903404953465a526408939ebd31eae40f57a57a6"
+assert context_evidence["ISOLATED"]["artifactId"]=="11072203230"
+for evidence_type in ["BEHAVIOURAL","RESPONSIVE_VISUAL","ACCESSIBILITY"]:
+    assert context_evidence[evidence_type]["exactHead"]=="183690acce0ed404d863a92d713709f25a5bfdd7"
+    assert context_evidence[evidence_type]["runId"]=="36660084169"
+    assert context_evidence[evidence_type]["artifactId"]=="11074450895"
 
 for component_id in ["ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED"]:
     entry=next(x for x in registry["entries"] if x["componentId"]==component_id)
@@ -95,6 +108,7 @@ assert backlog["components"]["currentRegistryCount"]==11
 assert backlog["components"]["missingProductCoverage"]==[]
 assert backlog["components"]["coverageState"]=="ALL_PRODUCTS_MACHINE_ADDRESSABLE"
 assert backlog["components"]["qualificationState"]=="PARTIAL"
+assert not any(target.startswith("CONTROL_CENTER.CONTEXT_HELP.FAMILY:") for target in backlog["components"]["nextTargets"])
 
 receipt=(ROOT/"docs/evidence/trama-component-evidence-expansion-2026-09-30.md").read_text(encoding="utf-8")
 for token in [
@@ -119,5 +133,22 @@ for token in [
     "deployed Context Help at confirmed REGISTERED",
 ]:
     assert token.lower() in qualification_receipt.lower(),token
+
+
+context_qualification_receipt=(ROOT/"docs/evidence/trama-component-qualification-context-help-r1-2026-09-30.md").read_text(encoding="utf-8")
+for token in [
+    "903404953465a526408939ebd31eae40f57a57a6",
+    "36657296405",
+    "11072203230",
+    "0dd4f602bc1cab17dfbab4ec32a42e573dfba3123004e29a362bd9a64255e1d9",
+    "183690acce0ed404d863a92d713709f25a5bfdd7",
+    "36660084169",
+    "11074450895",
+    "1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62",
+    "confirmedStage=ACCESSIBILITY",
+    "qualificationStatus=QUALIFIED",
+    "lifecycle=TRIAL",
+]:
+    assert token.lower() in context_qualification_receipt.lower(),token
 
 print("TRAMA_COMPONENT_EVIDENCE_EXPANSION_01_PASS")

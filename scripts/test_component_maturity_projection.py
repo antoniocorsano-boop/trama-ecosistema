@@ -86,9 +86,15 @@ assert timetable["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PRESENT"
 assert timetable["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PRESENT"
 
 context_help = by_id["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]
-assert context_help["maturity"]["confirmedStage"] == "REGISTERED"
-assert context_help["maturity"]["candidateStage"] == "REGISTERED"
-assert context_help["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PARTIAL"
+assert context_help["lifecycle"] == "TRIAL"
+assert context_help["maturity"]["confirmedStage"] == "ACCESSIBILITY"
+assert context_help["maturity"]["candidateStage"] == "ACCESSIBILITY"
+assert context_help["maturity"]["qualificationStatus"] == "QUALIFIED"
+assert context_help["maturity"]["remainingEvidenceTypes"] == []
+assert context_help["evidenceStatus"]["ISOLATED"]["status"] == "PRESENT"
+assert context_help["evidenceStatus"]["BEHAVIOURAL"]["status"] == "PRESENT"
+assert context_help["evidenceStatus"]["RESPONSIVE_VISUAL"]["status"] == "PRESENT"
+assert context_help["evidenceStatus"]["ACCESSIBILITY"]["status"] == "PRESENT"
 
 assert len(by_id) == 11
 assert {item["product"] for item in components} == {"ARENA","ATLAS","DOCENTE_OS","TRAMA_CONTROL_CENTER"}

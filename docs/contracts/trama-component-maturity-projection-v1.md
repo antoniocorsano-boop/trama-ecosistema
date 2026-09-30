@@ -128,9 +128,9 @@ The current registry must produce conservative results including:
 - ARENA.TABS.GOVERNED → confirmed ACCESSIBILITY / QUALIFIED;
 - legacy dialog/tabs → confirmed REGISTERED, candidate BEHAVIOURAL;
 - ARENA.TOOLTIP.LEGACY → REGISTERED;
-- CONTROL_CENTER.CONTEXT_HELP.FAMILY → REGISTERED.
+- CONTROL_CENTER.CONTEXT_HELP.FAMILY → confirmed ACCESSIBILITY / QUALIFIED.
 
-These results follow the evidence chain. Arena Dialog/Tabs reach ACCESSIBILITY only because exact-head responsive/accessibility evidence is now PRESENT; no other component is promoted by inference.
+These results follow the evidence chain. Arena Dialog/Tabs and Control Center Context Help reach ACCESSIBILITY only because their ordered exact-head evidence chains are now PRESENT; no other component is promoted by inference.
 
 ## 10. Snapshot synchronization and exact-head qualification
 

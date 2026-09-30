@@ -71,6 +71,11 @@ assert(appshell,'Docente OS AppShell missing');
 assert.equal(appshell.maturity.confirmedStage,'REGISTERED');
 assert.equal(appshell.maturity.candidateStage,'ACCESSIBILITY');
 
+const contextHelp=snapshot.components.find(c=>c.componentId==='CONTROL_CENTER.CONTEXT_HELP.FAMILY');
+assert(contextHelp,'Control Center Context Help missing');
+assert.equal(contextHelp.maturity.confirmedStage,'ACCESSIBILITY');
+assert.equal(contextHelp.maturity.qualificationStatus,'QUALIFIED');
+
 const legacy=snapshot.components.find(c=>c.componentId==='ARENA.DIALOG_CONFIRM.LEGACY');
 assert(legacy,'legacy dialog missing');
 const legacyNode=model.nodes.find(n=>n.component.componentId===legacy.componentId);

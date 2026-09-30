@@ -960,6 +960,32 @@
         "EXACT_HEAD_REQUALIFICATION",
         "COMPONENT_QUALIFICATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-COMPONENT-QUALIFICATION-CONTEXT-HELP-R1",
+      "path": "docs/evidence/trama-component-qualification-context-help-r1-2026-09-30.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "component-evidence",
+        "component-maturity",
+        "control-center",
+        "context-help",
+        "accessibility",
+        "responsive",
+        "exact-head"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-COMPONENT-EVIDENCE-EXPANSION",
+        "DOC-TRAMA-COMPONENT-MATURITY-PROJECTION"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_CONTEXT_HELP_EVIDENCE_CHANGE",
+        "EXACT_HEAD_REQUALIFICATION",
+        "COMPONENT_QUALIFICATION_CHANGE"
+      ]
     }
   ]
 }

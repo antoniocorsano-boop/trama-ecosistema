@@ -1,47 +1,47 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.6.0",
-  "generatedAt": "2026-09-30T02:04:39.336742+00:00",
+  "generatedAt": "2026-09-30T02:41:27.617178+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "ref": "STATUS.md",
       "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "ref": "ROADMAP.md",
       "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
-      "sha256": "eb8abca065f84024a37a5b0610b8dce232ad709eb84a96b4b3ede421c6002bd4"
+      "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
     },
     "maturity-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
       "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
     }
@@ -109,7 +109,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:41:27.617178+00:00"
     },
     {
       "id": "arena",
@@ -136,7 +136,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:41:27.617178+00:00"
     },
     {
       "id": "atlas",
@@ -166,7 +166,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:41:27.617178+00:00"
     },
     {
       "id": "docente-os",
@@ -194,7 +194,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:41:27.617178+00:00"
     }
   ],
   "capabilities": [
@@ -638,7 +638,7 @@
     {
       "componentId": "CONTROL_CENTER.CONTEXT_HELP.FAMILY",
       "product": "TRAMA_CONTROL_CENTER",
-      "target": "contextual help popover/dialog",
+      "target": "contextual help popover",
       "semanticPattern": null,
       "lifecycle": "TRIAL",
       "sourceClass": "PRODUCT_OWNED",
@@ -648,35 +648,51 @@
       ],
       "maturity": {
         "model": "TRAMA_COMPONENT_MATURITY_V1",
-        "confirmedStage": "REGISTERED",
-        "candidateStage": "REGISTERED",
-        "qualificationStatus": "REGISTERED_ONLY",
-        "remainingEvidenceTypes": [
-          "ISOLATED",
-          "BEHAVIOURAL",
-          "RESPONSIVE_VISUAL",
-          "ACCESSIBILITY"
-        ]
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
       },
       "evidenceStatus": {
         "ISOLATED": {
           "type": "ISOLATED",
-          "status": "NOT_OBSERVED"
+          "status": "PRESENT",
+          "ref": "governance/ui-development/trama-control-center-cs-s1-v1.json",
+          "exactHead": "903404953465a526408939ebd31eae40f57a57a6",
+          "runId": "36657296405",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11072203230",
+          "artifactDigest": "sha256:0dd4f602bc1cab17dfbab4ec32a42e573dfba3123004e29a362bd9a64255e1d9"
         },
         "BEHAVIOURAL": {
           "type": "BEHAVIOURAL",
-          "status": "PARTIAL",
-          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
         },
         "RESPONSIVE_VISUAL": {
           "type": "RESPONSIVE_VISUAL",
-          "status": "PARTIAL",
-          "ref": "docs/inventory/trama-component-evidence-coverage-inv03.md"
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
         },
         "ACCESSIBILITY": {
           "type": "ACCESSIBILITY",
-          "status": "PARTIAL",
-          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+          "status": "PRESENT",
+          "ref": "scripts/capture_control_center_context_help_runtime.cjs",
+          "exactHead": "183690acce0ed404d863a92d713709f25a5bfdd7",
+          "runId": "36660084169",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "artifactId": "11074450895",
+          "artifactDigest": "sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62"
         }
       },
       "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
@@ -1018,7 +1034,7 @@
         "path": "STATUS.md",
         "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1036,7 +1052,7 @@
         "path": "ROADMAP.md",
         "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1054,7 +1070,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1072,7 +1088,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1090,7 +1106,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1106,9 +1122,9 @@
       "status": "PASS",
       "source": {
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
-        "sha256": "eb8abca065f84024a37a5b0610b8dce232ad709eb84a96b4b3ede421c6002bd4"
+        "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1126,7 +1142,7 @@
         "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
         "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1672,7 +1688,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-30T02:04:39.336742+00:00",
+      "observedAt": "2026-09-30T02:41:27.617178+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
