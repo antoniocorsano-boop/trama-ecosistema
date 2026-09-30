@@ -60,7 +60,7 @@ else
 fi
 
 test -s "$OUT/index.html"
-test -s "$OUT/manifest.webmanifest"
+test -s "$OUT/manifest.json"
 test -s "$OUT/sw.js"
 test -s "$OUT/data/ecosystem-snapshot.json"
 test -s "$OUT/data/context-packs/project-knowledge.json"
