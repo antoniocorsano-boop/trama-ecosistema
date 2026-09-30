@@ -52,7 +52,8 @@ test("Maturity candidate renders LIVE_VERIFIED evidence without lifecycle promot
   await page.getByRole("button", { name: /relation-explorer/i }).click();
 
   await expect(page.getByText("Presente · live verificata")).toBeVisible();
-  await expect(page.getByText("Proposto")).toBeVisible();
-  await expect(page.getByText("Registrato", { exact: true })).toBeVisible();
-  await expect(page.getByText("Accessibilità", { exact: true })).toBeVisible();
+  const detail = page.locator(".component-detail");
+  await expect(detail.getByText("Proposto", { exact: true })).toBeVisible();
+  await expect(detail.getByText("Registrato", { exact: true })).toBeVisible();
+  await expect(detail.getByText("Accessibilità", { exact: true })).toBeVisible();
 });
