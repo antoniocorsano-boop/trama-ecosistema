@@ -49,6 +49,44 @@ anche quando la variazione riguarda solo pochi elementi.
 
 ## 3. Evidenza di partenza
 
+Le indicazioni operative rilevanti sono state ricavate dal manuale Argo didUP 4.54.0, aggiornato al 07/09/2026, in particolare dalle sezioni **Programma Scolastico** (pp. 99–101) e **Richiamo agli Argomenti** nel Giornale di classe (pp. 20–21).
+
+Il manuale documenta una struttura didattica gerarchica `classe → materia → modulo → argomenti`, il riuso tra classi e anni scolastici, l'importazione selettiva di singoli moduli, la gestione dello stato di svolgimento e un canale XLS di importazione/esportazione.
+
+### 3.1 Struttura e campi documentati
+
+Per i moduli:
+- la **descrizione** è necessaria;
+- l'**ordine** è opzionale;
+- ogni modulo contiene una lista di argomenti.
+
+Per gli argomenti:
+- la **descrizione** è necessaria;
+- **data di svolgimento** e **stato di svolgimento** sono facoltativi;
+- data e stato possono essere aggiornati automaticamente quando l'argomento viene richiamato nelle **Attività svolte** del Giornale di classe.
+
+### 3.2 Vincoli operativi documentati
+
+- un argomento già utilizzato in una valutazione non può essere cancellato;
+- il programma può essere importato da un'altra classe senza ricrearlo ex novo;
+- la sorgente può appartenere anche a un anno scolastico precedente;
+- è possibile importare l'intero programma oppure **solo alcuni moduli**;
+- i moduli importati vengono aggiunti a quelli già presenti;
+- l'XLS esportato da didUP è un artefatto condivisibile/importabile, ma il manuale sconsiglia vivamente di modificarne l'originale per evitare blocchi in importazione.
+
+### 3.3 Conseguenze di discovery
+
+Queste evidenze rafforzano quattro scelte candidate:
+
+1. **modello canonico gerarchico** allineato a modulo/argomento;
+2. **distinzione tra programmato e svolto**, perché lo stato di svolgimento evolve durante le lezioni;
+3. **riuso nativo Argo per moduli** da preferire, quando sufficiente, rispetto alla manipolazione dell'XLS;
+4. **conflitto governato sulle cancellazioni**, perché una rimozione locale non implica automaticamente cancellazione possibile in Argo.
+
+La struttura interna dell'XLS (fogli, colonne, metadati, identificatori, regole sui duplicati) non è documentata nel manuale e resta una lacuna di G1.
+
+
+
 Il manuale **Argo didUP 4.54.0**, aggiornato al **07/09/2026**, nella sezione **Programma Scolastico** (pagine 100–101):
 
 - consente di importare moduli e argomenti da un'altra classe e anche da un anno scolastico precedente;
@@ -172,6 +210,10 @@ updated_at
 
 ## 8. Change Detection Engine candidato
 
+Il motore deve distinguere tra **struttura pianificata** e **stato di attuazione**. Una variazione dello stato `svolto/non svolto` o della data di svolgimento non deve essere interpretata come modifica strutturale del contenuto.
+
+
+
 Il confronto avviene per entità persistente e non per posizione di cella.
 
 Stati candidati del delta:
@@ -180,6 +222,7 @@ Stati candidati del delta:
 - `MODIFIED`;
 - `UNCHANGED`;
 - `REMOVED`;
+- `PERFORMANCE_STATUS_CHANGED`;
 - `MOVED`;
 - `CONFLICT`.
 
@@ -268,6 +311,18 @@ La conferma umana dell'importazione chiude il ciclo e abilita la nuova baseline.
 
 ## 14. Riuso tra classi e anni
 
+Il manuale documenta già un meccanismo nativo di riuso in Argo: selezione di classe/materia sorgente, anche da anno scolastico precedente, e importazione dell'intero programma o di soli moduli selezionati.
+
+Conseguenza: la strategia di integrazione deve adottare una **preferenza nativa-first**:
+
+```text
+1. riuso/importazione nativa Argo per moduli, se sufficiente;
+2. XLS come canale di interoperabilità qualificato;
+3. nessuna manipolazione arbitraria dell'XLS originale.
+```
+
+
+
 Il modello dovrebbe supportare:
 
 - riuso da anno precedente;
@@ -290,6 +345,11 @@ Le seguenti assunzioni non sono ancora decisioni approvate:
 
 ## 16. Rischi e incertezze
 
+- duplicazione di moduli quando un'importazione nativa aggiunge elementi già presenti;
+- impossibilità di cancellare argomenti già collegati a valutazioni;
+- disallineamento tra programma pianificato in Docente OS e stato di svolgimento aggiornato direttamente nel Giornale di classe;
+
+
 - formato Argo non documentato come contratto stabile;
 - possibile differenza di struttura tra versioni didUP, istituti o configurazioni;
 - perdita di identità in round-trip se l'XLS Argo non conserva identificatori esterni;
@@ -300,6 +360,9 @@ Le seguenti assunzioni non sono ancora decisioni approvate:
 - possibile necessità di gestire più file/profili per classi o discipline differenti.
 
 ## 17. Open questions per G1/G2
+
+0. Qual è la semantica esatta dei duplicati quando Argo aggiunge moduli importati a quelli già presenti?
+
 
 1. Qual è la struttura effettiva di un XLS esportato da didUP 4.54.0?
 2. Quali campi sono obbligatori e quali tollerano valori aggiuntivi?
@@ -372,6 +435,17 @@ Pertanto a G2 deve essere valutata formalmente come **ADR-required** prima di qu
 Questi punti restano candidati a `REJECTED` o `DEFERRED` a G2; non vengono cancellati dalla memoria progettuale.
 
 ## 22. Primo slice di discovery
+
+La discovery va ora separata in due filoni:
+
+### Filone A — comportamento nativo documentato
+1. formalizzare il mapping modulo/argomento;
+2. formalizzare la distinzione planned/performed;
+3. definire la regola `REMOVED → CONFLICT` quando l'argomento risulta valutato o non cancellabile;
+4. modellare il riuso nativo Argo come strategia preferenziale.
+
+### Filone B — formato XLS non documentato
+
 
 Prima di qualunque runtime:
 
