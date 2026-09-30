@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TRAMA Control Center · CS-S1 Context Help Lab</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#071824;--surface:#0b2235;--surface2:#102b40;--line:#31566e;
+  --text:#f4f8fb;--muted:#adc0cc;--info:#58bff7;--focus:#8bd5ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif}
+main{width:min(920px,100%);margin:auto;padding:24px 16px 96px}
+h1{font-size:clamp(24px,5vw,38px);line-height:1.1;margin:0 0 10px}
+.lede{color:var(--muted);max-width:70ch}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:28px}
+.case{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:18px;min-width:0}
+.case h2{font-size:18px;margin:0 0 8px}
+.case p{color:var(--muted)}
+button{font:inherit;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface2);color:var(--text);padding:9px 12px;cursor:pointer}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.baseline-help{
+  position:fixed;z-index:30;right:18px;bottom:18px;width:min(390px,calc(100vw - 24px));
+  padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#0b2235f5;
+  box-shadow:0 20px 50px #0008;display:none
+}
+.baseline-help.open{display:block}
+.baseline-help button,.native-help button{float:right}
+.native-help{
+  position:fixed;inset:auto;margin:0;
+  width:min(390px,calc(100vw - 24px));max-height:min(60vh,460px);overflow:auto;
+  padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#0b2235;
+  color:var(--text);box-shadow:0 20px 50px #0008;
+  position-area:block-end span-inline-end;
+  position-try-fallbacks:block-start span-inline-end,block-end span-inline-start,block-start span-inline-start
+}
+.native-help::backdrop{background:transparent}
+.native-help strong,.baseline-help strong{display:block;margin:0 36px 5px 0}
+.note{margin-top:20px;padding:14px;border-left:4px solid var(--info);background:#0a2032}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+@supports not (position-area:block-end){
+  .native-help{right:12px;bottom:84px}
+}
+@media(max-width:640px){
+  main{padding:18px 12px 96px}
+  .grid{grid-template-columns:1fr}
+  .case{padding:14px}
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>CS-S1 · Aiuto contestuale</h1>
+  <p class="lede">Laboratorio isolato. Confronta il comportamento attuale del Control Center con un candidato basato sulle API native del browser. Non modifica il runtime pubblico.</p>
+
+  <div class="grid">
+    <section class="case" aria-labelledby="baseline-title">
+      <h2 id="baseline-title">A · Baseline personalizzata</h2>
+      <p>Replica minima del comportamento attuale: contenitore con <span class="mono">role="dialog"</span>, apertura gestita da JavaScript, chiusura con pulsante o Escape.</p>
+      <button id="baselineTrigger" type="button">Informazioni baseline</button>
+    </section>
+
+    <section class="case" aria-labelledby="native-title">
+      <h2 id="native-title">B · Candidato nativo</h2>
+      <p>Usa <span class="mono">popover="auto"</span> e un invocatore dichiarativo. Il browser gestisce relazione con l’invocatore, ordine del focus e chiusura leggera.</p>
+      <button id="nativeTrigger" type="button" popovertarget="nativeHelp">Informazioni native</button>
+    </section>
+  </div>
+
+  <div class="note">
+    <strong>Confine della prova</strong>
+    <div>La variante Web Awesome resta un confronto di capacità/documentazione: nessuna dipendenza di runtime viene installata o autorizzata da questo laboratorio.</div>
+  </div>
+</main>
+
+<div id="baselineHelp" class="baseline-help" role="dialog" aria-label="Informazioni contestuali baseline">
+  <button id="baselineClose" type="button" aria-label="Chiudi baseline">×</button>
+  <strong>Baseline personalizzata</strong>
+  <div>Aiuto contestuale gestito con JavaScript locale.</div>
+</div>
+
+<aside id="nativeHelp" class="native-help" popover="auto" aria-label="Informazioni contestuali native">
+  <button type="button" popovertarget="nativeHelp" popovertargetaction="hide" aria-label="Chiudi aiuto nativo">×</button>
+  <strong>Candidato nativo</strong>
+  <div>Aiuto contestuale non modale, controllato dalle API native Popover.</div>
+</aside>
+
+<script>
+const baselineTrigger=document.getElementById('baselineTrigger');
+const baselineHelp=document.getElementById('baselineHelp');
+const baselineClose=document.getElementById('baselineClose');
+function baselineShow(){baselineHelp.classList.add('open')}
+function baselineHide(){baselineHelp.classList.remove('open')}
+baselineTrigger.addEventListener('focus',baselineShow);
+baselineTrigger.addEventListener('mouseover',baselineShow);
+baselineTrigger.addEventListener('click',baselineShow);
+baselineClose.addEventListener('click',baselineHide);
+document.addEventListener('keydown',event=>{if(event.key==='Escape')baselineHide()});
+</script>
+</body>
+</html>
