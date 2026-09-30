@@ -37,7 +37,14 @@ assert "project-knowledge" in subjects
 doc_ids = {x["id"] for x in receipt["governedContext"]["governedDocuments"]}
 assert "DOC-TRAMA-COMPONENT-EVIDENCE-REGISTRY" in doc_ids
 assert "DOC-CONTROL-CENTER-HUMAN-READABLE-IA" in doc_ids
+assert "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE" in doc_ids
 assert "DOC-CONTROL-CENTER-V2-ARCHITECTURE" in doc_ids
+docs = receipt["governedContext"]["governedDocuments"]
+current_arch_index = next(i for i, x in enumerate(docs) if x["id"] == "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE")
+legacy_arch_index = next(i for i, x in enumerate(docs) if x["id"] == "DOC-CONTROL-CENTER-V2-ARCHITECTURE")
+assert docs[current_arch_index]["status"] == "CURRENT"
+assert docs[legacy_arch_index]["status"] == "SUPERSEDED"
+assert current_arch_index < legacy_arch_index
 assert "DOC-CONTROL-CENTER-V2-UI-SPEC" in doc_ids
 assert "DOC-CC2-F4-CAPABILITY-ECOSYSTEM-MAP" in doc_ids
 assert receipt["governedContext"]["negativeKnowledgeChecked"] is True
