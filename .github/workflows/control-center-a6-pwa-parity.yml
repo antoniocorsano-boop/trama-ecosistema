@@ -47,6 +47,8 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: A6 browser PWA parity qualification
         run: npx playwright test e2e/a6-pwa-parity.spec.ts
+      - name: A6 visual regression
+        run: npx playwright test e2e/a6-visual.spec.ts
       - uses: actions/upload-artifact@v4
         if: always()
         with:
