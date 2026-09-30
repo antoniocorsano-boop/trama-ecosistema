@@ -134,6 +134,27 @@ Migrate:
 
 The Home remains overview-only.
 
+### A3 materialized Overview + navigation
+
+State: **QUALIFIED — exact head `9f8d7e3062ac1990e7a505e04b8253a94283ba58` / run `36693184969` PASS**.
+
+Reference:
+- `docs/implementation/trama-control-center-a3-overview-navigation.md`;
+- `governance/control-center/trama-control-center-a3-overview-qualification.json`.
+
+Materialized:
+- human-readable Overview as candidate Home;
+- R1–R5 orientation without phase activation authority;
+- blocking-decision presentation without false urgency;
+- Project Knowledge contextual state;
+- progressive navigation with only migrated routes actionable;
+- persistent phone navigation;
+- desktop / phone / LIM evidence;
+- axe and zero-external-request browser qualification;
+- A1 and A2 regression PASS.
+
+Legacy public Home remains unchanged.
+
 ## A4 — Ecosystem + Evidence
 
 Migrate:
