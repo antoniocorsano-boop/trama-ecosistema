@@ -15,6 +15,7 @@ jobs:
       - {name: Install governed M1-A HTTP dependency, run: python3 -m pip install --disable-pip-version-check "httpx==0.28.1"}
       - {name: Validate governance, run: python3 scripts/validate_governance.py}
       - {name: Validate governed document registry, run: python3 scripts/validate_governed_document_registry.py}
+      - {name: Validate Control Center A0 architecture lock, run: python3 scripts/validate_control_center_a0_architecture_lock.py}
       - {name: Validate Stage E1 visual prototype, run: python3 scripts/validate_stage_e1_visual_prototype.py}
       - {name: Test Stage E2 project knowledge UI mapping, run: node scripts/test_stage_e2_project_knowledge_ui.cjs}
       - {name: Validate Stage E3 human-use catalog, run: python3 scripts/validate_stage_e3_human_use.py}
