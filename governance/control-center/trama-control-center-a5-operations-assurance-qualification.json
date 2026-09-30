@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "trama.control-center-a5-operations-assurance-qualification/v1",
+  "id": "TRAMA-CC-APP-A5-QUAL-01",
+  "status": "QUALIFIED",
+  "qualifiedAt": "2026-09-30",
+  "repository": "antoniocorsano-boop/trama-ecosistema",
+  "qualifiedHead": "d883c924dbe587254c88496276131d00c37992f3",
+  "workflow": {
+    "name": "Control Center A5 Operations Assurance",
+    "runId": 36698832261,
+    "conclusion": "SUCCESS"
+  },
+  "artifact": {
+    "id": 11089351441,
+    "name": "control-center-a5-operations-assurance-d883c924dbe587254c88496276131d00c37992f3",
+    "digest": "sha256:d0e90c3099a50a160cbf9e47c2b6b2c754297600ae72239770a4c85286accea4"
+  },
+  "gates": {
+    "npmCi": "PASS",
+    "typecheck": "PASS",
+    "unitComponentTests": {
+      "status": "PASS",
+      "passed": 21,
+      "total": 21
+    },
+    "build": "PASS",
+    "bundleBudget": {
+      "status": "PASS",
+      "entryJsGzipBytes": 132125,
+      "entryLimitGzipBytes": 184320,
+      "graphJsGzipBytes": 57387,
+      "graphLimitGzipBytes": 256000,
+      "cssGzipBytes": 7244,
+      "cssLimitGzipBytes": 51200,
+      "additionalA5SpecialistChunk": false
+    },
+    "governedArtifactSecurityBoundary": "PASS",
+    "browserQualification": {
+      "status": "PASS",
+      "passed": 6,
+      "total": 6
+    },
+    "axe": "PASS",
+    "overflowCanonicalViewports": "PASS",
+    "zeroExternalRuntimeRequests": "PASS",
+    "canonicalViewports": [
+      "desktop-1440x900",
+      "phone-pixel7",
+      "lim-1920x1080"
+    ],
+    "a1Regression": {
+      "status": "PASS",
+      "runId": 36698832301
+    },
+    "a2Regression": {
+      "status": "PASS",
+      "runId": 36698832244
+    },
+    "a3Regression": {
+      "status": "PASS",
+      "runId": 36698832257
+    },
+    "a4Regression": {
+      "status": "PASS",
+      "runId": 36698832522
+    },
+    "governance": {
+      "status": "PASS",
+      "runId": 36698832295
+    }
+  },
+  "semantics": {
+    "timelineCoverage": "PARTIAL_EXPLICIT",
+    "parallelRoadmap": false,
+    "overallScore": false,
+    "certificationInference": false,
+    "formalCertificationRequires": [
+      "externalCertificateRef",
+      "assessor"
+    ],
+    "explicitDefer": "DOS-A1"
+  },
+  "dependencyAdmission": {
+    "newRuntimeDependencies": []
+  },
+  "boundaries": {
+    "legacyOperationsModified": false,
+    "legacyHomeAssuranceModified": false,
+    "legacyServiceWorkerModified": false,
+    "publicCutoverAuthorized": false,
+    "renderProductionModified": false,
+    "browserGithubAuthority": false,
+    "repositoryWriteCapability": false,
+    "overallScore": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "nextStage": "A6_PWA_SECURITY_ACCESSIBILITY_PARITY"
+}

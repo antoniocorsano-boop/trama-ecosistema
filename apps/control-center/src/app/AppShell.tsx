@@ -22,7 +22,8 @@ export function AppShell({ children }: Props) {
         <NavLink to="/maturity">Maturità</NavLink>
         <NavLink to="/ecosystem">Ecosistema</NavLink>
         <NavLink to="/evidence">Evidenze</NavLink>
-        <span aria-disabled="true" data-stage="A5">Operazioni</span>
+        <NavLink to="/operations">Operazioni</NavLink>
+        <NavLink to="/assurance">Assurance</NavLink>
       </nav>
 
       <main id="main-content">{children}</main>

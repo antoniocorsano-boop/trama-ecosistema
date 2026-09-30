@@ -18,6 +18,7 @@ describe("AppShell", () => {
     expect(screen.getByRole("link", { name: "Maturità" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Ecosistema" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Evidenze" })).toBeInTheDocument();
-    expect(screen.getByText("Operazioni")).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("link", { name: "Operazioni" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Assurance" })).toBeInTheDocument();
   });
 });

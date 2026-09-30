@@ -169,8 +169,20 @@ export function OverviewView({
             </span>
             <em>Disponibile →</em>
           </Link>
-          <Destination label="Operazioni" description="Percorso operativo e cronologia governata" stage="A5" />
-          <Destination label="Assurance" description="Privacy, accessibilità, sicurezza e readiness" stage="A5" />
+          <Link className="destination is-available" to="/operations">
+            <span>
+              <strong>Operazioni</strong>
+              <small>Percorso operativo, defer e cronologia governata</small>
+            </span>
+            <em>Disponibile →</em>
+          </Link>
+          <Link className="destination is-available" to="/assurance">
+            <span>
+              <strong>Assurance</strong>
+              <small>Stato, target, gap evidenziali e limiti delle dichiarazioni</small>
+            </span>
+            <em>Disponibile →</em>
+          </Link>
         </nav>
       </section>
 

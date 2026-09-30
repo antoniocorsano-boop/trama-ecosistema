@@ -202,6 +202,28 @@ Migrate:
 
 No overall score is introduced.
 
+### A5 materialized Operations + Assurance
+
+State: **QUALIFIED — exact head `d883c924dbe587254c88496276131d00c37992f3` / run `36698832261` PASS**.
+
+Reference:
+- `docs/implementation/trama-control-center-a5-operations-assurance.md`;
+- `governance/control-center/trama-control-center-a5-operations-assurance-qualification.json`.
+
+Materialized:
+- modular Operations and Assurance routes;
+- operational path without parallel-roadmap inference;
+- governed timeline with PARTIAL_EXPLICIT coverage;
+- explicit DOS-A1 defer;
+- evidence-backed assurance status/target/gaps;
+- no overall score;
+- no certification inference;
+- no new npm dependency;
+- desktop / phone / LIM + axe + zero-external-request evidence;
+- A1/A2/A3/A4 regression PASS.
+
+Legacy production remains unchanged.
+
 ## A6 — PWA, security, accessibility and parity
 
 Complete:
