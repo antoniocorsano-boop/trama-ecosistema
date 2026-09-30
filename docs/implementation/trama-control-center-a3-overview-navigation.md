@@ -1,7 +1,7 @@
 # TRAMA Control Center — A3 Overview + Navigation
 
 **Document ID:** TRAMA-CC-APP-A3-OVERVIEW-01  
-**Status:** IMPLEMENTATION_CANDIDATE / PREVIEW_ONLY / READ_ONLY  
+**Status:** QUALIFIED / PREVIEW_ONLY / READ_ONLY  
 **Parent:** TRAMA-CC-APP-ARCH-01 · TRAMA-CC-APP-MIGRATION-01 · TRAMA-CC-APP-A2-MATURITY-01  
 **Production impact:** NONE  
 **Public cutover:** NOT_AUTHORIZED  
@@ -159,7 +159,25 @@ The legacy Home remains public production until A7.
 
 ## 11. Exit condition
 
-A3 is QUALIFIED only when the final exact head passes:
+A3 is **QUALIFIED**. Receipt: `governance/control-center/trama-control-center-a3-overview-qualification.json`.
+
+Qualified evidence:
+
+- exact head: `9f8d7e3062ac1990e7a505e04b8253a94283ba58`;
+- A3 workflow run: `36693184969` — SUCCESS;
+- artifact: `11086642804`;
+- artifact digest: `sha256:17f4af77a20e0718ff5d3d02de21805fc7190db17efa46cda01d6cae79acb348`;
+- 14/14 unit/component tests PASS;
+- 6/6 browser tests PASS;
+- axe PASS on desktop, phone and LIM;
+- zero external runtime requests PASS;
+- initial JS: `127825` bytes gzip ≤ `184320` bytes;
+- A1 regression PASS;
+- A2 regression PASS;
+- Governance PASS;
+- Project Knowledge Runtime PASS.
+
+The qualification covered:
 
 - A1 regression;
 - A2 regression;
