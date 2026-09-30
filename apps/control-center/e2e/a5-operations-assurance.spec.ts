@@ -8,7 +8,9 @@ test("Operations exposes governed path, explicit defer and semantic timeline",as
  await expect(page.getByRole("heading",{name:"Percorso operativo e cronologia governata"})).toBeVisible();
  await expect(page.getByText(/TRAMA-SA-01/)).toBeVisible();
  await expect(page.getByText(/DOS-A1/)).toBeVisible();
- await expect(page.getByText("DEFERRED",{exact:true}).first()).toBeVisible();
+ const deferBlock=page.getByRole("heading",{name:"Defer espliciti"}).locator("..");
+ await expect(deferBlock.getByText(/DOS-A1/)).toBeVisible();
+ await expect(deferBlock.getByText(/DEFERRED/)).toBeVisible();
  await page.getByRole("tab",{name:"Cronologia governata"}).click();
  await expect(page.getByText(/Copertura timeline: PARTIAL_EXPLICIT/)).toBeVisible();
  await expect(page.getByText("EVT-CC3-F1-HUMAN-PASS",{exact:true})).toBeVisible();
