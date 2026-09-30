@@ -85,6 +85,23 @@ Invarianti confermate:
 
 Il filone OR non ha ulteriori slice automatiche. Qualunque passaggio a esecuzione reale richiede un nuovo dossier e una nuova Human Review separata.
 
+## QE-01 — Prima Qualified Execution limitata
+
+Stato: **HUMAN APPROVED / AUTHORIZED_PENDING_PROVIDER_QUALIFICATION**.
+
+Decisione umana del 2026-09-30:
+- autorizzata una sola Qualified Execution governata della capability `lesson.preparation.observe`;
+- mode massimo `PROPOSE_ONLY`;
+- one-shot;
+- `maxRetries = 0`;
+- nessuna mutazione;
+- nessun dato personale studente;
+- decision owner: docente in Docente OS;
+- Control Center READ_ONLY;
+- `DOS-A1 = RUNTIME_DEFERRED`.
+
+L'autorizzazione non è ancora eseguibile. Nel repository non risulta un provider reale qualificato: `offline-dsh-fixture` resta una fixture. Prima dell'esecuzione devono risultare PASS provider/adapter reali, profilo congelato, rete/secret policy, privacy, timeout/cancel/cleanup, evidence receipt, stale/failure normalization, fallback manuale e Human exact-head review.
+
 ## TRAMA Control Center v2 — maturità, evidenze e project knowledge
 
 Il Control Center v2 è operativo come osservatorio **snapshot-first, read-only e senza overall score**.
