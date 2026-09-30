@@ -1142,6 +1142,32 @@
         "LIVE_COMPONENT_EVIDENCE_CHANGE",
         "A2_QUALIFICATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A3-OVERVIEW",
+      "path": "docs/implementation/trama-control-center-a3-overview-navigation.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "overview",
+        "navigation",
+        "project-knowledge",
+        "mobile-navigation"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION",
+        "DOC-CONTROL-CENTER-A2-MATURITY"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_A3_OVERVIEW_CHANGE",
+        "PROJECT_KNOWLEDGE_PRESENTATION_CHANGE",
+        "CONTROL_CENTER_NAVIGATION_CHANGE",
+        "A3_QUALIFICATION_CHANGE"
+      ]
     }
   ]
 }
