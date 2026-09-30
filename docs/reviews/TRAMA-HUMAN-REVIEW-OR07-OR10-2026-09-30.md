@@ -22,7 +22,7 @@ Consolidare in un solo pacchetto la Human Review della catena accelerata OR-07‚Ü
 | #206 | OR-09 Qualified Execution Readiness | `7a0181d51fc4103f3ef8662e01d7d321e53e34af` | qualified |
 | #207 | OR-09-P1 readiness validator | `4b85463dcb06a5d8fef7a93e896daaf66dcff045` | Governance PASS |
 | #208 | OR-10 Product Integrations Contract | `78a04afce2e315944e710c81053095231f1a6de3` | qualified |
-| #209 | OR-10-X evidence alignment | `26d0543863534d797c669a9cd66f39b41b73a217` | verifying |
+| #209 | OR-10-X evidence alignment | `26d0543863534d797c669a9cd66f39b41b73a217` | Governance PASS / integrated |
 
 ## 3. Slice prodotto
 
@@ -97,22 +97,22 @@ NON autorizza:
 
 ## 7. Checklist Human Review
 
-- [ ] exact heads invariati;
-- [ ] gate finali PASS;
-- [ ] nessun thread aperto;
-- [ ] diff coerenti con i perimetri dichiarati;
-- [ ] nessuna authority drift;
-- [ ] nessuna capability mutativa;
-- [ ] OR-09 non supera AWAITING_HUMAN_AUTHORIZATION;
-- [ ] product-local boundaries coerenti;
-- [ ] stacked order TRAMA rispettabile;
-- [ ] Human decision registrata prima dei merge.
+- [x] exact heads invariati;
+- [x] gate finali PASS sugli exact head qualificati;
+- [x] nessun thread aperto prima dell'integrazione; i rilievi finali sul presente pacchetto sono stati corretti e risolti prima del merge;
+- [x] diff coerenti con i perimetri dichiarati;
+- [x] nessuna authority drift;
+- [x] nessuna capability mutativa;
+- [x] OR-09 non supera AWAITING_HUMAN_AUTHORIZATION;
+- [x] product-local boundaries coerenti;
+- [x] stacked order TRAMA rispettato;
+- [x] Human decision registrata prima dei merge.
 
 ## 8. Decisione
 
 **HUMAN_APPROVED / INTEGRATION_COMPLETED.**
 
-Il pacchetto verr√† aggiornato a `HUMAN_APPROVED / INTEGRATED` soltanto dopo decisione esplicita e integrazione verificata.
+La decisione esplicita e l'integrazione verificata sono registrate nella sezione 9.
 
 
 ## 9. Decisione umana e integrazione
