@@ -1115,6 +1115,33 @@
         "CONTROL_CENTER_DEPENDENCY_CHANGE",
         "A1_QUALIFICATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A2-MATURITY",
+      "path": "docs/implementation/trama-control-center-a2-maturity.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "maturity",
+        "component-evidence",
+        "accessibility",
+        "frontend-testing"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION",
+        "DOC-CONTROL-CENTER-A1-FOUNDATION",
+        "DOC-CONTROL-CENTER-FRONTEND-DEPENDENCY-POLICY"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_A2_MATURITY_CHANGE",
+        "COMPONENT_MATURITY_MODEL_CHANGE",
+        "LIVE_COMPONENT_EVIDENCE_CHANGE",
+        "A2_QUALIFICATION_CHANGE"
+      ]
     }
   ]
 }
