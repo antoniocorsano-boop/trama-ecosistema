@@ -26,5 +26,9 @@ export default defineConfig({
       name: "lim",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1920, height: 1080 } },
     },
+    {
+      name: "reflow-320",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 320, height: 900 } },
+    },
   ],
 });
