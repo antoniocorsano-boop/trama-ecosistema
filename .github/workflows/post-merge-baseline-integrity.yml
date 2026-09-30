@@ -33,5 +33,8 @@ jobs:
       - name: Verify Component Evidence Lane v2 effective read model
         run: python scripts/test_component_evidence_lane_v2.py
 
+      - name: Verify Control Center live component evidence composition
+        run: python scripts/test_control_center_live_component_evidence.py
+
       - name: Verify post-merge check remains read-only
         run: python scripts/test_post_merge_baseline_integrity_contract.py

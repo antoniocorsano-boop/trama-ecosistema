@@ -74,6 +74,11 @@
     return EVIDENCE_STATUS_LABELS[value]||String(value||'—').replaceAll('_',' ');
   }
 
+  function evidenceDisplayLabel(item){
+    const status=evidenceStatusLabel(item?.status||'NOT_OBSERVED');
+    return item?.sourcePlane==='LIVE_VERIFIED'?status+' · live verificata':status;
+  }
+
   function shortName(component){
     const target=String(component.target||'');
     if(target){
@@ -203,10 +208,11 @@
     evidence.className='component-evidence-mini';
     ['ISOLATED','BEHAVIOURAL','RESPONSIVE_VISUAL','ACCESSIBILITY'].forEach(type=>{
       const item=document.createElement('li');
-      const status=component.evidenceStatus?.[type]?.status||'NOT_OBSERVED';
+      const evidenceItem=component.evidenceStatus?.[type]||{status:'NOT_OBSERVED'};
+      const status=evidenceItem.status||'NOT_OBSERVED';
       item.innerHTML='<span></span><b></b>';
       item.children[0].textContent=evidenceGapLabel(type);
-      item.children[1].textContent=evidenceStatusLabel(status);
+      item.children[1].textContent=evidenceDisplayLabel(evidenceItem);
       item.dataset.status=status;
       evidence.appendChild(item);
     });
@@ -369,7 +375,7 @@
     return {redraw,select,getFilter:()=>filter};
   }
 
-  const api={STAGES,STAGE_LABELS,LIFECYCLE_LABELS,SOURCE_LABELS,EVIDENCE_STATUS_LABELS,buildModel,componentDescription,productLabel,lifecycleLabel,sourceLabel,evidenceStatusLabel,shortName,render};
+  const api={STAGES,STAGE_LABELS,LIFECYCLE_LABELS,SOURCE_LABELS,EVIDENCE_STATUS_LABELS,buildModel,componentDescription,productLabel,lifecycleLabel,sourceLabel,evidenceStatusLabel,evidenceDisplayLabel,shortName,render};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.TRAMAMaturityMap=api;
 })(typeof window!=='undefined'?window:globalThis);

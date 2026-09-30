@@ -55,11 +55,18 @@ def evidence_index(entry: dict) -> dict[str, dict]:
     return out
 
 
-def _highest_contiguous_stage(index: dict[str, dict], accepted_statuses: set[str]) -> str:
+def _highest_contiguous_stage(
+    index: dict[str, dict],
+    accepted_statuses: set[str],
+    *,
+    allow_live: bool = True,
+) -> str:
     stage = "REGISTERED"
     for stage_name, evidence_type in STAGES[1:]:
         item = index.get(evidence_type)
         if item is None or item.get("status") not in accepted_statuses:
+            break
+        if not allow_live and item.get("sourcePlane") == "LIVE_VERIFIED":
             break
         stage = stage_name
     return stage
@@ -79,8 +86,8 @@ def project_component(entry: dict, source_ref: str) -> dict:
         invalid(f"{component_id}: invalid sourceClass")
 
     index = evidence_index(entry)
-    confirmed = _highest_contiguous_stage(index, CONFIRMED_STATUSES)
-    candidate = _highest_contiguous_stage(index, CANDIDATE_STATUSES)
+    confirmed = _highest_contiguous_stage(index, CONFIRMED_STATUSES, allow_live=False)
+    candidate = _highest_contiguous_stage(index, CANDIDATE_STATUSES, allow_live=True)
 
     if _stage_rank(candidate) < _stage_rank(confirmed):
         invalid(f"{component_id}: candidate stage below confirmed stage")
