@@ -1,0 +1,36 @@
+name: Control Center A7 Cutover Preflight
+
+on:
+  pull_request:
+    paths:
+      - "docs/implementation/trama-control-center-a7-public-cutover.md"
+      - "governance/control-center/trama-control-center-a7-cutover-preflight.json"
+      - "scripts/validate_control_center_a7_cutover_preflight.py"
+      - "scripts/build_control_center_a7_candidate.sh"
+      - "apps/control-center/**"
+      - "control-center/**"
+      - ".github/workflows/control-center-a7-cutover-preflight.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: apps/control-center/package-lock.json
+      - name: Validate A7 preflight contract
+        run: python scripts/validate_control_center_a7_cutover_preflight.py
+      - name: Build reversible A7 candidate without live network overlays
+        env:
+          TRAMA_RENDER_SKIP_LIVE: "1"
+        run: bash scripts/build_control_center_a7_candidate.sh
