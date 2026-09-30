@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "trama.human-review-package/v1",
+  "id": "TRAMA-HR-OR07-OR10-2026-09-30",
+  "status": "AWAITING_HUMAN_DECISION",
+  "date": "2026-09-30",
+  "invariants": {
+    "arenaAuthorityPreserved": true,
+    "atlasOptional": true,
+    "atlasCurriculumAuthority": false,
+    "docenteOsTeacherFirst": true,
+    "controlCenterReadOnly": true,
+    "newWriteAuthority": false,
+    "liveRuntimeAuthorized": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "productCandidates": [
+    {
+      "repo": "antoniocorsano-boop/CurManLight_arena",
+      "pr": 345,
+      "exactHead": "d7c2575260de6fb58aae58c12a82caf76440e823",
+      "decision": "PENDING"
+    },
+    {
+      "repo": "antoniocorsano-boop/docente-os-2026-27",
+      "pr": 645,
+      "exactHead": "984abbd06fd43bd0e726936f9da6188fb9e52ec0",
+      "decision": "PENDING"
+    },
+    {
+      "repo": "antoniocorsano-boop/Curriculum-Atlas",
+      "pr": 66,
+      "exactHead": "fe3b70d750e9cfab489518187935b4e8bca3aa13",
+      "decision": "PENDING"
+    }
+  ],
+  "tramaStack": [
+    {
+      "pr": 202,
+      "exactHead": "0e1e31d6c9b24b62e6096528debb48b253d99a83"
+    },
+    {
+      "pr": 203,
+      "exactHead": "40e247f85b48b37a300cb0edbd98e7b800139350"
+    },
+    {
+      "pr": 204,
+      "exactHead": "cc8232e20f97a9e3775f64dcd01365914fda61db"
+    },
+    {
+      "pr": 205,
+      "exactHead": "cb7a618f8b7f993f9dcf1e0501d8a6e14f7752d8"
+    },
+    {
+      "pr": 206,
+      "exactHead": "7a0181d51fc4103f3ef8662e01d7d321e53e34af"
+    },
+    {
+      "pr": 207,
+      "exactHead": "4b85463dcb06a5d8fef7a93e896daaf66dcff045"
+    },
+    {
+      "pr": 208,
+      "exactHead": "78a04afce2e315944e710c81053095231f1a6de3"
+    },
+    {
+      "pr": 209,
+      "exactHead": "26d0543863534d797c669a9cd66f39b41b73a217"
+    }
+  ],
+  "maximumAuthorizedScope": "NO_RUNTIME_INTEGRATION_ONLY",
+  "automaticMergeAuthorized": false
+}
