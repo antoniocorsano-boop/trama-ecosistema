@@ -39,6 +39,7 @@ validate(Path('schemas/live-repository-overlay.schema.json'),Path('control-cente
 validate(Path('schemas/effective-project-context.schema.json'),Path('control-center/fixtures/project-knowledge/effective-context-head-drift.json'))
 validate(Path('schemas/effective-project-context.schema.json'),Path('control-center/fixtures/project-knowledge/effective-context-semantic-drift.json'))
 validate(Path('schemas/effective-project-context.schema.json'),Path('control-center/fixtures/project-knowledge/effective-context-partial.json'))
+validate(Path('schemas/live-component-evidence-overlay.schema.json'),Path('control-center/fixtures/project-knowledge/live-component-evidence-atlas-r1.json'))
 
 import importlib.util
 spec=importlib.util.spec_from_file_location('session_bootstrap',ROOT/'scripts/build_session_bootstrap.py')
