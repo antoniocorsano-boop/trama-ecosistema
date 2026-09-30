@@ -182,7 +182,7 @@ Implementation tracking:
 - dependency additions: 0;
 - status: Draft / mergeable; CI evidence pending.
 
-### OR-05-I2 — Arena dead legacy removal — **IMPLEMENTED / VERIFYING**
+### OR-05-I2 — Arena dead legacy removal — **QUALIFIED / PENDING HUMAN INTEGRATION**
 La verifica live ha corretto l'ipotesi iniziale: non esistono call site produttivi dei componenti legacy `ConfirmDialog` e `Tabs`. I call site reali di conferma usano già `UiConfirmDialog`; `UiTabs` resta qualificato ma non ha oggi call site produttivi.
 
 Perimetro implementato:
@@ -200,7 +200,7 @@ Implementation tracking:
 - base: `main@a89553c0a3daa71555b6a9ec3a07c3edbf19a176`;
 - changed files: 3;
 - diff: 0 additions / 93 deletions;
-- status: Draft / mergeable; qualification in corso.
+- status: Draft / mergeable; Product CI PASS; Beta Release Contract PASS; TRAMA Perceptible Write PASS; nessun merge automatico.
 
 ### OR-05-I3 — Atlas no-op preservation + evidence
 - nessuna migrazione componenti;
