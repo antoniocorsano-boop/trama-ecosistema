@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { loadEcosystemSnapshot, type SnapshotLoadState } from "../../data/client";
 import { toMaturitySnapshot } from "../../domain/maturity/adapter";
 import {
@@ -196,7 +196,7 @@ function FilterButton({
 }: {
   active: boolean;
   onClick: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <button type="button" aria-pressed={active} onClick={onClick}>
