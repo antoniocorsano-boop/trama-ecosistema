@@ -1,0 +1,65 @@
+name: TRAMA Control Center Context Help Evidence
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'control-center/context-help.js'
+      - 'control-center/fixtures/context-help.html'
+      - 'control-center/index.html'
+      - 'control-center/sw.js'
+      - 'scripts/capture_control_center_context_help.mjs'
+      - 'scripts/test_control_center_context_help.cjs'
+      - 'docs/contracts/trama-control-center-context-help-cs-s1.md'
+      - '.github/workflows/control-center-context-help.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'control-center/context-help.js'
+      - 'control-center/fixtures/context-help.html'
+      - 'control-center/index.html'
+      - 'control-center/sw.js'
+      - 'scripts/capture_control_center_context_help.mjs'
+      - 'scripts/test_control_center_context_help.cjs'
+      - 'docs/contracts/trama-control-center-context-help-cs-s1.md'
+      - '.github/workflows/control-center-context-help.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  context-help-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      TRAMA_EXACT_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+      TRAMA_RUN_ID: ${{ github.run_id }}
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate static Context Help contract
+        run: node scripts/test_control_center_context_help.cjs
+      - name: Install pinned browser evidence dependencies
+        run: npm install --no-save --no-package-lock playwright@1.61.1 axe-core@4.12.1
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Capture isolated keyboard responsive accessibility evidence
+        run: node scripts/capture_control_center_context_help.mjs
+      - name: Upload governed Context Help evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trama-cc-context-help-${{ github.event.pull_request.head.sha || github.sha }}
+          path: artifacts/cc-context-help-cs-s1
+          if-no-files-found: error
+          retention-days: 30
+      - name: Qualification boundary
+        if: always()
+        run: echo 'Automated Context Help evidence does not authorize lifecycle promotion or replace human assistive-technology review.'
