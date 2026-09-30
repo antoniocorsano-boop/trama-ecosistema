@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "trama.or09-p1-fixtures/v1",
+  "readinessState": "AWAITING_HUMAN_AUTHORIZATION",
+  "executionProfile": {
+    "executionProfileId": "or09-p1-profile-001",
+    "capabilityId": "lesson.preparation.observe",
+    "capabilityVersion": "1.0.0",
+    "adapterId": "or08-dsh-compatible",
+    "adapterVersion": "0.1.0",
+    "providerType": "DSH_COMPATIBLE",
+    "providerId": "offline-dsh-fixture",
+    "runtimeProfileRef": "runtime-profile:offline-fixture",
+    "mode": "PROPOSE_ONLY",
+    "networkPolicy": "DENY",
+    "retryPolicy": {
+      "maxRetries": 0
+    },
+    "timeoutMs": 30000,
+    "evidencePolicyRef": "evidence-policy:or09-v0",
+    "authorityDecisionRef": null
+  },
+  "gates": {
+    "CAPABILITY_CONTRACT_QUALIFIED": true,
+    "PORTABILITY_QUALIFIED": true,
+    "EXACT_EXECUTION_PROFILE": true,
+    "ZERO_IMPLICIT_MUTATION": true,
+    "NO_SECRET_LEAKAGE": true,
+    "NO_PERSONAL_STUDENT_DATA": true,
+    "DETERMINISTIC_EVIDENCE": true,
+    "CANCELLATION_TIMEOUT_SEMANTICS": true,
+    "RESOURCE_CLEANUP_QUALIFIED": true,
+    "PROVIDER_PROVENANCE": true,
+    "STALE_FAILURE_NORMALIZATION": true,
+    "CONTROL_CENTER_READ_ONLY": true,
+    "HUMAN_EXACT_HEAD_REVIEW": false
+  },
+  "evidenceRefs": [
+    "docs/contracts/trama-shared-capability-layer-contract-v0.md",
+    "docs/contracts/trama-runtime-portability-contract-v0.md",
+    "docs/contracts/trama-qualified-execution-readiness-contract-v0.md",
+    "evidence:or07-p1",
+    "evidence:or08-p1"
+  ],
+  "liveRuntime": false,
+  "mutationAuthorized": false,
+  "networkEnabled": false,
+  "secretsPresent": false,
+  "personalStudentData": false,
+  "invalid": [
+    {
+      "id": "implicit-authorized-state",
+      "expect": [
+        "QE-01",
+        "QE-10"
+      ],
+      "patch": {
+        "readinessState": "AUTHORIZED_FOR_QUALIFIED_EXECUTION"
+      }
+    },
+    {
+      "id": "missing-profile-id",
+      "expect": [
+        "QE-02"
+      ],
+      "patch": {
+        "executionProfile": {
+          "executionProfileId": null
+        }
+      }
+    },
+    {
+      "id": "authority-ref-without-human-review",
+      "expect": [
+        "QE-03"
+      ],
+      "patch": {
+        "executionProfile": {
+          "authorityDecisionRef": "decision:fake"
+        }
+      }
+    },
+    {
+      "id": "network-enabled",
+      "expect": [
+        "QE-04",
+        "QE-10"
+      ],
+      "patch": {
+        "networkEnabled": true,
+        "executionProfile": {
+          "networkPolicy": "ALLOWLIST"
+        }
+      }
+    },
+    {
+      "id": "mutation-enabled",
+      "expect": [
+        "QE-05",
+        "QE-10"
+      ],
+      "patch": {
+        "mutationAuthorized": true,
+        "executionProfile": {
+          "mode": "MUTATIVE"
+        }
+      }
+    },
+    {
+      "id": "missing-evidence",
+      "expect": [
+        "QE-06"
+      ],
+      "patch": {
+        "evidenceRefs": []
+      }
+    },
+    {
+      "id": "cleanup-gate-fail",
+      "expect": [
+        "QE-07"
+      ],
+      "patch": {
+        "gates": {
+          "RESOURCE_CLEANUP_QUALIFIED": false
+        }
+      }
+    },
+    {
+      "id": "missing-provider",
+      "expect": [
+        "QE-08"
+      ],
+      "patch": {
+        "executionProfile": {
+          "providerType": null,
+          "providerId": null
+        }
+      }
+    },
+    {
+      "id": "control-center-not-readonly",
+      "expect": [
+        "QE-09"
+      ],
+      "patch": {
+        "gates": {
+          "CONTROL_CENTER_READ_ONLY": false
+        }
+      }
+    },
+    {
+      "id": "secret-present",
+      "expect": [
+        "QE-10"
+      ],
+      "patch": {
+        "secretsPresent": true
+      }
+    },
+    {
+      "id": "student-data-present",
+      "expect": [
+        "QE-10"
+      ],
+      "patch": {
+        "personalStudentData": true
+      }
+    },
+    {
+      "id": "live-runtime",
+      "expect": [
+        "QE-10"
+      ],
+      "patch": {
+        "liveRuntime": true
+      }
+    }
+  ]
+}
