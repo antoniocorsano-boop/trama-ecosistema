@@ -463,3 +463,26 @@ Decisioni consolidate:
 Prima capability di riferimento: `lesson.preparation.observe`, già usata nel proof OR-06.
 
 Next slice: **OR-07-P1 — deterministic provider-neutral fixture + validator**, interamente offline e con almeno due fake adapter per provare la sostituibilità del provider.
+
+
+## 18. Stato OR-08
+
+**PASS documentale / implementation-ready.**
+
+Creati:
+- `docs/contracts/trama-runtime-portability-contract-v0.md`;
+- `governance/runtime/trama-runtime-portability-v1.json`.
+
+Decisioni consolidate:
+- la portabilità si misura sulla stessa capability identity e sullo stesso request contract;
+- almeno due adapter distinti devono soddisfare lo stesso contratto;
+- il caller non conosce API proprietarie del provider;
+- provenance provider/adapter resta visibile;
+- failure e stale semantics sono normalizzate;
+- la sostituzione del provider non modifica authority o decision owner;
+- OR-08 v0 può raggiungere soltanto `PORTABLE_CONTRACT`, interamente offline;
+- candidati iniziali: profilo DSH-compatible e profilo Codex-compatible;
+- nessun runtime live e nessuna preferenza provider vengono introdotti;
+- `DOS-A1 = RUNTIME_DEFERRED`.
+
+Next slice: **OR-08-P1 — deterministic portability matrix**.
