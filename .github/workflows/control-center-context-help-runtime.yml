@@ -41,51 +41,7 @@ jobs:
             echo "Runtime remediation must not adopt a repository dependency." >&2
             exit 1
           fi
-          if grep -E '^control-center/' /tmp/context-help-runtime-files.txt | grep -Ev '^control-center/index\.html
-            echo "Runtime remediation may change only control-center/index.html under control-center/." >&2
-            exit 1
-          fi
-
-      - name: Validate conservative component registry
-        run: python scripts/validate_trama_component_evidence_registry.py
-
-      - name: Validate native runtime markers
-        shell: bash
-        run: |
-          set -euo pipefail
-          grep -q 'popover="auto"' control-center/index.html
-          grep -q 'popovertarget="helpPopover"' control-center/index.html
-          grep -q "showPopover({source:el})" control-center/index.html
-          grep -q ':popover-open' control-center/index.html
-          ! grep -q 'role="dialog"' control-center/index.html
-          ! grep -q "classList.add('open')" control-center/index.html
-          ! grep -q "e.key==='Escape'" control-center/index.html
-
-      - name: Install pinned browser evidence tool
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/trama-context-help-playwright
-          npm install --prefix /tmp/trama-context-help-playwright --no-save --ignore-scripts playwright@1.63.0
-          /tmp/trama-context-help-playwright/node_modules/.bin/playwright install --with-deps chromium
-
-      - name: Capture exact-head deployed-runtime evidence
-        run: node scripts/capture_control_center_context_help_runtime.cjs
-
-      - name: Upload runtime evidence
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: control-center-context-help-runtime-${{ github.event.pull_request.head.sha || github.sha }}
-          path: artifacts/control-center-context-help-runtime
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Qualification boundary
-        if: always()
-        run: |
-          echo "Runtime evidence does not authorize registry maturity promotion or merge; Human Review remains required."
- | grep -q .; then
+          if grep -E '^control-center/' /tmp/context-help-runtime-files.txt | grep -Ev '^control-center/index[.]html$' | grep -q .; then
             echo "Runtime remediation may change only control-center/index.html under control-center/." >&2
             exit 1
           fi
