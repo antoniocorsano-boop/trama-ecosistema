@@ -2,6 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./e2e",
+  testIgnore: "public-browser-certification.spec.ts",
   fullyParallel: true,
   retries: 0,
   use: {

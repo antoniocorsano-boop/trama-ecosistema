@@ -54,7 +54,7 @@ with tempfile.TemporaryDirectory(prefix="trama-render-build-") as tmp:
 
     # Modular public root.
     assert (out / "index.html").is_file()
-    assert (out / "manifest.webmanifest").is_file()
+    assert (out / "manifest.json").is_file()
     assert (out / "sw.js").is_file()
     assert (out / "data/ecosystem-snapshot.json").is_file()
     assert (out / "data/context-packs/project-knowledge.json").is_file()
