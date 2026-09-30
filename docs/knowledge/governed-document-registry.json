@@ -1698,6 +1698,51 @@
         "HUMAN_DECISION",
         "MERGE_STATUS_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-QE-DECISION-2026-09-30",
+      "path": "docs/reviews/TRAMA-QUALIFIED-EXECUTION-DECISION-2026-09-30.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "qualified-execution",
+        "runtime-authorization",
+        "human-review",
+        "dos-a1",
+        "lesson-preparation"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-HR-OR07-OR10-2026-09-30"
+      ],
+      "updateTriggers": [
+        "HUMAN_DECISION",
+        "RUNTIME_AUTHORIZATION_CHANGE",
+        "DOS_A1_CHANGE",
+        "EXECUTION_PROFILE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-QE-DECISION-MANIFEST-2026-09-30",
+      "path": "governance/runtime/trama-qualified-execution-decision-v1.json",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "qualified-execution",
+        "runtime-authorization",
+        "machine-readable-decision"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-QE-DECISION-2026-09-30"
+      ],
+      "updateTriggers": [
+        "HUMAN_DECISION",
+        "RUNTIME_AUTHORIZATION_CHANGE",
+        "DOS_A1_CHANGE"
+      ]
     }
   ]
 }
