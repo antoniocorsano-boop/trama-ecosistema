@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "trama.control-center-a1-foundation-qualification/v1",
+  "id": "TRAMA-CC-APP-A1-QUAL-01",
+  "status": "QUALIFIED",
+  "qualifiedAt": "2026-09-30",
+  "repository": "antoniocorsano-boop/trama-ecosistema",
+  "qualifiedHead": "3b4124720ab53246cca67fd7f0977ffef31c7fb7",
+  "workflow": {
+    "name": "Control Center A1 Foundation",
+    "runId": 36687481080,
+    "conclusion": "SUCCESS"
+  },
+  "artifact": {
+    "id": 11084008131,
+    "name": "control-center-a1-foundation-3b4124720ab53246cca67fd7f0977ffef31c7fb7",
+    "digest": "sha256:5f471fc6fceddd36ee3e223e0298eb574ea92c6ad5ddd1af273fcff9a0b2156c"
+  },
+  "gates": {
+    "npmCi": "PASS",
+    "typecheck": "PASS",
+    "unitComponentTests": "PASS",
+    "build": "PASS",
+    "bundleReport": "PASS",
+    "governedArtifactEmission": "PASS",
+    "chromiumInstall": "PASS",
+    "browserSmoke": "PASS",
+    "zeroExternalRuntimeRequests": "PASS",
+    "governance": "PASS",
+    "projectKnowledgeRuntime": "PASS"
+  },
+  "bundleBaseline": {
+    "applicationJs": {
+      "rawBytes": 406958,
+      "gzipBytes": 122971
+    },
+    "applicationCss": {
+      "rawBytes": 2888,
+      "gzipBytes": 1135
+    },
+    "ecosystemSnapshot": {
+      "rawBytes": 74829,
+      "gzipBytes": 10223
+    },
+    "projectKnowledge": {
+      "rawBytes": 7028,
+      "gzipBytes": 899
+    }
+  },
+  "boundaries": {
+    "legacyControlCenterModified": false,
+    "publicCutoverAuthorized": false,
+    "renderProductionModified": false,
+    "browserGithubAuthority": false,
+    "repositoryWriteCapability": false,
+    "runtimeAuthorization": false,
+    "maturityPromotion": false,
+    "lifecyclePromotion": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "nextStage": "A2_MATURITY_FEATURE"
+}
