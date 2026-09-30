@@ -123,3 +123,75 @@ Acquire a **real XLS exported from the Programma Scolastico function** and inspe
 - metadata that may be required for import.
 
 No modified file should be uploaded to Argo during this discovery step.
+
+
+## E-004 — Programma Scolastico: struttura e campi
+
+**Source:** manuale Argo didUP 4.54.0, pp. 99–100  
+**Evidence status:** DIRECT / CURRENT_FOR_DISCOVERY
+
+### Supported facts
+
+- il programma è organizzato per moduli e argomenti;
+- per il modulo la descrizione è necessaria e l'ordine è opzionale;
+- per l'argomento la descrizione è necessaria;
+- data di svolgimento e stato di svolgimento sono facoltativi;
+- data e stato possono essere aggiornati automaticamente quando l'argomento viene richiamato nelle Attività svolte;
+- un argomento già oggetto di valutazione non può essere cancellato.
+
+### Design consequence
+
+The canonical model should separate:
+- structural identity/content;
+- ordering;
+- planned state;
+- performed state/date;
+- deletion eligibility.
+
+A local `REMOVED` state cannot imply automatic external deletion.
+
+## E-005 — Native reuse across classes and years
+
+**Source:** manuale Argo didUP 4.54.0, pp. 100–101  
+**Evidence status:** DIRECT / CURRENT_FOR_DISCOVERY
+
+### Supported facts
+
+- modules and arguments can be imported from another class;
+- source class/material can be selected from a previous school year;
+- import can include the full program or only selected modules;
+- imported modules are added to existing modules.
+
+### Design consequence
+
+Adopt a **native-first reuse strategy** before resorting to XLS-based transfer. Duplicate behavior remains unresolved and must be tested.
+
+## E-006 — XLS interoperability constraint
+
+**Source:** manuale Argo didUP 4.54.0, p. 101  
+**Evidence status:** DIRECT / CURRENT_FOR_DISCOVERY
+
+### Supported facts
+
+- Programma Scolastico can be exported to `.XLS`;
+- the file can be shared with other teachers in the same area;
+- the manual strongly advises against modifying the original XLS produced by didUP to avoid import blocking.
+
+### Design consequence
+
+The XLS is an interoperability artifact, not the canonical editable source. Reconstructed/generated XLS compatibility is **not proven** by the manual.
+
+## E-007 — Programma ↔ lesson execution link
+
+**Source:** manuale Argo didUP 4.54.0, pp. 20–21  
+**Evidence status:** DIRECT / CURRENT_FOR_DISCOVERY
+
+### Supported facts
+
+- Programma Scolastico arguments can be recalled into lesson activities;
+- module description and argument are carried into the lesson activity;
+- selected arguments can be marked as completed automatically.
+
+### Design consequence
+
+The sync model must distinguish structural changes from execution-state changes and preserve a dedicated performed-state lineage.
