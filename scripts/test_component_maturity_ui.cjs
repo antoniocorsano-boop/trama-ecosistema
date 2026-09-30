@@ -20,7 +20,7 @@ assert.match(maturity,/deferSelection:window\.matchMedia/);
 assert.match(maturity,/Un livello basso può indicare prove non ancora bound/);
 assert.match(maturity,/Prove bound/);
 assert.match(maturity,/nextRequiredEvidenceTypes/);
-assert.match(sw,/trama-control-center-v15/);
+assert.match(sw,/trama-control-center-v16/);
 assert.match(sw,/\.\/maturity\.html/);
 assert.match(sw,/\.\/component-maturity\.js/);
 
