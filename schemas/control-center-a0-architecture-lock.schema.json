@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/control-center-a0-architecture-lock.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion","id","status","baseline","architectureRef","migrationRef","legacyBaselineRef","dependencyPolicyRef","applicationBoundary","architectureStyle","packageManager","dataAuthority","browserAuthority","production","humanReviewGates","prohibitedInitial","dosA1"],
+  "properties": {
+    "schemaVersion": {"const": "trama.control-center-a0-architecture-lock/v1"},
+    "id": {"const": "TRAMA-CC-APP-A0-LOCK-01"},
+    "status": {"enum": ["AWAITING_HUMAN_REVIEW","LOCKED"]},
+    "baseline": {
+      "type":"object","additionalProperties":false,
+      "required":["repository","commit"],
+      "properties":{
+        "repository":{"const":"antoniocorsano-boop/trama-ecosistema"},
+        "commit":{"type":"string","pattern":"^[0-9a-f]{40}$"}
+      }
+    },
+    "architectureRef":{"type":"string"},
+    "migrationRef":{"type":"string"},
+    "legacyBaselineRef":{"type":"string"},
+    "dependencyPolicyRef":{"type":"string"},
+    "applicationBoundary":{"const":"apps/control-center/"},
+    "architectureStyle":{"const":"MODULAR_MONOLITH_STATIC_READ_ONLY"},
+    "packageManager":{"const":"npm"},
+    "dataAuthority":{"const":"GOVERNED_JSON_SCHEMA_AND_DERIVED_STATIC_ARTIFACTS"},
+    "browserAuthority":{
+      "type":"object","additionalProperties":false,
+      "required":["githubRead","repositoryWrite","runtimeAuthorization","maturityPromotion","lifecyclePromotion"],
+      "properties":{
+        "githubRead":{"const":false},
+        "repositoryWrite":{"const":false},
+        "runtimeAuthorization":{"const":false},
+        "maturityPromotion":{"const":false},
+        "lifecyclePromotion":{"const":false}
+      }
+    },
+    "production":{
+      "type":"object","additionalProperties":false,
+      "required":["legacyRemainsActiveThrough","cutoverStage","rollbackRequired"],
+      "properties":{
+        "legacyRemainsActiveThrough":{"const":"A6"},
+        "cutoverStage":{"const":"A7"},
+        "rollbackRequired":{"const":true}
+      }
+    },
+    "humanReviewGates":{
+      "type":"array","const":["A0_ARCHITECTURE_LOCK","A6_PRODUCT_PARITY","A7_PUBLIC_CUTOVER"]
+    },
+    "prohibitedInitial":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string"}},
+    "dosA1":{"const":"RUNTIME_DEFERRED"}
+  }
+}
