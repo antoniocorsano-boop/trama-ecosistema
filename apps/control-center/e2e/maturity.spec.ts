@@ -12,7 +12,7 @@ test("Maturity candidate preserves governed semantics across canonical viewports
   await expect(page.getByRole("heading", { name: "Maturità", exact: true })).toBeVisible();
   await expect(page.getByText("Aree di maturità")).toBeVisible();
   await expect(page.getByText("Componenti", { exact: true })).toBeVisible();
-  await expect(page.getByText("READ_ONLY")).toBeVisible();
+  await expect(page.getByLabel("Modalità sola lettura")).toHaveText("READ_ONLY");
 
   const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
   const viewportWidth = await page.evaluate(() => window.innerWidth);
