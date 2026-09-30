@@ -250,7 +250,7 @@ Output:
 
 Decisione: nessuna UI library globale. Existing-supply-chain-first. Arena consolida i componenti governed già qualificati; Atlas preserva XYFlow/native; Docente OS riusa prima Radix/cmdk già presenti; Control Center non aggiunge primitive per OR-05. Primo candidato implementativo: `OR-05-I1` sui dialog mechanics del Timetable Docente OS, senza nuova dependency.
 
-### OR-06 — Cross-ecosystem read-only proof
+### OR-06 — Cross-ecosystem read-only proof — **PASS documentale / implementation-ready**
 **Obiettivo:** una sola prova end-to-end non mutativa che attraversi un workflow reale dell'ecosistema.
 
 ```text
@@ -270,6 +270,17 @@ Il proof deve dimostrare che:
 - il provider runtime è sostituibile.
 
 Nessuna autenticazione remota, installazione plugin o mutazione runtime in questo step.
+
+Proof selezionato: **Preparazione della prossima lezione**.
+
+Output:
+- `docs/contracts/trama-cross-ecosystem-readonly-proof-v0.md`;
+- `governance/runtime/trama-cross-ecosystem-readonly-proof-v1.json`.
+
+Catena:
+`Arena curriculum authority -> Docente OS preparation context -> Atlas optional resource read -> lesson.preparation.observe -> Runtime Adapter read-only -> Evidence Envelope -> Docente OS proposal + Control Center observation`.
+
+Next slice: **OR-06-P1 — deterministic cross-ecosystem read-only fixture + validator**. Nessuna connessione live ai prodotti richiesta.
 
 ## 7. Sequenza consigliata
 
