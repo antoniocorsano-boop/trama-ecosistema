@@ -36,7 +36,7 @@ The current page-local contextual-help overlay is replaced with the browser-nati
 - `popover="auto"` provides the top-layer and light-dismiss model;
 - the close control uses declarative `popovertarget` / `popovertargetaction="hide"`;
 - contextual invokers use `showPopover({source: ...})` so keyboard order is associated with the active source;
-- `aria-details` and `aria-haspopup` are applied to the active help source;
+- `aria-details` relates the active help source to its contextual detail without asserting an unrelated menu/dialog popup role;
 - the incorrect `role="dialog"` is removed because the component is non-modal;
 - custom Escape handling and the custom `.open` state are removed;
 - persistent hover opening is removed: contextual help is exposed through focus or intentional activation;
