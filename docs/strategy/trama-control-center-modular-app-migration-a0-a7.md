@@ -167,6 +167,30 @@ Migrate:
 
 React Flow is lazy-loaded.
 
+### A4 materialized Ecosystem + Evidence
+
+State: **QUALIFIED — exact head `601e552389b7cec6c33d4963bde637557dc9baa0` / run `36696727967` PASS**.
+
+Reference:
+- `docs/implementation/trama-control-center-a4-ecosystem-evidence.md`;
+- `governance/control-center/trama-control-center-a4-ecosystem-evidence-qualification.json`.
+
+Materialized:
+- modular Ecosystem and Evidence routes;
+- capability filters and governed relationship detail;
+- accessible graph/list dual representation;
+- React Flow 12.11.6 lazy-loaded only for the graph;
+- explicit FUTURE_NOT_AUTHORIZED semantics;
+- Evidence Explorer with deterministic freshness and exact-head binding;
+- Integrity view without overall score;
+- shell / lazy graph / CSS bundle budgets;
+- axe + desktop / phone / LIM evidence;
+- A1/A2/A3 regression PASS.
+
+TanStack Table remains deferred because current A4 behavior does not require datagrid-scale interaction.
+
+Legacy production remains unchanged.
+
 ## A5 — Operations + Assurance
 
 Migrate:
