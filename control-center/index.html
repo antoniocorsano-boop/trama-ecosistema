@@ -354,21 +354,32 @@ function setupPhasePagination(){
 
 function fail(err){healthText.textContent='Snapshot non disponibile';healthDot.style.background='var(--danger)';errorBox.innerHTML='<div class="error">Il Control Center non può mostrare uno stato affidabile: snapshot assente e nessuna copia locale disponibile.</div>'}
 const helpPopover=document.getElementById('helpPopover'),helpTitle=document.getElementById('helpTitle'),helpText=document.getElementById('helpText');
-let helpSource=null;
-function showHelp(el){
-  if(!el?.dataset?.help||typeof helpPopover.showPopover!=='function')return;
-  helpTitle.textContent=el.dataset.helpTitle||'Informazioni';
-  helpText.textContent=el.dataset.help;
+let helpSource=null,helpRebinding=false;
+function bindHelpSource(el){
   if(helpSource&&helpSource!==el){helpSource.removeAttribute('aria-details');helpSource.removeAttribute('aria-haspopup')}
   helpSource=el;
   el.setAttribute('aria-details','helpPopover');
   el.setAttribute('aria-haspopup','true');
+}
+function showHelp(el){
+  if(!el?.dataset?.help||typeof helpPopover.showPopover!=='function'||helpRebinding)return;
+  helpTitle.textContent=el.dataset.helpTitle||'Informazioni';
+  helpText.textContent=el.dataset.help;
+  const sourceChanged=Boolean(helpSource&&helpSource!==el);
+  if(sourceChanged&&helpPopover.matches(':popover-open')){
+    helpRebinding=true;
+    helpPopover.hidePopover();
+    bindHelpSource(el);
+    helpPopover.showPopover({source:el});
+    helpRebinding=false;
+    return;
+  }
+  bindHelpSource(el);
   if(!helpPopover.matches(':popover-open'))helpPopover.showPopover({source:el});
 }
 function hideHelp(){if(typeof helpPopover.hidePopover==='function'&&helpPopover.matches(':popover-open'))helpPopover.hidePopover()}
 document.addEventListener('focusin',e=>{const el=e.target.closest('.helpable');if(el)showHelp(el)});
 document.addEventListener('click',e=>{const el=e.target.closest('.helpable');if(!el)return;if(el.matches('a[href],button,input,select,textarea')){hideHelp();return}showHelp(el)});
-helpPopover.addEventListener('toggle',e=>{if(e.newState==='closed'&&helpSource){helpSource.removeAttribute('aria-details');helpSource.removeAttribute('aria-haspopup');helpSource=null}});
 function clampHorizontalViewport(){
   const y=window.scrollY;
   if(window.scrollX!==0)window.scrollTo(0,y);
