@@ -8,7 +8,7 @@ data = json.loads(p.read_text(encoding="utf-8"))
 assert data["schemaVersion"] == "trama.control-center-a7-cutover-preflight/v1"
 assert data["status"] == "PREFLIGHT"
 assert data["publicCutoverAuthorized"] is False
-assert data["renderEnvironmentBound"] is False
+assert data["renderEnvironmentBound"] is True
 assert data["sourceBaseline"]["a6Integrated"] is True
 assert data["sourceBaseline"]["a6HumanReview"] == "PASS"
 assert data["invariants"]["controlCenterReadOnly"] is True
@@ -31,9 +31,20 @@ for k in (
     "deployReceipt",
     "rollbackReceipt",
 ):
-    assert required[k] == "PENDING"
+    assert required[k] in {"PENDING", "IN_PROGRESS", "DEFINED", "BOUND"}
 
 assert required["preCutoverSmokePlan"] == "DEFINED"
 assert required["postCutoverSmokePlan"] == "DEFINED"
 
 print("A7 preflight contract: PASS")
+
+render = data["render"]
+assert render["serviceName"] == "trama-control-center"
+assert render["serviceType"] == "static_site"
+assert render["branch"] == "main"
+assert render["currentBuildCommand"] == "bash scripts/build_control_center_render.sh"
+assert render["currentPublishPath"] == "public"
+assert render["currentLiveCommit"] == data["sourceBaseline"]["main"]
+assert required["renderServiceIdentity"] == "BOUND"
+assert required["currentProductionEntrypoint"] == "BOUND"
+print("A7 Render environment binding: PASS")
