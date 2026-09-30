@@ -1251,6 +1251,50 @@
         "CONTROL_CENTER_A6_PARITY_CHANGE",
         "A6_HUMAN_REVIEW_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A7-PUBLIC-CERTIFICATION",
+      "path": "docs/evidence/trama-control-center-a7-public-certification-2026-09-30.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "public-deployment",
+        "browser-certification",
+        "pwa",
+        "evidence"
+      ],
+      "dependsOn": [
+        "DOC-CC-ORIENTATION-REMEDIATION-01"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_PUBLIC_DEPLOYMENT_CHANGE",
+        "LIVE_BROWSER_REPLAY_RESULT",
+        "A7_PUBLIC_DEFECT"
+      ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A7-PUBLIC-CERTIFICATION-RECEIPT",
+      "path": "governance/control-center/trama-control-center-a7-public-browser-certification.json",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "public-deployment",
+        "browser-certification",
+        "evidence",
+        "exact-head"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-A7-PUBLIC-CERTIFICATION"
+      ],
+      "updateTriggers": [
+        "LIVE_BROWSER_REPLAY_RESULT",
+        "PUBLIC_DEPLOYMENT_ID_CHANGE",
+        "PUBLIC_EXACT_HEAD_CHANGE"
+      ]
     }
   ]
 }
