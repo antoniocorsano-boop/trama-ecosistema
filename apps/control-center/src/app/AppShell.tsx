@@ -11,18 +11,18 @@ export function AppShell({ children }: Props) {
           <p className="eyebrow">TRAMA CONTROL CENTER · MODULAR CANDIDATE</p>
           <h1>Control Center</h1>
           <p className="lede">
-            Migrazione modulare in preview. Il Control Center pubblico legacy resta l’unico runtime di produzione.
+            Orientamento e viste specialistiche in migrazione. Il runtime pubblico legacy resta invariato.
           </p>
         </div>
         <span className="readonly" aria-label="Modalità sola lettura">READ_ONLY</span>
       </header>
 
       <nav className="primary-nav" aria-label="Navigazione principale candidate">
-        <NavLink to="/" end>Fondazione</NavLink>
+        <NavLink to="/" end>Overview</NavLink>
         <NavLink to="/maturity">Maturità</NavLink>
-        <span aria-disabled="true">Ecosistema</span>
-        <span aria-disabled="true">Evidenze</span>
-        <span aria-disabled="true">Operazioni</span>
+        <span aria-disabled="true" data-stage="A4">Ecosistema</span>
+        <span aria-disabled="true" data-stage="A4">Evidenze</span>
+        <span aria-disabled="true" data-stage="A5">Operazioni</span>
       </nav>
 
       <main id="main-content">{children}</main>
