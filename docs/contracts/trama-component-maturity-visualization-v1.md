@@ -116,7 +116,7 @@ The slice is qualified when:
 1. all snapshot components appear in the unfiltered model;
 2. product filtering does not leak components from other products;
 3. confirmed and candidate coordinates preserve stage ordering;
-4. governed Arena dialog/tabs render at confirmed BEHAVIOURAL;
+4. governed Arena dialog/tabs render at confirmed ACCESSIBILITY with qualificationStatus QUALIFIED;
 5. legacy Arena dialog renders confirmed REGISTERED with candidate BEHAVIOURAL;
 6. no score or percentage appears in component maturity semantics;
 7. an equivalent accessible list is present;
