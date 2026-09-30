@@ -1415,6 +1415,52 @@
         "PROOF_SCHEMA_CHANGE",
         "RUNTIME_ADAPTER_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-HR-OR05-OR06-2026-09-30",
+      "path": "docs/reviews/TRAMA-HUMAN-REVIEW-OR05-OR06-2026-09-30.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "human-review",
+        "or05",
+        "or06",
+        "arena",
+        "docente-os",
+        "runtime-proof"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-06-CROSS-ECOSYSTEM-READONLY-PROOF"
+      ],
+      "updateTriggers": [
+        "EXACT_HEAD_CHANGE",
+        "GATE_CHANGE",
+        "HUMAN_DECISION",
+        "MERGE_STATUS_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-HR-OR05-OR06-MANIFEST-2026-09-30",
+      "path": "governance/reviews/trama-human-review-or05-or06-2026-09-30.json",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "human-review",
+        "machine-readable-review"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-HR-OR05-OR06-2026-09-30"
+      ],
+      "updateTriggers": [
+        "EXACT_HEAD_CHANGE",
+        "GATE_CHANGE",
+        "HUMAN_DECISION",
+        "MERGE_STATUS_CHANGE"
+      ]
     }
   ]
 }
