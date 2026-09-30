@@ -96,6 +96,21 @@ async function measure(page, selector) {
   });
 }
 
+async function waitForSettledInViewport(page, selector) {
+  await page.waitForFunction((target) => {
+    const node = document.querySelector(target);
+    if (!node || !node.matches(':popover-open')) return false;
+    const rect = node.getBoundingClientRect();
+    return (
+      rect.left >= -1 &&
+      rect.right <= window.innerWidth + 1 &&
+      rect.top >= -1 &&
+      rect.bottom <= window.innerHeight + 1 &&
+      document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1
+    );
+  }, selector, { timeout: 3000 });
+}
+
 async function main() {
   await fs.mkdir(outDir, { recursive: true });
   await new Promise((resolve) => server.listen(port, '127.0.0.1', resolve));
@@ -149,6 +164,7 @@ async function main() {
       const axOpen = await accessibilityState(page, '#assurance .helpable');
       assert.equal(axOpen.properties.details !== undefined, true, 'Invoker must expose a details relationship in the accessibility tree');
 
+      await waitForSettledInViewport(page, '#helpPopover');
       const initialBounds = await measure(page, '#helpPopover');
       assert.ok(initialBounds.left >= -1 && initialBounds.right <= viewport.width + 1, 'Initial popover must fit horizontally');
       assert.ok(initialBounds.top >= -1 && initialBounds.bottom <= viewport.height + 1, 'Initial popover must fit vertically');
@@ -170,6 +186,7 @@ async function main() {
       assert.equal(await invoker.getAttribute('aria-details'), null, 'Previous source must be unbound when Context Help moves');
       assert.equal(await secondaryInvoker.getAttribute('aria-details'), 'helpPopover', 'New source must own the contextual-help relationship');
 
+      await waitForSettledInViewport(page, '#helpPopover');
       const reboundBounds = await measure(page, '#helpPopover');
       assert.ok(reboundBounds.left >= -1 && reboundBounds.right <= viewport.width + 1, 'Rebound popover must fit horizontally');
       assert.ok(reboundBounds.top >= -1 && reboundBounds.bottom <= viewport.height + 1, 'Rebound popover must fit vertically');
