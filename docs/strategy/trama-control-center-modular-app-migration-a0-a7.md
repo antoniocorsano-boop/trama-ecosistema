@@ -59,6 +59,27 @@ Deploy only as preview/candidate.
 
 Legacy production remains untouched.
 
+### A1 materialized foundation
+
+State: **IN_QUALIFICATION**.
+
+Reference:
+- `docs/implementation/trama-control-center-a1-foundation.md`.
+
+Materialized:
+- isolated npm package boundary;
+- React/TypeScript/Vite static candidate;
+- HashRouter preview shell;
+- governed data emission + AJV validation;
+- strict typecheck;
+- semantic component/unit tests;
+- deterministic bundle report;
+- Playwright Chromium smoke with zero-external-runtime-request guard;
+- committed npm lockfile;
+- final CI permissions READ_ONLY.
+
+Legacy production remains unchanged.
+
 ## A2 — Maturity feature
 
 First vertical migration because it already has:
