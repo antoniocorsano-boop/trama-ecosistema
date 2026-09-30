@@ -32,6 +32,18 @@ on:
       - 'config/repository-enrollment.json'
       - 'schemas/live-repository-overlay.schema.json'
       - 'schemas/effective-project-context.schema.json'
+      - 'config/live-component-evidence-sources.json'
+      - 'schemas/live-component-evidence-sources.schema.json'
+      - 'schemas/live-component-evidence-overlay.schema.json'
+      - 'schemas/effective-component-evidence.schema.json'
+      - 'scripts/run_live_component_evidence_overlay.py'
+      - 'scripts/compose_effective_component_evidence.py'
+      - 'scripts/materialize_live_component_evidence.py'
+      - 'scripts/test_live_component_evidence_lane_v2.py'
+      - 'scripts/test_live_component_evidence_collector_v2.py'
+      - 'control-center/fixtures/component-evidence/**'
+      - 'control-center/data/effective-component-evidence.json'
+      - 'docs/contracts/trama-live-component-evidence-lane-v2.md'
       - 'schemas/source-registry.schema.json'
       - 'schemas/repository-observation-promotion-proposal.schema.json'
       - 'schemas/repository-observation-promotion-event.schema.json'
@@ -76,12 +88,20 @@ jobs:
           python scripts/test_project_knowledge_dual_speed_stage_b.py
           python scripts/test_project_knowledge_dual_speed_stage_c.py
           python scripts/test_project_knowledge_dual_speed_stage_d.py
+          python scripts/test_live_component_evidence_collector_v2.py
+          python scripts/test_live_component_evidence_lane_v2.py
           python scripts/validate_cc_mss_live_predecision.py
           python scripts/test_repository_observation_promotion_canonical.py
           python scripts/validate_repository_observation_promotion_semantics.py
           python scripts/test_repository_observation_promotion_planner.py
           python scripts/test_repository_observation_promotion_write_actor.py
           python scripts/test_repository_observation_promotion_prepare.py
+      - name: Audit live component evidence read-only boundary
+        run: |
+          ! grep -En 'Authorization:|Bearer |github.token|GITHUB_TOKEN|GH_TOKEN|git push|gh pr|/merge|method=["'"'](POST|PUT|PATCH|DELETE)' scripts/run_live_component_evidence_overlay.py
+          ! grep -En 'git push|gh pr|/merge|Authorization:|Bearer ' scripts/compose_effective_component_evidence.py
+          grep -F 'promotionRequired":False' scripts/compose_effective_component_evidence.py
+          grep -F 'humanReviewRequired":False' scripts/compose_effective_component_evidence.py
       - name: Audit session bootstrap read-only boundary
         run: |
           ! grep -En 'urllib|httpx|requests|socket|subprocess|os\.system|Popen|git push|gh pr|/merge' scripts/build_session_bootstrap.py
