@@ -1,4 +1,4 @@
-import currentKnowledge from "../../../../control-center/data/context-packs/project-knowledge.json";
+import currentKnowledge from "../../../../../control-center/data/context-packs/project-knowledge.json";
 import { describe, expect, it } from "vitest";
 import { parseProjectKnowledge, projectKnowledgeTone } from "./model";
 
