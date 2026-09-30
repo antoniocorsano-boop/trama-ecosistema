@@ -1,11 +1,21 @@
-import type { ReactNode } from "react";
-import { NavLink } from "react-router";
+import { useEffect, useRef, type ReactNode } from "react";
+import { NavLink, useLocation } from "react-router";
+import { RuntimeStatus } from "../components/feedback/RuntimeStatus";
 
 type Props = { children: ReactNode };
 
 export function AppShell({ children }: Props) {
+  const location = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => mainRef.current?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [location.pathname]);
+
   return (
     <div className="app-shell">
+      <a className="skip-link" href="#main-content">Vai al contenuto</a>
       <header className="app-header">
         <div>
           <p className="eyebrow">TRAMA CONTROL CENTER · MODULAR CANDIDATE</p>
@@ -13,6 +23,7 @@ export function AppShell({ children }: Props) {
           <p className="lede">
             Orientamento e viste specialistiche in migrazione. Il runtime pubblico legacy resta invariato.
           </p>
+          <RuntimeStatus />
         </div>
         <span className="readonly" aria-label="Modalità sola lettura">READ_ONLY</span>
       </header>
@@ -26,7 +37,7 @@ export function AppShell({ children }: Props) {
         <NavLink to="/assurance">Assurance</NavLink>
       </nav>
 
-      <main id="main-content">{children}</main>
+      <main id="main-content" ref={mainRef} tabIndex={-1}>{children}</main>
     </div>
   );
 }
