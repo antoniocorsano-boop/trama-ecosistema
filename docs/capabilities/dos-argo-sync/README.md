@@ -5,7 +5,8 @@
 **Owning product candidate:** Docente OS  
 **Ecosystem impact:** TRAMA / Docente OS; Arena and Atlas boundaries to be assessed at G2  
 **Runtime:** NOT_AUTHORIZED  
-**Human decision required:** YES
+**Human decision required:** YES  
+**ADR candidate:** YES — formal classification required at G2
 
 ## 1. Problema
 
@@ -22,17 +23,45 @@ modifica didattica
 
 anche quando la variazione riguarda solo pochi elementi.
 
-## 2. Evidenza di partenza
+## 2. Attori e valore atteso
 
-Il manuale Argo didUP 4.54.0 (aggiornato al 07/09/2026), nella sezione **Programma Scolastico**:
+### Attore primario
+
+**Docente** che pianifica e aggiorna il programma scolastico e deve trasferire nel registro istituzionale solo le informazioni necessarie, senza duplicare il lavoro.
+
+### Attori secondari
+
+- **Dirigente / istituzione scolastica**, interessati alla correttezza e tracciabilità del dato istituzionale;
+- **TRAMA governance**, che deve preservare authority, confini, provenance e human control;
+- **Arena**, come authority curricolare;
+- **Atlas**, per contenuti/materiali pubblicabili nel proprio perimetro;
+- **Docente OS**, come ambiente operativo teacher-first;
+- **Argo didUP**, come sistema istituzionale esterno di destinazione.
+
+### Valore atteso
+
+- riduzione del lavoro ripetitivo;
+- verifica delle sole variazioni effettive;
+- riuso tra classi e anni;
+- tracciabilità della provenienza e delle versioni;
+- reversibilità;
+- nessuna promozione implicita o perdita di controllo umano.
+
+## 3. Evidenza di partenza
+
+Il manuale **Argo didUP 4.54.0**, aggiornato al **07/09/2026**, nella sezione **Programma Scolastico** (pagine 100–101):
 
 - consente di importare moduli e argomenti da un'altra classe e anche da un anno scolastico precedente;
 - consente l'importazione/esportazione tramite file XLS;
 - raccomanda espressamente di non modificare il file XLS originale prodotto da didUP, per evitare blocchi in fase di importazione.
 
-Questa evidenza porta a trattare il file Argo come **artefatto di interoperabilità**, non come fonte operativa primaria della didattica.
+Conseguenza di discovery: il file Argo va trattato come **artefatto di interoperabilità**, non come fonte operativa primaria della didattica.
 
-## 3. Ipotesi architetturale
+L'evidenza, le assunzioni e le lacune conoscitive sono registrate in:
+
+- `research-evidence-register.md`.
+
+## 4. Ipotesi architetturale
 
 Docente OS mantiene un **modello didattico canonico** e genera verso Argo solo artefatti compatibili con il formato richiesto.
 
@@ -50,9 +79,37 @@ Argo / registro istituzionale
 
 Argo resta il sistema istituzionale di destinazione. Non acquisisce authority sul curricolo o sulla progettazione didattica dell'ecosistema.
 
-## 4. Principio di sincronizzazione
+Questa è una **ipotesi di discovery**, non ancora un'architettura approvata.
 
-La sincronizzazione deve essere **incrementale, idempotente, non distruttiva e human-confirmed**.
+## 5. Alternative considerate a G1
+
+### A. Rigenerazione completa a ogni modifica
+
+**Vantaggio:** semplicità concettuale.  
+**Criticità:** lavoro ripetitivo, ricontrollo completo, rischio di sovrascrittura e scarsa scalabilità.  
+**Stato:** candidato da rigettare a G2 salvo evidenza contraria.
+
+### B. Modifica diretta del file XLS esportato da Argo
+
+**Vantaggio:** apparente immediatezza.  
+**Criticità:** contrasta con la raccomandazione del manuale Argo di non modificare il file originale; lega il modello interno a un formato esterno fragile.  
+**Stato:** candidato negativo; non autorizzato.
+
+### C. Sincronizzazione incrementale con modello canonico e adattatore
+
+**Vantaggio:** separa la didattica dal formato Argo, abilita delta, idempotenza, provenance e riuso.  
+**Criticità:** richiede identità persistente, baseline, mapping e gestione conflitti.  
+**Stato:** ipotesi principale da verificare.
+
+### D. Automazione diretta/browser/API verso Argo
+
+**Vantaggio:** ridurrebbe ulteriormente le azioni manuali.  
+**Criticità:** introduce credenziali, write authority esterna, fragilità e rischi non governati.  
+**Stato:** fuori perimetro e non autorizzato.
+
+## 6. Principio di sincronizzazione candidato
+
+La sincronizzazione dovrebbe essere **incrementale, idempotente, non distruttiva e human-confirmed**.
 
 Prima acquisizione:
 
@@ -81,7 +138,7 @@ conferma umana
 Baseline Argo B
 ```
 
-## 5. Identità persistente
+## 7. Identità persistente candidata
 
 Gli elementi didattici non devono essere identificati dal numero di riga del foglio.
 
@@ -113,7 +170,7 @@ versione
 updated_at
 ```
 
-## 6. Change Detection Engine
+## 8. Change Detection Engine candidato
 
 Il confronto avviene per entità persistente e non per posizione di cella.
 
@@ -130,7 +187,7 @@ Ogni entità può esporre un `contentHash` deterministico per riconoscere rapida
 
 Stesso file o stesso contenuto già acquisito deve produrre `NO_OP`.
 
-## 7. Formati
+## 9. Formati
 
 ### XLSX docente
 
@@ -144,9 +201,11 @@ Formato semplice di scambio e automazione. Non è il formato principale di lavor
 
 Artefatto generato dall'adattatore Argo e trattato come **output controllato**. Non deve diventare il documento sorgente che il docente modifica ordinariamente.
 
-## 8. Profilo Argo persistente
+La compatibilità reale del file prodotto resta **da verificare su un export Argo reale** prima di qualsiasi G3.
 
-La mappatura richiesta da Argo deve essere configurata o appresa una sola volta e conservata come profilo versionato.
+## 10. Profilo Argo persistente candidato
+
+La mappatura richiesta da Argo dovrebbe essere configurata o appresa una sola volta e conservata come profilo versionato.
 
 Campi candidati:
 
@@ -160,9 +219,9 @@ mappatura_campi
 vincoli
 ```
 
-Una variazione del formato Argo produce una nuova versione del profilo senza alterare il modello didattico canonico.
+Una variazione del formato Argo dovrebbe produrre una nuova versione del profilo senza alterare il modello didattico canonico.
 
-## 9. Stati operativi candidati
+## 11. Stati operativi candidati
 
 ```text
 DRAFT
@@ -176,7 +235,7 @@ SYNC_CONFIRMED
 
 La sola generazione del file non autorizza il passaggio a `SYNC_CONFIRMED`.
 
-## 10. Human control
+## 12. Human control
 
 Il docente deve poter esaminare esclusivamente le variazioni rilevate e, per ciascuna, scegliere almeno:
 
@@ -187,7 +246,7 @@ Il docente deve poter esaminare esclusivamente le variazioni rilevate e, per cia
 
 I conflitti devono essere fail-closed e non possono essere risolti implicitamente.
 
-## 11. Sync Receipt
+## 13. Sync Receipt candidata
 
 Ogni sincronizzazione candidata deve poter produrre una ricevuta immutabile/version-bound contenente almeno:
 
@@ -207,9 +266,9 @@ stato
 
 La conferma umana dell'importazione chiude il ciclo e abilita la nuova baseline.
 
-## 12. Riuso tra classi e anni
+## 14. Riuso tra classi e anni
 
-Il modello deve supportare:
+Il modello dovrebbe supportare:
 
 - riuso da anno precedente;
 - riuso tra classi parallele;
@@ -219,7 +278,41 @@ Il modello deve supportare:
 
 Il riuso non deve produrre duplicazioni non tracciabili.
 
-## 13. Invarianti candidate
+## 15. Assunzioni di discovery
+
+Le seguenti assunzioni non sono ancora decisioni approvate:
+
+1. il docente dispone di un file XLS esportato da didUP utilizzabile come campione;
+2. il formato XLS conserva una struttura sufficientemente deterministica da consentire un adattatore versionato;
+3. il docente beneficia maggiormente di un XLSX umano rispetto a un CSV come superficie primaria di lavoro;
+4. la conferma dell'avvenuta importazione in Argo può restare manuale senza compromettere il valore della capability;
+5. il programma scolastico è il primo dominio di interoperabilità da qualificare, prima di eventuali altre aree del registro.
+
+## 16. Rischi e incertezze
+
+- formato Argo non documentato come contratto stabile;
+- possibile differenza di struttura tra versioni didUP, istituti o configurazioni;
+- perdita di identità in round-trip se l'XLS Argo non conserva identificatori esterni;
+- cancellazioni o spostamenti potenzialmente ambigui;
+- rischio di falsa conferma della baseline se l'importazione Argo fallisce parzialmente;
+- necessità di distinguere contenuto curricolare autorevole, programmazione operativa e dato istituzionale;
+- rischio di trasformare la baseline in una nuova authority sintetica;
+- possibile necessità di gestire più file/profili per classi o discipline differenti.
+
+## 17. Open questions per G1/G2
+
+1. Qual è la struttura effettiva di un XLS esportato da didUP 4.54.0?
+2. Quali campi sono obbligatori e quali tollerano valori aggiuntivi?
+3. Argo importa solo file originariamente esportati da didUP o accetta file ricostruiti fedelmente?
+4. Come si comporta Argo in caso di record duplicati, modificati, rimossi o riordinati?
+5. È possibile aggiornare selettivamente moduli/argomenti senza duplicare quelli già presenti?
+6. Qual è il corretto confine tra dati curricolari Arena, materiali Atlas e pianificazione Docente OS?
+7. Dove deve vivere la baseline persistente e quale retention è necessaria?
+8. Quale livello di reversibilità è possibile prima e dopo la conferma umana?
+9. Quale feedback deve vedere il docente su successo, errore, conflitto e stato incerto?
+10. Quali requisiti di accessibilità devono applicarsi al confronto delta e alla revisione massiva?
+
+## 18. Invarianti candidate
 
 1. Il file Argo non è la source of truth della didattica dell'ecosistema.
 2. Nessuna modifica locale deve richiedere una reimportazione completa se il delta è determinabile.
@@ -232,7 +325,27 @@ Il riuso non deve produrre duplicazioni non tracciabili.
 9. Nessuna capability differita, incluso DOS-A1, viene attivata implicitamente.
 10. Nessuna automazione scrive direttamente su Argo in questa fase.
 
-## 14. ADR classification
+## 19. Privacy, accessibilità e inclusione
+
+### Privacy/data minimization
+
+Il primo perimetro è il **Programma Scolastico**. Non richiede dati personali degli studenti. Qualunque estensione futura a dati riferiti ad alunni deve riaprire la valutazione dal gate appropriato.
+
+### Accessibilità
+
+La capability comporta una futura interfaccia di confronto e revisione. A G3/G4 dovranno essere specificati almeno:
+
+- navigazione completa da tastiera;
+- differenze non comunicate dal solo colore;
+- annunci comprensibili degli stati;
+- gestione accessibile di tabelle/diff;
+- feedback percettibile per ogni write o conferma.
+
+### Età/inclusione
+
+La capability è uno strumento per il docente e non una superficie destinata direttamente a minori. I requisiti child-facing sono quindi **NOT_APPLICABLE nel perimetro G1 corrente**, salvo futuri cambi di scope.
+
+## 20. ADR classification
 
 La capability tocca:
 
@@ -245,7 +358,7 @@ La capability tocca:
 
 Pertanto a G2 deve essere valutata formalmente come **ADR-required** prima di qualsiasi implementazione runtime.
 
-## 15. Non-obiettivi iniziali
+## 21. Non-obiettivi iniziali / negative knowledge candidata
 
 - automazione browser di Argo;
 - uso di credenziali Argo da parte del sistema;
@@ -253,9 +366,12 @@ Pertanto a G2 deve essere valutata formalmente come **ADR-required** prima di qu
 - scraping del registro;
 - sincronizzazione bidirezionale non governata;
 - sostituzione del registro elettronico;
-- auto-approvazione o auto-promozione delle baseline.
+- auto-approvazione o auto-promozione delle baseline;
+- uso dell'XLS Argo come fonte primaria editabile.
 
-## 16. Primo slice candidato
+Questi punti restano candidati a `REJECTED` o `DEFERRED` a G2; non vengono cancellati dalla memoria progettuale.
+
+## 22. Primo slice di discovery
 
 Prima di qualunque runtime:
 
@@ -266,14 +382,49 @@ Prima di qualunque runtime:
 5. simulare due versioni successive della stessa didattica;
 6. verificare che il motore produca solo il delta;
 7. verificare idempotenza e gestione conflitti;
-8. redigere ADR e specifica G2/G3;
-9. sottoporre a Human Review.
+8. completare il confronto delle alternative;
+9. redigere ADR e specifica solo dopo il completamento di G2;
+10. sottoporre ogni avanzamento ai gate previsti.
 
-## 17. Criterio di successo
+## 23. Criterio di successo
 
 La capability è valida quando una modifica limitata della didattica richiede al docente di verificare soltanto le variazioni effettive, senza ricostruire o ricontrollare l'intero programma, mantenendo piena tracciabilità, reversibilità e controllo umano.
 
-## 18. Stato decisionale
+## 24. Gate review G0/G1
+
+### G0 — Intake
+
+- [x] stable capability ID assigned;
+- [x] problem/opportunity stated without prescribing implementation;
+- [x] intended users/actors identified;
+- [x] expected value stated;
+- [x] initial scope and explicit non-goals recorded;
+- [x] known product/ecosystem touchpoints listed;
+- [x] runtime state declared `NOT_AUTHORIZED`;
+- [x] next discovery action identified.
+
+**G0 assessment:** COMPLETE / ready for governed review.
+
+### G1 — Discovery
+
+- [x] initial evidence source recorded;
+- [x] user/context assumptions recorded;
+- [x] candidate alternatives compared;
+- [x] risks and uncertainties recorded;
+- [x] open questions explicit;
+- [x] candidate negative knowledge retained;
+- [x] privacy/data-minimization impact considered;
+- [x] accessibility implications identified;
+- [x] child-facing applicability explicitly classified;
+- [x] discovery conclusions separated from approved decisions;
+- [ ] real Argo XLS sample inspected;
+- [ ] format variability tested;
+- [ ] mapping feasibility demonstrated;
+- [ ] reviewable evidence package complete.
+
+**G1 assessment:** IN_PROGRESS. G2 is not authorized yet.
+
+## 25. Stato decisionale
 
 Questo documento consolida l'analisi come **capability proposal G0/G1**.
 
