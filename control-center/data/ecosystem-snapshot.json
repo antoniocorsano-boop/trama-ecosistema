@@ -1,47 +1,47 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.6.0",
-  "generatedAt": "2026-09-30T01:00:20.645435+00:00",
+  "generatedAt": "2026-09-30T02:04:39.336742+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "ref": "STATUS.md",
       "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "ref": "ROADMAP.md",
       "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
-      "sha256": "c0df92878fa1680edaf05442688cf66c442e9730f1cb69ac2f753e285cb176ea"
+      "sha256": "eb8abca065f84024a37a5b0610b8dce232ad709eb84a96b4b3ede421c6002bd4"
     },
     "maturity-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
       "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
     }
@@ -109,7 +109,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-30T01:00:20.645435+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
     },
     {
       "id": "arena",
@@ -136,7 +136,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-30T01:00:20.645435+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
     },
     {
       "id": "atlas",
@@ -166,7 +166,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-30T01:00:20.645435+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
     },
     {
       "id": "docente-os",
@@ -194,7 +194,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-30T01:00:20.645435+00:00"
+      "lastEvaluatedAt": "2026-09-30T02:04:39.336742+00:00"
     }
   ],
   "capabilities": [
@@ -437,39 +437,49 @@
       ],
       "maturity": {
         "model": "TRAMA_COMPONENT_MATURITY_V1",
-        "confirmedStage": "BEHAVIOURAL",
-        "candidateStage": "BEHAVIOURAL",
-        "qualificationStatus": "PARTIAL",
-        "remainingEvidenceTypes": [
-          "RESPONSIVE_VISUAL",
-          "ACCESSIBILITY"
-        ]
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
       },
       "evidenceStatus": {
         "ISOLATED": {
           "type": "ISOLATED",
           "status": "PRESENT",
           "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
-          "repository": "antoniocorsano-boop/CurManLight_arena"
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         "BEHAVIOURAL": {
           "type": "BEHAVIOURAL",
           "status": "PRESENT",
-          "ref": "src/__tests__/cml611-dialogs-confirmations.test.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
           "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         "RESPONSIVE_VISUAL": {
           "type": "RESPONSIVE_VISUAL",
-          "status": "NOT_OBSERVED"
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         "ACCESSIBILITY": {
           "type": "ACCESSIBILITY",
-          "status": "PARTIAL",
-          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         }
       },
       "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
@@ -533,39 +543,49 @@
       ],
       "maturity": {
         "model": "TRAMA_COMPONENT_MATURITY_V1",
-        "confirmedStage": "BEHAVIOURAL",
-        "candidateStage": "BEHAVIOURAL",
-        "qualificationStatus": "PARTIAL",
-        "remainingEvidenceTypes": [
-          "RESPONSIVE_VISUAL",
-          "ACCESSIBILITY"
-        ]
+        "confirmedStage": "ACCESSIBILITY",
+        "candidateStage": "ACCESSIBILITY",
+        "qualificationStatus": "QUALIFIED",
+        "remainingEvidenceTypes": []
       },
       "evidenceStatus": {
         "ISOLATED": {
           "type": "ISOLATED",
           "status": "PRESENT",
           "ref": "src/ui/stories/UiTabs.stories.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
-          "repository": "antoniocorsano-boop/CurManLight_arena"
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         "BEHAVIOURAL": {
           "type": "BEHAVIOURAL",
           "status": "PRESENT",
           "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
           "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         "RESPONSIVE_VISUAL": {
           "type": "RESPONSIVE_VISUAL",
-          "status": "NOT_OBSERVED"
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         "ACCESSIBILITY": {
           "type": "ACCESSIBILITY",
-          "status": "PARTIAL",
-          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         }
       },
       "sourceRef": "governance/ui-development/trama-component-evidence-registry-v1.json"
@@ -998,7 +1018,7 @@
         "path": "STATUS.md",
         "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1016,7 +1036,7 @@
         "path": "ROADMAP.md",
         "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1034,7 +1054,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1052,7 +1072,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1070,7 +1090,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1086,9 +1106,9 @@
       "status": "PASS",
       "source": {
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
-        "sha256": "c0df92878fa1680edaf05442688cf66c442e9730f1cb69ac2f753e285cb176ea"
+        "sha256": "eb8abca065f84024a37a5b0610b8dce232ad709eb84a96b4b3ede421c6002bd4"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1106,7 +1126,7 @@
         "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
         "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1652,7 +1672,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-30T01:00:20.645435+00:00",
+      "observedAt": "2026-09-30T02:04:39.336742+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
