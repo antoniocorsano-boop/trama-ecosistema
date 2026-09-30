@@ -1,0 +1,83 @@
+name: Control Center CS-S1 Evidence
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "experiments/control-center-cs-s1/**"
+      - "scripts/capture_control_center_cs_s1_evidence.cjs"
+      - "docs/evidence/control-center-cs-s1-native-popover-2026-09-30.md"
+      - "governance/ui-development/trama-control-center-cs-s1-v1.json"
+      - ".github/workflows/control-center-cs-s1.yml"
+  push:
+    branches:
+      - "feature/control-center-cs-s1-native-popover"
+    paths:
+      - "experiments/control-center-cs-s1/**"
+      - "scripts/capture_control_center_cs_s1_evidence.cjs"
+      - "docs/evidence/control-center-cs-s1-native-popover-2026-09-30.md"
+      - "governance/ui-development/trama-control-center-cs-s1-v1.json"
+      - ".github/workflows/control-center-cs-s1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-popover-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      TRAMA_EXACT_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+      TRAMA_RUN_ID: ${{ github.run_id }}
+      NODE_PATH: /tmp/trama-cs-s1-playwright/node_modules
+
+    steps:
+      - name: Checkout exact head
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+
+      - name: Enforce isolated-trial boundary
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --name-only "${{ github.event.pull_request.base.sha }}"..."${{ github.event.pull_request.head.sha }}" | tee /tmp/cs-s1-files.txt
+          if grep -Eq '^control-center/' /tmp/cs-s1-files.txt; then
+            echo "CS-S1 trial must not modify the deployed Control Center runtime." >&2
+            exit 1
+          fi
+          if grep -Eq '(^|/)package(-lock)?\.json$' /tmp/cs-s1-files.txt; then
+            echo "CS-S1 trial must not adopt a repository runtime dependency." >&2
+            exit 1
+          fi
+
+      - name: Validate governance registry remains conservative
+        run: python scripts/validate_trama_component_evidence_registry.py
+
+      - name: Install pinned browser evidence tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/trama-cs-s1-playwright
+          npm install --prefix /tmp/trama-cs-s1-playwright --no-save --ignore-scripts playwright@1.63.0
+          /tmp/trama-cs-s1-playwright/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Capture exact-head candidate evidence
+        run: node scripts/capture_control_center_cs_s1_evidence.cjs
+
+      - name: Upload CS-S1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: control-center-cs-s1-${{ github.event.pull_request.head.sha || github.sha }}
+          path: artifacts/control-center-cs-s1
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Qualification boundary
+        if: always()
+        run: |
+          echo "Candidate evidence only: no runtime migration, dependency adoption, registry promotion, or lifecycle promotion is authorized."
