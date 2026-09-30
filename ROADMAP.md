@@ -242,6 +242,33 @@ La baseline e il backlog governato sono:
 
 La prima tranche riconcilia stato canonico e semantica della maturità senza promuovere livelli. La tranche successiva collegherà solo evidenze già governate e version-bound.
 
+## Control Center modular application migration
+
+The current multi-page HTML implementation is now a **legacy production surface**. New significant Control Center feature development should target the modular application architecture unless required for correctness, security or migration parity.
+
+Canonical references:
+- `docs/architecture/trama-control-center-modular-app-architecture-v1.md`;
+- `docs/strategy/trama-control-center-modular-app-migration-a0-a7.md`.
+
+Governed migration sequence:
+
+1. **A0 — Architecture lock** — architecture, dependency policy, package boundary, rollback rules;
+2. **A1 — Application foundation** — React/TypeScript/Vite shell, typed data layer, schema validation and test harness in isolated preview;
+3. **A2 — Maturity feature** — first vertical migration with Evidence Lane parity;
+4. **A3 — Overview + navigation** — human-readable orientation shell;
+5. **A4 — Ecosystem + Evidence** — accessible graph/list and Evidence Explorer;
+6. **A5 — Operations + Assurance** — governed timeline, operational path and stakeholder assurance;
+7. **A6 — PWA + security + accessibility + parity** — candidate qualification;
+8. **A7 — Public cutover** — explicit Human Review before switching the Render production entrypoint.
+
+Permanent constraints:
+- Control Center remains READ_ONLY;
+- JSON Schema remains contract authority;
+- no GitHub authority inference in the browser;
+- no automatic lifecycle/maturity promotion;
+- legacy production remains rollback-capable until parity and cutover review;
+- DOS-A1 remains `RUNTIME_DEFERRED`.
+
 ## CC3 Governed Forecast & Readiness
 
 CC3 estende il Control Center senza modificare la roadmap R1–R5 e senza introdurre una nuova authority.
