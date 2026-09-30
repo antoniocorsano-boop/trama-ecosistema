@@ -232,7 +232,7 @@ File principali:
 
 La fixture è deliberatamente contract-compliant e non viene presentata come runtime live. `DOS-A1` resta `RUNTIME_DEFERRED`. Nessun pulsante operativo è introdotto.
 
-### OR-05 — Ecosystem component reuse
+### OR-05 — Ecosystem component reuse — **PASS documentale / implementation-ready**
 **Obiettivo:** ridurre componenti custom usando primitive mature e una strategia coerente attraverso Arena, Atlas, Docente OS e Control Center, senza uniformare forzatamente i prodotti.
 
 Priorità:
@@ -243,6 +243,12 @@ Priorità:
 5. diagrammi/stato con semantica coerente.
 
 **Principio:** upstream originale + design token/pattern TRAMA + identità di prodotto preservata.
+
+Output:
+- `docs/analysis/trama-or-05-ecosystem-component-reuse-2026-09-30.md`;
+- `governance/ui-development/trama-ecosystem-component-reuse-or05.json`.
+
+Decisione: nessuna UI library globale. Existing-supply-chain-first. Arena consolida i componenti governed già qualificati; Atlas preserva XYFlow/native; Docente OS riusa prima Radix/cmdk già presenti; Control Center non aggiunge primitive per OR-05. Primo candidato implementativo: `OR-05-I1` sui dialog mechanics del Timetable Docente OS, senza nuova dependency.
 
 ### OR-06 — Cross-ecosystem read-only proof
 **Obiettivo:** una sola prova end-to-end non mutativa che attraversi un workflow reale dell'ecosistema.
