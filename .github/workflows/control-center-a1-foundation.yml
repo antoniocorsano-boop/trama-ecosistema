@@ -8,7 +8,7 @@ on:
       - "control-center/data/context-packs/project-knowledge.json"
       - ".github/workflows/control-center-a1-foundation.yml"
 permissions:
-  contents: read
+  contents: write
 jobs:
   qualify:
     runs-on: ubuntu-latest
@@ -17,13 +17,32 @@ jobs:
         working-directory: apps/control-center
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
         with:
           node-version: "22"
+      - name: Detect committed lockfile
+        id: lock
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "missing=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "missing=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Bootstrap deterministic lockfile
+        if: steps.lock.outputs.missing == 'true'
         run: |
           npm install --package-lock-only --ignore-scripts
           npm install --save-dev --save-exact jsdom@latest @types/node@latest --ignore-scripts
+      - name: Persist bootstrap lockfile to PR branch
+        if: steps.lock.outputs.missing == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "A1: persist deterministic npm lockfile"
+          git push origin "HEAD:${{ github.head_ref }}"
       - name: Install from generated lockfile
         run: npm ci --ignore-scripts
       - name: Typecheck
