@@ -240,6 +240,28 @@ Complete:
 
 Exit requires **Product Parity Human Review**.
 
+### A6 technical qualification
+
+State: **TECHNICALLY_QUALIFIED — exact head `21e0b42d943806f1fb3a8a28acaf88985a6b4fff` / run `36701873581` PASS — AWAITING PRODUCT PARITY HUMAN REVIEW**.
+
+Reference:
+- `docs/implementation/trama-control-center-a6-pwa-parity.md`;
+- `governance/control-center/trama-control-center-a6-qualification.json`;
+- `governance/control-center/trama-control-center-a6-parity-matrix.json`.
+
+Materialized:
+- Workbox injectManifest PWA;
+- explicit offline/stale governed-data marker;
+- strict CSP without unsafe-eval;
+- build-time standalone AJV validator;
+- route error isolation and route-focus management;
+- 320px reflow;
+- 24 committed visual-regression baselines;
+- desktop / phone / LIM / 320 automated evidence;
+- A1–A5 regression PASS.
+
+A7 remains blocked until explicit Product Parity Human Review approval.
+
 ## A7 — Public cutover
 
 Only after A6 PASS:
