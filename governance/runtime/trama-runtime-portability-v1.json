@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "trama.runtime-portability/v1",
+  "id": "TRAMA-OR-08-RUNTIME-PORTABILITY",
+  "status": "PROPOSED_CONTRACT_ONLY",
+  "date": "2026-09-30",
+  "authorityChange": "NONE",
+  "dosA1": "RUNTIME_DEFERRED",
+  "targetClass": "PORTABLE_CONTRACT",
+  "referenceCapability": "lesson.preparation.observe",
+  "candidateAdapters": [
+    {
+      "adapterProfile": "DSH_COMPATIBLE",
+      "runtimeLive": false
+    },
+    {
+      "adapterProfile": "CODEX_COMPATIBLE",
+      "runtimeLive": false
+    }
+  ],
+  "invariants": [
+    "RP-01_SAME_CAPABILITY_IDENTITY",
+    "RP-02_SAME_REQUEST_CONTRACT",
+    "RP-03_SEMANTIC_RESULT_EQUIVALENCE",
+    "RP-04_PROVIDER_PROVENANCE_VISIBLE",
+    "RP-05_FAILURE_NORMALIZATION",
+    "RP-06_AUTHORITY_INVARIANCE",
+    "RP-07_CALLER_ISOLATION",
+    "RP-08_OFFLINE_QUALIFICATION_FIRST",
+    "RP-09_NO_SECRET_LEAKAGE",
+    "RP-10_DOS_A1_UNCHANGED"
+  ],
+  "nextSlice": "OR-08-P1_DETERMINISTIC_PORTABILITY_MATRIX"
+}
