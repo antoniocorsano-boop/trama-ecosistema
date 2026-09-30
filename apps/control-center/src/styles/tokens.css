@@ -1,0 +1,20 @@
+:root {
+  color-scheme: dark;
+  --cc-bg: #071827;
+  --cc-surface: #0b2235;
+  --cc-surface-raised: #0e2b42;
+  --cc-line: #1c4662;
+  --cc-text: #f4f8fb;
+  --cc-muted: #9fb9cb;
+  --cc-info: #58bff7;
+  --cc-ok: #55d79a;
+  --cc-danger: #f37d87;
+  --cc-space-1: 0.25rem;
+  --cc-space-2: 0.5rem;
+  --cc-space-3: 0.75rem;
+  --cc-space-4: 1rem;
+  --cc-space-6: 1.5rem;
+  --cc-space-8: 2rem;
+  --cc-radius: 0.875rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
