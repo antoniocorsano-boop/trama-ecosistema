@@ -184,17 +184,22 @@ Output completato:
 
 **Vincolo confermato:** nessun runtime attivato.
 
-### OR-03 — Runtime adapter contract
+### OR-03 — Runtime adapter contract — **PASS documentale**
 **Obiettivo:** trasformare il Harness Pilot in candidato adapter, non piattaforma centrale.
 
-Output:
-- adapter lifecycle;
-- capabilities;
-- health/status;
-- session/run identity;
-- cancellation semantics;
+Output completato:
+- `docs/contracts/trama-runtime-adapter-contract-v0.md`;
+- descriptor e identity adapter;
+- mapping Harness Pilot -> adapter;
+- capability model;
+- profile/generation/run identity separate;
+- health checks;
 - evidence envelope;
-- explicit unsupported operations.
+- cancellation semantics;
+- unsupported operations esplicite;
+- qualification states e gate;
+- chiusura gap G1–G7 a livello contrattuale;
+- registro DEFER senza backlog implicito.
 
 Prima implementazione candidata: DSH adapter. Codex resta seconda verifica di portabilità.
 
@@ -351,6 +356,19 @@ Decisioni consolidate:
 
 DEFER espliciti e non bloccanti: trasporto, autenticazione/pairing, formato machine-state concreto, controllo remoto multi-host, mutation API. Nessun backlog analitico implicito resta aperto per OR-02.
 
-## 14. Primo prossimo passo
+## 14. Stato OR-03
 
-Eseguire **OR-03 — Runtime Adapter Contract** come slice documentale conclusiva del livello di astrazione runtime: trasformare l'Harness Pilot in candidato adapter dietro `RuntimeGeneration` e `Local Connector`, con capability, lifecycle, observation/evidence e unsupported operations esplicite. Nessuna esecuzione reale del runtime in questa fase.
+**PASS documentale.** Creato `docs/contracts/trama-runtime-adapter-contract-v0.md`.
+
+Il livello di astrazione runtime è ora completo:
+1. `RuntimeGeneration`;
+2. `Local Connector`;
+3. `Runtime Adapter`.
+
+Il Pilot viene riclassificato come candidato adapter e non come piattaforma centrale. Sono fissati single-shot, `maxRetries=0`, snapshot read-only, consumption marker, zero-network qualification, runtime/model identity esplicita, evidence envelope, no auto-approval e unsupported operations negative-testable.
+
+DEFER espliciti: implementazione concreta DSH, adapter Codex di portabilità, gestione credenziali, retry > 0, recovery mutativo, validazione KPI su misura reale. Nessun backlog analitico implicito resta aperto per OR-03.
+
+## 15. Primo prossimo passo
+
+Eseguire **OR-04 — Control Center Observation Integration** come slice read-only: proiettare dati contract-compliant (anche mock) nel Control Center per availability, adapter/version, health, capability state ed evidence refs. Nessun comando operativo, nessuna mutazione, nessuna promozione automatica.
