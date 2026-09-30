@@ -257,7 +257,7 @@ Governed migration sequence:
 3. **A2 — Maturity feature** — QUALIFIED; first modular vertical slice with Evidence Lane parity, axe, canonical viewport evidence and A1 regression PASS; legacy production unchanged;
 4. **A3 — Overview + navigation** — QUALIFIED; modular Home orientation, Project Knowledge presentation, progressive navigation and canonical viewport evidence; legacy production unchanged;
 5. **A4 — Ecosystem + Evidence** — QUALIFIED; governed capability/relationship explorer, lazy accessible React Flow graph, Evidence Explorer and Integrity with A1/A2/A3 regression PASS; legacy production unchanged;
-6. **A5 — Operations + Assurance** — governed timeline, operational path and stakeholder assurance;
+6. **A5 — Operations + Assurance** — QUALIFIED; governed operational path/timeline and evidence-backed stakeholder assurance with A1/A2/A3/A4 regression PASS; legacy production unchanged;
 7. **A6 — PWA + security + accessibility + parity** — candidate qualification;
 8. **A7 — Public cutover** — explicit Human Review before switching the Render production entrypoint.
 
