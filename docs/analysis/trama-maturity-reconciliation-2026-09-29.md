@@ -239,3 +239,36 @@ This analysis and reconciliation do not authorize:
 - student accounts/tracking;
 - synthetic evidence;
 - automatic maturity promotion.
+
+
+## 12. Component evidence expansion checkpoint — 2026-09-30
+
+`TRAMA-COMPONENT-EVIDENCE-EXPANSION-01` closes the **product coverage/addressability** gap identified in this analysis without claiming that component qualification is complete.
+
+Registry coverage after the slice:
+
+- Arena — covered;
+- Atlas — covered through RelationExplorer and CurriculumTree disclosure targets;
+- Docente OS — covered through AppShell, Alert/status and Timetable interactive-cell targets;
+- Control Center — covered through Context Help.
+
+Registry size moves from 6 to 11 machine-addressable targets.
+
+Important distinction:
+
+> all products are now machine-addressable at component-evidence level, but qualification remains partial.
+
+In particular:
+
+- Arena governed Dialog/Tabs remain confirmed BEHAVIOURAL until responsive/accessibility evidence is executed on the component exact head;
+- Atlas targets remain confirmed REGISTERED because isolated component evidence is not yet present, despite strong journey evidence;
+- Docente OS AppShell/Timetable have strong browser evidence but remain confirmed REGISTERED because isolated component evidence is not yet present;
+- Control Center Context Help remains confirmed REGISTERED pending CS-S1 qualification.
+
+The evidence receipt is:
+
+`docs/evidence/trama-component-evidence-expansion-2026-09-30.md`
+
+The governing contract is:
+
+`docs/contracts/trama-component-evidence-expansion-v1.md`
