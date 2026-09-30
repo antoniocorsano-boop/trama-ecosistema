@@ -5,9 +5,12 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 from datetime import datetime, timezone
 
 import build_ecosystem_snapshot_core as core
+from compose_effective_component_evidence import compose_effective_component_evidence
+from project_component_maturity import project_components, validate_projection as validate_component_projection
 
 ROOT = core.ROOT
 ECO02_RECEIPT_PATH = "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md"
@@ -116,8 +119,15 @@ def _cc3f1_human_evidence(snapshot: dict) -> list[dict]:
     ]
 
 
-def build_snapshot(root=ROOT) -> dict:
+def build_snapshot(root=ROOT, live_component_overlay: dict | None = None) -> dict:
     snapshot = core.build_snapshot(root)
+    if live_component_overlay is not None:
+        registry = core.load_json(root / "governance/ui-development/trama-component-evidence-registry-v1.json")
+        effective = compose_effective_component_evidence(registry, live_component_overlay)
+        effective_registry = dict(registry)
+        effective_registry["entries"] = effective["entries"]
+        snapshot["components"] = project_components(effective_registry)
+        validate_component_projection(snapshot["components"])
     existing = {item.get("id") for item in snapshot.get("evidence", [])}
     governed_evidence = _eco02_final_evidence(snapshot) + _cc3f1_human_evidence(snapshot)
     snapshot["evidence"].extend(
@@ -141,9 +151,17 @@ def main() -> int:
         help="Output path relative to repository root.",
     )
     parser.add_argument("--check", action="store_true", help="Build and validate without writing.")
+    parser.add_argument(
+        "--live-component-overlay",
+        help="Optional ephemeral Live Component Evidence Overlay path; never persisted as authority.",
+    )
     args = parser.parse_args()
 
-    snapshot = build_snapshot(ROOT)
+    live_component_overlay = None
+    if args.live_component_overlay:
+        live_component_overlay = json.loads(Path(args.live_component_overlay).read_text(encoding="utf-8"))
+
+    snapshot = build_snapshot(ROOT, live_component_overlay=live_component_overlay)
     validate(snapshot)
 
     if args.check:
