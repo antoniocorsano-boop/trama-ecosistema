@@ -20,8 +20,8 @@ export function AppShell({ children }: Props) {
       <nav className="primary-nav" aria-label="Navigazione principale candidate">
         <NavLink to="/" end>Overview</NavLink>
         <NavLink to="/maturity">Maturità</NavLink>
-        <span aria-disabled="true" data-stage="A4">Ecosistema</span>
-        <span aria-disabled="true" data-stage="A4">Evidenze</span>
+        <NavLink to="/ecosystem">Ecosistema</NavLink>
+        <NavLink to="/evidence">Evidenze</NavLink>
         <span aria-disabled="true" data-stage="A5">Operazioni</span>
       </nav>
 

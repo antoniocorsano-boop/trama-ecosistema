@@ -16,6 +16,8 @@ describe("AppShell", () => {
     expect(screen.getByText(/runtime pubblico legacy resta invariato/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Overview" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Maturità" })).toBeInTheDocument();
-    expect(screen.getByText("Ecosistema")).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("link", { name: "Ecosistema" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Evidenze" })).toBeInTheDocument();
+    expect(screen.getByText("Operazioni")).toHaveAttribute("aria-disabled", "true");
   });
 });

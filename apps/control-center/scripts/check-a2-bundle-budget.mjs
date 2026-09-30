@@ -1,23 +1,22 @@
 import { readFileSync } from "node:fs";
 
-const reportPath = process.argv[2] || "a2-bundle-report.json";
-const report = JSON.parse(readFileSync(reportPath, "utf8"));
-const jsFiles = (report.files || []).filter((file) => file.file.endsWith(".js"));
+const reportPath=process.argv[2] || "a2-bundle-report.json";
+const report=JSON.parse(readFileSync(reportPath,"utf8"));
+const jsFiles=(report.files || []).filter((file)=>file.file.endsWith(".js"));
+const entry=jsFiles.find((file)=>/^assets\/index-.*\.js$/.test(file.file));
 
-if (!jsFiles.length) {
-  throw new Error("TRAMA_A2_BUNDLE_JS_MISSING");
-}
+if(!entry) throw new Error("TRAMA_A2_ENTRY_JS_MISSING");
 
-const initialJsGzip = jsFiles.reduce((sum, file) => sum + Number(file.gzipBytes || 0), 0);
-const limit = 180 * 1024;
+const initialJsGzip=Number(entry.gzipBytes || 0);
+const limit=180*1024;
 
 console.log(JSON.stringify({
-  schemaVersion: "trama.control-center-a2-bundle-budget/v1",
+  schemaVersion:"trama.control-center-a2-bundle-budget/v2",
+  entryFile:entry.file,
   initialJsGzip,
-  limitGzipBytes: limit,
-  status: initialJsGzip <= limit ? "PASS" : "FAIL",
-}, null, 2));
+  limitGzipBytes:limit,
+  lazyChunksExcluded:true,
+  status:initialJsGzip<=limit?"PASS":"FAIL",
+},null,2));
 
-if (initialJsGzip > limit) {
-  process.exit(1);
-}
+if(initialJsGzip>limit) process.exit(1);

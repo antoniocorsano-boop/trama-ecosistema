@@ -155,8 +155,20 @@ export function OverviewView({
             <em>Disponibile →</em>
           </Link>
 
-          <Destination label="Ecosistema" description="Relazioni autorizzate tra componenti e domini" stage="A4" />
-          <Destination label="Evidenze" description="Provenienza, integrità e drill-down evidenziale" stage="A4" />
+          <Link className="destination is-available" to="/ecosystem">
+            <span>
+              <strong>Ecosistema</strong>
+              <small>Capability, authority, flussi e relazioni governate</small>
+            </span>
+            <em>Disponibile →</em>
+          </Link>
+          <Link className="destination is-available" to="/evidence">
+            <span>
+              <strong>Evidenze</strong>
+              <small>Provenienza, freshness, binding e controlli di integrità</small>
+            </span>
+            <em>Disponibile →</em>
+          </Link>
           <Destination label="Operazioni" description="Percorso operativo e cronologia governata" stage="A5" />
           <Destination label="Assurance" description="Privacy, accessibilità, sicurezza e readiness" stage="A5" />
         </nav>
