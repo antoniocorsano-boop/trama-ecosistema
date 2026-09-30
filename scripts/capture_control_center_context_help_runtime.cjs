@@ -115,7 +115,13 @@ async function main() {
   await fs.mkdir(outDir, { recursive: true });
   await new Promise((resolve) => server.listen(port, '127.0.0.1', resolve));
 
-  const browser = await chromium.launch({ headless: true });
+  let browser = null;
+  try {
+    browser = await chromium.launch({ headless: true });
+  } catch (error) {
+    await new Promise((resolve) => server.close(resolve));
+    throw error;
+  }
   const evidence = {
     schemaVersion: 'trama.control-center.context-help-runtime-evidence/v1',
     exactHead,
