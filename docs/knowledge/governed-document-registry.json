@@ -1743,6 +1743,31 @@
         "RUNTIME_AUTHORIZATION_CHANGE",
         "DOS_A1_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-QE01-EXECUTION-PROFILE-2026-09-30",
+      "path": "governance/runtime/qe01-first-qualified-execution-profile.json",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "qualified-execution",
+        "runtime-authorization",
+        "lesson-preparation",
+        "provider-qualification",
+        "dos-a1"
+      ],
+      "decisionRef": "TRAMA-QE-DECISION-2026-09-30",
+      "dependsOn": [
+        "DOC-QE-DECISION-2026-09-30"
+      ],
+      "updateTriggers": [
+        "PROVIDER_QUALIFIED",
+        "ADAPTER_QUALIFIED",
+        "EXECUTION_PROFILE_CHANGE",
+        "HUMAN_EXACT_HEAD_REVIEW",
+        "RUNTIME_EXECUTION"
+      ]
     }
   ]
 }
