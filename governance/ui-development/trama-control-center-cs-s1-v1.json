@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "trama.control-center.cs-s1/v1",
+  "spikeId": "CS-S1_CONTROL_CENTER_CONTEXT_HELP",
+  "status": "TRIAL_EVIDENCE_PENDING",
+  "date": "2026-09-30",
+  "baseline": "12387e245c0387654ed4492d834472d82aba353b",
+  "runtimeImpact": "NONE",
+  "dosA1": "RUNTIME_DEFERRED",
+  "target": "CONTROL_CENTER.CONTEXT_HELP.FAMILY",
+  "constraints": {
+    "deployedRuntimeMayChange": false,
+    "dependencyAdoptionAuthorized": false,
+    "migrationAuthorized": false,
+    "lifecyclePromotionAuthorized": false,
+    "registryPromotionAuthorized": false,
+    "humanDecisionRequired": true
+  },
+  "criteria": [
+    "KEYBOARD",
+    "FOCUS_ORDER",
+    "FOCUS_RETURN",
+    "ESCAPE_DISMISSAL",
+    "LIGHT_DISMISSAL",
+    "ACCESSIBLE_INVOKER_RELATIONSHIP",
+    "MOBILE_PLACEMENT",
+    "NO_PAGE_HORIZONTAL_OVERFLOW",
+    "VISUAL_ADAPTATION",
+    "RUNTIME_COST",
+    "EXIT_PATH"
+  ],
+  "candidates": [
+    {
+      "id": "CURRENT_CUSTOM",
+      "class": "PRODUCT_OWNED_BASELINE",
+      "execution": "OBSERVED_IN_CURRENT_RUNTIME",
+      "semanticModel": "DIALOG_LIKE_CONTEXT_HELP",
+      "knownGaps": [
+        "NO_EXPLICIT_INVOKER_RELATIONSHIP",
+        "NO_FOCUS_ENTRY",
+        "NO_FOCUS_RETURN_CONTRACT",
+        "PAGE_LOCAL_POSITIONING"
+      ],
+      "adoptionState": "CURRENT"
+    },
+    {
+      "id": "NATIVE_POPOVER_AUTO",
+      "class": "NATIVE_PLATFORM",
+      "execution": "ISOLATED_EXACT_HEAD_BROWSER_EVIDENCE",
+      "semanticModel": "NON_MODAL_POPOVER",
+      "tooling": {
+        "browserHarness": "playwright@1.63.0",
+        "runtimeDependencyAdded": false
+      },
+      "adoptionState": "TRIAL_CANDIDATE"
+    },
+    {
+      "id": "WEB_AWESOME_POPOVER",
+      "class": "THIRD_PARTY_PRIMITIVE",
+      "execution": "DOCUMENTATION_BENCHMARK_ONLY",
+      "semanticModel": "NON_MODAL_POPOVER",
+      "referenceVersion": "3.10.0",
+      "runtimeDependencyAdded": false,
+      "adoptionState": "FALLBACK_TRIAL_CANDIDATE",
+      "executionGate": "ONLY_IF_NATIVE_CANDIDATE_HAS_MATERIAL_GAP"
+    }
+  ],
+  "evidence": {
+    "workflow": ".github/workflows/control-center-cs-s1.yml",
+    "lab": "experiments/control-center-cs-s1/native-popover.html",
+    "capture": "scripts/capture_control_center_cs_s1_evidence.cjs",
+    "artifact": null,
+    "exactHead": null
+  },
+  "decision": {
+    "state": "AWAITING_EXACT_HEAD_EVIDENCE",
+    "preferredOrder": [
+      "NATIVE_POPOVER_AUTO",
+      "WEB_AWESOME_POPOVER"
+    ],
+    "reason": "Native-first strategy: execute the zero-runtime-dependency candidate before authorizing an external primitive.",
+    "automaticSelection": false
+  }
+}
