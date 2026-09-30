@@ -149,18 +149,25 @@ async function main() {
       const axOpen = await accessibilityState(page, '#assurance .helpable');
       assert.equal(axOpen.properties.details !== undefined, true, 'Invoker must expose a details relationship in the accessibility tree');
 
+      const secondaryInvoker = page.locator('header .report-link.helpable');
+      await secondaryInvoker.focus();
+      await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
+      assert.equal(await page.locator('#helpTitle').textContent(), 'Dossier stakeholder', 'Changing help source must refresh the contextual content');
+      assert.equal(await invoker.getAttribute('aria-details'), null, 'Previous source must be unbound when Context Help moves');
+      assert.equal(await secondaryInvoker.getAttribute('aria-details'), 'helpPopover', 'New source must own the contextual-help relationship');
+
       await page.keyboard.press('Tab');
-      assert.equal(await page.evaluate(() => document.activeElement?.id || ''), 'helpClose', 'Popover content must follow the invoker in keyboard order');
+      assert.equal(await page.evaluate(() => document.activeElement?.id || ''), 'helpClose', 'Popover content must follow the rebound invoker in keyboard order');
 
       await page.keyboard.press('Escape');
       assert.equal(await popoverOpen(popover), false, 'Escape must dismiss native popover');
       assert.equal(
-        await page.evaluate(() => document.activeElement === document.querySelector('#assurance .helpable')),
+        await page.evaluate(() => document.activeElement === document.querySelector('header .report-link.helpable')),
         true,
-        'Escape must return or preserve focus on the invoker'
+        'Escape must return focus to the currently bound invoker after source rebinding'
       );
 
-      await invoker.click();
+      await invoker.focus();
       await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
       const bounds = await measure(page, '#helpPopover');
       assert.ok(bounds.left >= -1 && bounds.right <= viewport.width + 1, 'Popover must fit horizontally');
@@ -191,6 +198,7 @@ async function main() {
           firstTabTarget: 'helpClose',
           escapeDismissal: true,
           focusReturn: true,
+          sourceRebinding: true,
         },
         lightDismiss: true,
         hoverPersistence: false,
