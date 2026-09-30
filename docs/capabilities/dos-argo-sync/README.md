@@ -488,7 +488,7 @@ La capability è valida quando una modifica limitata della didattica richiede al
 - [x] initial mapping feasibility demonstrated;
 - [ ] reviewable evidence package complete.
 
-**G1 assessment:** IN_PROGRESS / BLOCKED ONLY BY FORMAT VARIABILITY AND ROUND-TRIP/IMPORT SEMANTICS. G2 is not authorized yet.
+**G1 assessment:** IN_PROGRESS / BLOCKED ONLY BY BINARY PROFILE VARIABILITY AND ROUND-TRIP/IMPORT SEMANTICS. UI/domain semantics for state values, date display and order have now been corroborated by official Argo public documentation. G2 is not authorized yet.
 
 ## 25. Stato decisionale
 
@@ -524,3 +524,18 @@ Risultati principali:
 - la compatibilità di un XLS ricostruito non è ancora provata.
 
 G1 chiude ora l'evidenza "real sample inspected" e "initial mapping feasibility", ma resta aperto per variabilità formato e round-trip/import semantics.
+
+
+## 28. Corroborazione documentazione ufficiale online
+
+La documentazione pubblica ufficiale Argo ha ridotto ulteriormente le lacune G1:
+
+- `Num Ordine` documentato per moduli e argomenti;
+- descrizione modulo documentata con limite di 200 caratteri;
+- stati documentati: `Svolto`, `Parzialmente Svolto`, `Non Svolto`;
+- esempi di data in forma `DD-MM-YYYY`;
+- importazione selettiva dell'intero programma o di singoli moduli;
+- comportamento additivo dei moduli importati;
+- conferma del canale XLS e della raccomandazione di non modificare l'originale didUP.
+
+Queste fonti corroborano la **semantica applicativa**, ma non trasformano il formato BIFF in un contratto pubblico stabile e non chiariscono duplicati, round-trip o update-vs-append.
