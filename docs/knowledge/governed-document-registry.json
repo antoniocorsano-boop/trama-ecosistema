@@ -1195,6 +1195,33 @@
         "EVIDENCE_MODEL_CHANGE",
         "A4_QUALIFICATION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A5-OPERATIONS-ASSURANCE",
+      "path": "docs/implementation/trama-control-center-a5-operations-assurance.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "operations",
+        "timeline",
+        "assurance",
+        "accessibility"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION",
+        "DOC-CONTROL-CENTER-A4-ECOSYSTEM-EVIDENCE"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_A5_OPERATIONS_CHANGE",
+        "CONTROL_CENTER_A5_ASSURANCE_CHANGE",
+        "OPERATIONAL_PATH_CHANGE",
+        "ASSURANCE_CLAIM_CHANGE",
+        "A5_QUALIFICATION_CHANGE"
+      ]
     }
   ]
 }
