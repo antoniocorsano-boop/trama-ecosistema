@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "trama.control-center.a6-parity-matrix/v1",
+  "id": "TRAMA-CC-APP-A6-PARITY-01",
+  "status": "CANDIDATE",
+  "baseline": "61e0a1d61dbb983ebf1fd3717d7c0c69114bbe1f",
+  "surfaces": [
+    {
+      "legacy": "control-center/index.html",
+      "candidate": "/#/",
+      "capability": "OVERVIEW_NAVIGATION",
+      "status": "CANDIDATE_PARITY"
+    },
+    {
+      "legacy": "control-center/maturity.html",
+      "candidate": "/#/maturity",
+      "capability": "MATURITY",
+      "status": "CANDIDATE_PARITY"
+    },
+    {
+      "legacy": "control-center/ecosystem.html",
+      "candidate": "/#/ecosystem",
+      "capability": "ECOSYSTEM",
+      "status": "CANDIDATE_PARITY"
+    },
+    {
+      "legacy": "control-center/evidence.html",
+      "candidate": "/#/evidence",
+      "capability": "EVIDENCE_INTEGRITY",
+      "status": "CANDIDATE_PARITY"
+    },
+    {
+      "legacy": "control-center/operations.html",
+      "candidate": "/#/operations",
+      "capability": "OPERATIONS_TIMELINE",
+      "status": "CANDIDATE_PARITY"
+    },
+    {
+      "legacy": "control-center/index.html#assurance",
+      "candidate": "/#/assurance",
+      "capability": "ASSURANCE",
+      "status": "CANDIDATE_PARITY"
+    }
+  ],
+  "crossCutting": [
+    {
+      "id": "PWA_INSTALLABILITY",
+      "legacy": "PRESENT",
+      "candidate": "CANDIDATE_TESTED"
+    },
+    {
+      "id": "OFFLINE_SHELL",
+      "legacy": "PRESENT",
+      "candidate": "CANDIDATE_TESTED"
+    },
+    {
+      "id": "OFFLINE_DATA_FRESHNESS_MARKER",
+      "legacy": "IMPLICIT_CACHE_FALLBACK",
+      "candidate": "EXPLICIT_STALE_MARKER_STRONGER"
+    },
+    {
+      "id": "CSP_COMPATIBILITY",
+      "legacy": "NOT_ENFORCED_AS_MODULAR_TARGET",
+      "candidate": "CANDIDATE_TESTED"
+    },
+    {
+      "id": "ROUTE_ERROR_ISOLATION",
+      "legacy": "PAGE_LEVEL",
+      "candidate": "ROUTE_BOUNDARY_STRONGER"
+    },
+    {
+      "id": "KEYBOARD_AXE",
+      "legacy": "MIXED",
+      "candidate": "CANDIDATE_TESTED"
+    },
+    {
+      "id": "REFLOW_320",
+      "legacy": "NOT_CANONICAL",
+      "candidate": "CANDIDATE_TESTED"
+    },
+    {
+      "id": "ZERO_EXTERNAL_RUNTIME_REQUESTS",
+      "legacy": "TARGET",
+      "candidate": "CANDIDATE_TESTED"
+    }
+  ],
+  "authority": {
+    "readOnly": true,
+    "browserGithubAuthority": false,
+    "productRuntimeAuthority": false,
+    "publicCutoverAuthorized": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "humanReviewRequired": "PRODUCT_PARITY"
+}
