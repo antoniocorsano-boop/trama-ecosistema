@@ -90,8 +90,16 @@
     {
       "id": "OR-05-I2",
       "product": "ARENA",
-      "target": "LEGACY_DIALOG_TABS_CALL_SITES",
-      "priority": "SECOND"
+      "target": "DEAD_LEGACY_DIALOG_TABS_REMOVAL",
+      "priority": "SECOND",
+      "status": "IMPLEMENTED_VERIFYING",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "pullRequest": 344,
+      "exactHead": "4244d9a0840040c2878745d22fb84dc537dca677",
+      "baseRef": "main@a89553c0a3daa71555b6a9ec3a07c3edbf19a176",
+      "dependencyAdditions": 0,
+      "additions": 0,
+      "deletions": 93
     },
     {
       "id": "OR-05-I3",
