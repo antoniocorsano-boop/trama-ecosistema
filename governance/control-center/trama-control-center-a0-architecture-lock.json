@@ -42,5 +42,6 @@
     "EXTERNAL_FONTS",
     "ANALYTICS_TRACKING"
   ],
-  "dosA1": "RUNTIME_DEFERRED"
+  "dosA1": "RUNTIME_DEFERRED",
+  "legacyBaselineDataRef": "governance/control-center/trama-control-center-a0-legacy-baseline.json"
 }
