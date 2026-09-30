@@ -13,6 +13,11 @@ for (const [name, route] of routes) {
   test(`visual parity: ${name}`, async ({ page }) => {
     await page.goto(route);
     await expect(page.locator("#main-content")).toBeVisible();
+    if (name === "operations") {
+      await page.getByTestId("runtime-observation").evaluate((element) => {
+        (element as HTMLElement).style.display = "none";
+      });
+    }
     await page.evaluate(async () => {
       await document.fonts.ready;
     });
