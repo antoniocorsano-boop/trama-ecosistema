@@ -24,6 +24,23 @@ Exit:
 - Human Review of architecture boundaries;
 - no runtime/deploy change.
 
+### A0 materialized baseline
+
+State: **LOCKED — Human Review APPROVED 2026-09-30**.
+
+Materialized outputs:
+
+- `docs/inventory/trama-control-center-a0-legacy-baseline.md`;
+- `governance/control-center/trama-control-center-a0-legacy-baseline.json`;
+- `docs/contracts/trama-control-center-frontend-dependency-policy-v1.md`;
+- `governance/control-center/trama-control-center-a0-architecture-lock.json`;
+- `schemas/control-center-a0-architecture-lock.schema.json`;
+- `scripts/validate_control_center_a0_architecture_lock.py`.
+
+Governance now fails closed on unacknowledged legacy baseline drift or architecture-boundary escalation.
+
+A0 is `LOCKED` after explicit Human Review. This authorizes entry into A1 foundation work only; it does not authorize public cutover, product runtime changes, or DOS-A1.
+
 ## A1 — Application foundation
 
 Create isolated `apps/control-center/` with:
