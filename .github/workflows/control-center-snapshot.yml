@@ -1,4 +1,5 @@
 name: Validate TRAMA Ecosystem Snapshot
+# A6 qualification trigger; remove after snapshot consistency check.
 
 on:
   pull_request:
