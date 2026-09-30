@@ -510,3 +510,30 @@ Decisioni consolidate:
 - `DOS-A1 = RUNTIME_DEFERRED`.
 
 Next slice: **OR-09-P1 — deterministic readiness package validator**.
+
+
+## 20. Stato OR-10
+
+**PASS documentale / NO_RUNTIME implementation-ready.**
+
+Creati:
+- `docs/contracts/trama-product-integrations-contract-v0.md`;
+- `governance/runtime/trama-product-integrations-v1.json`.
+
+Slice prodotto definite:
+- `OR-10-A` — Arena context adapter, READ_ONLY;
+- `OR-10-D` — Docente OS lesson preparation surface, PROPOSE_ONLY;
+- `OR-10-T` — Atlas optional resource adapter, READ_ONLY;
+- `OR-10-X` — cross-product evidence alignment, READ_ONLY.
+
+Decisioni consolidate:
+- ownership e stato restano nei prodotti;
+- Arena authority invariata;
+- Atlas resta opzionale per la preparazione ordinaria;
+- Docente OS mantiene la decisione docente;
+- Shared Capability Layer non diventa domain store o orchestration authority;
+- Control Center resta READ_ONLY;
+- OR-10 v0 non abilita runtime live;
+- `DOS-A1 = RUNTIME_DEFERRED`.
+
+Le quattro slice possono essere preparate in parallelo finché restano NO_RUNTIME e non cambiano authority.
