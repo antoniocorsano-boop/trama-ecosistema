@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "trama.control-center-a0-architecture-lock/v1",
+  "id": "TRAMA-CC-APP-A0-LOCK-01",
+  "status": "AWAITING_HUMAN_REVIEW",
+  "baseline": {
+    "repository": "antoniocorsano-boop/trama-ecosistema",
+    "commit": "c9c3031e022cab6b571b1ea323c938ab6090c353"
+  },
+  "architectureRef": "docs/architecture/trama-control-center-modular-app-architecture-v1.md",
+  "migrationRef": "docs/strategy/trama-control-center-modular-app-migration-a0-a7.md",
+  "legacyBaselineRef": "docs/inventory/trama-control-center-a0-legacy-baseline.md",
+  "dependencyPolicyRef": "docs/contracts/trama-control-center-frontend-dependency-policy-v1.md",
+  "applicationBoundary": "apps/control-center/",
+  "architectureStyle": "MODULAR_MONOLITH_STATIC_READ_ONLY",
+  "packageManager": "npm",
+  "dataAuthority": "GOVERNED_JSON_SCHEMA_AND_DERIVED_STATIC_ARTIFACTS",
+  "browserAuthority": {
+    "githubRead": false,
+    "repositoryWrite": false,
+    "runtimeAuthorization": false,
+    "maturityPromotion": false,
+    "lifecyclePromotion": false
+  },
+  "production": {
+    "legacyRemainsActiveThrough": "A6",
+    "cutoverStage": "A7",
+    "rollbackRequired": true
+  },
+  "humanReviewGates": [
+    "A0_ARCHITECTURE_LOCK",
+    "A6_PRODUCT_PARITY",
+    "A7_PUBLIC_CUTOVER"
+  ],
+  "prohibitedInitial": [
+    "SSR",
+    "NEXTJS",
+    "MICROFRONTEND",
+    "RUNTIME_PLUGIN_SYSTEM",
+    "REDUX",
+    "ZUSTAND",
+    "BROWSER_GITHUB_AUTHORITY",
+    "EXTERNAL_FONTS",
+    "ANALYTICS_TRACKING"
+  ],
+  "dosA1": "RUNTIME_DEFERRED"
+}
