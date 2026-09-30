@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "trama.cross-ecosystem-readonly-proof/v1",
+  "proofId": "OR-06-LESSON-PREPARATION-READONLY",
+  "status": "PROPOSED_IMPLEMENTATION_READY",
+  "workflow": "NEXT_LESSON_PREPARATION",
+  "authority": {
+    "curriculum": "ARENA",
+    "atlasRole": "OPTIONAL_RESOURCE_SOURCE",
+    "docenteOsRole": "TEACHER_DECISION_OWNER",
+    "controlCenterRole": "READ_ONLY_OBSERVER"
+  },
+  "capability": {
+    "key": "lesson.preparation.observe",
+    "supported": true,
+    "authorizedMode": "READ_ONLY",
+    "mutativeCapabilitiesAuthorized": false
+  },
+  "fixture": {
+    "discipline": "Tecnologia",
+    "classRef": "2C",
+    "topic": "Agricoltura come sistema tecnologico",
+    "personalStudentData": false,
+    "atlasOptional": true
+  },
+  "requiredChecks": [
+    "CE-01_AUTHORITY_PRESERVATION",
+    "CE-02_ATLAS_OPTIONALITY",
+    "CE-03_TEACHER_OWNERSHIP",
+    "CE-04_READ_ONLY_RUNTIME",
+    "CE-05_PROVENANCE",
+    "CE-06_STALE_UNKNOWN_HONESTY",
+    "CE-07_PROVIDER_REPLACEABILITY",
+    "CE-08_CONTROL_CENTER_NON_AUTHORITY",
+    "CE-09_NO_PERSONAL_STUDENT_DATA",
+    "CE-10_DETERMINISM"
+  ],
+  "nextSlice": "OR-06-P1_DETERMINISTIC_FIXTURE_VALIDATOR",
+  "runtimeActivationAuthorized": false,
+  "crossProductWritesAuthorized": false,
+  "dosA1": "RUNTIME_DEFERRED"
+}
