@@ -96,11 +96,13 @@
 
   function componentDescription(component){
     const m=component.maturity||{};
+    const observed=component.observedMaturity||m;
     const remaining=(m.remainingEvidenceTypes||[]).map(evidenceGapLabel);
     return [
       shortName(component)+'.',
       'Prodotto: '+productLabel(component.product)+'.',
-      'Maturità confermata: '+(STAGE_LABELS[m.confirmedStage]||m.confirmedStage||'non disponibile')+'.',
+      'Maturità governata: '+(STAGE_LABELS[m.confirmedStage]||m.confirmedStage||'non disponibile')+'.',
+      observed.confirmedStage!==m.confirmedStage?'Evidenza osservata live: '+(STAGE_LABELS[observed.confirmedStage]||observed.confirmedStage||'non disponibile')+'.':'',
       'Candidata: '+(STAGE_LABELS[m.candidateStage]||m.candidateStage||'non disponibile')+'.',
       'Ciclo di vita: '+lifecycleLabel(component.lifecycle)+'.',
       remaining.length?'Evidenze ancora richieste: '+remaining.join(', ')+'.':'Catena evidenziale completa.'
@@ -187,6 +189,7 @@
       return;
     }
     const maturity=component.maturity||{};
+    const observed=component.observedMaturity||maturity;
     const title=document.createElement('h3');
     title.textContent=shortName(component);
     const meta=document.createElement('div');
@@ -194,9 +197,10 @@
     meta.textContent=productLabel(component.product)+' · '+lifecycleLabel(component.lifecycle)+' · '+sourceLabel(component.sourceClass);
     const stage=document.createElement('div');
     stage.className='component-detail-stage';
-    stage.innerHTML='<span>Confermato</span><strong></strong><span>Candidato</span><strong></strong>';
+    stage.innerHTML='<span>Governato</span><strong></strong><span>Osservato live</span><strong></strong><span>Candidato</span><strong></strong>';
     stage.children[1].textContent=STAGE_LABELS[maturity.confirmedStage]||maturity.confirmedStage||'—';
-    stage.children[3].textContent=STAGE_LABELS[maturity.candidateStage]||maturity.candidateStage||'—';
+    stage.children[3].textContent=STAGE_LABELS[observed.confirmedStage]||observed.confirmedStage||'—';
+    stage.children[5].textContent=STAGE_LABELS[maturity.candidateStage]||maturity.candidateStage||'—';
     const evidenceTitle=document.createElement('strong');
     evidenceTitle.textContent='Evidenze';
     const evidence=document.createElement('ul');
