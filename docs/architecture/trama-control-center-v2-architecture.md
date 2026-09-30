@@ -1,7 +1,9 @@
 # TRAMA Control Center v2 — Architettura
 
 **Data:** 24 settembre 2026  
-**Stato:** PROPOSTA ARCHITETTURALE / READ_ONLY / NO WRITE AUTHORITY
+**Stato:** SUPERSEDED REFERENCE / READ_ONLY / NO WRITE AUTHORITY
+
+> **Superseded 2026-09-30:** the current canonical frontend architecture is `docs/architecture/trama-control-center-modular-app-architecture-v1.md`. This document remains as historical context for the original v2 direction.
 
 ## 1. Decisione architetturale
 
