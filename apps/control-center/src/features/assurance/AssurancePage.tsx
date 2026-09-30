@@ -1,4 +1,4 @@
-import {useEffect,useMemo,useState} from "react";
+import {useEffect,useState} from "react";
 import {loadEcosystemSnapshot,type SnapshotLoadState} from "../../data/client";
 import {hasFormalCertificate,statusLabel,targetGapKinds,toAssuranceModel} from "../../domain/assurance/model";
 import "./assurance.css";
@@ -12,7 +12,7 @@ export function AssurancePage(){
  if(state.status==="LOADING") return <Status message="Caricamento delle evidenze di assurance…"/>;
  if(state.status==="INVALID"||state.status==="UNAVAILABLE") return <Status message="Snapshot non utilizzabile. La candidate non deduce conformità o certificazioni." error/>;
  const model=toAssuranceModel(state.data);
- const domains=useMemo(()=>[...new Set(model.claims.map(c=>c.domain).filter(Boolean) as string[])].sort(),[model.claims]);
+ const domains=[...new Set(model.claims.map(c=>c.domain).filter(Boolean) as string[])].sort();
  const claims=model.claims.filter(c=>domain==="ALL"||c.domain===domain);
  const formal=model.claims.filter(hasFormalCertificate).length;
  return <section className="assurance-page" aria-labelledby="assurance-title">
