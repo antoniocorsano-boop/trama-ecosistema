@@ -162,7 +162,7 @@ Per il docente, il risultato atteso non è “componenti uguali”, ma comportam
 
 ## 8. First implementation candidates
 
-### OR-05-I1 — Docente OS dialog mechanics reuse
+### OR-05-I1 — Docente OS dialog mechanics reuse — **IMPLEMENTED / VERIFYING**
 **Candidate più forte.**
 
 Perimetro:
@@ -172,6 +172,15 @@ Perimetro:
 - nessuna nuova dependency;
 - preservare UI/copy;
 - regression e accessibility required.
+
+Implementation tracking:
+- repository: `antoniocorsano-boop/docente-os-2026-27`;
+- PR: `#644`;
+- exact head: `695f930b2012ce41f36698a0acf57906b975d3ed`;
+- base: `develop@1d8c4ee7c1209f624b412db1b11e666c2de25aaa`;
+- changed files: 1;
+- dependency additions: 0;
+- status: Draft / mergeable; CI evidence pending.
 
 ### OR-05-I2 — Arena legacy call-site consolidation
 - migrare call site dal legacy confirm/tabs ai governed components;
