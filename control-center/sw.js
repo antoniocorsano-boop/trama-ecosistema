@@ -1,5 +1,5 @@
-const CACHE='trama-control-center-v15';
-const SHELL=['./index.html','./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./maturity.html','./ecosystem.html','./evidence.html','./operations.html','./project-knowledge-state.js','./component-maturity.js','./data/ecosystem-snapshot.json','./data/context-packs/project-knowledge.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md','./e3/index.html'];
+const CACHE='trama-control-center-v16';
+const SHELL=['./index.html','./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg','./maturity.html','./ecosystem.html','./evidence.html','./operations.html','./project-knowledge-state.js','./component-maturity.js','./data/ecosystem-snapshot.json','./data/effective-component-evidence.json','./data/context-packs/project-knowledge.json','./reports/stakeholder-assurance.html','./reports/stakeholder-assurance.md','./e3/index.html'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));
@@ -35,13 +35,14 @@ self.addEventListener('fetch',event=>{
   const isHtml=u.pathname.endsWith('/')||u.pathname.endsWith('.html');
   const isSnapshot=u.pathname.endsWith('/data/ecosystem-snapshot.json');
   const isProjectKnowledge=u.pathname.endsWith('/data/context-packs/project-knowledge.json');
+  const isComponentEvidence=u.pathname.endsWith('/data/effective-component-evidence.json');
 
   if(isNavigation||isHtml){
     event.respondWith(networkFirst(request,'./index.html'));
     return;
   }
 
-  if(isSnapshot||isProjectKnowledge){
+  if(isSnapshot||isProjectKnowledge||isComponentEvidence){
     event.respondWith(networkFirst(request));
     return;
   }
