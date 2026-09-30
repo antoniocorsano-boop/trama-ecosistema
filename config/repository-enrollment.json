@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.repository-enrollment/v1",
-  "updatedAt": "2026-09-28T19:42:00Z",
+  "updatedAt": "2026-09-29T21:08:53Z",
   "policy": {
     "discovery": "EXPLICIT_ALLOWLIST_ONLY",
     "wildcards": false,
@@ -55,7 +55,8 @@
       "sourceRefs": [
         "docs/knowledge/source-registry.json#teacher-context"
       ],
-      "state": "ENROLLED"
+      "state": "ENROLLED",
+      "activeDevelopmentRef": "develop"
     }
   ]
 }

@@ -65,6 +65,21 @@ supports:
   - level: 4
 ```
 
+### 4.1 Binding forte
+
+Le evidenze forti `PR_EXACT_HEAD`, `AUTOMATED_TEST`, `SECURITY_GATE`, `ACCESSIBILITY_GATE`, `RUNTIME_CANARY` e `HUMAN_REVIEW` devono essere version-bound.
+
+Il binding richiede:
+- esattamente uno tra `capabilityRef` e `areaRef`;
+- `releaseRef`;
+- `exactHead` a 40 caratteri esadecimali.
+
+`capabilityRef` si usa quando esiste una capability canonica reale.
+
+`areaRef` si usa per una prova di prodotto quando inventare una capability solo per soddisfare lo schema sarebbe semanticamente scorretto. In questo caso `areaRef` deve coincidere con `evidence.area`.
+
+Nessuno dei due binding crea authority o autorizza promozione.
+
 ## 5. Tipi di evidenza
 
 | Tipo | Significato |

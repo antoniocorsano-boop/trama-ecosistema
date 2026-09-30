@@ -10,6 +10,12 @@ on:
       - "schemas/maturity-area-definitions.schema.json"
       - "tests/fixtures/cc2-f1d/**"
       - "scripts/evaluate_maturity_definitions.py"
+      - "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md"
+      - "docs/contracts/trama-maturity-evidence-binding-v1.md"
+      - "scripts/test_maturity_evidence_binding.py"
+      - "scripts/validate_maturity_evidence_registry.py"
+      - "governance/maturity/trama-maturity-evidence-registry-v1.json"
+      - "schemas/maturity-evidence-registry.schema.json"
       - "scripts/build_ecosystem_snapshot.py"
       - "control-center/data/ecosystem-snapshot.json"
       - "scripts/build_ecosystem_snapshot_core.py"
@@ -40,6 +46,12 @@ on:
       - "schemas/maturity-area-definitions.schema.json"
       - "tests/fixtures/cc2-f1d/**"
       - "scripts/evaluate_maturity_definitions.py"
+      - "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md"
+      - "docs/contracts/trama-maturity-evidence-binding-v1.md"
+      - "scripts/test_maturity_evidence_binding.py"
+      - "scripts/validate_maturity_evidence_registry.py"
+      - "governance/maturity/trama-maturity-evidence-registry-v1.json"
+      - "schemas/maturity-evidence-registry.schema.json"
       - "scripts/build_ecosystem_snapshot.py"
       - "control-center/data/ecosystem-snapshot.json"
       - "governance/ui-development/trama-component-evidence-registry-v1.json"
@@ -133,6 +145,11 @@ jobs:
           assert all(item.get("sourceRef") for item in events["events"])
           print("TRAMA_CC2_F6_GOVERNED_EVENTS_PASS")
           PY
+      - name: Validate governed product maturity evidence registry
+        shell: bash
+        run: |
+          python scripts/validate_maturity_evidence_registry.py
+          python scripts/test_maturity_evidence_binding.py
       - name: Validate generated snapshot against JSON Schema
         shell: bash
         run: |
@@ -174,9 +191,16 @@ jobs:
               assert area["interpretation"] == "BOUND_EVIDENCE_ONLY", area
               assert area["evidenceBindingStatus"] in {"NONE","PARTIAL","COMPLETE"}, area
               assert isinstance(area["nextRequiredEvidenceTypes"], list), area
-          assert areas["arena"]["evidenceBindingStatus"] == "NONE", areas["arena"]
-          assert areas["docente-os"]["evidenceBindingStatus"] == "NONE", areas["docente-os"]
-          assert areas["atlas"]["evidenceBindingStatus"] == "PARTIAL", areas["atlas"]
+          assert areas["governance"]["confirmedLevel"] == 4, areas["governance"]
+          assert areas["arena"]["confirmedLevel"] == 4, areas["arena"]
+          assert areas["atlas"]["confirmedLevel"] == 4, areas["atlas"]
+          assert areas["docente-os"]["confirmedLevel"] == 3, areas["docente-os"]
+          assert areas["docente-os"]["nextRequiredEvidenceTypes"] == ["RUNTIME_CANARY"], areas["docente-os"]
+          assert all(area["evidenceBindingStatus"] == "PARTIAL" for area in areas.values()), areas
+          assert not any(
+              item.get("area") == "docente-os" and item.get("type") == "RUNTIME_CANARY"
+              for item in snapshot["evidence"]
+          )
           print("TRAMA_MATURITY_WIRING_CONSERVATIVE_PASS")
           PY
       - name: Validate TRAMA-MATURITY-RECONCILIATION-01
@@ -226,7 +250,7 @@ jobs:
           source = json.loads(Path("governance/ui-development/trama-component-evidence-registry-v1.json").read_text(encoding="utf-8"))
           projected = {item["componentId"]: item for item in snapshot["components"]}
           assert set(projected) == {item["componentId"] for item in source["entries"]}, projected
-          assert snapshot["schemaVersion"] == "1.5.0", snapshot["schemaVersion"]
+          assert snapshot["schemaVersion"] == "1.6.0", snapshot["schemaVersion"]
           assert snapshot["sourceState"]["component-evidence-registry"]["status"] == "FRESH"
           assert projected["ARENA.DIALOG_CONFIRM.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"
           assert projected["ARENA.TABS.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"

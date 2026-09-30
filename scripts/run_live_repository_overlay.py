@@ -40,6 +40,8 @@ def observation_to_live_overlay(observation):
             "freshnessStatus":row["freshnessStatus"],
             "completenessStatus":row["completenessStatus"],
             "observedHead":row.get("observedHead"),
+            "activeDevelopmentRef":row.get("activeDevelopmentRef"),
+            "observedActiveDevelopmentHead":row.get("observedActiveDevelopmentHead"),
             "sourceRefs":list(row.get("sourceRefs",[]))
         })
 

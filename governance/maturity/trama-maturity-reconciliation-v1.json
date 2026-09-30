@@ -9,12 +9,10 @@
   "areas": [
     {
       "area": "governance",
-      "observedLevel": 1,
-      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "observedLevel": 4,
+      "target": "L5_AFTER_REGRESSION_HISTORY",
       "nextWork": [
-        "bind approved-contract evidence",
-        "bind exact-head evidence",
-        "bind human-review evidence"
+        "collect version-bound regression history"
       ],
       "l5Gap": [
         "REGRESSION_HISTORY"
@@ -22,14 +20,11 @@
     },
     {
       "area": "arena",
-      "observedLevel": 0,
-      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "observedLevel": 4,
+      "target": "L5_AFTER_REGRESSION_HISTORY",
       "nextWork": [
-        "bind DOCUMENT_CANONICAL",
-        "bind CONTRACT_APPROVED",
-        "bind PR_EXACT_HEAD",
-        "bind AUTOMATED_TEST",
-        "bind HUMAN_REVIEW"
+        "complete product regression history",
+        "complete component responsive/accessibility evidence for governed dialog/tabs"
       ],
       "l5Gap": [
         "REGRESSION_HISTORY"
@@ -37,15 +32,11 @@
     },
     {
       "area": "atlas",
-      "observedLevel": 0,
-      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "observedLevel": 4,
+      "target": "L5_AFTER_STABILITY_AND_ADOPTION",
       "nextWork": [
-        "bind DOCUMENT_CANONICAL",
-        "bind CONTRACT_APPROVED",
-        "bind PR_EXACT_HEAD",
-        "bind AUTOMATED_TEST",
-        "retain existing ACCESSIBILITY_GATE",
-        "retain existing HUMAN_REVIEW"
+        "collect regression history",
+        "collect adoption evidence without student tracking"
       ],
       "l5Gap": [
         "REGRESSION_HISTORY",
@@ -54,18 +45,14 @@
     },
     {
       "area": "docente-os",
-      "observedLevel": 0,
-      "target": "L4_CANDIDATE_AFTER_BINDING",
+      "observedLevel": 3,
+      "target": "L4_AFTER_VERSION_BOUND_RUNTIME_CANARY",
       "nextWork": [
-        "model active development ref separately from default branch",
-        "bind DOCUMENT_CANONICAL",
-        "bind CONTRACT_APPROVED",
-        "bind PR_EXACT_HEAD",
-        "bind AUTOMATED_TEST",
-        "bind RUNTIME_CANARY",
-        "bind HUMAN_REVIEW"
+        "recover or execute version-bound RUNTIME_CANARY",
+        "preserve active develop ref separately from default main"
       ],
       "l5Gap": [
+        "RUNTIME_CANARY",
         "REGRESSION_HISTORY",
         "ADOPTION_EVIDENCE"
       ]

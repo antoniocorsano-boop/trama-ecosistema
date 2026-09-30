@@ -20,6 +20,7 @@ def validate_object(schema_path,data,label,expect_valid=True):
         print(f'{label}: expected invalid but schema accepted fixture',file=sys.stderr)
         raise SystemExit(1)
 
+validate(Path('schemas/repository-enrollment.schema.json'),Path('config/repository-enrollment.json'))
 validate(Path('schemas/project-context-snapshot.schema.json'),Path('control-center/data/project-context-snapshot.json'))
 validate(Path('schemas/trama-context-pack.schema.json'),Path('control-center/data/context-packs/atlas-percorsi.json'))
 validate(Path('schemas/trama-context-pack.schema.json'),Path('control-center/data/context-packs/project-knowledge.json'))

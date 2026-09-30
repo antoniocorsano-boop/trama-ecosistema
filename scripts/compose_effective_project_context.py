@@ -18,6 +18,22 @@ def _repo_index(overlay):
         seen[name]=head
     return seen
 
+def _active_development_index(overlay):
+    seen={}
+    for item in overlay.get("repositories",[]):
+        repository=item.get("repository")
+        ref=item.get("activeDevelopmentRef")
+        head=item.get("observedActiveDevelopmentHead")
+        if ref is None and head is None:
+            continue
+        if not repository or not ref or not head:
+            raise EffectiveContextError("ACTIVE_DEVELOPMENT_IDENTITY_INVALID")
+        state=(ref,head)
+        if repository in seen and seen[repository]!=state:
+            raise EffectiveContextError("CONTRADICTORY_ACTIVE_DEVELOPMENT_IDENTITY")
+        seen[repository]=state
+    return seen
+
 def _pr_index(overlay):
     seen={}
     for item in overlay.get("pullRequests",[]):
@@ -113,6 +129,7 @@ def compose_effective_project_context(governed_snapshot,live_overlay,governed_sn
         raise EffectiveContextError("LIVE_OBSERVED_AT_MISSING")
 
     repos=_repo_index(live_overlay)
+    active_development=_active_development_index(live_overlay)
     pull_requests=_pr_index(live_overlay)
     anchors=_anchor_index(live_overlay)
     for repository,number in pull_requests:
@@ -133,6 +150,14 @@ def compose_effective_project_context(governed_snapshot,live_overlay,governed_sn
             "class":"VOLATILE",
             "subject":"repository-head",
             "repository":repository,
+            "observedHead":head
+        })
+    for repository,(ref,head) in sorted(active_development.items()):
+        facts.append({
+            "class":"VOLATILE",
+            "subject":"active-development-head",
+            "repository":repository,
+            "ref":ref,
             "observedHead":head
         })
     for item in sorted(live_overlay.get("pullRequests",[]),key=lambda x:(x["repository"],x["number"])):

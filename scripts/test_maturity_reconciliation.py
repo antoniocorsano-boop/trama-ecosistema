@@ -32,7 +32,7 @@ assert "A1 ECO-02/P1 e A2 Atlas R3-F0/S3 sono chiusi e verificati" in plan_text
 
 snapshot=snapshot_builder.build_snapshot(ROOT)
 snapshot_builder.validate(snapshot)
-assert snapshot["schemaVersion"]=="1.5.0"
+assert snapshot["schemaVersion"]=="1.6.0"
 
 areas={a["id"]:a for a in snapshot["areas"]}
 assert set(areas)=={"governance","arena","atlas","docente-os"}
@@ -43,24 +43,34 @@ for area in areas.values():
     assert area["candidateLevel"]==area["confirmedLevel"]
     assert isinstance(area["nextRequiredEvidenceTypes"],list)
 
-assert areas["arena"]["confirmedLevel"]==0
-assert areas["arena"]["evidenceBindingStatus"]=="NONE"
-assert areas["arena"]["nextTargetLevel"]==1
-assert areas["arena"]["nextRequiredEvidenceTypes"]==["DOCUMENT_CANONICAL"]
-
-assert areas["docente-os"]["confirmedLevel"]==0
-assert areas["docente-os"]["evidenceBindingStatus"]=="NONE"
-assert areas["docente-os"]["nextRequiredEvidenceTypes"]==["DOCUMENT_CANONICAL"]
-
-assert areas["atlas"]["confirmedLevel"]==0
-assert areas["atlas"]["evidenceBindingStatus"]=="PARTIAL"
-assert "DOCUMENT_CANONICAL" in areas["atlas"]["nextRequiredEvidenceTypes"]
-
-assert areas["governance"]["confirmedLevel"]==1
+assert areas["governance"]["confirmedLevel"]==4
 assert areas["governance"]["evidenceBindingStatus"]=="PARTIAL"
-assert "CONTRACT_APPROVED" in areas["governance"]["nextRequiredEvidenceTypes"]
+assert areas["governance"]["nextTargetLevel"]==5
+assert areas["governance"]["nextRequiredEvidenceTypes"]==["REGRESSION_HISTORY"]
+
+assert areas["arena"]["confirmedLevel"]==4
+assert areas["arena"]["evidenceBindingStatus"]=="PARTIAL"
+assert areas["arena"]["nextTargetLevel"]==5
+assert areas["arena"]["nextRequiredEvidenceTypes"]==["REGRESSION_HISTORY"]
+
+assert areas["atlas"]["confirmedLevel"]==4
+assert areas["atlas"]["evidenceBindingStatus"]=="PARTIAL"
+assert areas["atlas"]["nextTargetLevel"]==5
+assert set(areas["atlas"]["nextRequiredEvidenceTypes"])=={"REGRESSION_HISTORY","ADOPTION_EVIDENCE"}
+
+assert areas["docente-os"]["confirmedLevel"]==3
+assert areas["docente-os"]["evidenceBindingStatus"]=="PARTIAL"
+assert areas["docente-os"]["nextTargetLevel"]==4
+assert areas["docente-os"]["nextRequiredEvidenceTypes"]==["RUNTIME_CANARY"]
+assert not any(
+    item.get("area")=="docente-os" and item.get("type")=="RUNTIME_CANARY"
+    for item in snapshot["evidence"]
+)
 
 assert backlog["policy"]["evidenceBoundOnly"] is True
+assert {x["area"]:x["observedLevel"] for x in backlog["areas"]}=={
+    "governance":4,"arena":4,"atlas":4,"docente-os":3
+}
 assert backlog["components"]["currentRegistryCount"]==6
 assert set(backlog["components"]["missingProductCoverage"])=={"ATLAS","DOCENTE_OS"}
 assert backlog["functionalSequence"][:2]==["R3-P2","R3-P5"]

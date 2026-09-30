@@ -113,14 +113,30 @@ def validate_evidence_record(evidence: dict) -> None:
 
     if evidence_type in STRONG_BOUND_EVIDENCE_TYPES:
         binding = evidence.get("binding") or {}
+        target_refs = [
+            key for key in ("capabilityRef", "areaRef") if binding.get(key)
+        ]
+        if len(target_refs) != 1:
+            raise ValueError(
+                f"{evidence.get('id')}: {evidence_type} requires exactly one of capabilityRef or areaRef"
+            )
         missing = [
             key
-            for key in ("capabilityRef", "releaseRef", "exactHead")
+            for key in ("releaseRef", "exactHead")
             if not binding.get(key)
         ]
         if missing:
             raise ValueError(
                 f"{evidence.get('id')}: {evidence_type} requires binding fields {missing}"
+            )
+        exact_head = str(binding.get("exactHead") or "")
+        if len(exact_head) != 40 or any(ch not in "0123456789abcdef" for ch in exact_head.lower()):
+            raise ValueError(
+                f"{evidence.get('id')}: {evidence_type} exactHead must be a 40-hex commit"
+            )
+        if binding.get("areaRef") and binding["areaRef"] != evidence.get("area"):
+            raise ValueError(
+                f"{evidence.get('id')}: areaRef must match evidence area"
             )
 
 

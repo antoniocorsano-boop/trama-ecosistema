@@ -22,7 +22,8 @@ from pathlib import Path
 
 from evaluate_maturity_definitions import evaluate_area, validate_definitions
 from project_component_maturity import project_components, validate_projection as validate_component_projection
-from validate_stakeholder_assurance import assurance_readiness, validate_registry
+from validate_stakeholder_assurance import assurance_readiness, validate_registry as validate_assurance_registry
+from validate_maturity_evidence_registry import validate_registry as validate_maturity_evidence_registry
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -255,9 +256,14 @@ def build_integrity_checks(snapshot: dict, now: datetime) -> list[dict]:
                 unresolved.append(f"{expansion['id']} → dependency:{ref}")
     for item in evidence:
         binding = item.get("binding") or {}
-        ref = binding.get("capabilityRef")
-        if ref is not None and ref not in capability_ids:
-            unresolved.append(f"{item['id']} → capability:{ref}")
+        capability_ref = binding.get("capabilityRef")
+        area_ref = binding.get("areaRef")
+        if capability_ref is not None and capability_ref not in capability_ids:
+            unresolved.append(f"{item['id']} → capability:{capability_ref}")
+        if area_ref is not None and area_ref not in area_ids:
+            unresolved.append(f"{item['id']} → area:{area_ref}")
+        if capability_ref is not None and area_ref is not None:
+            unresolved.append(f"{item['id']} → binding:multiple-targets")
 
     unresolved = sorted(set(unresolved))
     checks.append(
@@ -619,8 +625,10 @@ def build_snapshot(root: Path) -> dict:
     assurance_registry = load_json(root / "config/stakeholder-assurance-registry.json")
     governed_events = load_json(root / "status/governed-events.json")
     component_registry = load_json(root / "governance/ui-development/trama-component-evidence-registry-v1.json")
+    maturity_evidence_registry = load_json(root / "governance/maturity/trama-maturity-evidence-registry-v1.json")
     validate_definitions(maturity_definitions)
-    validate_registry(assurance_registry)
+    validate_assurance_registry(assurance_registry)
+    validate_maturity_evidence_registry(maturity_evidence_registry)
     components = project_components(component_registry)
     validate_component_projection(components)
     caps = capability_map(eco_status)
@@ -655,6 +663,8 @@ def build_snapshot(root: Path) -> dict:
                     "supports": [],
                 }
             )
+
+    evidence.extend(json.loads(json.dumps(maturity_evidence_registry["evidence"])))
 
     gates = [
         {
@@ -834,7 +844,7 @@ def build_snapshot(root: Path) -> dict:
     ]
     snapshot = {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-        "schemaVersion": "1.5.0",
+        "schemaVersion": "1.6.0",
         "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),
@@ -920,6 +930,17 @@ def validate(snapshot: dict) -> None:
         raise ValueError("Duplicate capability id detected")
 
     validate_component_projection(snapshot["components"])
+
+    for evidence_item in snapshot["evidence"]:
+        binding = evidence_item.get("binding") or {}
+        capability_ref = binding.get("capabilityRef")
+        area_ref = binding.get("areaRef")
+        if capability_ref is not None and capability_ref not in capability_ids:
+            raise ValueError(f"Unresolved evidence capability reference: {capability_ref}")
+        if area_ref is not None and area_ref not in area_ids:
+            raise ValueError(f"Unresolved evidence area reference: {area_ref}")
+        if capability_ref is not None and area_ref is not None:
+            raise ValueError(f"Evidence has multiple binding targets: {evidence_item['id']}")
 
     for capability in snapshot["capabilities"]:
         area_ref = capability.get("maturityAreaRef")

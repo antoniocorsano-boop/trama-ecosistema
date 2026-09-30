@@ -818,6 +818,75 @@
         "COMPONENT_EVIDENCE_COVERAGE_CHANGE",
         "FUNCTIONAL_SEQUENCE_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-MATURITY-EVIDENCE-BINDING",
+      "path": "docs/contracts/trama-maturity-evidence-binding-v1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "maturity",
+        "evidence-binding",
+        "product-readiness",
+        "project-knowledge"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-MATURITY-RECONCILIATION-ANALYSIS",
+        "DOC-TRAMA-MATURITY-RECONCILIATION-BACKLOG"
+      ],
+      "updateTriggers": [
+        "MATURITY_EVIDENCE_BINDING_CHANGE",
+        "PRODUCT_EVIDENCE_CHANGE",
+        "ACTIVE_DEVELOPMENT_REF_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-TRAMA-MATURITY-EVIDENCE-VERIFICATION",
+      "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "maturity",
+        "evidence",
+        "exact-head",
+        "human-review",
+        "product-readiness"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-TRAMA-MATURITY-EVIDENCE-BINDING"
+      ],
+      "updateTriggers": [
+        "PRODUCT_EVIDENCE_CHANGE",
+        "EXACT_HEAD_REQUALIFICATION",
+        "RUNTIME_CANARY_EVIDENCE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-TRAMA-MATURITY-EVIDENCE-MODEL",
+      "path": "docs/assurance/trama-maturity-evidence-model.md",
+      "kind": "POLICY",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "maturity",
+        "evidence",
+        "evidence-binding",
+        "governance"
+      ],
+      "decisionRef": "TRAMA-ADR-014",
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE",
+        "DOC-TRAMA-MATURITY-EVIDENCE-BINDING"
+      ],
+      "updateTriggers": [
+        "MATURITY_MODEL_CHANGE",
+        "MATURITY_EVIDENCE_BINDING_CHANGE",
+        "EVIDENCE_TYPE_CHANGE"
+      ]
     }
   ]
 }

@@ -51,6 +51,14 @@ def repository_projection(observation):
     for r in repositories:
         if r.get("observedHead"):
             observed_heads.append({"subject":"repository-head","repository":r["repository"],"observedHead":r["observedHead"],"sourceRefs":r["sourceRefs"]})
+        if r.get("activeDevelopmentRef") and r.get("observedActiveDevelopmentHead"):
+            observed_heads.append({
+                "subject":"active-development-head",
+                "repository":r["repository"],
+                "ref":r["activeDevelopmentRef"],
+                "observedHead":r["observedActiveDevelopmentHead"],
+                "sourceRefs":r["sourceRefs"],
+            })
     return {"status":"CURRENT" if complete else "PARTIAL","openPullRequests":open_prs,"repositories":repositories,"observedHeads":observed_heads}
 
 def build(repository_observation_path=None, repository_observation_data=None, generated_at=None):
@@ -98,6 +106,8 @@ def build(repository_observation_path=None, repository_observation_data=None, ge
               "freshnessStatus":observed["freshnessStatus"],
               "completenessStatus":observed["completenessStatus"],
               "observedHead":observed["observedHead"],
+              "activeDevelopmentRef":observed.get("activeDevelopmentRef"),
+              "observedActiveDevelopmentHead":observed.get("observedActiveDevelopmentHead"),
               "sourceRefs":observed["sourceRefs"]
             }
 

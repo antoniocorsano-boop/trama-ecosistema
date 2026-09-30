@@ -1,43 +1,49 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.5.0",
-  "generatedAt": "2026-09-29T20:49:36.155015+00:00",
+  "schemaVersion": "1.6.0",
+  "generatedAt": "2026-09-29T21:30:27.729449+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "ref": "STATUS.md",
       "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "ref": "ROADMAP.md",
       "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
+    },
+    "maturity-evidence-registry": {
+      "status": "FRESH",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
+      "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
+      "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
     }
   },
   "phases": [
@@ -77,8 +83,8 @@
       "id": "governance",
       "name": "Governance e authority",
       "ownerDomain": "TRAMA",
-      "confirmedLevel": 1,
-      "candidateLevel": 1,
+      "confirmedLevel": 4,
+      "candidateLevel": 4,
       "confidence": "LOW",
       "status": "PARTIAL",
       "evidenceRefs": [
@@ -88,55 +94,71 @@
         "EV-SOURCE-DECISION-REGISTER",
         "EV-SOURCE-GOVERNED-EVENTS",
         "EV-SOURCE-COMPONENT-EVIDENCE-REGISTRY",
+        "EV-SOURCE-MATURITY-EVIDENCE-REGISTRY",
+        "EV-MAT-GOV-DOC",
+        "EV-MAT-GOV-CONTRACT-ADR001",
+        "EV-MAT-GOV-CC3F1-HEAD",
+        "EV-MAT-GOV-CC3F1-HUMAN",
         "EV-TRAMA-ADR-014"
       ],
       "evidenceBindingStatus": "PARTIAL",
-      "nextTargetLevel": 2,
+      "nextTargetLevel": 5,
       "nextRequiredEvidenceTypes": [
-        "CONTRACT_APPROVED"
+        "REGRESSION_HISTORY"
       ],
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
+      "lastEvaluatedAt": "2026-09-29T21:30:27.729449+00:00"
     },
     {
       "id": "arena",
       "name": "Arena",
       "ownerDomain": "Arena",
-      "confirmedLevel": 0,
-      "candidateLevel": 0,
+      "confirmedLevel": 4,
+      "candidateLevel": 4,
       "confidence": "LOW",
       "status": "PARTIAL",
-      "evidenceRefs": [],
-      "evidenceBindingStatus": "NONE",
-      "nextTargetLevel": 1,
+      "evidenceRefs": [
+        "EV-MAT-ARENA-DOC",
+        "EV-MAT-ARENA-CONTRACT-ADR002",
+        "EV-MAT-ARENA-PR312-HEAD",
+        "EV-MAT-ARENA-PR312-CI",
+        "EV-MAT-ARENA-PR312-HUMAN"
+      ],
+      "evidenceBindingStatus": "PARTIAL",
+      "nextTargetLevel": 5,
       "nextRequiredEvidenceTypes": [
-        "DOCUMENT_CANONICAL"
+        "REGRESSION_HISTORY"
       ],
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
+      "lastEvaluatedAt": "2026-09-29T21:30:27.729449+00:00"
     },
     {
       "id": "atlas",
       "name": "Atlas",
       "ownerDomain": "Atlas",
-      "confirmedLevel": 0,
-      "candidateLevel": 0,
+      "confirmedLevel": 4,
+      "candidateLevel": 4,
       "confidence": "LOW",
       "status": "PARTIAL",
       "evidenceRefs": [
+        "EV-MAT-ATLAS-DOC",
+        "EV-MAT-ATLAS-CONTRACT-ADR007",
+        "EV-MAT-ATLAS-PR32-HEAD",
+        "EV-MAT-ATLAS-PR32-CI",
         "EV-R3-F0-EXIT-ACCESSIBILITY",
         "EV-R3-F0-EXIT-HUMAN"
       ],
       "evidenceBindingStatus": "PARTIAL",
-      "nextTargetLevel": 1,
+      "nextTargetLevel": 5,
       "nextRequiredEvidenceTypes": [
-        "DOCUMENT_CANONICAL"
+        "ADOPTION_EVIDENCE",
+        "REGRESSION_HISTORY"
       ],
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
@@ -144,21 +166,27 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
+      "lastEvaluatedAt": "2026-09-29T21:30:27.729449+00:00"
     },
     {
       "id": "docente-os",
       "name": "Docente OS",
       "ownerDomain": "Docente OS",
-      "confirmedLevel": 0,
-      "candidateLevel": 0,
+      "confirmedLevel": 3,
+      "candidateLevel": 3,
       "confidence": "LOW",
       "status": "PARTIAL",
-      "evidenceRefs": [],
-      "evidenceBindingStatus": "NONE",
-      "nextTargetLevel": 1,
+      "evidenceRefs": [
+        "EV-MAT-DOS-DOC",
+        "EV-MAT-DOS-CONTRACT-ADR006",
+        "EV-MAT-DOS-PR579-HEAD",
+        "EV-MAT-DOS-PR579-CI",
+        "EV-MAT-DOS-ECO02-HUMAN"
+      ],
+      "evidenceBindingStatus": "PARTIAL",
+      "nextTargetLevel": 4,
       "nextRequiredEvidenceTypes": [
-        "DOCUMENT_CANONICAL"
+        "RUNTIME_CANARY"
       ],
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
@@ -166,7 +194,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-09-29T20:49:36.155015+00:00"
+      "lastEvaluatedAt": "2026-09-29T21:30:27.729449+00:00"
     }
   ],
   "capabilities": [
@@ -691,7 +719,7 @@
         "path": "STATUS.md",
         "sha256": "89ca30fa15449e8728854bdb848fc90cd962d5147f15870377ddb5bee3862d1d"
       },
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -709,7 +737,7 @@
         "path": "ROADMAP.md",
         "sha256": "55619aa5ed01a35d8b994138b948127c456cb59adfc814b4a72c8e39775bf290"
       },
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -727,7 +755,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -745,7 +773,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "8bd26b86df31a356ffc30b4e77d81bd88e3b8d207ec2deb6082ad10a3e65323b"
       },
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -763,7 +791,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -781,13 +809,503 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "73759af6c53e9a037fb59e10077cb12f582f0da5e5d1c4daf8fe8a49bfa63cdb"
       },
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
       },
       "confidence": "HIGH",
       "supports": []
+    },
+    {
+      "id": "EV-SOURCE-MATURITY-EVIDENCE-REGISTRY",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "MATURITY_EVIDENCE",
+      "status": "PASS",
+      "source": {
+        "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
+        "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
+      },
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
+      "freshness": {
+        "policy": "UNTIL_CHANGE",
+        "expiresAt": null
+      },
+      "confidence": "HIGH",
+      "supports": []
+    },
+    {
+      "id": "EV-MAT-GOV-DOC",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "governance",
+      "subject": "TRAMA ecosystem governance source registry",
+      "status": "PASS",
+      "source": {
+        "ref": "source-registry:ecosystem-governance",
+        "path": "docs/knowledge/source-registry.json"
+      },
+      "observedAt": "2026-09-25T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-GOV-CONTRACT-ADR001",
+      "type": "CONTRACT_APPROVED",
+      "area": "governance",
+      "subject": "TRAMA governance authority contract",
+      "status": "PASS",
+      "source": {
+        "ref": "TRAMA-ADR-001",
+        "path": "docs/decisions/decision-register.json",
+        "decisionRef": "TRAMA-ADR-001",
+        "decisionStatus": "APPROVED"
+      },
+      "observedAt": "2026-09-21T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-GOV-CC3F1-HEAD",
+      "type": "PR_EXACT_HEAD",
+      "area": "governance",
+      "subject": "CC3-F1 exact reviewed implementation head",
+      "status": "PASS",
+      "source": {
+        "ref": "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md",
+        "path": "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md"
+      },
+      "observedAt": "2026-09-26T00:00:00Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 3
+        }
+      ],
+      "binding": {
+        "capabilityRef": "CC3-F1",
+        "releaseRef": "TRAMA:CC3-F1",
+        "exactHead": "686fe01b91b5e5b38a9956198e79c5ff713b0b8f"
+      }
+    },
+    {
+      "id": "EV-MAT-GOV-CC3F1-HUMAN",
+      "type": "HUMAN_REVIEW",
+      "area": "governance",
+      "subject": "CC3-F1 human exact-head review",
+      "status": "PASS",
+      "source": {
+        "ref": "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md",
+        "path": "docs/reviews/CC3-F1-HUMAN-REVIEW-2026-09-26.md"
+      },
+      "observedAt": "2026-09-26T00:00:00Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 4
+        },
+        {
+          "gateRef": "GATE-CC3-F1-HUMAN"
+        }
+      ],
+      "binding": {
+        "capabilityRef": "CC3-F1",
+        "releaseRef": "TRAMA:CC3-F1",
+        "exactHead": "686fe01b91b5e5b38a9956198e79c5ff713b0b8f"
+      }
+    },
+    {
+      "id": "EV-MAT-ARENA-DOC",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "arena",
+      "subject": "Arena curriculum authority in source registry",
+      "status": "PASS",
+      "source": {
+        "ref": "source-registry:curriculum",
+        "path": "docs/knowledge/source-registry.json"
+      },
+      "observedAt": "2026-09-25T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-ARENA-CONTRACT-ADR002",
+      "type": "CONTRACT_APPROVED",
+      "area": "arena",
+      "subject": "Arena authoritative curriculum decision",
+      "status": "PASS",
+      "source": {
+        "ref": "TRAMA-ADR-002",
+        "path": "docs/decisions/decision-register.json",
+        "decisionRef": "TRAMA-ADR-002",
+        "decisionStatus": "APPROVED"
+      },
+      "observedAt": "2026-09-21T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-ARENA-PR312-HEAD",
+      "type": "PR_EXACT_HEAD",
+      "area": "arena",
+      "subject": "Arena ECO-01/S3 curriculum-source profile exact head",
+      "status": "PASS",
+      "source": {
+        "ref": "github:CurManLight_arena/pull/312",
+        "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+        "repository": "antoniocorsano-boop/CurManLight_arena",
+        "prNumber": 312,
+        "mergeCommit": "0d931c2c20a2c47c7a72c077faacf499feda6908"
+      },
+      "observedAt": "2026-09-20T13:13:36Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 3
+        }
+      ],
+      "binding": {
+        "areaRef": "arena",
+        "releaseRef": "CurManLight_arena#312",
+        "exactHead": "65a7f5b820b344ec61f8e09d7559012aae521bbc"
+      }
+    },
+    {
+      "id": "EV-MAT-ARENA-PR312-CI",
+      "type": "AUTOMATED_TEST",
+      "area": "arena",
+      "subject": "Arena Product CI for ECO-01/S3 curriculum-source profile",
+      "status": "PASS",
+      "source": {
+        "ref": "github-actions:CurManLight_arena/run/35512448131",
+        "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+        "repository": "antoniocorsano-boop/CurManLight_arena",
+        "prNumber": 312,
+        "runId": "35512448131"
+      },
+      "observedAt": "2026-09-20T13:06:15Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 3
+        },
+        {
+          "level": 4
+        }
+      ],
+      "binding": {
+        "areaRef": "arena",
+        "releaseRef": "CurManLight_arena#312",
+        "exactHead": "65a7f5b820b344ec61f8e09d7559012aae521bbc"
+      }
+    },
+    {
+      "id": "EV-MAT-ARENA-PR312-HUMAN",
+      "type": "HUMAN_REVIEW",
+      "area": "arena",
+      "subject": "Arena ECO-01/S3 human cross-review",
+      "status": "PASS",
+      "source": {
+        "ref": "github:CurManLight_arena/pull/312#issuecomment-5750603947",
+        "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+        "repository": "antoniocorsano-boop/CurManLight_arena",
+        "prNumber": 312,
+        "commentId": "5750603947"
+      },
+      "observedAt": "2026-09-20T15:03:40Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 4
+        }
+      ],
+      "binding": {
+        "areaRef": "arena",
+        "releaseRef": "CurManLight_arena#312",
+        "exactHead": "65a7f5b820b344ec61f8e09d7559012aae521bbc"
+      }
+    },
+    {
+      "id": "EV-MAT-ATLAS-DOC",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "atlas",
+      "subject": "Atlas resource/publication authority in source registry",
+      "status": "PASS",
+      "source": {
+        "ref": "source-registry:learning-resources+atlas-publication",
+        "path": "docs/knowledge/source-registry.json"
+      },
+      "observedAt": "2026-09-25T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-ATLAS-CONTRACT-ADR007",
+      "type": "CONTRACT_APPROVED",
+      "area": "atlas",
+      "subject": "Atlas public and didactic surface governance decision",
+      "status": "PASS",
+      "source": {
+        "ref": "TRAMA-ADR-007",
+        "path": "docs/decisions/decision-register.json",
+        "decisionRef": "TRAMA-ADR-007",
+        "decisionStatus": "APPROVED"
+      },
+      "observedAt": "2026-09-21T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-ATLAS-PR32-HEAD",
+      "type": "PR_EXACT_HEAD",
+      "area": "atlas",
+      "subject": "Atlas R3-F0 exit exact head",
+      "status": "PASS",
+      "source": {
+        "ref": "github:Curriculum-Atlas/pull/32",
+        "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+        "repository": "antoniocorsano-boop/Curriculum-Atlas",
+        "prNumber": 32,
+        "mergeCommit": "423444be9dd883f4c35c6c1c89e94f6b0e5405fa"
+      },
+      "observedAt": "2026-09-25T04:19:33Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 3
+        }
+      ],
+      "binding": {
+        "capabilityRef": "R3-F0",
+        "releaseRef": "Curriculum-Atlas#32",
+        "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+        "eventRef": "EVT-R3-F0-S3V2-MERGE-32"
+      }
+    },
+    {
+      "id": "EV-MAT-ATLAS-PR32-CI",
+      "type": "AUTOMATED_TEST",
+      "area": "atlas",
+      "subject": "Atlas R3-F0 F5 Exit exact-head workflow",
+      "status": "PASS",
+      "source": {
+        "ref": "github-actions:Curriculum-Atlas/run/36093494130",
+        "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+        "repository": "antoniocorsano-boop/Curriculum-Atlas",
+        "prNumber": 32,
+        "runId": "36093494130"
+      },
+      "observedAt": "2026-09-25T04:13:56Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 4
+        }
+      ],
+      "binding": {
+        "capabilityRef": "R3-F0",
+        "releaseRef": "Curriculum-Atlas#32",
+        "exactHead": "bc11577eeeeeed9c43ad62ac43fb7561e1197246",
+        "eventRef": "EVT-R3-F0-S3V2-MERGE-32"
+      }
+    },
+    {
+      "id": "EV-MAT-DOS-DOC",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "docente-os",
+      "subject": "Docente OS teacher-context authority in source registry",
+      "status": "PASS",
+      "source": {
+        "ref": "source-registry:teacher-context",
+        "path": "docs/knowledge/source-registry.json"
+      },
+      "observedAt": "2026-09-25T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-DOS-CONTRACT-ADR006",
+      "type": "CONTRACT_APPROVED",
+      "area": "docente-os",
+      "subject": "Arena to Docente OS professional-flow contract",
+      "status": "PASS",
+      "source": {
+        "ref": "TRAMA-ADR-006",
+        "path": "docs/decisions/decision-register.json",
+        "decisionRef": "TRAMA-ADR-006",
+        "decisionStatus": "IMPLEMENTED"
+      },
+      "observedAt": "2026-09-21T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "EV-MAT-DOS-PR579-HEAD",
+      "type": "PR_EXACT_HEAD",
+      "area": "docente-os",
+      "subject": "Docente OS Runtime Release lineage exact head",
+      "status": "PASS",
+      "source": {
+        "ref": "github:docente-os-2026-27/pull/579",
+        "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+        "repository": "antoniocorsano-boop/docente-os-2026-27",
+        "prNumber": 579,
+        "mergeCommit": "0e0916445bf5eb729aab883275d62e5968ad7601"
+      },
+      "observedAt": "2026-09-22T17:41:37Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 3
+        }
+      ],
+      "binding": {
+        "areaRef": "docente-os",
+        "releaseRef": "docente-os-2026-27#579",
+        "exactHead": "06410a7360ccd7eb55e049154c0c3657e6a24714"
+      }
+    },
+    {
+      "id": "EV-MAT-DOS-PR579-CI",
+      "type": "AUTOMATED_TEST",
+      "area": "docente-os",
+      "subject": "Docente OS Product CI for Runtime Release lineage",
+      "status": "PASS",
+      "source": {
+        "ref": "github-actions:docente-os-2026-27/run/35760485652",
+        "path": "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md",
+        "repository": "antoniocorsano-boop/docente-os-2026-27",
+        "prNumber": 579,
+        "runId": "35760485652"
+      },
+      "observedAt": "2026-09-22T17:27:37Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 4
+        }
+      ],
+      "binding": {
+        "areaRef": "docente-os",
+        "releaseRef": "docente-os-2026-27#579",
+        "exactHead": "06410a7360ccd7eb55e049154c0c3657e6a24714"
+      }
+    },
+    {
+      "id": "EV-MAT-DOS-ECO02-HUMAN",
+      "type": "HUMAN_REVIEW",
+      "area": "docente-os",
+      "subject": "Docente OS final real-case human acceptance",
+      "status": "PASS",
+      "source": {
+        "ref": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+        "path": "docs/pilots/ECO-02-P1-FINAL-HUMAN-ACCEPTANCE-2026-09-25.md",
+        "repository": "antoniocorsano-boop/docente-os-2026-27",
+        "prNumber": 600,
+        "mergeCommit": "02cfe7accee9abe63dc7c7d936ce1f3e0b7b8d7d"
+      },
+      "observedAt": "2026-09-25T12:46:47Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 4
+        },
+        {
+          "gateRef": "GATE-ECO02-HUMAN-FINAL"
+        }
+      ],
+      "binding": {
+        "areaRef": "docente-os",
+        "releaseRef": "docente-os-2026-27#600",
+        "exactHead": "91bba74acc45f2958fa856f3e8ae4f0b526a2edf",
+        "eventRef": "EVT-ECO02-P1-FINAL-HUMAN-PASS"
+      }
     },
     {
       "id": "EV-R3-F0-EXIT-ACCESSIBILITY",
@@ -855,7 +1373,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-09-29T20:49:36.155015+00:00",
+      "observedAt": "2026-09-29T21:30:27.729449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
