@@ -20,17 +20,19 @@ assert.match(maturity,/deferSelection:window\.matchMedia/);
 assert.match(maturity,/Un livello basso può indicare prove non ancora bound/);
 assert.match(maturity,/Prove bound/);
 assert.match(maturity,/nextRequiredEvidenceTypes/);
-assert.match(sw,/trama-control-center-v14/);
+assert.match(sw,/trama-control-center-v15/);
 assert.match(sw,/\.\/maturity\.html/);
 assert.match(sw,/\.\/component-maturity\.js/);
 
 assert.deepEqual(api.STAGES,['REGISTERED','ISOLATED','BEHAVIOURAL','RESPONSIVE_VISUAL','ACCESSIBILITY']);
 assert(Array.isArray(snapshot.components),'snapshot components missing');
-assert(snapshot.components.length>=1,'snapshot has no components');
+assert.equal(snapshot.components.length,11,'snapshot component count mismatch');
 
 const model=api.buildModel(snapshot.components);
 assert.equal(model.nodes.length,snapshot.components.length);
 assert(model.products.includes('ARENA'),'Arena lane missing');
+assert(model.products.includes('ATLAS'),'Atlas lane missing');
+assert(model.products.includes('DOCENTE_OS'),'Docente OS lane missing');
 assert(model.products.includes('TRAMA_CONTROL_CENTER'),'Control Center lane missing');
 
 for(const node of model.nodes){
@@ -52,6 +54,16 @@ const governed=snapshot.components.find(c=>c.componentId==='ARENA.DIALOG_CONFIRM
 assert(governed,'governed dialog missing');
 const governedNode=model.nodes.find(n=>n.component.componentId===governed.componentId);
 assert.equal(governedNode.confirmed,'BEHAVIOURAL');
+
+const relation=snapshot.components.find(c=>c.componentId==='ATLAS.RELATION_EXPLORER.FAMILY');
+assert(relation,'Atlas RelationExplorer missing');
+assert.equal(relation.maturity.confirmedStage,'REGISTERED');
+assert.equal(relation.maturity.candidateStage,'ACCESSIBILITY');
+
+const appshell=snapshot.components.find(c=>c.componentId==='DOCENTE_OS.APPSHELL.FAMILY');
+assert(appshell,'Docente OS AppShell missing');
+assert.equal(appshell.maturity.confirmedStage,'REGISTERED');
+assert.equal(appshell.maturity.candidateStage,'ACCESSIBILITY');
 
 const legacy=snapshot.components.find(c=>c.componentId==='ARENA.DIALOG_CONFIRM.LEGACY');
 assert(legacy,'legacy dialog missing');
