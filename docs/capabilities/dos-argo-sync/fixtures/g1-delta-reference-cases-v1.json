@@ -1,0 +1,422 @@
+{
+  "schemaVersion": "g1-delta-reference-cases-v1",
+  "capability": "CAP-DOS-ARGO-SYNC",
+  "status": "NOT_RUNTIME",
+  "notes": [
+    "Reference fixtures only; no XLS assumptions.",
+    "Stable IDs are authoritative within these fixtures.",
+    "Baseline promotion requires exact human confirmation."
+  ],
+  "cases": [
+    {
+      "id": "R01_NO_OP",
+      "baseline": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-001",
+                "description": "Tecnica",
+                "order": 1,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-001",
+                "description": "Tecnica",
+                "order": 1,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 0,
+        "conflictCount": 0,
+        "states": []
+      }
+    },
+    {
+      "id": "R02_MODIFIED",
+      "baseline": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-002",
+                "description": "Tecnologia",
+                "order": 2,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-002",
+                "description": "Tecnologia e bisogni umani",
+                "order": 2,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 1,
+        "conflictCount": 0,
+        "states": [
+          {
+            "entityId": "A-002",
+            "state": "MODIFIED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R03_MOVED",
+      "baseline": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-003",
+                "description": "Sistema tecnologico",
+                "order": 3,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-003",
+                "description": "Sistema tecnologico",
+                "order": 1,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 1,
+        "conflictCount": 0,
+        "states": [
+          {
+            "entityId": "A-003",
+            "state": "MOVED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R04_PERFORMANCE_ONLY",
+      "baseline": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-003",
+                "description": "Sistema tecnologico",
+                "order": 3,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-003",
+                "description": "Sistema tecnologico",
+                "order": 3,
+                "performedStatus": "PERFORMED",
+                "performedAt": "2026-09-30",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 1,
+        "structuralActionableCount": 0,
+        "conflictCount": 0,
+        "states": [
+          {
+            "entityId": "A-003",
+            "state": "PERFORMANCE_STATUS_CHANGED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R05_BLOCKED_REMOVAL",
+      "baseline": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-001",
+                "description": "Tecnica",
+                "order": 1,
+                "performedStatus": "PERFORMED",
+                "deletionEligibility": "BLOCKED_BY_USAGE"
+              }
+            ]
+          }
+        ]
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": []
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 1,
+        "conflictCount": 1,
+        "states": [
+          {
+            "entityId": "A-001",
+            "state": "CONFLICT",
+            "reason": "BLOCKED_BY_USAGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R06_UNKNOWN_REMOVAL",
+      "baseline": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": [
+              {
+                "id": "A-001",
+                "description": "Tecnica",
+                "order": 1,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "UNKNOWN"
+              }
+            ]
+          }
+        ]
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "arguments": []
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 1,
+        "conflictCount": 1,
+        "states": [
+          {
+            "entityId": "A-001",
+            "state": "CONFLICT",
+            "reason": "UNKNOWN_DELETE_ELIGIBILITY"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R07_NEW",
+      "baseline": {
+        "modules": []
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-02",
+            "description": "Agricoltura come sistema tecnologico",
+            "order": 2,
+            "arguments": [
+              {
+                "id": "A-004",
+                "description": "Elementi del sistema agricolo",
+                "order": 1,
+                "performedStatus": "NOT_PERFORMED",
+                "deletionEligibility": "ELIGIBLE"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 1,
+        "conflictCount": 0,
+        "states": [
+          {
+            "entityId": "M-02",
+            "state": "NEW"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R08_EXACT_DUPLICATE",
+      "candidate": {
+        "id": null,
+        "description": "Agricoltura come sistema tecnologico",
+        "order": 2
+      },
+      "existing": [
+        {
+          "id": "M-02",
+          "description": "Agricoltura come sistema tecnologico",
+          "order": 2
+        }
+      ],
+      "expected": {
+        "classification": "EXACT_MATCH",
+        "state": "NO_OP"
+      }
+    },
+    {
+      "id": "R09_POSSIBLE_DUPLICATE",
+      "candidate": {
+        "id": null,
+        "description": "Agricoltura: sistema tecnologico",
+        "order": 2
+      },
+      "existing": [
+        {
+          "id": "M-02",
+          "description": "Agricoltura come sistema tecnologico",
+          "order": 2
+        }
+      ],
+      "expected": {
+        "classification": "POSSIBLE_MATCH",
+        "state": "CONFLICT"
+      }
+    },
+    {
+      "id": "R10_LINEAGE_PREVIOUS_YEAR",
+      "baseline": {
+        "modules": []
+      },
+      "current": {
+        "modules": [
+          {
+            "id": "M-24-01",
+            "description": "Tecnica, tecnologia e sistemi",
+            "order": 1,
+            "originType": "COPIED_FROM_PREVIOUS_YEAR",
+            "originSchoolYear": "2025/2026",
+            "originEntityId": "M-OLD-01",
+            "arguments": []
+          }
+        ]
+      },
+      "expected": {
+        "actionableCount": 1,
+        "conflictCount": 0,
+        "states": [
+          {
+            "entityId": "M-24-01",
+            "state": "NEW",
+            "lineagePreserved": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "R11_PENDING_PACKAGE_SUPERSEDED",
+      "prepared": {
+        "baselineVersion": "A",
+        "currentVersion": "B",
+        "deltaDigest": "digest-B"
+      },
+      "currentCanonicalVersion": "C",
+      "expected": {
+        "packageState": "SUPERSEDED",
+        "baselineVersion": "A",
+        "baselineAdvanceAllowed": false
+      }
+    },
+    {
+      "id": "R12_CONFIRMED_ADVANCE",
+      "prepared": {
+        "baselineVersion": "A",
+        "currentVersion": "B",
+        "deltaDigest": "digest-B"
+      },
+      "externalResult": "CONFIRMED",
+      "humanConfirmation": {
+        "deltaDigest": "digest-B",
+        "currentVersion": "B"
+      },
+      "expected": {
+        "baselineVersion": "B",
+        "baselineAdvanceAllowed": true
+      }
+    }
+  ]
+}
