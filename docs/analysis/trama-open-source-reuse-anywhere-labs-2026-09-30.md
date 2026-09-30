@@ -129,7 +129,7 @@ Il riuso non modifica:
 
 ## 6. Piano operativo smart
 
-### OR-00 — License & provenance gate
+### OR-00 — License & provenance gate — **PASS CON RISERVA DI PERIMETRO**
 **Obiettivo:** stabilire cosa può essere riusato legalmente e con quale obbligo di attribuzione.
 
 Output:
@@ -267,6 +267,50 @@ Questo documento è la baseline dell'analisi, non una decisione architetturale f
 
 Le sole decisioni che matureranno devono essere promosse in ADR dedicate; lo stato operativo deve essere riflesso nel Control Center/Project Knowledge secondo il modello dual-speed già adottato.
 
-## 11. Primo prossimo passo
+## 11. OR-00 — Esito License & provenance gate
 
-Eseguire **OR-00 License & provenance gate** sui due exact head indicati. È il più piccolo passo che abilita riuso reale senza introdurre debito o authority drift.
+### 11.1 DSH Desktop
+
+**Esito:** `CODE_REUSE_ALLOWED` per il codice originale del repository e del package `dsh-plugin-desktop`, con obbligo di conservare copyright e testo MIT nelle copie o porzioni sostanziali.
+
+Evidenze verificate sull'exact head `85b79816c6ac0ae07df51d138da67d7c7baf7167`:
+- `LICENSE` radice: MIT, copyright 2026 Anywhere Labs;
+- `dsh-plugin-desktop/LICENSE`: MIT;
+- `dsh-plugin-desktop/package.json`: `license: MIT`;
+- `dsh-plugin-desktop/THIRD_PARTY_NOTICES.md`: inventario delle dipendenze redistribuite;
+- `dsh-plugin-desktop/scripts/verify-licenses.mjs`: gate automatico sulle licenze di produzione, con allowlist per MIT, Apache-2.0, BSD, ISC, MPL-2.0 e altre licenze redistribuibili e gestione separata delle licenze con obbligo di notice;
+- `.gitmodules`: `deepseek-harness` è un submodule esterno e non va considerato automaticamente coperto dalla licenza del repository Desktop.
+
+**Regola operativa:** riuso diretto ammesso soltanto per file appartenenti al perimetro DSH Desktop verificato; submodule, cartelle `vendor`, pacchetti vendorizzati e asset terzi richiedono verifica propria. Dove possibile, preferire dipendenze upstream anziché copia di codice vendorizzato.
+
+### 11.2 Agents Anywhere
+
+**Esito generale:** `REFERENCE_ONLY` per `contracts/`, `connector/`, `server/` e `web-next/` sull'exact head `ea27e0b45701c59ba93695617d901433ba8f68b0`, perché non è stata individuata una licenza radice applicabile né dichiarazioni di licenza nei manifest principali di connector, server o web.
+
+**Eccezione verificata:** `dsh-bridge/` è `CODE_REUSE_ALLOWED` sotto MIT:
+- `dsh-bridge/LICENSE`: MIT, copyright 2026 Agents Anywhere Contributors;
+- `dsh-bridge/package.json`: `license: MIT`.
+
+**Cautela ulteriore:** il processo `prepack` di `dsh-bridge` copia contenuti da `../connector` in `bundled-connector`. Poiché `connector/` non ha una licenza applicabile individuata, un artefatto impacchettato che includa quel contenuto non deve essere assunto integralmente MIT senza ulteriore chiarimento. Il riuso sicuro riguarda il codice sorgente specificamente coperto dal perimetro `dsh-bridge/`, non automaticamente il connector inglobato durante il packaging.
+
+### 11.3 Classificazione aggiornata
+
+| Percorso | Stato OR-00 | Uso TRAMA consentito |
+|---|---|---|
+| `dsh-desktop` codice originale | **CODE_REUSE_ALLOWED / MIT** | ADOPT o ADAPT con attribution |
+| `dsh-plugin-desktop` | **CODE_REUSE_ALLOWED / MIT** | candidato prioritario per OR-01 |
+| `dsh-desktop/deepseek-harness` submodule | **SEPARATE_LICENSE_CHECK** | non copiare per inferenza |
+| `dsh-desktop/vendor/**` | **SEPARATE_LICENSE_CHECK** | preferire upstream / verificare singolo artefatto |
+| `Agents-Anywhere/dsh-bridge/**` | **CODE_REUSE_ALLOWED / MIT** | ADAPT possibile, escluso bundled connector non verificato |
+| `Agents-Anywhere/contracts/**` | **REFERENCE_ONLY** | reimplementare concetti, non copiare testo/codice |
+| `Agents-Anywhere/connector/**` | **REFERENCE_ONLY** | riferimento architetturale |
+| `Agents-Anywhere/server/**` | **REFERENCE_ONLY** | riferimento architetturale |
+| `Agents-Anywhere/web-next/**` | **REFERENCE_ONLY** | usare librerie upstream, non wrapper/copied source |
+
+### 11.4 Conseguenza progettuale
+
+OR-00 sblocca **OR-01** senza necessità di altre verifiche generali: il candidato di riuso diretto è DSH Desktop. Agents Anywhere resta una fonte di pattern e contratti concettuali, salvo `dsh-bridge/`, che può essere analizzato come sorgente MIT separata.
+
+## 12. Primo prossimo passo
+
+Eseguire **OR-01 — DSH lifecycle extraction** come slice unica e non mutativa: estrarre generation lifecycle, idempotent release, subprocess ownership, cancellation, profile switching e recovery semantics, producendo il solo `TRAMA Runtime Generation Contract v0` e la relativa gap list.
