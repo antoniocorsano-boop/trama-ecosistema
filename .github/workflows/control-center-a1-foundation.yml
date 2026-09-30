@@ -7,6 +7,9 @@ on:
       - "control-center/data/ecosystem-snapshot.json"
       - "control-center/data/context-packs/project-knowledge.json"
       - ".github/workflows/control-center-a1-foundation.yml"
+      - "docs/implementation/trama-control-center-a1-foundation.md"
+      - "docs/strategy/trama-control-center-modular-app-migration-a0-a7.md"
+      - "docs/knowledge/governed-document-registry.json"
 permissions:
   contents: read
 jobs:
