@@ -149,12 +149,31 @@ async function main() {
       const axOpen = await accessibilityState(page, '#assurance .helpable');
       assert.equal(axOpen.properties.details !== undefined, true, 'Invoker must expose a details relationship in the accessibility tree');
 
+      const initialBounds = await measure(page, '#helpPopover');
+      assert.ok(initialBounds.left >= -1 && initialBounds.right <= viewport.width + 1, 'Initial popover must fit horizontally');
+      assert.ok(initialBounds.top >= -1 && initialBounds.bottom <= viewport.height + 1, 'Initial popover must fit vertically');
+      assert.ok(initialBounds.documentScrollWidth <= initialBounds.documentClientWidth + 1, 'Initial Context Help must not create page-level horizontal overflow');
+
+      const screenshot = path.join(outDir, `runtime-${viewport.label}.png`);
+      await page.screenshot({ path: screenshot, fullPage: true });
+
+      await page.locator('h1').click();
+      assert.equal(await popoverOpen(popover), false, 'Outside click must light-dismiss the popover');
+
+      await invoker.click();
+      await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
+
       const secondaryInvoker = page.locator('header .report-link.helpable');
       await secondaryInvoker.focus();
       await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
       assert.equal(await page.locator('#helpTitle').textContent(), 'Dossier stakeholder', 'Changing help source must refresh the contextual content');
       assert.equal(await invoker.getAttribute('aria-details'), null, 'Previous source must be unbound when Context Help moves');
       assert.equal(await secondaryInvoker.getAttribute('aria-details'), 'helpPopover', 'New source must own the contextual-help relationship');
+
+      const reboundBounds = await measure(page, '#helpPopover');
+      assert.ok(reboundBounds.left >= -1 && reboundBounds.right <= viewport.width + 1, 'Rebound popover must fit horizontally');
+      assert.ok(reboundBounds.top >= -1 && reboundBounds.bottom <= viewport.height + 1, 'Rebound popover must fit vertically');
+      assert.ok(reboundBounds.documentScrollWidth <= reboundBounds.documentClientWidth + 1, 'Rebound Context Help must not create page-level horizontal overflow');
 
       await page.keyboard.press('Tab');
       assert.equal(await page.evaluate(() => document.activeElement?.id || ''), 'helpClose', 'Popover content must follow the rebound invoker in keyboard order');
@@ -166,19 +185,6 @@ async function main() {
         true,
         'Escape must return focus to the currently bound invoker after source rebinding'
       );
-
-      await invoker.focus();
-      await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
-      const bounds = await measure(page, '#helpPopover');
-      assert.ok(bounds.left >= -1 && bounds.right <= viewport.width + 1, 'Popover must fit horizontally');
-      assert.ok(bounds.top >= -1 && bounds.bottom <= viewport.height + 1, 'Popover must fit vertically');
-      assert.ok(bounds.documentScrollWidth <= bounds.documentClientWidth + 1, 'Context help must not create page-level horizontal overflow');
-
-      const screenshot = path.join(outDir, `runtime-${viewport.label}.png`);
-      await page.screenshot({ path: screenshot, fullPage: true });
-
-      await page.locator('h1').click();
-      assert.equal(await popoverOpen(popover), false, 'Outside click must light-dismiss the popover');
 
       await page.mouse.move(0, 0);
       await invoker.hover();
@@ -202,7 +208,10 @@ async function main() {
         },
         lightDismiss: true,
         hoverPersistence: false,
-        bounds,
+        bounds: {
+          initial: initialBounds,
+          rebound: reboundBounds,
+        },
         screenshot: path.relative(process.cwd(), screenshot),
         status: 'PASS',
       });
