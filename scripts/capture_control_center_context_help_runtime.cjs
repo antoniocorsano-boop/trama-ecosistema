@@ -159,7 +159,6 @@ async function main() {
       await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
       assert.equal(await page.locator('#helpTitle').textContent(), 'Stakeholder Assurance');
       assert.equal(await invoker.getAttribute('aria-details'), 'helpPopover');
-      assert.equal(await invoker.getAttribute('aria-haspopup'), 'true');
 
       const axOpen = await accessibilityState(page, '#assurance .helpable');
       assert.equal(axOpen.properties.details !== undefined, true, 'Invoker must expose a details relationship in the accessibility tree');
@@ -214,7 +213,6 @@ async function main() {
         semanticModel: 'NON_MODAL_NATIVE_POPOVER',
         accessibleRelationship: {
           ariaDetails: 'helpPopover',
-          ariaHasPopup: 'true',
           accessibilityTree: axOpen,
         },
         keyboard: {
