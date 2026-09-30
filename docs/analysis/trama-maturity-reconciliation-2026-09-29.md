@@ -287,3 +287,24 @@ Current projection therefore changes only those two governed Arena primitives:
 Their lifecycle remains TRIAL; product maturity area remains L4 because L5 still requires regression history.
 
 Control Center CS-S1 also completed successfully in isolation, but the deployed Context Help remains REGISTERED until a separate governed runtime-remediation slice is integrated. No synthetic promotion is inferred from candidate evidence.
+
+
+## Control Center Context Help qualification addendum — 2026-09-30
+
+The earlier reconciliation intentionally kept deployed Context Help at REGISTERED while only the isolated native Popover candidate had been qualified.
+
+That separation is now closed by merged TRAMA PR #176:
+
+- deployed-runtime exact head: `183690acce0ed404d863a92d713709f25a5bfdd7`;
+- merge commit: `a1db74d9d41bd0a433669789e13a42351c88b79d`;
+- runtime evidence run: `36660084169`;
+- artifact: `11074450895`;
+- digest: `sha256:1b71eab18ae4fa67fcd1c019b0b4c3652f4391d8a32e41826310b75919061c62`.
+
+Combined with the isolated candidate evidence from PR #174, the deployed component now has a complete ordered evidence chain through ACCESSIBILITY.
+
+Current projection therefore becomes:
+
+- `CONTROL_CENTER.CONTEXT_HELP.FAMILY` → confirmed ACCESSIBILITY / QUALIFIED.
+
+The component lifecycle remains TRIAL, ecosystem component qualification remains PARTIAL because other targets are still incomplete, and DOS-A1 remains RUNTIME_DEFERRED.
