@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "trama.human-review-package/v1",
+  "id": "TRAMA-HR-OR07-OR10-2026-09-30",
+  "status": "HUMAN_APPROVED_INTEGRATION_COMPLETED",
+  "date": "2026-09-30",
+  "invariants": {
+    "arenaAuthorityPreserved": true,
+    "atlasOptional": true,
+    "atlasCurriculumAuthority": false,
+    "docenteOsTeacherFirst": true,
+    "controlCenterReadOnly": true,
+    "newWriteAuthority": false,
+    "liveRuntimeAuthorized": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "productCandidates": [
+    {
+      "repo": "antoniocorsano-boop/CurManLight_arena",
+      "pr": 345,
+      "exactHead": "d7c2575260de6fb58aae58c12a82caf76440e823",
+      "decision": "APPROVED",
+      "mergeCommit": "7d0e9d1e30af25e29b5a3366d0570f149c17a6f4"
+    },
+    {
+      "repo": "antoniocorsano-boop/docente-os-2026-27",
+      "pr": 645,
+      "exactHead": "984abbd06fd43bd0e726936f9da6188fb9e52ec0",
+      "decision": "APPROVED",
+      "mergeCommit": "97580b1b0b6bc024690275bb227c6551e30d6341"
+    },
+    {
+      "repo": "antoniocorsano-boop/Curriculum-Atlas",
+      "pr": 66,
+      "exactHead": "fe3b70d750e9cfab489518187935b4e8bca3aa13",
+      "decision": "APPROVED",
+      "mergeCommit": "db3fed294fe7695b33042192fd4551d6d36bdc68"
+    }
+  ],
+  "tramaStack": [
+    {
+      "pr": 202,
+      "exactHead": "0e1e31d6c9b24b62e6096528debb48b253d99a83",
+      "decision": "APPROVED",
+      "mergeCommit": "162fcd13034eb853f86ef97b5474d1ea750187cb"
+    },
+    {
+      "pr": 203,
+      "exactHead": "40e247f85b48b37a300cb0edbd98e7b800139350",
+      "decision": "APPROVED",
+      "mergeCommit": "6a1ba560cdd9aae6ed1707f8f294120fb207e71a"
+    },
+    {
+      "pr": 204,
+      "exactHead": "cc8232e20f97a9e3775f64dcd01365914fda61db",
+      "decision": "APPROVED",
+      "mergeCommit": "7f9882dff1c82dfa09e5d21e67a9d55d0dd6b8c0"
+    },
+    {
+      "pr": 205,
+      "exactHead": "cb7a618f8b7f993f9dcf1e0501d8a6e14f7752d8",
+      "decision": "APPROVED",
+      "mergeCommit": "a44f08e4822e80dc91218e88b5864b74f151dac3"
+    },
+    {
+      "pr": 206,
+      "exactHead": "7a0181d51fc4103f3ef8662e01d7d321e53e34af",
+      "decision": "APPROVED",
+      "mergeCommit": "2289c872c16c85c9d9ee3e22d511badaca4b39d5"
+    },
+    {
+      "pr": 207,
+      "exactHead": "4b85463dcb06a5d8fef7a93e896daaf66dcff045",
+      "decision": "APPROVED",
+      "mergeCommit": "bc304954129a6807272ecb5b0dba1184e3aaa141"
+    },
+    {
+      "pr": 208,
+      "exactHead": "78a04afce2e315944e710c81053095231f1a6de3",
+      "decision": "APPROVED",
+      "mergeCommit": "69a1bf8a932f77798d4d46853d2dc8882468e49b"
+    },
+    {
+      "pr": 209,
+      "exactHead": "26d0543863534d797c669a9cd66f39b41b73a217",
+      "decision": "APPROVED",
+      "mergeCommit": "d93e7b2b9a0e116f260409f2801e13b016529462"
+    }
+  ],
+  "maximumAuthorizedScope": "NO_RUNTIME_INTEGRATION_ONLY",
+  "automaticMergeAuthorized": false,
+  "humanDecision": {
+    "decision": "APPROVED",
+    "date": "2026-09-30",
+    "scope": "NO_RUNTIME_INTEGRATION_ONLY"
+  },
+  "liveRuntimeAuthorized": false
+}
