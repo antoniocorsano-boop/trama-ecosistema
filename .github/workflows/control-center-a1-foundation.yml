@@ -1,0 +1,55 @@
+name: Control Center A1 Foundation
+on:
+  pull_request:
+    paths:
+      - "apps/control-center/**"
+      - "schemas/ecosystem-snapshot.schema.json"
+      - "control-center/data/ecosystem-snapshot.json"
+      - "control-center/data/context-packs/project-knowledge.json"
+      - ".github/workflows/control-center-a1-foundation.yml"
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/control-center
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Bootstrap deterministic lockfile
+        run: |
+          npm install --package-lock-only --ignore-scripts
+          npm install --save-dev --save-exact jsdom@latest @types/node@latest --ignore-scripts
+      - name: Install from generated lockfile
+        run: npm ci --ignore-scripts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit and component tests
+        run: npm run test
+      - name: Build candidate
+        run: npm run build
+      - name: Bundle report
+        run: npm run build:report > a1-bundle-report.json
+      - name: Verify governed artifacts emitted
+        run: |
+          test -s dist/data/ecosystem-snapshot.json
+          test -s dist/data/context-packs/project-knowledge.json
+          ! grep -R -E "(api\.github\.com|raw\.githubusercontent\.com|GITHUB_TOKEN|Authorization: Bearer)" dist src
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser smoke
+        run: npm run test:e2e -- --project=desktop
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: control-center-a1-foundation-${{ github.event.pull_request.head.sha }}
+          path: |
+            apps/control-center/a1-bundle-report.json
+            apps/control-center/package.json
+            apps/control-center/package-lock.json
+            apps/control-center/playwright-report
+          if-no-files-found: warn
