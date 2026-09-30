@@ -1,0 +1,277 @@
+{
+  "schemaVersion": "trama.or07-p1-fixtures/v1",
+  "capability": {
+    "capabilityId": "lesson.preparation.observe",
+    "capabilityVersion": "1.0.0",
+    "mode": "PROPOSE_ONLY",
+    "ownerDomain": "DOCENTE_OS",
+    "authorityClass": "DOMAIN_BOUND"
+  },
+  "request": {
+    "requestId": "or07-p1-request-001",
+    "capabilityId": "lesson.preparation.observe",
+    "capabilityVersion": "1.0.0",
+    "caller": {
+      "product": "DOCENTE_OS",
+      "surface": "next-lesson-preparation"
+    },
+    "authorityContext": {
+      "sourceRefs": [
+        "arena:technology-2c:v1",
+        "atlas:resource:agri-system"
+      ],
+      "decisionOwner": "DOCENTE_OS"
+    },
+    "input": {
+      "curriculumRef": "arena:technology-2c:v1",
+      "optionalResourceRefs": [
+        "atlas:resource:agri-system"
+      ],
+      "personalStudentData": false
+    },
+    "requestedAt": "2026-09-30T00:00:00Z"
+  },
+  "adapters": [
+    {
+      "adapterId": "fake-adapter-alpha",
+      "providerType": "fixture",
+      "providerId": "alpha",
+      "adapterVersion": "0.1.0",
+      "supported": true,
+      "available": true,
+      "authorized": true,
+      "qualified": true,
+      "result": {
+        "status": "SUCCEEDED",
+        "output": {
+          "proposalKind": "LESSON_PREPARATION",
+          "summary": "Preparazione osservata dal contesto curricolare governato.",
+          "sourceRefs": [
+            "arena:technology-2c:v1",
+            "atlas:resource:agri-system"
+          ]
+        },
+        "evidenceRefs": [
+          "evidence:or07-p1:alpha"
+        ],
+        "producedAt": "2026-09-30T00:00:01Z",
+        "stale": false,
+        "decisionState": "PROPOSAL"
+      }
+    },
+    {
+      "adapterId": "fake-adapter-beta",
+      "providerType": "fixture",
+      "providerId": "beta",
+      "adapterVersion": "0.1.0",
+      "supported": true,
+      "available": true,
+      "authorized": true,
+      "qualified": true,
+      "result": {
+        "status": "SUCCEEDED",
+        "output": {
+          "proposalKind": "LESSON_PREPARATION",
+          "summary": "Preparazione osservata dal contesto curricolare governato.",
+          "sourceRefs": [
+            "arena:technology-2c:v1",
+            "atlas:resource:agri-system"
+          ]
+        },
+        "evidenceRefs": [
+          "evidence:or07-p1:beta"
+        ],
+        "producedAt": "2026-09-30T00:00:02Z",
+        "stale": false,
+        "decisionState": "PROPOSAL"
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "id": "provider-specific-capability-id",
+      "expect": [
+        "SC-02"
+      ],
+      "patch": {
+        "capability": {
+          "capabilityId": "dsh.lesson.preparation.observe"
+        }
+      }
+    },
+    {
+      "id": "caller-missing",
+      "expect": [
+        "SC-03"
+      ],
+      "patch": {
+        "request": {
+          "caller": null
+        }
+      }
+    },
+    {
+      "id": "decision-owner-missing",
+      "expect": [
+        "SC-03"
+      ],
+      "patch": {
+        "request": {
+          "authorityContext": {
+            "decisionOwner": null
+          }
+        }
+      }
+    },
+    {
+      "id": "mutative-mode",
+      "expect": [
+        "SC-04",
+        "SC-10"
+      ],
+      "patch": {
+        "capability": {
+          "mode": "MUTATIVE"
+        }
+      }
+    },
+    {
+      "id": "missing-evidence",
+      "expect": [
+        "SC-05"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "fake-adapter-alpha",
+            "providerType": "fixture",
+            "providerId": "alpha",
+            "adapterVersion": "0.1.0",
+            "supported": true,
+            "available": true,
+            "authorized": true,
+            "qualified": true,
+            "result": {
+              "status": "SUCCEEDED",
+              "output": {
+                "proposalKind": "LESSON_PREPARATION",
+                "summary": "Preparazione osservata dal contesto curricolare governato.",
+                "sourceRefs": [
+                  "arena:technology-2c:v1"
+                ]
+              },
+              "evidenceRefs": [],
+              "producedAt": "2026-09-30T00:00:01Z",
+              "stale": false,
+              "decisionState": "PROPOSAL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "provider-specific-output",
+      "expect": [
+        "SC-06"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "fake-adapter-alpha",
+            "providerType": "fixture",
+            "providerId": "alpha",
+            "adapterVersion": "0.1.0",
+            "supported": true,
+            "available": true,
+            "authorized": true,
+            "qualified": true,
+            "result": {
+              "status": "SUCCEEDED",
+              "output": {
+                "proposalKind": "LESSON_PREPARATION",
+                "summary": "Preparazione osservata dal contesto curricolare governato.",
+                "sourceRefs": [
+                  "arena:technology-2c:v1"
+                ],
+                "openaiModel": "forbidden"
+              },
+              "evidenceRefs": [
+                "evidence:x"
+              ],
+              "producedAt": "2026-09-30T00:00:01Z",
+              "stale": false,
+              "decisionState": "PROPOSAL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "stale-success",
+      "expect": [
+        "SC-08"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "fake-adapter-alpha",
+            "providerType": "fixture",
+            "providerId": "alpha",
+            "adapterVersion": "0.1.0",
+            "supported": true,
+            "available": true,
+            "authorized": true,
+            "qualified": true,
+            "result": {
+              "status": "SUCCEEDED",
+              "output": {
+                "proposalKind": "LESSON_PREPARATION",
+                "summary": "Preparazione osservata dal contesto curricolare governato.",
+                "sourceRefs": [
+                  "arena:technology-2c:v1"
+                ]
+              },
+              "evidenceRefs": [
+                "evidence:x"
+              ],
+              "producedAt": "2026-09-30T00:00:01Z",
+              "stale": true,
+              "decisionState": "PROPOSAL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "personal-student-data",
+      "expect": [
+        "SC-01"
+      ],
+      "patch": {
+        "request": {
+          "input": {
+            "personalStudentData": true,
+            "studentName": "Fixture Student"
+          }
+        }
+      }
+    },
+    {
+      "id": "control-center-owner",
+      "expect": [
+        "SC-09"
+      ],
+      "patch": {
+        "request": {
+          "caller": {
+            "product": "CONTROL_CENTER",
+            "surface": "operations"
+          },
+          "authorityContext": {
+            "decisionOwner": "CONTROL_CENTER"
+          }
+        }
+      }
+    }
+  ]
+}
