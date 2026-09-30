@@ -1024,7 +1024,7 @@
       "path": "docs/strategy/trama-control-center-modular-app-migration-a0-a7.md",
       "kind": "OPERATING_MODEL",
       "status": "CURRENT",
-      "priority": "FOUNDATIONAL",
+      "priority": "NORMATIVE",
       "subjects": [
         "control-center-ui",
         "frontend-migration",
