@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "trama.live-component-evidence-overlay/v1",
+  "observedAt": "2026-09-30T05:12:00Z",
+  "status": "COMPLETE",
+  "items": [
+    {
+      "componentId": "ATLAS.RELATION_EXPLORER.FAMILY",
+      "evidenceType": "ISOLATED",
+      "status": "PRESENT",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "exactHead": "fe43bb037ae0bd5bc13aba40e17875d1673667c2",
+      "sourceRef": "tests/isolation",
+      "runId": "36671130676",
+      "runConclusion": "SUCCESS",
+      "artifactId": "11078325536",
+      "artifactDigest": "sha256:3a664cea8d53ea87eed192afefc756a1d67eaf6ad3fd43b9d9a01d85405ec2a5"
+    },
+    {
+      "componentId": "ATLAS.CURRICULUM_TREE.DISCLOSURE",
+      "evidenceType": "ISOLATED",
+      "status": "PRESENT",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "exactHead": "fe43bb037ae0bd5bc13aba40e17875d1673667c2",
+      "sourceRef": "tests/isolation",
+      "runId": "36671130676",
+      "runConclusion": "SUCCESS",
+      "artifactId": "11078325536",
+      "artifactDigest": "sha256:3a664cea8d53ea87eed192afefc756a1d67eaf6ad3fd43b9d9a01d85405ec2a5"
+    }
+  ]
+}
