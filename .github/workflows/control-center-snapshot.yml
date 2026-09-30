@@ -22,6 +22,7 @@ on:
       - "docs/contracts/trama-component-maturity-projection-v1.md"
       - "scripts/test_component_maturity_projection.py"
       - "docs/evidence/trama-component-evidence-expansion-2026-09-30.md"
+      - "docs/evidence/trama-component-qualification-arena-r1-2026-09-30.md"
       - "docs/contracts/trama-component-evidence-expansion-v1.md"
       - "scripts/test_component_evidence_expansion.py"
       - "scripts/validate_trama_component_evidence_registry.py"
