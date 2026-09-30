@@ -1043,6 +1043,53 @@
         "PUBLIC_CUTOVER_CHANGE",
         "ROLLBACK_POLICY_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A0-LEGACY-BASELINE",
+      "path": "docs/inventory/trama-control-center-a0-legacy-baseline.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "legacy-baseline",
+        "rollback",
+        "parity"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION"
+      ],
+      "updateTriggers": [
+        "LEGACY_CONTROL_CENTER_CHANGE",
+        "MIGRATION_PARITY_CHANGE",
+        "PUBLIC_CUTOVER_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-FRONTEND-DEPENDENCY-POLICY",
+      "path": "docs/contracts/trama-control-center-frontend-dependency-policy-v1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "control-center-ui",
+        "frontend-architecture",
+        "ui-supply-chain",
+        "dependency-policy",
+        "accessibility"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-TRAMA-COMPONENT-STRATEGY"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_DEPENDENCY_CHANGE",
+        "UI_LIBRARY_ADOPTION_CHANGE",
+        "FRONTEND_STACK_CHANGE",
+        "BUNDLE_POLICY_CHANGE"
+      ]
     }
   ]
 }
