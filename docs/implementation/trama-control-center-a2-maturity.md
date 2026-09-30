@@ -1,7 +1,7 @@
 # TRAMA Control Center — A2 Maturity Feature
 
 **Document ID:** TRAMA-CC-APP-A2-MATURITY-01  
-**Status:** IMPLEMENTATION_CANDIDATE / PREVIEW_ONLY / READ_ONLY  
+**Status:** QUALIFIED / PREVIEW_ONLY / READ_ONLY  
 **Parent:** TRAMA-CC-APP-ARCH-01 · TRAMA-CC-APP-MIGRATION-01 · TRAMA-CC-APP-A1-FOUNDATION-01  
 **Production impact:** NONE  
 **Public cutover:** NOT_AUTHORIZED  
@@ -168,7 +168,24 @@ The old surface remains the production fallback until A7.
 
 ## 11. Exit condition
 
-A2 is QUALIFIED only when a final exact head passes:
+A2 is **QUALIFIED**. Receipt: `governance/control-center/trama-control-center-a2-maturity-qualification.json`.
+
+Qualified evidence:
+
+- exact head: `40729ee87af01ebd1ac3fda71324c28582f5674e`;
+- A2 workflow run: `36691092829` — SUCCESS;
+- artifact: `11085593330`;
+- artifact digest: `sha256:d2f3b79238fe1ba8892b0e14585f78f8acfafca8e1ecc2b8b544169081c1354c`;
+- 8/8 unit/component tests PASS;
+- 6/6 browser tests PASS;
+- axe PASS on desktop, phone and LIM;
+- `LIVE_VERIFIED` scenario PASS on desktop, phone and LIM;
+- initial JS: `125577` bytes gzip ≤ `184320` bytes;
+- A1 regression: PASS (`36691092762`);
+- Governance: PASS (`36691092784`);
+- Project Knowledge Runtime: PASS (`36691092801`).
+
+The qualification covered:
 
 - A1 regression foundation;
 - TypeScript strict typecheck;
@@ -183,4 +200,4 @@ A2 is QUALIFIED only when a final exact head passes:
 - Project Knowledge;
 - ecosystem snapshot consistency.
 
-A2 qualification authorizes progression to A3 only. It does not authorize public cutover.
+A2 qualification authorizes progression to A3 only. It does not authorize public cutover, legacy retirement or any product-runtime change.
