@@ -118,3 +118,67 @@ Until that decision is explicitly recorded:
 - Render production configuration SHALL NOT be changed;
 - public entrypoint SHALL remain unchanged;
 - no public cutover is authorized.
+
+
+## 9. Exact candidate binding
+
+The current A7 cutover candidate is bound to:
+
+`178f38f8dd71f18a3ae81b5547c5bb1c2c10ff38`
+
+This exact head is the only candidate eligible for the forthcoming Public Cutover Human Review. Any content change after this head invalidates the review binding and requires requalification.
+
+## 10. Rollback procedure
+
+Current production baseline:
+- Render service: `trama-control-center`;
+- service ID: `srv-dape3shsrm7s73f5krpg`;
+- live deploy: `dep-daugbrbrjlhs73crlbsg`;
+- live commit: `fffefc16f287bd1e63b0e3dde2e117e24be3ac8a`;
+- current build command: `bash scripts/build_control_center_render.sh`;
+- publish path: `public`.
+
+Rollback trigger:
+- any blocking public smoke failure after cutover;
+- missing primary route;
+- broken manifest/service-worker behavior;
+- governed-data failure;
+- unexpected runtime network dependency;
+- accessibility blocker;
+- write authority exposure.
+
+Rollback action:
+1. restore the legacy production build command `bash scripts/build_control_center_render.sh`;
+2. keep publish path `public`;
+3. deploy the last known-good legacy-capable baseline;
+4. verify legacy Home, Maturity and governed data;
+5. record a rollback receipt.
+
+The A7 candidate itself also preserves the legacy surface under `/legacy/` during the stability window.
+
+## 11. Receipt contract
+
+A successful cutover receipt SHALL record:
+- exact candidate head;
+- Render service ID;
+- deploy ID;
+- deployed commit;
+- public URL;
+- build command;
+- publish path;
+- smoke results;
+- Human Review decision reference;
+- timestamp.
+
+A rollback receipt SHALL additionally record:
+- failed smoke condition;
+- rollback target deploy/commit;
+- rollback completion state.
+
+## 12. Review readiness
+
+Once all repository gates pass on the bound exact head, A7 reaches:
+
+**TECHNICALLY_QUALIFIED / AWAITING_PUBLIC_CUTOVER_HUMAN_REVIEW**
+
+That state still does not authorize a Render mutation.
