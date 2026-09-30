@@ -15,8 +15,9 @@ test("Operations exposes governed path, explicit defer and semantic timeline",as
  await expect(runtimePanel.getByText("READ_ONLY",{exact:true})).toBeVisible();
  await expect(runtimePanel.getByText("DEFERRED",{exact:true})).toBeVisible();
  await expect(runtimePanel.getByText(/contract-mock/)).toBeVisible();
- await expect(runtimePanel.getByText(/runtime.start/)).toBeVisible();
- await expect(runtimePanel.getByText(/unauthorized/)).toBeVisible();
+ const startCapability=runtimePanel.getByText("runtime.start",{exact:true}).locator("..");
+ await expect(startCapability).toBeVisible();
+ await expect(startCapability.getByText(/unauthorized/)).toBeVisible();
  await page.getByRole("tab",{name:"Cronologia governata"}).click();
  await expect(page.getByText(/Copertura timeline: PARTIAL_EXPLICIT/)).toBeVisible();
  await expect(page.getByText("EVT-CC3-F1-HUMAN-PASS",{exact:true})).toBeVisible();
