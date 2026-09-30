@@ -86,18 +86,7 @@ Queste evidenze rafforzano quattro scelte candidate:
 La struttura interna dell'XLS (fogli, colonne, metadati, identificatori, regole sui duplicati) non è documentata nel manuale e resta una lacuna di G1.
 
 
-
-Il manuale **Argo didUP 4.54.0**, aggiornato al **07/09/2026**, nella sezione **Programma Scolastico** (pagine 100–101):
-
-- consente di importare moduli e argomenti da un'altra classe e anche da un anno scolastico precedente;
-- consente l'importazione/esportazione tramite file XLS;
-- raccomanda espressamente di non modificare il file XLS originale prodotto da didUP, per evitare blocchi in fase di importazione.
-
-Conseguenza di discovery: il file Argo va trattato come **artefatto di interoperabilità**, non come fonte operativa primaria della didattica.
-
-L'evidenza, le assunzioni e le lacune conoscitive sono registrate in:
-
-- `research-evidence-register.md`.
+L'evidenza, le assunzioni e le lacune conoscitive sono registrate in `research-evidence-register.md`.
 
 ## 4. Ipotesi architetturale
 
@@ -244,7 +233,7 @@ Formato semplice di scambio e automazione. Non è il formato principale di lavor
 
 Artefatto generato dall'adattatore Argo e trattato come **output controllato**. Non deve diventare il documento sorgente che il docente modifica ordinariamente.
 
-La compatibilità reale del file prodotto resta **da verificare su un export Argo reale** prima di qualsiasi G3.
+Un export Argo reale è stato ispezionato e ha confermato un file **BIFF8/CDFV2 .XLS** con foglio `Dati` e sei colonne semantiche. Resta da verificare la compatibilità di qualunque file ricostruito/modificato mediante round-trip controllato prima di qualsiasi G3.
 
 ## 10. Profilo Argo persistente candidato
 
@@ -364,7 +353,7 @@ Le seguenti assunzioni non sono ancora decisioni approvate:
 0. Qual è la semantica esatta dei duplicati quando Argo aggiunge moduli importati a quelli già presenti?
 
 
-1. Qual è la struttura effettiva di un XLS esportato da didUP 4.54.0?
+1. Quanto è stabile, tra esportazioni diverse, la struttura XLS osservata nel campione reale (BIFF8/CDFV2, foglio `Dati`, sei colonne)?
 2. Quali campi sono obbligatori e quali tollerano valori aggiuntivi?
 3. Argo importa solo file originariamente esportati da didUP o accetta file ricostruiti fedelmente?
 4. Come si comporta Argo in caso di record duplicati, modificati, rimossi o riordinati?
@@ -446,19 +435,22 @@ La discovery va ora separata in due filoni:
 
 ### Filone B — formato XLS non documentato
 
+Completato in G1:
 
-Prima di qualunque runtime:
+1. [x] acquisizione di un XLS reale esportato da Argo;
+2. [x] ispezione read-only del contenitore e dello schema visibile;
+3. [x] mapping semantico iniziale verso il modello canonico;
+4. [x] definizione di un profilo XLS candidato vincolato al campione.
 
-1. acquisire un XLS reale esportato da Argo;
-2. descriverne struttura e vincoli senza modificarlo;
-3. definire il Canonical Didactic Model v1;
-4. definire il mapping canonico → Argo;
-5. simulare due versioni successive della stessa didattica;
-6. verificare che il motore produca solo il delta;
-7. verificare idempotenza e gestione conflitti;
-8. completare il confronto delle alternative;
-9. redigere ADR e specifica solo dopo il completamento di G2;
-10. sottoporre ogni avanzamento ai gate previsti.
+Ancora necessario prima di chiudere G1:
+
+5. [ ] secondo export più ricco per verificare la variabilità del formato;
+6. [ ] evidenza di valori reali per ordine, stato svolgimento e data svolgimento;
+7. [ ] round-trip non modificato, se operativamente sicuro;
+8. [ ] comportamento su duplicati/aggiornamenti/import parziale;
+9. [ ] conferma o revisione del profilo `ARGO_PROGRAM_XLS_PROFILE_v1`.
+
+Solo dopo G1: classificazione ADR a G2 e specifica normativa a G3.
 
 ## 23. Criterio di successo
 
@@ -491,12 +483,12 @@ La capability è valida quando una modifica limitata della didattica richiede al
 - [x] accessibility implications identified;
 - [x] child-facing applicability explicitly classified;
 - [x] discovery conclusions separated from approved decisions;
-- [ ] real Argo XLS sample inspected;
+- [x] real Argo XLS sample inspected;
 - [ ] format variability tested;
-- [ ] mapping feasibility demonstrated;
+- [x] initial mapping feasibility demonstrated;
 - [ ] reviewable evidence package complete.
 
-**G1 assessment:** IN_PROGRESS. G2 is not authorized yet.
+**G1 assessment:** IN_PROGRESS / BLOCKED ONLY BY FORMAT VARIABILITY AND ROUND-TRIP/IMPORT SEMANTICS. G2 is not authorized yet.
 
 ## 25. Stato decisionale
 
