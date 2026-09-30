@@ -1509,6 +1509,52 @@
         "CAPABILITY_MODE_CHANGE",
         "QUALIFICATION_STATE_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-OR-08-RUNTIME-PORTABILITY",
+      "path": "docs/contracts/trama-runtime-portability-contract-v0.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "runtime-portability",
+        "shared-capability-layer",
+        "provider-portability",
+        "dsh",
+        "codex",
+        "ecosystem-architecture"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-07-SHARED-CAPABILITY-LAYER"
+      ],
+      "updateTriggers": [
+        "RUNTIME_PORTABILITY_CHANGE",
+        "ADAPTER_BINDING_CHANGE",
+        "PROVIDER_CHANGE",
+        "AUTHORITY_BOUNDARY_CHANGE",
+        "DOS_A1_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-OR-08-RUNTIME-PORTABILITY-MANIFEST",
+      "path": "governance/runtime/trama-runtime-portability-v1.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "runtime-portability",
+        "machine-readable-contract"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-08-RUNTIME-PORTABILITY"
+      ],
+      "updateTriggers": [
+        "RUNTIME_PORTABILITY_CHANGE",
+        "QUALIFICATION_STATE_CHANGE",
+        "ADAPTER_BINDING_CHANGE"
+      ]
     }
   ]
 }
