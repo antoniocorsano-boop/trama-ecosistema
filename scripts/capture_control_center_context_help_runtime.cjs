@@ -160,7 +160,7 @@ async function main() {
         'Escape must return or preserve focus on the invoker'
       );
 
-      await invoker.focus();
+      await invoker.click();
       await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
       const bounds = await measure(page, '#helpPopover');
       assert.ok(bounds.left >= -1 && bounds.right <= viewport.width + 1, 'Popover must fit horizontally');
