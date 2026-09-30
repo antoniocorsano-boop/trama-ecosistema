@@ -503,3 +503,12 @@ La capability è valida quando una modifica limitata della didattica richiede al
 Questo documento consolida l'analisi come **capability proposal G0/G1**.
 
 Non autorizza runtime, persistenza, automazione di Argo, nuove write authority o merge automatici.
+
+
+## 26. Artefatti di discovery collegati
+
+- `research-evidence-register.md` — evidenze, assunzioni, lacune e negative knowledge;
+- `canonical-didactic-model-candidate-v1.md` — modello canonico candidato, separato dai formati XLS/XLSX/CSV;
+- `delta-contract-candidate-v1.md` — contratto candidato per confronto incrementale, idempotenza, conflitti e baseline advancement.
+
+Questi artefatti restano **G1 candidate** e non autorizzano persistenza o runtime.
