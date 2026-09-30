@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — Argo Program XLS Profile Candidate v0.1
 
 **Gate:** G1 — Discovery  
-**Status:** SAMPLE_BOUND / NOT_APPROVED  
+**Status:** SAMPLE_BOUND + OFFICIAL_DOC_CORROBORATED / NOT_APPROVED  
 **Source evidence:** Real Argo XLS Sample Evidence 001  
 **Runtime:** NOT_AUTHORIZED
 
@@ -45,25 +45,30 @@ A row that violates these rules is `UNCLASSIFIED` and must fail closed during im
 
 ## State mapping candidate
 
-Observed literal:
+Official Argo documentation corroborates the three user-facing states:
 
 ```text
-"Non svolto" → NOT_PERFORMED
+"Non Svolto" → NOT_PERFORMED
+"Parzialmente Svolto" → PARTIALLY_PERFORMED
+"Svolto" → PERFORMED
 ```
 
-Other state literals are not yet evidenced and must not be invented.
+Case/spacing normalization remains an adapter concern; raw source literals must be retained in provenance.
 
 ## Date mapping
 
-No non-empty date was present in Sample 001. Date storage type, locale and formatting remain unknown.
+Official Argo documentation shows dates in the user-facing form `DD-MM-YYYY` (for example `11-10-2019`, `05-06-2018`, `04-07-2018`).
+
+The **binary cell storage type inside XLS remains unproven** because Sample 001 has an empty date. The adapter must distinguish display format from BIFF storage representation.
 
 ## Order fields
 
-Sample 001 does not establish a reliable numeric encoding:
-- module order is blank;
-- argument order contains the literal `.`.
+Official didUP documentation describes `Num Ordine` for modules and arguments and shows numeric examples. An older official ScuolaNext manual also describes numeric order with the next available number proposed automatically.
 
-Therefore order parsing must remain tolerant and profile-bound. The system must preserve raw source values in provenance even when a canonical order cannot be derived.
+Sample 001, however, contains blank/module and literal `.`/argument order values. Therefore:
+- canonical order should not be constrained to integer-only parsing at the adapter boundary;
+- raw source values must be preserved;
+- numeric normalization is allowed only when the source value is demonstrably numeric.
 
 ## Import safety
 
@@ -78,10 +83,10 @@ It is not yet sufficient to:
 ## Promotion criteria to v1
 
 At least:
-1. second independent export inspected;
+1. second independent export inspected **or** equivalent structural stability evidence;
 2. headers and row grammar confirmed;
-3. performed-state literals observed;
-4. non-empty date representation observed;
-5. order representation observed with real values;
+3. state literals corroborated — **DONE via official documentation**;
+4. user-facing date format corroborated — **DONE via official documentation**;
+5. order semantics corroborated — **DONE conceptually via official documentation**, binary/sample variability remains;
 6. unmodified round-trip evidence available;
 7. duplicate/import behavior recorded.
