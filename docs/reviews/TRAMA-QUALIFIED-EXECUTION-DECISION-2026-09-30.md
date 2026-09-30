@@ -133,3 +133,8 @@ Devono essere PASS e legati allo stesso exact head:
 **PENDING_HUMAN_DECISION.**
 
 Nessuna esecuzione reale è autorizzata dal presente dossier.
+
+
+## 11. Qualification retrigger
+
+Dopo la sincronizzazione automatica dello snapshot canonico da parte di GitHub Actions, la qualifica della presente PR viene rieseguita su un nuovo exact head umano. Questo passaggio non modifica stato, authority, runtime authorization o perimetro del dossier.
