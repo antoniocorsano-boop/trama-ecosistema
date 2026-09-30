@@ -1321,6 +1321,52 @@
         "PROJECT_KNOWLEDGE_BOOTSTRAP_CHANGE",
         "CROSS_ECOSYSTEM_PROOF_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-OR-05-ECOSYSTEM-COMPONENT-REUSE",
+      "path": "docs/analysis/trama-or-05-ecosystem-component-reuse-2026-09-30.md",
+      "kind": "ANALYSIS",
+      "status": "CURRENT",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "component-strategy",
+        "ecosystem-component-reuse",
+        "arena",
+        "atlas",
+        "docente-os",
+        "control-center"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-TRAMA-ADR-019-ECOSYSTEM-FIRST"
+      ],
+      "updateTriggers": [
+        "COMPONENT_SUPPLY_CHAIN_CHANGE",
+        "PRODUCT_STACK_CHANGE",
+        "OR05_IMPLEMENTATION_FINDING",
+        "COMPONENT_STRATEGY_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-OR-05-ECOSYSTEM-COMPONENT-REUSE-MAP",
+      "path": "governance/ui-development/trama-ecosystem-component-reuse-or05.json",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "component-strategy",
+        "ecosystem-component-reuse",
+        "ui-supply-chain"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-05-ECOSYSTEM-COMPONENT-REUSE"
+      ],
+      "updateTriggers": [
+        "COMPONENT_SUPPLY_CHAIN_CHANGE",
+        "OR05_IMPLEMENTATION_FINDING",
+        "DEPENDENCY_ADOPTION_CHANGE"
+      ]
     }
   ]
 }
