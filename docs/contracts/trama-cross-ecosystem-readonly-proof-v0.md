@@ -1,6 +1,6 @@
 # OR-06 — Cross-Ecosystem Read-Only Proof Contract
 
-**Stato:** PROPOSED / IMPLEMENTATION-READY  
+**Stato:** P1 IMPLEMENTED / QUALIFIED / PENDING HUMAN INTEGRATION  
 **Data:** 2026-09-30  
 **Baseline:** OR-05 stacked head `bc285f4f9b7e11983265aafca2c38ced44ecd694`  
 **Riferimenti:** TRAMA-ADR-019 · ECO-02/P1 · ECO-02/P9 · RuntimeGeneration · Local Connector · Runtime Adapter  
@@ -318,4 +318,20 @@ Non restano domande architetturali necessarie per implementare il proof offline.
 La prima slice implementativa è:
 **OR-06-P1 — deterministic cross-ecosystem read-only fixture + validator**.
 
-Questa slice può essere implementata interamente nel repository TRAMA senza modificare Arena, Atlas o Docente OS.
+Questa slice è stata implementata interamente nel repository TRAMA senza modificare Arena, Atlas o Docente OS.
+
+## 16. OR-06-P1 qualification
+
+- PR: `#200`;
+- exact head: `3bdb6cff283dc79a4cefe16271140e88b0745e43`;
+- fixture valida: 1;
+- fixture avversariali: 8;
+- validator fail-closed: PRESENT;
+- test deterministici: PRESENT;
+- Governance: **PASS**;
+- rete: NONE;
+- cross-product writes: NONE;
+- runtime activation: NONE;
+- stato: **QUALIFIED / PENDING HUMAN INTEGRATION**.
+
+Nessun merge o promotion automatica è autorizzato da questa qualifica.
