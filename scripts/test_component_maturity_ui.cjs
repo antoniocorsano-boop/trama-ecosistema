@@ -17,7 +17,7 @@ assert.match(maturity,/senza score o percentuali/);
 assert.match(maturity,/aria-live="polite"/);
 assert.match(maturity,/grid-template-areas:"list" "detail" "map"/);
 assert.match(maturity,/deferSelection:window\.matchMedia/);
-assert.match(maturity,/Un livello basso può indicare prove non ancora bound/);
+assert.match(maturity,/I livelli confermati riflettono evidenze governate/);
 assert.match(maturity,/Prove bound/);
 assert.match(maturity,/nextRequiredEvidenceTypes/);
 assert.match(sw,/trama-control-center-v15/);
@@ -91,5 +91,6 @@ for(const forbidden of ['api.github.com','raw.githubusercontent.com','Authorizat
 assert.equal(api.lifecycleLabel('TRIAL'),'In prova');
 assert.equal(api.sourceLabel('PRODUCT_OWNED'),'Componente del prodotto');
 assert.equal(api.evidenceStatusLabel('NOT_OBSERVED'),'Non osservata');
+assert.equal(api.evidenceDisplayLabel({status:'PRESENT',sourcePlane:'LIVE_VERIFIED'}),'Presente · live verificata');
 
 console.log('TRAMA_CC_MAT_VIZ_01_ORIENTATION_PASS');
