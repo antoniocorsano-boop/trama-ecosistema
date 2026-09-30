@@ -1,6 +1,7 @@
 import {useEffect,useState} from "react";
 import {loadEcosystemSnapshot,type SnapshotLoadState} from "../../data/client";
 import {sortTimeline,toOperationsModel,type OperationalItem} from "../../domain/operations/model";
+import {runtimeObservationFixture,visibleRuntimeObservations,type RuntimeObservation} from "../../domain/runtimeObservation/model";
 import "./operations.css";
 
 const initial:SnapshotLoadState={status:"LOADING"};
@@ -14,6 +15,7 @@ export function OperationsPage(){
  const model=toOperationsModel(state.data);
  const p=model.operationalPath;
  const timeline=sortTimeline(model.timelineEvents);
+ const runtimeObservations=visibleRuntimeObservations(runtimeObservationFixture);
  return <section className="operations-page" aria-labelledby="operations-title">
   <header className="feature-header"><p className="section-kicker">A5 · OPERAZIONI</p><h2 id="operations-title">Percorso operativo e cronologia governata</h2><p>Dove siamo, cosa viene dopo e come siamo arrivati allo stato corrente, senza creare una roadmap parallela.</p></header>
   <section className="operations-summary" aria-label="Sintesi operativa">
@@ -40,6 +42,7 @@ export function OperationsPage(){
     {e.details?.length?<ul>{e.details.map(d=><li key={d}>{d}</li>)}</ul>:null}
    </article>)}
   </section>}
+  <RuntimeObservationPanel items={runtimeObservations}/>
   <footer className="feature-footer">Snapshot {formatDate(model.generatedAt)} · READ_ONLY</footer>
  </section>;
 }
@@ -49,3 +52,24 @@ function Block({title,items,wide=false}:{title:string;items:OperationalItem[];wi
 }
 function Status({message,error=false}:{message:string;error?:boolean}){return <section className={error?"feature-status is-error":"feature-status"}><p className="section-kicker">A5 · OPERAZIONI</p><h2>Operazioni</h2><p role={error?"alert":undefined}>{message}</p></section>}
 function formatDate(value?:string){if(!value)return "non dichiarata";const d=new Date(value);return Number.isNaN(d.getTime())?value:new Intl.DateTimeFormat("it-IT",{dateStyle:"medium",timeStyle:"short"}).format(d);}
+
+
+function RuntimeObservationPanel({items}:{items:RuntimeObservation[]}){
+ return <section className="runtime-observation" data-testid="runtime-observation" aria-labelledby="runtime-observation-title">
+  <header><div><p className="section-kicker">OR-04 · RUNTIME OBSERVATION</p><h3 id="runtime-observation-title">Osservazione runtime</h3></div><strong className="runtime-readonly">READ_ONLY</strong></header>
+  <p className="runtime-observation-note">Proiezione contract-compliant di collaudo. Non rappresenta un runtime attivo e non espone comandi operativi.</p>
+  {items.map(item=><article key={item.runtimeId} className="runtime-observation-card">
+   <div className="runtime-observation-head"><div><strong>{item.runtimeType} · {item.runtimeId}</strong><small>{item.adapterId} · {item.adapterVersion}</small></div><span>{item.adapterState}</span></div>
+   <dl>
+    <div><dt>Disponibilità</dt><dd>{item.availability}</dd></div>
+    <div><dt>Health</dt><dd>{item.health}</dd></div>
+    <div><dt>Sorgente</dt><dd>{item.source}</dd></div>
+    <div><dt>Freshness</dt><dd>{item.stale?"STALE":"CURRENT_FIXTURE"}</dd></div>
+   </dl>
+   <div className="runtime-capabilities" aria-label="Capability runtime">
+    {item.capabilities.map(cap=><div key={cap.key}><code>{cap.key}</code><small>{cap.supported?"supported":"unsupported"} · {cap.available?"available":"unavailable"} · {cap.authorized?"authorized":"unauthorized"}{cap.reason?" · "+cap.reason:""}</small></div>)}
+   </div>
+   <div className="runtime-evidence"><strong>Evidenze</strong>{item.evidenceRefs.map(ref=><code key={ref}>{ref}</code>)}</div>
+  </article>)}
+ </section>;
+}

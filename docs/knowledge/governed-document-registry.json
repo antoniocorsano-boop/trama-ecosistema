@@ -1295,6 +1295,32 @@
         "PUBLIC_DEPLOYMENT_ID_CHANGE",
         "PUBLIC_EXACT_HEAD_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-TRAMA-ADR-019-ECOSYSTEM-FIRST",
+      "path": "docs/decisions/trama-adr-019-ecosystem-first-runtime-subordination.md",
+      "kind": "ADR",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "ecosystem-architecture",
+        "arena",
+        "atlas",
+        "docente-os",
+        "control-center",
+        "runtime",
+        "agents",
+        "project-knowledge"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [],
+      "updateTriggers": [
+        "ECOSYSTEM_AUTHORITY_CHANGE",
+        "RUNTIME_ARCHITECTURE_CHANGE",
+        "OR_ROADMAP_CHANGE",
+        "PROJECT_KNOWLEDGE_BOOTSTRAP_CHANGE",
+        "CROSS_ECOSYSTEM_PROOF_CHANGE"
+      ]
     }
   ]
 }

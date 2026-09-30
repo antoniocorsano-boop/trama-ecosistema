@@ -292,6 +292,34 @@ Vincoli permanenti:
 - nessuna modifica delle authority Arena / Atlas / Docente OS;
 - DOS-A1 resta `RUNTIME_DEFERRED`.
 
+## Runtime e agenti — regola ecosystem-first
+
+Riferimento: `TRAMA-ADR-019`.
+
+Il lavoro su connector, runtime adapter, agenti, DSH, Codex e capability locali è **infrastruttura trasversale subordinata** ai domini TRAMA.
+
+Vincoli:
+- Arena resta autorità curricolare;
+- Atlas resta superficie pubblica, di navigazione e learning-object;
+- Docente OS resta ambiente operativo teacher-first e sede delle decisioni professionali;
+- Control Center resta osservatorio READ_ONLY;
+- runtime/agent provider restano sostituibili;
+- nessun avanzamento tecnico runtime modifica authority o abilita DOS-A1.
+
+Dopo la qualificazione del livello contrattuale runtime, i proof devono tornare ai flussi di ecosistema.
+
+Sequenza OR corretta:
+
+1. OR-04 — runtime observation read-only;
+2. OR-05 — ecosystem component reuse;
+3. OR-06 — cross-ecosystem read-only proof;
+4. OR-07 — shared capability layer;
+5. OR-08 — runtime portability;
+6. OR-09 — qualified execution, soltanto dopo nuova decisione di authority;
+7. OR-10 — product integrations Arena / Atlas / Docente OS.
+
+Un proof runtime-only può qualificare infrastruttura ma non dimostra, da solo, valore di ecosistema.
+
 ## R5 Preparazione all'adozione
 
 - verifica del nome TRAMA;

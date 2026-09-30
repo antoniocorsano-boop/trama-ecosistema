@@ -25,9 +25,28 @@ Prima di ricostruire un tema dalla conversazione:
 
 1. identificare il subject/capability;
 2. leggere il Context Pack;
-3. verificare solo i fatti volatili necessari;
-4. risalire alle fonti canoniche per decisioni/evidenze forti;
-5. dopo lavoro significativo registrare un KnowledgeEvent se altrimenti la decisione resterebbe solo in chat.
+3. applicare **ecosystem-first bootstrap**: se il tema riguarda runtime, agenti, connector, adapter, automazione o Control Center, recuperare prima i confini Arena/Atlas/Docente OS, lo stato DOS-A1 e la roadmap cross-ecosystem pertinente;
+4. verificare solo i fatti volatili necessari;
+5. risalire alle fonti canoniche per decisioni/evidenze forti;
+6. dopo lavoro significativo registrare un KnowledgeEvent se altrimenti la decisione resterebbe solo in chat.
+
+### Ecosystem-first bootstrap
+
+Il bootstrap NON deve partire dallo strumento tecnico più vicino al task. Deve partire dal dominio e dal flusso che danno senso al task.
+
+Ordine minimo per capability runtime/agentiche:
+
+```text
+TRAMA invariants
+-> Arena / Atlas / Docente OS boundaries
+-> workflow di ecosistema
+-> Control Center / evidence state
+-> connector / adapter / runtime detail
+```
+
+Riferimento normativo: `TRAMA-ADR-019`.
+
+Questo ordine è obbligatorio per ridurre il rischio di ottimizzazione locale: un lavoro tecnicamente corretto sul runtime può essere architetturalmente errato se perde il ruolo degli altri prodotti.
 
 ## Runtime introdotto
 
