@@ -5,35 +5,35 @@
     {
       "path": "control-center/index.html",
       "blobSha": "89c4be3f0ade7522895743bcd20fdc51eb0ebf40",
-      "bytes": 37451,
+      "bytes": 37573,
       "lines": 403,
       "role": "OVERVIEW"
     },
     {
       "path": "control-center/maturity.html",
       "blobSha": "a5301b684f3d09cc5d7cbc34a85cf7951aaee510",
-      "bytes": 15763,
+      "bytes": 15804,
       "lines": 227,
       "role": "MATURITY"
     },
     {
       "path": "control-center/ecosystem.html",
       "blobSha": "6aa299715e5d67253f61263bfc546ef0a18c3be3",
-      "bytes": 18962,
+      "bytes": 19005,
       "lines": 197,
       "role": "ECOSYSTEM"
     },
     {
       "path": "control-center/evidence.html",
       "blobSha": "7f757c081d8e3639df1f7fe0fe53ef9a77ee9cc8",
-      "bytes": 15133,
+      "bytes": 15163,
       "lines": 163,
       "role": "EVIDENCE"
     },
     {
       "path": "control-center/operations.html",
       "blobSha": "53e907d34f9dd75c3637b3d13050b63ac59dc1ae",
-      "bytes": 12832,
+      "bytes": 12877,
       "lines": 127,
       "role": "OPERATIONS"
     }
@@ -42,13 +42,13 @@
     {
       "path": "control-center/component-maturity.js",
       "blobSha": "f26cb6f93f07b063d1ceb0089d107318b409af2f",
-      "bytes": 15687,
+      "bytes": 15714,
       "lines": 382
     },
     {
       "path": "control-center/project-knowledge-state.js",
       "blobSha": "0d99b47c1d999861866eb3f77d41e0a267b106b7",
-      "bytes": 9354,
+      "bytes": 9389,
       "lines": 179
     },
     {
@@ -60,7 +60,7 @@
     {
       "path": "control-center/manifest.webmanifest",
       "blobSha": "8e40ab750f6a21cd4e81fdac399bfde12679f40d",
-      "bytes": 926,
+      "bytes": 927,
       "lines": 43
     }
   ],
