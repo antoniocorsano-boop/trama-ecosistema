@@ -23,6 +23,11 @@ assert.match(home,/uiLabel\(d\.kind\)/);
 assert.match(home,/uiLabel\(d\.status/);
 assert.match(home,/uiLabel\(e\.type\)/);
 assert.match(home,/uiLabel\(e\.freshness/);
+assert.match(home,/role="tooltip"/);
+assert.match(home,/popover="manual"/);
+assert.match(home,/\.\/context-help\.js/);
+assert.match(home,/TRAMAContextHelp\.initContextHelp\(document\)/);
+assert.doesNotMatch(home,/id="helpClose"/);
 
 assert.match(maturity,/VISTA SPECIALISTICA/);
 assert.match(maturity,/grid-template-areas:"list" "detail" "map"/);
