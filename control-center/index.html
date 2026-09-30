@@ -356,10 +356,9 @@ function fail(err){healthText.textContent='Snapshot non disponibile';healthDot.s
 const helpPopover=document.getElementById('helpPopover'),helpTitle=document.getElementById('helpTitle'),helpText=document.getElementById('helpText');
 let helpSource=null,helpRebinding=false;
 function bindHelpSource(el){
-  if(helpSource&&helpSource!==el){helpSource.removeAttribute('aria-details');helpSource.removeAttribute('aria-haspopup')}
+  if(helpSource&&helpSource!==el)helpSource.removeAttribute('aria-details');
   helpSource=el;
   el.setAttribute('aria-details','helpPopover');
-  el.setAttribute('aria-haspopup','true');
 }
 function showHelp(el){
   if(!el?.dataset?.help||typeof helpPopover.showPopover!=='function'||helpRebinding)return;
