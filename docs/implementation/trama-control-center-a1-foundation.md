@@ -1,7 +1,7 @@
 # TRAMA Control Center — A1 Application Foundation
 
 **Document ID:** TRAMA-CC-APP-A1-FOUNDATION-01  
-**Status:** IMPLEMENTATION_CANDIDATE / PREVIEW_ONLY / READ_ONLY  
+**Status:** QUALIFIED / PREVIEW_ONLY / READ_ONLY  
 **Parent:** TRAMA-CC-APP-ARCH-01 · TRAMA-CC-APP-MIGRATION-01 · TRAMA-CC-APP-A0-LOCK-01  
 **Production impact:** NONE  
 **Public cutover:** NOT_AUTHORIZED  
@@ -210,7 +210,18 @@ The A0 legacy-baseline validator remains active and would fail on unacknowledged
 
 ## 14. Exit condition
 
-A1 may be considered QUALIFIED when the final committed-lockfile exact head passes:
+A1 is QUALIFIED. Qualification receipt: `governance/control-center/trama-control-center-a1-foundation-qualification.json`.
+
+Qualified evidence:
+
+- exact head: `3b4124720ab53246cca67fd7f0977ffef31c7fb7`;
+- workflow run: `36687481080` — SUCCESS;
+- artifact: `11084008131`;
+- artifact digest: `sha256:5f471fc6fceddd36ee3e223e0298eb574ea92c6ad5ddd1af273fcff9a0b2156c`;
+- Governance: PASS;
+- Project Knowledge Runtime: PASS.
+
+The qualification covered:
 
 - Governance;
 - Control Center A1 Foundation:
@@ -223,4 +234,4 @@ A1 may be considered QUALIFIED when the final committed-lockfile exact head pass
   - Chromium install;
   - browser smoke with zero external runtime requests.
 
-Qualification does not authorize public deployment or A2 feature promotion by itself.
+Qualification does not authorize public deployment. It authorizes progression to the planned A2 Maturity feature within the already locked migration architecture.
