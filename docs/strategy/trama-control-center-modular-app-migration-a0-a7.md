@@ -61,7 +61,7 @@ Legacy production remains untouched.
 
 ### A1 materialized foundation
 
-State: **IN_QUALIFICATION**.
+State: **QUALIFIED — exact head `3b4124720ab53246cca67fd7f0977ffef31c7fb7` / run `36687481080` PASS**.
 
 Reference:
 - `docs/implementation/trama-control-center-a1-foundation.md`.
