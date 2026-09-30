@@ -10,7 +10,7 @@ const graph=js.find((file)=>/EcosystemGraph-.*\.js$/.test(file.file));
 if(!entry) throw new Error("TRAMA_A6_ENTRY_JS_MISSING");
 if(!graph) throw new Error("TRAMA_A6_GRAPH_CHUNK_MISSING");
 if(!existsSync("dist/sw.js")) throw new Error("TRAMA_A6_SERVICE_WORKER_MISSING");
-if(!existsSync("dist/manifest.webmanifest")) throw new Error("TRAMA_A6_MANIFEST_MISSING");
+if(!existsSync("dist/manifest.json")) throw new Error("TRAMA_A6_MANIFEST_MISSING");
 
 const shellLimit=180*1024;
 const graphLimit=250*1024;
