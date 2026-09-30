@@ -182,11 +182,25 @@ Implementation tracking:
 - dependency additions: 0;
 - status: Draft / mergeable; CI evidence pending.
 
-### OR-05-I2 — Arena legacy call-site consolidation
-- migrare call site dal legacy confirm/tabs ai governed components;
-- no dependency change;
-- no visual redesign;
-- evidence parity.
+### OR-05-I2 — Arena dead legacy removal — **IMPLEMENTED / VERIFYING**
+La verifica live ha corretto l'ipotesi iniziale: non esistono call site produttivi dei componenti legacy `ConfirmDialog` e `Tabs`. I call site reali di conferma usano già `UiConfirmDialog`; `UiTabs` resta qualificato ma non ha oggi call site produttivi.
+
+Perimetro implementato:
+- rimozione `src/components/ui/ConfirmDialog.tsx`;
+- rimozione `src/components/ui/Tabs.tsx`;
+- rimozione dei due export legacy dal barrel;
+- governed components invariati;
+- nessuna dependency;
+- nessun redesign.
+
+Implementation tracking:
+- repository: `antoniocorsano-boop/CurManLight_arena`;
+- PR: `#344`;
+- exact head: `4244d9a0840040c2878745d22fb84dc537dca677`;
+- base: `main@a89553c0a3daa71555b6a9ec3a07c3edbf19a176`;
+- changed files: 3;
+- diff: 0 additions / 93 deletions;
+- status: Draft / mergeable; qualification in corso.
 
 ### OR-05-I3 — Atlas no-op preservation + evidence
 - nessuna migrazione componenti;
