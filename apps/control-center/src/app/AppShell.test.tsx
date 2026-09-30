@@ -1,10 +1,15 @@
-import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router";
+import { describe, expect, it } from "vitest";
 import { AppShell } from "./AppShell";
 
 describe("AppShell", () => {
   it("keeps the candidate explicitly read-only and isolated", () => {
-    render(<AppShell><p>contenuto</p></AppShell>);
+    render(
+      <MemoryRouter>
+        <AppShell><p>contenuto</p></AppShell>
+      </MemoryRouter>,
+    );
 
     expect(screen.getByRole("heading", { name: "Control Center" })).toBeInTheDocument();
     expect(screen.getByLabelText("Modalità sola lettura")).toHaveTextContent("READ_ONLY");
