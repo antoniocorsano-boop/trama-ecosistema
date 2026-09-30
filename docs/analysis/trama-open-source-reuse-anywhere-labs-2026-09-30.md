@@ -141,7 +141,7 @@ Output:
 
 **Exit:** nessuna riga di codice importata prima di questo gate.
 
-### OR-01 — DSH lifecycle extraction
+### OR-01 — DSH lifecycle extraction — **PASS documentale**
 **Obiettivo:** estrarre da DSH Desktop il minimo modello utile per Harness.
 
 Esaminare:
@@ -152,12 +152,15 @@ Esaminare:
 - profile switching;
 - recovery semantics.
 
-Output:
-- `TRAMA Runtime Generation Contract v0`;
+Output completato:
+- `docs/contracts/trama-runtime-generation-contract-v0.md`;
 - mapping DSH Desktop -> Harness Pilot;
-- gap list.
+- gap list G1–G7;
+- qualification gates per una futura implementazione.
 
-**Preferenza:** adattare concetti e API; evitare Electron.
+Esito: il pattern di generazione, ownership, `release()` idempotente, process-tree settlement, profile identity canonica e pending/last-known-good è riusabile senza importare Electron. Recovery mutativa resta contract-ready ma runtime-disabled.
+
+**Preferenza confermata:** adattare concetti e API; evitare Electron.
 
 ### OR-02 — Local connector contract
 **Obiettivo:** definire il confine locale tra TRAMA e runtime.
@@ -311,6 +314,21 @@ Evidenze verificate sull'exact head `85b79816c6ac0ae07df51d138da67d7c7baf7167`:
 
 OR-00 sblocca **OR-01** senza necessità di altre verifiche generali: il candidato di riuso diretto è DSH Desktop. Agents Anywhere resta una fonte di pattern e contratti concettuali, salvo `dsh-bridge/`, che può essere analizzato come sorgente MIT separata.
 
-## 12. Primo prossimo passo
+## 12. Stato OR-01
 
-Eseguire **OR-01 — DSH lifecycle extraction** come slice unica e non mutativa: estrarre generation lifecycle, idempotent release, subprocess ownership, cancellation, profile switching e recovery semantics, producendo il solo `TRAMA Runtime Generation Contract v0` e la relativa gap list.
+**PASS documentale.** Creato `docs/contracts/trama-runtime-generation-contract-v0.md`.
+
+Invarianti consolidate:
+- una generazione possiede tutte le risorse che crea;
+- nessun handle operativo sopravvive alla generazione;
+- `release()` è unico e idempotente anche su startup parziale;
+- cancel e release sono semanticamente distinti;
+- il processo è settled solo alla chiusura dell'intero process tree;
+- discovery profili/capability è read-only;
+- cambio profilo/modalità implica nuova generazione;
+- observation non crea authority;
+- recovery mutativa resta disabilitata nel perimetro corrente.
+
+## 13. Primo prossimo passo
+
+Eseguire **OR-02 — Local Connector Contract** come nuova slice documentale: definire il confine trasporto-indipendente tra Control Center e RuntimeGeneration, con sottoinsieme read-only, capability declaration, health/observation ed explicit mutation boundary. Agents Anywhere resta fonte concettuale `REFERENCE_ONLY`, salvo `dsh-bridge/` MIT.
