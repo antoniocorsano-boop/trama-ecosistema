@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "trama.or06-p1-fixtures/v1",
+  "valid": {
+    "id": "valid-technology-2c",
+    "input": {
+      "proofId": "OR-06-LESSON-PREPARATION-READONLY",
+      "professionalContext": {
+        "schoolYear": "2026-2027",
+        "classRef": "2C",
+        "disciplineRef": "Tecnologia"
+      },
+      "curriculum": {
+        "authority": "ARENA",
+        "snapshotRef": "arena:technology-2c",
+        "version": "v1",
+        "approvalState": "PROVISIONAL"
+      },
+      "atlas": {
+        "source": "ATLAS",
+        "resourceRefs": [
+          "atlas:resource:agri-system"
+        ],
+        "publicationState": "PUBLIC"
+      },
+      "docenteOs": {
+        "preparationRef": "dos:prep:technology-2c",
+        "teacherDecisionState": "UNDECIDED"
+      },
+      "freshness": {
+        "state": "LIVE_FIXTURE"
+      },
+      "personalStudentData": false
+    },
+    "capabilities": [
+      {
+        "key": "lesson.preparation.observe",
+        "supported": true,
+        "available": true,
+        "authorized": true
+      },
+      {
+        "key": "lesson.preparation.apply",
+        "supported": true,
+        "available": false,
+        "authorized": false
+      },
+      {
+        "key": "lesson.preparation.publish",
+        "supported": false,
+        "available": false,
+        "authorized": false
+      },
+      {
+        "key": "lesson.preparation.persist",
+        "supported": false,
+        "available": false,
+        "authorized": false
+      },
+      {
+        "key": "lesson.preparation.approve",
+        "supported": false,
+        "available": false,
+        "authorized": false
+      }
+    ],
+    "observation": {
+      "proofId": "OR-06-LESSON-PREPARATION-READONLY",
+      "runtime": {
+        "runtimeType": "fixture",
+        "runtimeId": "or06-fixture",
+        "adapterId": "or06-mock-adapter",
+        "adapterVersion": "0.1.0"
+      },
+      "observedAt": "2026-09-30T00:00:00Z",
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "CE-01",
+          "status": "PASS",
+          "message": "Arena authority preserved.",
+          "evidenceRefs": [
+            "arena:technology-2c"
+          ]
+        },
+        {
+          "id": "CE-03",
+          "status": "PASS",
+          "message": "Teacher decision remains pending.",
+          "evidenceRefs": [
+            "dos:prep:technology-2c"
+          ]
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "suggestion-1",
+          "kind": "ATLAS_RESOURCE",
+          "text": "Valuta la risorsa Atlas sul sistema agricolo.",
+          "sourceRefs": [
+            "arena:technology-2c",
+            "atlas:resource:agri-system"
+          ],
+          "decisionState": "PROPOSED"
+        }
+      ],
+      "evidenceRefs": [
+        "arena:technology-2c",
+        "dos:prep:technology-2c",
+        "atlas:resource:agri-system"
+      ],
+      "controlCenter": {
+        "mode": "READ_ONLY",
+        "actions": []
+      }
+    }
+  },
+  "invalid": [
+    {
+      "id": "invalid-authority",
+      "expect": [
+        "CE-01"
+      ],
+      "patch": {
+        "input": {
+          "curriculum": {
+            "authority": "ATLAS"
+          }
+        }
+      }
+    },
+    {
+      "id": "invalid-teacher-decision",
+      "expect": [
+        "CE-03"
+      ],
+      "patch": {
+        "observation": {
+          "suggestions": [
+            {
+              "id": "suggestion-1",
+              "kind": "ATLAS_RESOURCE",
+              "text": "Risorsa.",
+              "sourceRefs": [
+                "arena:technology-2c"
+              ],
+              "decisionState": "ACCEPTED"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "invalid-mutation-authorized",
+      "expect": [
+        "CE-04"
+      ],
+      "patch": {
+        "capabilities": [
+          {
+            "key": "lesson.preparation.apply",
+            "supported": true,
+            "available": true,
+            "authorized": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "invalid-provenance",
+      "expect": [
+        "CE-05"
+      ],
+      "patch": {
+        "observation": {
+          "suggestions": [
+            {
+              "id": "suggestion-1",
+              "kind": "LESSON_ADJUSTMENT",
+              "text": "Adatta la durata.",
+              "sourceRefs": [],
+              "decisionState": "PROPOSED"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "invalid-stale-pass",
+      "expect": [
+        "CE-06"
+      ],
+      "patch": {
+        "input": {
+          "freshness": {
+            "state": "STALE"
+          }
+        },
+        "observation": {
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "id": "invalid-provider-specific-runtime-field",
+      "expect": [
+        "CE-07"
+      ],
+      "patch": {
+        "observation": {
+          "runtime": {
+            "runtimeType": "fixture",
+            "runtimeId": "or06-fixture",
+            "adapterId": "or06-mock-adapter",
+            "adapterVersion": "0.1.0",
+            "openaiModel": "forbidden-provider-field"
+          }
+        }
+      }
+    },
+    {
+      "id": "invalid-control-center-action",
+      "expect": [
+        "CE-08"
+      ],
+      "patch": {
+        "observation": {
+          "controlCenter": {
+            "mode": "READ_ONLY",
+            "actions": [
+              "apply"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "invalid-personal-student-data",
+      "expect": [
+        "CE-09"
+      ],
+      "patch": {
+        "input": {
+          "personalStudentData": true,
+          "studentName": "Mario Rossi"
+        }
+      }
+    }
+  ]
+}
