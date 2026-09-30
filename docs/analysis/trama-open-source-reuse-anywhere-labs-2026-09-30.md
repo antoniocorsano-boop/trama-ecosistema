@@ -437,3 +437,29 @@ Backlog OR-04: **nessun tema analitico implicito**. L'unico passo residuo è la 
 ## 16. Primo prossimo passo
 
 Dopo PASS dei gate, **OR-05 — UI component reuse** può procedere come inventario/adozione mirata dei primitive maturi già identificati, senza duplicare la Component Strategy esistente. OR-06 resta il proof end-to-end read-only successivo.
+
+
+## 17. Stato OR-07
+
+**PASS documentale / implementation-ready.**
+
+Creati:
+- `docs/contracts/trama-shared-capability-layer-contract-v0.md`;
+- `governance/runtime/trama-shared-capability-layer-v1.json`.
+
+Decisioni consolidate:
+- il Shared Capability Layer è infrastruttura subordinata e non un nuovo prodotto;
+- capability identity provider-neutral;
+- caller e decision owner espliciti;
+- separazione tra semantica, adapter, provider e runtime;
+- capability state separate: `supported / available / authorized / qualified`;
+- OR-07 v0 ammette soltanto `READ_ONLY` e `PROPOSE_ONLY`;
+- provenance, freshness ed evidence refs obbligatorie per risultati governati;
+- failure isolation e stale honesty;
+- Arena authority, Atlas role, Docente OS teacher-first e Control Center READ_ONLY invariati;
+- nessun dato personale studente nel contratto base;
+- `DOS-A1 = RUNTIME_DEFERRED`.
+
+Prima capability di riferimento: `lesson.preparation.observe`, già usata nel proof OR-06.
+
+Next slice: **OR-07-P1 — deterministic provider-neutral fixture + validator**, interamente offline e con almeno due fake adapter per provare la sostituibilità del provider.
