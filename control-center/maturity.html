@@ -163,6 +163,7 @@ h1{margin:3px 0 4px;font-size:30px}
 <script src="./component-maturity.js"></script>
 <script>
 const SNAPSHOT_URL='./data/ecosystem-snapshot.json';
+const LIVE_COMPONENT_URL='./data/effective-component-evidence.json';
 const CACHE_KEY='trama-cc2-snapshot';
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function saveSnapshot(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch{}}
@@ -183,13 +184,14 @@ const EVIDENCE_TYPE_LABELS={
 };
 function bindingLabel(v){return ({NONE:'Non collegate',PARTIAL:'Parziali',COMPLETE:'Complete'})[String(v||'').toUpperCase()]||String(v||'—')}
 function evidenceTypeLabel(v){return EVIDENCE_TYPE_LABELS[v]||String(v||'').replaceAll('_',' ').toLowerCase()}
-function render(data,mode){
+function render(data,mode,componentView=null){
   updated.textContent=(mode==='offline'?'Offline · ':'Aggiornato · ')+new Date(data.generatedAt).toLocaleString('it-IT');
-  const areas=data.areas||[],components=data.components||[];
+  const areas=data.areas||[],components=(componentView&&Array.isArray(componentView.components)?componentView.components:(data.components||[]));
   areaCount.textContent=areas.length;
   componentCount.textContent=components.length;
   const source=data.sourceState?.['component-evidence-registry'];
-  componentSourceState.textContent=source?.status==='FRESH'?'Aggiornata':(source?.status||'Non disponibile');
+  const liveStatus=componentView?.liveObservationStatus;
+  componentSourceState.textContent=liveStatus==='FRESH'?'Governata + live':liveStatus==='PARTIAL'?'Live parziale':liveStatus==='UNAVAILABLE'?'Governata · live non disponibile':source?.status==='FRESH'?'Governata':(source?.status||'Non disponibile');
   areaGrid.innerHTML=areas.map(a=>{
     const next=(a.nextRequiredEvidenceTypes||[]).map(evidenceTypeLabel);
     const nextText=a.nextTargetLevel===null?'Catena L5 completa':('Per L'+a.nextTargetLevel+': '+(next.join(', ')||'nessuna prova aggiuntiva'));
@@ -213,7 +215,13 @@ async function load(){
   try{
     const r=await fetch(SNAPSHOT_URL,{cache:'no-store'});
     if(!r.ok)throw new Error('snapshot '+r.status);
-    const data=await r.json();saveSnapshot(data);render(data,'fresh');
+    const data=await r.json();
+    let componentView=null;
+    try{
+      const live=await fetch(LIVE_COMPONENT_URL,{cache:'no-store'});
+      if(live.ok)componentView=await live.json();
+    }catch{}
+    saveSnapshot(data);render(data,'fresh',componentView);
   }catch(err){
     const cached=readSnapshot();
     if(cached)render(cached,'offline');
