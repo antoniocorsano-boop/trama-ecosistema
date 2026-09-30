@@ -1367,6 +1367,54 @@
         "OR05_IMPLEMENTATION_FINDING",
         "DEPENDENCY_ADOPTION_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-OR-06-CROSS-ECOSYSTEM-READONLY-PROOF",
+      "path": "docs/contracts/trama-cross-ecosystem-readonly-proof-v0.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "cross-ecosystem-proof",
+        "lesson-preparation",
+        "arena",
+        "atlas",
+        "docente-os",
+        "control-center",
+        "runtime"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-TRAMA-ADR-019-ECOSYSTEM-FIRST",
+        "DOC-OR-05-ECOSYSTEM-COMPONENT-REUSE"
+      ],
+      "updateTriggers": [
+        "OR06_IMPLEMENTATION_FINDING",
+        "AUTHORITY_CHANGE",
+        "LESSON_PREPARATION_CONTRACT_CHANGE",
+        "RUNTIME_AUTHORITY_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-OR-06-CROSS-ECOSYSTEM-READONLY-PROOF-MANIFEST",
+      "path": "governance/runtime/trama-cross-ecosystem-readonly-proof-v1.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "cross-ecosystem-proof",
+        "machine-readable-proof",
+        "runtime"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-06-CROSS-ECOSYSTEM-READONLY-PROOF"
+      ],
+      "updateTriggers": [
+        "OR06_IMPLEMENTATION_FINDING",
+        "PROOF_SCHEMA_CHANGE",
+        "RUNTIME_ADAPTER_CHANGE"
+      ]
     }
   ]
 }
