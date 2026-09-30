@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "trama.human-review-package/v1",
+  "id": "TRAMA-HR-OR05-OR06-2026-09-30",
+  "status": "HUMAN_APPROVED_INTEGRATED",
+  "date": "2026-09-30",
+  "invariants": {
+    "arenaAuthorityPreserved": true,
+    "atlasAuthorityUnchanged": true,
+    "docenteOsTeacherFirst": true,
+    "controlCenterReadOnly": true,
+    "newWriteAuthority": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "candidates": [
+    {
+      "repo": "antoniocorsano-boop/CurManLight_arena",
+      "pr": 344,
+      "exactHead": "4244d9a0840040c2878745d22fb84dc537dca677",
+      "mergeable": true,
+      "openThreads": 0,
+      "gates": [
+        "CurManLight Product CI:PASS",
+        "Beta Release Contract:PASS",
+        "TRAMA Perceptible Write:PASS"
+      ],
+      "decision": "HUMAN_APPROVED",
+      "mergeCommit": "ac04058b689075a607fba050c706a8f222d0cca1"
+    },
+    {
+      "repo": "antoniocorsano-boop/docente-os-2026-27",
+      "pr": 644,
+      "exactHead": "caa76dd01dc448c14e97dbc6fb5bd38eefba786e",
+      "mergeable": true,
+      "openThreads": 0,
+      "gates": [
+        "Product CI:PASS",
+        "Browser Certification Orchestrator:PASS",
+        "Design Policy Gate:PASS",
+        "ASVS 5.0 Assurance:PASS",
+        "Human Interaction Model:PASS",
+        "TRAMA Perceptible Write:PASS"
+      ],
+      "decision": "HUMAN_APPROVED",
+      "mergeCommit": "18fe45cb88989bddf2666560ecc17b3cc0025f02"
+    },
+    {
+      "repo": "antoniocorsano-boop/trama-ecosistema",
+      "pr": 200,
+      "exactHead": "4a2247a9a52bc5310f6c2afd9a069b53faa27156",
+      "mergeable": true,
+      "openThreads": 0,
+      "gates": [
+        "Governance:PASS"
+      ],
+      "decision": "HUMAN_APPROVED",
+      "mergeCommit": "2bca36fdb5b70683cb95a27e6540e4a39ac3cf70"
+    }
+  ],
+  "stackedOrder": [
+    197,
+    198,
+    199,
+    200
+  ],
+  "automaticMergeAuthorized": false,
+  "decisionDate": "2026-09-30",
+  "tramaIntegration": [
+    {
+      "pr": 197,
+      "mergeCommit": "013fc443e3caa85e3ffd9cacfc270899a35e61ad"
+    },
+    {
+      "pr": 198,
+      "mergeCommit": "c3d09aaacde88417508bbde7a47b36fd513ef574"
+    },
+    {
+      "pr": 199,
+      "mergeCommit": "f52520ddc2aa3353b110bf5599b9db99302def6b"
+    },
+    {
+      "pr": 200,
+      "mergeCommit": "2bca36fdb5b70683cb95a27e6540e4a39ac3cf70"
+    }
+  ],
+  "humanIntegrationExecuted": true
+}
