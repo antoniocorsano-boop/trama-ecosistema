@@ -51,6 +51,37 @@ async function popoverOpen(locator) {
   return locator.evaluate((node) => node.matches(':popover-open'));
 }
 
+async function invokerAccessibilityState(page, selector) {
+  const session = await page.context().newCDPSession(page);
+  try {
+    await session.send('Accessibility.enable');
+    const doc = await session.send('DOM.getDocument', { depth: 1 });
+    const query = await session.send('DOM.querySelector', {
+      nodeId: doc.root.nodeId,
+      selector,
+    });
+    assert.ok(query.nodeId, `Accessibility target not found: ${selector}`);
+    const tree = await session.send('Accessibility.getPartialAXTree', {
+      nodeId: query.nodeId,
+      fetchRelatives: false,
+    });
+    const node = tree.nodes.find((item) => item.role?.value === 'button') || tree.nodes[0];
+    assert.ok(node, `Accessibility node not found: ${selector}`);
+    const properties = Object.fromEntries(
+      (node.properties || []).map((item) => [item.name, item.value?.value])
+    );
+    return {
+      role: node.role?.value || null,
+      name: node.name?.value || null,
+      expanded: properties.expanded ?? null,
+      details: properties.details ?? null,
+      properties,
+    };
+  } finally {
+    await session.detach();
+  }
+}
+
 async function measure(page, selector) {
   return page.locator(selector).evaluate((node) => {
     const rect = node.getBoundingClientRect();
@@ -125,8 +156,11 @@ async function main() {
       await nativeTrigger.press('Enter');
       assert.equal(await popoverOpen(nativeHelp), true, 'Native popover must open from keyboard activation');
   
+      await page.waitForTimeout(50);
       const nativeAriaOpen = await nativeTrigger.ariaSnapshot();
-      assert.match(nativeAriaOpen, /expanded/i, 'Native invoker accessibility snapshot must expose expanded state');
+      const nativeAxOpen = await invokerAccessibilityState(page, '#nativeTrigger');
+      assert.equal(nativeAxOpen.role, 'button', 'Native invoker must remain a button in the accessibility tree');
+      assert.equal(nativeAxOpen.expanded, true, 'Native invoker accessibility tree must expose expanded=true while the popover is open');
   
       await page.keyboard.press('Tab');
       const nativeFirstTabTarget = await page.evaluate(() => document.activeElement?.getAttribute('aria-label') || document.activeElement?.id || '');
@@ -165,6 +199,7 @@ async function main() {
           support,
           semanticModel: 'NON_MODAL_POPOVER',
           invokerAccessibilitySnapshotOpen: nativeAriaOpen,
+          invokerAccessibilityTreeOpen: nativeAxOpen,
           firstTabTargetAfterOpen: nativeFirstTabTarget,
           escapeReturnFocus: 'nativeTrigger',
           lightDismiss: true,
