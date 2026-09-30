@@ -255,7 +255,7 @@ Governed migration sequence:
 1. **A0 — Architecture lock** — LOCKED / HUMAN REVIEW APPROVED 2026-09-30; architecture, dependency policy, package boundary, rollback rules and machine-enforced legacy baseline materialized;
 2. **A1 — Application foundation** — QUALIFIED; React/TypeScript/Vite shell, governed data validation, committed lockfile and browser smoke in isolated preview; production legacy unchanged;
 3. **A2 — Maturity feature** — QUALIFIED; first modular vertical slice with Evidence Lane parity, axe, canonical viewport evidence and A1 regression PASS; legacy production unchanged;
-4. **A3 — Overview + navigation** — human-readable orientation shell;
+4. **A3 — Overview + navigation** — QUALIFIED; modular Home orientation, Project Knowledge presentation, progressive navigation and canonical viewport evidence; legacy production unchanged;
 5. **A4 — Ecosystem + Evidence** — accessible graph/list and Evidence Explorer;
 6. **A5 — Operations + Assurance** — governed timeline, operational path and stakeholder assurance;
 7. **A6 — PWA + security + accessibility + parity** — candidate qualification;

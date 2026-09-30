@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "trama.control-center-a3-overview-qualification/v1",
+  "id": "TRAMA-CC-APP-A3-QUAL-01",
+  "status": "QUALIFIED",
+  "qualifiedAt": "2026-09-30",
+  "repository": "antoniocorsano-boop/trama-ecosistema",
+  "qualifiedHead": "9f8d7e3062ac1990e7a505e04b8253a94283ba58",
+  "workflow": {
+    "name": "Control Center A3 Overview",
+    "runId": 36693184969,
+    "conclusion": "SUCCESS"
+  },
+  "artifact": {
+    "id": 11086642804,
+    "name": "control-center-a3-overview-9f8d7e3062ac1990e7a505e04b8253a94283ba58",
+    "digest": "sha256:17f4af77a20e0718ff5d3d02de21805fc7190db17efa46cda01d6cae79acb348"
+  },
+  "gates": {
+    "npmCi": "PASS",
+    "typecheck": "PASS",
+    "unitComponentTests": {
+      "status": "PASS",
+      "passed": 14,
+      "total": 14
+    },
+    "build": "PASS",
+    "bundleBudget": {
+      "status": "PASS",
+      "initialJsGzipBytes": 127825,
+      "limitGzipBytes": 184320
+    },
+    "governedArtifactSecurityBoundary": "PASS",
+    "browserQualification": {
+      "status": "PASS",
+      "passed": 6,
+      "total": 6
+    },
+    "axe": "PASS",
+    "overflowCanonicalViewports": "PASS",
+    "zeroExternalRuntimeRequests": "PASS",
+    "canonicalViewports": [
+      "desktop-1440x900",
+      "phone-pixel7",
+      "lim-1920x1080"
+    ],
+    "a1Regression": {
+      "status": "PASS",
+      "runId": 36693184984
+    },
+    "a2Regression": {
+      "status": "PASS",
+      "runId": 36693185019
+    },
+    "governance": {
+      "status": "PASS",
+      "runId": 36693185260
+    },
+    "projectKnowledgeRuntime": {
+      "status": "PASS",
+      "runId": 36693185118
+    }
+  },
+  "semantics": {
+    "homeRole": "ORIENTATION_LAUNCH_POINT",
+    "noOverallScore": true,
+    "noFalseUrgency": true,
+    "projectKnowledgePartialIsError": false,
+    "availablePrimaryDestinations": [
+      "OVERVIEW",
+      "MATURITY"
+    ],
+    "upcomingDestinations": [
+      "ECOSYSTEM_A4",
+      "EVIDENCE_A4",
+      "OPERATIONS_A5",
+      "ASSURANCE_A5"
+    ]
+  },
+  "boundaries": {
+    "legacyHomeModified": false,
+    "legacyServiceWorkerModified": false,
+    "publicCutoverAuthorized": false,
+    "renderProductionModified": false,
+    "newRuntimeDependency": false,
+    "browserGithubAuthority": false,
+    "repositoryWriteCapability": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "nextStage": "A4_ECOSYSTEM_EVIDENCE"
+}
