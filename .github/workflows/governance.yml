@@ -19,6 +19,8 @@ jobs:
       - {name: Test OR-06 cross-ecosystem read-only proof, run: python3 -m unittest tests.test_or06_cross_ecosystem_readonly_proof -v}
       - {name: Validate OR-07 shared capability layer, run: python3 scripts/validate_or07_shared_capability_layer.py}
       - {name: Test OR-07 shared capability layer, run: python3 -m unittest tests.test_or07_shared_capability_layer -v}
+      - {name: Validate OR-08 runtime portability, run: python3 scripts/validate_or08_runtime_portability.py}
+      - {name: Test OR-08 runtime portability, run: python3 -m unittest tests.test_or08_runtime_portability -v}
       - {name: Validate Control Center A0 architecture lock, run: python3 scripts/validate_control_center_a0_architecture_lock.py}
       - {name: Validate Stage E1 visual prototype, run: python3 scripts/validate_stage_e1_visual_prototype.py}
       - {name: Test Stage E2 project knowledge UI mapping, run: node scripts/test_stage_e2_project_knowledge_ui.cjs}

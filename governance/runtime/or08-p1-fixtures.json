@@ -1,0 +1,229 @@
+{
+  "schemaVersion": "trama.or08-p1-fixtures/v1",
+  "capabilityId": "lesson.preparation.observe",
+  "capabilityVersion": "1.0.0",
+  "canonicalRequest": {
+    "requestId": "or08-p1-request-001",
+    "capabilityId": "lesson.preparation.observe",
+    "capabilityVersion": "1.0.0",
+    "caller": {
+      "product": "DOCENTE_OS",
+      "surface": "next-lesson-preparation"
+    },
+    "authorityContext": {
+      "sourceRefs": [
+        "arena:technology-2c:v1",
+        "atlas:resource:agri-system"
+      ],
+      "decisionOwner": "DOCENTE_OS"
+    },
+    "input": {
+      "curriculumRef": "arena:technology-2c:v1",
+      "optionalResourceRefs": [
+        "atlas:resource:agri-system"
+      ],
+      "personalStudentData": false
+    }
+  },
+  "adapters": [
+    {
+      "adapterId": "or08-dsh-compatible",
+      "adapterVersion": "0.1.0",
+      "providerType": "DSH_COMPATIBLE",
+      "providerId": "offline-dsh-fixture",
+      "requestProjectionRef": "canonicalRequest",
+      "state": {
+        "supported": true,
+        "available": true,
+        "authorized": true,
+        "qualified": true
+      },
+      "result": {
+        "status": "SUCCEEDED",
+        "decisionState": "PROPOSAL",
+        "semantic": {
+          "proposalKind": "LESSON_PREPARATION",
+          "sourceRefs": [
+            "arena:technology-2c:v1",
+            "atlas:resource:agri-system"
+          ],
+          "authorityPreserved": true,
+          "teacherDecisionOwner": "DOCENTE_OS",
+          "mutation": false
+        },
+        "evidenceRefs": [
+          "evidence:or08-p1:dsh"
+        ],
+        "stale": false
+      }
+    },
+    {
+      "adapterId": "or08-codex-compatible",
+      "adapterVersion": "0.1.0",
+      "providerType": "CODEX_COMPATIBLE",
+      "providerId": "offline-codex-fixture",
+      "requestProjectionRef": "canonicalRequest",
+      "state": {
+        "supported": true,
+        "available": true,
+        "authorized": true,
+        "qualified": true
+      },
+      "result": {
+        "status": "SUCCEEDED",
+        "decisionState": "PROPOSAL",
+        "semantic": {
+          "proposalKind": "LESSON_PREPARATION",
+          "sourceRefs": [
+            "arena:technology-2c:v1",
+            "atlas:resource:agri-system"
+          ],
+          "authorityPreserved": true,
+          "teacherDecisionOwner": "DOCENTE_OS",
+          "mutation": false
+        },
+        "evidenceRefs": [
+          "evidence:or08-p1:codex"
+        ],
+        "stale": false
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "id": "different-capability",
+      "expect": [
+        "RP-01"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "or08-dsh-compatible",
+            "capabilityId": "dsh.lesson.preparation.observe"
+          }
+        ]
+      }
+    },
+    {
+      "id": "provider-field-in-request",
+      "expect": [
+        "RP-02"
+      ],
+      "patch": {
+        "canonicalRequest": {
+          "input": {
+            "providerCommand": "forbidden"
+          }
+        }
+      }
+    },
+    {
+      "id": "semantic-drift",
+      "expect": [
+        "RP-03"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "or08-codex-compatible",
+            "result": {
+              "semantic": {
+                "proposalKind": "AUTOMATIC_PUBLICATION"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "missing-provenance",
+      "expect": [
+        "RP-04"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "or08-codex-compatible",
+            "providerType": null,
+            "providerId": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "unnormalized-failure",
+      "expect": [
+        "RP-05"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "or08-codex-compatible",
+            "result": {
+              "status": "MODEL_TIMEOUT"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "authority-drift",
+      "expect": [
+        "RP-06"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "or08-codex-compatible",
+            "result": {
+              "semantic": {
+                "teacherDecisionOwner": "RUNTIME"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "caller-provider-api",
+      "expect": [
+        "RP-07"
+      ],
+      "patch": {
+        "canonicalRequest": {
+          "caller": {
+            "providerApi": "codex.execute"
+          }
+        }
+      }
+    },
+    {
+      "id": "live-runtime",
+      "expect": [
+        "RP-08",
+        "RP-10"
+      ],
+      "patch": {
+        "adapters": [
+          {
+            "adapterId": "or08-codex-compatible",
+            "runtimeLive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "secret-leak",
+      "expect": [
+        "RP-09"
+      ],
+      "patch": {
+        "canonicalRequest": {
+          "input": {
+            "apiKey": "secret"
+          }
+        }
+      }
+    }
+  ]
+}
