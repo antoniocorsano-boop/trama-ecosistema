@@ -107,4 +107,17 @@ for token in [
 ]:
     assert token.lower() in receipt.lower(),token
 
+qualification_receipt=(ROOT/"docs/evidence/trama-component-qualification-arena-r1-2026-09-30.md").read_text(encoding="utf-8")
+for token in [
+    "6a04455139a9a2161c723fdcef5358161aff66c4",
+    "36656179036",
+    "11073056182",
+    "ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb",
+    "confirmedStage=ACCESSIBILITY",
+    "qualificationStatus=QUALIFIED",
+    "903404953465a526408939ebd31eae40f57a57a6",
+    "deployed Context Help at confirmed REGISTERED",
+]:
+    assert token.lower() in qualification_receipt.lower(),token
+
 print("TRAMA_COMPONENT_EVIDENCE_EXPANSION_01_PASS")
