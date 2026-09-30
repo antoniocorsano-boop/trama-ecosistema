@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "trama.live-component-evidence-overlay/v1",
+  "observedAt": "2026-09-30T05:10:30Z",
+  "status": "COMPLETE",
+  "evidence": [
+    {
+      "sourceId": "ATLAS-RELATION-ISOLATED",
+      "componentId": "ATLAS.RELATION_EXPLORER.FAMILY",
+      "evidenceType": "ISOLATED",
+      "status": "PRESENT",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "defaultBranch": "main",
+      "observedMainHead": "0105d4f497bea6e476d1b0c40bd472585068f269",
+      "workflowName": "TRAMA Atlas Component Isolation R1",
+      "exactHead": "fe43bb037ae0bd5bc13aba40e17875d1673667c2",
+      "runId": 36671130676,
+      "artifactId": 11078325536,
+      "artifactName": "atlas-component-isolation-fe43bb037ae0bd5bc13aba40e17875d1673667c2",
+      "artifactDigest": "sha256:3a664cea8d53ea87eed192afefc756a1d67eaf6ad3fd43b9d9a01d85405ec2a5",
+      "artifactExpiresAt": "2026-10-30T04:57:28Z",
+      "integrationStatus": "INTEGRATED_IN_DEFAULT_BRANCH",
+      "sourceRefs": [
+        "fixture:atlas-pr-65"
+      ]
+    },
+    {
+      "sourceId": "ATLAS-CURRICULUM-TREE-ISOLATED",
+      "componentId": "ATLAS.CURRICULUM_TREE.DISCLOSURE",
+      "evidenceType": "ISOLATED",
+      "status": "PRESENT",
+      "repository": "antoniocorsano-boop/Curriculum-Atlas",
+      "defaultBranch": "main",
+      "observedMainHead": "0105d4f497bea6e476d1b0c40bd472585068f269",
+      "workflowName": "TRAMA Atlas Component Isolation R1",
+      "exactHead": "fe43bb037ae0bd5bc13aba40e17875d1673667c2",
+      "runId": 36671130676,
+      "artifactId": 11078325536,
+      "artifactName": "atlas-component-isolation-fe43bb037ae0bd5bc13aba40e17875d1673667c2",
+      "artifactDigest": "sha256:3a664cea8d53ea87eed192afefc756a1d67eaf6ad3fd43b9d9a01d85405ec2a5",
+      "artifactExpiresAt": "2026-10-30T04:57:28Z",
+      "integrationStatus": "INTEGRATED_IN_DEFAULT_BRANCH",
+      "sourceRefs": [
+        "fixture:atlas-pr-65"
+      ]
+    }
+  ],
+  "sourceRefs": [
+    "fixture:atlas-pr-65"
+  ]
+}
