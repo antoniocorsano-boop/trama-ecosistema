@@ -1461,6 +1461,54 @@
         "HUMAN_DECISION",
         "MERGE_STATUS_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-OR-07-SHARED-CAPABILITY-LAYER",
+      "path": "docs/contracts/trama-shared-capability-layer-contract-v0.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "shared-capability-layer",
+        "ecosystem-architecture",
+        "arena",
+        "atlas",
+        "docente-os",
+        "control-center",
+        "runtime",
+        "provider-portability"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-06-CROSS-ECOSYSTEM-READONLY-PROOF"
+      ],
+      "updateTriggers": [
+        "SHARED_CAPABILITY_CONTRACT_CHANGE",
+        "AUTHORITY_BOUNDARY_CHANGE",
+        "PROVIDER_BINDING_CHANGE",
+        "CAPABILITY_MODE_CHANGE",
+        "DOS_A1_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-OR-07-SHARED-CAPABILITY-MANIFEST",
+      "path": "governance/runtime/trama-shared-capability-layer-v1.json",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "shared-capability-layer",
+        "machine-readable-contract"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-07-SHARED-CAPABILITY-LAYER"
+      ],
+      "updateTriggers": [
+        "SHARED_CAPABILITY_CONTRACT_CHANGE",
+        "CAPABILITY_MODE_CHANGE",
+        "QUALIFICATION_STATE_CHANGE"
+      ]
     }
   ]
 }
