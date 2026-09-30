@@ -626,7 +626,7 @@
       "id": "DOC-CONTROL-CENTER-V2-ARCHITECTURE",
       "path": "docs/architecture/trama-control-center-v2-architecture.md",
       "kind": "ARCHITECTURE",
-      "status": "PROPOSED",
+      "status": "SUPERSEDED",
       "priority": "NORMATIVE",
       "subjects": [
         "control-center-ui",
@@ -640,7 +640,8 @@
       "updateTriggers": [
         "CONTROL_CENTER_ARCHITECTURE_CHANGE",
         "MATURITY_MODEL_CHANGE",
-        "VISUALIZATION_STACK_CHANGE"
+        "VISUALIZATION_STACK_CHANGE",
+        "CONTROL_CENTER_MODULAR_APP_ARCHITECTURE_CHANGE"
       ]
     },
     {
@@ -985,6 +986,62 @@
         "CONTROL_CENTER_CONTEXT_HELP_EVIDENCE_CHANGE",
         "EXACT_HEAD_REQUALIFICATION",
         "COMPONENT_QUALIFICATION_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+      "path": "docs/architecture/trama-control-center-modular-app-architecture-v1.md",
+      "kind": "ARCHITECTURE",
+      "status": "CURRENT",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "control-center-ui",
+        "control-center-architecture",
+        "frontend-architecture",
+        "design-system",
+        "pwa",
+        "accessibility",
+        "component-strategy",
+        "static-deploy"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-V2-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-HUMAN-READABLE-IA",
+        "DOC-TRAMA-UI-DEVELOPMENT-MODEL",
+        "DOC-TRAMA-COMPONENT-STRATEGY"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_FRONTEND_STACK_CHANGE",
+        "CONTROL_CENTER_APPLICATION_SHELL_CHANGE",
+        "CONTROL_CENTER_DATA_BOUNDARY_CHANGE",
+        "DESIGN_SYSTEM_CHANGE",
+        "PWA_ARCHITECTURE_CHANGE",
+        "PUBLIC_CUTOVER_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION",
+      "path": "docs/strategy/trama-control-center-modular-app-migration-a0-a7.md",
+      "kind": "OPERATING_MODEL",
+      "status": "CURRENT",
+      "priority": "FOUNDATIONAL",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "application-shell",
+        "maturity",
+        "pwa",
+        "accessibility",
+        "render-deploy"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_MIGRATION_STAGE_CHANGE",
+        "PARITY_FINDING",
+        "PUBLIC_CUTOVER_CHANGE",
+        "ROLLBACK_POLICY_CHANGE"
       ]
     }
   ]
