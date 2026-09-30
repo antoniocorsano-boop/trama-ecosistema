@@ -1,0 +1,57 @@
+name: Control Center A6 PWA Parity
+on:
+  pull_request:
+    paths:
+      - "apps/control-center/**"
+      - "control-center/data/ecosystem-snapshot.json"
+      - "control-center/data/context-packs/project-knowledge.json"
+      - "schemas/ecosystem-snapshot.schema.json"
+      - "governance/control-center/trama-control-center-a6-parity-matrix.json"
+      - "docs/implementation/trama-control-center-a6-pwa-parity.md"
+      - ".github/workflows/control-center-a6-pwa-parity.yml"
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/control-center
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/control-center/package-lock.json
+      - name: Install from lockfile
+        run: npm ci --ignore-scripts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit and component tests
+        run: npm run test
+      - name: Build candidate
+        run: npm run build
+      - name: Bundle report
+        run: node scripts/report-bundle-size.mjs > a6-bundle-report.json
+      - name: Enforce A6 PWA and bundle guardrails
+        run: node scripts/check-a6-bundle-budget.mjs a6-bundle-report.json
+      - name: Verify CSP-compatible static output
+        run: |
+          test -s dist/sw.js
+          test -s dist/manifest.webmanifest
+          ! grep -R -E "(api\.github\.com|raw\.githubusercontent\.com|GITHUB_TOKEN|Authorization: Bearer|dangerouslySetInnerHTML|eval\()" src
+          ! grep -E '<script(>|[^>]*>)[[:space:]]*[^<]' dist/index.html
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: A6 browser PWA parity qualification
+        run: npx playwright test e2e/a6-pwa-parity.spec.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: control-center-a6-pwa-parity-${{ github.event.pull_request.head.sha }}
+          path: |
+            apps/control-center/a6-bundle-report.json
+            apps/control-center/test-results
+            apps/control-center/playwright-report
+          if-no-files-found: warn
