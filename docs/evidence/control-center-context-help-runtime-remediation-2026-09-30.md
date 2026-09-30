@@ -60,8 +60,9 @@ The workflow tests the **actual** `control-center/index.html` at compact and des
 - native Popover API availability in the evidence browser;
 - no dialog semantic claim;
 - accessible invoker-to-help relationship;
-- keyboard order from invoker into the popover;
-- Escape dismissal and focus return/preservation;
+- rebinding of the native source when contextual focus moves while the popover is already open;
+- keyboard order from the currently bound invoker into the popover;
+- Escape dismissal and focus return to the currently bound invoker;
 - outside-click light dismissal;
 - no persisted hover-only help;
 - in-viewport placement at 390×844 and 1024×768;
