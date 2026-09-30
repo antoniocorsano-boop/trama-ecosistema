@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "trama.human-review-package/v1",
+  "id": "TRAMA-HR-OR05-OR06-2026-09-30",
+  "status": "AWAITING_HUMAN_DECISION",
+  "date": "2026-09-30",
+  "invariants": {
+    "arenaAuthorityPreserved": true,
+    "atlasAuthorityUnchanged": true,
+    "docenteOsTeacherFirst": true,
+    "controlCenterReadOnly": true,
+    "newWriteAuthority": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "candidates": [
+    {
+      "repo": "antoniocorsano-boop/CurManLight_arena",
+      "pr": 344,
+      "exactHead": "4244d9a0840040c2878745d22fb84dc537dca677",
+      "mergeable": true,
+      "openThreads": 0,
+      "gates": [
+        "CurManLight Product CI:PASS",
+        "Beta Release Contract:PASS",
+        "TRAMA Perceptible Write:PASS"
+      ],
+      "decision": "PENDING_HUMAN"
+    },
+    {
+      "repo": "antoniocorsano-boop/docente-os-2026-27",
+      "pr": 644,
+      "exactHead": "caa76dd01dc448c14e97dbc6fb5bd38eefba786e",
+      "mergeable": true,
+      "openThreads": 0,
+      "gates": [
+        "Product CI:PASS",
+        "Browser Certification Orchestrator:PASS",
+        "Design Policy Gate:PASS",
+        "ASVS 5.0 Assurance:PASS",
+        "Human Interaction Model:PASS",
+        "TRAMA Perceptible Write:PASS"
+      ],
+      "decision": "PENDING_HUMAN"
+    },
+    {
+      "repo": "antoniocorsano-boop/trama-ecosistema",
+      "pr": 200,
+      "exactHead": "4a2247a9a52bc5310f6c2afd9a069b53faa27156",
+      "mergeable": true,
+      "openThreads": 0,
+      "gates": [
+        "Governance:PASS"
+      ],
+      "decision": "PENDING_HUMAN"
+    }
+  ],
+  "stackedOrder": [
+    197,
+    198,
+    199,
+    200
+  ],
+  "automaticMergeAuthorized": false
+}
