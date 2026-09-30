@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import currentSnapshot from "../../../../control-center/data/ecosystem-snapshot.json";
 import { SnapshotValidationError, parseEcosystemSnapshot } from "./validation";
 
