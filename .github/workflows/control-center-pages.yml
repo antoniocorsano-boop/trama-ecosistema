@@ -115,7 +115,7 @@ jobs:
           grep -q "bottom:84px" control-center/index.html
           grep -q "prefers-reduced-motion:reduce" control-center/index.html
           grep -q "aria-live=\"polite\"" control-center/index.html
-          grep -q "focusin" control-center/index.html
+          grep -q "focusin" control-center/context-help.js
           grep -q "mobile-nav" control-center/index.html
           grep -q "Offline · ultimo snapshot locale" control-center/index.html
           grep -q "request.mode==='navigate'" control-center/sw.js
