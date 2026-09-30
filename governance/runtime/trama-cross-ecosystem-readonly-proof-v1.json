@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.cross-ecosystem-readonly-proof/v1",
   "proofId": "OR-06-LESSON-PREPARATION-READONLY",
-  "status": "PROPOSED_IMPLEMENTATION_READY",
+  "status": "IMPLEMENTED_P1_QUALIFIED_PENDING_HUMAN_INTEGRATION",
   "workflow": "NEXT_LESSON_PREPARATION",
   "authority": {
     "curriculum": "ARENA",
@@ -37,5 +37,14 @@
   "nextSlice": "OR-06-P1_DETERMINISTIC_FIXTURE_VALIDATOR",
   "runtimeActivationAuthorized": false,
   "crossProductWritesAuthorized": false,
-  "dosA1": "RUNTIME_DEFERRED"
+  "dosA1": "RUNTIME_DEFERRED",
+  "p1": {
+    "pullRequest": 200,
+    "exactHead": "3bdb6cff283dc79a4cefe16271140e88b0745e43",
+    "qualification": "GOVERNANCE_PASS",
+    "validFixture": 1,
+    "adversarialFixtures": 8,
+    "network": "NONE",
+    "crossProductWrites": false
+  }
 }
