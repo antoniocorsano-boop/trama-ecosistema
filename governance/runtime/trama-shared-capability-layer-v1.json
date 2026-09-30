@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "trama.shared-capability-layer/v1",
+  "id": "TRAMA-OR-07-SHARED-CAPABILITY-LAYER",
+  "status": "PROPOSED_CONTRACT_ONLY",
+  "date": "2026-09-30",
+  "authorityChange": "NONE",
+  "dosA1": "RUNTIME_DEFERRED",
+  "allowedModes": [
+    "READ_ONLY",
+    "PROPOSE_ONLY"
+  ],
+  "forbiddenInV0": [
+    "MUTATIVE",
+    "AUTO_APPROVAL",
+    "DOMAIN_AUTHORITY_TRANSFER",
+    "CONTROL_CENTER_COMMAND"
+  ],
+  "firstReferenceCapability": {
+    "capabilityId": "lesson.preparation.observe",
+    "mode": "PROPOSE_ONLY",
+    "ownerDomain": "DOCENTE_OS",
+    "arenaAuthorityPreserved": true,
+    "atlasOptional": true,
+    "teacherDecisionOwner": true,
+    "controlCenterReadOnly": true,
+    "providerPortable": true
+  },
+  "invariants": [
+    "SC-01_DOMAIN_AUTHORITY_PRESERVED",
+    "SC-02_PROVIDER_NEUTRAL_SEMANTICS",
+    "SC-03_EXPLICIT_CALLER_DECISION_OWNER",
+    "SC-04_NO_IMPLICIT_MUTATION",
+    "SC-05_EVIDENCE_CARRYING_RESULTS",
+    "SC-06_PROVENANCE_PRESERVED",
+    "SC-07_FAILURE_ISOLATION",
+    "SC-08_STALE_HONESTY",
+    "SC-09_CONTROL_CENTER_NON_AUTHORITY",
+    "SC-10_DOS_A1_UNCHANGED"
+  ],
+  "nextSlice": "OR-07-P1_DETERMINISTIC_PROVIDER_NEUTRAL_FIXTURE_VALIDATOR"
+}
