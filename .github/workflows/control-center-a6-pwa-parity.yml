@@ -42,6 +42,7 @@ jobs:
           test -s dist/manifest.webmanifest
           ! grep -R -E "(api\.github\.com|raw\.githubusercontent\.com|GITHUB_TOKEN|Authorization: Bearer|dangerouslySetInnerHTML|eval\()" src
           ! grep -E '<script(>|[^>]*>)[[:space:]]*[^<]' dist/index.html
+          ! grep -R -E 'new Function\(|eval\(' dist/assets/*.js
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: A6 browser PWA parity qualification
