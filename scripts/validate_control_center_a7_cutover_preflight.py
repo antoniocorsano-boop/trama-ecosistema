@@ -6,7 +6,7 @@ p = Path("governance/control-center/trama-control-center-a7-cutover-preflight.js
 data = json.loads(p.read_text(encoding="utf-8"))
 
 assert data["schemaVersion"] == "trama.control-center-a7-cutover-preflight/v1"
-assert data["status"] == "PREFLIGHT"
+assert data["status"] == "TECHNICALLY_READY_FOR_REQUALIFICATION"
 assert data["publicCutoverAuthorized"] is False
 assert data["renderEnvironmentBound"] is True
 assert data["sourceBaseline"]["a6Integrated"] is True
@@ -34,6 +34,12 @@ for k in (
     assert required[k] in {"PENDING", "IN_PROGRESS", "DEFINED", "BOUND"}
 
 assert required["preCutoverSmokePlan"] == "DEFINED"
+assert required["targetModularBuild"] == "DEFINED"
+assert required["legacyFallback"] == "DEFINED"
+assert required["rollbackProcedure"] == "DEFINED"
+assert required["exactHeadBinding"] == "BOUND"
+assert required["deployReceipt"] == "SCHEMA_DEFINED"
+assert required["rollbackReceipt"] == "SCHEMA_DEFINED"
 assert required["postCutoverSmokePlan"] == "DEFINED"
 
 print("A7 preflight contract: PASS")
@@ -48,3 +54,13 @@ assert render["currentLiveCommit"] == data["sourceBaseline"]["main"]
 assert required["renderServiceIdentity"] == "BOUND"
 assert required["currentProductionEntrypoint"] == "BOUND"
 print("A7 Render environment binding: PASS")
+
+assert data["candidateHead"] == "178f38f8dd71f18a3ae81b5547c5bb1c2c10ff38"
+assert data["rollback"]["legacyBuildCommand"] == "bash scripts/build_control_center_render.sh"
+assert data["rollback"]["publishPath"] == "public"
+assert data["rollback"]["legacyFallbackPath"] == "/legacy/"
+assert data["rollback"]["lastKnownGoodDeployId"] == "dep-daugbrbrjlhs73crlbsg"
+assert data["rollback"]["lastKnownGoodCommit"] == "fffefc16f287bd1e63b0e3dde2e117e24be3ac8a"
+assert "deploy" in data["receiptContract"]
+assert "rollback" in data["receiptContract"]
+print("A7 cutover evidence package: PASS")
