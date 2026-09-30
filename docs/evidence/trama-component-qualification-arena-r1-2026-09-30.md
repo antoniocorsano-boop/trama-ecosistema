@@ -109,3 +109,16 @@ This receipt does not:
 - modify Atlas or Docente OS;
 - authorize DOS-A1;
 - create product certification claims.
+
+
+## 7. TRAMA snapshot synchronization
+
+The PR synchronizer materialized the canonical Control Center snapshot on:
+
+`589c6f0ef5dc5834149658446bbbc43da7665d43`
+
+That commit was produced by `github-actions[bot]` and changed only:
+
+`control-center/data/ecosystem-snapshot.json`
+
+Per the exact-head qualification rule, the bot synchronization commit is not treated as the final qualification head. This receipt update intentionally creates a subsequent connector-authored head so all required workflows can execute against the already synchronized semantic state.
