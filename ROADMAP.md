@@ -253,7 +253,7 @@ Canonical references:
 Governed migration sequence:
 
 1. **A0 — Architecture lock** — LOCKED / HUMAN REVIEW APPROVED 2026-09-30; architecture, dependency policy, package boundary, rollback rules and machine-enforced legacy baseline materialized;
-2. **A1 — Application foundation** — React/TypeScript/Vite shell, typed data layer, schema validation and test harness in isolated preview;
+2. **A1 — Application foundation** — QUALIFIED; React/TypeScript/Vite shell, governed data validation, committed lockfile and browser smoke in isolated preview; production legacy unchanged;
 3. **A2 — Maturity feature** — first vertical migration with Evidence Lane parity;
 4. **A3 — Overview + navigation** — human-readable orientation shell;
 5. **A4 — Ecosystem + Evidence** — accessible graph/list and Evidence Explorer;

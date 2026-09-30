@@ -1090,6 +1090,31 @@
         "FRONTEND_STACK_CHANGE",
         "BUNDLE_POLICY_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-CONTROL-CENTER-A1-FOUNDATION",
+      "path": "docs/implementation/trama-control-center-a1-foundation.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "control-center-ui",
+        "frontend-migration",
+        "application-foundation",
+        "ui-supply-chain",
+        "frontend-testing"
+      ],
+      "dependsOn": [
+        "DOC-CONTROL-CENTER-MODULAR-APP-ARCHITECTURE",
+        "DOC-CONTROL-CENTER-MODULAR-APP-MIGRATION",
+        "DOC-CONTROL-CENTER-FRONTEND-DEPENDENCY-POLICY"
+      ],
+      "updateTriggers": [
+        "CONTROL_CENTER_A1_FOUNDATION_CHANGE",
+        "FRONTEND_STACK_CHANGE",
+        "CONTROL_CENTER_DEPENDENCY_CHANGE",
+        "A1_QUALIFICATION_CHANGE"
+      ]
     }
   ]
 }
