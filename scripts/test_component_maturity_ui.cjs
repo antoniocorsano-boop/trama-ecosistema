@@ -53,7 +53,13 @@ assert(arena.nodes.every(n=>n.product==='ARENA'),'Arena filter leaked other prod
 const governed=snapshot.components.find(c=>c.componentId==='ARENA.DIALOG_CONFIRM.GOVERNED');
 assert(governed,'governed dialog missing');
 const governedNode=model.nodes.find(n=>n.component.componentId===governed.componentId);
-assert.equal(governedNode.confirmed,'BEHAVIOURAL');
+assert.equal(governedNode.confirmed,'ACCESSIBILITY');
+assert.equal(governed.maturity.qualificationStatus,'QUALIFIED');
+
+const governedTabs=snapshot.components.find(c=>c.componentId==='ARENA.TABS.GOVERNED');
+assert(governedTabs,'governed tabs missing');
+assert.equal(governedTabs.maturity.confirmedStage,'ACCESSIBILITY');
+assert.equal(governedTabs.maturity.qualificationStatus,'QUALIFIED');
 
 const relation=snapshot.components.find(c=>c.componentId==='ATLAS.RELATION_EXPLORER.FAMILY');
 assert(relation,'Atlas RelationExplorer missing');

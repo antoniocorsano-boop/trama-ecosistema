@@ -75,6 +75,8 @@ assert backlog["components"]["currentRegistryCount"]==11
 assert backlog["components"]["missingProductCoverage"]==[]
 assert backlog["components"]["coverageState"]=="ALL_PRODUCTS_MACHINE_ADDRESSABLE"
 assert backlog["components"]["qualificationState"]=="PARTIAL"
+assert not any(target.startswith("ARENA.DIALOG_CONFIRM.GOVERNED:") for target in backlog["components"]["nextTargets"])
+assert not any(target.startswith("ARENA.TABS.GOVERNED:") for target in backlog["components"]["nextTargets"])
 assert backlog["functionalSequence"][:2]==["R3-P2","R3-P5"]
 
 timeline={item["id"] for item in snapshot["timelineEvents"]}

@@ -65,15 +65,28 @@ assert timetable_evidence["BEHAVIOURAL"]["status"]=="PARTIAL"
 assert timetable_evidence["RESPONSIVE_VISUAL"]["status"]=="PRESENT"
 assert timetable_evidence["ACCESSIBILITY"]["status"]=="PRESENT"
 
-# This slice expands addressability; it deliberately does not manufacture qualification.
-assert all(item["maturity"]["qualificationStatus"]!="QUALIFIED" for item in components)
+# Qualification is evidence-bound: only the two governed Arena primitives have a complete PRESENT chain.
+qualified={item["componentId"] for item in components if item["maturity"]["qualificationStatus"]=="QUALIFIED"}
+assert qualified=={"ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED"},qualified
 
 arena_dialog=by_id["ARENA.DIALOG_CONFIRM.GOVERNED"]
 arena_tabs=by_id["ARENA.TABS.GOVERNED"]
 context_help=by_id["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]
-assert arena_dialog["maturity"]["confirmedStage"]=="BEHAVIOURAL"
-assert arena_tabs["maturity"]["confirmedStage"]=="BEHAVIOURAL"
+assert arena_dialog["maturity"]["confirmedStage"]=="ACCESSIBILITY"
+assert arena_tabs["maturity"]["confirmedStage"]=="ACCESSIBILITY"
+assert arena_dialog["maturity"]["qualificationStatus"]=="QUALIFIED"
+assert arena_tabs["maturity"]["qualificationStatus"]=="QUALIFIED"
 assert context_help["maturity"]["confirmedStage"]=="REGISTERED"
+assert context_help["maturity"]["qualificationStatus"]=="REGISTERED_ONLY"
+
+for component_id in ["ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED"]:
+    entry=next(x for x in registry["entries"] if x["componentId"]==component_id)
+    evidence={x["type"]:x for x in entry["evidence"]}
+    assert evidence["RESPONSIVE_VISUAL"]["status"]=="PRESENT"
+    assert evidence["ACCESSIBILITY"]["status"]=="PRESENT"
+    assert evidence["RESPONSIVE_VISUAL"]["exactHead"]=="6a04455139a9a2161c723fdcef5358161aff66c4"
+    assert evidence["ACCESSIBILITY"]["runId"]=="36656179036"
+    assert evidence["ACCESSIBILITY"]["artifactId"]=="11073056182"
 
 backlog=json.loads(
     (ROOT/"governance/maturity/trama-maturity-reconciliation-v1.json").read_text(encoding="utf-8")
@@ -93,5 +106,18 @@ for token in [
     "no synthetic upgrade",
 ]:
     assert token.lower() in receipt.lower(),token
+
+qualification_receipt=(ROOT/"docs/evidence/trama-component-qualification-arena-r1-2026-09-30.md").read_text(encoding="utf-8")
+for token in [
+    "6a04455139a9a2161c723fdcef5358161aff66c4",
+    "36656179036",
+    "11073056182",
+    "ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb",
+    "confirmedStage=ACCESSIBILITY",
+    "qualificationStatus=QUALIFIED",
+    "903404953465a526408939ebd31eae40f57a57a6",
+    "deployed Context Help at confirmed REGISTERED",
+]:
+    assert token.lower() in qualification_receipt.lower(),token
 
 print("TRAMA_COMPONENT_EVIDENCE_EXPANSION_01_PASS")

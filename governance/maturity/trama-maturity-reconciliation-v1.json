@@ -23,8 +23,7 @@
       "observedLevel": 4,
       "target": "L5_AFTER_REGRESSION_HISTORY",
       "nextWork": [
-        "complete product regression history",
-        "complete component responsive/accessibility evidence for governed dialog/tabs"
+        "complete product regression history"
       ],
       "l5Gap": [
         "REGRESSION_HISTORY"
@@ -62,10 +61,6 @@
     "currentRegistryCount": 11,
     "missingProductCoverage": [],
     "nextTargets": [
-      "ARENA.DIALOG_CONFIRM.GOVERNED:RESPONSIVE_VISUAL",
-      "ARENA.DIALOG_CONFIRM.GOVERNED:ACCESSIBILITY",
-      "ARENA.TABS.GOVERNED:RESPONSIVE_VISUAL",
-      "ARENA.TABS.GOVERNED:ACCESSIBILITY",
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY:ISOLATED",
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY:BEHAVIOURAL",
       "CONTROL_CENTER.CONTEXT_HELP.FAMILY:RESPONSIVE_VISUAL",

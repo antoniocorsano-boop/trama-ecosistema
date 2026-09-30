@@ -272,3 +272,18 @@ The evidence receipt is:
 The governing contract is:
 
 `docs/contracts/trama-component-evidence-expansion-v1.md`
+
+
+## Qualification addendum — 2026-09-30
+
+The earlier reconciliation correctly kept Arena governed Dialog/Tabs at confirmed BEHAVIOURAL while responsive/accessibility evidence was missing.
+
+That gap is now closed by Arena PR #343 on exact head `6a04455139a9a2161c723fdcef5358161aff66c4` with exact-head browser/accessibility evidence.
+
+Current projection therefore changes only those two governed Arena primitives:
+- `ARENA.DIALOG_CONFIRM.GOVERNED` → confirmed ACCESSIBILITY / QUALIFIED;
+- `ARENA.TABS.GOVERNED` → confirmed ACCESSIBILITY / QUALIFIED.
+
+Their lifecycle remains TRIAL; product maturity area remains L4 because L5 still requires regression history.
+
+Control Center CS-S1 also completed successfully in isolation, but the deployed Context Help remains REGISTERED until a separate governed runtime-remediation slice is integrated. No synthetic promotion is inferred from candidate evidence.

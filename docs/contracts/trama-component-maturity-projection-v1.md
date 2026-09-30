@@ -124,13 +124,13 @@ The Control Center integrity projection must also report whether component evide
 
 The current registry must produce conservative results including:
 
-- ARENA.DIALOG_CONFIRM.GOVERNED → confirmed BEHAVIOURAL;
-- ARENA.TABS.GOVERNED → confirmed BEHAVIOURAL;
+- ARENA.DIALOG_CONFIRM.GOVERNED → confirmed ACCESSIBILITY / QUALIFIED;
+- ARENA.TABS.GOVERNED → confirmed ACCESSIBILITY / QUALIFIED;
 - legacy dialog/tabs → confirmed REGISTERED, candidate BEHAVIOURAL;
 - ARENA.TOOLTIP.LEGACY → REGISTERED;
 - CONTROL_CENTER.CONTEXT_HELP.FAMILY → REGISTERED.
 
-These results follow the evidence chain and do not infer missing responsive/accessibility evidence.
+These results follow the evidence chain. Arena Dialog/Tabs reach ACCESSIBILITY only because exact-head responsive/accessibility evidence is now PRESENT; no other component is promoted by inference.
 
 ## 10. Snapshot synchronization and exact-head qualification
 

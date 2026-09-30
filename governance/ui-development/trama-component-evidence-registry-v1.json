@@ -53,22 +53,39 @@
           "type": "ISOLATED",
           "status": "PRESENT",
           "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
-          "repository": "antoniocorsano-boop/CurManLight_arena"
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         {
           "type": "BEHAVIOURAL",
           "status": "PRESENT",
-          "ref": "src/__tests__/cml611-dialogs-confirmations.test.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
+          "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
           "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        {
           "type": "ACCESSIBILITY",
-          "status": "PARTIAL",
-          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiConfirmDialog.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         {
           "type": "LIFECYCLE",
@@ -125,22 +142,39 @@
           "type": "ISOLATED",
           "status": "PRESENT",
           "ref": "src/ui/stories/UiTabs.stories.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
-          "repository": "antoniocorsano-boop/CurManLight_arena"
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         {
           "type": "BEHAVIOURAL",
           "status": "PRESENT",
           "ref": "src/__tests__/trama-component-evidence-arena-01.test.tsx",
-          "exactHead": "bad81d4ca31bbf5fa3ba56c3d94c7219e5bdddea",
-          "runId": "36608209228",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656178967",
           "repository": "antoniocorsano-boop/CurManLight_arena"
         },
         {
+          "type": "RESPONSIVE_VISUAL",
+          "status": "PRESENT",
+          "ref": "scripts/capture-trama-component-evidence.mjs",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
+        },
+        {
           "type": "ACCESSIBILITY",
-          "status": "PARTIAL",
-          "ref": "docs/inventory/trama-interaction-duplication-inv02.md"
+          "status": "PRESENT",
+          "ref": "src/ui/stories/UiTabs.stories.tsx",
+          "exactHead": "6a04455139a9a2161c723fdcef5358161aff66c4",
+          "runId": "36656179036",
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "artifactId": "11073056182",
+          "artifactDigest": "sha256:ce1e0bdcc4bd97dd45a522bdb06cddb416316e23f8d80a8a5bb6a7d2b82bd3fb"
         },
         {
           "type": "LIFECYCLE",
