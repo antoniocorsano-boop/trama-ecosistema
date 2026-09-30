@@ -267,8 +267,8 @@ jobs:
           assert snapshot["sourceState"]["component-evidence-registry"]["status"] == "FRESH"
           assert len(projected) == 11, len(projected)
           assert {item["product"] for item in snapshot["components"]} == {"ARENA","ATLAS","DOCENTE_OS","TRAMA_CONTROL_CENTER"}
-          assert projected["ARENA.DIALOG_CONFIRM.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"
-          assert projected["ARENA.TABS.GOVERNED"]["maturity"]["confirmedStage"] == "BEHAVIOURAL"
+          assert projected["ARENA.DIALOG_CONFIRM.GOVERNED"]["maturity"]["confirmedStage"] == "ACCESSIBILITY"
+          assert projected["ARENA.TABS.GOVERNED"]["maturity"]["confirmedStage"] == "ACCESSIBILITY"
           assert projected["ARENA.DIALOG_CONFIRM.LEGACY"]["maturity"]["confirmedStage"] == "REGISTERED"
           assert projected["ATLAS.RELATION_EXPLORER.FAMILY"]["maturity"]["confirmedStage"] == "REGISTERED"
           assert projected["ATLAS.RELATION_EXPLORER.FAMILY"]["maturity"]["candidateStage"] == "ACCESSIBILITY"
@@ -276,7 +276,7 @@ jobs:
           assert projected["DOCENTE_OS.APPSHELL.FAMILY"]["maturity"]["candidateStage"] == "ACCESSIBILITY"
           assert projected["DOCENTE_OS.ALERT.STATUS"]["maturity"]["candidateStage"] == "BEHAVIOURAL"
           assert projected["CONTROL_CENTER.CONTEXT_HELP.FAMILY"]["maturity"]["confirmedStage"] == "REGISTERED"
-          assert all(item["maturity"]["qualificationStatus"] != "QUALIFIED" for item in snapshot["components"])
+          assert {item["componentId"] for item in snapshot["components"] if item["maturity"]["qualificationStatus"] == "QUALIFIED"} == {"ARENA.DIALOG_CONFIRM.GOVERNED","ARENA.TABS.GOVERNED"}
           assert "overallScore" not in snapshot
           assert all("score" not in item.get("maturity", {}) for item in snapshot["components"])
           print("TRAMA_CC_MAT_COMP_01_SNAPSHOT_PROJECTION_PASS")
