@@ -159,6 +159,7 @@ async function main() {
       await page.waitForFunction(() => document.querySelector('#helpPopover')?.matches(':popover-open'));
       assert.equal(await page.locator('#helpTitle').textContent(), 'Stakeholder Assurance');
       assert.equal(await invoker.getAttribute('aria-details'), 'helpPopover');
+      assert.equal(await invoker.getAttribute('aria-haspopup'), null, 'Context Help must not claim menu/dialog popup semantics');
 
       const axOpen = await accessibilityState(page, '#assurance .helpable');
       assert.equal(axOpen.properties.details !== undefined, true, 'Invoker must expose a details relationship in the accessibility tree');
