@@ -14,7 +14,8 @@ test("Overview orients without inventing blocking decisions", async ({ page }, t
   await expect(page.getByRole("heading", { name: "Dove siamo e cosa richiede attenzione." })).toBeVisible();
   await expect(page.getByText("Nessun gate bloccante aperto.")).toBeVisible();
   await expect(page.getByText(/Prossimo fronte pianificato: R4/)).toBeVisible();
-  await expect(page.getByRole("link", { name: /Maturità/ })).toBeVisible();
+  const specialistNav = page.getByRole("navigation", { name: "Viste specialistiche" });
+  await expect(specialistNav.getByRole("link", { name: /Maturità/ })).toBeVisible();
   await expect(page.getByText("Parziale", { exact: true })).toBeVisible();
   await expect(page.getByText(/informazione utilizzabile con contesto/i)).toBeVisible();
 
@@ -37,9 +38,10 @@ test("Overview orients without inventing blocking decisions", async ({ page }, t
 test("mobile navigation keeps only migrated destinations actionable", async ({ page }) => {
   await page.goto("/#/");
 
-  await expect(page.getByRole("link", { name: "Overview" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Maturità" })).toBeVisible();
-  await expect(page.getByText("Ecosistema")).toHaveAttribute("aria-disabled", "true");
-  await expect(page.getByText("Evidenze")).toHaveAttribute("aria-disabled", "true");
-  await expect(page.getByText("Operazioni")).toHaveAttribute("aria-disabled", "true");
+  const primaryNav = page.getByRole("navigation", { name: "Navigazione principale candidate" });
+  await expect(primaryNav.getByRole("link", { name: "Overview" })).toBeVisible();
+  await expect(primaryNav.getByRole("link", { name: "Maturità" })).toBeVisible();
+  await expect(primaryNav.getByText("Ecosistema")).toHaveAttribute("aria-disabled", "true");
+  await expect(primaryNav.getByText("Evidenze")).toHaveAttribute("aria-disabled", "true");
+  await expect(primaryNav.getByText("Operazioni")).toHaveAttribute("aria-disabled", "true");
 });
