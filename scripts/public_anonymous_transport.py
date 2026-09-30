@@ -4,7 +4,7 @@ import json, ssl, urllib.request, urllib.error
 from dataclasses import dataclass
 
 AUTHORITY="api.github.com"
-ALLOWED_OPS={"repo.read","ref.read","commit.read","pr.read"}
+ALLOWED_OPS={"repo.read","ref.read","commit.read","pr.read","workflow.list","workflow.runs.read","workflow.artifacts.read","compare.read"}
 
 class TransportError(RuntimeError): pass
 def die(code): raise TransportError(code)
@@ -25,12 +25,22 @@ class ResourceBudget:
         if n<0 or self.remaining_bytes-n<0: die("SESSION_RESOURCE_LIMIT_EXCEEDED")
         self.remaining_bytes-=n
 
-def build_url(repository,operation,ref="main",sha=None):
+def build_url(repository,operation,ref="main",sha=None,workflow_id=None,run_id=None,base_sha=None,head_sha=None):
     if operation not in ALLOWED_OPS: die("OPERATION_NOT_ALLOWED")
     base=f"https://{AUTHORITY}/repos/{repository}"
     if operation=="repo.read": return base
     if operation=="ref.read": return f"{base}/git/ref/heads/{ref}"
     if operation=="pr.read": return f"{base}/pulls?state=open&per_page=100"
+    if operation=="workflow.list": return f"{base}/actions/workflows?per_page=100"
+    if operation=="workflow.runs.read":
+        if not workflow_id: die("WORKFLOW_ID_REQUIRED")
+        return f"{base}/actions/workflows/{workflow_id}/runs?event=pull_request&status=success&per_page=50"
+    if operation=="workflow.artifacts.read":
+        if not run_id: die("RUN_ID_REQUIRED")
+        return f"{base}/actions/runs/{run_id}/artifacts?per_page=100"
+    if operation=="compare.read":
+        if not base_sha or not head_sha: die("COMPARE_SHA_REQUIRED")
+        return f"{base}/compare/{base_sha}...{head_sha}"
     if not sha: die("COMMIT_SHA_REQUIRED")
     return f"{base}/commits/{sha}"
 
