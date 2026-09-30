@@ -90,6 +90,12 @@ jobs:
           grep -q "Stakeholder Assurance" control-center/index.html
           grep -q "data-help-title" control-center/index.html
           grep -q "helpPopover" control-center/index.html
+          grep -q 'popover="auto"' control-center/index.html
+          grep -q 'popovertarget="helpPopover"' control-center/index.html
+          grep -q ':popover-open' control-center/index.html
+          ! grep -q 'role="dialog"' control-center/index.html
+          ! grep -q "classList.add('open')" control-center/index.html
+          ! grep -q "e.key==='Escape'" control-center/index.html
           grep -q "helpAttr(claim.requirementId" control-center/index.html
           grep -q "'assurance-card'" control-center/index.html
           grep -q "'alert'" control-center/index.html
