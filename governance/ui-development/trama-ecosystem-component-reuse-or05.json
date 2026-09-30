@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "trama.ecosystem-component-reuse/v1",
+  "id": "TRAMA-OR-05-COMPONENT-REUSE",
+  "status": "PASS_DOCUMENTAL_IMPLEMENTATION_READY",
+  "date": "2026-09-30",
+  "baseline": {
+    "trama": "6711f3012efa69ffc0ca2f3fcf5c049c8195d2bd",
+    "arena": "a89553c0a3daa71555b6a9ec3a07c3edbf19a176",
+    "atlas": "0105d4f497bea6e476d1b0c40bd472585068f269",
+    "docenteOs": "1d8c4ee7c1209f624b412db1b11e666c2de25aaa"
+  },
+  "principles": {
+    "ecosystemFirst": true,
+    "noGlobalComponentLibrary": true,
+    "existingSupplyChainFirst": true,
+    "shareSemanticsNotPixels": true,
+    "noDependencyChurnWithoutNeed": true
+  },
+  "decisions": [
+    {
+      "product": "ARENA",
+      "target": "ARENA.DIALOG_CONFIRM.GOVERNED",
+      "disposition": "KEEP_QUALIFIED_PRODUCT_LOCAL",
+      "dependencyChange": false
+    },
+    {
+      "product": "ARENA",
+      "target": "ARENA.TABS.GOVERNED",
+      "disposition": "KEEP_QUALIFIED_PRODUCT_LOCAL",
+      "dependencyChange": false
+    },
+    {
+      "product": "ATLAS",
+      "target": "ATLAS.RELATION_EXPLORER.FAMILY",
+      "disposition": "KEEP_SPECIALIST_XYFLOW",
+      "dependencyChange": false
+    },
+    {
+      "product": "ATLAS",
+      "target": "ATLAS.CURRICULUM_TREE.DISCLOSURE",
+      "disposition": "KEEP_NATIVE_FIRST",
+      "dependencyChange": false
+    },
+    {
+      "product": "DOCENTE_OS",
+      "target": "DOCENTE_OS.APPSHELL.FAMILY",
+      "disposition": "KEEP_PRODUCT_LOCAL",
+      "dependencyChange": false
+    },
+    {
+      "product": "DOCENTE_OS",
+      "target": "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS",
+      "disposition": "KEEP_PRODUCT_LOCAL",
+      "dependencyChange": false
+    },
+    {
+      "product": "DOCENTE_OS",
+      "target": "TIMETABLE_DIALOG_MECHANICS",
+      "disposition": "REUSE_EXISTING_RADIX_DIALOG_CANDIDATE",
+      "dependencyChange": false
+    },
+    {
+      "product": "CONTROL_CENTER",
+      "target": "RUNTIME_OBSERVATION",
+      "disposition": "KEEP_PRODUCT_LOCAL_NO_NEW_PRIMITIVE",
+      "dependencyChange": false
+    }
+  ],
+  "sharedSemantics": [
+    "TRAMA.STATUS_MESSAGE",
+    "EVIDENCE_PROVENANCE",
+    "AUTHORITY_SOURCE_IDENTITY",
+    "LOADING_PENDING_PROGRESS",
+    "ERROR_RECOVERY",
+    "REVIEW_DECIDE_CONFIRM"
+  ],
+  "implementationCandidates": [
+    {
+      "id": "OR-05-I1",
+      "product": "DOCENTE_OS",
+      "target": "TIMETABLE_DIALOG_MECHANICS",
+      "priority": "FIRST",
+      "status": "IMPLEMENTED_VERIFYING",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "pullRequest": 644,
+      "exactHead": "695f930b2012ce41f36698a0acf57906b975d3ed",
+      "baseRef": "develop@1d8c4ee7c1209f624b412db1b11e666c2de25aaa",
+      "dependencyAdditions": 0
+    },
+    {
+      "id": "OR-05-I2",
+      "product": "ARENA",
+      "target": "DEAD_LEGACY_DIALOG_TABS_REMOVAL",
+      "priority": "SECOND",
+      "status": "QUALIFIED_PENDING_HUMAN_INTEGRATION",
+      "repository": "antoniocorsano-boop/CurManLight_arena",
+      "pullRequest": 344,
+      "exactHead": "4244d9a0840040c2878745d22fb84dc537dca677",
+      "baseRef": "main@a89553c0a3daa71555b6a9ec3a07c3edbf19a176",
+      "dependencyAdditions": 0,
+      "additions": 0,
+      "deletions": 93,
+      "qualification": {
+        "productCI": "PASS",
+        "betaReleaseContract": "PASS",
+        "tramaPerceptibleWrite": "PASS"
+      }
+    },
+    {
+      "id": "OR-05-I3",
+      "product": "ATLAS",
+      "target": "PRESERVE_AND_EVIDENCE",
+      "priority": "NO_OP"
+    }
+  ],
+  "rejected": [
+    "GLOBAL_COMPONENT_LIBRARY",
+    "GLOBAL_SHADCN_VISUAL_SYSTEM",
+    "REACT_RUNTIME_UNIFICATION",
+    "XYFLOW_GENERALIZATION",
+    "CONSISTENCY_ONLY_MIGRATION"
+  ],
+  "deferred": [
+    "BASE_UI_SPIKE_UNTIL_REAL_NEED",
+    "WEB_AWESOME_UNTIL_REAL_NEED",
+    "SHARED_UI_CODE_PACKAGE",
+    "CROSS_REPO_TOKEN_PACKAGE"
+  ],
+  "migrationAuthorized": false,
+  "dependencyAdoptionAuthorized": false,
+  "runtimeChangeAuthorized": false,
+  "dosA1": "RUNTIME_DEFERRED"
+}
