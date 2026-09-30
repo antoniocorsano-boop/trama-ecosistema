@@ -515,3 +515,20 @@ Non autorizza runtime, persistenza, automazione di Argo, nuove write authority o
 - `fixtures/g1-delta-reference-cases-v1.json` — fixture di riferimento macchina-leggibili per i casi core.
 
 Questi artefatti restano **G1 candidate** e non autorizzano persistenza o runtime.
+
+
+## 27. Evidenza XLS reale
+
+È stato ispezionato in sola lettura un export reale didUP:
+
+- `evidence/argo-xls-sample-001.md` — evidenza binaria e semantica del campione reale;
+- `argo-program-xls-profile-candidate-v0.1.md` — profilo XLS candidato, vincolato al campione.
+
+Risultati principali:
+- il file è **BIFF8/CDFV2 .XLS**, non XLSX;
+- contiene un solo foglio visibile `Dati`;
+- schema osservato a 6 colonne: `ORD. MODULO`, `MODULO`, `ORD. ARGOMENTO`, `ARGOMENTO`, `STATO SVOLGIMENTO`, `DATA SVOLGIMENTO`;
+- il mapping semantico al modello canonico è diretto;
+- la compatibilità di un XLS ricostruito non è ancora provata.
+
+G1 chiude ora l'evidenza "real sample inspected" e "initial mapping feasibility", ma resta aperto per variabilità formato e round-trip/import semantics.
