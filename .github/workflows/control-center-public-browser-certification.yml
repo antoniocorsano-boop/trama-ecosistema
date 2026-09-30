@@ -1,0 +1,58 @@
+name: Control Center Public Browser Certification
+
+on:
+  pull_request:
+    paths:
+      - "apps/control-center/e2e/public-browser-certification.spec.ts"
+      - "apps/control-center/playwright.public.config.ts"
+      - "docs/implementation/trama-control-center-public-browser-certification.md"
+      - ".github/workflows/control-center-public-browser-certification.yml"
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: "Public Control Center URL to certify"
+        required: true
+        default: "https://trama-control-center.onrender.com"
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    name: Public browser certification
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/control-center
+    env:
+      TRAMA_PUBLIC_BASE_URL: ${{ github.event.inputs.target_url || 'https://trama-control-center.onrender.com' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/control-center/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run public browser certification
+        run: npx playwright test --config=playwright.public.config.ts
+
+      - name: Publish certification evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: control-center-public-browser-certification-${{ github.sha }}
+          path: |
+            apps/control-center/public-certification-evidence
+            apps/control-center/public-certification-results
+            apps/control-center/public-certification-report
+          if-no-files-found: warn
+          retention-days: 30
