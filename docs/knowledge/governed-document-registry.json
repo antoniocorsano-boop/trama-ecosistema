@@ -1646,6 +1646,58 @@
         "PRODUCT_INTEGRATION_CHANGE",
         "QUALIFICATION_STATE_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-HR-OR07-OR10-2026-09-30",
+      "path": "docs/reviews/TRAMA-HUMAN-REVIEW-OR07-OR10-2026-09-30.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "human-review",
+        "or07",
+        "or08",
+        "or09",
+        "or10",
+        "arena",
+        "atlas",
+        "docente-os"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-OR-10-PRODUCT-INTEGRATIONS"
+      ],
+      "updateTriggers": [
+        "EXACT_HEAD_CHANGE",
+        "GATE_CHANGE",
+        "HUMAN_DECISION",
+        "MERGE_STATUS_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-HR-OR07-OR10-MANIFEST-2026-09-30",
+      "path": "governance/reviews/trama-human-review-or07-or10-2026-09-30.json",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "human-review",
+        "machine-readable-review",
+        "or07",
+        "or08",
+        "or09",
+        "or10"
+      ],
+      "decisionRef": "TRAMA-ADR-019",
+      "dependsOn": [
+        "DOC-HR-OR07-OR10-2026-09-30"
+      ],
+      "updateTriggers": [
+        "EXACT_HEAD_CHANGE",
+        "GATE_CHANGE",
+        "HUMAN_DECISION",
+        "MERGE_STATUS_CHANGE"
+      ]
     }
   ]
 }
