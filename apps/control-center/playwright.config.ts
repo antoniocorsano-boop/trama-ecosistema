@@ -22,5 +22,9 @@ export default defineConfig({
       name: "phone",
       use: { ...devices["Pixel 7"] },
     },
+    {
+      name: "lim",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1920, height: 1080 } },
+    },
   ],
 });
