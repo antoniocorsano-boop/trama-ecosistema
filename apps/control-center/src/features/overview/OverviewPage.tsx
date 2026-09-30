@@ -146,7 +146,7 @@ export function OverviewView({
           <span>Progressive disclosure</span>
         </div>
 
-        <div className="destination-list">
+        <nav className="destination-list" aria-label="Viste specialistiche">
           <Link className="destination is-available" to="/maturity">
             <span>
               <strong>Maturità</strong>
@@ -159,7 +159,7 @@ export function OverviewView({
           <Destination label="Evidenze" description="Provenienza, integrità e drill-down evidenziale" stage="A4" />
           <Destination label="Operazioni" description="Percorso operativo e cronologia governata" stage="A5" />
           <Destination label="Assurance" description="Privacy, accessibilità, sicurezza e readiness" stage="A5" />
-        </div>
+        </nav>
       </section>
 
       <footer className="overview-footer">
