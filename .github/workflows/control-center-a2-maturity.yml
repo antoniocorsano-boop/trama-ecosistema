@@ -32,7 +32,7 @@ jobs:
       - name: Build candidate
         run: npm run build
       - name: Bundle report
-        run: npm run build:report > a2-bundle-report.json
+        run: node scripts/report-bundle-size.mjs > a2-bundle-report.json
       - name: Enforce A2 JS budget
         run: node scripts/check-a2-bundle-budget.mjs a2-bundle-report.json
       - name: Verify governed artifacts and browser authority boundary
