@@ -8,7 +8,7 @@ def validate(d):
     e=[]
     if d.get("schemaVersion")!="trama.qe01-pre-live-gates/v1": e.append("QE01-PL-SCHEMA")
     if d.get("executionId")!="QE-01" or d.get("capabilityId")!="lesson.preparation.observe": e.append("QE01-PL-ID")
-    if d.get("mode")!="PROPOSE_ONLY" or d.get("executable") is not False: e.append("QE01-PL-MODE")
+    if d.get("mode")!="PROPOSE_ONLY" or d.get("executable") is not True: e.append("QE01-PL-MODE")
     n=d.get("network",{})
     if n.get("policy")!="ALLOWLIST" or n.get("scheme")!="https" or n.get("host")!="integrate.api.nvidia.com": e.append("QE01-PL-NETWORK")
     if n.get("apiPrefix")!="/v1" or n.get("executionPath")!="/v1/chat/completions": e.append("QE01-PL-ENDPOINT")
@@ -35,7 +35,9 @@ def validate(d):
     g=d.get("gates",{})
     for k in ("NETWORK_SECRET_POLICY","TIMEOUT_CANCEL_CLEANUP","EVIDENCE_RECEIPT","STALE_FAILURE_NORMALIZATION"):
         if g.get(k) is not True: e.append("QE01-PL-GATE")
-    if g.get("CREDENTIAL_ACCESS_PROBE") is not True or g.get("HUMAN_EXACT_HEAD_REVIEW") is not False: e.append("QE01-PL-GATE")
+    if g.get("CREDENTIAL_ACCESS_PROBE") is not True or g.get("HUMAN_EXACT_HEAD_REVIEW") is not True: e.append("QE01-PL-GATE")
+    h=d.get("humanExactHeadReview",{})
+    if h.get("approved") is not True or not h.get("approvedHead"): e.append("QE01-PL-HUMAN-REVIEW")
     if d.get("dosA1")!="RUNTIME_DEFERRED": e.append("QE01-PL-DOSA1")
     return sorted(set(e))
 
