@@ -538,16 +538,16 @@ If safe changed-record semantics are not proven for the active profile, `DELTA_P
 - [x] privacy/minimization requirements appear in acceptance criteria;
 - [x] accessibility requirements appear in acceptance criteria;
 - [x] acceptance criteria trace to approved G2 governance and G1 evidence;
-- [ ] exact generated-workbook conformance validator remains to be defined as a versioned contract artifact;
-- [ ] UX interaction specification remains for G4.
+- [x] generated-workbook conformance validator expectations are defined by `argo-program-xls-profile-v1.md`;
+- [x] G3 leaves interaction/prototype validation explicitly to G4; no unresolved specification question blocks implementation design.
 
 ## 28. Current G3 assessment
 
-**IN_PROGRESS / CORE PRODUCT SPECIFICATION COMPLETE.**
+**PASS / READY_FOR_G4 DESIGN.**
 
 The teacher-facing capability, states, boundaries and acceptance criteria are now explicit.
 
-Next specification artifact:
-- versioned `ARGO_PROGRAM_XLS_PROFILE_v1` conformance contract and validator expectations.
+Normative companion contract:
+- `argo-program-xls-profile-v1.md` — versioned workbook/profile and validator contract.
 
 No runtime is authorized by this specification.
