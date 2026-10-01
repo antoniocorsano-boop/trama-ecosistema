@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — Sincronizzazione didattica incrementale verso Argo
 
 **Lifecycle:** ACTIVE_DISCOVERY  
-**Current gate:** G0 Intake / G1 Discovery  
+**Current gate:** G1 COMPLETE / G2 REVIEW CANDIDATE  
 **Owning product candidate:** Docente OS  
 **Ecosystem impact:** TRAMA / Docente OS; Arena and Atlas boundaries to be assessed at G2  
 **Runtime:** NOT_AUTHORIZED  
@@ -488,7 +488,7 @@ La capability è valida quando una modifica limitata della didattica richiede al
 - [x] initial mapping feasibility demonstrated;
 - [ ] reviewable evidence package complete.
 
-**G1 assessment:** IN_PROGRESS / BLOCKED ONLY BY BINARY PROFILE VARIABILITY AND ROUND-TRIP/IMPORT SEMANTICS. UI/domain semantics for state values, date display and order have now been corroborated by official Argo public documentation. G2 is not authorized yet.
+**G1 assessment:** COMPLETE FOR DISCOVERY. Real XLS inspected, official semantics corroborated, current UI import constraint captured, and exact re-import verified without duplicate visible content. G2 governance review may now begin; runtime remains NOT_AUTHORIZED.
 
 ## 25. Stato decisionale
 
@@ -550,3 +550,21 @@ Queste fonti corroborano la **semantica applicativa**, ma non trasformano il for
 - **R3** — copia minimamente modificata, esplicitamente **non ancora autorizzata**.
 
 Il protocollo non introduce automazione, credenziali o write authority. Serve esclusivamente a produrre evidenza umana riproducibile sul comportamento reale di importazione.
+
+
+## 30. R1 concluso: reimportazione esatta idempotente a livello visibile
+
+La reimportazione manuale dello stesso XLS è stata accettata da didUP e il controllo post-import mostra:
+
+- un solo modulo `0TEST`;
+- un solo argomento `arg1`;
+- nessuna duplicazione visibile;
+- stato `Non Svolto` preservato.
+
+Classificazione: `EXACT_REIMPORT_NO_DUPLICATE`.
+
+La schermata corrente di importazione didUP espone inoltre il vincolo:
+
+`È possibile importare solo file con estensione .xls prodotti con LibreOffice`.
+
+Questa evidenza rende la compatibilità LibreOffice un requisito esplicito del futuro adapter e consente di chiudere G1 come discovery completa, senza autorizzare runtime.
