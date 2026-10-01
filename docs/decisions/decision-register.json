@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.16.0",
-  "updatedAt": "2026-09-29",
+  "registerVersion": "1.18.0",
+  "updatedAt": "2026-10-01",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -257,6 +257,22 @@
         "Control Center"
       ],
       "decision": "È proposto che la UI primaria del Control Center traduca gli stati tecnici in linguaggio comprensibile anche a utenti non tecnici, separi stato e gravità, distingua aggiornamento, incertezza e blocco, preservi l'ultimo dato governato valido e renda repository, SHA, provenance ed enum interni disponibili solo tramite dettaglio tecnico progressivo.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-020",
+      "title": "Docente OS → Argo: interoperabilità didattica human-confirmed",
+      "status": "PROPOSED",
+      "date": "2026-10-01",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Argo didUP"
+      ],
+      "decision": "È proposto che Docente OS governi il flusso operativo di sincronizzazione verso Argo mediante modello canonico e adattatore .xls LibreOffice-compatible; Arena resta autorità curricolare, Argo resta destinazione istituzionale, Atlas non acquisisce nuovi contratti, TRAMA governa soltanto confini e contratti. Importazione e verifica restano manuali, la baseline avanza solo dopo conferma esplicita del docente, nessuna credenziale o write automatica verso Argo è autorizzata e DOS-A1 resta RUNTIME_DEFERRED.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
