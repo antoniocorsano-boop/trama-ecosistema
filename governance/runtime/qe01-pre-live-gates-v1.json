@@ -26,7 +26,7 @@
   },
   "credentialAccessProbe": {
     "required": true,
-    "completed": false,
+    "completed": true,
     "modelInvocationAllowed": false,
     "teachingContentAllowed": false,
     "personalStudentDataAllowed": false,
@@ -39,6 +39,18 @@
       "401_403": "CREDENTIAL_REJECTED",
       "VALIDATION_4XX": "CREDENTIAL_NOT_REJECTED_AT_ENDPOINT_ONLY",
       "2XX": "UNEXPECTED_AND_FAIL_CLOSED"
+    },
+    "result": {
+      "outcome": "PASS",
+      "statusCode": 400,
+      "observedAt": "2026-10-01T01:49:36.479631+00:00",
+      "exactHead": "5862b1aa6a442b19eeea6db97b93af6741c300d6",
+      "modelInvoked": false,
+      "validGenerationRequestSent": false,
+      "teachingContentSent": false,
+      "personalStudentDataSent": false,
+      "retryCount": 0,
+      "failureClass": null
     }
   },
   "execution": {
@@ -96,7 +108,7 @@
     "TIMEOUT_CANCEL_CLEANUP": true,
     "EVIDENCE_RECEIPT": true,
     "STALE_FAILURE_NORMALIZATION": true,
-    "CREDENTIAL_ACCESS_PROBE": false,
+    "CREDENTIAL_ACCESS_PROBE": true,
     "HUMAN_EXACT_HEAD_REVIEW": false
   },
   "dosA1": "RUNTIME_DEFERRED"
