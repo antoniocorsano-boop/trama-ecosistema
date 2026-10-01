@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — Sincronizzazione didattica incrementale verso Argo
 
 **Lifecycle:** ACTIVE_DISCOVERY  
-**Current gate:** G2 PASS / G3 Specification — AUTHORIZED_TO_START  
+**Current gate:** G3 PASS / G4 Design — READY_TO_START  
 **Owning product candidate:** Docente OS  
 **Ecosystem impact:** TRAMA / Docente OS; Arena and Atlas boundaries to be assessed at G2  
 **Runtime:** NOT_AUTHORIZED  
@@ -590,3 +590,20 @@ Effect:
 - G3 Specification is authorized to begin;
 - runtime remains `NOT_AUTHORIZED`;
 - no implementation or persistence write is authorized by this decision.
+
+
+## 33. G3 specification
+
+G3 now formalizes the capability as a teacher-facing function inside annual programming.
+
+Primary journey:
+
+`Programmazione annuale → Consolidata → Prepara file per Argo → Anteprima → Genera .xls → Import manuale → Verifica → Conferma`
+
+Normative artifacts:
+- `g3-specification-v1.md`;
+- `argo-program-xls-profile-v1.md`.
+
+G3 assessment: **PASS / READY_FOR_G4 DESIGN**.
+
+Runtime remains `NOT_AUTHORIZED`.
