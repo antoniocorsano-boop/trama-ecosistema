@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — Sincronizzazione didattica incrementale verso Argo
 
 **Lifecycle:** ACTIVE_DISCOVERY  
-**Current gate:** G4 PASS / G5 Implementation Planning — NOT_YET_AUTHORIZED  
+**Current gate:** G5 Implementation Planning — READY_FOR_AUTHORIZATION  
 **Owning product candidate:** Docente OS  
 **Ecosystem impact:** TRAMA / Docente OS; Arena and Atlas boundaries to be assessed at G2  
 **Runtime:** NOT_AUTHORIZED  
@@ -628,3 +628,21 @@ Artifact:
 G4 assessment: **PASS / READY_FOR_G5 PLANNING**.
 
 Runtime and implementation remain `NOT_AUTHORIZED` until the G5 slice is explicitly governed.
+
+
+## 35. G5 implementation plan
+
+`g5-implementation-plan-v1.md` binds implementation to the real Docente OS codebase.
+
+Key finding: the existing Piano annuale 33-block execution model is **not automatically equivalent** to the Argo module/argument hierarchy. G5 therefore requires an explicit `ArgoProgramProjection` before any XLS generation.
+
+Recommended first implementation authorization:
+- G5-A — pure canonical → Argo projection;
+- G5-B — pure profile validator.
+
+Explicitly excluded from the first slice:
+- UI changes;
+- DB migrations;
+- XLS writer/library;
+- external Argo writes;
+- runtime automation.
