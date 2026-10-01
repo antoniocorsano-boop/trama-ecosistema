@@ -263,7 +263,7 @@
     {
       "id": "TRAMA-ADR-019",
       "title": "Ecosystem-first architecture: runtime e agenti subordinati ai domini TRAMA",
-      "status": "PROPOSED",
+      "status": "APPROVED",
       "date": "2026-09-30",
       "scope": [
         "TRAMA",
@@ -272,7 +272,7 @@
         "Docente OS",
         "Control Center"
       ],
-      "decision": "È proposto che TRAMA mantenga un'architettura ecosystem-first: Arena, Atlas e Docente OS restano i domini di prodotto che determinano bisogni e flussi; il Control Center resta osservatorio read-only; connector, runtime adapter, agenti e provider come DSH/Codex sono infrastruttura subordinata, sostituibile e priva di nuova authority. I proof successivi al livello contrattuale devono dimostrare valore su flussi cross-ecosystem e DOS-A1 resta RUNTIME_DEFERRED.",
+      "decision": "È approvato che TRAMA mantenga un'architettura ecosystem-first: Arena, Atlas e Docente OS restano i domini di prodotto che determinano bisogni e flussi; il Control Center resta osservatorio read-only; connector, runtime adapter, agenti e provider come DSH/Codex sono infrastruttura subordinata, sostituibile e priva di nuova authority. I proof successivi al livello contrattuale devono dimostrare valore su flussi cross-ecosystem e DOS-A1 resta RUNTIME_DEFERRED.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
