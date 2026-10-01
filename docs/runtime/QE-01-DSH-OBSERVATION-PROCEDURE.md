@@ -57,3 +57,19 @@ A receipt is complete only when it contains all of:
 - evidence that the provider is configured in that active profile.
 
 A complete observation remains pre-execution evidence. It does not set `AUTHORIZED_FOR_QUALIFIED_EXECUTION`; the rest of the QE-01 gates and exact-head Human Review remain mandatory.
+
+
+## Historical harness location recovered
+
+Archived project evidence from 2026-09-26 identifies the former Harness Pilot root as:
+
+`C:\Users\anton\TRAMA-HARNESS-P0`
+
+The archived tree includes `test-infrastructure/runtime/**`, remediation harnesses and `test-infrastructure/stub/fake-dsh.js`.
+
+This is **historical location evidence only**:
+- it does not prove that the directory still exists;
+- it does not prove that a real DSH runtime is currently installed there;
+- stub files must never be accepted as provider qualification evidence.
+
+If the environment is re-observed, the collector must distinguish a real configured DSH runtime from the harness stub tree before any QE-01 promotion.
