@@ -314,3 +314,53 @@ The success message alone does not prove whether didUP:
 **R1 = ACCEPTED / POST-STATE VERIFICATION PENDING**
 
 To classify R1 conclusively, the post-import Programma Scolastico must be compared with the pre-import state.
+
+
+## E-011 — Exact re-import produced no duplicate content
+
+**Source:** user-provided didUP screenshots and direct human observation, 2026-10-01  
+**Evidence status:** DIRECT_UI_EVIDENCE / HUMAN_VERIFIED
+
+### Observed post-state
+
+After importing `Programma_2026_48591.xls`:
+
+- the program list shows a single module `0TEST`;
+- opening the module shows a single argument `arg1`;
+- the argument state is `Non Svolto`;
+- the user confirms that the contents were **not duplicated**.
+
+### Semantic classification
+
+For the tested identical specimen, re-import is **idempotent at the visible program-content level**.
+
+Candidate classification:
+
+`EXACT_REIMPORT_NO_DUPLICATE`
+
+This is stronger than mere transport acceptance. It does not prove the internal mechanism (deduplication, replacement, or update), but it proves that an identical re-import did not create a second visible module/argument.
+
+## E-012 — Current didUP import UI states LibreOffice XLS requirement
+
+**Source:** user-provided didUP import screen, 2026-10-01  
+**Evidence status:** DIRECT_UI_EVIDENCE / CURRENT_VERSION
+
+The current import screen states:
+
+> È possibile importare solo file con estensione .xls prodotti con LibreOffice
+
+### Consequence
+
+The current UI explicitly identifies:
+- required extension: `.xls`;
+- expected producer/tooling: LibreOffice.
+
+This materially changes the adapter hypothesis: a controlled LibreOffice-compatible XLS generation path is not merely speculative; it is directly indicated by the product UI.
+
+### Limitation
+
+The UI message does not document:
+- exact workbook schema beyond the observed sample;
+- accepted LibreOffice versions/options;
+- whether every semantically valid workbook is accepted;
+- update behavior for changed existing records.
