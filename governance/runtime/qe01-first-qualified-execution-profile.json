@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.qe01-execution-profile/v1",
   "executionId": "QE-01",
-  "state": "AUTHORIZED_PENDING_EXACT_HEAD_REVIEW",
+  "state": "AUTHORIZED_FOR_QUALIFIED_EXECUTION",
   "authorityDecisionRef": "TRAMA-ADR-020",
   "capability": {
     "id": "lesson.preparation.observe",
@@ -54,8 +54,19 @@
     "STALE_FAILURE_NORMALIZATION": true,
     "CONTROL_CENTER_OBSERVE_ONLY": true,
     "MANUAL_FALLBACK": true,
-    "HUMAN_EXACT_HEAD_REVIEW": false,
+    "HUMAN_EXACT_HEAD_REVIEW": true,
     "CREDENTIAL_ACCESS_PROBE": true
   },
-  "executable": false
+  "executable": true,
+  "humanExactHeadReview": {
+    "approved": true,
+    "approvedHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+    "scope": "QE-01_ONLY",
+    "mode": "PROPOSE_ONLY",
+    "oneShot": true,
+    "maxRetries": 0,
+    "mutationAllowed": false,
+    "personalStudentDataAllowed": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  }
 }
