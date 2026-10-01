@@ -87,11 +87,11 @@ Il filone OR non ha ulteriori slice automatiche. Qualunque passaggio a esecuzion
 
 ## QE-01 — Prima Qualified Execution limitata
 
-Stato: **HUMAN APPROVED / AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION**.
+Stato: **HUMAN APPROVED / AUTHORIZED_PENDING_EXACT_HEAD_REVIEW**.
 
 Decisione umana del 2026-09-30:
 - autorizzata una sola Qualified Execution governata della capability `lesson.preparation.observe`;
-- provider/model/adapter e policy pre-live qualificati; credential-access probe e Human exact-head review restano pendenti;
+- provider/model/adapter, policy pre-live e access probe qualificati; resta pendente la Human exact-head review;
 - mode massimo `PROPOSE_ONLY`;
 - one-shot;
 - `maxRetries = 0`;
