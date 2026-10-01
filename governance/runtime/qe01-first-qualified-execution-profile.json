@@ -67,6 +67,13 @@
     "maxRetries": 0,
     "mutationAllowed": false,
     "personalStudentDataAllowed": false,
-    "dosA1": "RUNTIME_DEFERRED"
+    "dosA1": "RUNTIME_DEFERRED",
+    "executionTargetHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f"
+  },
+  "executionTarget": {
+    "reviewedExactHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+    "immutable": true,
+    "executionMustUseReviewedHead": true,
+    "authorizationRecordMayBeNewer": true
   }
 }
