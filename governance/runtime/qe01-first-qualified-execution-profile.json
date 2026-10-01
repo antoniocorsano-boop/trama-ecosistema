@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.qe01-execution-profile/v1",
   "executionId": "QE-01",
-  "state": "AUTHORIZED_PENDING_PROVIDER_QUALIFICATION",
+  "state": "AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION",
   "authorityDecisionRef": "TRAMA-ADR-020",
   "capability": {
     "id": "lesson.preparation.observe",
@@ -10,16 +10,18 @@
   },
   "decisionOwner": "DOCENTE_OS",
   "runtime": {
-    "providerType": null,
-    "providerId": null,
-    "adapterId": null,
-    "adapterVersion": null,
-    "runtimeProfileRef": null,
-    "networkPolicy": "DENY_UNTIL_PROVIDER_QUALIFIED",
+    "providerType": "NVIDIA_NIM",
+    "providerId": "nvidia",
+    "adapterId": "@deepseek-ai/dsh-llm-pi-ai",
+    "adapterVersion": "0.1.5-rc.3",
+    "runtimeProfileRef": "runtime-profile:qe01:dsh-headless:nvidia-nemotron-3-ultra-550b-a55b",
+    "networkPolicy": "DENY",
     "allowedEndpoints": [],
     "maxRetries": 0,
     "timeoutMs": 30000,
-    "oneShot": true
+    "oneShot": true,
+    "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "activeProfile": "headless"
   },
   "dataPolicy": {
     "personalStudentData": false,
@@ -38,17 +40,17 @@
   },
   "gates": {
     "HUMAN_DECISION": true,
-    "PROVIDER_REAL_QUALIFIED": false,
-    "ADAPTER_REAL_QUALIFIED": false,
-    "EXECUTION_PROFILE_FROZEN": false,
+    "PROVIDER_REAL_QUALIFIED": true,
+    "ADAPTER_REAL_QUALIFIED": true,
+    "EXECUTION_PROFILE_FROZEN": true,
     "NETWORK_SECRET_POLICY": false,
-    "PRIVACY_DATA_MINIMIZATION": false,
+    "PRIVACY_DATA_MINIMIZATION": true,
     "TIMEOUT_CANCEL_CLEANUP": false,
-    "NO_MUTATION": false,
+    "NO_MUTATION": true,
     "EVIDENCE_RECEIPT": false,
     "STALE_FAILURE_NORMALIZATION": false,
-    "CONTROL_CENTER_OBSERVE_ONLY": false,
-    "MANUAL_FALLBACK": false,
+    "CONTROL_CENTER_OBSERVE_ONLY": true,
+    "MANUAL_FALLBACK": true,
     "HUMAN_EXACT_HEAD_REVIEW": false
   },
   "executable": false
