@@ -90,3 +90,37 @@ At least:
 5. order semantics corroborated — **DONE conceptually via official documentation**, binary/sample variability remains;
 6. unmodified round-trip evidence available;
 7. duplicate/import behavior recorded.
+
+
+## Current didUP UI import constraint
+
+Direct UI evidence from 2026-10-01 states:
+
+```text
+È possibile importare solo file con estensione .xls prodotti con LibreOffice
+```
+
+Therefore the candidate profile must now include:
+
+```text
+extension: .xls
+producerCompatibility: LibreOffice
+```
+
+This supports a future LibreOffice-compatible generation strategy, subject to G2/G3 governance and controlled validation.
+
+## Exact re-import behavior
+
+For Sample 001, importing the same file back into didUP:
+- was accepted;
+- produced no duplicate visible module;
+- produced no duplicate visible argument.
+
+Candidate semantic invariant:
+
+```text
+exact identical re-import
+→ no duplicate visible content
+```
+
+This does not yet define how changed existing records are reconciled.
