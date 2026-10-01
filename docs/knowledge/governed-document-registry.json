@@ -1300,7 +1300,7 @@
       "id": "DOC-TRAMA-ADR-019-ECOSYSTEM-FIRST",
       "path": "docs/decisions/trama-adr-019-ecosystem-first-runtime-subordination.md",
       "kind": "ADR",
-      "status": "APPROVED",
+      "status": "CURRENT",
       "priority": "NORMATIVE",
       "subjects": [
         "ecosystem-architecture",
