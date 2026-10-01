@@ -47,7 +47,9 @@ Requisiti:
 - usa la stessa identità provider del profilo congelato;
 - non invia contenuti didattici;
 - non invia dati personali;
-- non effettua `chat/completions`;
+- usa esclusivamente il path documentato `/v1/chat/completions` con un payload intenzionalmente non valido, così da non costituire una richiesta di generazione valida;
+- considera `401/403` come credenziale respinta e una risposta di validazione non-auth come sola evidenza che la credenziale non è stata respinta a quel confine;
+- non prova l'entitlement del modello né la riuscita di una generazione;
 - non promuove automaticamente lo stato a executable;
 - produce solo esito normalizzato + timestamp + endpoint class + status category;
 - non conserva response body potenzialmente sensibili.
