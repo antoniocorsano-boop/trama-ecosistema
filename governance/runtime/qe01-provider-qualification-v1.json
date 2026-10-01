@@ -43,5 +43,19 @@
     "NO_SILENT_SUBSTITUTION": true,
     "NO_MODEL_INVOCATION_DURING_QUALIFICATION": true
   },
-  "qualified": false
+  "qualified": false,
+  "candidateAdapterProfile": "DSH_COMPATIBLE",
+  "requiredEvidence": [
+    "runtime identity observed from actual DSH environment",
+    "adapter identity and version observed",
+    "provider identity observed from configured runtime state",
+    "model identity observed from configured runtime state",
+    "proof provider is configured, not merely catalog-listed",
+    "proof no silent model/provider substitution is enabled"
+  ],
+  "evidenceRefs": [
+    "docs/contracts/trama-runtime-adapter-contract-v0.md",
+    "docs/contracts/trama-runtime-portability-contract-v0.md",
+    "docs/contracts/trama-qualified-execution-readiness-contract-v0.md"
+  ]
 }
