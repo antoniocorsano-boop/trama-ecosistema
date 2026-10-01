@@ -277,7 +277,7 @@
       "supersedes": []
     },
     {
-      "id": "TRAMA-QE-DECISION-2026-09-30",
+      "id": "TRAMA-ADR-020",
       "title": "Prima Qualified Execution limitata di lesson.preparation.observe",
       "status": "APPROVED",
       "date": "2026-09-30",
