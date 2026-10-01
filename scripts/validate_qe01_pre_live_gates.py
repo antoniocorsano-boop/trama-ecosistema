@@ -18,9 +18,11 @@ def validate(d):
     if any(s.get(k) is not False for k in ("persisted","logged","includedInEvidence","returnedToControlCenter")): e.append("QE01-PL-SECRET")
     if s.get("missingFailsClosed") is not True: e.append("QE01-PL-SECRET")
     p=d.get("credentialAccessProbe",{})
-    if p.get("required") is not True or p.get("completed") is not False: e.append("QE01-PL-PROBE")
+    if p.get("required") is not True or p.get("completed") is not True: e.append("QE01-PL-PROBE")
     if any(p.get(k) is not False for k in ("modelInvocationAllowed","teachingContentAllowed","personalStudentDataAllowed","validGenerationRequestAllowed","promotesExecutableState")): e.append("QE01-PL-PROBE")
     if p.get("endpoint")!="https://integrate.api.nvidia.com/v1/chat/completions" or p.get("method")!="POST" or p.get("probePayloadClass")!="INTENTIONALLY_INVALID_NON_GENERATIVE": e.append("QE01-PL-PROBE")
+    pr=p.get("result",{})
+    if pr.get("outcome")!="PASS" or pr.get("statusCode")!=400 or pr.get("modelInvoked") is not False or pr.get("validGenerationRequestSent") is not False or pr.get("teachingContentSent") is not False or pr.get("personalStudentDataSent") is not False or pr.get("retryCount")!=0: e.append("QE01-PL-PROBE-RESULT")
     x=d.get("execution",{})
     if x.get("timeoutMs")!=30000 or x.get("maxRetries")!=0 or x.get("oneShot") is not True or x.get("automaticSecondRequest") is not False: e.append("QE01-PL-EXEC")
     fp=d.get("failurePolicy",{})
@@ -33,7 +35,7 @@ def validate(d):
     g=d.get("gates",{})
     for k in ("NETWORK_SECRET_POLICY","TIMEOUT_CANCEL_CLEANUP","EVIDENCE_RECEIPT","STALE_FAILURE_NORMALIZATION"):
         if g.get(k) is not True: e.append("QE01-PL-GATE")
-    if g.get("CREDENTIAL_ACCESS_PROBE") is not False or g.get("HUMAN_EXACT_HEAD_REVIEW") is not False: e.append("QE01-PL-GATE")
+    if g.get("CREDENTIAL_ACCESS_PROBE") is not True or g.get("HUMAN_EXACT_HEAD_REVIEW") is not False: e.append("QE01-PL-GATE")
     if d.get("dosA1")!="RUNTIME_DEFERRED": e.append("QE01-PL-DOSA1")
     return sorted(set(e))
 
