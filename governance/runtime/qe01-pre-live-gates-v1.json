@@ -30,8 +30,16 @@
     "modelInvocationAllowed": false,
     "teachingContentAllowed": false,
     "personalStudentDataAllowed": false,
-    "chatCompletionsAllowed": false,
-    "promotesExecutableState": false
+    "promotesExecutableState": false,
+    "endpoint": "https://integrate.api.nvidia.com/v1/chat/completions",
+    "method": "POST",
+    "probePayloadClass": "INTENTIONALLY_INVALID_NON_GENERATIVE",
+    "validGenerationRequestAllowed": false,
+    "interpretation": {
+      "401_403": "CREDENTIAL_REJECTED",
+      "VALIDATION_4XX": "CREDENTIAL_NOT_REJECTED_AT_ENDPOINT_ONLY",
+      "2XX": "UNEXPECTED_AND_FAIL_CLOSED"
+    }
   },
   "execution": {
     "timeoutMs": 30000,
