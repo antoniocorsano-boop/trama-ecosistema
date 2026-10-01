@@ -1757,7 +1757,7 @@
         "provider-qualification",
         "dos-a1"
       ],
-      "decisionRef": "TRAMA-QE-DECISION-2026-09-30",
+      "decisionRef": "TRAMA-ADR-020",
       "dependsOn": [
         "DOC-QE-DECISION-2026-09-30"
       ],
