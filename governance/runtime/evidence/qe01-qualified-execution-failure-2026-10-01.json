@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "trama.qe01-execution-receipt/v1",
+  "executionId": "QE-01",
+  "executionTargetHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+  "outcome": "FAIL",
+  "exitCode": 1,
+  "failureClass": "STALE_BINDING",
+  "providerErrorClass": "MISSING_CREDENTIAL",
+  "providerRouteObserved": "deepseek-official",
+  "expectedProviderId": "nvidia",
+  "expectedModelId": "nvidia/nemotron-3-ultra-550b-a55b",
+  "requestCount": 1,
+  "retryCount": 0,
+  "modelInvoked": false,
+  "validGenerationRequestSent": false,
+  "mutationObserved": false,
+  "personalStudentDataObserved": false,
+  "secretMaterialObserved": false,
+  "dosA1": "RUNTIME_DEFERRED"
+}
