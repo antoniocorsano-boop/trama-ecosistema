@@ -179,3 +179,18 @@ G1 may only advance after the recorded evidence is reviewed against:
 - the delta contract;
 - the conflict model;
 - authority and safety boundaries.
+
+
+## R1 observed execution status
+
+**Execution date:** 2026-10-01  
+**Operator:** authorized human user  
+**Observed import message:** successful upload/import reported by didUP  
+**Classification:** `ACCEPTED_POST_STATE_PENDING`
+
+The transport/import validation step succeeded. Final semantic classification remains pending until the resulting program is checked for:
+- duplicates;
+- updates;
+- no-op behavior;
+- partial import;
+- order/state/date changes.
