@@ -2,7 +2,7 @@
   "schemaVersion": "trama.qe01-provider-qualification/v1",
   "executionId": "QE-01",
   "capabilityId": "lesson.preparation.observe",
-  "status": "AWAITING_PROVIDER_MODEL_PROFILE_OBSERVATION",
+  "status": "PROVIDER_REAL_QUALIFIED",
   "candidateRuntimeType": "dsh",
   "qualificationPolicy": {
     "requireObservedRuntimeIdentity": true,
@@ -19,12 +19,14 @@
     "runtimeVersion": "0.1.5-rc.3",
     "adapterId": "@deepseek-ai/dsh-llm-pi-ai",
     "adapterVersion": "0.1.5-rc.3",
-    "providerId": null,
-    "modelId": null,
-    "runtimeProfileRef": "local:C:\\Users\\anton\\TRAMA-HARNESS-P0",
-    "providerConfigured": false,
-    "source": "LOCAL_READ_ONLY_OBSERVATION",
-    "observedAt": "2026-10-01"
+    "providerId": "nvidia",
+    "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "runtimeProfileRef": "runtime-profile:qe01:dsh-headless:nvidia-nemotron-3-ultra-550b-a55b",
+    "providerConfigured": true,
+    "source": "LOCAL_READ_ONLY_OBSERVATION_PLUS_GOVERNED_REF",
+    "observedAt": "2026-10-01",
+    "activeProfile": "headless",
+    "runtimeProfileRefSource": "TRAMA_GOVERNED_CANONICAL_REF_DERIVED_FROM_OBSERVED_PROFILE"
   },
   "executionConstraints": {
     "mode": "PROPOSE_ONLY",
@@ -37,13 +39,13 @@
   "gates": {
     "RUNTIME_IDENTITY_OBSERVED": true,
     "ADAPTER_IDENTITY_OBSERVED": true,
-    "PROVIDER_IDENTITY_OBSERVED": false,
-    "MODEL_IDENTITY_OBSERVED": false,
-    "PROVIDER_CONFIGURATION_VERIFIED": false,
+    "PROVIDER_IDENTITY_OBSERVED": true,
+    "MODEL_IDENTITY_OBSERVED": true,
+    "PROVIDER_CONFIGURATION_VERIFIED": true,
     "NO_SILENT_SUBSTITUTION": true,
     "NO_MODEL_INVOCATION_DURING_QUALIFICATION": true
   },
-  "qualified": false,
+  "qualified": true,
   "candidateAdapterProfile": "DSH_COMPATIBLE",
   "requiredEvidence": [
     "runtime identity observed from actual DSH environment",
@@ -61,7 +63,9 @@
     "local-observation:TRAMA-HARNESS-P0:dsh=0.1.5-rc.3",
     "local-observation:adapter=@deepseek-ai/dsh-llm-pi-ai@0.1.5-rc.3",
     "local-observation:pi-ai=@earendil-works/pi-ai@0.85.1",
-    "local-observation:cordis=@deepseek-ai/cordis@4.0.2"
+    "local-observation:cordis=@deepseek-ai/cordis@4.0.2",
+    "local-audit:copilot-readonly:2026-10-01",
+    "public-provider-evidence:NVIDIA:nemotron-3-ultra-550b-a55b:2026-10-01"
   ],
   "collector": "scripts/collect_qe01_dsh_observation.py",
   "collectorTest": "tests/test_qe01_dsh_observation.py",
@@ -77,5 +81,27 @@
       "Tree also contained test-infrastructure/stub/fake-dsh.js, so stub presence must not be confused with live provider binding."
     ],
     "currentQualificationImpact": "NONE_UNTIL_REOBSERVED"
+  },
+  "externalAvailabilityEvidence": {
+    "checkedAt": "2026-10-01",
+    "authority": "NVIDIA",
+    "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "publicModelAvailable": true,
+    "hostedEndpointAdvertised": true,
+    "endpointBase": "https://integrate.api.nvidia.com/v1",
+    "limitation": "Public availability does not prove this user's credential authorization or successful model invocation."
+  },
+  "localAuditEvidence": {
+    "activeProfile": "headless",
+    "configuredProvider": "nvidia",
+    "configuredModel": "nvidia/nemotron-3-ultra-550b-a55b",
+    "fallbackProviderDeclared": false,
+    "fallbackModelDeclared": false,
+    "silentSubstitutionPossible": false,
+    "credentialReferencePresent": true,
+    "networkUsed": false,
+    "modelInvoked": false,
+    "filesModified": false,
+    "realRuntimeDistinguishedFromStub": true
   }
 }
