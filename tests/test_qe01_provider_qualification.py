@@ -16,9 +16,10 @@ BASE = json.loads(
 
 
 class TestQE01ProviderQualification(unittest.TestCase):
-    def test_pending_observation_is_valid_and_not_qualified(self):
+    def test_qualified_binding_is_valid(self):
         self.assertEqual(validator.validate(BASE), [])
-        self.assertFalse(BASE["qualified"])
+        self.assertTrue(BASE["qualified"])
+        self.assertEqual(BASE["status"], "PROVIDER_REAL_QUALIFIED")
 
     def test_catalog_only_identity_is_rejected(self):
         d = copy.deepcopy(BASE)
@@ -47,10 +48,7 @@ class TestQE01ProviderQualification(unittest.TestCase):
 
     def test_qualified_requires_real_observed_binding(self):
         d = copy.deepcopy(BASE)
-        d["qualified"] = True
-        d["status"] = "PROVIDER_REAL_QUALIFIED"
-        for key in d["gates"]:
-            d["gates"][key] = True
+        d["observedBinding"]["providerId"] = None
         self.assertIn("QE01-PQ-INCOMPLETE", validator.validate(d))
 
 
