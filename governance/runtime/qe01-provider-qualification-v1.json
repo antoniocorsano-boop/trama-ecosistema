@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "trama.qe01-provider-qualification/v1",
+  "executionId": "QE-01",
+  "capabilityId": "lesson.preparation.observe",
+  "status": "AWAITING_REAL_PROVIDER_OBSERVATION",
+  "candidateRuntimeType": "dsh",
+  "qualificationPolicy": {
+    "requireObservedRuntimeIdentity": true,
+    "requireObservedProviderIdentity": true,
+    "requireObservedModelIdentity": true,
+    "requireAdapterIdentity": true,
+    "requireConfiguredProvider": true,
+    "allowCatalogOnlyIdentity": false,
+    "allowSilentModelSubstitution": false,
+    "allowFallbackProvider": false,
+    "invokeModelDuringQualification": false
+  },
+  "observedBinding": {
+    "runtimeVersion": null,
+    "adapterId": null,
+    "adapterVersion": null,
+    "providerId": null,
+    "modelId": null,
+    "runtimeProfileRef": null,
+    "providerConfigured": false,
+    "source": null,
+    "observedAt": null
+  },
+  "executionConstraints": {
+    "mode": "PROPOSE_ONLY",
+    "oneShot": true,
+    "maxRetries": 0,
+    "mutation": false,
+    "personalStudentData": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "gates": {
+    "RUNTIME_IDENTITY_OBSERVED": false,
+    "ADAPTER_IDENTITY_OBSERVED": false,
+    "PROVIDER_IDENTITY_OBSERVED": false,
+    "MODEL_IDENTITY_OBSERVED": false,
+    "PROVIDER_CONFIGURATION_VERIFIED": false,
+    "NO_SILENT_SUBSTITUTION": true,
+    "NO_MODEL_INVOCATION_DURING_QUALIFICATION": true
+  },
+  "qualified": false
+}
