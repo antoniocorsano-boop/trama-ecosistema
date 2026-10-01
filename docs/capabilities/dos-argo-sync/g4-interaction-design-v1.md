@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — G4 Interaction Design v1
 
 **Lifecycle:** G4 — Design  
-**Status:** IN_PROGRESS / INTERACTION_MODEL_DEFINED  
+**Status:** PASS / FLOW-VALIDATED  
 **Runtime:** NOT_AUTHORIZED  
 **Depends on:** G3 Specification v1, ARGO_PROGRAM_XLS_PROFILE_v1
 
@@ -19,16 +19,20 @@ The teacher should understand:
 
 ## 2. Placement in Docente OS
 
-Primary placement:
+Primary placement is bound to the real Docente OS surfaces:
 
 ```text
-Programmazione didattica
-  → classe
-  → disciplina
-  → programmazione annuale
+AppShell
+→ Piano annuale
+→ section/class context
+→ annual programming
+→ consolidated state
+→ Prepara file per Argo
 ```
 
-The Argo action belongs in the programming header/action area after consolidation.
+`Progetta → Programmazione annuale` may expose a contextual secondary link into the same canonical workflow.
+
+The Argo action must not create a new top-level navigation item or parallel shell.
 
 It must not live only in:
 - Settings;
@@ -339,12 +343,23 @@ This is not visible by default.
 - [x] accessibility addressed;
 - [x] success/error/waiting/recovery feedback defined;
 - [x] human control and authority boundaries preserved;
-- [ ] prototype/mockup evidence;
-- [ ] design review findings resolved;
+- [x] prototype/mockup evidence available as flow evidence;
+- [x] design review findings resolved in `g4-design-review-v1.md`;
 - [x] handoff traceable to G3 requirements.
 
 ## 17. Current G4 assessment
 
-**IN_PROGRESS — PROTOTYPE/MOCKUP EVIDENCE PENDING.**
+**PASS / READY_FOR_G5 PLANNING.**
 
 No runtime implementation is authorized.
+
+
+## 18. Visual fidelity rule
+
+The generated mockup is **non-binding visually**.
+
+Implementation must reuse the real Docente OS AppShell/navigation/components and preserve the established product language.
+
+The mockup is authoritative only for flow, state transitions, action semantics, feedback and confirmation timing.
+
+See `g4-design-review-v1.md` for the AppShell reconciliation and resolved findings.
