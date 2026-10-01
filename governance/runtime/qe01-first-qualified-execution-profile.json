@@ -2,7 +2,7 @@
   "schemaVersion": "trama.qe01-execution-profile/v1",
   "executionId": "QE-01",
   "state": "AUTHORIZED_PENDING_PROVIDER_QUALIFICATION",
-  "authorityDecisionRef": "TRAMA-QE-DECISION-2026-09-30",
+  "authorityDecisionRef": "TRAMA-ADR-020",
   "capability": {
     "id": "lesson.preparation.observe",
     "version": "1.0.0",
