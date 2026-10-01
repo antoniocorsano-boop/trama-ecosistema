@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.qe01-execution-profile/v1",
   "executionId": "QE-01",
-  "state": "AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION",
+  "state": "AUTHORIZED_PENDING_EXACT_HEAD_REVIEW",
   "authorityDecisionRef": "TRAMA-ADR-020",
   "capability": {
     "id": "lesson.preparation.observe",
@@ -55,7 +55,7 @@
     "CONTROL_CENTER_OBSERVE_ONLY": true,
     "MANUAL_FALLBACK": true,
     "HUMAN_EXACT_HEAD_REVIEW": false,
-    "CREDENTIAL_ACCESS_PROBE": false
+    "CREDENTIAL_ACCESS_PROBE": true
   },
   "executable": false
 }
