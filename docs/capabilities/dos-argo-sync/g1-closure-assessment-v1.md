@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — G1 Closure Assessment v1
 
 **Gate:** G1 — Discovery  
-**Status:** NEAR_COMPLETE / BLOCKERS_EXPLICIT  
+**Status:** COMPLETE_FOR_G1 / READY_FOR_G2_REVIEW  
 **Runtime:** NOT_AUTHORIZED  
 **Assessment date:** 2026-09-30
 
@@ -36,7 +36,7 @@ No runtime or persistence has been authorized.
 - [x] sample-bound XLS profile;
 - [x] reviewable G1 evidence package.
 
-## Remaining G1 blockers
+## Previously open G1 blockers
 
 ### B1 — Format variability
 
@@ -55,7 +55,7 @@ One real XLS sample still cannot establish binary/profile stability across expor
 
 **Evidence required:** preferably one richer independent export, or equivalent structural evidence.
 
-### B2 — Round-trip/import semantics
+### B2 — Round-trip/import semantics — RESOLVED FOR IDENTICAL RE-IMPORT
 
 The manual documents import/export but not:
 - duplicate handling;
@@ -64,7 +64,9 @@ The manual documents import/export but not:
 - whether an unmodified export reimports cleanly in the target context;
 - whether a minimally modified copy is accepted.
 
-**Evidence required:** controlled human-operated import experiments.
+**Evidence obtained:** controlled human-operated exact re-import accepted, with post-state visually verified and no duplicate content.
+
+Changed-record reconciliation remains an implementation/specification question for later gates, not a blocker to discovery closure.
 
 ## Recommended next evidence package
 
@@ -101,8 +103,14 @@ G1 may advance to G2 when:
 
 ## Current decision
 
-**DO NOT ADVANCE TO G2 YET.**
+**G1 MAY ADVANCE TO G2 GOVERNANCE REVIEW.**
 
-Reason: format variability and external import semantics can still materially alter the adapter strategy and conflict model.
+Reason:
+- a real XLS has been inspected;
+- official documentation corroborates domain semantics;
+- current UI specifies `.xls` produced with LibreOffice;
+- exact re-import has been accepted;
+- post-state shows no duplicate visible content;
+- remaining questions concern governed architecture/specification details rather than missing discovery evidence.
 
-The next action is evidence acquisition, not implementation.
+This does **not** authorize runtime, persistence, or external write automation.
