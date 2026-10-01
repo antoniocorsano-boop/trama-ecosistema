@@ -40,7 +40,7 @@ def validate(d):
         if r.get("networkPolicy") not in ("DENY","ALLOWLIST"): errors.append("QE01-NETWORK")
         if r.get("networkPolicy")=="ALLOWLIST" and not r.get("allowedEndpoints"): errors.append("QE01-ENDPOINTS")
     else:
-        if state not in ("AUTHORIZED_PENDING_PROVIDER_QUALIFICATION","AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION"):
+        if state not in ("AUTHORIZED_PENDING_PROVIDER_QUALIFICATION","AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION","AUTHORIZED_PENDING_EXACT_HEAD_REVIEW"):
             errors.append("QE01-PENDING-STATE")
         if state=="AUTHORIZED_PENDING_PROVIDER_QUALIFICATION":
             if gates.get("HUMAN_DECISION") is not True: errors.append("QE01-HUMAN")
