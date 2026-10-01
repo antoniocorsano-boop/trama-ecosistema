@@ -16,11 +16,14 @@ class TestQE01PreLive(unittest.TestCase):
   d=copy.deepcopy(BASE);d["execution"]["maxRetries"]=1;self.assertIn("QE01-PL-EXEC",v.validate(d))
  def test_model_probe_rejected(self):
   d=copy.deepcopy(BASE);d["credentialAccessProbe"]["modelInvocationAllowed"]=True;self.assertIn("QE01-PL-PROBE",v.validate(d))
- def test_probe_cannot_be_precompleted(self):
-  d=copy.deepcopy(BASE);d["credentialAccessProbe"]["completed"]=True;self.assertIn("QE01-PL-PROBE",v.validate(d))
+ def test_probe_must_remain_completed_after_qualification(self):
+  d=copy.deepcopy(BASE);d["credentialAccessProbe"]["completed"]=False;self.assertIn("QE01-PL-PROBE",v.validate(d))
+ def test_probe_result_cannot_claim_model_invocation(self):
+  d=copy.deepcopy(BASE);d["credentialAccessProbe"]["result"]["modelInvoked"]=True;self.assertIn("QE01-PL-PROBE-RESULT",v.validate(d))
  def test_secret_in_evidence_rejected(self):
   d=copy.deepcopy(BASE);d["evidenceReceipt"]["secretsStored"]=True;self.assertIn("QE01-PL-EVIDENCE",v.validate(d))
  def test_dos_a1_activation_rejected(self):
   d=copy.deepcopy(BASE);d["dosA1"]="ACTIVE";self.assertIn("QE01-PL-DOSA1",v.validate(d))
 
 if __name__=="__main__": unittest.main()
+
