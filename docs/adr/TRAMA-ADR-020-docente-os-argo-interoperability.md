@@ -1,6 +1,6 @@
 # TRAMA-ADR-020 — Docente OS → Argo: interoperabilità didattica human-confirmed
 
-**Status:** PROPOSED
+**Status:** APPROVED
 **Date:** 2026-10-01
 **Capability:** CAP-DOS-ARGO-SYNC
 **Scope:** TRAMA · Docente OS · Arena · Atlas · Argo didUP
@@ -64,3 +64,11 @@ Approval of this ADR does not authorize runtime. Runtime requires subsequent gov
 ## Relationship to existing decisions
 
 This ADR does not supersede TRAMA-ADR-002, TRAMA-ADR-004, TRAMA-ADR-006 or TRAMA-ADR-019. It specializes those boundaries for Docente OS → Argo interoperability.
+
+## Human decision
+
+**Decision:** PASS  
+**Date:** 2026-10-01  
+**Scope:** Governance approval only.
+
+This approval authorizes transition from G2 to G3 specification. It does not authorize runtime, persistence implementation, direct Argo writes, browser automation, credential use, or DOS-A1 activation.
