@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.qe01-execution-profile/v1",
   "executionId": "QE-01",
-  "state": "AUTHORIZED_FOR_QUALIFIED_EXECUTION",
+  "state": "EXECUTION_FAILED_REQUALIFICATION_REQUIRED",
   "authorityDecisionRef": "TRAMA-ADR-020",
   "capability": {
     "id": "lesson.preparation.observe",
@@ -43,8 +43,8 @@
   },
   "gates": {
     "HUMAN_DECISION": true,
-    "PROVIDER_REAL_QUALIFIED": true,
-    "ADAPTER_REAL_QUALIFIED": true,
+    "PROVIDER_REAL_QUALIFIED": false,
+    "ADAPTER_REAL_QUALIFIED": false,
     "EXECUTION_PROFILE_FROZEN": true,
     "NETWORK_SECRET_POLICY": true,
     "PRIVACY_DATA_MINIMIZATION": true,
@@ -57,7 +57,7 @@
     "HUMAN_EXACT_HEAD_REVIEW": true,
     "CREDENTIAL_ACCESS_PROBE": true
   },
-  "executable": true,
+  "executable": false,
   "humanExactHeadReview": {
     "approved": true,
     "approvedHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
@@ -75,5 +75,23 @@
     "immutable": true,
     "executionMustUseReviewedHead": true,
     "authorizationRecordMayBeNewer": true
+  },
+  "lastExecution": {
+    "executionId": "QE-01",
+    "executionTargetHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+    "outcome": "FAIL",
+    "exitCode": 1,
+    "providerRouteObserved": "deepseek-official",
+    "expectedProviderId": "nvidia",
+    "expectedModelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "failureClass": "STALE_BINDING",
+    "providerErrorClass": "MISSING_CREDENTIAL",
+    "modelInvoked": false,
+    "validGenerationRequestSent": false,
+    "retryCount": 0,
+    "mutationObserved": false,
+    "personalStudentDataObserved": false,
+    "secretMaterialObserved": false,
+    "dosA1": "RUNTIME_DEFERRED"
   }
 }
