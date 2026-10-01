@@ -1,6 +1,6 @@
 # TRAMA-ADR-019 — Ecosystem-first architecture: runtime e agenti subordinati ai domini TRAMA
 
-**Stato:** PROPOSED  
+**Stato:** APPROVED / HUMAN REVIEW PASS  
 **Data:** 2026-09-30  
 **Perimetro:** TRAMA · Arena · Atlas · Docente OS · Control Center · Runtime/Agent Infrastructure  
 **Runtime:** NO NEW WRITE AUTHORITY / DOS-A1 RUNTIME_DEFERRED
@@ -17,7 +17,7 @@ TRAMA esiste invece per coordinare prodotti e domini distinti:
 
 Runtime, agenti, connector e adapter sono infrastruttura al servizio di questi domini. Non costituiscono un nuovo prodotto centrale e non ridefiniscono le authority.
 
-## Decisione proposta
+## Decisione
 
 1. TRAMA adotta un principio **ecosystem-first**.
 2. Arena, Atlas e Docente OS restano i domini di prodotto che determinano i bisogni e i flussi.
@@ -114,12 +114,14 @@ Questa ADR non:
 
 Il principio impedisce che la crescita dell'infrastruttura agentica sposti implicitamente authority o priorità lontano dai workflow umani e dai prodotti dell'ecosistema.
 
-## Gate
+## Gate di promozione
 
-Prima di promuovere questa ADR:
+Soddisfatti:
 1. coerenza con ADR-001/002/007/014/015/017;
-2. aggiornamento roadmap OR;
+2. roadmap OR aggiornata;
 3. indicizzazione nel Governed Document Registry;
 4. bootstrap rule nel Second Brain;
-5. Governance CI;
-6. HUMAN EXACT-HEAD REVIEW.
+5. Governance CI sul pacchetto OR-05/OR-06;
+6. Human Review del pacchetto OR-05/OR-06 con ADR-019 dichiarata accettabile.
+
+Evidenza: `docs/reviews/TRAMA-HUMAN-REVIEW-OR05-OR06-2026-09-30.md`.
