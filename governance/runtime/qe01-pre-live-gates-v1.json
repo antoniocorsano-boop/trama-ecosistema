@@ -4,7 +4,7 @@
   "authorityDecisionRef": "TRAMA-ADR-020",
   "capabilityId": "lesson.preparation.observe",
   "mode": "PROPOSE_ONLY",
-  "executable": false,
+  "executable": true,
   "network": {
     "policy": "ALLOWLIST",
     "scheme": "https",
@@ -108,7 +108,11 @@
     "EVIDENCE_RECEIPT": true,
     "STALE_FAILURE_NORMALIZATION": true,
     "CREDENTIAL_ACCESS_PROBE": true,
-    "HUMAN_EXACT_HEAD_REVIEW": false
+    "HUMAN_EXACT_HEAD_REVIEW": true
   },
-  "dosA1": "RUNTIME_DEFERRED"
+  "dosA1": "RUNTIME_DEFERRED",
+  "humanExactHeadReview": {
+    "approved": true,
+    "approvedHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f"
+  }
 }
