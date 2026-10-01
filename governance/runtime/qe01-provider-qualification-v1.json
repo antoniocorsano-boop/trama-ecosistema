@@ -60,5 +60,18 @@
     "docs/runtime/QE-01-DSH-OBSERVATION-PROCEDURE.md"
   ],
   "collector": "scripts/collect_qe01_dsh_observation.py",
-  "collectorTest": "tests/test_qe01_dsh_observation.py"
+  "collectorTest": "tests/test_qe01_dsh_observation.py",
+  "historicalHarnessEvidence": {
+    "status": "FOUND_IN_ARCHIVED_PROJECT_LOG",
+    "observedDate": "2026-09-26",
+    "historicalRoot": "C:\\Users\\anton\\TRAMA-HARNESS-P0",
+    "evidenceClass": "HISTORICAL_LOCATION_ONLY",
+    "sourceDescription": "Archived project/library log shows the P0 harness tree and PowerShell working directory under this root.",
+    "caveats": [
+      "Does not prove the directory still exists today.",
+      "Does not prove a real DSH installation is currently available there.",
+      "Tree also contained test-infrastructure/stub/fake-dsh.js, so stub presence must not be confused with live provider binding."
+    ],
+    "currentQualificationImpact": "NONE_UNTIL_REOBSERVED"
+  }
 }
