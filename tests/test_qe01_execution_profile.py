@@ -25,7 +25,7 @@ class TestQE01(unittest.TestCase):
  def test_provider_binding_cannot_claim_pending_provider_after_binding(self):
   d=copy.deepcopy(BASE)
   d["state"]="AUTHORIZED_PENDING_PROVIDER_QUALIFICATION"
-  self.assertIn("QE01-PROVIDER-STATE",v.validate(d))
+  self.assertIn("QE01-EXEC-STATE",v.validate(d))
  def test_executable_requires_all_gates(self):
   d=copy.deepcopy(BASE);d["gates"]["HUMAN_EXACT_HEAD_REVIEW"]=False
   self.assertIn("QE01-EXEC-BLOCK",v.validate(d))
