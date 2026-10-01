@@ -186,11 +186,23 @@ G1 may only advance after the recorded evidence is reviewed against:
 **Execution date:** 2026-10-01  
 **Operator:** authorized human user  
 **Observed import message:** successful upload/import reported by didUP  
-**Classification:** `ACCEPTED_POST_STATE_PENDING`
+**Classification:** `EXACT_REIMPORT_NO_DUPLICATE`
 
-The transport/import validation step succeeded. Final semantic classification remains pending until the resulting program is checked for:
-- duplicates;
-- updates;
-- no-op behavior;
-- partial import;
-- order/state/date changes.
+The transport/import validation step succeeded and the post-state was visually verified.
+
+Observed:
+- one module `0TEST`;
+- one argument `arg1`;
+- no duplicated visible content;
+- argument remains `Non Svolto`.
+
+Therefore the tested identical re-import is **idempotent at visible semantic level**. The internal mechanism (dedupe vs replacement/update) remains unspecified.
+
+
+## R1 final result
+
+**Result:** `EXACT_REIMPORT_NO_DUPLICATE`  
+**Evidence:** direct human observation + screenshots  
+**Discovery effect:** exact identical re-import does not create duplicate visible program content for the tested specimen.
+
+The current didUP import UI also states that only `.xls` files produced with LibreOffice can be imported. This becomes a direct interoperability constraint for future adapter design.
