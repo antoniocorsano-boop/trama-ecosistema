@@ -56,6 +56,9 @@
   "evidenceRefs": [
     "docs/contracts/trama-runtime-adapter-contract-v0.md",
     "docs/contracts/trama-runtime-portability-contract-v0.md",
-    "docs/contracts/trama-qualified-execution-readiness-contract-v0.md"
-  ]
+    "docs/contracts/trama-qualified-execution-readiness-contract-v0.md",
+    "docs/runtime/QE-01-DSH-OBSERVATION-PROCEDURE.md"
+  ],
+  "collector": "scripts/collect_qe01_dsh_observation.py",
+  "collectorTest": "tests/test_qe01_dsh_observation.py"
 }
