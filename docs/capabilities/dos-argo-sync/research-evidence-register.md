@@ -279,3 +279,38 @@ Web documentation establishes **UI/domain semantics**, not the BIFF cell storage
 - [ ] update-vs-append behavior for equivalent items;
 - [ ] unmodified round-trip semantics;
 - [ ] acceptance of reconstructed/minimally modified XLS.
+
+
+## E-010 — Human-operated unmodified XLS re-import accepted
+
+**Source:** human-operated didUP import test reported on 2026-10-01  
+**Evidence status:** DIRECT_HUMAN_OBSERVATION / PARTIAL_ROUNDTRIP
+
+### Test condition
+
+The previously produced/exported Excel/XLS program file was manually uploaded into Argo didUP by the authorized user.
+
+### Observed result
+
+Argo displayed a message indicating that the upload/import had been completed successfully.
+
+### What this establishes
+
+- didUP accepted the tested file through the Programma Scolastico import path;
+- the file was not rejected at upload/import validation time;
+- the unmodified round-trip path is therefore **accepted at least at the transport/validation layer** for this specimen.
+
+### What this does NOT yet establish
+
+The success message alone does not prove whether didUP:
+- performed a semantic no-op;
+- duplicated existing modules/arguments;
+- updated existing content;
+- partially imported content;
+- altered order/state/date.
+
+### R1 status
+
+**R1 = ACCEPTED / POST-STATE VERIFICATION PENDING**
+
+To classify R1 conclusively, the post-import Programma Scolastico must be compared with the pre-import state.
