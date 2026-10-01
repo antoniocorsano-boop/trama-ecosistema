@@ -5,9 +5,9 @@ v=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(v)
 BASE=json.loads(Path("governance/runtime/qe01-first-qualified-execution-profile.json").read_text())
 
 class TestQE01(unittest.TestCase):
- def test_pending_exact_head_profile_is_valid_and_not_executable(self):
+ def test_pending_exact_head_review_profile_is_valid_and_not_executable(self):
   self.assertEqual(v.validate(BASE),[])
-  self.assertEqual(BASE["state"],"AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION")
+  self.assertEqual(BASE["state"],"AUTHORIZED_PENDING_EXACT_HEAD_REVIEW")
   self.assertFalse(BASE["executable"])
  def test_auto_mutation_is_rejected(self):
   d=copy.deepcopy(BASE);d["authorityBoundaries"]["arenaWrite"]=True
