@@ -2,7 +2,7 @@
   "schemaVersion": "trama.qe01-provider-qualification/v1",
   "executionId": "QE-01",
   "capabilityId": "lesson.preparation.observe",
-  "status": "AWAITING_REAL_PROVIDER_OBSERVATION",
+  "status": "AWAITING_PROVIDER_MODEL_PROFILE_OBSERVATION",
   "candidateRuntimeType": "dsh",
   "qualificationPolicy": {
     "requireObservedRuntimeIdentity": true,
@@ -16,15 +16,15 @@
     "invokeModelDuringQualification": false
   },
   "observedBinding": {
-    "runtimeVersion": null,
-    "adapterId": null,
-    "adapterVersion": null,
+    "runtimeVersion": "0.1.5-rc.3",
+    "adapterId": "@deepseek-ai/dsh-llm-pi-ai",
+    "adapterVersion": "0.1.5-rc.3",
     "providerId": null,
     "modelId": null,
-    "runtimeProfileRef": null,
+    "runtimeProfileRef": "local:C:\\Users\\anton\\TRAMA-HARNESS-P0",
     "providerConfigured": false,
-    "source": null,
-    "observedAt": null
+    "source": "LOCAL_READ_ONLY_OBSERVATION",
+    "observedAt": "2026-10-01"
   },
   "executionConstraints": {
     "mode": "PROPOSE_ONLY",
@@ -35,8 +35,8 @@
     "dosA1": "RUNTIME_DEFERRED"
   },
   "gates": {
-    "RUNTIME_IDENTITY_OBSERVED": false,
-    "ADAPTER_IDENTITY_OBSERVED": false,
+    "RUNTIME_IDENTITY_OBSERVED": true,
+    "ADAPTER_IDENTITY_OBSERVED": true,
     "PROVIDER_IDENTITY_OBSERVED": false,
     "MODEL_IDENTITY_OBSERVED": false,
     "PROVIDER_CONFIGURATION_VERIFIED": false,
@@ -57,7 +57,11 @@
     "docs/contracts/trama-runtime-adapter-contract-v0.md",
     "docs/contracts/trama-runtime-portability-contract-v0.md",
     "docs/contracts/trama-qualified-execution-readiness-contract-v0.md",
-    "docs/runtime/QE-01-DSH-OBSERVATION-PROCEDURE.md"
+    "docs/runtime/QE-01-DSH-OBSERVATION-PROCEDURE.md",
+    "local-observation:TRAMA-HARNESS-P0:dsh=0.1.5-rc.3",
+    "local-observation:adapter=@deepseek-ai/dsh-llm-pi-ai@0.1.5-rc.3",
+    "local-observation:pi-ai=@earendil-works/pi-ai@0.85.1",
+    "local-observation:cordis=@deepseek-ai/cordis@4.0.2"
   ],
   "collector": "scripts/collect_qe01_dsh_observation.py",
   "collectorTest": "tests/test_qe01_dsh_observation.py",
