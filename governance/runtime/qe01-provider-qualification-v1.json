@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "trama.qe01-provider-qualification/v1",
+  "executionId": "QE-01",
+  "capabilityId": "lesson.preparation.observe",
+  "status": "PROVIDER_REAL_QUALIFIED",
+  "candidateRuntimeType": "dsh",
+  "qualificationPolicy": {
+    "requireObservedRuntimeIdentity": true,
+    "requireObservedProviderIdentity": true,
+    "requireObservedModelIdentity": true,
+    "requireAdapterIdentity": true,
+    "requireConfiguredProvider": true,
+    "allowCatalogOnlyIdentity": false,
+    "allowSilentModelSubstitution": false,
+    "allowFallbackProvider": false,
+    "invokeModelDuringQualification": false
+  },
+  "observedBinding": {
+    "runtimeVersion": "0.1.5-rc.3",
+    "adapterId": "@deepseek-ai/dsh-llm-pi-ai",
+    "adapterVersion": "0.1.5-rc.3",
+    "providerId": "nvidia",
+    "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "runtimeProfileRef": "runtime-profile:qe01:dsh-headless:nvidia-nemotron-3-ultra-550b-a55b",
+    "providerConfigured": true,
+    "source": "LOCAL_READ_ONLY_OBSERVATION_PLUS_GOVERNED_REF",
+    "observedAt": "2026-10-01",
+    "activeProfile": "headless",
+    "runtimeProfileRefSource": "TRAMA_GOVERNED_CANONICAL_REF_DERIVED_FROM_OBSERVED_PROFILE"
+  },
+  "executionConstraints": {
+    "mode": "PROPOSE_ONLY",
+    "oneShot": true,
+    "maxRetries": 0,
+    "mutation": false,
+    "personalStudentData": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "gates": {
+    "RUNTIME_IDENTITY_OBSERVED": true,
+    "ADAPTER_IDENTITY_OBSERVED": true,
+    "PROVIDER_IDENTITY_OBSERVED": true,
+    "MODEL_IDENTITY_OBSERVED": true,
+    "PROVIDER_CONFIGURATION_VERIFIED": true,
+    "NO_SILENT_SUBSTITUTION": true,
+    "NO_MODEL_INVOCATION_DURING_QUALIFICATION": true
+  },
+  "qualified": true,
+  "candidateAdapterProfile": "DSH_COMPATIBLE",
+  "requiredEvidence": [
+    "runtime identity observed from actual DSH environment",
+    "adapter identity and version observed",
+    "provider identity observed from configured runtime state",
+    "model identity observed from configured runtime state",
+    "proof provider is configured, not merely catalog-listed",
+    "proof no silent model/provider substitution is enabled"
+  ],
+  "evidenceRefs": [
+    "docs/contracts/trama-runtime-adapter-contract-v0.md",
+    "docs/contracts/trama-runtime-portability-contract-v0.md",
+    "docs/contracts/trama-qualified-execution-readiness-contract-v0.md",
+    "docs/runtime/QE-01-DSH-OBSERVATION-PROCEDURE.md",
+    "local-observation:TRAMA-HARNESS-P0:dsh=0.1.5-rc.3",
+    "local-observation:adapter=@deepseek-ai/dsh-llm-pi-ai@0.1.5-rc.3",
+    "local-observation:pi-ai=@earendil-works/pi-ai@0.85.1",
+    "local-observation:cordis=@deepseek-ai/cordis@4.0.2",
+    "local-audit:copilot-readonly:2026-10-01",
+    "public-provider-evidence:NVIDIA:nemotron-3-ultra-550b-a55b:2026-10-01"
+  ],
+  "collector": "scripts/collect_qe01_dsh_observation.py",
+  "collectorTest": "tests/test_qe01_dsh_observation.py",
+  "historicalHarnessEvidence": {
+    "status": "FOUND_IN_ARCHIVED_PROJECT_LOG",
+    "observedDate": "2026-09-26",
+    "historicalRoot": "C:\\Users\\anton\\TRAMA-HARNESS-P0",
+    "evidenceClass": "HISTORICAL_LOCATION_ONLY",
+    "sourceDescription": "Archived project/library log shows the P0 harness tree and PowerShell working directory under this root.",
+    "caveats": [
+      "Does not prove the directory still exists today.",
+      "Does not prove a real DSH installation is currently available there.",
+      "Tree also contained test-infrastructure/stub/fake-dsh.js, so stub presence must not be confused with live provider binding."
+    ],
+    "currentQualificationImpact": "NONE_UNTIL_REOBSERVED"
+  },
+  "externalAvailabilityEvidence": {
+    "checkedAt": "2026-10-01",
+    "authority": "NVIDIA",
+    "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "publicModelAvailable": true,
+    "hostedEndpointAdvertised": true,
+    "endpointBase": "https://integrate.api.nvidia.com/v1",
+    "limitation": "Public availability does not prove this user's credential authorization or successful model invocation."
+  },
+  "localAuditEvidence": {
+    "activeProfile": "headless",
+    "configuredProvider": "nvidia",
+    "configuredModel": "nvidia/nemotron-3-ultra-550b-a55b",
+    "fallbackProviderDeclared": false,
+    "fallbackModelDeclared": false,
+    "silentSubstitutionPossible": false,
+    "credentialReferencePresent": true,
+    "networkUsed": false,
+    "modelInvoked": false,
+    "filesModified": false,
+    "realRuntimeDistinguishedFromStub": true
+  }
+}

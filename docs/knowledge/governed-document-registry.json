@@ -1743,6 +1743,54 @@
         "RUNTIME_AUTHORIZATION_CHANGE",
         "DOS_A1_CHANGE"
       ]
+    },
+    {
+      "id": "DOC-QE01-EXECUTION-PROFILE-2026-09-30",
+      "path": "governance/runtime/qe01-first-qualified-execution-profile.json",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "qualified-execution",
+        "runtime-authorization",
+        "lesson-preparation",
+        "provider-qualification",
+        "dos-a1"
+      ],
+      "decisionRef": "TRAMA-ADR-020",
+      "dependsOn": [
+        "DOC-QE-DECISION-2026-09-30"
+      ],
+      "updateTriggers": [
+        "PROVIDER_QUALIFIED",
+        "ADAPTER_QUALIFIED",
+        "EXECUTION_PROFILE_CHANGE",
+        "HUMAN_EXACT_HEAD_REVIEW",
+        "RUNTIME_EXECUTION"
+      ]
+    },
+    {
+      "id": "DOC-QE01-PRE-LIVE-GATES",
+      "path": "docs/runtime/QE-01-PRE-LIVE-GATE-CONTRACT.md",
+      "kind": "CONTRACT",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "qe-01",
+        "qualified-execution",
+        "network-policy",
+        "secret-policy",
+        "evidence",
+        "failure-normalization"
+      ],
+      "decisionRef": "TRAMA-ADR-020",
+      "dependsOn": [],
+      "updateTriggers": [
+        "QE01_NETWORK_POLICY_CHANGE",
+        "QE01_SECRET_POLICY_CHANGE",
+        "QE01_EVIDENCE_CONTRACT_CHANGE",
+        "QE01_FAILURE_POLICY_CHANGE"
+      ]
     }
   ]
 }

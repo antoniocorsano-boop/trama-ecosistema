@@ -1,10 +1,10 @@
 # TRAMA — Prima Qualified Execution reale: dossier decisionale
 
-**Stato:** PENDING_HUMAN_DECISION  
+**Stato:** HUMAN_APPROVED / AUTHORIZED_PENDING_PROVIDER_QUALIFICATION  
 **Data:** 2026-09-30  
-**Runtime live:** NOT_AUTHORIZED  
+**Runtime live:** AUTHORIZED_CONDITIONALLY / NOT_YET_EXECUTABLE  
 **DOS-A1:** RUNTIME_DEFERRED  
-**Authority change:** NONE in questo documento
+**Authority change:** LIMITED_QE01_AUTHORIZATION_ONLY
 
 ## 1. Perché esiste questo dossier
 
@@ -130,11 +130,43 @@ Devono essere PASS e legati allo stesso exact head:
 
 ## 10. Stato attuale
 
-**PENDING_HUMAN_DECISION.**
+**HUMAN_APPROVED / AUTHORIZED_PENDING_PROVIDER_QUALIFICATION.**
 
-Nessuna esecuzione reale è autorizzata dal presente dossier.
+Decisione esplicita ricevuta il 2026-09-30: **AUTORIZZARE_PRIMA_QUALIFIED_EXECUTION_LIMITATA**.
+
+L'autorizzazione è limitata a QE-01 e diventa eseguibile soltanto quando lo stesso exact head qualifica:
+- provider reale e adapter reale;
+- execution profile congelato;
+- policy rete/secret;
+- failure/cleanup;
+- evidence receipt;
+- no-mutation e no-student-data;
+- Control Center observe-only.
+
+Finché questi gate non sono PASS, nessuna chiamata runtime reale può partire.
 
 
 ## 11. Qualification retrigger
 
 Dopo la sincronizzazione automatica dello snapshot canonico da parte di GitHub Actions, la qualifica della presente PR viene rieseguita su un nuovo exact head umano. Questo passaggio non modifica stato, authority, runtime authorization o perimetro del dossier.
+
+
+## 12. Esito Human Review
+
+Decisione: **APPROVED_LIMITED_QE01**.
+
+Perimetro:
+- capability: `lesson.preparation.observe`;
+- mode: `PROPOSE_ONLY`;
+- one-shot;
+- maxRetries: `0`;
+- mutation: vietata;
+- dati personali studenti: vietati;
+- decision owner: docente;
+- Control Center: READ_ONLY;
+- DOS-A1: resta `RUNTIME_DEFERRED`.
+
+Stato operativo al momento della decisione:
+`AUTHORIZED_PENDING_PROVIDER_QUALIFICATION`.
+
+Motivo del blocco residuo: nessun provider reale è ancora qualificato nel repository; `offline-dsh-fixture` è una fixture e non può essere usata come provider live.

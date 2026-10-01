@@ -1,7 +1,7 @@
 {
   "schemaVersion": "trama.qualified-execution-decision/v1",
-  "id": "TRAMA-QE-DECISION-2026-09-30",
-  "status": "PENDING_HUMAN_DECISION",
+  "id": "TRAMA-ADR-020",
+  "status": "HUMAN_APPROVED_AUTHORIZED_PENDING_PROVIDER_QUALIFICATION",
   "date": "2026-09-30",
   "liveRuntimeAuthorized": false,
   "dosA1": "RUNTIME_DEFERRED",
@@ -24,5 +24,11 @@
     "AUTO_APPROVAL",
     "MUTATIVE_CAPABILITY",
     "GENERAL_DOS_A1_ACTIVATION"
-  ]
+  ],
+  "humanDecision": {
+    "decision": "AUTHORIZE_LIMITED_FIRST_QUALIFIED_EXECUTION",
+    "date": "2026-09-30",
+    "scope": "QE-01_ONLY"
+  },
+  "runtimeExecutionState": "AUTHORIZED_PENDING_PROVIDER_QUALIFICATION"
 }

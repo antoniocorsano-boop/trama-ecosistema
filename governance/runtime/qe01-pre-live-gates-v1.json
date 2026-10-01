@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "trama.qe01-pre-live-gates/v1",
+  "executionId": "QE-01",
+  "authorityDecisionRef": "TRAMA-ADR-020",
+  "capabilityId": "lesson.preparation.observe",
+  "mode": "PROPOSE_ONLY",
+  "executable": true,
+  "network": {
+    "policy": "ALLOWLIST",
+    "scheme": "https",
+    "host": "integrate.api.nvidia.com",
+    "apiPrefix": "/v1",
+    "executionPath": "/v1/chat/completions",
+    "crossHostRedirects": false,
+    "dynamicEndpoints": false,
+    "fallbackProvider": false,
+    "fallbackModel": false
+  },
+  "secret": {
+    "ref": "NVIDIA_API_KEY",
+    "persisted": false,
+    "logged": false,
+    "includedInEvidence": false,
+    "returnedToControlCenter": false,
+    "missingFailsClosed": true
+  },
+  "credentialAccessProbe": {
+    "required": true,
+    "completed": true,
+    "modelInvocationAllowed": false,
+    "teachingContentAllowed": false,
+    "personalStudentDataAllowed": false,
+    "promotesExecutableState": false,
+    "endpoint": "https://integrate.api.nvidia.com/v1/chat/completions",
+    "method": "POST",
+    "probePayloadClass": "INTENTIONALLY_INVALID_NON_GENERATIVE",
+    "validGenerationRequestAllowed": false,
+    "interpretation": {
+      "401_403": "CREDENTIAL_REJECTED",
+      "VALIDATION_4XX": "CREDENTIAL_NOT_REJECTED_AT_ENDPOINT_ONLY",
+      "2XX": "UNEXPECTED_AND_FAIL_CLOSED"
+    },
+    "result": {
+      "outcome": "PASS",
+      "statusCode": 400,
+      "exactHead": "5862b1aa6a442b19eeea6db97b93af6741c300d6",
+      "observedAt": "2026-10-01T01:49:36.479631+00:00",
+      "modelInvoked": false,
+      "validGenerationRequestSent": false,
+      "teachingContentSent": false,
+      "personalStudentDataSent": false,
+      "retryCount": 0
+    }
+  },
+  "execution": {
+    "timeoutMs": 30000,
+    "maxRetries": 0,
+    "oneShot": true,
+    "automaticSecondRequest": false,
+    "manualFallback": "DOCENTE_OS"
+  },
+  "failureClasses": [
+    "CREDENTIAL_MISSING",
+    "CREDENTIAL_REJECTED",
+    "ENDPOINT_NOT_ALLOWED",
+    "PROVIDER_UNAVAILABLE",
+    "MODEL_UNAVAILABLE",
+    "TIMEOUT",
+    "CANCELLED",
+    "RESPONSE_INVALID",
+    "EVIDENCE_INCOMPLETE",
+    "STALE_BINDING"
+  ],
+  "failurePolicy": {
+    "terminal": true,
+    "retry": false,
+    "providerSwitch": false,
+    "modelSwitch": false,
+    "mutation": false
+  },
+  "evidenceReceipt": {
+    "requiredFields": [
+      "executionId",
+      "exactHead",
+      "capabilityId",
+      "providerId",
+      "modelId",
+      "adapterId",
+      "adapterVersion",
+      "runtimeProfileRef",
+      "startedAt",
+      "finishedAt",
+      "outcome",
+      "requestCount",
+      "retryCount",
+      "mutationObserved",
+      "personalStudentDataObserved",
+      "secretMaterialObserved",
+      "evidenceDigest"
+    ],
+    "fullPromptStored": false,
+    "fullResponseStored": false,
+    "secretsStored": false
+  },
+  "gates": {
+    "NETWORK_SECRET_POLICY": true,
+    "TIMEOUT_CANCEL_CLEANUP": true,
+    "EVIDENCE_RECEIPT": true,
+    "STALE_FAILURE_NORMALIZATION": true,
+    "CREDENTIAL_ACCESS_PROBE": true,
+    "HUMAN_EXACT_HEAD_REVIEW": true
+  },
+  "dosA1": "RUNTIME_DEFERRED",
+  "humanExactHeadReview": {
+    "approved": true,
+    "approvedHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f"
+  }
+}

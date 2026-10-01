@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "trama.qe01-execution-profile/v1",
+  "executionId": "QE-01",
+  "state": "EXECUTION_FAILED_REQUALIFICATION_REQUIRED",
+  "authorityDecisionRef": "TRAMA-ADR-020",
+  "capability": {
+    "id": "lesson.preparation.observe",
+    "version": "1.0.0",
+    "mode": "PROPOSE_ONLY"
+  },
+  "decisionOwner": "DOCENTE_OS",
+  "runtime": {
+    "providerType": "NVIDIA_NIM",
+    "providerId": "nvidia",
+    "adapterId": "@deepseek-ai/dsh-llm-pi-ai",
+    "adapterVersion": "0.1.5-rc.3",
+    "runtimeProfileRef": "runtime-profile:qe01:dsh-headless:nvidia-nemotron-3-ultra-550b-a55b",
+    "networkPolicy": "ALLOWLIST",
+    "allowedEndpoints": [
+      "https://integrate.api.nvidia.com/v1/chat/completions"
+    ],
+    "maxRetries": 0,
+    "timeoutMs": 30000,
+    "oneShot": true,
+    "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "activeProfile": "headless",
+    "secretRef": "NVIDIA_API_KEY"
+  },
+  "dataPolicy": {
+    "personalStudentData": false,
+    "studentProfiles": false,
+    "studentTracking": false,
+    "secretsPersisted": false,
+    "evidenceMayContainSecrets": false
+  },
+  "authorityBoundaries": {
+    "arenaWrite": false,
+    "atlasPublish": false,
+    "docenteOsAutoAdopt": false,
+    "diaryWrite": false,
+    "controlCenterReadOnly": true,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "gates": {
+    "HUMAN_DECISION": true,
+    "PROVIDER_REAL_QUALIFIED": false,
+    "ADAPTER_REAL_QUALIFIED": false,
+    "EXECUTION_PROFILE_FROZEN": true,
+    "NETWORK_SECRET_POLICY": true,
+    "PRIVACY_DATA_MINIMIZATION": true,
+    "TIMEOUT_CANCEL_CLEANUP": true,
+    "NO_MUTATION": true,
+    "EVIDENCE_RECEIPT": true,
+    "STALE_FAILURE_NORMALIZATION": true,
+    "CONTROL_CENTER_OBSERVE_ONLY": true,
+    "MANUAL_FALLBACK": true,
+    "HUMAN_EXACT_HEAD_REVIEW": true,
+    "CREDENTIAL_ACCESS_PROBE": true
+  },
+  "executable": false,
+  "humanExactHeadReview": {
+    "approved": true,
+    "approvedHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+    "scope": "QE-01_ONLY",
+    "mode": "PROPOSE_ONLY",
+    "oneShot": true,
+    "maxRetries": 0,
+    "mutationAllowed": false,
+    "personalStudentDataAllowed": false,
+    "dosA1": "RUNTIME_DEFERRED",
+    "executionTargetHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f"
+  },
+  "executionTarget": {
+    "reviewedExactHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+    "immutable": true,
+    "executionMustUseReviewedHead": true,
+    "authorizationRecordMayBeNewer": true
+  },
+  "lastExecution": {
+    "executionId": "QE-01",
+    "executionTargetHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+    "outcome": "FAIL",
+    "exitCode": 1,
+    "providerRouteObserved": "deepseek-official",
+    "expectedProviderId": "nvidia",
+    "expectedModelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "failureClass": "STALE_BINDING",
+    "providerErrorClass": "MISSING_CREDENTIAL",
+    "modelInvoked": false,
+    "validGenerationRequestSent": false,
+    "retryCount": 0,
+    "mutationObserved": false,
+    "personalStudentDataObserved": false,
+    "secretMaterialObserved": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  }
+}
