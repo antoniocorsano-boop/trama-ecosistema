@@ -15,13 +15,16 @@
     "adapterId": "@deepseek-ai/dsh-llm-pi-ai",
     "adapterVersion": "0.1.5-rc.3",
     "runtimeProfileRef": "runtime-profile:qe01:dsh-headless:nvidia-nemotron-3-ultra-550b-a55b",
-    "networkPolicy": "DENY",
-    "allowedEndpoints": [],
+    "networkPolicy": "ALLOWLIST",
+    "allowedEndpoints": [
+      "https://integrate.api.nvidia.com/v1/chat/completions"
+    ],
     "maxRetries": 0,
     "timeoutMs": 30000,
     "oneShot": true,
     "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
-    "activeProfile": "headless"
+    "activeProfile": "headless",
+    "secretRef": "NVIDIA_API_KEY"
   },
   "dataPolicy": {
     "personalStudentData": false,
@@ -43,15 +46,16 @@
     "PROVIDER_REAL_QUALIFIED": true,
     "ADAPTER_REAL_QUALIFIED": true,
     "EXECUTION_PROFILE_FROZEN": true,
-    "NETWORK_SECRET_POLICY": false,
+    "NETWORK_SECRET_POLICY": true,
     "PRIVACY_DATA_MINIMIZATION": true,
-    "TIMEOUT_CANCEL_CLEANUP": false,
+    "TIMEOUT_CANCEL_CLEANUP": true,
     "NO_MUTATION": true,
-    "EVIDENCE_RECEIPT": false,
-    "STALE_FAILURE_NORMALIZATION": false,
+    "EVIDENCE_RECEIPT": true,
+    "STALE_FAILURE_NORMALIZATION": true,
     "CONTROL_CENTER_OBSERVE_ONLY": true,
     "MANUAL_FALLBACK": true,
-    "HUMAN_EXACT_HEAD_REVIEW": false
+    "HUMAN_EXACT_HEAD_REVIEW": false,
+    "CREDENTIAL_ACCESS_PROBE": false
   },
   "executable": false
 }
