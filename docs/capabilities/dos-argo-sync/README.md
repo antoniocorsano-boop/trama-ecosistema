@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — Sincronizzazione didattica incrementale verso Argo
 
 **Lifecycle:** ACTIVE_DISCOVERY  
-**Current gate:** G1 COMPLETE / G2 REVIEW CANDIDATE  
+**Current gate:** G2 Governance — READY_FOR_HUMAN_DECISION  
 **Owning product candidate:** Docente OS  
 **Ecosystem impact:** TRAMA / Docente OS; Arena and Atlas boundaries to be assessed at G2  
 **Runtime:** NOT_AUTHORIZED  
@@ -568,3 +568,12 @@ La schermata corrente di importazione didUP espone inoltre il vincolo:
 `È possibile importare solo file con estensione .xls prodotti con LibreOffice`.
 
 Questa evidenza rende la compatibilità LibreOffice un requisito esplicito del futuro adapter e consente di chiudere G1 come discovery completa, senza autorizzare runtime.
+
+
+## 31. G2 governance package
+
+- `g2-governance-impact-v1.md` — ownership, authority, privacy/security, human control, runtime and contract impact;
+- `../../adr/TRAMA-ADR-020-docente-os-argo-interoperability.md` — ADR proposto per persistenza, confini e interoperabilità;
+- `../../decisions/decision-register.json` — ADR-020 registrato come `PROPOSED`.
+
+G2 è documentato e pronto per decisione umana. **Runtime resta NOT_AUTHORIZED.**
