@@ -39,6 +39,10 @@ def validate(d):
         if not real_bound or not all_gates: errors.append("QE01-EXEC-BLOCK")
         if r.get("networkPolicy") not in ("DENY","ALLOWLIST"): errors.append("QE01-NETWORK")
         if r.get("networkPolicy")=="ALLOWLIST" and not r.get("allowedEndpoints"): errors.append("QE01-ENDPOINTS")
+        x=d.get("executionTarget",{})
+        h=d.get("humanExactHeadReview",{})
+        if x.get("immutable") is not True or x.get("executionMustUseReviewedHead") is not True: errors.append("QE01-TARGET")
+        if not x.get("reviewedExactHead") or x.get("reviewedExactHead")!=h.get("approvedHead") or h.get("approved") is not True: errors.append("QE01-TARGET")
     else:
         if state not in ("AUTHORIZED_PENDING_PROVIDER_QUALIFICATION","AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION","AUTHORIZED_PENDING_EXACT_HEAD_REVIEW"):
             errors.append("QE01-PENDING-STATE")
