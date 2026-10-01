@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — Sincronizzazione didattica incrementale verso Argo
 
 **Lifecycle:** ACTIVE_DISCOVERY  
-**Current gate:** G3 PASS / G4 Design — READY_TO_START  
+**Current gate:** G4 PASS / G5 Implementation Planning — NOT_YET_AUTHORIZED  
 **Owning product candidate:** Docente OS  
 **Ecosystem impact:** TRAMA / Docente OS; Arena and Atlas boundaries to be assessed at G2  
 **Runtime:** NOT_AUTHORIZED  
@@ -607,3 +607,24 @@ Normative artifacts:
 G3 assessment: **PASS / READY_FOR_G4 DESIGN**.
 
 Runtime remains `NOT_AUTHORIZED`.
+
+
+## 34. G4 design review against real Docente OS
+
+G4 has been reconciled with the current Docente OS repository.
+
+Canonical product binding:
+- current AppShell is reused;
+- current top-level navigation is unchanged;
+- primary entry point: `Piano annuale`;
+- secondary contextual entry: `Progetta → Programmazione annuale`;
+- one shared Argo state machine and generation flow.
+
+The generated mockup is retained as **flow evidence only**, not as a pixel-accurate visual specification.
+
+Artifact:
+- `g4-design-review-v1.md`.
+
+G4 assessment: **PASS / READY_FOR_G5 PLANNING**.
+
+Runtime and implementation remain `NOT_AUTHORIZED` until the G5 slice is explicitly governed.
