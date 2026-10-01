@@ -1,7 +1,7 @@
 # CAP-DOS-ARGO-SYNC — Sincronizzazione didattica incrementale verso Argo
 
 **Lifecycle:** ACTIVE_DISCOVERY  
-**Current gate:** G2 Governance — READY_FOR_HUMAN_DECISION  
+**Current gate:** G2 PASS / G3 Specification — AUTHORIZED_TO_START  
 **Owning product candidate:** Docente OS  
 **Ecosystem impact:** TRAMA / Docente OS; Arena and Atlas boundaries to be assessed at G2  
 **Runtime:** NOT_AUTHORIZED  
@@ -577,3 +577,16 @@ Questa evidenza rende la compatibilità LibreOffice un requisito esplicito del f
 - `../../decisions/decision-register.json` — ADR-020 registrato come `PROPOSED`.
 
 G2 è documentato e pronto per decisione umana. **Runtime resta NOT_AUTHORIZED.**
+
+
+## 32. G2 Human Decision
+
+**2026-10-01 — PASS**
+
+The human reviewer approved the G2 governance package and TRAMA-ADR-020.
+
+Effect:
+- G2 is closed as PASS;
+- G3 Specification is authorized to begin;
+- runtime remains `NOT_AUTHORIZED`;
+- no implementation or persistence write is authorized by this decision.
