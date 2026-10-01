@@ -5,8 +5,9 @@ v=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(v)
 BASE=json.loads(Path("governance/runtime/qe01-first-qualified-execution-profile.json").read_text())
 
 class TestQE01(unittest.TestCase):
- def test_pending_provider_profile_is_valid_and_not_executable(self):
+ def test_pending_exact_head_profile_is_valid_and_not_executable(self):
   self.assertEqual(v.validate(BASE),[])
+  self.assertEqual(BASE["state"],"AUTHORIZED_PENDING_EXACT_HEAD_QUALIFICATION")
   self.assertFalse(BASE["executable"])
  def test_auto_mutation_is_rejected(self):
   d=copy.deepcopy(BASE);d["authorityBoundaries"]["arenaWrite"]=True
@@ -20,9 +21,9 @@ class TestQE01(unittest.TestCase):
  def test_fake_executable_without_provider_is_rejected(self):
   d=copy.deepcopy(BASE);d["executable"]=True;d["state"]="AUTHORIZED_FOR_QUALIFIED_EXECUTION"
   self.assertIn("QE01-EXEC-BLOCK",v.validate(d))
- def test_provider_binding_cannot_remain_pending_provider(self):
+ def test_provider_binding_cannot_claim_pending_provider_after_binding(self):
   d=copy.deepcopy(BASE)
-  d["runtime"].update({"providerType":"X","providerId":"real","adapterId":"a","adapterVersion":"1","runtimeProfileRef":"r"})
+  d["state"]="AUTHORIZED_PENDING_PROVIDER_QUALIFICATION"
   self.assertIn("QE01-PROVIDER-STATE",v.validate(d))
  def test_executable_requires_all_gates(self):
   d=copy.deepcopy(BASE);d["state"]="AUTHORIZED_FOR_QUALIFIED_EXECUTION";d["executable"]=True
