@@ -1,12 +1,18 @@
 name: gh-aw T0 compile check
 
 on:
+  push:
+    branches:
+      - "gh-aw/t0-issue-triage-staged"
+    paths:
+      - ".github/workflows/trama-t0-issue-triage.md"
+      - ".github/workflows/trama-t0-issue-triage.lock.yml"
+      - ".github/workflows/gh-aw-t0-compile-check.yml"
   pull_request:
     paths:
       - ".github/workflows/trama-t0-issue-triage.md"
       - ".github/workflows/trama-t0-issue-triage.lock.yml"
       - ".github/workflows/gh-aw-t0-compile-check.yml"
-  workflow_dispatch:
 
 permissions:
   contents: read
