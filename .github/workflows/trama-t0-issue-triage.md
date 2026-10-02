@@ -22,7 +22,6 @@ safe-outputs:
       - documentation
       - question
     max: 1
-    max-labels: 1
     target: triggering
   add-comment:
     max: 1
