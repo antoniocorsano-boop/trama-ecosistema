@@ -31,16 +31,29 @@ jobs:
         run: |
           set -euo pipefail
           curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash
+          gh aw version
 
       - name: Compile T0 strictly
         shell: bash
         run: |
           set -euo pipefail
           gh aw compile trama-t0-issue-triage --strict
+          test -f .github/workflows/trama-t0-issue-triage.lock.yml
 
-      - name: Verify generated lock is committed
+      - name: Publish compiled lock for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: trama-t0-issue-triage-lock
+          path: .github/workflows/trama-t0-issue-triage.lock.yml
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Verify compiled lock is versioned and fresh
         shell: bash
         run: |
           set -euo pipefail
-          test -f .github/workflows/trama-t0-issue-triage.lock.yml
+          if ! git ls-files --error-unmatch .github/workflows/trama-t0-issue-triage.lock.yml >/dev/null 2>&1; then
+            echo "::error::Compiled lock is not versioned yet."
+            exit 1
+          fi
           git diff --exit-code -- .github/workflows/trama-t0-issue-triage.lock.yml
