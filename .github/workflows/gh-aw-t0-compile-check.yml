@@ -21,39 +21,65 @@ jobs:
   compile-check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Install gh-aw
         shell: bash
         run: |
           set -euo pipefail
           curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash
           gh aw version
-
       - name: Compile T0 strictly
         shell: bash
         run: |
           set -euo pipefail
           gh aw compile trama-t0-issue-triage --strict
           test -f .github/workflows/trama-t0-issue-triage.lock.yml
-
-      - name: Publish compiled lock for inspection
+      - name: Publish compiled lock evidence
         uses: actions/upload-artifact@v4
         with:
           name: trama-t0-issue-triage-lock
           path: .github/workflows/trama-t0-issue-triage.lock.yml
           if-no-files-found: error
           retention-days: 7
-
-      - name: Verify compiled lock is versioned and fresh
+      - name: Verify source and lock are synchronized
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
-          if ! git ls-files --error-unmatch .github/workflows/trama-t0-issue-triage.lock.yml >/dev/null 2>&1; then
-            echo "::error::Compiled lock is not versioned yet."
-            exit 1
-          fi
-          git diff --exit-code -- .github/workflows/trama-t0-issue-triage.lock.yml
+          gh aw list --json | jq -e 'map(select(.id == "trama-t0-issue-triage")) | length == 1 and all(.[]; .compiled == "Yes")'
+
+  bootstrap-lock:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/gh-aw/t0-issue-triage-staged'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout pilot branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-aw/t0-issue-triage-staged
+      - name: Install gh-aw
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash
+          gh aw version
+      - name: Generate exact lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh aw compile trama-t0-issue-triage --strict
+          test -f .github/workflows/trama-t0-issue-triage.lock.yml
+      - name: Commit only generated T0 lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- .github/workflows/trama-t0-issue-triage.lock.yml
+          if git diff --cached --quiet; then exit 0; fi
+          test "$(git diff --cached --name-only)" = ".github/workflows/trama-t0-issue-triage.lock.yml"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(gh-aw): compile T0 staged lock"
+          git push origin HEAD:gh-aw/t0-issue-triage-staged
