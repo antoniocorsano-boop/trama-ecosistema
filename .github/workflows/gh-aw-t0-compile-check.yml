@@ -1,0 +1,40 @@
+name: gh-aw T0 compile check
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/trama-t0-issue-triage.md"
+      - ".github/workflows/trama-t0-issue-triage.lock.yml"
+      - ".github/workflows/gh-aw-t0-compile-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install gh-aw
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash
+
+      - name: Compile T0 strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh aw compile trama-t0-issue-triage --strict
+
+      - name: Verify generated lock is committed
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .github/workflows/trama-t0-issue-triage.lock.yml
+          git diff --exit-code -- .github/workflows/trama-t0-issue-triage.lock.yml
