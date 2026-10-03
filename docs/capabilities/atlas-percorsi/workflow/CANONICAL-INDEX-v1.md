@@ -22,6 +22,7 @@ Single entry point for understanding current authority, experiments and open con
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
 | experiential grammar registry | `grammars/registry.yaml` | CANONICAL registry; entries remain `research` |
 | pathway dossier | `templates/PATHWAY-DOSSIER-TEMPLATE.md` | CANONICAL template |
+| proposed pathway `PW-CONSTRAINTS-TRADEOFFS-01` | `pathways/PW-CONSTRAINTS-TRADEOFFS-01/dossier-v1.md` | PROPOSED / HUMAN_REVIEW_PENDING / NOT_RUNTIME_AUTHORIZED |
 | backlog control | `workflow/backlog-zero-consolidation-plan-v1.md` | CANONICAL active plan |
 
 ## Constitutional layer
