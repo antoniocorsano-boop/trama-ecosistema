@@ -18,7 +18,7 @@ A generic graph that skips subject/premise, storyboard, narrative/interaction ra
 
 ## 2. Student library
 
-Percorsi is an open library, not a fixed set of eight courses. The six canonical organisational territories are:
+Percorsi is an open library, not a fixed set of eight courses. The recovered PR #96 package currently proposes six **candidate organisational territories** as a provisional navigation/design hypothesis:
 
 1. **Conosci te stesso** — self-awareness without personality profiling;
 2. **Impara a imparare** — metacognition, organisation, attention and strategy selection;
@@ -27,7 +27,7 @@ Percorsi is an open library, not a fixed set of eight courses. The six canonical
 5. **Agisci nel mondo** — responsibility, citizenship, sustainability and digital/information participation;
 6. **Progetta** — goals, initiative, planning and turning intention into action.
 
-These territories organise opportunities for practice; they are not psychological dimensions or learner labels.
+These territories are **not an approved taxonomy and are not binding authority**. Until a separate governance decision approves or replaces them, Atlas may use them only for provisional lab/navigation grouping and pathway discovery. Authors MUST preserve their candidate status, MUST NOT present them as authoritative learner classifications, and MUST NOT infer psychological dimensions or learner labels from them. The product process in this contract is binding for recovery work; the six-territory hypothesis is not.
 
 ## 3. Experience quality floor
 
@@ -94,7 +94,7 @@ Before a future Q9 request, the review packet for each pathway MUST include:
 2. learner-facing subject/premise;
 3. scene/storyboard inventory;
 4. declared experiential grammar(s);
-5. territory and competence target;
+5. competence target plus any provisional/candidate territory placement with its governance status;
 6. visible consequence/revision/transfer evidence;
 7. local-growth evidence mapping, if used;
 8. privacy/accessibility/child-safety checks;
