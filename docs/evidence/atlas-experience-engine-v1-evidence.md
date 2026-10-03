@@ -118,17 +118,18 @@ Observed implementation constraints remain:
 - accessibility/browser evidence is part of the qualified lane and separate G2 UX/mobile/LIM evidence is PASS;
 - no runtime promotion is inferred from accessibility or CI success.
 
-## 8. Remaining gates
+## 8. Integration review and remaining gates
+
+Joint exact-head review has completed with **PASS FOR HUMAN INTEGRATION DECISION** for Atlas PR #69 and this TRAMA evidence PR. The canonical decision records remain the PR review records; this does not alter runtime authority.
 
 The following remain explicitly open:
 
-1. Human Review of the **exact Atlas implementation head** and this evidence reconciliation before integration.
-2. Merge/integration decision for Atlas PR #69 remains separate.
-3. Any public student runtime promotion for a Percorso requires a separate governed runtime decision.
-4. Smart→Percorsi association remains separately governed; no automatic binding is active.
-5. Arena curriculum authority remains unchanged.
-6. `DOS-A1` remains `RUNTIME_DEFERRED`.
-7. The broader audit item P7 requiring a genuinely **public authorized Percorso** is not closed by implementation qualification alone.
+1. Merge/integration decision for Atlas PR #69 and TRAMA evidence remains separate from the review.
+2. Any public student runtime promotion for a Percorso requires a separate governed runtime decision.
+3. Smart→Percorsi association remains separately governed; no automatic binding is active.
+4. Arena curriculum authority remains unchanged.
+5. `DOS-A1` remains `RUNTIME_DEFERRED`.
+6. The broader audit item P7 requiring a genuinely **public authorized Percorso** is not closed by implementation qualification alone.
 
 ## 9. Reconciliation decision
 
@@ -137,3 +138,5 @@ The evidence supports moving Atlas A14/Percorsi from the earlier “partial infr
 `IMPLEMENTATION_QUALIFIED / NOT_RUNTIME_AUTHORIZED`.
 
 It does not support `RUNTIME_AUTHORIZED`, “public Percorso complete”, or any stronger claim.
+
+**Integration review:** PASS FOR HUMAN INTEGRATION DECISION. Integration itself remains a separate action.
