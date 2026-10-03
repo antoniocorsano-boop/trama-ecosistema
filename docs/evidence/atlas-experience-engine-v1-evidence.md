@@ -118,25 +118,32 @@ Observed implementation constraints remain:
 - accessibility/browser evidence is part of the qualified lane and separate G2 UX/mobile/LIM evidence is PASS;
 - no runtime promotion is inferred from accessibility or CI success.
 
-## 8. Integration review and remaining gates
+## 8. Integration outcome and remaining gates
 
-Joint exact-head review has completed with **PASS FOR HUMAN INTEGRATION DECISION** for Atlas PR #69 and this TRAMA evidence PR. The canonical decision records remain the PR review records; this does not alter runtime authority.
+Joint exact-head review completed with **PASS FOR HUMAN INTEGRATION DECISION**. The approved integrations were then executed:
+
+- Atlas PR #69 exact implementation head `5227c5200b46c91230e66f7fe3a917666c8c77fb` → merged to `main` as `d51da8bc6a71ee43a8d5f2cd71c51151fa591196`;
+- TRAMA PR #219 final evidence head `9c5f2c5e0c89a44221d7f8392c29f439ea26033a` → merged to `main` as `c393959a7951c40198fcea21c284dde4906a6a5d`;
+- source PRs #215, #216 and #217 were subsequently closed as `SUPERSEDED_BY_#219`, without separate merge, after verifying that `main` contains the same or newer governed content.
+
+These integration actions do not alter runtime authority.
 
 The following remain explicitly open:
 
-1. Merge/integration decision for Atlas PR #69 and TRAMA evidence remains separate from the review.
-2. Any public student runtime promotion for a Percorso requires a separate governed runtime decision.
-3. Smart→Percorsi association remains separately governed; no automatic binding is active.
-4. Arena curriculum authority remains unchanged.
-5. `DOS-A1` remains `RUNTIME_DEFERRED`.
-6. The broader audit item P7 requiring a genuinely **public authorized Percorso** is not closed by implementation qualification alone.
+1. Any public student runtime promotion for a Percorso requires a separate governed runtime decision.
+2. Smart→Percorsi association remains separately governed; no automatic binding is active.
+3. Arena curriculum authority remains unchanged.
+4. `DOS-A1` remains `RUNTIME_DEFERRED`.
+5. The broader audit item P7 requiring a genuinely **public authorized Percorso** is not closed by implementation qualification or integration alone.
 
 ## 9. Reconciliation decision
 
-The evidence supports moving Atlas A14/Percorsi from the earlier “partial infrastructure” description to:
+The canonical capability state remains:
 
 `IMPLEMENTATION_QUALIFIED / NOT_RUNTIME_AUTHORIZED`.
 
-It does not support `RUNTIME_AUTHORIZED`, “public Percorso complete”, or any stronger claim.
+Integration is now **COMPLETE** for the qualified Experience Engine implementation and its TRAMA evidence. This does not support `RUNTIME_AUTHORIZED`, “public Percorso complete”, or any stronger claim.
 
-**Integration review:** PASS FOR HUMAN INTEGRATION DECISION. Integration itself remains a separate action.
+**Integration review:** PASS FOR HUMAN INTEGRATION DECISION.  
+**Integration:** COMPLETE.  
+**Runtime promotion:** NOT AUTHORIZED / SEPARATE GOVERNED DECISION.
