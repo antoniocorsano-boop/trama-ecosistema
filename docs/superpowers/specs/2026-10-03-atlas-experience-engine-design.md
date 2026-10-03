@@ -1,7 +1,7 @@
 # Atlas Experience Engine v1 — Design Specification
 
 **Date:** 2026-10-03  
-**Status:** DESIGN_DIRECTION_APPROVED / SPEC_PENDING_HUMAN_REVIEW  
+**Status:** SPEC_APPROVED / IMPLEMENTATION_PLAN_IN_PREPARATION  
 **Authority:** TRAMA cross-ecosystem design specification  
 **Runtime:** NOT_RUNTIME_AUTHORIZED  
 **Implementation:** NOT_STARTED_BY_THIS_SPEC  
@@ -9,7 +9,8 @@
 **Arena authority:** unchanged  
 **Atlas publication role:** unchanged  
 **Docente OS role:** teacher-first operational consumer  
-**DOS-A1:** RUNTIME_DEFERRED
+**DOS-A1:** RUNTIME_DEFERRED  
+**Human review:** APPROVED 2026-10-03 — implementation planning authorized; runtime/merge remain separate decisions
 
 ---
 
