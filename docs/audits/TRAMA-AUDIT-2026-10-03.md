@@ -71,6 +71,18 @@ Gli SHA abbreviati sotto sono quelli riportati dall'audit originario; non utiliz
 | A40 | R4-P2 Professional Practice | Design autorizzato | Nessuna chiusura runtime |
 | A41 | R5 nome/marca/adozione | Pianificati | Dossier dati personali, formazione, assistenza, costi, domanda e pilota istituto da completare |
 
+## 4-bis. Delta verificato dopo l'audit — 3 ottobre 2026
+Questo delta aggiorna lo stato operativo senza riscrivere le risultanze storiche A01–A41.
+
+- Docente OS `develop` è a `0b498c0ff399310cc5f4a51c491051fd7b1a1d02`.
+- Le PR Docente OS #654, #656 e #658–#669 risultano integrate; il filone Orario ha quindi già acquisito unificazione upload/Share Target, separazione consultazione/aggiornamento/gestione, regressione sul PDF reale, percorso raster, OCR locale browser, timetable mobile prioritaria e rebaseline DOS-CRM.
+- La candidata `0.1.0-rc.1` è congelata sullo SHA esatto `efc31ed084da9cc6fe495ac6403151c3361f428a`. Il tag `v0.1.0-rc.1` esiste, risolve a quello SHA e la GitHub prerelease è pubblicata.
+- Il confronto `efc31ed… → develop@0b498c0…` mostra due commit successivi e modifiche soltanto a `CHANGELOG.md`, note di release e manifesto RC: nessuna modifica al codice prodotto.
+- Docente OS #670 è una proposta documentale separata per riallineare manifesto/note/changelog allo stato GitHub già verificato; fino all'integrazione resta proposta, non stato canonico del ramo `develop`.
+- P1 non richiede un terzo ramo funzionale dell'Orario. La condizione di uscita corrente è la validazione reale dell'exact RC: PDF raster reale → OCR locale → docente → 14 lezioni attese → revisione → conferma → persistenza, insieme a installazione PWA e Share Target Android con app aperta/chiusa.
+- #652 e #653 restano rami storici concorrenti: non vanno integrati in blocco. Prima della chiusura va completato il confronto di salvage per eventuali test o comportamenti unici.
+- La pubblicazione della RC non equivale a `CERTIFIED` né a `PROMOTED`; la promozione Production resta fuori dal perimetro e richiede una decisione separata.
+
 ## 5. Quattro problemi trasversali
 F01 Duplicazioni: #652/#653 orario e distribuzioni Docente OS concorrenti; Voice e legacy da confrontare prima di eliminarli. /legacy/ è un ripiego intenzionale, non una duplicazione da rimuovere automaticamente.
 F02 PR superate: #652 dichiarata sostituita; #187 da riconciliare con G5-A/B integrati; #194 draft dopo cutover da verificare. Non chiudere PR con contenuti ancora unici.
@@ -195,7 +207,7 @@ Campi obbligatori di ogni aggiornamento: ID Axx/Px; requisito; repository/ramo/S
 Aggiornare dopo integrazione, distribuzione, prova materiale o nuovo blocco. Una modifica di contratto o autorità segue GOVERNANCE.md; una correzione ordinaria procede nel perimetro già autorizzato.
 Baseline immutabile nel significato storico: versioni successive aggiungono variazioni e prove, non cancellano fallimenti o riscrivono la data dell'audit.
 Nessuna issue/PR obsoleta viene chiusa solo perché elencata qui: prima confronto contenuto e prove, poi azione documentata.
-Prima attività esecutiva: allinearsi al lavoro attivo su #653 e identificare versione Beta reale; P2 può essere una correzione circoscritta senza duplicare quel lavoro.
+Prima attività esecutiva aggiornata dal delta 4-bis: validare la RC esatta `v0.1.0-rc.1` sul percorso Android/PWA/Share Target e completare il salvage di #652/#653 senza integrarli; P2 può procedere in parallelo come correzione circoscritta.
 
 ## 9. Verifica del piano
 Copertura: A01–A41 incluse; F01–F04 collegati a P1/P3/P4/P5/P6; differimenti conservati in P8. Le condizioni di revisione sono assegnate a P1/P2/P3/P5.
