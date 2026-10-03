@@ -1,7 +1,7 @@
 # Atlas Experience Engine v1 — Design Specification
 
 **Date:** 2026-10-03  
-**Status:** DESIGN_APPROVED / PROPOSED_FOR_IMPLEMENTATION_PLANNING  
+**Status:** DESIGN_DIRECTION_APPROVED / SPEC_PENDING_HUMAN_REVIEW  
 **Authority:** TRAMA cross-ecosystem design specification  
 **Runtime:** NOT_RUNTIME_AUTHORIZED  
 **Implementation:** NOT_STARTED_BY_THIS_SPEC  
@@ -903,9 +903,10 @@ A future implementation plan must cite exact current heads before changing any o
 
 ## 34. Human-review boundary
 
-Approval of this design means:
+The conceptual direction approved on 2026-10-03 means:
 
-- the architecture may be formalized and implementation planning may begin;
+- this written specification may be formalized and reviewed;
+- implementation planning begins only after explicit human review of this written specification;
 - existing runtime status does not change;
 - existing authority status does not change;
 - no student release is authorized;
