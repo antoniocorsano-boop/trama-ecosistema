@@ -113,19 +113,18 @@ Therefore no status-only promotion is permitted.
 
 ## 6. Canonical remediation sequence
 
-### RRT-02 — Freeze candidate identities and publication metadata
+### RRT-02 — Define publication identity targets without freezing runtime head
 
-For each pathway, define a complete candidate binding without public exposure:
+For each pathway, define the non-authorizing publication metadata needed by the later runtime candidate:
 
-- exact Atlas runtime head;
 - immutable content version;
-- publication ID;
-- `publicationState=QUALIFIED` only after governed admission;
+- stable publication ID;
 - authority reference;
 - intended non-lab public route;
-- surface artifact digest.
+- qualification contract version;
+- publication target state `QUALIFIED`.
 
-No `RUNTIME_AUTHORIZED` field may be introduced.
+At this stage `runtimeExactHead` and `surfaceArtifactDigest` are intentionally **not frozen**, because RRT-03 still changes the runtime surface. No `RUNTIME_AUTHORIZED` field may be introduced and no public exposure is enabled.
 
 ### RRT-03 — Materialize the sealed preauthorization surface
 
@@ -133,9 +132,16 @@ Implement the real `SEALED_PREAUTH` adapter/runner and candidate route boundary 
 
 Activation after a future Q9 must be activation-only; rebuild/content/route changes invalidate Q1.
 
-### RRT-04 — Produce exact-identity automated receipts
+### RRT-04 — Freeze RuntimeCandidateIdentity and produce exact-identity automated receipts
 
-Execute candidate-bound Q2, Q3, Q5, Q6 and Q7 evidence, including:
+After RRT-03 code/routes are final and green:
+
+- freeze exact `runtimeExactHead`;
+- compute/bind the `surfaceArtifactDigest`;
+- bind pathway ID, content version and publication ID into one immutable candidate identity;
+- execute candidate-bound Q2, Q3, Q5, Q6 and Q7 evidence.
+
+Evidence includes:
 
 - network capture;
 - storage/reset/offline matrix;
@@ -187,4 +193,4 @@ This review does not:
 
 ## 8. Next canonical tranche
 
-Proceed with **RRT-02** first, for both candidates, because every later Q gate depends on stable identity/publication metadata. RRT-02 is preparatory and reversible and must end at `QUALIFIED / NOT_RUNTIME_AUTHORIZED` at most.
+Proceed with **RRT-02** first, for both candidates, to define stable publication metadata and intended public route targets without freezing `runtimeExactHead`. Freeze of the exact runtime identity occurs only after RRT-03 has materialized the final preauthorization surface. RRT-02 is preparatory and reversible and must remain `NOT_RUNTIME_AUTHORIZED`.
