@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.governed-document-registry/v1",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-03",
   "policy": {
     "purpose": "Durable index of foundational and normative TRAMA documents used by Project Knowledge and development continuity.",
     "chatIsAuthority": false,
@@ -1742,6 +1742,27 @@
         "HUMAN_DECISION",
         "RUNTIME_AUTHORIZATION_CHANGE",
         "DOS_A1_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-ATLAS-PERCORSI-STUDENT-LIBRARY-PRODUCT-CONTRACT",
+      "path": "docs/capabilities/atlas-percorsi/product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "atlas-percorsi",
+        "student-library",
+        "pathway-authoring",
+        "learner-local-growth",
+        "development-continuity"
+      ],
+      "dependsOn": [],
+      "updateTriggers": [
+        "ATLAS_PERCORSI_PRODUCT_CONTRACT_CHANGE",
+        "PATHWAY_AUTHORING_WORKFLOW_CHANGE",
+        "LOCAL_GROWTH_MODEL_CHANGE",
+        "TERRITORY_GOVERNANCE_CHANGE"
       ]
     }
   ]

@@ -18,6 +18,7 @@ Single entry point for understanding current authority, experiments and open con
 | error / relational agents / emotion screening | `research/common/error-relational-agents-emotion-screening-v1.md` | ACTIVE SCREENING |
 | C3/C11/C16 normalised evidence | `research/evidence/error-agent-emotion-records-v1.yaml` | ACTIVE NORMALISATION; C3/C16 strengthened; C11 precautionary constitutional stop supported by direct child evidence |
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
+| student library product contract | `../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md` | PRODUCT_RECOVERY_CANDIDATE / NOT_RUNTIME_AUTHORIZED — binds the recovery/authoring process to PR #96 artefacts; recovered territory taxonomy remains CANDIDATE / NOT_APPROVED |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
 | experiential grammar registry | `grammars/registry.yaml` | CANONICAL registry; entries remain `research` |
