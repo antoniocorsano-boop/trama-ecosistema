@@ -86,6 +86,10 @@ Nothing in this index, constitution, review contract or evidence normalisation a
 ## Recently completed consolidation
 - `PW-MISSING-INFORMATION-01` now has a named dossier, question inventory and child-agent/data-flow declaration; `constitutional-review-g1-v2.md` records the second constitutional document review as `DOCUMENT_PASS / HUMAN_VALIDATION_PENDING`. Do not repeat this document-remediation step unless a material-change trigger reopens it.
 
+
+## Proposed pathway candidates
+- `PW-CONSTRAINTS-TRADEOFFS-01` — **Una soluzione, molti vincoli**: `pathways/PW-CONSTRAINTS-TRADEOFFS-01/dossier-v1.md` — `PROPOSED / AUTHORITY_REVIEW_REQUIRED / NOT_RUNTIME_AUTHORIZED`. Candidate second generality proof for the shared Experience Engine; no Atlas portfolio registration is authorized before exact-head Human Review.
+
 ## Open consolidation queue
 1. Deepen direct child/teen generative-agent evidence: LLMs, text/voice agents, calibrated trust, disclosure, parasociality/dependency, longitudinal exposure and lower-secondary developmental differences.
 2. Separate and normalise primary/lower-secondary feedback evidence and higher-quality school-age SEL meta-analyses with implementation moderators.
