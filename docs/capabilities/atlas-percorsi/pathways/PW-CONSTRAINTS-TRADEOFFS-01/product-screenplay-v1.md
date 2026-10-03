@@ -159,18 +159,23 @@ This scene externalises the strategy. It does not add a new badge by itself.
 
 ### C7 — NEW DESIGN SURFACE / TRANSFER
 
-New context: a school group must create a **portable exhibition stand** for a corridor/event. The object and immediate constraints differ: portability, available space, setup time, material reuse.
+New context: a school group must create a **portable exhibition stand** for a corridor/event. The object and immediate constraints differ: portability, available space, setup time and material reuse.
+
+The bounded transfer brief states that:
+- the stand must pass through a narrow doorway and be assembled quickly;
+- reusable panels are already available;
+- some display area may be sacrificed if that protects portability, setup time and reuse.
 
 Prompt:
-> “Che cosa trasferisci dal progetto precedente?”
+> “Quale scelta applica il metodo ai nuovi vincoli, rendendo esplicito il compromesso?”
 
-Qualifying:
-> “Riparto dai nuovi vincoli, collego alternative e conseguenze e sono pronto a rivedere la soluzione.”
+Qualifying application:
+> “Uso pannelli modulari più piccoli e riutilizzabili: accetto meno superficie espositiva per facilitare trasporto e montaggio.”
 
-Non-qualifying:
+Non-qualifying response:
 > “Copio la soluzione del cortile perché ha già funzionato.”
 
-The qualifying transition earns:
+The qualifying transition is a **changed-context design decision**, not a repetition of the method named in C6. Only this applied decision earns:
 
 **Traguardo:** “Trasferisco il metodo di progetto in una nuova situazione.”  
 **Stage:** `TRANSFERS_TO_NEW_SITUATION`.
@@ -210,7 +215,7 @@ Avoid:
 |---|---|---|
 | explicit trade-off | C3A qualifying OR C3B qualifying | BEGINNING_TO_RECOGNISE |
 | revise after changed requirement | C5A qualifying OR C5B qualifying | CHOOSES_WHEN_TO_USE |
-| transfer design method | C7 qualifying | TRANSFERS_TO_NEW_SITUATION |
+| transfer design method | C7 qualifying applied design decision | TRANSFERS_TO_NEW_SITUATION |
 
 Arrival at a scene, pathway completion, time-on-task and route choice alone are not achievement evidence.
 
