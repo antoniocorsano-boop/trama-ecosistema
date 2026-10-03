@@ -4,7 +4,7 @@
 **State:** IMPLEMENTATION_QUALIFIED / NOT_RUNTIME_AUTHORIZED  
 **Atlas repository:** `antoniocorsano-boop/Curriculum-Atlas`  
 **Atlas PR:** #69 — Draft  
-**Exact implementation head:** `bfa9746e81fb413133887742a4825eeba7fa90f9`  
+**Exact implementation head:** `5227c5200b46c91230e66f7fe3a917666c8c77fb`  
 **TRAMA design/plan source:** PR #216 @ `aef2df1642f5b68728ae82ac63c002ca142b6f1a`  
 **TRAMA second-pathway authority:** PR #217 @ `81534e352396ad858c7cf5ee00c7ec3b0756ae64`  
 **Audit source:** PR #215 @ `0a215b2b536eb79fec338c8e64e1c7134f2d8f74`  
@@ -30,10 +30,10 @@ The second Percorso exercises the governed primitive sequence `EXPLORE → CONNE
 
 ## 3. Canonical CI evidence on exact Atlas head
 
-Primary canonical lane:
+Primary current-head canonical lane:
 
-- **Experience Engine / pull_request:** run **37144151493** — PASS.
-- **Experience Engine / push:** run **37144148146** — PASS.
+- **Experience Engine / push:** run **37144776481** — PASS on exact head `5227c5200b46c91230e66f7fe3a917666c8c77fb`.
+- The previous pull-request qualification run **37144151493** and push run **37144148146** were PASS on immediate predecessor `bfa9746e81fb413133887742a4825eeba7fa90f9` before synchronizing one unrelated `main` commit.
 
 The canonical lane executes and passed:
 
@@ -51,11 +51,16 @@ The canonical lane executes and passed:
 12. production build;
 13. Chromium browser conformance.
 
-Run URLs:
+Current exact-head run URL:
+- https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/37144776481
+
+Pre-sync qualification run URLs:
 - https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/37144151493
 - https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/37144148146
 
-## 4. Additional exact-head evidence
+## 4. Additional evidence from the immediate predecessor
+
+The following workflows passed on `bfa9746e81fb413133887742a4825eeba7fa90f9`, the immediate predecessor of the current implementation head. The synchronization delta to `5227c5200b46c91230e66f7fe3a917666c8c77fb` contains only main commit `d3e8a8f7d07c6f90703a180614a170b2cd899aa6`, which changes `.github/workflows/arena-curriculum-sync.yml` by setting `package-manager-cache: false`; it does not modify Experience Engine, Percorsi, Smart, runtime, catalog, receipt, mobile/LIM or visual-evidence implementation files. These runs are therefore retained as supporting evidence, but are not mislabeled as current exact-head runs.
 
 | Evidence | Run | Result |
 |---|---:|---|
@@ -88,7 +93,7 @@ Neither known Percorso is promoted to public student runtime by this evidence. T
 
 ## 6. Smart publication receipt reconciliation
 
-The exact-head canonical lane passed the receipt reconciliation regression suite. The tests demonstrate that:
+The current exact-head canonical Experience Engine lane (run `37144776481`) passed the receipt reconciliation regression suite. The tests demonstrate that:
 
 - a matching receipt updates the canonical MaterialSet and persists canonical receipt proof beside it;
 - the existing `humanDecisionRequired` flag remains true;

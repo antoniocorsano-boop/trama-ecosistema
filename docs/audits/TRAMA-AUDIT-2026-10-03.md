@@ -98,12 +98,12 @@ Questo delta aggiorna lo stato operativo senza riscrivere le risultanze storiche
 
 La riga A14 della fotografia iniziale resta storicamente **Parziale**. Dopo quella fotografia è stato prodotto e verificato il seguente avanzamento materiale:
 
-- **Atlas PR #69 exact head:** `bfa9746e81fb413133887742a4825eeba7fa90f9` — Draft, mergeable al momento della rilevazione.
+- **Atlas PR #69 exact head:** `5227c5200b46c91230e66f7fe3a917666c8c77fb` — Draft, mergeable al momento della rilevazione.
 - **Stato A14 aggiornato:** `IMPLEMENTATION_QUALIFIED / NOT_RUNTIME_AUTHORIZED`.
 - **Quattro casi di conformità dimostrati:** Smart SP-01 (`sistema-tecnologico`), Smart `fonte-digitale`, Percorso PW-MISSING e Percorso `pw-constraints-tradeoffs-01`.
 - **Autorità secondo Percorso:** TRAMA #217 exact head `81534e352396ad858c7cf5ee00c7ec3b0756ae64`, Human Review PASS limitato alla registrazione come implementation candidate.
-- **CI canonica Experience Engine:** run `37144151493` e run push `37144148146`, entrambi PASS sull'exact Atlas head.
-- **Evidenze aggiuntive sullo stesso head:** Percorsi Portfolio Factory `37144151492` PASS; Percorsi G2 Validator `37144151490` PASS; Percorsi G2 UX Collaudo `37144151545` PASS; Mobile/LIM `37144151548` PASS; Visual Evidence F1/F2/F3 `37144151528`/`37144151513`/`37144151523` PASS; TRAMA Perceptible Write `37144151506` PASS; Component Isolation R1 `37144151453` PASS.
+- **CI canonica Experience Engine:** run push `37144776481` PASS sull'exact Atlas head corrente; i run `37144151493` e `37144148146` restano prove PASS del predecessore immediato prima dell'allineamento a `main`.
+- **Evidenze aggiuntive sul predecessore immediato `bfa9746e81fb413133887742a4825eeba7fa90f9` (delta verso l'head corrente limitato al workflow Arena→Atlas):** Percorsi Portfolio Factory `37144151492` PASS; Percorsi G2 Validator `37144151490` PASS; Percorsi G2 UX Collaudo `37144151545` PASS; Mobile/LIM `37144151548` PASS; Visual Evidence F1/F2/F3 `37144151528`/`37144151513`/`37144151523` PASS; TRAMA Perceptible Write `37144151506` PASS; Component Isolation R1 `37144151453` PASS.
 - **Catalogo pubblico:** resta fail-closed per i Percorsi non autorizzati al runtime; nessuna route candidata deve diventare pubblicamente avviabile per effetto di questa qualificazione.
 - **Confini invariati:** nessun merge automatico, nessuna autorizzazione runtime studenti, nessun cambio di autorità Arena, nessuna promozione automatica Smart→Percorsi, `DOS-A1=RUNTIME_DEFERRED`.
 

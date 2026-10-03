@@ -24,7 +24,7 @@ Single entry point for understanding current authority, experiments and open con
 | pathway dossier | `templates/PATHWAY-DOSSIER-TEMPLATE.md` | CANONICAL template |
 | pathway `PW-CONSTRAINTS-TRADEOFFS-01` | `pathways/PW-CONSTRAINTS-TRADEOFFS-01/dossier-v1.md` | GOVERNED_PATHWAY_TARGET_APPROVED_FOR_IMPLEMENTATION_CANDIDATE / NOT_RUNTIME_AUTHORIZED — authority `TRAMA #217@81534e352396ad858c7cf5ee00c7ec3b0756ae64` |
 | backlog control | `workflow/backlog-zero-consolidation-plan-v1.md` | CANONICAL active plan |
-| Experience Engine v1 evidence | `../../../evidence/atlas-experience-engine-v1-evidence.md` | IMPLEMENTATION_QUALIFIED / NOT_RUNTIME_AUTHORIZED — Atlas #69 @ `bfa9746e81fb413133887742a4825eeba7fa90f9` |
+| Experience Engine v1 evidence | `../../../evidence/atlas-experience-engine-v1-evidence.md` | IMPLEMENTATION_QUALIFIED / NOT_RUNTIME_AUTHORIZED — Atlas #69 @ `5227c5200b46c91230e66f7fe3a917666c8c77fb` |
 
 ## Constitutional layer
 The Child-Safe Learning & Experience Constitution defines the non-negotiable G1 boundary. The Pathway Constitution Review Contract now translates C11 evidence into explicit authoring declarations and constitutional stops while preserving mandatory human review. Structural validity remains necessary but never sufficient for promotion.
@@ -86,7 +86,7 @@ Accidentally created `research/atlas-percorsi-*` refs remain **NON-CANONICAL / A
 Nothing in this index, constitution, review contract or evidence normalisation authorises child-facing runtime implementation or publication. `Runtime: NOT_AUTHORIZED` remains governing state.
 
 ## Recently completed consolidation
-- Atlas Experience Engine v1 has a four-case generality proof on exact Atlas head `bfa9746e81fb413133887742a4825eeba7fa90f9`: SP-01 compatibility, `fonte-digitale`, PW-MISSING compatibility and `pw-constraints-tradeoffs-01`. Canonical CI, build and browser conformance are PASS; this is implementation qualification only.
+- Atlas Experience Engine v1 has a four-case generality proof on exact Atlas head `5227c5200b46c91230e66f7fe3a917666c8c77fb`: SP-01 compatibility, `fonte-digitale`, PW-MISSING compatibility and `pw-constraints-tradeoffs-01`. Canonical CI, build and browser conformance are PASS; this is implementation qualification only.
 - `PW-CONSTRAINTS-TRADEOFFS-01` received exact-head Human Review for Atlas implementation-candidate registration on TRAMA #217 @ `81534e352396ad858c7cf5ee00c7ec3b0756ae64`; student runtime remains NOT_AUTHORIZED.
 
 - `PW-MISSING-INFORMATION-01` now has a named dossier, question inventory and child-agent/data-flow declaration; `constitutional-review-g1-v2.md` records the second constitutional document review as `DOCUMENT_PASS / HUMAN_VALIDATION_PENDING`. Do not repeat this document-remediation step unless a material-change trigger reopens it.
