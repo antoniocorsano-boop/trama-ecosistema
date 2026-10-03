@@ -80,8 +80,9 @@ Questo delta aggiorna lo stato operativo senza riscrivere le risultanze storiche
 - Il confronto `efc31ed… → develop@0b498c0…` mostra due commit successivi e modifiche soltanto a `CHANGELOG.md`, note di release e manifesto RC: nessuna modifica al codice prodotto.
 - Docente OS #670 è una proposta documentale separata per riallineare manifesto/note/changelog allo stato GitHub già verificato; fino all'integrazione resta proposta, non stato canonico del ramo `develop`.
 - P1 non richiede un terzo ramo funzionale dell'Orario. La condizione di uscita corrente è la validazione reale dell'exact RC: PDF raster reale → OCR locale → docente → 14 lezioni attese → revisione → conferma → persistenza, insieme a installazione PWA e Share Target Android con app aperta/chiusa.
-- #652 e #653 restano rami storici concorrenti: non vanno integrati in blocco. Prima della chiusura va completato il confronto di salvage per eventuali test o comportamenti unici.
+- #652 e #653 sono stati sottoposti a salvage e chiusi come `SUPERSEDED`, senza merge. #653 è superato dalla pipeline local-first/OCR già integrata; da #652 è stato preservato in #649 soltanto il finding UX condizionale su stato di avanzamento molto visibile e anteprima compatta, da usare solo se la prova RC riproduce ancora il difetto.
 - La pubblicazione della RC non equivale a `CERTIFIED` né a `PROMOTED`; la promozione Production resta fuori dal perimetro e richiede una decisione separata.
+- Arena→Atlas: il run schedulato `37110196676` è stato riesaminato e fallisce in `actions/setup-node@v5` perché la cache automatica tenta di invocare pnpm, pur non essendoci alcun comando pnpm nel job. Atlas #67 propone il fix minimo `package-manager-cache: false`; è una draft PR, non ancora integrata. La regressione di configurazione è stata riprodotta RED e verificata GREEN sul blocco workflow esatto.
 
 ## 5. Quattro problemi trasversali
 F01 Duplicazioni: #652/#653 orario e distribuzioni Docente OS concorrenti; Voice e legacy da confrontare prima di eliminarli. /legacy/ è un ripiego intenzionale, non una duplicazione da rimuovere automaticamente.
