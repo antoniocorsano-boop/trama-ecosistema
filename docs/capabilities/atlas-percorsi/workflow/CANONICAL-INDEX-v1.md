@@ -25,6 +25,7 @@ Single entry point for understanding current authority, experiments and open con
 | pathway `PW-CONSTRAINTS-TRADEOFFS-01` | `pathways/PW-CONSTRAINTS-TRADEOFFS-01/dossier-v1.md` | GOVERNED_PATHWAY_TARGET_APPROVED_FOR_IMPLEMENTATION_CANDIDATE / NOT_RUNTIME_AUTHORIZED — authority `TRAMA #217@81534e352396ad858c7cf5ee00c7ec3b0756ae64` |
 | backlog control | `workflow/backlog-zero-consolidation-plan-v1.md` | CANONICAL active plan |
 | Experience Engine v1 evidence | `../../../evidence/atlas-experience-engine-v1-evidence.md` | IMPLEMENTATION_QUALIFIED / NOT_RUNTIME_AUTHORIZED — integrated: Atlas #69 → `d51da8bc6a71ee43a8d5f2cd71c51151fa591196`; TRAMA #219 → `c393959a7951c40198fcea21c284dde4906a6a5d` |
+| Runtime Readiness Review RRT-01 | `../../../evidence/atlas-percorsi-runtime-readiness-review-2026-10-03.md` | REVIEW_COMPLETE / REMEDIATION_REQUIRED / NOT_RUNTIME_AUTHORIZED — next tranche RRT-02 |
 
 ## Constitutional layer
 The Child-Safe Learning & Experience Constitution defines the non-negotiable G1 boundary. The Pathway Constitution Review Contract now translates C11 evidence into explicit authoring declarations and constitutional stops while preserving mandatory human review. Structural validity remains necessary but never sufficient for promotion.
