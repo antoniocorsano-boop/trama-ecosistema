@@ -152,7 +152,11 @@ Review should check:
 
 This review does **not** decide runtime promotion.
 
-## 12. Decision recorded
+## 12. Product screenplay candidate
+
+The learner-facing product screenplay is specified in `product-screenplay-v1.md`. It instantiates the approved implementation-candidate target as a lower-secondary design-studio experience with explicit trade-off, changed-requirement revision, transfer and bounded local-growth evidence. This reference does not change runtime authority.
+
+## 13. Decision recorded
 
 Recorded state:
 
