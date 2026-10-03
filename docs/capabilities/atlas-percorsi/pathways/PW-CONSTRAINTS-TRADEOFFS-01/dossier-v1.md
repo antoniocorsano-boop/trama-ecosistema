@@ -1,10 +1,11 @@
 # PW-CONSTRAINTS-TRADEOFFS-01 — Una soluzione, molti vincoli
 
 **Gate:** G1 — proposal for governed pathway registration  
-**Status:** PROPOSED / HUMAN_REVIEW_PENDING / NOT_RUNTIME_AUTHORIZED  
+**Status:** GOVERNED_PATHWAY_TARGET_APPROVED_FOR_IMPLEMENTATION_CANDIDATE / NOT_RUNTIME_AUTHORIZED  
 **Developmental band:** LOWER_SECONDARY_CANDIDATE / HUMAN_VALIDATION_REQUIRED  
 **Territories:** `design`, `world`  
-**Runtime:** NOT_AUTHORIZED
+**Runtime:** NOT_AUTHORIZED  
+**Registration Human Review:** PASS on proposal exact head `81534e352396ad858c7cf5ee00c7ec3b0756ae64` in TRAMA PR #217; implementation-candidate registration only
 
 ## 1. Purpose
 
@@ -134,9 +135,11 @@ No `pw-constraints-tradeoffs-01` literal may enter generic engine/composer/workf
 
 The generality proof fails if pathway-specific engine infrastructure is needed.
 
-## 11. Human Review questions
+## 11. Registration Human Review record
 
-Human Review should decide only whether this exact proposal is suitable to become a governed **Atlas implementation candidate**.
+The exact proposal head `81534e352396ad858c7cf5ee00c7ec3b0756ae64` received Human Review PASS in TRAMA PR #217 for the narrow purpose of becoming a governed **Atlas implementation candidate**.
+
+The review criteria were:
 
 Review should check:
 
@@ -149,13 +152,11 @@ Review should check:
 
 This review does **not** decide runtime promotion.
 
-## 12. Decision requested
+## 12. Decision recorded
 
-Requested state after a PASS:
+Recorded state:
 
 `GOVERNED_PATHWAY_TARGET_APPROVED_FOR_IMPLEMENTATION_CANDIDATE / NOT_RUNTIME_AUTHORIZED`
 
-If approved, Atlas may register `pw-constraints-tradeoffs-01` with the exact TRAMA authority head and proceed with the second-pathway generality proof.
-
-Until that exact-head decision exists, Atlas must continue to reject this pathway as unregistered.
+Atlas may register `pw-constraints-tradeoffs-01` only with the exact TRAMA authority head above and may use it for the governed second-pathway generality proof. Any public/student runtime promotion remains separately governed.
 
