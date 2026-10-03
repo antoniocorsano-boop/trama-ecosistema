@@ -31,6 +31,7 @@
 - Preserve existing SP-01 and G2 behavior while adapting them to the shared contracts; no rewrite for architectural purity alone.
 - Generic engine/factory files must not contain literals for `sistema-tecnologico`, `pw-missing-information-01`, or the two generality-proof cases.
 - No new third-party runtime dependency is required for v1; follow the repository's current custom-validator pattern.
+- SMART-FLOW F0 natural-language interpretation stays in the agent/chat layer and must serialize to a governed `SmartActivityIntent`; Atlas must not embed a hidden LLM parser. Repository automation starts from validated intent/plan artifacts and carries them deterministically through the technical stages.
 
 ## Review Focus
 
@@ -59,6 +60,7 @@
 
 ### Governance/registries
 - Create `governance/experience-grammar-registry.json` — exactly seven cognitive primitives.
+- Create `governance/experience-qualification-profiles.json` — canonical `SMART_FAST_V1` and `PATHWAY_G2_PLUS_V1` requirements.
 - Modify `governance/percorsi-grammar-registry.json` — retain the eleven current labels as Presentation Grammar research/production strategies, not cognitive engines.
 - Modify `governance/percorsi-portfolio.json` only after the second Percorso receives governed TRAMA authority evidence.
 
@@ -77,6 +79,9 @@
 - Create `scripts/test-experience-contracts.mjs`.
 - Create `scripts/test-experience-grammar-registry.mjs`.
 - Create `scripts/test-experience-factory.mjs`.
+- Create `schemas/smart-activity-intent.schema.json` and `schemas/smart-activity-plan.schema.json` — machine-readable F0/F1 outputs.
+- Create `schemas/smart-flow-package.schema.json` — stage-linked F0→F10 package with explicit deferred states where a governed stage is not authorized.
+- Create `scripts/build-smart-flow-package.mjs` — deterministic F0/F1 artifact → experience/material package assembler and F10 status derivation.
 - Create `scripts/test-smart-flow.mjs` as the generic Smart qualification runner.
 - Create `scripts/test-experience-generality.mjs`.
 - Create `playwright.config.ts`.
@@ -106,7 +111,8 @@
 - Produces `validateChallengeKernel(value) -> { valid: boolean, errors: string[] }`.
 - Produces `validateExperienceDefinition(value) -> { valid: boolean, errors: string[] }`.
 - Produces `validateExperienceGraph(graph, { mode }) -> { valid: boolean, errors: string[] }`.
-- TypeScript exports: `ChallengeKernel`, `ExperienceDefinition`, `ExperienceMode`, `ExperiencePrimitive`, `RuntimeStatePolicy`.
+- TypeScript exports: `ChallengeKernel`, `ExperienceDefinition`, `ExperienceMode`, `ExperiencePrimitive`, `RuntimeStatePolicy`, `FeedbackCategory`.
+- `FeedbackCategory` is exactly `EVIDENCE_SUPPORTED | EVIDENCE_INCOMPLETE | DECISION_PREMATURE | ALTERNATIVE_PLAUSIBLE | MODEL_NEEDS_REVISION | TRANSFER_SUCCESSFUL`.
 
 - [ ] **Step 1: Write the failing contract tests.**
 
@@ -118,7 +124,9 @@ Assertions must prove:
 - `telemetryAllowed` must be `false`;
 - unknown transition targets fail;
 - a PATHWAY without at least one `TRANSFER` scene fails;
-- a SMART experience may be linear.
+- a SMART experience may be linear;
+- a ChallengeKernel requires `situation`, `generativeQuestion`, competence targets, evidence model, decision model, transfer principle, completion evidence and provenance refs;
+- feedback category values outside the six spec-defined categories fail.
 
 - [ ] **Step 2: Run the tests and verify they fail.**
 
@@ -149,10 +157,11 @@ git commit -m "feat(atlas): add experience engine contracts"
 
 ---
 
-### Task 2: Separate cognitive Experience Grammar from Presentation Grammar
+### Task 2: Separate cognitive Experience Grammar from Presentation Grammar and formalize qualification profiles
 
 **Files:**
 - Create: `governance/experience-grammar-registry.json`
+- Create: `governance/experience-qualification-profiles.json`
 - Modify: `governance/percorsi-grammar-registry.json`
 - Create: `scripts/test-experience-grammar-registry.mjs`
 - Modify: `package.json`
@@ -160,11 +169,12 @@ git commit -m "feat(atlas): add experience engine contracts"
 **Interfaces:**
 - `experience-grammar-registry.json` is canonical for the seven cognitive primitive IDs.
 - `percorsi-grammar-registry.json` retains the eleven current narrative labels as presentation strategies.
-- Task 3 consumes both registries.
+- `experience-qualification-profiles.json` defines `SMART_FAST_V1` and `PATHWAY_G2_PLUS_V1` without carrying runtime authority.
+- Task 3 consumes the grammar registries; Smart/Percorsi qualification tests consume the profile registry.
 
 - [ ] **Step 1: Write the failing registry test.**
 
-Assert exactly seven unique cognitive primitive IDs and that none of the eleven existing presentation IDs appears as a cognitive primitive.
+Assert exactly seven unique cognitive primitive IDs and that none of the eleven existing presentation IDs appears as a cognitive primitive. Assert exactly two qualification profile IDs, with `PATHWAY_G2_PLUS_V1` requiring meaningful branching, transfer, provenance, accessibility evidence and explicit runtime authorization before student release, while `SMART_FAST_V1` requires anonymous load/no learner write/mobile+desktop/keyboard/material verification.
 
 - [ ] **Step 2: Run the test and verify failure.**
 
@@ -173,7 +183,7 @@ Expected: FAIL because the cognitive registry does not exist/current registry is
 
 - [ ] **Step 3: Create the cognitive registry and reclassify the current Percorsi registry.**
 
-Preserve all eleven current labels and provenance; change their semantics/status to Presentation Grammar. Do not create eleven renderers.
+Preserve all eleven current labels and provenance; change their semantics/status to Presentation Grammar. Do not create eleven renderers. Add the two qualification profiles as testable requirements, but do not store PASS/FAIL state inside the profile registry.
 
 - [ ] **Step 4: Add registry validation to `validateExperienceDefinition`.**
 
@@ -260,7 +270,7 @@ git commit -m "refactor(atlas): generalize experience candidate factory"
 
 - [ ] **Step 1: Write Playwright tests before the component exists.**
 
-Cover keyboard completion, focus moving to the new scene heading, feedback `role=status`, restart, corrupt-localStorage recovery, and mobile viewport 390×844.
+Cover keyboard completion, focus moving to the new scene heading, feedback `role=status`, restart, corrupt-localStorage recovery, mobile viewport 390×844, 200% zoom/reflow without horizontal task loss, and `prefers-reduced-motion: reduce` without loss of essential information.
 
 - [ ] **Step 2: Add the network-write guard test.**
 
@@ -273,7 +283,7 @@ Expected: FAIL because the conformance route/runtime is absent.
 
 - [ ] **Step 4: Implement the minimal shared runtime/session engine.**
 
-Support v1 interaction shapes needed by the conformance cases: choice, text response, continue/review, terminal summary. Primitive controls cognition; interaction shape controls the UI widget.
+Support v1 interaction shapes needed by the conformance cases: choice, text response, continue/review, terminal summary. Primitive controls cognition; interaction shape controls the UI widget. Feedback rendered by the runtime must carry one of the six canonical `FeedbackCategory` values and may not expose a hidden score.
 
 - [ ] **Step 5: Run runtime tests, typecheck and lint.**
 
@@ -292,6 +302,13 @@ git commit -m "feat(atlas): add shared experience runtime"
 ### Task 5: Adapt SP-01 to the shared engine and remove the Smart-flow special case
 
 **Files:**
+- Create: `schemas/smart-activity-intent.schema.json`
+- Create: `schemas/smart-activity-plan.schema.json`
+- Create: `schemas/smart-flow-package.schema.json`
+- Create: `scripts/build-smart-flow-package.mjs`
+- Create: `content/smart-activities/sistema-tecnologico/intent.v1.json`
+- Create: `content/smart-activities/sistema-tecnologico/plan.v1.json`
+- Create: `content/smart-activities/sistema-tecnologico/flow-package.v1.json`
 - Create: `content/experience-kernels/smart/sistema-tecnologico.v1.json`
 - Create: `content/experiences/smart/sistema-tecnologico.v1.json`
 - Create: `scripts/test-smart-flow.mjs`
@@ -302,16 +319,19 @@ git commit -m "feat(atlas): add shared experience runtime"
 - Modify: `package.json`
 
 **Interfaces:**
-- Generic CLI: `node scripts/test-smart-flow.mjs --experience <experience.json> --material-set <material-set.json>`.
+- `SmartActivityIntent` is the governed F0 output; `SmartActivityPlan` is the governed F1 output.
+- `SmartFlowPackage` links F0→F10 stage evidence and may mark F5/F8 as `DEFERRED_NOT_AUTHORIZED` only when the governing contract makes that stage conditional; it may never translate an unresolved required F5 into `Pronto`.
+- Generic CLI: `node scripts/test-smart-flow.mjs --flow-package <flow-package.json>`.
+- `buildSmartFlowPackage({ intent, plan, experience, materialSet, qualificationProfile })` derives the technical package and F10 teacher status (`Pronto | Da verificare | Da completare | Da rivedere`) from canonical evidence; it creates no second readiness engine.
 - `test-smart-flow-sp01.mjs` becomes a thin compatibility invocation, not a second validator.
 
 - [ ] **Step 1: Write failing compatibility assertions.**
 
-Assert SP-01 has seven learner steps represented through shared primitives/interactions, still uses `LOCAL_DEVICE`, and still points to the existing MaterialSet v2.
+Assert SP-01 has validated F0 intent + F1 plan artifacts, seven learner steps represented through shared primitives/interactions, still uses `LOCAL_DEVICE`, still points to the existing MaterialSet v2, and derives its teacher status from canonical MaterialSet/publication evidence.
 
 - [ ] **Step 2: Run current SP-01 qualification plus new compatibility test.**
 
-Run: `pnpm test:smart:sp01 && node scripts/test-smart-flow.mjs --experience content/experiences/smart/sistema-tecnologico.v1.json --material-set content/smart-activities/sistema-tecnologico/material-set.v2.json`  
+Run: `pnpm test:smart:sp01 && node scripts/test-smart-flow.mjs --flow-package content/smart-activities/sistema-tecnologico/flow-package.v1.json`  
 Expected before implementation: new command fails; legacy command still passes.
 
 - [ ] **Step 3: Create the kernel/experience definitions and adapt the page to `ExperienceRuntime`.**
@@ -320,7 +340,7 @@ Preserve the learner copy, local-only answers, summary, review and restart seman
 
 - [ ] **Step 4: Generalize Smart qualification.**
 
-Move all path-independent checks from `test-smart-flow-sp01.mjs` into `test-smart-flow.mjs`. The compatibility wrapper may contain the SP-01 paths; the generic script may not contain the activity ID.
+Move all path-independent checks from `test-smart-flow-sp01.mjs` into `test-smart-flow.mjs`. Add deterministic validation for F0 intent, F1 plan, F2–F7 refs, F8 conditional/deferred semantics, F9 qualification evidence and F10 status. The compatibility wrapper may contain the SP-01 paths; the generic script/build package may not contain the activity ID.
 
 - [ ] **Step 5: Run SP-01 regression and browser tests.**
 
@@ -388,6 +408,10 @@ git commit -m "refactor(atlas): run first Percorso on shared engine"
 **Case fixed by this plan:** `fonte-digitale` — **“Una fonte digitale è affidabile?”**
 
 **Files:**
+- Create: `content/smart-activities/fonte-digitale/request.md`
+- Create: `content/smart-activities/fonte-digitale/intent.v1.json`
+- Create: `content/smart-activities/fonte-digitale/plan.v1.json`
+- Create: `content/smart-activities/fonte-digitale/flow-package.v1.json`
 - Create: `content/experience-kernels/smart/fonte-digitale.v1.json`
 - Create: `content/experiences/smart/fonte-digitale.v1.json`
 - Create: `content/smart-activities/fonte-digitale/material-set.v1.json`
@@ -398,12 +422,13 @@ git commit -m "refactor(atlas): run first Percorso on shared engine"
 - Modify: `tests/experience-runtime.spec.ts`
 
 **Interfaces:**
+- The request fixture is ordinary teacher language; execution/agent reasoning must serialize it to the validated F0 intent and F1 plan without introducing an Atlas-side LLM parser.
 - Kernel exercises source/evidence/date/purpose checks and ends with transfer to a materially different digital source.
-- Uses the same `test-smart-flow.mjs`, asset registration/publication contracts and runtime; no new Smart-specific workflow or validator is allowed.
+- Uses the same `build-smart-flow-package.mjs`, `test-smart-flow.mjs`, asset registration/publication contracts and runtime; no new Smart-specific workflow or validator is allowed.
 
 - [ ] **Step 1: Write the generality test first.**
 
-The test must run the generic Smart qualification against both SP-01 and `fonte-digitale`, then scan `.github/workflows` and generic engine scripts to ensure there is no new `fonte-digitale`-specific workflow/branch.
+The test must validate the full stage-linked flow packages for both SP-01 and `fonte-digitale`, including F0/F1 artifacts, then scan `.github/workflows` and generic engine scripts to ensure there is no new `fonte-digitale`-specific workflow/branch. Before canonical deployment, F5 may be publication-pending and F10 must therefore remain `Da completare`/`Da verificare`, never `Pronto`.
 
 - [ ] **Step 2: Run and verify failure.**
 
@@ -416,7 +441,7 @@ The SVG must be self-hosted and pass the existing digest/publication path/proven
 
 - [ ] **Step 4: Run generic Smart and runtime tests.**
 
-Run: `node scripts/test-smart-flow.mjs --experience content/experiences/smart/fonte-digitale.v1.json --material-set content/smart-activities/fonte-digitale/material-set.v1.json && pnpm exec playwright test tests/experience-runtime.spec.ts --project=chromium`  
+Run: `node scripts/test-smart-flow.mjs --flow-package content/smart-activities/fonte-digitale/flow-package.v1.json && pnpm exec playwright test tests/experience-runtime.spec.ts --project=chromium`  
 Expected: PASS except canonical public receipt state before deployment; unresolved public refs must remain fail-closed/not-ready.
 
 - [ ] **Step 5: Run the generality test.**
@@ -502,13 +527,13 @@ git commit -m "test(atlas): prove pathway factory generality"
 - Modify: `tests/experience-runtime.spec.ts`
 
 **Interfaces:**
-- `loadPublicPathways() -> PublicPathwaySummary[]`.
+- `loadPublicPathways() -> PublicPathwaySummary[]`, where each summary carries title, version, provenance disclosure and availability state.
 - A pathway is public only when its existing governed PathwayDefinition/experience graph has `authorizationState === "RUNTIME_AUTHORIZED"`.
 - `IMPLEMENTATION_CANDIDATE`, `PROTOTYPE_ONLY`, missing authorization and lab-only entries return no launch URL.
 
 - [ ] **Step 1: Write failing catalog tests.**
 
-With both known pathways still unauthorized, assert the public page exposes zero “Inizia” links to lab/candidate routes and does not contain `/percorsi/lab/` anchors.
+With both known pathways still unauthorized, assert the public page exposes zero “Inizia” links to lab/candidate routes and does not contain `/percorsi/lab/` anchors. Add loader fixtures proving: authorized entries expose version/provenance; withdrawn entries render an unavailable state with no launch URL; missing provenance fails closed.
 
 - [ ] **Step 2: Add a positive fixture for the loader only.**
 
@@ -521,7 +546,7 @@ Expected: catalog-specific assertions fail before implementation.
 
 - [ ] **Step 4: Implement the catalog/loader and replace foundation copy.**
 
-When zero pathways are authorized, show a real empty state such as “Nessun percorso è ancora autorizzato per l’uso pubblico” plus explanatory copy; do not advertise candidate routes.
+When zero pathways are authorized, show a real empty state such as “Nessun percorso è ancora autorizzato per l’uso pubblico” plus explanatory copy; do not advertise candidate routes. For authorized entries show version/provenance in user-appropriate form; for withdrawn entries show a clear unavailable state and never a launch link.
 
 - [ ] **Step 5: Run browser/build tests.**
 
@@ -682,7 +707,7 @@ node scripts/test-experience-factory.mjs
 node scripts/test-percorsi-pathway-factory.mjs
 pnpm validate:smart
 pnpm test:smart:sp01
-node scripts/test-smart-flow.mjs --experience content/experiences/smart/fonte-digitale.v1.json --material-set content/smart-activities/fonte-digitale/material-set.v1.json
+node scripts/test-smart-flow.mjs --flow-package content/smart-activities/fonte-digitale/flow-package.v1.json
 pnpm validate:percorsi:g2
 node scripts/test-experience-generality.mjs
 node scripts/test-smart-publication-reconciliation.mjs
@@ -698,6 +723,7 @@ Then verify:
 - both Smart pages send no learner writes;
 - both Percorsi candidates remain `NOT_RUNTIME_AUTHORIZED`;
 - Smart receipt reconciliation is idempotent and only proposes a draft PR;
+- after canonical deploy + receipt reconciliation, the second Smart flow package can be re-evaluated to F10 `Pronto` only if all required publication evidence is resolved; before that it must remain non-ready;
 - no second readiness state exists;
 - DOS-A1 remains RUNTIME_DEFERRED.
 
