@@ -2,6 +2,7 @@ name: Visual Factory — Kaggle Executor v0.1
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     paths:
       - ".github/workflows/visual-factory-kaggle-executor.yml"
       - "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/KAGGLE-Q4-SMOKE-TEST-v0.1.ipynb"
@@ -28,6 +29,8 @@ jobs:
   contract:
     name: Validate executor contract
     runs-on: ubuntu-latest
+    outputs:
+      exact_head: ${{ steps.revision.outputs.exact_head }}
     timeout-minutes: 10
     steps:
       - name: Resolve source revision
@@ -116,14 +119,18 @@ jobs:
 
   execute:
     name: Execute one-shot on Kaggle T4
-    if: github.event_name == 'workflow_dispatch'
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' &&
+       github.event.action == 'labeled' &&
+       github.event.label.name == 'vf-kaggle-run')
     needs: contract
     runs-on: ubuntu-latest
     timeout-minutes: 150
     env:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
-      EXACT_HEAD: ${{ inputs.exact_head }}
+      EXACT_HEAD: ${{ needs.contract.outputs.exact_head }}
     steps:
       - name: Fail closed if Kaggle bootstrap is missing
         shell: bash
@@ -145,7 +152,7 @@ jobs:
       - name: Checkout exact source
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.exact_head }}
+          ref: ${{ needs.contract.outputs.exact_head }}
           fetch-depth: 1
 
       - name: Prepare execution workspace
