@@ -4,7 +4,13 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { STAGES, type PathwayProject } from "../lib/model";
 import { getProject, updateProject } from "../lib/store";
-import { canPrepareProduction } from "../lib/production";
+import { getProductionBlockers, prepareWaitingProduction } from "../lib/production";
+import {
+  ExperienceEditor,
+  SceneEditor,
+  StoryEditor,
+  WorldEditor,
+} from "./AuthoringEditors";
 
 export function PathwayWorkspace({ id }: { id: string }) {
   const [project, setProject] = useState<PathwayProject | null>(null);
@@ -32,13 +38,34 @@ export function PathwayWorkspace({ id }: { id: string }) {
     }
   }
 
-  function requestProduction() {
+  function patchProject(patch: Partial<PathwayProject>) {
     if (!project) return;
-    const updated = updateProject(project.projectId, {
-      humanState: "PRODUCTION",
-      productionState: "WAITING_FOR_COMPUTE",
-    });
-    setProject(updated);
+    setSaveState("saving");
+    try {
+      const updated = updateProject(project.projectId, patch);
+      setProject(updated);
+      setSaveState("saved");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
+  async function requestProduction() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const { request, receipt } = await prepareWaitingProduction(project);
+      const updated = updateProject(project.projectId, {
+        humanState: "PRODUCTION",
+        productionState: "WAITING_FOR_COMPUTE",
+        lastProductionRequest: request,
+        lastProductionReceipt: receipt,
+      });
+      setProject(updated);
+      setSaveState("saved");
+    } catch {
+      setSaveState("error");
+    }
   }
 
   if (!project) {
@@ -107,61 +134,32 @@ export function PathwayWorkspace({ id }: { id: string }) {
             </>
           )}
 
-          {stage === "Produzione" && (
-            <>
-              <h1>Trasforma le scene in un prodotto.</h1>
-              {project.productionState === "WAITING_FOR_COMPUTE" ? (
-                <div className="production-wait">
-                  <span className="status-dot" aria-hidden="true" />
-                  <div>
-                    <strong>Produzione in attesa</strong>
-                    <p>
-                      Non c’è al momento una risorsa gratuita qualificata disponibile.
-                      Il Percorso resta salvato e puoi continuare a lavorare sulle altre fasi.
-                    </p>
-                  </div>
-                </div>
-              ) : !canPrepareProduction(project) ? (
-                <>
-                  <p className="lead">
-                    La Factory lavora su scene già definite. Questo Percorso è ancora
-                    allo stato Idea, quindi non c’è nulla da inviare alla produzione.
-                  </p>
-                  <div className="production-wait">
-                    <span className="status-dot neutral" aria-hidden="true" />
-                    <div>
-                      <strong>Prima servono le scene</strong>
-                      <p>
-                        Completa almeno una scena con ciò che lo studente vede, può fare
-                        e fa accadere. Solo allora Studio Atlas potrà creare una richiesta
-                        di produzione reale.
-                      </p>
-                      <button className="quiet-action" onClick={() => setStage("Scene")}>
-                        Vai a Scene →
-                      </button>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p className="lead">
-                    La Factory userà scene, direzione visuale e riferimenti approvati.
-                    Provider, modelli e GPU restano fuori dal tuo lavoro.
-                  </p>
-                  <button className="primary-action" onClick={requestProduction}>
-                    Prepara produzione
-                  </button>
-                </>
-              )}
-            </>
+          {stage === "Storia" && (
+            <StoryEditor project={project} onPatch={patchProject} />
           )}
 
-          {stage !== "Idea" && stage !== "Produzione" && (
+          {stage === "Mondo" && (
+            <WorldEditor project={project} onPatch={patchProject} />
+          )}
+
+          {stage === "Esperienza" && (
+            <ExperienceEditor project={project} onPatch={patchProject} />
+          )}
+
+          {stage === "Scene" && (
+            <SceneEditor project={project} onPatch={patchProject} />
+          )}
+
+          {stage === "Produzione" && (
+            <ProductionStage project={project} onRequest={requestProduction} onGoTo={setStage} />
+          )}
+
+          {(stage === "Prova" || stage === "Revisione") && (
             <div className="future-stage">
               <h1>{stage}</h1>
               <p>
-                Questa fase è già prevista dal percorso di authoring ma non viene simulata nella S1.
-                Il progetto rimane integro mentre completiamo lo Studio.
+                Questa fase non viene simulata: sarà attivata solo quando potremo usare
+                la stessa preview governata che verrà consegnata ad Atlas.
               </p>
             </div>
           )}
@@ -181,6 +179,96 @@ export function PathwayWorkspace({ id }: { id: string }) {
       </div>
     </main>
   );
+}
+
+function ProductionStage({
+  project,
+  onRequest,
+  onGoTo,
+}: {
+  project: PathwayProject;
+  onRequest: () => Promise<void>;
+  onGoTo: (stage: (typeof STAGES)[number]) => void;
+}) {
+  if (project.productionState === "WAITING_FOR_COMPUTE") {
+    return (
+      <>
+        <h1>Trasforma le scene in un prodotto.</h1>
+        <div className="production-wait">
+          <span className="status-dot" aria-hidden="true" />
+          <div>
+            <strong>Produzione in attesa</strong>
+            <p>
+              La richiesta Q4 è stata salvata, ma non c’è una risorsa FREE_ONLY
+              qualificata. Il Percorso non perde nulla e puoi continuare a lavorare.
+            </p>
+            {project.lastProductionRequest && (
+              <small className="technical-ref">
+                Richiesta {project.lastProductionRequest.requestId.slice(0, 8)} ·
+                {project.lastProductionRequest.sceneRefs.length} scene · Q4
+              </small>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  const blockers = getProductionBlockers(project);
+  if (blockers.length > 0) {
+    return (
+      <>
+        <h1>Prima rendi solido il Percorso.</h1>
+        <p className="lead">
+          Studio Atlas non invia alla Factory un Percorso incompleto. Mancano ancora
+          alcuni passaggi verificabili.
+        </p>
+        <ol className="blocker-list">
+          {blockers.map((blocker) => (
+            <li key={blocker}>{blockerLabel(blocker)}</li>
+          ))}
+        </ol>
+        <div className="next-line">
+          <span>Completa i passaggi mancanti e torna qui.</span>
+          <button className="quiet-action" onClick={() => onGoTo(firstStageFor(blockers))}>
+            Vai al primo blocco →
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h1>Il Percorso è pronto per la Factory.</h1>
+      <p className="lead">
+        Verrà creata una richiesta Q4 legata al digest esatto di storia, mondo,
+        esperienza e scene. Nessun provider o costo viene scelto qui.
+      </p>
+      <button className="primary-action" onClick={() => void onRequest()}>
+        Prepara produzione
+      </button>
+    </>
+  );
+}
+
+function blockerLabel(blocker: string) {
+  const labels: Record<string, string> = {
+    STORY_REVIEW_NOT_PASS: "La Storia non ha ancora Human Story Review PASS.",
+    WORLD_REVIEW_NOT_PASS: "Il Mondo non ha ancora review PASS.",
+    EXPERIENCE_NOT_SELECTED: "Non hai ancora scelto la forma dell’esperienza.",
+    STORYBOARD_NOT_READY: "Lo storyboard non è ancora segnato come pronto.",
+    NO_SCENES: "Non esiste ancora nessuna scena.",
+    INCOMPLETE_SCENES: "Una o più scene non hanno situazione, azione e conseguenza.",
+  };
+  return labels[blocker] ?? blocker;
+}
+
+function firstStageFor(blockers: string[]): (typeof STAGES)[number] {
+  if (blockers.includes("STORY_REVIEW_NOT_PASS")) return "Storia";
+  if (blockers.includes("WORLD_REVIEW_NOT_PASS")) return "Mondo";
+  if (blockers.includes("EXPERIENCE_NOT_SELECTED")) return "Esperienza";
+  return "Scene";
 }
 
 function humanStateLabel(project: PathwayProject) {
