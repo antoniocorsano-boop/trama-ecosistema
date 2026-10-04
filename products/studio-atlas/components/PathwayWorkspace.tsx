@@ -209,13 +209,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Revisione" && (
-            <div className="future-stage">
-              <h1>Revisione</h1>
-              <p>
-                La revisione completa verrà attivata quando l’anteprima Atlas potrà
-                restituire una Human Use Review legata allo snapshot esatto.
-              </p>
-            </div>
+            <ProductReviewStage project={project} onPatch={patchProject} onGoTo={setStage} />
           )}
         </section>
 
@@ -232,6 +226,161 @@ export function PathwayWorkspace({ id }: { id: string }) {
         </aside>
       </div>
     </main>
+  );
+}
+
+function ProductReviewStage({
+  project,
+  onPatch,
+  onGoTo,
+}: {
+  project: PathwayProject;
+  onPatch: (patch: Partial<PathwayProject>) => void;
+  onGoTo: (stage: (typeof STAGES)[number]) => void;
+}) {
+  const review = project.productReview;
+
+  if (!review) {
+    return (
+      <div className="future-stage">
+        <h1>Revisione</h1>
+        <p>
+          La Human Use Review completa verrà attivata quando l’anteprima Atlas potrà
+          restituire una decisione legata allo snapshot esatto.
+        </p>
+      </div>
+    );
+  }
+
+  const structuralBlockers = getProductionBlockers(project).filter(
+    (blocker) =>
+      blocker !== "PRODUCT_REVIEW_NOT_PASS" &&
+      blocker !== "WORLD_REVIEW_NOT_PASS" &&
+      blocker !== "STORYBOARD_NOT_READY",
+  );
+  const evidenceRef = review.evidenceRef ?? "Product Review Pack";
+
+  if (review.decision === "PASS") {
+    return (
+      <>
+        <h1>Pacchetto approvato per la prova.</h1>
+        <p className="lead">
+          La decisione copre insieme Mondo, Agency, Choreography, Storyboard e Transfer.
+          Non autorizza uso studente, pubblicazione o runtime pubblico.
+        </p>
+        <div className="production-wait">
+          <span className="status-dot neutral" aria-hidden="true" />
+          <div>
+            <strong>Human Product Review · PASS</strong>
+            <small className="technical-ref">{evidenceRef}</small>
+          </div>
+        </div>
+        <button className="primary-action" onClick={() => onGoTo("Prova")}>
+          Vai alla prova non pubblica
+        </button>
+      </>
+    );
+  }
+
+  if (review.decision === "REJECT") {
+    return (
+      <>
+        <h1>Pacchetto non accettato.</h1>
+        <p className="lead">
+          La decisione umana resta registrata e il Percorso rimane bloccato dalla preview.
+        </p>
+        <small className="technical-ref">{evidenceRef}</small>
+      </>
+    );
+  }
+
+  if (review.decision === "REVISE" || review.decision === "DRAFT") {
+    return (
+      <>
+        <h1>Il pacchetto richiede una nuova revisione.</h1>
+        <p className="lead">
+          Una modifica o una decisione REVISE ha invalidato il PASS. Aggiorna il materiale
+          e il relativo pacchetto di evidenze prima di ripresentarlo alla Human Product Review.
+        </p>
+        <small className="technical-ref">{evidenceRef}</small>
+      </>
+    );
+  }
+
+  const approve = () => {
+    if (structuralBlockers.length > 0) return;
+    const reviewedAt = new Date().toISOString();
+    onPatch({
+      humanState: "REVIEW",
+      productReview: { decision: "PASS", reviewedAt, evidenceRef },
+      worldReview: { decision: "PASS", reviewedAt, evidenceRef },
+      storyboardReady: true,
+    });
+  };
+
+  return (
+    <>
+      <h1>Human Product Review</h1>
+      <p className="lead">
+        Una sola decisione governa Mondo, Agency, Choreography, Storyboard e Transfer.
+        La preview resta bloccata finché questo pacchetto non riceve PASS.
+      </p>
+      <div className="production-wait">
+        <span className="status-dot neutral" aria-hidden="true" />
+        <div>
+          <strong>Pacchetto pronto per decisione umana</strong>
+          <p>
+            Il PASS abilita soltanto l’anteprima Atlas non pubblica. Non concede autorità
+            di pubblicazione, uso studente o calcolo a pagamento.
+          </p>
+          <small className="technical-ref">{evidenceRef}</small>
+        </div>
+      </div>
+      {structuralBlockers.length > 0 && (
+        <ol className="blocker-list">
+          {structuralBlockers.map((blocker) => (
+            <li key={blocker}>{blockerLabel(blocker)}</li>
+          ))}
+        </ol>
+      )}
+      <div className="review-actions">
+        <button
+          className="secondary-action"
+          onClick={() => onPatch({
+            humanState: "REVIEW",
+            productReview: {
+              decision: "REVISE",
+              reviewedAt: new Date().toISOString(),
+              evidenceRef,
+            },
+            storyboardReady: false,
+          })}
+        >
+          Richiedi modifiche
+        </button>
+        <button
+          className="secondary-action"
+          onClick={() => onPatch({
+            humanState: "REVIEW",
+            productReview: {
+              decision: "REJECT",
+              reviewedAt: new Date().toISOString(),
+              evidenceRef,
+            },
+            storyboardReady: false,
+          })}
+        >
+          Rifiuta pacchetto
+        </button>
+        <button
+          className="primary-action"
+          disabled={structuralBlockers.length > 0}
+          onClick={approve}
+        >
+          Approva pacchetto
+        </button>
+      </div>
+    </>
   );
 }
 
@@ -389,6 +538,7 @@ function ProductionStage({
 function blockerLabel(blocker: string) {
   const labels: Record<string, string> = {
     STORY_REVIEW_NOT_PASS: "La Storia non ha ancora Human Story Review PASS.",
+    PRODUCT_REVIEW_NOT_PASS: "Il pacchetto di Human Product Review non ha ancora PASS.",
     WORLD_REVIEW_NOT_PASS: "Il Mondo non ha ancora review PASS.",
     EXPERIENCE_NOT_SELECTED: "Non hai ancora scelto la forma dell’esperienza.",
     STORYBOARD_NOT_READY: "Lo storyboard non è ancora segnato come pronto.",
@@ -403,6 +553,7 @@ function blockerLabel(blocker: string) {
 
 function firstStageFor(blockers: string[]): (typeof STAGES)[number] {
   if (blockers.includes("STORY_REVIEW_NOT_PASS")) return "Storia";
+  if (blockers.includes("PRODUCT_REVIEW_NOT_PASS")) return "Revisione";
   if (blockers.includes("WORLD_REVIEW_NOT_PASS")) return "Mondo";
   if (blockers.includes("EXPERIENCE_NOT_SELECTED")) return "Esperienza";
   return "Scene";
