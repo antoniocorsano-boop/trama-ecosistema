@@ -1,0 +1,33 @@
+name: Visual Factory — Deploy HF Space
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy explicitly configured private Space
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deployment client only
+        run: pip install "huggingface_hub>=0.36.0"
+
+      - name: Deploy or stop without mutation
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_VISUAL_FACTORY_SPACE_REPO: ${{ vars.HF_VISUAL_FACTORY_SPACE_REPO }}
+        run: python scripts/deploy_visual_factory_hf_space.py
+
+      - name: Authority boundary
+        run: |
+          ! grep -Ei 'request_space_hardware|purchase|billing|paid.fallback' scripts/deploy_visual_factory_hf_space.py
+          grep -q 'private=True' scripts/deploy_visual_factory_hf_space.py
+          grep -q 'NOT_CONFIGURED' scripts/deploy_visual_factory_hf_space.py
