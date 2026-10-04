@@ -24,6 +24,19 @@ export function getProductionBlockers(project: PathwayProject) {
   );
   if (incompleteScene) blockers.push("INCOMPLETE_SCENES");
 
+  const invalidChoice = project.scenes.some(
+    (scene) =>
+      scene.interaction === "CHOICE" &&
+      (
+        scene.choices.length < 2 ||
+        scene.choices.some((choice) => !choice.label.trim() || !choice.feedback.trim())
+      ),
+  );
+  if (invalidChoice) blockers.push("INCOMPLETE_CHOICES");
+
+  const terminalChoice = project.scenes.at(-1)?.interaction === "CHOICE";
+  if (terminalChoice) blockers.push("TERMINAL_CHOICE_NEEDS_CLOSURE");
+
   return blockers;
 }
 
