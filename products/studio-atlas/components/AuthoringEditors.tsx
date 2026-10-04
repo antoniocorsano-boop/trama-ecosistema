@@ -264,10 +264,25 @@ export function SceneEditor({ project, onPatch }: Props) {
     project.scenes.length > 0 &&
     project.scenes.some((scene) => scene.kind === "TRANSFER") &&
     project.scenes.every(
-      (scene) =>
+      (scene, sceneIndex) =>
         scene.visibleSituation.trim() &&
         scene.learnerAction.trim() &&
-        scene.consequence.trim(),
+        scene.consequence.trim() &&
+        (
+          scene.interaction !== "CHOICE" ||
+          (
+            sceneIndex < project.scenes.length - 1 &&
+            scene.choices.length >= 2 &&
+            scene.choices.every(
+              (choice) =>
+                choice.label.trim() &&
+                choice.feedback.trim() &&
+                choice.targetSceneId.trim() &&
+                project.scenes.some((candidate) => candidate.sceneId === choice.targetSceneId),
+            ) &&
+            new Set(scene.choices.map((choice) => choice.targetSceneId)).size >= 2
+          )
+        ),
     );
 
   function addScene() {
@@ -357,8 +372,8 @@ export function SceneEditor({ project, onPatch }: Props) {
                       interaction: e.target.value as PathwayScene["interaction"],
                       choices: e.target.value === "CHOICE" && scene.choices.length < 2
                         ? [
-                            { choiceId: crypto.randomUUID(), label: "", feedback: "" },
-                            { choiceId: crypto.randomUUID(), label: "", feedback: "" },
+                            { choiceId: crypto.randomUUID(), label: "", feedback: "", targetSceneId: "" },
+                            { choiceId: crypto.randomUUID(), label: "", feedback: "", targetSceneId: "" },
                           ]
                         : scene.choices,
                     })}
@@ -420,6 +435,27 @@ export function SceneEditor({ project, onPatch }: Props) {
                             ),
                           })}
                         />
+                        <label className="choice-target">
+                          <span>Dopo questa possibilità</span>
+                          <select
+                            value={choice.targetSceneId}
+                            aria-label={`Esito opzione ${choiceIndex + 1} scena ${index + 1}`}
+                            onChange={(e) => updateScene(scene.sceneId, {
+                              choices: scene.choices.map((candidate) =>
+                                candidate.choiceId === choice.choiceId
+                                  ? { ...candidate, targetSceneId: e.target.value }
+                                  : candidate,
+                              ),
+                            })}
+                          >
+                            <option value="">Scegli una scena…</option>
+                            {project.scenes.map((target, targetIndex) => (
+                              <option key={target.sceneId} value={target.sceneId}>
+                                {targetIndex === index ? "↺ " : ""}{targetIndex + 1}. {target.title}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
                         {scene.choices.length > 2 && (
                           <button
                             className="quiet-action danger"
@@ -438,7 +474,7 @@ export function SceneEditor({ project, onPatch }: Props) {
                       onClick={() => updateScene(scene.sceneId, {
                         choices: [
                           ...scene.choices,
-                          { choiceId: crypto.randomUUID(), label: "", feedback: "" },
+                          { choiceId: crypto.randomUUID(), label: "", feedback: "", targetSceneId: "" },
                         ],
                       })}
                     >
