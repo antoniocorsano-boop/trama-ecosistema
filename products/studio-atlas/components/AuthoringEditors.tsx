@@ -13,6 +13,16 @@ type Props = {
   onPatch: (patch: Partial<PathwayProject>) => void;
 };
 
+function invalidateProductReview(project: PathwayProject) {
+  if (!project.productReview) return {};
+  return {
+    productReview: {
+      decision: "DRAFT" as const,
+      evidenceRef: project.productReview.evidenceRef,
+    },
+  };
+}
+
 const storyFields: Array<[keyof StoryDraft, string, string]> = [
   ["hook", "Apertura", "Qual è l’immagine o la situazione che fa entrare subito nella storia?"],
   ["setting", "Dove siamo", "Che luogo è? Che atmosfera ha?"],
@@ -32,6 +42,8 @@ export function StoryEditor({ project, onPatch }: Props) {
     onPatch({
       story: { ...project.story, [key]: value },
       storyReview: { decision: "DRAFT" },
+      storyboardReady: false,
+      ...invalidateProductReview(project),
       humanState: "STORY_DRAFT",
     });
   }
@@ -128,6 +140,8 @@ export function WorldEditor({ project, onPatch }: Props) {
     onPatch({
       world: { ...project.world, [key]: value },
       worldReview: { decision: "DRAFT" },
+      storyboardReady: false,
+      ...invalidateProductReview(project),
       humanState: "WORLD_DESIGN",
     });
   }
@@ -153,14 +167,20 @@ export function WorldEditor({ project, onPatch }: Props) {
         <div>
           <strong>World Review</strong>
           <p>
-            {project.worldReview.decision === "PASS"
-              ? "Mondo approvato per la progettazione dell’esperienza."
-              : project.worldReview.decision === "REVISE"
-                ? "Il mondo deve essere rivisto."
-                : "La review resta una decisione umana esplicita."}
+            {project.productReview
+              ? project.productReview.decision === "PASS"
+                ? "Mondo incluso nel pacchetto di Product Review approvato."
+                : "Questo Mondo fa parte della Product Review unica con Storyboard e Transfer."
+              : project.worldReview.decision === "PASS"
+                ? "Mondo approvato per la progettazione dell’esperienza."
+                : project.worldReview.decision === "REVISE"
+                  ? "Il mondo deve essere rivisto."
+                  : "La review resta una decisione umana esplicita."}
           </p>
         </div>
-        {project.worldReview.decision !== "PASS" && (
+        {project.productReview ? (
+          <span className="development-note">Decisione nella fase Revisione</span>
+        ) : project.worldReview.decision !== "PASS" ? (
           <div className="review-actions">
             <button
               className="secondary-action"
@@ -181,7 +201,7 @@ export function WorldEditor({ project, onPatch }: Props) {
               Approva mondo
             </button>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
@@ -211,6 +231,8 @@ export function ExperienceEditor({ project, onPatch }: Props) {
             className={project.experience.grammar === value ? "grammar-row active" : "grammar-row"}
             onClick={() => onPatch({
               experience: { ...project.experience, grammar: value },
+              storyboardReady: false,
+              ...invalidateProductReview(project),
               humanState: "SCENES",
             })}
           >
@@ -227,6 +249,8 @@ export function ExperienceEditor({ project, onPatch }: Props) {
           value={project.experience.rationale}
           onChange={(e) => onPatch({
             experience: { ...project.experience, rationale: e.target.value },
+            storyboardReady: false,
+            ...invalidateProductReview(project),
           })}
           placeholder="Spiega in poche righe perché questa forma serve alla storia e all’apprendimento."
         />
@@ -261,6 +285,7 @@ export function SceneEditor({ project, onPatch }: Props) {
     onPatch({
       scenes: [...project.scenes, scene],
       storyboardReady: false,
+      ...invalidateProductReview(project),
       humanState: "SCENES",
     });
   }
@@ -271,6 +296,7 @@ export function SceneEditor({ project, onPatch }: Props) {
         scene.sceneId === sceneId ? { ...scene, ...patch } : scene,
       ),
       storyboardReady: false,
+      ...invalidateProductReview(project),
       humanState: "SCENES",
     });
   }
@@ -279,6 +305,7 @@ export function SceneEditor({ project, onPatch }: Props) {
     onPatch({
       scenes: project.scenes.filter((scene) => scene.sceneId !== sceneId),
       storyboardReady: false,
+      ...invalidateProductReview(project),
     });
   }
 
@@ -431,14 +458,20 @@ export function SceneEditor({ project, onPatch }: Props) {
         <div>
           <strong>Storyboard</strong>
           <p>
-            {project.storyboardReady
-              ? "Storyboard segnato come pronto per la produzione."
-              : project.scenes.some((scene) => scene.kind === "TRANSFER")
-                ? "Controlla che ogni scena abbia situazione, azione e conseguenza."
-                : "Aggiungi anche una scena di trasferimento: la strategia deve essere provata in una situazione nuova."}
+            {project.productReview
+              ? project.productReview.decision === "PASS"
+                ? "Storyboard incluso nel pacchetto di Product Review approvato."
+                : "Storyboard e Transfer saranno decisi insieme nella Product Review."
+              : project.storyboardReady
+                ? "Storyboard segnato come pronto per la produzione."
+                : project.scenes.some((scene) => scene.kind === "TRANSFER")
+                  ? "Controlla che ogni scena abbia situazione, azione e conseguenza."
+                  : "Aggiungi anche una scena di trasferimento: la strategia deve essere provata in una situazione nuova."}
           </p>
         </div>
-        {!project.storyboardReady && (
+        {project.productReview ? (
+          <span className="development-note">Decisione nella fase Revisione</span>
+        ) : !project.storyboardReady ? (
           <button
             className="primary-action"
             disabled={!complete}
@@ -446,7 +479,7 @@ export function SceneEditor({ project, onPatch }: Props) {
           >
             Storyboard pronto
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   );
