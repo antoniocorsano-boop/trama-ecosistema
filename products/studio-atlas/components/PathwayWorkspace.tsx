@@ -7,6 +7,7 @@ import { getProject, updateProject } from "../lib/store";
 import { getProductionBlockers, prepareWaitingProduction } from "../lib/production";
 import {
   buildStudioAtlasPreviewSnapshot,
+  buildStudioAtlasReviewPreviewSnapshot,
   getPreviewBlockers,
   getReviewPreviewBlockers,
 } from "../lib/preview";
@@ -123,9 +124,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
     try {
       const snapshot = project.productReview?.decision === "PASS"
         ? await buildStudioAtlasPreviewSnapshot(project)
-        : await import("../lib/preview").then(({ buildStudioAtlasReviewPreviewSnapshot }) =>
-            buildStudioAtlasReviewPreviewSnapshot(project),
-          );
+        : await buildStudioAtlasReviewPreviewSnapshot(project);
       const updated = updateProject(project.projectId, {
         humanState: "PREVIEW",
         lastPreviewSnapshot: snapshot,
