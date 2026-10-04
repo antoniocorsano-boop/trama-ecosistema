@@ -42,24 +42,26 @@ The same strategy is therefore not automatically optimal for both goals.
 
 ## 3. Narrative identity
 
-Visual identity: restrained study-lab / workbench.
+Visual identity: a restrained **evolving strategy workbench**, not a sequence of cards.
+
+The learner should feel that they are working on one continuous surface whose organisation changes with the strategy and with the mission.
 
 Stable anchors:
 
-- **goal card** — current task;
-- **information strip** — facts always available;
-- **strategy tray** — bounded tools;
-- **evidence window** — what the strategy made easier or left unresolved;
-- **switch marker** — revision is legitimate;
-- **method card** — abstract principle after use.
+- **mission rail** — thin persistent band showing the current goal;
+- **evidence surface** — the same information fragments remain materially present and can be reorganised;
+- **tool bench** — bounded strategies available as tools, with equal visual status;
+- **structure layer** — ordering, arrows/relations or comparison grid appear only when the learner applies the corresponding strategy;
+- **fit signal** — subtle annotation showing what the current representation makes easier or leaves unresolved;
+- **method trace** — compact summary left by the learner's actions, not a reward card.
 
-No mascot, avatar, personality graph, score, streak or essential animation.
+The visual rhythm should alternate quiet inspection, manipulation, reveal and reconsideration. No mascot, avatar, personality graph, score, streak, confetti or decorative animation. Small transitions may preserve object continuity when the same fragments are reorganised, with full reduced-motion equivalence.
 
 ## 4. Learner-facing sequence
 
 ### M1 — WHAT IS THE GOAL? / EXPLORE
 
-The learner sees the five expedition facts and the first goal:
+The learner enters the workbench. The five expedition facts are already laid out as neutral fragments on the same surface. The mission rail introduces the first goal:
 
 > “Tra poco dovrai ricostruire l’ordine del percorso senza guardare la scheda.”
 
@@ -73,7 +75,7 @@ No growth evidence is awarded.
 
 ### M2 — CHOOSE A TOOL / CHOOSE
 
-Three strategy cards are shown with equal visual status:
+The tool bench opens three strategy tools with equal visual status. They are not presented as personality choices or collectible cards:
 
 **A — Sequenza + recupero**
 > “Metto i passaggi in ordine, copro la scheda e provo a ricostruirli senza guardare.”
@@ -94,11 +96,11 @@ Choosing A alone does **not** award growth evidence. The pathway must first obse
 
 ### M3A — TEST THE SEQUENCE / CONNECT
 
-If A was chosen, the learner sees a compact reconstruction prompt:
+If A was chosen, the same evidence fragments move into an orderable lane. The learner must actively reconstruct the route rather than answer on a detached quiz screen:
 
 > “Quale ordine useresti per controllare il tuo ricordo?”
 
-Options present one correct sequence and plausible altered sequences.
+The learner arranges the supplied fragments; keyboard and touch alternatives provide the same ordering action. A final “controlla” action reveals whether the reconstructed order matches the evidence.
 
 The purpose is not factual assessment about expeditions; it is to make the consequence of the strategy inspectable.
 
@@ -113,7 +115,7 @@ Only a correct applied reconstruction after selecting/switching to the sequence-
 
 ### M3B — THE GOAL IS STILL ORDER / CONNECT
 
-If B or C was chosen, the evidence window says what the strategy supported and what remains weak.
+If B or C was chosen, the workbench visibly reflects that tool. The fit signal explains what the representation helped expose and what the mission still requires.
 
 For B:
 
@@ -137,7 +139,7 @@ A revision here is evidence of task-bound adjustment, not of intelligence or mot
 
 ### M4 — CHECK THE EVIDENCE / REFRAME
 
-The goal card remains visible.
+The mission rail remains visible while the workspace pauses; no new visual layer is introduced.
 
 Prompt:
 
@@ -153,11 +155,11 @@ No new badge is awarded; this scene prepares the goal change.
 
 ### M5 — THE GOAL CHANGES / REFRAME
 
-Same five facts. New goal:
+The same five fragments stay on the workbench. Only the mission rail changes, so the learner can immediately perceive that **the material is the same but the purpose is different**. New goal:
 
 > “Ora non devi ricordare l’ordine. Devi spiegare perché il gruppo ha cambiato percorso.”
 
-The learner must choose again:
+The tool bench becomes active again. The learner must choose again:
 
 **A — Continuo con la sequenza**
 > useful for order, but not sufficient to expose the causal relation.
@@ -178,16 +180,16 @@ Selecting B alone does **not** award growth evidence.
 
 ### M6 — MAKE THE RELATION VISIBLE / BUILD
 
-The learner applies the chosen strategy through a bounded representation task.
+The learner applies the chosen strategy on the existing evidence surface. Rather than selecting a prewritten statement, the interface asks them to build the causal structure by linking the supplied fragments.
 
 Prompt:
 
 > “Quale schema rende visibile il motivo del cambiamento?”
 
-Qualifying representation:
+Qualifying structure:
 > “Pioggia intensa → sentiero basso non utilizzabile → percorso di cresta → arrivo più tardi.”
 
-Distractors either reverse causality or list facts without relations.
+The learner creates the chain from the supplied fragments/connectors. Accessible alternatives allow equivalent selection-and-linking without drag-only interaction. Incorrect structures may reverse causality, omit a required relation or leave the facts as an unstructured list.
 
 This scene ensures the learner does not merely select the label “mappa causa-effetto”; the learner applies it to the material.
 
@@ -212,7 +214,7 @@ This scene names a principle already exercised. It does not by itself award tran
 
 ### M8 — NEW TASK, NEW REPRESENTATION / TRANSFER
 
-New context: a fictional museum offers two visit routes.
+The workbench clears with a deliberate scene transition and becomes a **comparison desk** that preserves the same visual grammar: mission rail, evidence surface and tool bench, but no expedition imagery. New context: a fictional museum offers two visit routes.
 
 **Route Blu**
 - 45 minutes;
@@ -244,7 +246,9 @@ Choosing the comparison-table strategy is necessary but not sufficient.
 
 ### M8B — APPLY THE COMPARISON / BUILD
 
-The learner sees three candidate working tables. Only one organises the supplied museum data by the stated criteria:
+The learner now has to apply the selected comparison tool. The evidence fragments for the two routes sit beside an empty criterion grid. The task is to place the supplied facts into the correct comparison structure. A non-drag keyboard/touch-equivalent path is mandatory.
+
+The completed qualifying structure is:
 
 | Criterio | Blu | Verde |
 |---|---|---|
@@ -252,13 +256,13 @@ The learner sees three candidate working tables. Only one organises the supplied
 | accesso | ascensore | solo scale |
 | attività pratiche | 1 | 2 |
 
-Other options either mix criteria, omit one route, or reproduce an irrelevant sequence.
+Non-qualifying constructions mix criteria, omit one route or reproduce an irrelevant sequence.
 
 Prompt:
 
-> “Quale tabella rende davvero controllabile il confronto richiesto?”
+> “Organizza i dati in modo che il confronto richiesto sia controllabile.”
 
-Only the correct applied representation earns:
+Only a correct applied representation earns:
 
 **Traguardo:** “Scelgo e applico una strategia adatta in un nuovo compito.”  
 **Stage:** `TRANSFERS_TO_NEW_SITUATION`.
@@ -280,6 +284,27 @@ Local-growth record, if already enabled by the shared product layer:
 - no score, ranking or streak.
 
 Completion alone awards nothing.
+
+## 4A. Experience choreography
+
+This pathway must not be implemented as ten visually independent screens.
+
+The intended choreography is:
+
+1. **arrival** — quiet inspection of one coherent workspace;
+2. **tool choice** — the tool bench opens without replacing the evidence surface;
+3. **manipulation** — learner acts directly on the material;
+4. **reveal** — consequence/fit becomes visible on the same surface;
+5. **brief pause** — interpretation without new visual clutter;
+6. **mission shift** — goal changes while the evidence remains;
+7. **reconfiguration** — same material, different structure;
+8. **principle emergence** — the method trace is distilled from what happened;
+9. **transfer** — a new comparison desk uses the same interaction language but a genuinely different task;
+10. **close** — local trace/control, no reward burst.
+
+**Anti-card-stack rule:** standard containers may support responsive layout, but the learner should perceive a continuous workbench and evolving representations. If the implementation can be described accurately as “read a card, click an answer, go to the next card,” this screenplay has not been implemented faithfully.
+
+**Enjoyment target:** curiosity about what the tool will reveal, satisfaction from reorganising information, visible consequences of changing strategy, and mastery through transfer. No gamified retention mechanism is required or desired.
 
 ## 5. Feedback grammar
 
@@ -326,14 +351,15 @@ Forbidden:
 
 ## 8. Accessibility and attention
 
-- goal card remains visible;
-- information sheet remains inspectable when memory is not the construct being tested;
+- mission rail remains visible when orientation is needed;
+- evidence fragments remain inspectable when memory is not the construct being tested;
+- ordering, linking and comparison actions have complete keyboard/touch-equivalent alternatives;
 - essential distinctions are textual, not colour-only;
-- complete keyboard path;
-- deterministic focus to new scene heading;
+- deterministic focus follows meaningful workspace changes rather than arbitrary “next card” navigation;
 - no essential animation/audio;
-- mobile reflow;
-- strategy cards use parallel wording and equal visual salience;
+- any object-continuity transition has reduced-motion equivalence;
+- mobile reflow preserves the workbench relationships without forcing horizontal precision;
+- strategy tools use parallel wording and equal visual salience;
 - low-stimulation literal mode is fully equivalent.
 
 ## 9. Human product review questions
@@ -348,6 +374,10 @@ Forbidden:
 8. Is the tone appropriate and non-infantilising for lower secondary?
 9. Does the experience avoid unnecessary working-memory and navigation burden?
 10. Does any wording invite trait inference or autobiographical disclosure?
+11. Does the implementation read as one evolving workbench rather than a stack of cards/screens?
+12. Is the scene rhythm perceptibly different across inspect → manipulate → reveal → reconsider → transfer?
+13. Does the pathway have a recognizable visual identity without depending on decorative assets or gamification?
+14. Would a lower-secondary learner plausibly want to continue because of curiosity, control and visible consequence rather than reward pressure?
 
 ## 10. Boundary
 
