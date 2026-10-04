@@ -140,6 +140,7 @@ Minimum candidate fields:
 - `sceneId`;
 - `order`;
 - `purpose`;
+- `interaction` when the scene contains an authored interaction;
 - `learnerVisibleSituation`;
 - `availableInformation`;
 - `learnerActions[]`;
@@ -147,7 +148,10 @@ Minimum candidate fields:
 - `informationRevealed[]`;
 - `continuityAnchors[]`;
 - `nextSceneRefs[]`;
+- for a choice scene, `choices[]` with stable `choiceId`, learner-visible `label`, consequence `feedback` and exact `targetSceneId`;
 - accessibility/alternate-mode declarations.
+
+`nextSceneRefs[]` describes graph reachability but does not replace choice routing. A conforming export/import MUST preserve the binding between each authored choice and its `targetSceneId`; otherwise two semantically different branches could collapse into the same sequential path.
 
 Generated visual prompts are production metadata, not canonical learner content.
 
