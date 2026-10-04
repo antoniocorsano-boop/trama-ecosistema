@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "schemas/trama-compute-*.schema.json"
+      - "schemas/atlas-visual-production-*.schema.json"
       - "docs/capabilities/atlas-percorsi/production/TRAMA-COMPUTE-POLICY-v0.1.md"
       - "docs/capabilities/atlas-percorsi/production/SKYPILOT-ORCHESTRATOR-v0.1.md"
       - "scripts/compile_visual_factory_compute_plan.py"
@@ -30,6 +31,8 @@ jobs:
         run: |
           python -m json.tool schemas/trama-compute-policy.v0.1.schema.json >/dev/null
           python -m json.tool schemas/trama-compute-entitlement-snapshot.v0.1.schema.json >/dev/null
+          python -m json.tool schemas/atlas-visual-production-request.v0.1.schema.json >/dev/null
+          python -m json.tool schemas/atlas-visual-production-receipt.v0.1.schema.json >/dev/null
           python -m json.tool fixtures/visual-factory-compute/policy-free-q4.json >/dev/null
           python -m json.tool fixtures/visual-factory-compute/snapshot-eligible.json >/dev/null
           python -m json.tool fixtures/visual-factory-compute/snapshot-no-free.json >/dev/null
