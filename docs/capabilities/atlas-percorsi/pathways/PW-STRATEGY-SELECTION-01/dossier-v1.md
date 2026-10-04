@@ -392,3 +392,42 @@ Before Atlas registration:
 - runtime authority: **not granted**.
 
 `RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`.
+
+
+## 18. Narrative presence remediation — 2026-10-04
+
+**Human Experience Review:** CHANGES_REQUIRED / NARRATIVE_REDESIGN_REQUIRED
+
+Observed failure on the MagicPath comparison prototype:
+
+- the learner received instructions and a map but still experienced the activity as an abstract ordering exercise;
+- no characters carried goals, partial information or consequences;
+- the learner had no socially meaningful role inside the situation;
+- the expedition setting functioned as a thin narrative skin: removing the setting would leave essentially the same generic sequence task;
+- Workbench, Evidence Board and Microworld variants therefore differed in representation but not in narrative meaning.
+
+This violates the already-governed Pathway-Specific Narrative Architecture, which requires a world/context, narrative engine, character system/point of view, information-release rhythm and concrete scene continuity.
+
+### Required redesign
+
+The next prototype must not begin from “five facts to order”.
+
+It must establish a small story in which:
+
+1. named fictional characters have a concrete shared goal;
+2. each character knows or reports different parts of what happened;
+3. an event interrupts the original plan;
+4. the learner has a clear role and reason to reconstruct/interpret the information;
+5. actions alter the characters' understanding or next decision;
+6. the same cast/world carries continuity into the goal-change scene;
+7. the cognitive target remains strategy–task fit; narrative cannot replace the required applied evidence.
+
+### Candidate narrative hypothesis
+
+Working title: **Missione Belvedere**.
+
+A small school field team is collecting environmental observations. Their planned route to a viewpoint is disrupted by heavy rain. Several short field messages/log entries are synchronised out of order. The learner helps the team reconstruct the field log, then changes representation when the task changes from chronology to causal explanation.
+
+The candidate must be developed with a governed character bible and controlled screenplay before further Atlas implementation.
+
+RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED.
