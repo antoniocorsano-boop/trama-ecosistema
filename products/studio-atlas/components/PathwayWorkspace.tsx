@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { STAGES, type PathwayProject } from "../lib/model";
 import { getProject, updateProject } from "../lib/store";
 import { getProductionBlockers, prepareWaitingProduction } from "../lib/production";
+import { buildStudioAtlasPreviewSnapshot, getPreviewBlockers } from "../lib/preview";
 import {
   ExperienceEditor,
   SceneEditor,
@@ -60,6 +61,22 @@ export function PathwayWorkspace({ id }: { id: string }) {
         productionState: "WAITING_FOR_COMPUTE",
         lastProductionRequest: request,
         lastProductionReceipt: receipt,
+      });
+      setProject(updated);
+      setSaveState("saved");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
+  async function preparePreview() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const snapshot = await buildStudioAtlasPreviewSnapshot(project);
+      const updated = updateProject(project.projectId, {
+        humanState: "PREVIEW",
+        lastPreviewSnapshot: snapshot,
       });
       setProject(updated);
       setSaveState("saved");
@@ -154,12 +171,16 @@ export function PathwayWorkspace({ id }: { id: string }) {
             <ProductionStage project={project} onRequest={requestProduction} onGoTo={setStage} />
           )}
 
-          {(stage === "Prova" || stage === "Revisione") && (
+          {stage === "Prova" && (
+            <PreviewStage project={project} onPrepare={preparePreview} onGoTo={setStage} />
+          )}
+
+          {stage === "Revisione" && (
             <div className="future-stage">
-              <h1>{stage}</h1>
+              <h1>Revisione</h1>
               <p>
-                Questa fase non viene simulata: sarà attivata solo quando potremo usare
-                la stessa preview governata che verrà consegnata ad Atlas.
+                La revisione completa verrà attivata quando l’anteprima Atlas potrà
+                restituire una Human Use Review legata allo snapshot esatto.
               </p>
             </div>
           )}
@@ -178,6 +199,75 @@ export function PathwayWorkspace({ id }: { id: string }) {
         </aside>
       </div>
     </main>
+  );
+}
+
+function PreviewStage({
+  project,
+  onPrepare,
+  onGoTo,
+}: {
+  project: PathwayProject;
+  onPrepare: () => Promise<void>;
+  onGoTo: (stage: (typeof STAGES)[number]) => void;
+}) {
+  const blockers = getPreviewBlockers(project);
+
+  if (blockers.length > 0) {
+    return (
+      <>
+        <h1>Prima prepara un Percorso completo.</h1>
+        <p className="lead">
+          Atlas non riceve un’anteprima incompleta. Completa i passaggi mancanti,
+          compresa una scena di trasferimento esplicita.
+        </p>
+        <ol className="blocker-list">
+          {blockers.map((blocker) => <li key={blocker}>{blockerLabel(blocker)}</li>)}
+        </ol>
+        <button className="quiet-action" onClick={() => onGoTo(firstStageFor(blockers))}>
+          Vai al primo blocco →
+        </button>
+      </>
+    );
+  }
+
+  if (project.lastPreviewSnapshot) {
+    return (
+      <>
+        <h1>Snapshot pronto per Atlas.</h1>
+        <p className="lead">
+          Studio Atlas ha congelato la versione da provare senza autorizzarla agli studenti.
+          Il prossimo passo è consegnare questo snapshot al preview adapter Atlas.
+        </p>
+        <div className="production-wait">
+          <span className="status-dot neutral" aria-hidden="true" />
+          <div>
+            <strong>Anteprima pronta · trasporto non ancora collegato</strong>
+            <p>
+              Il contenuto non viene messo nell’URL e non viene pubblicato. Serve il
+              canale opaco Studio Atlas → Atlas che stiamo qualificando.
+            </p>
+            <small className="technical-ref">
+              Snapshot {project.lastPreviewSnapshot.snapshotId.slice(0, 8)} ·
+              digest {project.lastPreviewSnapshot.packageDigest.slice(0, 12)}…
+            </small>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h1>Prepara ciò che vedrà lo studente.</h1>
+      <p className="lead">
+        Verrà creato uno snapshot immutabile con digest, senza account studente,
+        telemetria o autorizzazione runtime.
+      </p>
+      <button className="primary-action" onClick={() => void onPrepare()}>
+        Prepara anteprima Atlas
+      </button>
+    </>
   );
 }
 
@@ -260,6 +350,7 @@ function blockerLabel(blocker: string) {
     STORYBOARD_NOT_READY: "Lo storyboard non è ancora segnato come pronto.",
     NO_SCENES: "Non esiste ancora nessuna scena.",
     INCOMPLETE_SCENES: "Una o più scene non hanno situazione, azione e conseguenza.",
+    TRANSFER_SCENE_REQUIRED: "Manca una scena di trasferimento in una situazione nuova.",
   };
   return labels[blocker] ?? blocker;
 }
