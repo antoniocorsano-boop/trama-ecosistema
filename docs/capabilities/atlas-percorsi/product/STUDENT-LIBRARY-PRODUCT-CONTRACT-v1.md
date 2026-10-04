@@ -170,8 +170,11 @@ Before a future Q9 request, the review packet for each pathway MUST include:
 6. visible consequence/revision/transfer evidence;
 7. local-growth evidence mapping, if used;
 8. privacy/accessibility/child-safety checks;
-9. **Experience Quality Gate** review of mise-en-scène, pathway-specific visual identity, rhythm, continuity, meaningful interaction variation and anti-card-stack compliance;
-10. human pedagogical/product review of the actual learner experience from the student point of view;
-11. exact-head technical qualification.
+9. **learner-language translation artefact** for first-cycle learner-facing pathways, plus recorded Human Review showing that the situation and next concrete action are understandable without educational terminology;
+10. **Experience Quality Gate** review of mise-en-scène, pathway-specific visual identity, rhythm, continuity, meaningful interaction variation and anti-card-stack compliance;
+11. human pedagogical/product review of the actual learner experience from the student point of view;
+12. exact-head technical qualification.
+
+Existing candidates are not exempt from item 9. Any pathway created before the learner-language rule must complete it before a future Q9 request.
 
 Q9 remains separate. This contract does not authorize student runtime.
