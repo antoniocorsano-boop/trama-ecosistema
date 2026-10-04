@@ -74,6 +74,44 @@ export function normalizeExecutorResponse(
   return value as VisualExecutionReceipt;
 }
 
+function gradioFileUrl(value: unknown): string | null {
+  if (typeof value === "string" && value.startsWith("https://")) return value;
+  if (!isObject(value)) return null;
+  if (typeof value.url === "string" && value.url.startsWith("https://")) return value.url;
+  return null;
+}
+
+export function normalizeGradioExecutionResult(
+  data: unknown,
+  expectedDigest: string,
+): VisualExecutionReceipt {
+  if (!Array.isArray(data) || data.length < 2 || !isObject(data[0]) || !Array.isArray(data[1])) {
+    return noAuthorityReceipt(expectedDigest, "FAILED", "INVALID_EXECUTOR_RESPONSE", "GRADIO_RESULT_SHAPE");
+  }
+
+  const receipt = structuredClone(data[0]) as Record<string, unknown>;
+  if (!Array.isArray(receipt.assets)) {
+    return noAuthorityReceipt(expectedDigest, "FAILED", "INVALID_EXECUTOR_RESPONSE", "GRADIO_ASSETS_MISSING");
+  }
+
+  const fileUrls = data[1].map(gradioFileUrl);
+  for (const asset of receipt.assets) {
+    if (!isObject(asset) || typeof asset.url !== "string") {
+      return noAuthorityReceipt(expectedDigest, "FAILED", "INVALID_EXECUTOR_RESPONSE", "GRADIO_ASSET_INVALID");
+    }
+    const match = /^gradio-file:\/\/(\d+)$/.exec(asset.url);
+    if (!match) continue;
+    const index = Number(match[1]);
+    const url = fileUrls[index];
+    if (!url) {
+      return noAuthorityReceipt(expectedDigest, "FAILED", "INVALID_EXECUTOR_RESPONSE", "GRADIO_FILE_MISSING");
+    }
+    asset.url = url;
+  }
+
+  return normalizeExecutorResponse(receipt, expectedDigest);
+}
+
 export function waitingForComputeReceipt(
   packageDigest: string,
   detail: string,
