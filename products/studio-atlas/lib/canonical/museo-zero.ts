@@ -1,8 +1,76 @@
-import type { PathwayProject } from "../model";
+import type { PathwayProject, SceneStage } from "../model";
 
 export const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 export const MUSEO_ZERO_PRODUCT_REVIEW_REF =
   "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/PRODUCT-REVIEW-PACK-v0.1.md";
+
+const MUSEO_ZERO_LOCATIONS: NonNullable<SceneStage["locations"]> = [
+  { id: "entry", label: "Ingresso", detail: "Il nuovo percorso comincia qui.", position: "ENTRY" },
+  { id: "room", label: "Sala Zero", detail: "Proiezione, suono e luce reagiscono al visitatore.", position: "ROOM" },
+  { id: "control", label: "Cabina regia", detail: "Qui vengono ascoltati trigger e cue.", position: "CONTROL" },
+  { id: "lab", label: "Laboratorio", detail: "Etichette, note e tracce delle modifiche.", position: "LAB" },
+];
+
+const MUSEO_ZERO_EVIDENCE: NonNullable<SceneStage["evidence"]> = [
+  {
+    id: "ev-route",
+    label: "Percorso invertito",
+    detail: "La nuova entrata mantiene il passaggio più accessibile; il vecchio segno d’ingresso è ancora visibile.",
+    locationId: "entry",
+    kind: "TRACE",
+  },
+  {
+    id: "ev-lia",
+    label: "Perché il percorso è cambiato",
+    detail: "Lia conferma che l’inversione è stata scelta per mantenere il nuovo accesso praticabile.",
+    locationId: "entry",
+    kind: "PERSON",
+    character: "Lia",
+  },
+  {
+    id: "ev-sensor-b",
+    label: "Sensor B spostato",
+    detail: "L’etichetta di montaggio mostra che Sensor B è stato portato sulla nuova entrata e risponde al passaggio.",
+    locationId: "room",
+    kind: "OBJECT",
+  },
+  {
+    id: "ev-failed-rehearsal",
+    label: "Prova fallita",
+    detail: "La registrazione mostra Lia già oltre la soglia quando la proiezione parte; suono e luce seguono in ritardo.",
+    locationId: "room",
+    kind: "TRACE",
+  },
+  {
+    id: "ev-mapping",
+    label: "Mappatura cue attiva",
+    detail: "La regia sta ancora ascoltando Sensor A, il riferimento del vecchio ingresso.",
+    locationId: "control",
+    kind: "SYSTEM",
+  },
+  {
+    id: "ev-teo",
+    label: "Il log di Teo",
+    detail: "Il cue parte regolarmente, ma troppo tardi rispetto al nuovo percorso del visitatore.",
+    locationId: "control",
+    kind: "PERSON",
+    character: "Teo",
+  },
+  {
+    id: "ev-artwork",
+    label: "Grafica aggiornata",
+    detail: "Una grafica della proiezione è stata sostituita nello stesso pomeriggio: è un cambiamento reale, ma non spiega il ritardo.",
+    locationId: "lab",
+    kind: "OBJECT",
+  },
+  {
+    id: "ev-volume",
+    label: "Volume regolato",
+    detail: "Il volume è stato corretto prima della prova finale; modifica il suono, non il momento in cui il trigger viene ricevuto.",
+    locationId: "lab",
+    kind: "TRACE",
+  },
+];
 
 export function createMuseoZeroPilotProject(): PathwayProject {
   const now = new Date().toISOString();
@@ -88,6 +156,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             { id: "sound-light", label: "Suono e luce", state: "DELAYED", detail: "Seguono la proiezione in ritardo." },
           ],
         },
+        stage: {
+          visualMode: "CINEMATIC_EDITORIAL",
+          focusLocationId: "room",
+          locations: MUSEO_ZERO_LOCATIONS,
+          characterBeat: {
+            name: "Omar",
+            role: "installazione",
+            line: "Il sensore si accende. Allora perché parte tutto dopo?",
+          },
+        },
         choices: [],
       },
       {
@@ -112,6 +190,27 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             { id: "control", label: "Regia", state: "MISMATCH", detail: "La configurazione non è ancora stata collegata con certezza alle altre modifiche." },
             { id: "rehearsal-log", label: "Log prova", state: "DELAYED", detail: "Registra la risposta tardiva della sala." },
           ],
+        },
+        stage: {
+          visualMode: "CINEMATIC_EDITORIAL",
+          focusLocationId: "entry",
+          locations: MUSEO_ZERO_LOCATIONS,
+          evidence: MUSEO_ZERO_EVIDENCE,
+          characterBeat: {
+            name: "Lia",
+            role: "spazio e percorso",
+            line: "Ognuno di noi ha cambiato qualcosa oggi. Serve rimettere insieme i pezzi.",
+          },
+          workbench: {
+            modes: ["TIMELINE", "CONNECTIONS", "COMPARE"],
+            prompt: "Porta gli indizi sul banco e scegli come guardarli",
+            minEvidence: 3,
+            transitionMap: {
+              TIMELINE: "timeline",
+              CONNECTIONS: "connections",
+              COMPARE: "compare-fixes",
+            },
+          },
         },
         choices: [
           {
@@ -160,6 +259,21 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             { id: "causal-link", label: "Relazione causale", state: "MISMATCH", detail: "La timeline da sola non la rende visibile." },
           ],
         },
+        stage: {
+          visualMode: "CINEMATIC_EDITORIAL",
+          focusLocationId: "control",
+          locations: MUSEO_ZERO_LOCATIONS,
+          characterBeat: {
+            name: "Teo",
+            role: "regia e prove",
+            line: "Ora sappiamo quando. Ma non ancora perché parte tardi.",
+          },
+          workbench: {
+            modes: ["TIMELINE", "CONNECTIONS"],
+            prompt: "La sequenza è chiara: cambia rappresentazione per cercare la relazione",
+            minEvidence: 3,
+          },
+        },
         choices: [],
       },
       {
@@ -184,6 +298,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             { id: "projection", label: "Proiezione", state: "DELAYED", detail: "Riceve il cue troppo tardi." },
             { id: "sequence", label: "Sequenza sala", state: "DELAYED", detail: "Suono e luce seguono il ritardo." },
           ],
+        },
+        stage: {
+          visualMode: "CINEMATIC_EDITORIAL",
+          focusLocationId: "room",
+          locations: MUSEO_ZERO_LOCATIONS,
+          characterBeat: {
+            name: "Teo",
+            role: "regia e prove",
+            line: "Proviamolo qui. Se la relazione è giusta, deve essere la sala a mostrarcelo.",
+          },
         },
         choices: [
           {
@@ -260,6 +384,21 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             { id: "workload", label: "Lavoro richiesto", state: "READY", detail: "Il team ha poco tempo prima della prova generale." },
           ],
         },
+        stage: {
+          visualMode: "CINEMATIC_EDITORIAL",
+          focusLocationId: "control",
+          locations: MUSEO_ZERO_LOCATIONS,
+          characterBeat: {
+            name: "Lia",
+            role: "spazio e percorso",
+            line: "Va bene farla partire. Ma il nuovo ingresso deve restare e domani deve funzionare ogni volta.",
+          },
+          workbench: {
+            modes: ["COMPARE"],
+            prompt: "Confronta le soluzioni usando gli indizi che hai già raccolto",
+            minEvidence: 3,
+          },
+        },
         choices: [
           {
             choiceId: "restore-old-route",
@@ -334,6 +473,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             { id: "sound-light", label: "Suono e luce", state: "STABLE", detail: "Seguono la sequenza senza ritardo." },
           ],
         },
+        stage: {
+          visualMode: "CINEMATIC_EDITORIAL",
+          focusLocationId: "room",
+          locations: MUSEO_ZERO_LOCATIONS,
+          characterBeat: {
+            name: "Omar",
+            role: "installazione",
+            line: "Quindi il sensore era a posto. Era il collegamento.",
+          },
+        },
         choices: [],
       },
       {
@@ -357,6 +506,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             { id: "route", label: "Percorso accessibile", state: "STABLE", detail: "La nuova entrata resta attiva." },
             { id: "team", label: "Sessione di allestimento", state: "OFF", detail: "Il team può chiudere la prova." },
           ],
+        },
+        stage: {
+          visualMode: "CINEMATIC_EDITORIAL",
+          focusLocationId: "room",
+          locations: MUSEO_ZERO_LOCATIONS,
+          characterBeat: {
+            name: "Lia",
+            role: "spazio e percorso",
+            line: "Perfetto. Il nuovo percorso può restare.",
+          },
         },
         choices: [],
       },
