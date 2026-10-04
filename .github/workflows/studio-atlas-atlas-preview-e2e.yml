@@ -70,7 +70,7 @@ jobs:
           (
             cd _atlas
             NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN="$STUDIO_ORIGIN" \
-              pnpm dev -- --hostname 127.0.0.1 --port 3200 \
+              pnpm exec next dev -H 127.0.0.1 -p 3200 \
               >/tmp/atlas-e2e.log 2>&1
           ) &
           echo $! >/tmp/atlas-e2e.pid
