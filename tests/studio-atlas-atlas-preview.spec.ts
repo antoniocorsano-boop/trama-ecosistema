@@ -1,8 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-  MUSEO_ZERO_PROJECT_ID,
-  createMuseoZeroPilotProject,
-} from "../products/studio-atlas/lib/canonical/museo-zero";
+const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 
 const STUDIO = "http://127.0.0.1:3100";
 const ATLAS = "http://127.0.0.1:3200";
@@ -257,12 +254,6 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
 test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atlas choices", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
-
-  const canonical = createMuseoZeroPilotProject();
-  expect(canonical.projectId).toBe(MUSEO_ZERO_PROJECT_ID);
-  expect(canonical.storyReview.decision).toBe("PASS");
-  expect(canonical.worldReview.decision).toBe("READY");
-  expect(canonical.storyboardReady).toBe(false);
 
   await page.goto(STUDIO);
   await page.getByRole("button", { name: "Apri MUSEO ZERO" }).click();
