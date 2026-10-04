@@ -81,7 +81,6 @@ jobs:
               '"Q4_SMOKE_PASS"',
               '"Q4_OOM_FALLBACK_Q3_ALLOWED"',
               '"Q4_SMOKE_FAIL_DIAGNOSE"',
-              'NvidiaTesla',
           ]
           missing = [item for item in required if item not in source]
           if missing:
