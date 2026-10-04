@@ -315,9 +315,15 @@
                 "targetSceneId": {
                   "type": "string",
                   "minLength": 1
+                },
+                "worldAfter": {
+                  "$ref": "#/$defs/worldState"
                 }
               }
             }
+          },
+          "world": {
+            "$ref": "#/$defs/worldState"
           }
         },
         "allOf": [
@@ -542,5 +548,64 @@
         }
       }
     }
-  ]
+  ],
+  "$defs": {
+    "worldState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "place",
+        "status",
+        "signals"
+      ],
+      "properties": {
+        "place": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "state"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "OFF",
+                  "READY",
+                  "ACTIVE",
+                  "DELAYED",
+                  "MISMATCH",
+                  "STABLE",
+                  "MANUAL"
+                ]
+              },
+              "detail": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
