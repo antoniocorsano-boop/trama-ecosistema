@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: studio-atlas-preview-e2e-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   ATLAS_PREVIEW_SHA: 073650b20943415df9a466da92174a33ccf2928b
