@@ -76,6 +76,7 @@ export type PathwayScene = {
 export type HumanReview = {
   decision: ReviewDecision;
   reviewedAt?: string;
+  evidenceRef?: string;
 };
 
 export type VisualProductionRequest = {
