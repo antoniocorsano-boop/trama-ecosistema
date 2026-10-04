@@ -1,3 +1,4 @@
+# Permanent regression guard for the reconciled P3 baseline.
 import json
 import unittest
 from pathlib import Path
