@@ -5,7 +5,9 @@
 **Developmental band:** LOWER_SECONDARY_CANDIDATE / HUMAN_VALIDATION_REQUIRED  
 **Candidate territory:** `learning` only; territory taxonomy remains `CANDIDATE_NOT_APPROVED`  
 **Runtime:** NOT_AUTHORIZED  
-**Date:** 2026-10-04
+**Date:** 2026-10-04  
+**First-cycle experience spec:** `../../product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md`  
+**Dominant visual-interaction pattern:** `OPERATIVE_WORKBENCH`
 
 ## 1. Pathway brief
 
@@ -85,9 +87,9 @@ Do not implement:
 
 ### Subject / premise
 
-The learner enters a quiet **strategy laboratory**. A fictional set of information is already provided; the learner does not need outside knowledge.
+The learner enters a quiet **operative workbench**. A fictional set of information is already provided; the learner does not need outside knowledge. Internally this supports strategy selection; learner-facing wording must remain concrete and task-first.
 
-The first mission is to prepare for a **sequence reconstruction**. Later, the goal changes: the learner must explain a **cause–effect relation** in the same material. The strategy that fit the first goal is therefore not automatically sufficient for the second.
+The first mission is to prepare for a **sequence reconstruction**. Later, the goal changes: the learner must explain a **cause–effect relation** in the same material, including the later arrival. The source explicitly states that the ridge route takes longer, so the required causal chain is supported rather than inferred from mere temporal sequence.
 
 A final transfer task uses a different information surface and asks the learner to build a concrete comparison representation.
 
@@ -102,7 +104,7 @@ The narrative tension is cognitive, not emotional: “does the current strategy 
 Use:
 
 - **mission strip** — the current task remains visible as part of the workspace, not as a detached quiz card;
-- **tool bench** — strategies appear as manipulable working tools with equal visual dignity;
+- **tool bench** — learner-facing actions appear as manipulable working tools with equal visual dignity; internal strategy labels remain governance language;
 - **working surface** — information is reorganised on the same canvas so the learner can see what the chosen strategy actually does;
 - **switch gesture/state** — revising a strategy visibly transforms the workspace rather than replacing it with an unrelated screen;
 - **method trace** — the reusable principle emerges from the completed work and remains as a compact trace, not a reward card.
@@ -294,6 +296,8 @@ Observed product defects:
 Required remediation:
 
 - **learner-first task framing:** first state the situation and concrete challenge in ordinary language (“five events happened; the source will be hidden; put them back in order”), then ask how the learner wants to prepare; introduce strategy/method language only after it has been experienced;
+- apply the canonical `OPERATIVE_WORKBENCH` pattern: one persistent stage, visible material, direct manipulation, visible consequence and quiet progress chrome;
+- cards may exist only as meaningful evidence/tool objects, never as the pathway’s page-by-page organising structure;
 - preserve one persistent workbench as the dominant learner-visible composition;
 - restrict the large editorial title/serif treatment to entry and closure;
 - keep mission and growth state compact and non-overlaying;
