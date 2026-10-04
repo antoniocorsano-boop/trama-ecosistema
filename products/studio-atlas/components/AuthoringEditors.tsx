@@ -315,7 +315,15 @@ export function SceneEditor({ project, onPatch }: Props) {
                   <select
                     className="scene-kind"
                     value={scene.kind}
-                    onChange={(e) => updateScene(scene.sceneId, { kind: e.target.value as PathwayScene["kind"] })}
+                    onChange={(e) => {
+                      const kind = e.target.value as PathwayScene["kind"];
+                      updateScene(scene.sceneId, {
+                        kind,
+                        primitive: kind === "TRANSFER" ? "TRANSFER" : scene.primitive === "TRANSFER" ? "INVESTIGATE" : scene.primitive,
+                        feedbackCategory:
+                          kind === "TRANSFER" ? "TRANSFER_SUCCESSFUL" : scene.feedbackCategory === "TRANSFER_SUCCESSFUL" ? "EVIDENCE_SUPPORTED" : scene.feedbackCategory,
+                      });
+                    }}
                     aria-label={`Tipo scena ${index + 1}`}
                   >
                     <option value="SCENE">Scena del percorso</option>
