@@ -81,6 +81,8 @@ A pathway that fails this review returns to narrative/storyboard design. It must
 
 Experience-quality judgement is a **mandatory Human Review**. Repository automation may verify that the required artefacts and declarations exist, but it MUST NOT auto-certify that a pathway is engaging, coherent or aesthetically successful.
 
+**No grandfathering:** existing pathway candidates, including `PW-MISSING-INFORMATION-01` and `PW-CONSTRAINTS-TRADEOFFS-01`, must pass this gate on their actual learner-facing experience before any future Q9/runtime-authorization request. Prior technical qualification or product recovery does not substitute for this review.
+
 ## 4. Local personal growth
 
 Atlas MAY provide a learner-controlled local growth record, but it MUST NOT become an account, remote profile, score, ranking or psychometric identity.
