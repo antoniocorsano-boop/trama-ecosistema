@@ -90,10 +90,7 @@ Prompt:
 
 For this goal, A is the qualifying task-fit choice. B is a useful strategy for another goal; C may feel familiar but provides weaker evidence for the explicit sequence-retrieval goal.
 
-Qualifying evidence candidate:
-
-**Traguardo:** “Collego una strategia allo scopo del compito.”  
-**Stage:** `BEGINNING_TO_RECOGNISE`.
+Choosing A alone does **not** award growth evidence. The pathway must first observe an applied sequence-retrieval action.
 
 ### M3A — TEST THE SEQUENCE / CONNECT
 
@@ -108,6 +105,11 @@ The purpose is not factual assessment about expeditions; it is to make the conse
 Feedback:
 
 > “Il metodo ti ha fatto esercitare proprio l’ordine che il compito richiedeva.”
+
+Only a correct applied reconstruction after selecting/switching to the sequence-retrieval strategy earns:
+
+**Traguardo:** “Collego una strategia allo scopo del compito.”  
+**Stage:** `BEGINNING_TO_RECOGNISE`.
 
 ### M3B — THE GOAL IS STILL ORDER / CONNECT
 
@@ -172,10 +174,7 @@ Prompt:
 
 Qualifying choice: B.
 
-Qualifying evidence candidate:
-
-**Traguardo:** “Cambio strategia quando cambia lo scopo.”  
-**Stage:** `CHOOSES_WHEN_TO_USE`.
+Selecting B alone does **not** award growth evidence.
 
 ### M6 — MAKE THE RELATION VISIBLE / BUILD
 
@@ -191,6 +190,11 @@ Qualifying representation:
 Distractors either reverse causality or list facts without relations.
 
 This scene ensures the learner does not merely select the label “mappa causa-effetto”; the learner applies it to the material.
+
+Only the correct applied cause–effect representation after the goal change earns:
+
+**Traguardo:** “Cambio strategia quando cambia lo scopo.”  
+**Stage:** `CHOOSES_WHEN_TO_USE`.
 
 ### M7 — NAME THE PRINCIPLE / REFRAME
 
@@ -236,9 +240,25 @@ Qualifying applied choice:
 Non-qualifying:
 > “Memorizzo l’ordine delle stanze del Percorso Blu.”
 
-The qualifying action applies the **strategy-selection principle** in a different information structure and goal.
+Choosing the comparison-table strategy is necessary but not sufficient.
 
-Only this applied decision earns:
+### M8B — APPLY THE COMPARISON / BUILD
+
+The learner sees three candidate working tables. Only one organises the supplied museum data by the stated criteria:
+
+| Criterio | Blu | Verde |
+|---|---|---|
+| durata | 45 min | 30 min |
+| accesso | ascensore | solo scale |
+| attività pratiche | 1 | 2 |
+
+Other options either mix criteria, omit one route, or reproduce an irrelevant sequence.
+
+Prompt:
+
+> “Quale tabella rende davvero controllabile il confronto richiesto?”
+
+Only the correct applied representation earns:
 
 **Traguardo:** “Scelgo e applico una strategia adatta in un nuovo compito.”  
 **Stage:** `TRANSFERS_TO_NEW_SITUATION`.
@@ -282,9 +302,9 @@ Avoid:
 
 | Evidence | Qualifying outcome | Stage |
 |---|---|---|
-| strategy–goal fit | M2 chooses sequence + retrieval for sequence goal | BEGINNING_TO_RECOGNISE |
-| strategic revision | M3B switches after mismatch and/or M5 selects cause–effect after goal change | CHOOSES_WHEN_TO_USE |
-| applied transfer | M8 constructs/selects criterion-by-criterion comparison representation | TRANSFERS_TO_NEW_SITUATION |
+| strategy–goal fit | M3A correctly reconstructs the sequence after selecting/switching to sequence + retrieval | BEGINNING_TO_RECOGNISE |
+| strategic revision | M6 correctly applies a cause–effect representation after the goal change | CHOOSES_WHEN_TO_USE |
+| applied transfer | M8B correctly applies the criterion-by-criterion comparison representation in the new museum task | TRANSFERS_TO_NEW_SITUATION |
 
 A scene arrival, completion, time-on-task or initial preference is not growth evidence.
 
@@ -323,8 +343,8 @@ Forbidden:
 3. Does M3 make the consequence of a strategy observable rather than merely telling the learner the answer?
 4. Does M5 genuinely require revision because the goal changed?
 5. Does M6 require application of the cause–effect representation?
-6. Does M8 require an applied new-task representation rather than repetition of M7?
-7. Are the badge labels bounded to observed actions?
+6. Does M8B require an applied new-task representation rather than repetition of M7?
+7. Are all three growth events tied to applied task performance rather than strategy-label selection?
 8. Is the tone appropriate and non-infantilising for lower secondary?
 9. Does the experience avoid unnecessary working-memory and navigation burden?
 10. Does any wording invite trait inference or autobiographical disclosure?
