@@ -148,10 +148,13 @@ Minimum candidate fields:
 - `informationRevealed[]`;
 - `continuityAnchors[]`;
 - `nextSceneRefs[]`;
-- for a choice scene, `choices[]` with stable `choiceId`, learner-visible `label`, consequence `feedback` and exact `targetSceneId`;
+- optional `world` state with place, current status and observable signals;
+- for a choice scene, `choices[]` with stable `choiceId`, learner-visible `label`, consequence `feedback`, exact `targetSceneId` and optional `worldAfter`;
 - accessibility/alternate-mode declarations.
 
 `nextSceneRefs[]` describes graph reachability but does not replace choice routing. A conforming export/import MUST preserve the binding between each authored choice and its `targetSceneId`; otherwise two semantically different branches could collapse into the same sequential path.
+
+When present, `world` and `worldAfter` are part of the semantic experience contract: they describe what the learner can observe changing in the world. They MUST remain presentation-neutral, textual/semantic enough for an accessible equivalent, and MUST NOT encode learner telemetry or identity.
 
 Generated visual prompts are production metadata, not canonical learner content.
 
