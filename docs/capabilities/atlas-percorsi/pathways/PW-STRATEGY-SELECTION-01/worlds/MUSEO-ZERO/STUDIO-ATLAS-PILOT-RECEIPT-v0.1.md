@@ -71,13 +71,23 @@ The materialized scenes are complete enough to review, but are not silently prom
 
 ### Transfer
 
-An explicit transfer scene is present as a **candidate**:
+Transfer is kept **inside the approved story arc**, not appended as a didactic epilogue.
 
-`MZ7_TRANSFER_CANDIDATE`
+The scene:
 
-It tests whether the learner changes representation according to the new question in a second installation context.
+`MZ5_COMPARE_RECOVERY`
 
-Its presence satisfies the runtime structural requirement but does not make the transfer design human-approved.
+is marked as the transfer scene because the learner must move from the causal question:
+
+> why is the room late?
+
+to a different decision question:
+
+> which recovery option is the strongest under the current constraints?
+
+The competence therefore transfers by changing the representation according to the problem: causal/dependency view → comparison/constraint view.
+
+The earlier second-installation epilogue candidate was removed because it weakened the approved quiet ending.
 
 ## Materialized authoring content
 
@@ -89,8 +99,9 @@ The pilot contains:
 4. simulated trigger-mapping test;
 5. recovery-option comparison;
 6. final rehearsal;
-7. explicit transfer candidate;
-8. quiet close.
+7. quiet close.
+
+Transfer occurs within the recovery-comparison phase rather than as an extra post-story scene.
 
 Meaningful-choice scenes preserve alternative actions and distinct consequences.
 
@@ -145,7 +156,7 @@ This tranche proves that Studio Atlas can now carry a real governed Percorso fro
 Before MUSEO ZERO can be treated as a publishable-candidate experience:
 
 1. real Human World Review;
-2. real storyboard/transfer review;
+2. real storyboard review, including confirmation that the in-story recovery phase is an adequate transfer demonstration;
 3. Human Use Review of the learner experience;
 4. Visual Factory asset production and Visual Quality Bar review;
 5. accessibility/rights/provenance review as applicable;
