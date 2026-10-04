@@ -47,6 +47,40 @@ The common educational grammar remains:
 
 The grammar is functional, not a mandatory screen count.
 
+### 3.1 Mandatory Experience Quality Gate
+
+Pedagogical correctness, safety, accessibility and technical validity are necessary but **not sufficient** for an Atlas Percorso.
+
+A learner-facing pathway fails the product gate if it is experienced primarily as a sequence of generic cards, forms, quizzes, explanatory panels or automatically assembled prompts, even when those elements are individually correct.
+
+Before implementation handoff, every pathway MUST define and survive human review for:
+
+- **mise-en-scène** — a coherent situation/world in which the learner understands where they are, what is happening and why their action matters;
+- **pathway-specific visual identity** — recognizable composition, visual language and atmosphere derived from the competence and subject, not from a universal Atlas skin;
+- **experiential rhythm** — intentional alternation of orientation, action, consequence, pause, reconsideration and transfer rather than constant prompt-response cadence;
+- **continuity** — stable visual/narrative anchors across scenes so the experience feels like one evolving situation rather than disconnected screens;
+- **meaningful variation** — interaction forms vary only when the cognitive action changes; repetition and novelty must both have a reason;
+- **learner pleasure without manipulation** — curiosity, agency, discovery, mastery and aesthetic care may make the experience enjoyable; streaks, reward harvesting, artificial urgency, addictive loops and empty gamification may not;
+- **non-generic composition** — cards, panels, chips and buttons may be components, but they must not become the product's visible organising idea by default;
+- **authored scene design** — generated text/assets may assist production, but no automatically generated stack of scenes/cards is accepted as a finished Percorso without deliberate human composition;
+- **age-appropriate dignity** — the experience must avoid both infantilisation and sterile institutional tone for its intended developmental band;
+- **visual/interaction purpose** — salient media, movement, illustration and transitions must serve orientation, meaning, consequence, viewpoint, evidence or atmosphere; decorative churn is not product quality.
+
+The review must answer from the **student point of view**, not from governance documents:
+
+1. Would a learner immediately understand the situation and want to see what happens next?
+2. Does each scene feel causally connected to the previous one?
+3. Is there a recognizable identity that belongs to this pathway?
+4. Does the rhythm create anticipation, action, consequence and reflection rather than repeated questioning?
+5. Are interactions doing cognitive work rather than merely collecting answers?
+6. Would removing the card/container styling reveal an actual experience, or only a questionnaire?
+7. Is enjoyment produced by agency, curiosity, consequence and craft rather than points/rewards/retention pressure?
+8. Does the transfer scene feel like a meaningful new situation rather than a reskinned exercise?
+
+A pathway that fails this review returns to narrative/storyboard design. It must not proceed merely because engine contracts, CI, accessibility automation or content validation pass.
+
+Experience-quality judgement is a **mandatory Human Review**. Repository automation may verify that the required artefacts and declarations exist, but it MUST NOT auto-certify that a pathway is engaging, coherent or aesthetically successful.
+
 ## 4. Local personal growth
 
 Atlas MAY provide a learner-controlled local growth record, but it MUST NOT become an account, remote profile, score, ranking or psychometric identity.
@@ -98,7 +132,8 @@ Before a future Q9 request, the review packet for each pathway MUST include:
 6. visible consequence/revision/transfer evidence;
 7. local-growth evidence mapping, if used;
 8. privacy/accessibility/child-safety checks;
-9. human pedagogical/product review of the actual learner experience;
-10. exact-head technical qualification.
+9. **Experience Quality Gate** review of mise-en-scène, pathway-specific visual identity, rhythm, continuity, meaningful interaction variation and anti-card-stack compliance;
+10. human pedagogical/product review of the actual learner experience from the student point of view;
+11. exact-head technical qualification.
 
 Q9 remains separate. This contract does not authorize student runtime.
