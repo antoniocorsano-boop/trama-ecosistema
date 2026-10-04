@@ -264,14 +264,19 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
 
   await page.getByRole("button", { name: "Mondo" }).click();
   await expect(page.getByRole("heading", { name: "Fai esistere il mondo." })).toBeVisible();
-  await page.getByRole("button", { name: "Approva mondo" }).click();
+  await expect(page.getByRole("button", { name: "Approva mondo" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "Scene" }).click();
   await expect(page.getByRole("heading", { name: "Metti in sequenza ciò che accade." })).toBeVisible();
   await expect(
     page.getByRole("textbox", { name: "Titolo scena 7" }),
   ).toHaveValue("Un’altra sala, una domanda diversa");
-  await page.getByRole("button", { name: "Storyboard pronto" }).click();
+  await expect(page.getByRole("button", { name: "Storyboard pronto" })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Revisione" }).click();
+  await expect(page.getByRole("heading", { name: "Human Product Review" })).toBeVisible();
+  await expect(previewButton).toBeDisabled();
+  await page.getByRole("button", { name: "Approva pacchetto" }).click();
 
   await expect(previewButton).toBeEnabled();
 
@@ -325,7 +330,10 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
     return items.find((item: { projectId?: string }) => item.projectId === projectId);
   }, MUSEO_ZERO_PROJECT_ID);
 
+  expect(stored.productReview.decision).toBe("PASS");
+  expect(stored.productReview.evidenceRef).toContain("PRODUCT-REVIEW-PACK-v0.1.md");
   expect(stored.worldReview.decision).toBe("PASS");
+  expect(stored.worldReview.evidenceRef).toContain("PRODUCT-REVIEW-PACK-v0.1.md");
   expect(stored.storyboardReady).toBe(true);
   expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
   expect(
