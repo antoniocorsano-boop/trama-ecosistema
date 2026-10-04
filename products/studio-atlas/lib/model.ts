@@ -56,11 +56,34 @@ export type ExperienceDraft = {
   rationale: string;
 };
 
+export type SceneWorldSignalState =
+  | "OFF"
+  | "READY"
+  | "ACTIVE"
+  | "DELAYED"
+  | "MISMATCH"
+  | "STABLE"
+  | "MANUAL";
+
+export type SceneWorldSignal = {
+  id: string;
+  label: string;
+  state: SceneWorldSignalState;
+  detail?: string;
+};
+
+export type SceneWorldState = {
+  place: string;
+  status: string;
+  signals: SceneWorldSignal[];
+};
+
 export type PathwaySceneChoice = {
   choiceId: string;
   label: string;
   feedback: string;
   targetSceneId: string;
+  worldAfter?: SceneWorldState;
 };
 
 export type PathwayScene = {
@@ -72,6 +95,7 @@ export type PathwayScene = {
   learnerAction: string;
   consequence: string;
   reveal: string;
+  world?: SceneWorldState;
   choices: PathwaySceneChoice[];
 };
 
