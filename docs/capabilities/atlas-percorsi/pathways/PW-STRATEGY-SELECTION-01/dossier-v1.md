@@ -280,6 +280,8 @@ Human Experience Review was performed on 2026-10-04 against the learner-facing A
 
 Observed product defects:
 
+- **learner task framing was too meta-cognitive before the learner had a concrete task**: phrases such as “scegli uno strumento”, “adatto allo scopo” and “guarda il materiale prima di scegliere come lavorarci” required the learner to understand the pedagogical model before understanding what to do;
+- the opening must state the concrete situation, what will happen next, and the exact action the learner will have to perform before any strategy/method vocabulary appears;
 - mobile experience still read primarily as a long editorial/document flow rather than one evolving workbench;
 - the large title consumed too much of the learner viewport after entry;
 - the mission chrome visually competed with and could cover scene content;
@@ -291,6 +293,7 @@ Observed product defects:
 
 Required remediation:
 
+- **learner-first task framing:** first state the situation and concrete challenge in ordinary language (“five events happened; the source will be hidden; put them back in order”), then ask how the learner wants to prepare; introduce strategy/method language only after it has been experienced;
 - preserve one persistent workbench as the dominant learner-visible composition;
 - restrict the large editorial title/serif treatment to entry and closure;
 - keep mission and growth state compact and non-overlaying;
