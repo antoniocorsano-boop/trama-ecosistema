@@ -7,6 +7,7 @@ import {
   createInitialVisualFactoryState,
   ingestVisualCandidates,
   lockVisualReference,
+  reconcileVisualFactoryState,
   type VisualExecutionReceipt,
 } from "./visual-factory";
 
@@ -84,6 +85,27 @@ test("a candidate from a stale authoring digest cannot be locked", () => {
     () => lockVisualReference(state, "lia", "lia-1", OTHER_DIGEST),
     /STALE_VISUAL_CANDIDATE/,
   );
+});
+
+test("a newer authoring digest invalidates old candidates and locks", () => {
+  let state = createInitialVisualFactoryState(DIGEST);
+  state = ingestVisualCandidates(state, candidateReceipt());
+  state = lockVisualReference(state, "lia", "lia-1", DIGEST);
+
+  const reconciled = reconcileVisualFactoryState(state, OTHER_DIGEST);
+
+  assert.equal(reconciled.packageDigest, OTHER_DIGEST);
+  assert.equal(reconciled.stage, "NEEDS_REFERENCES");
+  assert.deepEqual(reconciled.candidates, []);
+  assert.deepEqual(reconciled.referenceLocks, []);
+  assert.deepEqual(reconciled.sceneAssets, []);
+});
+
+test("the same authoring digest preserves visual review state", () => {
+  let state = createInitialVisualFactoryState(DIGEST);
+  state = ingestVisualCandidates(state, candidateReceipt());
+
+  assert.equal(reconcileVisualFactoryState(state, DIGEST), state);
 });
 
 test("locked MUSEO ZERO references compile exactly F1 through F6", () => {
