@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { STAGES, type PathwayProject } from "../lib/model";
 import { getProject, updateProject } from "../lib/store";
+import { canPrepareProduction } from "../lib/production";
 
 export function PathwayWorkspace({ id }: { id: string }) {
   const [project, setProject] = useState<PathwayProject | null>(null);
@@ -120,6 +121,27 @@ export function PathwayWorkspace({ id }: { id: string }) {
                     </p>
                   </div>
                 </div>
+              ) : !canPrepareProduction(project) ? (
+                <>
+                  <p className="lead">
+                    La Factory lavora su scene già definite. Questo Percorso è ancora
+                    allo stato Idea, quindi non c’è nulla da inviare alla produzione.
+                  </p>
+                  <div className="production-wait">
+                    <span className="status-dot neutral" aria-hidden="true" />
+                    <div>
+                      <strong>Prima servono le scene</strong>
+                      <p>
+                        Completa almeno una scena con ciò che lo studente vede, può fare
+                        e fa accadere. Solo allora Studio Atlas potrà creare una richiesta
+                        di produzione reale.
+                      </p>
+                      <button className="quiet-action" onClick={() => setStage("Scene")}>
+                        Vai a Scene →
+                      </button>
+                    </div>
+                  </div>
+                </>
               ) : (
                 <>
                   <p className="lead">
