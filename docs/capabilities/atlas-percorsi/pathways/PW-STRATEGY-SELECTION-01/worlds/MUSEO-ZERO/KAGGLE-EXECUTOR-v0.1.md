@@ -2,7 +2,7 @@
 
 **Candidate:** MZ-VF-001  
 **Factory:** TRAMA Visual Factory v0.1  
-**State:** EXECUTOR_IMPLEMENTED / BOOTSTRAP_REQUIRED / NOT_RUNTIME_AUTHORIZED  
+**State:** AUTOMATION_BRIDGE_PASS / GPU_PROVISIONING_NOT_QUALIFIED / NOT_RUNTIME_AUTHORIZED  
 **Execution provider:** Kaggle Notebooks Free  
 **Authority:** GitHub remains the governed source; Kaggle is compute-only
 
@@ -224,13 +224,79 @@ Human authority remains required for:
 5. PUBLISH_CANDIDATE;
 6. runtime/public publication.
 
-## 13. Current next action
+## 13. Empirical execution evidence — 2026-10-04
 
-After Human Review integrates the executor workflow onto the default branch:
+### GitHub -> Kaggle bridge
 
-1. configure `KAGGLE_API_TOKEN`;
-2. configure `KAGGLE_USERNAME`;
-3. dispatch **Visual Factory — Kaggle Executor v0.1** with the exact governed head;
-4. inspect the returned GitHub artifact and decision.
+PASS.
 
-No manual Kaggle notebook interaction should then be required.
+Observed on exact head:
+
+`cf6240d40cf6e7884ae2f8e92749d31ee9ce1b3a`
+
+GitHub Actions run:
+
+`37204908880`
+
+Kaggle kernel:
+
+`antoniocorsano/trama-visual-factory-q4-smoke`
+
+Observed:
+- repository secret and variable bootstrap: PASS;
+- Kaggle CLI authentication: PASS;
+- private kernel push: PASS;
+- Kaggle kernel version 1 creation: PASS;
+- provider status: `QUEUED -> ERROR`;
+- evidence artifact uploaded: PASS;
+- automatic retry: 0.
+
+Notebook decision from Kaggle logs:
+
+`KAGGLE_NO_GPU`
+
+The notebook stopped before model/tool installation.
+
+### Provider probe
+
+Read-only GitHub Actions run:
+
+`37205275252`
+
+Observed account quota:
+- GPU used: `0.00h`;
+- GPU remaining: `30.00h`;
+- GPU total: `30.00h`;
+- TPU remaining: `20.00h`.
+
+Pulled persisted Kaggle metadata:
+- `enable_gpu: true`;
+- `enable_tpu: false`;
+- `machine_shape: "NvidiaTeslaT4"`;
+- `enable_internet: true`.
+
+Therefore the no-GPU result is **not explained by exhausted quota** and is **not explained by missing GPU metadata**.
+
+### Qualification decision
+
+The GitHub <-> Kaggle automation bridge is technically proven.
+
+The **Kaggle CLI/API GPU provisioning path is NOT QUALIFIED** for the canonical Visual Factory v0.1 executor because an accepted and persisted T4 request produced a CPU-only runtime.
+
+No second GPU execution is authorised merely to repeat the same condition.
+
+This finding is consistent with current Kaggle CLI reports documenting gaps between push-based accelerator requests and the environment actually provisioned.
+
+## 14. Current next action
+
+Do not repeat the Q4 Kaggle run until one of these becomes true:
+
+1. Kaggle CLI/API accelerator provisioning is independently verified for this account/path; or
+2. a different zero-cost programmatic GPU executor is qualified.
+
+The existing executor remains useful as:
+- a validated GitHub <-> Kaggle transport/evidence bridge;
+- a provider probe;
+- a future executor if Kaggle GPU provisioning is proven.
+
+Manual Kaggle UI execution may remain a diagnostic fallback, but it is **not** the canonical automated factory path.
