@@ -294,6 +294,87 @@ This strongly matches Atlas privacy-first and non-ranking requirements.
 
 ---
 
+
+## 3.6 Quandary
+
+### What it is
+
+Quandary is a free, nonprofit ethical decision-making game for players aged 8+.
+
+The learner plays a leadership role on the fictional planet Braxos and faces dilemmas with **no single correct answer**. Decisions affect the learner, other community members and the planet.
+
+Players:
+- investigate facts and opinions;
+- hear different character viewpoints;
+- consider possible solutions;
+- weigh consequences;
+- make a recommendation.
+
+Official:
+https://quandarygame.org/
+https://quandarygame.org/faq
+
+### What Atlas should learn
+
+Quandary is important because it shows that a serious educational experience can be driven by:
+
+- a fictional world;
+- a meaningful role;
+- characters with different perspectives;
+- ambiguous problems;
+- consequences;
+- discussion and judgement;
+
+without requiring points, badges or a single “correct” route.
+
+The learner is not answering questions about ethical decision-making. The learner is **performing ethical decision-making**.
+
+### What Atlas should not copy literally
+
+Quandary itself uses card-based interaction. Atlas should retain the deeper principle — role, conflicting perspectives and consequence — without inheriting card-dominant visual structure.
+
+---
+
+## 3.7 iCivics simulations
+
+iCivics uses collaborative simulations in which learners apply principles, work in groups, explore different perspectives, argue and determine outcomes.
+
+Official:
+https://vision.icivics.org/how-to-use/simulations/
+
+### What Atlas should learn
+
+For some competencies, **social deliberation and role-based perspective** are more meaningful than solo selection mechanics.
+
+Atlas should not require multiplayer accounts to gain this benefit. A single learner can still encounter multiple represented perspectives or prepare an artefact for later classroom discussion.
+
+---
+
+## 3.8 Legends of Learning — useful contrast
+
+Legends of Learning currently offers thousands of standards-aligned K–8 educational games and distinguishes between instructional games, quiz games and simulations.
+
+Official:
+https://www.legendsoflearning.com/
+https://help.legendsoflearning.com/en/articles/3505828-types-of-games
+
+This is useful as a contrast case.
+
+### What Atlas should learn
+
+A large content library can:
+- distinguish interaction types;
+- align experiences to specific objectives;
+- support broad curricular coverage;
+- treat gameplay as a content-delivery form rather than only assessment.
+
+### What Atlas should avoid
+
+Percorsi should not become a catalogue of disconnected mini-games whose primary common structure is “play to practise a standard”.
+
+Its differentiator should be **coherent learning worlds and transferable competence growth**, not volume.
+
+
 ## 4. Cross-case synthesis
 
 Across the strongest precedents, the recurring pattern is not:
