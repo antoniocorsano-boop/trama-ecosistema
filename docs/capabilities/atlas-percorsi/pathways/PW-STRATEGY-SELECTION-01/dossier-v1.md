@@ -274,9 +274,31 @@ The visual tone must resemble a capable young person’s investigation/workbench
 
 ### Human review decision
 
-Current state: **NOT_REVIEWED / CHANGES_REQUIRED BEFORE ATLAS IMPLEMENTATION**.
+Current state: **CHANGES_REQUIRED / REMEDIATION_IN_PROGRESS**.
 
-The dossier now defines the intended experience-quality target, but the gate can pass only on a reviewable student-facing prototype or exact implementation surface.
+Human Experience Review was performed on 2026-10-04 against the learner-facing Atlas laboratory prototype in PR #78. The pedagogical sequence and task logic were retained, but the surface did **not** pass the Experience Quality Gate in its pre-remediation form.
+
+Observed product defects:
+
+- mobile experience still read primarily as a long editorial/document flow rather than one evolving workbench;
+- the large title consumed too much of the learner viewport after entry;
+- the mission chrome visually competed with and could cover scene content;
+- local-growth trace occupied too much mobile space;
+- tools were still perceived as textual options rather than operational instruments;
+- scene composition required too much vertical scrolling to understand mission + material + action together;
+- programmatic heading focus produced an undesirable visible outline in the review surface;
+- completion remained more declarative than evidential/visual.
+
+Required remediation:
+
+- preserve one persistent workbench as the dominant learner-visible composition;
+- restrict the large editorial title/serif treatment to entry and closure;
+- keep mission and growth state compact and non-overlaying;
+- make strategy tools visibly operable;
+- keep mission, evidence and current action perceptually connected on mobile;
+- re-run exact-head technical qualification and a second Human Experience Review before implementation handoff.
+
+Atlas remediation branch/PR: **Curriculum-Atlas #78**. Runtime remains **NOT_RUNTIME_AUTHORIZED** and no Q9/publication action is implied.
 
 ## 9. Consequence review
 
