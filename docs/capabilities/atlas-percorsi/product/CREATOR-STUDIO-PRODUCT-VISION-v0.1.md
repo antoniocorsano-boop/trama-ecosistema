@@ -80,7 +80,7 @@ Studio Atlas is not:
 
 It is a **professional authoring mode for Atlas content** using the existing professional identity boundary.
 
-The creator should not log into Atlas separately.
+The creator should not need a separate public-Atlas account. A professional already authenticated through Docente OS should enter Studio Atlas without a second registration.
 
 ### 3.2 Atlas remains the destination, not the authoring account system
 
@@ -166,9 +166,11 @@ One person may hold multiple roles in a pilot, but the roles remain conceptually
 
 ## 7. Entry points in Docente OS
 
-Recommended professional entry point:
+Recommended Docente OS integration entry:
 
-**Crea → Studio Atlas**
+**Crea → Studio Atlas ↗**
+
+Studio Atlas also has its own standalone professional entry.
 
 Alternative human labels to validate:
 
