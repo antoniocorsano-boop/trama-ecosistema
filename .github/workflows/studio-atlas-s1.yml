@@ -40,3 +40,14 @@ jobs:
           ! grep -R "studentName\|classId\|KAGGLE\|AZURE_CREDENTIALS\|kubectl\|sky launch" app components lib
           grep -R "Produzione in attesa" components
           grep -R "Nessuna classe, studente o provider" components
+
+      - name: Enforce Atlas preview bridge contract
+        run: |
+          grep -q 'studio-atlas.preview-snapshot/v0.1' lib/model.ts lib/preview.ts
+          grep -q 'runtimeAuthorized: false' lib/preview.ts
+          grep -q 'studentAuthorized: false' lib/preview.ts
+          grep -q 'scene.kind === "TRANSFER"' lib/production.ts
+          grep -q 'event.origin !== atlasOrigin' lib/preview-bridge.ts
+          grep -q 'event.source !== previewWindow' lib/preview-bridge.ts
+          ! grep -R 'postMessage([^,]*,[[:space:]]*"\*"' lib/preview-bridge.ts
+          grep -q 'NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN' lib/preview-bridge.ts
