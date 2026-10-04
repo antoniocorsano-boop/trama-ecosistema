@@ -165,7 +165,7 @@ export function createMuseoZeroPilotProject(): PathwayProject {
       },
       {
         sceneId: "MZ5_COMPARE_RECOVERY",
-        kind: "SCENE",
+        kind: "TRANSFER",
         interaction: "CHOICE",
         title: "Quale soluzione regge davvero?",
         visibleSituation:
@@ -213,41 +213,7 @@ export function createMuseoZeroPilotProject(): PathwayProject {
         choices: [],
       },
       {
-        sceneId: "MZ7_TRANSFER_CANDIDATE",
-        kind: "TRANSFER",
-        interaction: "CHOICE",
-        title: "Un’altra sala, una domanda diversa",
-        visibleSituation:
-          "Prima di chiudere, Teo mostra il log di un’altra installazione: anche lì il percorso è stato modificato e una proiezione parte tardi. Il team conosce già l’ordine delle modifiche ma non sa quale relazione spieghi il ritardo.",
-        learnerAction:
-          "Quale rappresentazione useresti adesso per proseguire l’indagine?",
-        consequence:
-          "La scelta mostra se la strategia viene trasferita in funzione della nuova domanda, non per somiglianza superficiale.",
-        reveal:
-          "La domanda guida il modo di organizzare le informazioni anche quando cambia il contesto.",
-        choices: [
-          {
-            choiceId: "transfer-timeline",
-            label: "Ricostruisco di nuovo la timeline",
-            feedback:
-              "La cronologia è già nota: ripeterla aggiunge poco alla domanda causale.",
-          },
-          {
-            choiceId: "transfer-connections",
-            label: "Costruisco una vista delle relazioni tra trigger e comportamento",
-            feedback:
-              "La domanda è causale: una vista delle dipendenze è il passo più informativo.",
-          },
-          {
-            choiceId: "transfer-comparison",
-            label: "Confronto subito le soluzioni possibili",
-            feedback:
-              "Prima di confrontare le soluzioni conviene capire quale relazione produce il problema.",
-          },
-        ],
-      },
-      {
-        sceneId: "MZ8_QUIET_CLOSE",
+        sceneId: "MZ7_QUIET_CLOSE",
         kind: "SCENE",
         interaction: "SUMMARY",
         title: "Pronta per la prova generale",
