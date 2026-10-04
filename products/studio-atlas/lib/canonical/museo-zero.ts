@@ -1,6 +1,8 @@
 import type { PathwayProject } from "../model";
 
 export const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
+export const MUSEO_ZERO_PRODUCT_REVIEW_REF =
+  "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/PRODUCT-REVIEW-PACK-v0.1.md";
 
 export function createMuseoZeroPilotProject(): PathwayProject {
   const now = new Date().toISOString();
@@ -53,6 +55,10 @@ export function createMuseoZeroPilotProject(): PathwayProject {
         "Capire finalmente che cosa non torna, vedere la sala reagire correttamente e contribuire a una decisione che il team userà nella prova finale.",
     },
     worldReview: { decision: "READY" },
+    productReview: {
+      decision: "READY",
+      evidenceRef: MUSEO_ZERO_PRODUCT_REVIEW_REF,
+    },
     experience: {
       grammar: "SIMULATION_MICROWORLD",
       rationale:
