@@ -137,6 +137,20 @@ Apply child safety, emotional-development, privacy, accessibility, attention/mem
 
 **Gate:** blockers stop progression before polished visual work.
 
+### W5A — Learner-language translation
+
+Before storyboard polish, translate the internal educational construct into the learner's concrete cognitive context.
+
+Required sequence for first-cycle experiences:
+
+`SITUATION → WHAT HAPPENED / AVAILABLE INFORMATION → WHAT WILL HAPPEN NEXT → CONCRETE LEARNER ACTION → ONLY THEN METHOD/STRATEGY NAMING IF USEFUL`
+
+The authoring team may reason with professional terms. The learner must not need those terms to understand the task.
+
+**Hard gate:** if the first-cycle learner-facing instruction begins with abstract educational language (for example “choose a strategy”, “reflect on your method”, “select the tool best suited to the goal”) before the task has been concretely grounded, return to W4/W5.
+
+The reviewer must be able to paraphrase the opening in one ordinary sentence beginning with an action verb, e.g. “rimetti”, “confronta”, “trova”, “scegli”, “collega”, “controlla”.
+
 ### W6 — Controlled storyboard
 
 Create literal instructions, scenes, actions, consequences, reconsideration, strategy recognition and transfer. Generate visuals only after the structural storyboard is reviewable.
