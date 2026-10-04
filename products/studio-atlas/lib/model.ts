@@ -78,6 +78,40 @@ export type SceneWorldState = {
   signals: SceneWorldSignal[];
 };
 
+export type SceneStageLocationPosition = "ENTRY" | "ROOM" | "CONTROL" | "LAB";
+export type SceneStageEvidenceKind = "TRACE" | "OBJECT" | "PERSON" | "SYSTEM";
+export type SceneWorkbenchMode = "TIMELINE" | "CONNECTIONS" | "COMPARE";
+
+export type SceneStage = {
+  visualMode: "CINEMATIC_EDITORIAL";
+  focusLocationId?: string;
+  locations?: Array<{
+    id: string;
+    label: string;
+    detail: string;
+    position: SceneStageLocationPosition;
+  }>;
+  evidence?: Array<{
+    id: string;
+    label: string;
+    detail: string;
+    locationId: string;
+    kind: SceneStageEvidenceKind;
+    character?: string;
+  }>;
+  characterBeat?: {
+    name: string;
+    role: string;
+    line: string;
+  };
+  workbench?: {
+    modes: SceneWorkbenchMode[];
+    prompt: string;
+    minEvidence: number;
+    transitionMap?: Partial<Record<SceneWorkbenchMode, string>>;
+  };
+};
+
 export type PathwaySceneChoice = {
   choiceId: string;
   label: string;
@@ -96,6 +130,7 @@ export type PathwayScene = {
   consequence: string;
   reveal: string;
   world?: SceneWorldState;
+  stage?: SceneStage;
   choices: PathwaySceneChoice[];
 };
 
