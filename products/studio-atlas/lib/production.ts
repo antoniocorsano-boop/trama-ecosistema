@@ -32,7 +32,14 @@ export function getProductionBlockers(project: PathwayProject) {
       scene.interaction === "CHOICE" &&
       (
         scene.choices.length < 2 ||
-        scene.choices.some((choice) => !choice.label.trim() || !choice.feedback.trim())
+        scene.choices.some(
+          (choice) =>
+            !choice.label.trim() ||
+            !choice.feedback.trim() ||
+            !choice.targetSceneId.trim() ||
+            !project.scenes.some((candidate) => candidate.sceneId === choice.targetSceneId),
+        ) ||
+        new Set(scene.choices.map((choice) => choice.targetSceneId)).size < 2
       ),
   );
   if (invalidChoice) blockers.push("INCOMPLETE_CHOICES");
