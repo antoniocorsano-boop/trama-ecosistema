@@ -1,0 +1,161 @@
+name: Visual Factory — Provider Discovery v0.1
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    paths:
+      - ".github/workflows/visual-factory-provider-discovery.yml"
+      - "scripts/probe_azure_credit_entitlement.py"
+      - "scripts/probe_owned_k8s_entitlement.py"
+      - "docs/capabilities/atlas-percorsi/production/PROVIDER-QUALIFICATION-MATRIX-v0.1.md"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  contract:
+    name: Validate provider discovery contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate probe scripts compile
+        run: |
+          python -m py_compile scripts/probe_azure_credit_entitlement.py
+          python -m py_compile scripts/probe_owned_k8s_entitlement.py
+
+      - name: Confirm read-only contract
+        run: |
+          ! grep -R "az vm create\|kubectl apply\|kubectl create\|sky launch" \
+            scripts/probe_azure_credit_entitlement.py \
+            scripts/probe_owned_k8s_entitlement.py
+
+  discover:
+    name: Read-only provider discovery
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'vf-provider-probe'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      AZURE_CREDENTIALS_JSON: ${{ secrets.AZURE_CREDENTIALS }}
+      AZURE_BILLING_ACCOUNT_ID: ${{ vars.AZURE_BILLING_ACCOUNT_ID }}
+      AZURE_BILLING_PROFILE_ID: ${{ vars.AZURE_BILLING_PROFILE_ID }}
+      KUBECONFIG_B64: ${{ secrets.TRAMA_KUBECONFIG_B64 }}
+      K8S_CONTEXT: ${{ vars.TRAMA_K8S_CONTEXT }}
+      K8S_ZERO_MARGINAL: ${{ vars.TRAMA_K8S_ZERO_MARGINAL_AUTHORIZED }}
+      K8S_ESTIMATED_RUNS: ${{ vars.TRAMA_K8S_ESTIMATED_RUNS_REMAINING }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare evidence directory
+        run: mkdir -p /tmp/provider-discovery
+
+      - name: Probe Azure configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=/tmp/provider-discovery/azure.json
+
+          if [[ -z "${AZURE_CREDENTIALS_JSON:-}" || -z "${AZURE_BILLING_ACCOUNT_ID:-}" || -z "${AZURE_BILLING_PROFILE_ID:-}" ]]; then
+            printf '%s\n' '{"schemaVersion":"trama.compute-entitlement-adapter-evidence/v0.1","adapter":"azure-credit/v0.1","readOnly":true,"decision":"NOT_CONFIGURED","reason":"REQUIRED_GITHUB_SECRET_OR_VARIABLE_MISSING"}' | python -m json.tool > "$OUT"
+            cat "$OUT"
+            exit 0
+          fi
+
+          python -m pip install -q azure-cli
+          python - <<'PY'
+import json, os, subprocess
+creds=json.loads(os.environ["AZURE_CREDENTIALS_JSON"])
+cmd=[
+  "az","login","--service-principal",
+  "--username",creds["clientId"],
+  "--password",creds["clientSecret"],
+  "--tenant",creds["tenantId"],
+  "--output","none"
+]
+subprocess.run(cmd, check=True)
+if creds.get("subscriptionId"):
+    subprocess.run(["az","account","set","--subscription",creds["subscriptionId"]], check=True)
+PY
+
+          python scripts/probe_azure_credit_entitlement.py \
+            --billing-account-id "$AZURE_BILLING_ACCOUNT_ID" \
+            --billing-profile-id "$AZURE_BILLING_PROFILE_ID" \
+            --run-cost-upper-bound-usd 2.0 \
+            --system-ram-gib 24 \
+            --disk-free-gib 80 \
+            --accelerator L4 \
+            --vram-gib 24 \
+            --output "$OUT"
+
+      - name: Probe owned Kubernetes configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=/tmp/provider-discovery/kubernetes.json
+
+          if [[ -z "${KUBECONFIG_B64:-}" || "${K8S_ZERO_MARGINAL:-}" != "true" ]]; then
+            printf '%s\n' '{"schemaVersion":"trama.compute-entitlement-adapter-evidence/v0.1","adapter":"owned-kubernetes/v0.1","readOnly":true,"decision":"NOT_CONFIGURED","reason":"KUBECONFIG_OR_ZERO_MARGINAL_AUTHORIZATION_MISSING"}' | python -m json.tool > "$OUT"
+            cat "$OUT"
+            exit 0
+          fi
+
+          mkdir -p ~/.kube
+          printf '%s' "$KUBECONFIG_B64" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+          RUNS="${K8S_ESTIMATED_RUNS:-0}"
+          python scripts/probe_owned_k8s_entitlement.py \
+            --context "${K8S_CONTEXT:-}" \
+            --zero-marginal-authorized \
+            --accelerator-name T4 \
+            --vram-gib 16 \
+            --system-ram-gib 24 \
+            --disk-free-gib 80 \
+            --estimated-runs-remaining "$RUNS" \
+            --output "$OUT"
+
+      - name: Build discovery summary
+        shell: bash
+        run: |
+          python - <<'PY'
+import json
+from pathlib import Path
+providers={}
+for name in ("azure","kubernetes"):
+    p=Path(f"/tmp/provider-discovery/{name}.json")
+    if p.exists():
+        providers[name]=json.loads(p.read_text())
+result={
+    "schemaVersion":"trama.provider-discovery/v0.1",
+    "readOnly":True,
+    "computeProvisioned":False,
+    "providers":{
+        name:{"decision":data.get("decision"),"reason":data.get("reason")}
+        for name,data in providers.items()
+    }
+}
+Path("/tmp/provider-discovery/summary.json").write_text(json.dumps(result,indent=2)+"\n")
+print(json.dumps(result,indent=2))
+PY
+
+          {
+            echo "### Visual Factory provider discovery"
+            echo "- read-only: true"
+            echo "- compute provisioned: false"
+            cat /tmp/provider-discovery/summary.json
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload discovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-factory-provider-discovery
+          path: /tmp/provider-discovery
+          if-no-files-found: warn
+          retention-days: 14
