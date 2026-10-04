@@ -8,7 +8,7 @@
 
 Single product-level entry point for the professional Atlas Percorsi authoring domain.
 
-Studio Atlas is defined as a **separable professional product domain** whose first distribution may reuse Docente OS authentication and shell, while preserving independent semantics and future standalone deployment.
+Studio Atlas is defined as a **standalone professional product domain** with its own deployment/runtime boundary. Docente OS remains a privileged professional entry point through federated/shared identity and deep links, but Studio Atlas does not live inside the Docente OS class/lesson domain.
 
 ## Product sentence
 
@@ -41,27 +41,30 @@ It owns:
 
 ## Deployment modes
 
-### Mode A — Embedded professional entry
+### Mode A — Standalone Studio Atlas
 
-**Preferred v0.x deployment**
+**Selected application direction**
 
-`Docente OS authenticated shell → Crea → Studio Atlas`
+Studio Atlas is deployed as its own web/PWA application with its own authoring domain, release cadence and draft store.
 
-Benefits:
-- reuse existing professional identity;
-- no second login;
-- fastest route to a real pilot.
+Docente OS reaches it through:
+- shared/federated professional identity;
+- deep links;
+- minimised handoff objects when a lesson/material becomes a seed.
 
-Constraint:
-Studio Atlas domain objects MUST NOT depend on class-workspace semantics.
+No second creator registration should be required for an already authenticated professional.
 
-### Mode B — Standalone Studio Atlas
+### Mode B — Docente OS privileged entry
 
-**Future compatible deployment**
+**Required ecosystem integration**
 
-A separate web/PWA application may use an ecosystem professional identity adapter and the same Pathway Authoring Package.
+`Docente OS → Crea → Studio Atlas`
 
-No authoring migration should be required.
+and contextual actions such as:
+
+`Lezione/Materiale → Trasforma in Percorso → Studio Atlas`
+
+This is an integration path, not embedded domain ownership.
 
 ### Mode C — Atlas public admin/editor
 
@@ -236,3 +239,27 @@ Build **S1 Thin Shell specification**, not the full UI:
 - package materialisation boundary.
 
 No Visual Factory integration is required to validate S1.
+
+
+## Lesson continuity invariant
+
+Studio Atlas must not weaken the centrality of the lesson in Docente OS.
+
+Every reusable Atlas object produced through Studio Atlas must remain attachable back to professional lesson preparation through stable references.
+
+Required direction:
+
+`Studio Atlas/Atlas pathway or material → stable reusable resource reference → Docente OS lesson/material slot`
+
+This means:
+
+- a published/qualified Percorso can be selected from Docente OS while preparing a lesson;
+- a published/qualified Atlas material can be selected from Docente OS while preparing a lesson;
+- Docente OS decides whether/how the resource is used in the lesson;
+- Studio Atlas does not own TeachingSession, timetable, class or lesson state;
+- using a Percorso in a lesson does not copy curriculum authority into Docente OS;
+- a lesson may seed a new Percorso, but the new Percorso becomes reusable and class-independent.
+
+The detailed runtime binding is intentionally deferred while Studio Atlas/Visual Factory are completed.
+
+This invariant MUST be preserved in later Atlas ↔ Docente OS integration contracts and must not be reopened accidentally as a consequence of standalone deployment.
