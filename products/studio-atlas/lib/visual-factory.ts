@@ -103,7 +103,7 @@ type ShotDefinition = {
   prompt: string;
 };
 
-const MUSEO_ZERO_PROJECT_ID = "PW-STRATEGY-SELECTION-01";
+const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 
 export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
@@ -256,7 +256,11 @@ export function ingestVisualCandidates(
   receipt: VisualExecutionReceipt,
 ): VisualFactoryState {
   if (receipt.status !== "SUCCEEDED") {
-    return { ...state, stage: receipt.status === "WAITING_FOR_COMPUTE" ? "WAITING_FOR_COMPUTE" : "FAILED", lastReceipt: receipt };
+    return {
+      ...state,
+      stage: receipt.status === "WAITING_FOR_COMPUTE" ? "WAITING_FOR_COMPUTE" : "FAILED",
+      lastReceipt: receipt,
+    };
   }
   if (receipt.packageDigest !== state.packageDigest) {
     throw new Error("STALE_VISUAL_CANDIDATE");
