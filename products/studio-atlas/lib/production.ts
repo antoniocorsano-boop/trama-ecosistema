@@ -12,6 +12,9 @@ export function getProductionBlockers(project: PathwayProject) {
   if (!project.experience.grammar) blockers.push("EXPERIENCE_NOT_SELECTED");
   if (!project.storyboardReady) blockers.push("STORYBOARD_NOT_READY");
   if (project.scenes.length < 1) blockers.push("NO_SCENES");
+  if (!project.scenes.some((scene) => scene.kind === "TRANSFER")) {
+    blockers.push("TRANSFER_SCENE_REQUIRED");
+  }
 
   const incompleteScene = project.scenes.some(
     (scene) =>
@@ -69,7 +72,7 @@ export async function prepareWaitingProduction(project: PathwayProject) {
   return { request, receipt };
 }
 
-async function digestAuthoringState(project: PathwayProject) {
+export async function digestAuthoringState(project: PathwayProject) {
   const canonical = JSON.stringify({
     pathwayId: project.projectId,
     title: project.title,
