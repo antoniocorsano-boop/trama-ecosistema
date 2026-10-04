@@ -1,0 +1,441 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-pathway-authoring-package.v0.1.schema.json",
+  "title": "Atlas Pathway Authoring Package v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageId",
+    "packageVersion",
+    "pathwayId",
+    "title",
+    "authoringState",
+    "sourceSeed",
+    "curriculumBinding",
+    "story",
+    "worldExperience",
+    "scenes",
+    "safeguards",
+    "reviews",
+    "publicationCandidate",
+    "runtimeAuthorized"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "atlas.pathway-authoring-package/v0.1"
+    },
+    "packageId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "packageVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "pathwayId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authoringState": {
+      "type": "string",
+      "enum": [
+        "SEED",
+        "AUTHORING",
+        "REVIEWABLE",
+        "REVISION_REQUIRED",
+        "PUBLISH_CANDIDATE",
+        "REVIEWED",
+        "ACCEPTED_FOR_ATLAS_HANDOFF",
+        "REJECTED",
+        "SUPERSEDED"
+      ]
+    },
+    "creatorSubjectRef": {
+      "type": "string"
+    },
+    "creatorWorkspaceRef": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sourceDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sourceSeed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "CURRICULUM_TARGET",
+            "PLAIN_IDEA",
+            "DOCENTE_OS_ACTIVITY",
+            "EXISTING_PATHWAY",
+            "EXISTING_STORY_WORLD",
+            "OTHER_GOVERNED_SOURCE"
+          ]
+        },
+        "sourceRef": {
+          "type": "string"
+        },
+        "minimised": {
+          "type": "boolean"
+        }
+      }
+    },
+    "curriculumBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "curriculumVersionRef",
+        "authorityState",
+        "curriculumObjectiveRefs"
+      ],
+      "properties": {
+        "authority": {
+          "const": "Arena"
+        },
+        "curriculumVersionRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorityState": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorityReceiptRef": {
+          "type": "string"
+        },
+        "curriculumObjectiveRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "teacherLearningIntent": {
+          "type": "string"
+        }
+      }
+    },
+    "story": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storyRef",
+        "storyState",
+        "targetAgeBand",
+        "humanStoryReviewRef"
+      ],
+      "properties": {
+        "storyRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "storyState": {
+          "type": "string",
+          "enum": [
+            "SEED",
+            "STORY_DRAFT",
+            "HUMAN_STORY_REVIEW_REQUIRED",
+            "STORY_APPROVED_FOR_WORLD_DESIGN",
+            "WORLD_DESIGN_ACTIVE",
+            "SUPERSEDED",
+            "REJECTED"
+          ]
+        },
+        "targetAgeBand": {
+          "type": "string",
+          "enum": [
+            "earlier-primary",
+            "later-primary",
+            "lower-secondary",
+            "mixed-first-cycle"
+          ]
+        },
+        "humanStoryReviewRef": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "worldExperience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "worldBriefRef",
+        "roleAgencyRef",
+        "informationDistributionRef",
+        "consequenceModelRef",
+        "grammarRefs"
+      ],
+      "properties": {
+        "worldBriefRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "roleAgencyRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "informationDistributionRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consequenceModelRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grammarRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sceneId",
+          "order",
+          "purpose",
+          "learnerVisibleSituation",
+          "learnerActions",
+          "consequences"
+        ],
+        "properties": {
+          "sceneId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "learnerVisibleSituation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "availableInformation": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "learnerActions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "consequences": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "informationRevealed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "continuityAnchors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nextSceneRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "visualProduction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "visualCandidateRef": {
+          "type": "string"
+        },
+        "referenceLockState": {
+          "type": "string",
+          "enum": [
+            "NOT_STARTED",
+            "IN_REVIEW",
+            "LOCKED",
+            "REVISION_REQUIRED"
+          ]
+        },
+        "assetRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "safeguards": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "childSafetyRef",
+        "privacyRef",
+        "accessibilityRef",
+        "rightsRef"
+      ],
+      "properties": {
+        "childSafetyRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "privacyRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accessibilityRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rightsRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "agentBoundaryRef": {
+          "type": "string"
+        }
+      }
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "decision",
+          "evidenceRef"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "STORY_REVIEW",
+              "WORLD_REVIEW",
+              "CHILD_SAFETY_REVIEW",
+              "ACCESSIBILITY_REVIEW",
+              "VISUAL_REFERENCE_LOCK_REVIEW",
+              "EXPERIENCE_QUALITY_REVIEW",
+              "HUMAN_USE_REVIEW",
+              "PUBLICATION_CANDIDATE_REVIEW"
+            ]
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "REVISE",
+              "REJECT",
+              "PENDING"
+            ]
+          },
+          "evidenceRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reviewedBySubjectRef": {
+            "type": "string"
+          },
+          "reviewedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "learnerPreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "previewRef": {
+          "type": "string"
+        },
+        "packageDigest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "humanUseReviewRef": {
+          "type": "string"
+        }
+      }
+    },
+    "publicationCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision"
+      ],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "REVISE",
+            "REJECT",
+            "PUBLISH_CANDIDATE",
+            "ACCEPTED_FOR_ATLAS_HANDOFF"
+          ]
+        },
+        "submissionDigest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "runtimeAuthorized": {
+      "const": false
+    }
+  }
+}
