@@ -250,11 +250,13 @@ export function SceneEditor({ project, onPatch }: Props) {
     const scene: PathwayScene = {
       sceneId: crypto.randomUUID(),
       kind: "SCENE",
+      interaction: "SUMMARY",
       title: `Scena ${project.scenes.length + 1}`,
       visibleSituation: "",
       learnerAction: "",
       consequence: "",
       reveal: "",
+      choices: [],
     };
     onPatch({
       scenes: [...project.scenes, scene],
@@ -319,6 +321,23 @@ export function SceneEditor({ project, onPatch }: Props) {
                     <option value="SCENE">Scena del percorso</option>
                     <option value="TRANSFER">Trasferimento · situazione nuova</option>
                   </select>
+                  <select
+                    className="scene-kind"
+                    value={scene.interaction}
+                    onChange={(e) => updateScene(scene.sceneId, {
+                      interaction: e.target.value as PathwayScene["interaction"],
+                      choices: e.target.value === "CHOICE" && scene.choices.length < 2
+                        ? [
+                            { choiceId: crypto.randomUUID(), label: "", feedback: "" },
+                            { choiceId: crypto.randomUUID(), label: "", feedback: "" },
+                          ]
+                        : scene.choices,
+                    })}
+                    aria-label={`Interazione scena ${index + 1}`}
+                  >
+                    <option value="SUMMARY">Momento narrativo</option>
+                    <option value="CHOICE">Scelta con conseguenze</option>
+                  </select>
                 </div>
                 <label>
                   <span>Cosa vede</span>
@@ -336,6 +355,69 @@ export function SceneEditor({ project, onPatch }: Props) {
                   <span>Cosa scopre</span>
                   <textarea rows={2} value={scene.reveal} onChange={(e) => updateScene(scene.sceneId, { reveal: e.target.value })} />
                 </label>
+
+                {scene.interaction === "CHOICE" && (
+                  <div className="scene-choice-editor">
+                    <div className="scene-choice-heading">
+                      <strong>Possibilità</strong>
+                      <span>Ogni possibilità deve mostrare una conseguenza comprensibile prima di continuare.</span>
+                    </div>
+
+                    {scene.choices.map((choice, choiceIndex) => (
+                      <div className="scene-choice-row" key={choice.choiceId}>
+                        <span className="choice-index">{String(choiceIndex + 1).padStart(2, "0")}</span>
+                        <input
+                          value={choice.label}
+                          placeholder="Cosa può scegliere lo studente"
+                          aria-label={`Opzione ${choiceIndex + 1} scena ${index + 1}`}
+                          onChange={(e) => updateScene(scene.sceneId, {
+                            choices: scene.choices.map((candidate) =>
+                              candidate.choiceId === choice.choiceId
+                                ? { ...candidate, label: e.target.value }
+                                : candidate,
+                            ),
+                          })}
+                        />
+                        <textarea
+                          rows={2}
+                          value={choice.feedback}
+                          placeholder="Che cosa mostra questa scelta"
+                          aria-label={`Conseguenza opzione ${choiceIndex + 1} scena ${index + 1}`}
+                          onChange={(e) => updateScene(scene.sceneId, {
+                            choices: scene.choices.map((candidate) =>
+                              candidate.choiceId === choice.choiceId
+                                ? { ...candidate, feedback: e.target.value }
+                                : candidate,
+                            ),
+                          })}
+                        />
+                        {scene.choices.length > 2 && (
+                          <button
+                            className="quiet-action danger"
+                            onClick={() => updateScene(scene.sceneId, {
+                              choices: scene.choices.filter((candidate) => candidate.choiceId !== choice.choiceId),
+                            })}
+                          >
+                            Rimuovi possibilità
+                          </button>
+                        )}
+                      </div>
+                    ))}
+
+                    <button
+                      className="quiet-action"
+                      onClick={() => updateScene(scene.sceneId, {
+                        choices: [
+                          ...scene.choices,
+                          { choiceId: crypto.randomUUID(), label: "", feedback: "" },
+                        ],
+                      })}
+                    >
+                      + Aggiungi possibilità
+                    </button>
+                  </div>
+                )}
+
                 <button className="quiet-action danger" onClick={() => removeScene(scene.sceneId)}>Rimuovi scena</button>
               </div>
             </section>
