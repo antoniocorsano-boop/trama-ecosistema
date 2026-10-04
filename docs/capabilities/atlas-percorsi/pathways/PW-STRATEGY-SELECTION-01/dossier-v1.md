@@ -328,7 +328,7 @@ No covert psychological profiling or persistent individual behavioural scoring. 
 
 ## 13. Product/specification handoff readiness
 
-Current state: **READY_FOR_EXACT_HEAD_PRODUCT_CANDIDATE_REVIEW**, not runtime authorization.
+Current state: **EXPERIENCE_QUALITY_REVIEW_PENDING / NOT_READY_FOR_IMPLEMENTATION_HANDOFF**, not runtime authorization.
 
 Before Atlas registration:
 
