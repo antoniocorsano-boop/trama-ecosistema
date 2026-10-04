@@ -58,10 +58,9 @@ Current sequence:
 2. **MZ2_RECONSTRUCT_DAY** — choose how to organise distributed information
 3. **MZ3_TIMELINE_LIMIT** — chronology proves insufficient for causality
 4. **MZ4_TEST_MAPPING** — simulated mapping choice with visible consequences
-5. **MZ5_COMPARE_RECOVERY** — compare recovery options against constraints
+5. **MZ5_COMPARE_RECOVERY** — transfer from causal explanation to constraint-based recovery decision
 6. **MZ6_FINAL_REHEARSAL** — room returns to coherent behaviour
-7. **MZ7_TRANSFER_CANDIDATE** — transfer representation choice to a second installation
-8. **MZ8_QUIET_CLOSE** — quiet closure, no score or didactic moral
+7. **MZ7_QUIET_CLOSE** — quiet closure, no score or didactic moral
 
 Questions:
 
@@ -73,35 +72,33 @@ Questions:
 
 PASS means the storyboard may be marked `storyboardReady=true`.
 
-### C. Transfer candidate
+### C. Transfer inside the story arc
 
-The approved original story did not contain an explicit cross-context transfer scene.
+The earlier second-installation epilogue candidate has been removed.
 
-The materialisation therefore adds one **candidate**, not an approved fact:
+Transfer is now materialised in:
 
-**MZ7_TRANSFER_CANDIDATE — “Un’altra sala, una domanda diversa”**
+**MZ5_COMPARE_RECOVERY — “Quale soluzione regge davvero?”**
 
-Situation:
+The learner has already used chronology and dependency reasoning to explain why the room starts late. The problem then changes:
 
-> Before closing, Teo shows the log of another installation. Its visitor route was also modified and its projection starts late. The chronology is already known; the team does not yet know which relation explains the delay.
+> Which recovery option is strongest under the current constraints?
 
-Learner question:
-
-> Which representation would you use now to continue the investigation?
+The learner must therefore change representation again, from a causal/dependency view to a comparison of alternatives against accessibility, reliability and operational effort.
 
 Choices:
 
-- rebuild the timeline;
-- build a relation/dependency view;
-- compare solutions immediately.
+- restore the old route;
+- update the cue mapping to Sensor B;
+- use a manual cue.
 
-The supported consequence is not “correct answer” scoring. It makes visible that, because chronology is already known and the question is causal, a dependency view is the most informative next representation.
+The relevant transfer is **not** a renamed repetition in a second context. It is the reuse of the target competence when the *kind of question changes inside the same believable world*: causal explanation → constrained decision.
 
 Review question:
 
-> Is this a legitimate transfer of the target competence, while remaining natural enough inside the MUSEO ZERO world?
+> Does MZ5 demonstrate legitimate transfer of strategy selection while preserving the story’s quiet ending and avoiding a didactic epilogue?
 
-PASS authorises changing the scene from **TRANSFER_CANDIDATE** to the accepted transfer scene for this pathway version.
+PASS accepts **MZ5_COMPARE_RECOVERY** as the explicit transfer scene for this pathway version.
 
 ## Product criteria
 
@@ -129,7 +126,7 @@ The museum remains a believable world. The earlier Phaser-style technical diagra
 The experience can be expressed through inspectable places, choices and stateful views without joystick-scale interaction.
 
 ### P8 — Transfer legitimacy
-MZ7 tests the strategy in a changed situation rather than repeating the same answer with renamed objects.
+MZ5 requires the learner to change representation because the problem changes from causal explanation to constrained decision, without appending a second-context exercise after the story.
 
 ## Current Studio state
 
@@ -149,7 +146,7 @@ This is intentional fail-closed behaviour.
 A Human Product Review PASS on this exact pack authorises only the following pilot-state transitions:
 
 - `worldReview: READY → PASS`
-- accept MZ7 as the explicit transfer scene;
+- accept MZ5_COMPARE_RECOVERY as the explicit transfer scene;
 - `storyboardReady: false → true`
 - enable generation of an exact non-public learner preview snapshot.
 
