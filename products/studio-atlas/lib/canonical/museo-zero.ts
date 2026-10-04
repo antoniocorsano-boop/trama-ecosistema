@@ -96,18 +96,21 @@ export function createMuseoZeroPilotProject(): PathwayProject {
         choices: [
           {
             choiceId: "timeline",
+            targetSceneId: "MZ3_TIMELINE_LIMIT",
             label: "Metto in fila i cambiamenti della giornata",
             feedback:
               "La sequenza temporale chiarisce che percorso e sensore sono cambiati prima della prova fallita. Ora sai quando, ma non ancora perché.",
           },
           {
             choiceId: "connections",
+            targetSceneId: "MZ4_TEST_MAPPING",
             label: "Collego subito percorso, sensore e regia",
             feedback:
               "Le relazioni sono promettenti, ma senza ordinare alcune modifiche rischi di attribuire importanza a coincidenze.",
           },
           {
             choiceId: "compare-fixes",
+            targetSceneId: "MZ2_RECONSTRUCT_DAY",
             label: "Confronto già le possibili soluzioni",
             feedback:
               "È troppo presto: prima devi capire quale relazione spiega davvero il ritardo.",
@@ -145,18 +148,21 @@ export function createMuseoZeroPilotProject(): PathwayProject {
         choices: [
           {
             choiceId: "current-a",
+            targetSceneId: "MZ4_TEST_MAPPING",
             label: "Mantengo il trigger su Sensor A",
             feedback:
               "Il visitatore supera la nuova entrata e la sala continua a partire tardi: il fallimento si ripete.",
           },
           {
             choiceId: "switch-b",
+            targetSceneId: "MZ5_COMPARE_RECOVERY",
             label: "Provo il trigger su Sensor B",
             feedback:
               "La proiezione parte all’ingresso e la sequenza torna sincronizzata: la relazione causale è fortemente supportata.",
           },
           {
             choiceId: "manual",
+            targetSceneId: "MZ5_COMPARE_RECOVERY",
             label: "Provo un cue manuale",
             feedback:
               "La sala può funzionare in una prova, ma il risultato dipende dal tempismo dell’operatore e non è stabile.",
@@ -179,18 +185,21 @@ export function createMuseoZeroPilotProject(): PathwayProject {
         choices: [
           {
             choiceId: "restore-old-route",
+            targetSceneId: "MZ5_COMPARE_RECOVERY",
             label: "Ripristino il vecchio percorso",
             feedback:
               "Riduce il cambiamento in regia, ma entra in conflitto con il nuovo percorso e richiede nuovo lavoro fisico.",
           },
           {
             choiceId: "update-mapping",
+            targetSceneId: "MZ6_FINAL_REHEARSAL",
             label: "Aggiorno la mappatura a Sensor B",
             feedback:
               "Mantiene il percorso accessibile, richiede una modifica contenuta e nella simulazione produce un comportamento stabile.",
           },
           {
             choiceId: "manual-cue",
+            targetSceneId: "MZ5_COMPARE_RECOVERY",
             label: "Uso il cue manuale",
             feedback:
               "È un buon ripiego temporaneo, ma resta meno affidabile per visite ripetute.",
