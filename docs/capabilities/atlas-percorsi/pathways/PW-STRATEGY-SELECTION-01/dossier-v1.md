@@ -470,3 +470,66 @@ Required direction:
 ARRIVAL IN TROUBLE → CHARACTER REACTION → WHAT HAPPENED? → RECOVER MOMENTS → STORY REBUILT → NEW QUESTION EMERGES NATURALLY → CHANGE REPRESENTATION → CONSEQUENCE EXPLAINED → CHARACTER RESPONSE → QUIET CLOSE
 
 Runtime remains NOT_RUNTIME_AUTHORIZED. Atlas #78 remains untouched pending a genuinely convincing Human Experience Review.
+
+
+## 20. World Concept Sprint — 2026-10-04
+
+**State:** WORLD_DIRECTION_SELECTED_FOR_HUMAN_PRODUCT_REVIEW / NOT_IMPLEMENTATION_AUTHORIZED
+
+The Compact Learning World process has been applied before any further UI work.
+
+### Concepts screened
+
+1. `NOVA-7 / Segnale fuori rotta`
+2. `MUSEO ZERO / La sala che non torna`
+3. `RADIO 19 / Prima della diretta`
+
+The comparative design screen is recorded in:
+- `world-concept-sprint-v1.md`
+
+### Recommended world
+
+**MUSEO ZERO / La sala che non torna**
+
+Rationale:
+- strongest balance of human/social presence, visual world richness and productive agency;
+- multiple information strategies arise naturally from different world questions;
+- visible room/system consequences can replace detached correctness feedback;
+- feasible as a lightweight 2-D mobile world;
+- sufficiently distinct from source-reliability / missing-information pathways.
+
+### Required world artefacts completed
+
+- `worlds/MUSEO-ZERO/world-brief-v1.md`
+- `worlds/MUSEO-ZERO/role-agency-map-v1.md`
+- `worlds/MUSEO-ZERO/information-distribution-map-v1.md`
+- `worlds/MUSEO-ZERO/consequence-model-v1.md`
+- `worlds/MUSEO-ZERO/experience-choreography-v1.md`
+- `worlds/MUSEO-ZERO/visual-world-concept-v1.md`
+
+### Human Product Review gate
+
+Before any MagicPath/Figma/Atlas learner-facing prototype, Human Review must decide whether the world itself is compelling enough.
+
+Key question:
+
+> If this were not assigned by a teacher, is there a plausible reason an 11–14-year-old might want to continue for another few minutes?
+
+Required review dimensions:
+- curiosity;
+- functional role;
+- agency;
+- distributed information;
+- visible consequence;
+- visual-world potential;
+- age-appropriate dignity;
+- low prior-knowledge burden;
+- natural need to change representation.
+
+Until that review passes:
+
+`UI_PROTOTYPING = HOLD`
+
+`ATLAS_IMPLEMENTATION = HOLD`
+
+`RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`
