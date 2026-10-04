@@ -6,7 +6,8 @@ import type { PathwayProject } from "./model";
 
 const READY_TYPE = "STUDIO_ATLAS_PREVIEW_READY";
 const SNAPSHOT_TYPE = "STUDIO_ATLAS_PREVIEW_SNAPSHOT";
-const ACCEPTED_TYPE = "STUDIO_ATLAS_PREVIEW_ACCEPTED";
+const ACK_TYPE = "STUDIO_ATLAS_PREVIEW_ACK";
+const SNAPSHOT_RETRY_LIMIT = 30;
 
 export type PreviewBridgeResult =
   | { status: "OPENED"; snapshot: StudioAtlasPreviewSnapshot }
@@ -53,9 +54,11 @@ export async function openAtlasLearnerPreview(
   return await new Promise<PreviewBridgeResult>((resolve) => {
     let settled = false;
     let retry: number | null = null;
+    let attempts = 0;
 
     const sendSnapshot = () => {
-      if (previewWindow.closed) return;
+      if (settled || previewWindow.closed || attempts >= SNAPSHOT_RETRY_LIMIT) return;
+      attempts += 1;
       previewWindow.postMessage(
         {
           type: SNAPSHOT_TYPE,
@@ -79,13 +82,14 @@ export async function openAtlasLearnerPreview(
 
     function onMessage(event: MessageEvent) {
       if (event.origin !== atlasOrigin) return;
+      if (event.source !== previewWindow) return;
 
       if (isReadyMessage(event.data, channel)) {
         sendSnapshot();
         return;
       }
 
-      if (isAcceptedMessage(event.data, channel, snapshot.snapshotId)) {
+      if (isAckMessage(event.data, channel, snapshot.snapshotId)) {
         finish({ status: "OPENED", snapshot });
       }
     }
@@ -106,7 +110,7 @@ function isReadyMessage(value: unknown, channel: string) {
   return message.type === READY_TYPE && message.channel === channel;
 }
 
-function isAcceptedMessage(value: unknown, channel: string, snapshotId: string) {
+function isAckMessage(value: unknown, channel: string, snapshotId: string) {
   if (!value || typeof value !== "object") return false;
   const message = value as {
     type?: unknown;
@@ -114,7 +118,7 @@ function isAcceptedMessage(value: unknown, channel: string, snapshotId: string) 
     snapshotId?: unknown;
   };
   return (
-    message.type === ACCEPTED_TYPE &&
+    message.type === ACK_TYPE &&
     message.channel === channel &&
     message.snapshotId === snapshotId
   );
