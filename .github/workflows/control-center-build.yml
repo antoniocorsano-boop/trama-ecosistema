@@ -8,6 +8,8 @@ on:
       - "status/**"
       - "docs/decisions/**"
       - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/build_project_context_snapshot.py"
+      - "scripts/build_trama_context_pack.py"
       - "scripts/generate_stakeholder_report.py"
       - "scripts/validate_stakeholder_assurance.py"
       - "scripts/materialize_live_project_knowledge_bundle.py"
@@ -91,20 +93,67 @@ jobs:
               generated.replace(canonical)
               print('CANONICAL_SNAPSHOT_SEMANTIC_CHANGE_PROMOTED')
           PY
-      - name: Commit snapshot only when semantically changed
+      - name: Regenerate governed Project Knowledge projections
+        run: |
+          python scripts/build_project_context_snapshot.py --output control-center/data/project-context-snapshot.generated.json
+          python scripts/build_trama_context_pack.py project-knowledge --snapshot control-center/data/project-context-snapshot.generated.json --output control-center/data/context-packs/project-knowledge.generated.json
+      - name: Promote Project Knowledge semantic changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          def project_context_view(value):
+              normalized = json.loads(json.dumps(value))
+              normalized.pop('generatedAt', None)
+              return normalized
+
+          def context_pack_view(value):
+              normalized = json.loads(json.dumps(value))
+              normalized.pop('asOf', None)
+              return normalized
+
+          pairs = [
+              (
+                  Path('control-center/data/project-context-snapshot.json'),
+                  Path('control-center/data/project-context-snapshot.generated.json'),
+                  project_context_view,
+                  'PROJECT_CONTEXT',
+              ),
+              (
+                  Path('control-center/data/context-packs/project-knowledge.json'),
+                  Path('control-center/data/context-packs/project-knowledge.generated.json'),
+                  context_pack_view,
+                  'PROJECT_KNOWLEDGE',
+              ),
+          ]
+
+          for canonical, generated, semantic_view, label in pairs:
+              old = semantic_view(json.loads(canonical.read_text(encoding='utf-8'))) if canonical.exists() else None
+              new = semantic_view(json.loads(generated.read_text(encoding='utf-8')))
+              if old == new:
+                  generated.unlink()
+                  print(f'CANONICAL_{label}_SEMANTICALLY_CURRENT')
+              else:
+                  generated.replace(canonical)
+                  print(f'CANONICAL_{label}_SEMANTIC_CHANGE_PROMOTED')
+          PY
+      - name: Commit governed projections only when semantically changed
         shell: bash
         env:
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
-          if git diff --quiet -- control-center/data/ecosystem-snapshot.json; then
-            echo "CANONICAL_SNAPSHOT_ALREADY_SYNCHRONIZED"
+          if git diff --quiet -- control-center/data/ecosystem-snapshot.json control-center/data/project-context-snapshot.json control-center/data/context-packs/project-knowledge.json; then
+            echo "CANONICAL_PROJECTIONS_ALREADY_SYNCHRONIZED"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add control-center/data/ecosystem-snapshot.json
-          git commit -m "chore(control-center): synchronize canonical snapshot"
+          git add control-center/data/ecosystem-snapshot.json control-center/data/project-context-snapshot.json control-center/data/context-packs/project-knowledge.json
+          git commit -m "chore(control-center): synchronize governed projections"
           git push origin "HEAD:${HEAD_REF}"
 
   build:

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-04T19:59:26Z",
+  "generatedAt": "2026-10-04T19:46:07Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -339,36 +339,6 @@
       "decision": "È proposto che TRAMA mantenga un'architettura ecosystem-first: Arena, Atlas e Docente OS restano i domini di prodotto che determinano bisogni e flussi; il Control Center resta osservatorio read-only; connector, runtime adapter, agenti e provider come DSH/Codex sono infrastruttura subordinata, sostituibile e priva di nuova authority. I proof successivi al livello contrattuale devono dimostrare valore su flussi cross-ecosystem e DOS-A1 resta RUNTIME_DEFERRED.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
-    },
-    {
-      "id": "TRAMA-ADR-020",
-      "title": "Studio Atlas come dominio di prodotto separabile per l'authoring dei Percorsi",
-      "status": "PROPOSED",
-      "date": "2026-10-04",
-      "scope": [
-        "TRAMA",
-        "Arena",
-        "Atlas",
-        "Docente OS",
-        "Studio Atlas"
-      ],
-      "decision": "Studio Atlas è proposto come dominio di prodotto professionale separabile per l'authoring dei Percorsi: la prima distribuzione può riusare autenticazione e shell di Docente OS, ma il dominio non dipende da classe/lezione e resta estraibile come applicazione autonoma. Atlas resta superficie pubblica/learner; il Pathway Authoring Package è l'handoff governato; repository, AI e compute restano infrastruttura subordinata e invisibile al creator.",
-      "humanControlImpact": "STRENGTHENED",
-      "supersedes": []
-    },
-    {
-      "id": "TRAMA-ADR-021",
-      "title": "Compute Policy TRAMA + SkyPilot per la Visual Factory",
-      "status": "PROPOSED",
-      "date": "2026-10-04",
-      "scope": [
-        "TRAMA",
-        "Studio Atlas",
-        "Visual Factory"
-      ],
-      "decision": "La Visual Factory separa policy e provisioning: TRAMA Compute Policy filtra provider realmente autorizzati e FREE_ONLY; SkyPilot orchestra provisioning/failover soltanto tra candidati ammessi. Nessun paid fallback, retry illimitato o quality downgrade automatico.",
-      "humanControlImpact": "STRENGTHENED",
-      "supersedes": []
     }
   ],
   "activeInvariants": [
@@ -437,6 +407,33 @@
         }
       ],
       "validFrom": "2026-09-28T19:42:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04",
+      "type": "DECISION",
+      "subject": "project-knowledge",
+      "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
+      "status": "CURRENT",
+      "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 230,
+          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-04T16:52:55Z",
       "supersedes": [],
       "invalidatedBy": [],
       "freshness": {
@@ -617,6 +614,41 @@
       "pullRequest": null,
       "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
       "sourceEvent": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 230,
+      "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+      "sourceEvent": "TRAMA-EVT-P1-APPLICATION-SCOPE-CLOSED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
+      "sourceEvent": "TRAMA-EVT-P1-APPLICATION-SCOPE-CLOSED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 230,
+      "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+      "sourceEvent": "TRAMA-EVT-P2-ARENA-ATLAS-VERIFIED-INTEGRATED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 230,
+      "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+      "sourceEvent": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
+      "sourceEvent": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
     },
     {
       "subject": "repository-head",
@@ -1131,6 +1163,86 @@
         ],
         "supersedes": []
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-P1-APPLICATION-SCOPE-CLOSED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P1 Orario + PWA + Android is CLOSED_APPLICATION_SCOPE / DEVICE_NATIVE_RESIDUAL: A19 is VERIFIED_ON_BETA; A20 is IMPLEMENTED_QUALIFIED; the remaining Chrome/Android installation behavior is a non-blocking native-device qualification residual and does not reopen the application scope.",
+      "status": "CURRENT",
+      "rationale": "TRAMA Audit v1.1 was integrated after Human Review and separates application completion from the remaining browser/device-native qualification residual.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 230,
+          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-04T16:52:55Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P2-ARENA-ATLAS-VERIFIED-INTEGRATED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P2 Arena to Atlas curriculum synchronization is VERIFIED / INTEGRATED; the scheduled synchronization run completed successfully with governed validation and no-op behavior when no publication change was required.",
+      "status": "CURRENT",
+      "rationale": "Audit v1.1 records the bootstrap remediation as integrated and cites scheduled run 37214517566 as PASS without changing authority boundaries: Arena remains authoritative and Atlas remains the publication surface.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 230,
+          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "ref": "github-actions:workflow-run/37214517566"
+        }
+      ],
+      "validFrom": "2026-10-04T16:52:55Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04",
+      "type": "DECISION",
+      "subject": "project-knowledge",
+      "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
+      "status": "CURRENT",
+      "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 230,
+          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-04T16:52:55Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ],
   "knowledgeSources": [
@@ -1138,7 +1250,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "91123c6d9f3f22aed1485bdc527c1bbb5234e2ce1ac1fd772653a66dfc8a7bf1"
+      "sha256": "686174f94ab24fe237286746bb2f3f4d9825f61d75e5299674df9292593dfcc2"
     },
     {
       "id": "source-registry",
@@ -1150,7 +1262,7 @@
       "id": "decision-register",
       "path": "docs/decisions/decision-register.json",
       "role": "DECISIONS",
-      "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
+      "sha256": "16731a46dda6db41d5d3215e361d906bdffa821720fb9e76bc559c9cd79a2636"
     },
     {
       "id": "ecosystem-status",
@@ -1168,7 +1280,7 @@
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "e116e8f2b82068402f17f60740b973bad754f1aadd089bbe2e0236f1552e724e"
+      "sha256": "96177b6fdfdb6db7e8ddba77e1d334bd00a386c9bb1e810bc7945fd8d014c940"
     }
   ]
 }
