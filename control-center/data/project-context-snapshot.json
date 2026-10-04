@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-09-29T04:34:20Z",
+  "generatedAt": "2026-10-04T19:59:26Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -295,9 +295,104 @@
       "decision": "Il Control Center può produrre forecast source-bound e advisory su possibili transizioni future, ma tali forecast restano separati dallo stato canonico, non modificano capability/gate/maturity, non autorizzano runtime o write e non possono attivare DOS-A1. La confidence iniziale è solo LOW/MEDIUM/HIGH; probabilità numeriche o score sono vietati finché non esiste calibrazione sufficiente e una nuova decisione TRAMA.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-017",
+      "title": "Project Knowledge dual-speed: Governed Core + Live Overlay",
+      "status": "PROPOSED",
+      "date": "2026-09-29",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS"
+      ],
+      "decision": "È proposto che Project Knowledge separi conoscenza governata durevole, osservazione live effimera read-only e vista di contesto derivata, così che normali variazioni di repository, PR o CI non richiedano promotion governata; il semantic drift resta un segnale di riverifica e non crea authority o promotion automatica.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-018",
+      "title": "Stato di sistema leggibile e dettaglio tecnico progressivo",
+      "status": "PROPOSED",
+      "date": "2026-09-29",
+      "scope": [
+        "TRAMA",
+        "Control Center"
+      ],
+      "decision": "È proposto che la UI primaria del Control Center traduca gli stati tecnici in linguaggio comprensibile anche a utenti non tecnici, separi stato e gravità, distingua aggiornamento, incertezza e blocco, preservi l'ultimo dato governato valido e renda repository, SHA, provenance ed enum interni disponibili solo tramite dettaglio tecnico progressivo.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-019",
+      "title": "Ecosystem-first architecture: runtime e agenti subordinati ai domini TRAMA",
+      "status": "PROPOSED",
+      "date": "2026-09-30",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Control Center"
+      ],
+      "decision": "È proposto che TRAMA mantenga un'architettura ecosystem-first: Arena, Atlas e Docente OS restano i domini di prodotto che determinano bisogni e flussi; il Control Center resta osservatorio read-only; connector, runtime adapter, agenti e provider come DSH/Codex sono infrastruttura subordinata, sostituibile e priva di nuova authority. I proof successivi al livello contrattuale devono dimostrare valore su flussi cross-ecosystem e DOS-A1 resta RUNTIME_DEFERRED.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-020",
+      "title": "Studio Atlas come dominio di prodotto separabile per l'authoring dei Percorsi",
+      "status": "PROPOSED",
+      "date": "2026-10-04",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Studio Atlas"
+      ],
+      "decision": "Studio Atlas è proposto come dominio di prodotto professionale separabile per l'authoring dei Percorsi: la prima distribuzione può riusare autenticazione e shell di Docente OS, ma il dominio non dipende da classe/lezione e resta estraibile come applicazione autonoma. Atlas resta superficie pubblica/learner; il Pathway Authoring Package è l'handoff governato; repository, AI e compute restano infrastruttura subordinata e invisibile al creator.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-021",
+      "title": "Compute Policy TRAMA + SkyPilot per la Visual Factory",
+      "status": "PROPOSED",
+      "date": "2026-10-04",
+      "scope": [
+        "TRAMA",
+        "Studio Atlas",
+        "Visual Factory"
+      ],
+      "decision": "La Visual Factory separa policy e provisioning: TRAMA Compute Policy filtra provider realmente autorizzati e FREE_ONLY; SkyPilot orchestra provisioning/failover soltanto tra candidati ammessi. Nessun paid fallback, retry illimitato o quality downgrade automatico.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
     }
   ],
   "activeInvariants": [
+    {
+      "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
+      "type": "DECISION",
+      "subject": "development-continuity",
+      "statement": "During CI qualification, freeze the exact head under review and use a separate safe parallel track for reversible, non-conflicting preparation of the next step; promote that work only after the qualified baseline is known and revalidated.",
+      "status": "CURRENT",
+      "rationale": "Turns CI waiting time into productive work without causing unnecessary reruns, baseline churn, or premature coupling between unfinished workstreams.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "b35ed9242d2b0574219c04c88f5a6a858203727c",
+          "ref": "docs/process/trama-development-continuity-protocol-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-29T17:35:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
     {
       "eventId": "TRAMA-EVT-KB-SECOND-BRAIN-FOUNDATION",
       "type": "DECISION",
@@ -358,6 +453,8 @@
         "freshnessStatus": "FRESH",
         "completenessStatus": "COMPLETE",
         "observedHead": "9da1cf65ae86ff5a3a65888636bf04f3a7312a7b",
+        "activeDevelopmentRef": null,
+        "observedActiveDevelopmentHead": null,
         "sourceRefs": [
           "github-public-api:antoniocorsano-boop/CurManLight_arena@9da1cf65ae86ff5a3a65888636bf04f3a7312a7b"
         ]
@@ -371,6 +468,8 @@
         "freshnessStatus": "FRESH",
         "completenessStatus": "COMPLETE",
         "observedHead": "f68be1d9913fed77483685158e38848d3d0a19b2",
+        "activeDevelopmentRef": null,
+        "observedActiveDevelopmentHead": null,
         "sourceRefs": [
           "github-public-api:antoniocorsano-boop/Curriculum-Atlas@f68be1d9913fed77483685158e38848d3d0a19b2"
         ]
@@ -388,6 +487,8 @@
         "freshnessStatus": "FRESH",
         "completenessStatus": "COMPLETE",
         "observedHead": "f0b7e5c01620d4cc87587081859cbf270cc1d033",
+        "activeDevelopmentRef": null,
+        "observedActiveDevelopmentHead": null,
         "sourceRefs": [
           "github-public-api:antoniocorsano-boop/docente-os-2026-27@f0b7e5c01620d4cc87587081859cbf270cc1d033"
         ]
@@ -401,6 +502,8 @@
         "freshnessStatus": "FRESH",
         "completenessStatus": "COMPLETE",
         "observedHead": "fec17431177e82392ac374247ee2d55a1d0210c2",
+        "activeDevelopmentRef": null,
+        "observedActiveDevelopmentHead": null,
         "sourceRefs": [
           "github-public-api:antoniocorsano-boop/trama-ecosistema@fec17431177e82392ac374247ee2d55a1d0210c2"
         ]
@@ -480,6 +583,13 @@
     }
   ],
   "activeExactHeads": [
+    {
+      "subject": "development-continuity",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "b35ed9242d2b0574219c04c88f5a6a858203727c",
+      "sourceEvent": "TRAMA-EVT-CI-WAIT-DUAL-TRACK"
+    },
     {
       "subject": "atlas-percorsi",
       "repository": "antoniocorsano-boop/trama-ecosistema",
@@ -796,6 +906,27 @@
   "nextCandidateActions": [],
   "knowledgeEvents": [
     {
+      "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
+      "type": "DECISION",
+      "subject": "development-continuity",
+      "statement": "During CI qualification, freeze the exact head under review and use a separate safe parallel track for reversible, non-conflicting preparation of the next step; promote that work only after the qualified baseline is known and revalidated.",
+      "status": "CURRENT",
+      "rationale": "Turns CI waiting time into productive work without causing unnecessary reruns, baseline churn, or premature coupling between unfinished workstreams.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "b35ed9242d2b0574219c04c88f5a6a858203727c",
+          "ref": "docs/process/trama-development-continuity-protocol-v1.md"
+        }
+      ],
+      "validFrom": "2026-09-29T17:35:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
       "eventId": "TRAMA-EVT-PERCORSI-PR96-RECOVERY",
       "type": "KNOWLEDGE_RECOVERY",
       "subject": "atlas-percorsi",
@@ -1007,7 +1138,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "c2ab1a319cb1751528125ebe7b2a602d0388e74d3c4a75e3242ec24c3e3fa365"
+      "sha256": "91123c6d9f3f22aed1485bdc527c1bbb5234e2ce1ac1fd772653a66dfc8a7bf1"
     },
     {
       "id": "source-registry",
@@ -1019,7 +1150,7 @@
       "id": "decision-register",
       "path": "docs/decisions/decision-register.json",
       "role": "DECISIONS",
-      "sha256": "d6314e937cc82faa78d5e24e193760dd12cd7a32ae0dbd59d1ba322cfc1047df"
+      "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
     },
     {
       "id": "ecosystem-status",
@@ -1031,13 +1162,13 @@
       "id": "governed-events",
       "path": "status/governed-events.json",
       "role": "HISTORY",
-      "sha256": "5bc68e05527537c9f996144a9633bf4dddcaf8b9370a4182502b52559287e39c"
+      "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     {
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "73f2ec40abed82478079afe6793228f53c4f285123150f7c6a26279266a7ad94"
+      "sha256": "e116e8f2b82068402f17f60740b973bad754f1aadd089bbe2e0236f1552e724e"
     }
   ]
 }

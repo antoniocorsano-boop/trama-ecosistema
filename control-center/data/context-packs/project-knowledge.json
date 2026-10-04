@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-09-28T19:30:00Z",
-  "status": "PARTIAL",
+  "asOf": "2026-10-04T19:59:26Z",
+  "status": "CURRENT",
   "facts": [
     {
       "eventId": "TRAMA-EVT-KB-SECOND-BRAIN-FOUNDATION",
@@ -50,6 +50,118 @@
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED",
+      "type": "DEFERMENT",
+      "subject": "project-knowledge-live-collector",
+      "statement": "LIVE_ONE_SHOT remains blocked until a real credential principal and authoritative read-only permission attestation are bound to the frozen candidate.",
+      "status": "SUPERSEDED",
+      "rationale": "Stage C and the Second Brain projection are integrated, but the human decision gate requires a concrete principal/permission envelope before any live network execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-LIVE-ONE-SHOT-DECISION-GATE.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-ADAPTER-M1B-LIVE-ONE-SHOT-CONTRACT.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:45:00Z",
+      "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED",
+      "type": "CLOSURE",
+      "subject": "project-knowledge-live-collector",
+      "statement": "PUBLIC_ANONYMOUS_READ_ONLY LIVE_ONE_SHOT is qualified and has completed one governed run successfully on main; the receipt terminated CONSUMED and RepositoryObservation terminated COMPLETE.",
+      "status": "CURRENT",
+      "rationale": "The credentialed-path blocker was removed by the approved public-anonymous source model. PRs #126, #128, #129 and #130 established source, transport, single-use binding and executable workflow. Workflow run 36482487361 executed once on exact main baseline 895aac7c31d2e8388b22b01ac45408102ad6ff1c with run_attempt=1; 4 enrolled repositories were observed, 8 open PRs were reported, no artifact was published, and the receipt gha-dispatch-36482487361--gha-36482487361 closed CONSUMED.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 126,
+          "ref": "docs/control-center/CC-MSS-01-READ-ONLY-CREDENTIAL-SOURCE-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 128,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-TRANSPORT-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 129,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-BINDING-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 130,
+          "exactHead": "bcca546e7e30ca5bf94acf96844f347b8ffb78aa",
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-WORKFLOW-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+          "ref": "github-actions:workflow-run/36482487361"
+        }
+      ],
+      "validFrom": "2026-09-28T20:54:45Z",
+      "supersedes": [
+        "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-REPOSITORY-OBSERVATION-PROMOTION-2598ccf7219b9d72",
+      "type": "PROMOTION",
+      "subject": "project-knowledge-repository-state",
+      "statement": "A governed RepositoryObservation was promoted into the current Project Knowledge repository-state projection.",
+      "status": "CURRENT",
+      "rationale": "Promotion is bound to proposal rop-f0413d1ae92f295166e606af980ea9a6a1bc29688a7fe10490819813e9891399, source run 36522211129, exact collector and actor revisions, policy digest and enrollment digest.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "github-actions:workflow-run/36522211129"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "receipt:gha-dispatch-36522211129--gha-36522211129"
+        }
+      ],
+      "validFrom": "2026-09-29T04:34:20Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "promotionEvent": {
+        "schemaVersion": "trama.repository-observation-promotion-event/v1",
+        "eventId": "rope-2598ccf7219b9d729322f71cb39ff14deec8071d8a68a406a751d32331afb20a",
+        "proposalId": "rop-f0413d1ae92f295166e606af980ea9a6a1bc29688a7fe10490819813e9891399",
+        "observationDigest": "f0413d1ae92f295166e606af980ea9a6a1bc29688a7fe10490819813e9891399",
+        "previousObservationDigest": null,
+        "recordedAt": "2026-09-29T04:34:20Z",
+        "recordedBy": "gha-dispatch-36522211129",
+        "sourceRunId": "36522211129",
+        "sourceReceiptRef": "gha-dispatch-36522211129--gha-36522211129",
+        "collectorExactSha": "fec17431177e82392ac374247ee2d55a1d0210c2",
+        "promotionActorExactSha": "fec17431177e82392ac374247ee2d55a1d0210c2",
+        "promotionPolicyDigest": "70c58675a75c3436dd81b01f8bc6694af9fb2e0ae646ea14a5ca0b284c0c1616",
+        "repositoryEnrollmentDigest": "ebedf9e82e75ff1bb0a110510ce669c4b5bf627af0113998808dddc2dc2ec54d",
+        "result": "PROMOTED",
+        "sourceRefs": [
+          "github-actions:workflow-run/36522211129",
+          "receipt:gha-dispatch-36522211129--gha-36522211129"
+        ],
+        "supersedes": []
       }
     }
   ],
@@ -132,9 +244,136 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED",
+      "type": "DEFERMENT",
+      "subject": "project-knowledge-live-collector",
+      "statement": "LIVE_ONE_SHOT remains blocked until a real credential principal and authoritative read-only permission attestation are bound to the frozen candidate.",
+      "status": "SUPERSEDED",
+      "rationale": "Stage C and the Second Brain projection are integrated, but the human decision gate requires a concrete principal/permission envelope before any live network execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-LIVE-ONE-SHOT-DECISION-GATE.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/control-center/CC-MSS-01-STAGE-C2-ADAPTER-M1B-LIVE-ONE-SHOT-CONTRACT.md"
+        }
+      ],
+      "validFrom": "2026-09-28T19:45:00Z",
+      "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED",
+      "type": "CLOSURE",
+      "subject": "project-knowledge-live-collector",
+      "statement": "PUBLIC_ANONYMOUS_READ_ONLY LIVE_ONE_SHOT is qualified and has completed one governed run successfully on main; the receipt terminated CONSUMED and RepositoryObservation terminated COMPLETE.",
+      "status": "CURRENT",
+      "rationale": "The credentialed-path blocker was removed by the approved public-anonymous source model. PRs #126, #128, #129 and #130 established source, transport, single-use binding and executable workflow. Workflow run 36482487361 executed once on exact main baseline 895aac7c31d2e8388b22b01ac45408102ad6ff1c with run_attempt=1; 4 enrolled repositories were observed, 8 open PRs were reported, no artifact was published, and the receipt gha-dispatch-36482487361--gha-36482487361 closed CONSUMED.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 126,
+          "ref": "docs/control-center/CC-MSS-01-READ-ONLY-CREDENTIAL-SOURCE-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 128,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-TRANSPORT-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 129,
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-BINDING-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 130,
+          "exactHead": "bcca546e7e30ca5bf94acf96844f347b8ffb78aa",
+          "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-WORKFLOW-01.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+          "ref": "github-actions:workflow-run/36482487361"
+        }
+      ],
+      "validFrom": "2026-09-28T20:54:45Z",
+      "supersedes": [
+        "TRAMA-EVT-CCMSS-LIVE-PREDECISION-BLOCKED"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-REPOSITORY-OBSERVATION-PROMOTION-2598ccf7219b9d72",
+      "type": "PROMOTION",
+      "subject": "project-knowledge-repository-state",
+      "statement": "A governed RepositoryObservation was promoted into the current Project Knowledge repository-state projection.",
+      "status": "CURRENT",
+      "rationale": "Promotion is bound to proposal rop-f0413d1ae92f295166e606af980ea9a6a1bc29688a7fe10490819813e9891399, source run 36522211129, exact collector and actor revisions, policy digest and enrollment digest.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "github-actions:workflow-run/36522211129"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "receipt:gha-dispatch-36522211129--gha-36522211129"
+        }
+      ],
+      "validFrom": "2026-09-29T04:34:20Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "promotionEvent": {
+        "schemaVersion": "trama.repository-observation-promotion-event/v1",
+        "eventId": "rope-2598ccf7219b9d729322f71cb39ff14deec8071d8a68a406a751d32331afb20a",
+        "proposalId": "rop-f0413d1ae92f295166e606af980ea9a6a1bc29688a7fe10490819813e9891399",
+        "observationDigest": "f0413d1ae92f295166e606af980ea9a6a1bc29688a7fe10490819813e9891399",
+        "previousObservationDigest": null,
+        "recordedAt": "2026-09-29T04:34:20Z",
+        "recordedBy": "gha-dispatch-36522211129",
+        "sourceRunId": "36522211129",
+        "sourceReceiptRef": "gha-dispatch-36522211129--gha-36522211129",
+        "collectorExactSha": "fec17431177e82392ac374247ee2d55a1d0210c2",
+        "promotionActorExactSha": "fec17431177e82392ac374247ee2d55a1d0210c2",
+        "promotionPolicyDigest": "70c58675a75c3436dd81b01f8bc6694af9fb2e0ae646ea14a5ca0b284c0c1616",
+        "repositoryEnrollmentDigest": "ebedf9e82e75ff1bb0a110510ce669c4b5bf627af0113998808dddc2dc2ec54d",
+        "result": "PROMOTED",
+        "sourceRefs": [
+          "github-actions:workflow-run/36522211129",
+          "receipt:gha-dispatch-36522211129--gha-36522211129"
+        ],
+        "supersedes": []
+      }
     }
   ],
-  "exactHeads": [],
+  "exactHeads": [
+    {
+      "subject": "project-knowledge-live-collector",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 130,
+      "exactHead": "bcca546e7e30ca5bf94acf96844f347b8ffb78aa",
+      "sourceEvent": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+    },
+    {
+      "subject": "project-knowledge-live-collector",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+      "sourceEvent": "TRAMA-EVT-CCMSS-PUBLIC-ANONYMOUS-LIVE-QUALIFIED"
+    }
+  ],
   "blockingGates": [],
   "dependencies": [],
   "knownConflicts": [],
@@ -180,19 +419,69 @@
     },
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "ref": "docs/architecture/trama-project-knowledge-agent-context-v1.md"
+      "ref": "docs/control-center/CC-MSS-01-STAGE-C2-LIVE-ONE-SHOT-DECISION-GATE.md"
     },
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "ref": "docs/contracts/project-context-snapshot-v1.md"
+      "ref": "docs/control-center/CC-MSS-01-STAGE-C2-ADAPTER-M1B-LIVE-ONE-SHOT-CONTRACT.md"
     },
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "ref": "docs/contracts/trama-context-pack-v1.md"
+      "pullRequest": 126,
+      "ref": "docs/control-center/CC-MSS-01-READ-ONLY-CREDENTIAL-SOURCE-01.md"
     },
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "ref": "docs/implementation/cc2-f1e-project-knowledge-foundation.md"
+      "pullRequest": 128,
+      "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-TRANSPORT-01.md"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 129,
+      "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-BINDING-01.md"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 130,
+      "exactHead": "bcca546e7e30ca5bf94acf96844f347b8ffb78aa",
+      "ref": "docs/control-center/CC-MSS-01-PUBLIC-ANONYMOUS-LIVE-WORKFLOW-01.md"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "895aac7c31d2e8388b22b01ac45408102ad6ff1c",
+      "ref": "github-actions:workflow-run/36482487361"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "ref": "github-actions:workflow-run/36522211129"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "ref": "receipt:gha-dispatch-36522211129--gha-36522211129"
+    },
+    {
+      "snapshotSource": "control-center/data/ecosystem-snapshot.json",
+      "sha256": "91123c6d9f3f22aed1485bdc527c1bbb5234e2ce1ac1fd772653a66dfc8a7bf1"
+    },
+    {
+      "snapshotSource": "docs/knowledge/source-registry.json",
+      "sha256": "46c40d24c648053198543a8c01af5ed65922f633719bc019fb6ed1a809332502"
+    },
+    {
+      "snapshotSource": "docs/decisions/decision-register.json",
+      "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
+    },
+    {
+      "snapshotSource": "status/ecosystem-status.json",
+      "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
+    },
+    {
+      "snapshotSource": "status/governed-events.json",
+      "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
+    },
+    {
+      "snapshotSource": "status/project-knowledge-events.json",
+      "sha256": "e116e8f2b82068402f17f60740b973bad754f1aadd089bbe2e0236f1552e724e"
     }
   ]
 }
