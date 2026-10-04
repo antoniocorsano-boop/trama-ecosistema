@@ -36,9 +36,18 @@ function responseForReceipt(receipt: ReturnType<typeof normalizeExecutorResponse
   return NextResponse.json(receipt, { status });
 }
 
+function huggingFaceToken(): `hf_${string}` | undefined {
+  const token = process.env.VISUAL_FACTORY_EXECUTOR_TOKEN?.trim();
+  if (!token) return undefined;
+  if (!token.startsWith("hf_")) {
+    throw new Error("HF_TOKEN_FORMAT_INVALID");
+  }
+  return token as `hf_${string}`;
+}
+
 async function executeGradio(raw: VisualGenerationPlan, executorUrl: string) {
   const { Client } = await import("@gradio/client");
-  const token = process.env.VISUAL_FACTORY_EXECUTOR_TOKEN?.trim();
+  const token = huggingFaceToken();
   const client = await Client.connect(
     executorUrl,
     token ? { token } : undefined,
