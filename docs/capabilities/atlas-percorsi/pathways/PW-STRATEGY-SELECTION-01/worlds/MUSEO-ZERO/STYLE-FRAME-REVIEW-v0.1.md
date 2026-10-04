@@ -35,7 +35,7 @@ Use this file only after representative frames exist.
 - SF8 Repeatability/cost: 1
 - Hard stops: none confirmed, but HS03/HS04 remain open risks until controlled reproduction
 - Total: 20/24
-- Decision: PROMISING_REFERENCE_NOT_SELECTED
+- Decision: SELECTED_FOR_REFERENCE_LOCK
 - Notes:
   - Strong quality target: contemporary museum, cinematic illustrated realism, coherent warm/cool lighting, clear scene progression and immediate emotional legibility.
   - Not yet a Factory-selected style because it was produced as a single generative storyboard rather than through the governed open/reproducible pipeline.
@@ -61,15 +61,15 @@ Use this file only after representative frames exist.
 
 ## Final Human Visual Selection
 
-- Selected direction: NONE — Direction B is the current QUALITY BENCHMARK only
-- Reason: visual quality is promising, but reproducibility/continuity/open-pipeline proof is not yet demonstrated
-- Rejected direction(s): none yet
+- Selected direction: **B — Cinematic Editorial Illustration**
+- Reason: this direction best combines world credibility, narrative energy, lower-secondary dignity and a plausible path to repeatable 2-D production. The selection is visual only; reproducibility/continuity still require the open-pipeline proof.
+- Rejected direction(s): **A as standalone direction** (too easy to become static/editorial); **C as standalone direction** (too high a risk of reverting to diagram/diorama). Their useful restraint/spatial clarity may inform B without becoming separate directions.
 - Required corrections before Reference Lock:
   1. reproduce F3 as a clean visual plate with no generated text/UI;
   2. reproduce F4 in the same art language;
-  3. lock Lia/Teo/Omar as adult museum crew with stable identity;
-  4. demonstrate the same Sala Zero architecture in at least two independent frames;
-  5. record open/reproducible workflow and human refinement steps;
+  3. lock Lia/Teo/Omar as believable adult museum crew with stable identity;
+  4. preserve the same Sala Zero architecture across independent frames;
+  5. run the selected open/reproducible workflow and record human refinement;
   6. re-score SF4 and SF8 after reproduction.
 - Reviewer: Human direction captured in project review
 - Date: 2026-10-04
