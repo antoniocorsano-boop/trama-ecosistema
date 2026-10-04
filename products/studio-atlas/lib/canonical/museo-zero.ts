@@ -78,6 +78,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           "La sala non è pronta, ma il fallimento rende visibile il problema da spiegare.",
         reveal:
           "Il sensore fisico sembra funzionare: il problema non coincide automaticamente con un guasto hardware.",
+        world: {
+          place: "Sala Zero",
+          status: "La sala reagisce dopo il passaggio del visitatore",
+          signals: [
+            { id: "sensor-b", label: "Sensor B · nuova entrata", state: "ACTIVE", detail: "Il sensore rileva il passaggio." },
+            { id: "cue-map", label: "Mappatura regia", state: "MISMATCH", detail: "Il cue attivo non segue il nuovo ingresso." },
+            { id: "projection", label: "Proiezione", state: "DELAYED", detail: "Parte quando Lia è già oltre." },
+            { id: "sound-light", label: "Suono e luce", state: "DELAYED", detail: "Seguono la proiezione in ritardo." },
+          ],
+        },
         choices: [],
       },
       {
@@ -93,6 +103,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           "Il modo in cui organizzi le informazioni rende alcune domande più facili da affrontare e altre ancora opache.",
         reveal:
           "Sapere quando è avvenuto un cambiamento non significa ancora sapere se lo ha causato.",
+        world: {
+          place: "Museo Zero · indizi della giornata",
+          status: "Le modifiche sono note, ma la relazione causale è ancora incerta",
+          signals: [
+            { id: "route", label: "Percorso visitatori", state: "ACTIVE", detail: "È stato invertito per mantenere accessibile la nuova entrata." },
+            { id: "sensor-b", label: "Sensor B", state: "READY", detail: "È stato spostato sul nuovo ingresso." },
+            { id: "control", label: "Regia", state: "MISMATCH", detail: "La configurazione non è ancora stata collegata con certezza alle altre modifiche." },
+            { id: "rehearsal-log", label: "Log prova", state: "DELAYED", detail: "Registra la risposta tardiva della sala." },
+          ],
+        },
         choices: [
           {
             choiceId: "timeline",
@@ -130,6 +150,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           "L’attenzione si sposta dalla cronologia alla dipendenza tra ingresso, sensore ascoltato e cue attivi.",
         reveal:
           "Una rappresentazione utile per una domanda può diventare insufficiente quando cambia la domanda.",
+        world: {
+          place: "Timeline dell’allestimento",
+          status: "La sequenza temporale è chiara, ma non spiega perché la sala reagisce tardi",
+          signals: [
+            { id: "route-change", label: "Cambio percorso", state: "READY", detail: "Avviene prima della prova fallita." },
+            { id: "sensor-move", label: "Spostamento Sensor B", state: "READY", detail: "Avviene prima della prova fallita." },
+            { id: "graphics-volume", label: "Grafica e volume", state: "READY", detail: "Cambiano nello stesso pomeriggio ma non spiegano il ritardo." },
+            { id: "causal-link", label: "Relazione causale", state: "MISMATCH", detail: "La timeline da sola non la rende visibile." },
+          ],
+        },
         choices: [],
       },
       {
@@ -145,11 +175,30 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           "La conseguenza della prova permette di confrontare la tua spiegazione con il comportamento del sistema.",
         reveal:
           "Il mondo, non un punteggio, deve mostrare se il modello spiega il problema.",
+        world: {
+          place: "Simulazione · Sala Zero",
+          status: "Il nuovo ingresso usa Sensor B, ma la regia ascolta ancora Sensor A",
+          signals: [
+            { id: "sensor-b", label: "Sensor B", state: "ACTIVE", detail: "Rileva il visitatore al nuovo ingresso." },
+            { id: "trigger-map", label: "Trigger regia", state: "MISMATCH", detail: "È ancora associato a Sensor A." },
+            { id: "projection", label: "Proiezione", state: "DELAYED", detail: "Riceve il cue troppo tardi." },
+            { id: "sequence", label: "Sequenza sala", state: "DELAYED", detail: "Suono e luce seguono il ritardo." },
+          ],
+        },
         choices: [
           {
             choiceId: "current-a",
             targetSceneId: "MZ3_TIMELINE_LIMIT",
             label: "Mantengo il trigger su Sensor A",
+            worldAfter: {
+              place: "Simulazione · Sala Zero",
+              status: "Il ritardo si ripete: la configurazione continua ad ascoltare il riferimento sbagliato",
+              signals: [
+                { id: "sensor-b", label: "Sensor B", state: "ACTIVE", detail: "Il nuovo ingresso viene rilevato." },
+                { id: "trigger-map", label: "Trigger su Sensor A", state: "MISMATCH", detail: "La regia non usa il segnale del nuovo ingresso." },
+                { id: "projection", label: "Proiezione", state: "DELAYED", detail: "Parte quando il visitatore è già oltre." },
+              ],
+            },
             feedback:
               "Il visitatore supera la nuova entrata e la sala continua a partire tardi: il fallimento si ripete.",
           },
@@ -157,6 +206,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             choiceId: "switch-b",
             targetSceneId: "MZ5_COMPARE_RECOVERY",
             label: "Provo il trigger su Sensor B",
+            worldAfter: {
+              place: "Simulazione · Sala Zero",
+              status: "La sala risponde nel momento previsto: la mappatura aggiornata spiega il problema",
+              signals: [
+                { id: "sensor-b", label: "Sensor B", state: "ACTIVE", detail: "Rileva il passaggio al nuovo ingresso." },
+                { id: "trigger-map", label: "Trigger su Sensor B", state: "ACTIVE", detail: "La regia ascolta il segnale corretto." },
+                { id: "projection", label: "Proiezione", state: "STABLE", detail: "Parte all’ingresso." },
+                { id: "sequence", label: "Suono e luce", state: "STABLE", detail: "Restano sincronizzati." },
+              ],
+            },
             feedback:
               "La proiezione parte all’ingresso e la sequenza torna sincronizzata: la relazione causale è fortemente supportata.",
           },
@@ -164,6 +223,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             choiceId: "manual",
             targetSceneId: "MZ5_COMPARE_RECOVERY",
             label: "Provo un cue manuale",
+            worldAfter: {
+              place: "Simulazione · Sala Zero",
+              status: "La prova riesce, ma dipende dall’intervento dell’operatore",
+              signals: [
+                { id: "sensor-b", label: "Sensor B", state: "ACTIVE", detail: "Il sensore continua a funzionare." },
+                { id: "manual-cue", label: "Cue operatore", state: "MANUAL", detail: "Un operatore deve intervenire al momento giusto." },
+                { id: "projection", label: "Proiezione", state: "STABLE", detail: "Parte correttamente in questa prova." },
+                { id: "repeatability", label: "Ripetibilità", state: "MISMATCH", detail: "Il risultato non è garantito visita dopo visita." },
+              ],
+            },
             feedback:
               "La sala può funzionare in una prova, ma il risultato dipende dal tempismo dell’operatore e non è stabile.",
           },
@@ -182,11 +251,29 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           "La raccomandazione cambia la configurazione della prova finale e rende visibili i compromessi.",
         reveal:
           "La scelta migliore dipende dai vincoli condivisi, non solo dalla soluzione che sembra più rapida.",
+        world: {
+          place: "Banco decisione · Sala Zero",
+          status: "Tre soluzioni possono far ripartire la sala, ma non rispettano allo stesso modo i vincoli",
+          signals: [
+            { id: "accessibility", label: "Accessibilità del percorso", state: "ACTIVE", detail: "Il nuovo ingresso deve restare utilizzabile." },
+            { id: "reliability", label: "Affidabilità", state: "MISMATCH", detail: "La soluzione deve funzionare in visite ripetute." },
+            { id: "workload", label: "Lavoro richiesto", state: "READY", detail: "Il team ha poco tempo prima della prova generale." },
+          ],
+        },
         choices: [
           {
             choiceId: "restore-old-route",
             targetSceneId: "MZ4_TEST_MAPPING",
             label: "Ripristino il vecchio percorso",
+            worldAfter: {
+              place: "Confronto soluzione",
+              status: "Il vecchio percorso riduce il lavoro in regia ma sacrifica il nuovo assetto accessibile",
+              signals: [
+                { id: "accessibility", label: "Accessibilità del percorso", state: "MISMATCH", detail: "Il nuovo ingresso non viene mantenuto." },
+                { id: "reliability", label: "Affidabilità tecnica", state: "STABLE", detail: "La vecchia configurazione è conosciuta." },
+                { id: "workload", label: "Lavoro fisico", state: "DELAYED", detail: "Serve ripristinare il percorso precedente." },
+              ],
+            },
             feedback:
               "Riduce il cambiamento in regia, ma entra in conflitto con il nuovo percorso e richiede nuovo lavoro fisico.",
           },
@@ -194,6 +281,15 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             choiceId: "update-mapping",
             targetSceneId: "MZ6_FINAL_REHEARSAL",
             label: "Aggiorno la mappatura a Sensor B",
+            worldAfter: {
+              place: "Confronto soluzione",
+              status: "La mappatura a Sensor B mantiene il percorso accessibile e produce una risposta stabile",
+              signals: [
+                { id: "accessibility", label: "Accessibilità del percorso", state: "STABLE", detail: "La nuova entrata resta utilizzabile." },
+                { id: "reliability", label: "Affidabilità", state: "STABLE", detail: "La simulazione risponde in modo ripetibile." },
+                { id: "workload", label: "Lavoro richiesto", state: "READY", detail: "La modifica è circoscritta alla configurazione." },
+              ],
+            },
             feedback:
               "Mantiene il percorso accessibile, richiede una modifica contenuta e nella simulazione produce un comportamento stabile.",
           },
@@ -201,6 +297,15 @@ export function createMuseoZeroPilotProject(): PathwayProject {
             choiceId: "manual-cue",
             targetSceneId: "MZ4_TEST_MAPPING",
             label: "Uso il cue manuale",
+            worldAfter: {
+              place: "Confronto soluzione",
+              status: "Il cue manuale è praticabile come ripiego, ma resta fragile per l’uso ripetuto",
+              signals: [
+                { id: "accessibility", label: "Accessibilità del percorso", state: "STABLE", detail: "Il nuovo ingresso resta utilizzabile." },
+                { id: "reliability", label: "Affidabilità", state: "MANUAL", detail: "Dipende dal tempismo dell’operatore." },
+                { id: "workload", label: "Carico operativo", state: "MISMATCH", detail: "Richiede attenzione continua durante le visite." },
+              ],
+            },
             feedback:
               "È un buon ripiego temporaneo, ma resta meno affidabile per visite ripetute.",
           },
@@ -219,6 +324,16 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           "Il team può procedere alla prova generale e il nuovo percorso resta utilizzabile.",
         reveal:
           "Il sensore non era rotto: la configurazione ascoltava il riferimento sbagliato.",
+        world: {
+          place: "Sala Zero · prova finale",
+          status: "Ingresso, trigger e risposta della sala sono di nuovo sincronizzati",
+          signals: [
+            { id: "sensor-b", label: "Sensor B", state: "ACTIVE", detail: "Rileva il passaggio nel punto corretto." },
+            { id: "trigger-map", label: "Trigger regia", state: "ACTIVE", detail: "Ascolta Sensor B." },
+            { id: "projection", label: "Proiezione", state: "STABLE", detail: "Parte al momento previsto." },
+            { id: "sound-light", label: "Suono e luce", state: "STABLE", detail: "Seguono la sequenza senza ritardo." },
+          ],
+        },
         choices: [],
       },
       {
@@ -234,6 +349,15 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           "Il Percorso si chiude senza punteggio o morale esplicita.",
         reveal:
           "SALA ZERO — PRONTA PER LA PROVA GENERALE.",
+        world: {
+          place: "Sala Zero · chiusura",
+          status: "La configurazione resta stabile e pronta per la prova generale",
+          signals: [
+            { id: "room", label: "Sala Zero", state: "STABLE", detail: "La sequenza è pronta." },
+            { id: "route", label: "Percorso accessibile", state: "STABLE", detail: "La nuova entrata resta attiva." },
+            { id: "team", label: "Sessione di allestimento", state: "OFF", detail: "Il team può chiudere la prova." },
+          ],
+        },
         choices: [],
       },
     ],
