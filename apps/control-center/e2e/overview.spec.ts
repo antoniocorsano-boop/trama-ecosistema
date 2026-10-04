@@ -16,8 +16,8 @@ test("Overview orients without inventing blocking decisions", async ({ page }, t
   await expect(page.getByText(/Prossimo fronte pianificato: R4/)).toBeVisible();
   const specialistNav = page.getByRole("navigation", { name: "Viste specialistiche" });
   await expect(specialistNav.getByRole("link", { name: /Maturità/ })).toBeVisible();
-  await expect(page.getByText("Parziale", { exact: true })).toBeVisible();
-  await expect(page.getByText(/informazione utilizzabile con contesto/i)).toBeVisible();
+  await expect(page.getByText("Aggiornata", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Stato parziale: informazione utilizzabile con contesto/i)).toHaveCount(0);
 
   const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
   const viewportWidth = await page.evaluate(() => window.innerWidth);
