@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-09-29T17:35:00Z",
+  "updatedAt": "2026-10-04T19:43:00Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
@@ -227,6 +227,86 @@
           "receipt:gha-dispatch-36522211129--gha-36522211129"
         ],
         "supersedes": []
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P1-APPLICATION-SCOPE-CLOSED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P1 Orario + PWA + Android is CLOSED_APPLICATION_SCOPE / DEVICE_NATIVE_RESIDUAL: A19 is VERIFIED_ON_BETA; A20 is IMPLEMENTED_QUALIFIED; the remaining Chrome/Android installation behavior is a non-blocking native-device qualification residual and does not reopen the application scope.",
+      "status": "CURRENT",
+      "rationale": "TRAMA Audit v1.1 was integrated after Human Review and separates application completion from the remaining browser/device-native qualification residual.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 230,
+          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-04T16:52:55Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P2-ARENA-ATLAS-VERIFIED-INTEGRATED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P2 Arena to Atlas curriculum synchronization is VERIFIED / INTEGRATED; the scheduled synchronization run completed successfully with governed validation and no-op behavior when no publication change was required.",
+      "status": "CURRENT",
+      "rationale": "Audit v1.1 records the bootstrap remediation as integrated and cites scheduled run 37214517566 as PASS without changing authority boundaries: Arena remains authoritative and Atlas remains the publication surface.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 230,
+          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/CurManLight_arena",
+          "ref": "github-actions:workflow-run/37214517566"
+        }
+      ],
+      "validFrom": "2026-10-04T16:52:55Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04",
+      "type": "DECISION",
+      "subject": "project-knowledge",
+      "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
+      "status": "CURRENT",
+      "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 230,
+          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-04T16:52:55Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
       }
     }
   ]
