@@ -19,6 +19,7 @@ export type ProductionState =
   | "FAILED";
 
 export type ReviewDecision = "DRAFT" | "READY" | "PASS" | "REVISE";
+export type ProductReviewDecision = ReviewDecision | "REJECT";
 
 export type StoryDraft = {
   hook: string;
@@ -79,6 +80,12 @@ export type HumanReview = {
   evidenceRef?: string;
 };
 
+export type ProductReview = {
+  decision: ProductReviewDecision;
+  reviewedAt?: string;
+  evidenceRef?: string;
+};
+
 export type VisualProductionRequest = {
   schemaVersion: "atlas.visual-production-request/v0.1";
   requestId: string;
@@ -133,6 +140,7 @@ export type PathwayProject = {
   storyReview: HumanReview;
   world: WorldDraft;
   worldReview: HumanReview;
+  productReview?: ProductReview;
   experience: ExperienceDraft;
   scenes: PathwayScene[];
   storyboardReady: boolean;
