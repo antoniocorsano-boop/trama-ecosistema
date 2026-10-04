@@ -110,3 +110,23 @@ This is intentional: provider onboarding follows the policy rather than precedin
 7. store receipt.
 
 No paid run is implied by qualification.
+
+
+## Mandatory dry-run gate
+
+A compiled `PLAN_READY` is necessary but not sufficient.
+
+Before real provisioning, CI/orchestration MUST run:
+
+```bash
+sky launch --dryrun exact-task.yaml
+```
+
+The dry-run is evidence only and does not authorise launch.
+
+A real launch may occur only when:
+
+- entitlement snapshot remains fresh;
+- dry-run is compatible with the compiled candidate set;
+- exact workload/quality profile is unchanged;
+- Human Review required by the qualification tranche is present.
