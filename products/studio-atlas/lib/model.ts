@@ -60,6 +60,7 @@ export type PathwaySceneChoice = {
   choiceId: string;
   label: string;
   feedback: string;
+  targetSceneId: string;
 };
 
 export type PathwayScene = {
