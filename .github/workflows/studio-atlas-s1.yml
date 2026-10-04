@@ -55,3 +55,6 @@ jobs:
           grep -q 'Approva pacchetto' components/PathwayWorkspace.tsx
           grep -q 'targetSceneId' lib/model.ts
           grep -q 'MUSEO_ZERO_PRODUCT_REVIEW_REF' lib/canonical/museo-zero.ts
+          grep -q 'worldAfter' lib/model.ts
+          grep -q 'world: {' lib/canonical/museo-zero.ts
+          grep -q 'worldAfter: {' lib/canonical/museo-zero.ts
