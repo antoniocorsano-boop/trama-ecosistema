@@ -394,6 +394,8 @@ function blockerLabel(blocker: string) {
     STORYBOARD_NOT_READY: "Lo storyboard non è ancora segnato come pronto.",
     NO_SCENES: "Non esiste ancora nessuna scena.",
     INCOMPLETE_SCENES: "Una o più scene non hanno situazione, azione e conseguenza.",
+    INCOMPLETE_CHOICES: "Una scena di scelta non ha ancora almeno due possibilità complete.",
+    TERMINAL_CHOICE_NEEDS_CLOSURE: "L’ultima scena è una scelta: aggiungi una breve scena di chiusura dopo la conseguenza.",
     TRANSFER_SCENE_REQUIRED: "Manca una scena di trasferimento in una situazione nuova.",
   };
   return labels[blocker] ?? blocker;
