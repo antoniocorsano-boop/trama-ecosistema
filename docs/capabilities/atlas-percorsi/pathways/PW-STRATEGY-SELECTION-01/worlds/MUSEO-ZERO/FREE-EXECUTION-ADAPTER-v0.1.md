@@ -87,3 +87,29 @@ If probe fails:
 **FREE_GPU_EXECUTION_UNAVAILABLE**
 
 Then select another zero-cost/available adapter without reopening art direction.
+
+
+## Probe receipt — run 1 — 2026-10-04
+
+Observed from the governed Colab probe v0.2:
+
+- adapter: `google-colab-free`
+- gpuPresent: `false`
+- gpuName: `null`
+- vramGiB: `0.0`
+- ramGiB: `12.67`
+- diskFreeGiB: `87.23`
+- decision: `NO_GPU`
+- paidComputeAuthorized: `false`
+
+Interpretation:
+the notebook executed correctly, but the assigned runtime had no CUDA GPU.
+
+This is **not** a model/pipeline qualification failure.
+
+Next action:
+1. request/enable a free GPU runtime once;
+2. rerun the hardware probe;
+3. if Colab Free still provides no GPU, stop retrying and move to the next zero-cost adapter.
+
+No model downloads are authorised on this CPU-only runtime.
