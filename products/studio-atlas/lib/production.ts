@@ -1,43 +1,48 @@
-import type { PathwayProject } from "./model";
+import type {
+  PathwayProject,
+  VisualProductionReceipt,
+  VisualProductionRequest,
+} from "./model";
 
-export type VisualProductionRequest = {
-  schemaVersion: "atlas.visual-production-request/v0.1";
-  requestId: string;
-  pathwayId: string;
-  packageDigest: string;
-  operation: "GENERATE";
-  sceneRefs: string[];
-  qualityProfile: "Q4";
-  productForm: "illustrated-sequence";
-  computePolicyRef: "TRAMA Compute Policy v0.1";
-  paidComputeAuthorized: false;
-  allowQualityDowngrade: false;
-  maxAttempts: 4;
-  requestedAt: string;
-};
+export function getProductionBlockers(project: PathwayProject) {
+  const blockers: string[] = [];
 
-export function canPrepareProduction(project: PathwayProject) {
-  return project.sceneRefs.length > 0;
+  if (project.storyReview.decision !== "PASS") blockers.push("STORY_REVIEW_NOT_PASS");
+  if (project.worldReview.decision !== "PASS") blockers.push("WORLD_REVIEW_NOT_PASS");
+  if (!project.experience.grammar) blockers.push("EXPERIENCE_NOT_SELECTED");
+  if (!project.storyboardReady) blockers.push("STORYBOARD_NOT_READY");
+  if (project.scenes.length < 1) blockers.push("NO_SCENES");
+
+  const incompleteScene = project.scenes.some(
+    (scene) =>
+      !scene.visibleSituation.trim() ||
+      !scene.learnerAction.trim() ||
+      !scene.consequence.trim(),
+  );
+  if (incompleteScene) blockers.push("INCOMPLETE_SCENES");
+
+  return blockers;
 }
 
-export function buildVisualProductionRequest(
-  project: PathwayProject,
-  packageDigest: string,
-): VisualProductionRequest {
-  if (!canPrepareProduction(project)) {
-    throw new Error("PRODUCTION_REQUIRES_SCENES");
-  }
-  if (!/^[0-9a-f]{64}$/.test(packageDigest)) {
-    throw new Error("INVALID_PACKAGE_DIGEST");
+export function canPrepareProduction(project: PathwayProject) {
+  return getProductionBlockers(project).length === 0;
+}
+
+export async function prepareWaitingProduction(project: PathwayProject) {
+  const blockers = getProductionBlockers(project);
+  if (blockers.length) {
+    throw new Error(`PRODUCTION_BLOCKED:${blockers.join(",")}`);
   }
 
-  return {
+  const packageDigest = await digestAuthoringState(project);
+
+  const request: VisualProductionRequest = {
     schemaVersion: "atlas.visual-production-request/v0.1",
     requestId: crypto.randomUUID(),
     pathwayId: project.projectId,
     packageDigest,
     operation: "GENERATE",
-    sceneRefs: [...project.sceneRefs],
+    sceneRefs: project.scenes.map((scene) => scene.sceneId),
     qualityProfile: "Q4",
     productForm: "illustrated-sequence",
     computePolicyRef: "TRAMA Compute Policy v0.1",
@@ -46,4 +51,42 @@ export function buildVisualProductionRequest(
     maxAttempts: 4,
     requestedAt: new Date().toISOString(),
   };
+
+  const receipt: VisualProductionReceipt = {
+    schemaVersion: "atlas.visual-production-receipt/v0.1",
+    receiptId: crypto.randomUUID(),
+    requestId: request.requestId,
+    status: "WAITING_FOR_COMPUTE",
+    qualityProfile: "Q4",
+    effectiveCostClass: "UNKNOWN",
+    costClass: "FREE_ONLY",
+    attempts: 0,
+    failureCategory: "NO_FREE_PROVIDER",
+    failureDetail: "NO_SKYPILOT_FREE_ONLY_PROVIDER_BOUND",
+    publicationAuthorityGranted: false,
+  };
+
+  return { request, receipt };
+}
+
+async function digestAuthoringState(project: PathwayProject) {
+  const canonical = JSON.stringify({
+    pathwayId: project.projectId,
+    title: project.title,
+    idea: project.idea,
+    ageBand: project.ageBand,
+    story: project.story,
+    storyReview: project.storyReview,
+    world: project.world,
+    worldReview: project.worldReview,
+    experience: project.experience,
+    scenes: project.scenes,
+    storyboardReady: project.storyboardReady,
+    revision: project.revision,
+  });
+  const bytes = new TextEncoder().encode(canonical);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 }
