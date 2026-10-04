@@ -16,7 +16,7 @@ import tempfile
 import spaces  # ZeroGPU must patch torch before diffusers imports it.
 import gradio as gr
 import torch
-from diffusers import DiffusionPipeline
+from diffusers import Flux2KleinPipeline
 from diffusers.utils import load_image
 
 from contract import (
@@ -31,9 +31,9 @@ MODEL_ID = os.environ.get("VISUAL_FACTORY_MODEL_ID", "black-forest-labs/FLUX.2-k
 WORKFLOW_REF = "hf-zerogpu.flux2-klein-4b/v0.1"
 VARIANTS_PER_JOB = max(1, min(3, int(os.environ.get("VISUAL_FACTORY_VARIANTS_PER_JOB", "1"))))
 
-# HF ZeroGPU emulates CUDA during process startup. Keeping the pipeline at module
-# scope lets the platform optimise transfers when a real GPU is assigned.
-pipe = DiffusionPipeline.from_pretrained(
+# Keep construction outside the metered generation function. ZeroGPU intercepts
+# the CUDA move and restores the pipeline when the decorated function receives a GPU.
+pipe = Flux2KleinPipeline.from_pretrained(
     MODEL_ID,
     torch_dtype=torch.bfloat16,
 ).to("cuda")
@@ -73,8 +73,6 @@ def execute_plan(plan_json: str):
         plan = validate_plan(json.loads(plan_json))
         jobs = compile_execution_jobs(plan)
     except Exception as exc:
-        # A malformed input has no trustworthy package digest, so surface an
-        # ordinary endpoint error rather than forging a governed receipt.
         raise gr.Error(f"INVALID_VISUAL_GENERATION_PLAN: {exc}") from exc
 
     files: list[str] = []
@@ -89,13 +87,15 @@ def execute_plan(plan_json: str):
                     "prompt": _prompt(job),
                     "width": job.width,
                     "height": job.height,
+                    "guidance_scale": 1.0,
                     "num_inference_steps": 4,
-                    "generator": torch.Generator(device="cpu").manual_seed(
+                    "generator": torch.Generator(device="cuda").manual_seed(
                         _seed(plan["packageDigest"], job.job_id, variant)
                     ),
                 }
                 if references:
-                    kwargs["image"] = references if len(references) > 1 else references[0]
+                    # FLUX.2 Klein natively accepts a list for multi-reference editing.
+                    kwargs["image"] = references
 
                 image = pipe(**kwargs).images[0]
                 asset_id = f"{job.subject_ref}-{variant + 1}-{hashlib.sha256(image.tobytes()).hexdigest()[:12]}"
