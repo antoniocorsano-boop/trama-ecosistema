@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
+// MUSEO ZERO transfer contract: the recovery-comparison phase carries transfer inside the approved story arc.
 
 const STUDIO = "http://127.0.0.1:3100";
 const ATLAS = "http://127.0.0.1:3200";
