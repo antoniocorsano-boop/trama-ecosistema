@@ -56,9 +56,10 @@ jobs:
           NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN: ${{ env.ATLAS_ORIGIN }}
         run: npm run build
 
-      - name: Build exact Atlas candidate with Studio origin
+      - name: Build exact Atlas static preview candidate with Studio origin
         working-directory: _atlas
         env:
+          ATLAS_PREVIEW_ROOT_SCOPED: "true"
           NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN: ${{ env.STUDIO_ORIGIN }}
         run: pnpm build
 
@@ -80,9 +81,8 @@ jobs:
           echo $! >/tmp/studio-atlas-e2e.pid
 
           (
-            cd _atlas
-            NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN="$STUDIO_ORIGIN" \
-              pnpm exec next start -H 127.0.0.1 -p 3200 \
+            cd _atlas/out
+            python3 -m http.server 3200 --bind 127.0.0.1 \
               >/tmp/atlas-e2e.log 2>&1
           ) &
           echo $! >/tmp/atlas-e2e.pid
