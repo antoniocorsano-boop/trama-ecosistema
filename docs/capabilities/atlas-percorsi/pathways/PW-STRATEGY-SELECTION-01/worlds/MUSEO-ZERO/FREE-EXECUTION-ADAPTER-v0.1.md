@@ -146,3 +146,39 @@ Failure policy:
 - if Q4 fails specifically for memory, permit one controlled Q3 fallback;
 - otherwise stop and diagnose;
 - no repeated random retries.
+
+
+## Adapter decision update — 2026-10-04
+
+### Google Colab Free
+
+State:
+**PROBE_SUCCESSFUL / EXECUTION_ADAPTER_REJECTED_FOR_REPEATABILITY**
+
+Observed:
+- one successful free T4 allocation;
+- subsequent runtime replacement lost the GPU before the Q4 smoke test;
+- a later corrected notebook again started without NVIDIA GPU.
+
+Interpretation:
+Colab Free is useful for opportunistic hardware probes, but its free GPU allocation is not stable enough to be the canonical execution adapter for the Visual Factory v0.1 pilot.
+
+No paid Colab tier is authorised.
+
+### Kaggle Notebooks
+
+State:
+**SELECTED_FREE_EXECUTION_ADAPTER_FOR_Q4_SMOKE**
+
+Current official environment provides:
+- free GPU option;
+- T4 x2 as the current recommended accelerator after P100 retirement;
+- approximately 29 GiB host RAM for the T4 x2 environment;
+- up to 12-hour GPU notebook sessions;
+- reproducible notebook version execution.
+
+The adapter remains fail-closed:
+- if no GPU is allocated, stop;
+- if the free quota is unavailable, do not purchase compute automatically;
+- if Q4 OOMs, allow one controlled Q3 fallback only;
+- no repeated random retries.
