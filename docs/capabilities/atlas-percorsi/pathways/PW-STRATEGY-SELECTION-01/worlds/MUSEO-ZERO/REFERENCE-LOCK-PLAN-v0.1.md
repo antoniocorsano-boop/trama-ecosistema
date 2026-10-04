@@ -83,3 +83,22 @@ If continuity fails:
 **RETURN_TO_ART_DIRECTION**
 
 Runtime, publication and implementation remain NOT_AUTHORIZED.
+
+
+## Review note — visual reference iteration 2026-10-04
+
+The latest clean four-panel reference board is retained as **COMPOSITION_REFERENCE / REFERENCE_LOCK_CANDIDATE_NOT_ACCEPTED**.
+
+Strengths:
+- strong Sala Zero continuity;
+- coherent warm/cool museum lighting;
+- F3 and F4 visibly belong to the same world;
+- visual quality is close to the desired benchmark;
+- no dependence on explanatory prose for the broad scene state.
+
+Blocking correction before Reference Lock:
+- Lia/Omar/Teo read too young and too close to student/anime-protagonist coding for their canonical roles as museum setup crew;
+- character identity must be re-authored as believable adult staff while preserving the current visual language;
+- generated text/signage remains non-canonical and must be removed from final visual plates.
+
+Next render must therefore preserve the environment/art direction but correct **age/role dignity and professional credibility**.
