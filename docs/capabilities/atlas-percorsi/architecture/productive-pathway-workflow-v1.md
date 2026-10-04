@@ -211,8 +211,11 @@ Once schemas stabilize, repository automation can check mechanically:
 - generated visual assets have a scenario-fidelity review;
 - an Experience Quality Gate declaration exists;
 - a student-point-of-view walkthrough exists;
-- the pathway is not represented primarily as a generic card/form/quiz sequence;
-- implementation handoff preserves reviewed mise-en-scène, identity, continuity and rhythm.
+- an anti-card-stack review declaration exists;
+- a recorded Human Review decision for the Experience Quality Gate exists;
+- implementation handoff explicitly references the reviewed mise-en-scène, identity, continuity and rhythm artefacts.
+
+Deterministic automation may check only the **presence, references, schema/state and recorded human decision** for these items. It must not decide whether the pathway is aesthetically successful, engaging, coherent, sufficiently distinctive, “too card-like”, appropriately paced, or whether identity/continuity/rhythm were qualitatively preserved; those remain Human Review judgements.
 
 These are deterministic checks and should not require an LLM.
 
