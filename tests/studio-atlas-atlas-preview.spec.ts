@@ -39,29 +39,62 @@ const project = {
     {
       sceneId: "S1",
       kind: "SCENE",
+      interaction: "SUMMARY",
       title: "Qualcosa non torna",
       visibleSituation: "Il sistema reagisce in ritardo rispetto a ciò che osservi.",
       learnerAction: "Individua quale relazione potrebbe essere fuori posto.",
       consequence: "Hai isolato il punto da verificare.",
-      reveal: "Una relazione può restare valida tecnicamente ma non più nel contesto."
+      reveal: "Una relazione può restare valida tecnicamente ma non più nel contesto.",
+      choices: []
     },
     {
       sceneId: "S2",
       kind: "SCENE",
+      interaction: "CHOICE",
       title: "Prova una modifica",
-      visibleSituation: "Puoi cambiare una relazione e ripetere la stessa prova.",
-      learnerAction: "Modifica la relazione e osserva la nuova risposta.",
-      consequence: "La risposta ora coincide con la situazione osservata.",
-      reveal: "La conseguenza rende visibile la relazione causale."
+      visibleSituation: "Puoi cambiare una sola relazione e ripetere la stessa prova.",
+      learnerAction: "Quale modifica vuoi provare?",
+      consequence: "La nuova prova rende visibile se la relazione scelta era davvero rilevante.",
+      reveal: "La conseguenza rende visibile la relazione causale.",
+      choices: [
+        {
+          choiceId: "keep-old",
+          label: "Mantengo il collegamento al vecchio segnale",
+          feedback: "Il ritardo si ripete: il sistema continua ad ascoltare il punto sbagliato."
+        },
+        {
+          choiceId: "use-new",
+          label: "Collego il sistema al segnale del nuovo ingresso",
+          feedback: "La risposta parte nel momento atteso: questa modifica spiega il ritardo."
+        },
+        {
+          choiceId: "manual",
+          label: "Uso un comando manuale",
+          feedback: "Può funzionare una volta, ma il risultato dipende dal tempismo dell’operatore."
+        }
+      ]
     },
     {
       sceneId: "S3_TRANSFER",
       kind: "TRANSFER",
+      interaction: "SUMMARY",
       title: "Un sistema diverso",
       visibleSituation: "Un altro dispositivo reagisce ancora a un’informazione non aggiornata.",
       learnerAction: "Riusa la strategia: osserva, individua la relazione e verifica la conseguenza.",
       consequence: "La strategia funziona anche quando cambia il contesto.",
-      reveal: "Il metodo è trasferibile, non dipende dal primo sistema."
+      reveal: "Il metodo è trasferibile, non dipende dal primo sistema.",
+      choices: []
+    },
+    {
+      sceneId: "S4_CLOSE",
+      kind: "SCENE",
+      interaction: "SUMMARY",
+      title: "La strategia resta tua",
+      visibleSituation: "Il secondo sistema ora risponde in modo coerente.",
+      learnerAction: "Chiudi la prova quando hai riconosciuto che cosa hai riutilizzato.",
+      consequence: "Il percorso si chiude senza trasformare la prova in un punteggio.",
+      reveal: "Hai trasferito un modo di ragionare, non una risposta da ricordare.",
+      choices: []
     }
   ],
   storyboardReady: true,
@@ -175,6 +208,25 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
   ).toBeVisible();
   await expect(
     popup.getByRole("heading", { name: "Qualcosa non torna" }),
+  ).toBeVisible();
+
+  await popup.getByRole("button", { name: "Continua" }).click();
+  await expect(
+    popup.getByRole("heading", { name: "Prova una modifica" }),
+  ).toBeVisible();
+
+  const supportedChoice = popup.getByRole("radio", {
+    name: "Collego il sistema al segnale del nuovo ingresso",
+  });
+  await expect(supportedChoice).toBeVisible();
+  await supportedChoice.check();
+  await expect(
+    popup.getByText("La risposta parte nel momento atteso: questa modifica spiega il ritardo."),
+  ).toBeVisible();
+
+  await popup.getByRole("button", { name: "Continua" }).click();
+  await expect(
+    popup.getByRole("heading", { name: "Un sistema diverso" }),
   ).toBeVisible();
 
   await expect.poll(async () => {
