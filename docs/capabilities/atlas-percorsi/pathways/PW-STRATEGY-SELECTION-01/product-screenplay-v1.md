@@ -25,7 +25,7 @@ Functional sequence:
 
 The learner works in a quiet **strategy laboratory** with a fictional information sheet about a small expedition route.
 
-The sheet contains five neutral facts:
+The workbench presents one continuous expedition route with five neutral facts:
 
 1. the group begins at the field station;
 2. it crosses a footbridge;
@@ -79,8 +79,8 @@ No growth evidence is awarded.
 
 The tool bench opens three strategy tools with equal visual status. They are not presented as personality choices or collectible cards:
 
-**A — Metto gli eventi in ordine**
-> “Li dispongo in sequenza e poi provo a ricordarli.”
+**A — Creo una sequenza di parole chiave**
+> “Riduco ogni evento a una parola e provo a ricordare l’ordine.”
 
 **B — Cerco cause e conseguenze**
 > “Collego ciò che fa succedere qualcos’altro.”
@@ -98,7 +98,7 @@ Choosing any tool alone does **not** award growth evidence. The tool must first 
 
 ### M3A — TEST THE SEQUENCE / CONNECT
 
-If A was chosen, the learner first organises the full evidence into a sequence on the workbench. Then Atlas explicitly enters **retrieval mode**:
+If A was chosen, the learner compresses the already visible route into a five-keyword sequence on the workbench. Then Atlas explicitly enters **retrieval mode**:
 
 - the full source sheet and full-sentence fragments are hidden;
 - the learner receives only five short neutral concept tokens that do not encode their own temporal position: **stazione**, **ponte**, **pioggia**, **cresta**, **osservazione**;
@@ -154,9 +154,9 @@ Prompt:
 > “Vuoi provare un modo pensato proprio per ricordare una sequenza?”
 
 Qualifying recovery:
-> switch to sequence + retrieval, then perform the applied reconstruction.
+> switch to the five-keyword sequence preparation, then perform the applied reconstruction.
 
-Exploration with the original method may occur inside M3B, but **progression to M4/M5 requires an applied sequence + retrieval attempt that qualifies for the first evidence event**. Therefore the active method immediately before the goal change is the sequence/retrieval method, ensuring that the later move to cause–effect is an actual method change rather than a repeated selection.
+Exploration with the original method may occur inside M3B, but **progression to M4/M5 requires an applied five-keyword sequence + retrieval attempt that qualifies for the first evidence event**. Therefore the active method immediately before the goal change is the five-keyword sequence/retrieval method, ensuring that the later move to cause–effect is an actual method change rather than a repeated selection.
 
 A revision here is evidence of task-bound adjustment, not of intelligence or motivation.
 
@@ -184,7 +184,7 @@ The same five fragments stay on the workbench. Only the mission rail changes, so
 
 The tool bench becomes active again. The learner must choose again:
 
-**A — Continuo a mettere in ordine**
+**A — Continuo con la sequenza di parole chiave**
 > useful for before/after, but not sufficient to expose the causal relation.
 
 **B — Cerco cause e conseguenze**
@@ -367,8 +367,8 @@ Avoid:
 
 | Evidence | Qualifying outcome | Stage |
 |---|---|---|
-| strategy–goal fit | after an actually tried preparation strategy, the learner selects/switches to sequence + retrieval and correctly reconstructs the route in retrieval mode with source text hidden | BEGINNING_TO_RECOGNISE |
-| strategic revision | prior qualifying sequence/retrieval use **then** qualifying M5 cause–effect selection/reselection **and** correct M6 applied causal construction | CHOOSES_WHEN_TO_USE |
+| strategy–goal fit | after an actually tried preparation approach, the learner selects/switches to the five-keyword sequence and correctly reconstructs the route in retrieval mode with source text hidden | BEGINNING_TO_RECOGNISE |
+| strategic revision | prior qualifying five-keyword sequence/retrieval use **then** qualifying M5 cause–effect selection/reselection **and** correct M6 applied causal construction | CHOOSES_WHEN_TO_USE |
 | applied transfer | qualifying M8 comparison-strategy selection (initial or recovered) **and** correct M8B criterion-by-criterion application | TRANSFERS_TO_NEW_SITUATION |
 
 A scene arrival, completion, time-on-task or initial preference is not growth evidence.
