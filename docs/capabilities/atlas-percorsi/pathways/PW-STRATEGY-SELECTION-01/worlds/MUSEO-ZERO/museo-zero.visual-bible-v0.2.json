@@ -26,12 +26,7 @@
       "name": "Lia",
       "role": "exhibition layout / visitor flow",
       "description": "adult museum crew member, calm focused physicality, practical contemporary setup clothing, clear full-body silhouette, stable hairstyle and one recurring warm accent",
-      "continuityAnchors": [
-        "stable hairstyle",
-        "stable outerwear silhouette",
-        "same adult age band",
-        "warm accent detail"
-      ],
+      "continuityAnchors": ["stable hairstyle", "stable outerwear silhouette", "same adult age band", "warm accent detail"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
@@ -40,12 +35,7 @@
       "name": "Omar",
       "role": "installation",
       "description": "adult museum installer, practical posture, contemporary work clothing, distinct silhouette, often physically near sensors or installation props, participant rather than teacher",
-      "continuityAnchors": [
-        "stable workwear",
-        "distinct silhouette from Teo",
-        "same adult age band",
-        "installation gesture or small prop"
-      ],
+      "continuityAnchors": ["stable workwear", "distinct silhouette from Teo", "same adult age band", "installation gesture or small prop"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
@@ -54,12 +44,7 @@
       "name": "Teo",
       "role": "control / rehearsal",
       "description": "adult museum control-room crew member, contemporary practical clothing, observant restrained body language, distinct silhouette, physically connected to rehearsal and control booth",
-      "continuityAnchors": [
-        "stable clothing",
-        "distinct silhouette from Omar",
-        "same adult age band",
-        "control booth association"
-      ],
+      "continuityAnchors": ["stable clothing", "distinct silhouette from Omar", "same adult age band", "control booth association"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     }
@@ -69,13 +54,7 @@
       "environmentId": "sala-zero",
       "name": "Sala Zero",
       "description": "contemporary interactive museum room after closing; large projection wall; new entrance threshold; subtle floor route; integrated sensor; exit light; believable spatial depth",
-      "continuityAnchors": [
-        "new entrance threshold",
-        "projection wall geometry",
-        "subtle floor route",
-        "integrated sensor position",
-        "museum accent colour"
-      ],
+      "continuityAnchors": ["new entrance threshold", "projection wall geometry", "subtle floor route", "integrated sensor position", "museum accent colour"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
@@ -83,19 +62,14 @@
       "environmentId": "cabina-regia",
       "name": "Cabina regia",
       "description": "physically adjacent museum control booth; tactile believable AV control surface; view or spatial connection back to Sala Zero; simple readable cue mapping and replay controls",
-      "continuityAnchors": [
-        "same material language as Sala Zero",
-        "physical adjacency",
-        "stable control surface geometry",
-        "small readable cue mapping"
-      ],
+      "continuityAnchors": ["same material language as Sala Zero", "physical adjacency", "stable control surface geometry", "small readable cue mapping"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     }
   ],
   "generationPolicy": {
-    "draftWorkflowFamily": "diffusers.flux1-schnell/v0.1",
-    "productionWorkflowFamily": "comfyui.sdxl-ipadapter-controlnet/v0.1",
+    "draftWorkflowFamily": "flux2-klein-4b/v0.2",
+    "productionWorkflowFamily": "flux2-klein-4b/v0.2",
     "promptOnlyProductionAllowed": false,
     "maxVariants": 3
   },
