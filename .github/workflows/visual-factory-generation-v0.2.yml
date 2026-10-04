@@ -9,8 +9,10 @@ on:
       - "schemas/atlas-visual-bible.v0.1.schema.json"
       - "schemas/atlas-visual-shot-plan.v0.1.schema.json"
       - "scripts/compile_visual_generation_plan.py"
+      - "services/visual-factory-hf/**"
       - "fixtures/visual-factory-generation/**"
       - "tests/test_visual_generation_plan.py"
+      - "tests/test_visual_factory_hf_contract.py"
       - ".github/workflows/visual-factory-generation-v0.2.yml"
 
 permissions:
@@ -28,7 +30,9 @@ jobs:
           python-version: "3.12"
 
       - name: Unit tests
-        run: python -m unittest tests/test_visual_generation_plan.py -v
+        run: |
+          python -m unittest tests/test_visual_generation_plan.py -v
+          python -m unittest tests/test_visual_factory_hf_contract.py -v
 
       - name: Compile unlocked reference jobs
         run: |
@@ -75,3 +79,9 @@ jobs:
           assert all(j["referenceInputs"] for j in p["jobs"])
           assert not p["paidComputeAuthorized"]
           PY
+
+      - name: Executor safety inspection
+        run: |
+          test -f services/visual-factory-hf/app.py
+          grep -q '@spaces.GPU' services/visual-factory-hf/app.py
+          ! grep -R -Ei 'purchase|billing|credit.card|paid.fallback' services/visual-factory-hf
