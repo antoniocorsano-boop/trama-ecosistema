@@ -277,6 +277,28 @@ Where characters are used, they must be **cognitive/narrative actors**: they car
 
 The learner should be able to answer “why am I doing this here?” from the situation itself.
 
+### 11.1 Lived narrative rule
+
+For narrative-present pathways, **presence is not enough**. The learner should experience the situation as something unfolding, not as a story explained before an exercise.
+
+Prefer:
+- **in medias res** entry at a meaningful moment;
+- dialogue and environmental events that reveal information progressively;
+- characters who react to what the learner discovers or changes;
+- diegetic prompts (“Ci dai una mano?”, “Che cosa è successo qui?”) instead of instructional labels;
+- consequences that alter the same scene/world;
+- quiet closure through character response or changed situation.
+
+Avoid:
+- exposition blocks that explain the whole premise before action;
+- chapter/step chrome when story continuity can orient the learner;
+- avatars added to an otherwise generic worksheet;
+- characters who merely repeat instructions;
+- end-of-pathway pedagogical morals that tell the learner what principle they were supposed to discover.
+
+**Human Review lens:** if the experience can be paraphrased as “read the setup, do the exercise, read the lesson”, it is not yet lived enough.
+
+
 ## 12. Canonical visual-interaction patterns
 
 These patterns are **selection grammars**, not reusable page templates.
