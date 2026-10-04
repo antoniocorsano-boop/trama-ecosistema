@@ -134,6 +134,7 @@ The governed pilot is deliberately materialised as:
 
 - `storyReview = PASS`
 - `worldReview = READY`
+- `productReview = READY`
 - `storyboardReady = false`
 - production = `NOT_REQUESTED`
 
@@ -145,6 +146,7 @@ This is intentional fail-closed behaviour.
 
 A Human Product Review PASS on this exact pack authorises only the following pilot-state transitions:
 
+- `productReview: READY → PASS`
 - `worldReview: READY → PASS`
 - accept MZ5_COMPARE_RECOVERY as the explicit transfer scene;
 - `storyboardReady: false → true`
