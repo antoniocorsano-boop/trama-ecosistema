@@ -137,6 +137,20 @@ Apply child safety, emotional-development, privacy, accessibility, attention/mem
 
 **Gate:** blockers stop progression before polished visual work.
 
+### W5A — Learner-language translation
+
+Before storyboard polish, translate the internal educational construct into the learner's concrete cognitive context.
+
+Required sequence for first-cycle experiences:
+
+`SITUATION → WHAT HAPPENED / AVAILABLE INFORMATION → WHAT WILL HAPPEN NEXT → CONCRETE LEARNER ACTION → ONLY THEN METHOD/STRATEGY NAMING IF USEFUL`
+
+The authoring team may reason with professional terms. The learner must not need those terms to understand the task.
+
+**Hard gate:** if the first-cycle learner-facing instruction begins with abstract educational language (for example “choose a strategy”, “reflect on your method”, “select the tool best suited to the goal”) before the task has been concretely grounded, return to W4/W5.
+
+The reviewer must be able to paraphrase the opening in one ordinary sentence beginning with an action verb, e.g. “rimetti”, “confronta”, “trova”, “scegli”, “collega”, “controlla”.
+
 ### W6 — Controlled storyboard
 
 Create literal instructions, scenes, actions, consequences, reconsideration, strategy recognition and transfer. Generate visuals only after the structural storyboard is reviewable.
@@ -175,7 +189,16 @@ State hypotheses, comparison/baseline, supporting/rejecting evidence and human-v
 
 Only evidence-supported, safeguard-passed **and Experience-Quality-Gate-passed** decisions become implementation requirements.
 
-A technically implementable storyboard is not sufficient. The handoff must preserve the reviewed mise-en-scène, visual identity, continuity and rhythm; implementation may not flatten them into a generic component stack without reopening product review.
+For every first-cycle learner-facing pathway, W9 MUST also contain:
+
+- a completed learner-language translation artefact;
+- a Human Review decision confirming that the opening can be understood without educational/professional terminology;
+- a student-point-of-view walkthrough using the exact or review-equivalent learner wording;
+- explicit confirmation that situation, available information, next event and concrete learner action are visible before method/strategy naming is required.
+
+A technically implementable storyboard is not sufficient. The handoff must preserve the reviewed mise-en-scène, visual identity, continuity, rhythm **and learner-language translation**; implementation may not flatten them into a generic component stack or reintroduce pedagogical jargon without reopening product review.
+
+**No grandfathering:** existing first-cycle candidates created before W5A must complete the same learner-language artefact and Human Review before implementation handoff, product-review closure or any future Q9 request.
 
 ### W10 — Runtime authorization
 
@@ -213,7 +236,10 @@ Once schemas stabilize, repository automation can check mechanically:
 - a student-point-of-view walkthrough exists;
 - an anti-card-stack review declaration exists;
 - a recorded Human Review decision for the Experience Quality Gate exists;
-- implementation handoff explicitly references the reviewed mise-en-scène, identity, continuity and rhythm artefacts.
+- implementation handoff explicitly references the reviewed mise-en-scène, identity, continuity and rhythm artefacts;
+- a completed learner-language translation artefact exists for first-cycle learner-facing pathways;
+- a recorded Human Review confirms learner-task comprehension without professional educational terminology;
+- existing candidates are not exempt from learner-language review.
 
 Deterministic automation may check only the **presence, references, schema/state and recorded human decision** for these items. It must not decide whether the pathway is aesthetically successful, engaging, coherent, sufficiently distinctive, “too card-like”, appropriately paced, or whether identity/continuity/rhythm were qualitatively preserved; those remain Human Review judgements.
 

@@ -19,6 +19,8 @@ Single entry point for understanding current authority, experiments and open con
 | C3/C11/C16 normalised evidence | `research/evidence/error-agent-emotion-records-v1.yaml` | ACTIVE NORMALISATION; C3/C16 strengthened; C11 precautionary constitutional stop supported by direct child evidence |
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
 | student library product contract | `../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md` | PRODUCT_RECOVERY_CANDIDATE / NOT_RUNTIME_AUTHORIZED — binds the recovery/authoring process to PR #96 artefacts; includes mandatory human Experience Quality Gate; recovered territory taxonomy remains CANDIDATE / NOT_APPROVED |
+| first-cycle learner experience specification | `../product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md` | PROPOSED_CANONICAL_PRODUCT_SPEC / HUMAN_REVIEW_REQUIRED — learner language, representation, interaction, mobile composition, feedback and visual-pattern selection; runtime not authorised |
+| first-cycle digital learning research screening | `../research/common/first-cycle-digital-learning-experience-screening-v1.md` | RESEARCH_SCREENING / DESIGN_INPUT — interactive learning, scaffolding, inquiry, gamification, narrative and mature-product precedents |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
 | experiential grammar registry | `grammars/registry.yaml` | CANONICAL registry; entries remain `research` |
@@ -94,6 +96,20 @@ The gate requires human review of:
 A pathway that is primarily a generic card/form/quiz/prompt sequence is not a finished Atlas Percorso. Standard components may implement scenes but must not become the visible product concept by default.
 
 Automation may verify declarations and artefacts. It cannot certify engagement, aesthetic quality, rhythm or experiential coherence.
+
+## Learner-language authority rule
+
+For first-cycle learner-facing Percorsi, internal pedagogical sophistication must be translated into **ordinary, situated learner language**.
+
+The learner surface should follow:
+
+`situation → concrete goal → concrete action → consequence → later recognition/name of strategy when useful`.
+
+A learner must not need to understand professional educational terminology in order to begin. Terms such as metacognition, transfer, strategy selection, trade-off, competence or goal–strategy fit belong to authoring/governance unless they are explicitly taught content.
+
+Human Review must ask whether a learner in the intended age band can understand the next action from the screen alone.
+
+The canonical first-cycle product direction is further defined by `product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md`: representation before explanation, direct cognitive action, visible consequence, one dominant stage, mobile-first continuity and cards as secondary objects rather than the visible product structure.
 
 ## Narrative authority rule
 There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
