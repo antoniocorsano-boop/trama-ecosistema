@@ -472,3 +472,15 @@ References:
 - `TRAMA-ADR-021`
 
 Compute is subordinate infrastructure. A missing FREE_ONLY provider produces **Produzione in attesa** and does not block non-production authoring.
+
+
+## Production request/receipt boundary
+
+Studio Atlas communicates with the Factory through:
+
+- `atlas.visual-production-request/v0.1`;
+- `atlas.visual-production-receipt/v0.1`.
+
+Reference: `VISUAL-PRODUCTION-CONTRACT-v0.1.md`.
+
+The request binds creator intent to an exact authoring-package digest. The receipt reports execution/output truth only; quality/publication decisions remain separate.
