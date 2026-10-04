@@ -141,6 +141,28 @@ Apply child safety, emotional-development, privacy, accessibility, attention/mem
 
 Create literal instructions, scenes, actions, consequences, reconsideration, strategy recognition and transfer. Generate visuals only after the structural storyboard is reviewable.
 
+### W6A — Experience quality design and review
+
+Before the pathway can advance from storyboard to implementation specification, authors must review the experience **as a learner-facing product**, not as a valid sequence of educational states.
+
+Required artefacts:
+
+- mise-en-scène / world statement;
+- pathway-specific visual identity;
+- scene-to-scene continuity anchors;
+- rhythm map showing orientation, action, consequence, pause/reconsideration and transfer;
+- interaction-variation rationale;
+- anti-card-stack review;
+- age-appropriateness/dignity review;
+- student-point-of-view walkthrough;
+- explicit note on what makes the experience enjoyable without manipulative gamification.
+
+**Hard gate:** a pathway that reads primarily as a questionnaire, generic card stack, slide deck, form flow or automatically generated prompt sequence returns to W4/W6.
+
+Cards and standard components are permitted implementation primitives. They are not accepted as the pathway's narrative/experiential identity by default.
+
+Automation may check that these artefacts exist. It may not certify engagement, aesthetic quality, rhythm or emotional/narrative coherence.
+
 ### W7 — Consequence review
 
 Record foreseeable beneficial/adverse consequences, uncertainty, preventability and controls.
@@ -151,7 +173,9 @@ State hypotheses, comparison/baseline, supporting/rejecting evidence and human-v
 
 ### W9 — Product specification handoff
 
-Only evidence-supported, safeguard-passed decisions become implementation requirements.
+Only evidence-supported, safeguard-passed **and Experience-Quality-Gate-passed** decisions become implementation requirements.
+
+A technically implementable storyboard is not sufficient. The handoff must preserve the reviewed mise-en-scène, visual identity, continuity and rhythm; implementation may not flatten them into a generic component stack without reopening product review.
 
 ### W10 — Runtime authorization
 
@@ -184,7 +208,11 @@ Once schemas stabilize, repository automation can check mechanically:
 - validation plan exists before status advances;
 - `runtimeAuthorized` remains false without explicit governance receipt;
 - no pathway claims completion with unresolved blocking controls;
-- generated visual assets have a scenario-fidelity review.
+- generated visual assets have a scenario-fidelity review;
+- an Experience Quality Gate declaration exists;
+- a student-point-of-view walkthrough exists;
+- the pathway is not represented primarily as a generic card/form/quiz sequence;
+- implementation handoff preserves reviewed mise-en-scène, identity, continuity and rhythm.
 
 These are deterministic checks and should not require an LLM.
 
