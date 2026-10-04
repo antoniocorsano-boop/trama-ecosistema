@@ -1,8 +1,20 @@
 import type {
   PathwayProject,
+  SceneWorldState,
   VisualProductionReceipt,
   VisualProductionRequest,
 } from "./model";
+
+function hasValidWorldState(world: SceneWorldState | undefined) {
+  if (!world) return true;
+  if (!world.place.trim() || !world.status.trim() || world.signals.length < 1) return false;
+  const ids = new Set<string>();
+  return world.signals.every((signal) => {
+    if (!signal.id.trim() || !signal.label.trim() || ids.has(signal.id)) return false;
+    ids.add(signal.id);
+    return true;
+  });
+}
 
 export function getProductionBlockers(project: PathwayProject) {
   const blockers: string[] = [];
@@ -43,6 +55,13 @@ export function getProductionBlockers(project: PathwayProject) {
       ),
   );
   if (invalidChoice) blockers.push("INCOMPLETE_CHOICES");
+
+  const invalidWorldState = project.scenes.some(
+    (scene) =>
+      !hasValidWorldState(scene.world) ||
+      scene.choices.some((choice) => !hasValidWorldState(choice.worldAfter)),
+  );
+  if (invalidWorldState) blockers.push("INCOMPLETE_WORLD_STATE");
 
   const terminalChoice = project.scenes.at(-1)?.interaction === "CHOICE";
   if (terminalChoice) blockers.push("TERMINAL_CHOICE_NEEDS_CLOSURE");
