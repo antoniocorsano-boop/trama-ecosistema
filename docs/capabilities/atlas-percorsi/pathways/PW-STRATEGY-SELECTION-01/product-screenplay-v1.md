@@ -92,7 +92,7 @@ Prompt:
 
 For this goal, A is the qualifying task-fit choice. B is a useful strategy for another goal; C may feel familiar but provides weaker evidence for the explicit sequence-retrieval goal.
 
-Choosing A alone does **not** award growth evidence. The pathway must first observe an applied sequence-retrieval action.
+Choosing any tool alone does **not** award growth evidence. The tool must first be used on the material, and the next feedback must refer only to an actually observed consequence.
 
 ### M3A — TEST THE SEQUENCE / CONNECT
 
@@ -113,27 +113,40 @@ Only a correct applied reconstruction after selecting/switching to the sequence-
 **Traguardo:** “Collego una strategia allo scopo del compito.”  
 **Stage:** `BEGINNING_TO_RECOGNISE`.
 
-### M3B — THE GOAL IS STILL ORDER / CONNECT
+### M3B — TRY THE CHOSEN TOOL, THEN CHECK FIT / CONNECT
 
-If B or C was chosen, the workbench visibly reflects that tool. The fit signal explains what the representation helped expose and what the mission still requires.
+If B or C was chosen, the learner must **actually use that tool before Atlas comments on its fit**.
 
-For B:
+**If B — causa-effetto**
 
-> “Hai reso visibile perché il percorso è cambiato, ma il tuo obiettivo attuale è ricostruire l’ordine.”
+The evidence fragments are placed on a relation surface. The learner links the supplied fragments into a causal chain. Only after that concrete action does the mission rail return to the original goal: reconstruct the **order**.
 
-For C:
+Atlas then asks the learner to try a short sequence reconstruction from the same material.
 
-> “Hai rivisto tutte le informazioni, ma non hai ancora verificato se riesci a recuperare l’ordine senza guardare.”
+Observed feedback may then say:
+
+> “La mappa ha reso visibile perché il percorso è cambiato. Nella prova d’ordine, però, non hai ancora esercitato direttamente la sequenza richiesta dalla missione.”
+
+The wording must describe only what the learner actually constructed and what happened in the sequence check.
+
+**If C — rilettura**
+
+The learner deliberately rereads the complete evidence surface and then closes it with an explicit action. No speed or reading time is measured. Atlas immediately asks for the same bounded sequence reconstruction.
+
+Observed feedback may then say:
+
+> “Hai riletto tutte le informazioni. Ora la prova mostra quanto riesci a ricostruire l’ordine senza guardare.”
+
+If the sequence is incomplete or incorrect, Atlas can legitimately expose the mismatch between the chosen preparation and the mission. If the learner succeeds anyway, Atlas must not fabricate a failure; it may instead say that the strategy happened to support this attempt while still inviting comparison with a more directly targeted sequence strategy.
 
 Prompt:
 
-> “Che cosa faresti adesso?”
+> “Vuoi mantenere questo metodo o provare uno strumento più direttamente collegato all’ordine?”
 
-Qualifying revision:
-> “Passo a una sequenza ordinata e provo a recuperarla senza guardare.”
+Qualifying recovery:
+> switch to sequence + retrieval, then perform the applied reconstruction.
 
-Non-qualifying:
-> “Continuo nello stesso modo anche se non ho ancora controllato l’ordine.”
+Continuing with the original method remains allowed for exploration, but no growth evidence is awarded until an applied strategy-goal fit has been demonstrated.
 
 A revision here is evidence of task-bound adjustment, not of intelligence or motivation.
 
@@ -244,6 +257,10 @@ Non-qualifying:
 
 Choosing the comparison-table strategy is necessary but not sufficient.
 
+If the learner chooses the non-qualifying memorisation strategy, Atlas must **not** advance directly to the awardable comparison task. The workbench first exposes the mismatch with the stated comparison goal and offers a recovery path back to the tool bench.
+
+Only after the learner selects the criterion-by-criterion comparison strategy can the transfer application proceed.
+
 ### M8B — APPLY THE COMPARISON / BUILD
 
 The learner now has to apply the selected comparison tool. The evidence fragments for the two routes sit beside an empty criterion grid. The task is to place the supplied facts into the correct comparison structure. A non-drag keyboard/touch-equivalent path is mandatory.
@@ -262,7 +279,12 @@ Prompt:
 
 > “Organizza i dati in modo che il confronto richiesto sia controllabile.”
 
-Only a correct applied representation earns:
+Only the conjunction of:
+
+1. a qualifying M8 strategy selection (either initially or after explicit recovery/reselection); and
+2. a correct M8B applied comparison representation
+
+earns:
 
 **Traguardo:** “Scelgo e applico una strategia adatta in un nuovo compito.”  
 **Stage:** `TRANSFERS_TO_NEW_SITUATION`.
@@ -327,9 +349,9 @@ Avoid:
 
 | Evidence | Qualifying outcome | Stage |
 |---|---|---|
-| strategy–goal fit | M3A correctly reconstructs the sequence after selecting/switching to sequence + retrieval | BEGINNING_TO_RECOGNISE |
+| strategy–goal fit | after an actually tried preparation strategy, the learner selects/switches to sequence + retrieval and correctly performs the sequence reconstruction | BEGINNING_TO_RECOGNISE |
 | strategic revision | M6 correctly applies a cause–effect representation after the goal change | CHOOSES_WHEN_TO_USE |
-| applied transfer | M8B correctly applies the criterion-by-criterion comparison representation in the new museum task | TRANSFERS_TO_NEW_SITUATION |
+| applied transfer | qualifying M8 comparison-strategy selection (initial or recovered) **and** correct M8B criterion-by-criterion application | TRANSFERS_TO_NEW_SITUATION |
 
 A scene arrival, completion, time-on-task or initial preference is not growth evidence.
 
@@ -366,10 +388,10 @@ Forbidden:
 
 1. Is “strategy–task fit” understandable without suggesting a fixed learning style?
 2. Are A/B/C presented neutrally enough that the learner must reason from the goal rather than visual cues?
-3. Does M3 make the consequence of a strategy observable rather than merely telling the learner the answer?
+3. Does every M3 feedback statement refer only to a strategy the learner actually tried and to an observable result, never a fabricated consequence?
 4. Does M5 genuinely require revision because the goal changed?
 5. Does M6 require application of the cause–effect representation?
-6. Does M8B require an applied new-task representation rather than repetition of M7?
+6. Does M8B require both qualifying strategy selection/reselection and an applied new-task representation rather than repetition of M7?
 7. Are all three growth events tied to applied task performance rather than strategy-label selection?
 8. Is the tone appropriate and non-infantilising for lower secondary?
 9. Does the experience avoid unnecessary working-memory and navigation burden?
