@@ -6,6 +6,10 @@ import {
   EMPTY_WORLD,
   type PathwayProject,
 } from "./model";
+import {
+  MUSEO_ZERO_PROJECT_ID,
+  createMuseoZeroPilotProject,
+} from "./canonical/museo-zero";
 
 const KEY = "studio-atlas.projects.v0.1";
 
@@ -109,4 +113,14 @@ export function updateProject(
   });
   writeAll(projects);
   return updated;
+}
+
+
+export function ensureMuseoZeroPilotProject(): PathwayProject {
+  const existing = getProject(MUSEO_ZERO_PROJECT_ID);
+  if (existing) return existing;
+
+  const project = createMuseoZeroPilotProject();
+  writeAll([project, ...readAll()]);
+  return project;
 }
