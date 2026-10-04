@@ -21,6 +21,9 @@ Single entry point for understanding current authority, experiments and open con
 | student library product contract | `../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md` | PRODUCT_RECOVERY_CANDIDATE / NOT_RUNTIME_AUTHORIZED — binds the recovery/authoring process to PR #96 artefacts; includes mandatory human Experience Quality Gate; recovered territory taxonomy remains CANDIDATE / NOT_APPROVED |
 | first-cycle learner experience specification | `../product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md` | PROPOSED_CANONICAL_PRODUCT_SPEC / HUMAN_REVIEW_REQUIRED — learner language, representation, interaction, mobile composition, feedback and visual-pattern selection; runtime not authorised |
 | compact learning world specification | `../product/COMPACT-LEARNING-WORLD-SPEC-v1.md` | PROPOSED_PRODUCT_DIRECTION / HUMAN_REVIEW_REQUIRED — world, role, agency, information distribution, consequence and desire-to-continue gate; runtime not authorised |
+| storytelling-first authoring contract | `../product/STORYTELLING-FIRST-AUTHORING-CONTRACT-v1.md` | HUMAN_DIRECTION_APPROVED / PROPOSED_CANONICAL_AUTHORING_CONTRACT — story concept + Human Story Review precede world/UI; runtime not authorised |
+| storytelling registry | `../storytelling/registry.yaml` | ACTIVE_STORY_COLLECTION — governed story concepts and states |
+| storytelling `STORY-PW-STRATEGY-01` | `../storytelling/STORY-PW-STRATEGY-01-MUSEO-ZERO.md` | STORY_APPROVED_FOR_WORLD_DESIGN / NOT_RUNTIME_AUTHORIZED — first approved storytelling concept for PW-STRATEGY-SELECTION-01 |
 | game-world learning experience benchmark | `../research/common/game-world-learning-experience-benchmark-v1.md` | RESEARCH_SCREENING / PRODUCT_DIRECTION_INPUT — Quest Atlantis, EcoMUVE, River City, Minecraft Education, Mission US, Quandary, iCivics and current game-library contrast |
 | first-cycle digital learning research screening | `../research/common/first-cycle-digital-learning-experience-screening-v1.md` | RESEARCH_SCREENING / DESIGN_INPUT — interactive learning, scaffolding, inquiry, gamification, narrative and mature-product precedents |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
@@ -115,6 +118,16 @@ A learner must not need to understand professional educational terminology in or
 Human Review must ask whether a learner in the intended age band can understand the next action from the screen alone.
 
 The canonical first-cycle product direction is further defined by `product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md`: representation before explanation, direct cognitive action, visible consequence, one dominant stage, mobile-first continuity and cards as secondary objects rather than the visible product structure.
+
+## Storytelling-first authority rule
+
+For first-cycle learner-facing Percorsi, the governed story concept precedes world/UI design.
+
+Required direction:
+
+`COMPETENCE TARGET → STORYTELLING CONCEPT → HUMAN STORY REVIEW → WORLD DESIGN → EXPERIENCE CHOREOGRAPHY → VISUAL/PLAYABLE PROTOTYPE → HUMAN USE REVIEW → IMPLEMENTATION`
+
+Storytelling concepts are collected in `storytelling/registry.yaml`. Human Story Review authorizes progression to world design only; it does not authorize implementation or runtime.
 
 ## Compact Learning World authority rule
 
