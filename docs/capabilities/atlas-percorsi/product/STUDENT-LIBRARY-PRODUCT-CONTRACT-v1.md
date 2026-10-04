@@ -47,6 +47,42 @@ The common educational grammar remains:
 
 The grammar is functional, not a mandatory screen count.
 
+### 3.0 Learner-language translation rule
+
+For first-cycle learners, the internal educational model MUST NOT be exposed as the entry language of the experience.
+
+Internal authoring may legitimately use terms such as `metacognition`, `strategy selection`, `transfer`, `evidence`, `trade-off`, `revision`, `competence`, `goal–strategy fit` or equivalent professional language. The learner-facing surface must translate those constructs into an age-appropriate **situation → concrete goal → observable action → consequence**.
+
+Before any learner is asked to choose a method/strategy/tool, the pathway must make explicit in ordinary language:
+
+1. **where / in what situation the learner is;**
+2. **what has happened or what information is available;**
+3. **what will happen next;**
+4. **what the learner will actually have to do.**
+
+Preferred learner-facing forms are concrete verbs and questions such as:
+
+- “Rimetti gli eventi nell’ordine corretto.”
+- “Quale informazione manca?”
+- “Che cosa ha fatto cambiare il percorso?”
+- “Confronta le due soluzioni.”
+- “Scegli quale dato controllare prima.”
+- “Prova di nuovo in questa situazione.”
+
+Avoid as entry instructions unless the pathway has already grounded them in concrete experience:
+
+- “scegli una strategia”;
+- “usa uno strumento adatto allo scopo”;
+- “rifletti sul tuo metodo”;
+- “valuta il tuo processo”;
+- “dimostra trasferimento”;
+- other pedagogical, psychological or curriculum terminology.
+
+**Design rule:** the learner should experience the cognitive move before being asked to name or generalise it.
+
+**Human-review question:** could a learner in the intended first-cycle age band understand what to do next without knowing any educational terminology?
+
+
 ### 3.1 Mandatory Experience Quality Gate
 
 Pedagogical correctness, safety, accessibility and technical validity are necessary but **not sufficient** for an Atlas Percorso.
