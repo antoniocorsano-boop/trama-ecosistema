@@ -36,8 +36,9 @@ required_p3_sync = [
     "control-center/data/context-packs/project-knowledge.generated.json",
     "python scripts/build_project_context_snapshot.py --output control-center/data/project-context-snapshot.generated.json",
     "python scripts/build_trama_context_pack.py project-knowledge --snapshot control-center/data/project-context-snapshot.generated.json --output control-center/data/context-packs/project-knowledge.generated.json",
-    "CANONICAL_PROJECT_CONTEXT_SEMANTIC_CHANGE_PROMOTED",
-    "CANONICAL_PROJECT_KNOWLEDGE_SEMANTIC_CHANGE_PROMOTED",
+    "'PROJECT_CONTEXT'",
+    "'PROJECT_KNOWLEDGE'",
+    "CANONICAL_{label}_SEMANTIC_CHANGE_PROMOTED",
     "git add control-center/data/ecosystem-snapshot.json control-center/data/project-context-snapshot.json control-center/data/context-packs/project-knowledge.json",
 ]
 for token in required_p3_sync:
