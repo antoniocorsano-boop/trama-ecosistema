@@ -322,6 +322,9 @@ Before implementation, verify:
 - [ ] privacy/data inventory passed;
 - [ ] accessibility equivalent exists;
 - [ ] emotional safeguards passed;
+- [ ] learner-language translation completed for first-cycle learner-facing use;
+- [ ] Human Review confirms the opening situation and next learner action are understandable without educational/professional terminology;
+- [ ] student-point-of-view wording reviewed on the actual or review-equivalent learner surface;
 - [ ] Experience Quality Gate passed by Human Review;
 - [ ] student-point-of-view walkthrough reviewed;
 - [ ] anti-card-stack review passed;
@@ -330,5 +333,7 @@ Before implementation, verify:
 - [ ] validation evidence is sufficient for the claimed decision;
 - [ ] no unresolved blocker is hidden by polished visuals;
 - [ ] runtime authority is explicitly granted by the correct governance process.
+
+**Existing candidates are not grandfathered:** if this dossier predates section 7A, section 7A and its Human Review must be completed before handoff/product-review closure/Q9.
 
 **Implementation remains unauthorised until the relevant gate explicitly permits it.**
