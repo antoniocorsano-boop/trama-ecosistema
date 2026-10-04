@@ -1,0 +1,42 @@
+name: Studio Atlas — S1 Standalone
+
+on:
+  pull_request:
+    paths:
+      - "products/studio-atlas/**"
+      - ".github/workflows/studio-atlas-s1.yml"
+      - "docs/capabilities/atlas-percorsi/product/STUDIO-ATLAS-S1-THIN-SHELL-SPEC-v0.1.md"
+      - "docs/capabilities/atlas-percorsi/product/STUDIO-ATLAS-PRODUCT-FOUNDATION-v0.1.md"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Typecheck and build standalone slice
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: products/studio-atlas
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install exact declared dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Product boundary checks
+        run: |
+          ! grep -R "studentName\|classId\|KAGGLE\|AZURE_CREDENTIALS\|kubectl\|sky launch" app components lib
+          grep -R "Produzione in attesa" components
+          grep -R "Nessuna classe, studente o provider" components
