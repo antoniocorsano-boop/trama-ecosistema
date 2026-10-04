@@ -267,3 +267,29 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .scene-choice-row textarea,
   .scene-choice-row .quiet-action { grid-column: 2; }
 }
+
+
+.pilot-pathway {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: end;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+  padding: 24px 0 28px;
+  margin-bottom: 54px;
+}
+.pilot-pathway h2 {
+  font-size: clamp(26px, 4vw, 42px);
+  letter-spacing: -.035em;
+}
+.pilot-pathway p:not(.eyebrow) {
+  max-width: 720px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 10px 0 0;
+}
+@media (max-width: 700px) {
+  .pilot-pathway { grid-template-columns: 1fr; align-items: start; }
+  .pilot-pathway .secondary-action { justify-self: start; }
+}
