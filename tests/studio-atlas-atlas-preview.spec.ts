@@ -269,8 +269,8 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
   await page.getByRole("button", { name: "Scene" }).click();
   await expect(page.getByRole("heading", { name: "Metti in sequenza ciò che accade." })).toBeVisible();
   await expect(
-    page.getByRole("textbox", { name: "Titolo scena 7" }),
-  ).toHaveValue("Un’altra sala, una domanda diversa");
+    page.getByRole("textbox", { name: "Titolo scena 5" }),
+  ).toHaveValue("Quale soluzione regge davvero?");
   await expect(page.getByRole("button", { name: "Storyboard pronto" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "Revisione" }).click();
@@ -338,9 +338,15 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
   expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
   expect(
     stored.lastPreviewSnapshot.scenes.some(
-      (scene: { kind?: string }) => scene.kind === "TRANSFER",
+      (scene: { sceneId?: string; kind?: string }) =>
+        scene.sceneId === "MZ5_COMPARE_RECOVERY" && scene.kind === "TRANSFER",
     ),
   ).toBe(true);
+  expect(
+    stored.lastPreviewSnapshot.scenes.some(
+      (scene: { sceneId?: string }) => scene.sceneId === "MZ7_TRANSFER_CANDIDATE",
+    ),
+  ).toBe(false);
 
   await context.close();
 });
