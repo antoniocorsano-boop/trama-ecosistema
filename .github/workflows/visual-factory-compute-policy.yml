@@ -8,7 +8,10 @@ on:
       - "docs/capabilities/atlas-percorsi/production/TRAMA-COMPUTE-POLICY-v0.1.md"
       - "docs/capabilities/atlas-percorsi/production/SKYPILOT-ORCHESTRATOR-v0.1.md"
       - "scripts/compile_visual_factory_compute_plan.py"
+      - "scripts/probe_azure_credit_entitlement.py"
+      - "scripts/probe_owned_k8s_entitlement.py"
       - "tests/test_visual_factory_compute_plan.py"
+      - "tests/test_visual_factory_provider_adapters.py"
       - "fixtures/visual-factory-compute/**"
       - ".github/workflows/visual-factory-compute-policy.yml"
   workflow_dispatch:
@@ -38,7 +41,9 @@ jobs:
           python -m json.tool fixtures/visual-factory-compute/snapshot-no-free.json >/dev/null
 
       - name: Run deterministic compute-policy tests
-        run: python -m unittest tests/test_visual_factory_compute_plan.py -v
+        run: |
+          python -m unittest tests/test_visual_factory_compute_plan.py -v
+          python -m unittest tests/test_visual_factory_provider_adapters.py -v
 
       - name: Compile fixture plan
         run: |
