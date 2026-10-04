@@ -1,0 +1,17 @@
+version: 1
+status: ACTIVE_STORY_COLLECTION
+runtimeAuthorization: NOT_AUTHORIZED
+stories:
+  - id: STORY-PW-STRATEGY-01
+    title: "MUSEO ZERO / La sala che non torna"
+    pathwayId: PW-STRATEGY-SELECTION-01
+    targetAge: lower-secondary
+    state: STORY_APPROVED_FOR_WORLD_DESIGN
+    targetCompetence: strategy-task-fit
+    worldType: interactive-museum-backstage
+    humanReviewDate: 2026-10-04
+    canonicalFile: storytelling/STORY-PW-STRATEGY-01-MUSEO-ZERO.md
+    notes:
+      - storytelling approved before UI prototyping
+      - runtime remains not authorized
+      - current world package exists under pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO
