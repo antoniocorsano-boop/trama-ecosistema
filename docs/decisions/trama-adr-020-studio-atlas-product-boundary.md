@@ -34,30 +34,35 @@ Manca però una definizione esplicita del prodotto con cui professionisti creano
    - repository Git;
    - Visual Factory.
 
-3. La **prima modalità di distribuzione preferita** riusa il confine di autenticazione professionale già presente in Docente OS e rende Studio Atlas accessibile come modalità distinta, ad esempio:
+3. Studio Atlas nasce come **applicazione standalone** con proprio dominio di authoring, proprio deploy e proprio ciclo di rilascio.
+
+4. Docente OS è un **ingresso professionale privilegiato** tramite identità federata/condivisa e deep link, ad esempio:
    `Docente OS → Crea → Studio Atlas`.
+   Una lezione o un materiale può creare un handoff minimizzato come seed.
 
-4. Questa scelta di distribuzione **non assegna a Docente OS la proprietà semantica del dominio Studio Atlas**. Il Percorso resta un prodotto riutilizzabile, non un oggetto di classe/lezione.
+5. La distribuzione standalone **non assegna a Studio Atlas la proprietà del dominio lezione**. Il Percorso resta un prodotto riutilizzabile, mentre Docente OS resta il luogo in cui il docente decide se e come usare Percorsi/materiali nella lezione.
 
-5. Studio Atlas deve essere **separabile** in futuro come applicazione autonoma senza modificare:
+6. Studio Atlas deve rimanere compatibile con identità professionale condivisa senza richiedere una seconda registrazione per utenti già autenticati.
+
+7. Studio Atlas può evolvere senza modificare:
    - Pathway Authoring Package;
    - ruoli/authority;
    - workflow di storytelling;
    - Atlas runtime;
    - Arena authority.
 
-6. Atlas pubblico **non acquisisce un login professionale/editor amministrativo** come requisito dell'authoring.
+8. Atlas pubblico **non acquisisce un login professionale/editor amministrativo** come requisito dell'authoring.
 
-7. Il contratto di handoff principale di Studio Atlas è il **Pathway Authoring Package**, distinto da:
+9. Il contratto di handoff principale di Studio Atlas è il **Pathway Authoring Package**, distinto da:
    - LessonPublicationManifest;
    - PublicationReceipt;
    - runtime authorization.
 
-8. Repository, CI, AI, Visual Factory e compute provider sono infrastruttura subordinata e devono risultare invisibili nel journey ordinario del creator.
+10. Repository, CI, AI, Visual Factory e compute provider sono infrastruttura subordinata e devono risultare invisibili nel journey ordinario del creator.
 
-9. La produzione visuale/interattiva usa richieste asincrone provider-independent. Mancanza di compute non blocca story/world/scene authoring e non autorizza downgrade qualitativo o acquisto automatico.
+11. La produzione visuale/interattiva usa richieste asincrone provider-independent. Mancanza di compute non blocca story/world/scene authoring e non autorizza downgrade qualitativo o acquisto automatico.
 
-10. L'azione umana **Invia per pubblicazione** produce un `PUBLISH_CANDIDATE`, non pubblicazione immediata.
+12. L'azione umana **Invia per pubblicazione** produce un `PUBLISH_CANDIDATE`, non pubblicazione immediata.
 
 ## Motivazione
 
@@ -93,11 +98,11 @@ Utile come ingresso/seed, ma insufficiente perché:
 - può essere creato da profili non legati alla singola classe;
 - ha story/world/visual production/review propri.
 
-### C. Studio Atlas separabile con adapter di identità
+### C. Studio Atlas standalone con adapter di identità e integrazione privilegiata Docente OS
 
 **SELECTED DIRECTION.**
 
-La UI può iniziare embedded per ridurre costi e duplicazioni, mantenendo un confine di prodotto autonomo.
+Studio Atlas è un prodotto autonomo; Docente OS lo apre senza duplicare l'identità e può inviare/ricevere riferimenti minimizzati a Percorsi e materiali. La lezione resta governata da Docente OS.
 
 ## Impatto su controllo umano
 
@@ -138,3 +143,18 @@ La decisione:
 5. user journey mobile/desktop;
 6. threat/privacy review del confine professionale;
 7. prototipo thin-shell senza dipendenza dalla Visual Factory.
+
+
+## Invariante di continuità della lezione
+
+La scelta standalone non deve spezzare il circuito didattico.
+
+Deve restare sempre possibile:
+
+`Percorso/materiale Atlas → riferimento stabile → Docente OS → preparazione/lezione`
+
+e, in senso opposto:
+
+`lezione/materiale Docente OS → seed minimizzato → Studio Atlas`.
+
+Studio Atlas non gestisce classe, orario o TeachingSession; Docente OS non diventa autorevole sul contenuto Atlas. L'implementazione dettagliata del binding è differita, ma l'invariante è vincolante.
