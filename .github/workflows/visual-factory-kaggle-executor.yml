@@ -1,0 +1,396 @@
+name: Visual Factory — Kaggle Executor v0.1
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/visual-factory-kaggle-executor.yml"
+      - "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/KAGGLE-Q4-SMOKE-TEST-v0.1.ipynb"
+      - "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/KAGGLE-EXECUTOR-v0.1.md"
+  workflow_dispatch:
+    inputs:
+      exact_head:
+        description: "Exact TRAMA commit SHA containing the governed notebook to execute"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-factory-kaggle-executor
+  cancel-in-progress: false
+
+env:
+  NOTEBOOK_PATH: docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/KAGGLE-Q4-SMOKE-TEST-v0.1.ipynb
+  KERNEL_SLUG: trama-visual-factory-q4-smoke
+
+jobs:
+  contract:
+    name: Validate executor contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Resolve source revision
+        id: revision
+        shell: bash
+        env:
+          DISPATCH_HEAD: ${{ inputs.exact_head }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            EXACT_HEAD="$DISPATCH_HEAD"
+          else
+            EXACT_HEAD="$PR_HEAD"
+          fi
+          if [[ ! "$EXACT_HEAD" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid exact head: $EXACT_HEAD" >&2
+            exit 1
+          fi
+          echo "exact_head=$EXACT_HEAD" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.revision.outputs.exact_head }}
+          fetch-depth: 1
+
+      - name: Validate notebook and fail-closed boundary
+        shell: bash
+        env:
+          EXACT_HEAD: ${{ steps.revision.outputs.exact_head }}
+        run: |
+          set -euo pipefail
+          test -f "$NOTEBOOK_PATH"
+          python -m json.tool "$NOTEBOOK_PATH" >/dev/null
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/KAGGLE-Q4-SMOKE-TEST-v0.1.ipynb")
+          nb = json.loads(path.read_text(encoding="utf-8"))
+          source = "\n".join(
+              "".join(cell.get("source", []))
+              for cell in nb.get("cells", [])
+              if cell.get("cell_type") == "code"
+          )
+
+          required = [
+              '"paidComputeAuthorized": False',
+              '"Q4_SMOKE_PASS"',
+              '"Q4_OOM_FALLBACK_Q3_ALLOWED"',
+              '"Q4_SMOKE_FAIL_DIAGNOSE"',
+              'NvidiaTesla',
+          ]
+          missing = [item for item in required if item not in source]
+          if missing:
+              raise SystemExit(f"Executor contract missing markers: {missing}")
+
+          prohibited = [
+              "KAGGLE_API_TOKEN",
+              "KAGGLE_KEY",
+              "github.token",
+              "git push",
+              "gh pr merge",
+          ]
+          found = [item for item in prohibited if item in source]
+          if found:
+              raise SystemExit(f"Notebook contains prohibited executor material: {found}")
+          PY
+
+          printf '%s\n' "$EXACT_HEAD" > /tmp/EXACT_HEAD.txt
+          sha256sum "$NOTEBOOK_PATH" | awk '{print $1}' > /tmp/NOTEBOOK_SHA256.txt
+
+      - name: Contract summary
+        shell: bash
+        env:
+          EXACT_HEAD: ${{ steps.revision.outputs.exact_head }}
+        run: |
+          {
+            echo "### Visual Factory Kaggle executor contract"
+            echo "- exact head: `$EXACT_HEAD`"
+            echo "- notebook: `$NOTEBOOK_PATH`"
+            echo "- Kaggle execution: **not run by PR validation**"
+            echo "- paid compute authorised: **false**"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  execute:
+    name: Execute one-shot on Kaggle T4
+    if: github.event_name == 'workflow_dispatch'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+      EXACT_HEAD: ${{ inputs.exact_head }}
+    steps:
+      - name: Fail closed if Kaggle bootstrap is missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN" || {
+            echo "::error::Missing repository secret KAGGLE_API_TOKEN"
+            exit 1
+          }
+          test -n "$KAGGLE_USERNAME" || {
+            echo "::error::Missing repository variable KAGGLE_USERNAME"
+            exit 1
+          }
+          [[ "$KAGGLE_USERNAME" =~ ^[A-Za-z0-9_-]+$ ]] || {
+            echo "::error::KAGGLE_USERNAME contains unsupported characters"
+            exit 1
+          }
+
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.exact_head }}
+          fetch-depth: 1
+
+      - name: Prepare execution workspace
+        id: prep
+        shell: bash
+        run: |
+          set -euo pipefail
+          SHORT_SHA="${EXACT_HEAD:0:12}"
+          KERNEL_REF="$KAGGLE_USERNAME/$KERNEL_SLUG"
+          KERNEL_DIR="$RUNNER_TEMP/kaggle-kernel"
+          EVIDENCE_DIR="$RUNNER_TEMP/kaggle-evidence"
+
+          mkdir -p "$KERNEL_DIR" "$EVIDENCE_DIR/output"
+          cp "$NOTEBOOK_PATH" "$KERNEL_DIR/kaggle-q4-smoke-test.ipynb"
+
+          NOTEBOOK_SHA256="$(sha256sum "$NOTEBOOK_PATH" | awk '{print $1}')"
+
+          cat > "$KERNEL_DIR/kernel-metadata.json" <<JSON
+          {
+            "id": "$KERNEL_REF",
+            "title": "TRAMA Visual Factory Q4 Smoke",
+            "code_file": "kaggle-q4-smoke-test.ipynb",
+            "language": "python",
+            "kernel_type": "notebook",
+            "is_private": true,
+            "enable_gpu": true,
+            "enable_internet": true,
+            "machine_shape": "NvidiaTeslaT4",
+            "dataset_sources": [],
+            "competition_sources": [],
+            "kernel_sources": [],
+            "model_sources": []
+          }
+          JSON
+
+          printf '%s\n' "$EXACT_HEAD" > "$EVIDENCE_DIR/EXACT_HEAD.txt"
+          printf '%s\n' "$NOTEBOOK_SHA256" > "$EVIDENCE_DIR/NOTEBOOK_SHA256.txt"
+          cp "$KERNEL_DIR/kernel-metadata.json" "$EVIDENCE_DIR/kernel-metadata.json"
+
+          echo "short_sha=$SHORT_SHA" >> "$GITHUB_OUTPUT"
+          echo "kernel_ref=$KERNEL_REF" >> "$GITHUB_OUTPUT"
+          echo "kernel_dir=$KERNEL_DIR" >> "$GITHUB_OUTPUT"
+          echo "evidence_dir=$EVIDENCE_DIR" >> "$GITHUB_OUTPUT"
+          echo "notebook_sha256=$NOTEBOOK_SHA256" >> "$GITHUB_OUTPUT"
+
+      - name: Install current Kaggle CLI
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Kaggle CLI package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade kaggle
+          kaggle --version
+
+      - name: Authenticate non-interactively
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The current Kaggle CLI accepts KAGGLE_API_TOKEN for non-interactive auth.
+          # Do not print or persist the token.
+          kaggle kernels list --mine --page 1 >/dev/null
+
+      - name: Push and start one private T4 run
+        id: push
+        shell: bash
+        env:
+          KERNEL_DIR: ${{ steps.prep.outputs.kernel_dir }}
+          EVIDENCE_DIR: ${{ steps.prep.outputs.evidence_dir }}
+        run: |
+          set -euo pipefail
+          set +e
+          kaggle kernels push             -p "$KERNEL_DIR"             --accelerator NvidiaTeslaT4             --timeout 7200             >"$EVIDENCE_DIR/push.log" 2>&1
+          PUSH_EXIT=$?
+          set -e
+
+          cat "$EVIDENCE_DIR/push.log"
+          echo "push_exit=$PUSH_EXIT" >> "$GITHUB_OUTPUT"
+
+          if [[ "$PUSH_EXIT" -ne 0 ]]; then
+            {
+              echo "### Kaggle submission failed"
+              echo "The run was not accepted by Kaggle. No automatic retry was attempted."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit "$PUSH_EXIT"
+          fi
+
+      - name: Poll Kaggle run once per minute
+        id: poll
+        shell: bash
+        env:
+          KERNEL_REF: ${{ steps.prep.outputs.kernel_ref }}
+          EVIDENCE_DIR: ${{ steps.prep.outputs.evidence_dir }}
+        run: |
+          set -euo pipefail
+          FINAL_STATE="UNKNOWN"
+
+          for attempt in $(seq 1 120); do
+            set +e
+            STATUS_RAW="$(kaggle kernels status "$KERNEL_REF" 2>&1)"
+            STATUS_EXIT=$?
+            set -e
+
+            printf '[%s] attempt=%s exit=%s %s\n'               "$(date -u +%FT%TZ)" "$attempt" "$STATUS_EXIT" "$STATUS_RAW"               | tee -a "$EVIDENCE_DIR/status.log"
+
+            STATUS="$(printf '%s' "$STATUS_RAW" | tr '[:upper:]' '[:lower:]')"
+
+            if [[ "$STATUS" == *"complete"* ]]; then
+              FINAL_STATE="COMPLETE"
+              break
+            fi
+
+            if [[ "$STATUS" == *"error"* || "$STATUS" == *"failed"* || "$STATUS" == *"cancel"* ]]; then
+              FINAL_STATE="ERROR"
+              break
+            fi
+
+            sleep 60
+          done
+
+          echo "final_state=$FINAL_STATE" >> "$GITHUB_OUTPUT"
+
+          if [[ "$FINAL_STATE" == "UNKNOWN" ]]; then
+            echo "::error::Kaggle run did not reach a terminal state within 120 minutes."
+            exit 1
+          fi
+
+      - name: Capture Kaggle logs
+        if: always() && steps.prep.outputs.kernel_ref != ''
+        shell: bash
+        env:
+          KERNEL_REF: ${{ steps.prep.outputs.kernel_ref }}
+          EVIDENCE_DIR: ${{ steps.prep.outputs.evidence_dir }}
+        run: |
+          set +e
+          kaggle kernels logs "$KERNEL_REF" >"$EVIDENCE_DIR/kaggle.log" 2>&1
+          exit 0
+
+      - name: Download Kaggle outputs
+        if: steps.poll.outputs.final_state == 'COMPLETE'
+        shell: bash
+        env:
+          KERNEL_REF: ${{ steps.prep.outputs.kernel_ref }}
+          EVIDENCE_DIR: ${{ steps.prep.outputs.evidence_dir }}
+        run: |
+          set -euo pipefail
+          kaggle kernels output "$KERNEL_REF" -p "$EVIDENCE_DIR/output" -o
+
+      - name: Validate execution receipt
+        id: validate
+        if: steps.poll.outputs.final_state == 'COMPLETE'
+        shell: bash
+        env:
+          EVIDENCE_DIR: ${{ steps.prep.outputs.evidence_dir }}
+          NOTEBOOK_SHA256: ${{ steps.prep.outputs.notebook_sha256 }}
+        run: |
+          set -euo pipefail
+
+          RECEIPT="$(find "$EVIDENCE_DIR/output" -type f -name 'trama-kaggle-q4-smoke-receipt.json' -print -quit)"
+          test -n "$RECEIPT" || {
+            echo "::error::Kaggle completed but no TRAMA receipt was returned."
+            exit 1
+          }
+
+          DECISION="$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["decision"])' "$RECEIPT")"
+          cp "$RECEIPT" "$EVIDENCE_DIR/raw-kaggle-receipt.json"
+
+          python - "$EVIDENCE_DIR/execution-manifest.json" "$RECEIPT" <<'PY'
+          import hashlib, json, os, sys
+          from datetime import datetime, timezone
+
+          manifest_path, receipt_path = sys.argv[1], sys.argv[2]
+          exact_head = os.environ["EXACT_HEAD"]
+          notebook_sha = os.environ["NOTEBOOK_SHA256"]
+
+          raw = open(receipt_path, "rb").read()
+          receipt = json.loads(raw)
+
+          manifest = {
+              "schemaVersion": "trama.visual-factory.kaggle-execution/v0.1",
+              "candidateId": "MZ-VF-001",
+              "exactHead": exact_head,
+              "notebookSha256": notebook_sha,
+              "rawReceiptSha256": hashlib.sha256(raw).hexdigest(),
+              "kaggleDecision": receipt.get("decision"),
+              "adapter": "kaggle-notebooks-free",
+              "acceleratorRequested": "NvidiaTeslaT4",
+              "paidComputeAuthorized": False,
+              "executedAt": datetime.now(timezone.utc).isoformat(),
+          }
+          with open(manifest_path, "w", encoding="utf-8") as fh:
+              json.dump(manifest, fh, indent=2)
+          PY
+
+          echo "decision=$DECISION" >> "$GITHUB_OUTPUT"
+
+          case "$DECISION" in
+            Q4_SMOKE_PASS)
+              ;;
+            Q4_OOM_FALLBACK_Q3_ALLOWED)
+              echo "::error::Q4 reached the controlled OOM fallback state; Q3 requires a separate Human-authorized run."
+              exit 1
+              ;;
+            *)
+              echo "::error::Kaggle execution completed with decision: $DECISION"
+              exit 1
+              ;;
+          esac
+
+      - name: Fail if Kaggle execution errored
+        if: steps.poll.outputs.final_state == 'ERROR'
+        shell: bash
+        run: |
+          echo "::error::Kaggle reported a terminal execution error. See uploaded evidence."
+          exit 1
+
+      - name: Upload immutable execution evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-factory-kaggle-${{ steps.prep.outputs.short_sha }}
+          path: ${{ steps.prep.outputs.evidence_dir }}
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Final summary
+        if: always()
+        shell: bash
+        env:
+          KERNEL_REF: ${{ steps.prep.outputs.kernel_ref }}
+          FINAL_STATE: ${{ steps.poll.outputs.final_state }}
+          DECISION: ${{ steps.validate.outputs.decision }}
+        run: |
+          {
+            echo "### Visual Factory — Kaggle Executor v0.1"
+            echo "- exact head: `$EXACT_HEAD`"
+            echo "- Kaggle kernel: `$KERNEL_REF`"
+            echo "- requested accelerator: `NvidiaTeslaT4`"
+            echo "- terminal state: `${FINAL_STATE:-NOT_REACHED}`"
+            echo "- TRAMA decision: `${DECISION:-NOT_AVAILABLE}`"
+            echo "- paid compute authorised: **false**"
+            echo "- automatic retries: **0**"
+            echo "- runtime/publication authority: **not granted**"
+          } >> "$GITHUB_STEP_SUMMARY"
