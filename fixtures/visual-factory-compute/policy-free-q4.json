@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "trama.compute-policy/v0.1",
+  "policyId": "visual-factory-q4-free",
+  "costMode": "FREE_ONLY",
+  "qualityProfile": "Q4",
+  "minVramGiB": 14,
+  "minSystemRamGiB": 11,
+  "minDiskGiB": 35,
+  "acceleratorPreference": [
+    "L4",
+    "A10",
+    "A10G",
+    "T4"
+  ],
+  "maxProviderAttempts": 3,
+  "maxSnapshotAgeMinutes": 60,
+  "requiredEstimatedRunsRemaining": 1,
+  "providerAllowlist": [],
+  "noPaidFallback": true,
+  "noQualityDowngrade": true
+}
