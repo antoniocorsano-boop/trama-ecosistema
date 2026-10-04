@@ -33,7 +33,11 @@ export function createMuseoZeroPilotProject(): PathwayProject {
       ending:
         "La soluzione supportata viene provata: proiezione, suono e luce tornano sincronizzati e Sala Zero è pronta per la prova generale.",
     },
-    storyReview: { decision: "PASS" },
+    storyReview: {
+      decision: "PASS",
+      evidenceRef:
+        "docs/capabilities/atlas-percorsi/storytelling/STORY-PW-STRATEGY-01-MUSEO-ZERO.md",
+    },
     world: {
       learnerRole:
         "Junior setup operator che costruisce una vista coerente tra luoghi, tempi, configurazioni e conseguenze.",
