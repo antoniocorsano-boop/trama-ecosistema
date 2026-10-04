@@ -533,3 +533,37 @@ Until that review passes:
 `ATLAS_IMPLEMENTATION = HOLD`
 
 `RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`
+
+
+## 21. Human approval — storytelling-first direction — 2026-10-04
+
+**Decision:** HUMAN_PRODUCT_DIRECTION_APPROVED
+
+The Human Reviewer approved the storytelling-first direction after reviewing the narrated MUSEO ZERO concept in conversational form.
+
+Approved product principle:
+
+> First define and collect strong storytelling concepts. Use the approved storytelling as the structural base on which world, interaction, visual representation and final pathway are built.
+
+Consequences:
+
+- `STORY-PW-STRATEGY-01 / MUSEO ZERO` is recorded as `STORY_APPROVED_FOR_WORLD_DESIGN`;
+- storytelling is now a governed authoring artefact with a shared registry;
+- UI is not the source of narrative structure;
+- world design must preserve the approved story;
+- future storytelling candidates may be collected/reused as seeds across the Percorsi library when appropriate.
+
+This approval does **not** approve:
+- a specific UI;
+- Atlas #78 as final product;
+- runtime;
+- Q9;
+- territory taxonomy.
+
+Current progression authority:
+
+`STORY_APPROVED_FOR_WORLD_DESIGN → WORLD_DESIGN_ALLOWED`
+
+`ATLAS_IMPLEMENTATION = HOLD`
+
+`RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`
