@@ -35,6 +35,7 @@ export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ag
     ageBand: input.ageBand,
     humanState: "IDEA",
     productionState: "NOT_REQUESTED",
+    sceneRefs: [],
     archived: false,
     createdAt: now,
     updatedAt: now,
