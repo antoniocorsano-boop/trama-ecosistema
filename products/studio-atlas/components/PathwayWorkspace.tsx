@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { STAGES, type PathwayProject } from "../lib/model";
 import { getProject, updateProject } from "../lib/store";
-import { getProductionBlockers, prepareWaitingProduction } from "../lib/production";
+import { getProductionBlockers } from "../lib/production";
 import {
   buildStudioAtlasPreviewSnapshot,
   buildStudioAtlasReviewPreviewSnapshot,
@@ -22,6 +22,7 @@ import {
   StoryEditor,
   WorldEditor,
 } from "./AuthoringEditors";
+import { VisualFactoryStage } from "./VisualFactoryStage";
 
 export function PathwayWorkspace({ id }: { id: string }) {
   const [project, setProject] = useState<PathwayProject | null>(null);
@@ -54,24 +55,6 @@ export function PathwayWorkspace({ id }: { id: string }) {
     setSaveState("saving");
     try {
       const updated = updateProject(project.projectId, patch);
-      setProject(updated);
-      setSaveState("saved");
-    } catch {
-      setSaveState("error");
-    }
-  }
-
-  async function requestProduction() {
-    if (!project) return;
-    setSaveState("saving");
-    try {
-      const { request, receipt } = await prepareWaitingProduction(project);
-      const updated = updateProject(project.projectId, {
-        humanState: "PRODUCTION",
-        productionState: "WAITING_FOR_COMPUTE",
-        lastProductionRequest: request,
-        lastProductionReceipt: receipt,
-      });
       setProject(updated);
       setSaveState("saved");
     } catch {
@@ -237,7 +220,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Produzione" && (
-            <ProductionStage project={project} onRequest={requestProduction} onGoTo={setStage} />
+            <VisualFactoryStage project={project} />
           )}
 
           {stage === "Prova" && (
@@ -505,77 +488,6 @@ function PreviewStage({
       </p>
       <button className="primary-action" onClick={() => void onPrepare()}>
         {isReviewPreview ? "Prepara anteprima di revisione" : "Prepara anteprima Atlas"}
-      </button>
-    </>
-  );
-}
-
-function ProductionStage({
-  project,
-  onRequest,
-  onGoTo,
-}: {
-  project: PathwayProject;
-  onRequest: () => Promise<void>;
-  onGoTo: (stage: (typeof STAGES)[number]) => void;
-}) {
-  if (project.productionState === "WAITING_FOR_COMPUTE") {
-    return (
-      <>
-        <h1>Trasforma le scene in un prodotto.</h1>
-        <div className="production-wait">
-          <span className="status-dot" aria-hidden="true" />
-          <div>
-            <strong>Produzione in attesa</strong>
-            <p>
-              La richiesta Q4 è stata salvata, ma non c’è una risorsa FREE_ONLY
-              qualificata. Il Percorso non perde nulla e puoi continuare a lavorare.
-            </p>
-            {project.lastProductionRequest && (
-              <small className="technical-ref">
-                Richiesta {project.lastProductionRequest.requestId.slice(0, 8)} ·
-                {project.lastProductionRequest.sceneRefs.length} scene · Q4
-              </small>
-            )}
-          </div>
-        </div>
-      </>
-    );
-  }
-
-  const blockers = getProductionBlockers(project);
-  if (blockers.length > 0) {
-    return (
-      <>
-        <h1>Prima rendi solido il Percorso.</h1>
-        <p className="lead">
-          Studio Atlas non invia alla Factory un Percorso incompleto. Mancano ancora
-          alcuni passaggi verificabili.
-        </p>
-        <ol className="blocker-list">
-          {blockers.map((blocker) => (
-            <li key={blocker}>{blockerLabel(blocker)}</li>
-          ))}
-        </ol>
-        <div className="next-line">
-          <span>Completa i passaggi mancanti e torna qui.</span>
-          <button className="quiet-action" onClick={() => onGoTo(firstStageFor(blockers))}>
-            Vai al primo blocco →
-          </button>
-        </div>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <h1>Il Percorso è pronto per la Factory.</h1>
-      <p className="lead">
-        Verrà creata una richiesta Q4 legata al digest esatto di storia, mondo,
-        esperienza e scene. Nessun provider o costo viene scelto qui.
-      </p>
-      <button className="primary-action" onClick={() => void onRequest()}>
-        Prepara produzione
       </button>
     </>
   );
