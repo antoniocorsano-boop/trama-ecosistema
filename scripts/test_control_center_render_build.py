@@ -8,10 +8,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/build_control_center_render.sh"
 A7 = ROOT / "scripts/build_control_center_a7_candidate.sh"
 LEGACY = ROOT / "scripts/build_control_center_render_legacy.sh"
+WORKFLOW = ROOT / ".github/workflows/control-center-build.yml"
 
 wrapper = SCRIPT.read_text(encoding="utf-8")
 a7 = A7.read_text(encoding="utf-8")
 legacy = LEGACY.read_text(encoding="utf-8")
+workflow = WORKFLOW.read_text(encoding="utf-8")
 combined = "\n".join([wrapper, a7, legacy])
 
 assert 'exec bash "$ROOT/scripts/build_control_center_a7_candidate.sh"' in wrapper
@@ -26,6 +28,20 @@ required = [
 ]
 for token in required:
     assert token in combined, token
+
+# P3: the PR synchronization lane must keep the governed Project Knowledge
+# projection aligned with the same canonical inputs used by the public bundle.
+required_p3_sync = [
+    "control-center/data/project-context-snapshot.generated.json",
+    "control-center/data/context-packs/project-knowledge.generated.json",
+    "python scripts/build_project_context_snapshot.py --output control-center/data/project-context-snapshot.generated.json",
+    "python scripts/build_trama_context_pack.py project-knowledge --snapshot control-center/data/project-context-snapshot.generated.json --output control-center/data/context-packs/project-knowledge.generated.json",
+    "CANONICAL_PROJECT_CONTEXT_SEMANTIC_CHANGE_PROMOTED",
+    "CANONICAL_PROJECT_KNOWLEDGE_SEMANTIC_CHANGE_PROMOTED",
+    "git add control-center/data/ecosystem-snapshot.json control-center/data/project-context-snapshot.json control-center/data/context-packs/project-knowledge.json",
+]
+for token in required_p3_sync:
+    assert token in workflow, token
 
 assert "python3 -m pip install --disable-pip-version-check --quiet jsonschema" in combined
 assert "--user" not in combined
