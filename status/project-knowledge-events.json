@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-10-04T19:43:00Z",
+  "updatedAt": "2026-10-04T20:08:00Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
@@ -287,7 +287,7 @@
       "type": "DECISION",
       "subject": "project-knowledge",
       "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
       "sourceRefs": [
         {
@@ -303,6 +303,128 @@
         }
       ],
       "validFrom": "2026-10-04T16:52:55Z",
+      "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. P4/P5/P6 residuals remain explicitly separate and open.",
+      "status": "CURRENT",
+      "rationale": "PR #234 integrated the persistent synchronization lane and was verified post-merge. The final P3 reconciliation records the current distribution evidence and prevents superseded P3=NEXT state from remaining current.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 234,
+          "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+          "ref": "STATUS.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "github-actions:workflow-run/37230342692"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "render:deploy/dep-db1b042vcj2c73a2na60"
+        },
+        {
+          "repository": "antoniocorsano-boop/docente-os-2026-27",
+          "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
+          "ref": "render:deploy/dep-db180cavcj2c739v6lc0"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [
+        "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04",
+      "type": "BLOCKER",
+      "subject": "qe-01",
+      "statement": "QE-01 remains REQUALIFICATION_REQUIRED. PR #212 still carries an authorization narrative, while current validator/audit evidence does not establish executable runtime authorization; no new qualified execution is inferred from P3.",
+      "status": "CURRENT",
+      "rationale": "P3 records the contradiction instead of resolving it by assertion. QE-01 remains a distinct P5 package and must be reconciled against the current validator, receipt and exact execution target before any execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 212,
+          "ref": "runtime: prepare QE-01 first qualified execution"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-ARGO-G5C-REAL-IMPORT-PENDING-2026-10-04",
+      "type": "DEFERMENT",
+      "subject": "argo-g5c",
+      "statement": "Argo G5-C remains PRONTA_PER_PROVA_REALE: Docente OS PR #647 is still draft at exact head e5dd179f074421f08b2c7952238fa0764d643ce6; automated BIFF8 structure/round-trip evidence exists, but LibreOffice opening and manual didUP import are not attested.",
+      "status": "CURRENT",
+      "rationale": "The automated proof does not establish real interoperability. P4 remains open until a non-personal reference workbook is accepted in the authorized real workflow.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/docente-os-2026-27",
+          "pullRequest": 647,
+          "exactHead": "e5dd179f074421f08b2c7952238fa0764d643ce6",
+          "ref": "CAP-DOS-ARGO-SYNC G5-C: BIFF8 XLS proof"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-GHAW-T0-STAGED-NOT-EXECUTABLE-2026-10-04",
+      "type": "DEFERMENT",
+      "subject": "gh-aw-t0",
+      "statement": "gh-aw T0 remains STAGED / NOT_EXECUTABLE: TRAMA PR #214 is still draft at exact head ba98dfcf730e60cdd946cd44ccedca5c3eec049b and requires current-cli compilation/lock plus controlled staged-run evidence before execution or integration.",
+      "status": "CURRENT",
+      "rationale": "P3 records the current maintenance-automation boundary without promoting source review or compilation to operational qualification. P6 remains separate.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 214,
+          "exactHead": "ba98dfcf730e60cdd946cd44ccedca5c3eec049b",
+          "ref": "gh-aw T0 — staged issue triage pilot"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
       "supersedes": [],
       "invalidatedBy": [],
       "freshness": {
