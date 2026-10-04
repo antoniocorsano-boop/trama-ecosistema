@@ -4,6 +4,7 @@ import type { VisualGenerationPlan } from "./visual-factory";
 import {
   executeVisualFactoryPlan,
   normalizeExecutorResponse,
+  normalizeGradioExecutionResult,
 } from "./visual-factory-executor";
 
 const DIGEST = "d".repeat(64);
@@ -22,16 +23,8 @@ const PLAN: VisualGenerationPlan = {
   publicationAuthorityGranted: false,
 };
 
-test("malformed executor payload fails closed", () => {
-  const receipt = normalizeExecutorResponse({ status: "SUCCEEDED", assets: [] }, DIGEST);
-  assert.equal(receipt.status, "FAILED");
-  assert.equal(receipt.failureCategory, "INVALID_EXECUTOR_RESPONSE");
-  assert.equal(receipt.runtimeAuthorized, false);
-  assert.equal(receipt.publicationAuthorityGranted, false);
-});
-
-test("valid executor payload preserves asset provenance and no authority", () => {
-  const receipt = normalizeExecutorResponse({
+function validReceipt(url = "https://assets.invalid/lia.png") {
+  return {
     schemaVersion: "atlas.visual-execution-receipt/v0.1",
     receiptId: "receipt-1",
     packageDigest: DIGEST,
@@ -41,10 +34,10 @@ test("valid executor payload preserves asset provenance and no authority", () =>
       assetId: "lia-1",
       subjectRef: "lia",
       purpose: "CHARACTER_REFERENCE",
-      url: "https://assets.invalid/lia.png",
+      url,
       sha256: "e".repeat(64),
-      modelRef: "black-forest-labs/FLUX.1-schnell",
-      workflowRef: "diffusers.flux1-schnell/v0.1",
+      modelRef: "black-forest-labs/FLUX.2-klein-4B",
+      workflowRef: "hf-zerogpu.flux2-klein-4b/v0.1",
       createdAt: "2026-10-04T20:00:00.000Z",
       packageDigest: DIGEST,
       provenanceStatus: "RECORDED",
@@ -53,12 +46,47 @@ test("valid executor payload preserves asset provenance and no authority", () =>
     allowQualityDowngrade: false,
     runtimeAuthorized: false,
     publicationAuthorityGranted: false,
-  }, DIGEST);
+  };
+}
+
+test("malformed executor payload fails closed", () => {
+  const receipt = normalizeExecutorResponse({ status: "SUCCEEDED", assets: [] }, DIGEST);
+  assert.equal(receipt.status, "FAILED");
+  assert.equal(receipt.failureCategory, "INVALID_EXECUTOR_RESPONSE");
+  assert.equal(receipt.runtimeAuthorized, false);
+  assert.equal(receipt.publicationAuthorityGranted, false);
+});
+
+test("valid executor payload preserves asset provenance and no authority", () => {
+  const receipt = normalizeExecutorResponse(validReceipt(), DIGEST);
 
   assert.equal(receipt.status, "SUCCEEDED");
-  assert.equal(receipt.assets[0]?.modelRef, "black-forest-labs/FLUX.1-schnell");
+  assert.equal(receipt.assets[0]?.modelRef, "black-forest-labs/FLUX.2-klein-4B");
   assert.equal(receipt.assets[0]?.provenanceStatus, "RECORDED");
   assert.equal(receipt.paidComputeAuthorized, false);
+});
+
+test("Gradio result replaces file placeholders before receipt validation", () => {
+  const receipt = normalizeGradioExecutionResult(
+    [
+      validReceipt("gradio-file://0"),
+      [{ url: "https://space.invalid/gradio_api/file=/tmp/lia.webp" }],
+    ],
+    DIGEST,
+  );
+
+  assert.equal(receipt.status, "SUCCEEDED");
+  assert.equal(receipt.assets[0]?.url, "https://space.invalid/gradio_api/file=/tmp/lia.webp");
+});
+
+test("Gradio result fails closed when a referenced file is missing", () => {
+  const receipt = normalizeGradioExecutionResult(
+    [validReceipt("gradio-file://1"), [{ url: "https://space.invalid/only-file.webp" }]],
+    DIGEST,
+  );
+
+  assert.equal(receipt.status, "FAILED");
+  assert.equal(receipt.failureCategory, "INVALID_EXECUTOR_RESPONSE");
 });
 
 test("same-origin gateway propagates WAITING_FOR_COMPUTE without throwing", async () => {
