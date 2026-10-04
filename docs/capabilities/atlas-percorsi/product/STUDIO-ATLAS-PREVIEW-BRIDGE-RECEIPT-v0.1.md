@@ -8,7 +8,7 @@
 ### TRAMA / Studio Atlas
 
 PR: `#229`  
-Exact head: `f2566eb242d933ee946aae6129c71540b69c44f6`
+Exact head: `675ab6696571664ff5487b3b0a71de0cf97f3d19`
 
 Relevant runs:
 
@@ -139,3 +139,54 @@ Playwright verifies:
 - an explicit `TRANSFER` scene is present.
 
 Result: **PASS**.
+
+
+## Meaningful-choice and MUSEO ZERO browser proof
+
+Cross-product workflow:
+
+`Studio Atlas ↔ Atlas Preview E2E`
+
+Run:
+
+`37218287169`
+
+Exact TRAMA / Studio Atlas head:
+
+`675ab6696571664ff5487b3b0a71de0cf97f3d19`
+
+Pinned exact Atlas preview candidate:
+
+`073650b20943415df9a466da92174a33ccf2928b`
+
+Result: **PASS**
+
+The browser qualification proves:
+
+1. Studio Atlas and Atlas run on distinct origins;
+2. Studio Atlas sends only an opaque 192-bit channel in the URL;
+3. the exact immutable snapshot travels in memory;
+4. Atlas validates it and returns the origin-bound ACK;
+5. a `CHOICE` Studio scene becomes a real choice in `ExperienceRuntime`;
+6. the selected option exposes its authored consequence/feedback before continuing;
+7. the runtime continues into an explicit `TRANSFER` scene;
+8. MUSEO ZERO is available from the real Studio Atlas Home;
+9. its preview is blocked before world/storyboard review state is satisfied;
+10. once the **test harness** simulates those human gates, the MUSEO ZERO snapshot opens in the real Atlas learner runtime and exposes its authored meaningful choice.
+
+### Authority caveat
+
+The Playwright harness clicking **Approva mondo** and **Storyboard pronto** is test setup only.
+
+It is **not Human Product Review evidence** and MUST NOT mutate the canonical MUSEO ZERO governance state to PASS.
+
+The real pilot therefore remains:
+
+- Story Review: PASS (previously approved);
+- World Product Review: READY / human decision required;
+- Storyboard: NOT YET HUMAN-APPROVED;
+- MZ7 transfer: CANDIDATE / human decision required;
+- learner runtime: NOT STUDENT AUTHORIZED;
+- public publication: NOT AUTHORIZED.
+
+The next gate is the single consolidated `PRODUCT-REVIEW-PACK-v0.1.md` decision.
