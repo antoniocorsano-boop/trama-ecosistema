@@ -24,7 +24,10 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     worldReview: raw.worldReview ?? { decision: "DRAFT" },
     experience: { ...EMPTY_EXPERIENCE, ...(raw.experience ?? {}) },
     scenes: Array.isArray(raw.scenes)
-      ? raw.scenes.map((scene) => ({ kind: "SCENE" as const, ...scene }))
+      ? raw.scenes.map((scene) => ({
+          ...scene,
+          kind: scene.kind === "TRANSFER" ? "TRANSFER" as const : "SCENE" as const,
+        }))
       : [],
     storyboardReady: raw.storyboardReady ?? false,
     lastProductionRequest: raw.lastProductionRequest,
