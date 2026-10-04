@@ -24,11 +24,15 @@ No public Atlas publication occurs.
 
 ## 2. Initial deployment
 
-Preferred pilot deployment:
+Selected pilot deployment:
 
-`Docente OS authenticated shell → /studio-atlas`
+`Studio Atlas standalone web/PWA`
 
-This is a distribution decision only.
+with privileged entry from:
+
+`Docente OS authenticated shell → Studio Atlas ↗`
+
+Docente OS integration is an identity/deep-link adapter, not an embedded route.
 
 The route MUST NOT require:
 
@@ -138,7 +142,7 @@ A stale editor cannot silently overwrite a newer draft.
 
 ### Physical storage
 
-For the initial embedded deployment, the store MAY live in the same Supabase project already used by Docente OS, provided that:
+For the standalone deployment, the store SHOULD have a Studio Atlas-owned logical schema/service. It MAY initially reuse the same Supabase infrastructure already available to the ecosystem, provided that:
 
 - Studio Atlas tables/schema are logically separate;
 - RLS is explicit;
