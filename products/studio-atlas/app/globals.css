@@ -187,3 +187,22 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .grammar-row { grid-template-columns: 1fr; gap: 5px; }
   .story-beat, .scene-row { grid-template-columns: 38px minmax(0, 1fr); }
 }
+
+.scene-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: end;
+}
+.scene-kind {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 8px 12px;
+  max-width: 260px;
+}
+@media (max-width: 700px) {
+  .scene-heading-row { grid-template-columns: 1fr; }
+  .scene-kind { max-width: 100%; }
+}
