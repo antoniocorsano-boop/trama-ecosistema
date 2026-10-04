@@ -276,7 +276,7 @@ The visual tone must resemble a capable young person’s investigation/workbench
 
 ### Human review decision
 
-Current state: **CHANGES_REQUIRED / REMEDIATION_IN_PROGRESS**.
+Current state: **REMEDIATION_IMPLEMENTED / AWAITING_SECOND_HUMAN_EXPERIENCE_REVIEW**.
 
 Human Experience Review was performed on 2026-10-04 against the learner-facing Atlas laboratory prototype in PR #78. The pedagogical sequence and task logic were retained, but the surface did **not** pass the Experience Quality Gate in its pre-remediation form.
 
@@ -306,6 +306,21 @@ Required remediation:
 - re-run exact-head technical qualification and a second Human Experience Review before implementation handoff.
 
 Atlas remediation branch/PR: **Curriculum-Atlas #78**. Runtime remains **NOT_RUNTIME_AUTHORIZED** and no Q9/publication action is implied.
+
+Remediation implementation evidence (2026-10-04):
+
+- Atlas exact head: `124f7c07bcca29581ebe3315ab83bbc36399071a`;
+- Experience Engine: PASS;
+- G2 UX Collaudo: PASS;
+- Mobile/LIM F4: PASS;
+- F1/F2/F3/F5 and Foundation: PASS;
+- RRT-03 sealed preauthorization: PASS;
+- learner-facing educational jargon scan: no strategy/transfer/metacognition/competence terminology required to understand or start the task;
+- real 390×844 browser evidence captured by F4, including entry, preparation, source-hidden retrieval, goal shift, cause workspace and transfer workspace;
+- dominant representation changed from disconnected source cards to one continuous expedition route, with causal emphasis only after the learner's question changes;
+- first preparation action clarified as a five-keyword sequence trace rather than “put already ordered events in order”.
+
+These technical/product changes do **not** set Experience Quality Gate PASS. A second Human Experience Review of the actual learner-facing surface remains mandatory.
 
 ## 9. Consequence review
 
@@ -359,7 +374,7 @@ No covert psychological profiling or persistent individual behavioural scoring. 
 
 ## 13. Product/specification handoff readiness
 
-Current state: **EXPERIENCE_QUALITY_REVIEW_PENDING / NOT_READY_FOR_IMPLEMENTATION_HANDOFF**, not runtime authorization.
+Current state: **REMEDIATION_IMPLEMENTED / SECOND_HUMAN_EXPERIENCE_REVIEW_PENDING / NOT_READY_FOR_IMPLEMENTATION_HANDOFF**, not runtime authorization.
 
 Before Atlas registration:
 
