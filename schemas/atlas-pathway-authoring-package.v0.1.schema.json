@@ -12,12 +12,6 @@
     "title",
     "authoringState",
     "sourceSeed",
-    "curriculumBinding",
-    "story",
-    "worldExperience",
-    "scenes",
-    "safeguards",
-    "reviews",
     "publicationCandidate",
     "runtimeAuthorized"
   ],
@@ -437,5 +431,58 @@
     "runtimeAuthorized": {
       "const": false
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "authoringState": {
+            "enum": [
+              "REVIEWABLE",
+              "PUBLISH_CANDIDATE",
+              "REVIEWED",
+              "ACCEPTED_FOR_ATLAS_HANDOFF"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "curriculumBinding",
+          "story",
+          "worldExperience",
+          "scenes",
+          "safeguards",
+          "reviews"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "authoringState": {
+            "enum": [
+              "PUBLISH_CANDIDATE",
+              "REVIEWED",
+              "ACCEPTED_FOR_ATLAS_HANDOFF"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "publicationCandidate": {
+            "properties": {
+              "decision": {
+                "enum": [
+                  "PUBLISH_CANDIDATE",
+                  "ACCEPTED_FOR_ATLAS_HANDOFF"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
