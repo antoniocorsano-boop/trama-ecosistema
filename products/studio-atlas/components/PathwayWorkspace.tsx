@@ -6,6 +6,7 @@ import { STAGES, type PathwayProject } from "../lib/model";
 import { getProject, updateProject } from "../lib/store";
 import { getProductionBlockers, prepareWaitingProduction } from "../lib/production";
 import { buildStudioAtlasPreviewSnapshot, getPreviewBlockers } from "../lib/preview";
+import { atlasPreviewOrigin, openAtlasLearnerPreview } from "../lib/preview-bridge";
 import {
   ExperienceEditor,
   SceneEditor,
@@ -69,6 +70,26 @@ export function PathwayWorkspace({ id }: { id: string }) {
     }
   }
 
+  async function openLearnerPreview() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const result = await openAtlasLearnerPreview(project);
+      if (result.status === "OPENED") {
+        const updated = updateProject(project.projectId, {
+          humanState: "PREVIEW",
+          lastPreviewSnapshot: result.snapshot,
+        });
+        setProject(updated);
+        setSaveState("saved");
+        return;
+      }
+      setSaveState("error");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
   async function preparePreview() {
     if (!project) return;
     setSaveState("saving");
@@ -113,7 +134,14 @@ export function PathwayWorkspace({ id }: { id: string }) {
           <span className={`save-state ${saveState}`}>
             {saveState === "saving" ? "Salvataggio…" : saveState === "error" ? "Non salvato" : "Salvato"}
           </span>
-          <button className="secondary-action" disabled>Vedi come studente</button>
+          <button
+            className="secondary-action"
+            disabled={getPreviewBlockers(project).length > 0 || !atlasPreviewOrigin()}
+            onClick={() => void openLearnerPreview()}
+            title={!atlasPreviewOrigin() ? "Origine Atlas preview non configurata" : undefined}
+          >
+            Vedi come studente
+          </button>
         </div>
       </header>
 
@@ -172,7 +200,12 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Prova" && (
-            <PreviewStage project={project} onPrepare={preparePreview} onGoTo={setStage} />
+            <PreviewStage
+              project={project}
+              onPrepare={preparePreview}
+              onOpen={openLearnerPreview}
+              onGoTo={setStage}
+            />
           )}
 
           {stage === "Revisione" && (
@@ -205,10 +238,12 @@ export function PathwayWorkspace({ id }: { id: string }) {
 function PreviewStage({
   project,
   onPrepare,
+  onOpen,
   onGoTo,
 }: {
   project: PathwayProject;
   onPrepare: () => Promise<void>;
+  onOpen: () => Promise<void>;
   onGoTo: (stage: (typeof STAGES)[number]) => void;
 }) {
   const blockers = getPreviewBlockers(project);
@@ -251,6 +286,15 @@ function PreviewStage({
               Snapshot {project.lastPreviewSnapshot.snapshotId.slice(0, 8)} ·
               digest {project.lastPreviewSnapshot.packageDigest.slice(0, 12)}…
             </small>
+            {atlasPreviewOrigin() ? (
+              <button className="primary-action preview-open-action" onClick={() => void onOpen()}>
+                Apri in Atlas
+              </button>
+            ) : (
+              <p className="bridge-note">
+                Configura NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN per aprire la preview reale.
+              </p>
+            )}
           </div>
         </div>
       </>
