@@ -5,7 +5,9 @@
 **Pathway:** `PW-STRATEGY-SELECTION-01 — Stesso obiettivo, strategia diversa`  
 **Developmental band:** lower-secondary candidate / human validation required  
 **Candidate territory:** `learning` / `CANDIDATE_NOT_APPROVED`  
-**Product contract:** `../../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md`
+**Product contract:** `../../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md`  
+**First-cycle experience spec:** `../../product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md`  
+**Dominant visual-interaction pattern:** `OPERATIVE_WORKBENCH`
 
 ## 1. Product intent
 
@@ -28,7 +30,7 @@ The sheet contains five neutral facts:
 1. the group begins at the field station;
 2. it crosses a footbridge;
 3. heavy rain makes the lower path unusable;
-4. the group uses the ridge path instead;
+4. the group uses the ridge path instead, **which takes longer**;
 5. it reaches the observation point later than planned.
 
 No outside knowledge is needed.
@@ -63,11 +65,11 @@ The visual rhythm should alternate quiet inspection, manipulation, reveal and re
 
 The learner enters the workbench. The five expedition facts are already laid out as neutral fragments on the same surface. The mission rail introduces the first goal:
 
-> “Tra poco dovrai ricostruire l’ordine del percorso senza guardare la scheda.”
+> “Tra poco le frasi spariranno: dovrai rimettere gli eventi nell’ordine giusto.”
 
 Prompt:
 
-> “Prima di scegliere un metodo, chiarisci che cosa dovrai riuscire a fare.”
+> “Leggi cosa è successo. Quando sei pronto, continua.”
 
 Interaction: deliberate continue.
 
@@ -77,18 +79,18 @@ No growth evidence is awarded.
 
 The tool bench opens three strategy tools with equal visual status. They are not presented as personality choices or collectible cards:
 
-**A — Sequenza + recupero**
-> “Metto i passaggi in ordine, copro la scheda e provo a ricostruirli senza guardare.”
+**A — Metto gli eventi in ordine**
+> “Li dispongo in sequenza e poi provo a ricordarli.”
 
-**B — Mappa causa-effetto**
-> “Collego gli eventi con frecce: che cosa provoca che cosa.”
+**B — Cerco cause e conseguenze**
+> “Collego ciò che fa succedere qualcos’altro.”
 
-**C — Rilettura continua**
-> “Rileggo tutta la scheda più volte senza cambiare rappresentazione.”
+**C — Rileggo tutto**
+> “Rileggo le cinque frasi così come sono.”
 
 Prompt:
 
-> “Quale strategia useresti per prepararti a ricostruire l’ordine?”
+> “Prima della prova, cosa vuoi fare?”
 
 For this goal, A is the qualifying task-fit choice. B is a useful strategy for another goal; C may feel familiar but provides weaker evidence for the explicit sequence-retrieval goal.
 
@@ -106,7 +108,7 @@ If A was chosen, the learner first organises the full evidence into a sequence o
 
 Prompt:
 
-> “Ora la scheda è coperta. Ricostruisci l’ordine usando solo ciò che ricordi.”
+> “Le frasi sono coperte. Rimetti questi cinque elementi nell’ordine in cui sono accaduti.”
 
 A final “controlla” action reveals the original source beside the recalled sequence for comparison.
 
@@ -114,7 +116,7 @@ The purpose is not factual assessment about expeditions; it is to make the conse
 
 Feedback:
 
-> “Il metodo ti ha fatto esercitare proprio l’ordine che il compito richiedeva.”
+> “Hai scelto un modo per prepararti e lo hai usato nella prova.”
 
 Only a correct applied reconstruction after selecting/switching to the sequence-retrieval strategy earns:
 
@@ -149,12 +151,12 @@ If the sequence is incomplete or incorrect, Atlas can legitimately expose the mi
 
 Prompt:
 
-> “Vuoi mantenere questo metodo o provare uno strumento più direttamente collegato all’ordine?”
+> “Vuoi provare un modo pensato proprio per ricordare una sequenza?”
 
 Qualifying recovery:
 > switch to sequence + retrieval, then perform the applied reconstruction.
 
-Continuing with the original method remains allowed for exploration, but no growth evidence is awarded until an applied strategy-goal fit has been demonstrated.
+Exploration with the original method may occur inside M3B, but **progression to M4/M5 requires an applied sequence + retrieval attempt that qualifies for the first evidence event**. Therefore the active method immediately before the goal change is the sequence/retrieval method, ensuring that the later move to cause–effect is an actual method change rather than a repeated selection.
 
 A revision here is evidence of task-bound adjustment, not of intelligence or motivation.
 
@@ -164,13 +166,13 @@ The mission rail remains visible while the workspace pauses; no new visual layer
 
 Prompt:
 
-> “Che cosa ti dice l’evidenza?”
+> “Che cosa hai notato?”
 
 Qualifying:
-> “Una strategia è utile se mi aiuta a fare ciò che il compito richiede; se non basta, posso cambiarla.”
+> “Un modo può aiutarmi in un compito e non in un altro. Se la domanda cambia, posso cambiare modo.”
 
 Non-qualifying:
-> “Se una strategia mi piace, dovrei usarla sempre.”
+> “Se un modo mi piace, dovrei usarlo sempre.”
 
 No new badge is awarded; this scene prepares the goal change.
 
@@ -178,22 +180,22 @@ No new badge is awarded; this scene prepares the goal change.
 
 The same five fragments stay on the workbench. Only the mission rail changes, so the learner can immediately perceive that **the material is the same but the purpose is different**. New goal:
 
-> “Ora non devi ricordare l’ordine. Devi spiegare perché il gruppo ha cambiato percorso.”
+> “Ora non devi ricordare l’ordine. Devi spiegare perché il gruppo ha cambiato sentiero e perché è arrivato più tardi.”
 
 The tool bench becomes active again. The learner must choose again:
 
-**A — Continuo con la sequenza**
-> useful for order, but not sufficient to expose the causal relation.
+**A — Continuo a mettere in ordine**
+> useful for before/after, but not sufficient to expose the causal relation.
 
-**B — Costruisco una mappa causa-effetto**
-> heavy rain → lower path unavailable → ridge path → later arrival.
+**B — Cerco cause e conseguenze**
+> heavy rain → lower path unavailable → **longer** ridge path → later arrival.
 
-**C — Rileggo senza organizzare**
+**C — Rileggo tutto**
 > may support familiarity but does not explicitly represent the requested relation.
 
 Prompt:
 
-> “Quale strategia serve adesso?”
+> “Come puoi rendere chiaro che cosa ha causato il cambio di percorso e il ritardo?”
 
 Qualifying choice: B.
 
@@ -210,7 +212,7 @@ Prompt:
 > “Quale schema rende visibile il motivo del cambiamento?”
 
 Qualifying structure:
-> “Pioggia intensa → sentiero basso non utilizzabile → percorso di cresta → arrivo più tardi.”
+> “Pioggia intensa → sentiero basso non utilizzabile → percorso di cresta più lungo → arrivo più tardi.”
 
 The learner creates the chain from the supplied fragments/connectors. Accessible alternatives allow equivalent selection-and-linking without drag-only interaction. Incorrect structures may reverse causality, omit a required relation or leave the facts as an unstructured list.
 
@@ -218,8 +220,9 @@ This scene ensures the learner does not merely select the label “mappa causa-e
 
 Only the conjunction of:
 
-1. a qualifying M5 cause–effect strategy selection (initially or after explicit recovery/reselection); and
-2. a correct M6 applied cause–effect representation
+1. the learner reached M5 after a qualifying sequence/retrieval application, so the active method before the goal change is not cause–effect;
+2. a qualifying M5 cause–effect selection (initially or after explicit recovery/reselection); and
+3. a correct M6 applied cause–effect representation
 
 earns:
 
@@ -233,7 +236,7 @@ Prompt:
 > “Quale principio hai usato?”
 
 Qualifying:
-> “Prima chiarisco il compito, poi scelgo una strategia; controllo se funziona e la cambio se lo scopo o l’evidenza cambiano.”
+> “Prima capisco che cosa devo fare. Poi scelgo un modo per lavorare e lo cambio se la domanda cambia.”
 
 Non-qualifying:
 > “Trovo il mio metodo preferito e lo uso in ogni situazione.”
@@ -310,7 +313,7 @@ This is a local transfer probe, not certification of general metacognitive compe
 
 Summary:
 
-> “Le strategie sono strumenti. Il punto non è trovarne una ‘tua’, ma scegliere quella che serve al compito, controllare l’effetto e cambiarla quando necessario.”
+> “Hai usato modi diversi perché le domande erano diverse. Non esiste un unico modo che va bene sempre.”
 
 Local-growth record, if already enabled by the shared product layer:
 
@@ -365,7 +368,7 @@ Avoid:
 | Evidence | Qualifying outcome | Stage |
 |---|---|---|
 | strategy–goal fit | after an actually tried preparation strategy, the learner selects/switches to sequence + retrieval and correctly reconstructs the route in retrieval mode with source text hidden | BEGINNING_TO_RECOGNISE |
-| strategic revision | qualifying M5 cause–effect strategy selection/reselection **and** correct M6 applied causal construction | CHOOSES_WHEN_TO_USE |
+| strategic revision | prior qualifying sequence/retrieval use **then** qualifying M5 cause–effect selection/reselection **and** correct M6 applied causal construction | CHOOSES_WHEN_TO_USE |
 | applied transfer | qualifying M8 comparison-strategy selection (initial or recovered) **and** correct M8B criterion-by-criterion application | TRANSFERS_TO_NEW_SITUATION |
 
 A scene arrival, completion, time-on-task or initial preference is not growth evidence.
@@ -404,8 +407,9 @@ Forbidden:
 1. Is “strategy–task fit” understandable without suggesting a fixed learning style?
 2. Are A/B/C presented neutrally enough that the learner must reason from the goal rather than visual cues?
 3. Does every M3 feedback statement refer only to a strategy the learner actually tried and to an observable result, never a fabricated consequence?
-4. Does M5 require a qualifying cause–effect selection/reselection before the awardable M6 state?
-5. Does M6 require an applied cause–effect representation, with the revision traguardo gated on both M5 and M6?
+4. Does progression to M5 guarantee that the learner actually used sequence/retrieval immediately before the goal change?
+5. Does M5 require a qualifying cause–effect selection/reselection before the awardable M6 state?
+6. Does M6 require an applied cause–effect representation supported by the source facts, with the revision traguardo gated on the real method change plus M5/M6 application?
 6. Does M8B require both qualifying strategy selection/reselection and an applied new-task representation rather than repetition of M7?
 7. Are all three growth events tied to applied task performance rather than strategy-label selection?
 8. Is the tone appropriate and non-infantilising for lower secondary?
