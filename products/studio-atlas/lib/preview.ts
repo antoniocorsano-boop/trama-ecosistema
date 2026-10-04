@@ -1,14 +1,26 @@
 import type { PathwayProject, StudioAtlasPreviewSnapshot } from "./model";
 import { digestAuthoringState, getProductionBlockers } from "./production";
 
+const REVIEW_ONLY_BLOCKERS = new Set([
+  "PRODUCT_REVIEW_NOT_PASS",
+  "WORLD_REVIEW_NOT_PASS",
+  "STORYBOARD_NOT_READY",
+]);
+
 export function getPreviewBlockers(project: PathwayProject) {
   return getProductionBlockers(project);
 }
 
-export async function buildStudioAtlasPreviewSnapshot(
+export function getReviewPreviewBlockers(project: PathwayProject) {
+  return getProductionBlockers(project).filter((blocker) => !REVIEW_ONLY_BLOCKERS.has(blocker));
+}
+
+async function buildSnapshot(
   project: PathwayProject,
+  blockers: string[],
+  purpose: "LEARNER" | "HUMAN_PRODUCT_REVIEW",
 ): Promise<StudioAtlasPreviewSnapshot> {
-  const blockers = getPreviewBlockers(project);
+  void purpose;
   if (blockers.length > 0) {
     throw new Error(`PREVIEW_BLOCKED:${blockers.join(",")}`);
   }
@@ -25,4 +37,16 @@ export async function buildStudioAtlasPreviewSnapshot(
     studentAuthorized: false,
     scenes: project.scenes.map((scene) => ({ ...scene })),
   };
+}
+
+export async function buildStudioAtlasPreviewSnapshot(
+  project: PathwayProject,
+): Promise<StudioAtlasPreviewSnapshot> {
+  return buildSnapshot(project, getPreviewBlockers(project), "LEARNER");
+}
+
+export async function buildStudioAtlasReviewPreviewSnapshot(
+  project: PathwayProject,
+): Promise<StudioAtlasPreviewSnapshot> {
+  return buildSnapshot(project, getReviewPreviewBlockers(project), "HUMAN_PRODUCT_REVIEW");
 }
