@@ -20,6 +20,8 @@ Single entry point for understanding current authority, experiments and open con
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
 | student library product contract | `../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md` | PRODUCT_RECOVERY_CANDIDATE / NOT_RUNTIME_AUTHORIZED — binds the recovery/authoring process to PR #96 artefacts; includes mandatory human Experience Quality Gate; recovered territory taxonomy remains CANDIDATE / NOT_APPROVED |
 | first-cycle learner experience specification | `../product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md` | PROPOSED_CANONICAL_PRODUCT_SPEC / HUMAN_REVIEW_REQUIRED — learner language, representation, interaction, mobile composition, feedback and visual-pattern selection; runtime not authorised |
+| compact learning world specification | `../product/COMPACT-LEARNING-WORLD-SPEC-v1.md` | PROPOSED_PRODUCT_DIRECTION / HUMAN_REVIEW_REQUIRED — world, role, agency, information distribution, consequence and desire-to-continue gate; runtime not authorised |
+| game-world learning experience benchmark | `../research/common/game-world-learning-experience-benchmark-v1.md` | RESEARCH_SCREENING / PRODUCT_DIRECTION_INPUT — Quest Atlantis, EcoMUVE, River City, Minecraft Education, Mission US, Quandary, iCivics and current game-library contrast |
 | first-cycle digital learning research screening | `../research/common/first-cycle-digital-learning-experience-screening-v1.md` | RESEARCH_SCREENING / DESIGN_INPUT — interactive learning, scaffolding, inquiry, gamification, narrative and mature-product precedents |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
@@ -112,6 +114,16 @@ A learner must not need to understand professional educational terminology in or
 Human Review must ask whether a learner in the intended age band can understand the next action from the screen alone.
 
 The canonical first-cycle product direction is further defined by `product/FIRST-CYCLE-LEARNER-EXPERIENCE-SPEC-v1.md`: representation before explanation, direct cognitive action, visible consequence, one dominant stage, mobile-first continuity and cards as secondary objects rather than the visible product structure.
+
+## Compact Learning World authority rule
+
+For inquiry/decision/causality/construction/perspective pathways, interface prototyping must follow a reviewed **World Brief**. The learner needs a functional role, productive agency, distributed information and visible consequence. A story layered over a worksheet is not a completed Percorso.
+
+Canonical design sequence:
+
+`COMPETENCE TARGET → WORLD BRIEF → ROLE/AGENCY MAP → INFORMATION DISTRIBUTION → CONSEQUENCE MODEL → EXPERIENCE CHOREOGRAPHY → VISUAL WORLD CONCEPT → PLAYABLE PROTOTYPE → HUMAN USE REVIEW → IMPLEMENTATION`
+
+A Human Review must explicitly answer the **desire-to-continue gate**: absent teacher assignment, is there a plausible reason an 11–14-year-old might continue for another few minutes because of curiosity, agency, challenge, consequence or world interest?
 
 ## Narrative authority rule
 There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
