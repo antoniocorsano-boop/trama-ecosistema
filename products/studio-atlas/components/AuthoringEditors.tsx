@@ -238,6 +238,7 @@ export function ExperienceEditor({ project, onPatch }: Props) {
 export function SceneEditor({ project, onPatch }: Props) {
   const complete =
     project.scenes.length > 0 &&
+    project.scenes.some((scene) => scene.kind === "TRANSFER") &&
     project.scenes.every(
       (scene) =>
         scene.visibleSituation.trim() &&
