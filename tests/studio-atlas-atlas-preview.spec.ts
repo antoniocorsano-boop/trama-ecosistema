@@ -61,16 +61,19 @@ const project = {
       choices: [
         {
           choiceId: "keep-old",
+          targetSceneId: "S2",
           label: "Mantengo il collegamento al vecchio segnale",
           feedback: "Il ritardo si ripete: il sistema continua ad ascoltare il punto sbagliato."
         },
         {
           choiceId: "use-new",
+          targetSceneId: "S3_TRANSFER",
           label: "Collego il sistema al segnale del nuovo ingresso",
           feedback: "La risposta parte nel momento atteso: questa modifica spiega il ritardo."
         },
         {
           choiceId: "manual",
+          targetSceneId: "S2",
           label: "Uso un comando manuale",
           feedback: "Può funzionare una volta, ma il risultato dipende dal tempismo dell’operatore."
         }
@@ -305,15 +308,20 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
   await expect(
     popup.getByRole("heading", { name: "Tutti hanno cambiato qualcosa" }),
   ).toBeVisible();
-  const timelineChoice = popup.getByRole("radio", {
-    name: "Metto in fila i cambiamenti della giornata",
+  const connectionsChoice = popup.getByRole("radio", {
+    name: "Collego subito percorso, sensore e regia",
   });
-  await expect(timelineChoice).toBeVisible();
-  await timelineChoice.check();
+  await expect(connectionsChoice).toBeVisible();
+  await connectionsChoice.check();
   await expect(
     popup.getByText(
-      "La sequenza temporale chiarisce che percorso e sensore sono cambiati prima della prova fallita. Ora sai quando, ma non ancora perché.",
+      "Le relazioni sono promettenti, ma senza ordinare alcune modifiche rischi di attribuire importanza a coincidenze.",
     ),
+  ).toBeVisible();
+
+  await popup.getByRole("button", { name: "Continua" }).click();
+  await expect(
+    popup.getByRole("heading", { name: "Prova il collegamento" }),
   ).toBeVisible();
 
   await expect.poll(async () => {
