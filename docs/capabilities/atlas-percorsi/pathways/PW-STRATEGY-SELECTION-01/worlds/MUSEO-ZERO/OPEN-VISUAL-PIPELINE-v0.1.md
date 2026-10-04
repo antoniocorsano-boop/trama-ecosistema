@@ -90,6 +90,23 @@ Do not weaken the visual target merely to fit an unqualified device profile.
 
 A lower-VRAM or Intel-specific route may be qualified later, but it must reproduce the same quality gate before becoming canonical.
 
+## 3A. Execution-provider decision
+
+The Factory does **not** use Hugging Face Jobs as the default execution route for v0.1.
+
+Reason:
+- Jobs are billed compute;
+- the project requirement for this pilot is a zero-cost or already-provisioned execution path;
+- no paid GPU run is authorised merely to validate visual production.
+
+State:
+- PAID_HF_JOBS: REJECTED_FOR_FREE_BASELINE
+- FREE_EXECUTION_ADAPTER: REQUIRED / NOT_YET_QUALIFIED
+- LOCAL_HEAVY_QWEN_PROFILE: NOT_ASSUMED
+- EXECUTION_COST_AUTHORITY: HUMAN_ONLY
+
+Until a free/available GPU route is qualified, the Factory may prepare workflows and recipes but must not silently incur compute cost.
+
 ## 4. Model package
 
 Reference package:
