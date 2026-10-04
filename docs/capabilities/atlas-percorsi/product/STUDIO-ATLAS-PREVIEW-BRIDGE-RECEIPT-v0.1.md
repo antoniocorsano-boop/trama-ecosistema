@@ -100,15 +100,24 @@ This receipt does not claim:
 
 ## Next canonical product step
 
-Use the now-working authoring + preview path on a real canonical pathway, beginning with **MUSEO ZERO**, instead of a technical fixture.
+Use **MUSEO ZERO** as the first real governed Studio Atlas pathway, but preserve the existing human authority boundary.
 
-That tranche should:
+Current authority is asymmetric:
 
-1. materialise the approved MUSEO ZERO story/world/experience/scenes into Studio Atlas authoring data;
-2. mark the explicit transfer scene;
-3. prove the direct Atlas learner preview;
-4. keep Visual Factory production independently queued under the orchestrator;
-5. evaluate the learner experience before further UI expansion.
+- the MUSEO ZERO story is `STORY_APPROVED_FOR_WORLD_DESIGN`;
+- the world package remains `HUMAN_PRODUCT_REVIEW_REQUIRED`;
+- `ATLAS_IMPLEMENTATION = HOLD`;
+- runtime remains `NOT_RUNTIME_AUTHORIZED`.
+
+The next tranche therefore must:
+
+1. materialise the approved MUSEO ZERO story in Studio Atlas with its Human Story Review evidence;
+2. materialise the existing world design as **reviewable**, never as already approved;
+3. stop fail-closed at Human World/Product Review while that decision is pending;
+4. only after an explicit Human Review PASS, continue with experience, scenes, explicit transfer, storyboard and the real Atlas learner preview;
+5. keep Visual Factory production independently queued under the orchestrator and evaluate learner experience before any publication step.
+
+Studio Atlas must not manufacture a World Review PASS merely to unlock preview or production.
 
 
 ## Browser E2E proof
