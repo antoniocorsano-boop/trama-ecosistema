@@ -431,3 +431,42 @@ A small school field team is collecting environmental observations. Their planne
 The candidate must be developed with a governed character bible and controlled screenplay before further Atlas implementation.
 
 RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED.
+
+## 19. Second Human Experience Review — 2026-10-04
+
+**State:** CHANGES_REQUIRED / TOO_EXPOSITORY / NOT_YET_LIVED
+
+The Missione Belvedere candidate improved narrative presence but still feels too cold, logical and didactic for the target age.
+
+Observed defects:
+
+- characters are present but mostly **explain** the activity rather than live through it;
+- the opening is still exposition-first instead of beginning inside an event;
+- the learner remains outside the story, arranging evidence for a task rather than participating in a situation that unfolds;
+- visual scenes function more like illustrated documents than lived moments;
+- interaction remains dominated by “choose / order / check” rather than reaction, discovery and consequence;
+- character relationships are too static; nobody reacts meaningfully to what the learner discovers;
+- the closing statement reads as a pedagogical moral rather than an insight emerging naturally from the experience;
+- the overall rhythm is still teacher-authored and logically segmented rather than spontaneous.
+
+### Required redesign
+
+The next prototype must move from **narrative-present worksheet** to **lived interactive scene**.
+
+Required direction:
+
+1. **in medias res opening** — begin at a consequential moment, not with premise explanation;
+2. **diegetic learner role** — the learner is addressed by characters inside the scene and has a reason to respond;
+3. **character reaction loop** — characters react to learner actions/discoveries and change what they say/do next;
+4. **story information arrives through events, dialogue and environment**, not explanatory blocks;
+5. **less explicit instructional chrome** — avoid “Passo 1 di 2”, “Capitolo”, “quello che hai imparato” framing where the story itself can carry orientation;
+6. **choice should affect the scene**, not only a validation state;
+7. **show before tell** — visual/event consequence precedes explanation;
+8. **no didactic moral at closure** — characters may naturally recognise the difference between chronology and causality; the system need not state the pedagogical abstraction;
+9. **retain the competence evidence contract** — chronology and causal representation must still be genuinely applied, but they should feel like necessary actions inside the story.
+
+### Candidate experiential choreography
+
+ARRIVAL IN TROUBLE → CHARACTER REACTION → WHAT HAPPENED? → RECOVER MOMENTS → STORY REBUILT → NEW QUESTION EMERGES NATURALLY → CHANGE REPRESENTATION → CONSEQUENCE EXPLAINED → CHARACTER RESPONSE → QUIET CLOSE
+
+Runtime remains NOT_RUNTIME_AUTHORIZED. Atlas #78 remains untouched pending a genuinely convincing Human Experience Review.
