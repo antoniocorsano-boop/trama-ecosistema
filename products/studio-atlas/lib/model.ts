@@ -25,6 +25,7 @@ export type PathwayProject = {
   ageBand: "later-primary" | "lower-secondary" | "mixed-first-cycle";
   humanState: HumanState;
   productionState: ProductionState;
+  sceneRefs: string[];
   archived: boolean;
   createdAt: string;
   updatedAt: string;
