@@ -272,15 +272,15 @@ function PreviewStage({
         <h1>Snapshot pronto per Atlas.</h1>
         <p className="lead">
           Studio Atlas ha congelato la versione da provare senza autorizzarla agli studenti.
-          Il prossimo passo è consegnare questo snapshot al preview adapter Atlas.
+          Puoi aprirla nel runtime Atlas reale e tornare qui per continuare la revisione.
         </p>
         <div className="production-wait">
           <span className="status-dot neutral" aria-hidden="true" />
           <div>
-            <strong>Anteprima pronta · trasporto non ancora collegato</strong>
+            <strong>Anteprima pronta · collegamento Atlas attivo</strong>
             <p>
-              Il contenuto non viene messo nell’URL e non viene pubblicato. Serve il
-              canale opaco Studio Atlas → Atlas che stiamo qualificando.
+              Il contenuto non viene messo nell’URL e non viene pubblicato. Lo snapshot
+              passa direttamente alla finestra Atlas tramite il canale effimero qualificato.
             </p>
             <small className="technical-ref">
               Snapshot {project.lastPreviewSnapshot.snapshotId.slice(0, 8)} ·
