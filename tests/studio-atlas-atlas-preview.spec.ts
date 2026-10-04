@@ -73,6 +73,22 @@ const project = {
 
 test("Studio Atlas opens exact learner preview in Atlas across origins", async ({ browser }) => {
   const context = await browser.newContext();
+  const diagnostics: string[] = [];
+  context.on("page", (candidate) => {
+    candidate.on("pageerror", (error) => {
+      diagnostics.push(`pageerror:${error.name}:${error.message}`);
+    });
+    candidate.on("console", (message) => {
+      if (message.type() === "error" || message.type() === "warning") {
+        diagnostics.push(`console:${message.type()}:${message.text()}`);
+      }
+    });
+    candidate.on("requestfailed", (request) => {
+      diagnostics.push(
+        `requestfailed:${request.url()}:${request.failure()?.errorText ?? "unknown"}`,
+      );
+    });
+  });
   const page = await context.newPage();
 
   await page.addInitScript((seed) => {
@@ -149,6 +165,7 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
     atlasOrigin: await popup.evaluate(() => window.location.origin),
   };
   console.log("STUDIO_ATLAS_BRIDGE_DEBUG", JSON.stringify(bridgeDebug));
+  console.log("STUDIO_ATLAS_BROWSER_DIAGNOSTICS", JSON.stringify(diagnostics));
 
   await expect(
     popup.getByText("ANTEPRIMA STUDIO ATLAS · NON AUTORIZZATA AGLI STUDENTI"),
