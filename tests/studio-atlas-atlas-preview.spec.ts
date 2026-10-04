@@ -323,6 +323,21 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
   await expect(
     popup.getByRole("heading", { name: "Prova il collegamento" }),
   ).toBeVisible();
+  await expect(
+    popup.getByText("Il nuovo ingresso usa Sensor B, ma la regia ascolta ancora Sensor A"),
+  ).toBeVisible();
+
+  const switchSensorChoice = popup.getByRole("radio", {
+    name: "Provo il trigger su Sensor B",
+  });
+  await switchSensorChoice.check();
+  await expect(
+    popup.getByText(
+      "La sala risponde nel momento previsto: la mappatura aggiornata spiega il problema",
+    ),
+  ).toBeVisible();
+  await expect(popup.getByText("Trigger su Sensor B")).toBeVisible();
+  await expect(popup.getByText("Suono e luce")).toBeVisible();
 
   await expect.poll(async () => {
     return await page.evaluate((projectId) => {
