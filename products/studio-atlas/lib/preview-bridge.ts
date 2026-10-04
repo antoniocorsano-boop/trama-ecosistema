@@ -46,7 +46,6 @@ export async function openAtlasLearnerPreview(
 
   const previewUrl = new URL("/percorsi/lab/studio-atlas-preview/", atlasOrigin);
   previewUrl.searchParams.set("channel", channel);
-  previewWindow.location.replace(previewUrl.toString());
 
   return await new Promise<PreviewBridgeResult>((resolve) => {
     let settled = false;
@@ -76,7 +75,11 @@ export async function openAtlasLearnerPreview(
       finish({ status: "OPENED", snapshot });
     }
 
+    // Register the READY listener before navigating the popup. Atlas may load
+    // quickly enough to post READY immediately; registering after navigation
+    // creates a real race and can lose the one-shot handshake.
     window.addEventListener("message", onMessage);
+    previewWindow.location.replace(previewUrl.toString());
   });
 }
 
