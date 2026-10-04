@@ -9,6 +9,7 @@ on:
       - "schemas/atlas-visual-bible.v0.1.schema.json"
       - "schemas/atlas-visual-shot-plan.v0.1.schema.json"
       - "scripts/compile_visual_generation_plan.py"
+      - "scripts/deploy_visual_factory_hf_space.py"
       - "services/visual-factory-hf/**"
       - "fixtures/visual-factory-generation/**"
       - "tests/test_visual_generation_plan.py"
@@ -87,7 +88,12 @@ jobs:
           test -f services/visual-factory-hf/app.py
           test -f services/visual-factory-hf/contract.py
           test -f services/visual-factory-hf/requirements.txt
-          python -m py_compile services/visual-factory-hf/app.py services/visual-factory-hf/contract.py
+          python -m py_compile services/visual-factory-hf/app.py services/visual-factory-hf/contract.py scripts/deploy_visual_factory_hf_space.py
           grep -q '@spaces.GPU' services/visual-factory-hf/app.py
           grep -q 'black-forest-labs/FLUX.2-klein-4B' services/visual-factory-hf/app.py
           ! grep -Ei 'purchase|billing|credit.card|paid.fallback' services/visual-factory-hf/app.py services/visual-factory-hf/contract.py
+
+      - name: Prove deployment is inert without explicit HF configuration
+        run: |
+          output="$(env -u HF_TOKEN -u HF_VISUAL_FACTORY_SPACE_REPO python scripts/deploy_visual_factory_hf_space.py)"
+          test "$output" = "NOT_CONFIGURED"
