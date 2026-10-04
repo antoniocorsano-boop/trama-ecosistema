@@ -8,6 +8,9 @@ export function getProductionBlockers(project: PathwayProject) {
   const blockers: string[] = [];
 
   if (project.storyReview.decision !== "PASS") blockers.push("STORY_REVIEW_NOT_PASS");
+  if (project.productReview && project.productReview.decision !== "PASS") {
+    blockers.push("PRODUCT_REVIEW_NOT_PASS");
+  }
   if (project.worldReview.decision !== "PASS") blockers.push("WORLD_REVIEW_NOT_PASS");
   if (!project.experience.grammar) blockers.push("EXPERIENCE_NOT_SELECTED");
   if (!project.storyboardReady) blockers.push("STORYBOARD_NOT_READY");
@@ -95,6 +98,7 @@ export async function digestAuthoringState(project: PathwayProject) {
     storyReview: project.storyReview,
     world: project.world,
     worldReview: project.worldReview,
+    productReview: project.productReview,
     experience: project.experience,
     scenes: project.scenes,
     storyboardReady: project.storyboardReady,
