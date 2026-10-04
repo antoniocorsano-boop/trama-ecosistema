@@ -50,11 +50,23 @@ jobs:
         working-directory: _atlas
         run: pnpm install --no-frozen-lockfile
 
+      - name: Build Studio Atlas with exact Atlas origin
+        working-directory: products/studio-atlas
+        env:
+          NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN: ${{ env.ATLAS_ORIGIN }}
+        run: npm run build
+
+      - name: Build exact Atlas candidate with Studio origin
+        working-directory: _atlas
+        env:
+          NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN: ${{ env.STUDIO_ORIGIN }}
+        run: pnpm build
+
       - name: Install Chromium
         working-directory: _atlas
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Start Studio Atlas and Atlas on distinct origins
+      - name: Start production Studio Atlas and Atlas on distinct origins
         shell: bash
         run: |
           set -euo pipefail
@@ -62,7 +74,7 @@ jobs:
           (
             cd products/studio-atlas
             NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN="$ATLAS_ORIGIN" \
-              npm run dev -- --hostname 127.0.0.1 --port 3100 \
+              npm run start -- --hostname 127.0.0.1 --port 3100 \
               >/tmp/studio-atlas-e2e.log 2>&1
           ) &
           echo $! >/tmp/studio-atlas-e2e.pid
@@ -70,7 +82,7 @@ jobs:
           (
             cd _atlas
             NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN="$STUDIO_ORIGIN" \
-              pnpm exec next dev -H 127.0.0.1 -p 3200 \
+              pnpm exec next start -H 127.0.0.1 -p 3200 \
               >/tmp/atlas-e2e.log 2>&1
           ) &
           echo $! >/tmp/atlas-e2e.pid
