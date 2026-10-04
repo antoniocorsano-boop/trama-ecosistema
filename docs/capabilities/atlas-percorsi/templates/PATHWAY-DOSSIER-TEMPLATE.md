@@ -149,6 +149,35 @@ Mark only functions actually required:
 
 For omitted functions, explain why.
 
+## 7A. Learner-language translation
+
+Complete this section for every first-cycle learner-facing pathway.
+
+### Internal construct → learner experience
+
+| Internal educational construct | Concrete learner situation | Learner-visible goal | Learner-visible action | Wording to avoid |
+|---|---|---|---|---|
+| TBD | TBD | TBD | TBD | TBD |
+
+### Entry-comprehension check
+
+Before the first meaningful action, verify that the learner can answer from the screen alone:
+
+- Where am I / what situation am I in?
+- What has happened or what information do I have?
+- What is about to happen?
+- What exactly do I need to do?
+
+### Language boundary
+
+Professional educational terminology may remain in authoring/governance artefacts. It must not be required to understand the learner task.
+
+- [ ] first instruction uses concrete situation + concrete action;
+- [ ] no pedagogical jargon is required to start;
+- [ ] strategy/method language appears only after the learner has an intelligible task context, unless the term is itself the curriculum content;
+- [ ] instructions have been read from the point of view of the intended age band;
+- [ ] a learner can explain the next action in their own words without knowing the design model.
+
 ## 8. Storyboard / screenplay
 
 For each scene/frame record:
