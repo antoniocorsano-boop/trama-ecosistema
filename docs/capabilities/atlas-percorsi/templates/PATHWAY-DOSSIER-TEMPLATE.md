@@ -167,6 +167,76 @@ For each scene/frame record:
 - resource/sustainability note;
 - failure signal.
 
+## 8A. Experience Quality Gate
+
+This section is mandatory before implementation handoff.
+
+### Mise-en-scène
+- What situation/world is the learner entering?
+- What makes the learner understand why the next action matters?
+- What evolves across the experience?
+
+### Pathway-specific visual identity
+- What composition, visual grammar and atmosphere belong specifically to this pathway?
+- Which recurring visual anchors create continuity?
+- What has been deliberately rejected because it would look generic, infantilising or decorative?
+
+### Rhythm map
+
+Describe the intended rhythm, not only the screen order:
+
+`ORIENT → TENSION/QUESTION → ACTION → CONSEQUENCE → PAUSE/NOTICE → REVISE → NEW SITUATION → TRANSFER`
+
+Where does the experience accelerate, pause, reveal, compare or change mode? Why?
+
+### Interaction-variation rationale
+For each interaction form, state the cognitive reason it changes. Avoid variety for novelty and repetition for convenience.
+
+### Anti-card-stack review
+
+Answer explicitly:
+
+- If standard card/container styling were removed, would a coherent experience still remain?
+- Does the pathway feel like one evolving situation rather than a stack of prompts?
+- Are generic cards/panels implementation components rather than the visible product concept?
+- Has any automatically generated scene/prompt sequence been deliberately authored and re-composed by a human?
+
+### Learner pleasure without manipulation
+
+What should make this experience pleasant or compelling?
+
+Allowed sources include:
+- curiosity;
+- discovery;
+- agency;
+- visible consequence;
+- mastery;
+- surprise that serves meaning;
+- aesthetic care;
+- narrative continuity.
+
+Do not rely on:
+- streaks;
+- loot/reward harvesting;
+- artificial urgency;
+- leaderboards;
+- empty points;
+- retention pressure;
+- excessive stimulation.
+
+### Age-appropriate dignity
+Explain why the experience should feel appropriate to the intended age band without infantilisation or sterile institutional tone.
+
+### Student-point-of-view walkthrough
+Describe the pathway in ordinary learner-facing language, scene by scene, so a reviewer can understand the experience without reading governance terminology.
+
+### Human review decision
+- [ ] PASS — experience is coherent, distinctive, appropriately paced and enjoyable without artificial gamification.
+- [ ] CHANGES_REQUIRED — return to narrative/storyboard design.
+- [ ] NOT_REVIEWED
+
+Automated checks may verify this section exists. They must not set PASS.
+
 ## 9. Consequence review
 
 Human actions and design choices have foreseeable consequences. Record them before implementation.
@@ -223,6 +293,10 @@ Before implementation, verify:
 - [ ] privacy/data inventory passed;
 - [ ] accessibility equivalent exists;
 - [ ] emotional safeguards passed;
+- [ ] Experience Quality Gate passed by Human Review;
+- [ ] student-point-of-view walkthrough reviewed;
+- [ ] anti-card-stack review passed;
+- [ ] mise-en-scène, pathway identity, continuity and rhythm are preserved in the handoff;
 - [ ] consequence review completed;
 - [ ] validation evidence is sufficient for the claimed decision;
 - [ ] no unresolved blocker is hidden by polished visuals;

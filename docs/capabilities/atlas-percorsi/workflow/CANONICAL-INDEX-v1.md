@@ -18,7 +18,7 @@ Single entry point for understanding current authority, experiments and open con
 | error / relational agents / emotion screening | `research/common/error-relational-agents-emotion-screening-v1.md` | ACTIVE SCREENING |
 | C3/C11/C16 normalised evidence | `research/evidence/error-agent-emotion-records-v1.yaml` | ACTIVE NORMALISATION; C3/C16 strengthened; C11 precautionary constitutional stop supported by direct child evidence |
 | pathway narrative architecture | `architecture/pathway-specific-narrative-architecture-v1.md` | CANONICAL G1 hypothesis |
-| student library product contract | `../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md` | PRODUCT_RECOVERY_CANDIDATE / NOT_RUNTIME_AUTHORIZED — binds the recovery/authoring process to PR #96 artefacts; recovered territory taxonomy remains CANDIDATE / NOT_APPROVED |
+| student library product contract | `../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md` | PRODUCT_RECOVERY_CANDIDATE / NOT_RUNTIME_AUTHORIZED — binds the recovery/authoring process to PR #96 artefacts; includes mandatory human Experience Quality Gate; recovered territory taxonomy remains CANDIDATE / NOT_APPROVED |
 | productive authoring workflow | `architecture/productive-pathway-workflow-v1.md` | CANONICAL G1 workflow |
 | evidence-first research | `research/evidence-first-research-program-v1.md` | CANONICAL research programme |
 | experiential grammar registry | `grammars/registry.yaml` | CANONICAL registry; entries remain `research` |
@@ -75,6 +75,25 @@ Atlas Percorsi preserves:
 `completion → local supported performance → local independent performance → changed-context performance → multi-context transfer evidence`
 
 No step automatically implies the next. None authorises a stable personality or psychological label.
+
+## Experience Quality authority rule
+
+Every learner-facing Percorso must pass a mandatory **Experience Quality Gate** before implementation handoff. Pedagogical correctness, privacy, accessibility, engine conformance and CI are necessary but insufficient.
+
+The gate requires human review of:
+
+- mise-en-scène and student-visible premise;
+- pathway-specific visual identity;
+- experiential rhythm and scene-to-scene continuity;
+- meaningful interaction variation;
+- age-appropriate dignity;
+- learner pleasure grounded in curiosity, agency, consequence and craft rather than manipulative gamification;
+- explicit anti-card-stack review;
+- a student-point-of-view walkthrough understandable without governance terminology.
+
+A pathway that is primarily a generic card/form/quiz/prompt sequence is not a finished Atlas Percorso. Standard components may implement scenes but must not become the visible product concept by default.
+
+Automation may verify declarations and artefacts. It cannot certify engagement, aesthetic quality, rhythm or experiential coherence.
 
 ## Narrative authority rule
 There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
