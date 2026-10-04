@@ -81,6 +81,24 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
 
   await page.goto(`${STUDIO}/percorso/${project.projectId}`);
 
+  await page.evaluate(() => {
+    const target = window as Window & { __bridgeEvents?: unknown[] };
+    target.__bridgeEvents = [];
+    window.addEventListener("message", (event) => {
+      target.__bridgeEvents?.push({
+        origin: event.origin,
+        type:
+          event.data && typeof event.data === "object"
+            ? (event.data as { type?: unknown }).type
+            : typeof event.data,
+        channel:
+          event.data && typeof event.data === "object"
+            ? (event.data as { channel?: unknown }).channel
+            : undefined,
+      });
+    });
+  });
+
   const previewButton = page.getByRole("button", { name: "Vedi come studente" });
   await expect(previewButton).toBeEnabled();
 
@@ -98,6 +116,39 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
   expect(url.searchParams.get("channel")).toMatch(/^[0-9a-f]{48}$/);
   expect(popup.url()).not.toContain("E2E%20Percorso");
   expect(popup.url()).not.toContain("snapshot");
+
+  await popup.evaluate(() => {
+    const target = window as Window & { __bridgeEvents?: unknown[] };
+    target.__bridgeEvents = [];
+    window.addEventListener("message", (event) => {
+      target.__bridgeEvents?.push({
+        origin: event.origin,
+        type:
+          event.data && typeof event.data === "object"
+            ? (event.data as { type?: unknown }).type
+            : typeof event.data,
+        channel:
+          event.data && typeof event.data === "object"
+            ? (event.data as { channel?: unknown }).channel
+            : undefined,
+        sourceMatchesOpener: event.source === window.opener,
+      });
+    });
+  });
+
+  await popup.waitForTimeout(1500);
+  const bridgeDebug = {
+    studio: await page.evaluate(
+      () => (window as Window & { __bridgeEvents?: unknown[] }).__bridgeEvents ?? [],
+    ),
+    atlas: await popup.evaluate(
+      () => (window as Window & { __bridgeEvents?: unknown[] }).__bridgeEvents ?? [],
+    ),
+    atlasHasOpener: await popup.evaluate(() => Boolean(window.opener)),
+    studioOrigin: await page.evaluate(() => window.location.origin),
+    atlasOrigin: await popup.evaluate(() => window.location.origin),
+  };
+  console.log("STUDIO_ATLAS_BRIDGE_DEBUG", JSON.stringify(bridgeDebug));
 
   await expect(
     popup.getByText("ANTEPRIMA STUDIO ATLAS · NON AUTORIZZATA AGLI STUDENTI"),
