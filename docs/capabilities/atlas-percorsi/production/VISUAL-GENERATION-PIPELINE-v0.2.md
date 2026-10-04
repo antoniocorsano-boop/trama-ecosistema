@@ -19,23 +19,25 @@ The product runtime then composes approved visual assets with bounded interactio
 ### Authoring / orchestration
 - Studio Atlas owns the Visual Bible and shot intent.
 - Visual Factory compiles deterministic generation jobs.
-- ComfyUI is the canonical node-workflow engine for reproducible generation and controlled editing.
+- The generation contract is provider-neutral and does not expose cloud/model credentials to the browser.
+- ComfyUI remains a candidate canonical workflow engine for governed GPU execution and deeper controlled editing.
+- Hugging Face Gradio/ZeroGPU is the first opportunistic pilot executor adapter.
 - Execution provider remains replaceable.
 
-### Model families
+### Model family — v0.2
 
-**Draft / art-direction exploration**
-- FLUX.1 Schnell is the preferred open draft model.
-- It is used for rapid concept frames and environment exploration.
-- Draft images do not become character identity authority automatically.
+Visual Factory v0.2 uses one primary open model family:
 
-**Continuity-sensitive production**
-- SDXL + IP-Adapter Plus is the v0.2 primary controlled route.
-- Character and environment reference images are mandatory inputs.
-- ControlNet-class pose/depth/edge guidance may be used when composition must remain stable.
-- FaceID / InsightFace-dependent routes are not canonical v0.2 dependencies because their usage terms require separate qualification.
+**FLUX.2 [klein] 4B**
+- reference candidates: text-to-image;
+- production scenes: native image-conditioned / multi-reference generation;
+- character and environment reference images are mandatory inputs for recurring production scenes;
+- the same locked Lia/Sala Zero references are reused where continuity requires them;
+- pose/depth/edge controls remain optional future refinements, not prerequisites for the first qualification slice.
 
-This split deliberately favours a mature control ecosystem over novelty.
+Using one model family for both stages reduces model-switch drift between reference sheets and production scenes.
+
+FaceID / InsightFace-dependent routes are not canonical v0.2 dependencies and require separate licence qualification before any future adoption.
 
 ## Reference-lock pipeline
 
@@ -79,7 +81,7 @@ Each production shot binds:
 - character refs;
 - environment ref;
 - camera;
-- composition/pose controls;
+- optional composition/pose controls;
 - visual continuity anchors;
 - negative constraints;
 - aspect ratio;
@@ -149,22 +151,34 @@ The production contract is provider-neutral.
 Two execution classes are recognised:
 
 1. **CANONICAL_GPU** — governed provider through TRAMA Compute Policy / SkyPilot.
-2. **OPPORTUNISTIC_FREE** — bounded pilot executor such as Hugging Face ZeroGPU, permitted only when:
-   - cost remains zero;
-   - quota is checked before execution;
-   - no paid overage can occur;
+2. **OPPORTUNISTIC_FREE** — bounded pilot executor such as a Hugging Face ZeroGPU Space, permitted only when:
+   - the account already has an eligible hosting/compute entitlement;
+   - the next run has zero authorised marginal cost;
+   - no paid overage or automatic subscription action can occur;
    - output provenance is preserved;
-   - lack of quota returns WAITING_FOR_COMPUTE.
+   - lack of hosting entitlement, quota or capacity returns `WAITING_FOR_COMPUTE`.
 
-Hugging Face ZeroGPU is suitable for pilot qualification because free personal accounts can host a limited number of ZeroGPU Spaces and free users receive a bounded daily GPU quota. It is not production capacity authority.
+ZeroGPU is therefore an executor technology, **not evidence of free entitlement**. The adapter may be deployed only to an explicitly configured Space. Hardware/entitlement selection is outside the automatic deploy script.
 
 ## Model / licensing posture
 
-- FLUX.1 Schnell: draft candidate; Apache-2.0 model release.
-- h94 IP-Adapter family: controlled-reference candidate; Apache-2.0 model repository.
-- ComfyUI: workflow engine.
+- `black-forest-labs/FLUX.2-klein-4B`: v0.2 primary generation candidate; Apache-2.0 model release.
+- ComfyUI: candidate canonical graph/workflow engine for governed GPU execution.
+- Diffusers: pilot ZeroGPU execution implementation.
 - FaceID / InsightFace-dependent identity routes: EXPERIMENTAL_ONLY until separate licence qualification.
 - Any third-party checkpoint/style LoRA requires explicit provenance and licence review before use.
+
+## Storage boundary
+
+The pilot ZeroGPU adapter may return ephemeral candidate file URLs.
+
+This is sufficient to test:
+- generation;
+- reference selection;
+- continuity binding;
+- Human Product Review.
+
+Ephemeral provider output is **not** sufficient for `PUBLISH_CANDIDATE`. Before that state, accepted assets require durable governed storage or a reproducible regeneration path bound to exact provenance.
 
 ## Non-negotiable product rule
 
@@ -181,7 +195,7 @@ The pipeline is demonstrated only when:
 3. Sala Zero and control booth each have one locked environment master;
 4. F1–F6 compile into exact generation jobs;
 5. production shots cannot compile when required references are unlocked/missing;
-6. one executor returns assets with provenance;
+6. one qualified executor returns assets with provenance;
 7. the same character/environment refs are reused across dependent shots;
 8. Atlas can compose returned assets without replacing the story with dashboard UI;
 9. Human Product Review judges the generated scene sequence;
