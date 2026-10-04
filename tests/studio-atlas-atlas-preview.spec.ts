@@ -269,8 +269,8 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
   await page.getByRole("button", { name: "Scene" }).click();
   await expect(page.getByRole("heading", { name: "Metti in sequenza ciò che accade." })).toBeVisible();
   await expect(
-    page.getByDisplayValue("Un’altra sala, una domanda diversa"),
-  ).toBeVisible();
+    page.getByRole("textbox", { name: "Titolo scena 7" }),
+  ).toHaveValue("Un’altra sala, una domanda diversa");
   await page.getByRole("button", { name: "Storyboard pronto" }).click();
 
   await expect(previewButton).toBeEnabled();
