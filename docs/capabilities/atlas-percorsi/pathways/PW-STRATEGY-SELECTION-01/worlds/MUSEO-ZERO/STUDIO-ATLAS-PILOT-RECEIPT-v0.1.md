@@ -9,7 +9,7 @@
 
 Qualified implementation exact head:
 
-`9d2aa6465c435308a97b7ecc064a57638fe58a7e`
+`907821ded98277143d6a72026cb36d8989543709`
 
 This head includes the current `main` baseline through:
 
@@ -17,10 +17,10 @@ This head includes the current `main` baseline through:
 
 Relevant runs:
 
-- Governance — `37219964538` — PASS
-- Studio Atlas — S1 Standalone — `37219964545` — PASS
-- Validate TRAMA Ecosystem Snapshot — `37219964491` — PASS
-- Studio Atlas ↔ Atlas Preview E2E — `37219964578` — PASS
+- Governance — `37221251849` — PASS
+- Studio Atlas — S1 Standalone — `37221251910` — PASS
+- Validate TRAMA Ecosystem Snapshot — `37221251871` — PASS
+- Studio Atlas ↔ Atlas Preview E2E — `37221251814` — PASS
 
 The cross-origin browser job completed every build/start/browser step with PASS.
 
@@ -28,15 +28,15 @@ The cross-origin browser job completed every build/start/browser step with PASS.
 
 Exact Atlas candidate pinned and exercised by the E2E:
 
-`6e9335e386e100cc97ebc4cf9b88fc8950cea79d`
+`16670e405ae1b3e098bc89c7be6f48b33bdff9a3`
 
 Relevant Atlas runs:
 
-- Studio Atlas → Atlas Preview v0.1 — `37219376840` — PASS
-- Experience Engine — `37219376885` — PASS
-- Percorsi G2 UX Collaudo — `37219376837` — PASS
-- Percorsi RRT-03 Sealed Preauthorization — `37219376878` — PASS
-- TRAMA Perceptible Write — `37219376882` — PASS
+- Studio Atlas → Atlas Preview v0.1 — `37220847212` — PASS
+- Experience Engine — `37220847118` — PASS
+- Percorsi G2 UX Collaudo — `37220847131` — PASS
+- Percorsi RRT-03 Sealed Preauthorization — `37220847121` — PASS
+- TRAMA Perceptible Write — `37220847052` — PASS
 
 The Atlas candidate preserves the existing `PathwayRuntimeSurface / ExperienceRuntime`; no second learner player is introduced.
 
@@ -148,6 +148,15 @@ Studio Atlas fails closed when:
 - the destination does not exist;
 - a choice scene does not contain at least two divergent destinations.
 
+Scenes may now also carry a semantic `world` state and choices may carry `worldAfter`:
+
+- place and current system status;
+- observable signals;
+- semantic signal states such as `ACTIVE`, `DELAYED`, `MISMATCH`, `STABLE` or `MANUAL`;
+- per-choice world consequences shown before the learner continues.
+
+Studio Atlas blocks incomplete world states before preview/production. Atlas validates the same optional contract before mounting the runtime.
+
 Atlas validates the same boundary and uses the authored `targetSceneId` as the actual Experience Runtime transition.
 
 Choices are therefore no longer reduced to different feedback followed by the same sequential next scene.
@@ -168,8 +177,12 @@ The browser qualification proves the following sequence across two real origins:
 10. Atlas mounts the existing `PathwayRuntimeSurface / ExperienceRuntime`;
 11. in MZ2 the learner selects **Collego subito percorso, sensore e regia**;
 12. the authored destination is followed to **MZ4_TEST_MAPPING — Prova il collegamento**, skipping the sequential MZ3 node;
-13. snapshot remains `studentAuthorized=false`;
-14. runtime remains `runtimeAuthorized=false`.
+13. Atlas renders the initial MZ4 world state: Sensor B active, cue mapping mismatched and room response delayed;
+14. the learner selects **Provo il trigger su Sensor B**;
+15. before continuing, the visible world changes to the authored `worldAfter` state: Trigger on Sensor B, stable projection and stable sound/light sequence;
+16. the explanatory feedback remains available but is no longer the only representation of consequence;
+17. snapshot remains `studentAuthorized=false`;
+18. runtime remains `runtimeAuthorized=false`.
 
 This proves an actual non-linear learner transition, not only alternate feedback copy.
 
@@ -221,7 +234,7 @@ This tranche proves that Studio Atlas can carry a real governed Percorso from ca
 - GPU availability;
 - a second runtime/player.
 
-It also proves that authored choices can now change the actual learner path rather than only change explanatory feedback.
+It also proves that authored choices can now change both the actual learner path and an observable semantic state of the world rather than only change explanatory feedback.
 
 ## Remaining product gates
 
