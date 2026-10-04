@@ -1,4 +1,8 @@
 import { test, expect } from "@playwright/test";
+import {
+  MUSEO_ZERO_PROJECT_ID,
+  createMuseoZeroPilotProject,
+} from "../products/studio-atlas/lib/canonical/museo-zero";
 
 const STUDIO = "http://127.0.0.1:3100";
 const ATLAS = "http://127.0.0.1:3200";
@@ -245,6 +249,97 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
 
   expect(stored.runtimeAuthorized).toBe(false);
   expect(stored.scenes.some((scene) => scene.kind === "TRANSFER")).toBe(true);
+
+  await context.close();
+});
+
+
+test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atlas choices", async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  const canonical = createMuseoZeroPilotProject();
+  expect(canonical.projectId).toBe(MUSEO_ZERO_PROJECT_ID);
+  expect(canonical.storyReview.decision).toBe("PASS");
+  expect(canonical.worldReview.decision).toBe("READY");
+  expect(canonical.storyboardReady).toBe(false);
+
+  await page.goto(STUDIO);
+  await page.getByRole("button", { name: "Apri MUSEO ZERO" }).click();
+  await expect(page).toHaveURL(new RegExp(`/percorso/${MUSEO_ZERO_PROJECT_ID}$`));
+
+  const previewButton = page.getByRole("button", { name: "Vedi come studente" });
+  await expect(previewButton).toBeDisabled();
+
+  await page.getByRole("button", { name: "Mondo" }).click();
+  await expect(page.getByRole("heading", { name: "Fai esistere il mondo." })).toBeVisible();
+  await page.getByRole("button", { name: "Approva mondo" }).click();
+
+  await page.getByRole("button", { name: "Scene" }).click();
+  await expect(page.getByRole("heading", { name: "Metti in sequenza ciò che accade." })).toBeVisible();
+  await expect(page.getByText("Un’altra sala, una domanda diversa")).toBeVisible();
+  await page.getByRole("button", { name: "Storyboard pronto" }).click();
+
+  await expect(previewButton).toBeEnabled();
+
+  const popupPromise = context.waitForEvent("page");
+  await previewButton.click();
+  const popup = await popupPromise;
+
+  await popup.waitForURL(
+    new RegExp("^http://127\\.0\\.0\\.1:3200/percorsi/lab/studio-atlas-preview/\\?channel=[0-9a-f]{48}$"),
+    { timeout: 15_000 },
+  );
+
+  await expect(
+    popup.getByText("ANTEPRIMA STUDIO ATLAS · NON AUTORIZZATA AGLI STUDENTI"),
+  ).toBeVisible({ timeout: 15_000 });
+  await expect(
+    popup.getByRole("heading", { name: "MUSEO ZERO · La sala che non torna" }),
+  ).toBeVisible();
+  await expect(
+    popup.getByRole("heading", { name: "Qualcosa non torna" }),
+  ).toBeVisible();
+
+  await popup.getByRole("button", { name: "Continua" }).click();
+
+  await expect(
+    popup.getByRole("heading", { name: "Tutti hanno cambiato qualcosa" }),
+  ).toBeVisible();
+  const timelineChoice = popup.getByRole("radio", {
+    name: "Metto in fila i cambiamenti della giornata",
+  });
+  await expect(timelineChoice).toBeVisible();
+  await timelineChoice.check();
+  await expect(
+    popup.getByText(
+      "La sequenza temporale chiarisce che percorso e sensore sono cambiati prima della prova fallita. Ora sai quando, ma non ancora perché.",
+    ),
+  ).toBeVisible();
+
+  await expect.poll(async () => {
+    return await page.evaluate((projectId) => {
+      const raw = localStorage.getItem("studio-atlas.projects.v0.1");
+      const items = raw ? JSON.parse(raw) : [];
+      return items.find((item: { projectId?: string }) => item.projectId === projectId)
+        ?.lastPreviewSnapshot?.studentAuthorized;
+    }, MUSEO_ZERO_PROJECT_ID);
+  }).toBe(false);
+
+  const stored = await page.evaluate((projectId) => {
+    const raw = localStorage.getItem("studio-atlas.projects.v0.1");
+    const items = raw ? JSON.parse(raw) : [];
+    return items.find((item: { projectId?: string }) => item.projectId === projectId);
+  }, MUSEO_ZERO_PROJECT_ID);
+
+  expect(stored.worldReview.decision).toBe("PASS");
+  expect(stored.storyboardReady).toBe(true);
+  expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
+  expect(
+    stored.lastPreviewSnapshot.scenes.some(
+      (scene: { kind?: string }) => scene.kind === "TRANSFER",
+    ),
+  ).toBe(true);
 
   await context.close();
 });
