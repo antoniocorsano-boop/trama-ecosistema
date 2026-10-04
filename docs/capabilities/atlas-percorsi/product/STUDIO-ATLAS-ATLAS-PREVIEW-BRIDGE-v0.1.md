@@ -53,8 +53,9 @@ On an explicit human click:
 3. create the exact snapshot and SHA-256 package digest;
 4. create a random 24-byte channel value;
 5. navigate the new window to the configured Atlas preview origin;
-6. wait for READY from the exact Atlas origin and exact opened window;
-7. send the snapshot using `postMessage(snapshot, atlasOrigin)`.
+6. navigate the exact opened window to the Atlas preview route;
+7. retry the exact immutable snapshot on a bounded interval using `postMessage(..., atlasOrigin)`;
+8. accept completion only after an ACK from the exact Atlas origin containing the same channel and snapshot ID.
 
 Required public configuration:
 
@@ -75,8 +76,8 @@ Atlas requires:
 - `window.opener`;
 - configured Studio Atlas origin;
 - matching `event.origin`;
-- matching `event.source`;
 - matching channel;
+- valid `window.opener` relationship for direct creator preview;
 - valid preview snapshot.
 
 Required public configuration:
@@ -121,7 +122,10 @@ The bridge uses:
 - high-entropy random channel;
 - exact target origin;
 - exact sender origin;
-- exact sender window;
+- non-null opener relationship;
+- 192-bit random channel;
+- bounded exact-snapshot retry;
+- ACK bound to channel + snapshot ID;
 - fail-closed snapshot validation.
 
 The bridge must never use:
@@ -134,7 +138,7 @@ Human-facing failures remain explicit:
 
 - preview origin not configured;
 - popup blocked;
-- handshake timeout;
+- ACK timeout;
 - invalid snapshot;
 - preview opened outside Studio Atlas.
 
