@@ -248,6 +248,7 @@ export function SceneEditor({ project, onPatch }: Props) {
   function addScene() {
     const scene: PathwayScene = {
       sceneId: crypto.randomUUID(),
+      kind: "SCENE",
       title: `Scena ${project.scenes.length + 1}`,
       visibleSituation: "",
       learnerAction: "",
@@ -301,12 +302,23 @@ export function SceneEditor({ project, onPatch }: Props) {
             <section className="scene-row" key={scene.sceneId}>
               <div className="scene-number">{String(index + 1).padStart(2, "0")}</div>
               <div className="scene-body">
-                <input
-                  className="scene-title"
-                  value={scene.title}
-                  onChange={(e) => updateScene(scene.sceneId, { title: e.target.value })}
-                  aria-label={`Titolo scena ${index + 1}`}
-                />
+                <div className="scene-heading-row">
+                  <input
+                    className="scene-title"
+                    value={scene.title}
+                    onChange={(e) => updateScene(scene.sceneId, { title: e.target.value })}
+                    aria-label={`Titolo scena ${index + 1}`}
+                  />
+                  <select
+                    className="scene-kind"
+                    value={scene.kind}
+                    onChange={(e) => updateScene(scene.sceneId, { kind: e.target.value as PathwayScene["kind"] })}
+                    aria-label={`Tipo scena ${index + 1}`}
+                  >
+                    <option value="SCENE">Scena del percorso</option>
+                    <option value="TRANSFER">Trasferimento · situazione nuova</option>
+                  </select>
+                </div>
                 <label>
                   <span>Cosa vede</span>
                   <textarea rows={3} value={scene.visibleSituation} onChange={(e) => updateScene(scene.sceneId, { visibleSituation: e.target.value })} />
@@ -336,7 +348,9 @@ export function SceneEditor({ project, onPatch }: Props) {
           <p>
             {project.storyboardReady
               ? "Storyboard segnato come pronto per la produzione."
-              : "Controlla che ogni scena abbia situazione, azione e conseguenza."}
+              : project.scenes.some((scene) => scene.kind === "TRANSFER")
+                ? "Controlla che ogni scena abbia situazione, azione e conseguenza."
+                : "Aggiungi anche una scena di trasferimento: la strategia deve essere provata in una situazione nuova."}
           </p>
         </div>
         {!project.storyboardReady && (
