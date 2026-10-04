@@ -57,6 +57,7 @@ export type ExperienceDraft = {
 
 export type PathwayScene = {
   sceneId: string;
+  kind: "SCENE" | "TRANSFER";
   title: string;
   visibleSituation: string;
   learnerAction: string;
@@ -83,6 +84,19 @@ export type VisualProductionRequest = {
   allowQualityDowngrade: false;
   maxAttempts: 4;
   requestedAt: string;
+};
+
+export type StudioAtlasPreviewSnapshot = {
+  schemaVersion: "studio-atlas.preview-snapshot/v0.1";
+  snapshotId: string;
+  packageDigest: string;
+  pathwayId: string;
+  version: string;
+  title: string;
+  description: string;
+  runtimeAuthorized: false;
+  studentAuthorized: false;
+  scenes: PathwayScene[];
 };
 
 export type VisualProductionReceipt = {
@@ -115,6 +129,7 @@ export type PathwayProject = {
   storyboardReady: boolean;
   lastProductionRequest?: VisualProductionRequest;
   lastProductionReceipt?: VisualProductionReceipt;
+  lastPreviewSnapshot?: StudioAtlasPreviewSnapshot;
   archived: boolean;
   createdAt: string;
   updatedAt: string;
