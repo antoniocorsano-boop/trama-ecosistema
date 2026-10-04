@@ -170,6 +170,7 @@ Con questo delta:
 - **P1**: chiuso come sviluppo applicativo; residuo device-native registrato e non bloccante;
 - **P2**: verificato/integrato;
 - **P3**: diventa il prossimo pacchetto canonico — allineare evidenze, distribuzioni, snapshot, STATUS e Control Center;
+- il primo riallineamento P3 è già materializzato nel ramo di questa v1.1: il workflow ha sincronizzato `control-center/data/ecosystem-snapshot.json` con il nuovo digest di `STATUS.md` tramite commit automatico `d0494b3f77cf01cd6be13834a2691395c3d8d38e`;
 - **P4–P8**: restano nell'ordine originario salvo nuove dipendenze verificate;
 - `DOS-A1` resta `RUNTIME_DEFERRED`;
 - nessuna promozione Production di Docente OS è implicata.
