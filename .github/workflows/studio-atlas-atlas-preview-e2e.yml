@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  ATLAS_PREVIEW_SHA: 16670e405ae1b3e098bc89c7be6f48b33bdff9a3
+  ATLAS_PREVIEW_SHA: db383929118ba817bd1a936f43bd1cd98d853317
   STUDIO_ORIGIN: http://127.0.0.1:3100
   ATLAS_ORIGIN: http://127.0.0.1:3200
 
