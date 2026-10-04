@@ -1,12 +1,12 @@
 # TRAMA-AUDIT-2026-10-03 — Audit di completamento e piano operativo
-Versione 1.0 — 3 ottobre 2026 — riferimento richiesto da Antonio nella conversazione del 03/10/2026.
+Versione 1.1 — 4 ottobre 2026 — baseline storica del 03/10/2026 aggiornata per delta verificati, senza riscrivere le risultanze originarie.
 
 ## 1. Mandato, validità e precedenza
 Questo documento consolida la ricognizione riportata nella conversazione e ne fa la baseline di confronto per il completamento dell'intero ecosistema. La richiesta dell'utente autorizza il salvataggio e la pianificazione; non attesta nuove prove funzionali.
 Le risultanze tecniche dell'audit precedente sono conservate come EVIDENZE RIPORTATE: in questo turno non sono stati rieseguiti i controlli sui quattro prodotti, sui dispositivi o sui provider. Sono stati letti direttamente README.md, STATUS.md e GOVERNANCE.md di TRAMA; confermano la separazione delle autorità e lo stato documentale al 30 settembre.
 Non si trasformano i risultati storici in certificazioni attuali. Prima di intervenire, confrontare ogni rilievo con SHA completo, ramo, PR, esito corrente e distribuzione reale.
 Precedenza: decisioni/contratti approvati → STATUS.md → piano operativo canonico → specifiche integrate → questo audit, come riferimento trasversale di completamento. La sua integrazione documentale non promuove capacità, non autorizza esecuzioni e non certifica conformità.
-Stato del riferimento: adottato dall'utente per la pianificazione; integrazione nel ramo principale da documentare separatamente. Una proposta di integrazione non equivale a integrazione.
+Stato del riferimento: il documento è presente su `main` TRAMA e resta la baseline trasversale di completamento. La versione 1.1 aggiorna soltanto delta verificati e priorità operative; non promuove capacità prive di prova e non autorizza nuovi runtime.
 
 ## 2. Criterio di completamento
 Per ogni capacità mantenere separati: dichiarazione, implementazione, verifica automatica, prova di uso, distribuzione, autorità e integrazione dell'evidenza.
@@ -109,11 +109,78 @@ La riga A14 della fotografia iniziale resta storicamente **Parziale**. Dopo quel
 
 **Residuo A14:** decisione umana di integrazione sull'exact implementation/evidence head e, separatamente, eventuale futura decisione di runtime promotion. La qualificazione dell'implementazione non soddisfa da sola il requisito P7 di “percorso pubblico” autorizzato.
 
+## 4-quater. Delta verificato — 4 ottobre 2026 — P1/P2 e riallineamento del piano
+
+Questo delta usa gli head correnti verificati il 4 ottobre 2026:
+
+- TRAMA `main@4d2605f516ef939cf86cc2cabbac5ada96666f0e`;
+- Arena / Curriculum-Manager `main@66fd4bd39b645b6738ace02f53d4cab9233f8b2c`;
+- Atlas / Curriculum-Atlas `main@b7b95e81e896a027335b3398d222660aa81f928a`;
+- Docente OS `develop@09a3a3600b81992f3675be82d1d2f188f1643909`.
+
+### A19 / P1 — Orario mobile e versioning
+
+A19 passa da **PRONTA_PER_PROVA_E2E** a **VERIFICATA_SU_BETA** nel perimetro del flusso manuale canonico.
+
+Evidenze:
+
+- Docente OS #684 exact head `45ea89d309674fcd25f2b8e4ad4fe05e0e7fda09`, merge `7009f3e05c428254dddf3b2cc491b506af554cdb`;
+- prova reale Android completata sul percorso **Orario → Modifica → Data → Controlla → Metti in uso → Orario**;
+- decorrenza retrodatabile nell'anno scolastico, con schema runtime Supabase **v86** e lineage PASS;
+- Product CI, Browser Certification, HVA, WCAG, P6 e gate applicabili PASS sull'exact head;
+- beta canonica successivamente consolidata sul merge Docente OS #686, quindi il comportamento Orario verificato resta incluso nella versione distribuita corrente.
+
+Il percorso PDF/OCR resta fallback separato e non è condizione per riaprire il flusso manuale già verificato.
+
+### A20 / P1 — PWA, Android e Share Target
+
+Il lavoro applicativo passa da **NON CHIUSO END-TO-END** a **IMPLEMENTED_QUALIFIED / DEVICE_NATIVE_RESIDUAL**.
+
+Evidenze:
+
+- Docente OS #686 exact head `0a833a58133f508f8efdddc4e1102272bd11ef2a`, merge `09a3a3600b81992f3675be82d1d2f188f1643909`;
+- beta Render canonica deploy `dep-db180cavcj2c739v6lc0` LIVE sul merge `09a3a3600b81992f3675be82d1d2f188f1643909`;
+- Product CI e Browser Certification PASS; manifest, service worker e Share Target qualificati automaticamente;
+- Docente OS non intercetta più `beforeinstallprompt`, non usa `preventDefault()` e non sostituisce la UI nativa del browser;
+- icone PNG 192/512/maskable restano canoniche; l'icona SVG `sizes:any` è stata rimossa dal manifest Android;
+- il comportamento del messaggio/installazione nativa Chrome su specifici device resta non deterministico nella prova reale.
+
+Decisione operativa: il residuo **device-native install** non blocca più lo sviluppo Docente OS e non giustifica ulteriori modifiche applicative senza una riproduzione diagnostica specifica. Tuttavia, secondo il criterio rigoroso originario P1, la qualification completa **install/update → share sheet → intake** su Android reale resta una evidenza distinta e non viene falsamente marcata PASS.
+
+Quindi P1 è **CHIUSO COME CANTIERE APPLICATIVO / BETA CONSOLIDATA**, con residuo di qualification nativa registrato.
+
+### A10 / P2 — Arena → Atlas Curriculum Sync
+
+P2 passa da bootstrap ripristinato ma non provato end-to-end a **VERIFICATA / INTEGRATA** nel perimetro del sync governato.
+
+Evidenze:
+
+- Atlas #67 merge `d3e8a8f7d07c6f90703a180614a170b2cd899aa6`;
+- più run schedulati del 4 ottobre su Atlas `main@b7b95e81e896a027335b3398d222660aa81f928a` sono PASS;
+- run recente `37214517566`: setup-node PASS, **Fetch and validate Arena curriculum** PASS, **Detect curriculum change** PASS;
+- risultato: `Arena curriculum already current: b355be71 PROVISIONAL_COMPLETE`; `changed=false`, quindi nessuna PR di sync superflua;
+- policy osservata nel run: `atlasAutomaticSync=true`, visibilità pubblica ammessa per `PROVISIONAL_COMPLETE|APPROVED`, mentre la vigenza richiede `APPROVED`.
+
+Questo chiude il difetto bootstrap e dimostra anche il comportamento no-op quando Atlas è già allineato. Non equivale ad attribuire stato `APPROVED` a una sorgente `PROVISIONAL_COMPLETE`.
+
+### Riallineamento del piano
+
+Con questo delta:
+
+- **P1**: chiuso come sviluppo applicativo; residuo device-native registrato e non bloccante;
+- **P2**: verificato/integrato;
+- **P3**: diventa il prossimo pacchetto canonico — allineare evidenze, distribuzioni, snapshot, STATUS e Control Center;
+- il primo riallineamento P3 è già materializzato nel ramo di questa v1.1: il workflow ha sincronizzato `control-center/data/ecosystem-snapshot.json` con il nuovo digest di `STATUS.md` tramite commit automatico `d0494b3f77cf01cd6be13834a2691395c3d8d38e`;
+- **P4–P8**: restano nell'ordine originario salvo nuove dipendenze verificate;
+- `DOS-A1` resta `RUNTIME_DEFERRED`;
+- nessuna promozione Production di Docente OS è implicata.
+
+
 ## 5. Quattro problemi trasversali
-F01 Duplicazioni: #652/#653 orario e distribuzioni Docente OS concorrenti; Voice e legacy da confrontare prima di eliminarli. /legacy/ è un ripiego intenzionale, non una duplicazione da rimuovere automaticamente.
-F02 PR superate: #652 dichiarata sostituita; #187 da riconciliare con G5-A/B integrati; #194 draft dopo cutover da verificare. Non chiudere PR con contenuti ancora unici.
-F03 Evidenze non consolidate: snapshot 30/09, A7, QE-01, Argo, gh-aw. Il disallineamento riguarda stato/implementazione/prova.
-F04 Capacità dichiarate senza prova completa: orario/PWA, QE-01, gh-aw controllato, TypeSafe, didUP, R3-P4. Uno stato non autorizzato va conservato, non trattato come difetto da aggirare.
+F01 Duplicazioni: #652/#653 Orario sono state chiuse come SUPERSEDED e non costituiscono più implementazioni concorrenti; le preview Render temporanee non sono servizi canonici. Voice e /legacy/ restano da confrontare prima di eventuale rimozione; /legacy/ è un fallback intenzionale.
+F02 PR superate: #652/#653 risolte; Docente OS #685 chiusa senza merge dopo verifica che la hotfix non era necessaria; #187 e #194 restano da riconciliare prima di qualsiasi chiusura definitiva.
+F03 Evidenze non consolidate: il delta P1/P2 del 4 ottobre deve ancora essere proiettato coerentemente in snapshot, Control Center e memoria di progetto; QE-01, Argo e gh-aw mantengono inoltre residui propri. Questo è il focus immediato di P3.
+F04 Capacità dichiarate senza prova completa: installazione PWA device-native, QE-01, gh-aw controllato, TypeSafe, didUP e R3-P4 restano esempi attuali. Il flusso manuale Orario non rientra più in questo gruppo.
 
 # Piano di attuazione — TRAMA-CAP-CLOSE-2026-10-03
 > Per gli esecutori: usare superpowers:executing-plans per attuare il piano per attività. Questo documento è un piano di programma con procedure verificabili; i percorsi applicativi non osservati vanno risolti nel primo passo di ogni attività prima di modificarli.
@@ -137,6 +204,20 @@ F04 Capacità dichiarate senza prova completa: orario/PWA, QE-01, gh-aw controll
 | 6 | P6 gh-aw T0 poi T1/T2 | Meno manutenzione ripetitiva | Prova controllata autorizzata e misurata |
 | 7 | P7 completamento prodotto | Atlas/Knowledge/loop docente | P1 chiuso; pacchetti autonomi con prove |
 | 8 | P8 funzioni differite/adozione | Evoluzione ulteriore | Nuove decisioni dove richieste |
+
+### Stato dei pacchetti al 4 ottobre 2026
+
+| Pacchetto | Stato v1.1 | Nota |
+| --- | --- | --- |
+| P0 | **INTEGRATO / DA RENDERE PIÙ RINTRACCIABILE** | Audit presente su `main`; questa v1.1 aggiunge il collegamento operativo da STATUS |
+| P1 | **CLOSED_APPLICATION_SCOPE / DEVICE_NATIVE_RESIDUAL** | Orario verificato su Beta; PWA/Share applicativamente qualificate; installazione nativa Android residua e non bloccante |
+| P2 | **VERIFIED / INTEGRATED** | Run schedulati Arena Curriculum Sync PASS con validation/no-op governato |
+| P3 | **NEXT** | Riconciliare stato, distribuzioni, snapshot, Control Center e project knowledge |
+| P4 | **OPEN** | Argo G5-C: prova reale LibreOffice/didUP ancora necessaria |
+| P5 | **OPEN / REQUALIFICATION** | QE-01 da riconciliare prima di nuova esecuzione |
+| P6 | **OPEN** | gh-aw T0 da provare in esecuzione controllata |
+| P7 | **UNBLOCKED FOR SCOPED INCREMENTS** | P1 non blocca più nuovi incrementi; ogni capacità mantiene i propri gate |
+| P8 | **DEFERRED / DECISION-BOUND** | Nessun cambiamento alle funzioni differite |
 
 P2 è una correzione breve candidata a essere svolta senza interrompere il filone P1 già attivo. Non si apre una seconda implementazione concorrente dell'orario. P5 va riconciliato documentalmente subito, ma non precede P1 come sviluppo. Nessuna stima di giorni viene presentata come impegno senza esame del codice.
 
@@ -233,7 +314,7 @@ Campi obbligatori di ogni aggiornamento: ID Axx/Px; requisito; repository/ramo/S
 Aggiornare dopo integrazione, distribuzione, prova materiale o nuovo blocco. Una modifica di contratto o autorità segue GOVERNANCE.md; una correzione ordinaria procede nel perimetro già autorizzato.
 Baseline immutabile nel significato storico: versioni successive aggiungono variazioni e prove, non cancellano fallimenti o riscrivono la data dell'audit.
 Nessuna issue/PR obsoleta viene chiusa solo perché elencata qui: prima confronto contenuto e prove, poi azione documentata.
-Prima attività esecutiva aggiornata dal delta 4-bis: validare la RC esatta `v0.1.0-rc.1` sul percorso Android/PWA/Share Target e completare il salvage di #652/#653 senza integrarli; P2 può procedere in parallelo come correzione circoscritta.
+Prima attività esecutiva aggiornata dalla v1.1: **P3 — allineamento evidenze/distribuzioni**. La precedente priorità P1 è chiusa come cantiere applicativo con residuo device-native registrato; P2 è verificato/integrato. Nessuna nuova attività deve riaprire P1 senza un bug riproducibile o una decisione esplicita.
 
 ## 9. Verifica del piano
 Copertura: A01–A41 incluse; F01–F04 collegati a P1/P3/P4/P5/P6; differimenti conservati in P8. Le condizioni di revisione sono assegnate a P1/P2/P3/P5.

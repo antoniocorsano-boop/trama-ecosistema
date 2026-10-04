@@ -1,6 +1,14 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 30 settembre 2026.
+Aggiornato al 4 ottobre 2026.
+
+
+Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.md`](docs/audits/TRAMA-AUDIT-2026-10-03.md), **v1.1 / delta verificato 04-10-2026**.
+
+Stato operativo del piano di chiusura:
+- **P1 Orario + PWA + Android:** cantiere applicativo chiuso e beta consolidata; installazione nativa Chrome/Android resta residuo di qualification non bloccante;
+- **P2 Arena→Atlas:** VERIFIED / INTEGRATED; run schedulati del sync PASS con validation e no-op governato;
+- **P3 evidenze/distribuzioni:** **NEXT**.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -43,8 +51,9 @@ flowchart LR
 | --- | --- | --- |
 | Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati; TRAMA-PW-01 integrato; baseline documentale ecosistema integrata via PR #62 |
 | Arena | **OPERATIVA** | Fonte curricolare autorevole; EC-01/Arena-F4 integrato |
-| Docente OS | **OPERATIVO / CANARY PASS** | Preparazione, contesto, decisione docente e registrazione lezione disponibili; post-merge Product CI, P6 Performance Runtime e HVA Runtime PASS sul Beta reale |
+| Docente OS | **OPERATIVO / BETA CONSOLIDATA** | `develop@09a3a3600b81992f3675be82d1d2f188f1643909`; Orario manuale verificato su Android/Beta; PWA e Share Target applicativamente qualificate; residuo installazione nativa browser/device non bloccante |
 | ECO-02/P1 | **CLOSED_VERIFIED / HUMAN REVIEW PASS** | Collaudo reale Tecnologia 2C chiuso; nessuna autorizzazione implicita a DOS-A1 |
+| Arena→Atlas sync | **VERIFIED / INTEGRATED** | Atlas `main@b7b95e81e896a027335b3398d222660aa81f928a`; run `37214517566` PASS: fetch/validate, change detection e no-op governato quando il curricolo è già corrente |
 | Atlas R3-F0 | **CLOSED / HUMAN REVIEW PASS** | S3-V2 F0-F5 integrata; F4 Mobile+LIM e F5 Exit PASS su exact head `bc11577eeeeeed9c43ad62ac43fb7561e1197246`, merge Atlas #32 `423444be9dd883f4c35c6c1c89e94f6b0e5405fa` |
 | Runtime Docente OS → Atlas | **NON AUTORIZZATO** | Nessuna pubblicazione automatica cross-product |
 | Officina materiali | **PLANNED** | Architettura approvata; runtime ancora da progettare/autorizzare |
