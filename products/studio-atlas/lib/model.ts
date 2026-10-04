@@ -55,14 +55,22 @@ export type ExperienceDraft = {
   rationale: string;
 };
 
+export type PathwaySceneChoice = {
+  choiceId: string;
+  label: string;
+  feedback: string;
+};
+
 export type PathwayScene = {
   sceneId: string;
   kind: "SCENE" | "TRANSFER";
+  interaction: "SUMMARY" | "CHOICE";
   title: string;
   visibleSituation: string;
   learnerAction: string;
   consequence: string;
   reveal: string;
+  choices: PathwaySceneChoice[];
 };
 
 export type HumanReview = {
