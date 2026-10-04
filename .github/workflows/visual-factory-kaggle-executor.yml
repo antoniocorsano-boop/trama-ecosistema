@@ -117,6 +117,83 @@ jobs:
             echo "- paid compute authorised: **false**"
           } >> "$GITHUB_STEP_SUMMARY"
 
+  provider_probe:
+    name: Probe Kaggle provider state
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'vf-kaggle-probe'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+    steps:
+      - name: Fail closed if Kaggle bootstrap is missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN" || {
+            echo "::error::Missing repository secret KAGGLE_API_TOKEN"
+            exit 1
+          }
+          test -n "$KAGGLE_USERNAME" || {
+            echo "::error::Missing repository variable KAGGLE_USERNAME"
+            exit 1
+          }
+
+      - name: Install Kaggle CLI
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install current Kaggle CLI package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade kaggle
+          kaggle --version
+
+      - name: Capture quota and persisted kernel metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          EVIDENCE_DIR="$RUNNER_TEMP/kaggle-provider-probe"
+          mkdir -p "$EVIDENCE_DIR/pulled"
+
+          kaggle quota > "$EVIDENCE_DIR/quota.txt"
+
+          set +e
+          kaggle kernels pull "$KAGGLE_USERNAME/$KERNEL_SLUG" \
+            -p "$EVIDENCE_DIR/pulled" \
+            -m \
+            > "$EVIDENCE_DIR/pull.log" 2>&1
+          PULL_EXIT=$?
+          set -e
+
+          echo "pull_exit=$PULL_EXIT" > "$EVIDENCE_DIR/probe-status.txt"
+
+          {
+            echo "### Kaggle provider probe"
+            echo "- read-only: true"
+            echo "- GPU job started: false"
+            echo "- kernel: $KAGGLE_USERNAME/$KERNEL_SLUG"
+            echo "- pull exit: $PULL_EXIT"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          cat "$EVIDENCE_DIR/quota.txt" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload provider probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-factory-kaggle-provider-probe
+          path: ${{ runner.temp }}/kaggle-provider-probe
+          if-no-files-found: warn
+          retention-days: 14
+
   execute:
     name: Execute one-shot on Kaggle T4
     if: >-
@@ -368,8 +445,15 @@ jobs:
       - name: Fail if Kaggle execution errored
         if: steps.poll.outputs.final_state == 'ERROR'
         shell: bash
+        env:
+          EVIDENCE_DIR: ${{ steps.prep.outputs.evidence_dir }}
         run: |
-          echo "::error::Kaggle reported a terminal execution error. See uploaded evidence."
+          set -euo pipefail
+          if grep -q '"decision": "KAGGLE_NO_GPU"' "$EVIDENCE_DIR/kaggle.log"; then
+            echo "::error::KAGGLE_NO_GPU: Kaggle accepted the T4 request but the notebook runtime had no NVIDIA GPU."
+          else
+            echo "::error::Kaggle reported a terminal execution error. See uploaded evidence."
+          fi
           exit 1
 
       - name: Upload immutable execution evidence
@@ -391,11 +475,11 @@ jobs:
         run: |
           {
             echo "### Visual Factory — Kaggle Executor v0.1"
-            echo "- exact head: `$EXACT_HEAD`"
-            echo "- Kaggle kernel: `$KERNEL_REF`"
-            echo "- requested accelerator: `NvidiaTeslaT4`"
-            echo "- terminal state: `${FINAL_STATE:-NOT_REACHED}`"
-            echo "- TRAMA decision: `${DECISION:-NOT_AVAILABLE}`"
+            echo "- exact head: $EXACT_HEAD"
+            echo "- Kaggle kernel: $KERNEL_REF"
+            echo "- requested accelerator: NvidiaTeslaT4"
+            echo "- terminal state: ${FINAL_STATE:-NOT_REACHED}"
+            echo "- TRAMA decision: ${DECISION:-NOT_AVAILABLE}"
             echo "- paid compute authorised: **false**"
             echo "- automatic retries: **0**"
             echo "- runtime/publication authority: **not granted**"
