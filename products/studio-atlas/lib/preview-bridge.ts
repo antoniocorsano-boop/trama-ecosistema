@@ -33,19 +33,20 @@ export async function openAtlasLearnerPreview(
   // the SHA-256 snapshot digest is prepared.
   const target = window.open("about:blank", "_blank");
   if (!target) return { status: "POPUP_BLOCKED" };
+  const previewWindow = target;
 
   const channel = randomChannel();
   let snapshot: StudioAtlasPreviewSnapshot;
   try {
     snapshot = await buildStudioAtlasPreviewSnapshot(project);
   } catch (error) {
-    target.close();
+    previewWindow.close();
     throw error;
   }
 
   const previewUrl = new URL("/percorsi/lab/studio-atlas-preview/", atlasOrigin);
   previewUrl.searchParams.set("channel", channel);
-  target.location.replace(previewUrl.toString());
+  previewWindow.location.replace(previewUrl.toString());
 
   return await new Promise<PreviewBridgeResult>((resolve) => {
     let settled = false;
@@ -61,10 +62,10 @@ export async function openAtlasLearnerPreview(
 
     function onMessage(event: MessageEvent) {
       if (event.origin !== atlasOrigin) return;
-      if (event.source !== target) return;
+      if (event.source !== previewWindow) return;
       if (!isReadyMessage(event.data, channel)) return;
 
-      target.postMessage(
+      previewWindow.postMessage(
         {
           type: SNAPSHOT_TYPE,
           channel,
