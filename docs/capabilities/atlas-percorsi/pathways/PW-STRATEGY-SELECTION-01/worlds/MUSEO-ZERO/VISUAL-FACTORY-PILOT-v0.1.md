@@ -3,7 +3,7 @@
 **Pathway:** PW-STRATEGY-SELECTION-01  
 **Story:** STORY-PW-STRATEGY-01 — MUSEO ZERO / La sala che non torna  
 **Story state:** STORY_APPROVED_FOR_WORLD_DESIGN  
-**Pilot state:** PRODUCTION_PLAN / NOT_RUNTIME_AUTHORIZED  
+**Pilot state:** PRODUCTION_PACK_READY / STYLE_FRAME_SPRINT_READY / NOT_RUNTIME_AUTHORIZED  
 **Factory:** TRAMA Visual Factory v0.1  
 **Target quality:** Q3 PUBLISHABLE CRAFT
 
@@ -265,6 +265,13 @@ Even if the pilot reaches Q3 PUBLISHABLE CRAFT:
 
 ## 14. Immediate next production action
 
-Create the Visual Production Pack for F1–F6 and run P1 Style-frame Sprint.
+The Visual Production Pack and Style Frame Sprint are now defined:
 
-The next expensive technical step is prohibited until style frames are judged strong enough to justify it.
+- `VISUAL-PRODUCTION-PACK-v0.1.md`
+- `STYLE-FRAME-SPRINT-v0.1.md`
+- `STYLE-FRAME-REVIEW-v0.1.md`
+
+Immediate action:
+render the controlled F3 comparison for Directions A, B and C under the bounded sprint protocol, then perform Human Visual Selection.
+
+The next expensive technical step remains prohibited until one direction passes the sprint and reaches Reference Lock.
