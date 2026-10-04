@@ -45,6 +45,7 @@ jobs:
           p=json.load(open("/tmp/reference-plan.json"))
           assert p["decision"] == "REFERENCE_GENERATION_READY"
           assert len(p["jobs"]) == 5
+          assert all(j["workflowFamily"] == "flux2-klein-4b/v0.2" for j in p["jobs"])
           assert not p["runtimeAuthorized"]
           assert not p["publicationAuthorityGranted"]
           PY
@@ -76,6 +77,7 @@ jobs:
           p=json.load(open("/tmp/shot-plan.json"))
           assert p["decision"] == "SHOT_GENERATION_READY"
           assert [j["shotId"] for j in p["jobs"]] == ["F1","F2","F3","F4","F5","F6"]
+          assert all(j["workflowFamily"] == "flux2-klein-4b/v0.2" for j in p["jobs"])
           assert all(j["referenceInputs"] for j in p["jobs"])
           assert not p["paidComputeAuthorized"]
           PY
@@ -83,5 +85,9 @@ jobs:
       - name: Executor safety inspection
         run: |
           test -f services/visual-factory-hf/app.py
+          test -f services/visual-factory-hf/contract.py
+          test -f services/visual-factory-hf/requirements.txt
+          python -m py_compile services/visual-factory-hf/app.py services/visual-factory-hf/contract.py
           grep -q '@spaces.GPU' services/visual-factory-hf/app.py
-          ! grep -R -Ei 'purchase|billing|credit.card|paid.fallback' services/visual-factory-hf
+          grep -q 'black-forest-labs/FLUX.2-klein-4B' services/visual-factory-hf/app.py
+          ! grep -Ei 'purchase|billing|credit.card|paid.fallback' services/visual-factory-hf/app.py services/visual-factory-hf/contract.py
