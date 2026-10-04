@@ -244,7 +244,23 @@ Badges/traces may record a bounded accomplishment locally, but must not substitu
 
 ## 11. Narrative/context
 
-Narrative is optional but context is not.
+Narrative is not a universal visual skin, but **narrative presence is mandatory whenever the learning task depends on consequence, uncertainty, perspective, decision, social meaning or causality**.
+
+For those pathways, context alone is insufficient. The experience must define and visibly carry:
+
+1. **someone** — one or more actors with bounded roles;
+2. **somewhere** — a world, place or situation that remains perceptible;
+3. **something wanted** — a goal meaningful inside that situation;
+4. **something changed** — an event/problem that creates the learner's task;
+5. **learner role** — why the learner is being asked to act;
+6. **information carriers** — characters, artefacts or environmental cues that provide partial information;
+7. **consequence** — what changes because of the learner's action;
+8. **continuity** — the world and actors persist across scenes unless transfer deliberately changes context.
+
+A pathway fails this requirement if its “story” can be removed without changing the learner's reason for acting.
+
+**Thin narrative skin is not sufficient.** A paragraph of setup followed by generic cards/buttons is still a worksheet-like experience.
+
 
 A pathway may use:
 - realistic situation;
@@ -257,7 +273,31 @@ A pathway may use:
 
 Narrative must create meaning for the action, not add prose before the real exercise.
 
+Where characters are used, they must be **cognitive/narrative actors**: they carry viewpoint, partial knowledge, uncertainty, goals or consequences. Decorative mascots do not satisfy narrative presence.
+
 The learner should be able to answer “why am I doing this here?” from the situation itself.
+
+### 11.1 Lived narrative rule
+
+For narrative-present pathways, **presence is not enough**. The learner should experience the situation as something unfolding, not as a story explained before an exercise.
+
+Prefer:
+- **in medias res** entry at a meaningful moment;
+- dialogue and environmental events that reveal information progressively;
+- characters who react to what the learner discovers or changes;
+- diegetic prompts (“Ci dai una mano?”, “Che cosa è successo qui?”) instead of instructional labels;
+- consequences that alter the same scene/world;
+- quiet closure through character response or changed situation.
+
+Avoid:
+- exposition blocks that explain the whole premise before action;
+- chapter/step chrome when story continuity can orient the learner;
+- avatars added to an otherwise generic worksheet;
+- characters who merely repeat instructions;
+- end-of-pathway pedagogical morals that tell the learner what principle they were supposed to discover.
+
+**Human Review lens:** if the experience can be paraphrased as “read the setup, do the exercise, read the lesson”, it is not yet lived enough.
+
 
 ## 12. Canonical visual-interaction patterns
 
@@ -425,6 +465,8 @@ A first-cycle Percorso cannot pass Experience Quality Review unless Human Review
 8. Does visual quality help comprehension and orientation?
 9. Is motivation based primarily on curiosity/agency/mastery rather than rewards?
 10. Does a changed-context task require actual use, not recognition of a label?
+11. Where consequence/perspective/causality is central, are world, actors, learner role and narrative engine visibly present rather than merely described?
+12. Could the story/characters be removed without changing why the learner acts? If yes, narrative presence has failed.
 
 A NO returns the pathway to design/remediation.
 

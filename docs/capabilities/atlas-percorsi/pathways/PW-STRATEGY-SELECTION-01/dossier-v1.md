@@ -392,3 +392,178 @@ Before Atlas registration:
 - runtime authority: **not granted**.
 
 `RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`.
+
+
+## 18. Narrative presence remediation — 2026-10-04
+
+**Human Experience Review:** CHANGES_REQUIRED / NARRATIVE_REDESIGN_REQUIRED
+
+Observed failure on the MagicPath comparison prototype:
+
+- the learner received instructions and a map but still experienced the activity as an abstract ordering exercise;
+- no characters carried goals, partial information or consequences;
+- the learner had no socially meaningful role inside the situation;
+- the expedition setting functioned as a thin narrative skin: removing the setting would leave essentially the same generic sequence task;
+- Workbench, Evidence Board and Microworld variants therefore differed in representation but not in narrative meaning.
+
+This violates the already-governed Pathway-Specific Narrative Architecture, which requires a world/context, narrative engine, character system/point of view, information-release rhythm and concrete scene continuity.
+
+### Required redesign
+
+The next prototype must not begin from “five facts to order”.
+
+It must establish a small story in which:
+
+1. named fictional characters have a concrete shared goal;
+2. each character knows or reports different parts of what happened;
+3. an event interrupts the original plan;
+4. the learner has a clear role and reason to reconstruct/interpret the information;
+5. actions alter the characters' understanding or next decision;
+6. the same cast/world carries continuity into the goal-change scene;
+7. the cognitive target remains strategy–task fit; narrative cannot replace the required applied evidence.
+
+### Candidate narrative hypothesis
+
+Working title: **Missione Belvedere**.
+
+A small school field team is collecting environmental observations. Their planned route to a viewpoint is disrupted by heavy rain. Several short field messages/log entries are synchronised out of order. The learner helps the team reconstruct the field log, then changes representation when the task changes from chronology to causal explanation.
+
+The candidate must be developed with a governed character bible and controlled screenplay before further Atlas implementation.
+
+RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED.
+
+## 19. Second Human Experience Review — 2026-10-04
+
+**State:** CHANGES_REQUIRED / TOO_EXPOSITORY / NOT_YET_LIVED
+
+The Missione Belvedere candidate improved narrative presence but still feels too cold, logical and didactic for the target age.
+
+Observed defects:
+
+- characters are present but mostly **explain** the activity rather than live through it;
+- the opening is still exposition-first instead of beginning inside an event;
+- the learner remains outside the story, arranging evidence for a task rather than participating in a situation that unfolds;
+- visual scenes function more like illustrated documents than lived moments;
+- interaction remains dominated by “choose / order / check” rather than reaction, discovery and consequence;
+- character relationships are too static; nobody reacts meaningfully to what the learner discovers;
+- the closing statement reads as a pedagogical moral rather than an insight emerging naturally from the experience;
+- the overall rhythm is still teacher-authored and logically segmented rather than spontaneous.
+
+### Required redesign
+
+The next prototype must move from **narrative-present worksheet** to **lived interactive scene**.
+
+Required direction:
+
+1. **in medias res opening** — begin at a consequential moment, not with premise explanation;
+2. **diegetic learner role** — the learner is addressed by characters inside the scene and has a reason to respond;
+3. **character reaction loop** — characters react to learner actions/discoveries and change what they say/do next;
+4. **story information arrives through events, dialogue and environment**, not explanatory blocks;
+5. **less explicit instructional chrome** — avoid “Passo 1 di 2”, “Capitolo”, “quello che hai imparato” framing where the story itself can carry orientation;
+6. **choice should affect the scene**, not only a validation state;
+7. **show before tell** — visual/event consequence precedes explanation;
+8. **no didactic moral at closure** — characters may naturally recognise the difference between chronology and causality; the system need not state the pedagogical abstraction;
+9. **retain the competence evidence contract** — chronology and causal representation must still be genuinely applied, but they should feel like necessary actions inside the story.
+
+### Candidate experiential choreography
+
+ARRIVAL IN TROUBLE → CHARACTER REACTION → WHAT HAPPENED? → RECOVER MOMENTS → STORY REBUILT → NEW QUESTION EMERGES NATURALLY → CHANGE REPRESENTATION → CONSEQUENCE EXPLAINED → CHARACTER RESPONSE → QUIET CLOSE
+
+Runtime remains NOT_RUNTIME_AUTHORIZED. Atlas #78 remains untouched pending a genuinely convincing Human Experience Review.
+
+
+## 20. World Concept Sprint — 2026-10-04
+
+**State:** WORLD_DIRECTION_SELECTED_FOR_HUMAN_PRODUCT_REVIEW / NOT_IMPLEMENTATION_AUTHORIZED
+
+The Compact Learning World process has been applied before any further UI work.
+
+### Concepts screened
+
+1. `NOVA-7 / Segnale fuori rotta`
+2. `MUSEO ZERO / La sala che non torna`
+3. `RADIO 19 / Prima della diretta`
+
+The comparative design screen is recorded in:
+- `world-concept-sprint-v1.md`
+
+### Recommended world
+
+**MUSEO ZERO / La sala che non torna**
+
+Rationale:
+- strongest balance of human/social presence, visual world richness and productive agency;
+- multiple information strategies arise naturally from different world questions;
+- visible room/system consequences can replace detached correctness feedback;
+- feasible as a lightweight 2-D mobile world;
+- sufficiently distinct from source-reliability / missing-information pathways.
+
+### Required world artefacts completed
+
+- `worlds/MUSEO-ZERO/world-brief-v1.md`
+- `worlds/MUSEO-ZERO/role-agency-map-v1.md`
+- `worlds/MUSEO-ZERO/information-distribution-map-v1.md`
+- `worlds/MUSEO-ZERO/consequence-model-v1.md`
+- `worlds/MUSEO-ZERO/experience-choreography-v1.md`
+- `worlds/MUSEO-ZERO/visual-world-concept-v1.md`
+
+### Human Product Review gate
+
+Before any MagicPath/Figma/Atlas learner-facing prototype, Human Review must decide whether the world itself is compelling enough.
+
+Key question:
+
+> If this were not assigned by a teacher, is there a plausible reason an 11–14-year-old might want to continue for another few minutes?
+
+Required review dimensions:
+- curiosity;
+- functional role;
+- agency;
+- distributed information;
+- visible consequence;
+- visual-world potential;
+- age-appropriate dignity;
+- low prior-knowledge burden;
+- natural need to change representation.
+
+Until that review passes:
+
+`UI_PROTOTYPING = HOLD`
+
+`ATLAS_IMPLEMENTATION = HOLD`
+
+`RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`
+
+
+## 21. Human approval — storytelling-first direction — 2026-10-04
+
+**Decision:** HUMAN_PRODUCT_DIRECTION_APPROVED
+
+The Human Reviewer approved the storytelling-first direction after reviewing the narrated MUSEO ZERO concept in conversational form.
+
+Approved product principle:
+
+> First define and collect strong storytelling concepts. Use the approved storytelling as the structural base on which world, interaction, visual representation and final pathway are built.
+
+Consequences:
+
+- `STORY-PW-STRATEGY-01 / MUSEO ZERO` is recorded as `STORY_APPROVED_FOR_WORLD_DESIGN`;
+- storytelling is now a governed authoring artefact with a shared registry;
+- UI is not the source of narrative structure;
+- world design must preserve the approved story;
+- future storytelling candidates may be collected/reused as seeds across the Percorsi library when appropriate.
+
+This approval does **not** approve:
+- a specific UI;
+- Atlas #78 as final product;
+- runtime;
+- Q9;
+- territory taxonomy.
+
+Current progression authority:
+
+`STORY_APPROVED_FOR_WORLD_DESIGN → WORLD_DESIGN_ALLOWED`
+
+`ATLAS_IMPLEMENTATION = HOLD`
+
+`RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`
