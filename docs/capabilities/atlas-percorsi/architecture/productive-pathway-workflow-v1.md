@@ -189,7 +189,16 @@ State hypotheses, comparison/baseline, supporting/rejecting evidence and human-v
 
 Only evidence-supported, safeguard-passed **and Experience-Quality-Gate-passed** decisions become implementation requirements.
 
-A technically implementable storyboard is not sufficient. The handoff must preserve the reviewed mise-en-scène, visual identity, continuity and rhythm; implementation may not flatten them into a generic component stack without reopening product review.
+For every first-cycle learner-facing pathway, W9 MUST also contain:
+
+- a completed learner-language translation artefact;
+- a Human Review decision confirming that the opening can be understood without educational/professional terminology;
+- a student-point-of-view walkthrough using the exact or review-equivalent learner wording;
+- explicit confirmation that situation, available information, next event and concrete learner action are visible before method/strategy naming is required.
+
+A technically implementable storyboard is not sufficient. The handoff must preserve the reviewed mise-en-scène, visual identity, continuity, rhythm **and learner-language translation**; implementation may not flatten them into a generic component stack or reintroduce pedagogical jargon without reopening product review.
+
+**No grandfathering:** existing first-cycle candidates created before W5A must complete the same learner-language artefact and Human Review before implementation handoff, product-review closure or any future Q9 request.
 
 ### W10 — Runtime authorization
 
@@ -227,7 +236,10 @@ Once schemas stabilize, repository automation can check mechanically:
 - a student-point-of-view walkthrough exists;
 - an anti-card-stack review declaration exists;
 - a recorded Human Review decision for the Experience Quality Gate exists;
-- implementation handoff explicitly references the reviewed mise-en-scène, identity, continuity and rhythm artefacts.
+- implementation handoff explicitly references the reviewed mise-en-scène, identity, continuity and rhythm artefacts;
+- a completed learner-language translation artefact exists for first-cycle learner-facing pathways;
+- a recorded Human Review confirms learner-task comprehension without professional educational terminology;
+- existing candidates are not exempt from learner-language review.
 
 Deterministic automation may check only the **presence, references, schema/state and recorded human decision** for these items. It must not decide whether the pathway is aesthetically successful, engaging, coherent, sufficiently distinctive, “too card-like”, appropriately paced, or whether identity/continuity/rhythm were qualitatively preserved; those remain Human Review judgements.
 
