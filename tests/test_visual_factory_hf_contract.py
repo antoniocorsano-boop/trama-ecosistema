@@ -34,7 +34,7 @@ class VisualFactoryHfContractTests(unittest.TestCase):
                 "subjectRef": "lia" if purpose != "SCENE_FRAME" else "F1",
                 "shotId": "F1" if purpose == "SCENE_FRAME" else None,
                 "sceneRef": "MZ1_FAILED_REHEARSAL" if purpose == "SCENE_FRAME" else None,
-                "workflowFamily": "diffusers.flux1-schnell/v0.1" if purpose != "SCENE_FRAME" else "comfyui.sdxl-ipadapter-controlnet/v0.1",
+                "workflowFamily": "flux2-klein-4b/v0.2",
                 "prompt": "cinematic editorial museum scene",
                 "negativeConstraints": ["dashboard aesthetic"],
                 "referenceInputs": refs or [],
@@ -63,7 +63,7 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         plan = self.contract.validate_plan(self.plan("SCENE_FRAME", "4:3", refs=refs))
         job = self.contract.compile_execution_jobs(plan)[0]
         self.assertEqual((job.width, job.height), (1024, 768))
-        self.assertEqual(job.reference_inputs, refs)
+        self.assertEqual(job.reference_inputs, tuple(refs))
 
     def test_paid_or_quality_downgrade_flags_are_rejected(self):
         for field in ("paidComputeAuthorized", "allowQualityDowngrade", "runtimeAuthorized", "publicationAuthorityGranted"):
@@ -88,8 +88,8 @@ class VisualFactoryHfContractTests(unittest.TestCase):
                 "purpose": "CHARACTER_REFERENCE",
                 "url": "https://assets.invalid/lia.png",
                 "sha256": "b" * 64,
-                "modelRef": "black-forest-labs/FLUX.1-schnell",
-                "workflowRef": "hf-zerogpu.flux1-schnell/v0.1",
+                "modelRef": "black-forest-labs/FLUX.2-klein-4B",
+                "workflowRef": "hf-zerogpu.flux2-klein-4b/v0.1",
                 "createdAt": "2026-10-04T20:00:00Z",
                 "packageDigest": "a" * 64,
                 "provenanceStatus": "RECORDED",
