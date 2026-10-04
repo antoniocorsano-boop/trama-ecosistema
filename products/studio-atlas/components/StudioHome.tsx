@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { listProjects, updateProject } from "../lib/store";
+import {
+  ensureMuseoZeroPilotProject,
+  listProjects,
+  updateProject,
+} from "../lib/store";
 import type { PathwayProject } from "../lib/model";
 
 export function StudioHome() {
+  const router = useRouter();
   const [projects, setProjects] = useState<PathwayProject[]>([]);
 
   const refresh = () => setProjects(listProjects());
@@ -35,6 +41,27 @@ export function StudioHome() {
           La parte tecnica resta dietro lo Studio.
         </p>
         <span className="development-note">S1 · salvataggio locale di sviluppo</span>
+      </section>
+
+      <section className="pilot-pathway" aria-labelledby="pilot-title">
+        <div>
+          <p className="eyebrow">Percorso pilota</p>
+          <h2 id="pilot-title">MUSEO ZERO · La sala che non torna</h2>
+          <p>
+            Storia approvata. Mondo e storyboard sono materializzati nello Studio
+            e attendono la decisione umana prima della preview learner.
+          </p>
+        </div>
+        <button
+          className="secondary-action"
+          onClick={() => {
+            const project = ensureMuseoZeroPilotProject();
+            refresh();
+            router.push(`/percorso/${project.projectId}`);
+          }}
+        >
+          Apri MUSEO ZERO
+        </button>
       </section>
 
       <section className="project-list" aria-labelledby="continue-title">
