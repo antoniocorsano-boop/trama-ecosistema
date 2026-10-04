@@ -1,7 +1,10 @@
 "use client";
 
 import type { StudioAtlasPreviewSnapshot } from "./model";
-import { buildStudioAtlasPreviewSnapshot } from "./preview";
+import {
+  buildStudioAtlasPreviewSnapshot,
+  buildStudioAtlasReviewPreviewSnapshot,
+} from "./preview";
 import type { PathwayProject } from "./model";
 
 const SNAPSHOT_TYPE = "STUDIO_ATLAS_PREVIEW_SNAPSHOT";
@@ -27,6 +30,19 @@ export function atlasPreviewOrigin() {
 export async function openAtlasLearnerPreview(
   project: PathwayProject,
 ): Promise<PreviewBridgeResult> {
+  return openAtlasPreview(project, "LEARNER");
+}
+
+export async function openAtlasReviewPreview(
+  project: PathwayProject,
+): Promise<PreviewBridgeResult> {
+  return openAtlasPreview(project, "HUMAN_PRODUCT_REVIEW");
+}
+
+async function openAtlasPreview(
+  project: PathwayProject,
+  purpose: "LEARNER" | "HUMAN_PRODUCT_REVIEW",
+): Promise<PreviewBridgeResult> {
   const atlasOrigin = atlasPreviewOrigin();
   if (!atlasOrigin) return { status: "NOT_CONFIGURED" };
 
@@ -39,7 +55,9 @@ export async function openAtlasLearnerPreview(
   const channel = randomChannel();
   let snapshot: StudioAtlasPreviewSnapshot;
   try {
-    snapshot = await buildStudioAtlasPreviewSnapshot(project);
+    snapshot = purpose === "HUMAN_PRODUCT_REVIEW"
+      ? await buildStudioAtlasReviewPreviewSnapshot(project)
+      : await buildStudioAtlasPreviewSnapshot(project);
   } catch (error) {
     previewWindow.close();
     throw error;
