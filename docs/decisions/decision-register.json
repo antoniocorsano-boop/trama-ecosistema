@@ -1,6 +1,6 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.18.0",
+  "registerVersion": "1.19.0",
   "updatedAt": "2026-10-04",
   "decisions": [
     {
@@ -289,6 +289,20 @@
         "Studio Atlas"
       ],
       "decision": "Studio Atlas è proposto come dominio di prodotto professionale separabile per l'authoring dei Percorsi: la prima distribuzione può riusare autenticazione e shell di Docente OS, ma il dominio non dipende da classe/lezione e resta estraibile come applicazione autonoma. Atlas resta superficie pubblica/learner; il Pathway Authoring Package è l'handoff governato; repository, AI e compute restano infrastruttura subordinata e invisibile al creator.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-021",
+      "title": "Compute Policy TRAMA + SkyPilot per la Visual Factory",
+      "status": "PROPOSED",
+      "date": "2026-10-04",
+      "scope": [
+        "TRAMA",
+        "Studio Atlas",
+        "Visual Factory"
+      ],
+      "decision": "La Visual Factory separa policy e provisioning: TRAMA Compute Policy filtra provider realmente autorizzati e FREE_ONLY; SkyPilot orchestra provisioning/failover soltanto tra candidati ammessi. Nessun paid fallback, retry illimitato o quality downgrade automatico.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
