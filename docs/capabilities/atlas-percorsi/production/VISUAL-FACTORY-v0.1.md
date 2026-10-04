@@ -455,3 +455,20 @@ External tool references reviewed for v0.1:
 
 Benchmark:
 - https://education.minecraft.net/
+
+
+## Compute orchestration boundary
+
+Visual Factory production requests do not choose providers directly.
+
+Canonical direction:
+
+`VisualProductionRequest → TRAMA Compute Policy → SkyPilot → authorised provider → receipt/assets`
+
+References:
+
+- `TRAMA-COMPUTE-POLICY-v0.1.md`
+- `SKYPILOT-ORCHESTRATOR-v0.1.md`
+- `TRAMA-ADR-021`
+
+Compute is subordinate infrastructure. A missing FREE_ONLY provider produces **Produzione in attesa** and does not block non-production authoring.
