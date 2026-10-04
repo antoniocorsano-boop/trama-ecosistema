@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.17.0",
-  "updatedAt": "2026-09-30",
+  "registerVersion": "1.18.0",
+  "updatedAt": "2026-10-04",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -273,6 +273,22 @@
         "Control Center"
       ],
       "decision": "È proposto che TRAMA mantenga un'architettura ecosystem-first: Arena, Atlas e Docente OS restano i domini di prodotto che determinano bisogni e flussi; il Control Center resta osservatorio read-only; connector, runtime adapter, agenti e provider come DSH/Codex sono infrastruttura subordinata, sostituibile e priva di nuova authority. I proof successivi al livello contrattuale devono dimostrare valore su flussi cross-ecosystem e DOS-A1 resta RUNTIME_DEFERRED.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-020",
+      "title": "Studio Atlas come dominio di prodotto separabile per l'authoring dei Percorsi",
+      "status": "PROPOSED",
+      "date": "2026-10-04",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Studio Atlas"
+      ],
+      "decision": "Studio Atlas è proposto come dominio di prodotto professionale separabile per l'authoring dei Percorsi: la prima distribuzione può riusare autenticazione e shell di Docente OS, ma il dominio non dipende da classe/lezione e resta estraibile come applicazione autonoma. Atlas resta superficie pubblica/learner; il Pathway Authoring Package è l'handoff governato; repository, AI e compute restano infrastruttura subordinata e invisibile al creator.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
