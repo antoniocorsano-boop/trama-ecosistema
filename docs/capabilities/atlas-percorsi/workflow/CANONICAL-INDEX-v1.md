@@ -95,6 +95,18 @@ A pathway that is primarily a generic card/form/quiz/prompt sequence is not a fi
 
 Automation may verify declarations and artefacts. It cannot certify engagement, aesthetic quality, rhythm or experiential coherence.
 
+## Learner-language authority rule
+
+For first-cycle learner-facing Percorsi, internal pedagogical sophistication must be translated into **ordinary, situated learner language**.
+
+The learner surface should follow:
+
+`situation → concrete goal → concrete action → consequence → later recognition/name of strategy when useful`.
+
+A learner must not need to understand professional educational terminology in order to begin. Terms such as metacognition, transfer, strategy selection, trade-off, competence or goal–strategy fit belong to authoring/governance unless they are explicitly taught content.
+
+Human Review must ask whether a learner in the intended age band can understand the next action from the screen alone.
+
 ## Narrative authority rule
 There is no universal Atlas Percorsi metaphor. Common constitution/safeguards and functional grammar coexist with pathway-specific narrative identity. Journey, manga/comics, anime/animation, inquiry, workshop, simulation, theatre/viewpoint, map/exploration and other traditions remain research/design resources—not defaults.
 
