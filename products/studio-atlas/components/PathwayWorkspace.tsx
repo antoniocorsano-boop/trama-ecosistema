@@ -545,6 +545,7 @@ function blockerLabel(blocker: string) {
     NO_SCENES: "Non esiste ancora nessuna scena.",
     INCOMPLETE_SCENES: "Una o più scene non hanno situazione, azione e conseguenza.",
     INCOMPLETE_CHOICES: "Una scena di scelta non ha ancora almeno due possibilità complete.",
+    INCOMPLETE_WORLD_STATE: "Una scena contiene uno stato del mondo incompleto: servono luogo, stato e almeno un segnale osservabile.",
     TERMINAL_CHOICE_NEEDS_CLOSURE: "L’ultima scena è una scelta: aggiungi una breve scena di chiusura dopo la conseguenza.",
     TRANSFER_SCENE_REQUIRED: "Manca una scena di trasferimento in una situazione nuova.",
   };
