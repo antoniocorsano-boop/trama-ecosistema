@@ -5,8 +5,16 @@ import { useEffect, useMemo, useState } from "react";
 import { STAGES, type PathwayProject } from "../lib/model";
 import { getProject, updateProject } from "../lib/store";
 import { getProductionBlockers, prepareWaitingProduction } from "../lib/production";
-import { buildStudioAtlasPreviewSnapshot, getPreviewBlockers } from "../lib/preview";
-import { atlasPreviewOrigin, openAtlasLearnerPreview } from "../lib/preview-bridge";
+import {
+  buildStudioAtlasPreviewSnapshot,
+  getPreviewBlockers,
+  getReviewPreviewBlockers,
+} from "../lib/preview";
+import {
+  atlasPreviewOrigin,
+  openAtlasLearnerPreview,
+  openAtlasReviewPreview,
+} from "../lib/preview-bridge";
 import {
   ExperienceEditor,
   SceneEditor,
@@ -90,11 +98,34 @@ export function PathwayWorkspace({ id }: { id: string }) {
     }
   }
 
+  async function openReviewPreview() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const result = await openAtlasReviewPreview(project);
+      if (result.status === "OPENED") {
+        const updated = updateProject(project.projectId, {
+          lastPreviewSnapshot: result.snapshot,
+        });
+        setProject(updated);
+        setSaveState("saved");
+        return;
+      }
+      setSaveState("error");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
   async function preparePreview() {
     if (!project) return;
     setSaveState("saving");
     try {
-      const snapshot = await buildStudioAtlasPreviewSnapshot(project);
+      const snapshot = project.productReview?.decision === "PASS"
+        ? await buildStudioAtlasPreviewSnapshot(project)
+        : await import("../lib/preview").then(({ buildStudioAtlasReviewPreviewSnapshot }) =>
+            buildStudioAtlasReviewPreviewSnapshot(project),
+          );
       const updated = updateProject(project.projectId, {
         humanState: "PREVIEW",
         lastPreviewSnapshot: snapshot,
@@ -136,11 +167,22 @@ export function PathwayWorkspace({ id }: { id: string }) {
           </span>
           <button
             className="secondary-action"
-            disabled={getPreviewBlockers(project).length > 0 || !atlasPreviewOrigin()}
-            onClick={() => void openLearnerPreview()}
+            disabled={
+              (project.productReview?.decision === "PASS"
+                ? getPreviewBlockers(project)
+                : getReviewPreviewBlockers(project)
+              ).length > 0 || !atlasPreviewOrigin()
+            }
+            onClick={() => void (
+              project.productReview?.decision === "PASS"
+                ? openLearnerPreview()
+                : openReviewPreview()
+            )}
             title={!atlasPreviewOrigin() ? "Origine Atlas preview non configurata" : undefined}
           >
-            Vedi come studente
+            {project.productReview?.decision === "PASS"
+              ? "Vedi come studente"
+              : "Anteprima di revisione"}
           </button>
         </div>
       </header>
@@ -203,7 +245,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
             <PreviewStage
               project={project}
               onPrepare={preparePreview}
-              onOpen={openLearnerPreview}
+              onOpen={project.productReview?.decision === "PASS" ? openLearnerPreview : openReviewPreview}
               onGoTo={setStage}
             />
           )}
@@ -395,7 +437,10 @@ function PreviewStage({
   onOpen: () => Promise<void>;
   onGoTo: (stage: (typeof STAGES)[number]) => void;
 }) {
-  const blockers = getPreviewBlockers(project);
+  const isReviewPreview = project.productReview?.decision !== "PASS";
+  const blockers = isReviewPreview
+    ? getReviewPreviewBlockers(project)
+    : getPreviewBlockers(project);
 
   if (blockers.length > 0) {
     return (
@@ -432,12 +477,13 @@ function PreviewStage({
               passa direttamente alla finestra Atlas tramite il canale effimero qualificato.
             </p>
             <small className="technical-ref">
+              {isReviewPreview ? "ANTEPRIMA DI REVISIONE · " : ""}
               Snapshot {project.lastPreviewSnapshot.snapshotId.slice(0, 8)} ·
               digest {project.lastPreviewSnapshot.packageDigest.slice(0, 12)}…
             </small>
             {atlasPreviewOrigin() ? (
               <button className="primary-action preview-open-action" onClick={() => void onOpen()}>
-                Apri in Atlas
+                {isReviewPreview ? "Apri anteprima di revisione" : "Apri in Atlas"}
               </button>
             ) : (
               <p className="bridge-note">
@@ -455,10 +501,11 @@ function PreviewStage({
       <h1>Prepara ciò che vedrà lo studente.</h1>
       <p className="lead">
         Verrà creato uno snapshot immutabile con digest, senza account studente,
-        telemetria o autorizzazione runtime.
+        telemetria o autorizzazione runtime. Se la Human Product Review non è ancora PASS,
+        lo snapshot serve soltanto alla revisione e non modifica alcuna decisione.
       </p>
       <button className="primary-action" onClick={() => void onPrepare()}>
-        Prepara anteprima Atlas
+        {isReviewPreview ? "Prepara anteprima di revisione" : "Prepara anteprima Atlas"}
       </button>
     </>
   );
