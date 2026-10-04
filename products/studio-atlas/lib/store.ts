@@ -7,6 +7,7 @@ import {
   type PathwayProject,
 } from "./model";
 import {
+  MUSEO_ZERO_PRODUCT_REVIEW_REF,
   MUSEO_ZERO_PROJECT_ID,
   createMuseoZeroPilotProject,
 } from "./canonical/museo-zero";
@@ -15,6 +16,8 @@ const KEY = "studio-atlas.projects.v0.1";
 
 function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
   const now = new Date().toISOString();
+  const legacyMuseoZero =
+    raw.projectId === MUSEO_ZERO_PROJECT_ID && !raw.productReview;
   return {
     projectId: raw.projectId ?? crypto.randomUUID(),
     title: raw.title ?? "Senza titolo",
@@ -25,7 +28,14 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     story: { ...EMPTY_STORY, ...(raw.story ?? {}) },
     storyReview: raw.storyReview ?? { decision: "DRAFT" },
     world: { ...EMPTY_WORLD, ...(raw.world ?? {}) },
-    worldReview: raw.worldReview ?? { decision: "DRAFT" },
+    worldReview: legacyMuseoZero
+      ? { decision: "READY" }
+      : raw.worldReview ?? { decision: "DRAFT" },
+    productReview:
+      raw.productReview ??
+      (legacyMuseoZero
+        ? { decision: "READY", evidenceRef: MUSEO_ZERO_PRODUCT_REVIEW_REF }
+        : undefined),
     experience: { ...EMPTY_EXPERIENCE, ...(raw.experience ?? {}) },
     scenes: Array.isArray(raw.scenes)
       ? raw.scenes.map((scene) => ({
@@ -35,7 +45,7 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
           choices: Array.isArray(scene.choices) ? scene.choices : [],
         }))
       : [],
-    storyboardReady: raw.storyboardReady ?? false,
+    storyboardReady: legacyMuseoZero ? false : raw.storyboardReady ?? false,
     lastProductionRequest: raw.lastProductionRequest,
     lastProductionReceipt: raw.lastProductionReceipt,
     lastPreviewSnapshot: raw.lastPreviewSnapshot,
