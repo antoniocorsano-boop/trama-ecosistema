@@ -282,11 +282,11 @@ The dossier now defines the intended experience-quality target, but the gate can
 
 | Consequence | Type | Control |
 |---|---|---|
-| learner may read strategy choice as judgement of intelligence | adverse | feedback refers only to goal/fit/consequence |
+| learner may read strategy choice as judgement of intelligence | adverse | feedback refers only to goal/fit and to consequences actually observed after the learner uses the strategy |
 | one strategy may appear universally superior | adverse | goal changes so different strategies become useful |
 | interface may create memory burden unrelated to competence | adverse | goal and evidence remain visible |
 | learner may think “my first choice defines my style” | adverse | explicit text: strategies are tools, not identities |
-| successful changed-task performance may be overclaimed as broad transfer | adverse | local evidence wording + explicit claim ceiling |
+| successful changed-task performance may be overclaimed as broad transfer | adverse | require qualifying strategy selection/reselection plus applied representation; local evidence wording + explicit claim ceiling |
 | revision may be interpreted as failure | adverse | revision framed as expected response to evidence |
 
 ## 10. Sustainability/resource proportionality
