@@ -42,7 +42,12 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
           ...scene,
           kind: scene.kind === "TRANSFER" ? "TRANSFER" as const : "SCENE" as const,
           interaction: scene.interaction === "CHOICE" ? "CHOICE" as const : "SUMMARY" as const,
-          choices: Array.isArray(scene.choices) ? scene.choices : [],
+          choices: Array.isArray(scene.choices)
+            ? scene.choices.map((choice) => ({
+                ...choice,
+                targetSceneId: choice.targetSceneId ?? "",
+              }))
+            : [],
         }))
       : [],
     storyboardReady: legacyMuseoZero ? false : raw.storyboardReady ?? false,
