@@ -133,9 +133,23 @@ export function updateProject(
 
 export function ensureMuseoZeroPilotProject(): PathwayProject {
   const existing = getProject(MUSEO_ZERO_PROJECT_ID);
-  if (existing) return existing;
+  const isCurrentCanonical =
+    existing?.scenes.some((scene) => scene.stage?.visualMode === "CINEMATIC_EDITORIAL") ?? false;
+
+  if (existing && isCurrentCanonical) return existing;
 
   const project = createMuseoZeroPilotProject();
+
+  if (existing) {
+    project.createdAt = existing.createdAt;
+    project.revision = Math.max(existing.revision + 1, project.revision);
+    writeAll([
+      project,
+      ...readAll().filter((candidate) => candidate.projectId !== MUSEO_ZERO_PROJECT_ID),
+    ]);
+    return project;
+  }
+
   writeAll([project, ...readAll()]);
   return project;
 }
