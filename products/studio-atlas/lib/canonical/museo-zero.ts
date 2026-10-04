@@ -110,7 +110,7 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           },
           {
             choiceId: "compare-fixes",
-            targetSceneId: "MZ2_RECONSTRUCT_DAY",
+            targetSceneId: "MZ3_TIMELINE_LIMIT",
             label: "Confronto già le possibili soluzioni",
             feedback:
               "È troppo presto: prima devi capire quale relazione spiega davvero il ritardo.",
@@ -148,7 +148,7 @@ export function createMuseoZeroPilotProject(): PathwayProject {
         choices: [
           {
             choiceId: "current-a",
-            targetSceneId: "MZ4_TEST_MAPPING",
+            targetSceneId: "MZ3_TIMELINE_LIMIT",
             label: "Mantengo il trigger su Sensor A",
             feedback:
               "Il visitatore supera la nuova entrata e la sala continua a partire tardi: il fallimento si ripete.",
@@ -185,7 +185,7 @@ export function createMuseoZeroPilotProject(): PathwayProject {
         choices: [
           {
             choiceId: "restore-old-route",
-            targetSceneId: "MZ5_COMPARE_RECOVERY",
+            targetSceneId: "MZ4_TEST_MAPPING",
             label: "Ripristino il vecchio percorso",
             feedback:
               "Riduce il cambiamento in regia, ma entra in conflitto con il nuovo percorso e richiede nuovo lavoro fisico.",
@@ -199,7 +199,7 @@ export function createMuseoZeroPilotProject(): PathwayProject {
           },
           {
             choiceId: "manual-cue",
-            targetSceneId: "MZ5_COMPARE_RECOVERY",
+            targetSceneId: "MZ4_TEST_MAPPING",
             label: "Uso il cue manuale",
             feedback:
               "È un buon ripiego temporaneo, ma resta meno affidabile per visite ripetute.",
