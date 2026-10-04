@@ -16,8 +16,9 @@ The repository should preserve four distinct layers:
 
 1. **policy/constitution** — rules that every pathway must obey;
 2. **research library** — reusable evidence and design reasoning;
-3. **grammar/catalogue library** — reusable experiential/narrative patterns and their suitability/risks;
-4. **pathway dossiers** — the governed record for each concrete pathway.
+3. **storytelling library** — reusable story concepts, worlds, casts, hooks and narrative engines with explicit Human Story Review state;
+4. **grammar/catalogue library** — reusable experiential/narrative patterns and their suitability/risks;
+5. **pathway dossiers** — the governed record for each concrete pathway.
 
 ## Proposed structure
 
@@ -40,6 +41,9 @@ docs/capabilities/atlas-percorsi/
 │   ├── theatre-perspective/
 │   ├── environmental-storytelling/
 │   └── visual-multimodal-literacy/
+├── storytelling/
+│   ├── registry.yaml
+│   └── STORY-<id>.md
 ├── grammars/
 │   ├── registry.yaml
 │   ├── sequential-visual-narrative.md
@@ -121,15 +125,48 @@ Every material finding becomes an evidence record with population/context, suppo
 
 **Efficiency rule:** do not repeatedly research a settled common question for every pathway; link governed evidence.
 
-### W3 — Grammar selection
+### W3 — Storytelling concept
 
-Consult the experiential-grammar registry. Rank candidate grammars by fit to the required cognitive action, not by popularity or visual attractiveness.
+Create or select a storytelling concept from the governed storytelling library.
+
+The story must define, before interface design:
+- world/setting;
+- characters and their own goals;
+- normal state;
+- disruption/problem;
+- learner role;
+- central unknown/curiosity question;
+- information-release logic;
+- turning point;
+- resolution/open ending;
+- why the target competence becomes useful inside the story.
+
+**Hard gate — Human Story Review:** the story must be understandable and compelling as a story without UI. If it reads as a lesson plan with names/setting added, return to W3.
+
+Approved story state required to proceed:
+`STORY_APPROVED_FOR_WORLD_DESIGN`.
+
+### W3A — Grammar selection
+
+Only after the story is reviewable, consult the experiential-grammar registry.
+
+Rank candidate grammars by fit to both:
+- the required cognitive action; and
+- the approved story/world.
 
 Record selected, rejected and deferred candidates and why.
 
-### W4 — Narrative concept
+### W4 — World / narrative design
 
-Define subject, world, narrative engine, character roles, information-release rhythm, atmosphere, local metaphorical devices and transfer logic.
+Expand the approved storytelling concept into:
+- World Brief;
+- role/agency map;
+- information-distribution map;
+- consequence model;
+- experience choreography;
+- visual-world concept.
+
+The world must preserve the approved story rather than reducing it to a generic exercise flow.
 
 ### W5 — Safeguard review
 
@@ -223,6 +260,8 @@ The operator must read/write the same governed artefacts and pass the same gates
 Once schemas stabilize, repository automation can check mechanically:
 
 - required dossier files exist;
+- a storytelling concept is registered;
+- Human Story Review state is present before world/UI progression;
 - manifest schema is valid;
 - age bands and competence territories are declared;
 - grammar IDs exist in the registry;
@@ -299,12 +338,13 @@ A future Atlas Percorsi authoring tool should guide a teacher/designer through t
 
 1. describe the competence need;
 2. inspect/reuse evidence;
-3. compare suitable grammars;
-4. compose the narrative concept;
-5. run safeguard checks;
-6. storyboard;
-7. define validation;
-8. export a complete pathway package.
+3. write/select and review the storytelling concept;
+4. compare suitable grammars inside the approved story/world;
+5. design world, role, agency and consequence;
+6. run safeguard checks;
+7. storyboard/choreograph the experience;
+8. define validation;
+9. export a complete pathway package.
 
 The user should be able to complete this without writing prompts and without knowing which AI, if any, is used behind the interface.
 
