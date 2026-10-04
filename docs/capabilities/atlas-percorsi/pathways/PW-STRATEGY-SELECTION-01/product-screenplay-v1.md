@@ -96,11 +96,19 @@ Choosing any tool alone does **not** award growth evidence. The tool must first 
 
 ### M3A — TEST THE SEQUENCE / CONNECT
 
-If A was chosen, the same evidence fragments move into an orderable lane. The learner must actively reconstruct the route rather than answer on a detached quiz screen:
+If A was chosen, the learner first organises the full evidence into a sequence on the workbench. Then Atlas explicitly enters **retrieval mode**:
 
-> “Quale ordine useresti per controllare il tuo ricordo?”
+- the full source sheet and full-sentence fragments are hidden;
+- the learner receives only five short neutral concept tokens that do not encode their own temporal position: **stazione**, **ponte**, **pioggia**, **cresta**, **osservazione**;
+- the learner reconstructs the sequence from memory;
+- keyboard and touch alternatives provide the same ordering action;
+- no source text may remain visible until the learner chooses “controlla”.
 
-The learner arranges the supplied fragments; keyboard and touch alternatives provide the same ordering action. A final “controlla” action reveals whether the reconstructed order matches the evidence.
+Prompt:
+
+> “Ora la scheda è coperta. Ricostruisci l’ordine usando solo ciò che ricordi.”
+
+A final “controlla” action reveals the original source beside the recalled sequence for comparison.
 
 The purpose is not factual assessment about expeditions; it is to make the consequence of the strategy inspectable.
 
@@ -191,9 +199,11 @@ Qualifying choice: B.
 
 Selecting B alone does **not** award growth evidence.
 
+If the learner selects A or C, the workbench must first expose the mismatch with the new cause–effect mission and offer an explicit recovery path back to the tool bench. The learner cannot enter the awardable causal-construction state until B has been selected, either initially or after recovery/reselection.
+
 ### M6 — MAKE THE RELATION VISIBLE / BUILD
 
-The learner applies the chosen strategy on the existing evidence surface. Rather than selecting a prewritten statement, the interface asks them to build the causal structure by linking the supplied fragments.
+After a qualifying M5 selection/reselection, the learner applies the chosen cause–effect strategy on the existing evidence surface. Rather than selecting a prewritten statement, the interface asks them to build the causal structure by linking the supplied fragments.
 
 Prompt:
 
@@ -206,7 +216,12 @@ The learner creates the chain from the supplied fragments/connectors. Accessible
 
 This scene ensures the learner does not merely select the label “mappa causa-effetto”; the learner applies it to the material.
 
-Only the correct applied cause–effect representation after the goal change earns:
+Only the conjunction of:
+
+1. a qualifying M5 cause–effect strategy selection (initially or after explicit recovery/reselection); and
+2. a correct M6 applied cause–effect representation
+
+earns:
 
 **Traguardo:** “Cambio strategia quando cambia lo scopo.”  
 **Stage:** `CHOOSES_WHEN_TO_USE`.
@@ -349,8 +364,8 @@ Avoid:
 
 | Evidence | Qualifying outcome | Stage |
 |---|---|---|
-| strategy–goal fit | after an actually tried preparation strategy, the learner selects/switches to sequence + retrieval and correctly performs the sequence reconstruction | BEGINNING_TO_RECOGNISE |
-| strategic revision | M6 correctly applies a cause–effect representation after the goal change | CHOOSES_WHEN_TO_USE |
+| strategy–goal fit | after an actually tried preparation strategy, the learner selects/switches to sequence + retrieval and correctly reconstructs the route in retrieval mode with source text hidden | BEGINNING_TO_RECOGNISE |
+| strategic revision | qualifying M5 cause–effect strategy selection/reselection **and** correct M6 applied causal construction | CHOOSES_WHEN_TO_USE |
 | applied transfer | qualifying M8 comparison-strategy selection (initial or recovered) **and** correct M8B criterion-by-criterion application | TRANSFERS_TO_NEW_SITUATION |
 
 A scene arrival, completion, time-on-task or initial preference is not growth evidence.
@@ -389,8 +404,8 @@ Forbidden:
 1. Is “strategy–task fit” understandable without suggesting a fixed learning style?
 2. Are A/B/C presented neutrally enough that the learner must reason from the goal rather than visual cues?
 3. Does every M3 feedback statement refer only to a strategy the learner actually tried and to an observable result, never a fabricated consequence?
-4. Does M5 genuinely require revision because the goal changed?
-5. Does M6 require application of the cause–effect representation?
+4. Does M5 require a qualifying cause–effect selection/reselection before the awardable M6 state?
+5. Does M6 require an applied cause–effect representation, with the revision traguardo gated on both M5 and M6?
 6. Does M8B require both qualifying strategy selection/reselection and an applied new-task representation rather than repetition of M7?
 7. Are all three growth events tied to applied task performance rather than strategy-label selection?
 8. Is the tone appropriate and non-infantilising for lower secondary?
