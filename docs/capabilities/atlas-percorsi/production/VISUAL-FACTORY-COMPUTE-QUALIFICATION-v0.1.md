@@ -1,6 +1,6 @@
 # Visual Factory — Compute Qualification v0.1
 
-**State:** POLICY_COMPILER_PASS / ORCHESTRATOR_SELECTED / LIVE_PROVIDER_SET_PENDING  
+**State:** POLICY_COMPILER_PASS / ORCHESTRATOR_SELECTED / LIVE_DISCOVERY_PASS / NO_PROVIDER_BOUND  
 **Date:** 2026-10-04
 
 ## Completed
@@ -53,3 +53,45 @@ Qualification requires:
 `LIVE_PROVIDER_ENTITLEMENT_NOT_YET_BOUND`
 
 This is not an architecture blocker. It is the next infrastructure qualification step.
+
+
+## Live discovery evidence
+
+Read-only provider discovery has now been executed successfully.
+
+Run:
+
+`37210057324`
+
+Artifact:
+
+`11305939644`
+
+Result:
+
+```json
+{
+  "readOnly": true,
+  "computeProvisioned": false,
+  "providers": {
+    "azure": {
+      "decision": "NOT_CONFIGURED"
+    },
+    "kubernetes": {
+      "decision": "NOT_CONFIGURED"
+    }
+  }
+}
+```
+
+Therefore the next blocker is now precisely:
+
+`NO_SKYPILOT_FREE_ONLY_PROVIDER_BOUND`
+
+The system MUST remain in:
+
+**Produzione in attesa**
+
+for real Visual Factory requests until at least one provider reaches `ELIGIBLE`.
+
+No retry across unbound providers is useful.
