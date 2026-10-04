@@ -1,0 +1,56 @@
+name: Visual Factory — Compute Policy v0.1
+
+on:
+  pull_request:
+    paths:
+      - "schemas/trama-compute-*.schema.json"
+      - "docs/capabilities/atlas-percorsi/production/TRAMA-COMPUTE-POLICY-v0.1.md"
+      - "docs/capabilities/atlas-percorsi/production/SKYPILOT-ORCHESTRATOR-v0.1.md"
+      - "scripts/compile_visual_factory_compute_plan.py"
+      - "tests/test_visual_factory_compute_plan.py"
+      - "fixtures/visual-factory-compute/**"
+      - ".github/workflows/visual-factory-compute-policy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate JSON schemas and fixtures
+        run: |
+          python -m json.tool schemas/trama-compute-policy.v0.1.schema.json >/dev/null
+          python -m json.tool schemas/trama-compute-entitlement-snapshot.v0.1.schema.json >/dev/null
+          python -m json.tool fixtures/visual-factory-compute/policy-free-q4.json >/dev/null
+          python -m json.tool fixtures/visual-factory-compute/snapshot-eligible.json >/dev/null
+          python -m json.tool fixtures/visual-factory-compute/snapshot-no-free.json >/dev/null
+
+      - name: Run deterministic compute-policy tests
+        run: python -m unittest tests/test_visual_factory_compute_plan.py -v
+
+      - name: Compile fixture plan
+        run: |
+          mkdir -p /tmp/trama-compute
+          python scripts/compile_visual_factory_compute_plan.py \
+            --policy fixtures/visual-factory-compute/policy-free-q4.json \
+            --snapshot fixtures/visual-factory-compute/snapshot-eligible.json \
+            --now 2026-10-04T13:30:00Z \
+            --plan-out /tmp/trama-compute/plan.json \
+            --sky-out /tmp/trama-compute/skypilot-resources.yaml
+          grep -q '"decision": "PLAN_READY"' /tmp/trama-compute/plan.json
+
+      - name: Upload deterministic fixture evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-factory-compute-policy-fixture
+          path: /tmp/trama-compute
+          retention-days: 7
