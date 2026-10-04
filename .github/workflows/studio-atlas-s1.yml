@@ -58,3 +58,4 @@ jobs:
           grep -q 'worldAfter' lib/model.ts
           grep -q 'world: {' lib/canonical/museo-zero.ts
           grep -q 'worldAfter: {' lib/canonical/museo-zero.ts
+          grep -q 'INCOMPLETE_WORLD_STATE' lib/production.ts
