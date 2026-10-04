@@ -285,8 +285,10 @@ The dossier now defines the intended experience-quality target, but the gate can
 | learner may read strategy choice as judgement of intelligence | adverse | feedback refers only to goal/fit and to consequences actually observed after the learner uses the strategy |
 | one strategy may appear universally superior | adverse | goal changes so different strategies become useful |
 | interface may create memory burden unrelated to competence | adverse | goal and evidence remain visible |
-| learner may think “my first choice defines my style” | adverse | explicit text: strategies are tools, not identities |
+| learner may think “my first choice defines my style” | adverse | explicit text: strategies are tools, not identities; no growth evidence is awarded from an initial choice alone |
 | successful changed-task performance may be overclaimed as broad transfer | adverse | require qualifying strategy selection/reselection plus applied representation; local evidence wording + explicit claim ceiling |
+| sequence task may reward reading cues rather than retrieval | adverse | hide full source text during recall; use neutral concept tokens; compare with source only after submission |
+| revision evidence may be awarded without choosing the revised strategy | adverse | require qualifying cause–effect selection/reselection plus correct applied causal construction |
 | revision may be interpreted as failure | adverse | revision framed as expected response to evidence |
 
 ## 10. Sustainability/resource proportionality
@@ -299,7 +301,7 @@ Version 1 requires no generative media service, audio or network service. A smal
 
 Lower-secondary learners can understand that strategy choice should depend on the current task goal rather than on a fixed personal “best method”.
 
-**Support:** learners can select a fitting strategy, apply it to the task, inspect the visible consequence, and revise with a second applied representation when the goal changes.
+**Support:** learners can select a fitting strategy, genuinely apply it to the task, perform the sequence check with source text hidden, inspect the visible consequence, and revise with a qualifying cause–effect selection/reselection plus applied representation when the goal changes.
 
 **Reject/change:** learners interpret alternatives as personality categories, cannot identify what changed, or select based on wording cues rather than task structure.
 
