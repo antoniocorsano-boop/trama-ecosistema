@@ -113,3 +113,36 @@ Next action:
 3. if Colab Free still provides no GPU, stop retrying and move to the next zero-cost adapter.
 
 No model downloads are authorised on this CPU-only runtime.
+
+
+## Probe receipt — run 2 — 2026-10-04
+
+Observed from the governed Colab probe v0.2:
+
+- adapter: `google-colab-free`
+- gpuPresent: `true`
+- gpuName: `Tesla T4`
+- vramGiB: `15.0`
+- ramGiB: `12.67`
+- diskFreeGiB: `70.21`
+- decision: `T4_Q4_CANDIDATE`
+- paidComputeAuthorized: `false`
+
+Interpretation:
+the free Colab adapter is **qualified for a bounded Q4 smoke test**, not yet for production.
+
+Next action:
+run `Q4-SMOKE-TEST-COLAB-v0.1.ipynb`.
+
+Pass condition:
+- ComfyUI installs;
+- required GGUF/Qwen nodes are present;
+- Q4 model package loads under `--lowvram`;
+- one 512x512 edit completes;
+- an execution receipt is produced;
+- no paid compute is used.
+
+Failure policy:
+- if Q4 fails specifically for memory, permit one controlled Q3 fallback;
+- otherwise stop and diagnose;
+- no repeated random retries.
