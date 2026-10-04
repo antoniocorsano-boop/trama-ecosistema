@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-visual-production-receipt.v0.1.schema.json",
+  "title": "Atlas Visual Production Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "receiptId",
+    "requestId",
+    "status",
+    "qualityProfile",
+    "costClass",
+    "publicationAuthorityGranted"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "atlas.visual-production-receipt/v0.1"
+    },
+    "receiptId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "requestId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "QUEUED",
+        "WAITING_FOR_COMPUTE",
+        "RUNNING",
+        "SUCCEEDED",
+        "FAILED",
+        "CANCELLED"
+      ]
+    },
+    "qualityProfile": {
+      "type": "string",
+      "enum": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    "computePlanDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "orchestrator": {
+      "type": "string"
+    },
+    "providerId": {
+      "type": "string"
+    },
+    "accelerator": {
+      "type": "string"
+    },
+    "effectiveCostClass": {
+      "type": "string",
+      "enum": [
+        "ZERO_MARGINAL",
+        "CREDIT_COVERED",
+        "PAID",
+        "UNKNOWN"
+      ]
+    },
+    "costClass": {
+      "type": "string",
+      "enum": [
+        "FREE_ONLY",
+        "PAID_NOT_AUTHORIZED"
+      ]
+    },
+    "chargedAmountUsd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "attempts": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4
+    },
+    "modelArtifactRefs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outputAssets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assetRef",
+          "sha256"
+        ],
+        "properties": {
+          "assetRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "failureCategory": {
+      "type": "string",
+      "enum": [
+        "NO_FREE_PROVIDER",
+        "STALE_ENTITLEMENT",
+        "PROVISIONING",
+        "OUT_OF_CAPACITY",
+        "OUT_OF_QUOTA",
+        "WORKLOAD",
+        "OOM",
+        "VALIDATION",
+        "UNKNOWN"
+      ]
+    },
+    "failureDetail": {
+      "type": "string"
+    },
+    "publicationAuthorityGranted": {
+      "const": false
+    }
+  }
+}
