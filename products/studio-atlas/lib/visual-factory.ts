@@ -219,6 +219,16 @@ export function createInitialVisualFactoryState(packageDigest: string): VisualFa
   };
 }
 
+export function reconcileVisualFactoryState(
+  state: VisualFactoryState | null | undefined,
+  packageDigest: string,
+): VisualFactoryState {
+  if (!state || state.packageDigest !== packageDigest) {
+    return createInitialVisualFactoryState(packageDigest);
+  }
+  return state;
+}
+
 export function compileReferenceJobs(
   project: PathwayProject,
   packageDigest: string,
