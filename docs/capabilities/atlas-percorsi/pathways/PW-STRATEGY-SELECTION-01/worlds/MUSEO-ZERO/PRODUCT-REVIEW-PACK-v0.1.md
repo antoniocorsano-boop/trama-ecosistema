@@ -98,6 +98,8 @@ Review question:
 
 > Does MZ5 demonstrate legitimate transfer of strategy selection while preserving the story’s quiet ending and avoiding a didactic epilogue?
 
+> In MZ4, can a learner understand what changed by observing the world-state consequence itself, before relying on the explanatory feedback sentence?
+
 PASS accepts **MZ5_COMPARE_RECOVERY** as the explicit transfer scene for this pathway version.
 
 ## Product criteria
@@ -127,6 +129,18 @@ The experience can be expressed through inspectable places, choices and stateful
 
 ### P8 — Transfer legitimacy
 MZ5 requires the learner to change representation because the problem changes from causal explanation to constrained decision, without appending a second-context exercise after the story.
+
+### P9 — Consequence visible in the world
+The learner must be able to observe a meaningful change in the represented system before continuing, not only read explanatory feedback.
+
+For the MZ4 simulation this means the preview exposes at least:
+
+- active input/sensor;
+- current cue mapping;
+- delayed or stable room response;
+- the changed state produced by the selected configuration.
+
+The semantic world state must retain an accessible textual equivalent and must not depend on visual-only interpretation.
 
 ## Current Studio state
 
