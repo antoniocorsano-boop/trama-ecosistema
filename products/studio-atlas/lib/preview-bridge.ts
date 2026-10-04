@@ -31,9 +31,8 @@ export async function openAtlasLearnerPreview(
 
   // Open synchronously from the user's click to avoid popup blocking while
   // the SHA-256 snapshot digest is prepared.
-  const target = window.open("about:blank", "_blank");
-  if (!target) return { status: "POPUP_BLOCKED" };
-  const previewWindow = target;
+  const previewWindow = window.open("about:blank", "_blank");
+  if (!previewWindow) return { status: "POPUP_BLOCKED" };
 
   const channel = randomChannel();
   let snapshot: StudioAtlasPreviewSnapshot;
@@ -47,6 +46,8 @@ export async function openAtlasLearnerPreview(
   const previewUrl = new URL("/percorsi/lab/studio-atlas-preview/", atlasOrigin);
   previewUrl.searchParams.set("channel", channel);
 
+  // Register the READY listener before navigating the popup. Atlas may mount
+  // quickly enough to emit READY during the first navigation task.
   return await new Promise<PreviewBridgeResult>((resolve) => {
     let settled = false;
     const timeout = window.setTimeout(() => finish({ status: "TIMEOUT" }), 12000);
@@ -75,9 +76,6 @@ export async function openAtlasLearnerPreview(
       finish({ status: "OPENED", snapshot });
     }
 
-    // Register the READY listener before navigating the popup. Atlas may load
-    // quickly enough to post READY immediately; registering after navigation
-    // creates a real race and can lose the one-shot handshake.
     window.addEventListener("message", onMessage);
     previewWindow.location.replace(previewUrl.toString());
   });
