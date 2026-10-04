@@ -31,8 +31,9 @@ export async function openAtlasLearnerPreview(
 
   // Open synchronously from the user's click to avoid popup blocking while
   // the SHA-256 snapshot digest is prepared.
-  const previewWindow = window.open("about:blank", "_blank");
-  if (!previewWindow) return { status: "POPUP_BLOCKED" };
+  const openedWindow = window.open("about:blank", "_blank");
+  if (!openedWindow) return { status: "POPUP_BLOCKED" };
+  const previewWindow: Window = openedWindow;
 
   const channel = randomChannel();
   let snapshot: StudioAtlasPreviewSnapshot;
