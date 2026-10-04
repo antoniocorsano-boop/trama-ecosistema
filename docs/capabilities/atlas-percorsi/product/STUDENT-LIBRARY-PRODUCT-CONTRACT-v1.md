@@ -12,7 +12,7 @@ Every learner-facing Percorso MUST be derived from the recovered PR #96 product 
 
 The mandatory product chain is:
 
-`territory → competence need → dossier → evidence → experiential grammar → narrative identity → safeguards → controlled storyboard/screenplay → consequence review → validation plan → implementation → human product review → runtime authorization`.
+`territory → competence need → dossier → evidence → experiential grammar → narrative identity → safeguards → controlled storyboard/screenplay → consequence review → validation plan → **Experience Quality Gate (Human Review)** → implementation handoff → learner-facing implementation → human product review → runtime authorization`.
 
 A generic graph that skips subject/premise, storyboard, narrative/interaction rationale or progression evidence is a **technical fixture**, not a completed student Percorso.
 
