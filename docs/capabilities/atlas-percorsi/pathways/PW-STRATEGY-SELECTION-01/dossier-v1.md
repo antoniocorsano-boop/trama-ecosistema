@@ -191,7 +191,8 @@ Core functional sequence:
 6. **M6 REVISE** — select a strategy that now fits the changed goal.
 7. **M7 METHOD** — name the principle: strategy follows task and evidence.
 8. **M8 TRANSFER** — new material and a new comparison goal; choose a concrete working representation.
-9. **M9 TRACE** — terminal summary/local-growth control.
+9. **M8B APPLY** — apply that representation to the supplied comparison data; growth evidence is withheld until this succeeds.
+10. **M9 TRACE** — terminal summary/local-growth control.
 
 The exact implementation may branch, but a cosmetic branch is not sufficient.
 
@@ -216,7 +217,7 @@ Version 1 requires no generated media, animation, audio or network services. Sta
 
 Lower-secondary learners can understand that strategy choice should depend on the current task goal rather than on a fixed personal “best method”.
 
-**Support:** learners can select a fitting strategy, justify it through the visible consequence, and revise when the goal changes.
+**Support:** learners can select a fitting strategy, apply it to the task, inspect the visible consequence, and revise with a second applied representation when the goal changes.
 
 **Reject/change:** learners interpret alternatives as personality categories, cannot identify what changed, or select based on wording cues rather than task structure.
 
@@ -224,7 +225,7 @@ Lower-secondary learners can understand that strategy choice should depend on th
 
 The transfer task elicits an applied strategy choice in a different information structure.
 
-**Support:** learner selects a concrete comparison representation because the new task requires comparison.
+**Support:** learner selects a concrete comparison representation and then applies it correctly to the new museum-route data.
 
 **Reject/change:** learner merely repeats the method statement from M7 or can pass without using the new task information.
 
@@ -240,7 +241,8 @@ No covert psychological profiling or persistent individual behavioural scoring. 
 | 2026-10-04 | territory limited to `learning` | PROPOSED | avoid premature personal taxonomy; competence is school-task bound |
 | 2026-10-04 | no characters/agent in v1 | PROPOSED | no cognitive need; removes relational/disclosure surface |
 | 2026-10-04 | no free text | PROPOSED | bounded evidence sufficient for first candidate |
-| 2026-10-04 | transfer must be an applied new-task decision | PROPOSED | aligns C12 and previous PW-CONSTRAINTS review lesson |
+| 2026-10-04 | every growth event requires applied task performance, not strategy-label selection | PROPOSED | prevents overclaiming from recognition/guessing and aligns C9/C12/C13 |
+| 2026-10-04 | transfer must include selection plus applied comparison | PROPOSED | aligns C12 and previous PW-CONSTRAINTS review lesson |
 
 ## 13. Product/specification handoff readiness
 
