@@ -6,6 +6,7 @@ import type { PathwayProject } from "./model";
 
 const READY_TYPE = "STUDIO_ATLAS_PREVIEW_READY";
 const SNAPSHOT_TYPE = "STUDIO_ATLAS_PREVIEW_SNAPSHOT";
+const ACCEPTED_TYPE = "STUDIO_ATLAS_PREVIEW_ACCEPTED";
 
 export type PreviewBridgeResult =
   | { status: "OPENED"; snapshot: StudioAtlasPreviewSnapshot }
@@ -51,21 +52,10 @@ export async function openAtlasLearnerPreview(
   // quickly enough to emit READY during the first navigation task.
   return await new Promise<PreviewBridgeResult>((resolve) => {
     let settled = false;
-    const timeout = window.setTimeout(() => finish({ status: "TIMEOUT" }), 12000);
+    let retry: number | null = null;
 
-    function finish(result: PreviewBridgeResult) {
-      if (settled) return;
-      settled = true;
-      window.clearTimeout(timeout);
-      window.removeEventListener("message", onMessage);
-      resolve(result);
-    }
-
-    function onMessage(event: MessageEvent) {
-      if (event.origin !== atlasOrigin) return;
-      if (event.source !== previewWindow) return;
-      if (!isReadyMessage(event.data, channel)) return;
-
+    const sendSnapshot = () => {
+      if (previewWindow.closed) return;
       previewWindow.postMessage(
         {
           type: SNAPSHOT_TYPE,
@@ -74,11 +64,39 @@ export async function openAtlasLearnerPreview(
         },
         atlasOrigin,
       );
-      finish({ status: "OPENED", snapshot });
+    };
+
+    const timeout = window.setTimeout(() => finish({ status: "TIMEOUT" }), 12000);
+
+    function finish(result: PreviewBridgeResult) {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
+      if (retry !== null) window.clearInterval(retry);
+      window.removeEventListener("message", onMessage);
+      resolve(result);
+    }
+
+    function onMessage(event: MessageEvent) {
+      if (event.origin !== atlasOrigin) return;
+
+      if (isReadyMessage(event.data, channel)) {
+        sendSnapshot();
+        return;
+      }
+
+      if (isAcceptedMessage(event.data, channel, snapshot.snapshotId)) {
+        finish({ status: "OPENED", snapshot });
+      }
     }
 
     window.addEventListener("message", onMessage);
     previewWindow.location.replace(previewUrl.toString());
+
+    // The target runtime is a separate origin and may mount before or after
+    // the one-shot READY message is observed. Retry the exact same immutable
+    // snapshot on a bounded interval until Atlas validates it and ACKs.
+    retry = window.setInterval(sendSnapshot, 300);
   });
 }
 
@@ -86,6 +104,20 @@ function isReadyMessage(value: unknown, channel: string) {
   if (!value || typeof value !== "object") return false;
   const message = value as { type?: unknown; channel?: unknown };
   return message.type === READY_TYPE && message.channel === channel;
+}
+
+function isAcceptedMessage(value: unknown, channel: string, snapshotId: string) {
+  if (!value || typeof value !== "object") return false;
+  const message = value as {
+    type?: unknown;
+    channel?: unknown;
+    snapshotId?: unknown;
+  };
+  return (
+    message.type === ACCEPTED_TYPE &&
+    message.channel === channel &&
+    message.snapshotId === snapshotId
+  );
 }
 
 function randomChannel() {
