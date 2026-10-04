@@ -82,7 +82,6 @@ export async function openAtlasLearnerPreview(
 
     function onMessage(event: MessageEvent) {
       if (event.origin !== atlasOrigin) return;
-      if (event.source !== previewWindow) return;
 
       if (isReadyMessage(event.data, channel)) {
         sendSnapshot();
@@ -95,6 +94,11 @@ export async function openAtlasLearnerPreview(
     }
 
     window.addEventListener("message", onMessage);
+
+    // Cross-origin WindowProxy identity is deliberately not treated as an
+    // authority signal. The bridge is already bound to the exact Atlas
+    // origin and an unguessable 192-bit channel, and Atlas validates the
+    // snapshot before ACKing it.
     previewWindow.location.replace(previewUrl.toString());
 
     // The target runtime is a separate origin and may mount before or after
