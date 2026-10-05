@@ -126,9 +126,11 @@ test("VF-GEN-01 blocks duplicate job ids", () => {
 });
 
 test("VF-GEN-01 blocks any authority escalation", () => {
-  const plan = referencePlan() as VisualGenerationPlan & { paidComputeAuthorized: boolean };
-  plan.paidComputeAuthorized = true;
-  const result = preflightVisualGenerationPlan(plan as VisualGenerationPlan);
+  const malformedPlan = {
+    ...referencePlan(),
+    paidComputeAuthorized: true,
+  } as unknown as VisualGenerationPlan;
+  const result = preflightVisualGenerationPlan(malformedPlan);
   assert.equal(result.status, "BLOCKED");
   assert.ok(result.issues.some((issue) => issue.code === "AUTHORITY_VIOLATION"));
 });
