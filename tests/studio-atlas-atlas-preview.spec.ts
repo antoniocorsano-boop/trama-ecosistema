@@ -1,11 +1,10 @@
-import { test, expect } from "@playwright/test";
-const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
-// MUSEO ZERO transfer contract: the recovery-comparison phase carries transfer inside the approved story arc.
+import { expect, test } from "@playwright/test";
 
+const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 const STUDIO = "http://127.0.0.1:3100";
 const ATLAS = "http://127.0.0.1:3200";
 
-const project = {
+const approvedProject = {
   projectId: "e2e-studio-atlas-preview",
   title: "E2E Percorso Studio Atlas",
   idea: "Capire una relazione osservando che cosa cambia quando si interviene.",
@@ -21,7 +20,7 @@ const project = {
     unknown: "Quale relazione è rimasta collegata al segnale sbagliato?",
     learnerRole: "Osservare, intervenire e verificare.",
     turningPoint: "Una modifica produce finalmente la conseguenza attesa.",
-    ending: "La strategia viene provata in un sistema diverso."
+    ending: "La strategia viene provata in un sistema diverso.",
   },
   storyReview: { decision: "PASS", reviewedAt: "2026-10-04T15:00:00Z" },
   world: {
@@ -30,17 +29,17 @@ const project = {
     canChange: "Una relazione alla volta.",
     unknown: "Quale relazione produce il ritardo.",
     consequence: "Il comportamento cambia immediatamente o resta incoerente.",
-    motivation: "Rendere il sistema coerente prima della prova finale."
+    motivation: "Rendere il sistema coerente prima della prova finale.",
   },
   worldReview: { decision: "PASS", reviewedAt: "2026-10-04T15:02:00Z" },
   productReview: {
     decision: "PASS",
     reviewedAt: "2026-10-04T15:02:30Z",
-    evidenceRef: "e2e://human-product-review-pass"
+    evidenceRef: "e2e://human-product-review-pass",
   },
   experience: {
     grammar: "SIMULATION_MICROWORLD",
-    rationale: "La comprensione nasce dal confronto fra intervento e conseguenza."
+    rationale: "La comprensione nasce dal confronto fra intervento e conseguenza.",
   },
   scenes: [
     {
@@ -52,7 +51,7 @@ const project = {
       learnerAction: "Individua quale relazione potrebbe essere fuori posto.",
       consequence: "Hai isolato il punto da verificare.",
       reveal: "Una relazione può restare valida tecnicamente ma non più nel contesto.",
-      choices: []
+      choices: [],
     },
     {
       sceneId: "S2",
@@ -68,21 +67,21 @@ const project = {
           choiceId: "keep-old",
           targetSceneId: "S2",
           label: "Mantengo il collegamento al vecchio segnale",
-          feedback: "Il ritardo si ripete: il sistema continua ad ascoltare il punto sbagliato."
+          feedback: "Il ritardo si ripete: il sistema continua ad ascoltare il punto sbagliato.",
         },
         {
           choiceId: "use-new",
           targetSceneId: "S3_TRANSFER",
           label: "Collego il sistema al segnale del nuovo ingresso",
-          feedback: "La risposta parte nel momento atteso: questa modifica spiega il ritardo."
+          feedback: "La risposta parte nel momento atteso: questa modifica spiega il ritardo.",
         },
         {
           choiceId: "manual",
           targetSceneId: "S2",
           label: "Uso un comando manuale",
-          feedback: "Può funzionare una volta, ma il risultato dipende dal tempismo dell’operatore."
-        }
-      ]
+          feedback: "Può funzionare una volta, ma il risultato dipende dal tempismo dell’operatore.",
+        },
+      ],
     },
     {
       sceneId: "S3_TRANSFER",
@@ -93,7 +92,7 @@ const project = {
       learnerAction: "Riusa la strategia: osserva, individua la relazione e verifica la conseguenza.",
       consequence: "La strategia funziona anche quando cambia il contesto.",
       reveal: "Il metodo è trasferibile, non dipende dal primo sistema.",
-      choices: []
+      choices: [],
     },
     {
       sceneId: "S4_CLOSE",
@@ -104,59 +103,25 @@ const project = {
       learnerAction: "Chiudi la prova quando hai riconosciuto che cosa hai riutilizzato.",
       consequence: "Il percorso si chiude senza trasformare la prova in un punteggio.",
       reveal: "Hai trasferito un modo di ragionare, non una risposta da ricordare.",
-      choices: []
-    }
+      choices: [],
+    },
   ],
   storyboardReady: true,
   archived: false,
   createdAt: "2026-10-04T14:00:00Z",
   updatedAt: "2026-10-04T15:03:00Z",
-  revision: 9
+  revision: 9,
 };
 
-test("Studio Atlas opens exact learner preview in Atlas across origins", async ({ browser }) => {
+test("Studio Atlas opens an exact learner preview only after explicit Product Review PASS", async ({ browser }) => {
   const context = await browser.newContext();
-  const diagnostics: string[] = [];
-  context.on("page", (candidate) => {
-    candidate.on("pageerror", (error) => {
-      diagnostics.push(`pageerror:${error.name}:${error.message}`);
-    });
-    candidate.on("console", (message) => {
-      if (message.type() === "error" || message.type() === "warning") {
-        diagnostics.push(`console:${message.type()}:${message.text()}`);
-      }
-    });
-    candidate.on("requestfailed", (request) => {
-      diagnostics.push(
-        `requestfailed:${request.url()}:${request.failure()?.errorText ?? "unknown"}`,
-      );
-    });
-  });
   const page = await context.newPage();
 
   await page.addInitScript((seed) => {
     localStorage.setItem("studio-atlas.projects.v0.1", JSON.stringify([seed]));
-  }, project);
+  }, approvedProject);
 
-  await page.goto(`${STUDIO}/percorso/${project.projectId}`);
-
-  await page.evaluate(() => {
-    const target = window as Window & { __bridgeEvents?: unknown[] };
-    target.__bridgeEvents = [];
-    window.addEventListener("message", (event) => {
-      target.__bridgeEvents?.push({
-        origin: event.origin,
-        type:
-          event.data && typeof event.data === "object"
-            ? (event.data as { type?: unknown }).type
-            : typeof event.data,
-        channel:
-          event.data && typeof event.data === "object"
-            ? (event.data as { channel?: unknown }).channel
-            : undefined,
-      });
-    });
-  });
+  await page.goto(`${STUDIO}/percorso/${approvedProject.projectId}`);
 
   const previewButton = page.getByRole("button", { name: "Vedi come studente" });
   await expect(previewButton).toBeEnabled();
@@ -173,79 +138,28 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
   const url = new URL(popup.url());
   expect([...url.searchParams.keys()]).toEqual(["channel"]);
   expect(url.searchParams.get("channel")).toMatch(/^[0-9a-f]{48}$/);
-  expect(popup.url()).not.toContain("E2E%20Percorso");
   expect(popup.url()).not.toContain("snapshot");
-
-  await popup.evaluate(() => {
-    const target = window as Window & { __bridgeEvents?: unknown[] };
-    target.__bridgeEvents = [];
-    window.addEventListener("message", (event) => {
-      target.__bridgeEvents?.push({
-        origin: event.origin,
-        type:
-          event.data && typeof event.data === "object"
-            ? (event.data as { type?: unknown }).type
-            : typeof event.data,
-        channel:
-          event.data && typeof event.data === "object"
-            ? (event.data as { channel?: unknown }).channel
-            : undefined,
-        sourceMatchesOpener: event.source === window.opener,
-      });
-    });
-  });
-
-  await popup.waitForTimeout(1500);
-  const bridgeDebug = {
-    studio: await page.evaluate(
-      () => (window as Window & { __bridgeEvents?: unknown[] }).__bridgeEvents ?? [],
-    ),
-    atlas: await popup.evaluate(
-      () => (window as Window & { __bridgeEvents?: unknown[] }).__bridgeEvents ?? [],
-    ),
-    atlasHasOpener: await popup.evaluate(() => Boolean(window.opener)),
-    studioOrigin: await page.evaluate(() => window.location.origin),
-    atlasOrigin: await popup.evaluate(() => window.location.origin),
-  };
-  console.log("STUDIO_ATLAS_BRIDGE_DEBUG", JSON.stringify(bridgeDebug));
-  console.log("STUDIO_ATLAS_BROWSER_DIAGNOSTICS", JSON.stringify(diagnostics));
+  expect(popup.url()).not.toContain("E2E%20Percorso");
 
   await expect(
     popup.getByText("ANTEPRIMA STUDIO ATLAS · NON AUTORIZZATA AGLI STUDENTI"),
   ).toBeVisible({ timeout: 15_000 });
-  await expect(
-    popup.getByRole("heading", { name: "E2E Percorso Studio Atlas" }),
-  ).toBeVisible();
-  await expect(
-    popup.getByRole("heading", { name: "Qualcosa non torna" }),
-  ).toBeVisible();
+  await expect(popup.getByRole("heading", { name: approvedProject.title })).toBeVisible();
+  await expect(popup.getByRole("heading", { name: "Qualcosa non torna" })).toBeVisible();
 
   await popup.getByRole("button", { name: "Continua" }).click();
-  await expect(
-    popup.getByRole("heading", { name: "Prova una modifica" }),
-  ).toBeVisible();
+  await expect(popup.getByRole("heading", { name: "Prova una modifica" })).toBeVisible();
 
   const supportedChoice = popup.getByRole("radio", {
     name: "Collego il sistema al segnale del nuovo ingresso",
   });
-  await expect(supportedChoice).toBeVisible();
   await supportedChoice.check();
   await expect(
     popup.getByText("La risposta parte nel momento atteso: questa modifica spiega il ritardo."),
   ).toBeVisible();
 
   await popup.getByRole("button", { name: "Continua" }).click();
-  await expect(
-    popup.getByRole("heading", { name: "Un sistema diverso" }),
-  ).toBeVisible();
-
-  await expect.poll(async () => {
-    return await page.evaluate(() => {
-      const raw = localStorage.getItem("studio-atlas.projects.v0.1");
-      const items = raw ? JSON.parse(raw) : [];
-      return items[0]?.lastPreviewSnapshot?.studentAuthorized;
-    });
-  }).toBe(false);
+  await expect(popup.getByRole("heading", { name: "Un sistema diverso" })).toBeVisible();
 
   const stored = await page.evaluate(() => {
     const raw = localStorage.getItem("studio-atlas.projects.v0.1");
@@ -253,14 +167,14 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
     return items[0]?.lastPreviewSnapshot;
   });
 
+  expect(stored.studentAuthorized).toBe(false);
   expect(stored.runtimeAuthorized).toBe(false);
-  expect(stored.scenes.some((scene) => scene.kind === "TRANSFER")).toBe(true);
+  expect(stored.scenes.some((scene: { kind?: string }) => scene.kind === "TRANSFER")).toBe(true);
 
   await context.close();
 });
 
-
-test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", async ({ browser }) => {
+test("MUSEO ZERO stays REVISE while review preview exercises investigation, representations and world consequence", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
 
@@ -278,9 +192,9 @@ test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", asyn
 
   await page.getByRole("button", { name: "Scene" }).click();
   await expect(page.getByRole("heading", { name: "Metti in sequenza ciò che accade." })).toBeVisible();
-  await expect(
-    page.getByRole("textbox", { name: "Titolo scena 5" }),
-  ).toHaveValue("Quale soluzione regge davvero?");
+  await expect(page.getByRole("textbox", { name: "Titolo scena 5" })).toHaveValue(
+    "Quale soluzione regge davvero?",
+  );
   await expect(page.getByRole("button", { name: "Storyboard pronto" })).toHaveCount(0);
 
   await page
@@ -291,7 +205,6 @@ test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", asyn
     page.getByRole("heading", { name: "Il pacchetto richiede una nuova revisione." }),
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "Approva pacchetto" })).toHaveCount(0);
-  await expect(reviewPreviewButton).toBeEnabled();
 
   const popupPromise = context.waitForEvent("page");
   await reviewPreviewButton.click();
@@ -308,20 +221,30 @@ test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", asyn
   await expect(
     popup.getByRole("heading", { name: "MUSEO ZERO · La sala che non torna" }),
   ).toBeVisible();
-  await expect(
-    popup.getByRole("heading", { name: "Qualcosa non torna" }),
-  ).toBeVisible();
+  await expect(popup.getByRole("heading", { name: "Qualcosa non torna" })).toBeVisible();
 
   await popup.getByRole("button", { name: "Continua" }).click();
-
   await expect(
     popup.getByRole("heading", { name: "Tutti hanno cambiato qualcosa" }),
   ).toBeVisible();
-  const connectionsChoice = popup.getByRole("radio", {
-    name: "Collego subito percorso, sensore e regia",
-  });
-  await expect(connectionsChoice).toBeVisible();
-  await connectionsChoice.check();
+
+  async function pinEvidence(label: string) {
+    const card = popup.locator("article.experience-evidence").filter({ hasText: label });
+    await expect(card).toBeVisible();
+    await card.getByRole("button", { name: "Porta sul banco" }).click();
+  }
+
+  await pinEvidence("Percorso invertito");
+  await pinEvidence("Perché il percorso è cambiato");
+
+  const locations = popup.getByRole("navigation", { name: "Luoghi di Museo Zero" });
+  await locations.getByRole("button", { name: "Sala Zero" }).click();
+  await pinEvidence("Sensor B spostato");
+
+  const representation = popup.getByRole("group", { name: "Rappresentazione" });
+  const connectMode = representation.getByRole("button", { name: "Collega", exact: true });
+  await expect(connectMode).toBeEnabled();
+  await connectMode.click();
   await expect(
     popup.getByText(
       "Le relazioni sono promettenti, ma senza ordinare alcune modifiche rischi di attribuire importanza a coincidenze.",
@@ -329,17 +252,17 @@ test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", asyn
   ).toBeVisible();
 
   await popup.getByRole("button", { name: "Continua" }).click();
-  await expect(
-    popup.getByRole("heading", { name: "Prova il collegamento" }),
-  ).toBeVisible();
+  await expect(popup.getByRole("heading", { name: "Prova il collegamento" })).toBeVisible();
   await expect(
     popup.getByText("Il nuovo ingresso usa Sensor B, ma la regia ascolta ancora Sensor A"),
   ).toBeVisible();
 
-  const switchSensorChoice = popup.getByRole("radio", {
+  const switchSensorChoice = popup.getByRole("button", {
     name: "Provo il trigger su Sensor B",
+    exact: true,
   });
-  await switchSensorChoice.check();
+  await switchSensorChoice.click();
+
   await expect(
     popup.getByText(
       "La sala risponde nel momento previsto: la mappatura aggiornata spiega il problema",
@@ -347,6 +270,7 @@ test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", asyn
   ).toBeVisible();
   await expect(popup.getByText("Trigger su Sensor B", { exact: true })).toBeVisible();
   await expect(popup.getByText("Suono e luce", { exact: true })).toBeVisible();
+  await expect(popup.getByRole("button", { name: "Continua dalla conseguenza" })).toBeEnabled();
 
   await expect.poll(async () => {
     return await page.evaluate((projectId) => {
