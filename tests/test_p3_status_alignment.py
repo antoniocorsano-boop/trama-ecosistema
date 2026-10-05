@@ -90,6 +90,22 @@ class P3StatusAlignmentTests(unittest.TestCase):
         self.assertIn("Versione 1.2", audit)
         self.assertIn("P6 — CLOSED / INTEGRATED", audit)
         self.assertIn("4ee44c1b906f3f816600c911614f6a9b43c3785c", audit)
+        self.assertIn("### Stato dei pacchetti al 5 ottobre 2026", audit)
+        self.assertIn("| Pacchetto | Stato v1.2 | Nota |", audit)
+        self.assertNotIn("### Stato dei pacchetti al 4 ottobre 2026\n\n| Pacchetto | Stato v1.1 | Nota |", audit)
+
+    def test_project_knowledge_pack_projects_p6_closure(self):
+        pack = json.loads(
+            (ROOT / "control-center/data/context-packs/project-knowledge.json").read_text(encoding="utf-8")
+        )
+        facts = {item.get("eventId"): item for item in pack.get("facts", []) if item.get("eventId")}
+        event_id = "TRAMA-EVT-GHAW-T0-CLOSED-INTEGRATED-2026-10-05"
+        self.assertIn(event_id, facts)
+        self.assertEqual(facts[event_id]["status"], "CURRENT")
+        self.assertIn(
+            "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+            json.dumps(facts[event_id], ensure_ascii=False),
+        )
 
     def test_status_records_p6_closed_and_remaining_residuals(self):
         status = (ROOT / "STATUS.md").read_text(encoding="utf-8")
