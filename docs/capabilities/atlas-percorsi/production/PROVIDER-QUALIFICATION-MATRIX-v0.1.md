@@ -1,7 +1,7 @@
 # Visual Factory — Provider Qualification Matrix v0.1
 
 **Status:** ACTIVE_QUALIFICATION_MATRIX  
-**Date:** 2026-10-04  
+**Date:** 2026-10-05  
 **Policy:** FREE_ONLY
 
 | Provider class | SkyPilot support | Read-only entitlement proof | Programmatic provisioning | v0.1 decision |
@@ -16,6 +16,28 @@
 | Kaggle Free | NO canonical SkyPilot infra | quota visible, but empirical T4 request produced CPU runtime | notebook API | **NEGATIVE KNOWLEDGE / NOT_CANONICAL** |
 | Colab Free | NO canonical SkyPilot infra | GPU assignment not stable/guaranteed | notebook runtime | **NEGATIVE KNOWLEDGE / NOT_CANONICAL** |
 
+## VF-ORCH-01 bounded provider chain
+
+The Studio Atlas v0.2 execution path adds a narrower provider chain for the approved `flux2-klein-4b/v0.2` family. This chain does not replace the broader SkyPilot qualification matrix and does not create paid-compute authority.
+
+| Provider | Exact model / route | Zero-cost admission | Automated state | Live state |
+|---|---|---|---|---|
+| Hugging Face ZeroGPU | `black-forest-labs/FLUX.2-klein-4B` through configured Gradio Space | authenticated ZeroGPU quota preflight; no overquota; protected reserve for unfinished canonical refs | **ADAPTER + ORCHESTRATION QUALIFIED** | **LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN** |
+| Cloudflare Workers AI | `@cf/black-forest-labs/flux-2-klein-4b` | explicit `CLOUDFLARE_WORKERS_FREE_ADMITTED=true`; unknown/free status defaults ineligible | **ADAPTER + FALLBACK POLICY QUALIFIED** | **LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN** |
+
+Canonical constraints for both adapters:
+
+- `FREE_ONLY` only;
+- no paid fallback and no automatic quality downgrade;
+- each provider attempted at most once per orchestration cycle;
+- unknown cost eligibility excludes the provider;
+- malformed output fails closed;
+- provider credentials never belong in browser-visible configuration or receipts;
+- successful generation remains only a candidate until Human Visual Review/reference lock;
+- generation grants neither runtime nor publication authority.
+
+The repository manual workflow is intentionally credential-neutral. It can qualify the orchestration surface and produce fail-closed evidence without injecting provider secrets. A real zero-cost run therefore remains a separate trusted operational proof.
+
 ## Selection rationale
 
 v0.1 does not attempt to support every provider.
@@ -29,7 +51,7 @@ Azure and owned Kubernetes cover the two important cases:
 1. **credit-covered programmable cloud**;
 2. **already-owned zero-marginal GPU capacity**.
 
-This is enough to prove the orchestrator architecture without building a provider zoo.
+The VF-ORCH-01 chain separately proves bounded application-level fallback for the single approved visual model family without building a provider zoo.
 
 ## Azure
 
@@ -73,11 +95,10 @@ The presence of a Google Cloud billing account or free-trial eligibility is insu
 No provider moves from DEFER/UNKNOWN to eligible without:
 
 - read-only entitlement evidence;
-- SkyPilot credential check;
-- exact dry-run;
-- bounded run estimate;
+- provider credential readiness;
+- explicit zero-cost admission appropriate to that provider;
+- bounded-run evidence;
 - Human Review of the qualification evidence.
-
 
 ## Live discovery — 2026-10-04
 
@@ -103,6 +124,15 @@ Observed without provisioning:
 
 Interpretation:
 
-No live SkyPilot-compatible FREE_ONLY provider is currently bound to the repository.
+No live SkyPilot-compatible FREE_ONLY provider was bound by that discovery run.
 
-This is an infrastructure qualification state, not a Visual Factory architecture failure.
+## VF-ORCH-01 deterministic qualification — 2026-10-05
+
+TDD evidence:
+
+- RED: run `37308190087`, exact head `47f96f3d6cd99aa5ecc64eed05112a2d2db7c891`, failed exactly because the dedicated runner/manual qualification surface did not yet exist;
+- GREEN: run `37308776923`, exact head `83a37ea3cd2843e1aa90ada5253c320e31d61c89`, passed the qualification-surface gate, Studio Atlas tests, typecheck, build, Python Visual Factory contracts, reference compilation, fail-closed unlocked scenes, F1–F6 compilation and executor safety checks.
+
+Interpretation:
+
+The zero-cost orchestration **implementation and deterministic qualification surface are proven**. No live HF/Cloudflare inference was performed by those CI runs. Current live state therefore remains `LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN` rather than PASS.
