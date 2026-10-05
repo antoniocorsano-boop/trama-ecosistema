@@ -121,6 +121,21 @@ export type VisualPreflightReceipt = {
   publicationAuthorityGranted: false;
 };
 
+export type CompileVisualPromptOptions = {
+  compilerVersion?: string;
+  referenceInputs?: readonly string[];
+};
+
+export type CreateVisualPreflightReceiptInput = {
+  spec: VisualIntentSpec;
+  providerFamily: "FLUX2_KLEIN_4B";
+  semanticCritic: SemanticCriticResult;
+  humanPreflightDecision?: "PASS" | "REVISE";
+  compilerVersion?: string;
+  referenceInputs?: readonly string[];
+  createdAt?: string;
+};
+
 function canonicalize(value: unknown): unknown {
   if (Array.isArray(value)) {
     return value.map((item) => canonicalize(item));
@@ -294,4 +309,119 @@ export function resolvePreflightState(
     return "PREFLIGHT_PASS";
   }
   return "PREFLIGHT_REVISE";
+}
+
+function joinSection(values: readonly string[]): string {
+  return values.map((item) => item.trim()).filter(Boolean).join("; ");
+}
+
+export function compileVisualPrompt(
+  spec: VisualIntentSpec,
+  providerFamily: "FLUX2_KLEIN_4B",
+  options: CompileVisualPromptOptions = {},
+): CompiledVisualPrompt {
+  const deterministicFindings = runDeterministicPreflight(spec);
+  if (hasPreflightErrors(deterministicFindings)) {
+    throw new Error("VISUAL_PREFLIGHT_SPEC_NOT_COMPILABLE");
+  }
+
+  const compilerVersion = options.compilerVersion ?? VISUAL_PREFLIGHT_COMPILER_VERSION;
+  const sourceSpecDigest = canonicalDigest(spec);
+  const positivePrompt = [
+    "medium/style: cinematic editorial illustration; polished 2-D illustrated realism",
+    `narrative/world: ${joinSection([spec.narrativeFunction, ...spec.worldAnchors])}`,
+    `identity: ${joinSection(spec.identityAnchors.length > 0 ? spec.identityAnchors : spec.worldAnchors)}`,
+    `action/state: ${joinSection([...spec.requiredVisualFacts, spec.interactionState ?? ""])}`,
+    `composition: ${joinSection([
+      spec.composition.dominantSubject,
+      ...spec.composition.foreground,
+      ...spec.composition.midground,
+      ...spec.composition.background,
+      spec.composition.spatialRelation,
+      ...(spec.composition.focalActions ?? []),
+    ])}`,
+    `camera: ${joinSection([
+      spec.camera.shotScale,
+      spec.camera.viewpoint,
+      spec.camera.lensLanguage,
+      spec.camera.continuityFamily ?? "",
+    ])}`,
+    `lighting/material: ${joinSection([spec.lightingMood, ...spec.materialTextureLanguage])}`,
+    `continuity: ${joinSection(spec.continuityRefs.length > 0 ? spec.continuityRefs : ["preserve approved identity and world anchors"])}`,
+    "provider adaptation: FLUX.2 Klein 4B; preserve semantic priority in section order",
+  ].join(". ");
+  const negativePrompt = joinSection([
+    ...spec.negativeConstraints,
+    ...spec.forbiddenTextPatterns.map((item) => `forbid text pattern: ${item}`),
+  ]);
+  const promptCore = {
+    providerFamily,
+    workflowFamily: "flux2-klein-4b/v0.2",
+    positivePrompt,
+    negativePrompt,
+    referenceInputs: [...(options.referenceInputs ?? [])],
+    aspectRatio: spec.targetAspectRatio,
+    maxVariants: 1 as const,
+    sourceSpecDigest,
+    compilerVersion,
+  };
+
+  return {
+    ...promptCore,
+    promptDigest: canonicalDigest(promptCore),
+  };
+}
+
+export function createVisualPreflightReceipt(
+  input: CreateVisualPreflightReceiptInput,
+): VisualPreflightReceipt {
+  const compilerVersion = input.compilerVersion ?? VISUAL_PREFLIGHT_COMPILER_VERSION;
+  const deterministicChecks = runDeterministicPreflight(input.spec);
+  const finalState = resolvePreflightState({
+    deterministicFindings: deterministicChecks,
+    semanticCritic: input.semanticCritic,
+    humanPreflightDecision: input.humanPreflightDecision,
+  });
+  const specDigest = canonicalDigest(input.spec);
+  const compiledPrompts = hasPreflightErrors(deterministicChecks)
+    ? []
+    : [compileVisualPrompt(input.spec, input.providerFamily, {
+        compilerVersion,
+        referenceInputs: input.referenceInputs,
+      })];
+  const humanPreflightRequired =
+    input.semanticCritic.mode === "NOT_AVAILABLE" && input.semanticCritic.result === "NOT_RUN";
+  const bindingDigest = canonicalDigest({
+    specDigest,
+    packageDigest: input.spec.packageDigest,
+    compilerVersion,
+    artDirectionVersion: input.spec.artDirectionVersion,
+    finalState,
+    promptDigests: compiledPrompts.map((prompt) => prompt.promptDigest),
+    semanticCritic: {
+      mode: input.semanticCritic.mode,
+      modelRef: input.semanticCritic.modelRef ?? null,
+      modelDigest: input.semanticCritic.modelDigest ?? null,
+      result: input.semanticCritic.result,
+    },
+    humanPreflightDecision: input.humanPreflightDecision ?? null,
+  });
+
+  return {
+    schemaVersion: VISUAL_PREFLIGHT_RECEIPT_SCHEMA_VERSION,
+    receiptId: `vpc-${bindingDigest.slice(0, 32)}`,
+    specId: input.spec.specId,
+    packageDigest: input.spec.packageDigest,
+    specDigest,
+    compilerVersion,
+    artDirectionVersion: input.spec.artDirectionVersion,
+    deterministicChecks,
+    semanticCritic: input.semanticCritic,
+    humanPreflightRequired,
+    ...(input.humanPreflightDecision ? { humanPreflightDecision: input.humanPreflightDecision } : {}),
+    compiledPrompts,
+    finalState,
+    createdAt: input.createdAt ?? new Date().toISOString(),
+    ...PREFLIGHT_AUTHORITY_FLAGS,
+  };
 }
