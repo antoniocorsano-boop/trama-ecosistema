@@ -58,7 +58,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          gh aw trial .github/workflows/trama-t0-issue-triage.md \
+          gh aw trial ./.github/workflows/trama-t0-issue-triage.md \
             --host-repo . \
             --trigger-context 'https://github.com/antoniocorsano-boop/trama-ecosistema/issues/117' \
             --dry-run \
