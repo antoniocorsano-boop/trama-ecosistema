@@ -37,7 +37,7 @@ export type HfReserveInput = {
 
 export type VisualProviderAdapter = {
   id: VisualProviderId;
-  preflight(ctx: OrchestrationContext): Promise<ProviderEligibility>;
+  preflight(plan: VisualGenerationPlan, ctx: OrchestrationContext): Promise<ProviderEligibility>;
   execute(plan: VisualGenerationPlan, ctx: OrchestrationContext): Promise<ProviderAttemptOutcome>;
 };
 
@@ -50,29 +50,34 @@ export function computeProtectedHfReserve(input: HfReserveInput): number {
   return Math.max(0, input.unfinishedReferenceCount) * estimate + input.safetyMarginSeconds;
 }
 
-function hfCanServeCanonicalReference(ctx: OrchestrationContext): boolean {
-  if (typeof ctx.hfQuotaRemainingSeconds !== "number") return false;
-  const estimate = estimateReferenceSeconds(ctx);
-  const otherUnfinished = Math.max(0, ctx.unfinishedCanonicalReferenceCount - 1);
+function estimatedAttemptSeconds(plan: VisualGenerationPlan, ctx: OrchestrationContext): number {
+  return Math.max(1, plan.jobs.length) * estimateReferenceSeconds(ctx);
+}
+
+function hfCanServeCanonicalReference(plan: VisualGenerationPlan, ctx: OrchestrationContext): boolean {
+  // Unknown quota is not eligibility. It only keeps HF in the bounded candidate
+  // list so the adapter can perform the authoritative authenticated preflight.
+  if (typeof ctx.hfQuotaRemainingSeconds !== "number") return true;
+  const attemptUnits = Math.max(1, plan.jobs.length);
+  const otherUnfinished = Math.max(0, ctx.unfinishedCanonicalReferenceCount - attemptUnits);
   const reserveForOthers = computeProtectedHfReserve({
     unfinishedReferenceCount: otherUnfinished,
     configuredFloorSeconds: ctx.hfConfiguredFloorSeconds,
     measuredReferenceP95Seconds: ctx.measuredReferenceP95Seconds,
     safetyMarginSeconds: ctx.hfSafetyMarginSeconds,
   });
-  return ctx.hfQuotaRemainingSeconds >= estimate + reserveForOthers;
+  return ctx.hfQuotaRemainingSeconds >= estimatedAttemptSeconds(plan, ctx) + reserveForOthers;
 }
 
-function hfCanServeNonReference(ctx: OrchestrationContext): boolean {
-  if (typeof ctx.hfQuotaRemainingSeconds !== "number") return false;
-  const estimate = estimateReferenceSeconds(ctx);
+function hfCanServeNonReference(plan: VisualGenerationPlan, ctx: OrchestrationContext): boolean {
+  if (typeof ctx.hfQuotaRemainingSeconds !== "number") return true;
   const protectedReserve = computeProtectedHfReserve({
     unfinishedReferenceCount: ctx.unfinishedCanonicalReferenceCount,
     configuredFloorSeconds: ctx.hfConfiguredFloorSeconds,
     measuredReferenceP95Seconds: ctx.measuredReferenceP95Seconds,
     safetyMarginSeconds: ctx.hfSafetyMarginSeconds,
   });
-  return ctx.hfQuotaRemainingSeconds - estimate >= protectedReserve;
+  return ctx.hfQuotaRemainingSeconds - estimatedAttemptSeconds(plan, ctx) >= protectedReserve;
 }
 
 export function selectProviderOrder(
@@ -80,18 +85,18 @@ export function selectProviderOrder(
   ctx: OrchestrationContext,
 ): VisualProviderId[] {
   if (plan.planType === "REFERENCE_GENERATION") {
-    return hfCanServeCanonicalReference(ctx)
+    return hfCanServeCanonicalReference(plan, ctx)
       ? ["HF_ZEROGPU", "CLOUDFLARE_WORKERS_AI"]
       : ["CLOUDFLARE_WORKERS_AI"];
   }
 
   if (ctx.unfinishedCanonicalReferenceCount > 0) {
-    return hfCanServeNonReference(ctx)
+    return hfCanServeNonReference(plan, ctx)
       ? ["CLOUDFLARE_WORKERS_AI", "HF_ZEROGPU"]
       : ["CLOUDFLARE_WORKERS_AI"];
   }
 
-  return hfCanServeNonReference(ctx)
+  return hfCanServeNonReference(plan, ctx)
     ? ["HF_ZEROGPU", "CLOUDFLARE_WORKERS_AI"]
     : ["CLOUDFLARE_WORKERS_AI"];
 }
@@ -145,7 +150,7 @@ export async function orchestrateVisualGeneration(
 
     let eligibility: ProviderEligibility;
     try {
-      eligibility = await adapter.preflight(ctx);
+      eligibility = await adapter.preflight(plan, ctx);
     } catch (error) {
       failures.push(`${providerId}:PREFLIGHT_ERROR:${error instanceof Error ? error.message : "UNKNOWN"}`);
       continue;
