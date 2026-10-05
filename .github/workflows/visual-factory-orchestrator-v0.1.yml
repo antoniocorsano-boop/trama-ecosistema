@@ -1,0 +1,96 @@
+name: Visual Factory — Zero-Cost Orchestrator v0.1
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Eligibility only, canonical references, or locked-reference shots"
+        required: true
+        type: choice
+        default: dry-run
+        options:
+          - dry-run
+          - references
+          - shots
+      plan_path:
+        description: "Optional repository path to a governed visual generation plan; required for shots"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrate:
+    name: Bounded FREE_ONLY visual orchestration
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_WORKERS_FREE_ADMITTED: "false"
+      VISUAL_FACTORY_EVIDENCE_DIR: ${{ github.workspace }}/visual-factory-evidence
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install exact declared Studio Atlas dependencies
+        working-directory: products/studio-atlas
+        run: npm install --no-audit --no-fund
+
+      - name: Prepare governed generation plan
+        shell: bash
+        env:
+          MODE: ${{ inputs.mode }}
+          PLAN_PATH: ${{ inputs.plan_path }}
+        run: |
+          set -euo pipefail
+          if [ -n "$PLAN_PATH" ]; then
+            test -f "$PLAN_PATH"
+            cp "$PLAN_PATH" /tmp/visual-generation-plan.json
+          elif [ "$MODE" = "shots" ]; then
+            echo "shots mode requires plan_path pointing to a human-locked SHOT_GENERATION plan" >&2
+            exit 1
+          else
+            python scripts/compile_visual_generation_plan.py \
+              --visual-bible docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/museo-zero.visual-bible-v0.2.json \
+              --mode references \
+              --output /tmp/visual-generation-plan.json
+          fi
+
+      - name: Execute bounded orchestrator
+        working-directory: products/studio-atlas
+        env:
+          MODE: ${{ inputs.mode }}
+        run: |
+          npm run visual-factory:orchestrate -- \
+            --mode "$MODE" \
+            --plan /tmp/visual-generation-plan.json \
+            --output "$VISUAL_FACTORY_EVIDENCE_DIR"
+
+      - name: Verify evidence remains non-authoritative
+        run: |
+          test -d visual-factory-evidence
+          grep -R '"costClass": "FREE_ONLY"' visual-factory-evidence
+          grep -R '"runtimeAuthorized": false' visual-factory-evidence
+          grep -R '"publicationAuthorityGranted": false' visual-factory-evidence
+
+      - name: Trusted credential binding boundary
+        run: |
+          echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING"
+          echo "This repository workflow does not inject provider secrets."
+
+      - name: Upload governed orchestration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-factory-orchestration-${{ github.run_id }}-${{ inputs.mode }}
+          path: visual-factory-evidence/
+          if-no-files-found: warn
+          retention-days: 14
