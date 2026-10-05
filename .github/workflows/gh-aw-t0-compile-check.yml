@@ -37,20 +37,13 @@ jobs:
           set -euo pipefail
           gh aw compile trama-t0-issue-triage --strict
           test -f .github/workflows/trama-t0-issue-triage.lock.yml
-      - name: Require controlled trial entrypoint
+      - name: Require controlled trial entrypoints
         shell: bash
         run: |
           set -euo pipefail
           grep -q '^  workflow_call:' .github/workflows/trama-t0-issue-triage.lock.yml
+          grep -q '^  workflow_dispatch:' .github/workflows/trama-t0-issue-triage.lock.yml
           grep -q 'item_number:' .github/workflows/trama-t0-issue-triage.lock.yml
-      - name: Report controlled trial auth prerequisites
-        shell: bash
-        env:
-          GH_AW_TOKEN_CONFIGURED: ${{ secrets.GH_AW_GITHUB_TOKEN != '' }}
-          COPILOT_TOKEN_CONFIGURED: ${{ secrets.COPILOT_GITHUB_TOKEN != '' }}
-        run: |
-          echo "GH_AW_GITHUB_TOKEN configured: ${GH_AW_TOKEN_CONFIGURED}"
-          echo "COPILOT_GITHUB_TOKEN configured: ${COPILOT_TOKEN_CONFIGURED}"
       - name: Publish compiled lock evidence
         uses: actions/upload-artifact@v4
         with:
@@ -58,3 +51,21 @@ jobs:
           path: .github/workflows/trama-t0-issue-triage.lock.yml
           if-no-files-found: error
           retention-days: 7
+      - name: One-shot sync trial lock with dedicated token
+        if: github.event_name == 'push' && github.ref_name == 'gh-aw/t0-controlled-trial' && github.actor != 'github-actions[bot]'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "${GH_TOKEN:-}"
+          git add .github/workflows/trama-t0-issue-triage.lock.yml
+          if git diff --cached --quiet; then
+            echo 'lock already synchronized'
+            exit 0
+          fi
+          gh auth setup-git
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(gh-aw): synchronize controlled-trial lock'
+          git push origin HEAD:gh-aw/t0-controlled-trial
