@@ -81,6 +81,12 @@ export type SemanticCriticResult = {
   findings: VisualPreflightFinding[];
 };
 
+export type PreflightDecisionInput = {
+  deterministicFindings: readonly VisualPreflightFinding[];
+  semanticCritic: SemanticCriticResult;
+  humanPreflightDecision?: "PASS" | "REVISE";
+};
+
 export type CompiledVisualPrompt = {
   providerFamily: "FLUX2_KLEIN_4B";
   workflowFamily: string;
@@ -142,11 +148,13 @@ function finding(
   code: string,
   message: string,
   sourcePath: string,
+  severity: VisualPreflightFinding["severity"] = "ERROR",
+  dimension = "CONTRACT",
 ): VisualPreflightFinding {
   return {
     code,
-    severity: "ERROR",
-    dimension: "CONTRACT",
+    severity,
+    dimension,
     message,
     sourcePath,
     checkerVersion: VISUAL_PREFLIGHT_CHECKER_VERSION,
@@ -168,4 +176,122 @@ export function validateVisualIntentSpec(spec: VisualIntentSpec): VisualPrefligh
     findings.push(finding("PATHWAY_ID_REQUIRED", "Visual intent pathwayId is required.", "pathwayId"));
   }
   return findings;
+}
+
+function positiveSemanticText(spec: VisualIntentSpec): string[] {
+  return [
+    spec.narrativeFunction,
+    ...spec.requiredVisualFacts,
+    ...spec.worldAnchors,
+    ...spec.identityAnchors,
+    spec.composition.dominantSubject,
+    ...spec.composition.foreground,
+    ...spec.composition.midground,
+    ...spec.composition.background,
+    spec.composition.spatialRelation,
+    ...(spec.composition.focalActions ?? []),
+    spec.composition.dominantSurface ?? "",
+    spec.camera.shotScale,
+    spec.camera.viewpoint,
+    spec.camera.lensLanguage,
+    spec.camera.continuityFamily ?? "",
+    spec.lightingMood,
+    ...spec.materialTextureLanguage,
+    spec.interactionState ?? "",
+    ...spec.continuityRefs,
+    ...spec.qualityCriteria,
+  ].filter(Boolean);
+}
+
+const PROVIDER_SYNTAX = /(?:--ar\b|--stylize\b|\bcfg[_ -]?scale\b|@cf\/|black-forest-labs\/flux|\bseed\s*=)/i;
+const FORBIDDEN_POSITIVE_TROPES = [
+  /dashboard aesthetic/i,
+  /detached (?:saas )?dashboard/i,
+  /floating avatar heads?/i,
+  /chibi|mascot treatment/i,
+  /generic cyberpunk(?:[- ]neon)? default/i,
+  /large educational captions?/i,
+  /technical diagram as dominant scene/i,
+  /decorative ai clutter/i,
+];
+
+export function runDeterministicPreflight(spec: VisualIntentSpec): VisualPreflightFinding[] {
+  const findings = [...validateVisualIntentSpec(spec)];
+
+  if (!spec.narrativeFunction.trim()) {
+    findings.push(finding("NARRATIVE_FUNCTION_REQUIRED", "Narrative function must be explicit before generation.", "narrativeFunction", "ERROR", "COMPLETENESS"));
+  }
+  if (spec.requiredVisualFacts.length === 0) {
+    findings.push(finding("REQUIRED_VISUAL_FACTS_REQUIRED", "At least one required visual fact is required.", "requiredVisualFacts", "ERROR", "COMPLETENESS"));
+  }
+  if (!spec.composition.spatialRelation.trim()) {
+    findings.push(finding("SPATIAL_RELATION_REQUIRED", "Spatial relation must be explicit.", "composition.spatialRelation", "ERROR", "COMPOSITION"));
+  }
+  if (spec.purpose === "CHARACTER_REFERENCE" && spec.identityAnchors.length === 0) {
+    findings.push(finding("CHARACTER_IDENTITY_ANCHORS_REQUIRED", "Character references require stable identity anchors.", "identityAnchors", "ERROR", "CONTINUITY"));
+  }
+  if (spec.purpose === "ENVIRONMENT_REFERENCE" && spec.worldAnchors.length === 0) {
+    findings.push(finding("ENVIRONMENT_WORLD_ANCHORS_REQUIRED", "Environment references require world anchors.", "worldAnchors", "ERROR", "WORLD"));
+  }
+  if (spec.purpose === "SCENE_FRAME") {
+    if (!spec.sceneRef?.trim()) {
+      findings.push(finding("SCENE_REF_REQUIRED", "Scene frames require a sceneRef.", "sceneRef", "ERROR", "COMPLETENESS"));
+    }
+    if (!spec.shotId?.trim()) {
+      findings.push(finding("SHOT_ID_REQUIRED", "Scene frames require a shotId.", "shotId", "ERROR", "COMPLETENESS"));
+    }
+  }
+
+  const forbiddenText = new Set(spec.forbiddenTextPatterns.map((item) => item.trim().toLocaleLowerCase()).filter(Boolean));
+  for (const text of spec.exactTextRequired ?? []) {
+    if (forbiddenText.has(text.trim().toLocaleLowerCase())) {
+      findings.push(finding("REQUIRED_FORBIDDEN_TEXT_CONTRADICTION", "The same text cannot be both required and forbidden.", "exactTextRequired", "ERROR", "CONTRADICTION"));
+      break;
+    }
+  }
+
+  if (
+    spec.composition.diegeticScene === true &&
+    /(?:detached|saas).*dashboard|dashboard.*(?:detached|saas)/i.test(spec.composition.dominantSurface ?? "")
+  ) {
+    findings.push(finding("DIEGETIC_DASHBOARD_CONTRADICTION", "A diegetic scene cannot use a detached dashboard as its dominant surface.", "composition.dominantSurface", "ERROR", "CONTRADICTION"));
+  }
+
+  if ((spec.camera.conflictingDirectives?.length ?? 0) > 0) {
+    findings.push(finding("CAMERA_DIRECTIVES_CONFLICT", "Camera directives contain an explicit unresolved conflict.", "camera.conflictingDirectives", "ERROR", "CAMERA"));
+  }
+
+  const positiveText = positiveSemanticText(spec);
+  if (positiveText.some((item) => PROVIDER_SYNTAX.test(item))) {
+    findings.push(finding("PROVIDER_SYNTAX_FORBIDDEN", "Provider-specific syntax is not allowed in canonical visual intent.", "visualIntent", "ERROR", "PROMPT_RISK"));
+  }
+  if (positiveText.some((item) => FORBIDDEN_POSITIVE_TROPES.some((pattern) => pattern.test(item)))) {
+    findings.push(finding("FORBIDDEN_POSITIVE_TROPE", "A forbidden visual trope is being requested positively.", "visualIntent", "ERROR", "ART_DIRECTION"));
+  }
+
+  if ((spec.composition.focalActions?.length ?? 0) > 3) {
+    findings.push(finding("TOO_MANY_FOCAL_ACTIONS", "More than three simultaneous focal actions weakens visual hierarchy.", "composition.focalActions", "WARNING", "PROMPT_RISK"));
+  }
+  if (positiveText.some((item) => item.split(",").filter((part) => part.trim()).length >= 7)) {
+    findings.push(finding("UNPRIORITIZED_ADJECTIVE_CHAIN", "Long comma-separated descriptor chains should be prioritised before generation.", "visualIntent", "WARNING", "PROMPT_RISK"));
+  }
+
+  return findings;
+}
+
+export function hasPreflightErrors(findings: readonly VisualPreflightFinding[]): boolean {
+  return findings.some((item) => item.severity === "ERROR");
+}
+
+export function resolvePreflightState(
+  input: PreflightDecisionInput,
+): "PREFLIGHT_PASS" | "PREFLIGHT_REVISE" {
+  if (hasPreflightErrors(input.deterministicFindings)) return "PREFLIGHT_REVISE";
+  if (input.humanPreflightDecision === "REVISE") return "PREFLIGHT_REVISE";
+  if (input.semanticCritic.result === "REVISE") return "PREFLIGHT_REVISE";
+  if (input.semanticCritic.result === "PASS") return "PREFLIGHT_PASS";
+  if (input.semanticCritic.mode === "NOT_AVAILABLE" && input.humanPreflightDecision === "PASS") {
+    return "PREFLIGHT_PASS";
+  }
+  return "PREFLIGHT_REVISE";
 }
