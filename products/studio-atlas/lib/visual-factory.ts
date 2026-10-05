@@ -140,27 +140,27 @@ export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
     subjectRef: "lia",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Lia, adult museum exhibition-layout and visitor-flow crew member; calm focused physicality; practical contemporary setup clothing; stable hairstyle and warm accent detail; full-body and medium-shot continuity sheet.",
+    prompt: "Single subject with no other people or partial figures; adult museum exhibition-layout and visitor-flow crew member actively placing clean blank visitor-flow markers along the accessible circulation route at the new entrance; hands clearly visible doing the task; calm focused physicality; practical contemporary setup clothing with no logos or lettering; stable hairstyle and one warm accent detail; full-body working pose in a sparse museum corridor with blank walls, no wall plaques and no signage anywhere, not a posed portrait.",
   },
   {
     subjectRef: "omar",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Omar, adult museum installer; practical contemporary workwear; distinct silhouette; grounded posture near sensors and installation props; participant, not teacher; full-body and medium-shot continuity sheet.",
+    prompt: "Single subject with no other people or partial figures; adult museum hands-on installer physically adjusting a compact sensor mount and nearby installation hardware; practical contemporary workwear with no logos or lettering; distinct silhouette; grounded posture, small hand tool or fixture detail allowed; participant with partial knowledge, not teacher or supervisor; full-body working continuity reference.",
   },
   {
     subjectRef: "teo",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Teo, adult museum control and rehearsal crew member; contemporary practical clothing; observant restrained body language; distinct silhouette associated with the control booth; continuity sheet.",
+    prompt: "Single subject; adult museum AV rehearsal technician, not security staff and no security uniform or badge; contemporary practical clothing visually distinct from the installer reference and with no logos or lettering; restrained observant body language inside a compact control booth; physical console only with tactile buttons, knobs and faders, monitor off and no screen interface; all displays dark, no illuminated display and no lettering anywhere; clear sightline through an unlabeled interior window into the adjacent warm-projection gallery; working continuity reference, not a guard portrait.",
   },
   {
     subjectRef: "sala-zero",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Sala Zero contemporary interactive museum room after closing; large projection wall, new accessible entrance threshold, subtle floor route, integrated sensor, exit light, believable architecture and spatial depth; cinematic editorial illustration environment master.",
+    prompt: "Contemporary interactive museum room after closing, viewed from the new accessible entrance threshold into a believable deep space; subtle floor circulation route and integrated sensor near the threshold; large projection wall showing abstract light in warm amber tones and simple non-text motion only; no text, no interface, no charts, no signage, unlabeled walls and unlabeled doors; blank walls, no plaques and no lettering anywhere; exit light and restrained installation details; narrative physical environment first.",
   },
   {
     subjectRef: "cabina-regia",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Cabina regia physically adjacent to Sala Zero; tactile believable museum AV control surface, spatial connection back to the exhibition, simple readable cue mapping and replay controls; cinematic editorial illustration environment master.",
+    prompt: "Interior viewpoint with the camera inside a small enclosed adjacent booth connected to an adjacent warm-projection gallery; a wide observation window frames the warm abstract projection in that gallery; entirely analog control surface in the foreground with physical buttons, knobs, faders and unlit indicator lamps only; no rectangular display panels, no screen-like surfaces, no screens, no monitors, no signage or wall posters; believable museum AV back-of-house materials and working scale; cinematic environment master.",
   },
 ];
 
@@ -212,6 +212,12 @@ const COMMON_NEGATIVE = [
   "technical diagram as dominant scene",
   "large educational captions",
   "decorative AI clutter",
+  "readable text, pseudo-text, labels, captions, signage, or watermarks",
+  "charts, graphs, dashboards, detached UI panels, or screen-wall interfaces",
+  "partial, cropped, headless, duplicate, or malformed human figures",
+  "computer monitor interfaces, source-code screens, or software windows",
+  "illuminated displays, monitor content, interface text, control-screen graphics, or wall placards",
+  "clothing logos, brand marks, badges, embroidered lettering, or printed lettering",
 ];
 
 function basePlan(
