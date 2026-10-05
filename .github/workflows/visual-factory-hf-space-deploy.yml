@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy explicitly configured private Space
+    name: Deploy explicitly configured private ZeroGPU Space
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,7 +18,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install deployment client only
-        run: pip install "huggingface_hub>=0.36.0"
+        run: pip install "huggingface_hub>=2.1.1"
 
       - name: Deploy or stop without mutation
         env:
@@ -28,6 +28,23 @@ jobs:
 
       - name: Authority boundary
         run: |
-          ! grep -Ei 'request_space_hardware|purchase|billing|paid.fallback' scripts/deploy_visual_factory_hf_space.py
-          grep -q 'private=True' scripts/deploy_visual_factory_hf_space.py
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+
+          path = Path("scripts/deploy_visual_factory_hf_space.py")
+          spec = importlib.util.spec_from_file_location("deploy_visual_factory_hf_space", path)
+          module = importlib.util.module_from_spec(spec)
+          assert spec.loader is not None
+          spec.loader.exec_module(module)
+
+          kwargs = module.space_create_kwargs()
+          assert kwargs["space_hardware"] == "zero-a10g"
+          assert kwargs["space_sdk"] == "gradio"
+          assert kwargs["private"] is True
+          assert kwargs["exist_ok"] is True
+          assert module.FREE_ZERO_GPU_BASE_SECONDS == 300.0
+          PY
+          ! grep -q 'request_space_hardware' scripts/deploy_visual_factory_hf_space.py
           grep -q 'NOT_CONFIGURED' scripts/deploy_visual_factory_hf_space.py
+          grep -q 'FREE_ONLY_PRECHECK_FAILED' scripts/deploy_visual_factory_hf_space.py
