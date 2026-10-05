@@ -49,6 +49,26 @@ function validReceipt(url = "https://assets.invalid/lia.png") {
   };
 }
 
+function validOrchestrationEvidence() {
+  return {
+    schemaVersion: "atlas.visual-orchestration-evidence/v0.1",
+    orchestrationId: "orch-1",
+    workloadClass: "CANONICAL_REFERENCE",
+    consideredProviders: ["HF_ZEROGPU", "CLOUDFLARE_WORKERS_AI"],
+    selectedProvider: "HF_ZEROGPU",
+    selectedModelRef: "black-forest-labs/FLUX.2-klein-4B",
+    attempts: [{
+      provider: "HF_ZEROGPU",
+      eligibility: "ELIGIBLE",
+      eligibilityReason: "HF_BASE_QUOTA_SUFFICIENT",
+      quotaRemainingGpuSeconds: 300,
+      outcome: "SUCCEEDED",
+      durationMs: 42,
+    }],
+    finalState: "SUCCEEDED",
+  };
+}
+
 test("malformed executor payload fails closed", () => {
   const receipt = normalizeExecutorResponse({ status: "SUCCEEDED", assets: [] }, DIGEST);
   assert.equal(receipt.status, "FAILED");
@@ -64,6 +84,31 @@ test("valid executor payload preserves asset provenance and no authority", () =>
   assert.equal(receipt.assets[0]?.modelRef, "black-forest-labs/FLUX.2-klein-4B");
   assert.equal(receipt.assets[0]?.provenanceStatus, "RECORDED");
   assert.equal(receipt.paidComputeAuthorized, false);
+});
+
+test("valid optional orchestration evidence is preserved", () => {
+  const receipt = normalizeExecutorResponse({
+    ...validReceipt(),
+    orchestration: validOrchestrationEvidence(),
+  }, DIGEST);
+
+  assert.equal(receipt.status, "SUCCEEDED");
+  assert.equal(receipt.orchestration?.selectedProvider, "HF_ZEROGPU");
+  assert.equal(receipt.orchestration?.attempts[0]?.quotaRemainingGpuSeconds, 300);
+});
+
+test("malformed optional orchestration evidence fails closed", () => {
+  const receipt = normalizeExecutorResponse({
+    ...validReceipt(),
+    orchestration: {
+      ...validOrchestrationEvidence(),
+      attempts: [{ provider: "UNKNOWN_PROVIDER", eligibility: "ELIGIBLE", durationMs: -1 }],
+    },
+  }, DIGEST);
+
+  assert.equal(receipt.status, "FAILED");
+  assert.equal(receipt.failureCategory, "INVALID_EXECUTOR_RESPONSE");
+  assert.equal(receipt.failureDetail, "CONTRACT_MISMATCH");
 });
 
 test("Gradio result replaces file placeholders before receipt validation", () => {
