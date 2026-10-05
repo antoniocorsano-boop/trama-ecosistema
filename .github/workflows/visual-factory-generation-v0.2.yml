@@ -16,6 +16,7 @@ on:
       - "tests/test_visual_factory_hf_contract.py"
       - "tests/test_visual_factory_hf_deploy_zero_gpu.py"
       - "products/studio-atlas/lib/visual-factory*.ts"
+      - "products/studio-atlas/scripts/compile-canonical-reference-plan.ts"
       - "products/studio-atlas/scripts/run-visual-factory-orchestrator.ts"
       - "products/studio-atlas/package.json"
       - ".github/workflows/visual-factory-generation-v0.2.yml"
@@ -42,7 +43,9 @@ jobs:
       - name: Require bounded orchestrator qualification surface
         run: |
           test -f .github/workflows/visual-factory-orchestrator-v0.1.yml
+          test -f products/studio-atlas/scripts/compile-canonical-reference-plan.ts
           test -f products/studio-atlas/scripts/run-visual-factory-orchestrator.ts
+          grep -q '"visual-factory:compile-reference-plan"' products/studio-atlas/package.json
           grep -q '"visual-factory:orchestrate"' products/studio-atlas/package.json
           grep -q 'workflow_dispatch:' .github/workflows/visual-factory-orchestrator-v0.1.yml
           grep -q 'CLOUDFLARE_WORKERS_FREE_ADMITTED' .github/workflows/visual-factory-orchestrator-v0.1.yml
@@ -56,6 +59,30 @@ jobs:
           npm test
           npm run typecheck
           npm run build
+
+      - name: Prove canonical manual reference plan reaches dry-run
+        working-directory: products/studio-atlas
+        run: |
+          npm run visual-factory:compile-reference-plan -- \
+            --output /tmp/canonical-reference-plan.json
+          python - <<'PY'
+          import json,re
+          p=json.load(open("/tmp/canonical-reference-plan.json"))
+          assert p["pathwayId"] == "pw-strategy-selection-01-museo-zero"
+          assert re.fullmatch(r"[0-9a-f]{64}", p["packageDigest"])
+          assert p["decision"] == "REFERENCE_GENERATION_READY"
+          assert p["blockers"] == []
+          assert len(p["jobs"]) == 5
+          assert all(j["aspectRatio"] in {"3:4", "4:3"} for j in p["jobs"])
+          assert not p["paidComputeAuthorized"]
+          assert not p["runtimeAuthorized"]
+          assert not p["publicationAuthorityGranted"]
+          PY
+          npm run visual-factory:orchestrate -- \
+            --mode dry-run \
+            --plan /tmp/canonical-reference-plan.json \
+            --output /tmp/canonical-dry-run-evidence
+          test -d /tmp/canonical-dry-run-evidence
 
       - name: Unit tests
         run: |

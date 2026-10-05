@@ -9,6 +9,7 @@
     "start": "next start",
     "test": "tsx --test lib/*.test.ts",
     "typecheck": "tsc --noEmit",
+    "visual-factory:compile-reference-plan": "tsx scripts/compile-canonical-reference-plan.ts",
     "visual-factory:orchestrate": "tsx scripts/run-visual-factory-orchestrator.ts"
   },
   "dependencies": {
