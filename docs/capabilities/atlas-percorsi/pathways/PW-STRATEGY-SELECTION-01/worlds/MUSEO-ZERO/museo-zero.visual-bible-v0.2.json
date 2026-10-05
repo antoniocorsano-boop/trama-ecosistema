@@ -19,7 +19,9 @@
       "decorative AI clutter",
       "large educational captions",
       "readable text, pseudo-text, labels, captions, signage, or watermarks",
-      "charts, graphs, dashboards, detached UI panels, or screen-wall interfaces"
+      "charts, graphs, dashboards, detached UI panels, or screen-wall interfaces",
+      "partial, cropped, headless, duplicate, or malformed human figures",
+      "computer monitor interfaces, source-code screens, or software windows"
     ]
   },
   "characters": [
@@ -27,8 +29,8 @@
       "characterId": "lia",
       "name": "Lia",
       "role": "exhibition layout / visitor flow",
-      "description": "adult museum crew member actively checking the accessible circulation route at the new entrance; practical contemporary setup clothing, calm focused physicality, stable hairstyle, recurring warm accent, and a working pose with visitor-flow markers rather than a posed portrait",
-      "continuityAnchors": ["stable hairstyle", "stable outerwear silhouette", "same adult age band", "warm accent detail", "visitor-flow task association"],
+      "description": "single-subject adult museum crew member actively placing clean blank floor-route markers at the new accessible entrance; hands clearly visible doing the task; practical contemporary setup clothing, calm focused physicality, stable hairstyle and recurring warm accent; sparse unlabeled museum corridor and no bystanders or partial figures",
+      "continuityAnchors": ["stable hairstyle", "stable outerwear silhouette", "same adult age band", "warm accent detail", "visitor-flow task association", "single-subject working reference"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
@@ -45,8 +47,8 @@
       "characterId": "teo",
       "name": "Teo",
       "role": "control / rehearsal",
-      "description": "adult museum AV rehearsal technician, explicitly not security staff; contemporary practical clothing distinct from Omar, restrained observant body language, tactile control association, and a clear physical sightline from the adjacent booth toward Sala Zero",
-      "continuityAnchors": ["stable clothing", "distinct silhouette from Omar", "same adult age band", "tactile control booth association", "no security uniform or badge"],
+      "description": "single-subject adult museum AV rehearsal technician, explicitly not security staff; contemporary practical clothing distinct from Omar, restrained observant body language, tactile physical-console association, monitor off with no software UI, and a clear physical sightline through an unlabeled window toward Sala Zero",
+      "continuityAnchors": ["stable clothing", "distinct silhouette from Omar", "same adult age band", "tactile control booth association", "no security uniform or badge", "monitor off", "unlabeled window toward Sala Zero"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     }
@@ -55,16 +57,16 @@
     {
       "environmentId": "sala-zero",
       "name": "Sala Zero",
-      "description": "contemporary interactive museum room after closing, seen from the new accessible entrance threshold into a believable deep space; subtle floor circulation route, integrated sensor, exit light, and a large projection wall that shows only abstract warm light or simple non-text motion rather than interface content",
-      "continuityAnchors": ["new entrance threshold", "projection wall geometry", "subtle floor route", "integrated sensor position", "museum accent colour", "non-text abstract projection"],
+      "description": "contemporary interactive museum room after closing, seen from the new accessible entrance threshold into a believable deep space; subtle floor circulation route, integrated sensor, exit light, unlabeled walls and doors, and a large projection wall that shows only abstract warm light or simple non-text motion rather than interface content",
+      "continuityAnchors": ["new entrance threshold", "projection wall geometry", "subtle floor route", "integrated sensor position", "museum accent colour", "non-text abstract projection", "unlabeled walls and doors"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
     {
       "environmentId": "cabina-regia",
       "name": "Cabina regia",
-      "description": "small enclosed museum AV booth physically adjacent to Sala Zero; interior observation window visibly connects to the same projection wall or entrance zone; compact tactile controls rely on physical buttons, knobs, faders and non-text status indicators rather than dashboards or screen walls",
-      "continuityAnchors": ["same material language as Sala Zero", "physical adjacency", "observation window toward Sala Zero", "stable tactile control surface geometry", "non-text status indicators"],
+      "description": "interior viewpoint from a small enclosed museum AV booth physically adjacent to Sala Zero; a wide observation window visibly frames the same warm abstract projection in Sala Zero; tactile foreground console uses physical buttons, knobs and faders only; no screens, monitors, signage or wall posters",
+      "continuityAnchors": ["same material language as Sala Zero", "physical adjacency", "interior viewpoint", "observation window with Sala Zero projection visible", "stable tactile control surface geometry", "no screens or signage"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     }
