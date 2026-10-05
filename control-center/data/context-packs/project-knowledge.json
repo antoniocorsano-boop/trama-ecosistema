@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-05T12:36:57Z",
+  "asOf": "2026-10-05T12:39:06Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -354,6 +354,35 @@
         }
       ],
       "validFrom": "2026-10-05T08:00:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-QUALIFICATION-2026-10-05",
+      "type": "BASELINE",
+      "subject": "visual-factory",
+      "statement": "VF-ORCH-01 has deterministic qualification PASS for its bounded FREE_ONLY orchestration surface, shared runner and manual dry-run/references/shots modes; live zero-cost provider inference is not yet proven and no runtime, publication, learner or student authority is granted.",
+      "status": "CURRENT",
+      "rationale": "project-knowledge projection of the post-Audit-v1.3 VF-ORCH-01 closeout: implementation qualification is distinct from the still-pending real governed visual run.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "48750cda9d7073df374d1263142d233135a0b045",
+          "ref": "docs/capabilities/atlas-percorsi/production/VF-ORCH-01-QUALIFICATION-RECEIPT-v0.1.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/superpowers/plans/2026-10-05-vf-orch-01-zero-cost-multiprovider.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T12:38:00Z",
       "supersedes": [],
       "invalidatedBy": [],
       "freshness": {
@@ -748,6 +777,35 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-QUALIFICATION-2026-10-05",
+      "type": "BASELINE",
+      "subject": "visual-factory",
+      "statement": "VF-ORCH-01 has deterministic qualification PASS for its bounded FREE_ONLY orchestration surface, shared runner and manual dry-run/references/shots modes; live zero-cost provider inference is not yet proven and no runtime, publication, learner or student authority is granted.",
+      "status": "CURRENT",
+      "rationale": "project-knowledge projection of the post-Audit-v1.3 VF-ORCH-01 closeout: implementation qualification is distinct from the still-pending real governed visual run.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "48750cda9d7073df374d1263142d233135a0b045",
+          "ref": "docs/capabilities/atlas-percorsi/production/VF-ORCH-01-QUALIFICATION-RECEIPT-v0.1.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/superpowers/plans/2026-10-05-vf-orch-01-zero-cost-multiprovider.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T12:38:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ],
   "exactHeads": [
@@ -988,8 +1046,17 @@
       "ref": "STATUS.md"
     },
     {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "48750cda9d7073df374d1263142d233135a0b045",
+      "ref": "docs/capabilities/atlas-percorsi/production/VF-ORCH-01-QUALIFICATION-RECEIPT-v0.1.md"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "ref": "docs/superpowers/plans/2026-10-05-vf-orch-01-zero-cost-multiprovider.md"
+    },
+    {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "c006044772ee0744550233516803ae45cbaacc7015cb710b65d7e11e9dfce44c"
+      "sha256": "bcc50a9fa3200f73d0cac01e2aed888efe5157ec57e60bdcd53b19d852402455"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -1009,7 +1076,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "1b169647089be460cf8684858c7db3eb6572d0e6f86118c1513663d196da6a76"
+      "sha256": "7593819105eba5f1971e20cd08cd2a528a55ec384380295f4e11e9d6e0f4c859"
     }
   ]
 }

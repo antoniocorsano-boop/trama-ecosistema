@@ -82,13 +82,13 @@ Stato corrente governato:
 - **Studio Atlas → Atlas preview:** `CROSS_PRODUCT_QUALIFIED / NON_PUBLIC`; nessuna autorizzazione student/public runtime;
 - **MUSEO ZERO v0.2:** `REMEDIATION_IMPLEMENTED / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`; l'esito precedente resta `REVISE` fino alla nuova review consolidata;
 - **Visual Factory:** `IMPLEMENTATION_ADVANCED / AUTOMATED_QUALIFICATION_AVAILABLE / REAL_VISUAL_RUN_PENDING`;
-- **VF-ORCH-01:** `CORE_IMPLEMENTED / PLAN_INCOMPLETE`;
+- **VF-ORCH-01:** `DETERMINISTIC_QUALIFICATION_PASS / LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN`; runner condiviso, modalità manuali `dry-run | references | shots`, test/typecheck/build e contratti provider sono qualificati; nessun live inference è ancora attestato;
 - **Durability:** `DEVELOPMENT_PERSISTENCE_ONLY / PROFESSIONAL_RUNTIME_FOUNDATION_PENDING`;
 - **Docente OS ↔ Studio Atlas lesson continuity:** `CONTRACT_DIRECTION_ESTABLISHED / RUNTIME_BINDING_DEFERRED`.
 
 La prova di completamento prodotto richiede ancora la catena reale `references → Human Visual Review/reference lock → F1–F6 → learner integration → seconda Human Product Review`. CI verde e preview tecnica non sostituiscono questi gate.
 
-Sequenza canonica: baseline v1.3 → consolidamento PR sovrapposte → chiusura bounded VF-ORCH-01 → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6. P4/P5 restano lane indipendenti. `DOS-A1=RUNTIME_DEFERRED`.
+Sequenza canonica: baseline v1.3 → consolidamento Studio Atlas/Visual Factory + qualifica deterministica VF-ORCH-01 → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6. P4/P5 restano lane indipendenti. `DOS-A1=RUNTIME_DEFERRED`.
 
 ## OR-07 → OR-10 — capability condivise, portabilità e integrazioni prodotto
 
