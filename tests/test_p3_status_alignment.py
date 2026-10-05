@@ -176,7 +176,24 @@ class P3StatusAlignmentTests(unittest.TestCase):
         self.assertIn("Visual Factory", current["statement"])
         self.assertIn("MUSEO ZERO", current["statement"])
         self.assertIn("REQUALIFICATION_PREPARED_NOT_AUTHORIZED", current["statement"])
-        self.assertTrue(any(ref.get("pullRequest") == 249 for ref in current["sourceRefs"]))
+        self.assertTrue(
+            any(
+                ref.get("pullRequest") == 249
+                and ref.get("exactHead") == "6c223a4556868c0c1f14cdabd6b8f101fce6368d"
+                for ref in current["sourceRefs"]
+            )
+        )
+        audit_refs = [
+            ref
+            for ref in current["sourceRefs"]
+            if ref.get("ref") == "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        ]
+        self.assertEqual(len(audit_refs), 1)
+        self.assertEqual(audit_refs[0].get("pullRequest"), 250)
+        self.assertNotEqual(
+            audit_refs[0].get("exactHead"),
+            "290d6f3f0d15df3e8f8f438a46a26449d1247043",
+        )
 
     def test_context_pack_projects_v13_history_and_current_v14_event(self):
         pack = json.loads(
