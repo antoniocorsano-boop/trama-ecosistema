@@ -1,0 +1,37 @@
+name: P3 Provenance Reconciliation
+
+on:
+  push:
+    branches:
+      - docs/p3-final-reconciliation
+    paths:
+      - scripts/reconcile_p3_provenance.py
+      - .github/workflows/p3-provenance-reconciliation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout reconciliation branch
+        uses: actions/checkout@v4
+        with:
+          ref: docs/p3-final-reconciliation
+          fetch-depth: 0
+      - name: Apply idempotent provenance reconciliation
+        run: python3 scripts/reconcile_p3_provenance.py
+      - name: Commit source reconciliation only when changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- status/project-knowledge-events.json; then
+            echo "P3_PROVENANCE_ALREADY_RECONCILED"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add status/project-knowledge-events.json
+          git commit -m "docs(p3): pin provenance evidence heads"
+          git push origin HEAD:docs/p3-final-reconciliation
