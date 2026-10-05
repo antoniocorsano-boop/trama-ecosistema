@@ -43,6 +43,14 @@ jobs:
           set -euo pipefail
           grep -q '^  workflow_call:' .github/workflows/trama-t0-issue-triage.lock.yml
           grep -q 'item_number:' .github/workflows/trama-t0-issue-triage.lock.yml
+      - name: Report controlled trial auth prerequisites
+        shell: bash
+        env:
+          GH_AW_TOKEN_CONFIGURED: ${{ secrets.GH_AW_GITHUB_TOKEN != '' }}
+          COPILOT_TOKEN_CONFIGURED: ${{ secrets.COPILOT_GITHUB_TOKEN != '' }}
+        run: |
+          echo "GH_AW_GITHUB_TOKEN configured: ${GH_AW_TOKEN_CONFIGURED}"
+          echo "COPILOT_GITHUB_TOKEN configured: ${COPILOT_TOKEN_CONFIGURED}"
       - name: Publish compiled lock evidence
         uses: actions/upload-artifact@v4
         with:
