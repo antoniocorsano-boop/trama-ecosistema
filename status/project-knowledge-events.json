@@ -321,8 +321,7 @@
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
-          "pullRequest": 234,
-          "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+          "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
           "ref": "STATUS.md"
         },
         {
@@ -365,10 +364,12 @@
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
           "pullRequest": 212,
+          "exactHead": "2889189ceab3c83a759b0b1f86a9a3797188ff9a",
           "ref": "runtime: prepare QE-01 first qualified execution"
         },
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
           "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
         }
       ],
