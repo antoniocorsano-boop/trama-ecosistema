@@ -13,11 +13,18 @@ import {
 } from "./canonical/museo-zero";
 
 const KEY = "studio-atlas.projects.v0.1";
+const MUSEO_ZERO_HUMAN_PRODUCT_REVIEW_REF =
+  "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/HUMAN-PRODUCT-REVIEW-v0.1.md";
 
 function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
   const now = new Date().toISOString();
   const legacyMuseoZero =
     raw.projectId === MUSEO_ZERO_PROJECT_ID && !raw.productReview;
+  const reviewedMuseoZero =
+    raw.projectId === MUSEO_ZERO_PROJECT_ID &&
+    (legacyMuseoZero ||
+      (raw.productReview?.decision === "READY" &&
+        raw.productReview.evidenceRef === MUSEO_ZERO_PRODUCT_REVIEW_REF));
   return {
     projectId: raw.projectId ?? crypto.randomUUID(),
     title: raw.title ?? "Senza titolo",
@@ -28,14 +35,12 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     story: { ...EMPTY_STORY, ...(raw.story ?? {}) },
     storyReview: raw.storyReview ?? { decision: "DRAFT" },
     world: { ...EMPTY_WORLD, ...(raw.world ?? {}) },
-    worldReview: legacyMuseoZero
-      ? { decision: "READY" }
+    worldReview: reviewedMuseoZero
+      ? { decision: "REVISE", evidenceRef: MUSEO_ZERO_HUMAN_PRODUCT_REVIEW_REF }
       : raw.worldReview ?? { decision: "DRAFT" },
-    productReview:
-      raw.productReview ??
-      (legacyMuseoZero
-        ? { decision: "READY", evidenceRef: MUSEO_ZERO_PRODUCT_REVIEW_REF }
-        : undefined),
+    productReview: reviewedMuseoZero
+      ? { decision: "REVISE", evidenceRef: MUSEO_ZERO_HUMAN_PRODUCT_REVIEW_REF }
+      : raw.productReview,
     experience: { ...EMPTY_EXPERIENCE, ...(raw.experience ?? {}) },
     scenes: Array.isArray(raw.scenes)
       ? raw.scenes.map((scene) => ({
@@ -50,7 +55,7 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
             : [],
         }))
       : [],
-    storyboardReady: legacyMuseoZero ? false : raw.storyboardReady ?? false,
+    storyboardReady: reviewedMuseoZero ? false : raw.storyboardReady ?? false,
     lastProductionRequest: raw.lastProductionRequest,
     lastProductionReceipt: raw.lastProductionReceipt,
     lastPreviewSnapshot: raw.lastPreviewSnapshot,
@@ -138,7 +143,7 @@ export function ensureMuseoZeroPilotProject(): PathwayProject {
 
   if (existing && isCurrentCanonical) return existing;
 
-  const project = createMuseoZeroPilotProject();
+  const project = normalizeProject(createMuseoZeroPilotProject());
 
   if (existing) {
     project.createdAt = existing.createdAt;
