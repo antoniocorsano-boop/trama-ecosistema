@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-05T18:02:56Z",
+  "asOf": "2026-10-05T18:10:40Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -389,6 +389,51 @@
       "invalidatedBy": [
         "TRAMA-EVT-VF-ORCH-01-LIVE-ZERO-COST-PROOF-2026-10-05"
       ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-AUDIT-V1.4-VISUAL-FACTORY-LIVE-PROOF-2026-10-05",
+      "type": "BASELINE",
+      "subject": "ecosystem-audit",
+      "statement": "Audit v1.4 records real Visual Factory reference generation as proven, VF-ORCH-01 live FREE_ONLY reference execution as proven, MUSEO ZERO art-direction remediation v0.3 as an implemented and automatically qualified candidate with regeneration and Human Visual Review still pending, P5 as REQUALIFICATION_PREPARED_NOT_AUTHORIZED and P4 as local-proof-package-ready candidate. Formal maturity levels remain unchanged and DOS-A1 remains RUNTIME_DEFERRED.",
+      "status": "CURRENT",
+      "rationale": "project-knowledge projection of Audit v1.4: reconciles the governed completion audit with evidence integrated after Audit v1.3 while preserving the distinction between technical execution, human visual acceptance, maturity promotion and runtime authority.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 241,
+          "exactHead": "32f63da198c7341363201778c47daa032c14ddd1",
+          "ref": "github:trama-ecosistema/pull/241"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 246,
+          "exactHead": "ef5734646964ce6403a85e53caa72ea62527e32e",
+          "ref": "github:trama-ecosistema/pull/246"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 249,
+          "exactHead": "e40054349db5ed28ea663d24f4c4d048481ba3b5",
+          "ref": "github:trama-ecosistema/pull/249"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T17:43:00Z",
+      "supersedes": [
+        "TRAMA-EVT-AUDIT-V1.3-STUDIO-ATLAS-BASELINE-2026-10-05"
+      ],
+      "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -814,6 +859,51 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-AUDIT-V1.4-VISUAL-FACTORY-LIVE-PROOF-2026-10-05",
+      "type": "BASELINE",
+      "subject": "ecosystem-audit",
+      "statement": "Audit v1.4 records real Visual Factory reference generation as proven, VF-ORCH-01 live FREE_ONLY reference execution as proven, MUSEO ZERO art-direction remediation v0.3 as an implemented and automatically qualified candidate with regeneration and Human Visual Review still pending, P5 as REQUALIFICATION_PREPARED_NOT_AUTHORIZED and P4 as local-proof-package-ready candidate. Formal maturity levels remain unchanged and DOS-A1 remains RUNTIME_DEFERRED.",
+      "status": "CURRENT",
+      "rationale": "project-knowledge projection of Audit v1.4: reconciles the governed completion audit with evidence integrated after Audit v1.3 while preserving the distinction between technical execution, human visual acceptance, maturity promotion and runtime authority.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 241,
+          "exactHead": "32f63da198c7341363201778c47daa032c14ddd1",
+          "ref": "github:trama-ecosistema/pull/241"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 246,
+          "exactHead": "ef5734646964ce6403a85e53caa72ea62527e32e",
+          "ref": "github:trama-ecosistema/pull/246"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 249,
+          "exactHead": "e40054349db5ed28ea663d24f4c4d048481ba3b5",
+          "ref": "github:trama-ecosistema/pull/249"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T17:43:00Z",
+      "supersedes": [
+        "TRAMA-EVT-AUDIT-V1.3-STUDIO-ATLAS-BASELINE-2026-10-05"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ],
   "exactHeads": [
@@ -1063,8 +1153,31 @@
       "ref": "docs/superpowers/plans/2026-10-05-vf-orch-01-zero-cost-multiprovider.md"
     },
     {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
+      "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 241,
+      "exactHead": "32f63da198c7341363201778c47daa032c14ddd1",
+      "ref": "github:trama-ecosistema/pull/241"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 246,
+      "exactHead": "ef5734646964ce6403a85e53caa72ea62527e32e",
+      "ref": "github:trama-ecosistema/pull/246"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 249,
+      "exactHead": "e40054349db5ed28ea663d24f4c4d048481ba3b5",
+      "ref": "github:trama-ecosistema/pull/249"
+    },
+    {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "1abb657d05a179cc237819e3828dfadf43e230552f0c64b33b49d2eead8ccb14"
+      "sha256": "3b9d65d3c2713b01e2a77b8835bc452a104501c2e30475d7307f1bb38d541c34"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -1084,7 +1197,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "c41884e0b9fbfaeb8f2d73161c4b5580acbd3d8aa9decabd9df79ebcc97c882f"
+      "sha256": "943f94bf444758c6405414685a6cba16a8e617a1551796639980ef5e5c6530fd"
     }
   ]
 }

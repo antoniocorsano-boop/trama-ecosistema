@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-05T18:02:56Z",
+  "generatedAt": "2026-10-05T18:10:40Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -1690,7 +1690,7 @@
       "subject": "ecosystem-audit",
       "statement": "Audit v1.4 records real Visual Factory reference generation as proven, VF-ORCH-01 live FREE_ONLY reference execution as proven, MUSEO ZERO art-direction remediation v0.3 as an implemented and automatically qualified candidate with regeneration and Human Visual Review still pending, P5 as REQUALIFICATION_PREPARED_NOT_AUTHORIZED and P4 as local-proof-package-ready candidate. Formal maturity levels remain unchanged and DOS-A1 remains RUNTIME_DEFERRED.",
       "status": "CURRENT",
-      "rationale": "Reconciles the governed completion audit with evidence integrated after Audit v1.3 while preserving the distinction between technical execution, human visual acceptance, maturity promotion and runtime authority.",
+      "rationale": "project-knowledge projection of Audit v1.4: reconciles the governed completion audit with evidence integrated after Audit v1.3 while preserving the distinction between technical execution, human visual acceptance, maturity promotion and runtime authority.",
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
@@ -1735,7 +1735,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "1abb657d05a179cc237819e3828dfadf43e230552f0c64b33b49d2eead8ccb14"
+      "sha256": "3b9d65d3c2713b01e2a77b8835bc452a104501c2e30475d7307f1bb38d541c34"
     },
     {
       "id": "source-registry",
@@ -1765,7 +1765,7 @@
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "c41884e0b9fbfaeb8f2d73161c4b5580acbd3d8aa9decabd9df79ebcc97c882f"
+      "sha256": "943f94bf444758c6405414685a6cba16a8e617a1551796639980ef5e5c6530fd"
     }
   ]
 }
