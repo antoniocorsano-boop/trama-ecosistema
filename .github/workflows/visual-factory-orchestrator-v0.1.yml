@@ -64,11 +64,34 @@ jobs:
               --output /tmp/visual-generation-plan.json
           fi
 
-      - name: Execute bounded orchestrator
+      - name: Execute bounded orchestrator dry-run
+        if: inputs.mode == 'dry-run'
         working-directory: products/studio-atlas
         env:
           MODE: ${{ inputs.mode }}
         run: |
+          npm run visual-factory:orchestrate -- \
+            --mode "$MODE" \
+            --plan /tmp/visual-generation-plan.json \
+            --output "$VISUAL_FACTORY_EVIDENCE_DIR"
+
+      - name: Execute bounded orchestrator live
+        if: inputs.mode != 'dry-run'
+        working-directory: products/studio-atlas
+        env:
+          MODE: ${{ inputs.mode }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_VISUAL_FACTORY_SPACE_REPO: ${{ vars.HF_VISUAL_FACTORY_SPACE_REPO }}
+        run: |
+          set -euo pipefail
+          test -n "${HF_TOKEN:-}" || {
+            echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_TOKEN is not configured" >&2
+            exit 1
+          }
+          test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}" || {
+            echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_VISUAL_FACTORY_SPACE_REPO is not configured" >&2
+            exit 1
+          }
           npm run visual-factory:orchestrate -- \
             --mode "$MODE" \
             --plan /tmp/visual-generation-plan.json \
@@ -80,11 +103,6 @@ jobs:
           grep -R '"costClass": "FREE_ONLY"' visual-factory-evidence
           grep -R '"runtimeAuthorized": false' visual-factory-evidence
           grep -R '"publicationAuthorityGranted": false' visual-factory-evidence
-
-      - name: Trusted credential binding boundary
-        run: |
-          echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING"
-          echo "This repository workflow does not inject provider secrets."
 
       - name: Upload governed orchestration evidence
         if: always()

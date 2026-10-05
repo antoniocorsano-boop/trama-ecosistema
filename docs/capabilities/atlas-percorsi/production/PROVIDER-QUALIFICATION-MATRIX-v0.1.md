@@ -36,7 +36,7 @@ Canonical constraints for both adapters:
 - successful generation remains only a candidate until Human Visual Review/reference lock;
 - generation grants neither runtime nor publication authority.
 
-The repository manual workflow is intentionally credential-neutral. It can qualify the orchestration surface and produce fail-closed evidence without injecting provider secrets. A real zero-cost run therefore remains a separate trusted operational proof.
+The repository manual workflow binds trusted provider credentials only in the live execution step; `dry-run` remains credential-free. For Hugging Face live `references` / `shots`, `HF_TOKEN` comes only from GitHub Secrets and `HF_VISUAL_FACTORY_SPACE_REPO` only from GitHub Variables. Missing binding fails closed before provider invocation. This live binding does not turn deterministic qualification into evidence of a successful provider run.
 
 ## Selection rationale
 
