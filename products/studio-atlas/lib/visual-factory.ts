@@ -140,7 +140,7 @@ export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
     subjectRef: "lia",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Lia only, single subject with no other people or partial figures; adult museum exhibition-layout and visitor-flow crew member actively placing clean blank floor-route markers at the new accessible entrance; hands clearly visible doing the task; calm focused physicality; practical contemporary setup clothing; stable hairstyle and one warm accent detail; full-body working pose in a sparse unlabeled museum corridor, not a posed portrait.",
+    prompt: "Lia only, single subject with no other people or partial figures; adult museum exhibition-layout and visitor-flow crew member actively placing clean blank visitor-flow markers along the accessible circulation route at the new entrance; hands clearly visible doing the task; calm focused physicality; practical contemporary setup clothing; stable hairstyle and one warm accent detail; full-body working pose in a sparse unlabeled museum corridor, not a posed portrait.",
   },
   {
     subjectRef: "omar",
