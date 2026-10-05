@@ -51,7 +51,6 @@ function candidateReceipt(): VisualExecutionReceipt {
 test("MUSEO ZERO compiles five reference jobs before scene production", () => {
   const project = createMuseoZeroPilotProject();
   const state = createInitialVisualFactoryState(DIGEST);
-
   const plan = compileReferenceJobs(project, DIGEST, state);
 
   assert.equal(plan.decision, "REFERENCE_GENERATION_READY");
@@ -74,34 +73,39 @@ test("reference art direction keeps characters in role and environments free of 
   assert.match(bySubject.get("lia")?.prompt ?? "", /visitor-flow markers|circulation route/i);
   assert.match(bySubject.get("lia")?.prompt ?? "", /not a posed portrait/i);
   assert.match(bySubject.get("lia")?.prompt ?? "", /single subject|no other people/i);
+  assert.match(bySubject.get("lia")?.prompt ?? "", /blank walls|no wall plaques|no signage anywhere/i);
 
   assert.match(bySubject.get("omar")?.prompt ?? "", /sensor mount|installation hardware/i);
   assert.match(bySubject.get("omar")?.prompt ?? "", /hands-on installer/i);
+  assert.match(bySubject.get("omar")?.prompt ?? "", /single subject|no other people/i);
 
   assert.match(bySubject.get("teo")?.prompt ?? "", /not security staff/i);
   assert.match(bySubject.get("teo")?.prompt ?? "", /sightline.*Sala Zero|window.*Sala Zero/i);
   assert.match(bySubject.get("teo")?.prompt ?? "", /monitor off|no screen interface|physical console only/i);
+  assert.match(bySubject.get("teo")?.prompt ?? "", /all displays.*dark|no illuminated display|no lettering anywhere/i);
 
   assert.match(bySubject.get("sala-zero")?.prompt ?? "", /projection.*abstract light|abstract light.*projection/i);
   assert.match(bySubject.get("sala-zero")?.prompt ?? "", /no text|no interface/i);
   assert.match(bySubject.get("sala-zero")?.prompt ?? "", /no signage|unlabeled walls|unlabeled doors/i);
+  assert.match(bySubject.get("sala-zero")?.prompt ?? "", /blank walls|no plaques|no lettering anywhere/i);
 
   assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /adjacent booth|window.*Sala Zero/i);
   assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /physical buttons|tactile controls/i);
   assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /camera inside|interior viewpoint/i);
   assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /window.*projection|projection.*window/i);
   assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /no screens|no monitors|no signage/i);
+  assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /all display surfaces.*dark|blank status lights|no illuminated display/i);
 
   for (const job of plan.jobs) {
     assert.ok(job.negativeConstraints.includes("readable text, pseudo-text, labels, captions, signage, or watermarks"));
     assert.ok(job.negativeConstraints.includes("charts, graphs, dashboards, detached UI panels, or screen-wall interfaces"));
+    assert.ok(job.negativeConstraints.includes("illuminated displays, monitor content, interface text, control-screen graphics, or wall placards"));
   }
 });
 
 test("scene generation fails closed until every required reference is locked", () => {
   const project = createMuseoZeroPilotProject();
   const state = createInitialVisualFactoryState(DIGEST);
-
   const plan = compileShotJobs(project, DIGEST, state);
 
   assert.equal(plan.decision, "STOP_REFERENCE_LOCK_REQUIRED");
@@ -112,7 +116,6 @@ test("scene generation fails closed until every required reference is locked", (
 test("a candidate from a stale authoring digest cannot be locked", () => {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, candidateReceipt());
-
   assert.throws(
     () => lockVisualReference(state, "lia", "lia-1", OTHER_DIGEST),
     /STALE_VISUAL_CANDIDATE/,
@@ -123,7 +126,6 @@ test("a newer authoring digest invalidates old candidates and locks", () => {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, candidateReceipt());
   state = lockVisualReference(state, "lia", "lia-1", DIGEST);
-
   const reconciled = reconcileVisualFactoryState(state, OTHER_DIGEST);
 
   assert.equal(reconciled.packageDigest, OTHER_DIGEST);
@@ -136,7 +138,6 @@ test("a newer authoring digest invalidates old candidates and locks", () => {
 test("the same authoring digest preserves visual review state", () => {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, candidateReceipt());
-
   assert.equal(reconcileVisualFactoryState(state, DIGEST), state);
 });
 
@@ -156,7 +157,6 @@ test("locked MUSEO ZERO references compile exactly F1 through F6", () => {
   }
 
   const plan = compileShotJobs(project, DIGEST, state);
-
   assert.equal(plan.decision, "SHOT_GENERATION_READY");
   assert.deepEqual(plan.jobs.map((job) => job.shotId), ["F1", "F2", "F3", "F4", "F5", "F6"]);
   assert.ok(plan.jobs.every((job) => job.referenceInputs.length > 0));
