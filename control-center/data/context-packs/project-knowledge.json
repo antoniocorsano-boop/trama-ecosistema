@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-05T01:15:11Z",
+  "asOf": "2026-10-05T03:18:43Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -250,7 +250,7 @@
       "eventId": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04",
       "type": "CLOSURE",
       "subject": "project-knowledge",
-      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. P4/P5/P6 residuals remain explicitly separate and open.",
+      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. At the P3 closure baseline, P4/P5/P6 residuals were explicitly separate and open; later closures are recorded by their own events.",
       "status": "CURRENT",
       "rationale": "PR #234 integrated the persistent synchronization lane and was verified post-merge. The final P3 reconciliation records the current distribution evidence and prevents superseded P3=NEXT state from remaining current.",
       "sourceRefs": [
@@ -567,7 +567,7 @@
       "eventId": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04",
       "type": "CLOSURE",
       "subject": "project-knowledge",
-      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. P4/P5/P6 residuals remain explicitly separate and open.",
+      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. At the P3 closure baseline, P4/P5/P6 residuals were explicitly separate and open; later closures are recorded by their own events.",
       "status": "CURRENT",
       "rationale": "PR #234 integrated the persistent synchronization lane and was verified post-merge. The final P3 reconciliation records the current distribution evidence and prevents superseded P3=NEXT state from remaining current.",
       "sourceRefs": [
@@ -811,7 +811,7 @@
     },
     {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "b18a8c1eb94a97590510404b9261e97b7307be300fb3e011f80b723b276a7698"
+      "sha256": "83851f23d2b63430398638811793043c051fbc05b0022806d3955dfded0b68c0"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -831,7 +831,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "9357c8717ead5685b9447eb84fbe78bd8ac0d6c93b2ac8d8895fdfa05647f7e7"
+      "sha256": "162736c750371cea2223deea1564a69c27bd8f9d8035355aa2d76cf134e15732"
     }
   ]
 }
