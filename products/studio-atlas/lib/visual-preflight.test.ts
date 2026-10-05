@@ -5,6 +5,8 @@ import {
   VISUAL_INTENT_SCHEMA_VERSION,
   VISUAL_PREFLIGHT_RECEIPT_SCHEMA_VERSION,
   canonicalDigest,
+  compileVisualPrompt,
+  createVisualPreflightReceipt,
   hasPreflightErrors,
   resolvePreflightState,
   runDeterministicPreflight,
@@ -229,4 +231,97 @@ test("explicit human preflight PASS can admit deterministic-clean intent when cr
     semanticCritic: semanticUnavailable,
     humanPreflightDecision: "PASS",
   }), "PREFLIGHT_PASS");
+});
+
+test("compiled visual prompt preserves canonical semantic section order", () => {
+  const prompt = compileVisualPrompt(validSpec(), "FLUX2_KLEIN_4B");
+  const orderedMarkers = [
+    "medium/style:",
+    "narrative/world:",
+    "identity:",
+    "action/state:",
+    "composition:",
+    "camera:",
+    "lighting/material:",
+    "continuity:",
+    "provider adaptation:",
+  ];
+  let previous = -1;
+  for (const marker of orderedMarkers) {
+    const index = prompt.positivePrompt.indexOf(marker);
+    assert.ok(index > previous, `${marker} must follow the preceding semantic section`);
+    previous = index;
+  }
+  assert.match(prompt.negativePrompt, /dashboard aesthetic/i);
+});
+
+test("compiled visual prompt is deterministically bound and limited to one variant", () => {
+  const first = compileVisualPrompt(validSpec(), "FLUX2_KLEIN_4B");
+  const second = compileVisualPrompt(validSpec(), "FLUX2_KLEIN_4B");
+  assert.equal(first.maxVariants, 1);
+  assert.equal(first.promptDigest, second.promptDigest);
+  assert.equal(first.sourceSpecDigest, canonicalDigest(validSpec()));
+  assert.match(first.promptDigest, /^[0-9a-f]{64}$/);
+});
+
+test("preflight receipt changes binding when semantic source or package digest changes", () => {
+  const base = createVisualPreflightReceipt({
+    spec: validSpec(),
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: semanticUnavailable,
+    humanPreflightDecision: "PASS",
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+  const semanticChange = createVisualPreflightReceipt({
+    spec: validSpec({ lightingMood: "cool neutral rehearsal light" }),
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: semanticUnavailable,
+    humanPreflightDecision: "PASS",
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+  const packageChange = createVisualPreflightReceipt({
+    spec: validSpec({ packageDigest: "b".repeat(64) }),
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: semanticUnavailable,
+    humanPreflightDecision: "PASS",
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+
+  assert.equal(base.finalState, "PREFLIGHT_PASS");
+  assert.notEqual(base.specDigest, semanticChange.specDigest);
+  assert.notEqual(base.compiledPrompts[0]?.promptDigest, semanticChange.compiledPrompts[0]?.promptDigest);
+  assert.notEqual(base.specDigest, packageChange.specDigest);
+  assert.notEqual(base.receiptId, packageChange.receiptId);
+});
+
+test("preflight receipt binding changes with compiler or art-direction version", () => {
+  const base = createVisualPreflightReceipt({
+    spec: validSpec(),
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: semanticUnavailable,
+    humanPreflightDecision: "PASS",
+    compilerVersion: "compiler-A",
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+  const compilerChange = createVisualPreflightReceipt({
+    spec: validSpec(),
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: semanticUnavailable,
+    humanPreflightDecision: "PASS",
+    compilerVersion: "compiler-B",
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+  const artDirectionChange = createVisualPreflightReceipt({
+    spec: validSpec({ artDirectionVersion: "museo-zero-art-direction/v0.4" }),
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: semanticUnavailable,
+    humanPreflightDecision: "PASS",
+    compilerVersion: "compiler-A",
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+
+  assert.notEqual(base.compiledPrompts[0]?.promptDigest, compilerChange.compiledPrompts[0]?.promptDigest);
+  assert.notEqual(base.receiptId, compilerChange.receiptId);
+  assert.notEqual(base.specDigest, artDirectionChange.specDigest);
+  assert.notEqual(base.receiptId, artDirectionChange.receiptId);
 });
