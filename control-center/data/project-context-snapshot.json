@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-05T01:15:11Z",
+  "generatedAt": "2026-10-05T01:31:37Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -337,6 +337,36 @@
         "Control Center"
       ],
       "decision": "È proposto che TRAMA mantenga un'architettura ecosystem-first: Arena, Atlas e Docente OS restano i domini di prodotto che determinano bisogni e flussi; il Control Center resta osservatorio read-only; connector, runtime adapter, agenti e provider come DSH/Codex sono infrastruttura subordinata, sostituibile e priva di nuova authority. I proof successivi al livello contrattuale devono dimostrare valore su flussi cross-ecosystem e DOS-A1 resta RUNTIME_DEFERRED.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-020",
+      "title": "Studio Atlas come dominio di prodotto separabile per l'authoring dei Percorsi",
+      "status": "PROPOSED",
+      "date": "2026-10-04",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Studio Atlas"
+      ],
+      "decision": "Studio Atlas è proposto come dominio di prodotto professionale separabile per l'authoring dei Percorsi: la prima distribuzione può riusare autenticazione e shell di Docente OS, ma il dominio non dipende da classe/lezione e resta estraibile come applicazione autonoma. Atlas resta superficie pubblica/learner; il Pathway Authoring Package è l'handoff governato; repository, AI e compute restano infrastruttura subordinata e invisibile al creator.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-021",
+      "title": "Compute Policy TRAMA + SkyPilot per la Visual Factory",
+      "status": "PROPOSED",
+      "date": "2026-10-04",
+      "scope": [
+        "TRAMA",
+        "Studio Atlas",
+        "Visual Factory"
+      ],
+      "decision": "La Visual Factory separa policy e provisioning: TRAMA Compute Policy filtra provider realmente autorizzati e FREE_ONLY; SkyPilot orchestra provisioning/failover soltanto tra candidati ammessi. Nessun paid fallback, retry illimitato o quality downgrade automatico.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
@@ -1402,7 +1432,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "b18a8c1eb94a97590510404b9261e97b7307be300fb3e011f80b723b276a7698"
+      "sha256": "974b730bc0dceaadf8c625561f65bf96c981329be4a3fcb2852ba7b9ea4a46e2"
     },
     {
       "id": "source-registry",
@@ -1414,7 +1444,7 @@
       "id": "decision-register",
       "path": "docs/decisions/decision-register.json",
       "role": "DECISIONS",
-      "sha256": "16731a46dda6db41d5d3215e361d906bdffa821720fb9e76bc559c9cd79a2636"
+      "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
     },
     {
       "id": "ecosystem-status",
