@@ -278,7 +278,7 @@ export function ingestVisualCandidates(
   ) {
     throw new Error("VISUAL_EXECUTION_AUTHORITY_VIOLATION");
   }
-  if (receipt.assets.some((asset) => asset.packageDigest !== state.packageDigest) {
+  if (receipt.assets.some((asset) => asset.packageDigest !== state.packageDigest)) {
     throw new Error("STALE_VISUAL_CANDIDATE");
   }
 
