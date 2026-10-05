@@ -33,6 +33,11 @@ const project = {
     motivation: "Rendere il sistema coerente prima della prova finale."
   },
   worldReview: { decision: "PASS", reviewedAt: "2026-10-04T15:02:00Z" },
+  productReview: {
+    decision: "PASS",
+    reviewedAt: "2026-10-04T15:02:30Z",
+    evidenceRef: "e2e://human-product-review-pass"
+  },
   experience: {
     grammar: "SIMULATION_MICROWORLD",
     rationale: "La comprensione nasce dal confronto fra intervento e conseguenza."
@@ -255,7 +260,7 @@ test("Studio Atlas opens exact learner preview in Atlas across origins", async (
 });
 
 
-test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atlas choices", async ({ browser }) => {
+test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
 
@@ -263,8 +268,9 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
   await page.getByRole("button", { name: "Apri MUSEO ZERO" }).click();
   await expect(page).toHaveURL(new RegExp(`/percorso/${MUSEO_ZERO_PROJECT_ID}$`));
 
-  const previewButton = page.getByRole("button", { name: "Vedi come studente" });
-  await expect(previewButton).toBeDisabled();
+  const reviewPreviewButton = page.getByRole("button", { name: "Anteprima di revisione" });
+  await expect(reviewPreviewButton).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Vedi come studente" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "Mondo" }).click();
   await expect(page.getByRole("heading", { name: "Fai esistere il mondo." })).toBeVisible();
@@ -278,14 +284,14 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
   await expect(page.getByRole("button", { name: "Storyboard pronto" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "Revisione" }).click();
-  await expect(page.getByRole("heading", { name: "Human Product Review" })).toBeVisible();
-  await expect(previewButton).toBeDisabled();
-  await page.getByRole("button", { name: "Approva pacchetto" }).click();
-
-  await expect(previewButton).toBeEnabled();
+  await expect(
+    page.getByRole("heading", { name: "Il pacchetto richiede una nuova revisione." }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Approva pacchetto" })).toHaveCount(0);
+  await expect(reviewPreviewButton).toBeEnabled();
 
   const popupPromise = context.waitForEvent("page");
-  await previewButton.click();
+  await reviewPreviewButton.click();
   const popup = await popupPromise;
 
   await popup.waitForURL(
@@ -354,12 +360,13 @@ test("MUSEO ZERO pilot stays gated until human review then opens meaningful Atla
     return items.find((item: { projectId?: string }) => item.projectId === projectId);
   }, MUSEO_ZERO_PROJECT_ID);
 
-  expect(stored.productReview.decision).toBe("PASS");
-  expect(stored.productReview.evidenceRef).toContain("PRODUCT-REVIEW-PACK-v0.1.md");
-  expect(stored.worldReview.decision).toBe("PASS");
-  expect(stored.worldReview.evidenceRef).toContain("PRODUCT-REVIEW-PACK-v0.1.md");
-  expect(stored.storyboardReady).toBe(true);
+  expect(stored.productReview.decision).toBe("REVISE");
+  expect(stored.productReview.evidenceRef).toContain("HUMAN-PRODUCT-REVIEW-v0.1.md");
+  expect(stored.worldReview.decision).toBe("REVISE");
+  expect(stored.worldReview.evidenceRef).toContain("HUMAN-PRODUCT-REVIEW-v0.1.md");
+  expect(stored.storyboardReady).toBe(false);
   expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
+  expect(stored.lastPreviewSnapshot.studentAuthorized).toBe(false);
   expect(
     stored.lastPreviewSnapshot.scenes.some(
       (scene: { sceneId?: string; kind?: string }) =>
