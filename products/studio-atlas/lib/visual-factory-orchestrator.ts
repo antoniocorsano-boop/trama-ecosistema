@@ -1,6 +1,12 @@
-import type { VisualExecutionReceipt, VisualGenerationPlan } from "./visual-factory";
+import type {
+  VisualExecutionProviderId,
+  VisualExecutionReceipt,
+  VisualGenerationPlan,
+  VisualOrchestrationEvidence,
+  VisualProviderAttemptEvidence,
+} from "./visual-factory";
 
-export type VisualProviderId = "HF_ZEROGPU" | "CLOUDFLARE_WORKERS_AI";
+export type VisualProviderId = VisualExecutionProviderId;
 
 export type ProviderEligibility = {
   eligible: boolean;
@@ -117,7 +123,57 @@ function safeSucceededReceipt(
   );
 }
 
-function waitingReceipt(packageDigest: string, detail: string): VisualExecutionReceipt {
+function stableEvidenceReason(value: string): string {
+  return /^[A-Z0-9_:.-]{1,160}$/.test(value) ? value : "PROVIDER_REASON_REDACTED";
+}
+
+function attemptEvidence(
+  provider: VisualProviderId,
+  eligibility: VisualProviderAttemptEvidence["eligibility"],
+  eligibilityReason: string,
+  startedMs: number,
+  completedMs: number,
+  quotaRemainingGpuSeconds?: number,
+  outcome?: VisualProviderAttemptEvidence["outcome"],
+): VisualProviderAttemptEvidence {
+  return {
+    provider,
+    eligibility,
+    eligibilityReason: stableEvidenceReason(eligibilityReason),
+    quotaRemainingGpuSeconds,
+    outcome,
+    startedAt: new Date(startedMs).toISOString(),
+    completedAt: new Date(completedMs).toISOString(),
+    durationMs: Math.max(0, completedMs - startedMs),
+  };
+}
+
+function orchestrationEvidence(
+  orchestrationId: string,
+  plan: VisualGenerationPlan,
+  consideredProviders: VisualProviderId[],
+  attempts: VisualProviderAttemptEvidence[],
+  finalState: VisualOrchestrationEvidence["finalState"],
+  selectedProvider?: VisualProviderId,
+  selectedModelRef?: string,
+): VisualOrchestrationEvidence {
+  return {
+    schemaVersion: "atlas.visual-orchestration-evidence/v0.1",
+    orchestrationId,
+    workloadClass: plan.planType === "REFERENCE_GENERATION" ? "CANONICAL_REFERENCE" : "SCENE_FRAME",
+    consideredProviders,
+    selectedProvider,
+    selectedModelRef,
+    attempts,
+    finalState,
+  };
+}
+
+function waitingReceipt(
+  packageDigest: string,
+  detail: string,
+  orchestration: VisualOrchestrationEvidence,
+): VisualExecutionReceipt {
   return {
     schemaVersion: "atlas.visual-execution-receipt/v0.1",
     receiptId: crypto.randomUUID(),
@@ -127,6 +183,7 @@ function waitingReceipt(packageDigest: string, detail: string): VisualExecutionR
     assets: [],
     failureCategory: "NO_FREE_PROVIDER",
     failureDetail: detail,
+    orchestration,
     paidComputeAuthorized: false,
     allowQualityDowngrade: false,
     runtimeAuthorized: false,
@@ -140,10 +197,22 @@ export async function orchestrateVisualGeneration(
   ctx: OrchestrationContext,
 ): Promise<VisualExecutionReceipt> {
   const failures: string[] = [];
+  const attempts: VisualProviderAttemptEvidence[] = [];
+  const consideredProviders = selectProviderOrder(plan, ctx);
+  const orchestrationId = crypto.randomUUID();
 
-  for (const providerId of selectProviderOrder(plan, ctx)) {
+  for (const providerId of consideredProviders) {
+    const startedMs = Date.now();
     const adapter = adapters[providerId];
     if (!adapter) {
+      const completedMs = Date.now();
+      attempts.push(attemptEvidence(
+        providerId,
+        "NOT_CONFIGURED",
+        "NOT_CONFIGURED",
+        startedMs,
+        completedMs,
+      ));
       failures.push(`${providerId}:NOT_CONFIGURED`);
       continue;
     }
@@ -151,30 +220,90 @@ export async function orchestrateVisualGeneration(
     let eligibility: ProviderEligibility;
     try {
       eligibility = await adapter.preflight(plan, ctx);
-    } catch (error) {
-      failures.push(`${providerId}:PREFLIGHT_ERROR:${error instanceof Error ? error.message : "UNKNOWN"}`);
+    } catch {
+      const completedMs = Date.now();
+      attempts.push(attemptEvidence(
+        providerId,
+        "PREFLIGHT_ERROR",
+        "PREFLIGHT_ERROR",
+        startedMs,
+        completedMs,
+      ));
+      failures.push(`${providerId}:PREFLIGHT_ERROR`);
       continue;
     }
 
+    const eligibilityReason = stableEvidenceReason(eligibility.reason);
     if (!eligibility.eligible) {
-      failures.push(`${providerId}:INELIGIBLE:${eligibility.reason}`);
+      const completedMs = Date.now();
+      attempts.push(attemptEvidence(
+        providerId,
+        "INELIGIBLE",
+        eligibilityReason,
+        startedMs,
+        completedMs,
+        eligibility.remainingGpuSeconds,
+      ));
+      failures.push(`${providerId}:INELIGIBLE:${eligibilityReason}`);
       continue;
     }
 
     let outcome: ProviderAttemptOutcome;
     try {
       outcome = await adapter.execute(plan, ctx);
-    } catch (error) {
-      failures.push(`${providerId}:EXECUTION_ERROR:${error instanceof Error ? error.message : "UNKNOWN"}`);
+    } catch {
+      const completedMs = Date.now();
+      attempts.push(attemptEvidence(
+        providerId,
+        "ELIGIBLE",
+        eligibilityReason,
+        startedMs,
+        completedMs,
+        eligibility.remainingGpuSeconds,
+        "RETRYABLE_PROVIDER_FAILURE",
+      ));
+      failures.push(`${providerId}:EXECUTION_ERROR`);
       continue;
     }
 
+    const completedMs = Date.now();
+    const evidenceOutcome = outcome.kind === "SUCCEEDED" && !safeSucceededReceipt(outcome.receipt, plan.packageDigest)
+      ? "PERMANENT_FAILURE"
+      : outcome.kind;
+    attempts.push(attemptEvidence(
+      providerId,
+      "ELIGIBLE",
+      eligibilityReason,
+      startedMs,
+      completedMs,
+      eligibility.remainingGpuSeconds,
+      evidenceOutcome,
+    ));
+
     if (outcome.kind === "SUCCEEDED" && safeSucceededReceipt(outcome.receipt, plan.packageDigest)) {
-      return outcome.receipt;
+      return {
+        ...outcome.receipt,
+        orchestration: orchestrationEvidence(
+          orchestrationId,
+          plan,
+          consideredProviders,
+          attempts,
+          "SUCCEEDED",
+          providerId,
+          outcome.receipt.assets[0]?.modelRef,
+        ),
+      };
     }
 
-    failures.push(`${providerId}:${outcome.kind}:${outcome.detail ?? "NO_DETAIL"}`);
+    failures.push(`${providerId}:${evidenceOutcome}`);
   }
 
-  return waitingReceipt(plan.packageDigest, failures.join("|") || "NO_ELIGIBLE_PROVIDER");
+  const orchestration = orchestrationEvidence(
+    orchestrationId,
+    plan,
+    consideredProviders,
+    attempts,
+    "GENERATION_DEFERRED",
+  );
+  return waitingReceipt(plan.packageDigest, failures.join("|") || "NO_ELIGIBLE_PROVIDER", orchestration);
 }
