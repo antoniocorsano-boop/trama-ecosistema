@@ -1,49 +1,49 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.6.0",
-  "generatedAt": "2026-10-05T03:18:43.583100+00:00",
+  "generatedAt": "2026-10-05T08:32:25.027982+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "ref": "STATUS.md",
-      "sha256": "23e6e02e969025ca22c75a2662cdd2aa643f5b88ec62b3240b6539cfe01ee440"
+      "sha256": "021a91d1b42609d374f22b40e839b2208d474402d3709dbde20c9aded7722b52"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "ref": "ROADMAP.md",
       "sha256": "1778d9e302950a6431a4a5e6430cf96f27e80938652fb43da32bf835236c98ae"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "16731a46dda6db41d5d3215e361d906bdffa821720fb9e76bc559c9cd79a2636"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
     },
     "maturity-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
-      "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
+      "sha256": "85800e2df6f2ca936dfd585487b57b0807b34157b6b71709b7b6be6d8ddbd7b9"
     }
   },
   "phases": [
@@ -109,7 +109,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-10-05T03:18:43.583100+00:00"
+      "lastEvaluatedAt": "2026-10-05T08:32:25.027982+00:00"
     },
     {
       "id": "arena",
@@ -136,7 +136,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-10-05T03:18:43.583100+00:00"
+      "lastEvaluatedAt": "2026-10-05T08:32:25.027982+00:00"
     },
     {
       "id": "atlas",
@@ -166,7 +166,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-05T03:18:43.583100+00:00"
+      "lastEvaluatedAt": "2026-10-05T08:32:25.027982+00:00"
     },
     {
       "id": "docente-os",
@@ -194,7 +194,31 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-05T03:18:43.583100+00:00"
+      "lastEvaluatedAt": "2026-10-05T08:32:25.027982+00:00"
+    },
+    {
+      "id": "studio-atlas",
+      "name": "Studio Atlas",
+      "ownerDomain": "Studio Atlas",
+      "confirmedLevel": 1,
+      "candidateLevel": 1,
+      "confidence": "LOW",
+      "status": "PARTIAL",
+      "evidenceRefs": [
+        "EV-MAT-STUDIO-ATLAS-DOC"
+      ],
+      "evidenceBindingStatus": "PARTIAL",
+      "nextTargetLevel": 2,
+      "nextRequiredEvidenceTypes": [
+        "CONTRACT_APPROVED"
+      ],
+      "interpretation": "BOUND_EVIDENCE_ONLY",
+      "blockingGateRefs": [],
+      "dependencies": [
+        "governance",
+        "arena"
+      ],
+      "lastEvaluatedAt": "2026-10-05T08:32:25.027982+00:00"
     }
   ],
   "capabilities": [
@@ -1032,9 +1056,9 @@
       "status": "PASS",
       "source": {
         "path": "STATUS.md",
-        "sha256": "23e6e02e969025ca22c75a2662cdd2aa643f5b88ec62b3240b6539cfe01ee440"
+        "sha256": "021a91d1b42609d374f22b40e839b2208d474402d3709dbde20c9aded7722b52"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1052,7 +1076,7 @@
         "path": "ROADMAP.md",
         "sha256": "1778d9e302950a6431a4a5e6430cf96f27e80938652fb43da32bf835236c98ae"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1070,7 +1094,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1088,7 +1112,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "16731a46dda6db41d5d3215e361d906bdffa821720fb9e76bc559c9cd79a2636"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1106,7 +1130,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1124,7 +1148,7 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1140,9 +1164,9 @@
       "status": "PASS",
       "source": {
         "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
-        "sha256": "bcf57e4fc2cc30fb2a323003fd90e8790834637f5b9d019c63c6dc37182569e7"
+        "sha256": "85800e2df6f2ca936dfd585487b57b0807b34157b6b71709b7b6be6d8ddbd7b9"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1623,6 +1647,27 @@
       }
     },
     {
+      "id": "EV-MAT-STUDIO-ATLAS-DOC",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "studio-atlas",
+      "subject": "Studio Atlas first-level product boundary in Audit v1.3 design",
+      "status": "PASS",
+      "source": {
+        "ref": "docs/superpowers/specs/2026-10-05-trama-audit-v1-3-studio-atlas-baseline-design.md",
+        "path": "docs/superpowers/specs/2026-10-05-trama-audit-v1-3-studio-atlas-baseline-design.md"
+      },
+      "observedAt": "2026-10-05T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 1
+        }
+      ]
+    },
+    {
       "id": "EV-R3-F0-EXIT-ACCESSIBILITY",
       "type": "ACCESSIBILITY_GATE",
       "area": "atlas",
@@ -1688,7 +1733,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-10-05T03:18:43.583100+00:00",
+      "observedAt": "2026-10-05T08:32:25.027982+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null

@@ -35,7 +35,7 @@ snapshot_builder.validate(snapshot)
 assert snapshot["schemaVersion"]=="1.6.0"
 
 areas={a["id"]:a for a in snapshot["areas"]}
-assert set(areas)=={"governance","arena","atlas","docente-os"}
+assert set(areas)=={"governance","arena","atlas","docente-os","studio-atlas"}
 
 for area in areas.values():
     assert area["interpretation"]=="BOUND_EVIDENCE_ONLY"
@@ -67,17 +67,24 @@ assert not any(
     for item in snapshot["evidence"]
 )
 
+assert areas["studio-atlas"]["ownerDomain"]=="Studio Atlas"
+assert areas["studio-atlas"]["confirmedLevel"]==1
+assert areas["studio-atlas"]["candidateLevel"]==1
+assert areas["studio-atlas"]["evidenceBindingStatus"]=="PARTIAL"
+assert areas["studio-atlas"]["nextTargetLevel"]==2
+assert areas["studio-atlas"]["nextRequiredEvidenceTypes"]==["CONTRACT_APPROVED"]
+
 assert backlog["policy"]["evidenceBoundOnly"] is True
 assert {x["area"]:x["observedLevel"] for x in backlog["areas"]}=={
-    "governance":4,"arena":4,"atlas":4,"docente-os":3
+    "governance":4,"arena":4,"atlas":4,"docente-os":3,"studio-atlas":1
 }
 assert backlog["components"]["currentRegistryCount"]==11
-assert backlog["components"]["missingProductCoverage"]==[]
-assert backlog["components"]["coverageState"]=="ALL_PRODUCTS_MACHINE_ADDRESSABLE"
+assert backlog["components"]["missingProductCoverage"]==["Studio Atlas"]
+assert backlog["components"]["coverageState"]=="PARTIAL_PRODUCT_COVERAGE"
 assert backlog["components"]["qualificationState"]=="PARTIAL"
 assert not any(target.startswith("ARENA.DIALOG_CONFIRM.GOVERNED:") for target in backlog["components"]["nextTargets"])
 assert not any(target.startswith("ARENA.TABS.GOVERNED:") for target in backlog["components"]["nextTargets"])
-assert backlog["functionalSequence"][:2]==["R3-P2","R3-P5"]
+assert backlog["functionalSequence"]==["AUDIT_V1_3_BASELINE_RECONCILIATION","STUDIO_ATLAS_PR_CONSOLIDATION","VF_ORCH_01_BOUNDED_CLOSEOUT","VISUAL_FACTORY_FIRST_GOVERNED_RUN","MUSEO_ZERO_V0_2_SECOND_HUMAN_REVIEW","STUDIO_ATLAS_S5","STUDIO_ATLAS_S6"]
 
 timeline={item["id"] for item in snapshot["timelineEvents"]}
 assert "EVT-ECO02-P1-FINAL-HUMAN-PASS" in timeline

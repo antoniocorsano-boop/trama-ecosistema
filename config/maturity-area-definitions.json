@@ -231,6 +231,65 @@
         "governance",
         "arena"
       ]
+    },
+    {
+      "id": "studio-atlas",
+      "name": "Studio Atlas",
+      "ownerDomain": "Studio Atlas",
+      "levels": {
+        "0": {
+          "requiredEvidenceTypes": [],
+          "description": "Perimetro non definito"
+        },
+        "1": {
+          "requiredEvidenceTypes": [
+            "DOCUMENT_CANONICAL"
+          ],
+          "description": "Boundary di prodotto, ownership e separazione delle autorità documentati"
+        },
+        "2": {
+          "requiredEvidenceTypes": [
+            "DOCUMENT_CANONICAL",
+            "CONTRACT_APPROVED"
+          ],
+          "description": "Contratti cross-product e gate di authoring/handoff approvati"
+        },
+        "3": {
+          "requiredEvidenceTypes": [
+            "DOCUMENT_CANONICAL",
+            "CONTRACT_APPROVED",
+            "PR_EXACT_HEAD",
+            "AUTOMATED_TEST"
+          ],
+          "description": "Implementazione exact-head verificabile senza inferire runtime authorization"
+        },
+        "4": {
+          "requiredEvidenceTypes": [
+            "DOCUMENT_CANONICAL",
+            "CONTRACT_APPROVED",
+            "PR_EXACT_HEAD",
+            "AUTOMATED_TEST",
+            "HUMAN_REVIEW"
+          ],
+          "description": "Prodotto qualificato tramite Human Product Review bound alla baseline esatta"
+        },
+        "5": {
+          "requiredEvidenceTypes": [
+            "DOCUMENT_CANONICAL",
+            "CONTRACT_APPROVED",
+            "PR_EXACT_HEAD",
+            "AUTOMATED_TEST",
+            "HUMAN_REVIEW",
+            "REGRESSION_HISTORY",
+            "ADOPTION_EVIDENCE"
+          ],
+          "description": "Prodotto stabilizzato con regressione e adozione osservata senza tracking studente"
+        }
+      },
+      "dependencies": [
+        "governance",
+        "arena"
+      ]
     }
   ]
 }

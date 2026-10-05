@@ -191,7 +191,7 @@ jobs:
 
           snapshot = json.loads(Path("/tmp/ecosystem-snapshot.json").read_text(encoding="utf-8"))
           areas = {area["id"]: area for area in snapshot["areas"]}
-          expected = {"governance", "arena", "atlas", "docente-os"}
+          expected = {"governance", "arena", "atlas", "docente-os", "studio-atlas"}
           assert set(areas) == expected, set(areas)
           for area in areas.values():
               assert area["candidateLevel"] == area["confirmedLevel"], area
@@ -205,6 +205,14 @@ jobs:
           assert areas["atlas"]["confirmedLevel"] == 4, areas["atlas"]
           assert areas["docente-os"]["confirmedLevel"] == 3, areas["docente-os"]
           assert areas["docente-os"]["nextRequiredEvidenceTypes"] == ["RUNTIME_CANARY"], areas["docente-os"]
+          assert areas["studio-atlas"]["confirmedLevel"] == 1, areas["studio-atlas"]
+          assert areas["studio-atlas"]["candidateLevel"] == 1, areas["studio-atlas"]
+          assert areas["studio-atlas"]["nextTargetLevel"] == 2, areas["studio-atlas"]
+          assert areas["studio-atlas"]["nextRequiredEvidenceTypes"] == ["CONTRACT_APPROVED"], areas["studio-atlas"]
+          assert not any(
+              item.get("area") == "studio-atlas" and item.get("type") != "DOCUMENT_CANONICAL"
+              for item in snapshot["evidence"]
+          ), snapshot["evidence"]
           assert all(area["evidenceBindingStatus"] == "PARTIAL" for area in areas.values()), areas
           assert not any(
               item.get("area") == "docente-os" and item.get("type") == "RUNTIME_CANARY"
@@ -404,4 +412,3 @@ jobs:
           grep -q '"timelineEvents"' schemas/ecosystem-snapshot.schema.json
           grep -q '"timelineCoverage"' schemas/ecosystem-snapshot.schema.json
           ! grep -Eq '"(overallScore|score)"' schemas/ecosystem-snapshot.schema.json
-

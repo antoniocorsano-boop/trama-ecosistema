@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-05T04:40:09Z",
+  "generatedAt": "2026-10-05T08:32:25Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -1476,6 +1476,34 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-AUDIT-V1.3-STUDIO-ATLAS-BASELINE-2026-10-05",
+      "type": "BASELINE",
+      "subject": "ecosystem-audit",
+      "statement": "Audit v1.3 establishes Studio Atlas as a first-level application domain and records additive findings A42 through A49. It preserves NOT_RUNTIME_AUTHORIZED for Studio Atlas, SECOND_HUMAN_PRODUCT_REVIEW_PENDING for MUSEO ZERO, REAL_VISUAL_RUN_PENDING for Visual Factory, VF-ORCH-01 PLAN_INCOMPLETE, and DOS-A1=RUNTIME_DEFERRED; no student runtime or publication authority is granted.",
+      "status": "CURRENT",
+      "rationale": "project-knowledge projection of the governed Audit v1.3 baseline: the ecosystem must represent Studio Atlas as a first-level product domain without converting implementation evidence into product, runtime, publication or student authority.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/superpowers/specs/2026-10-05-trama-audit-v1-3-studio-atlas-baseline-design.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T08:00:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ],
   "knowledgeSources": [
@@ -1483,7 +1511,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "83851f23d2b63430398638811793043c051fbc05b0022806d3955dfded0b68c0"
+      "sha256": "0c1c55be0b42f400a3ebed8f2a2ad7d9020c24aca9d721aaaeb713874f348466"
     },
     {
       "id": "source-registry",
@@ -1513,7 +1541,7 @@
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "a6a4b8278fde75327960d5155504db59cdc9f0c2e0ce73d8af93c5c908e02230"
+      "sha256": "1b169647089be460cf8684858c7db3eb6572d0e6f86118c1513663d196da6a76"
     }
   ]
 }
