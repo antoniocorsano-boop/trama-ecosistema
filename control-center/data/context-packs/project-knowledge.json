@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-05T18:10:40Z",
+  "asOf": "2026-10-05T18:20:29Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -403,8 +403,9 @@
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
-          "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
-          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+          "exactHead": "76818f7e817c4c969421c8cf5965891d7a6fc52a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md",
+          "pullRequest": 250
         },
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
@@ -421,7 +422,7 @@
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
           "pullRequest": 249,
-          "exactHead": "e40054349db5ed28ea663d24f4c4d048481ba3b5",
+          "exactHead": "6c223a4556868c0c1f14cdabd6b8f101fce6368d",
           "ref": "github:trama-ecosistema/pull/249"
         },
         {
@@ -870,8 +871,9 @@
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
-          "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
-          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+          "exactHead": "76818f7e817c4c969421c8cf5965891d7a6fc52a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md",
+          "pullRequest": 250
         },
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
@@ -888,7 +890,7 @@
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
           "pullRequest": 249,
-          "exactHead": "e40054349db5ed28ea663d24f4c4d048481ba3b5",
+          "exactHead": "6c223a4556868c0c1f14cdabd6b8f101fce6368d",
           "ref": "github:trama-ecosistema/pull/249"
         },
         {
@@ -1154,8 +1156,9 @@
     },
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
-      "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+      "exactHead": "76818f7e817c4c969421c8cf5965891d7a6fc52a",
+      "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md",
+      "pullRequest": 250
     },
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
@@ -1172,12 +1175,12 @@
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
       "pullRequest": 249,
-      "exactHead": "e40054349db5ed28ea663d24f4c4d048481ba3b5",
+      "exactHead": "6c223a4556868c0c1f14cdabd6b8f101fce6368d",
       "ref": "github:trama-ecosistema/pull/249"
     },
     {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "3b9d65d3c2713b01e2a77b8835bc452a104501c2e30475d7307f1bb38d541c34"
+      "sha256": "72de6fd58c40f66efdb9a3be13c1bfd27e7bdb6ac8547274fba149d7f37b7bbe"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -1197,7 +1200,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "943f94bf444758c6405414685a6cba16a8e617a1551796639980ef5e5c6530fd"
+      "sha256": "97e9be61c40f5381d84dfc6aa912c4725bdd2ec0b89265f46336f6eb3cb0a8fb"
     }
   ]
 }

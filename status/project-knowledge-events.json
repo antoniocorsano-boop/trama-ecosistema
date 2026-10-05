@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-10-05T18:02:00Z",
+  "updatedAt": "2026-10-05T18:20:29Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
@@ -609,8 +609,9 @@
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
-          "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
-          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+          "exactHead": "76818f7e817c4c969421c8cf5965891d7a6fc52a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md",
+          "pullRequest": 250
         },
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
@@ -627,7 +628,7 @@
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
           "pullRequest": 249,
-          "exactHead": "e40054349db5ed28ea663d24f4c4d048481ba3b5",
+          "exactHead": "6c223a4556868c0c1f14cdabd6b8f101fce6368d",
           "ref": "github:trama-ecosistema/pull/249"
         },
         {
