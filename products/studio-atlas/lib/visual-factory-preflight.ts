@@ -12,6 +12,7 @@ export type VisualGenerationPreflightIssueCode =
   | "EMPTY_JOBS"
   | "TOO_MANY_JOBS"
   | "DUPLICATE_JOB_ID"
+  | "JOB_CONTRACT_INVALID"
   | "EMPTY_PROMPT"
   | "EMPTY_NEGATIVE_CONSTRAINTS"
   | "MODEL_NOT_ALLOWLISTED"
@@ -72,6 +73,31 @@ export function preflightVisualGenerationPlan(
 
   const jobIds = new Set<string>();
   for (const job of plan.jobs) {
+    const rawJob = job as unknown as Record<string, unknown>;
+    const jobId = typeof rawJob.jobId === "string" ? rawJob.jobId : undefined;
+    const commonContractValid =
+      typeof rawJob.jobId === "string" &&
+      rawJob.jobId.trim().length > 0 &&
+      (rawJob.purpose === "CHARACTER_REFERENCE" ||
+        rawJob.purpose === "ENVIRONMENT_REFERENCE" ||
+        rawJob.purpose === "SCENE_FRAME") &&
+      typeof rawJob.workflowFamily === "string" &&
+      typeof rawJob.prompt === "string" &&
+      Array.isArray(rawJob.negativeConstraints) &&
+      rawJob.negativeConstraints.every((item) => typeof item === "string") &&
+      Array.isArray(rawJob.referenceInputs) &&
+      rawJob.referenceInputs.every((item) => typeof item === "string") &&
+      typeof rawJob.aspectRatio === "string" &&
+      typeof rawJob.maxVariants === "number" &&
+      (rawJob.subjectRef === undefined || typeof rawJob.subjectRef === "string") &&
+      (rawJob.shotId === undefined || typeof rawJob.shotId === "string") &&
+      (rawJob.sceneRef === undefined || typeof rawJob.sceneRef === "string");
+
+    if (!commonContractValid) {
+      addIssue(issues, "JOB_CONTRACT_INVALID", jobId);
+      continue;
+    }
+
     if (jobIds.has(job.jobId)) addIssue(issues, "DUPLICATE_JOB_ID", job.jobId);
     jobIds.add(job.jobId);
 
