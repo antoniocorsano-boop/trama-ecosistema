@@ -3,7 +3,7 @@ name: gh-aw T0 compile check
 on:
   push:
     branches:
-      - "gh-aw/t0-controlled-trial"
+      - main
     paths:
       - ".github/workflows/trama-t0-issue-triage.md"
       - ".github/workflows/trama-t0-issue-triage.lock.yml"
@@ -37,17 +37,23 @@ jobs:
           set -euo pipefail
           gh aw compile trama-t0-issue-triage --strict
           test -f .github/workflows/trama-t0-issue-triage.lock.yml
-      - name: Require controlled trial entrypoint
+      - name: Require production-only staged contract
         shell: bash
         run: |
           set -euo pipefail
-          grep -q '^  workflow_call:' .github/workflows/trama-t0-issue-triage.lock.yml
-          grep -q 'item_number:' .github/workflows/trama-t0-issue-triage.lock.yml
-      - name: Verify committed lock is synchronized
-        shell: bash
-        run: |
-          set -euo pipefail
-          git diff --exit-code -- .github/workflows/trama-t0-issue-triage.lock.yml
+          source_file=.github/workflows/trama-t0-issue-triage.md
+          lock_file=.github/workflows/trama-t0-issue-triage.lock.yml
+
+          grep -q '^  issues:' "$source_file"
+          grep -q 'types: \[opened, reopened\]' "$source_file"
+          grep -q '^  staged: true$' "$source_file"
+          ! grep -q '^  workflow_call:' "$source_file"
+          ! grep -q '^  workflow_dispatch:' "$source_file"
+
+          grep -q '^  issues:' "$lock_file"
+          grep -q 'GH_AW_SAFE_OUTPUTS_STAGED:' "$lock_file"
+          ! grep -q '^  workflow_call:' "$lock_file"
+          ! grep -q '^  workflow_dispatch:' "$lock_file"
       - name: Publish compiled lock evidence
         uses: actions/upload-artifact@v4
         with:
@@ -55,19 +61,8 @@ jobs:
           path: .github/workflows/trama-t0-issue-triage.lock.yml
           if-no-files-found: error
           retention-days: 7
-
-  controlled-staged-trial:
-    name: controlled-staged-trial-issue-117
-    needs: compile-check
-    if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
-    permissions:
-      actions: read
-      contents: read
-      issues: write
-    uses: ./.github/workflows/trama-t0-issue-triage.lock.yml
-    with:
-      item_number: 117
-      aw_context: "P6 controlled staged qualification; analyze issue 117 only; no persistent writes."
-    secrets:
-      GH_AW_GITHUB_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
-      COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+      - name: Verify committed lock is synchronized
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- .github/workflows/trama-t0-issue-triage.lock.yml
