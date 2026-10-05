@@ -19,26 +19,11 @@ jobs:
           ref: feat/studio-atlas-visual-factory-consolidated-v0.2
           fetch-depth: 0
 
-      - name: Reconcile canonical status and project knowledge
+      - name: Record VF-ORCH-01 deterministic closeout in Project Knowledge
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-
-          status_path = Path('STATUS.md')
-          status = status_path.read_text(encoding='utf-8')
-          old = '- **VF-ORCH-01:** `CORE_IMPLEMENTED / PLAN_INCOMPLETE`;'
-          new = '- **VF-ORCH-01:** `DETERMINISTIC_QUALIFICATION_PASS / LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN`;'
-          if old not in status:
-              raise SystemExit('Expected VF-ORCH-01 baseline marker not found exactly once')
-          if status.count(old) != 1:
-              raise SystemExit('VF-ORCH-01 baseline marker is not unique')
-          status = status.replace(old, new)
-          old_seq = 'Sequenza canonica: baseline v1.3 → consolidamento PR sovrapposte → chiusura bounded VF-ORCH-01 → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6.'
-          new_seq = 'Sequenza canonica: baseline v1.3 → consolidamento PR sovrapposte → **VF-ORCH-01 bounded closeout deterministico completato** → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6.'
-          if old_seq not in status:
-              raise SystemExit('Canonical sequence marker not found')
-          status_path.write_text(status.replace(old_seq, new_seq), encoding='utf-8')
 
           events_path = Path('status/project-knowledge-events.json')
           data = json.loads(events_path.read_text(encoding='utf-8'))
@@ -69,7 +54,7 @@ jobs:
                   'invalidatedBy': [],
                   'freshness': {'policy': 'UNTIL_CHANGE'}
               })
-          data['updatedAt'] = '2026-10-05T12:40:00Z'
+          data['updatedAt'] = '2026-10-05T12:55:00Z'
           events_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
           PY
 
@@ -87,7 +72,7 @@ jobs:
           changed="$(git diff --name-only)"
           printf '%s\n' "$changed"
           test -n "$changed"
-          unexpected="$(printf '%s\n' "$changed" | grep -v -E '^(STATUS.md|status/project-knowledge-events.json|control-center/data/ecosystem-snapshot.json|control-center/data/project-context-snapshot.json|control-center/data/context-packs/project-knowledge.json)$' || true)"
+          unexpected="$(printf '%s\n' "$changed" | grep -v -E '^(status/project-knowledge-events.json|control-center/data/ecosystem-snapshot.json|control-center/data/project-context-snapshot.json|control-center/data/context-packs/project-knowledge.json)$' || true)"
           if [ -n "$unexpected" ]; then
             echo "Unexpected closeout files:" >&2
             printf '%s\n' "$unexpected" >&2
@@ -104,9 +89,9 @@ jobs:
         run: |
           git config user.name 'trama-audit-bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add STATUS.md status/project-knowledge-events.json \
+          git add status/project-knowledge-events.json \
             control-center/data/ecosystem-snapshot.json \
             control-center/data/project-context-snapshot.json \
             control-center/data/context-packs/project-knowledge.json
-          git commit -m 'docs: reconcile VF-ORCH-01 deterministic closeout'
+          git commit -m 'docs: record VF-ORCH-01 deterministic closeout'
           git push origin HEAD:feat/studio-atlas-visual-factory-consolidated-v0.2
