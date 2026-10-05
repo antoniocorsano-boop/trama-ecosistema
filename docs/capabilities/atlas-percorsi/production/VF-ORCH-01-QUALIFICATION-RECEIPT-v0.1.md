@@ -77,7 +77,7 @@ Admission requires configured account/token **and** explicit Workers Free admiss
 
 ## Manual workflow boundary
 
-`.github/workflows/visual-factory-orchestrator-v0.1.yml` keeps `dry-run` credential-free. The workflow binds `HF_TOKEN` from GitHub Secrets and `HF_VISUAL_FACTORY_SPACE_REPO` from GitHub Variables only for live `references` / `shots` execution. Missing trusted binding fails closed before provider invocation.
+For `.github/workflows/visual-factory-orchestrator-v0.1.yml`, `dry-run` remains credential-free. The workflow binds `HF_TOKEN` from GitHub Secrets and `HF_VISUAL_FACTORY_SPACE_REPO` from GitHub Variables only for live `references` / `shots` execution. Missing trusted binding fails closed before provider invocation.
 
 This preserves the original safety boundary: repository content contains no secret values, provider credentials are not exposed to the browser or evidence receipts, deterministic CI does not consume the live binding, and no successful live provider run may be claimed until provenance-complete execution evidence exists.
 
