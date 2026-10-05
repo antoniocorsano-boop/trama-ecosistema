@@ -90,24 +90,25 @@ A plan is `READY` only when all of the following hold:
 5. plan decision matches the plan type;
 6. no plan blocker exists;
 7. the plan contains between one and six jobs;
-8. job identifiers are unique;
-9. every job has a non-empty positive prompt;
-10. every job has at least one non-empty negative constraint;
-11. the workflow family is exactly `flux2-klein-4b/v0.2`;
-12. aspect ratio is currently `3:4` or `4:3`;
-13. variant budget is an integer between 1 and 3;
-14. no job contains more than four image references;
-15. canonical reference jobs contain a subject identity;
-16. scene jobs contain `shotId`, `sceneRef` and at least one locked reference input.
+8. each job satisfies the common runtime contract before any field-specific operation is attempted;
+9. job identifiers are unique;
+10. every job has a non-empty positive prompt;
+11. every job has at least one non-empty negative constraint;
+12. the workflow family is exactly `flux2-klein-4b/v0.2`;
+13. aspect ratio is currently `3:4` or `4:3`;
+14. variant budget is an integer between 1 and 3;
+15. no job contains more than four image references;
+16. canonical reference jobs contain a subject identity;
+17. scene jobs contain `shotId`, `sceneRef` and at least one locked reference input.
 
-Any violation produces `BLOCKED`; provider orchestration must not start.
+Malformed common job fields produce `JOB_CONTRACT_INVALID` rather than an exception. Any violation produces `BLOCKED`; provider orchestration must not start.
 
 ## 6. Failure semantics
 
 The web execution boundary returns:
 
 - `400 INVALID_VISUAL_GENERATION_PLAN` for malformed outer contracts;
-- `422 VISUAL_GENERATION_PREFLIGHT_BLOCKED` for structurally valid plans that fail VF-GEN-01.
+- `422 VISUAL_GENERATION_PREFLIGHT_BLOCKED` for plans that reach VF-GEN-01 but fail its semantic or job-level contract.
 
 The manual runner fails before provider eligibility or inference with:
 
@@ -153,7 +154,8 @@ The focused test surface proves:
 6. duplicate jobs are blocked;
 7. authority escalation is blocked;
 8. prompt compilation normalizes content without mutating source reference arrays;
-9. model routing cannot silently change the canonical family.
+9. model routing cannot silently change the canonical family;
+10. malformed job contracts are blocked without throwing before inference.
 
 A local independent harness verified the same behavior RED → GREEN without depending on GitHub Actions.
 
