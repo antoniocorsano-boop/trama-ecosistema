@@ -1,4 +1,9 @@
 import type { PathwayProject } from "./model";
+import {
+  getMuseoZeroReferenceIntent,
+  getMuseoZeroShotIntent,
+} from "./canonical/museo-zero-visual-intents";
+import type { VisualIntentSpec } from "./visual-preflight";
 
 export type VisualAssetPurpose =
   | "CHARACTER_REFERENCE"
@@ -124,95 +129,51 @@ export type VisualExecutionReceipt = {
 type VisualSubject = {
   subjectRef: string;
   purpose: "CHARACTER_REFERENCE" | "ENVIRONMENT_REFERENCE";
-  prompt: string;
 };
 
 type ShotDefinition = {
   shotId: string;
   sceneRef: string;
   subjectRefs: string[];
-  prompt: string;
 };
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 
 export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
-  {
-    subjectRef: "lia",
-    purpose: "CHARACTER_REFERENCE",
-    prompt: "Lia, adult museum exhibition-layout and visitor-flow crew member; calm focused physicality; practical contemporary setup clothing; stable hairstyle and warm accent detail; full-body and medium-shot continuity sheet.",
-  },
-  {
-    subjectRef: "omar",
-    purpose: "CHARACTER_REFERENCE",
-    prompt: "Omar, adult museum installer; practical contemporary workwear; distinct silhouette; grounded posture near sensors and installation props; participant, not teacher; full-body and medium-shot continuity sheet.",
-  },
-  {
-    subjectRef: "teo",
-    purpose: "CHARACTER_REFERENCE",
-    prompt: "Teo, adult museum control and rehearsal crew member; contemporary practical clothing; observant restrained body language; distinct silhouette associated with the control booth; continuity sheet.",
-  },
-  {
-    subjectRef: "sala-zero",
-    purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Sala Zero contemporary interactive museum room after closing; large projection wall, new accessible entrance threshold, subtle floor route, integrated sensor, exit light, believable architecture and spatial depth; cinematic editorial illustration environment master.",
-  },
-  {
-    subjectRef: "cabina-regia",
-    purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Cabina regia physically adjacent to Sala Zero; tactile believable museum AV control surface, spatial connection back to the exhibition, simple readable cue mapping and replay controls; cinematic editorial illustration environment master.",
-  },
+  { subjectRef: "lia", purpose: "CHARACTER_REFERENCE" },
+  { subjectRef: "omar", purpose: "CHARACTER_REFERENCE" },
+  { subjectRef: "teo", purpose: "CHARACTER_REFERENCE" },
+  { subjectRef: "sala-zero", purpose: "ENVIRONMENT_REFERENCE" },
+  { subjectRef: "cabina-regia", purpose: "ENVIRONMENT_REFERENCE" },
 ];
 
 const MUSEO_ZERO_SHOTS: ShotDefinition[] = [
-  {
-    shotId: "F1",
-    sceneRef: "MZ1_FAILED_REHEARSAL",
-    subjectRefs: ["lia", "omar", "teo", "sala-zero"],
-    prompt: "After-hours museum, final rehearsal about to start; Lia approaches the new accessible entrance while Omar and Teo are naturally at work; world credibility first, no technical explanation.",
-  },
-  {
-    shotId: "F2",
-    sceneRef: "MZ1_FAILED_REHEARSAL",
-    subjectRefs: ["lia", "omar", "sala-zero"],
-    prompt: "Lia has crossed the new entrance threshold but the projection wall remains dark; Omar sees the sensor respond; same spatial family as F1, closer and readable without captions.",
-  },
-  {
-    shotId: "F3",
-    sceneRef: "MZ1_FAILED_REHEARSAL",
-    subjectRefs: ["lia", "omar", "teo", "sala-zero"],
-    prompt: "The warm projection finally triggers too late; Lia is already deeper inside; visible spatial mismatch between her position and the room response; one restrained crew reaction.",
-  },
-  {
-    shotId: "F4",
-    sceneRef: "MZ4_TEST_MAPPING",
-    subjectRefs: ["teo", "cabina-regia"],
-    prompt: "Teo beside a believable museum AV control surface; one readable mapping relation still points to old entrance logic; the control remains diegetic, never a detached dashboard.",
-  },
-  {
-    shotId: "F5",
-    sceneRef: "MZ4_TEST_MAPPING",
-    subjectRefs: ["teo", "cabina-regia"],
-    prompt: "Same control surface and composition as F4 after one bounded mapping change to the new entrance sensor; state update is quiet and physically believable.",
-  },
-  {
-    shotId: "F6",
-    sceneRef: "MZ6_FINAL_REHEARSAL",
-    subjectRefs: ["lia", "omar", "teo", "sala-zero"],
-    prompt: "Same rehearsal and camera family as F2/F3; Lia crosses the same threshold and the warm projection response begins immediately; restrained crew satisfaction, no reward effect.",
-  },
+  { shotId: "F1", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
+  { shotId: "F2", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "sala-zero"] },
+  { shotId: "F3", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
+  { shotId: "F4", sceneRef: "MZ4_TEST_MAPPING", subjectRefs: ["teo", "cabina-regia"] },
+  { shotId: "F5", sceneRef: "MZ4_TEST_MAPPING", subjectRefs: ["teo", "cabina-regia"] },
+  { shotId: "F6", sceneRef: "MZ6_FINAL_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
 ];
 
-const COMMON_NEGATIVE = [
-  "dashboard aesthetic",
-  "generic SaaS cards",
-  "floating avatar heads",
-  "chibi or mascot treatment",
-  "cyberpunk neon default",
-  "technical diagram as dominant scene",
-  "large educational captions",
-  "decorative AI clutter",
-];
+function promptFromIntent(intent: VisualIntentSpec): string {
+  const parts = [
+    "cinematic editorial illustration; polished 2-D illustrated realism; after-hours contemporary museum",
+    intent.narrativeFunction,
+    `required visual facts: ${intent.requiredVisualFacts.join("; ")}`,
+    `world anchors: ${intent.worldAnchors.join("; ")}`,
+    intent.identityAnchors.length ? `identity anchors: ${intent.identityAnchors.join("; ")}` : "",
+    `composition: ${intent.composition.dominantSubject}; foreground ${intent.composition.foreground.join("; ")}; background ${intent.composition.background.join("; ")}; ${intent.composition.spatialRelation}`,
+    intent.composition.focalActions?.length ? `focal action: ${intent.composition.focalActions.join("; ")}` : "",
+    `camera: ${intent.camera.shotScale}; ${intent.camera.viewpoint}; ${intent.camera.lensLanguage}`,
+    `lighting: ${intent.lightingMood}`,
+    `materials: ${intent.materialTextureLanguage.join("; ")}`,
+    intent.interactionState ? `interaction state: ${intent.interactionState}` : "",
+    `quality: ${intent.qualityCriteria.join("; ")}`,
+    `avoid: ${intent.negativeConstraints.join("; ")}`,
+  ];
+  return parts.filter(Boolean).join(". ");
+}
 
 function basePlan(
   project: PathwayProject,
@@ -272,17 +233,20 @@ export function compileReferenceJobs(
   const locked = new Set(state.referenceLocks.map((item) => item.subjectRef));
   const jobs = MUSEO_ZERO_VISUAL_SUBJECTS
     .filter((subject) => !locked.has(subject.subjectRef))
-    .map<VisualGenerationJob>((subject) => ({
-      jobId: `reference-${subject.subjectRef}`,
-      purpose: subject.purpose,
-      subjectRef: subject.subjectRef,
-      workflowFamily: "flux2-klein-4b/v0.2",
-      prompt: `cinematic editorial illustration; polished 2-D illustrated realism; after-hours contemporary museum. ${subject.prompt}`,
-      negativeConstraints: [...COMMON_NEGATIVE],
-      referenceInputs: [],
-      aspectRatio: subject.purpose === "CHARACTER_REFERENCE" ? "3:4" : "4:3",
-      maxVariants: 3,
-    }));
+    .map<VisualGenerationJob>((subject) => {
+      const intent = getMuseoZeroReferenceIntent(subject.subjectRef);
+      return {
+        jobId: `reference-${subject.subjectRef}`,
+        purpose: subject.purpose,
+        subjectRef: subject.subjectRef,
+        workflowFamily: "flux2-klein-4b/v0.2",
+        prompt: promptFromIntent(intent),
+        negativeConstraints: [...intent.negativeConstraints],
+        referenceInputs: [],
+        aspectRatio: intent.targetAspectRatio,
+        maxVariants: 3,
+      };
+    });
 
   return {
     ...prefix,
@@ -314,7 +278,7 @@ export function ingestVisualCandidates(
   ) {
     throw new Error("VISUAL_EXECUTION_AUTHORITY_VIOLATION");
   }
-  if (receipt.assets.some((asset) => asset.packageDigest !== state.packageDigest)) {
+  if (receipt.assets.some((asset) => asset.packageDigest !== state.packageDigest) {
     throw new Error("STALE_VISUAL_CANDIDATE");
   }
 
@@ -392,19 +356,22 @@ export function compileShotJobs(
     };
   }
 
-  const jobs = MUSEO_ZERO_SHOTS.map<VisualGenerationJob>((shot) => ({
-    jobId: `shot-${shot.shotId}`,
-    purpose: "SCENE_FRAME",
-    subjectRef: shot.shotId,
-    shotId: shot.shotId,
-    sceneRef: shot.sceneRef,
-    workflowFamily: "flux2-klein-4b/v0.2",
-    prompt: `cinematic editorial illustration; polished 2-D illustrated realism; believable museum architecture; character-in-world staging. ${shot.prompt}`,
-    negativeConstraints: [...COMMON_NEGATIVE, "website mockup", "floating UI overlay"],
-    referenceInputs: shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl),
-    aspectRatio: "4:3",
-    maxVariants: 3,
-  }));
+  const jobs = MUSEO_ZERO_SHOTS.map<VisualGenerationJob>((shot) => {
+    const intent = getMuseoZeroShotIntent(shot.shotId);
+    return {
+      jobId: `shot-${shot.shotId}`,
+      purpose: "SCENE_FRAME",
+      subjectRef: shot.shotId,
+      shotId: shot.shotId,
+      sceneRef: shot.sceneRef,
+      workflowFamily: "flux2-klein-4b/v0.2",
+      prompt: promptFromIntent(intent),
+      negativeConstraints: [...intent.negativeConstraints, "website mockup", "floating UI overlay"],
+      referenceInputs: shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl),
+      aspectRatio: intent.targetAspectRatio,
+      maxVariants: 3,
+    };
+  });
 
   return {
     ...prefix,
