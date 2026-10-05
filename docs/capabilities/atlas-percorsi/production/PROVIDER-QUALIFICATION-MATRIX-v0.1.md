@@ -10,7 +10,7 @@
 | Azure with existing credits | YES | Azure Consumption Credits balance API | YES | **ADAPTER_SELECTED** |
 | GCP with trial/promo credits | YES | billing/cost APIs exist, but remaining promo entitlement is not yet bound to a sufficiently simple canonical balance signal for this workflow | YES | **DEFER / UNKNOWN_FREE_ENTITLEMENT** |
 | AWS with promotional credits | YES | AWS billing APIs exist, but v0.1 has not qualified a read-only remaining-credit path suitable for automatic FREE_ONLY admission | YES | **DEFER / UNKNOWN_FREE_ENTITLEMENT** |
-| RunPod | YES where supported | provider-specific credit proof required | YES | **DEFER** |
+| RunPod | YES | account/billing integration requires provider-specific balance qualification | YES | **DEFER** |
 | Paperspace Free / Gradient | SkyPilot supports Paperspace, but the free plan is notebook-scoped | current Free-plan GPU is M4000 (8 GiB VRAM), below Q4 minimum 14 GiB | notebook/free path not qualified as SkyPilot production path | **REJECT_FOR_Q4_PROFILE** |
 | Lambda / Vast / other GPU clouds | YES where supported | provider-specific credit proof required | YES | **DEFER** |
 | Kaggle Free | NO canonical SkyPilot infra | quota visible, but empirical T4 request produced CPU runtime | notebook API | **NEGATIVE KNOWLEDGE / NOT_CANONICAL** |
