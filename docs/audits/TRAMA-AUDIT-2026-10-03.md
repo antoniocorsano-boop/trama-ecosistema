@@ -1,12 +1,12 @@
 # TRAMA-AUDIT-2026-10-03 — Audit di completamento e piano operativo
-Versione 1.3 — 5 ottobre 2026 — baseline storica del 03/10/2026 aggiornata per il delta Studio Atlas / Visual Factory, senza riscrivere le risultanze originarie.
+Versione 1.4 — 5 ottobre 2026 — baseline storica del 03/10/2026 aggiornata per la prova reale Visual Factory, il riesame MUSEO ZERO e i residui P4/P5, senza riscrivere le risultanze originarie.
 
 ## 1. Mandato, validità e precedenza
 Questo documento consolida la ricognizione riportata nella conversazione e ne fa la baseline di confronto per il completamento dell'intero ecosistema. La richiesta dell'utente autorizza il salvataggio e la pianificazione; non attesta nuove prove funzionali.
 Le risultanze tecniche dell'audit precedente sono conservate come EVIDENZE RIPORTATE: in questo turno non sono stati rieseguiti i controlli sui quattro prodotti, sui dispositivi o sui provider. Sono stati letti direttamente README.md, STATUS.md e GOVERNANCE.md di TRAMA; confermano la separazione delle autorità e lo stato documentale al 30 settembre.
 Non si trasformano i risultati storici in certificazioni attuali. Prima di intervenire, confrontare ogni rilievo con SHA completo, ramo, PR, esito corrente e distribuzione reale.
 Precedenza: decisioni/contratti approvati → STATUS.md → piano operativo canonico → specifiche integrate → questo audit, come riferimento trasversale di completamento. La sua integrazione documentale non promuove capacità, non autorizza esecuzioni e non certifica conformità.
-Stato del riferimento: il documento è presente su `main` TRAMA e resta la baseline trasversale di completamento. La versione 1.3 incorpora i delta verificati fino alla chiusura P6/gh-aw T0 e aggiunge Studio Atlas / Visual Factory alla baseline governata; non promuove capacità prive di prova, non attiva T1/T2 e non autorizza nuovi runtime. La Versione 1.2 resta conservata come baseline precedente e cronologia verificabile.
+Stato del riferimento: il documento è presente su `main` TRAMA e resta la baseline trasversale di completamento. La versione 1.4 incorpora la prova reale FREE_ONLY della Visual Factory, mantiene separata la qualità visuale dalla riuscita tecnica, registra il riesame MUSEO ZERO come REWORK e riallinea P4/P5 senza promuovere capacità prive di prova, attivare T1/T2 o autorizzare nuovi runtime. Le versioni 1.3 e 1.2 restano conservate come baseline precedenti e cronologia verificabile.
 
 ## 2. Criterio di completamento
 Per ogni capacità mantenere separati: dichiarazione, implementazione, verifica automatica, prova di uso, distribuzione, autorità e integrazione dell'evidenza.
@@ -277,6 +277,61 @@ Studio Atlas è standalone nel dominio di ownership; Docente OS resta ingresso p
 
 La riconciliazione v1.3 non autorizza MUSEO ZERO, Visual Factory production, student runtime, QE-01, Argo reale, DOS-A1 o promozioni Production. `DOS-A1=RUNTIME_DEFERRED` resta invariato.
 
+## 4-octies. Delta verificato — 5 ottobre 2026 — Audit v1.4 / prova reale Visual Factory
+
+Questo delta supersede, per lo **stato corrente**, le formulazioni v1.3 `REAL_VISUAL_RUN_PENDING`, `LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN` e `PLAN_INCOMPLETE` relative alla prova reale della Visual Factory. Non modifica retroattivamente la cronologia e non concede authority di runtime, pubblicazione o student use.
+
+### Baseline e prova reale governata
+
+- Baseline Audit v1.3 integrata: `main@d5a54022e1bad7b3fb2c4a853bbdd5f7e114d3aa`.
+- Baseline reale osservata per questo delta: `main@290d6f3f0d15df3e8f8f438a46a26449d1247043`, merge della PR #248.
+- La linea Studio Atlas / Visual Factory è stata consolidata con PR #243 e i follow-up #244, #245, #247 e #248, senza paid fallback né nuova authority.
+- Il run manuale `37348637767` su `main@290d6f3f0d15df3e8f8f438a46a26449d1247043` ha completato `Bounded FREE_ONLY visual orchestration` con esecuzione live SUCCESS, verifica di non-authority e upload delle evidenze.
+- L'artefatto `11361642336` contiene le reference candidate governate ed è registrato con digest `sha256:91ed622868c2214b730e2c56f800ffcbd0de579a9913471f96cdb1ca764fea12`; la riuscita tecnica non costituisce approvazione visuale.
+
+### A45 / MUSEO ZERO
+
+A45 passa da `REMEDIATION_IMPLEMENTED / SECOND_HUMAN_PRODUCT_REVIEW_PENDING` a **`REAL_REFERENCES_GENERATED / ART_DIRECTION_REMEDIATION_IMPLEMENTED_CANDIDATE / REGENERATION_PENDING / HUMAN_VISUAL_REVIEW_PENDING / REFERENCE_LOCK_PENDING / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`**.
+
+La prima Human Visual Review delle reference reali non concede reference lock. La PR #249 ha ora implementato il candidato di remediation art-direction sull'exact head `6c223a4556868c0c1f14cdabd6b8f101fce6368d`: Governance, Studio Atlas S1 Standalone, Visual Factory Generation Pipeline v0.2 e Studio Atlas ↔ Atlas Preview E2E risultano PASS. La remediation rafforza l'identità di Lia/Omar/Teo, elimina pseudo-testo e dashboard spurie, rende Sala Zero uno spazio narrativo fisico e Cabina regia un ambiente adiacente e coerente. La nuova generazione reale delle cinque reference e la successiva Human Visual Review restano necessarie; nessun F1–F6 parte prima del reference lock PASS.
+
+### A46 / Visual Factory
+
+A46 passa da `IMPLEMENTATION_ADVANCED / AUTOMATED_QUALIFICATION_AVAILABLE / REAL_VISUAL_RUN_PENDING` a **`REAL_REFERENCE_GENERATION_PROVEN / GOVERNED_EVIDENCE_AVAILABLE / HUMAN_VISUAL_ACCEPTANCE_PENDING`**.
+
+È ora dimostrato end-to-end il percorso `piano canonico Studio Atlas → orchestratore bounded → provider gratuito qualificato → generazione reale → ricevuta → materializzazione binari → verifica SHA-256 → artefatto revisionabile`. Resta separata la qualità del risultato dalla riuscita tecnica.
+
+### A47 / VF-ORCH-01
+
+A47 passa da `DETERMINISTIC_QUALIFICATION_PASS / LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN` a **`LIVE_ZERO_COST_REFERENCE_EXECUTION_PROVEN / FREE_ONLY / FAIL_CLOSED / HUMAN_AUTHORITY_PRESERVED`**.
+
+Il residuo di prova reale dell'orchestratore è chiuso nel perimetro reference. `shots` resta correttamente fail-closed fino al reference lock umano; questo è un gate di prodotto, non un difetto residuo dell'orchestratore.
+
+### P4 / Argo G5-C
+
+P4 resta aperto ma avanza a **`OPEN / LOCAL_PROOF_PACKAGE_READY_CANDIDATE`**. La PR #246, exact head `ef5734646964ce6403a85e53caa72ea62527e32e`, prepara manifest, dossier, validatore e test fail-closed; il gate resta `LOCAL_EVIDENCE_REQUIRED`. Servono ancora apertura reale del `.xls` in LibreOffice, import manuale in didUP, attestazione umana e review finale.
+
+### P5 / QE-01
+
+P5 passa da `OPEN / REQUALIFICATION` a **`REQUALIFICATION_PREPARED_NOT_AUTHORIZED`**. La PR #241 è integrata con merge `c0ab9f65d42ee88a640afd57ddfac9bef9df6606`; il pacchetto resta intenzionalmente `executable=false`. Una nuova esecuzione richiede fresh local observation, exact target freeze, Human Exact-Head Review e nuova Human Authorization separata.
+
+### Maturità formale
+
+Nessuna promozione automatica dei livelli di maturità deriva da questo delta. Restano confermati: Governance L4, Arena L4, Atlas L4, Docente OS L3, Studio Atlas L1. Studio Atlas resta L1 finché non esiste evidenza `CONTRACT_APPROVED` sufficiente per L2; ADR-020/ADR-021 non vengono promosse da questo audit.
+
+### Sequenza operativa v1.4
+
+1. completare la remediation art-direction v0.3 delle sole cinque reference canoniche;
+2. rigenerare Lia, Omar, Teo, Sala Zero e Cabina regia con la stessa pipeline FREE_ONLY governata;
+3. eseguire Human Visual Review; soltanto un PASS concede reference lock;
+4. generare e revisionare F1–F6;
+5. integrare gli asset nella learner experience MUSEO ZERO v0.2;
+6. eseguire la seconda Human Product Review `PASS / REWORK / REJECT`;
+7. solo dopo PASS procedere con S5 e quindi S6;
+8. P4 e P5 restano lane indipendenti, rispettivamente vincolate a prova locale reale e nuova autorizzazione di esecuzione.
+
+`DOS-A1=RUNTIME_DEFERRED` resta invariato. Nessuna promozione Production, student runtime o pubblicazione automatica è implicata dalla v1.4.
+
 ## 5. Quattro problemi trasversali
 F01 Duplicazioni: #652/#653 Orario sono state chiuse come SUPERSEDED e non costituiscono più implementazioni concorrenti; le preview Render temporanee non sono servizi canonici. Voice e /legacy/ restano da confrontare prima di eventuale rimozione; /legacy/ è un fallback intenzionale.
 F02 PR superate: #652/#653 risolte; Docente OS #685 chiusa senza merge dopo verifica che la hotfix non era necessaria; #187 e #194 restano da riconciliare prima di qualsiasi chiusura definitiva.
@@ -310,12 +365,12 @@ F04 Capacità dichiarate senza prova completa: installazione PWA device-native, 
 
 | Pacchetto | Stato v1.2 | Nota |
 | --- | --- | --- |
-| P0 | **INTEGRATO / DA RENDERE PIÙ RINTRACCIABILE** | Audit presente su `main`; questa v1.2 mantiene il collegamento operativo da STATUS |
+| P0 | **INTEGRATO / RIFERIMENTO V1.4** | Audit presente su `main`; STATUS e proiezioni governate devono restare allineati al delta v1.4 |
 | P1 | **CLOSED_APPLICATION_SCOPE / DEVICE_NATIVE_RESIDUAL** | Orario verificato su Beta; PWA/Share applicativamente qualificate; installazione nativa Android residua e non bloccante |
 | P2 | **VERIFIED / INTEGRATED** | Run schedulati Arena Curriculum Sync PASS con validation/no-op governato |
 | P3 | **CLOSED / BASELINE_RECONCILED** | Stato, distribuzioni, snapshot, Control Center e Project Knowledge riconciliati |
-| P4 | **OPEN** | Argo G5-C: prova reale LibreOffice/didUP ancora necessaria |
-| P5 | **OPEN / REQUALIFICATION** | QE-01 da riconciliare prima di nuova esecuzione |
+| P4 | **OPEN / LOCAL_PROOF_PACKAGE_READY_CANDIDATE** | Pacchetto fail-closed #246 pronto; prova reale LibreOffice/didUP ancora necessaria |
+| P5 | **REQUALIFICATION_PREPARED_NOT_AUTHORIZED** | Pacchetto QE-01 v2 integrato; nuova esecuzione richiede fresh local observation e nuova Human Authorization |
 | P6 | **CLOSED / INTEGRATED** | T0 qualificato con trial staged reale e zero side effect; T1/T2 restano incrementi separati |
 | P7 | **UNBLOCKED FOR SCOPED INCREMENTS** | P1 non blocca più nuovi incrementi; ogni capacità mantiene i propri gate |
 | P8 | **DEFERRED / DECISION-BOUND** | Nessun cambiamento alle funzioni differite |
