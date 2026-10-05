@@ -7,6 +7,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "services" / "visual-factory-hf" / "contract.py"
 ORCHESTRATOR_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-orchestrator-v0.1.yml"
+STUDIO_PACKAGE = ROOT / "products" / "studio-atlas" / "package.json"
+CANONICAL_PLAN_CLI = ROOT / "products" / "studio-atlas" / "scripts" / "compile-canonical-reference-plan.ts"
 
 
 def load_contract():
@@ -123,6 +125,14 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         self.assertIn('test -n "${HF_TOKEN:-}"', workflow)
         self.assertIn('test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}"', workflow)
         self.assertIn("LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING", workflow)
+
+    def test_manual_orchestrator_uses_canonical_studio_atlas_reference_plan(self):
+        workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
+        package = STUDIO_PACKAGE.read_text(encoding="utf-8")
+        self.assertTrue(CANONICAL_PLAN_CLI.is_file())
+        self.assertIn('"visual-factory:compile-reference-plan": "tsx scripts/compile-canonical-reference-plan.ts"', package)
+        self.assertIn("npm run visual-factory:compile-reference-plan", workflow)
+        self.assertNotIn("python scripts/compile_visual_generation_plan.py", workflow)
 
 
 if __name__ == "__main__":
