@@ -4,6 +4,12 @@ intent: "Classify new issues conservatively and surface a concise maintainer-fac
 on:
   issues:
     types: [opened, reopened]
+  workflow_call:
+    inputs:
+      item_number:
+        description: "Existing TRAMA issue number to analyze in a controlled staged trial"
+        required: true
+        type: number
 
 permissions:
   contents: read
@@ -22,15 +28,20 @@ safe-outputs:
       - documentation
       - question
     max: 1
-    target: triggering
+    target: "${{ github.event.issue.number || inputs.item_number }}"
   add-comment:
     max: 1
-    target: triggering
+    target: "${{ github.event.issue.number || inputs.item_number }}"
 ---
 
 # TRAMA T0 — Issue triage
 
-Analyze only the issue that triggered this workflow.
+Analyze exactly one issue selected from trusted run context:
+
+- for an `issues` event, use `${{ github.event.issue.number }}`;
+- for a controlled reusable trial, use `${{ inputs.item_number }}`.
+
+Read that issue first. Do not substitute another target. Repository issue search is allowed only to detect obvious related-work signals.
 
 ## Boundaries
 
