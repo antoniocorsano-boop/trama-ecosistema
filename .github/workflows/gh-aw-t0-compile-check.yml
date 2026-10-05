@@ -50,24 +50,3 @@ jobs:
           path: .github/workflows/trama-t0-issue-triage.lock.yml
           if-no-files-found: error
           retention-days: 7
-      - name: Sync generated lock with dedicated gh-aw token
-        if: github.event_name == 'push' && github.ref_name == 'gh-aw/t0-controlled-trial' && github.actor != 'github-actions[bot]'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo 'GH_AW_GITHUB_TOKEN is not configured; refusing to broaden GITHUB_TOKEN permissions.'
-            exit 2
-          fi
-          git add .github/workflows/trama-t0-issue-triage.lock.yml
-          if git diff --cached --quiet; then
-            echo 'lock already synchronized'
-            exit 0
-          fi
-          gh auth setup-git
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'chore(gh-aw): synchronize generated T0 lock'
-          git push origin HEAD:gh-aw/t0-controlled-trial
