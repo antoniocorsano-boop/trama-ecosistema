@@ -75,6 +75,36 @@ export type VisualGenerationPlan = {
   publicationAuthorityGranted: false;
 };
 
+export type VisualExecutionProviderId = "HF_ZEROGPU" | "CLOUDFLARE_WORKERS_AI";
+
+export type VisualProviderAttemptEvidence = {
+  provider: VisualExecutionProviderId;
+  eligibility: "ELIGIBLE" | "INELIGIBLE" | "NOT_CONFIGURED" | "PREFLIGHT_ERROR";
+  eligibilityReason: string;
+  quotaRemainingGpuSeconds?: number;
+  outcome?:
+    | "SUCCEEDED"
+    | "RETRYABLE_PROVIDER_FAILURE"
+    | "PROVIDER_EXHAUSTED"
+    | "PROVIDER_INELIGIBLE"
+    | "LICENSE_BLOCKED"
+    | "PERMANENT_FAILURE";
+  startedAt: string;
+  completedAt: string;
+  durationMs: number;
+};
+
+export type VisualOrchestrationEvidence = {
+  schemaVersion: "atlas.visual-orchestration-evidence/v0.1";
+  orchestrationId: string;
+  workloadClass: "CANONICAL_REFERENCE" | "SCENE_FRAME";
+  consideredProviders: VisualExecutionProviderId[];
+  selectedProvider?: VisualExecutionProviderId;
+  selectedModelRef?: string;
+  attempts: VisualProviderAttemptEvidence[];
+  finalState: "SUCCEEDED" | "GENERATION_DEFERRED";
+};
+
 export type VisualExecutionReceipt = {
   schemaVersion: "atlas.visual-execution-receipt/v0.1";
   receiptId: string;
@@ -84,6 +114,7 @@ export type VisualExecutionReceipt = {
   assets: VisualAssetCandidate[];
   failureCategory?: "NO_FREE_PROVIDER" | "EXECUTOR_UNAVAILABLE" | "INVALID_EXECUTOR_RESPONSE" | "EXECUTION_FAILED";
   failureDetail?: string;
+  orchestration?: VisualOrchestrationEvidence;
   paidComputeAuthorized: false;
   allowQualityDowngrade: false;
   runtimeAuthorized: false;
