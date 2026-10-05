@@ -23,6 +23,8 @@ jobs:
       - {name: Test OR-08 runtime portability, run: python3 -m unittest tests.test_or08_runtime_portability -v}
       - {name: Validate OR-09 execution readiness, run: python3 scripts/validate_or09_execution_readiness.py}
       - {name: Test OR-09 execution readiness, run: python3 -m unittest tests.test_or09_execution_readiness -v}
+      - {name: Validate QE-01 requalification v2, run: python3 scripts/validate_qe01_requalification_v2.py}
+      - {name: Test QE-01 requalification v2, run: python3 -m unittest tests.test_qe01_requalification_v2 -v}
       - {name: Validate OR-10 product evidence alignment, run: python3 scripts/validate_or10_product_evidence_alignment.py}
       - {name: Validate Control Center A0 architecture lock, run: python3 scripts/validate_control_center_a0_architecture_lock.py}
       - {name: Validate Stage E1 visual prototype, run: python3 scripts/validate_stage_e1_visual_prototype.py}
