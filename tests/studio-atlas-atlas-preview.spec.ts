@@ -253,9 +253,8 @@ test("MUSEO ZERO stays REVISE while review preview exercises investigation, repr
 
   await popup.getByRole("button", { name: "Continua" }).click();
   await expect(popup.getByRole("heading", { name: "Prova il collegamento" })).toBeVisible();
-  await expect(
-    popup.getByText("Il nuovo ingresso usa Sensor B, ma la regia ascolta ancora Sensor A"),
-  ).toBeVisible();
+  await expect(popup.getByText("Trigger regia", { exact: true })).toBeVisible();
+  await expect(popup.getByText("È ancora associato a Sensor A.", { exact: true })).toBeVisible();
 
   const switchSensorChoice = popup.getByRole("button", {
     name: "Provo il trigger su Sensor B",
