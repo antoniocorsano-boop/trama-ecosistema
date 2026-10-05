@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "atlas.visual-shot-plan/v0.1",
+  "pathwayId": "PW-STRATEGY-SELECTION-01",
+  "visualBibleRef": "MZ-VB-001",
+  "shots": [
+    {
+      "shotId": "F1",
+      "sceneRef": "MZ1_FAILED_REHEARSAL",
+      "generationClass": "PRODUCTION",
+      "narrativeBeat": "After-hours museum; final rehearsal about to start; Lia approaches the new entrance while Omar and Teo are already working.",
+      "environmentRef": "sala-zero",
+      "characterRefs": [
+        "lia",
+        "omar",
+        "teo"
+      ],
+      "camera": "wide, slightly elevated, entering toward Sala Zero",
+      "continuityRefs": [
+        "new entrance threshold",
+        "projection wall geometry",
+        "Lia silhouette/clothing"
+      ],
+      "promptCore": "Lia about to cross the new accessible entrance; crew present naturally in the museum; no technical explanation yet",
+      "negativeConstraints": [
+        "no UI panels",
+        "no giant labels",
+        "no educational caption"
+      ],
+      "aspectRatio": "4:3",
+      "referenceRequired": true
+    },
+    {
+      "shotId": "F2",
+      "sceneRef": "MZ1_FAILED_REHEARSAL",
+      "generationClass": "PRODUCTION",
+      "narrativeBeat": "Lia crosses the new entrance and nothing happens.",
+      "environmentRef": "sala-zero",
+      "characterRefs": [
+        "lia",
+        "omar"
+      ],
+      "camera": "same spatial family as F1, closer on threshold and Lia",
+      "continuityRefs": [
+        "new entrance threshold",
+        "projection wall geometry",
+        "Lia silhouette/clothing"
+      ],
+      "promptCore": "Lia has crossed the threshold; projection wall remains dark; Omar watches the sensor respond",
+      "negativeConstraints": [
+        "no UI panels",
+        "no explanatory arrows",
+        "no giant sensor labels"
+      ],
+      "aspectRatio": "4:3",
+      "referenceRequired": true
+    },
+    {
+      "shotId": "F3",
+      "sceneRef": "MZ1_FAILED_REHEARSAL",
+      "generationClass": "PRODUCTION",
+      "narrativeBeat": "Projection finally triggers too late after Lia is already deeper inside.",
+      "environmentRef": "sala-zero",
+      "characterRefs": [
+        "lia",
+        "omar",
+        "teo"
+      ],
+      "camera": "same room and camera family as F2, Lia visibly farther into the room",
+      "continuityRefs": [
+        "new entrance threshold",
+        "projection wall geometry",
+        "Lia silhouette/clothing"
+      ],
+      "promptCore": "warm projection switches on late; spatial mismatch between Lia position and room response; one grounded crew reaction",
+      "negativeConstraints": [
+        "no UI panels",
+        "no educational caption",
+        "no exaggerated sci-fi effects"
+      ],
+      "aspectRatio": "4:3",
+      "referenceRequired": true
+    },
+    {
+      "shotId": "F4",
+      "sceneRef": "MZ4_TEST_MAPPING",
+      "generationClass": "PRODUCTION",
+      "narrativeBeat": "Learner inspects the believable control booth and sees the old entrance mapping.",
+      "environmentRef": "cabina-regia",
+      "characterRefs": [
+        "teo"
+      ],
+      "camera": "medium close shot on physical control surface with museum context still visible",
+      "continuityRefs": [
+        "stable control surface geometry",
+        "same material language as Sala Zero"
+      ],
+      "promptCore": "Teo near a believable museum AV control surface; one readable mapping relation still points to old entrance logic",
+      "negativeConstraints": [
+        "no detached technical diagram",
+        "no dashboard wall",
+        "no giant A/B labels"
+      ],
+      "aspectRatio": "4:3",
+      "referenceRequired": true
+    },
+    {
+      "shotId": "F5",
+      "sceneRef": "MZ4_TEST_MAPPING",
+      "generationClass": "PRODUCTION",
+      "narrativeBeat": "Learner changes mapping to the new entrance sensor.",
+      "environmentRef": "cabina-regia",
+      "characterRefs": [
+        "teo"
+      ],
+      "camera": "same composition as F4 where practical",
+      "continuityRefs": [
+        "stable control surface geometry",
+        "same material language as Sala Zero"
+      ],
+      "promptCore": "same control surface after one bounded mapping change; state update visible quietly and physically",
+      "negativeConstraints": [
+        "no celebration effect",
+        "no detached diagram",
+        "no floating panel"
+      ],
+      "aspectRatio": "4:3",
+      "referenceRequired": true
+    },
+    {
+      "shotId": "F6",
+      "sceneRef": "MZ6_FINAL_REHEARSAL",
+      "generationClass": "PRODUCTION",
+      "narrativeBeat": "Same rehearsal succeeds; Lia enters and projection responds immediately.",
+      "environmentRef": "sala-zero",
+      "characterRefs": [
+        "lia",
+        "omar",
+        "teo"
+      ],
+      "camera": "deliberately echo F2 and F3",
+      "continuityRefs": [
+        "new entrance threshold",
+        "projection wall geometry",
+        "Lia silhouette/clothing"
+      ],
+      "promptCore": "Lia crosses the same threshold and the warm projection response begins immediately; restrained crew satisfaction",
+      "negativeConstraints": [
+        "no confetti",
+        "no score card",
+        "no UI overlay"
+      ],
+      "aspectRatio": "4:3",
+      "referenceRequired": true
+    }
+  ],
+  "runtimeAuthorized": false
+}

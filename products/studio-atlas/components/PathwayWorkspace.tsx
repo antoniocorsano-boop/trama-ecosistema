@@ -1,0 +1,531 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { STAGES, type PathwayProject } from "../lib/model";
+import { getProject, updateProject } from "../lib/store";
+import { getProductionBlockers } from "../lib/production";
+import {
+  buildStudioAtlasPreviewSnapshot,
+  buildStudioAtlasReviewPreviewSnapshot,
+  getPreviewBlockers,
+  getReviewPreviewBlockers,
+} from "../lib/preview";
+import {
+  atlasPreviewOrigin,
+  openAtlasLearnerPreview,
+  openAtlasReviewPreview,
+} from "../lib/preview-bridge";
+import {
+  ExperienceEditor,
+  SceneEditor,
+  StoryEditor,
+  WorldEditor,
+} from "./AuthoringEditors";
+import { VisualFactoryStage } from "./VisualFactoryStage";
+
+export function PathwayWorkspace({ id }: { id: string }) {
+  const [project, setProject] = useState<PathwayProject | null>(null);
+  const [stage, setStage] = useState<(typeof STAGES)[number]>("Idea");
+  const [draftIdea, setDraftIdea] = useState("");
+  const [saveState, setSaveState] = useState<"saved" | "saving" | "error">("saved");
+
+  useEffect(() => {
+    const loaded = getProject(id);
+    setProject(loaded);
+    setDraftIdea(loaded?.idea ?? "");
+  }, [id]);
+
+  const stageIndex = useMemo(() => STAGES.indexOf(stage), [stage]);
+
+  function saveIdea() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const updated = updateProject(project.projectId, { idea: draftIdea });
+      setProject(updated);
+      setSaveState("saved");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
+  function patchProject(patch: Partial<PathwayProject>) {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const updated = updateProject(project.projectId, patch);
+      setProject(updated);
+      setSaveState("saved");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
+  async function openLearnerPreview() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const result = await openAtlasLearnerPreview(project);
+      if (result.status === "OPENED") {
+        const updated = updateProject(project.projectId, {
+          humanState: "PREVIEW",
+          lastPreviewSnapshot: result.snapshot,
+        });
+        setProject(updated);
+        setSaveState("saved");
+        return;
+      }
+      setSaveState("error");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
+  async function openReviewPreview() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const result = await openAtlasReviewPreview(project);
+      if (result.status === "OPENED") {
+        const updated = updateProject(project.projectId, {
+          lastPreviewSnapshot: result.snapshot,
+        });
+        setProject(updated);
+        setSaveState("saved");
+        return;
+      }
+      setSaveState("error");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
+  async function preparePreview() {
+    if (!project) return;
+    setSaveState("saving");
+    try {
+      const snapshot = project.productReview?.decision === "PASS"
+        ? await buildStudioAtlasPreviewSnapshot(project)
+        : await buildStudioAtlasReviewPreviewSnapshot(project);
+      const updated = updateProject(project.projectId, {
+        humanState: "PREVIEW",
+        lastPreviewSnapshot: snapshot,
+      });
+      setProject(updated);
+      setSaveState("saved");
+    } catch {
+      setSaveState("error");
+    }
+  }
+
+  if (!project) {
+    return (
+      <main className="studio-shell narrow">
+        <p>Percorso non trovato.</p>
+        <Link href="/">Torna a Studio Atlas</Link>
+      </main>
+    );
+  }
+
+  return (
+    <main className="workspace-shell">
+      <header className="workspace-header">
+        <div>
+          <Link className="eyebrow link" href="/">Studio Atlas</Link>
+          <input
+            className="title-input"
+            value={project.title}
+            aria-label="Titolo del Percorso"
+            onChange={(e) => {
+              const updated = updateProject(project.projectId, { title: e.target.value });
+              setProject(updated);
+            }}
+          />
+        </div>
+        <div className="workspace-actions">
+          <span className={`save-state ${saveState}`}>
+            {saveState === "saving" ? "Salvataggio…" : saveState === "error" ? "Non salvato" : "Salvato"}
+          </span>
+          <button
+            className="secondary-action"
+            disabled={
+              (project.productReview?.decision === "PASS"
+                ? getPreviewBlockers(project)
+                : getReviewPreviewBlockers(project)
+              ).length > 0 || !atlasPreviewOrigin()
+            }
+            onClick={() => void (
+              project.productReview?.decision === "PASS"
+                ? openLearnerPreview()
+                : openReviewPreview()
+            )}
+            title={!atlasPreviewOrigin() ? "Origine Atlas preview non configurata" : undefined}
+          >
+            {project.productReview?.decision === "PASS"
+              ? "Vedi come studente"
+              : "Anteprima di revisione"}
+          </button>
+        </div>
+      </header>
+
+      <div className="workspace-grid">
+        <nav className="stage-rail" aria-label="Fasi del Percorso">
+          {STAGES.map((item, index) => (
+            <button
+              key={item}
+              className={item === stage ? "active" : ""}
+              onClick={() => setStage(item)}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>{item}
+            </button>
+          ))}
+        </nav>
+
+        <section className="work-surface">
+          <p className="eyebrow">Fase {stageIndex + 1}</p>
+
+          {stage === "Idea" && (
+            <>
+              <h1>Che cosa vuoi far vivere?</h1>
+              <p className="lead">Non serve compilare un modulo didattico. Parti da ciò che dovrebbe accadere allo studente.</p>
+              <textarea
+                className="idea-editor"
+                value={draftIdea}
+                onChange={(e) => setDraftIdea(e.target.value)}
+                onBlur={saveIdea}
+                aria-label="Idea del Percorso"
+              />
+              <div className="next-line">
+                <span>Quando l’idea regge, il passo successivo sarà costruire la storia.</span>
+                <button className="quiet-action" onClick={() => setStage("Storia")}>Vai a Storia →</button>
+              </div>
+            </>
+          )}
+
+          {stage === "Storia" && (
+            <StoryEditor project={project} onPatch={patchProject} />
+          )}
+
+          {stage === "Mondo" && (
+            <WorldEditor project={project} onPatch={patchProject} />
+          )}
+
+          {stage === "Esperienza" && (
+            <ExperienceEditor project={project} onPatch={patchProject} />
+          )}
+
+          {stage === "Scene" && (
+            <SceneEditor project={project} onPatch={patchProject} />
+          )}
+
+          {stage === "Produzione" && (
+            <VisualFactoryStage project={project} />
+          )}
+
+          {stage === "Prova" && (
+            <PreviewStage
+              project={project}
+              onPrepare={preparePreview}
+              onOpen={project.productReview?.decision === "PASS" ? openLearnerPreview : openReviewPreview}
+              onGoTo={setStage}
+            />
+          )}
+
+          {stage === "Revisione" && (
+            <ProductReviewStage project={project} onPatch={patchProject} onGoTo={setStage} />
+          )}
+        </section>
+
+        <aside className="context-panel">
+          <p className="eyebrow">Percorso</p>
+          <dl>
+            <div><dt>Stato</dt><dd>{humanStateLabel(project)}</dd></div>
+            <div><dt>Destinatari</dt><dd>{ageLabel(project.ageBand)}</dd></div>
+            <div><dt>Revisione</dt><dd>{project.revision}</dd></div>
+          </dl>
+          <p className="context-note">
+            Nessuna classe, studente o provider di calcolo è legato a questo draft.
+          </p>
+        </aside>
+      </div>
+    </main>
+  );
+}
+
+function ProductReviewStage({
+  project,
+  onPatch,
+  onGoTo,
+}: {
+  project: PathwayProject;
+  onPatch: (patch: Partial<PathwayProject>) => void;
+  onGoTo: (stage: (typeof STAGES)[number]) => void;
+}) {
+  const review = project.productReview;
+
+  if (!review) {
+    return (
+      <div className="future-stage">
+        <h1>Revisione</h1>
+        <p>
+          La Human Use Review completa verrà attivata quando l’anteprima Atlas potrà
+          restituire una decisione legata allo snapshot esatto.
+        </p>
+      </div>
+    );
+  }
+
+  const structuralBlockers = getProductionBlockers(project).filter(
+    (blocker) =>
+      blocker !== "PRODUCT_REVIEW_NOT_PASS" &&
+      blocker !== "WORLD_REVIEW_NOT_PASS" &&
+      blocker !== "STORYBOARD_NOT_READY",
+  );
+  const evidenceRef = review.evidenceRef ?? "Product Review Pack";
+
+  if (review.decision === "PASS") {
+    return (
+      <>
+        <h1>Pacchetto approvato per la prova.</h1>
+        <p className="lead">
+          La decisione copre insieme Mondo, Agency, Choreography, Storyboard e Transfer.
+          Non autorizza uso studente, pubblicazione o runtime pubblico.
+        </p>
+        <div className="production-wait">
+          <span className="status-dot neutral" aria-hidden="true" />
+          <div>
+            <strong>Human Product Review · PASS</strong>
+            <small className="technical-ref">{evidenceRef}</small>
+          </div>
+        </div>
+        <button className="primary-action" onClick={() => onGoTo("Prova")}>
+          Vai alla prova non pubblica
+        </button>
+      </>
+    );
+  }
+
+  if (review.decision === "REJECT") {
+    return (
+      <>
+        <h1>Pacchetto non accettato.</h1>
+        <p className="lead">
+          La decisione umana resta registrata e il Percorso rimane bloccato dalla preview.
+        </p>
+        <small className="technical-ref">{evidenceRef}</small>
+      </>
+    );
+  }
+
+  if (review.decision === "REVISE" || review.decision === "DRAFT") {
+    return (
+      <>
+        <h1>Il pacchetto richiede una nuova revisione.</h1>
+        <p className="lead">
+          Una modifica o una decisione REVISE ha invalidato il PASS. Aggiorna il materiale
+          e il relativo pacchetto di evidenze prima di ripresentarlo alla Human Product Review.
+        </p>
+        <small className="technical-ref">{evidenceRef}</small>
+      </>
+    );
+  }
+
+  const approve = () => {
+    if (structuralBlockers.length > 0) return;
+    const reviewedAt = new Date().toISOString();
+    onPatch({
+      humanState: "REVIEW",
+      productReview: { decision: "PASS", reviewedAt, evidenceRef },
+      worldReview: { decision: "PASS", reviewedAt, evidenceRef },
+      storyboardReady: true,
+    });
+  };
+
+  return (
+    <>
+      <h1>Human Product Review</h1>
+      <p className="lead">
+        Una sola decisione governa Mondo, Agency, Choreography, Storyboard e Transfer.
+        La preview resta bloccata finché questo pacchetto non riceve PASS.
+      </p>
+      <div className="production-wait">
+        <span className="status-dot neutral" aria-hidden="true" />
+        <div>
+          <strong>Pacchetto pronto per decisione umana</strong>
+          <p>
+            Il PASS abilita soltanto l’anteprima Atlas non pubblica. Non concede autorità
+            di pubblicazione, uso studente o calcolo a pagamento.
+          </p>
+          <small className="technical-ref">{evidenceRef}</small>
+        </div>
+      </div>
+      {structuralBlockers.length > 0 && (
+        <ol className="blocker-list">
+          {structuralBlockers.map((blocker) => (
+            <li key={blocker}>{blockerLabel(blocker)}</li>
+          ))}
+        </ol>
+      )}
+      <div className="review-actions">
+        <button
+          className="secondary-action"
+          onClick={() => onPatch({
+            humanState: "REVIEW",
+            productReview: {
+              decision: "REVISE",
+              reviewedAt: new Date().toISOString(),
+              evidenceRef,
+            },
+            storyboardReady: false,
+          })}
+        >
+          Richiedi modifiche
+        </button>
+        <button
+          className="secondary-action"
+          onClick={() => onPatch({
+            humanState: "REVIEW",
+            productReview: {
+              decision: "REJECT",
+              reviewedAt: new Date().toISOString(),
+              evidenceRef,
+            },
+            storyboardReady: false,
+          })}
+        >
+          Rifiuta pacchetto
+        </button>
+        <button
+          className="primary-action"
+          disabled={structuralBlockers.length > 0}
+          onClick={approve}
+        >
+          Approva pacchetto
+        </button>
+      </div>
+    </>
+  );
+}
+
+function PreviewStage({
+  project,
+  onPrepare,
+  onOpen,
+  onGoTo,
+}: {
+  project: PathwayProject;
+  onPrepare: () => Promise<void>;
+  onOpen: () => Promise<void>;
+  onGoTo: (stage: (typeof STAGES)[number]) => void;
+}) {
+  const isReviewPreview = project.productReview?.decision !== "PASS";
+  const blockers = isReviewPreview
+    ? getReviewPreviewBlockers(project)
+    : getPreviewBlockers(project);
+
+  if (blockers.length > 0) {
+    return (
+      <>
+        <h1>Prima prepara un Percorso completo.</h1>
+        <p className="lead">
+          Atlas non riceve un’anteprima incompleta. Completa i passaggi mancanti,
+          compresa una scena di trasferimento esplicita.
+        </p>
+        <ol className="blocker-list">
+          {blockers.map((blocker) => <li key={blocker}>{blockerLabel(blocker)}</li>)}
+        </ol>
+        <button className="quiet-action" onClick={() => onGoTo(firstStageFor(blockers))}>
+          Vai al primo blocco →
+        </button>
+      </>
+    );
+  }
+
+  if (project.lastPreviewSnapshot) {
+    return (
+      <>
+        <h1>Snapshot pronto per Atlas.</h1>
+        <p className="lead">
+          Studio Atlas ha congelato la versione da provare senza autorizzarla agli studenti.
+          Puoi aprirla nel runtime Atlas reale e tornare qui per continuare la revisione.
+        </p>
+        <div className="production-wait">
+          <span className="status-dot neutral" aria-hidden="true" />
+          <div>
+            <strong>Anteprima pronta · collegamento Atlas attivo</strong>
+            <p>
+              Il contenuto non viene messo nell’URL e non viene pubblicato. Lo snapshot
+              passa direttamente alla finestra Atlas tramite il canale effimero qualificato.
+            </p>
+            <small className="technical-ref">
+              {isReviewPreview ? "ANTEPRIMA DI REVISIONE · " : ""}
+              Snapshot {project.lastPreviewSnapshot.snapshotId.slice(0, 8)} ·
+              digest {project.lastPreviewSnapshot.packageDigest.slice(0, 12)}…
+            </small>
+            {atlasPreviewOrigin() ? (
+              <button className="primary-action preview-open-action" onClick={() => void onOpen()}>
+                {isReviewPreview ? "Apri anteprima di revisione" : "Apri in Atlas"}
+              </button>
+            ) : (
+              <p className="bridge-note">
+                Configura NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN per aprire la preview reale.
+              </p>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h1>Prepara ciò che vedrà lo studente.</h1>
+      <p className="lead">
+        Verrà creato uno snapshot immutabile con digest, senza account studente,
+        telemetria o autorizzazione runtime. Se la Human Product Review non è ancora PASS,
+        lo snapshot serve soltanto alla revisione e non modifica alcuna decisione.
+      </p>
+      <button className="primary-action" onClick={() => void onPrepare()}>
+        {isReviewPreview ? "Prepara anteprima di revisione" : "Prepara anteprima Atlas"}
+      </button>
+    </>
+  );
+}
+
+function blockerLabel(blocker: string) {
+  const labels: Record<string, string> = {
+    STORY_REVIEW_NOT_PASS: "La Storia non ha ancora Human Story Review PASS.",
+    PRODUCT_REVIEW_NOT_PASS: "Il pacchetto di Human Product Review non ha ancora PASS.",
+    WORLD_REVIEW_NOT_PASS: "Il Mondo non ha ancora review PASS.",
+    EXPERIENCE_NOT_SELECTED: "Non hai ancora scelto la forma dell’esperienza.",
+    STORYBOARD_NOT_READY: "Lo storyboard non è ancora segnato come pronto.",
+    NO_SCENES: "Non esiste ancora nessuna scena.",
+    INCOMPLETE_SCENES: "Una o più scene non hanno situazione, azione e conseguenza.",
+    INCOMPLETE_CHOICES: "Una scena di scelta non ha ancora almeno due possibilità complete.",
+    INCOMPLETE_WORLD_STATE: "Una scena contiene uno stato del mondo incompleto: servono luogo, stato e almeno un segnale osservabile.",
+    TERMINAL_CHOICE_NEEDS_CLOSURE: "L’ultima scena è una scelta: aggiungi una breve scena di chiusura dopo la conseguenza.",
+    TRANSFER_SCENE_REQUIRED: "Manca una scena di trasferimento in una situazione nuova.",
+  };
+  return labels[blocker] ?? blocker;
+}
+
+function firstStageFor(blockers: string[]): (typeof STAGES)[number] {
+  if (blockers.includes("STORY_REVIEW_NOT_PASS")) return "Storia";
+  if (blockers.includes("PRODUCT_REVIEW_NOT_PASS")) return "Revisione";
+  if (blockers.includes("WORLD_REVIEW_NOT_PASS")) return "Mondo";
+  if (blockers.includes("EXPERIENCE_NOT_SELECTED")) return "Esperienza";
+  return "Scene";
+}
+
+function humanStateLabel(project: PathwayProject) {
+  if (project.productionState === "WAITING_FOR_COMPUTE") return "Produzione in attesa";
+  if (project.humanState === "IDEA") return "Idea";
+  return project.humanState.replaceAll("_", " ").toLowerCase();
+}
+
+function ageLabel(ageBand: PathwayProject["ageBand"]) {
+  if (ageBand === "lower-secondary") return "Secondaria I grado";
+  if (ageBand === "later-primary") return "Primaria · ultimi anni";
+  return "Primo ciclo";
+}

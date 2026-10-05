@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-visual-bible.v0.1.schema.json",
+  "title": "Atlas Visual Bible v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "visualBibleId",
+    "pathwayId",
+    "styleDirection",
+    "characters",
+    "environments",
+    "generationPolicy",
+    "qualityTarget"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "atlas.visual-bible/v0.1"
+    },
+    "visualBibleId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "pathwayId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "styleDirection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "finish",
+        "palette",
+        "lighting",
+        "composition",
+        "forbidden"
+      ],
+      "properties": {
+        "family": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finish": {
+          "type": "string",
+          "minLength": 1
+        },
+        "palette": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lighting": {
+          "type": "string",
+          "minLength": 1
+        },
+        "composition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "characterId",
+          "name",
+          "role",
+          "description",
+          "continuityAnchors",
+          "referenceStatus",
+          "referenceAssetRefs"
+        ],
+        "properties": {
+          "characterId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "continuityAnchors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "referenceStatus": {
+            "enum": [
+              "UNLOCKED",
+              "CANDIDATE",
+              "LOCKED"
+            ]
+          },
+          "referenceAssetRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "environments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "environmentId",
+          "name",
+          "description",
+          "continuityAnchors",
+          "referenceStatus",
+          "referenceAssetRefs"
+        ],
+        "properties": {
+          "environmentId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "continuityAnchors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "referenceStatus": {
+            "enum": [
+              "UNLOCKED",
+              "CANDIDATE",
+              "LOCKED"
+            ]
+          },
+          "referenceAssetRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "generationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "draftWorkflowFamily",
+        "productionWorkflowFamily",
+        "promptOnlyProductionAllowed",
+        "maxVariants"
+      ],
+      "properties": {
+        "draftWorkflowFamily": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productionWorkflowFamily": {
+          "type": "string",
+          "minLength": 1
+        },
+        "promptOnlyProductionAllowed": {
+          "const": false
+        },
+        "maxVariants": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        }
+      }
+    },
+    "qualityTarget": {
+      "enum": [
+        "Q3",
+        "Q4"
+      ]
+    },
+    "runtimeAuthorized": {
+      "const": false
+    }
+  }
+}

@@ -1,0 +1,121 @@
+name: Studio Atlas ↔ Atlas Preview E2E
+
+on:
+  pull_request:
+    paths:
+      - "products/studio-atlas/**"
+      - "tests/studio-atlas-atlas-preview.spec.ts"
+      - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: studio-atlas-preview-e2e-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  ATLAS_PREVIEW_SHA: db383929118ba817bd1a936f43bd1cd98d853317
+  STUDIO_ORIGIN: http://127.0.0.1:3100
+  ATLAS_ORIGIN: http://127.0.0.1:3200
+
+jobs:
+  browser:
+    name: Cross-origin learner preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+
+      - name: Checkout exact Atlas preview candidate
+        run: |
+          git clone --filter=blob:none https://github.com/antoniocorsano-boop/Curriculum-Atlas.git _atlas
+          git -C _atlas checkout "$ATLAS_PREVIEW_SHA"
+          test "$(git -C _atlas rev-parse HEAD)" = "$ATLAS_PREVIEW_SHA"
+
+      - name: Install Studio Atlas
+        working-directory: products/studio-atlas
+        run: npm install --no-audit --no-fund
+
+      - name: Install Atlas exact candidate
+        working-directory: _atlas
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build Studio Atlas with exact Atlas origin
+        working-directory: products/studio-atlas
+        env:
+          NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN: ${{ env.ATLAS_ORIGIN }}
+        run: npm run build
+
+      - name: Build exact Atlas static preview candidate with Studio origin
+        working-directory: _atlas
+        env:
+          ATLAS_PREVIEW_ROOT_SCOPED: "true"
+          NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN: ${{ env.STUDIO_ORIGIN }}
+        run: pnpm build
+
+      - name: Install Chromium
+        working-directory: _atlas
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Start production Studio Atlas and Atlas on distinct origins
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          (
+            cd products/studio-atlas
+            NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN="$ATLAS_ORIGIN" \
+              npm run start -- --hostname 127.0.0.1 --port 3100 \
+              >/tmp/studio-atlas-e2e.log 2>&1
+          ) &
+          echo $! >/tmp/studio-atlas-e2e.pid
+
+          (
+            cd _atlas/out
+            python3 -m http.server 3200 --bind 127.0.0.1 \
+              >/tmp/atlas-e2e.log 2>&1
+          ) &
+          echo $! >/tmp/atlas-e2e.pid
+
+          for attempt in $(seq 1 90); do
+            if curl --fail --silent "$STUDIO_ORIGIN/" >/dev/null \
+              && curl --fail --silent "$ATLAS_ORIGIN/percorsi/lab/studio-atlas-preview/?channel=bootstrap" >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+
+          echo "Studio Atlas log:"
+          cat /tmp/studio-atlas-e2e.log || true
+          echo "Atlas log:"
+          cat /tmp/atlas-e2e.log || true
+          exit 1
+
+      - name: Run cross-origin browser qualification
+        shell: bash
+        run: |
+          cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --reporter=line
+
+      - name: Upload server logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-atlas-atlas-preview-e2e-logs
+          path: |
+            /tmp/studio-atlas-e2e.log
+            /tmp/atlas-e2e.log
+            _atlas/test-results
+          if-no-files-found: ignore
+          retention-days: 7
