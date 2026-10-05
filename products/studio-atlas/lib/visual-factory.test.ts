@@ -66,6 +66,32 @@ test("MUSEO ZERO compiles five reference jobs before scene production", () => {
   assert.equal(plan.publicationAuthorityGranted, false);
 });
 
+test("reference art direction keeps characters in role and environments free of synthetic UI text", () => {
+  const project = createMuseoZeroPilotProject();
+  const plan = compileReferenceJobs(project, DIGEST, createInitialVisualFactoryState(DIGEST));
+  const bySubject = new Map(plan.jobs.map((job) => [job.subjectRef, job]));
+
+  assert.match(bySubject.get("lia")?.prompt ?? "", /visitor-flow markers|circulation route/i);
+  assert.match(bySubject.get("lia")?.prompt ?? "", /not a posed portrait/i);
+
+  assert.match(bySubject.get("omar")?.prompt ?? "", /sensor mount|installation hardware/i);
+  assert.match(bySubject.get("omar")?.prompt ?? "", /hands-on installer/i);
+
+  assert.match(bySubject.get("teo")?.prompt ?? "", /not security staff/i);
+  assert.match(bySubject.get("teo")?.prompt ?? "", /sightline.*Sala Zero|window.*Sala Zero/i);
+
+  assert.match(bySubject.get("sala-zero")?.prompt ?? "", /projection.*abstract light|abstract light.*projection/i);
+  assert.match(bySubject.get("sala-zero")?.prompt ?? "", /no text|no interface/i);
+
+  assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /adjacent booth|window.*Sala Zero/i);
+  assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /physical buttons|tactile controls/i);
+
+  for (const job of plan.jobs) {
+    assert.ok(job.negativeConstraints.includes("readable text, pseudo-text, labels, captions, signage, or watermarks"));
+    assert.ok(job.negativeConstraints.includes("charts, graphs, dashboards, detached UI panels, or screen-wall interfaces"));
+  }
+});
+
 test("scene generation fails closed until every required reference is locked", () => {
   const project = createMuseoZeroPilotProject();
   const state = createInitialVisualFactoryState(DIGEST);
