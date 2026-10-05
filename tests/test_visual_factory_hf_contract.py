@@ -1,10 +1,12 @@
 import importlib.util
+import re
 import sys
 from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "services" / "visual-factory-hf" / "contract.py"
+ORCHESTRATOR_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-orchestrator-v0.1.yml"
 
 
 def load_contract():
@@ -100,6 +102,22 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         self.assertFalse(receipt["runtimeAuthorized"])
         self.assertFalse(receipt["publicationAuthorityGranted"])
         self.assertEqual(receipt["costClass"], "FREE_ONLY")
+
+    def test_manual_orchestrator_binds_hf_credentials_without_hardcoding(self):
+        workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
+        self.assertRegex(workflow, r"HF_TOKEN:\s*\$\{\{\s*secrets\.HF_TOKEN\s*\}\}")
+        self.assertRegex(
+            workflow,
+            r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}",
+        )
+        self.assertNotRegex(workflow, r"HF_TOKEN:\s*(?!\$\{\{)[^\n]+")
+
+    def test_manual_orchestrator_fails_closed_without_hf_binding_for_live_modes(self):
+        workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn('if [ "$MODE" != "dry-run" ]; then', workflow)
+        self.assertIn('test -n "${HF_TOKEN:-}"', workflow)
+        self.assertIn('test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}"', workflow)
+        self.assertIn("LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING", workflow)
 
 
 if __name__ == "__main__":
