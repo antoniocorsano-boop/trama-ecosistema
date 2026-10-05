@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-04T19:46:07Z",
+  "asOf": "2026-10-05T01:15:11Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -222,7 +222,7 @@
       "type": "DECISION",
       "subject": "project-knowledge",
       "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
       "sourceRefs": [
         {
@@ -239,6 +239,50 @@
       ],
       "validFrom": "2026-10-04T16:52:55Z",
       "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. P4/P5/P6 residuals remain explicitly separate and open.",
+      "status": "CURRENT",
+      "rationale": "PR #234 integrated the persistent synchronization lane and was verified post-merge. The final P3 reconciliation records the current distribution evidence and prevents superseded P3=NEXT state from remaining current.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
+          "ref": "STATUS.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "github-actions:workflow-run/37230342692"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "render:deploy/dep-db1b042vcj2c73a2na60"
+        },
+        {
+          "repository": "antoniocorsano-boop/docente-os-2026-27",
+          "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
+          "ref": "render:deploy/dep-db180cavcj2c739v6lc0"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [
+        "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+      ],
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
@@ -269,33 +313,6 @@
         }
       ],
       "validFrom": "2026-09-28T19:20:00Z",
-      "supersedes": [],
-      "invalidatedBy": [],
-      "freshness": {
-        "policy": "UNTIL_CHANGE"
-      }
-    },
-    {
-      "eventId": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04",
-      "type": "DECISION",
-      "subject": "project-knowledge",
-      "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
-      "status": "CURRENT",
-      "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
-      "sourceRefs": [
-        {
-          "repository": "antoniocorsano-boop/trama-ecosistema",
-          "pullRequest": 230,
-          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
-          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
-        },
-        {
-          "repository": "antoniocorsano-boop/trama-ecosistema",
-          "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
-          "ref": "STATUS.md"
-        }
-      ],
-      "validFrom": "2026-10-04T16:52:55Z",
       "supersedes": [],
       "invalidatedBy": [],
       "freshness": {
@@ -522,7 +539,7 @@
       "type": "DECISION",
       "subject": "project-knowledge",
       "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
       "sourceRefs": [
         {
@@ -539,6 +556,50 @@
       ],
       "validFrom": "2026-10-04T16:52:55Z",
       "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. P4/P5/P6 residuals remain explicitly separate and open.",
+      "status": "CURRENT",
+      "rationale": "PR #234 integrated the persistent synchronization lane and was verified post-merge. The final P3 reconciliation records the current distribution evidence and prevents superseded P3=NEXT state from remaining current.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
+          "ref": "STATUS.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "github-actions:workflow-run/37230342692"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "render:deploy/dep-db1b042vcj2c73a2na60"
+        },
+        {
+          "repository": "antoniocorsano-boop/docente-os-2026-27",
+          "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
+          "ref": "render:deploy/dep-db180cavcj2c739v6lc0"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [
+        "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+      ],
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
@@ -594,6 +655,34 @@
       "pullRequest": null,
       "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
       "sourceEvent": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "pullRequest": null,
+      "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
     }
   ],
   "blockingGates": [],
@@ -697,8 +786,32 @@
       "ref": "github-actions:workflow-run/37214517566"
     },
     {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
+      "ref": "STATUS.md"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "ref": "github-actions:workflow-run/37230342692"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "ref": "render:deploy/dep-db1b042vcj2c73a2na60"
+    },
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
+      "ref": "render:deploy/dep-db180cavcj2c739v6lc0"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+    },
+    {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "686174f94ab24fe237286746bb2f3f4d9825f61d75e5299674df9292593dfcc2"
+      "sha256": "b18a8c1eb94a97590510404b9261e97b7307be300fb3e011f80b723b276a7698"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -718,7 +831,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "96177b6fdfdb6db7e8ddba77e1d334bd00a386c9bb1e810bc7945fd8d014c940"
+      "sha256": "9357c8717ead5685b9447eb84fbe78bd8ac0d6c93b2ac8d8895fdfa05647f7e7"
     }
   ]
 }

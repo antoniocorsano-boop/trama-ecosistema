@@ -176,6 +176,41 @@ Con questo delta:
 - nessuna promozione Production di Docente OS è implicata.
 
 
+## 4-quinquies. Delta verificato — 4 ottobre 2026 — P3 — BASELINE_RECONCILED
+
+Questa sezione supersede, per lo **stato corrente**, le occorrenze storiche `P3 = NEXT` nelle sezioni 4-quater, 6 e 8. Le risultanze originarie restano conservate come cronologia dell'audit.
+
+### Stato canonico e Project Knowledge
+
+- La PR TRAMA #234, exact head `b4ca73b34ec3f9892342031ace79fa0971fa4697`, è stata integrata con squash merge `0000ca9be8a8dfa24535a4b718eecdbcde82ab8c`.
+- Sul merge `0000ca9be8a8dfa24535a4b718eecdbcde82ab8c`, Governance push run `37230342576` è PASS e Build TRAMA Control Center Bundle run `37230342692` è PASS.
+- Il lane di build rigenera e riconcilia `ecosystem-snapshot`, `project-context-snapshot` e `project-knowledge` solo per variazioni semantiche; il secondo passaggio sullo stesso contenuto è idempotente.
+- `STATUS.md` e Project Knowledge non mantengono più `P3 = NEXT` come stato corrente: P3 è **CLOSED / BASELINE_RECONCILED**.
+- `decision-register.json` e `ROADMAP.md` sono stati riesaminati ma non modificati: P3 non introduce una nuova decisione di authority e non cambia la sequenza di prodotto; la separazione tra decisione normativa e stato operativo resta intenzionale.
+
+### Distribuzioni Docente OS riconciliate
+
+- Docente OS `develop@09a3a3600b81992f3675be82d1d2f188f1643909` è la baseline applicativa corrente già registrata dalla v1.1.
+- Il servizio Render **Beta** è la distribuzione canonica di prova: deploy `dep-db180cavcj2c739v6lc0` è LIVE sullo SHA `09a3a3600b81992f3675be82d1d2f188f1643909`, con auto-deploy da `develop`.
+- `PROJECT_HEALTH.md` è esplicitamente un puntatore storico/non canonico e rimanda a `docs/product/PROJECT_STATUS_CURRENT.md`, che identifica Render come runtime corrente.
+- Il servizio Render denominato Production resta separato: auto-deploy disattivato e ultimo deploy LIVE osservato sul commit storico `7fa8deae375bc15b4386d17c97b1809f49488b98`. Non viene quindi assunto come automaticamente allineato a `develop` e **nessuna promozione Production** è dichiarata da P3.
+
+### A7 / Control Center pubblico
+
+- Il servizio Render `trama-control-center` ha deploy `dep-db1b042vcj2c73a2na60` LIVE sull'exact main `0000ca9be8a8dfa24535a4b718eecdbcde82ab8c`.
+- Il build post-merge ha qualificato rigenerazione snapshot, materializzazione read-only della Project Knowledge, dossier stakeholder, contratto macchina e pacchetto distribuibile.
+- La verifica HTTP esterna diretta del dominio Render non è stata rieseguita con successo da questo ambiente di esecuzione; questo limite è registrato come **controllo non osservabile nel turno**, non trasformato in PASS e non interpretato come FAIL applicativo. Restano valide le evidenze Render e i gate A7/build già prodotti sul commit distribuito.
+
+### Residui separati, registrati ma non chiusi da P3
+
+- **P4 / Argo G5-C:** Docente OS #647 resta Draft, exact head `e5dd179f074421f08b2c7952238fa0764d643ce6`; prova automatica BIFF8 disponibile, apertura LibreOffice e import manuale didUP ancora non attestati.
+- **P5 / QE-01:** TRAMA #212 resta aperta; il testo di autorizzazione e le evidenze correnti del validatore non sono trattati come equivalenti. Stato operativo: **REQUALIFICATION_REQUIRED**; nessuna nuova esecuzione è autorizzata o inferita da P3.
+- **P6 / gh-aw T0:** TRAMA #214 resta Draft, exact head `ba98dfcf730e60cdd946cd44ccedca5c3eec049b`; stato **STAGED / NOT_EXECUTABLE** fino a compilazione/lock corrente e prova controllata prevista dal contratto.
+
+### Esito P3
+
+**P3 — CLOSED / BASELINE_RECONCILED.** La condizione di uscita è soddisfatta nel perimetro di riconciliazione: stato corrente, memoria persistente, snapshot/Control Center e distribuzioni canoniche sono ricondotti alla stessa baseline source-bound; i controlli non osservabili sono esplicitati e i residui QE-01, Argo e gh-aw sono mantenuti nei rispettivi pacchetti P5/P4/P6. P1 e P2 non vengono riaperti; `DOS-A1` resta `RUNTIME_DEFERRED`.
+
 ## 5. Quattro problemi trasversali
 F01 Duplicazioni: #652/#653 Orario sono state chiuse come SUPERSEDED e non costituiscono più implementazioni concorrenti; le preview Render temporanee non sono servizi canonici. Voice e /legacy/ restano da confrontare prima di eventuale rimozione; /legacy/ è un fallback intenzionale.
 F02 PR superate: #652/#653 risolte; Docente OS #685 chiusa senza merge dopo verifica che la hotfix non era necessaria; #187 e #194 restano da riconciliare prima di qualsiasi chiusura definitiva.
