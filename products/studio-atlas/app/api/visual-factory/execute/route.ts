@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { VisualExecutionReceipt, VisualGenerationPlan } from "../../../../lib/visual-factory";
 import { waitingForComputeReceipt } from "../../../../lib/visual-factory-executor";
 import { orchestrateVisualGeneration } from "../../../../lib/visual-factory-orchestrator";
+import { preflightVisualGenerationPlan } from "../../../../lib/visual-factory-preflight";
 import {
   buildVisualProviderConfig,
   createConfiguredVisualProviderAdapters,
@@ -45,6 +46,17 @@ export async function POST(request: Request) {
   const raw = await request.json().catch(() => null);
   if (!isPlan(raw)) {
     return NextResponse.json({ error: "INVALID_VISUAL_GENERATION_PLAN" }, { status: 400 });
+  }
+
+  const generationPreflight = preflightVisualGenerationPlan(raw);
+  if (generationPreflight.status !== "READY") {
+    return NextResponse.json(
+      {
+        error: "VISUAL_GENERATION_PREFLIGHT_BLOCKED",
+        issues: generationPreflight.issues,
+      },
+      { status: 422 },
+    );
   }
 
   const config = buildVisualProviderConfig(process.env);
