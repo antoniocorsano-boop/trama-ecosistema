@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-04T20:11:20Z",
+  "asOf": "2026-10-05T01:15:11Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -256,8 +256,7 @@
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
-          "pullRequest": 234,
-          "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+          "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
           "ref": "STATUS.md"
         },
         {
@@ -574,8 +573,7 @@
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
-          "pullRequest": 234,
-          "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+          "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
           "ref": "STATUS.md"
         },
         {
@@ -661,8 +659,8 @@
     {
       "subject": "project-knowledge",
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "pullRequest": 234,
-      "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+      "pullRequest": null,
+      "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
       "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
     },
     {
@@ -789,8 +787,7 @@
     },
     {
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "pullRequest": 234,
-      "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+      "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
       "ref": "STATUS.md"
     },
     {
@@ -834,7 +831,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "e98a6770943951c50317ca717636d8a800c72a32be7c4d5eda3f8f413bfe0b41"
+      "sha256": "9357c8717ead5685b9447eb84fbe78bd8ac0d6c93b2ac8d8895fdfa05647f7e7"
     }
   ]
 }

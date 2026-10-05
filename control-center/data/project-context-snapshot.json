@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-04T20:11:20Z",
+  "generatedAt": "2026-10-05T01:15:11Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -626,8 +626,8 @@
     {
       "subject": "project-knowledge",
       "repository": "antoniocorsano-boop/trama-ecosistema",
-      "pullRequest": 234,
-      "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+      "pullRequest": null,
+      "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
       "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
     },
     {
@@ -650,6 +650,20 @@
       "pullRequest": null,
       "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
       "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "qe-01",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 212,
+      "exactHead": "2889189ceab3c83a759b0b1f86a9a3797188ff9a",
+      "sourceEvent": "TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04"
+    },
+    {
+      "subject": "qe-01",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "sourceEvent": "TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04"
     },
     {
       "subject": "argo-g5c",
@@ -1271,8 +1285,7 @@
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
-          "pullRequest": 234,
-          "exactHead": "b4ca73b34ec3f9892342031ace79fa0971fa4697",
+          "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
           "ref": "STATUS.md"
         },
         {
@@ -1315,10 +1328,12 @@
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
           "pullRequest": 212,
+          "exactHead": "2889189ceab3c83a759b0b1f86a9a3797188ff9a",
           "ref": "runtime: prepare QE-01 first qualified execution"
         },
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
           "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
         }
       ],
@@ -1417,7 +1432,7 @@
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "e98a6770943951c50317ca717636d8a800c72a32be7c4d5eda3f8f413bfe0b41"
+      "sha256": "9357c8717ead5685b9447eb84fbe78bd8ac0d6c93b2ac8d8895fdfa05647f7e7"
     }
   ]
 }
