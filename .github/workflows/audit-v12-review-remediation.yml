@@ -1,3 +1,4 @@
+# Temporary one-shot: remove after the two P2 findings are remediated.
 name: Audit v1.2 review remediation
 
 on:
