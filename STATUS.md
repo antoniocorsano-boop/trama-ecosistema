@@ -8,7 +8,7 @@ Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.m
 Stato operativo del piano di chiusura:
 - **P1 Orario + PWA + Android:** cantiere applicativo chiuso e beta consolidata; installazione nativa Chrome/Android resta residuo di qualification non bloccante;
 - **P2 Arena→Atlas:** VERIFIED / INTEGRATED; run schedulati del sync PASS con validation e no-op governato;
-- **P3 evidenze/distribuzioni:** **NEXT**.
+- **P3 evidenze/distribuzioni:** **CLOSED / BASELINE_RECONCILED**; stato canonico, Project Knowledge persistente, Control Center e distribuzioni sono riconciliati; QE-01, Argo G5-C e gh-aw T0 restano residui separati P5/P4/P6.
 
 
 ## Mappa unica TRAMA — stato corrente

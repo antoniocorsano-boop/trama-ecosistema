@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-04T20:07:43Z",
+  "generatedAt": "2026-10-05T01:15:11Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -339,36 +339,6 @@
       "decision": "È proposto che TRAMA mantenga un'architettura ecosystem-first: Arena, Atlas e Docente OS restano i domini di prodotto che determinano bisogni e flussi; il Control Center resta osservatorio read-only; connector, runtime adapter, agenti e provider come DSH/Codex sono infrastruttura subordinata, sostituibile e priva di nuova authority. I proof successivi al livello contrattuale devono dimostrare valore su flussi cross-ecosystem e DOS-A1 resta RUNTIME_DEFERRED.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
-    },
-    {
-      "id": "TRAMA-ADR-020",
-      "title": "Studio Atlas come dominio di prodotto separabile per l'authoring dei Percorsi",
-      "status": "PROPOSED",
-      "date": "2026-10-04",
-      "scope": [
-        "TRAMA",
-        "Arena",
-        "Atlas",
-        "Docente OS",
-        "Studio Atlas"
-      ],
-      "decision": "Studio Atlas è proposto come dominio di prodotto professionale separabile per l'authoring dei Percorsi: la prima distribuzione può riusare autenticazione e shell di Docente OS, ma il dominio non dipende da classe/lezione e resta estraibile come applicazione autonoma. Atlas resta superficie pubblica/learner; il Pathway Authoring Package è l'handoff governato; repository, AI e compute restano infrastruttura subordinata e invisibile al creator.",
-      "humanControlImpact": "STRENGTHENED",
-      "supersedes": []
-    },
-    {
-      "id": "TRAMA-ADR-021",
-      "title": "Compute Policy TRAMA + SkyPilot per la Visual Factory",
-      "status": "PROPOSED",
-      "date": "2026-10-04",
-      "scope": [
-        "TRAMA",
-        "Studio Atlas",
-        "Visual Factory"
-      ],
-      "decision": "La Visual Factory separa policy e provisioning: TRAMA Compute Policy filtra provider realmente autorizzati e FREE_ONLY; SkyPilot orchestra provisioning/failover soltanto tra candidati ammessi. Nessun paid fallback, retry illimitato o quality downgrade automatico.",
-      "humanControlImpact": "STRENGTHENED",
-      "supersedes": []
     }
   ],
   "activeInvariants": [
@@ -437,33 +407,6 @@
         }
       ],
       "validFrom": "2026-09-28T19:42:00Z",
-      "supersedes": [],
-      "invalidatedBy": [],
-      "freshness": {
-        "policy": "UNTIL_CHANGE"
-      }
-    },
-    {
-      "eventId": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04",
-      "type": "DECISION",
-      "subject": "project-knowledge",
-      "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
-      "status": "CURRENT",
-      "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
-      "sourceRefs": [
-        {
-          "repository": "antoniocorsano-boop/trama-ecosistema",
-          "pullRequest": 230,
-          "exactHead": "1d8808eedba53d329f9d8a5a78e3342fbaf9d68a",
-          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
-        },
-        {
-          "repository": "antoniocorsano-boop/trama-ecosistema",
-          "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
-          "ref": "STATUS.md"
-        }
-      ],
-      "validFrom": "2026-10-04T16:52:55Z",
       "supersedes": [],
       "invalidatedBy": [],
       "freshness": {
@@ -679,6 +622,62 @@
       "pullRequest": null,
       "exactHead": "ff11d5cb123625065fd14288e4a96998d7c11053",
       "sourceEvent": "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "project-knowledge",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "pullRequest": null,
+      "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
+      "sourceEvent": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+    },
+    {
+      "subject": "qe-01",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 212,
+      "exactHead": "2889189ceab3c83a759b0b1f86a9a3797188ff9a",
+      "sourceEvent": "TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04"
+    },
+    {
+      "subject": "qe-01",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": null,
+      "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+      "sourceEvent": "TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04"
+    },
+    {
+      "subject": "argo-g5c",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "pullRequest": 647,
+      "exactHead": "e5dd179f074421f08b2c7952238fa0764d643ce6",
+      "sourceEvent": "TRAMA-EVT-ARGO-G5C-REAL-IMPORT-PENDING-2026-10-04"
+    },
+    {
+      "subject": "gh-aw-t0",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 214,
+      "exactHead": "ba98dfcf730e60cdd946cd44ccedca5c3eec049b",
+      "sourceEvent": "TRAMA-EVT-GHAW-T0-STAGED-NOT-EXECUTABLE-2026-10-04"
     },
     {
       "subject": "repository-head",
@@ -1252,7 +1251,7 @@
       "type": "DECISION",
       "subject": "project-knowledge",
       "statement": "P3 evidence/distribution alignment is the next canonical package: reconcile persisted Project Knowledge and Control Center distributed evidence with the integrated P1/P2 baseline before opening lower-priority capability work.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "TRAMA Audit v1.1 names P3 as NEXT because Control Center reliability depends on the repository-governed memory and the distributed read model carrying the same source-bound baseline.",
       "sourceRefs": [
         {
@@ -1269,6 +1268,129 @@
       ],
       "validFrom": "2026-10-04T16:52:55Z",
       "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04",
+      "type": "CLOSURE",
+      "subject": "project-knowledge",
+      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. P4/P5/P6 residuals remain explicitly separate and open.",
+      "status": "CURRENT",
+      "rationale": "PR #234 integrated the persistent synchronization lane and was verified post-merge. The final P3 reconciliation records the current distribution evidence and prevents superseded P3=NEXT state from remaining current.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
+          "ref": "STATUS.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "github-actions:workflow-run/37230342692"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "render:deploy/dep-db1b042vcj2c73a2na60"
+        },
+        {
+          "repository": "antoniocorsano-boop/docente-os-2026-27",
+          "exactHead": "09a3a3600b81992f3675be82d1d2f188f1643909",
+          "ref": "render:deploy/dep-db180cavcj2c739v6lc0"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [
+        "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04",
+      "type": "BLOCKER",
+      "subject": "qe-01",
+      "statement": "QE-01 remains REQUALIFICATION_REQUIRED. PR #212 still carries an authorization narrative, while current validator/audit evidence does not establish executable runtime authorization; no new qualified execution is inferred from P3.",
+      "status": "CURRENT",
+      "rationale": "P3 records the contradiction instead of resolving it by assertion. QE-01 remains a distinct P5 package and must be reconciled against the current validator, receipt and exact execution target before any execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 212,
+          "exactHead": "2889189ceab3c83a759b0b1f86a9a3797188ff9a",
+          "ref": "runtime: prepare QE-01 first qualified execution"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-ARGO-G5C-REAL-IMPORT-PENDING-2026-10-04",
+      "type": "DEFERMENT",
+      "subject": "argo-g5c",
+      "statement": "Argo G5-C remains PRONTA_PER_PROVA_REALE: Docente OS PR #647 is still draft at exact head e5dd179f074421f08b2c7952238fa0764d643ce6; automated BIFF8 structure/round-trip evidence exists, but LibreOffice opening and manual didUP import are not attested.",
+      "status": "CURRENT",
+      "rationale": "The automated proof does not establish real interoperability. P4 remains open until a non-personal reference workbook is accepted in the authorized real workflow.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/docente-os-2026-27",
+          "pullRequest": 647,
+          "exactHead": "e5dd179f074421f08b2c7952238fa0764d643ce6",
+          "ref": "CAP-DOS-ARGO-SYNC G5-C: BIFF8 XLS proof"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-GHAW-T0-STAGED-NOT-EXECUTABLE-2026-10-04",
+      "type": "DEFERMENT",
+      "subject": "gh-aw-t0",
+      "statement": "gh-aw T0 remains STAGED / NOT_EXECUTABLE: TRAMA PR #214 is still draft at exact head ba98dfcf730e60cdd946cd44ccedca5c3eec049b and requires current-cli compilation/lock plus controlled staged-run evidence before execution or integration.",
+      "status": "CURRENT",
+      "rationale": "P3 records the current maintenance-automation boundary without promoting source review or compilation to operational qualification. P6 remains separate.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 214,
+          "exactHead": "ba98dfcf730e60cdd946cd44ccedca5c3eec049b",
+          "ref": "gh-aw T0 — staged issue triage pilot"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
+        }
+      ],
+      "validFrom": "2026-10-04T20:08:00Z",
+      "supersedes": [],
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
@@ -1280,7 +1402,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "91123c6d9f3f22aed1485bdc527c1bbb5234e2ce1ac1fd772653a66dfc8a7bf1"
+      "sha256": "b18a8c1eb94a97590510404b9261e97b7307be300fb3e011f80b723b276a7698"
     },
     {
       "id": "source-registry",
@@ -1292,7 +1414,7 @@
       "id": "decision-register",
       "path": "docs/decisions/decision-register.json",
       "role": "DECISIONS",
-      "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
+      "sha256": "16731a46dda6db41d5d3215e361d906bdffa821720fb9e76bc559c9cd79a2636"
     },
     {
       "id": "ecosystem-status",
@@ -1310,7 +1432,7 @@
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "96177b6fdfdb6db7e8ddba77e1d334bd00a386c9bb1e810bc7945fd8d014c940"
+      "sha256": "9357c8717ead5685b9447eb84fbe78bd8ac0d6c93b2ac8d8895fdfa05647f7e7"
     }
   ]
 }
