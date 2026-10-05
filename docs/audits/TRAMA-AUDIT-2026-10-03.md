@@ -291,9 +291,9 @@ Questo delta supersede, per lo **stato corrente**, le formulazioni v1.3 `REAL_VI
 
 ### A45 / MUSEO ZERO
 
-A45 passa da `REMEDIATION_IMPLEMENTED / SECOND_HUMAN_PRODUCT_REVIEW_PENDING` a **`REAL_REFERENCES_GENERATED / HUMAN_VISUAL_REVIEW_REWORK / REFERENCE_LOCK_PENDING / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`**.
+A45 passa da `REMEDIATION_IMPLEMENTED / SECOND_HUMAN_PRODUCT_REVIEW_PENDING` a **`REAL_REFERENCES_GENERATED / ART_DIRECTION_REMEDIATION_IMPLEMENTED_CANDIDATE / REGENERATION_PENDING / HUMAN_VISUAL_REVIEW_PENDING / REFERENCE_LOCK_PENDING / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`**.
 
-La prima Human Visual Review delle reference reali non concede reference lock. La PR #249, osservata come Draft sull'exact head `c3b4aa3cf952f6d4a5cc91d3015c3bfa8143ea8f`, apre una remediation bounded dell'art direction: rafforzare l'identità di Lia/Omar/Teo, eliminare pseudo-testo e dashboard spurie, rendere Sala Zero uno spazio narrativo fisico e Cabina regia un ambiente adiacente e coerente. Nessun F1–F6 parte prima del nuovo Human Visual Review PASS.
+La prima Human Visual Review delle reference reali non concede reference lock. La PR #249 ha ora implementato il candidato di remediation art-direction sull'exact head `e40054349db5ed28ea663d24f4c4d048481ba3b5`: Governance, Studio Atlas S1 Standalone, Visual Factory Generation Pipeline v0.2 e Studio Atlas ↔ Atlas Preview E2E risultano PASS. La remediation rafforza l'identità di Lia/Omar/Teo, elimina pseudo-testo e dashboard spurie, rende Sala Zero uno spazio narrativo fisico e Cabina regia un ambiente adiacente e coerente. La nuova generazione reale delle cinque reference e la successiva Human Visual Review restano necessarie; nessun F1–F6 parte prima del reference lock PASS.
 
 ### A46 / Visual Factory
 

@@ -80,7 +80,7 @@ Stato corrente governato:
 - **Studio Atlas product boundary:** `IMPLEMENTED_CANDIDATE / PRODUCT_DOMAIN_ESTABLISHED / NOT_RUNTIME_AUTHORIZED`;
 - **Authoring:** `VERIFIED_BUILD / AUTHORING_SLICE_AVAILABLE / HUMAN_GATES_PRESERVED`;
 - **Studio Atlas → Atlas preview:** `CROSS_PRODUCT_QUALIFIED / NON_PUBLIC`; nessuna autorizzazione student/public runtime;
-- **MUSEO ZERO v0.2:** `REAL_REFERENCES_GENERATED / HUMAN_VISUAL_REVIEW_REWORK / REFERENCE_LOCK_PENDING / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`; la prima review visuale delle reference reali richiede remediation art-direction v0.3; nessun F1–F6 prima del reference lock;
+- **MUSEO ZERO v0.2:** `REAL_REFERENCES_GENERATED / ART_DIRECTION_REMEDIATION_IMPLEMENTED_CANDIDATE / REGENERATION_PENDING / HUMAN_VISUAL_REVIEW_PENDING / REFERENCE_LOCK_PENDING / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`; PR #249 `e40054349db5ed28ea663d24f4c4d048481ba3b5` ha i quattro gate principali PASS; nuova generazione reale e Human Visual Review restano necessarie; nessun F1–F6 prima del reference lock;
 - **Visual Factory:** `REAL_REFERENCE_GENERATION_PROVEN / GOVERNED_EVIDENCE_AVAILABLE / HUMAN_VISUAL_ACCEPTANCE_PENDING`; run FREE_ONLY reale `37348637767` su `main@290d6f3f0d15df3e8f8f438a46a26449d1247043`, artefatto governato `11361642336`;
 - **VF-ORCH-01:** `LIVE_ZERO_COST_REFERENCE_EXECUTION_PROVEN / FREE_ONLY / FAIL_CLOSED / HUMAN_AUTHORITY_PRESERVED`; reference live provate end-to-end, mentre `shots` resta fail-closed fino al reference lock umano;
 - **Durability:** `DEVELOPMENT_PERSISTENCE_ONLY / PROFESSIONAL_RUNTIME_FOUNDATION_PENDING`;
