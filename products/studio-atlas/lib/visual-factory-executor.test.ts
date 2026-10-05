@@ -63,6 +63,8 @@ function validOrchestrationEvidence() {
       eligibilityReason: "HF_BASE_QUOTA_SUFFICIENT",
       quotaRemainingGpuSeconds: 300,
       outcome: "SUCCEEDED",
+      startedAt: "2026-10-05T04:30:00.000Z",
+      completedAt: "2026-10-05T04:30:00.042Z",
       durationMs: 42,
     }],
     finalState: "SUCCEEDED",
