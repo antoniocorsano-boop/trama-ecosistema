@@ -1,9 +1,11 @@
-# Permanent regression guard for P3 reconciliation and P6 closure provenance.
+# Permanent regression guard for P3 reconciliation, P6 closure, and Audit v1.3 provenance.
 import json
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+V13_EVENT_ID = "TRAMA-EVT-AUDIT-V1.3-STUDIO-ATLAS-BASELINE-2026-10-05"
+V13_SPEC_PATH = "docs/superpowers/specs/2026-10-05-trama-audit-v1-3-studio-atlas-baseline-design.md"
 
 
 class P3StatusAlignmentTests(unittest.TestCase):
@@ -112,6 +114,66 @@ class P3StatusAlignmentTests(unittest.TestCase):
         self.assertIn("**P6 gh-aw T0:** **CLOSED / INTEGRATED**", status)
         self.assertNotIn("gh-aw T0 restano residui separati P5/P4/P6", status)
         self.assertIn("Argo G5-C e QE-01 restano residui separati P4/P5", status)
+
+    def test_audit_v13_adds_studio_atlas_without_rewriting_history(self):
+        audit = (ROOT / "docs/audits/TRAMA-AUDIT-2026-10-03.md").read_text(encoding="utf-8")
+        self.assertIn("Versione 1.3", audit)
+        for audit_id in range(42, 50):
+            self.assertIn(f"A{audit_id:02d}", audit)
+        self.assertIn("Studio Atlas", audit)
+        self.assertIn("SECOND_HUMAN_PRODUCT_REVIEW_PENDING", audit)
+        self.assertIn("REAL_VISUAL_RUN_PENDING", audit)
+        self.assertIn("CORE_IMPLEMENTED / PLAN_INCOMPLETE", audit)
+        self.assertIn("A01", audit)
+        self.assertIn("A41", audit)
+        self.assertIn("P6 — CLOSED / INTEGRATED", audit)
+        self.assertIn("REVISE", audit)
+        self.assertNotIn("MUSEO ZERO Human Product Review: PASS", audit)
+
+    def test_status_projects_studio_atlas_as_first_level_domain_without_authority_promotion(self):
+        status = (ROOT / "STATUS.md").read_text(encoding="utf-8")
+        self.assertIn("v1.3", status)
+        self.assertIn("Studio Atlas", status)
+        self.assertIn("NOT_RUNTIME_AUTHORIZED", status)
+        self.assertIn("DOS-A1", status)
+        self.assertIn("RUNTIME_DEFERRED", status)
+        for marker in (
+            "P1 Orario + PWA + Android",
+            "P2 Arena→Atlas",
+            "P3 evidenze/distribuzioni",
+            "P6 gh-aw T0",
+            "P4",
+            "P5",
+        ):
+            self.assertIn(marker, status)
+
+    def test_project_knowledge_records_audit_v13_as_current_source_bound_delta(self):
+        payload = json.loads((ROOT / "status/project-knowledge-events.json").read_text(encoding="utf-8"))
+        events = {event["eventId"]: event for event in payload["events"]}
+        self.assertIn(V13_EVENT_ID, events)
+        event = events[V13_EVENT_ID]
+        self.assertEqual(event["status"], "CURRENT")
+        self.assertEqual(event["type"], "BASELINE")
+        self.assertEqual(event["subject"], "ecosystem-audit")
+        self.assertIn("Studio Atlas", event["statement"])
+        self.assertIn("A42", event["statement"])
+        self.assertIn("A49", event["statement"])
+        self.assertTrue(
+            any(ref.get("ref") == V13_SPEC_PATH or ref.get("path") == V13_SPEC_PATH for ref in event["sourceRefs"])
+        )
+
+    def test_context_pack_projects_audit_v13_event(self):
+        pack = json.loads(
+            (ROOT / "control-center/data/context-packs/project-knowledge.json").read_text(encoding="utf-8")
+        )
+        facts = {item.get("eventId"): item for item in pack.get("facts", []) if item.get("eventId")}
+        self.assertIn(V13_EVENT_ID, facts)
+        event = facts[V13_EVENT_ID]
+        self.assertEqual(event["status"], "CURRENT")
+        rendered = json.dumps(event, ensure_ascii=False)
+        self.assertIn("Studio Atlas", rendered)
+        self.assertIn("NOT_RUNTIME_AUTHORIZED", rendered)
+        self.assertNotIn("STUDENT_AUTHORIZED", rendered)
 
 
 if __name__ == "__main__":
