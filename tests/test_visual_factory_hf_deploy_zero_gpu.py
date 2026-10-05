@@ -1,5 +1,6 @@
 import importlib.util
 from pathlib import Path
+from types import SimpleNamespace
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,6 +40,11 @@ class ZeroGpuDeploymentPolicyTests(unittest.TestCase):
                 {"name": "antonio-corsano1303", "type": "user", "isPro": False},
                 "someone-else/studio-atlas-visual-factory",
             )
+
+    def test_existing_space_must_be_private_before_upload(self):
+        module.validate_private_space(SimpleNamespace(private=True))
+        with self.assertRaisesRegex(ValueError, "HF_SPACE_NOT_PRIVATE"):
+            module.validate_private_space(SimpleNamespace(private=False))
 
 
 if __name__ == "__main__":

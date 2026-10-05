@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "services" / "visual-factory-hf" / "contract.py"
 ORCHESTRATOR_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-orchestrator-v0.1.yml"
 DEPLOY_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-hf-space-deploy.yml"
+GENERATION_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-generation-v0.2.yml"
 DEPLOY_SCRIPT = ROOT / "scripts" / "deploy_visual_factory_hf_space.py"
 STUDIO_PACKAGE = ROOT / "products" / "studio-atlas" / "package.json"
 CANONICAL_PLAN_CLI = ROOT / "products" / "studio-atlas" / "scripts" / "compile-canonical-reference-plan.ts"
@@ -151,6 +152,10 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         self.assertIn("python scripts/deploy_visual_factory_hf_space.py", workflow)
         self.assertIn("services/visual-factory-hf", workflow)
         self.assertIn("zero-a10g", DEPLOY_SCRIPT.read_text(encoding="utf-8"))
+
+    def test_hf_space_deploy_workflow_changes_trigger_generation_qualification(self):
+        workflow = GENERATION_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn('- ".github/workflows/visual-factory-hf-space-deploy.yml"', workflow)
 
 
 if __name__ == "__main__":
