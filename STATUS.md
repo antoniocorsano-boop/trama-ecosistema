@@ -1,14 +1,15 @@
 # Stato dell ecosistema TRAMA
 
-Aggiornato al 4 ottobre 2026.
+Aggiornato al 5 ottobre 2026.
 
 
-Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.md`](docs/audits/TRAMA-AUDIT-2026-10-03.md), **v1.1 / delta verificato 04-10-2026**.
+Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.md`](docs/audits/TRAMA-AUDIT-2026-10-03.md), **v1.2 / delta verificato 05-10-2026**.
 
 Stato operativo del piano di chiusura:
 - **P1 Orario + PWA + Android:** cantiere applicativo chiuso e beta consolidata; installazione nativa Chrome/Android resta residuo di qualification non bloccante;
 - **P2 Arena→Atlas:** VERIFIED / INTEGRATED; run schedulati del sync PASS con validation e no-op governato;
-- **P3 evidenze/distribuzioni:** **CLOSED / BASELINE_RECONCILED**; stato canonico, Project Knowledge persistente, Control Center e distribuzioni sono riconciliati; QE-01, Argo G5-C e gh-aw T0 restano residui separati P5/P4/P6.
+- **P3 evidenze/distribuzioni:** **CLOSED / BASELINE_RECONCILED**; stato canonico, Project Knowledge persistente, Control Center e distribuzioni restano riconciliati; Argo G5-C e QE-01 restano residui separati P4/P5.
+- **P6 gh-aw T0:** **CLOSED / INTEGRATED**; prova staged reale PASS, zero side effect persistenti sull'issue pilota, trigger finale production-only e lock strict sincronizzato; T1/T2 restano incrementi successivi separati, non attivati automaticamente.
 
 
 ## Mappa unica TRAMA — stato corrente
