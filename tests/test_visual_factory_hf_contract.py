@@ -110,7 +110,8 @@ class VisualFactoryHfContractTests(unittest.TestCase):
             workflow,
             r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}",
         )
-        self.assertNotRegex(workflow, r"HF_TOKEN:\s*(?!\$\{\{)[^\n]+")
+        self.assertEqual(workflow.count("HF_TOKEN:"), 1)
+        self.assertEqual(workflow.count("HF_VISUAL_FACTORY_SPACE_REPO:"), 1)
 
     def test_manual_orchestrator_fails_closed_without_hf_binding_for_live_modes(self):
         workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
