@@ -8,6 +8,7 @@ import {
   type OrchestrationContext,
   type VisualProviderId,
 } from "../lib/visual-factory-orchestrator";
+import { preflightVisualGenerationPlan } from "../lib/visual-factory-preflight";
 import {
   buildVisualProviderConfig,
   createConfiguredVisualProviderAdapters,
@@ -112,6 +113,11 @@ async function main(): Promise<void> {
   await mkdir(outputDir, { recursive: true });
 
   const plan = validatePlan(JSON.parse(await readFile(resolve(planPath), "utf8")), mode);
+  const generationPreflight = preflightVisualGenerationPlan(plan);
+  if (generationPreflight.status !== "READY") {
+    throw new Error(`VF_GEN_PREFLIGHT_BLOCKED:${generationPreflight.issues.map((issue) => issue.code).join(",")}`);
+  }
+
   const config = buildVisualProviderConfig(process.env);
   const adapters = createConfiguredVisualProviderAdapters(config);
   const ctx = contextFor(plan);
@@ -145,6 +151,17 @@ async function main(): Promise<void> {
         mode,
         packageDigest: plan.packageDigest,
         costClass: "FREE_ONLY",
+        generationPreflight: {
+          status: generationPreflight.status,
+          compiledJobs: generationPreflight.compiledJobs.map(({ spec, modelRoute }) => ({
+            jobId: spec.jobId,
+            purpose: spec.purpose,
+            workflowFamily: modelRoute.workflowFamily,
+            modelPolicy: modelRoute.modelPolicy,
+            requiredCapabilities: modelRoute.requiredCapabilities,
+            referenceCount: spec.referenceInputs.length,
+          })),
+        },
         providerConfig: publicVisualProviderConfigSummary(config),
         consideredProviders,
         eligibility,
