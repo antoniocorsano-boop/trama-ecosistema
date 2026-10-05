@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-10-05T12:55:00Z",
+  "updatedAt": "2026-10-05T18:20:29Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
@@ -483,7 +483,7 @@
       "type": "BASELINE",
       "subject": "ecosystem-audit",
       "statement": "Audit v1.3 establishes Studio Atlas as a first-level application domain and records additive findings A42 through A49. It preserves NOT_RUNTIME_AUTHORIZED for Studio Atlas, SECOND_HUMAN_PRODUCT_REVIEW_PENDING for MUSEO ZERO, REAL_VISUAL_RUN_PENDING for Visual Factory, VF-ORCH-01 PLAN_INCOMPLETE, and DOS-A1=RUNTIME_DEFERRED; no student runtime or publication authority is granted.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "project-knowledge projection of the governed Audit v1.3 baseline: the ecosystem must represent Studio Atlas as a first-level product domain without converting implementation evidence into product, runtime, publication or student authority.",
       "sourceRefs": [
         {
@@ -501,7 +501,9 @@
       ],
       "validFrom": "2026-10-05T08:00:00Z",
       "supersedes": [],
-      "invalidatedBy": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-AUDIT-V1.4-VISUAL-FACTORY-LIVE-PROOF-2026-10-05"
+      ],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -511,7 +513,7 @@
       "type": "BASELINE",
       "subject": "visual-factory",
       "statement": "VF-ORCH-01 has deterministic qualification PASS for its bounded FREE_ONLY orchestration surface, shared runner and manual dry-run/references/shots modes; live zero-cost provider inference is not yet proven and no runtime, publication, learner or student authority is granted.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "project-knowledge projection of the post-Audit-v1.3 VF-ORCH-01 closeout: implementation qualification is distinct from the still-pending real governed visual run.",
       "sourceRefs": [
         {
@@ -530,7 +532,9 @@
       ],
       "validFrom": "2026-10-05T12:38:00Z",
       "supersedes": [],
-      "invalidatedBy": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-VF-ORCH-01-LIVE-ZERO-COST-PROOF-2026-10-05"
+      ],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -557,6 +561,85 @@
       ],
       "validFrom": "2026-10-05T12:30:00Z",
       "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-VF-ORCH-01-LIVE-ZERO-COST-PROOF-2026-10-05",
+      "type": "BASELINE",
+      "subject": "visual-factory",
+      "statement": "VF-ORCH-01 has proven a real governed FREE_ONLY reference execution on main@290d6f3f0d15df3e8f8f438a46a26449d1247043. Run 37348637767 completed live execution, non-authority verification and governed evidence upload; artifact 11361642336 contains reviewable candidates. Human Visual Review and reference lock remain separate gates.",
+      "status": "CURRENT",
+      "rationale": "Supersedes the deterministic-only VF-ORCH baseline because real zero-cost provider execution and governed candidate materialization are now directly evidenced, without granting runtime, publication, learner or student authority.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "290d6f3f0d15df3e8f8f438a46a26449d1247043",
+          "ref": "github-actions:trama-ecosistema/run/37348637767"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 248,
+          "exactHead": "b35df2741cddfc2781816b176b640217c40b7b38",
+          "ref": "github:trama-ecosistema/pull/248"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T17:28:42Z",
+      "supersedes": [
+        "TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-QUALIFICATION-2026-10-05"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-AUDIT-V1.4-VISUAL-FACTORY-LIVE-PROOF-2026-10-05",
+      "type": "BASELINE",
+      "subject": "ecosystem-audit",
+      "statement": "Audit v1.4 records real Visual Factory reference generation as proven, VF-ORCH-01 live FREE_ONLY reference execution as proven, MUSEO ZERO art-direction remediation v0.3 as an implemented and automatically qualified candidate with regeneration and Human Visual Review still pending, P5 as REQUALIFICATION_PREPARED_NOT_AUTHORIZED and P4 as local-proof-package-ready candidate. Formal maturity levels remain unchanged and DOS-A1 remains RUNTIME_DEFERRED.",
+      "status": "CURRENT",
+      "rationale": "project-knowledge projection of Audit v1.4: reconciles the governed completion audit with evidence integrated after Audit v1.3 while preserving the distinction between technical execution, human visual acceptance, maturity promotion and runtime authority.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "76818f7e817c4c969421c8cf5965891d7a6fc52a",
+          "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md",
+          "pullRequest": 250
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 241,
+          "exactHead": "32f63da198c7341363201778c47daa032c14ddd1",
+          "ref": "github:trama-ecosistema/pull/241"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 246,
+          "exactHead": "ef5734646964ce6403a85e53caa72ea62527e32e",
+          "ref": "github:trama-ecosistema/pull/246"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 249,
+          "exactHead": "6c223a4556868c0c1f14cdabd6b8f101fce6368d",
+          "ref": "github:trama-ecosistema/pull/249"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T17:43:00Z",
+      "supersedes": [
+        "TRAMA-EVT-AUDIT-V1.3-STUDIO-ATLAS-BASELINE-2026-10-05"
+      ],
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"
