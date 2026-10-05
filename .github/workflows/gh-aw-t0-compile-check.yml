@@ -60,6 +60,10 @@ jobs:
     name: controlled-staged-trial-issue-117
     needs: compile-check
     if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
+    permissions:
+      actions: read
+      contents: read
+      issues: write
     uses: ./.github/workflows/trama-t0-issue-triage.lock.yml
     with:
       item_number: 117
