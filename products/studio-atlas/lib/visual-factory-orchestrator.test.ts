@@ -206,3 +206,93 @@ test("all-provider failure degrades to FREE_ONLY WAITING_FOR_COMPUTE with no aut
   assert.equal(receipt.publicationAuthorityGranted, false);
   assert.equal(receipt.failureCategory, "NO_FREE_PROVIDER");
 });
+
+test("HF to Cloudflare fallback records both attempts in order and selected model", async () => {
+  const counts: Record<string, number> = {};
+  const receipt = await orchestrateVisualGeneration(
+    plan("REFERENCE_GENERATION"),
+    {
+      HF_ZEROGPU: adapter(
+        "HF_ZEROGPU",
+        { eligible: true, reason: "HF_BASE_QUOTA_SUFFICIENT", remainingGpuSeconds: 300 },
+        { kind: "RETRYABLE_PROVIDER_FAILURE", detail: "TIMEOUT" },
+        counts,
+      ),
+      CLOUDFLARE_WORKERS_AI: adapter(
+        "CLOUDFLARE_WORKERS_AI",
+        { eligible: true, reason: "CLOUDFLARE_WORKERS_FREE_ADMITTED" },
+        { kind: "SUCCEEDED", receipt: successReceipt("CLOUDFLARE_WORKERS_AI") },
+        counts,
+      ),
+    },
+    ctx(),
+  );
+
+  assert.equal(receipt.status, "SUCCEEDED");
+  assert.equal(receipt.orchestration?.schemaVersion, "atlas.visual-orchestration-evidence/v0.1");
+  assert.equal(receipt.orchestration?.workloadClass, "CANONICAL_REFERENCE");
+  assert.deepEqual(receipt.orchestration?.consideredProviders, ["HF_ZEROGPU", "CLOUDFLARE_WORKERS_AI"]);
+  assert.deepEqual(receipt.orchestration?.attempts.map((item) => [item.provider, item.outcome]), [
+    ["HF_ZEROGPU", "RETRYABLE_PROVIDER_FAILURE"],
+    ["CLOUDFLARE_WORKERS_AI", "SUCCEEDED"],
+  ]);
+  assert.equal(receipt.orchestration?.attempts[0]?.quotaRemainingGpuSeconds, 300);
+  assert.equal(receipt.orchestration?.selectedProvider, "CLOUDFLARE_WORKERS_AI");
+  assert.equal(receipt.orchestration?.selectedModelRef, "@cf/black-forest-labs/flux-2-klein-4b");
+  assert.equal(receipt.orchestration?.finalState, "SUCCEEDED");
+});
+
+test("orchestration evidence records categories and quota but never copies free-form provider details", async () => {
+  const secret = "hf_token_must_not_appear";
+  const counts: Record<string, number> = {};
+  const receipt = await orchestrateVisualGeneration(
+    plan("REFERENCE_GENERATION"),
+    {
+      HF_ZEROGPU: adapter(
+        "HF_ZEROGPU",
+        { eligible: true, reason: "HF_BASE_QUOTA_SUFFICIENT", remainingGpuSeconds: 275 },
+        { kind: "RETRYABLE_PROVIDER_FAILURE", detail: `TIMEOUT:${secret}` },
+        counts,
+      ),
+      CLOUDFLARE_WORKERS_AI: adapter(
+        "CLOUDFLARE_WORKERS_AI",
+        { eligible: true, reason: "CLOUDFLARE_WORKERS_FREE_ADMITTED" },
+        { kind: "SUCCEEDED", receipt: successReceipt("CLOUDFLARE_WORKERS_AI") },
+        counts,
+      ),
+    },
+    ctx(),
+  );
+
+  const serializedEvidence = JSON.stringify(receipt.orchestration);
+  assert.equal(serializedEvidence.includes(secret), false);
+  assert.equal(receipt.orchestration?.attempts[0]?.quotaRemainingGpuSeconds, 275);
+});
+
+test("deferred receipt carries Human Visual Review provider evidence", async () => {
+  const counts: Record<string, number> = {};
+  const receipt = await orchestrateVisualGeneration(
+    plan("REFERENCE_GENERATION"),
+    {
+      HF_ZEROGPU: adapter(
+        "HF_ZEROGPU",
+        { eligible: false, reason: "HF_QUOTA_UNAVAILABLE" },
+        { kind: "PERMANENT_FAILURE" },
+        counts,
+      ),
+      CLOUDFLARE_WORKERS_AI: adapter(
+        "CLOUDFLARE_WORKERS_AI",
+        { eligible: false, reason: "CLOUDFLARE_FREE_PLAN_NOT_ADMITTED" },
+        { kind: "PERMANENT_FAILURE" },
+        counts,
+      ),
+    },
+    ctx(),
+  );
+
+  assert.equal(receipt.status, "WAITING_FOR_COMPUTE");
+  assert.equal(receipt.orchestration?.finalState, "GENERATION_DEFERRED");
+  assert.equal(receipt.orchestration?.attempts.length, 2);
+  assert.deepEqual(receipt.orchestration?.attempts.map((item) => item.eligibility), ["INELIGIBLE", "INELIGIBLE"]);
+  assert.ok(receipt.orchestration?.orchestrationId);
+});
