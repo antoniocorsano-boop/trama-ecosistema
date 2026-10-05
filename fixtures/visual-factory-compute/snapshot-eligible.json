@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "trama.compute-entitlement-snapshot/v0.1",
+  "snapshotId": "fixture-eligible-01",
+  "observedAt": "2026-10-04T13:00:00Z",
+  "providers": [
+    {
+      "providerId": "owned-k8s-lab",
+      "skyInfra": "k8s/visual-factory-lab",
+      "authorized": true,
+      "credentialsAvailable": true,
+      "effectiveCostClass": "ZERO_MARGINAL",
+      "estimatedRunsRemaining": 8,
+      "status": "AVAILABLE",
+      "systemRamGiB": 32,
+      "diskFreeGiB": 120,
+      "accelerators": [
+        {
+          "name": "T4",
+          "vramGiB": 16
+        }
+      ],
+      "evidenceRef": "fixture://owned-k8s-lab"
+    },
+    {
+      "providerId": "cloud-credit-a",
+      "skyInfra": "gcp",
+      "authorized": true,
+      "credentialsAvailable": true,
+      "effectiveCostClass": "CREDIT_COVERED",
+      "estimatedRunsRemaining": 3,
+      "status": "AVAILABLE",
+      "systemRamGiB": 24,
+      "diskFreeGiB": 100,
+      "accelerators": [
+        {
+          "name": "L4",
+          "vramGiB": 24
+        }
+      ],
+      "evidenceRef": "fixture://cloud-credit-a"
+    },
+    {
+      "providerId": "paid-only",
+      "skyInfra": "aws",
+      "authorized": true,
+      "credentialsAvailable": true,
+      "effectiveCostClass": "PAID",
+      "estimatedRunsRemaining": 20,
+      "status": "AVAILABLE",
+      "systemRamGiB": 64,
+      "diskFreeGiB": 200,
+      "accelerators": [
+        {
+          "name": "A10G",
+          "vramGiB": 24
+        }
+      ],
+      "evidenceRef": "fixture://paid-only"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/trama-compute-entitlement-snapshot.v0.1.schema.json",
+  "title": "TRAMA Compute Entitlement Snapshot v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "snapshotId",
+    "observedAt",
+    "providers"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.compute-entitlement-snapshot/v0.1"
+    },
+    "snapshotId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "providers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "providerId",
+          "skyInfra",
+          "authorized",
+          "credentialsAvailable",
+          "effectiveCostClass",
+          "estimatedRunsRemaining",
+          "status",
+          "systemRamGiB",
+          "diskFreeGiB",
+          "accelerators"
+        ],
+        "properties": {
+          "providerId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "skyInfra": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorized": {
+            "type": "boolean"
+          },
+          "credentialsAvailable": {
+            "type": "boolean"
+          },
+          "effectiveCostClass": {
+            "type": "string",
+            "enum": [
+              "ZERO_MARGINAL",
+              "CREDIT_COVERED",
+              "PAID",
+              "UNKNOWN"
+            ]
+          },
+          "estimatedRunsRemaining": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "DEGRADED",
+              "UNAVAILABLE",
+              "UNKNOWN"
+            ]
+          },
+          "systemRamGiB": {
+            "type": "number",
+            "minimum": 0
+          },
+          "diskFreeGiB": {
+            "type": "number",
+            "minimum": 0
+          },
+          "accelerators": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "vramGiB"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "vramGiB": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "evidenceRef": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

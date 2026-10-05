@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "trama.compute-entitlement-snapshot/v0.1",
+  "snapshotId": "fixture-none-01",
+  "observedAt": "2026-10-04T13:00:00Z",
+  "providers": [
+    {
+      "providerId": "paid-only",
+      "skyInfra": "aws",
+      "authorized": true,
+      "credentialsAvailable": true,
+      "effectiveCostClass": "PAID",
+      "estimatedRunsRemaining": 99,
+      "status": "AVAILABLE",
+      "systemRamGiB": 64,
+      "diskFreeGiB": 200,
+      "accelerators": [
+        {
+          "name": "A10G",
+          "vramGiB": 24
+        }
+      ]
+    },
+    {
+      "providerId": "free-empty",
+      "skyInfra": "gcp",
+      "authorized": true,
+      "credentialsAvailable": true,
+      "effectiveCostClass": "CREDIT_COVERED",
+      "estimatedRunsRemaining": 0,
+      "status": "AVAILABLE",
+      "systemRamGiB": 24,
+      "diskFreeGiB": 100,
+      "accelerators": [
+        {
+          "name": "L4",
+          "vramGiB": 24
+        }
+      ]
+    }
+  ]
+}

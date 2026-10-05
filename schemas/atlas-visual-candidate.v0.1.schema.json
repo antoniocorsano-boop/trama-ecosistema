@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-visual-candidate.v0.1.schema.json",
+  "title": "Atlas Visual Candidate v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "pathwayId",
+    "storyRef",
+    "targetAgeBand",
+    "productForm",
+    "factoryVersion",
+    "qualityTarget",
+    "assets",
+    "qualityReview",
+    "publicationDecision",
+    "runtimeAuthorized"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "atlas.visual-candidate/v0.1"
+    },
+    "candidateId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "pathwayId": {
+      "type": "string",
+      "minLength": 3
+    },
+    "storyRef": {
+      "type": "string",
+      "minLength": 3
+    },
+    "worldRef": {
+      "type": "string"
+    },
+    "exactSourceRevision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "targetAgeBand": {
+      "type": "string",
+      "enum": [
+        "earlier-primary",
+        "later-primary",
+        "lower-secondary",
+        "mixed-first-cycle"
+      ]
+    },
+    "productForm": {
+      "type": "string",
+      "enum": [
+        "illustrated-sequence",
+        "motion-illustration",
+        "micro-animation",
+        "interactive-scene",
+        "hybrid"
+      ]
+    },
+    "factoryVersion": {
+      "const": "TRAMA Visual Factory v0.1"
+    },
+    "qualityTarget": {
+      "const": "Q3_PUBLISHABLE_CRAFT"
+    },
+    "artDirectionRef": {
+      "type": "string"
+    },
+    "productionPackRef": {
+      "type": "string"
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assetId",
+          "type",
+          "sourceKind",
+          "canonicalRef",
+          "usageBasis"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "character",
+              "environment",
+              "prop",
+              "ui-diegetic",
+              "audio",
+              "motion",
+              "video",
+              "other"
+            ]
+          },
+          "sourceKind": {
+            "type": "string",
+            "enum": [
+              "HUMAN",
+              "GENERATIVE_AI",
+              "PROCEDURAL",
+              "LICENSED_EXTERNAL",
+              "CAPTURED",
+              "MIXED"
+            ]
+          },
+          "canonicalRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "editableMasterRef": {
+            "type": "string"
+          },
+          "workflowRef": {
+            "type": "string"
+          },
+          "toolchain": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "usageBasis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "humanRefined": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "qualityReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "barVersion",
+        "hardStops",
+        "scores",
+        "humanDecision"
+      ],
+      "properties": {
+        "barVersion": {
+          "const": "TRAMA Visual Quality Bar v0.1"
+        },
+        "hardStops": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "HS01",
+              "HS02",
+              "HS03",
+              "HS04",
+              "HS05",
+              "HS06",
+              "HS07",
+              "HS08",
+              "HS09",
+              "HS10"
+            ]
+          }
+        },
+        "scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+            "D6",
+            "D7",
+            "D8"
+          ],
+          "properties": {
+            "D1": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "D2": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "D3": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "D4": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "D5": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "D6": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "D7": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "D8": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            }
+          }
+        },
+        "reviewEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "humanDecision": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "REVISE",
+            "REJECT",
+            "PUBLISH_CANDIDATE"
+          ]
+        }
+      }
+    },
+    "publicationDecision": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "REVISE",
+        "REJECT",
+        "PUBLISH_CANDIDATE"
+      ]
+    },
+    "runtimeAuthorized": {
+      "const": false
+    }
+  }
+}

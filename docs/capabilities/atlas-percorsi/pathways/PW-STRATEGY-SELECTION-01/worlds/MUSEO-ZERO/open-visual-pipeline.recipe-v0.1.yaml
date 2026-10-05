@@ -1,0 +1,82 @@
+schemaVersion: trama.visual-pipeline-recipe/v0.1
+candidateId: MZ-VF-001
+name: museo-zero-cinematic-editorial-qwen
+status: EXECUTION_NOT_YET_QUALIFIED
+visualDirection: CINEMATIC_EDITORIAL_ILLUSTRATION
+runtimeAuthorized: false
+
+toolchain:
+  orchestrator:
+    name: ComfyUI
+    role: workflow-orchestration
+  generator:
+    family: Qwen-Image
+    license: Apache-2.0
+    role: canonical-character-and-environment-baseline
+  editor:
+    family: Qwen-Image-Edit
+    license: Apache-2.0
+    role: controlled-scene-editing-and-continuity
+  refiner:
+    name: Krita
+    role: human-refinement
+  accelerator:
+    name: Qwen-Image-Lightning-4steps
+    role: optional
+    qualificationRequired: true
+
+executionProfiles:
+  reference:
+    state: REQUIRED_FOR_FIRST_QUALIFICATION
+    gpuClass: 24GB-class-or-validated-equivalent
+  lowVramQuantized:
+    state: NOT_YET_QUALIFIED
+  cpuOnly:
+    state: NOT_ACCEPTED_FOR_PRODUCTION
+
+stages:
+  - id: OP0
+    output: SALA-ZERO-CANON-01
+    maxExploratoryRuns: 4
+  - id: OP1
+    output: LIA-CANON-01
+    maxExploratoryRuns: 4
+  - id: OP2
+    output: F3-TOO-LATE-01
+    maxExploratoryRuns: 4
+  - id: OP3
+    output: F4-BACKSTAGE-CLUE-01
+    maxExploratoryRuns: 4
+  - id: OP4
+    output: HUMAN_REFINED_PLATES
+  - id: OP5
+    output: REFERENCE_LOCK_DECISION
+
+hardStops:
+  - HS02
+  - HS03
+  - HS04
+  - HS05
+  - HS07
+
+platePolicy:
+  generatedLearnerText: PROHIBITED
+  generatedDialogueText: PROHIBITED
+  generatedFinalUi: PROHIBITED
+  textComposition: SEPARATE_RENDER_LAYER
+
+receiptFields:
+  - workflowJsonHash
+  - modelFileHashes
+  - prompt
+  - negativeConstraints
+  - seed
+  - dimensions
+  - sampler
+  - steps
+  - cfg
+  - loraHashes
+  - inputReferenceHashes
+  - outputHash
+  - humanRefinementRef
+  - humanDecision

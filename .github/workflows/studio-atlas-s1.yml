@@ -1,0 +1,64 @@
+name: Studio Atlas — S1 Standalone
+
+on:
+  pull_request:
+    paths:
+      - "products/studio-atlas/**"
+      - ".github/workflows/studio-atlas-s1.yml"
+      - "docs/capabilities/atlas-percorsi/product/STUDIO-ATLAS-S1-THIN-SHELL-SPEC-v0.1.md"
+      - "docs/capabilities/atlas-percorsi/product/STUDIO-ATLAS-PRODUCT-FOUNDATION-v0.1.md"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Typecheck and build standalone slice
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: products/studio-atlas
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install exact declared dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Product boundary checks
+        run: |
+          ! grep -R "studentName\|classId\|KAGGLE\|AZURE_CREDENTIALS\|kubectl\|sky launch" app components lib
+          grep -R "Produzione in attesa" components
+          grep -R "Nessuna classe, studente o provider" components
+
+      - name: Enforce Atlas preview bridge contract
+        run: |
+          grep -q 'studio-atlas.preview-snapshot/v0.1' lib/model.ts lib/preview.ts
+          grep -q 'runtimeAuthorized: false' lib/preview.ts
+          grep -q 'studentAuthorized: false' lib/preview.ts
+          grep -q 'scene.kind === "TRANSFER"' lib/production.ts
+          grep -q 'event.origin !== atlasOrigin' lib/preview-bridge.ts
+          grep -q 'message.channel === channel' lib/preview-bridge.ts
+          ! grep -R 'postMessage([^,]*,[[:space:]]*"\*"' lib/preview-bridge.ts
+          grep -q 'NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN' lib/preview-bridge.ts
+          grep -q 'PRODUCT_REVIEW_NOT_PASS' lib/production.ts
+          grep -q 'Approva pacchetto' components/PathwayWorkspace.tsx
+          grep -q 'targetSceneId' lib/model.ts
+          grep -q 'MUSEO_ZERO_PRODUCT_REVIEW_REF' lib/canonical/museo-zero.ts
+          grep -q 'worldAfter' lib/model.ts
+          grep -q 'world: {' lib/canonical/museo-zero.ts
+          grep -q 'worldAfter: {' lib/canonical/museo-zero.ts
+          grep -q 'INCOMPLETE_WORLD_STATE' lib/production.ts
