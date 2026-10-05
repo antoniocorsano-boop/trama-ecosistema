@@ -1,0 +1,112 @@
+name: Studio Atlas canonical closeout
+
+on:
+  push:
+    branches:
+      - feat/studio-atlas-visual-factory-consolidated-v0.2
+    paths:
+      - .github/workflows/studio-atlas-canonical-closeout.yml
+
+permissions:
+  contents: write
+
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/studio-atlas-visual-factory-consolidated-v0.2
+          fetch-depth: 0
+
+      - name: Reconcile canonical status and project knowledge
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          status_path = Path('STATUS.md')
+          status = status_path.read_text(encoding='utf-8')
+          old = '- **VF-ORCH-01:** `CORE_IMPLEMENTED / PLAN_INCOMPLETE`;'
+          new = '- **VF-ORCH-01:** `DETERMINISTIC_QUALIFICATION_PASS / LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN`;'
+          if old not in status:
+              raise SystemExit('Expected VF-ORCH-01 baseline marker not found exactly once')
+          if status.count(old) != 1:
+              raise SystemExit('VF-ORCH-01 baseline marker is not unique')
+          status = status.replace(old, new)
+          old_seq = 'Sequenza canonica: baseline v1.3 → consolidamento PR sovrapposte → chiusura bounded VF-ORCH-01 → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6.'
+          new_seq = 'Sequenza canonica: baseline v1.3 → consolidamento PR sovrapposte → **VF-ORCH-01 bounded closeout deterministico completato** → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6.'
+          if old_seq not in status:
+              raise SystemExit('Canonical sequence marker not found')
+          status_path.write_text(status.replace(old_seq, new_seq), encoding='utf-8')
+
+          events_path = Path('status/project-knowledge-events.json')
+          data = json.loads(events_path.read_text(encoding='utf-8'))
+          event_id = 'TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-CLOSEOUT-2026-10-05'
+          if not any(e.get('eventId') == event_id for e in data['events']):
+              data['events'].append({
+                  'eventId': event_id,
+                  'type': 'BASELINE',
+                  'subject': 'studio-atlas-visual-factory',
+                  'statement': 'VF-ORCH-01 has completed its bounded deterministic implementation and qualification: runner, manual dry-run|references|shots surface, Studio Atlas tests, typecheck/build, generation contracts and safety checks pass. Live zero-cost provider execution remains not yet proven; REAL_VISUAL_RUN_PENDING, Human Visual Review/reference lock, F1-F6 production and second MUSEO ZERO Human Product Review remain required. No runtime, learner, publication or paid-compute authority is granted; DOS-A1 remains RUNTIME_DEFERRED.',
+                  'status': 'CURRENT',
+                  'rationale': 'Reconciles the Audit v1.3 PLAN_INCOMPLETE baseline with the subsequently verified VF-ORCH-01 deterministic closeout while preserving the distinction between deterministic qualification and real provider execution.',
+                  'sourceRefs': [
+                      {
+                          'repository': 'antoniocorsano-boop/trama-ecosistema',
+                          'pullRequest': 233,
+                          'exactHead': '48750cda9d7073df374d1263142d233135a0b045',
+                          'ref': 'docs/capabilities/atlas-percorsi/production/VF-ORCH-01-QUALIFICATION-RECEIPT-v0.1.md'
+                      },
+                      {
+                          'repository': 'antoniocorsano-boop/trama-ecosistema',
+                          'pullRequest': 243,
+                          'ref': 'STATUS.md'
+                      }
+                  ],
+                  'validFrom': '2026-10-05T12:30:00Z',
+                  'supersedes': [],
+                  'invalidatedBy': [],
+                  'freshness': {'policy': 'UNTIL_CHANGE'}
+              })
+          data['updatedAt'] = '2026-10-05T12:40:00Z'
+          events_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          PY
+
+      - name: Regenerate canonical projections
+        run: |
+          python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.json
+          python scripts/build_project_context_snapshot.py --output control-center/data/project-context-snapshot.json
+          python scripts/build_trama_context_pack.py project-knowledge \
+            --snapshot control-center/data/project-context-snapshot.json \
+            --output control-center/data/context-packs/project-knowledge.json
+
+      - name: Restrict closeout delta
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          test -n "$changed"
+          unexpected="$(printf '%s\n' "$changed" | grep -v -E '^(STATUS.md|status/project-knowledge-events.json|control-center/data/ecosystem-snapshot.json|control-center/data/project-context-snapshot.json|control-center/data/context-packs/project-knowledge.json)$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected closeout files:" >&2
+            printf '%s\n' "$unexpected" >&2
+            exit 1
+          fi
+
+      - name: Verify regenerated state
+        run: |
+          python scripts/build_ecosystem_snapshot.py --check
+          python scripts/build_project_context_snapshot.py --check
+          python -m unittest tests/test_p3_status_alignment.py -v
+
+      - name: Commit canonical closeout
+        run: |
+          git config user.name 'trama-audit-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add STATUS.md status/project-knowledge-events.json \
+            control-center/data/ecosystem-snapshot.json \
+            control-center/data/project-context-snapshot.json \
+            control-center/data/context-packs/project-knowledge.json
+          git commit -m 'docs: reconcile VF-ORCH-01 deterministic closeout'
+          git push origin HEAD:feat/studio-atlas-visual-factory-consolidated-v0.2
