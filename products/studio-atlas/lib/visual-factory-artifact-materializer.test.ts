@@ -39,7 +39,7 @@ test("materializes authenticated review assets and verifies their receipt digest
   const output = await mkdtemp(join(tmpdir(), "vf-review-assets-"));
   try {
     const files = await materializeReviewAssets(
-      succeededReceipt("https://private-space.invalid/gradio_api/file=candidate.webp", digest),
+      succeededReceipt("https://studio-atlas-visual-factory-v02.hf.space/gradio_api/file=candidate.webp", digest),
       output,
       {
         token: "hf_test_token",
@@ -61,7 +61,7 @@ test("fails closed when a downloaded candidate does not match receipt provenance
   try {
     await assert.rejects(
       materializeReviewAssets(
-        succeededReceipt("https://private-space.invalid/candidate.webp", "b".repeat(64)),
+        succeededReceipt("https://studio-atlas-visual-factory-v02.hf.space/gradio_api/file=candidate.webp", "b".repeat(64)),
         output,
         {
           token: "hf_test_token",
@@ -79,10 +79,18 @@ test("fails closed when a downloaded candidate does not match receipt provenance
 });
 
 test("rejects a succeeded receipt with no reviewable assets", async () => {
-  const receipt = succeededReceipt("https://private-space.invalid/candidate.webp", "c".repeat(64));
+  const receipt = succeededReceipt("https://studio-atlas-visual-factory-v02.hf.space/gradio_api/file=candidate.webp", "c".repeat(64));
   receipt.assets = [];
   await assert.rejects(
     materializeReviewAssets(receipt, tmpdir(), { token: "hf_test_token" }),
     /VF_ORCH_SUCCEEDED_WITHOUT_ASSETS/,
+  );
+});
+
+test("never forwards the HF token to an untrusted candidate host", async () => {
+  const receipt = succeededReceipt("https://example.invalid/candidate.webp", "d".repeat(64));
+  await assert.rejects(
+    materializeReviewAssets(receipt, tmpdir(), { token: "hf_test_token" }),
+    /VF_ORCH_ASSET_HOST_NOT_ALLOWED/,
   );
 });
