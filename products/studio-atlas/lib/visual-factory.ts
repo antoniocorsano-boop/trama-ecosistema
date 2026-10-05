@@ -155,7 +155,7 @@ export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
     subjectRef: "sala-zero",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Sala Zero, contemporary interactive museum room after closing, viewed from the new accessible entrance threshold into a believable deep space; subtle floor circulation route and integrated sensor near the threshold; large projection wall showing abstract warm light and simple non-text motion only, no text, no interface, no charts; exit light and restrained installation details; narrative physical environment first.",
+    prompt: "Sala Zero, contemporary interactive museum room after closing, viewed from the new accessible entrance threshold into a believable deep space; subtle floor circulation route and integrated sensor near the threshold; large projection wall showing abstract light in warm amber tones and simple non-text motion only, no text, no interface, no charts; exit light and restrained installation details; narrative physical environment first.",
   },
   {
     subjectRef: "cabina-regia",
