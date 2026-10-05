@@ -1,7 +1,10 @@
 import type {
   VisualAssetCandidate,
+  VisualExecutionProviderId,
   VisualExecutionReceipt,
   VisualGenerationPlan,
+  VisualOrchestrationEvidence,
+  VisualProviderAttemptEvidence,
 } from "./visual-factory";
 
 function noAuthorityReceipt(
@@ -28,6 +31,57 @@ function noAuthorityReceipt(
 
 function isObject(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function isProvider(value: unknown): value is VisualExecutionProviderId {
+  return value === "HF_ZEROGPU" || value === "CLOUDFLARE_WORKERS_AI";
+}
+
+function isAttemptOutcome(value: unknown): value is VisualProviderAttemptEvidence["outcome"] {
+  return value === "SUCCEEDED" ||
+    value === "RETRYABLE_PROVIDER_FAILURE" ||
+    value === "PROVIDER_EXHAUSTED" ||
+    value === "PROVIDER_INELIGIBLE" ||
+    value === "LICENSE_BLOCKED" ||
+    value === "PERMANENT_FAILURE";
+}
+
+function isAttemptEvidence(value: unknown): value is VisualProviderAttemptEvidence {
+  if (!isObject(value) || !isProvider(value.provider)) return false;
+  const eligibility = value.eligibility;
+  return (
+    (eligibility === "ELIGIBLE" || eligibility === "INELIGIBLE" || eligibility === "NOT_CONFIGURED" || eligibility === "PREFLIGHT_ERROR") &&
+    typeof value.eligibilityReason === "string" && value.eligibilityReason.length > 0 && value.eligibilityReason.length <= 160 &&
+    (value.quotaRemainingGpuSeconds === undefined ||
+      (typeof value.quotaRemainingGpuSeconds === "number" && Number.isFinite(value.quotaRemainingGpuSeconds) && value.quotaRemainingGpuSeconds >= 0)) &&
+    (value.outcome === undefined || isAttemptOutcome(value.outcome)) &&
+    typeof value.startedAt === "string" && value.startedAt.length > 0 &&
+    typeof value.completedAt === "string" && value.completedAt.length > 0 &&
+    typeof value.durationMs === "number" && Number.isFinite(value.durationMs) && value.durationMs >= 0
+  );
+}
+
+function isOrchestrationEvidence(value: unknown): value is VisualOrchestrationEvidence {
+  if (!isObject(value)) return false;
+  if (
+    value.schemaVersion !== "atlas.visual-orchestration-evidence/v0.1" ||
+    typeof value.orchestrationId !== "string" || !value.orchestrationId ||
+    (value.workloadClass !== "CANONICAL_REFERENCE" && value.workloadClass !== "SCENE_FRAME") ||
+    !Array.isArray(value.consideredProviders) ||
+    value.consideredProviders.length < 1 ||
+    value.consideredProviders.length > 2 ||
+    !value.consideredProviders.every(isProvider) ||
+    (value.selectedProvider !== undefined && !isProvider(value.selectedProvider)) ||
+    (value.selectedModelRef !== undefined && (typeof value.selectedModelRef !== "string" || !value.selectedModelRef)) ||
+    !Array.isArray(value.attempts) ||
+    value.attempts.length > 2 ||
+    !value.attempts.every(isAttemptEvidence) ||
+    (value.finalState !== "SUCCEEDED" && value.finalState !== "GENERATION_DEFERRED")
+  ) {
+    return false;
+  }
+  if (value.selectedProvider && !value.consideredProviders.includes(value.selectedProvider)) return false;
+  return true;
 }
 
 function isAsset(value: unknown, expectedDigest: string): value is VisualAssetCandidate {
@@ -66,7 +120,8 @@ export function normalizeExecutorResponse(
     value.allowQualityDowngrade !== false ||
     value.runtimeAuthorized !== false ||
     value.publicationAuthorityGranted !== false ||
-    !value.assets.every((asset) => isAsset(asset, expectedDigest))
+    !value.assets.every((asset) => isAsset(asset, expectedDigest)) ||
+    (value.orchestration !== undefined && !isOrchestrationEvidence(value.orchestration))
   ) {
     return noAuthorityReceipt(expectedDigest, "FAILED", "INVALID_EXECUTOR_RESPONSE", "CONTRACT_MISMATCH");
   }
