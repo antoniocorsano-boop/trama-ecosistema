@@ -113,9 +113,13 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         self.assertEqual(len(re.findall(r"(?m)^\s*HF_TOKEN:\s*", workflow)), 1)
         self.assertEqual(len(re.findall(r"(?m)^\s*HF_VISUAL_FACTORY_SPACE_REPO:\s*", workflow)), 1)
 
-    def test_manual_orchestrator_fails_closed_without_hf_binding_for_live_modes(self):
+    def test_dry_run_is_credential_free_and_live_modes_fail_closed(self):
         workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
-        self.assertIn('if [ "$MODE" != "dry-run" ]; then', workflow)
+        job_prefix = workflow.split("    steps:", 1)[0]
+        self.assertNotIn("HF_TOKEN:", job_prefix)
+        self.assertNotIn("HF_VISUAL_FACTORY_SPACE_REPO:", job_prefix)
+        self.assertIn("- name: Execute bounded orchestrator dry-run\n        if: inputs.mode == 'dry-run'", workflow)
+        self.assertIn("- name: Execute bounded orchestrator live\n        if: inputs.mode != 'dry-run'", workflow)
         self.assertIn('test -n "${HF_TOKEN:-}"', workflow)
         self.assertIn('test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}"', workflow)
         self.assertIn("LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING", workflow)
