@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { materializeReviewAssets } from "../lib/visual-factory-artifact-materializer";
 import type { VisualGenerationPlan, VisualExecutionReceipt } from "../lib/visual-factory";
 import {
   orchestrateVisualGeneration,
@@ -182,6 +183,11 @@ async function main(): Promise<void> {
     }, null, 2)}\n`,
     "utf8",
   );
+  if (receipt.status === "SUCCEEDED") {
+    await materializeReviewAssets(receipt, resolve(outputDir, "candidates"), {
+      token: process.env.HF_TOKEN,
+    });
+  }
   console.log(`VF_ORCH_${receipt.status}`);
 }
 
