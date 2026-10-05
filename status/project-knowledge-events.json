@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-10-04T20:08:00Z",
+  "updatedAt": "2026-10-05T04:40:08Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
@@ -315,7 +315,7 @@
       "eventId": "TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04",
       "type": "CLOSURE",
       "subject": "project-knowledge",
-      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. P4/P5/P6 residuals remain explicitly separate and open.",
+      "statement": "P3 evidence/distribution alignment is CLOSED / BASELINE_RECONCILED: the governed persistent Project Knowledge, STATUS and Control Center distribution now share the post-P1/P2 baseline; Docente OS Beta is the canonical current test distribution on Render; A7 is deployed on the current TRAMA main baseline. At the P3 closure baseline, P4/P5/P6 residuals were explicitly separate and open; later closures are recorded by their own events.",
       "status": "CURRENT",
       "rationale": "PR #234 integrated the persistent synchronization lane and was verified post-merge. The final P3 reconciliation records the current distribution evidence and prevents superseded P3=NEXT state from remaining current.",
       "sourceRefs": [
@@ -411,7 +411,7 @@
       "type": "DEFERMENT",
       "subject": "gh-aw-t0",
       "statement": "gh-aw T0 remains STAGED / NOT_EXECUTABLE: TRAMA PR #214 is still draft at exact head ba98dfcf730e60cdd946cd44ccedca5c3eec049b and requires current-cli compilation/lock plus controlled staged-run evidence before execution or integration.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "P3 records the current maintenance-automation boundary without promoting source review or compilation to operational qualification. P6 remains separate.",
       "sourceRefs": [
         {
@@ -427,6 +427,52 @@
       ],
       "validFrom": "2026-10-04T20:08:00Z",
       "supersedes": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-GHAW-T0-CLOSED-INTEGRATED-2026-10-05"
+      ],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-GHAW-T0-CLOSED-INTEGRATED-2026-10-05",
+      "type": "CLOSURE",
+      "subject": "gh-aw-t0",
+      "statement": "P6 gh-aw T0 is CLOSED / INTEGRATED: controlled staged execution completed successfully, safe outputs produced zero persistent side effects, the production-only trigger and strict compiled lock are integrated on TRAMA main.",
+      "status": "CURRENT",
+      "rationale": "PR #236 replaced superseded PR #214, qualified the real staged agent path on issue #117, isolated and corrected the Copilot PAT permission blocker, removed all trial-only surfaces, and passed final plus post-merge governance/compile checks without granting authority or runtime promotion. The closure is part of the project-knowledge context pack so distributed agents and the Control Center can resolve the current P6 state from the governed projection.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 236,
+          "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+          "ref": "gh-aw T0 — controlled staged issue triage qualification"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+          "ref": "main"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "9b66f24748b6dbcbb36e0cec1009c9a360381c2f",
+          "ref": "github-actions:workflow-run/37254749917#attempt-2"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+          "ref": "github-actions:workflow-run/37257375965"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+          "ref": "github-actions:workflow-run/37257624779"
+        }
+      ],
+      "validFrom": "2026-10-05T03:00:44Z",
+      "supersedes": [
+        "TRAMA-EVT-GHAW-T0-STAGED-NOT-EXECUTABLE-2026-10-04"
+      ],
       "invalidatedBy": [],
       "freshness": {
         "policy": "UNTIL_CHANGE"

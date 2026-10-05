@@ -1,12 +1,12 @@
 # TRAMA-AUDIT-2026-10-03 — Audit di completamento e piano operativo
-Versione 1.1 — 4 ottobre 2026 — baseline storica del 03/10/2026 aggiornata per delta verificati, senza riscrivere le risultanze originarie.
+Versione 1.2 — 5 ottobre 2026 — baseline storica del 03/10/2026 aggiornata per delta verificati, senza riscrivere le risultanze originarie.
 
 ## 1. Mandato, validità e precedenza
 Questo documento consolida la ricognizione riportata nella conversazione e ne fa la baseline di confronto per il completamento dell'intero ecosistema. La richiesta dell'utente autorizza il salvataggio e la pianificazione; non attesta nuove prove funzionali.
 Le risultanze tecniche dell'audit precedente sono conservate come EVIDENZE RIPORTATE: in questo turno non sono stati rieseguiti i controlli sui quattro prodotti, sui dispositivi o sui provider. Sono stati letti direttamente README.md, STATUS.md e GOVERNANCE.md di TRAMA; confermano la separazione delle autorità e lo stato documentale al 30 settembre.
 Non si trasformano i risultati storici in certificazioni attuali. Prima di intervenire, confrontare ogni rilievo con SHA completo, ramo, PR, esito corrente e distribuzione reale.
 Precedenza: decisioni/contratti approvati → STATUS.md → piano operativo canonico → specifiche integrate → questo audit, come riferimento trasversale di completamento. La sua integrazione documentale non promuove capacità, non autorizza esecuzioni e non certifica conformità.
-Stato del riferimento: il documento è presente su `main` TRAMA e resta la baseline trasversale di completamento. La versione 1.1 aggiorna soltanto delta verificati e priorità operative; non promuove capacità prive di prova e non autorizza nuovi runtime.
+Stato del riferimento: il documento è presente su `main` TRAMA e resta la baseline trasversale di completamento. La versione 1.2 incorpora i delta verificati fino alla chiusura P6/gh-aw T0; non promuove capacità prive di prova, non attiva T1/T2 e non autorizza nuovi runtime.
 
 ## 2. Criterio di completamento
 Per ogni capacità mantenere separati: dichiarazione, implementazione, verifica automatica, prova di uso, distribuzione, autorità e integrazione dell'evidenza.
@@ -211,11 +211,41 @@ Questa sezione supersede, per lo **stato corrente**, le occorrenze storiche `P3 
 
 **P3 — CLOSED / BASELINE_RECONCILED.** La condizione di uscita è soddisfatta nel perimetro di riconciliazione: stato corrente, memoria persistente, snapshot/Control Center e distribuzioni canoniche sono ricondotti alla stessa baseline source-bound; i controlli non osservabili sono esplicitati e i residui QE-01, Argo e gh-aw sono mantenuti nei rispettivi pacchetti P5/P4/P6. P1 e P2 non vengono riaperti; `DOS-A1` resta `RUNTIME_DEFERRED`.
 
+## 4-sexies. Delta verificato — 5 ottobre 2026 — P6 — CLOSED / INTEGRATED
+
+Questa sezione supersede, per lo **stato corrente di P6/gh-aw T0**, le occorrenze storiche `STAGED / NOT_EXECUTABLE` e `P6 = OPEN` nelle sezioni precedenti. Le risultanze originarie restano conservate come cronologia dell'audit.
+
+### Qualificazione agentica T0
+
+- La precedente TRAMA PR #214 è stata chiusa come **SUPERSEDED**, senza merge; il lavoro valido è stato riallineato sulla baseline corrente nella PR #236.
+- La PR TRAMA #236 è stata qualificata sull'exact head `3327162f9045619fed6e5c3ba2712334390d0d24` e integrata con squash merge `4ee44c1b906f3f816600c911614f6a9b43c3785c`.
+- Il trial reale controllato su issue #117 ha completato, nell'attempt 2 del run `37254749917`, compile-check, pre-activation, activation, GitHub Copilot CLI, threat detection, safe outputs e conclusion.
+- Il primo attempt aveva isolato un `HTTP 401` dovuto al PAT usato da `COPILOT_GITHUB_TOKEN` privo del permesso **Copilot Requests**. La correzione è stata limitata al nuovo fine-grained PAT con `Copilot Requests: Read`; il contratto T0 non è stato ampliato per far passare il trial.
+- L'output staged proponeva la label `enhancement` e una nota maintainer-facing non autorevole. La verifica prima/dopo su #117 ha confermato **state open, 0 commenti, 0 label e `updated_at` invariato**: nessuna write persistente.
+
+### Contratto finale e regressione
+
+- Dopo il trial sono state rimosse tutte le superfici temporanee: nessun `workflow_call`, nessun `workflow_dispatch`, nessun job di trial permanente e nessuno step permanente con token privilegiato.
+- Il sorgente finale scatta soltanto su issue `opened/reopened`, mantiene agente read-only per l'analisi e `safe-outputs.staged: true`; label consentite: `bug`, `enhancement`, `documentation`, `question`, massimo una.
+- Il lock finale è stato generato con `gh aw compile --strict`, compiler `v0.89.21`, ed è sincronizzato con il sorgente.
+- Sul final head `3327162f9045619fed6e5c3ba2712334390d0d24`: gh-aw T0 compile check run `37257375965` PASS e Governance run `37257376016` PASS.
+- Sul merge `4ee44c1b906f3f816600c911614f6a9b43c3785c`: commit GitHub verified; Post-Merge Baseline Integrity run `37257624779` PASS; compile-check, build e Governance/validate post-merge PASS sullo stesso SHA.
+
+### Esito e confini
+
+**P6 — CLOSED / INTEGRATED.** La condizione di uscita T0 è soddisfatta: esecuzione agentica osservata entro i confini, safe-output realmente staged, zero side effect persistenti, lock strict e regressione permanente. T1/T2 restano incrementi futuri separati e non sono autorizzati o attivati automaticamente da questa chiusura.
+
+Restano aperti come residui prioritari indipendenti:
+
+- **P4 / Argo G5-C:** prova reale LibreOffice/didUP ancora necessaria;
+- **P5 / QE-01:** `REQUALIFICATION_REQUIRED`, nessuna esecuzione runtime inferita;
+- `DOS-A1` resta `RUNTIME_DEFERRED`; nessuna promozione Production è implicata.
+
 ## 5. Quattro problemi trasversali
 F01 Duplicazioni: #652/#653 Orario sono state chiuse come SUPERSEDED e non costituiscono più implementazioni concorrenti; le preview Render temporanee non sono servizi canonici. Voice e /legacy/ restano da confrontare prima di eventuale rimozione; /legacy/ è un fallback intenzionale.
 F02 PR superate: #652/#653 risolte; Docente OS #685 chiusa senza merge dopo verifica che la hotfix non era necessaria; #187 e #194 restano da riconciliare prima di qualsiasi chiusura definitiva.
-F03 Evidenze non consolidate: il delta P1/P2 del 4 ottobre deve ancora essere proiettato coerentemente in snapshot, Control Center e memoria di progetto; QE-01, Argo e gh-aw mantengono inoltre residui propri. Questo è il focus immediato di P3.
-F04 Capacità dichiarate senza prova completa: installazione PWA device-native, QE-01, gh-aw controllato, TypeSafe, didUP e R3-P4 restano esempi attuali. Il flusso manuale Orario non rientra più in questo gruppo.
+F03 Evidenze non consolidate: P1/P2/P3 sono riconciliati e la chiusura P6 viene proiettata dalla v1.2 nelle fonti governate; restano da consolidare soltanto gli esiti futuri di QE-01 e Argo quando produrranno nuova evidenza reale.
+F04 Capacità dichiarate senza prova completa: installazione PWA device-native, QE-01, TypeSafe, didUP e R3-P4 restano esempi attuali. gh-aw T0 non rientra più in questo gruppo dopo il trial staged reale e l'integrazione P6.
 
 # Piano di attuazione — TRAMA-CAP-CLOSE-2026-10-03
 > Per gli esecutori: usare superpowers:executing-plans per attuare il piano per attività. Questo documento è un piano di programma con procedure verificabili; i percorsi applicativi non osservati vanno risolti nel primo passo di ogni attività prima di modificarli.
@@ -240,17 +270,17 @@ F04 Capacità dichiarate senza prova completa: installazione PWA device-native, 
 | 7 | P7 completamento prodotto | Atlas/Knowledge/loop docente | P1 chiuso; pacchetti autonomi con prove |
 | 8 | P8 funzioni differite/adozione | Evoluzione ulteriore | Nuove decisioni dove richieste |
 
-### Stato dei pacchetti al 4 ottobre 2026
+### Stato dei pacchetti al 5 ottobre 2026
 
-| Pacchetto | Stato v1.1 | Nota |
+| Pacchetto | Stato v1.2 | Nota |
 | --- | --- | --- |
-| P0 | **INTEGRATO / DA RENDERE PIÙ RINTRACCIABILE** | Audit presente su `main`; questa v1.1 aggiunge il collegamento operativo da STATUS |
+| P0 | **INTEGRATO / DA RENDERE PIÙ RINTRACCIABILE** | Audit presente su `main`; questa v1.2 mantiene il collegamento operativo da STATUS |
 | P1 | **CLOSED_APPLICATION_SCOPE / DEVICE_NATIVE_RESIDUAL** | Orario verificato su Beta; PWA/Share applicativamente qualificate; installazione nativa Android residua e non bloccante |
 | P2 | **VERIFIED / INTEGRATED** | Run schedulati Arena Curriculum Sync PASS con validation/no-op governato |
-| P3 | **NEXT** | Riconciliare stato, distribuzioni, snapshot, Control Center e project knowledge |
+| P3 | **CLOSED / BASELINE_RECONCILED** | Stato, distribuzioni, snapshot, Control Center e Project Knowledge riconciliati |
 | P4 | **OPEN** | Argo G5-C: prova reale LibreOffice/didUP ancora necessaria |
 | P5 | **OPEN / REQUALIFICATION** | QE-01 da riconciliare prima di nuova esecuzione |
-| P6 | **OPEN** | gh-aw T0 da provare in esecuzione controllata |
+| P6 | **CLOSED / INTEGRATED** | T0 qualificato con trial staged reale e zero side effect; T1/T2 restano incrementi separati |
 | P7 | **UNBLOCKED FOR SCOPED INCREMENTS** | P1 non blocca più nuovi incrementi; ogni capacità mantiene i propri gate |
 | P8 | **DEFERRED / DECISION-BOUND** | Nessun cambiamento alle funzioni differite |
 
@@ -317,14 +347,15 @@ Responsabile: TRAMA/harness.
 - [ ] Sottoporre SHA esatto alla revisione richiesta; solo dopo eventuale autorizzazione valida eseguire la prova e conservarne ricevuta.
 Uscita documentale: nessuna contraddizione. Uscita runtime: prova reale autorizzata riuscita, separata e non estesa a DOS-A1.
 
-### P6 — gh-aw
-Responsabile: TRAMA. Fonti: #214 e workflow .github/workflows/*.md/.lock.yml.
-- [ ] Riverificare compile e configurazione; limiti add-labels.allowed, repository consentiti e safe-outputs.
-- [ ] Eseguire prova controllata prevista dal contratto solo dopo soddisfacimento dei prerequisiti.
-- [ ] Registrare risultato, permessi effettivi, errori, modifiche consentite e procedura di disattivazione.
-- [ ] Misurare attività ripetitive risparmiate senza dedurre qualità dal numero di commenti.
-- [ ] Introdurre T1 sola lettura; T2 solo proposte documentate su F01–F04 dopo T0 provato.
-Uscita: esecuzione osservata entro i confini, non solo compilazione. Nessun passaggio automatico di autorità.
+### P6 — gh-aw T0
+Responsabile: TRAMA. Fonti correnti: PR #236, exact head `3327162f9045619fed6e5c3ba2712334390d0d24`, merge `4ee44c1b906f3f816600c911614f6a9b43c3785c`, workflow `.github/workflows/trama-t0-issue-triage.md` + lock compilato.
+- [x] Compile/configurazione verificati; allow-list chiusa, agente read-only, safe-output staged.
+- [x] Prova controllata reale eseguita su issue #117 dopo i prerequisiti di autenticazione.
+- [x] Risultato e permessi effettivi registrati; primo errore 401 isolato e corretto senza ampliare il contratto.
+- [x] Zero side effect verificato prima/dopo; superfici di trial e step privilegiati rimossi.
+- [ ] Misurazione del risparmio operativo: follow-up osservativo, non condizione di chiusura T0.
+- [ ] T1 sola lettura e T2 propositive: eventuali incrementi separati, ciascuno con proprio perimetro e qualifica; non attivati automaticamente.
+Uscita T0: **soddisfatta** — esecuzione osservata entro i confini, non solo compilazione; nessun passaggio automatico di autorità.
 
 ### P7 — Capacità operative successive
 Dopo P1, scegliere un incremento verificabile alla volta; ogni punto conserva ID audit e issue originali.
@@ -349,7 +380,7 @@ Campi obbligatori di ogni aggiornamento: ID Axx/Px; requisito; repository/ramo/S
 Aggiornare dopo integrazione, distribuzione, prova materiale o nuovo blocco. Una modifica di contratto o autorità segue GOVERNANCE.md; una correzione ordinaria procede nel perimetro già autorizzato.
 Baseline immutabile nel significato storico: versioni successive aggiungono variazioni e prove, non cancellano fallimenti o riscrivono la data dell'audit.
 Nessuna issue/PR obsoleta viene chiusa solo perché elencata qui: prima confronto contenuto e prove, poi azione documentata.
-Prima attività esecutiva aggiornata dalla v1.1: **P3 — allineamento evidenze/distribuzioni**. La precedente priorità P1 è chiusa come cantiere applicativo con residuo device-native registrato; P2 è verificato/integrato. Nessuna nuova attività deve riaprire P1 senza un bug riproducibile o una decisione esplicita.
+Prima attività esecutiva aggiornata dalla v1.2: **P4 — Argo G5-C**, quando è disponibile l'ambiente reale LibreOffice/didUP necessario alla prova; in assenza di tale ambiente può procedere **P5 — QE-01** come riconciliazione separata, senza dichiarare P4 chiuso. P1/P2/P3/P6 restano chiusi nei rispettivi perimetri e non vanno riaperti senza nuova evidenza o decisione esplicita.
 
 ## 9. Verifica del piano
 Copertura: A01–A41 incluse; F01–F04 collegati a P1/P3/P4/P5/P6; differimenti conservati in P8. Le condizioni di revisione sono assegnate a P1/P2/P3/P5.
