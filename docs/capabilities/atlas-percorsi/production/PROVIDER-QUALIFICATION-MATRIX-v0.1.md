@@ -10,7 +10,7 @@
 | Azure with existing credits | YES | Azure Consumption Credits balance API | YES | **ADAPTER_SELECTED** |
 | GCP with trial/promo credits | YES | billing/cost APIs exist, but remaining promo entitlement is not yet bound to a sufficiently simple canonical balance signal for this workflow | YES | **DEFER / UNKNOWN_FREE_ENTITLEMENT** |
 | AWS with promotional credits | YES | AWS billing APIs exist, but v0.1 has not qualified a read-only remaining-credit path suitable for automatic FREE_ONLY admission | YES | **DEFER / UNKNOWN_FREE_ENTITLEMENT** |
-| RunPod | YES | account/billing integration requires provider-specific balance qualification | YES | **DEFER** |
+| RunPod | YES where supported | provider-specific credit proof required | YES | **DEFER** |
 | Paperspace Free / Gradient | SkyPilot supports Paperspace, but the free plan is notebook-scoped | current Free-plan GPU is M4000 (8 GiB VRAM), below Q4 minimum 14 GiB | notebook/free path not qualified as SkyPilot production path | **REJECT_FOR_Q4_PROFILE** |
 | Lambda / Vast / other GPU clouds | YES where supported | provider-specific credit proof required | YES | **DEFER** |
 | Kaggle Free | NO canonical SkyPilot infra | quota visible, but empirical T4 request produced CPU runtime | notebook API | **NEGATIVE KNOWLEDGE / NOT_CANONICAL** |
@@ -36,7 +36,7 @@ Canonical constraints for both adapters:
 - successful generation remains only a candidate until Human Visual Review/reference lock;
 - generation grants neither runtime nor publication authority.
 
-The repository manual workflow is intentionally credential-neutral. It can qualify the orchestration surface and produce fail-closed evidence without injecting provider secrets. A real zero-cost run therefore remains a separate trusted operational proof.
+The repository manual workflow binds trusted provider credentials only in the live execution step; `dry-run` remains credential-free. For Hugging Face live `references` / `shots`, `HF_TOKEN` comes only from GitHub Secrets and `HF_VISUAL_FACTORY_SPACE_REPO` only from GitHub Variables. Missing binding fails closed before provider invocation. This live binding does not turn deterministic qualification into evidence of a successful provider run.
 
 ## Selection rationale
 
