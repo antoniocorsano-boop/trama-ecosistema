@@ -51,7 +51,7 @@ jobs:
           path: .github/workflows/trama-t0-issue-triage.lock.yml
           if-no-files-found: error
           retention-days: 7
-      - name: One-shot sync trial lock with dedicated token
+      - name: Ensure trial lock is synchronized
         if: github.event_name == 'push' && github.ref_name == 'gh-aw/t0-controlled-trial' && github.actor != 'github-actions[bot]'
         shell: bash
         env:
@@ -60,12 +60,24 @@ jobs:
           set -euo pipefail
           test -n "${GH_TOKEN:-}"
           git add .github/workflows/trama-t0-issue-triage.lock.yml
-          if git diff --cached --quiet; then
-            echo 'lock already synchronized'
-            exit 0
+          if ! git diff --cached --quiet; then
+            gh auth setup-git
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'chore(gh-aw): synchronize controlled-trial lock'
+            git push origin HEAD:gh-aw/t0-controlled-trial
           fi
-          gh auth setup-git
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'chore(gh-aw): synchronize controlled-trial lock'
-          git push origin HEAD:gh-aw/t0-controlled-trial
+      - name: Run one controlled staged trial on issue 117
+        if: github.event_name == 'push' && github.ref_name == 'gh-aw/t0-controlled-trial' && github.actor != 'github-actions[bot]'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_AW_GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh aw run trama-t0-issue-triage \
+            --repo antoniocorsano-boop/trama-ecosistema \
+            --ref gh-aw/t0-controlled-trial \
+            --raw-field item_number=117 \
+            --raw-field aw_context='P6 controlled staged qualification; analyze issue 117 only; no persistent writes.' \
+            --approve \
+            --json
