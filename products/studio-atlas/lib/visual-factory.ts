@@ -140,27 +140,27 @@ export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
     subjectRef: "lia",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Lia, adult museum exhibition-layout and visitor-flow crew member; calm focused physicality; practical contemporary setup clothing; stable hairstyle and warm accent detail; full-body and medium-shot continuity sheet.",
+    prompt: "Lia, adult museum exhibition-layout and visitor-flow crew member actively checking the accessible circulation route at the new entrance, placing or measuring visitor-flow markers; calm focused physicality; practical contemporary setup clothing; stable hairstyle and one warm accent detail; full-body working pose with environmental context, not a posed portrait.",
   },
   {
     subjectRef: "omar",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Omar, adult museum installer; practical contemporary workwear; distinct silhouette; grounded posture near sensors and installation props; participant, not teacher; full-body and medium-shot continuity sheet.",
+    prompt: "Omar, adult museum hands-on installer physically adjusting a compact sensor mount and nearby installation hardware; practical contemporary workwear; distinct silhouette; grounded posture, small hand tool or fixture detail allowed; participant with partial knowledge, not teacher or supervisor; full-body working continuity reference.",
   },
   {
     subjectRef: "teo",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Teo, adult museum control and rehearsal crew member; contemporary practical clothing; observant restrained body language; distinct silhouette associated with the control booth; continuity sheet.",
+    prompt: "Teo, adult museum AV rehearsal technician, not security staff and no security uniform or badge; contemporary practical clothing distinct from Omar; restrained observant body language inside a compact control booth, one hand near tactile cue controls, with a clear sightline through an interior window toward Sala Zero; working continuity reference, not a guard portrait.",
   },
   {
     subjectRef: "sala-zero",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Sala Zero contemporary interactive museum room after closing; large projection wall, new accessible entrance threshold, subtle floor route, integrated sensor, exit light, believable architecture and spatial depth; cinematic editorial illustration environment master.",
+    prompt: "Sala Zero, contemporary interactive museum room after closing, viewed from the new accessible entrance threshold into a believable deep space; subtle floor circulation route and integrated sensor near the threshold; large projection wall showing abstract warm light and simple non-text motion only, no text, no interface, no charts; exit light and restrained installation details; narrative physical environment first.",
   },
   {
     subjectRef: "cabina-regia",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Cabina regia physically adjacent to Sala Zero; tactile believable museum AV control surface, spatial connection back to the exhibition, simple readable cue mapping and replay controls; cinematic editorial illustration environment master.",
+    prompt: "Cabina regia, a small enclosed museum AV booth physically adjacent to Sala Zero; interior observation window clearly frames part of the same projection wall or entrance zone; compact tactile controls with physical buttons, knobs and faders, plus only small non-text status indicators; believable back-of-house materials and working scale, no detached dashboard or screen wall; cinematic environment master.",
   },
 ];
 
@@ -212,6 +212,8 @@ const COMMON_NEGATIVE = [
   "technical diagram as dominant scene",
   "large educational captions",
   "decorative AI clutter",
+  "readable text, pseudo-text, labels, captions, signage, or watermarks",
+  "charts, graphs, dashboards, detached UI panels, or screen-wall interfaces",
 ];
 
 function basePlan(
