@@ -52,6 +52,12 @@ def validate_free_only_quota(quota: Any) -> None:
         raise ValueError("PAID_OVERQUOTA_NOT_ALLOWED")
 
 
+def validate_private_space(space_info: Any) -> None:
+    private = space_info.get("private") if isinstance(space_info, dict) else getattr(space_info, "private", None)
+    if private is not True:
+        raise ValueError("HF_SPACE_NOT_PRIVATE")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-id", default=os.environ.get("HF_VISUAL_FACTORY_SPACE_REPO", ""))
@@ -87,6 +93,11 @@ def main() -> int:
         raise SystemExit(f"FREE_ONLY_PRECHECK_FAILED:{exc}") from exc
 
     api.create_repo(repo_id=repo_id, **space_create_kwargs())
+    try:
+        space_info = api.repo_info(repo_id=repo_id, repo_type="space")
+        validate_private_space(space_info)
+    except Exception as exc:
+        raise SystemExit(f"PRIVATE_SPACE_PRECHECK_FAILED:{exc}") from exc
 
     readme = """---
 title: Studio Atlas Visual Factory

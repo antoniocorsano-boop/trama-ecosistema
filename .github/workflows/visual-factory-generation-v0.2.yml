@@ -21,6 +21,7 @@ on:
       - "products/studio-atlas/package.json"
       - ".github/workflows/visual-factory-generation-v0.2.yml"
       - ".github/workflows/visual-factory-orchestrator-v0.1.yml"
+      - ".github/workflows/visual-factory-hf-space-deploy.yml"
 
 permissions:
   contents: read
