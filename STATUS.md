@@ -3,15 +3,15 @@
 Aggiornato al 5 ottobre 2026.
 
 
-Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.md`](docs/audits/TRAMA-AUDIT-2026-10-03.md), **v1.3 / delta Studio Atlas–Visual Factory verificato 05-10-2026**.
+Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.md`](docs/audits/TRAMA-AUDIT-2026-10-03.md), **v1.4 / prova reale Visual Factory e riesame MUSEO ZERO verificati 05-10-2026**.
 
 Stato operativo del piano di chiusura:
 - **P1 Orario + PWA + Android:** cantiere applicativo chiuso e beta consolidata; installazione nativa Chrome/Android resta residuo di qualification non bloccante;
 - **P2 Arena→Atlas:** VERIFIED / INTEGRATED; run schedulati del sync PASS con validation e no-op governato;
 - **P3 evidenze/distribuzioni:** **CLOSED / BASELINE_RECONCILED**; stato canonico, Project Knowledge persistente, Control Center e distribuzioni restano riconciliati; Argo G5-C e QE-01 restano residui separati P4/P5.
 - **P6 gh-aw T0:** **CLOSED / INTEGRATED**; prova staged reale PASS, zero side effect persistenti sull'issue pilota, trigger finale production-only e lock strict sincronizzato; T1/T2 restano incrementi successivi separati, non attivati automaticamente.
-- **P4 Argo G5-C:** **OPEN / REAL_LIBREOFFICE_DIDUP_PROOF_PENDING**; lane indipendente, non chiusa dalla v1.3.
-- **P5 QE-01:** **REQUALIFICATION_PREPARED_NOT_AUTHORIZED**; nessuna nuova esecuzione runtime è autorizzata dalla v1.3.
+- **P4 Argo G5-C:** **OPEN / LOCAL_PROOF_PACKAGE_READY_CANDIDATE / REAL_LIBREOFFICE_DIDUP_PROOF_PENDING**; PR #246 prepara il pacchetto fail-closed, ma la prova reale LibreOffice/didUP resta obbligatoria.
+- **P5 QE-01:** **REQUALIFICATION_PREPARED_NOT_AUTHORIZED**; il pacchetto v2 è integrato, ma nessuna nuova esecuzione runtime è autorizzata dalla v1.4.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -80,15 +80,15 @@ Stato corrente governato:
 - **Studio Atlas product boundary:** `IMPLEMENTED_CANDIDATE / PRODUCT_DOMAIN_ESTABLISHED / NOT_RUNTIME_AUTHORIZED`;
 - **Authoring:** `VERIFIED_BUILD / AUTHORING_SLICE_AVAILABLE / HUMAN_GATES_PRESERVED`;
 - **Studio Atlas → Atlas preview:** `CROSS_PRODUCT_QUALIFIED / NON_PUBLIC`; nessuna autorizzazione student/public runtime;
-- **MUSEO ZERO v0.2:** `REMEDIATION_IMPLEMENTED / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`; l'esito precedente resta `REVISE` fino alla nuova review consolidata;
-- **Visual Factory:** `IMPLEMENTATION_ADVANCED / AUTOMATED_QUALIFICATION_AVAILABLE / REAL_VISUAL_RUN_PENDING`;
-- **VF-ORCH-01:** `DETERMINISTIC_QUALIFICATION_PASS / LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN`; runner condiviso, modalità manuali `dry-run | references | shots`, test/typecheck/build e contratti provider sono qualificati; nessun live inference è ancora attestato;
+- **MUSEO ZERO v0.2:** `REAL_REFERENCES_GENERATED / HUMAN_VISUAL_REVIEW_REWORK / REFERENCE_LOCK_PENDING / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`; la prima review visuale delle reference reali richiede remediation art-direction v0.3; nessun F1–F6 prima del reference lock;
+- **Visual Factory:** `REAL_REFERENCE_GENERATION_PROVEN / GOVERNED_EVIDENCE_AVAILABLE / HUMAN_VISUAL_ACCEPTANCE_PENDING`; run FREE_ONLY reale `37348637767` su `main@290d6f3f0d15df3e8f8f438a46a26449d1247043`, artefatto governato `11361642336`;
+- **VF-ORCH-01:** `LIVE_ZERO_COST_REFERENCE_EXECUTION_PROVEN / FREE_ONLY / FAIL_CLOSED / HUMAN_AUTHORITY_PRESERVED`; reference live provate end-to-end, mentre `shots` resta fail-closed fino al reference lock umano;
 - **Durability:** `DEVELOPMENT_PERSISTENCE_ONLY / PROFESSIONAL_RUNTIME_FOUNDATION_PENDING`;
 - **Docente OS ↔ Studio Atlas lesson continuity:** `CONTRACT_DIRECTION_ESTABLISHED / RUNTIME_BINDING_DEFERRED`.
 
-La prova di completamento prodotto richiede ancora la catena reale `references → Human Visual Review/reference lock → F1–F6 → learner integration → seconda Human Product Review`. CI verde e preview tecnica non sostituiscono questi gate.
+La prova `references` è ora reale e governata. Il completamento prodotto richiede ancora `art direction v0.3 → rigenerazione delle 5 reference → Human Visual Review/reference lock → F1–F6 → learner integration → seconda Human Product Review`. La riuscita tecnica non sostituisce l'accettazione visuale o di prodotto.
 
-Sequenza canonica: baseline v1.3 → consolidamento Studio Atlas/Visual Factory + qualifica deterministica VF-ORCH-01 → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6. P4/P5 restano lane indipendenti. `DOS-A1=RUNTIME_DEFERRED`.
+Sequenza canonica v1.4: prova reference reale acquisita → remediation art-direction v0.3 → nuova generazione delle 5 reference → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6. P4/P5 restano lane indipendenti. `DOS-A1=RUNTIME_DEFERRED`.
 
 ## OR-07 → OR-10 — capability condivise, portabilità e integrazioni prodotto
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-05T12:55:59Z",
+  "asOf": "2026-10-05T18:00:35Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -337,7 +337,7 @@
       "type": "BASELINE",
       "subject": "ecosystem-audit",
       "statement": "Audit v1.3 establishes Studio Atlas as a first-level application domain and records additive findings A42 through A49. It preserves NOT_RUNTIME_AUTHORIZED for Studio Atlas, SECOND_HUMAN_PRODUCT_REVIEW_PENDING for MUSEO ZERO, REAL_VISUAL_RUN_PENDING for Visual Factory, VF-ORCH-01 PLAN_INCOMPLETE, and DOS-A1=RUNTIME_DEFERRED; no student runtime or publication authority is granted.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "project-knowledge projection of the governed Audit v1.3 baseline: the ecosystem must represent Studio Atlas as a first-level product domain without converting implementation evidence into product, runtime, publication or student authority.",
       "sourceRefs": [
         {
@@ -355,7 +355,9 @@
       ],
       "validFrom": "2026-10-05T08:00:00Z",
       "supersedes": [],
-      "invalidatedBy": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-AUDIT-V1.4-VISUAL-FACTORY-LIVE-PROOF-2026-10-05"
+      ],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -365,7 +367,7 @@
       "type": "BASELINE",
       "subject": "visual-factory",
       "statement": "VF-ORCH-01 has deterministic qualification PASS for its bounded FREE_ONLY orchestration surface, shared runner and manual dry-run/references/shots modes; live zero-cost provider inference is not yet proven and no runtime, publication, learner or student authority is granted.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "project-knowledge projection of the post-Audit-v1.3 VF-ORCH-01 closeout: implementation qualification is distinct from the still-pending real governed visual run.",
       "sourceRefs": [
         {
@@ -384,7 +386,9 @@
       ],
       "validFrom": "2026-10-05T12:38:00Z",
       "supersedes": [],
-      "invalidatedBy": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-VF-ORCH-01-LIVE-ZERO-COST-PROOF-2026-10-05"
+      ],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -755,7 +759,7 @@
       "type": "BASELINE",
       "subject": "ecosystem-audit",
       "statement": "Audit v1.3 establishes Studio Atlas as a first-level application domain and records additive findings A42 through A49. It preserves NOT_RUNTIME_AUTHORIZED for Studio Atlas, SECOND_HUMAN_PRODUCT_REVIEW_PENDING for MUSEO ZERO, REAL_VISUAL_RUN_PENDING for Visual Factory, VF-ORCH-01 PLAN_INCOMPLETE, and DOS-A1=RUNTIME_DEFERRED; no student runtime or publication authority is granted.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "project-knowledge projection of the governed Audit v1.3 baseline: the ecosystem must represent Studio Atlas as a first-level product domain without converting implementation evidence into product, runtime, publication or student authority.",
       "sourceRefs": [
         {
@@ -773,7 +777,9 @@
       ],
       "validFrom": "2026-10-05T08:00:00Z",
       "supersedes": [],
-      "invalidatedBy": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-AUDIT-V1.4-VISUAL-FACTORY-LIVE-PROOF-2026-10-05"
+      ],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -783,7 +789,7 @@
       "type": "BASELINE",
       "subject": "visual-factory",
       "statement": "VF-ORCH-01 has deterministic qualification PASS for its bounded FREE_ONLY orchestration surface, shared runner and manual dry-run/references/shots modes; live zero-cost provider inference is not yet proven and no runtime, publication, learner or student authority is granted.",
-      "status": "CURRENT",
+      "status": "SUPERSEDED",
       "rationale": "project-knowledge projection of the post-Audit-v1.3 VF-ORCH-01 closeout: implementation qualification is distinct from the still-pending real governed visual run.",
       "sourceRefs": [
         {
@@ -802,7 +808,9 @@
       ],
       "validFrom": "2026-10-05T12:38:00Z",
       "supersedes": [],
-      "invalidatedBy": [],
+      "invalidatedBy": [
+        "TRAMA-EVT-VF-ORCH-01-LIVE-ZERO-COST-PROOF-2026-10-05"
+      ],
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
@@ -1056,7 +1064,7 @@
     },
     {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "7783a23607eded5272e2b27ce47fa1871da5434075a9be5dd819a0133d10721b"
+      "sha256": "7f1aa3350f0a2e2b773455b5370ee1fbbcaf948f2b51e9c6e7119c3c886be13c"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -1076,7 +1084,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "6a86d0f5d77a6bcce67c5a7c6ca710939e95a8b13068a636abffff88e4ae5ff7"
+      "sha256": "294e908acc1dc687c10e81f1c5d7dc9db94169e36b7c09f974cac1a3f618d6ab"
     }
   ]
 }
