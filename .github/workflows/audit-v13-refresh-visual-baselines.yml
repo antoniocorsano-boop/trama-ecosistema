@@ -1,0 +1,54 @@
+name: Audit v1.3 refresh visual baselines
+
+on:
+  push:
+    branches:
+      - docs/audit-v1-3-studio-atlas-baseline
+    paths:
+      - .github/workflows/audit-v13-refresh-visual-baselines.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/control-center/package-lock.json
+      - name: Install Control Center dependencies
+        working-directory: apps/control-center
+        run: npm ci --ignore-scripts
+      - name: Install Chromium
+        working-directory: apps/control-center
+        run: npx playwright install --with-deps chromium
+      - name: Refresh governed visual baselines
+        working-directory: apps/control-center
+        run: npx playwright test e2e/a6-visual.spec.ts --update-snapshots
+      - name: Restrict and commit visual baseline delta
+        run: |
+          git status --short
+          changed="$(git diff --name-only)"
+          if [ -z "$changed" ]; then
+            echo 'No snapshot changes produced.'
+            exit 1
+          fi
+          unexpected="$(printf '%s\n' "$changed" | grep -v '^apps/control-center/e2e/a6-visual.spec.ts-snapshots/\(maturity\|evidence\)-\(desktop\|phone\|lim\|reflow-320\)-linux\.png$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo 'Unexpected files changed:'
+            printf '%s\n' "$unexpected"
+            exit 1
+          fi
+          count="$(printf '%s\n' "$changed" | sed '/^$/d' | wc -l)"
+          test "$count" -eq 8
+          git config user.name 'trama-audit-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add apps/control-center/e2e/a6-visual.spec.ts-snapshots/
+          git commit -m 'test: refresh Control Center baselines for Studio Atlas'
+          git push origin HEAD:docs/audit-v1-3-studio-atlas-baseline
