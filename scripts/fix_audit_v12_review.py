@@ -15,11 +15,11 @@ def main() -> None:
     payload = json.loads(EVENTS_PATH.read_text(encoding="utf-8"))
     event = next(item for item in payload["events"] if item["eventId"] == EVENT_ID)
 
-    marker = "Project Knowledge context pack"
+    marker = "project-knowledge context pack"
     if marker not in event.get("rationale", ""):
         event["rationale"] = (
             event["rationale"].rstrip()
-            + " The closure is part of the Project Knowledge context pack so distributed agents and the Control Center can resolve the current P6 state from the governed projection."
+            + " The closure is part of the project-knowledge context pack so distributed agents and the Control Center can resolve the current P6 state from the governed projection."
         )
 
     payload["updatedAt"] = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
