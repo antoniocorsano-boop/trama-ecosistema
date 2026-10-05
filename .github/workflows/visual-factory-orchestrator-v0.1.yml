@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_VISUAL_FACTORY_SPACE_REPO: ${{ vars.HF_VISUAL_FACTORY_SPACE_REPO }}
       CLOUDFLARE_WORKERS_FREE_ADMITTED: "false"
       VISUAL_FACTORY_EVIDENCE_DIR: ${{ github.workspace }}/visual-factory-evidence
     steps:
@@ -64,6 +66,23 @@ jobs:
               --output /tmp/visual-generation-plan.json
           fi
 
+      - name: Validate trusted HF binding for live modes
+        shell: bash
+        env:
+          MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          if [ "$MODE" != "dry-run" ]; then
+            test -n "${HF_TOKEN:-}" || {
+              echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_TOKEN is not configured" >&2
+              exit 1
+            }
+            test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}" || {
+              echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_VISUAL_FACTORY_SPACE_REPO is not configured" >&2
+              exit 1
+            }
+          fi
+
       - name: Execute bounded orchestrator
         working-directory: products/studio-atlas
         env:
@@ -80,11 +99,6 @@ jobs:
           grep -R '"costClass": "FREE_ONLY"' visual-factory-evidence
           grep -R '"runtimeAuthorized": false' visual-factory-evidence
           grep -R '"publicationAuthorityGranted": false' visual-factory-evidence
-
-      - name: Trusted credential binding boundary
-        run: |
-          echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING"
-          echo "This repository workflow does not inject provider secrets."
 
       - name: Upload governed orchestration evidence
         if: always()
