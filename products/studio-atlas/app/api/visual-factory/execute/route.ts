@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import type { VisualGenerationPlan } from "../../../../lib/visual-factory";
+import type { VisualExecutionReceipt, VisualGenerationPlan } from "../../../../lib/visual-factory";
+import { waitingForComputeReceipt } from "../../../../lib/visual-factory-executor";
+import { orchestrateVisualGeneration } from "../../../../lib/visual-factory-orchestrator";
 import {
-  normalizeExecutorResponse,
-  normalizeGradioExecutionResult,
-  waitingForComputeReceipt,
-} from "../../../../lib/visual-factory-executor";
+  buildVisualProviderConfig,
+  createConfiguredVisualProviderAdapters,
+} from "../../../../lib/visual-factory-route-config";
 
 export const runtime = "nodejs";
 
@@ -23,11 +24,15 @@ function isPlan(value: unknown): value is VisualGenerationPlan {
     plan.allowQualityDowngrade === false &&
     plan.runtimeAuthorized === false &&
     plan.publicationAuthorityGranted === false &&
-    plan.jobs.every((job) => job.maxVariants >= 1 && job.maxVariants <= 3)
+    plan.jobs.every((job) =>
+      job.workflowFamily === "flux2-klein-4b/v0.2" &&
+      job.maxVariants >= 1 &&
+      job.maxVariants <= 3
+    )
   );
 }
 
-function responseForReceipt(receipt: ReturnType<typeof normalizeExecutorResponse>) {
+function responseForReceipt(receipt: VisualExecutionReceipt) {
   const status = receipt.status === "SUCCEEDED"
     ? 200
     : receipt.status === "WAITING_FOR_COMPUTE"
@@ -36,72 +41,32 @@ function responseForReceipt(receipt: ReturnType<typeof normalizeExecutorResponse
   return NextResponse.json(receipt, { status });
 }
 
-function huggingFaceToken(): `hf_${string}` | undefined {
-  const token = process.env.VISUAL_FACTORY_EXECUTOR_TOKEN?.trim();
-  if (!token) return undefined;
-  if (!token.startsWith("hf_")) {
-    throw new Error("HF_TOKEN_FORMAT_INVALID");
-  }
-  return token as `hf_${string}`;
-}
-
-async function executeGradio(raw: VisualGenerationPlan, executorUrl: string) {
-  const { Client } = await import("@gradio/client");
-  const token = huggingFaceToken();
-  const client = await Client.connect(
-    executorUrl,
-    token ? { token } : undefined,
-  );
-  const result = await client.predict("/execute", {
-    plan_json: JSON.stringify(raw),
-  });
-  return normalizeGradioExecutionResult(result.data, raw.packageDigest);
-}
-
-async function executeHttp(raw: VisualGenerationPlan, executorUrl: string) {
-  const headers: Record<string, string> = { "content-type": "application/json" };
-  const token = process.env.VISUAL_FACTORY_EXECUTOR_TOKEN?.trim();
-  if (token) headers.authorization = `Bearer ${token}`;
-
-  const upstream = await fetch(executorUrl, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(raw),
-    cache: "no-store",
-  });
-  const payload = await upstream.json().catch(() => null);
-  return normalizeExecutorResponse(payload, raw.packageDigest);
-}
-
 export async function POST(request: Request) {
   const raw = await request.json().catch(() => null);
   if (!isPlan(raw)) {
     return NextResponse.json({ error: "INVALID_VISUAL_GENERATION_PLAN" }, { status: 400 });
   }
 
-  const executorUrl = process.env.VISUAL_FACTORY_EXECUTOR_URL?.trim();
-  if (!executorUrl) {
-    return NextResponse.json(
-      waitingForComputeReceipt(raw.packageDigest, "EXECUTOR_NOT_CONFIGURED"),
-      { status: 503 },
-    );
-  }
+  const config = buildVisualProviderConfig(process.env);
+  const adapters = createConfiguredVisualProviderAdapters(config);
+  const context = {
+    unfinishedCanonicalReferenceCount: raw.planType === "REFERENCE_GENERATION" ? raw.jobs.length : 0,
+    hfConfiguredFloorSeconds: config.hfConfiguredFloorSeconds,
+    measuredReferenceP95Seconds: config.measuredReferenceP95Seconds,
+    hfSafetyMarginSeconds: config.hfSafetyMarginSeconds,
+  };
 
   try {
-    const kind = (process.env.VISUAL_FACTORY_EXECUTOR_KIND ?? "GRADIO").trim().toUpperCase();
-    const receipt = kind === "GRADIO"
-      ? await executeGradio(raw, executorUrl)
-      : kind === "HTTP"
-        ? await executeHttp(raw, executorUrl)
-        : waitingForComputeReceipt(raw.packageDigest, `EXECUTOR_KIND_UNSUPPORTED:${kind}`, "EXECUTOR_UNAVAILABLE");
+    const receipt = await orchestrateVisualGeneration(raw, adapters, context);
+    if (config.migrationState === "LEGACY_HTTP_REJECTED" && receipt.status === "WAITING_FOR_COMPUTE") {
+      receipt.failureDetail = receipt.failureDetail
+        ? `LEGACY_HTTP_EXECUTOR_NOT_ADMITTED|${receipt.failureDetail}`
+        : "LEGACY_HTTP_EXECUTOR_NOT_ADMITTED";
+    }
     return responseForReceipt(receipt);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
-      waitingForComputeReceipt(
-        raw.packageDigest,
-        error instanceof Error ? error.message : "EXECUTOR_UNAVAILABLE",
-        "EXECUTOR_UNAVAILABLE",
-      ),
+      waitingForComputeReceipt(raw.packageDigest, "ORCHESTRATION_UNAVAILABLE", "EXECUTOR_UNAVAILABLE"),
       { status: 503 },
     );
   }
