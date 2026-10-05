@@ -1,10 +1,11 @@
-# Permanent regression guard for P3 reconciliation, P6 closure, and Audit v1.3 provenance.
+# Permanent regression guard for P3/P6 closure and Audit v1.3→v1.4 provenance.
 import json
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 V13_EVENT_ID = "TRAMA-EVT-AUDIT-V1.3-STUDIO-ATLAS-BASELINE-2026-10-05"
+V14_EVENT_ID = "TRAMA-EVT-AUDIT-V1.4-VISUAL-FACTORY-LIVE-PROOF-2026-10-05"
 V13_SPEC_PATH = "docs/superpowers/specs/2026-10-05-trama-audit-v1-3-studio-atlas-baseline-design.md"
 
 
@@ -84,16 +85,18 @@ class P3StatusAlignmentTests(unittest.TestCase):
             ghaw_closed["sourceRefs"],
         )
 
-    def test_audit_records_p3_and_p6_closure_evidence(self):
+    def test_audit_records_p3_p6_and_v14_evidence(self):
         audit = (ROOT / "docs/audits/TRAMA-AUDIT-2026-10-03.md").read_text(encoding="utf-8")
+        self.assertIn("Versione 1.4", audit)
+        self.assertIn("versioni 1.3 e 1.2", audit)
         self.assertIn("P3 — BASELINE_RECONCILED", audit)
         self.assertIn("0000ca9be8a8dfa24535a4b718eecdbcde82ab8c", audit)
         self.assertIn("09a3a3600b81992f3675be82d1d2f188f1643909", audit)
-        self.assertIn("Versione 1.2", audit)
         self.assertIn("P6 — CLOSED / INTEGRATED", audit)
         self.assertIn("4ee44c1b906f3f816600c911614f6a9b43c3785c", audit)
         self.assertIn("### Stato dei pacchetti al 5 ottobre 2026", audit)
-        self.assertIn("| Pacchetto | Stato v1.2 | Nota |", audit)
+        self.assertIn("| P0 | **INTEGRATO / RIFERIMENTO V1.4**", audit)
+        self.assertIn("LIVE_ZERO_COST_REFERENCE_EXECUTION_PROVEN", audit)
         self.assertNotIn("### Stato dei pacchetti al 4 ottobre 2026\n\n| Pacchetto | Stato v1.1 | Nota |", audit)
 
     def test_project_knowledge_pack_projects_p6_closure(self):
@@ -115,15 +118,18 @@ class P3StatusAlignmentTests(unittest.TestCase):
         self.assertNotIn("gh-aw T0 restano residui separati P5/P4/P6", status)
         self.assertIn("Argo G5-C e QE-01 restano residui separati P4/P5", status)
 
-    def test_audit_v13_adds_studio_atlas_without_rewriting_history(self):
+    def test_audit_v14_preserves_v13_history_and_adds_live_visual_delta(self):
         audit = (ROOT / "docs/audits/TRAMA-AUDIT-2026-10-03.md").read_text(encoding="utf-8")
-        self.assertIn("Versione 1.3", audit)
+        self.assertIn("Versione 1.4", audit)
+        self.assertIn("Audit v1.3", audit)
         for audit_id in range(42, 50):
             self.assertIn(f"A{audit_id:02d}", audit)
         self.assertIn("Studio Atlas", audit)
         self.assertIn("SECOND_HUMAN_PRODUCT_REVIEW_PENDING", audit)
-        self.assertIn("REAL_VISUAL_RUN_PENDING", audit)
-        self.assertIn("CORE_IMPLEMENTED / PLAN_INCOMPLETE", audit)
+        self.assertIn("REAL_VISUAL_RUN_PENDING", audit)  # historical v1.3 evidence remains preserved
+        self.assertIn("CORE_IMPLEMENTED / PLAN_INCOMPLETE", audit)  # historical v1.3 evidence remains preserved
+        self.assertIn("REAL_REFERENCE_GENERATION_PROVEN", audit)
+        self.assertIn("ART_DIRECTION_REMEDIATION_IMPLEMENTED_CANDIDATE", audit)
         self.assertIn("A01", audit)
         self.assertIn("A41", audit)
         self.assertIn("P6 — CLOSED / INTEGRATED", audit)
@@ -132,7 +138,7 @@ class P3StatusAlignmentTests(unittest.TestCase):
 
     def test_status_projects_studio_atlas_as_first_level_domain_without_authority_promotion(self):
         status = (ROOT / "STATUS.md").read_text(encoding="utf-8")
-        self.assertIn("v1.3", status)
+        self.assertIn("v1.4", status)
         self.assertIn("Studio Atlas", status)
         self.assertIn("NOT_RUNTIME_AUTHORIZED", status)
         self.assertIn("DOS-A1", status)
@@ -147,33 +153,45 @@ class P3StatusAlignmentTests(unittest.TestCase):
         ):
             self.assertIn(marker, status)
 
-    def test_project_knowledge_records_audit_v13_as_current_source_bound_delta(self):
+    def test_project_knowledge_supersedes_v13_with_current_v14_source_bound_delta(self):
         payload = json.loads((ROOT / "status/project-knowledge-events.json").read_text(encoding="utf-8"))
         events = {event["eventId"]: event for event in payload["events"]}
         self.assertIn(V13_EVENT_ID, events)
-        event = events[V13_EVENT_ID]
-        self.assertEqual(event["status"], "CURRENT")
-        self.assertEqual(event["type"], "BASELINE")
-        self.assertEqual(event["subject"], "ecosystem-audit")
-        self.assertIn("Studio Atlas", event["statement"])
-        self.assertIn("A42", event["statement"])
-        self.assertIn("A49", event["statement"])
+        self.assertIn(V14_EVENT_ID, events)
+
+        historical = events[V13_EVENT_ID]
+        self.assertEqual(historical["status"], "SUPERSEDED")
+        self.assertIn(V14_EVENT_ID, historical["invalidatedBy"])
+        self.assertEqual(historical["type"], "BASELINE")
+        self.assertIn("Studio Atlas", historical["statement"])
         self.assertTrue(
-            any(ref.get("ref") == V13_SPEC_PATH or ref.get("path") == V13_SPEC_PATH for ref in event["sourceRefs"])
+            any(ref.get("ref") == V13_SPEC_PATH or ref.get("path") == V13_SPEC_PATH for ref in historical["sourceRefs"])
         )
 
-    def test_context_pack_projects_audit_v13_event(self):
+        current = events[V14_EVENT_ID]
+        self.assertEqual(current["status"], "CURRENT")
+        self.assertEqual(current["type"], "BASELINE")
+        self.assertEqual(current["subject"], "ecosystem-audit")
+        self.assertIn(V13_EVENT_ID, current["supersedes"])
+        self.assertIn("Visual Factory", current["statement"])
+        self.assertIn("MUSEO ZERO", current["statement"])
+        self.assertIn("REQUALIFICATION_PREPARED_NOT_AUTHORIZED", current["statement"])
+        self.assertTrue(any(ref.get("pullRequest") == 249 for ref in current["sourceRefs"]))
+
+    def test_context_pack_projects_v13_history_and_current_v14_event(self):
         pack = json.loads(
             (ROOT / "control-center/data/context-packs/project-knowledge.json").read_text(encoding="utf-8")
         )
         facts = {item.get("eventId"): item for item in pack.get("facts", []) if item.get("eventId")}
         self.assertIn(V13_EVENT_ID, facts)
-        event = facts[V13_EVENT_ID]
-        self.assertEqual(event["status"], "CURRENT")
-        rendered = json.dumps(event, ensure_ascii=False)
-        self.assertIn("Studio Atlas", rendered)
-        self.assertIn("NOT_RUNTIME_AUTHORIZED", rendered)
-        self.assertNotIn("STUDENT_AUTHORIZED", rendered)
+        self.assertIn(V14_EVENT_ID, facts)
+        self.assertEqual(facts[V13_EVENT_ID]["status"], "SUPERSEDED")
+        self.assertEqual(facts[V14_EVENT_ID]["status"], "CURRENT")
+        rendered = json.dumps(facts[V14_EVENT_ID], ensure_ascii=False)
+        self.assertIn("Visual Factory", rendered)
+        self.assertIn("MUSEO ZERO", rendered)
+        self.assertIn("DOS-A1", rendered)
+        self.assertNotIn("student runtime authorized", rendered.lower())
 
 
 if __name__ == "__main__":
