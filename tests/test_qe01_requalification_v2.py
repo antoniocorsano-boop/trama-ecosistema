@@ -7,6 +7,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "governance/runtime/qe01-requalification-v2.json"
 VALIDATOR = ROOT / "scripts/validate_qe01_requalification_v2.py"
+DOSSIER = ROOT / "docs/runtime/QE-01-REQUALIFICATION-v2.md"
+GOVERNANCE = ROOT / ".github/workflows/governance.yml"
 
 
 def load_validator():
@@ -91,6 +93,26 @@ class Qe01RequalificationV2Tests(unittest.TestCase):
         self.assertFalse(prior["modelInvoked"])
         self.assertFalse(prior["validGenerationRequestSent"])
         self.assertEqual([], validator.validate(data))
+
+    def test_dossier_and_explicit_governance_gate_exist(self):
+        self.assertTrue(DOSSIER.exists(), "QE-01 v2 dossier is missing")
+        dossier = DOSSIER.read_text(encoding="utf-8")
+        for token in (
+            "REQUALIFICATION_PREPARED_NOT_AUTHORIZED",
+            "EXECUTION NOT AUTHORIZED",
+            "deepseek-official",
+            "STALE_BINDING",
+            "MISSING_CREDENTIAL",
+            "nvidia/nemotron-3-ultra-550b-a55b",
+            "@deepseek-ai/dsh-llm-pi-ai",
+            "LOCAL_REOBSERVATION_REQUIRED",
+            "DOS-A1=RUNTIME_DEFERRED",
+        ):
+            self.assertIn(token, dossier)
+        governance = GOVERNANCE.read_text(encoding="utf-8")
+        self.assertIn("Validate QE-01 requalification v2", governance)
+        self.assertIn("python3 scripts/validate_qe01_requalification_v2.py", governance)
+        self.assertIn("python3 -m unittest tests.test_qe01_requalification_v2 -v", governance)
 
 
 if __name__ == "__main__":
