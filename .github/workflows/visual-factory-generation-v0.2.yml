@@ -38,6 +38,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Require bounded orchestrator qualification surface
         run: |
           test -f .github/workflows/visual-factory-orchestrator-v0.1.yml
@@ -47,6 +51,14 @@ jobs:
           grep -q 'CLOUDFLARE_WORKERS_FREE_ADMITTED' .github/workflows/visual-factory-orchestrator-v0.1.yml
           grep -q 'FREE_ONLY' products/studio-atlas/scripts/run-visual-factory-orchestrator.ts
           ! grep -Eq '^[[:space:]]+(HF_TOKEN|CLOUDFLARE_API_TOKEN|CLOUDFLARE_ACCOUNT_ID):' .github/workflows/visual-factory-generation-v0.2.yml
+
+      - name: Verify Studio Atlas orchestrator implementation
+        working-directory: products/studio-atlas
+        run: |
+          npm install --no-audit --no-fund
+          npm test
+          npm run typecheck
+          npm run build
 
       - name: Unit tests
         run: |
