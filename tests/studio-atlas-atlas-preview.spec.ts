@@ -283,7 +283,10 @@ test("MUSEO ZERO remains REVISE and opens a governed Atlas review preview", asyn
   ).toHaveValue("Quale soluzione regge davvero?");
   await expect(page.getByRole("button", { name: "Storyboard pronto" })).toHaveCount(0);
 
-  await page.getByRole("button", { name: "Revisione", exact: true }).click();
+  await page
+    .getByRole("navigation", { name: "Fasi del Percorso" })
+    .getByRole("button", { name: "Revisione" })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Il pacchetto richiede una nuova revisione." }),
   ).toBeVisible();
