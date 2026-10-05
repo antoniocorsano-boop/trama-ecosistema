@@ -21,7 +21,9 @@
       "readable text, pseudo-text, labels, captions, signage, or watermarks",
       "charts, graphs, dashboards, detached UI panels, or screen-wall interfaces",
       "partial, cropped, headless, duplicate, or malformed human figures",
-      "computer monitor interfaces, source-code screens, or software windows"
+      "computer monitor interfaces, source-code screens, or software windows",
+      "illuminated displays, monitor content, interface text, control-screen graphics, or wall placards",
+      "clothing logos, brand marks, badges, embroidered lettering, or printed lettering"
     ]
   },
   "characters": [
@@ -29,8 +31,8 @@
       "characterId": "lia",
       "name": "Lia",
       "role": "exhibition layout / visitor flow",
-      "description": "single-subject adult museum crew member actively placing clean blank floor-route markers at the new accessible entrance; hands clearly visible doing the task; practical contemporary setup clothing, calm focused physicality, stable hairstyle and recurring warm accent; sparse unlabeled museum corridor and no bystanders or partial figures",
-      "continuityAnchors": ["stable hairstyle", "stable outerwear silhouette", "same adult age band", "warm accent detail", "visitor-flow task association", "single-subject working reference"],
+      "description": "single-subject adult museum crew member actively placing clean blank visitor-flow markers along the accessible circulation route at the new entrance; hands clearly visible doing the task; practical contemporary setup clothing without logos or lettering, calm focused physicality, stable hairstyle and recurring warm accent; sparse blank-walled museum corridor and no bystanders or partial figures",
+      "continuityAnchors": ["stable hairstyle", "stable outerwear silhouette", "same adult age band", "warm accent detail", "visitor-flow task association", "single-subject working reference", "no clothing logos or lettering", "blank walls with no plaques or signage"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
@@ -38,8 +40,8 @@
       "characterId": "omar",
       "name": "Omar",
       "role": "installation",
-      "description": "adult hands-on museum installer physically associated with a compact sensor mount and installation hardware; practical contemporary workwear, grounded posture, distinct silhouette, participant with partial knowledge rather than teacher or supervisor",
-      "continuityAnchors": ["stable workwear", "distinct silhouette from Teo", "same adult age band", "sensor-mount or installation-hardware association"],
+      "description": "single-subject adult hands-on museum installer physically associated with a compact sensor mount and installation hardware; practical contemporary workwear without logos or lettering, grounded posture, distinct silhouette, participant with partial knowledge rather than teacher or supervisor",
+      "continuityAnchors": ["stable workwear", "distinct silhouette from Teo", "same adult age band", "sensor-mount or installation-hardware association", "single-subject working reference", "no clothing logos or lettering"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
@@ -47,8 +49,8 @@
       "characterId": "teo",
       "name": "Teo",
       "role": "control / rehearsal",
-      "description": "single-subject adult museum AV rehearsal technician, explicitly not security staff; contemporary practical clothing distinct from Omar, restrained observant body language, tactile physical-console association, monitor off with no software UI, and a clear physical sightline through an unlabeled window toward Sala Zero",
-      "continuityAnchors": ["stable clothing", "distinct silhouette from Omar", "same adult age band", "tactile control booth association", "no security uniform or badge", "monitor off", "unlabeled window toward Sala Zero"],
+      "description": "single-subject adult museum AV rehearsal technician, explicitly not security staff; contemporary practical clothing distinct from Omar and without logos or lettering, restrained observant body language, tactile physical-console association, monitor off with no software UI, and a clear physical sightline through an unlabeled window toward the adjacent warm-projection gallery; generation prompts describe that gallery spatially rather than rendering its canonical room name as signage",
+      "continuityAnchors": ["stable clothing", "distinct silhouette from Omar", "same adult age band", "tactile control booth association", "no security uniform or badge", "monitor off", "unlabeled window toward adjacent warm-projection gallery", "no clothing logos or lettering", "no room-name lettering in generated image"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     }
@@ -57,16 +59,16 @@
     {
       "environmentId": "sala-zero",
       "name": "Sala Zero",
-      "description": "contemporary interactive museum room after closing, seen from the new accessible entrance threshold into a believable deep space; subtle floor circulation route, integrated sensor, exit light, unlabeled walls and doors, and a large projection wall that shows only abstract warm light or simple non-text motion rather than interface content",
-      "continuityAnchors": ["new entrance threshold", "projection wall geometry", "subtle floor route", "integrated sensor position", "museum accent colour", "non-text abstract projection", "unlabeled walls and doors"],
+      "description": "contemporary interactive museum room after closing, seen from the new accessible entrance threshold into a believable deep space; subtle floor circulation route, integrated sensor, exit light, blank unlabeled walls and doors, and a large projection wall that shows only abstract warm light or simple non-text motion rather than interface content",
+      "continuityAnchors": ["new entrance threshold", "projection wall geometry", "subtle floor route", "integrated sensor position", "museum accent colour", "non-text abstract projection", "blank unlabeled walls and doors", "no plaques or lettering"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     },
     {
       "environmentId": "cabina-regia",
       "name": "Cabina regia",
-      "description": "interior viewpoint from a small enclosed museum AV booth physically adjacent to Sala Zero; a wide observation window visibly frames the same warm abstract projection in Sala Zero; tactile foreground console uses physical buttons, knobs and faders only; no screens, monitors, signage or wall posters",
-      "continuityAnchors": ["same material language as Sala Zero", "physical adjacency", "interior viewpoint", "observation window with Sala Zero projection visible", "stable tactile control surface geometry", "no screens or signage"],
+      "description": "interior viewpoint from a small enclosed museum AV booth physically adjacent to Sala Zero; a wide observation window visibly frames the same warm abstract projection in Sala Zero; the foreground console is entirely analog, using physical buttons, knobs, faders and unlit indicator lamps only; no rectangular display panels, screen-like surfaces, screens, monitors, signage or wall posters",
+      "continuityAnchors": ["same material language as Sala Zero", "physical adjacency", "interior viewpoint", "observation window with Sala Zero projection visible", "stable analog tactile control surface geometry", "physical buttons knobs and faders", "no rectangular display panels or screen-like surfaces", "no screens monitors or signage"],
       "referenceStatus": "UNLOCKED",
       "referenceAssetRefs": []
     }
