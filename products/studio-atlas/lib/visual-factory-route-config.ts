@@ -17,6 +17,8 @@ export type VisualProviderRuntimeConfig = {
   migrationState: VisualProviderMigrationState;
 };
 
+type EnvLike = Readonly<Record<string, string | undefined>>;
+
 function positiveNumber(value: string | undefined, fallback: number): number {
   if (!value?.trim()) return fallback;
   const parsed = Number(value);
@@ -29,7 +31,7 @@ function optionalPositiveNumber(value: string | undefined): number | undefined {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
-export function buildVisualProviderConfig(env: NodeJS.ProcessEnv): VisualProviderRuntimeConfig {
+export function buildVisualProviderConfig(env: EnvLike): VisualProviderRuntimeConfig {
   const nativeHfToken = env.HF_TOKEN?.trim();
   const nativeHfSpace = env.HF_VISUAL_FACTORY_SPACE_REPO?.trim();
   const legacyKind = (env.VISUAL_FACTORY_EXECUTOR_KIND ?? "GRADIO").trim().toUpperCase();
