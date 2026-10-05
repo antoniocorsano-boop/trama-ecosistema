@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "trama.qe01-requalification/v2",
+  "executionId": "QE-01",
+  "status": "REQUALIFICATION_PREPARED_NOT_AUTHORIZED",
+  "executable": false,
+  "capability": {
+    "id": "lesson.preparation.observe",
+    "version": "1.0.0",
+    "mode": "PROPOSE_ONLY"
+  },
+  "decisionOwner": "DOCENTE_OS",
+  "baseline": {
+    "repository": "antoniocorsano-boop/trama-ecosistema",
+    "mainSha": "36e7f105070ab69c09930ad27c64f05962ec170b",
+    "audit": "TRAMA Audit v1.2 / 2026-10-05"
+  },
+  "priorCandidate": {
+    "pullRequest": 212,
+    "exactHead": "2889189ceab3c83a759b0b1f86a9a3797188ff9a",
+    "merged": false,
+    "authorizationReusable": false,
+    "lastRecordedState": "EXECUTION_FAILED_REQUALIFICATION_REQUIRED"
+  },
+  "priorFailure": {
+    "executionTargetHead": "d672cf445cff3b0431844f2b62885a987d2c5c8f",
+    "outcome": "FAIL",
+    "exitCode": 1,
+    "providerRouteObserved": "deepseek-official",
+    "expectedProviderId": "nvidia",
+    "expectedModelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "failureClass": "STALE_BINDING",
+    "providerErrorClass": "MISSING_CREDENTIAL",
+    "modelInvoked": false,
+    "validGenerationRequestSent": false,
+    "retryCount": 0,
+    "mutationObserved": false,
+    "personalStudentDataObserved": false,
+    "secretMaterialObserved": false
+  },
+  "candidate": {
+    "providerType": "NVIDIA_NIM",
+    "providerId": "nvidia",
+    "modelId": "nvidia/nemotron-3-ultra-550b-a55b",
+    "endpointBase": "https://integrate.api.nvidia.com/v1",
+    "adapterId": "@deepseek-ai/dsh-llm-pi-ai",
+    "adapterVersion": "REOBSERVE_REQUIRED",
+    "runtimeVersion": "REOBSERVE_REQUIRED",
+    "providerRoute": "REOBSERVE_REQUIRED",
+    "secretRef": "NVIDIA_API_KEY",
+    "publicModelAvailability": "OBSERVED_2026-10-05",
+    "publicAdapterPackageAvailability": "OBSERVED_2026-10-05"
+  },
+  "executionConstraints": {
+    "mode": "PROPOSE_ONLY",
+    "oneShot": true,
+    "maxRetries": 0,
+    "mutation": false,
+    "personalStudentData": false,
+    "studentProfiles": false,
+    "studentTracking": false,
+    "secretPersistence": false,
+    "evidenceMayContainSecrets": false,
+    "networkExecutionAuthorized": false
+  },
+  "authorityBoundaries": {
+    "arenaWrite": false,
+    "atlasPublish": false,
+    "docenteOsAutoAdopt": false,
+    "diaryWrite": false,
+    "controlCenterReadOnly": true,
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "gates": {
+    "PRIOR_FAILURE_PRESERVED": "PASS",
+    "PUBLIC_PROVIDER_MODEL_OBSERVED": "PASS",
+    "PUBLIC_ADAPTER_PACKAGE_OBSERVED": "PASS",
+    "LOCAL_RUNTIME_BINDING_REOBSERVED": "BLOCKED",
+    "LOCAL_ADAPTER_VERSION_REOBSERVED": "BLOCKED",
+    "LOCAL_PROVIDER_ROUTE_REOBSERVED": "BLOCKED",
+    "LOCAL_CREDENTIAL_REFERENCE_REOBSERVED": "BLOCKED",
+    "EXACT_EXECUTION_TARGET_FROZEN": "BLOCKED",
+    "HUMAN_EXACT_HEAD_REVIEW": "BLOCKED",
+    "HUMAN_AUTHORIZATION_FOR_NEW_EXECUTION": "BLOCKED"
+  },
+  "evidenceRefs": {
+    "PRIOR_FAILURE_PRESERVED": [
+      "TRAMA PR #212 @ 2889189ceab3c83a759b0b1f86a9a3797188ff9a",
+      "governance/runtime/evidence/qe01-qualified-execution-failure-2026-10-01.json @ PR #212"
+    ],
+    "PUBLIC_PROVIDER_MODEL_OBSERVED": [
+      "https://build.nvidia.com/nvidia/nemotron-3-ultra-550b-a55b",
+      "https://build.nvidia.com/nvidia/nemotron-3-ultra-550b-a55b/modelcard"
+    ],
+    "PUBLIC_ADAPTER_PACKAGE_OBSERVED": [
+      "https://www.npmjs.com/package/@deepseek-ai/dsh-llm-pi-ai",
+      "https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/llm/llm-pi-ai"
+    ]
+  },
+  "blockingGates": [
+    "LOCAL_RUNTIME_BINDING_REOBSERVED",
+    "LOCAL_ADAPTER_VERSION_REOBSERVED",
+    "LOCAL_PROVIDER_ROUTE_REOBSERVED",
+    "LOCAL_CREDENTIAL_REFERENCE_REOBSERVED",
+    "EXACT_EXECUTION_TARGET_FROZEN",
+    "HUMAN_EXACT_HEAD_REVIEW",
+    "HUMAN_AUTHORIZATION_FOR_NEW_EXECUTION"
+  ],
+  "nextAction": "LOCAL_REOBSERVATION_REQUIRED",
+  "secretHandling": "REFERENCE_ONLY_NEVER_VALUE"
+}
