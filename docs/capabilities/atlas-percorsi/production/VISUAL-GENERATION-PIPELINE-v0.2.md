@@ -191,7 +191,7 @@ The manual workflow `.github/workflows/visual-factory-orchestrator-v0.1.yml` exp
 - `references` — remaining canonical-reference plan;
 - `shots` — requires an explicit `SHOT_GENERATION_READY` plan whose reference inputs are already human-locked.
 
-The repository-authored workflow is deliberately credential-neutral and fail-closed. It does not inject provider secrets. Trusted credential binding for a real live run is a separate operational step and must not be inferred from deterministic CI qualification.
+`dry-run` remains credential-free. The live `references` / `shots` step binds `HF_TOKEN` from GitHub Secrets and `HF_VISUAL_FACTORY_SPACE_REPO` from GitHub Variables only inside that live execution step. Missing bindings fail closed before provider execution. Deterministic CI qualification remains credential-free and must not be interpreted as proof that a live provider run succeeded. Secret values are never browser-visible, emitted to receipts, or intentionally logged.
 
 All workflow outputs are evidence artifacts only. No generated asset is automatically committed, published, accepted or promoted.
 
