@@ -1,6 +1,6 @@
 # Studio Atlas / Visual Factory — Visual Generation Pipeline v0.2
 
-**Status:** PROPOSED_IMPLEMENTABLE_PIPELINE / HUMAN_REVIEW_REQUIRED  
+**Status:** IMPLEMENTATION_ADVANCED / AUTOMATED_QUALIFICATION_AVAILABLE / REAL_VISUAL_RUN_PENDING  
 **Runtime:** NOT_AUTHORIZED  
 **Purpose:** make Studio Atlas produce character-driven visual assets and scene frames, rather than simulate them with UI.
 
@@ -22,7 +22,8 @@ The product runtime then composes approved visual assets with bounded interactio
 - The generation contract is provider-neutral and does not expose cloud/model credentials to the browser.
 - ComfyUI remains a candidate canonical workflow engine for governed GPU execution and deeper controlled editing.
 - Hugging Face Gradio/ZeroGPU is the first opportunistic pilot executor adapter.
-- Execution provider remains replaceable.
+- Cloudflare Workers AI is the bounded same-model zero-cost fallback only when Workers Free admission is explicitly established.
+- Execution provider remains replaceable inside the allowlisted model family and FREE_ONLY policy.
 
 ### Model family — v0.2
 
@@ -160,9 +161,44 @@ Two execution classes are recognised:
 
 ZeroGPU is therefore an executor technology, **not evidence of free entitlement**. The adapter may be deployed only to an explicitly configured Space. Hardware/entitlement selection is outside the automatic deploy script.
 
+## VF-ORCH-01 — bounded zero-cost orchestration
+
+The v0.2 executor now has a single bounded orchestration policy shared by the Studio Atlas API and the qualification runner.
+
+Canonical properties:
+
+- accepted receipts always carry `costClass=FREE_ONLY`;
+- `paidComputeAuthorized=false` and `allowQualityDowngrade=false` are invariant;
+- generation never grants runtime or publication authority;
+- provider order is finite and each provider is attempted at most once per orchestration cycle;
+- Hugging Face ZeroGPU is protected by a reserve for unfinished canonical references;
+- scene work may prefer Cloudflare while the protected HF reserve is still needed;
+- Cloudflare Workers AI is eligible only with explicit Workers Free admission;
+- the allowlisted family remains `flux2-klein-4b/v0.2` (`black-forest-labs/FLUX.2-klein-4B` / `@cf/black-forest-labs/flux-2-klein-4b`);
+- Cloudflare scene work fails closed above four required reference images;
+- malformed provider success cannot become an accepted visual candidate;
+- if no free provider is usable, the result is `WAITING_FOR_COMPUTE` with bounded attempt evidence.
+
+### Qualification and manual execution surface
+
+`products/studio-atlas/scripts/run-visual-factory-orchestrator.ts` exposes the same policy through:
+
+`npm run visual-factory:orchestrate`
+
+The manual workflow `.github/workflows/visual-factory-orchestrator-v0.1.yml` exposes three modes:
+
+- `dry-run` — provider eligibility/evidence only;
+- `references` — remaining canonical-reference plan;
+- `shots` — requires an explicit `SHOT_GENERATION_READY` plan whose reference inputs are already human-locked.
+
+The repository-authored workflow is deliberately credential-neutral and fail-closed. It does not inject provider secrets. Trusted credential binding for a real live run is a separate operational step and must not be inferred from deterministic CI qualification.
+
+All workflow outputs are evidence artifacts only. No generated asset is automatically committed, published, accepted or promoted.
+
 ## Model / licensing posture
 
 - `black-forest-labs/FLUX.2-klein-4B`: v0.2 primary generation candidate; Apache-2.0 model release.
+- `@cf/black-forest-labs/flux-2-klein-4b`: same-family Cloudflare execution target, admitted only under explicit Workers Free qualification.
 - ComfyUI: candidate canonical graph/workflow engine for governed GPU execution.
 - Diffusers: pilot ZeroGPU execution implementation.
 - FaceID / InsightFace-dependent identity routes: EXPERIMENTAL_ONLY until separate licence qualification.
@@ -195,8 +231,10 @@ The pipeline is demonstrated only when:
 3. Sala Zero and control booth each have one locked environment master;
 4. F1–F6 compile into exact generation jobs;
 5. production shots cannot compile when required references are unlocked/missing;
-6. one qualified executor returns assets with provenance;
+6. one qualified executor returns assets with provenance in a real governed zero-cost run;
 7. the same character/environment refs are reused across dependent shots;
 8. Atlas can compose returned assets without replacing the story with dashboard UI;
 9. Human Product Review judges the generated scene sequence;
 10. no runtime/publication authority is implied.
+
+Deterministic qualification of the orchestrator is necessary but does not satisfy items 2, 3, 6, 7, 8 or 9 by itself. Until a live governed generation is recorded, the canonical execution state remains `REAL_VISUAL_RUN_PENDING` / `LIVE_ZERO_COST_EXECUTION_NOT_YET_PROVEN`.
