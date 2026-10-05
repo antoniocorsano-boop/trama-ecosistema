@@ -1,0 +1,50 @@
+name: gh-aw T0 compile check
+
+on:
+  push:
+    branches:
+      - "gh-aw/t0-controlled-trial"
+    paths:
+      - ".github/workflows/trama-t0-issue-triage.md"
+      - ".github/workflows/trama-t0-issue-triage.lock.yml"
+      - ".github/workflows/gh-aw-t0-compile-check.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/trama-t0-issue-triage.md"
+      - ".github/workflows/trama-t0-issue-triage.lock.yml"
+      - ".github/workflows/gh-aw-t0-compile-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  compile-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install gh-aw
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sL https://raw.githubusercontent.com/github/gh-aw/main/install-gh-aw.sh | bash
+          gh aw version
+      - name: Compile T0 strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh aw compile trama-t0-issue-triage --strict
+          test -f .github/workflows/trama-t0-issue-triage.lock.yml
+      - name: Require controlled trial entrypoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q '^  workflow_call:' .github/workflows/trama-t0-issue-triage.lock.yml
+          grep -q 'item_number:' .github/workflows/trama-t0-issue-triage.lock.yml
+      - name: Publish compiled lock evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: trama-t0-issue-triage-lock
+          path: .github/workflows/trama-t0-issue-triage.lock.yml
+          if-no-files-found: error
+          retention-days: 7
