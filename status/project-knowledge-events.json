@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-10-05T03:00:44Z",
+  "updatedAt": "2026-10-05T04:40:08Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
@@ -440,7 +440,7 @@
       "subject": "gh-aw-t0",
       "statement": "P6 gh-aw T0 is CLOSED / INTEGRATED: controlled staged execution completed successfully, safe outputs produced zero persistent side effects, the production-only trigger and strict compiled lock are integrated on TRAMA main.",
       "status": "CURRENT",
-      "rationale": "PR #236 replaced superseded PR #214, qualified the real staged agent path on issue #117, isolated and corrected the Copilot PAT permission blocker, removed all trial-only surfaces, and passed final plus post-merge governance/compile checks without granting authority or runtime promotion.",
+      "rationale": "PR #236 replaced superseded PR #214, qualified the real staged agent path on issue #117, isolated and corrected the Copilot PAT permission blocker, removed all trial-only surfaces, and passed final plus post-merge governance/compile checks without granting authority or runtime promotion. The closure is part of the project-knowledge context pack so distributed agents and the Control Center can resolve the current P6 state from the governed projection.",
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",

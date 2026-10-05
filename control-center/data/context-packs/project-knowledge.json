@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-05T03:18:43Z",
+  "asOf": "2026-10-05T04:40:09Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -282,6 +282,50 @@
       "validFrom": "2026-10-04T20:08:00Z",
       "supersedes": [
         "TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-GHAW-T0-CLOSED-INTEGRATED-2026-10-05",
+      "type": "CLOSURE",
+      "subject": "gh-aw-t0",
+      "statement": "P6 gh-aw T0 is CLOSED / INTEGRATED: controlled staged execution completed successfully, safe outputs produced zero persistent side effects, the production-only trigger and strict compiled lock are integrated on TRAMA main.",
+      "status": "CURRENT",
+      "rationale": "PR #236 replaced superseded PR #214, qualified the real staged agent path on issue #117, isolated and corrected the Copilot PAT permission blocker, removed all trial-only surfaces, and passed final plus post-merge governance/compile checks without granting authority or runtime promotion. The closure is part of the project-knowledge context pack so distributed agents and the Control Center can resolve the current P6 state from the governed projection.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 236,
+          "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+          "ref": "gh-aw T0 — controlled staged issue triage qualification"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+          "ref": "main"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "9b66f24748b6dbcbb36e0cec1009c9a360381c2f",
+          "ref": "github-actions:workflow-run/37254749917#attempt-2"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+          "ref": "github-actions:workflow-run/37257375965"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+          "ref": "github-actions:workflow-run/37257624779"
+        }
+      ],
+      "validFrom": "2026-10-05T03:00:44Z",
+      "supersedes": [
+        "TRAMA-EVT-GHAW-T0-STAGED-NOT-EXECUTABLE-2026-10-04"
       ],
       "invalidatedBy": [],
       "freshness": {
@@ -604,6 +648,50 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-GHAW-T0-CLOSED-INTEGRATED-2026-10-05",
+      "type": "CLOSURE",
+      "subject": "gh-aw-t0",
+      "statement": "P6 gh-aw T0 is CLOSED / INTEGRATED: controlled staged execution completed successfully, safe outputs produced zero persistent side effects, the production-only trigger and strict compiled lock are integrated on TRAMA main.",
+      "status": "CURRENT",
+      "rationale": "PR #236 replaced superseded PR #214, qualified the real staged agent path on issue #117, isolated and corrected the Copilot PAT permission blocker, removed all trial-only surfaces, and passed final plus post-merge governance/compile checks without granting authority or runtime promotion. The closure is part of the project-knowledge context pack so distributed agents and the Control Center can resolve the current P6 state from the governed projection.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 236,
+          "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+          "ref": "gh-aw T0 — controlled staged issue triage qualification"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+          "ref": "main"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "9b66f24748b6dbcbb36e0cec1009c9a360381c2f",
+          "ref": "github-actions:workflow-run/37254749917#attempt-2"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+          "ref": "github-actions:workflow-run/37257375965"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+          "ref": "github-actions:workflow-run/37257624779"
+        }
+      ],
+      "validFrom": "2026-10-05T03:00:44Z",
+      "supersedes": [
+        "TRAMA-EVT-GHAW-T0-STAGED-NOT-EXECUTABLE-2026-10-04"
+      ],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ],
   "exactHeads": [
@@ -810,6 +898,32 @@
       "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md"
     },
     {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 236,
+      "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+      "ref": "gh-aw T0 — controlled staged issue triage qualification"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+      "ref": "main"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "9b66f24748b6dbcbb36e0cec1009c9a360381c2f",
+      "ref": "github-actions:workflow-run/37254749917#attempt-2"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "3327162f9045619fed6e5c3ba2712334390d0d24",
+      "ref": "github-actions:workflow-run/37257375965"
+    },
+    {
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "exactHead": "4ee44c1b906f3f816600c911614f6a9b43c3785c",
+      "ref": "github-actions:workflow-run/37257624779"
+    },
+    {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
       "sha256": "83851f23d2b63430398638811793043c051fbc05b0022806d3955dfded0b68c0"
     },
@@ -831,7 +945,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "162736c750371cea2223deea1564a69c27bd8f9d8035355aa2d76cf134e15732"
+      "sha256": "a6a4b8278fde75327960d5155504db59cdc9f0c2e0ce73d8af93c5c908e02230"
     }
   ]
 }

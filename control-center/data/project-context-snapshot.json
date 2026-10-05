@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-05T03:18:43Z",
+  "generatedAt": "2026-10-05T04:40:09Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -1439,7 +1439,7 @@
       "subject": "gh-aw-t0",
       "statement": "P6 gh-aw T0 is CLOSED / INTEGRATED: controlled staged execution completed successfully, safe outputs produced zero persistent side effects, the production-only trigger and strict compiled lock are integrated on TRAMA main.",
       "status": "CURRENT",
-      "rationale": "PR #236 replaced superseded PR #214, qualified the real staged agent path on issue #117, isolated and corrected the Copilot PAT permission blocker, removed all trial-only surfaces, and passed final plus post-merge governance/compile checks without granting authority or runtime promotion.",
+      "rationale": "PR #236 replaced superseded PR #214, qualified the real staged agent path on issue #117, isolated and corrected the Copilot PAT permission blocker, removed all trial-only surfaces, and passed final plus post-merge governance/compile checks without granting authority or runtime promotion. The closure is part of the project-knowledge context pack so distributed agents and the Control Center can resolve the current P6 state from the governed projection.",
       "sourceRefs": [
         {
           "repository": "antoniocorsano-boop/trama-ecosistema",
@@ -1513,7 +1513,7 @@
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "162736c750371cea2223deea1564a69c27bd8f9d8035355aa2d76cf134e15732"
+      "sha256": "a6a4b8278fde75327960d5155504db59cdc9f0c2e0ce73d8af93c5c908e02230"
     }
   ]
 }

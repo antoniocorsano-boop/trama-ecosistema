@@ -270,11 +270,11 @@ F04 Capacità dichiarate senza prova completa: installazione PWA device-native, 
 | 7 | P7 completamento prodotto | Atlas/Knowledge/loop docente | P1 chiuso; pacchetti autonomi con prove |
 | 8 | P8 funzioni differite/adozione | Evoluzione ulteriore | Nuove decisioni dove richieste |
 
-### Stato dei pacchetti al 4 ottobre 2026
+### Stato dei pacchetti al 5 ottobre 2026
 
-| Pacchetto | Stato v1.1 | Nota |
+| Pacchetto | Stato v1.2 | Nota |
 | --- | --- | --- |
-| P0 | **INTEGRATO / DA RENDERE PIÙ RINTRACCIABILE** | Audit presente su `main`; questa v1.1 aggiunge il collegamento operativo da STATUS |
+| P0 | **INTEGRATO / DA RENDERE PIÙ RINTRACCIABILE** | Audit presente su `main`; questa v1.2 mantiene il collegamento operativo da STATUS |
 | P1 | **CLOSED_APPLICATION_SCOPE / DEVICE_NATIVE_RESIDUAL** | Orario verificato su Beta; PWA/Share applicativamente qualificate; installazione nativa Android residua e non bloccante |
 | P2 | **VERIFIED / INTEGRATED** | Run schedulati Arena Curriculum Sync PASS con validation/no-op governato |
 | P3 | **CLOSED / BASELINE_RECONCILED** | Stato, distribuzioni, snapshot, Control Center e Project Knowledge riconciliati |
