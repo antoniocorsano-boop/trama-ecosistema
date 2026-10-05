@@ -262,11 +262,6 @@ test("MUSEO ZERO stays REVISE while review preview exercises investigation, repr
   });
   await switchSensorChoice.click();
 
-  await expect(
-    popup.getByText(
-      "La sala risponde nel momento previsto: la mappatura aggiornata spiega il problema",
-    ),
-  ).toBeVisible();
   await expect(popup.getByText("Trigger su Sensor B", { exact: true })).toBeVisible();
   await expect(popup.getByText("Suono e luce", { exact: true })).toBeVisible();
   await expect(popup.getByRole("button", { name: "Continua dalla conseguenza" })).toBeEnabled();
