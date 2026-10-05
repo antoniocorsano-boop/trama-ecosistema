@@ -22,15 +22,23 @@ jobs:
           fetch-depth: 1
       - name: Apply focused review remediation
         run: python scripts/fix_audit_v12_review.py
+      - name: Materialize governed Project Knowledge projections
+        run: |
+          python scripts/build_project_context_snapshot.py
+          python scripts/build_trama_context_pack.py project-knowledge --output control-center/data/context-packs/project-knowledge.json
       - name: Verify focused regression
         run: python -m unittest tests.test_p3_status_alignment -v
-      - name: Commit reconciled sources
+      - name: Commit reconciled sources and projections
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/audits/TRAMA-AUDIT-2026-10-03.md status/project-knowledge-events.json
+          git add \
+            docs/audits/TRAMA-AUDIT-2026-10-03.md \
+            status/project-knowledge-events.json \
+            control-center/data/project-context-snapshot.json \
+            control-center/data/context-packs/project-knowledge.json
           if git diff --cached --quiet; then
             echo "AUDIT_V1_2_REVIEW_ALREADY_REMEDIATED"
             exit 0
