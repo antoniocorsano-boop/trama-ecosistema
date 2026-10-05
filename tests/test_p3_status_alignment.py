@@ -23,9 +23,37 @@ class P3StatusAlignmentTests(unittest.TestCase):
         closure = events["TRAMA-EVT-P3-BASELINE-RECONCILED-2026-10-04"]
         self.assertEqual(closure["status"], "CURRENT")
         self.assertIn("TRAMA-EVT-P3-EVIDENCE-DISTRIBUTION-NEXT-2026-10-04", closure["supersedes"])
+        closure_refs = closure["sourceRefs"]
+        self.assertIn(
+            {
+                "repository": "antoniocorsano-boop/trama-ecosistema",
+                "exactHead": "937392cb4de74344040adfd1dd35355776bb15b6",
+                "ref": "STATUS.md",
+            },
+            closure_refs,
+        )
+
+        qe = events["TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04"]
+        self.assertEqual(qe["status"], "CURRENT")
+        self.assertIn(
+            {
+                "repository": "antoniocorsano-boop/trama-ecosistema",
+                "pullRequest": 212,
+                "exactHead": "2889189ceab3c83a759b0b1f86a9a3797188ff9a",
+                "ref": "runtime: prepare QE-01 first qualified execution",
+            },
+            qe["sourceRefs"],
+        )
+        self.assertIn(
+            {
+                "repository": "antoniocorsano-boop/trama-ecosistema",
+                "exactHead": "0000ca9be8a8dfa24535a4b718eecdbcde82ab8c",
+                "ref": "docs/audits/TRAMA-AUDIT-2026-10-03.md",
+            },
+            qe["sourceRefs"],
+        )
 
         for event_id in (
-            "TRAMA-EVT-QE01-REQUALIFICATION-REQUIRED-2026-10-04",
             "TRAMA-EVT-ARGO-G5C-REAL-IMPORT-PENDING-2026-10-04",
             "TRAMA-EVT-GHAW-T0-STAGED-NOT-EXECUTABLE-2026-10-04",
         ):
