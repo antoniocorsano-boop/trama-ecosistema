@@ -140,7 +140,7 @@ export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
     subjectRef: "lia",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Lia, adult museum exhibition-layout and visitor-flow crew member actively checking the accessible circulation route at the new entrance, placing or measuring visitor-flow markers; calm focused physicality; practical contemporary setup clothing; stable hairstyle and one warm accent detail; full-body working pose with environmental context, not a posed portrait.",
+    prompt: "Lia only, single subject with no other people or partial figures; adult museum exhibition-layout and visitor-flow crew member actively placing clean blank floor-route markers at the new accessible entrance; hands clearly visible doing the task; calm focused physicality; practical contemporary setup clothing; stable hairstyle and one warm accent detail; full-body working pose in a sparse unlabeled museum corridor, not a posed portrait.",
   },
   {
     subjectRef: "omar",
@@ -150,17 +150,17 @@ export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
     subjectRef: "teo",
     purpose: "CHARACTER_REFERENCE",
-    prompt: "Teo, adult museum AV rehearsal technician, not security staff and no security uniform or badge; contemporary practical clothing distinct from Omar; restrained observant body language inside a compact control booth, one hand near tactile cue controls, with a clear sightline through an interior window toward Sala Zero; working continuity reference, not a guard portrait.",
+    prompt: "Teo only, single subject; adult museum AV rehearsal technician, not security staff and no security uniform or badge; contemporary practical clothing distinct from Omar; restrained observant body language inside a compact control booth; physical console only with tactile buttons, knobs and faders, monitor off and no screen interface; clear sightline through an unlabeled interior window toward Sala Zero; working continuity reference, not a guard portrait.",
   },
   {
     subjectRef: "sala-zero",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Sala Zero, contemporary interactive museum room after closing, viewed from the new accessible entrance threshold into a believable deep space; subtle floor circulation route and integrated sensor near the threshold; large projection wall showing abstract light in warm amber tones and simple non-text motion only, no text, no interface, no charts; exit light and restrained installation details; narrative physical environment first.",
+    prompt: "Sala Zero, contemporary interactive museum room after closing, viewed from the new accessible entrance threshold into a believable deep space; subtle floor circulation route and integrated sensor near the threshold; large projection wall showing abstract light in warm amber tones and simple non-text motion only; no text, no interface, no charts, no signage, unlabeled walls and unlabeled doors; exit light and restrained installation details; narrative physical environment first.",
   },
   {
     subjectRef: "cabina-regia",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Cabina regia, a small enclosed adjacent booth connected to Sala Zero; an interior observation window looks directly into Sala Zero and frames part of the same projection wall or entrance zone; compact tactile controls with physical buttons, knobs and faders, plus only small non-text status indicators; believable museum AV back-of-house materials and working scale, no detached dashboard or screen wall; cinematic environment master.",
+    prompt: "Cabina regia, interior viewpoint with the camera inside a small enclosed adjacent booth connected to Sala Zero; a wide observation window looks directly into Sala Zero and the warm abstract projection is visibly framed through that window; tactile control console in the foreground with physical buttons, knobs and faders only; no screens, no monitors, no signage, no wall posters; believable museum AV back-of-house materials and working scale; cinematic environment master.",
   },
 ];
 
@@ -214,6 +214,8 @@ const COMMON_NEGATIVE = [
   "decorative AI clutter",
   "readable text, pseudo-text, labels, captions, signage, or watermarks",
   "charts, graphs, dashboards, detached UI panels, or screen-wall interfaces",
+  "partial, cropped, headless, duplicate, or malformed human figures",
+  "computer monitor interfaces, source-code screens, or software windows",
 ];
 
 function basePlan(
