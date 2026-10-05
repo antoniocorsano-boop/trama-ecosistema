@@ -73,18 +73,24 @@ test("reference art direction keeps characters in role and environments free of 
 
   assert.match(bySubject.get("lia")?.prompt ?? "", /visitor-flow markers|circulation route/i);
   assert.match(bySubject.get("lia")?.prompt ?? "", /not a posed portrait/i);
+  assert.match(bySubject.get("lia")?.prompt ?? "", /single subject|no other people/i);
 
   assert.match(bySubject.get("omar")?.prompt ?? "", /sensor mount|installation hardware/i);
   assert.match(bySubject.get("omar")?.prompt ?? "", /hands-on installer/i);
 
   assert.match(bySubject.get("teo")?.prompt ?? "", /not security staff/i);
   assert.match(bySubject.get("teo")?.prompt ?? "", /sightline.*Sala Zero|window.*Sala Zero/i);
+  assert.match(bySubject.get("teo")?.prompt ?? "", /monitor off|no screen interface|physical console only/i);
 
   assert.match(bySubject.get("sala-zero")?.prompt ?? "", /projection.*abstract light|abstract light.*projection/i);
   assert.match(bySubject.get("sala-zero")?.prompt ?? "", /no text|no interface/i);
+  assert.match(bySubject.get("sala-zero")?.prompt ?? "", /no signage|unlabeled walls|unlabeled doors/i);
 
   assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /adjacent booth|window.*Sala Zero/i);
   assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /physical buttons|tactile controls/i);
+  assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /camera inside|interior viewpoint/i);
+  assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /window.*projection|projection.*window/i);
+  assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /no screens|no monitors|no signage/i);
 
   for (const job of plan.jobs) {
     assert.ok(job.negativeConstraints.includes("readable text, pseudo-text, labels, captions, signage, or watermarks"));
