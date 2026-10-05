@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-10-05T12:39:06Z",
+  "asOf": "2026-10-05T12:55:59Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -1056,7 +1056,7 @@
     },
     {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "bcc50a9fa3200f73d0cac01e2aed888efe5157ec57e60bdcd53b19d852402455"
+      "sha256": "7783a23607eded5272e2b27ce47fa1871da5434075a9be5dd819a0133d10721b"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -1076,7 +1076,7 @@
     },
     {
       "snapshotSource": "status/project-knowledge-events.json",
-      "sha256": "7593819105eba5f1971e20cd08cd2a528a55ec384380295f4e11e9d6e0f4c859"
+      "sha256": "6a86d0f5d77a6bcce67c5a7c6ca710939e95a8b13068a636abffff88e4ae5ff7"
     }
   ]
 }

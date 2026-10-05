@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-05T12:39:06Z",
+  "generatedAt": "2026-10-05T12:55:59Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -750,6 +750,13 @@
       "pullRequest": null,
       "exactHead": "48750cda9d7073df374d1263142d233135a0b045",
       "sourceEvent": "TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-QUALIFICATION-2026-10-05"
+    },
+    {
+      "subject": "studio-atlas-visual-factory",
+      "repository": "antoniocorsano-boop/trama-ecosistema",
+      "pullRequest": 233,
+      "exactHead": "48750cda9d7073df374d1263142d233135a0b045",
+      "sourceEvent": "TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-CLOSEOUT-2026-10-05"
     },
     {
       "subject": "repository-head",
@@ -1570,6 +1577,33 @@
       "freshness": {
         "policy": "UNTIL_CHANGE"
       }
+    },
+    {
+      "eventId": "TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-CLOSEOUT-2026-10-05",
+      "type": "BASELINE",
+      "subject": "studio-atlas-visual-factory",
+      "statement": "VF-ORCH-01 has completed its bounded deterministic implementation and qualification: runner, manual dry-run|references|shots surface, Studio Atlas tests, typecheck/build, generation contracts and safety checks pass. Live zero-cost provider execution remains not yet proven; REAL_VISUAL_RUN_PENDING, Human Visual Review/reference lock, F1-F6 production and second MUSEO ZERO Human Product Review remain required. No runtime, learner, publication or paid-compute authority is granted; DOS-A1 remains RUNTIME_DEFERRED.",
+      "status": "CURRENT",
+      "rationale": "Reconciles the Audit v1.3 PLAN_INCOMPLETE baseline with the subsequently verified VF-ORCH-01 deterministic closeout while preserving the distinction between deterministic qualification and real provider execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 233,
+          "exactHead": "48750cda9d7073df374d1263142d233135a0b045",
+          "ref": "docs/capabilities/atlas-percorsi/production/VF-ORCH-01-QUALIFICATION-RECEIPT-v0.1.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 243,
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T12:30:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
     }
   ],
   "knowledgeSources": [
@@ -1577,7 +1611,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "bcc50a9fa3200f73d0cac01e2aed888efe5157ec57e60bdcd53b19d852402455"
+      "sha256": "7783a23607eded5272e2b27ce47fa1871da5434075a9be5dd819a0133d10721b"
     },
     {
       "id": "source-registry",
@@ -1607,7 +1641,7 @@
       "id": "project-knowledge-events",
       "path": "status/project-knowledge-events.json",
       "role": "OPERATIONAL_MEMORY",
-      "sha256": "7593819105eba5f1971e20cd08cd2a528a55ec384380295f4e11e9d6e0f4c859"
+      "sha256": "6a86d0f5d77a6bcce67c5a7c6ca710939e95a8b13068a636abffff88e4ae5ff7"
     }
   ]
 }

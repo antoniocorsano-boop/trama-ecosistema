@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.project-knowledge-events/v1",
-  "updatedAt": "2026-10-05T12:38:00Z",
+  "updatedAt": "2026-10-05T12:55:00Z",
   "events": [
     {
       "eventId": "TRAMA-EVT-CI-WAIT-DUAL-TRACK",
@@ -529,6 +529,33 @@
         }
       ],
       "validFrom": "2026-10-05T12:38:00Z",
+      "supersedes": [],
+      "invalidatedBy": [],
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      }
+    },
+    {
+      "eventId": "TRAMA-EVT-VF-ORCH-01-DETERMINISTIC-CLOSEOUT-2026-10-05",
+      "type": "BASELINE",
+      "subject": "studio-atlas-visual-factory",
+      "statement": "VF-ORCH-01 has completed its bounded deterministic implementation and qualification: runner, manual dry-run|references|shots surface, Studio Atlas tests, typecheck/build, generation contracts and safety checks pass. Live zero-cost provider execution remains not yet proven; REAL_VISUAL_RUN_PENDING, Human Visual Review/reference lock, F1-F6 production and second MUSEO ZERO Human Product Review remain required. No runtime, learner, publication or paid-compute authority is granted; DOS-A1 remains RUNTIME_DEFERRED.",
+      "status": "CURRENT",
+      "rationale": "Reconciles the Audit v1.3 PLAN_INCOMPLETE baseline with the subsequently verified VF-ORCH-01 deterministic closeout while preserving the distinction between deterministic qualification and real provider execution.",
+      "sourceRefs": [
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 233,
+          "exactHead": "48750cda9d7073df374d1263142d233135a0b045",
+          "ref": "docs/capabilities/atlas-percorsi/production/VF-ORCH-01-QUALIFICATION-RECEIPT-v0.1.md"
+        },
+        {
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "pullRequest": 243,
+          "ref": "STATUS.md"
+        }
+      ],
+      "validFrom": "2026-10-05T12:30:00Z",
       "supersedes": [],
       "invalidatedBy": [],
       "freshness": {
