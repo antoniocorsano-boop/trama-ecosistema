@@ -15,7 +15,11 @@ on:
       - "tests/test_visual_generation_plan.py"
       - "tests/test_visual_factory_hf_contract.py"
       - "tests/test_visual_factory_hf_deploy_zero_gpu.py"
+      - "products/studio-atlas/lib/visual-factory*.ts"
+      - "products/studio-atlas/scripts/run-visual-factory-orchestrator.ts"
+      - "products/studio-atlas/package.json"
       - ".github/workflows/visual-factory-generation-v0.2.yml"
+      - ".github/workflows/visual-factory-orchestrator-v0.1.yml"
 
 permissions:
   contents: read
@@ -30,6 +34,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Require bounded orchestrator qualification surface
+        run: |
+          test -f .github/workflows/visual-factory-orchestrator-v0.1.yml
+          test -f products/studio-atlas/scripts/run-visual-factory-orchestrator.ts
+          grep -q '"visual-factory:orchestrate"' products/studio-atlas/package.json
+          grep -q 'workflow_dispatch:' .github/workflows/visual-factory-orchestrator-v0.1.yml
+          grep -q 'CLOUDFLARE_WORKERS_FREE_ADMITTED' .github/workflows/visual-factory-orchestrator-v0.1.yml
+          grep -q 'FREE_ONLY' products/studio-atlas/scripts/run-visual-factory-orchestrator.ts
+          ! grep -Eq '^[[:space:]]+(HF_TOKEN|CLOUDFLARE_API_TOKEN|CLOUDFLARE_ACCOUNT_ID):' .github/workflows/visual-factory-generation-v0.2.yml
 
       - name: Unit tests
         run: |
