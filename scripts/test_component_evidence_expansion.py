@@ -105,8 +105,8 @@ backlog=json.loads(
     (ROOT/"governance/maturity/trama-maturity-reconciliation-v1.json").read_text(encoding="utf-8")
 )
 assert backlog["components"]["currentRegistryCount"]==11
-assert backlog["components"]["missingProductCoverage"]==[]
-assert backlog["components"]["coverageState"]=="ALL_PRODUCTS_MACHINE_ADDRESSABLE"
+assert backlog["components"]["missingProductCoverage"]==["Studio Atlas"]
+assert backlog["components"]["coverageState"]=="PARTIAL_PRODUCT_COVERAGE"
 assert backlog["components"]["qualificationState"]=="PARTIAL"
 assert not any(target.startswith("CONTROL_CENTER.CONTEXT_HELP.FAMILY:") for target in backlog["components"]["nextTargets"])
 

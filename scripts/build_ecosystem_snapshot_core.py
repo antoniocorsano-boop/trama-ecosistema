@@ -98,6 +98,7 @@ def capability_projection(eco_status: dict, maturity_areas: list[dict]) -> list[
         "Arena": "arena",
         "Atlas": "atlas",
         "Docente OS": "docente-os",
+        "Studio Atlas": "studio-atlas",
     }
     known_areas = {area["id"] for area in maturity_areas}
     gate_refs = {

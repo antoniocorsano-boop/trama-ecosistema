@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.maturity-evidence-registry/v1",
-  "updatedAt": "2026-09-29",
+  "updatedAt": "2026-10-05",
   "policy": {
     "projectionReadOnly": true,
     "automaticPromotion": false,
@@ -481,6 +481,27 @@
         "exactHead": "91bba74acc45f2958fa856f3e8ae4f0b526a2edf",
         "eventRef": "EVT-ECO02-P1-FINAL-HUMAN-PASS"
       }
+    },
+    {
+      "id": "EV-MAT-STUDIO-ATLAS-DOC",
+      "type": "DOCUMENT_CANONICAL",
+      "area": "studio-atlas",
+      "subject": "Studio Atlas first-level product boundary in Audit v1.3 design",
+      "status": "PASS",
+      "source": {
+        "ref": "docs/superpowers/specs/2026-10-05-trama-audit-v1-3-studio-atlas-baseline-design.md",
+        "path": "docs/superpowers/specs/2026-10-05-trama-audit-v1-3-studio-atlas-baseline-design.md"
+      },
+      "observedAt": "2026-10-05T00:00:00Z",
+      "freshness": {
+        "policy": "UNTIL_CHANGE"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 1
+        }
+      ]
     }
   ]
 }

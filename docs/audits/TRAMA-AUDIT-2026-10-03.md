@@ -1,12 +1,12 @@
 # TRAMA-AUDIT-2026-10-03 — Audit di completamento e piano operativo
-Versione 1.2 — 5 ottobre 2026 — baseline storica del 03/10/2026 aggiornata per delta verificati, senza riscrivere le risultanze originarie.
+Versione 1.3 — 5 ottobre 2026 — baseline storica del 03/10/2026 aggiornata per il delta Studio Atlas / Visual Factory, senza riscrivere le risultanze originarie.
 
 ## 1. Mandato, validità e precedenza
 Questo documento consolida la ricognizione riportata nella conversazione e ne fa la baseline di confronto per il completamento dell'intero ecosistema. La richiesta dell'utente autorizza il salvataggio e la pianificazione; non attesta nuove prove funzionali.
 Le risultanze tecniche dell'audit precedente sono conservate come EVIDENZE RIPORTATE: in questo turno non sono stati rieseguiti i controlli sui quattro prodotti, sui dispositivi o sui provider. Sono stati letti direttamente README.md, STATUS.md e GOVERNANCE.md di TRAMA; confermano la separazione delle autorità e lo stato documentale al 30 settembre.
 Non si trasformano i risultati storici in certificazioni attuali. Prima di intervenire, confrontare ogni rilievo con SHA completo, ramo, PR, esito corrente e distribuzione reale.
 Precedenza: decisioni/contratti approvati → STATUS.md → piano operativo canonico → specifiche integrate → questo audit, come riferimento trasversale di completamento. La sua integrazione documentale non promuove capacità, non autorizza esecuzioni e non certifica conformità.
-Stato del riferimento: il documento è presente su `main` TRAMA e resta la baseline trasversale di completamento. La versione 1.2 incorpora i delta verificati fino alla chiusura P6/gh-aw T0; non promuove capacità prive di prova, non attiva T1/T2 e non autorizza nuovi runtime.
+Stato del riferimento: il documento è presente su `main` TRAMA e resta la baseline trasversale di completamento. La versione 1.3 incorpora i delta verificati fino alla chiusura P6/gh-aw T0 e aggiunge Studio Atlas / Visual Factory alla baseline governata; non promuove capacità prive di prova, non attiva T1/T2 e non autorizza nuovi runtime. La Versione 1.2 resta conservata come baseline precedente e cronologia verificabile.
 
 ## 2. Criterio di completamento
 Per ogni capacità mantenere separati: dichiarazione, implementazione, verifica automatica, prova di uso, distribuzione, autorità e integrazione dell'evidenza.
@@ -240,6 +240,42 @@ Restano aperti come residui prioritari indipendenti:
 - **P4 / Argo G5-C:** prova reale LibreOffice/didUP ancora necessaria;
 - **P5 / QE-01:** `REQUALIFICATION_REQUIRED`, nessuna esecuzione runtime inferita;
 - `DOS-A1` resta `RUNTIME_DEFERRED`; nessuna promozione Production è implicata.
+
+
+## 4-septies. Delta verificato — 5 ottobre 2026 — Studio Atlas / Visual Factory — Audit v1.3
+
+Questo delta è **additivo**: conserva integralmente A01–A41 e le chiusure P1/P2/P3/P6 già registrate. Non retro-promuove implementazioni aperte e non converte CI verde in approvazione di prodotto, runtime o pubblicazione.
+
+| ID | Area/capacità | Stato v1.3 | Evidenza e limite |
+| --- | --- | --- | --- |
+| A42 | Studio Atlas — product boundary | **IMPLEMENTED_CANDIDATE / PRODUCT_DOMAIN_ESTABLISHED / NOT_RUNTIME_AUTHORIZED** | Studio Atlas è riconosciuto come dominio applicativo professionale di primo livello sotto TRAMA; non possiede autorità curricolare Arena, verità classe/orario/TeachingSession di Docente OS, stato pubblico Atlas, autorità GPU/provider o identità studente. |
+| A43 | Studio Atlas — authoring workflow | **VERIFIED_BUILD / AUTHORING_SLICE_AVAILABLE / HUMAN_GATES_PRESERVED** | Flusso Idea → Storia → Human Story Review → Mondo → World Review → Esperienza → Scene → Storyboard → Produzione disponibile come slice; i gate umani restano vincolanti. |
+| A44 | Studio Atlas → Atlas learner preview | **CROSS_PRODUCT_QUALIFIED / NON_PUBLIC / NOT_STUDENT_AUTHORIZED** | Preview cross-product qualificata con boundary non pubblico, origine esatta/nonce, nessuna persistenza Atlas, identità o telemetria; nessuna autorizzazione studente/pubblicazione deriva dall'integrazione. |
+| A45 | MUSEO ZERO v0.2 candidate | **REMEDIATION_IMPLEMENTED / SECOND_HUMAN_PRODUCT_REVIEW_PENDING** | La Human Product Review precedente resta **REVISE** e autorevole per la baseline esaminata. Le remediation tecniche successive non trasformano retroattivamente l'esito in PASS. |
+| A46 | Visual Factory | **IMPLEMENTATION_ADVANCED / AUTOMATED_QUALIFICATION_AVAILABLE / REAL_VISUAL_RUN_PENDING** | Visual Bible, reference lock, Lia/Omar/Teo, Sala Zero/Cabina regia, F1–F6, FREE_ONLY e ricevute sono implementati; completamento solo dopo run reale refs → human lock → F1–F6 → continuity review → learner integration. |
+| A47 | VF-ORCH-01 | **CORE_IMPLEMENTED / PLAN_INCOMPLETE** | Policy di orchestrazione, HF ZeroGPU, Cloudflare/config/evidence risultano implementati; manca ancora la superficie di esecuzione finale prevista dal piano approvato, quindi il piano non è chiuso. |
+| A48 | Studio Atlas — durability | **DEVELOPMENT_PERSISTENCE_ONLY / PROFESSIONAL_RUNTIME_FOUNDATION_PENDING** | Persistenza locale di sviluppo non equivale ad autenticazione professionale, store remoto durevole, multi-device, collaborazione o production durability; questi appartengono a S6. |
+| A49 | Studio Atlas ↔ Docente OS lesson continuity | **CONTRACT_DIRECTION_ESTABLISHED / RUNTIME_BINDING_DEFERRED** | Le risorse Studio Atlas devono restare collegabili a lezioni/materiali Docente OS tramite riferimenti stabili; Docente OS mantiene decisione d'uso, classe, orario e TeachingSession. Il binding runtime è differito. |
+
+### Topologia canonica v1.3
+
+TRAMA governa contratti, confini e Human Review. Sotto TRAMA operano come domini distinti: **Arena** (autorità curricolare), **Docente OS** (contesto professionale, classe, orario, lezione e decisione docente), **Studio Atlas** (authoring/produzione professionale dei Percorsi Atlas) e **Atlas** (navigazione learner/pubblica, preview/runtime e pubblicazione governata). I servizi condivisi di evidence/knowledge, connector/runtime, sync/import e assurance restano subordinati e non diventano authority concorrenti.
+
+Studio Atlas è standalone nel dominio di ownership; Docente OS resta ingresso professionale privilegiato e autorità sull'uso nella lezione tramite riferimenti stabili. Studio Atlas non possiede identità studente e non abilita tracking o telemetria individuale.
+
+### Sequenza operativa canonica dopo la v1.3
+
+1. riconciliare questa baseline v1.3 e le sue proiezioni governate;
+2. consolidare le PR Studio Atlas / Visual Factory sovrapposte, preservando le evidenze e marcando le linee superate come `SUPERSEDED / DO NOT MERGE`;
+3. chiudere il residuo bounded di VF-ORCH-01;
+4. eseguire la prima generazione reale governata di Lia, Omar, Teo, Sala Zero e Cabina regia;
+5. eseguire Human Visual Review e reference lock;
+6. generare e revisionare F1–F6 e integrare gli asset nella completa esperienza MUSEO ZERO v0.2;
+7. eseguire **una** seconda Human Product Review con esito `PASS / REWORK / REJECT`;
+8. soltanto dopo PASS, procedere con Studio Atlas S5; quindi S6 per identità professionale, persistenza remota durevole, standalone deployment e collegamento privilegiato Docente OS ↔ Studio Atlas;
+9. P4/Argo e P5/QE-01 restano lane indipendenti da svolgere quando l'ambiente locale richiesto è disponibile.
+
+La riconciliazione v1.3 non autorizza MUSEO ZERO, Visual Factory production, student runtime, QE-01, Argo reale, DOS-A1 o promozioni Production. `DOS-A1=RUNTIME_DEFERRED` resta invariato.
 
 ## 5. Quattro problemi trasversali
 F01 Duplicazioni: #652/#653 Orario sono state chiuse come SUPERSEDED e non costituiscono più implementazioni concorrenti; le preview Render temporanee non sono servizi canonici. Voice e /legacy/ restano da confrontare prima di eventuale rimozione; /legacy/ è un fallback intenzionale.

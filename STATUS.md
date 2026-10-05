@@ -3,13 +3,15 @@
 Aggiornato al 5 ottobre 2026.
 
 
-Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.md`](docs/audits/TRAMA-AUDIT-2026-10-03.md), **v1.2 / delta verificato 05-10-2026**.
+Riferimento trasversale di completamento: [`docs/audits/TRAMA-AUDIT-2026-10-03.md`](docs/audits/TRAMA-AUDIT-2026-10-03.md), **v1.3 / delta Studio Atlas–Visual Factory verificato 05-10-2026**.
 
 Stato operativo del piano di chiusura:
 - **P1 Orario + PWA + Android:** cantiere applicativo chiuso e beta consolidata; installazione nativa Chrome/Android resta residuo di qualification non bloccante;
 - **P2 Arena→Atlas:** VERIFIED / INTEGRATED; run schedulati del sync PASS con validation e no-op governato;
 - **P3 evidenze/distribuzioni:** **CLOSED / BASELINE_RECONCILED**; stato canonico, Project Knowledge persistente, Control Center e distribuzioni restano riconciliati; Argo G5-C e QE-01 restano residui separati P4/P5.
 - **P6 gh-aw T0:** **CLOSED / INTEGRATED**; prova staged reale PASS, zero side effect persistenti sull'issue pilota, trigger finale production-only e lock strict sincronizzato; T1/T2 restano incrementi successivi separati, non attivati automaticamente.
+- **P4 Argo G5-C:** **OPEN / REAL_LIBREOFFICE_DIDUP_PROOF_PENDING**; lane indipendente, non chiusa dalla v1.3.
+- **P5 QE-01:** **REQUALIFICATION_PREPARED_NOT_AUTHORIZED**; nessuna nuova esecuzione runtime è autorizzata dalla v1.3.
 
 
 ## Mappa unica TRAMA — stato corrente
@@ -19,8 +21,9 @@ flowchart LR
   TRAMA["TRAMA · governo ecosistema"]
 
   TRAMA --> ARENA["Arena · autorità curricolare"]
-  TRAMA --> DOS["Docente OS · contesto e decisione docente"]
-  TRAMA --> ATLAS["Atlas · navigazione, risorse e pubblicazioni"]
+  TRAMA --> DOS["Docente OS · contesto, classe, lezione e decisione docente"]
+  TRAMA --> STUDIO["Studio Atlas · authoring e produzione professionale"]
+  TRAMA --> ATLAS["Atlas · navigazione learner/pubblica, preview/runtime e pubblicazione governata"]
   TRAMA --> ASSURANCE["Assurance · TypeSafe advisory-only"]
   TRAMA --> BRAND["Adozione · marca e istituto"]
 
@@ -30,6 +33,8 @@ flowchart LR
 
   DOS --> DOSBASE["Baseline + preparazione + TeachingSession · OPERATIVE"]
   DOS --> DOSA1["DOS-A1 · DEFERRED"]
+  DOS -. "ingresso professionale privilegiato + riferimenti stabili" .-> STUDIO
+  STUDIO -. "candidate handoff / preview governata" .-> ATLAS
 
   ATLAS --> R3F0["R3-F0 · CLOSED / PASS"]
   R3F0 --> S1["S1 IA + Visual Grammar · INTEGRATED"]
@@ -53,6 +58,7 @@ flowchart LR
 | Governo TRAMA | **STABILE** | Autorità, confini e contratti cross-product consolidati; TRAMA-PW-01 integrato; baseline documentale ecosistema integrata via PR #62 |
 | Arena | **OPERATIVA** | Fonte curricolare autorevole; EC-01/Arena-F4 integrato |
 | Docente OS | **OPERATIVO / BETA CONSOLIDATA** | `develop@09a3a3600b81992f3675be82d1d2f188f1643909`; Orario manuale verificato su Android/Beta; PWA e Share Target applicativamente qualificate; residuo installazione nativa browser/device non bloccante |
+| Studio Atlas | **IMPLEMENTED_CANDIDATE / PRODUCT_DOMAIN_ESTABLISHED / NOT_RUNTIME_AUTHORIZED** | Dominio standalone professionale di authoring/produzione; Docente OS mantiene classe/orario/lezione e decisione d'uso; Atlas mantiene navigazione/pubblicazione; nessuna identità o telemetria studente |
 | ECO-02/P1 | **CLOSED_VERIFIED / HUMAN REVIEW PASS** | Collaudo reale Tecnologia 2C chiuso; nessuna autorizzazione implicita a DOS-A1 |
 | Arena→Atlas sync | **VERIFIED / INTEGRATED** | Atlas `main@b7b95e81e896a027335b3398d222660aa81f928a`; run `37214517566` PASS: fetch/validate, change detection e no-op governato quando il curricolo è già corrente |
 | Atlas R3-F0 | **CLOSED / HUMAN REVIEW PASS** | S3-V2 F0-F5 integrata; F4 Mobile+LIM e F5 Exit PASS su exact head `bc11577eeeeeed9c43ad62ac43fb7561e1197246`, merge Atlas #32 `423444be9dd883f4c35c6c1c89e94f6b0e5405fa` |
@@ -63,6 +69,26 @@ flowchart LR
 | Marca/adozione | **PLANNED** | Nome, posizionamento, protezione e pilota istituto ancora da svolgere |
 | TRAMA Control Center v2 | **CC2-F0–F6 INTEGRATED** | Primo ciclo Control Center v2 integrato: snapshot/evidence, Home, Stakeholder Assurance, mobile-first, Project Knowledge, Penpot tooling/design system, Capability + Ecosystem Map, Evidence Explorer + Integrity, Timeline + Operational Path. ADR-015 resta PROPOSED. |
 | TRAMA Governed Forecast / CC3 | **CC3-F0 CLOSED / CC3-F1 CLOSED** | F0 e F1 hanno HUMAN EXACT-HEAD REVIEW PASS. F2–F5 restano pianificati; nessuna probability/score, ranking, auto-promotion, authority o runtime authorization. ADR-016 resta PROPOSED. |
+
+
+## Studio Atlas / Visual Factory — baseline v1.3
+
+Studio Atlas è ora un **dominio applicativo di primo livello** nella mappa canonica TRAMA, ma resta `NOT_RUNTIME_AUTHORIZED`. Il suo ownership riguarda authoring e produzione professionale dei Percorsi; non assorbe autorità da Arena, Docente OS o Atlas.
+
+Stato corrente governato:
+
+- **Studio Atlas product boundary:** `IMPLEMENTED_CANDIDATE / PRODUCT_DOMAIN_ESTABLISHED / NOT_RUNTIME_AUTHORIZED`;
+- **Authoring:** `VERIFIED_BUILD / AUTHORING_SLICE_AVAILABLE / HUMAN_GATES_PRESERVED`;
+- **Studio Atlas → Atlas preview:** `CROSS_PRODUCT_QUALIFIED / NON_PUBLIC`; nessuna autorizzazione student/public runtime;
+- **MUSEO ZERO v0.2:** `REMEDIATION_IMPLEMENTED / SECOND_HUMAN_PRODUCT_REVIEW_PENDING`; l'esito precedente resta `REVISE` fino alla nuova review consolidata;
+- **Visual Factory:** `IMPLEMENTATION_ADVANCED / AUTOMATED_QUALIFICATION_AVAILABLE / REAL_VISUAL_RUN_PENDING`;
+- **VF-ORCH-01:** `CORE_IMPLEMENTED / PLAN_INCOMPLETE`;
+- **Durability:** `DEVELOPMENT_PERSISTENCE_ONLY / PROFESSIONAL_RUNTIME_FOUNDATION_PENDING`;
+- **Docente OS ↔ Studio Atlas lesson continuity:** `CONTRACT_DIRECTION_ESTABLISHED / RUNTIME_BINDING_DEFERRED`.
+
+La prova di completamento prodotto richiede ancora la catena reale `references → Human Visual Review/reference lock → F1–F6 → learner integration → seconda Human Product Review`. CI verde e preview tecnica non sostituiscono questi gate.
+
+Sequenza canonica: baseline v1.3 → consolidamento PR sovrapposte → chiusura bounded VF-ORCH-01 → primo run visuale reale governato → Human Visual Review/reference lock → F1–F6 + MUSEO ZERO v0.2 → Human Product Review `PASS/REWORK/REJECT` → S5 → S6. P4/P5 restano lane indipendenti. `DOS-A1=RUNTIME_DEFERRED`.
 
 ## OR-07 → OR-10 — capability condivise, portabilità e integrazioni prodotto
 
@@ -167,13 +193,14 @@ L’integrazione non autorizza R3-P4, DOS-A1, pubblicazione automatica o altri r
 
 La sequenza operativa è ora definita nel [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md).
 
-1. **R3-P2 — Curriculum pubblico** come prossimo incremento Atlas, ora che ECO-02/P1 e R3-F0 sono chiusi e verificati.
-2. **R3-P5 — Smart Navigation / Percorsi** mantenendo separata la promozione runtime dalla presenza di prototipi governati.
-3. **Ridurre l'attrito del percorso docente** mantenendo Arena → Docente OS diretto e Atlas opzionale, non obbligatorio.
-4. **R4-P1 — Officina materiali** soltanto dopo evidenze e gate dedicati; R4-P2/S1 può proseguire NO_RUNTIME.
-5. **R3-P3 — Learning Hub**; successivamente R3-P4 solo con nuova autorizzazione umana/runtime e R3-P6.
-6. **R5 — adozione** con nome/marca, privacy dossier, assistenza, costi e pilota d'istituto.
-7. Mantenere **DOS-A1 deferred**, pubblicazione autonoma non autorizzata e Atlas privacy-first.
+1. **Audit v1.3 — baseline reconciliation**: integrare Studio Atlas e Visual Factory nelle fonti governate senza promozioni sintetiche.
+2. **Consolidamento Studio Atlas / Visual Factory**: una linea corrente per prodotto, evidenze preservate e PR superate marcate `SUPERSEDED / DO NOT MERGE`.
+3. **VF-ORCH-01 bounded closeout**: completare soltanto la superficie residua già prevista dal piano approvato.
+4. **Prima produzione visuale reale governata**: Lia, Omar, Teo, Sala Zero e Cabina regia → Human Visual Review → reference lock.
+5. **MUSEO ZERO v0.2**: produrre/revisionare F1–F6, integrare le interazioni e sottoporre l'esperienza completa a una sola Human Product Review `PASS / REWORK / REJECT`.
+6. **Studio Atlas S5 → S6** soltanto dopo PASS di prodotto: handoff/pubblicazione governata, quindi identità professionale, persistenza remota durevole, standalone deployment e collegamento privilegiato Docente OS ↔ Studio Atlas.
+7. **P4 Argo e P5 QE-01** restano lane indipendenti da riprendere quando è disponibile l'ambiente locale richiesto.
+8. Mantenere **DOS-A1 deferred**, nessuna identità/tracking studente e nessuna pubblicazione/runtime autonomi.
 
 
 | Area | Stato | Evidenza o prossimo controllo |

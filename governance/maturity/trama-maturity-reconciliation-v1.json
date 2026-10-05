@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.maturity-reconciliation/v1",
-  "updatedAt": "2026-09-30",
+  "updatedAt": "2026-10-05",
   "policy": {
     "evidenceBoundOnly": true,
     "noSyntheticPromotion": true,
@@ -55,11 +55,29 @@
         "REGRESSION_HISTORY",
         "ADOPTION_EVIDENCE"
       ]
+    },
+    {
+      "area": "studio-atlas",
+      "observedLevel": 1,
+      "target": "L2_AFTER_CANONICAL_CONTRACT",
+      "nextWork": [
+        "approve and bind the canonical Studio Atlas cross-product authority contract"
+      ],
+      "l5Gap": [
+        "CONTRACT_APPROVED",
+        "PR_EXACT_HEAD",
+        "AUTOMATED_TEST",
+        "HUMAN_REVIEW",
+        "REGRESSION_HISTORY",
+        "ADOPTION_EVIDENCE"
+      ]
     }
   ],
   "components": {
     "currentRegistryCount": 11,
-    "missingProductCoverage": [],
+    "missingProductCoverage": [
+      "Studio Atlas"
+    ],
     "nextTargets": [
       "DOCENTE_OS.APPSHELL.FAMILY:ISOLATED",
       "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS:ISOLATED",
@@ -67,18 +85,17 @@
       "ATLAS.RELATION_EXPLORER.FAMILY:ISOLATED",
       "ATLAS.CURRICULUM_TREE.DISCLOSURE:ISOLATED"
     ],
-    "coverageState": "ALL_PRODUCTS_MACHINE_ADDRESSABLE",
+    "coverageState": "PARTIAL_PRODUCT_COVERAGE",
     "qualificationState": "PARTIAL"
   },
   "functionalSequence": [
-    "R3-P2",
-    "R3-P5",
-    "CROSS_PRODUCT_CONTINUITY",
-    "R4-P1",
-    "R3-P3",
-    "R3-P4_REQUIRES_NEW_AUTHORIZATION",
-    "R3-P6",
-    "R5"
+    "AUDIT_V1_3_BASELINE_RECONCILIATION",
+    "STUDIO_ATLAS_PR_CONSOLIDATION",
+    "VF_ORCH_01_BOUNDED_CLOSEOUT",
+    "VISUAL_FACTORY_FIRST_GOVERNED_RUN",
+    "MUSEO_ZERO_V0_2_SECOND_HUMAN_REVIEW",
+    "STUDIO_ATLAS_S5",
+    "STUDIO_ATLAS_S6"
   ],
   "invariants": [
     "DOS-A1=RUNTIME_DEFERRED",
