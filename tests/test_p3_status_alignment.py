@@ -1,4 +1,4 @@
-# Permanent regression guard for P3 closure and version-bound provenance.
+# Permanent regression guard for P3 reconciliation and P6 closure provenance.
 import json
 import unittest
 from pathlib import Path
