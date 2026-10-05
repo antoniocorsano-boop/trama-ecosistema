@@ -147,3 +147,15 @@ test("model router never silently changes the canonical family", () => {
   assert.equal(route.workflowFamily, "flux2-klein-4b/v0.2");
   assert.equal(route.modelPolicy, "CANONICAL_FLUX2_KLEIN_4B");
 });
+
+test("VF-GEN-01 blocks malformed job contracts without throwing", () => {
+  const malformedJob = {
+    ...REFERENCE_JOB,
+    prompt: 42,
+    negativeConstraints: null,
+    referenceInputs: null,
+  } as unknown as VisualGenerationJob;
+  const result = preflightVisualGenerationPlan(referencePlan({ jobs: [malformedJob] }));
+  assert.equal(result.status, "BLOCKED");
+  assert.ok(result.issues.some((issue) => issue.code === "JOB_CONTRACT_INVALID"));
+});
