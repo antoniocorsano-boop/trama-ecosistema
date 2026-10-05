@@ -1,0 +1,38 @@
+name: Audit v1.2 P6 reconciliation
+
+on:
+  push:
+    branches:
+      - "docs/audit-v1-2-p6-closure"
+    paths:
+      - "scripts/reconcile_audit_v12_p6.py"
+      - ".github/workflows/audit-v12-p6-reconciliation.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/audit-v1-2-p6-closure
+          fetch-depth: 1
+      - name: Reconcile audit v1.2 and P6 closure
+        run: python scripts/reconcile_audit_v12_p6.py
+      - name: Verify focused regression
+        run: python -m unittest tests.test_p3_status_alignment -v
+      - name: Commit reconciled sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add STATUS.md docs/audits/TRAMA-AUDIT-2026-10-03.md status/project-knowledge-events.json
+          if git diff --cached --quiet; then
+            echo "AUDIT_V1_2_ALREADY_RECONCILED"
+            exit 0
+          fi
+          git commit -m "docs(audit): reconcile v1.2 after P6 closure"
+          git push origin HEAD:docs/audit-v1-2-p6-closure
