@@ -160,7 +160,7 @@ export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   {
     subjectRef: "cabina-regia",
     purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Cabina regia, a small enclosed museum AV booth physically adjacent to Sala Zero; interior observation window clearly frames part of the same projection wall or entrance zone; compact tactile controls with physical buttons, knobs and faders, plus only small non-text status indicators; believable back-of-house materials and working scale, no detached dashboard or screen wall; cinematic environment master.",
+    prompt: "Cabina regia, a small enclosed adjacent booth connected to Sala Zero; an interior observation window looks directly into Sala Zero and frames part of the same projection wall or entrance zone; compact tactile controls with physical buttons, knobs and faders, plus only small non-text status indicators; believable museum AV back-of-house materials and working scale, no detached dashboard or screen wall; cinematic environment master.",
   },
 ];
 
