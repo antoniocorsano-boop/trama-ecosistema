@@ -1,7 +1,7 @@
 # DOS-M4-01 — Docente OS L3 → L4 runtime-canary qualification
 
-**Stato:** PREPARED / ACTIONS-DEPENDENT CLOSEOUT  
-**Data:** 5 ottobre 2026  
+**Stato:** PREPARED / RUNTIME-BASELINE-BOUND — CANARY_PENDING  
+**Data:** 6 ottobre 2026  
 **Ambito:** Docente OS product maturity  
 **Authority effect:** NONE  
 **DOS-A1:** RUNTIME_DEFERRED
@@ -16,10 +16,11 @@ Nessun nuovo sviluppo funzionale è richiesto da questo pacchetto. La qualificaz
 
 - repository: `antoniocorsano-boop/docente-os-2026-27`;
 - active development ref: `develop`;
-- exact head candidato: `09a3a3600b81992f3675be82d1d2f188f1643909`;
-- Beta canonica registrata dall'audit corrente: deploy Render `dep-db180cavcj2c739v6lc0`, LIVE sullo stesso SHA.
+- exact head candidato: `5d2afea7ab03c13892e2b16cc774f25cc5a4b35b`;
+- Beta canonica Render: deploy `dep-db2k8hjncjis738lomq0`, LIVE sullo stesso SHA;
+- `/api/build-info`: binding exact-head verificato dal gate H1 post-merge, che ha superato `Wait for Render to serve this product commit` sul medesimo SHA.
 
-Prima della chiusura formale occorre riconfermare che la versione distribuita osservata durante la canary corrisponda ancora a questo exact head. In caso di drift, la prova deve essere ribasata sul nuovo exact head e non riutilizzata sinteticamente.
+La canary deve essere acquisita su questa baseline. In caso di drift successivo, la prova deve essere ribasata sul nuovo exact head e non riutilizzata sinteticamente.
 
 ## 3. Gap L4 corrente
 
@@ -52,13 +53,13 @@ Esito ammesso: `PASS` oppure `FAIL`, senza reinterpretazioni manuali.
 La ricevuta della canary deve contenere almeno:
 
 ```yaml
-id: EV-MAT-DOS-RUNTIME-CANARY-2026-10-05
+id: EV-MAT-DOS-RUNTIME-CANARY-2026-10-06
 type: RUNTIME_CANARY
 area: docente-os
 status: PASS
 source:
   repository: antoniocorsano-boop/docente-os-2026-27
-  ref: <runtime/deploy receipt>
+  ref: dep-db2k8hjncjis738lomq0
 observedAt: <timestamp UTC>
 freshness:
   policy: RUNTIME_BOUND
@@ -67,8 +68,8 @@ supports:
   - level: 4
 binding:
   areaRef: docente-os
-  releaseRef: <Docente OS release/deploy ref>
-  exactHead: <40-hex exact head osservato>
+  releaseRef: dep-db2k8hjncjis738lomq0
+  exactHead: 5d2afea7ab03c13892e2b16cc774f25cc5a4b35b
 ```
 
 La ricevuta deve essere supportata da prova osservabile della versione runtime, non da una dichiarazione di branch.
@@ -84,11 +85,11 @@ Dopo la canary PASS:
 5. registrare una Human Exact-Head Review conclusiva che attesti coerenza fra SHA, runtime osservato, risultato della canary e proiezione di maturità;
 6. integrare solo dopo PASS coerenti e assenza di drift.
 
-## 7. Incidente GitHub Actions
+## 7. Stato GitHub Actions
 
-Al momento della preparazione di DOS-M4-01 GitHub Actions presenta un incidente esterno sui runner hosted. Ritardi, code o mancata assegnazione dei runner non devono essere interpretati come regressioni Docente OS.
+Il precedente incidente esterno sui runner hosted non costituisce più il blocco di DOS-M4-01. I gate post-merge sono nuovamente operativi; il gate H1 ha già verificato il binding della Beta al nuovo exact head.
 
-Finché Actions resta degradato è ammesso preparare il pacchetto, verificare la baseline e raccogliere la canary runtime. La chiusura formale L4 resta sospesa fino al ritorno operativo di Actions e al completamento dei gate richiesti.
+La chiusura formale L4 resta comunque sospesa fino alla `RUNTIME_CANARY` professionale reale e al completamento coerente dei gate richiesti sul perimetro finale.
 
 ## 8. Criterio di uscita
 
