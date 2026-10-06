@@ -66,6 +66,15 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         self.assertEqual(job.max_variants, 1)
         self.assertEqual(job.preflight_state, "PREFLIGHT_PASS")
 
+    def test_provider_ready_prompt_matches_cloudflare_fallback_contract(self):
+        plan = self.contract.validate_plan(self.plan())
+        job = self.contract.compile_execution_jobs(plan)[0]
+        self.assertEqual(
+            self.contract.provider_ready_prompt(job),
+            "cinematic editorial museum scene\n\nAvoid: dashboard aesthetic.",
+        )
+        self.assertNotIn("Keep the authored world coherent", self.contract.provider_ready_prompt(job))
+
     def test_scene_job_requires_locked_reference_inputs(self):
         with self.assertRaisesRegex(ValueError, "SCENE_REFERENCE_REQUIRED"):
             self.contract.validate_plan(self.plan("SCENE_FRAME", "4:3", refs=[]))
