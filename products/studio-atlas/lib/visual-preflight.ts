@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 
-export const VISUAL_INTENT_SPEC_SCHEMA_VERSION = "atlas.visual-intent-spec/v0.1" as const;
+export const VISUAL_INTENT_SCHEMA_VERSION = "atlas.visual-intent-spec/v0.1" as const;
 export const VISUAL_PREFLIGHT_RECEIPT_SCHEMA_VERSION = "atlas.visual-preflight-receipt/v0.1" as const;
-export const VISUAL_PREFLIGHT_COMPILER_VERSION = "vpc-compiler/v0.1" as const;
-export const VISUAL_PREFLIGHT_CHECKER_VERSION = "vpc-deterministic/v0.1" as const;
+export const VISUAL_PREFLIGHT_CHECKER_VERSION = "vpc-01/v0.1" as const;
+export const VISUAL_PREFLIGHT_COMPILER_VERSION = "vpc-01-compiler/v0.1" as const;
 
 export const PREFLIGHT_AUTHORITY_FLAGS = {
   paidComputeAuthorized: false,
@@ -12,20 +12,32 @@ export const PREFLIGHT_AUTHORITY_FLAGS = {
   publicationAuthorityGranted: false,
 } as const;
 
-export type VisualIntentPurpose = "CHARACTER_REFERENCE" | "ENVIRONMENT_REFERENCE" | "SCENE_FRAME";
-export type VisualPreflightSeverity = "ERROR" | "WARNING";
-export type VisualPreflightDimension =
-  | "COMPLETENESS"
-  | "CONTRADICTION"
-  | "ART_DIRECTION"
-  | "PROMPT_RISK"
-  | "IDENTITY"
-  | "SPATIALITY"
-  | "CONTINUITY"
-  | "CAMERA";
+export type VisualIntentPurpose =
+  | "CHARACTER_REFERENCE"
+  | "ENVIRONMENT_REFERENCE"
+  | "SCENE_FRAME";
+
+export type VisualIntentComposition = {
+  dominantSubject: string;
+  foreground: string[];
+  midground: string[];
+  background: string[];
+  spatialRelation: string;
+  focalActions?: string[];
+  diegeticScene?: boolean;
+  dominantSurface?: string;
+};
+
+export type VisualIntentCamera = {
+  shotScale: string;
+  viewpoint: string;
+  lensLanguage: string;
+  continuityFamily?: string;
+  conflictingDirectives?: string[];
+};
 
 export type VisualIntentSpec = {
-  schemaVersion: typeof VISUAL_INTENT_SPEC_SCHEMA_VERSION;
+  schemaVersion: typeof VISUAL_INTENT_SCHEMA_VERSION;
   specId: string;
   pathwayId: string;
   packageDigest: string;
@@ -37,41 +49,27 @@ export type VisualIntentSpec = {
   requiredVisualFacts: string[];
   worldAnchors: string[];
   identityAnchors: string[];
-  composition: {
-    dominantSubject: string;
-    foreground: string[];
-    midground: string[];
-    background: string[];
-    spatialRelation: string;
-    diegeticScene: boolean;
-    dominantSurface?: string;
-    focalActions?: string[];
-  };
-  camera: {
-    framing: string;
-    angle: string;
-    movement?: string;
-    conflictingDirectives?: string[];
-  };
+  composition: VisualIntentComposition;
+  camera: VisualIntentCamera;
   lightingMood: string;
-  materialLanguage: string[];
+  materialTextureLanguage: string[];
   interactionState?: string;
-  continuityFamily?: string;
+  continuityRefs: string[];
   negativeConstraints: string[];
   forbiddenTextPatterns: string[];
   exactTextRequired?: string[];
   qualityCriteria: string[];
-  aspectRatio: "3:4" | "4:3" | "1:1" | "16:9" | "9:16";
+  targetAspectRatio: string;
   artDirectionVersion: string;
 };
 
 export type VisualPreflightFinding = {
   code: string;
-  severity: VisualPreflightSeverity;
-  dimension: VisualPreflightDimension;
+  severity: "ERROR" | "WARNING" | "INFO";
+  dimension: string;
   message: string;
-  sourcePath: string;
-  suggestedResolution: string;
+  sourcePath?: string;
+  suggestedResolution?: string;
   checkerVersion: string;
 };
 
@@ -83,13 +81,19 @@ export type SemanticCriticResult = {
   findings: VisualPreflightFinding[];
 };
 
+export type PreflightDecisionInput = {
+  deterministicFindings: readonly VisualPreflightFinding[];
+  semanticCritic: SemanticCriticResult;
+  humanPreflightDecision?: "PASS" | "REVISE";
+};
+
 export type CompiledVisualPrompt = {
   providerFamily: "FLUX2_KLEIN_4B";
-  workflowFamily: "flux2-klein-4b/v0.2";
+  workflowFamily: string;
   positivePrompt: string;
   negativePrompt: string;
   referenceInputs: string[];
-  aspectRatio: VisualIntentSpec["aspectRatio"];
+  aspectRatio: string;
   maxVariants: 1;
   promptDigest: string;
   sourceSpecDigest: string;
@@ -100,7 +104,6 @@ export type VisualPreflightReceipt = {
   schemaVersion: typeof VISUAL_PREFLIGHT_RECEIPT_SCHEMA_VERSION;
   receiptId: string;
   specId: string;
-  pathwayId: string;
   packageDigest: string;
   specDigest: string;
   compilerVersion: string;
@@ -118,12 +121,6 @@ export type VisualPreflightReceipt = {
   publicationAuthorityGranted: false;
 };
 
-export type PreflightDecisionInput = {
-  deterministicFindings: readonly VisualPreflightFinding[];
-  semanticCritic: SemanticCriticResult;
-  humanPreflightDecision?: "PASS" | "REVISE";
-};
-
 export type CompileVisualPromptOptions = {
   compilerVersion?: string;
   referenceInputs?: readonly string[];
@@ -134,33 +131,40 @@ export type CreateVisualPreflightReceiptInput = {
   providerFamily: "FLUX2_KLEIN_4B";
   semanticCritic: SemanticCriticResult;
   humanPreflightDecision?: "PASS" | "REVISE";
-  referenceInputs?: readonly string[];
   compilerVersion?: string;
+  referenceInputs?: readonly string[];
   createdAt?: string;
 };
 
 function canonicalize(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(canonicalize);
-  if (value && typeof value === "object") {
-    const entries = Object.entries(value as Record<string, unknown>)
-      .filter(([, item]) => item !== undefined)
-      .sort(([left], [right]) => left.localeCompare(right));
-    return Object.fromEntries(entries.map(([key, item]) => [key, canonicalize(item)]));
+  if (Array.isArray(value)) {
+    return value.map((item) => canonicalize(item));
+  }
+  if (value !== null && typeof value === "object") {
+    const source = value as Record<string, unknown>;
+    return Object.fromEntries(
+      Object.keys(source)
+        .sort()
+        .map((key) => [key, canonicalize(source[key])]),
+    );
   }
   return value;
 }
 
 export function canonicalDigest(value: unknown): string {
-  return createHash("sha256").update(JSON.stringify(canonicalize(value))).digest("hex");
+  const encoded = JSON.stringify(canonicalize(value));
+  if (encoded === undefined) {
+    throw new Error("VISUAL_PREFLIGHT_VALUE_NOT_JSON_SERIALIZABLE");
+  }
+  return createHash("sha256").update(encoded, "utf8").digest("hex");
 }
 
 function finding(
   code: string,
   message: string,
   sourcePath: string,
-  severity: VisualPreflightSeverity,
-  dimension: VisualPreflightDimension,
-  suggestedResolution = "Revise the VisualIntentSpec and recompile preflight.",
+  severity: VisualPreflightFinding["severity"] = "ERROR",
+  dimension = "CONTRACT",
 ): VisualPreflightFinding {
   return {
     code,
@@ -168,23 +172,26 @@ function finding(
     dimension,
     message,
     sourcePath,
-    suggestedResolution,
     checkerVersion: VISUAL_PREFLIGHT_CHECKER_VERSION,
   };
 }
 
-const PROVIDER_SYNTAX = /(?:--ar\b|--stylize\b|<lora:|\(\w+:[0-9.]+\)|CFG\s*[=:]|steps\s*[=:])/i;
-const FORBIDDEN_POSITIVE_TROPES = [
-  /dashboard aesthetic/i,
-  /generic SaaS/i,
-  /floating avatar/i,
-  /chibi/i,
-  /mascot treatment/i,
-  /generic cyberpunk/i,
-  /technical diagram as dominant/i,
-  /large educational captions/i,
-  /decorative AI clutter/i,
-];
+export function validateVisualIntentSpec(spec: VisualIntentSpec): VisualPreflightFinding[] {
+  const findings: VisualPreflightFinding[] = [];
+  if (spec.schemaVersion !== VISUAL_INTENT_SCHEMA_VERSION) {
+    findings.push(finding("SCHEMA_VERSION_UNSUPPORTED", "Visual intent schema version is unsupported.", "schemaVersion"));
+  }
+  if (!/^[0-9a-f]{64}$/.test(spec.packageDigest)) {
+    findings.push(finding("PACKAGE_DIGEST_INVALID", "Package digest must be 64 lowercase hexadecimal characters.", "packageDigest"));
+  }
+  if (!spec.specId.trim()) {
+    findings.push(finding("SPEC_ID_REQUIRED", "Visual intent specId is required.", "specId"));
+  }
+  if (!spec.pathwayId.trim()) {
+    findings.push(finding("PATHWAY_ID_REQUIRED", "Visual intent pathwayId is required.", "pathwayId"));
+  }
+  return findings;
+}
 
 function positiveSemanticText(spec: VisualIntentSpec): string[] {
   return [
@@ -197,47 +204,49 @@ function positiveSemanticText(spec: VisualIntentSpec): string[] {
     ...spec.composition.midground,
     ...spec.composition.background,
     spec.composition.spatialRelation,
-    spec.composition.dominantSurface ?? "",
     ...(spec.composition.focalActions ?? []),
-    spec.camera.framing,
-    spec.camera.angle,
-    spec.camera.movement ?? "",
+    spec.composition.dominantSurface ?? "",
+    spec.camera.shotScale,
+    spec.camera.viewpoint,
+    spec.camera.lensLanguage,
+    spec.camera.continuityFamily ?? "",
     spec.lightingMood,
-    ...spec.materialLanguage,
+    ...spec.materialTextureLanguage,
     spec.interactionState ?? "",
-    spec.continuityFamily ?? "",
+    ...spec.continuityRefs,
     ...spec.qualityCriteria,
   ].filter(Boolean);
 }
 
+const PROVIDER_SYNTAX = /(?:--ar\b|--stylize\b|\bcfg[_ -]?scale\b|@cf\/|black-forest-labs\/flux|\bseed\s*=)/i;
+const FORBIDDEN_POSITIVE_TROPES = [
+  /dashboard aesthetic/i,
+  /detached (?:saas )?dashboard/i,
+  /floating avatar heads?/i,
+  /chibi|mascot treatment/i,
+  /generic cyberpunk(?:[- ]neon)? default/i,
+  /large educational captions?/i,
+  /technical diagram as dominant scene/i,
+  /decorative ai clutter/i,
+];
+
 export function runDeterministicPreflight(spec: VisualIntentSpec): VisualPreflightFinding[] {
-  const findings: VisualPreflightFinding[] = [];
+  const findings = [...validateVisualIntentSpec(spec)];
 
-  if (spec.schemaVersion !== VISUAL_INTENT_SPEC_SCHEMA_VERSION) {
-    findings.push(finding("INTENT_SCHEMA_UNSUPPORTED", "Visual intent schema is unsupported.", "schemaVersion", "ERROR", "COMPLETENESS"));
+  if (!spec.narrativeFunction.trim()) {
+    findings.push(finding("NARRATIVE_FUNCTION_REQUIRED", "Narrative function must be explicit before generation.", "narrativeFunction", "ERROR", "COMPLETENESS"));
   }
-  if (!spec.specId?.trim()) findings.push(finding("SPEC_ID_REQUIRED", "specId is required.", "specId", "ERROR", "COMPLETENESS"));
-  if (!spec.pathwayId?.trim()) findings.push(finding("PATHWAY_ID_REQUIRED", "pathwayId is required.", "pathwayId", "ERROR", "COMPLETENESS"));
-  if (!/^[0-9a-f]{64}$/.test(spec.packageDigest)) {
-    findings.push(finding("PACKAGE_DIGEST_INVALID", "packageDigest must be a 64-character lowercase hex digest.", "packageDigest", "ERROR", "COMPLETENESS"));
+  if (spec.requiredVisualFacts.length === 0) {
+    findings.push(finding("REQUIRED_VISUAL_FACTS_REQUIRED", "At least one required visual fact is required.", "requiredVisualFacts", "ERROR", "COMPLETENESS"));
   }
-  if (!spec.narrativeFunction?.trim()) findings.push(finding("NARRATIVE_FUNCTION_REQUIRED", "narrativeFunction is required.", "narrativeFunction", "ERROR", "COMPLETENESS"));
-  if (spec.requiredVisualFacts.length === 0) findings.push(finding("VISUAL_FACT_REQUIRED", "At least one required visual fact is required.", "requiredVisualFacts", "ERROR", "COMPLETENESS"));
-  if (!spec.composition.dominantSubject?.trim()) findings.push(finding("DOMINANT_SUBJECT_REQUIRED", "A dominant subject is required.", "composition.dominantSubject", "ERROR", "COMPLETENESS"));
-  if (!spec.composition.spatialRelation?.trim()) findings.push(finding("SPATIAL_RELATION_REQUIRED", "A spatial relation is required.", "composition.spatialRelation", "ERROR", "SPATIALITY"));
-  if (!spec.camera.framing?.trim() || !spec.camera.angle?.trim()) {
-    findings.push(finding("CAMERA_REQUIRED", "Camera framing and angle are required.", "camera", "ERROR", "CAMERA"));
+  if (!spec.composition.spatialRelation.trim()) {
+    findings.push(finding("SPATIAL_RELATION_REQUIRED", "Spatial relation must be explicit.", "composition.spatialRelation", "ERROR", "COMPOSITION"));
   }
-  if (!spec.lightingMood?.trim()) findings.push(finding("LIGHTING_REQUIRED", "lightingMood is required.", "lightingMood", "ERROR", "COMPLETENESS"));
-  if (spec.materialLanguage.length === 0) findings.push(finding("MATERIAL_LANGUAGE_REQUIRED", "materialLanguage is required.", "materialLanguage", "ERROR", "COMPLETENESS"));
-  if (spec.qualityCriteria.length === 0) findings.push(finding("QUALITY_CRITERIA_REQUIRED", "qualityCriteria is required.", "qualityCriteria", "ERROR", "COMPLETENESS"));
-  if (!spec.artDirectionVersion?.trim()) findings.push(finding("ART_DIRECTION_VERSION_REQUIRED", "artDirectionVersion is required.", "artDirectionVersion", "ERROR", "COMPLETENESS"));
-
   if (spec.purpose === "CHARACTER_REFERENCE" && spec.identityAnchors.length === 0) {
-    findings.push(finding("IDENTITY_ANCHOR_REQUIRED", "Character references require identity anchors.", "identityAnchors", "ERROR", "IDENTITY"));
+    findings.push(finding("CHARACTER_IDENTITY_ANCHORS_REQUIRED", "Character references require stable identity anchors.", "identityAnchors", "ERROR", "CONTINUITY"));
   }
   if (spec.purpose === "ENVIRONMENT_REFERENCE" && spec.worldAnchors.length === 0) {
-    findings.push(finding("WORLD_ANCHOR_REQUIRED", "Environment references require world anchors.", "worldAnchors", "ERROR", "SPATIALITY"));
+    findings.push(finding("ENVIRONMENT_WORLD_ANCHORS_REQUIRED", "Environment references require world anchors.", "worldAnchors", "ERROR", "WORLD"));
   }
   if (spec.purpose === "SCENE_FRAME") {
     if (!spec.sceneRef?.trim()) {
@@ -330,57 +339,57 @@ export function compileVisualPrompt(
       ...spec.composition.midground,
       ...spec.composition.background,
       spec.composition.spatialRelation,
+      ...(spec.composition.focalActions ?? []),
     ])}`,
-    `camera: ${joinSection([spec.camera.framing, spec.camera.angle, spec.camera.movement ?? ""])}`,
-    `lighting/material: ${joinSection([spec.lightingMood, ...spec.materialLanguage])}`,
-    `continuity: ${joinSection([spec.continuityFamily ?? "standalone", ...spec.qualityCriteria])}`,
-    "provider adaptation: preserve authored physical-world semantics; do not invent UI, text, captions, diagrams, or decorative AI motifs",
-  ].join("\n");
-  const negativePrompt = joinSection([...spec.negativeConstraints, ...spec.forbiddenTextPatterns]);
-  const referenceInputs = [...(options.referenceInputs ?? [])];
-  const promptDigest = canonicalDigest({
+    `camera: ${joinSection([
+      spec.camera.shotScale,
+      spec.camera.viewpoint,
+      spec.camera.lensLanguage,
+      spec.camera.continuityFamily ?? "",
+    ])}`,
+    `lighting/material: ${joinSection([spec.lightingMood, ...spec.materialTextureLanguage])}`,
+    `continuity: ${joinSection(spec.continuityRefs.length > 0 ? spec.continuityRefs : ["preserve approved identity and world anchors"])}`,
+    "provider adaptation: FLUX.2 Klein 4B; preserve semantic priority in section order",
+  ].join(". ");
+  const negativePrompt = joinSection([
+    ...spec.negativeConstraints,
+    ...spec.forbiddenTextPatterns.map((item) => `forbid text pattern: ${item}`),
+  ]);
+  const promptCore = {
     providerFamily,
     workflowFamily: "flux2-klein-4b/v0.2",
     positivePrompt,
     negativePrompt,
-    referenceInputs,
-    aspectRatio: spec.aspectRatio,
-    maxVariants: 1,
+    referenceInputs: [...(options.referenceInputs ?? [])],
+    aspectRatio: spec.targetAspectRatio,
+    maxVariants: 1 as const,
     sourceSpecDigest,
     compilerVersion,
-  });
+  };
 
   return {
-    providerFamily,
-    workflowFamily: "flux2-klein-4b/v0.2",
-    positivePrompt,
-    negativePrompt,
-    referenceInputs,
-    aspectRatio: spec.aspectRatio,
-    maxVariants: 1,
-    promptDigest,
-    sourceSpecDigest,
-    compilerVersion,
+    ...promptCore,
+    promptDigest: canonicalDigest(promptCore),
   };
 }
 
 export function createVisualPreflightReceipt(
   input: CreateVisualPreflightReceiptInput,
 ): VisualPreflightReceipt {
+  const compilerVersion = input.compilerVersion ?? VISUAL_PREFLIGHT_COMPILER_VERSION;
   const deterministicChecks = runDeterministicPreflight(input.spec);
   const finalState = resolvePreflightState({
     deterministicFindings: deterministicChecks,
     semanticCritic: input.semanticCritic,
     humanPreflightDecision: input.humanPreflightDecision,
   });
+  const specDigest = canonicalDigest(input.spec);
   const compiledPrompts = hasPreflightErrors(deterministicChecks)
     ? []
     : [compileVisualPrompt(input.spec, input.providerFamily, {
-        compilerVersion: input.compilerVersion,
+        compilerVersion,
         referenceInputs: input.referenceInputs,
       })];
-  const compilerVersion = input.compilerVersion ?? VISUAL_PREFLIGHT_COMPILER_VERSION;
-  const specDigest = canonicalDigest(input.spec);
   const humanPreflightRequired =
     input.semanticCritic.mode === "NOT_AVAILABLE" && input.semanticCritic.result === "NOT_RUN";
   const bindingDigest = canonicalDigest({
@@ -403,7 +412,6 @@ export function createVisualPreflightReceipt(
     schemaVersion: VISUAL_PREFLIGHT_RECEIPT_SCHEMA_VERSION,
     receiptId: `vpc-${bindingDigest.slice(0, 32)}`,
     specId: input.spec.specId,
-    pathwayId: input.spec.pathwayId,
     packageDigest: input.spec.packageDigest,
     specDigest,
     compilerVersion,
