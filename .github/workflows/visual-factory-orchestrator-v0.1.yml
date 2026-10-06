@@ -37,7 +37,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      CLOUDFLARE_WORKERS_FREE_ADMITTED: "false"
       VISUAL_FACTORY_EVIDENCE_DIR: ${{ github.workspace }}/visual-factory-evidence
     steps:
       - uses: actions/checkout@v4
@@ -117,6 +116,9 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_VISUAL_FACTORY_SPACE_REPO: ${{ vars.HF_VISUAL_FACTORY_SPACE_REPO }}
           VISUAL_FACTORY_ADMISSION_SECRET: ${{ secrets.HF_VISUAL_FACTORY_ADMISSION_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_WORKERS_FREE_ADMITTED: ${{ vars.CLOUDFLARE_WORKERS_FREE_ADMITTED }}
         run: |
           set -euo pipefail
           test -n "${HF_TOKEN:-}" || {
