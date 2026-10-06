@@ -50,6 +50,7 @@ jobs:
     timeout-minutes: 30
     env:
       VISUAL_FACTORY_EVIDENCE_DIR: ${{ github.workspace }}/visual-factory-evidence
+      VISUAL_FACTORY_UNFINISHED_CANONICAL_REFERENCES: ${{ inputs.mode == 'shots' && '0' || '5' }}
     steps:
       - uses: actions/checkout@v4
 
