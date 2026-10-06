@@ -4,6 +4,15 @@ import { useEffect, useMemo, useState } from "react";
 import type { PathwayProject } from "../lib/model";
 import { digestAuthoringState, getProductionBlockers } from "../lib/production";
 import {
+  getMuseoZeroReferenceIntent,
+  getMuseoZeroShotIntent,
+} from "../lib/canonical/museo-zero-visual-intents";
+import {
+  createVisualPreflightReceipt,
+  type VisualIntentSpec,
+  type VisualPreflightReceipt,
+} from "../lib/visual-preflight";
+import {
   MUSEO_ZERO_VISUAL_SUBJECTS,
   compileReferenceJobs,
   compileShotJobs,
@@ -34,11 +43,46 @@ const SUBJECT_LABELS: Record<string, string> = {
   "cabina-regia": "Cabina regia",
 };
 
+const SHOT_IDS = ["F1", "F2", "F3", "F4", "F5", "F6"] as const;
+
+function bindDigest(spec: VisualIntentSpec, packageDigest: string): VisualIntentSpec {
+  return { ...spec, packageDigest };
+}
+
+function createLocalPreflightReceipt(
+  spec: VisualIntentSpec,
+  humanApproved: boolean,
+  referenceInputs: readonly string[] = [],
+): VisualPreflightReceipt {
+  return createVisualPreflightReceipt({
+    spec,
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
+    ...(humanApproved ? { humanPreflightDecision: "PASS" as const } : {}),
+    referenceInputs,
+  });
+}
+
+function preflightMessage(receipts: readonly VisualPreflightReceipt[], blockers: readonly string[]): string {
+  const deterministic = receipts.flatMap((receipt) =>
+    receipt.deterministicChecks.filter((finding) => finding.severity === "ERROR").map((finding) => finding.code)
+  );
+  if (deterministic.length > 0) {
+    return `Preflight visivo da correggere: ${[...new Set(deterministic)].join(", ")}. Nessun provider è stato chiamato.`;
+  }
+  if (blockers.length > 0) {
+    return "Prima della generazione serve la conferma di coerenza visiva. Nessun provider è stato chiamato.";
+  }
+  return "";
+}
+
 export function VisualFactoryStage({ project }: { project: PathwayProject }) {
   const [packageDigest, setPackageDigest] = useState<string | null>(null);
   const [state, setState] = useState<VisualFactoryState | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [referencePreflightApproved, setReferencePreflightApproved] = useState(false);
+  const [shotPreflightApproved, setShotPreflightApproved] = useState(false);
 
   const structuralBlockers = useMemo(
     () => getProductionBlockers(project).filter((blocker) => !REVIEW_ONLY_BLOCKERS.has(blocker)),
@@ -53,6 +97,8 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
       const reconciled = reconcileVisualFactoryState(stored, digest);
       setPackageDigest(digest);
       setState(reconciled);
+      setReferencePreflightApproved(false);
+      setShotPreflightApproved(false);
       if (stored !== reconciled) writeVisualFactoryState(project.projectId, reconciled);
     });
     return () => {
@@ -63,6 +109,50 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
   function persist(next: VisualFactoryState) {
     setState(next);
     writeVisualFactoryState(project.projectId, next);
+  }
+
+  function referenceReceipts(humanApproved: boolean): VisualPreflightReceipt[] {
+    if (!packageDigest) return [];
+    return MUSEO_ZERO_VISUAL_SUBJECTS.map((subject) =>
+      createLocalPreflightReceipt(
+        bindDigest(getMuseoZeroReferenceIntent(subject.subjectRef), packageDigest),
+        humanApproved,
+      )
+    );
+  }
+
+  function shotReceipts(humanApproved: boolean): VisualPreflightReceipt[] {
+    if (!packageDigest || !state) return [];
+    const lockBySubject = new Map(state.referenceLocks.map((item) => [item.subjectRef, item]));
+    return SHOT_IDS.map((shotId) => {
+      const spec = bindDigest(getMuseoZeroShotIntent(shotId), packageDigest);
+      const referenceInputs = spec.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)?.assetUrl ?? "");
+      return createLocalPreflightReceipt(spec, humanApproved, referenceInputs);
+    });
+  }
+
+  function approveReferencePreflight() {
+    const receipts = referenceReceipts(true);
+    const failed = receipts.filter((receipt) => receipt.finalState !== "PREFLIGHT_PASS");
+    if (failed.length > 0) {
+      setReferencePreflightApproved(false);
+      setMessage(preflightMessage(receipts, ["VISUAL_PREFLIGHT_NOT_PASSED"]));
+      return;
+    }
+    setReferencePreflightApproved(true);
+    setMessage("Coerenza visiva confermata per personaggi e ambienti. Ora la generazione può partire.");
+  }
+
+  function approveShotPreflight() {
+    const receipts = shotReceipts(true);
+    const failed = receipts.filter((receipt) => receipt.finalState !== "PREFLIGHT_PASS");
+    if (failed.length > 0) {
+      setShotPreflightApproved(false);
+      setMessage(preflightMessage(receipts, ["VISUAL_PREFLIGHT_NOT_PASSED"]));
+      return;
+    }
+    setShotPreflightApproved(true);
+    setMessage("Coerenza visiva confermata per F1–F6. Ora la generazione delle scene può partire.");
   }
 
   async function execute(plan: VisualGenerationPlan) {
@@ -87,16 +177,26 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
 
   async function generateReferences() {
     if (!state || !packageDigest) return;
-    const plan = compileReferenceJobs(project, packageDigest, state);
+    const receipts = referenceReceipts(referencePreflightApproved);
+    const plan = compileReferenceJobs(project, packageDigest, state, receipts);
+    if (plan.decision === "STOP_PREFLIGHT_REQUIRED") {
+      setMessage(preflightMessage(receipts, plan.blockers));
+      return;
+    }
     if (plan.jobs.length === 0) return;
     await execute(plan);
   }
 
   async function generateShots() {
     if (!state || !packageDigest) return;
-    const plan = compileShotJobs(project, packageDigest, state);
-    if (plan.decision !== "SHOT_GENERATION_READY") {
+    const receipts = shotReceipts(shotPreflightApproved);
+    const plan = compileShotJobs(project, packageDigest, state, receipts);
+    if (plan.decision === "STOP_REFERENCE_LOCK_REQUIRED") {
       setMessage("Prima blocca un riferimento per Lia, Omar, Teo, Sala Zero e Cabina regia.");
+      return;
+    }
+    if (plan.decision === "STOP_PREFLIGHT_REQUIRED") {
+      setMessage(preflightMessage(receipts, plan.blockers));
       return;
     }
     await execute(plan);
@@ -106,6 +206,7 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
     if (!state || !packageDigest) return;
     try {
       persist(lockVisualReference(state, subjectRef, assetId, packageDigest));
+      setShotPreflightApproved(false);
       setMessage(`${SUBJECT_LABELS[subjectRef] ?? subjectRef}: riferimento bloccato.`);
     } catch {
       setMessage("Questo candidato appartiene a una revisione precedente. Rigenera i riferimenti.");
@@ -158,7 +259,12 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
             Verranno richiesti candidati distinti per Lia, Omar, Teo, Sala Zero e Cabina regia.
             Le scene non possono ancora essere generate.
           </p>
-          <button className="primary-action" disabled={busy} onClick={() => void generateReferences()}>
+          {!referencePreflightApproved ? (
+            <button className="secondary-action" disabled={busy} onClick={approveReferencePreflight}>
+              Conferma coerenza visiva
+            </button>
+          ) : null}
+          <button className="primary-action" disabled={busy || !referencePreflightApproved} onClick={() => void generateReferences()}>
             {busy ? "Generazione…" : "Genera personaggi e ambienti"}
           </button>
         </section>
@@ -212,7 +318,12 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
           {state.stage === "READY_FOR_SHOTS" && (
             <div className="visual-factory-next">
               <p>Le cinque identità visive sono bloccate. Ora le scene devono riusarle.</p>
-              <button className="primary-action" disabled={busy} onClick={() => void generateShots()}>
+              {!shotPreflightApproved ? (
+                <button className="secondary-action" disabled={busy} onClick={approveShotPreflight}>
+                  Conferma coerenza delle scene
+                </button>
+              ) : null}
+              <button className="primary-action" disabled={busy || !shotPreflightApproved} onClick={() => void generateShots()}>
                 {busy ? "Generazione…" : "Genera le scene F1–F6"}
               </button>
             </div>
