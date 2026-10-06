@@ -87,6 +87,71 @@
     "runtimeAuthorized": { "const": false },
     "publicationAuthorityGranted": { "const": false }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "mode": { "const": "NOT_AVAILABLE" }
+            },
+            "required": ["mode"]
+          }
+        },
+        "required": ["semanticCritic"]
+      },
+      "then": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "result": { "const": "NOT_RUN" }
+            }
+          },
+          "humanPreflightRequired": { "const": true }
+        },
+        "required": ["humanPreflightDecision"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "mode": { "const": "NOT_AVAILABLE" }
+            },
+            "required": ["mode"]
+          },
+          "finalState": { "const": "PREFLIGHT_PASS" }
+        },
+        "required": ["semanticCritic", "finalState"]
+      },
+      "then": {
+        "properties": {
+          "humanPreflightDecision": { "const": "PASS" }
+        },
+        "required": ["humanPreflightDecision"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "mode": { "const": "NOT_AVAILABLE" }
+            },
+            "required": ["mode"]
+          },
+          "humanPreflightDecision": { "const": "REVISE" }
+        },
+        "required": ["semanticCritic", "humanPreflightDecision"]
+      },
+      "then": {
+        "properties": {
+          "finalState": { "const": "PREFLIGHT_REVISE" }
+        }
+      }
+    }
+  ],
   "$defs": {
     "finding": {
       "type": "object",
