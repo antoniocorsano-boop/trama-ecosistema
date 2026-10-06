@@ -17,6 +17,11 @@ on:
         required: false
         type: string
         default: ""
+      preflight_path:
+        description: "Repository path to persisted preflight evidence when plan_path is supplied"
+        required: false
+        type: string
+        default: ""
       human_preflight_pass:
         description: "Explicit Human Preflight PASS for canonical references when no plan_path is supplied"
         required: true
@@ -49,19 +54,27 @@ jobs:
         working-directory: products/studio-atlas
         run: npm install --no-audit --no-fund
 
-      - name: Prepare governed generation plan
+      - name: Prepare governed generation plan and persisted preflight evidence
         shell: bash
         env:
           MODE: ${{ inputs.mode }}
           PLAN_PATH: ${{ inputs.plan_path }}
+          PREFLIGHT_PATH: ${{ inputs.preflight_path }}
           HUMAN_PREFLIGHT_PASS: ${{ inputs.human_preflight_pass }}
         run: |
           set -euo pipefail
           if [ -n "$PLAN_PATH" ]; then
             test -f "$PLAN_PATH"
+            test -n "$PREFLIGHT_PATH" || {
+              echo "PLAN_PATH_REQUIRES_PERSISTED_PREFLIGHT_PATH" >&2
+              exit 1
+            }
+            test -d "$PREFLIGHT_PATH"
             cp "$PLAN_PATH" /tmp/visual-generation-plan.json
+            rm -rf /tmp/canonical-visual-preflight
+            cp -R "$PREFLIGHT_PATH" /tmp/canonical-visual-preflight
           elif [ "$MODE" = "shots" ]; then
-            echo "shots mode requires plan_path pointing to a human-locked, preflight-bound SHOT_GENERATION plan" >&2
+            echo "shots mode requires plan_path plus preflight_path pointing to human-locked, preflight-bound evidence" >&2
             exit 1
           else
             test "$HUMAN_PREFLIGHT_PASS" = "true" || {
@@ -79,6 +92,11 @@ jobs:
             )
           fi
 
+          mkdir -p "$VISUAL_FACTORY_EVIDENCE_DIR"
+          rm -rf "$VISUAL_FACTORY_EVIDENCE_DIR/preflight"
+          cp -R /tmp/canonical-visual-preflight "$VISUAL_FACTORY_EVIDENCE_DIR/preflight"
+          test -f "$VISUAL_FACTORY_EVIDENCE_DIR/preflight/manifest.json"
+
       - name: Execute bounded orchestrator dry-run
         if: inputs.mode == 'dry-run'
         working-directory: products/studio-atlas
@@ -88,6 +106,7 @@ jobs:
           npm run visual-factory:orchestrate -- \
             --mode "$MODE" \
             --plan /tmp/visual-generation-plan.json \
+            --preflight "$VISUAL_FACTORY_EVIDENCE_DIR/preflight" \
             --output "$VISUAL_FACTORY_EVIDENCE_DIR"
 
       - name: Execute bounded orchestrator live
@@ -110,11 +129,13 @@ jobs:
           npm run visual-factory:orchestrate -- \
             --mode "$MODE" \
             --plan /tmp/visual-generation-plan.json \
+            --preflight "$VISUAL_FACTORY_EVIDENCE_DIR/preflight" \
             --output "$VISUAL_FACTORY_EVIDENCE_DIR"
 
       - name: Verify evidence remains non-authoritative
         run: |
           test -d visual-factory-evidence
+          test -f visual-factory-evidence/preflight/manifest.json
           grep -R '"costClass": "FREE_ONLY"' visual-factory-evidence
           grep -R '"runtimeAuthorized": false' visual-factory-evidence
           grep -R '"publicationAuthorityGranted": false' visual-factory-evidence
