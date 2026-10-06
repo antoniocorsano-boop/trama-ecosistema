@@ -222,6 +222,7 @@ function qualifyPreflight(
   receipts: readonly VisualPreflightReceipt[],
   key: string,
   referenceInputs: readonly string[] = [],
+  referenceInputDigests: readonly string[] = [],
 ): { qualified?: QualifiedPreflight; blocker?: string } {
   const intent = bindPackageDigest(intentTemplate, packageDigest);
   const receipt = receipts.find((item) => item.specId === intent.specId);
@@ -257,7 +258,10 @@ function qualifyPreflight(
   if (receipt.compiledPrompts.length !== 1) {
     return { blocker: `VISUAL_PREFLIGHT_PROMPT_MISSING:${key}` };
   }
-  const expected = compileVisualPrompt(intent, "FLUX2_KLEIN_4B", { referenceInputs });
+  const expected = compileVisualPrompt(intent, "FLUX2_KLEIN_4B", {
+    referenceInputs,
+    referenceInputDigests,
+  });
   const compiled = receipt.compiledPrompts[0];
   if (
     compiled.promptDigest !== expected.promptDigest ||
@@ -265,6 +269,7 @@ function qualifyPreflight(
     compiled.compilerVersion !== expected.compilerVersion ||
     compiled.maxVariants !== 1 ||
     !sameStringArray(compiled.referenceInputs, expected.referenceInputs) ||
+    !sameStringArray(compiled.referenceInputDigests, expected.referenceInputDigests) ||
     canonicalDigest(compiled) !== canonicalDigest(expected)
   ) {
     return { blocker: `VISUAL_PREFLIGHT_PROMPT_DIGEST_MISMATCH:${key}` };
@@ -358,7 +363,7 @@ export function compileReferenceJobs(
       prompt: compiled.positivePrompt,
       negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
       referenceInputs: [...compiled.referenceInputs],
-      referenceInputDigests: [],
+      referenceInputDigests: [...compiled.referenceInputDigests],
       aspectRatio: compiled.aspectRatio,
       maxVariants: 1,
       preflightReceiptId: receipt.receiptId,
@@ -489,6 +494,7 @@ export function compileShotJobs(
         preflightReceipts,
         shot.shotId,
         referenceInputs,
+        referenceInputDigests,
       ),
     };
   });
@@ -497,7 +503,7 @@ export function compileShotJobs(
     return { ...prefix, decision: "STOP_PREFLIGHT_REQUIRED", jobs: [], blockers };
   }
 
-  const jobs = qualified.map<VisualGenerationJob>(({ shot, referenceInputs, referenceInputDigests, result }) => {
+  const jobs = qualified.map<VisualGenerationJob>(({ shot, result }) => {
     const { receipt, compiled } = result.qualified!;
     return {
       jobId: `shot-${shot.shotId}`,
@@ -508,8 +514,8 @@ export function compileShotJobs(
       workflowFamily: compiled.workflowFamily,
       prompt: compiled.positivePrompt,
       negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
-      referenceInputs,
-      referenceInputDigests,
+      referenceInputs: [...compiled.referenceInputs],
+      referenceInputDigests: [...compiled.referenceInputDigests],
       aspectRatio: compiled.aspectRatio,
       maxVariants: 1,
       preflightReceiptId: receipt.receiptId,
