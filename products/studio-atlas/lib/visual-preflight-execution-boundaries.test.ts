@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { POST } from "../app/api/visual-factory/execute/route";
-import type { VisualGenerationPlan } from "./visual-factory";
+import { createMuseoZeroPilotProject } from "./canonical/museo-zero";
+import { getMuseoZeroReferenceIntent } from "./canonical/museo-zero-visual-intents";
+import {
+  compileReferenceJobs,
+  createInitialVisualFactoryState,
+  type VisualGenerationPlan,
+} from "./visual-factory";
 import { executeVisualFactoryPlan } from "./visual-factory-executor";
 import {
   orchestrateVisualGeneration,
@@ -13,39 +19,31 @@ import {
 } from "./visual-factory-orchestrator";
 import { createCloudflareWorkersAiAdapter } from "./visual-factory-provider-cloudflare";
 import { createHfZeroGpuAdapter } from "./visual-factory-provider-hf";
+import { createVisualPreflightReceipt } from "./visual-preflight";
 
 const DIGEST = "a".repeat(64);
-const SPEC_DIGEST = "b".repeat(64);
-const PROMPT_DIGEST = "c".repeat(64);
 
 function boundPlan(): VisualGenerationPlan {
-  return {
-    schemaVersion: "atlas.visual-generation-plan/v0.1",
-    pathwayId: "pw-strategy-selection-01-museo-zero",
-    packageDigest: DIGEST,
-    planType: "REFERENCE_GENERATION",
-    decision: "REFERENCE_GENERATION_READY",
-    jobs: [{
-      jobId: "reference-lia",
-      purpose: "CHARACTER_REFERENCE",
-      subjectRef: "lia",
-      workflowFamily: "flux2-klein-4b/v0.2",
-      prompt: "exact preflight compiled prompt",
-      negativeConstraints: ["dashboard aesthetic"],
-      referenceInputs: [],
-      aspectRatio: "3:4",
-      maxVariants: 1,
-      preflightReceiptId: "vpc-0123456789abcdef0123456789abcdef",
-      preflightSpecDigest: SPEC_DIGEST,
-      compiledPromptDigest: PROMPT_DIGEST,
-      preflightState: "PREFLIGHT_PASS",
-    }],
-    blockers: [],
-    paidComputeAuthorized: false,
-    allowQualityDowngrade: false,
-    runtimeAuthorized: false,
-    publicationAuthorityGranted: false,
+  const project = createMuseoZeroPilotProject();
+  const spec = { ...getMuseoZeroReferenceIntent("lia"), packageDigest: DIGEST };
+  const receipt = createVisualPreflightReceipt({
+    spec,
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
+    humanPreflightDecision: "PASS",
+    createdAt: "2026-10-06T02:00:00.000Z",
+  });
+  const state = {
+    ...createInitialVisualFactoryState(DIGEST),
+    referenceLocks: ["omar", "teo", "sala-zero", "cabina-regia"].map((subjectRef) => ({
+      subjectRef,
+      assetId: `${subjectRef}-locked`,
+      assetUrl: `https://assets.invalid/${subjectRef}.png`,
+      packageDigest: DIGEST,
+      lockedAt: "2026-10-06T02:00:00.000Z",
+    })),
   };
+  return compileReferenceJobs(project, DIGEST, state, [receipt]);
 }
 
 function unboundPlan(): VisualGenerationPlan {
@@ -108,11 +106,47 @@ test("same-origin executor performs zero fetches for an unbound hand-crafted pla
   assert.equal(receipt.failureDetail, "VISUAL_PREFLIGHT_BINDING_INVALID");
 });
 
+test("valid-looking forged prompt or digest bindings perform zero gateway fetches", async () => {
+  const mutations: Array<(plan: VisualGenerationPlan) => void> = [
+    (plan) => { plan.jobs[0].prompt = `${plan.jobs[0].prompt}. rogue dashboard`; },
+    (plan) => { plan.jobs[0].compiledPromptDigest = "e".repeat(64); },
+    (plan) => { plan.jobs[0].preflightSpecDigest = "f".repeat(64); },
+    (plan) => { plan.jobs[0].preflightReceiptId = "vpc-ffffffffffffffffffffffffffffffff"; },
+  ];
+
+  for (const mutate of mutations) {
+    let fetchCalls = 0;
+    const plan = structuredClone(boundPlan());
+    mutate(plan);
+    const receipt = await executeVisualFactoryPlan(plan, async () => {
+      fetchCalls += 1;
+      return new Response("{}", { status: 200 });
+    });
+    assert.equal(fetchCalls, 0);
+    assert.equal(receipt.status, "FAILED");
+    assert.equal(receipt.failureDetail, "VISUAL_PREFLIGHT_BINDING_INVALID");
+  }
+});
+
 test("HTTP execution route rejects an unbound canonical plan before provider selection", async () => {
   const request = new Request("http://localhost/api/visual-factory/execute", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(unboundPlan()),
+  });
+
+  const response = await POST(request);
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { error: "INVALID_VISUAL_GENERATION_PLAN" });
+});
+
+test("HTTP execution route rejects valid-looking forged prompt bindings", async () => {
+  const plan = boundPlan();
+  plan.jobs[0].prompt = `${plan.jobs[0].prompt}. injected semantic mutation`;
+  const request = new Request("http://localhost/api/visual-factory/execute", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(plan),
   });
 
   const response = await POST(request);
