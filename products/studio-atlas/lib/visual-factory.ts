@@ -67,10 +67,10 @@ export type VisualGenerationJob = {
   referenceInputs: string[];
   aspectRatio: string;
   maxVariants: 1;
-  preflightReceiptId: string;
-  preflightSpecDigest: string;
-  compiledPromptDigest: string;
-  preflightState: "PREFLIGHT_PASS";
+  preflightReceiptId?: string;
+  preflightSpecDigest?: string;
+  compiledPromptDigest?: string;
+  preflightState?: "PREFLIGHT_PASS";
 };
 
 export type VisualGenerationPlan = {
