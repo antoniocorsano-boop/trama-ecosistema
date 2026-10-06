@@ -3,7 +3,13 @@ import {
   getMuseoZeroShotIntent,
 } from "./canonical/museo-zero-visual-intents";
 import type { VisualGenerationJob, VisualGenerationPlan } from "./visual-factory";
-import { createVisualPreflightReceipt, type VisualIntentSpec } from "./visual-preflight";
+import {
+  canonicalDigest,
+  compileVisualPrompt,
+  resolvePreflightState,
+  type VisualIntentSpec,
+  type VisualPreflightReceipt,
+} from "./visual-preflight";
 
 const HEX_64 = /^[0-9a-f]{64}$/;
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
@@ -66,8 +72,60 @@ function expectedSpec(plan: VisualGenerationPlan, job: VisualGenerationJob): Vis
   throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
 }
 
-function assertExactJobBinding(plan: VisualGenerationPlan, job: VisualGenerationJob): void {
+function assertReceiptIntegrity(receipt: VisualPreflightReceipt): void {
+  const expectedHumanRequired =
+    receipt.semanticCritic.mode === "NOT_AVAILABLE" && receipt.semanticCritic.result === "NOT_RUN";
+  const resolvedState = resolvePreflightState({
+    deterministicFindings: receipt.deterministicChecks,
+    semanticCritic: receipt.semanticCritic,
+    humanPreflightDecision: receipt.humanPreflightDecision,
+  });
+  const bindingDigest = canonicalDigest({
+    specDigest: receipt.specDigest,
+    packageDigest: receipt.packageDigest,
+    compilerVersion: receipt.compilerVersion,
+    artDirectionVersion: receipt.artDirectionVersion,
+    finalState: receipt.finalState,
+    promptDigests: receipt.compiledPrompts.map((prompt) => prompt.promptDigest),
+    semanticCritic: {
+      mode: receipt.semanticCritic.mode,
+      modelRef: receipt.semanticCritic.modelRef ?? null,
+      modelDigest: receipt.semanticCritic.modelDigest ?? null,
+      result: receipt.semanticCritic.result,
+    },
+    humanPreflightDecision: receipt.humanPreflightDecision ?? null,
+  });
+
+  if (
+    receipt.schemaVersion !== "atlas.visual-preflight-receipt/v0.1" ||
+    receipt.finalState !== "PREFLIGHT_PASS" ||
+    resolvedState !== receipt.finalState ||
+    receipt.humanPreflightRequired !== expectedHumanRequired ||
+    (receipt.humanPreflightRequired && receipt.humanPreflightDecision !== "PASS") ||
+    receipt.deterministicChecks.some((finding) => finding.severity === "ERROR") ||
+    receipt.compiledPrompts.length !== 1 ||
+    receipt.receiptId !== `vpc-${bindingDigest.slice(0, 32)}` ||
+    receipt.paidComputeAuthorized !== false ||
+    receipt.allowQualityDowngrade !== false ||
+    receipt.runtimeAuthorized !== false ||
+    receipt.publicationAuthorityGranted !== false
+  ) {
+    throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
+  }
+}
+
+function assertExactJobBinding(
+  plan: VisualGenerationPlan,
+  job: VisualGenerationJob,
+  receipts: readonly VisualPreflightReceipt[],
+): void {
   assertStructuralJobBinding(job);
+
+  const receipt = receipts.find((item) => item.receiptId === job.preflightReceiptId);
+  if (!receipt) {
+    throw new Error("VISUAL_PREFLIGHT_EVIDENCE_REQUIRED");
+  }
+  assertReceiptIntegrity(receipt);
 
   let spec: VisualIntentSpec;
   try {
@@ -76,47 +134,60 @@ function assertExactJobBinding(plan: VisualGenerationPlan, job: VisualGeneration
     throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
   }
 
-  const expectedReceipt = createVisualPreflightReceipt({
-    spec,
-    providerFamily: "FLUX2_KLEIN_4B",
-    semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
-    humanPreflightDecision: "PASS",
+  const expectedSpecDigest = canonicalDigest(spec);
+  const actualPrompt = receipt.compiledPrompts.find((prompt) => prompt.promptDigest === job.compiledPromptDigest);
+  if (!actualPrompt) throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
+  const expectedPrompt = compileVisualPrompt(spec, "FLUX2_KLEIN_4B", {
+    compilerVersion: receipt.compilerVersion,
     referenceInputs: job.referenceInputs,
-    createdAt: "1970-01-01T00:00:00.000Z",
   });
-  const expectedPrompt = expectedReceipt.compiledPrompts[0];
-  const expectedNegativeConstraints = expectedPrompt?.negativePrompt
-    ? [expectedPrompt.negativePrompt]
+  const expectedNegativeConstraints = actualPrompt.negativePrompt
+    ? [actualPrompt.negativePrompt]
     : [];
   const expectedJobId = plan.planType === "REFERENCE_GENERATION"
     ? `reference-${job.subjectRef}`
     : `shot-${job.shotId}`;
 
   if (
-    expectedReceipt.finalState !== "PREFLIGHT_PASS" ||
-    !expectedPrompt ||
+    receipt.specId !== spec.specId ||
+    receipt.packageDigest !== plan.packageDigest ||
+    receipt.specDigest !== expectedSpecDigest ||
+    receipt.artDirectionVersion !== spec.artDirectionVersion ||
+    actualPrompt.sourceSpecDigest !== expectedSpecDigest ||
+    actualPrompt.promptDigest !== expectedPrompt.promptDigest ||
+    actualPrompt.positivePrompt !== expectedPrompt.positivePrompt ||
+    actualPrompt.negativePrompt !== expectedPrompt.negativePrompt ||
+    actualPrompt.workflowFamily !== expectedPrompt.workflowFamily ||
+    actualPrompt.aspectRatio !== expectedPrompt.aspectRatio ||
+    actualPrompt.maxVariants !== 1 ||
+    !sameStrings(actualPrompt.referenceInputs, expectedPrompt.referenceInputs) ||
     job.jobId !== expectedJobId ||
     job.purpose !== spec.purpose ||
-    job.preflightReceiptId !== expectedReceipt.receiptId ||
-    job.preflightSpecDigest !== expectedReceipt.specDigest ||
-    job.compiledPromptDigest !== expectedPrompt.promptDigest ||
-    job.workflowFamily !== expectedPrompt.workflowFamily ||
-    job.prompt !== expectedPrompt.positivePrompt ||
+    job.preflightReceiptId !== receipt.receiptId ||
+    job.preflightSpecDigest !== receipt.specDigest ||
+    job.compiledPromptDigest !== actualPrompt.promptDigest ||
+    job.workflowFamily !== actualPrompt.workflowFamily ||
+    job.prompt !== actualPrompt.positivePrompt ||
     !sameStrings(job.negativeConstraints, expectedNegativeConstraints) ||
-    !sameStrings(job.referenceInputs, expectedPrompt.referenceInputs) ||
-    job.aspectRatio !== expectedPrompt.aspectRatio ||
-    expectedPrompt.maxVariants !== 1
+    !sameStrings(job.referenceInputs, actualPrompt.referenceInputs) ||
+    job.aspectRatio !== actualPrompt.aspectRatio
   ) {
     throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
   }
 }
 
-export function assertExactCanonicalVisualPreflightBoundPlan(plan: VisualGenerationPlan): void {
+export function assertExactCanonicalVisualPreflightBoundPlan(
+  plan: VisualGenerationPlan,
+  receipts: readonly VisualPreflightReceipt[],
+): void {
   assertVisualPreflightBoundPlan(plan);
+  if (!Array.isArray(receipts) || receipts.length === 0) {
+    throw new Error("VISUAL_PREFLIGHT_EVIDENCE_REQUIRED");
+  }
   if (plan.pathwayId !== MUSEO_ZERO_PROJECT_ID) {
     throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
   }
-  for (const job of plan.jobs) assertExactJobBinding(plan, job);
+  for (const job of plan.jobs) assertExactJobBinding(plan, job, receipts);
 }
 
 export function isVisualPreflightBoundPlan(plan: VisualGenerationPlan): boolean {
@@ -128,9 +199,12 @@ export function isVisualPreflightBoundPlan(plan: VisualGenerationPlan): boolean 
   }
 }
 
-export function isExactCanonicalVisualPreflightBoundPlan(plan: VisualGenerationPlan): boolean {
+export function isExactCanonicalVisualPreflightBoundPlan(
+  plan: VisualGenerationPlan,
+  receipts: readonly VisualPreflightReceipt[],
+): boolean {
   try {
-    assertExactCanonicalVisualPreflightBoundPlan(plan);
+    assertExactCanonicalVisualPreflightBoundPlan(plan, receipts);
     return true;
   } catch {
     return false;
