@@ -35,6 +35,7 @@ export type VisualReferenceLock = {
   subjectRef: string;
   assetId: string;
   assetUrl: string;
+  assetSha256?: string;
   packageDigest: string;
   lockedAt: string;
 };
@@ -66,6 +67,7 @@ export type VisualGenerationJob = {
   prompt: string;
   negativeConstraints: string[];
   referenceInputs: string[];
+  referenceInputDigests?: string[];
   aspectRatio: string;
   maxVariants: 1;
   preflightReceiptId?: string;
@@ -356,6 +358,7 @@ export function compileReferenceJobs(
       prompt: compiled.positivePrompt,
       negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
       referenceInputs: [...compiled.referenceInputs],
+      referenceInputDigests: [],
       aspectRatio: compiled.aspectRatio,
       maxVariants: 1,
       preflightReceiptId: receipt.receiptId,
@@ -432,6 +435,7 @@ export function lockVisualReference(
     subjectRef,
     assetId,
     assetUrl: candidate.url,
+    assetSha256: candidate.sha256,
     packageDigest,
     lockedAt: new Date().toISOString(),
   });
@@ -458,22 +462,27 @@ export function compileShotJobs(
   const lockBySubject = new Map(state.referenceLocks.map((item) => [item.subjectRef, item]));
   const missing = MUSEO_ZERO_VISUAL_SUBJECTS
     .map((item) => item.subjectRef)
-    .filter((subjectRef) => !lockBySubject.has(subjectRef));
+    .filter((subjectRef) => {
+      const lock = lockBySubject.get(subjectRef);
+      return !lock || !lock.assetSha256 || !/^[0-9a-f]{64}$/.test(lock.assetSha256);
+    });
 
   if (missing.length > 0) {
     return {
       ...prefix,
       decision: "STOP_REFERENCE_LOCK_REQUIRED",
       jobs: [],
-      blockers: missing.map((subjectRef) => `REFERENCE_NOT_LOCKED:${subjectRef}`),
+      blockers: missing.map((subjectRef) => `REFERENCE_LOCK_PROVENANCE_MISSING:${subjectRef}`),
     };
   }
 
   const qualified = MUSEO_ZERO_SHOTS.map((shot) => {
     const referenceInputs = shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl);
+    const referenceInputDigests = shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetSha256!);
     return {
       shot,
       referenceInputs,
+      referenceInputDigests,
       result: qualifyPreflight(
         getMuseoZeroShotIntent(shot.shotId),
         packageDigest,
@@ -488,7 +497,7 @@ export function compileShotJobs(
     return { ...prefix, decision: "STOP_PREFLIGHT_REQUIRED", jobs: [], blockers };
   }
 
-  const jobs = qualified.map<VisualGenerationJob>(({ shot, referenceInputs, result }) => {
+  const jobs = qualified.map<VisualGenerationJob>(({ shot, referenceInputs, referenceInputDigests, result }) => {
     const { receipt, compiled } = result.qualified!;
     return {
       jobId: `shot-${shot.shotId}`,
@@ -500,6 +509,7 @@ export function compileShotJobs(
       prompt: compiled.positivePrompt,
       negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
       referenceInputs,
+      referenceInputDigests,
       aspectRatio: compiled.aspectRatio,
       maxVariants: 1,
       preflightReceiptId: receipt.receiptId,
