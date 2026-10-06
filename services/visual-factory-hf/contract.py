@@ -86,7 +86,10 @@ def validate_plan(value: dict[str, Any]) -> dict[str, Any]:
         _require(isinstance(job.get("prompt"), str) and job["prompt"].strip(), "PROMPT_REQUIRED")
         _require(job.get("aspectRatio") in ALLOWED_ASPECTS, "ASPECT_RATIO_UNSUPPORTED")
         variants = job.get("maxVariants")
-        _require(isinstance(variants, int) and variants == MAX_VARIANTS, "MAX_VARIANTS_MUST_BE_ONE")
+        _require(
+            isinstance(variants, int) and not isinstance(variants, bool) and variants == MAX_VARIANTS,
+            "MAX_VARIANTS_MUST_BE_ONE",
+        )
         _require(
             isinstance(job.get("preflightReceiptId"), str) and bool(job["preflightReceiptId"]),
             "PREFLIGHT_RECEIPT_REQUIRED",
