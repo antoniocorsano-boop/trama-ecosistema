@@ -91,6 +91,21 @@ jobs:
             )
           fi
 
+          # Diagnostic branch only: preserve the exact canonical Lia job and evidence,
+          # while removing the other four jobs before provider execution.
+          if [ "$MODE" = "references" ]; then
+            node - <<'NODE'
+          const fs = require("node:fs");
+          const path = "/tmp/visual-generation-plan.json";
+          const plan = JSON.parse(fs.readFileSync(path, "utf8"));
+          if (plan.planType !== "REFERENCE_GENERATION" || plan.jobs?.[0]?.subjectRef !== "lia") {
+            throw new Error("DIAGNOSTIC_SINGLE_LIA_PLAN_MISMATCH");
+          }
+          plan.jobs = [plan.jobs[0]];
+          fs.writeFileSync(path, `${JSON.stringify(plan, null, 2)}\n`);
+          NODE
+          fi
+
           mkdir -p "$VISUAL_FACTORY_EVIDENCE_DIR"
           rm -rf "$VISUAL_FACTORY_EVIDENCE_DIR/preflight"
           cp -R /tmp/canonical-visual-preflight "$VISUAL_FACTORY_EVIDENCE_DIR/preflight"
