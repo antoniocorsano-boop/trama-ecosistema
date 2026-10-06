@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { VisualExecutionReceipt, VisualGenerationPlan } from "../../../../lib/visual-factory";
-import { isVisualPreflightBoundPlan } from "../../../../lib/visual-factory-execution-contract";
+import { isExactCanonicalVisualPreflightBoundPlan } from "../../../../lib/visual-factory-execution-contract";
 import { waitingForComputeReceipt } from "../../../../lib/visual-factory-executor";
 import { orchestrateVisualGeneration } from "../../../../lib/visual-factory-orchestrator";
 import {
@@ -32,7 +32,7 @@ function isPlan(value: unknown): value is VisualGenerationPlan {
   ) {
     return false;
   }
-  return isVisualPreflightBoundPlan(plan as VisualGenerationPlan);
+  return isExactCanonicalVisualPreflightBoundPlan(plan as VisualGenerationPlan);
 }
 
 function responseForReceipt(receipt: VisualExecutionReceipt) {
