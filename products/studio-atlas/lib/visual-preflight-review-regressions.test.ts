@@ -122,6 +122,38 @@ test("shot receipt binding changes when locked bytes change at the same URL", as
   assert.notEqual(first.receipts[0]?.receiptId, changed.receipts[0]?.receiptId);
 });
 
+test("offline shot qualification rejects incomplete lock metadata before persistence", async () => {
+  const project = createMuseoZeroPilotProject();
+  const packageDigest = await digestAuthoringState(project);
+
+  const malformedLocks: VisualReferenceLock[][] = [
+    makeReferenceLocks(packageDigest).map((lock, index) => index === 0 ? { ...lock, assetId: "" } : lock),
+    makeReferenceLocks(packageDigest).map((lock, index) => index === 0 ? { ...lock, lockedAt: "" } : lock),
+    (() => {
+      const locks = structuredClone(makeReferenceLocks(packageDigest));
+      delete (locks[0] as Partial<VisualReferenceLock>).assetId;
+      return locks as VisualReferenceLock[];
+    })(),
+    (() => {
+      const locks = structuredClone(makeReferenceLocks(packageDigest));
+      delete (locks[0] as Partial<VisualReferenceLock>).lockedAt;
+      return locks as VisualReferenceLock[];
+    })(),
+  ];
+
+  for (const referenceLocks of malformedLocks) {
+    await assert.rejects(
+      () => compileCanonicalVisualPreflight({
+        mode: "shots",
+        humanPreflightPass: true,
+        createdAt: "2026-10-06T05:40:00.000Z",
+        referenceLocks,
+      }),
+      /VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID/,
+    );
+  }
+});
+
 test("offline shot qualification persists the exact validated reference-lock envelope", async () => {
   const project = createMuseoZeroPilotProject();
   const packageDigest = await digestAuthoringState(project);
