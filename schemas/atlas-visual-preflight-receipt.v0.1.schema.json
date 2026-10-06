@@ -60,6 +60,7 @@
           "positivePrompt",
           "negativePrompt",
           "referenceInputs",
+          "referenceInputDigests",
           "aspectRatio",
           "maxVariants",
           "promptDigest",
@@ -72,6 +73,7 @@
           "positivePrompt": { "type": "string", "minLength": 1 },
           "negativePrompt": { "type": "string" },
           "referenceInputs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "referenceInputDigests": { "type": "array", "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" } },
           "aspectRatio": { "type": "string", "minLength": 1 },
           "maxVariants": { "const": 1 },
           "promptDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
@@ -108,8 +110,7 @@
             }
           },
           "humanPreflightRequired": { "const": true }
-        },
-        "required": ["humanPreflightDecision"]
+        }
       }
     },
     {
