@@ -1,41 +1,43 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import type { VisualGenerationPlan } from "./visual-factory";
+import { createMuseoZeroPilotProject } from "./canonical/museo-zero";
+import { getMuseoZeroReferenceIntent } from "./canonical/museo-zero-visual-intents";
+import {
+  compileReferenceJobs,
+  createInitialVisualFactoryState,
+  type VisualGenerationPlan,
+} from "./visual-factory";
 import {
   executeVisualFactoryPlan,
   normalizeExecutorResponse,
   normalizeGradioExecutionResult,
 } from "./visual-factory-executor";
+import { createVisualPreflightReceipt } from "./visual-preflight";
 
 const DIGEST = "d".repeat(64);
 
-const PLAN: VisualGenerationPlan = {
-  schemaVersion: "atlas.visual-generation-plan/v0.1",
-  pathwayId: "pw-strategy-selection-01-museo-zero",
-  packageDigest: DIGEST,
-  planType: "REFERENCE_GENERATION",
-  decision: "REFERENCE_GENERATION_READY",
-  jobs: [{
-    jobId: "reference-lia",
-    purpose: "CHARACTER_REFERENCE",
-    subjectRef: "lia",
-    workflowFamily: "flux2-klein-4b/v0.2",
-    prompt: "test prompt",
-    negativeConstraints: [],
-    referenceInputs: [],
-    aspectRatio: "3:4",
-    maxVariants: 1,
-    preflightReceiptId: "vpc-test-receipt",
-    preflightSpecDigest: "b".repeat(64),
-    compiledPromptDigest: "c".repeat(64),
-    preflightState: "PREFLIGHT_PASS",
-  }],
-  blockers: [],
-  paidComputeAuthorized: false,
-  allowQualityDowngrade: false,
-  runtimeAuthorized: false,
-  publicationAuthorityGranted: false,
-};
+function exactPlan(): VisualGenerationPlan {
+  const project = createMuseoZeroPilotProject();
+  const spec = { ...getMuseoZeroReferenceIntent("lia"), packageDigest: DIGEST };
+  const receipt = createVisualPreflightReceipt({
+    spec,
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
+    humanPreflightDecision: "PASS",
+    createdAt: "2026-10-06T02:00:00.000Z",
+  });
+  const state = {
+    ...createInitialVisualFactoryState(DIGEST),
+    referenceLocks: ["omar", "teo", "sala-zero", "cabina-regia"].map((subjectRef) => ({
+      subjectRef,
+      assetId: `${subjectRef}-locked`,
+      assetUrl: `https://assets.invalid/${subjectRef}.png`,
+      packageDigest: DIGEST,
+      lockedAt: "2026-10-06T02:00:00.000Z",
+    })),
+  };
+  return compileReferenceJobs(project, DIGEST, state, [receipt]);
+}
 
 function validReceipt(url = "https://assets.invalid/lia.png") {
   return {
@@ -166,7 +168,7 @@ test("same-origin gateway propagates WAITING_FOR_COMPUTE without throwing", asyn
     publicationAuthorityGranted: false,
   }), { status: 503, headers: { "content-type": "application/json" } });
 
-  const receipt = await executeVisualFactoryPlan(PLAN, fetchImpl);
+  const receipt = await executeVisualFactoryPlan(exactPlan(), fetchImpl);
 
   assert.equal(receipt.status, "WAITING_FOR_COMPUTE");
   assert.equal(receipt.failureCategory, "NO_FREE_PROVIDER");
