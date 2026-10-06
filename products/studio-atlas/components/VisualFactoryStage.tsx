@@ -24,6 +24,7 @@ import {
   type VisualGenerationPlan,
 } from "../lib/visual-factory";
 import { executeVisualFactoryPlan } from "../lib/visual-factory-executor";
+import { getVisualFactoryRetryPreflightState } from "../lib/visual-factory-retry";
 import {
   readVisualFactoryState,
   writeVisualFactoryState,
@@ -239,6 +240,20 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
     list.push(candidate);
     candidatesBySubject.set(candidate.subjectRef, list);
   }
+  const retryPreflight = getVisualFactoryRetryPreflightState(
+    state.referenceLocks.length,
+    referencePreflightApproved,
+    shotPreflightApproved,
+  );
+  const approveRetryPreflight = retryPreflight.kind === "SHOTS"
+    ? approveShotPreflight
+    : approveReferencePreflight;
+  const retryGeneration = retryPreflight.kind === "SHOTS"
+    ? generateShots
+    : generateReferences;
+  const retryConfirmationLabel = retryPreflight.kind === "SHOTS"
+    ? "Conferma coerenza delle scene"
+    : "Conferma coerenza visiva";
 
   return (
     <div className="visual-factory-authoring">
@@ -361,10 +376,15 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
               Non è disponibile calcolo FREE_ONLY. I riferimenti già scelti restano salvati;
               nessun provider a pagamento verrà usato.
             </p>
+            {retryPreflight.requiresConfirmation ? (
+              <button className="secondary-action" disabled={busy} onClick={approveRetryPreflight}>
+                {retryConfirmationLabel}
+              </button>
+            ) : null}
             <button
               className="secondary-action"
-              disabled={busy}
-              onClick={() => void (state.referenceLocks.length === 5 ? generateShots() : generateReferences())}
+              disabled={busy || !retryPreflight.approved}
+              onClick={() => void retryGeneration()}
             >
               Riprova quando disponibile
             </button>
@@ -376,10 +396,15 @@ export function VisualFactoryStage({ project }: { project: PathwayProject }) {
         <section className="visual-factory-step">
           <h2>La produzione non è stata accettata.</h2>
           <p>Nessun output incompleto o non conforme è diventato riferimento canonico.</p>
+          {retryPreflight.requiresConfirmation ? (
+            <button className="secondary-action" disabled={busy} onClick={approveRetryPreflight}>
+              {retryConfirmationLabel}
+            </button>
+          ) : null}
           <button
             className="secondary-action"
-            disabled={busy}
-            onClick={() => void (state.referenceLocks.length === 5 ? generateShots() : generateReferences())}
+            disabled={busy || !retryPreflight.approved}
+            onClick={() => void retryGeneration()}
           >
             Riprova
           </button>
