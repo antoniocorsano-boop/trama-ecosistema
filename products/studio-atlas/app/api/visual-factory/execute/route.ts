@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { VisualExecutionReceipt, VisualGenerationPlan } from "../../../../lib/visual-factory";
+import { isVisualPreflightBoundPlan } from "../../../../lib/visual-factory-execution-contract";
 import { waitingForComputeReceipt } from "../../../../lib/visual-factory-executor";
 import { orchestrateVisualGeneration } from "../../../../lib/visual-factory-orchestrator";
 import {
@@ -12,24 +13,26 @@ export const runtime = "nodejs";
 function isPlan(value: unknown): value is VisualGenerationPlan {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const plan = value as Partial<VisualGenerationPlan>;
-  return (
-    plan.schemaVersion === "atlas.visual-generation-plan/v0.1" &&
-    typeof plan.pathwayId === "string" &&
-    typeof plan.packageDigest === "string" &&
-    /^[0-9a-f]{64}$/.test(plan.packageDigest) &&
-    Array.isArray(plan.jobs) &&
-    plan.jobs.length > 0 &&
-    plan.jobs.length <= 6 &&
-    plan.paidComputeAuthorized === false &&
-    plan.allowQualityDowngrade === false &&
-    plan.runtimeAuthorized === false &&
-    plan.publicationAuthorityGranted === false &&
-    plan.jobs.every((job) =>
+  if (
+    plan.schemaVersion !== "atlas.visual-generation-plan/v0.1" ||
+    typeof plan.pathwayId !== "string" ||
+    typeof plan.packageDigest !== "string" ||
+    !/^[0-9a-f]{64}$/.test(plan.packageDigest) ||
+    !Array.isArray(plan.jobs) ||
+    plan.jobs.length < 1 ||
+    plan.jobs.length > 6 ||
+    plan.paidComputeAuthorized !== false ||
+    plan.allowQualityDowngrade !== false ||
+    plan.runtimeAuthorized !== false ||
+    plan.publicationAuthorityGranted !== false ||
+    !plan.jobs.every((job) =>
       job.workflowFamily === "flux2-klein-4b/v0.2" &&
-      job.maxVariants >= 1 &&
-      job.maxVariants <= 3
+      job.maxVariants === 1
     )
-  );
+  ) {
+    return false;
+  }
+  return isVisualPreflightBoundPlan(plan as VisualGenerationPlan);
 }
 
 function responseForReceipt(receipt: VisualExecutionReceipt) {
