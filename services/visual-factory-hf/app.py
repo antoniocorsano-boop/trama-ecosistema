@@ -59,28 +59,40 @@ def _reference_bytes(url: str) -> bytes:
     return payload
 
 
-def _load_references(refs: tuple[str, ...], reference_input_digests: tuple[str, ...]):
-    if len(refs) != len(reference_input_digests):
-        raise ValueError("REFERENCE_INPUT_DIGEST_INVALID")
-    images = []
-    for ref, expected_digest in zip(refs, reference_input_digests, strict=True):
-        payload = _reference_bytes(ref)
-        actual_digest = hashlib.sha256(payload).hexdigest()
-        if actual_digest != expected_digest:
-            raise ValueError("REFERENCE_CONTENT_DIGEST_MISMATCH")
-        images.append(Image.open(BytesIO(payload)).convert("RGB"))
-    return images
+def _prepare_verified_references(plan: dict) -> dict[str, tuple[Image.Image, ...]]:
+    """Fetch, verify, and decode locked references before reserving ZeroGPU time."""
+    prepared: dict[str, tuple[Image.Image, ...]] = {}
+    for job in compile_execution_jobs(plan):
+        if len(job.reference_inputs) != len(job.reference_input_digests):
+            raise ValueError("REFERENCE_INPUT_DIGEST_INVALID")
+        images: list[Image.Image] = []
+        for ref, expected_digest in zip(
+            job.reference_inputs,
+            job.reference_input_digests,
+            strict=True,
+        ):
+            payload = _reference_bytes(ref)
+            actual_digest = hashlib.sha256(payload).hexdigest()
+            if actual_digest != expected_digest:
+                raise ValueError("REFERENCE_CONTENT_DIGEST_MISMATCH")
+            with Image.open(BytesIO(payload)) as source:
+                source.load()
+                images.append(source.convert("RGB"))
+        prepared[job.job_id] = tuple(images)
+    return prepared
 
 
 @spaces.GPU(duration=120)
-def _execute_admitted(plan: dict):
+def _execute_admitted(plan: dict, prepared_references: dict[str, tuple[Image.Image, ...]]):
     jobs = compile_execution_jobs(plan)
     files: list[str] = []
     assets: list[dict] = []
 
     try:
         for job in jobs:
-            references = _load_references(job.reference_inputs, job.reference_input_digests)
+            references = prepared_references.get(job.job_id)
+            if references is None or len(references) != len(job.reference_inputs):
+                raise ValueError("REFERENCE_PREPARATION_MISMATCH")
             variant_count = min(job.max_variants, VARIANTS_PER_JOB)
             for variant in range(variant_count):
                 kwargs = {
@@ -94,7 +106,7 @@ def _execute_admitted(plan: dict):
                     ),
                 }
                 if references:
-                    kwargs["image"] = references
+                    kwargs["image"] = list(references)
 
                 image = pipe(**kwargs).images[0]
                 asset_id = f"{job.subject_ref}-{variant + 1}-{hashlib.sha256(image.tobytes()).hexdigest()[:12]}"
@@ -124,7 +136,7 @@ def _execute_admitted(plan: dict):
 
 
 def execute_plan(plan_json: str, admission_json: str):
-    """Verify provider admission before entering the metered GPU function."""
+    """Verify provider admission and locked references before entering metered GPU work."""
     try:
         plan = validate_plan(json.loads(plan_json))
         capability = json.loads(admission_json)
@@ -135,9 +147,10 @@ def execute_plan(plan_json: str, admission_json: str):
             secret,
             now_epoch=int(time.time()),
         )
+        prepared_references = _prepare_verified_references(plan)
     except Exception as exc:
         raise gr.Error(f"INVALID_VISUAL_PROVIDER_ADMISSION: {exc}") from exc
-    return _execute_admitted(plan)
+    return _execute_admitted(plan, prepared_references)
 
 
 with gr.Blocks(title="Studio Atlas Visual Factory") as demo:
