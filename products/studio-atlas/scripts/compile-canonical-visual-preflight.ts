@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { createMuseoZeroPilotProject } from "../lib/canonical/museo-zero";
@@ -7,6 +7,10 @@ import {
   MUSEO_ZERO_SHOT_INTENTS,
 } from "../lib/canonical/museo-zero-visual-intents";
 import { digestAuthoringState } from "../lib/production";
+import {
+  MUSEO_ZERO_VISUAL_SUBJECTS,
+  type VisualReferenceLock,
+} from "../lib/visual-factory";
 import {
   PREFLIGHT_AUTHORITY_FLAGS,
   createVisualPreflightReceipt,
@@ -22,6 +26,7 @@ export type CanonicalVisualPreflightOptions = {
   mode: CanonicalVisualPreflightMode;
   humanPreflightPass: boolean;
   createdAt?: string;
+  referenceLocks?: readonly VisualReferenceLock[];
 };
 
 export type CanonicalVisualPreflightQualification = {
@@ -45,6 +50,37 @@ function bindPackageDigest(spec: VisualIntentSpec, packageDigest: string): Visua
   return { ...structuredClone(spec), packageDigest };
 }
 
+function validateShotReferenceLocks(
+  referenceLocks: readonly VisualReferenceLock[] | undefined,
+  packageDigest: string,
+): Map<string, VisualReferenceLock> {
+  if (!referenceLocks) {
+    throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_REQUIRED");
+  }
+  const requiredSubjects = MUSEO_ZERO_VISUAL_SUBJECTS.map((subject) => subject.subjectRef);
+  if (referenceLocks.length !== requiredSubjects.length) {
+    throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
+  }
+  const lockBySubject = new Map<string, VisualReferenceLock>();
+  for (const lock of referenceLocks) {
+    if (
+      !requiredSubjects.includes(lock.subjectRef) ||
+      lockBySubject.has(lock.subjectRef) ||
+      lock.packageDigest !== packageDigest ||
+      !lock.assetUrl.startsWith("https://") ||
+      !lock.assetSha256 ||
+      !/^[0-9a-f]{64}$/.test(lock.assetSha256)
+    ) {
+      throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
+    }
+    lockBySubject.set(lock.subjectRef, lock);
+  }
+  if (!requiredSubjects.every((subjectRef) => lockBySubject.has(subjectRef))) {
+    throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
+  }
+  return lockBySubject;
+}
+
 export async function compileCanonicalVisualPreflight(
   options: CanonicalVisualPreflightOptions,
 ): Promise<CanonicalVisualPreflightQualification> {
@@ -55,18 +91,31 @@ export async function compileCanonicalVisualPreflight(
     : MUSEO_ZERO_SHOT_INTENTS;
   const sourceSpecs = templates.map((spec) => bindPackageDigest(spec, packageDigest));
   const createdAt = options.createdAt ?? new Date().toISOString();
+  const lockBySubject = options.mode === "shots"
+    ? validateShotReferenceLocks(options.referenceLocks, packageDigest)
+    : undefined;
 
-  const receipts = sourceSpecs.map((spec) => createVisualPreflightReceipt({
-    spec,
-    providerFamily: "FLUX2_KLEIN_4B",
-    semanticCritic: {
-      mode: "NOT_AVAILABLE",
-      result: "NOT_RUN",
-      findings: [],
-    },
-    ...(options.humanPreflightPass ? { humanPreflightDecision: "PASS" as const } : {}),
-    createdAt,
-  }));
+  const receipts = sourceSpecs.map((spec) => {
+    const referenceInputs = lockBySubject
+      ? spec.subjectRefs.map((subjectRef) => {
+          const lock = lockBySubject.get(subjectRef);
+          if (!lock) throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
+          return lock.assetUrl;
+        })
+      : [];
+    return createVisualPreflightReceipt({
+      spec,
+      providerFamily: "FLUX2_KLEIN_4B",
+      semanticCritic: {
+        mode: "NOT_AVAILABLE",
+        result: "NOT_RUN",
+        findings: [],
+      },
+      ...(options.humanPreflightPass ? { humanPreflightDecision: "PASS" as const } : {}),
+      ...(referenceInputs.length > 0 ? { referenceInputs } : {}),
+      createdAt,
+    });
+  });
 
   return {
     schemaVersion: "atlas.visual-preflight-qualification/v0.1",
@@ -97,6 +146,23 @@ function hasFlag(name: string): boolean {
 function parseMode(value: string | undefined): CanonicalVisualPreflightMode {
   if (value === "references" || value === "shots") return value;
   throw new Error("VPC_CANONICAL_PREFLIGHT_MODE_INVALID");
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+async function loadReferenceLocks(path: string): Promise<VisualReferenceLock[]> {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(await readFile(resolve(path), "utf8"));
+  } catch {
+    throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_UNAVAILABLE");
+  }
+  if (!isRecord(parsed) || !Array.isArray(parsed.locks)) {
+    throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
+  }
+  return parsed.locks as VisualReferenceLock[];
 }
 
 async function writeJson(path: string, value: unknown): Promise<void> {
@@ -162,10 +228,16 @@ async function main(): Promise<void> {
   const mode = parseMode(argument("--mode"));
   const output = argument("--output");
   if (!output) throw new Error("VPC_CANONICAL_PREFLIGHT_OUTPUT_REQUIRED");
+  const referenceLocksPath = argument("--reference-locks");
+  if (mode === "shots" && !referenceLocksPath) {
+    throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_REQUIRED");
+  }
+  const referenceLocks = referenceLocksPath ? await loadReferenceLocks(referenceLocksPath) : undefined;
 
   const qualification = await compileCanonicalVisualPreflight({
     mode,
     humanPreflightPass: hasFlag("--human-preflight-pass"),
+    ...(referenceLocks ? { referenceLocks } : {}),
   });
 
   if (qualification.receipts.some((receipt) => receipt.finalState !== "PREFLIGHT_PASS")) {
