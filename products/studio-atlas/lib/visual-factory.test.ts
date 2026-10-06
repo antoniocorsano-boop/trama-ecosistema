@@ -33,6 +33,7 @@ function bindDigest(spec: VisualIntentSpec, packageDigest = DIGEST): VisualInten
 function passReceipt(
   spec: VisualIntentSpec,
   referenceInputs: readonly string[] = [],
+  referenceInputDigests: readonly string[] = [],
 ): VisualPreflightReceipt {
   return createVisualPreflightReceipt({
     spec,
@@ -40,6 +41,7 @@ function passReceipt(
     semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
     humanPreflightDecision: "PASS",
     referenceInputs,
+    referenceInputDigests,
     createdAt: "2026-10-05T20:00:00.000Z",
   });
 }
@@ -104,7 +106,8 @@ function shotReceipts(state: VisualFactoryState): VisualPreflightReceipt[] {
   return SHOT_IDS.map((shotId) => {
     const spec = bindDigest(getMuseoZeroShotIntent(shotId));
     const refs = spec.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl);
-    return passReceipt(spec, refs);
+    const digests = spec.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetSha256!);
+    return passReceipt(spec, refs, digests);
   });
 }
 
