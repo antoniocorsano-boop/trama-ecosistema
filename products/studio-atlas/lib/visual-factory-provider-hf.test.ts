@@ -17,7 +17,7 @@ function configured(): HfZeroGpuConfig {
     token: TOKEN,
     spaceUrl: "owner/space",
     admissionSecret: ADMISSION_SECRET,
-  } as HfZeroGpuConfig;
+  };
 }
 
 function plan(planType: VisualGenerationPlan["planType"] = "REFERENCE_GENERATION"): VisualGenerationPlan {
@@ -121,13 +121,13 @@ test("protected reference reserve rejects insufficient HF quota before inference
 
 test("safe HF quota sends one short-lived admission capability bound to the exact plan", async () => {
   let predictCalls = 0;
-  let admission: Record<string, unknown> | null = null;
+  let admissionJson: string | undefined;
   const adapter = createHfZeroGpuAdapter(configured(), {
     nowEpoch: () => 1_800_000_000,
     async getQuota() { return { base: 300, remaining: 300, overquotaUsed: 0, resetsAt: "2026-10-06T04:00:00Z" }; },
     async predict(input) {
       predictCalls += 1;
-      admission = JSON.parse((input as typeof input & { admissionJson: string }).admissionJson) as Record<string, unknown>;
+      admissionJson = input.admissionJson;
       return gradioSuccess();
     },
   });
@@ -137,11 +137,13 @@ test("safe HF quota sends one short-lived admission capability bound to the exac
   const outcome = await adapter.execute(currentPlan, ctx());
   assert.equal(outcome.kind, "SUCCEEDED");
   assert.equal(predictCalls, 1);
-  assert.equal(admission?.schemaVersion, "atlas.visual-provider-admission/v0.1");
-  assert.equal(admission?.planDigest, canonicalDigest(currentPlan));
-  assert.equal(admission?.issuedAtEpoch, 1_800_000_000);
-  assert.equal(admission?.expiresAtEpoch, 1_800_000_120);
-  assert.match(String(admission?.signature), /^[0-9a-f]{64}$/);
+  assert.ok(admissionJson);
+  const admission = JSON.parse(admissionJson) as Record<string, unknown>;
+  assert.equal(admission.schemaVersion, "atlas.visual-provider-admission/v0.1");
+  assert.equal(admission.planDigest, canonicalDigest(currentPlan));
+  assert.equal(admission.issuedAtEpoch, 1_800_000_000);
+  assert.equal(admission.expiresAtEpoch, 1_800_000_120);
+  assert.match(String(admission.signature), /^[0-9a-f]{64}$/);
 });
 
 test("paid overquota usage makes HF ineligible even when a response reports remaining seconds", async () => {
