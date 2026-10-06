@@ -23,3 +23,12 @@ test("reference workflow can scope one canonical reference without weakening pre
   assert.match(workflow, /REFERENCE_SUBJECT:\s*\$\{\{\s*inputs\.reference_subject\s*\}\}/);
   assert.match(workflow, /--subject\s+"\$REFERENCE_SUBJECT"/);
 });
+
+test("scoped reference execution preserves the conservative canonical HF reserve", async () => {
+  const workflow = await readFile(WORKFLOW, "utf8");
+
+  assert.match(
+    workflow,
+    /VISUAL_FACTORY_UNFINISHED_CANONICAL_REFERENCES:\s*\$\{\{\s*inputs\.mode\s*==\s*'shots'\s*&&\s*'0'\s*\|\|\s*'5'\s*\}\}/,
+  );
+});
