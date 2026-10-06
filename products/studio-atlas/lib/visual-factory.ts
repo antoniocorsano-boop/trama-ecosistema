@@ -50,6 +50,7 @@ export type VisualFactoryStage =
 
 export type VisualFactoryState = {
   packageDigest: string;
+  artDirectionVersion?: string;
   stage: VisualFactoryStage;
   candidates: VisualAssetCandidate[];
   referenceLocks: VisualReferenceLock[];
@@ -158,6 +159,7 @@ type QualifiedPreflight = {
 };
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
+const MUSEO_ZERO_ART_DIRECTION_VERSION = getMuseoZeroReferenceIntent("lia").artDirectionVersion;
 
 export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
   { subjectRef: "lia", purpose: "CHARACTER_REFERENCE" },
@@ -306,6 +308,7 @@ export function createInitialVisualFactoryState(packageDigest: string): VisualFa
   }
   return {
     packageDigest,
+    artDirectionVersion: MUSEO_ZERO_ART_DIRECTION_VERSION,
     stage: "NEEDS_REFERENCES",
     candidates: [],
     referenceLocks: [],
@@ -317,7 +320,11 @@ export function reconcileVisualFactoryState(
   state: VisualFactoryState | null | undefined,
   packageDigest: string,
 ): VisualFactoryState {
-  if (!state || state.packageDigest !== packageDigest) {
+  if (
+    !state ||
+    state.packageDigest !== packageDigest ||
+    state.artDirectionVersion !== MUSEO_ZERO_ART_DIRECTION_VERSION
+  ) {
     return createInitialVisualFactoryState(packageDigest);
   }
   return state;
@@ -330,7 +337,10 @@ export function compileReferenceJobs(
   preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
   const prefix = basePlan(project, packageDigest, "REFERENCE_GENERATION");
-  if (state.packageDigest !== packageDigest) {
+  if (
+    state.packageDigest !== packageDigest ||
+    state.artDirectionVersion !== MUSEO_ZERO_ART_DIRECTION_VERSION
+  ) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
   const locked = new Set(state.referenceLocks.map((item) => item.subjectRef));
@@ -461,7 +471,10 @@ export function compileShotJobs(
   preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
   const prefix = basePlan(project, packageDigest, "SHOT_GENERATION");
-  if (state.packageDigest !== packageDigest) {
+  if (
+    state.packageDigest !== packageDigest ||
+    state.artDirectionVersion !== MUSEO_ZERO_ART_DIRECTION_VERSION
+  ) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
   const lockBySubject = new Map(state.referenceLocks.map((item) => [item.subjectRef, item]));
