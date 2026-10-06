@@ -89,9 +89,7 @@ function promptFor(job: VisualGenerationJob): string {
 }
 
 function endpoint(accountId: string): string {
-  const url = new URL(`https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${MODEL_REF}`);
-  url.searchParams.set("rejectIfBusy", "true");
-  return url.toString();
+  return `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${MODEL_REF}`;
 }
 
 function successReceipt(plan: VisualGenerationPlan, assets: VisualAssetCandidate[]): VisualExecutionReceipt {
@@ -154,6 +152,7 @@ async function executeJob(
   form.append("width", String(size.width));
   form.append("height", String(size.height));
   form.append("seed", String(seedFor(plan.packageDigest, job.jobId, variant)));
+  form.append("options", JSON.stringify({ rejectIfBusy: true }));
 
   try {
     for (let index = 0; index < job.referenceInputs.length; index += 1) {
