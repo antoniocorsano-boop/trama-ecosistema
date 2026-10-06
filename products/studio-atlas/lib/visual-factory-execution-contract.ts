@@ -16,6 +16,37 @@ function bindPackageDigest(spec: VisualIntentSpec, packageDigest: string): Visua
   return { ...spec, packageDigest };
 }
 
+function assertStructuralJobBinding(job: VisualGenerationJob): void {
+  if (
+    job.maxVariants !== 1 ||
+    job.preflightState !== "PREFLIGHT_PASS" ||
+    typeof job.preflightReceiptId !== "string" ||
+    job.preflightReceiptId.length === 0 ||
+    typeof job.preflightSpecDigest !== "string" ||
+    !HEX_64.test(job.preflightSpecDigest) ||
+    typeof job.compiledPromptDigest !== "string" ||
+    !HEX_64.test(job.compiledPromptDigest)
+  ) {
+    throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
+  }
+}
+
+export function assertVisualPreflightBoundPlan(plan: VisualGenerationPlan): void {
+  if (
+    !HEX_64.test(plan.packageDigest) ||
+    !Array.isArray(plan.jobs) ||
+    plan.jobs.length < 1 ||
+    plan.jobs.length > 6 ||
+    plan.paidComputeAuthorized !== false ||
+    plan.allowQualityDowngrade !== false ||
+    plan.runtimeAuthorized !== false ||
+    plan.publicationAuthorityGranted !== false
+  ) {
+    throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
+  }
+  for (const job of plan.jobs) assertStructuralJobBinding(job);
+}
+
 function expectedSpec(plan: VisualGenerationPlan, job: VisualGenerationJob): VisualIntentSpec {
   if (plan.pathwayId !== MUSEO_ZERO_PROJECT_ID) {
     throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
@@ -36,18 +67,7 @@ function expectedSpec(plan: VisualGenerationPlan, job: VisualGenerationJob): Vis
 }
 
 function assertExactJobBinding(plan: VisualGenerationPlan, job: VisualGenerationJob): void {
-  if (
-    job.maxVariants !== 1 ||
-    job.preflightState !== "PREFLIGHT_PASS" ||
-    typeof job.preflightReceiptId !== "string" ||
-    job.preflightReceiptId.length === 0 ||
-    typeof job.preflightSpecDigest !== "string" ||
-    !HEX_64.test(job.preflightSpecDigest) ||
-    typeof job.compiledPromptDigest !== "string" ||
-    !HEX_64.test(job.compiledPromptDigest)
-  ) {
-    throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
-  }
+  assertStructuralJobBinding(job);
 
   let spec: VisualIntentSpec;
   try {
@@ -91,29 +111,26 @@ function assertExactJobBinding(plan: VisualGenerationPlan, job: VisualGeneration
   }
 }
 
-export function assertVisualPreflightBoundPlan(plan: VisualGenerationPlan): void {
-  if (
-    plan.pathwayId !== MUSEO_ZERO_PROJECT_ID ||
-    !HEX_64.test(plan.packageDigest) ||
-    !Array.isArray(plan.jobs) ||
-    plan.jobs.length < 1 ||
-    plan.jobs.length > 6 ||
-    plan.paidComputeAuthorized !== false ||
-    plan.allowQualityDowngrade !== false ||
-    plan.runtimeAuthorized !== false ||
-    plan.publicationAuthorityGranted !== false
-  ) {
+export function assertExactCanonicalVisualPreflightBoundPlan(plan: VisualGenerationPlan): void {
+  assertVisualPreflightBoundPlan(plan);
+  if (plan.pathwayId !== MUSEO_ZERO_PROJECT_ID) {
     throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
   }
-
-  for (const job of plan.jobs) {
-    assertExactJobBinding(plan, job);
-  }
+  for (const job of plan.jobs) assertExactJobBinding(plan, job);
 }
 
 export function isVisualPreflightBoundPlan(plan: VisualGenerationPlan): boolean {
   try {
     assertVisualPreflightBoundPlan(plan);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function isExactCanonicalVisualPreflightBoundPlan(plan: VisualGenerationPlan): boolean {
+  try {
+    assertExactCanonicalVisualPreflightBoundPlan(plan);
     return true;
   } catch {
     return false;
