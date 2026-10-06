@@ -197,6 +197,7 @@ function positiveSemanticText(spec: VisualIntentSpec): string[] {
   return [
     spec.narrativeFunction,
     ...spec.requiredVisualFacts,
+    ...(spec.exactTextRequired ?? []),
     ...spec.worldAnchors,
     ...spec.identityAnchors,
     spec.composition.dominantSubject,
@@ -328,11 +329,13 @@ export function compileVisualPrompt(
 
   const compilerVersion = options.compilerVersion ?? VISUAL_PREFLIGHT_COMPILER_VERSION;
   const sourceSpecDigest = canonicalDigest(spec);
+  const exactTextSection = joinSection(spec.exactTextRequired ?? []);
   const positivePrompt = [
     "medium/style: cinematic editorial illustration; polished 2-D illustrated realism",
     `narrative/world: ${joinSection([spec.narrativeFunction, ...spec.worldAnchors])}`,
     `identity: ${joinSection(spec.identityAnchors.length > 0 ? spec.identityAnchors : spec.worldAnchors)}`,
     `action/state: ${joinSection([...spec.requiredVisualFacts, spec.interactionState ?? ""])}`,
+    ...(exactTextSection ? [`exact text required: ${exactTextSection}`] : []),
     `composition: ${joinSection([
       spec.composition.dominantSubject,
       ...spec.composition.foreground,
