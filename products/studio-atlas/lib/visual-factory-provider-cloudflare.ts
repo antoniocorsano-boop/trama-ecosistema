@@ -14,8 +14,8 @@ import type {
 } from "./visual-factory-orchestrator";
 import { assertVisualReferenceBytesMatchDigest } from "./visual-reference-integrity";
 
-const MODEL_REF = "@cf/black-forest-labs/flux-2-klein-4b";
-const WORKFLOW_REF = "cloudflare-workers-ai.flux2-klein-4b/v0.1";
+const MODEL_REF = "@cf/black-forest-labs/flux-2-klein-9b";
+const WORKFLOW_REF = "cloudflare-workers-ai.flux2-klein-9b/v0.1";
 const MAX_REFERENCE_IMAGES = 4;
 
 export type CloudflareWorkersAiConfig = {
