@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 import { POST } from "../app/api/visual-factory/execute/route";
 import { createMuseoZeroPilotProject } from "./canonical/museo-zero";
@@ -19,11 +22,16 @@ import {
 } from "./visual-factory-orchestrator";
 import { createCloudflareWorkersAiAdapter } from "./visual-factory-provider-cloudflare";
 import { createHfZeroGpuAdapter } from "./visual-factory-provider-hf";
-import { createVisualPreflightReceipt } from "./visual-preflight";
+import { createVisualPreflightReceipt, type VisualPreflightReceipt } from "./visual-preflight";
 
 const DIGEST = "a".repeat(64);
 
-function boundPlan(): VisualGenerationPlan {
+type BoundFixture = {
+  plan: VisualGenerationPlan;
+  receipt: VisualPreflightReceipt;
+};
+
+function boundFixture(): BoundFixture {
   const project = createMuseoZeroPilotProject();
   const spec = { ...getMuseoZeroReferenceIntent("lia"), packageDigest: DIGEST };
   const receipt = createVisualPreflightReceipt({
@@ -43,7 +51,14 @@ function boundPlan(): VisualGenerationPlan {
       lockedAt: "2026-10-06T02:00:00.000Z",
     })),
   };
-  return compileReferenceJobs(project, DIGEST, state, [receipt]);
+  return {
+    receipt,
+    plan: compileReferenceJobs(project, DIGEST, state, [receipt]),
+  };
+}
+
+function boundPlan(): VisualGenerationPlan {
+  return boundFixture().plan;
 }
 
 function unboundPlan(): VisualGenerationPlan {
@@ -53,6 +68,53 @@ function unboundPlan(): VisualGenerationPlan {
   delete plan.jobs[0].compiledPromptDigest;
   delete plan.jobs[0].preflightState;
   return plan;
+}
+
+async function writePersistedEvidence(fixture: BoundFixture): Promise<string> {
+  const root = await mkdtemp(join(tmpdir(), "vpc-issued-evidence-"));
+  await mkdir(join(root, "receipts"), { recursive: true });
+  const prompt = fixture.receipt.compiledPrompts[0];
+  if (!prompt) throw new Error("TEST_PREFLIGHT_PROMPT_REQUIRED");
+  await writeFile(
+    join(root, "receipts", `${fixture.receipt.specId}.json`),
+    `${JSON.stringify(fixture.receipt, null, 2)}\n`,
+    "utf8",
+  );
+  await writeFile(
+    join(root, "manifest.json"),
+    `${JSON.stringify({
+      schemaVersion: "atlas.visual-preflight-qualification/v0.1",
+      mode: "references",
+      pathwayId: fixture.plan.pathwayId,
+      packageDigest: fixture.plan.packageDigest,
+      semanticCriticMode: "NOT_AVAILABLE",
+      humanPreflightDecision: "PASS",
+      providerCallCount: 0,
+      sourceSpecIds: [fixture.receipt.specId],
+      receiptIds: [fixture.receipt.receiptId],
+      finalStates: [fixture.receipt.finalState],
+      compiledPromptDigests: [prompt.promptDigest],
+      paidComputeAuthorized: false,
+      allowQualityDowngrade: false,
+      runtimeAuthorized: false,
+      publicationAuthorityGranted: false,
+    }, null, 2)}\n`,
+    "utf8",
+  );
+  return root;
+}
+
+async function withPersistedEvidence<T>(fixture: BoundFixture, run: () => Promise<T>): Promise<T> {
+  const root = await writePersistedEvidence(fixture);
+  const previous = process.env.VISUAL_FACTORY_PREFLIGHT_EVIDENCE_DIR;
+  process.env.VISUAL_FACTORY_PREFLIGHT_EVIDENCE_DIR = root;
+  try {
+    return await run();
+  } finally {
+    if (previous === undefined) delete process.env.VISUAL_FACTORY_PREFLIGHT_EVIDENCE_DIR;
+    else process.env.VISUAL_FACTORY_PREFLIGHT_EVIDENCE_DIR = previous;
+    await rm(root, { recursive: true, force: true });
+  }
 }
 
 function ctx(): OrchestrationContext {
@@ -106,12 +168,11 @@ test("same-origin executor performs zero fetches for an unbound hand-crafted pla
   assert.equal(receipt.failureDetail, "VISUAL_PREFLIGHT_BINDING_INVALID");
 });
 
-test("valid-looking forged prompt or digest bindings perform zero gateway fetches", async () => {
+test("forged prompt and semantic digest bindings perform zero gateway fetches", async () => {
   const mutations: Array<(plan: VisualGenerationPlan) => void> = [
     (plan) => { plan.jobs[0].prompt = `${plan.jobs[0].prompt}. rogue dashboard`; },
     (plan) => { plan.jobs[0].compiledPromptDigest = "e".repeat(64); },
     (plan) => { plan.jobs[0].preflightSpecDigest = "f".repeat(64); },
-    (plan) => { plan.jobs[0].preflightReceiptId = "vpc-ffffffffffffffffffffffffffffffff"; },
   ];
 
   for (const mutate of mutations) {
@@ -140,18 +201,36 @@ test("HTTP execution route rejects an unbound canonical plan before provider sel
   assert.deepEqual(await response.json(), { error: "INVALID_VISUAL_GENERATION_PLAN" });
 });
 
-test("HTTP execution route rejects valid-looking forged prompt bindings", async () => {
-  const plan = boundPlan();
+test("HTTP execution route rejects forged prompt against trusted persisted evidence", async () => {
+  const fixture = boundFixture();
+  const plan = structuredClone(fixture.plan);
   plan.jobs[0].prompt = `${plan.jobs[0].prompt}. injected semantic mutation`;
-  const request = new Request("http://localhost/api/visual-factory/execute", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(plan),
-  });
 
-  const response = await POST(request);
-  assert.equal(response.status, 400);
-  assert.deepEqual(await response.json(), { error: "INVALID_VISUAL_GENERATION_PLAN" });
+  await withPersistedEvidence(fixture, async () => {
+    const response = await POST(new Request("http://localhost/api/visual-factory/execute", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(plan),
+    }));
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), { error: "INVALID_VISUAL_GENERATION_PLAN" });
+  });
+});
+
+test("HTTP execution route rejects forged receipt id against trusted persisted evidence", async () => {
+  const fixture = boundFixture();
+  const plan = structuredClone(fixture.plan);
+  plan.jobs[0].preflightReceiptId = "vpc-ffffffffffffffffffffffffffffffff";
+
+  await withPersistedEvidence(fixture, async () => {
+    const response = await POST(new Request("http://localhost/api/visual-factory/execute", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(plan),
+    }));
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), { error: "INVALID_VISUAL_GENERATION_PLAN" });
+  });
 });
 
 test("orchestrator rejects an unbound hand-crafted plan before adapter preflight", async () => {
