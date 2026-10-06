@@ -6,8 +6,7 @@ import type {
   VisualOrchestrationEvidence,
   VisualProviderAttemptEvidence,
 } from "./visual-factory";
-import { assertExactCanonicalVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
-import type { VisualPreflightReceipt } from "./visual-preflight";
+import { assertCanonicalVisualPlanSemantics } from "./visual-factory-execution-contract";
 
 function noAuthorityReceipt(
   packageDigest: string,
@@ -179,20 +178,16 @@ export function waitingForComputeReceipt(
 
 export async function executeVisualFactoryPlan(
   plan: VisualGenerationPlan,
-  preflightReceipts: readonly VisualPreflightReceipt[],
   fetchImpl: typeof fetch = fetch,
 ): Promise<VisualExecutionReceipt> {
   try {
-    assertExactCanonicalVisualPreflightBoundPlan(plan, preflightReceipts);
-  } catch (error) {
-    const detail = error instanceof Error && error.message === "VISUAL_PREFLIGHT_EVIDENCE_REQUIRED"
-      ? "VISUAL_PREFLIGHT_EVIDENCE_REQUIRED"
-      : "VISUAL_PREFLIGHT_BINDING_INVALID";
+    assertCanonicalVisualPlanSemantics(plan);
+  } catch {
     return noAuthorityReceipt(
       plan.packageDigest,
       "FAILED",
       "INVALID_EXECUTOR_RESPONSE",
-      detail,
+      "VISUAL_PREFLIGHT_BINDING_INVALID",
     );
   }
 
