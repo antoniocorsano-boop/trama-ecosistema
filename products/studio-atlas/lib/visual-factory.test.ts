@@ -143,7 +143,7 @@ test("stale or revise reference preflight blocks generation", () => {
   const revisePlan = compileReferenceJobs(project, DIGEST, state, revised);
   assert.equal(revisePlan.decision, "STOP_PREFLIGHT_REQUIRED");
   assert.deepEqual(revisePlan.jobs, []);
-  assert.ok(revisePlan.blockers.some((item) => item.includes("NOT_PASSED:lia")));
+  assert.ok(revisePlan.blockers.some((item) => item.includes("RECEIPT_INTEGRITY_INVALID:lia")));
 });
 
 test("tampered PASS receipt with stale receiptId is rejected before job compilation", () => {
