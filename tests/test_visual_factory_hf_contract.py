@@ -46,7 +46,11 @@ class VisualFactoryHfContractTests(unittest.TestCase):
                 "negativeConstraints": ["dashboard aesthetic"],
                 "referenceInputs": refs or [],
                 "aspectRatio": aspect_ratio,
-                "maxVariants": 3,
+                "maxVariants": 1,
+                "preflightReceiptId": "vpc-test-receipt",
+                "preflightSpecDigest": "b" * 64,
+                "compiledPromptDigest": "c" * 64,
+                "preflightState": "PREFLIGHT_PASS",
             }],
             "blockers": [],
             "paidComputeAuthorized": False,
@@ -59,7 +63,8 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         plan = self.contract.validate_plan(self.plan())
         job = self.contract.compile_execution_jobs(plan)[0]
         self.assertEqual((job.width, job.height), (768, 1024))
-        self.assertEqual(job.max_variants, 3)
+        self.assertEqual(job.max_variants, 1)
+        self.assertEqual(job.preflight_state, "PREFLIGHT_PASS")
 
     def test_scene_job_requires_locked_reference_inputs(self):
         with self.assertRaisesRegex(ValueError, "SCENE_REFERENCE_REQUIRED"):
@@ -79,11 +84,24 @@ class VisualFactoryHfContractTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "AUTHORITY_VIOLATION"):
                 self.contract.validate_plan(plan)
 
-    def test_variant_count_is_bounded(self):
-        plan = self.plan()
-        plan["jobs"][0]["maxVariants"] = 4
-        with self.assertRaisesRegex(ValueError, "MAX_VARIANTS_EXCEEDED"):
-            self.contract.validate_plan(plan)
+    def test_variant_count_is_exactly_one(self):
+        for variants in (0, 2, 3, 4):
+            plan = self.plan()
+            plan["jobs"][0]["maxVariants"] = variants
+            with self.assertRaisesRegex(ValueError, "MAX_VARIANTS_MUST_BE_ONE"):
+                self.contract.validate_plan(plan)
+
+    def test_preflight_bindings_are_required(self):
+        for field, error in (
+            ("preflightReceiptId", "PREFLIGHT_RECEIPT_REQUIRED"),
+            ("preflightSpecDigest", "PREFLIGHT_SPEC_DIGEST_INVALID"),
+            ("compiledPromptDigest", "COMPILED_PROMPT_DIGEST_INVALID"),
+            ("preflightState", "PREFLIGHT_NOT_PASSED"),
+        ):
+            plan = self.plan()
+            plan["jobs"][0].pop(field)
+            with self.assertRaisesRegex(ValueError, error):
+                self.contract.validate_plan(plan)
 
     def test_receipt_never_grants_authority(self):
         plan = self.contract.validate_plan(self.plan())
