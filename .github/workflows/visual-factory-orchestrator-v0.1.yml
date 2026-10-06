@@ -50,7 +50,6 @@ jobs:
     timeout-minutes: 30
     env:
       VISUAL_FACTORY_EVIDENCE_DIR: ${{ github.workspace }}/visual-factory-evidence
-      VISUAL_FACTORY_UNFINISHED_CANONICAL_REFERENCES: ${{ inputs.mode == 'shots' && '0' || '5' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -109,6 +108,20 @@ jobs:
                 --output /tmp/visual-generation-plan.json
             )
           fi
+
+          PLAN_TYPE="$(node -e 'const fs = require("node:fs"); const plan = JSON.parse(fs.readFileSync("/tmp/visual-generation-plan.json", "utf8")); process.stdout.write(String(plan.planType ?? ""));')"
+          case "$PLAN_TYPE" in
+            REFERENCE_GENERATION)
+              echo "VISUAL_FACTORY_UNFINISHED_CANONICAL_REFERENCES=5" >> "$GITHUB_ENV"
+              ;;
+            SHOT_GENERATION)
+              echo "VISUAL_FACTORY_UNFINISHED_CANONICAL_REFERENCES=0" >> "$GITHUB_ENV"
+              ;;
+            *)
+              echo "UNSUPPORTED_VISUAL_GENERATION_PLAN_TYPE:$PLAN_TYPE" >&2
+              exit 1
+              ;;
+          esac
 
           mkdir -p "$VISUAL_FACTORY_EVIDENCE_DIR"
           rm -rf "$VISUAL_FACTORY_EVIDENCE_DIR/preflight"
