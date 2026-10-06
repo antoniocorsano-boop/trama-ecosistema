@@ -76,6 +76,10 @@ jobs:
           HUMAN_PREFLIGHT_PASS: ${{ inputs.human_preflight_pass }}
         run: |
           set -euo pipefail
+          if [ -n "$PLAN_PATH" ] && [ "$REFERENCE_SUBJECT" != "all" ]; then
+            echo "PLAN_PATH_REQUIRES_REFERENCE_SUBJECT_ALL" >&2
+            exit 1
+          fi
           if [ -n "$PLAN_PATH" ]; then
             test -f "$PLAN_PATH"
             test -n "$PREFLIGHT_PATH" || {
