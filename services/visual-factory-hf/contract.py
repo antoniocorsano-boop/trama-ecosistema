@@ -22,7 +22,7 @@ ALLOWED_ASPECTS = {
     "9:16": (576, 1024),
 }
 MAX_JOBS = 6
-MAX_VARIANTS = 3
+MAX_VARIANTS = 1
 
 
 @dataclass(frozen=True)
@@ -38,6 +38,10 @@ class ExecutionJob:
     width: int
     height: int
     max_variants: int
+    preflight_receipt_id: str
+    preflight_spec_digest: str
+    compiled_prompt_digest: str
+    preflight_state: str
 
 
 def _require(condition: bool, message: str) -> None:
@@ -45,12 +49,16 @@ def _require(condition: bool, message: str) -> None:
         raise ValueError(message)
 
 
+def _is_digest(value: Any) -> bool:
+    return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+
+
 def validate_plan(value: dict[str, Any]) -> dict[str, Any]:
     _require(isinstance(value, dict), "INVALID_PLAN")
     _require(value.get("schemaVersion") == SCHEMA, "UNSUPPORTED_SCHEMA")
     _require(isinstance(value.get("pathwayId"), str) and value["pathwayId"], "PATHWAY_REQUIRED")
     digest = value.get("packageDigest")
-    _require(isinstance(digest, str) and len(digest) == 64 and all(c in "0123456789abcdef" for c in digest), "PACKAGE_DIGEST_INVALID")
+    _require(_is_digest(digest), "PACKAGE_DIGEST_INVALID")
 
     for field in (
         "paidComputeAuthorized",
@@ -72,7 +80,14 @@ def validate_plan(value: dict[str, Any]) -> dict[str, Any]:
         _require(isinstance(job.get("prompt"), str) and job["prompt"].strip(), "PROMPT_REQUIRED")
         _require(job.get("aspectRatio") in ALLOWED_ASPECTS, "ASPECT_RATIO_UNSUPPORTED")
         variants = job.get("maxVariants")
-        _require(isinstance(variants, int) and 1 <= variants <= MAX_VARIANTS, "MAX_VARIANTS_EXCEEDED")
+        _require(isinstance(variants, int) and variants == MAX_VARIANTS, "MAX_VARIANTS_MUST_BE_ONE")
+        _require(
+            isinstance(job.get("preflightReceiptId"), str) and bool(job["preflightReceiptId"]),
+            "PREFLIGHT_RECEIPT_REQUIRED",
+        )
+        _require(_is_digest(job.get("preflightSpecDigest")), "PREFLIGHT_SPEC_DIGEST_INVALID")
+        _require(_is_digest(job.get("compiledPromptDigest")), "COMPILED_PROMPT_DIGEST_INVALID")
+        _require(job.get("preflightState") == "PREFLIGHT_PASS", "PREFLIGHT_NOT_PASSED")
         refs = job.get("referenceInputs", [])
         _require(isinstance(refs, list) and all(isinstance(ref, str) and ref for ref in refs), "REFERENCE_INPUT_INVALID")
         if purpose == "SCENE_FRAME":
@@ -101,6 +116,10 @@ def compile_execution_jobs(plan: dict[str, Any]) -> list[ExecutionJob]:
                 width=width,
                 height=height,
                 max_variants=job["maxVariants"],
+                preflight_receipt_id=job["preflightReceiptId"],
+                preflight_spec_digest=job["preflightSpecDigest"],
+                compiled_prompt_digest=job["compiledPromptDigest"],
+                preflight_state=job["preflightState"],
             )
         )
     return compiled
