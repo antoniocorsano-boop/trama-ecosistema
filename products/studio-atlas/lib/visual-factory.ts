@@ -3,7 +3,14 @@ import {
   getMuseoZeroReferenceIntent,
   getMuseoZeroShotIntent,
 } from "./canonical/museo-zero-visual-intents";
-import type { VisualIntentSpec } from "./visual-preflight";
+import {
+  canonicalDigest,
+  compileVisualPrompt,
+  VISUAL_PREFLIGHT_COMPILER_VERSION,
+  type CompiledVisualPrompt,
+  type VisualIntentSpec,
+  type VisualPreflightReceipt,
+} from "./visual-preflight";
 
 export type VisualAssetPurpose =
   | "CHARACTER_REFERENCE"
@@ -59,7 +66,11 @@ export type VisualGenerationJob = {
   negativeConstraints: string[];
   referenceInputs: string[];
   aspectRatio: string;
-  maxVariants: number;
+  maxVariants: 1;
+  preflightReceiptId: string;
+  preflightSpecDigest: string;
+  compiledPromptDigest: string;
+  preflightState: "PREFLIGHT_PASS";
 };
 
 export type VisualGenerationPlan = {
@@ -71,7 +82,8 @@ export type VisualGenerationPlan = {
     | "REFERENCE_GENERATION_READY"
     | "NO_REFERENCE_GENERATION_REQUIRED"
     | "SHOT_GENERATION_READY"
-    | "STOP_REFERENCE_LOCK_REQUIRED";
+    | "STOP_REFERENCE_LOCK_REQUIRED"
+    | "STOP_PREFLIGHT_REQUIRED";
   jobs: VisualGenerationJob[];
   blockers: string[];
   paidComputeAuthorized: false;
@@ -137,6 +149,11 @@ type ShotDefinition = {
   subjectRefs: string[];
 };
 
+type QualifiedPreflight = {
+  receipt: VisualPreflightReceipt;
+  compiled: CompiledVisualPrompt;
+};
+
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 
 export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
@@ -156,23 +173,65 @@ const MUSEO_ZERO_SHOTS: ShotDefinition[] = [
   { shotId: "F6", sceneRef: "MZ6_FINAL_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
 ];
 
-function promptFromIntent(intent: VisualIntentSpec): string {
-  const parts = [
-    "cinematic editorial illustration; polished 2-D illustrated realism; after-hours contemporary museum",
-    intent.narrativeFunction,
-    `required visual facts: ${intent.requiredVisualFacts.join("; ")}`,
-    `world anchors: ${intent.worldAnchors.join("; ")}`,
-    intent.identityAnchors.length ? `identity anchors: ${intent.identityAnchors.join("; ")}` : "",
-    `composition: ${intent.composition.dominantSubject}; foreground ${intent.composition.foreground.join("; ")}; background ${intent.composition.background.join("; ")}; ${intent.composition.spatialRelation}`,
-    intent.composition.focalActions?.length ? `focal action: ${intent.composition.focalActions.join("; ")}` : "",
-    `camera: ${intent.camera.shotScale}; ${intent.camera.viewpoint}; ${intent.camera.lensLanguage}`,
-    `lighting: ${intent.lightingMood}`,
-    `materials: ${intent.materialTextureLanguage.join("; ")}`,
-    intent.interactionState ? `interaction state: ${intent.interactionState}` : "",
-    `quality: ${intent.qualityCriteria.join("; ")}`,
-    `avoid: ${intent.negativeConstraints.join("; ")}`,
-  ];
-  return parts.filter(Boolean).join(". ");
+function bindPackageDigest(intent: VisualIntentSpec, packageDigest: string): VisualIntentSpec {
+  return { ...intent, packageDigest };
+}
+
+function sameStringArray(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((item, index) => item === right[index]);
+}
+
+function qualifyPreflight(
+  intentTemplate: VisualIntentSpec,
+  packageDigest: string,
+  receipts: readonly VisualPreflightReceipt[],
+  key: string,
+  referenceInputs: readonly string[] = [],
+): { qualified?: QualifiedPreflight; blocker?: string } {
+  const intent = bindPackageDigest(intentTemplate, packageDigest);
+  const receipt = receipts.find((item) => item.specId === intent.specId);
+  if (!receipt) return { blocker: `VISUAL_PREFLIGHT_RECEIPT_MISSING:${key}` };
+  if (receipt.finalState !== "PREFLIGHT_PASS") {
+    return { blocker: `VISUAL_PREFLIGHT_NOT_PASSED:${key}` };
+  }
+  const expectedSpecDigest = canonicalDigest(intent);
+  if (
+    receipt.packageDigest !== packageDigest ||
+    receipt.specDigest !== expectedSpecDigest ||
+    receipt.specId !== intent.specId
+  ) {
+    return { blocker: `VISUAL_PREFLIGHT_STALE_RECEIPT:${key}` };
+  }
+  if (receipt.compilerVersion !== VISUAL_PREFLIGHT_COMPILER_VERSION) {
+    return { blocker: `VISUAL_PREFLIGHT_COMPILER_VERSION_MISMATCH:${key}` };
+  }
+  if (receipt.artDirectionVersion !== intent.artDirectionVersion) {
+    return { blocker: `VISUAL_PREFLIGHT_ART_DIRECTION_VERSION_MISMATCH:${key}` };
+  }
+  if (
+    receipt.paidComputeAuthorized !== false ||
+    receipt.allowQualityDowngrade !== false ||
+    receipt.runtimeAuthorized !== false ||
+    receipt.publicationAuthorityGranted !== false
+  ) {
+    return { blocker: `VISUAL_PREFLIGHT_AUTHORITY_VIOLATION:${key}` };
+  }
+  if (receipt.compiledPrompts.length !== 1) {
+    return { blocker: `VISUAL_PREFLIGHT_PROMPT_MISSING:${key}` };
+  }
+  const expected = compileVisualPrompt(intent, "FLUX2_KLEIN_4B", { referenceInputs });
+  const compiled = receipt.compiledPrompts[0];
+  if (
+    compiled.promptDigest !== expected.promptDigest ||
+    compiled.sourceSpecDigest !== expected.sourceSpecDigest ||
+    compiled.compilerVersion !== expected.compilerVersion ||
+    compiled.maxVariants !== 1 ||
+    !sameStringArray(compiled.referenceInputs, expected.referenceInputs) ||
+    canonicalDigest(compiled) !== canonicalDigest(expected)
+  ) {
+    return { blocker: `VISUAL_PREFLIGHT_PROMPT_DIGEST_MISMATCH:${key}` };
+  }
+  return { qualified: { receipt, compiled } };
 }
 
 function basePlan(
@@ -225,35 +284,52 @@ export function compileReferenceJobs(
   project: PathwayProject,
   packageDigest: string,
   state: VisualFactoryState,
+  preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
   const prefix = basePlan(project, packageDigest, "REFERENCE_GENERATION");
   if (state.packageDigest !== packageDigest) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
   const locked = new Set(state.referenceLocks.map((item) => item.subjectRef));
-  const jobs = MUSEO_ZERO_VISUAL_SUBJECTS
-    .filter((subject) => !locked.has(subject.subjectRef))
-    .map<VisualGenerationJob>((subject) => {
-      const intent = getMuseoZeroReferenceIntent(subject.subjectRef);
-      return {
-        jobId: `reference-${subject.subjectRef}`,
-        purpose: subject.purpose,
-        subjectRef: subject.subjectRef,
-        workflowFamily: "flux2-klein-4b/v0.2",
-        prompt: promptFromIntent(intent),
-        negativeConstraints: [...intent.negativeConstraints],
-        referenceInputs: [],
-        aspectRatio: intent.targetAspectRatio,
-        maxVariants: 3,
-      };
-    });
+  const pending = MUSEO_ZERO_VISUAL_SUBJECTS.filter((subject) => !locked.has(subject.subjectRef));
+  if (pending.length === 0) {
+    return { ...prefix, decision: "NO_REFERENCE_GENERATION_REQUIRED", jobs: [], blockers: [] };
+  }
 
-  return {
-    ...prefix,
-    decision: jobs.length > 0 ? "REFERENCE_GENERATION_READY" : "NO_REFERENCE_GENERATION_REQUIRED",
-    jobs,
-    blockers: [],
-  };
+  const qualified = pending.map((subject) => ({
+    subject,
+    result: qualifyPreflight(
+      getMuseoZeroReferenceIntent(subject.subjectRef),
+      packageDigest,
+      preflightReceipts,
+      subject.subjectRef,
+    ),
+  }));
+  const blockers = qualified.flatMap((item) => item.result.blocker ? [item.result.blocker] : []);
+  if (blockers.length > 0) {
+    return { ...prefix, decision: "STOP_PREFLIGHT_REQUIRED", jobs: [], blockers };
+  }
+
+  const jobs = qualified.map<VisualGenerationJob>(({ subject, result }) => {
+    const { receipt, compiled } = result.qualified!;
+    return {
+      jobId: `reference-${subject.subjectRef}`,
+      purpose: subject.purpose,
+      subjectRef: subject.subjectRef,
+      workflowFamily: compiled.workflowFamily,
+      prompt: compiled.positivePrompt,
+      negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
+      referenceInputs: [...compiled.referenceInputs],
+      aspectRatio: compiled.aspectRatio,
+      maxVariants: 1,
+      preflightReceiptId: receipt.receiptId,
+      preflightSpecDigest: receipt.specDigest,
+      compiledPromptDigest: compiled.promptDigest,
+      preflightState: "PREFLIGHT_PASS",
+    };
+  });
+
+  return { ...prefix, decision: "REFERENCE_GENERATION_READY", jobs, blockers: [] };
 }
 
 export function ingestVisualCandidates(
@@ -337,6 +413,7 @@ export function compileShotJobs(
   project: PathwayProject,
   packageDigest: string,
   state: VisualFactoryState,
+  preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
   const prefix = basePlan(project, packageDigest, "SHOT_GENERATION");
   if (state.packageDigest !== packageDigest) {
@@ -356,27 +433,45 @@ export function compileShotJobs(
     };
   }
 
-  const jobs = MUSEO_ZERO_SHOTS.map<VisualGenerationJob>((shot) => {
-    const intent = getMuseoZeroShotIntent(shot.shotId);
+  const qualified = MUSEO_ZERO_SHOTS.map((shot) => {
+    const referenceInputs = shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl);
+    return {
+      shot,
+      referenceInputs,
+      result: qualifyPreflight(
+        getMuseoZeroShotIntent(shot.shotId),
+        packageDigest,
+        preflightReceipts,
+        shot.shotId,
+        referenceInputs,
+      ),
+    };
+  });
+  const blockers = qualified.flatMap((item) => item.result.blocker ? [item.result.blocker] : []);
+  if (blockers.length > 0) {
+    return { ...prefix, decision: "STOP_PREFLIGHT_REQUIRED", jobs: [], blockers };
+  }
+
+  const jobs = qualified.map<VisualGenerationJob>(({ shot, referenceInputs, result }) => {
+    const { receipt, compiled } = result.qualified!;
     return {
       jobId: `shot-${shot.shotId}`,
       purpose: "SCENE_FRAME",
       subjectRef: shot.shotId,
       shotId: shot.shotId,
       sceneRef: shot.sceneRef,
-      workflowFamily: "flux2-klein-4b/v0.2",
-      prompt: promptFromIntent(intent),
-      negativeConstraints: [...intent.negativeConstraints, "website mockup", "floating UI overlay"],
-      referenceInputs: shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl),
-      aspectRatio: intent.targetAspectRatio,
-      maxVariants: 3,
+      workflowFamily: compiled.workflowFamily,
+      prompt: compiled.positivePrompt,
+      negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
+      referenceInputs,
+      aspectRatio: compiled.aspectRatio,
+      maxVariants: 1,
+      preflightReceiptId: receipt.receiptId,
+      preflightSpecDigest: receipt.specDigest,
+      compiledPromptDigest: compiled.promptDigest,
+      preflightState: "PREFLIGHT_PASS",
     };
   });
 
-  return {
-    ...prefix,
-    decision: "SHOT_GENERATION_READY",
-    jobs,
-    blockers: [],
-  };
+  return { ...prefix, decision: "SHOT_GENERATION_READY", jobs, blockers: [] };
 }
