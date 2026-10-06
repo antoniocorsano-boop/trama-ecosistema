@@ -2,7 +2,11 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { materializeReviewAssets } from "../lib/visual-factory-artifact-materializer";
 import type { VisualGenerationPlan, VisualExecutionReceipt } from "../lib/visual-factory";
-import { assertExactCanonicalVisualPreflightBoundPlan } from "../lib/visual-factory-execution-contract";
+import {
+  assertExactCanonicalVisualPreflightBoundPlan,
+  assertVisualPreflightBoundPlan,
+} from "../lib/visual-factory-execution-contract";
+import { loadPersistedVisualPreflightEvidence } from "../lib/visual-preflight-evidence-node";
 import {
   orchestrateVisualGeneration,
   selectProviderOrder,
@@ -48,7 +52,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function validatePlan(raw: unknown, mode: RunMode): VisualGenerationPlan {
+function validatePlanShape(raw: unknown, mode: RunMode): VisualGenerationPlan {
   if (!isRecord(raw)) throw new Error("VF_ORCH_PLAN_NOT_OBJECT");
   if (raw.schemaVersion !== "atlas.visual-generation-plan/v0.1") throw new Error("VF_ORCH_PLAN_SCHEMA_UNSUPPORTED");
   if (typeof raw.packageDigest !== "string" || !/^[0-9a-f]{64}$/.test(raw.packageDigest)) {
@@ -65,7 +69,7 @@ function validatePlan(raw: unknown, mode: RunMode): VisualGenerationPlan {
   }
 
   const plan = raw as unknown as VisualGenerationPlan;
-  assertExactCanonicalVisualPreflightBoundPlan(plan);
+  assertVisualPreflightBoundPlan(plan);
   if (mode === "references" && plan.planType !== "REFERENCE_GENERATION") {
     throw new Error("VF_ORCH_REFERENCE_PLAN_REQUIRED");
   }
@@ -110,10 +114,15 @@ async function main(): Promise<void> {
   const mode = parseMode(argument("--mode") ?? process.env.VISUAL_FACTORY_MODE ?? "dry-run");
   const planPath = argument("--plan") ?? process.env.VISUAL_FACTORY_PLAN_PATH;
   if (!planPath) throw new Error("VF_ORCH_PLAN_PATH_REQUIRED");
+  const preflightPath = argument("--preflight") ?? process.env.VISUAL_FACTORY_PREFLIGHT_EVIDENCE_DIR;
+  if (!preflightPath) throw new Error("VF_ORCH_PREFLIGHT_EVIDENCE_REQUIRED");
   const outputDir = resolve(argument("--output") ?? process.env.VISUAL_FACTORY_EVIDENCE_DIR ?? "visual-factory-evidence");
   await mkdir(outputDir, { recursive: true });
 
-  const plan = validatePlan(JSON.parse(await readFile(resolve(planPath), "utf8")), mode);
+  const plan = validatePlanShape(JSON.parse(await readFile(resolve(planPath), "utf8")), mode);
+  const preflightReceipts = await loadPersistedVisualPreflightEvidence(preflightPath, plan);
+  assertExactCanonicalVisualPreflightBoundPlan(plan, preflightReceipts);
+
   const config = buildVisualProviderConfig(process.env);
   const adapters = createConfiguredVisualProviderAdapters(config);
   const ctx = contextFor(plan);
