@@ -12,6 +12,18 @@ on:
           - dry-run
           - references
           - shots
+      reference_subject:
+        description: "Canonical reference to generate; use all for the legacy five-reference batch"
+        required: true
+        type: choice
+        default: all
+        options:
+          - all
+          - lia
+          - omar
+          - teo
+          - sala-zero
+          - cabina-regia
       plan_path:
         description: "Optional repository path to a governed visual generation plan; required for shots"
         required: false
@@ -57,6 +69,7 @@ jobs:
         shell: bash
         env:
           MODE: ${{ inputs.mode }}
+          REFERENCE_SUBJECT: ${{ inputs.reference_subject }}
           PLAN_PATH: ${{ inputs.plan_path }}
           PREFLIGHT_PATH: ${{ inputs.preflight_path }}
           HUMAN_PREFLIGHT_PASS: ${{ inputs.human_preflight_pass }}
@@ -87,6 +100,7 @@ jobs:
                 --human-preflight-pass
               npm run visual-factory:compile-reference-plan -- \
                 --preflight /tmp/canonical-visual-preflight \
+                --subject "$REFERENCE_SUBJECT" \
                 --output /tmp/visual-generation-plan.json
             )
           fi
@@ -151,7 +165,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: visual-factory-orchestration-${{ github.run_id }}-${{ inputs.mode }}
+          name: visual-factory-orchestration-${{ github.run_id }}-${{ inputs.mode }}-${{ inputs.reference_subject }}
           path: visual-factory-evidence/
           if-no-files-found: warn
           retention-days: 14
