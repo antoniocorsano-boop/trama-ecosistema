@@ -7,6 +7,7 @@ import {
   compileReferenceJobs,
   createInitialVisualFactoryState,
 } from "../lib/visual-factory";
+import { selectReferencePlanSubject } from "../lib/visual-reference-plan-selection";
 
 function argument(name: string): string | undefined {
   const index = process.argv.indexOf(name);
@@ -66,17 +67,18 @@ async function main() {
   if (!output) throw new Error("VF_CANONICAL_PLAN_OUTPUT_REQUIRED");
   const preflight = argument("--preflight");
   if (!preflight) throw new Error("VF_CANONICAL_PREFLIGHT_DIRECTORY_REQUIRED");
+  const subject = argument("--subject") ?? "all";
 
   const project = createMuseoZeroPilotProject();
   const packageDigest = await digestAuthoringState(project);
   const state = createInitialVisualFactoryState(packageDigest);
   const receipts = await loadPassPreflightReceipts(preflight, packageDigest);
-  const plan = compileReferenceJobs(project, packageDigest, state, receipts);
+  const canonicalPlan = compileReferenceJobs(project, packageDigest, state, receipts);
 
-  if (plan.decision !== "REFERENCE_GENERATION_READY" || plan.jobs.length !== 5) {
+  if (canonicalPlan.decision !== "REFERENCE_GENERATION_READY" || canonicalPlan.jobs.length !== 5) {
     throw new Error("VF_CANONICAL_REFERENCE_PLAN_NOT_READY");
   }
-  if (plan.jobs.some((job) =>
+  if (canonicalPlan.jobs.some((job) =>
     job.preflightState !== "PREFLIGHT_PASS" ||
     !job.preflightReceiptId ||
     !job.preflightSpecDigest ||
@@ -86,6 +88,7 @@ async function main() {
     throw new Error("VF_CANONICAL_REFERENCE_PLAN_BINDING_INVALID");
   }
 
+  const plan = selectReferencePlanSubject(canonicalPlan, subject);
   const outputPath = resolve(output);
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(plan, null, 2)}\n`, "utf8");
