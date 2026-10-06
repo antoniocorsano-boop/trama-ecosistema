@@ -89,6 +89,7 @@ function assertCanonicalJobSemantics(plan: VisualGenerationPlan, job: VisualGene
   const prompt = compileVisualPrompt(spec, "FLUX2_KLEIN_4B", {
     compilerVersion: VISUAL_PREFLIGHT_COMPILER_VERSION,
     referenceInputs: job.referenceInputs,
+    referenceInputDigests: job.referenceInputDigests ?? [],
   });
   const negativeConstraints = prompt.negativePrompt ? [prompt.negativePrompt] : [];
   const expectedJobId = plan.planType === "REFERENCE_GENERATION"
@@ -104,6 +105,7 @@ function assertCanonicalJobSemantics(plan: VisualGenerationPlan, job: VisualGene
     job.prompt !== prompt.positivePrompt ||
     !sameStrings(job.negativeConstraints, negativeConstraints) ||
     !sameStrings(job.referenceInputs, prompt.referenceInputs) ||
+    !sameStrings(job.referenceInputDigests ?? [], prompt.referenceInputDigests) ||
     job.aspectRatio !== prompt.aspectRatio ||
     job.maxVariants !== 1
   ) {
@@ -228,6 +230,7 @@ function assertExactJobBinding(
   const expectedPrompt = compileVisualPrompt(spec, "FLUX2_KLEIN_4B", {
     compilerVersion: receipt.compilerVersion,
     referenceInputs: job.referenceInputs,
+    referenceInputDigests: job.referenceInputDigests ?? [],
   });
 
   if (
@@ -244,6 +247,7 @@ function assertExactJobBinding(
     actualPrompt.aspectRatio !== expectedPrompt.aspectRatio ||
     actualPrompt.maxVariants !== 1 ||
     !sameStrings(actualPrompt.referenceInputs, expectedPrompt.referenceInputs) ||
+    !sameStrings(actualPrompt.referenceInputDigests, expectedPrompt.referenceInputDigests) ||
     job.preflightReceiptId !== receipt.receiptId ||
     job.preflightSpecDigest !== receipt.specDigest ||
     job.compiledPromptDigest !== actualPrompt.promptDigest
