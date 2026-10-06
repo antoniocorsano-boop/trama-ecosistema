@@ -16,9 +16,10 @@ Nessun nuovo sviluppo funzionale è richiesto da questo pacchetto. La qualificaz
 
 - repository: `antoniocorsano-boop/docente-os-2026-27`;
 - active development ref: `develop`;
-- exact head candidato: `5d2afea7ab03c13892e2b16cc774f25cc5a4b35b`;
-- Beta canonica Render: deploy `dep-db2k8hjncjis738lomq0`, LIVE sullo stesso SHA;
-- `/api/build-info`: binding exact-head verificato dal gate H1 post-merge, che ha superato `Wait for Render to serve this product commit` sul medesimo SHA.
+- exact head candidato: `39bce05fa2e87f3746ee3b6dcd7433065cb2d876`;
+- Beta canonica Render: deploy `dep-db2ke2ajnfac73f3qoog`, LIVE sullo stesso SHA;
+- `/api/build-info`: binding exact-head verificato dal gate H1 post-merge;
+- H1 Human Task Comfort Gate: PASS completo sul runtime Beta exact-head, incluse AAL2, Piano annuale mobile e Progetta.
 
 La canary deve essere acquisita su questa baseline. In caso di drift successivo, la prova deve essere ribasata sul nuovo exact head e non riutilizzata sinteticamente.
 
@@ -59,7 +60,7 @@ area: docente-os
 status: PASS
 source:
   repository: antoniocorsano-boop/docente-os-2026-27
-  ref: dep-db2k8hjncjis738lomq0
+  ref: dep-db2ke2ajnfac73f3qoog
 observedAt: <timestamp UTC>
 freshness:
   policy: RUNTIME_BOUND
@@ -68,8 +69,8 @@ supports:
   - level: 4
 binding:
   areaRef: docente-os
-  releaseRef: dep-db2k8hjncjis738lomq0
-  exactHead: 5d2afea7ab03c13892e2b16cc774f25cc5a4b35b
+  releaseRef: dep-db2ke2ajnfac73f3qoog
+  exactHead: 39bce05fa2e87f3746ee3b6dcd7433065cb2d876
 ```
 
 La ricevuta deve essere supportata da prova osservabile della versione runtime, non da una dichiarazione di branch.
@@ -87,9 +88,9 @@ Dopo la canary PASS:
 
 ## 7. Stato GitHub Actions
 
-Il precedente incidente esterno sui runner hosted non costituisce più il blocco di DOS-M4-01. I gate post-merge sono nuovamente operativi; il gate H1 ha già verificato il binding della Beta al nuovo exact head.
+I gate post-merge sono operativi. Product CI e H1 sono PASS sulla baseline corrente; H1 ha verificato anche il binding della Beta all'exact head corrente.
 
-La chiusura formale L4 resta comunque sospesa fino alla `RUNTIME_CANARY` professionale reale e al completamento coerente dei gate richiesti sul perimetro finale.
+La chiusura formale L4 resta sospesa fino alla `RUNTIME_CANARY` professionale reale e al completamento coerente dei gate richiesti sul perimetro finale.
 
 ## 8. Criterio di uscita
 
