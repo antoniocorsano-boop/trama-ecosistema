@@ -2,6 +2,16 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createMuseoZeroPilotProject } from "./canonical/museo-zero";
 import {
+  getMuseoZeroReferenceIntent,
+  getMuseoZeroShotIntent,
+} from "./canonical/museo-zero-visual-intents";
+import {
+  createVisualPreflightReceipt,
+  type VisualIntentSpec,
+  type VisualPreflightReceipt,
+} from "./visual-preflight";
+import {
+  MUSEO_ZERO_VISUAL_SUBJECTS,
   compileReferenceJobs,
   compileShotJobs,
   createInitialVisualFactoryState,
@@ -9,10 +19,38 @@ import {
   lockVisualReference,
   reconcileVisualFactoryState,
   type VisualExecutionReceipt,
+  type VisualFactoryState,
 } from "./visual-factory";
 
 const DIGEST = "a".repeat(64);
 const OTHER_DIGEST = "b".repeat(64);
+const SHOT_IDS = ["F1", "F2", "F3", "F4", "F5", "F6"] as const;
+
+function bindDigest(spec: VisualIntentSpec, packageDigest = DIGEST): VisualIntentSpec {
+  return { ...spec, packageDigest };
+}
+
+function passReceipt(
+  spec: VisualIntentSpec,
+  referenceInputs: readonly string[] = [],
+  referenceInputDigests: readonly string[] = [],
+): VisualPreflightReceipt {
+  return createVisualPreflightReceipt({
+    spec,
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
+    humanPreflightDecision: "PASS",
+    referenceInputs,
+    referenceInputDigests,
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+}
+
+function referenceReceipts(packageDigest = DIGEST): VisualPreflightReceipt[] {
+  return MUSEO_ZERO_VISUAL_SUBJECTS.map((subject) =>
+    passReceipt(bindDigest(getMuseoZeroReferenceIntent(subject.subjectRef), packageDigest))
+  );
+}
 
 function candidateReceipt(): VisualExecutionReceipt {
   return {
@@ -48,89 +86,160 @@ function candidateReceipt(): VisualExecutionReceipt {
   };
 }
 
-test("MUSEO ZERO compiles five reference jobs before scene production", () => {
+function lockedState(): VisualFactoryState {
+  let state = createInitialVisualFactoryState(DIGEST);
+  state = ingestVisualCandidates(state, candidateReceipt());
+  for (const [subjectRef, assetId] of [
+    ["lia", "lia-1"],
+    ["omar", "omar-1"],
+    ["teo", "teo-1"],
+    ["sala-zero", "sala-zero-1"],
+    ["cabina-regia", "cabina-regia-1"],
+  ] as const) {
+    state = lockVisualReference(state, subjectRef, assetId, DIGEST);
+  }
+  return state;
+}
+
+function shotReceipts(state: VisualFactoryState): VisualPreflightReceipt[] {
+  const lockBySubject = new Map(state.referenceLocks.map((item) => [item.subjectRef, item]));
+  return SHOT_IDS.map((shotId) => {
+    const spec = bindDigest(getMuseoZeroShotIntent(shotId));
+    const refs = spec.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl);
+    const digests = spec.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetSha256!);
+    return passReceipt(spec, refs, digests);
+  });
+}
+
+test("reference jobs fail closed without exact preflight receipts", () => {
   const project = createMuseoZeroPilotProject();
   const state = createInitialVisualFactoryState(DIGEST);
-  const plan = compileReferenceJobs(project, DIGEST, state);
+  const plan = compileReferenceJobs(project, DIGEST, state, []);
+
+  assert.equal(plan.decision, "STOP_PREFLIGHT_REQUIRED");
+  assert.deepEqual(plan.jobs, []);
+  assert.equal(plan.blockers.length, 5);
+  assert.ok(plan.blockers.every((item) => item.startsWith("VISUAL_PREFLIGHT_")));
+});
+
+test("stale or revise reference preflight blocks generation", () => {
+  const project = createMuseoZeroPilotProject();
+  const state = createInitialVisualFactoryState(DIGEST);
+
+  const stale = referenceReceipts();
+  stale[0] = passReceipt(bindDigest(getMuseoZeroReferenceIntent("lia"), OTHER_DIGEST));
+  const stalePlan = compileReferenceJobs(project, DIGEST, state, stale);
+  assert.equal(stalePlan.decision, "STOP_PREFLIGHT_REQUIRED");
+  assert.deepEqual(stalePlan.jobs, []);
+  assert.ok(stalePlan.blockers.some((item) => item.includes("STALE_RECEIPT:lia")));
+
+  const reviseSpec = bindDigest(getMuseoZeroReferenceIntent("lia"));
+  const revise = createVisualPreflightReceipt({
+    spec: reviseSpec,
+    providerFamily: "FLUX2_KLEIN_4B",
+    semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
+    humanPreflightDecision: "REVISE",
+    createdAt: "2026-10-05T20:00:00.000Z",
+  });
+  const revised = referenceReceipts();
+  revised[0] = revise;
+  const revisePlan = compileReferenceJobs(project, DIGEST, state, revised);
+  assert.equal(revisePlan.decision, "STOP_PREFLIGHT_REQUIRED");
+  assert.deepEqual(revisePlan.jobs, []);
+  assert.ok(revisePlan.blockers.some((item) => item.includes("RECEIPT_INTEGRITY_INVALID:lia")));
+});
+
+test("tampered PASS receipt with stale receiptId is rejected before job compilation", () => {
+  const project = createMuseoZeroPilotProject();
+  const state = createInitialVisualFactoryState(DIGEST);
+  const receipts = referenceReceipts();
+  receipts[0] = {
+    ...receipts[0],
+    humanPreflightDecision: "REVISE",
+  };
+
+  const plan = compileReferenceJobs(project, DIGEST, state, receipts);
+  assert.equal(plan.decision, "STOP_PREFLIGHT_REQUIRED");
+  assert.deepEqual(plan.jobs, []);
+  assert.ok(plan.blockers.some((item) => item.includes("RECEIPT_INTEGRITY_INVALID:lia")));
+});
+
+test("five exact PASS receipts compile five bound reference jobs", () => {
+  const project = createMuseoZeroPilotProject();
+  const receipts = referenceReceipts();
+  const plan = compileReferenceJobs(project, DIGEST, createInitialVisualFactoryState(DIGEST), receipts);
 
   assert.equal(plan.decision, "REFERENCE_GENERATION_READY");
-  assert.deepEqual(
-    plan.jobs.map((job) => job.subjectRef),
-    ["lia", "omar", "teo", "sala-zero", "cabina-regia"],
-  );
+  assert.deepEqual(plan.jobs.map((job) => job.subjectRef), ["lia", "omar", "teo", "sala-zero", "cabina-regia"]);
   assert.equal(plan.jobs.length, 5);
+  for (const job of plan.jobs) {
+    const receipt = receipts.find((item) => item.receiptId === job.preflightReceiptId)!;
+    const compiled = receipt.compiledPrompts[0];
+    assert.equal(job.maxVariants, 1);
+    assert.equal(job.preflightState, "PREFLIGHT_PASS");
+    assert.equal(job.preflightSpecDigest, receipt.specDigest);
+    assert.equal(job.compiledPromptDigest, compiled.promptDigest);
+    assert.equal(job.prompt, compiled.positivePrompt);
+  }
   assert.equal(plan.paidComputeAuthorized, false);
   assert.equal(plan.allowQualityDowngrade, false);
   assert.equal(plan.runtimeAuthorized, false);
   assert.equal(plan.publicationAuthorityGranted, false);
 });
 
-test("reference art direction keeps characters in role and environments free of synthetic UI text", () => {
+test("reference art direction remains present in preflight-compiled jobs", () => {
   const project = createMuseoZeroPilotProject();
-  const plan = compileReferenceJobs(project, DIGEST, createInitialVisualFactoryState(DIGEST));
+  const plan = compileReferenceJobs(project, DIGEST, createInitialVisualFactoryState(DIGEST), referenceReceipts());
   const bySubject = new Map(plan.jobs.map((job) => [job.subjectRef, job]));
 
-  const liaPrompt = bySubject.get("lia")?.prompt ?? "";
-  assert.match(liaPrompt, /visitor-flow markers|circulation route/i);
-  assert.match(liaPrompt, /not a posed portrait/i);
-  assert.match(liaPrompt, /single subject|no other people/i);
-  assert.match(liaPrompt, /blank walls|no wall plaques|no signage anywhere/i);
-  assert.doesNotMatch(liaPrompt, /\bLia\b/i);
-
-  const omarPrompt = bySubject.get("omar")?.prompt ?? "";
-  assert.match(omarPrompt, /sensor mount|installation hardware/i);
-  assert.match(omarPrompt, /hands-on installer/i);
-  assert.match(omarPrompt, /single subject|no other people/i);
-  assert.doesNotMatch(omarPrompt, /\bOmar\b/i);
-
-  const teoPrompt = bySubject.get("teo")?.prompt ?? "";
-  assert.match(teoPrompt, /not security staff/i);
-  assert.match(teoPrompt, /adjacent.*warm.*projection.*gallery|adjacent.*projection.*gallery/i);
-  assert.match(teoPrompt, /monitor off|no screen interface|physical console only/i);
-  assert.match(teoPrompt, /all displays.*dark|no illuminated display|no lettering anywhere/i);
-  assert.doesNotMatch(teoPrompt, /\bTeo\b|Sala Zero/i);
-
-  const salaPrompt = bySubject.get("sala-zero")?.prompt ?? "";
-  assert.match(salaPrompt, /projection.*abstract light|abstract light.*projection/i);
-  assert.match(salaPrompt, /no text|no interface/i);
-  assert.match(salaPrompt, /no signage|unlabeled walls|unlabeled doors/i);
-  assert.match(salaPrompt, /blank walls|no plaques|no lettering anywhere/i);
-  assert.doesNotMatch(salaPrompt, /Sala Zero/i);
-
-  const cabinaPrompt = bySubject.get("cabina-regia")?.prompt ?? "";
-  assert.match(cabinaPrompt, /adjacent booth|adjacent.*warm.*projection.*gallery/i);
-  assert.match(cabinaPrompt, /physical buttons|tactile controls/i);
-  assert.match(cabinaPrompt, /camera inside|interior viewpoint/i);
-  assert.match(cabinaPrompt, /window.*projection|projection.*window/i);
-  assert.match(cabinaPrompt, /analog control surface|analog console/i);
-  assert.match(cabinaPrompt, /no rectangular display panels|no screen-like surfaces/i);
-  assert.doesNotMatch(cabinaPrompt, /Sala Zero/i);
-
-  for (const job of plan.jobs) {
-    assert.ok(job.negativeConstraints.includes("readable text, pseudo-text, labels, captions, signage, or watermarks"));
-    assert.ok(job.negativeConstraints.includes("charts, graphs, dashboards, detached UI panels, or screen-wall interfaces"));
-    assert.ok(job.negativeConstraints.includes("illuminated displays, monitor content, interface text, control-screen graphics, or wall placards"));
-    assert.ok(job.negativeConstraints.includes("clothing logos, brand marks, badges, embroidered lettering, or printed lettering"));
-  }
+  assert.match(bySubject.get("lia")?.prompt ?? "", /visitor-flow markers|circulation route/i);
+  assert.match(bySubject.get("omar")?.prompt ?? "", /sensor mount|installation hardware/i);
+  assert.match(bySubject.get("teo")?.prompt ?? "", /monitor remains off|monitor off/i);
+  assert.match(bySubject.get("sala-zero")?.prompt ?? "", /projection wall|projection response/i);
+  assert.match(bySubject.get("cabina-regia")?.prompt ?? "", /analog.*console|tactile controls/i);
 });
 
 test("scene generation fails closed until every required reference is locked", () => {
   const project = createMuseoZeroPilotProject();
   const state = createInitialVisualFactoryState(DIGEST);
-  const plan = compileShotJobs(project, DIGEST, state);
+  const plan = compileShotJobs(project, DIGEST, state, []);
 
   assert.equal(plan.decision, "STOP_REFERENCE_LOCK_REQUIRED");
   assert.deepEqual(plan.jobs, []);
   assert.ok(plan.blockers.length >= 5);
 });
 
+test("locked references do not bypass scene preflight", () => {
+  const project = createMuseoZeroPilotProject();
+  const plan = compileShotJobs(project, DIGEST, lockedState(), []);
+  assert.equal(plan.decision, "STOP_PREFLIGHT_REQUIRED");
+  assert.deepEqual(plan.jobs, []);
+  assert.equal(plan.blockers.length, 6);
+});
+
+test("locked references plus exact shot preflight compile F1 through F6", () => {
+  const project = createMuseoZeroPilotProject();
+  const state = lockedState();
+  const receipts = shotReceipts(state);
+  const plan = compileShotJobs(project, DIGEST, state, receipts);
+
+  assert.equal(plan.decision, "SHOT_GENERATION_READY");
+  assert.deepEqual(plan.jobs.map((job) => job.shotId), ["F1", "F2", "F3", "F4", "F5", "F6"]);
+  assert.ok(plan.jobs.every((job) => job.referenceInputs.length > 0));
+  assert.ok(plan.jobs.every((job) => job.maxVariants === 1));
+  assert.ok(plan.jobs.every((job) => job.preflightState === "PREFLIGHT_PASS"));
+  const liaRef = "https://assets.invalid/lia-1.png";
+  for (const shotId of ["F1", "F2", "F3", "F6"]) {
+    assert.ok(plan.jobs.find((job) => job.shotId === shotId)?.referenceInputs.includes(liaRef));
+  }
+  assert.equal(plan.runtimeAuthorized, false);
+  assert.equal(plan.publicationAuthorityGranted, false);
+});
+
 test("a candidate from a stale authoring digest cannot be locked", () => {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, candidateReceipt());
-  assert.throws(
-    () => lockVisualReference(state, "lia", "lia-1", OTHER_DIGEST),
-    /STALE_VISUAL_CANDIDATE/,
-  );
+  assert.throws(() => lockVisualReference(state, "lia", "lia-1", OTHER_DIGEST), /STALE_VISUAL_CANDIDATE/);
 });
 
 test("a newer authoring digest invalidates old candidates and locks", () => {
@@ -150,31 +259,4 @@ test("the same authoring digest preserves visual review state", () => {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, candidateReceipt());
   assert.equal(reconcileVisualFactoryState(state, DIGEST), state);
-});
-
-test("locked MUSEO ZERO references compile exactly F1 through F6", () => {
-  const project = createMuseoZeroPilotProject();
-  let state = createInitialVisualFactoryState(DIGEST);
-  state = ingestVisualCandidates(state, candidateReceipt());
-
-  for (const [subjectRef, assetId] of [
-    ["lia", "lia-1"],
-    ["omar", "omar-1"],
-    ["teo", "teo-1"],
-    ["sala-zero", "sala-zero-1"],
-    ["cabina-regia", "cabina-regia-1"],
-  ] as const) {
-    state = lockVisualReference(state, subjectRef, assetId, DIGEST);
-  }
-
-  const plan = compileShotJobs(project, DIGEST, state);
-  assert.equal(plan.decision, "SHOT_GENERATION_READY");
-  assert.deepEqual(plan.jobs.map((job) => job.shotId), ["F1", "F2", "F3", "F4", "F5", "F6"]);
-  assert.ok(plan.jobs.every((job) => job.referenceInputs.length > 0));
-  const liaRef = "https://assets.invalid/lia-1.png";
-  for (const shotId of ["F1", "F2", "F3", "F6"]) {
-    assert.ok(plan.jobs.find((job) => job.shotId === shotId)?.referenceInputs.includes(liaRef));
-  }
-  assert.equal(plan.runtimeAuthorized, false);
-  assert.equal(plan.publicationAuthorityGranted, false);
 });

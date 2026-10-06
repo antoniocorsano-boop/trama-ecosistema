@@ -5,6 +5,7 @@ import type {
   VisualOrchestrationEvidence,
   VisualProviderAttemptEvidence,
 } from "./visual-factory";
+import { assertVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
 
 export type VisualProviderId = VisualExecutionProviderId;
 
@@ -61,8 +62,6 @@ function estimatedAttemptSeconds(plan: VisualGenerationPlan, ctx: OrchestrationC
 }
 
 function hfCanServeCanonicalReference(plan: VisualGenerationPlan, ctx: OrchestrationContext): boolean {
-  // Unknown quota is not eligibility. It only keeps HF in the bounded candidate
-  // list so the adapter can perform the authoritative authenticated preflight.
   if (typeof ctx.hfQuotaRemainingSeconds !== "number") return true;
   const attemptUnits = Math.max(1, plan.jobs.length);
   const otherUnfinished = Math.max(0, ctx.unfinishedCanonicalReferenceCount - attemptUnits);
@@ -90,6 +89,8 @@ export function selectProviderOrder(
   plan: VisualGenerationPlan,
   ctx: OrchestrationContext,
 ): VisualProviderId[] {
+  assertVisualPreflightBoundPlan(plan);
+
   if (plan.planType === "REFERENCE_GENERATION") {
     return hfCanServeCanonicalReference(plan, ctx)
       ? ["HF_ZEROGPU", "CLOUDFLARE_WORKERS_AI"]
@@ -196,6 +197,8 @@ export async function orchestrateVisualGeneration(
   adapters: Partial<Record<VisualProviderId, VisualProviderAdapter>>,
   ctx: OrchestrationContext,
 ): Promise<VisualExecutionReceipt> {
+  assertVisualPreflightBoundPlan(plan);
+
   const failures: string[] = [];
   const attempts: VisualProviderAttemptEvidence[] = [];
   const consideredProviders = selectProviderOrder(plan, ctx);

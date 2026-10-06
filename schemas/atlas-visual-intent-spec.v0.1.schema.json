@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-visual-intent-spec.v0.1.schema.json",
+  "title": "Atlas Visual Intent Spec v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "specId",
+    "pathwayId",
+    "packageDigest",
+    "purpose",
+    "subjectRefs",
+    "narrativeFunction",
+    "requiredVisualFacts",
+    "worldAnchors",
+    "identityAnchors",
+    "composition",
+    "camera",
+    "lightingMood",
+    "materialTextureLanguage",
+    "continuityRefs",
+    "negativeConstraints",
+    "forbiddenTextPatterns",
+    "qualityCriteria",
+    "targetAspectRatio",
+    "artDirectionVersion"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "atlas.visual-intent-spec/v0.1" },
+    "specId": { "type": "string", "minLength": 1 },
+    "pathwayId": { "type": "string", "minLength": 1 },
+    "packageDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "purpose": {
+      "enum": ["CHARACTER_REFERENCE", "ENVIRONMENT_REFERENCE", "SCENE_FRAME"]
+    },
+    "subjectRefs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "sceneRef": { "type": "string", "minLength": 1 },
+    "shotId": { "type": "string", "minLength": 1 },
+    "narrativeFunction": { "type": "string", "minLength": 1 },
+    "requiredVisualFacts": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "worldAnchors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "identityAnchors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dominantSubject", "foreground", "midground", "background", "spatialRelation"],
+      "properties": {
+        "dominantSubject": { "type": "string", "minLength": 1 },
+        "foreground": { "type": "array", "items": { "type": "string" } },
+        "midground": { "type": "array", "items": { "type": "string" } },
+        "background": { "type": "array", "items": { "type": "string" } },
+        "spatialRelation": { "type": "string", "minLength": 1 },
+        "focalActions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "diegeticScene": { "type": "boolean" },
+        "dominantSurface": { "type": "string" }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shotScale", "viewpoint", "lensLanguage"],
+      "properties": {
+        "shotScale": { "type": "string", "minLength": 1 },
+        "viewpoint": { "type": "string", "minLength": 1 },
+        "lensLanguage": { "type": "string", "minLength": 1 },
+        "continuityFamily": { "type": "string", "minLength": 1 },
+        "conflictingDirectives": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "lightingMood": { "type": "string", "minLength": 1 },
+    "materialTextureLanguage": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "interactionState": { "type": "string", "minLength": 1 },
+    "continuityRefs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "negativeConstraints": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "forbiddenTextPatterns": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "exactTextRequired": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "qualityCriteria": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "targetAspectRatio": { "type": "string", "minLength": 1 },
+    "artDirectionVersion": { "type": "string", "minLength": 1 }
+  }
+}

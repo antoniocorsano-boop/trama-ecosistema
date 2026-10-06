@@ -1,4 +1,17 @@
 import type { PathwayProject } from "./model";
+import {
+  getMuseoZeroReferenceIntent,
+  getMuseoZeroShotIntent,
+} from "./canonical/museo-zero-visual-intents";
+import {
+  canonicalDigest,
+  compileVisualPrompt,
+  resolvePreflightState,
+  VISUAL_PREFLIGHT_COMPILER_VERSION,
+  type CompiledVisualPrompt,
+  type VisualIntentSpec,
+  type VisualPreflightReceipt,
+} from "./visual-preflight";
 
 export type VisualAssetPurpose =
   | "CHARACTER_REFERENCE"
@@ -22,6 +35,7 @@ export type VisualReferenceLock = {
   subjectRef: string;
   assetId: string;
   assetUrl: string;
+  assetSha256?: string;
   packageDigest: string;
   lockedAt: string;
 };
@@ -53,8 +67,13 @@ export type VisualGenerationJob = {
   prompt: string;
   negativeConstraints: string[];
   referenceInputs: string[];
+  referenceInputDigests?: string[];
   aspectRatio: string;
-  maxVariants: number;
+  maxVariants: 1;
+  preflightReceiptId?: string;
+  preflightSpecDigest?: string;
+  compiledPromptDigest?: string;
+  preflightState?: "PREFLIGHT_PASS";
 };
 
 export type VisualGenerationPlan = {
@@ -66,7 +85,8 @@ export type VisualGenerationPlan = {
     | "REFERENCE_GENERATION_READY"
     | "NO_REFERENCE_GENERATION_REQUIRED"
     | "SHOT_GENERATION_READY"
-    | "STOP_REFERENCE_LOCK_REQUIRED";
+    | "STOP_REFERENCE_LOCK_REQUIRED"
+    | "STOP_PREFLIGHT_REQUIRED";
   jobs: VisualGenerationJob[];
   blockers: string[];
   paidComputeAuthorized: false;
@@ -124,101 +144,138 @@ export type VisualExecutionReceipt = {
 type VisualSubject = {
   subjectRef: string;
   purpose: "CHARACTER_REFERENCE" | "ENVIRONMENT_REFERENCE";
-  prompt: string;
 };
 
 type ShotDefinition = {
   shotId: string;
   sceneRef: string;
   subjectRefs: string[];
-  prompt: string;
+};
+
+type QualifiedPreflight = {
+  receipt: VisualPreflightReceipt;
+  compiled: CompiledVisualPrompt;
 };
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 
 export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
-  {
-    subjectRef: "lia",
-    purpose: "CHARACTER_REFERENCE",
-    prompt: "Single subject with no other people or partial figures; adult museum exhibition-layout and visitor-flow crew member actively placing clean blank visitor-flow markers along the accessible circulation route at the new entrance; hands clearly visible doing the task; calm focused physicality; practical contemporary setup clothing with no logos or lettering; stable hairstyle and one warm accent detail; full-body working pose in a sparse museum corridor with blank walls, no wall plaques and no signage anywhere, not a posed portrait.",
-  },
-  {
-    subjectRef: "omar",
-    purpose: "CHARACTER_REFERENCE",
-    prompt: "Single subject with no other people or partial figures; adult museum hands-on installer physically adjusting a compact sensor mount and nearby installation hardware; practical contemporary workwear with no logos or lettering; distinct silhouette; grounded posture, small hand tool or fixture detail allowed; participant with partial knowledge, not teacher or supervisor; full-body working continuity reference.",
-  },
-  {
-    subjectRef: "teo",
-    purpose: "CHARACTER_REFERENCE",
-    prompt: "Single subject; adult museum AV rehearsal technician, not security staff and no security uniform or badge; contemporary practical clothing visually distinct from the installer reference and with no logos or lettering; restrained observant body language inside a compact control booth; physical console only with tactile buttons, knobs and faders, monitor off and no screen interface; all displays dark, no illuminated display and no lettering anywhere; clear sightline through an unlabeled interior window into the adjacent warm-projection gallery; working continuity reference, not a guard portrait.",
-  },
-  {
-    subjectRef: "sala-zero",
-    purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Contemporary interactive museum room after closing, viewed from the new accessible entrance threshold into a believable deep space; subtle floor circulation route and integrated sensor near the threshold; large projection wall showing abstract light in warm amber tones and simple non-text motion only; no text, no interface, no charts, no signage, unlabeled walls and unlabeled doors; blank walls, no plaques and no lettering anywhere; exit light and restrained installation details; narrative physical environment first.",
-  },
-  {
-    subjectRef: "cabina-regia",
-    purpose: "ENVIRONMENT_REFERENCE",
-    prompt: "Interior viewpoint with the camera inside a small enclosed adjacent booth connected to an adjacent warm-projection gallery; a wide observation window frames the warm abstract projection in that gallery; entirely analog control surface in the foreground with physical buttons, knobs, faders and unlit indicator lamps only; no rectangular display panels, no screen-like surfaces, no screens, no monitors, no signage or wall posters; believable museum AV back-of-house materials and working scale; cinematic environment master.",
-  },
+  { subjectRef: "lia", purpose: "CHARACTER_REFERENCE" },
+  { subjectRef: "omar", purpose: "CHARACTER_REFERENCE" },
+  { subjectRef: "teo", purpose: "CHARACTER_REFERENCE" },
+  { subjectRef: "sala-zero", purpose: "ENVIRONMENT_REFERENCE" },
+  { subjectRef: "cabina-regia", purpose: "ENVIRONMENT_REFERENCE" },
 ];
 
 const MUSEO_ZERO_SHOTS: ShotDefinition[] = [
-  {
-    shotId: "F1",
-    sceneRef: "MZ1_FAILED_REHEARSAL",
-    subjectRefs: ["lia", "omar", "teo", "sala-zero"],
-    prompt: "After-hours museum, final rehearsal about to start; Lia approaches the new accessible entrance while Omar and Teo are naturally at work; world credibility first, no technical explanation.",
-  },
-  {
-    shotId: "F2",
-    sceneRef: "MZ1_FAILED_REHEARSAL",
-    subjectRefs: ["lia", "omar", "sala-zero"],
-    prompt: "Lia has crossed the new entrance threshold but the projection wall remains dark; Omar sees the sensor respond; same spatial family as F1, closer and readable without captions.",
-  },
-  {
-    shotId: "F3",
-    sceneRef: "MZ1_FAILED_REHEARSAL",
-    subjectRefs: ["lia", "omar", "teo", "sala-zero"],
-    prompt: "The warm projection finally triggers too late; Lia is already deeper inside; visible spatial mismatch between her position and the room response; one restrained crew reaction.",
-  },
-  {
-    shotId: "F4",
-    sceneRef: "MZ4_TEST_MAPPING",
-    subjectRefs: ["teo", "cabina-regia"],
-    prompt: "Teo beside a believable museum AV control surface; one readable mapping relation still points to old entrance logic; the control remains diegetic, never a detached dashboard.",
-  },
-  {
-    shotId: "F5",
-    sceneRef: "MZ4_TEST_MAPPING",
-    subjectRefs: ["teo", "cabina-regia"],
-    prompt: "Same control surface and composition as F4 after one bounded mapping change to the new entrance sensor; state update is quiet and physically believable.",
-  },
-  {
-    shotId: "F6",
-    sceneRef: "MZ6_FINAL_REHEARSAL",
-    subjectRefs: ["lia", "omar", "teo", "sala-zero"],
-    prompt: "Same rehearsal and camera family as F2/F3; Lia crosses the same threshold and the warm projection response begins immediately; restrained crew satisfaction, no reward effect.",
-  },
+  { shotId: "F1", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
+  { shotId: "F2", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "sala-zero"] },
+  { shotId: "F3", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
+  { shotId: "F4", sceneRef: "MZ4_TEST_MAPPING", subjectRefs: ["teo", "cabina-regia"] },
+  { shotId: "F5", sceneRef: "MZ4_TEST_MAPPING", subjectRefs: ["teo", "cabina-regia"] },
+  { shotId: "F6", sceneRef: "MZ6_FINAL_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
 ];
 
-const COMMON_NEGATIVE = [
-  "dashboard aesthetic",
-  "generic SaaS cards",
-  "floating avatar heads",
-  "chibi or mascot treatment",
-  "cyberpunk neon default",
-  "technical diagram as dominant scene",
-  "large educational captions",
-  "decorative AI clutter",
-  "readable text, pseudo-text, labels, captions, signage, or watermarks",
-  "charts, graphs, dashboards, detached UI panels, or screen-wall interfaces",
-  "partial, cropped, headless, duplicate, or malformed human figures",
-  "computer monitor interfaces, source-code screens, or software windows",
-  "illuminated displays, monitor content, interface text, control-screen graphics, or wall placards",
-  "clothing logos, brand marks, badges, embroidered lettering, or printed lettering",
-];
+function bindPackageDigest(intent: VisualIntentSpec, packageDigest: string): VisualIntentSpec {
+  return { ...intent, packageDigest };
+}
+
+function sameStringArray(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((item, index) => item === right[index]);
+}
+
+function hasSelfConsistentReceiptBinding(receipt: VisualPreflightReceipt): boolean {
+  const expectedFinalState = resolvePreflightState({
+    deterministicFindings: receipt.deterministicChecks,
+    semanticCritic: receipt.semanticCritic,
+    humanPreflightDecision: receipt.humanPreflightDecision,
+  });
+  const expectedHumanPreflightRequired =
+    receipt.semanticCritic.mode === "NOT_AVAILABLE" && receipt.semanticCritic.result === "NOT_RUN";
+  const bindingDigest = canonicalDigest({
+    specDigest: receipt.specDigest,
+    packageDigest: receipt.packageDigest,
+    compilerVersion: receipt.compilerVersion,
+    artDirectionVersion: receipt.artDirectionVersion,
+    finalState: receipt.finalState,
+    promptDigests: receipt.compiledPrompts.map((prompt) => prompt.promptDigest),
+    semanticCritic: {
+      mode: receipt.semanticCritic.mode,
+      modelRef: receipt.semanticCritic.modelRef ?? null,
+      modelDigest: receipt.semanticCritic.modelDigest ?? null,
+      result: receipt.semanticCritic.result,
+    },
+    humanPreflightDecision: receipt.humanPreflightDecision ?? null,
+  });
+
+  return (
+    receipt.finalState === expectedFinalState &&
+    receipt.humanPreflightRequired === expectedHumanPreflightRequired &&
+    (!expectedHumanPreflightRequired || receipt.humanPreflightDecision === "PASS") &&
+    receipt.receiptId === `vpc-${bindingDigest.slice(0, 32)}`
+  );
+}
+
+function qualifyPreflight(
+  intentTemplate: VisualIntentSpec,
+  packageDigest: string,
+  receipts: readonly VisualPreflightReceipt[],
+  key: string,
+  referenceInputs: readonly string[] = [],
+  referenceInputDigests: readonly string[] = [],
+): { qualified?: QualifiedPreflight; blocker?: string } {
+  const intent = bindPackageDigest(intentTemplate, packageDigest);
+  const receipt = receipts.find((item) => item.specId === intent.specId);
+  if (!receipt) return { blocker: `VISUAL_PREFLIGHT_RECEIPT_MISSING:${key}` };
+  if (!hasSelfConsistentReceiptBinding(receipt)) {
+    return { blocker: `VISUAL_PREFLIGHT_RECEIPT_INTEGRITY_INVALID:${key}` };
+  }
+  if (receipt.finalState !== "PREFLIGHT_PASS") {
+    return { blocker: `VISUAL_PREFLIGHT_NOT_PASSED:${key}` };
+  }
+  const expectedSpecDigest = canonicalDigest(intent);
+  if (
+    receipt.packageDigest !== packageDigest ||
+    receipt.specDigest !== expectedSpecDigest ||
+    receipt.specId !== intent.specId
+  ) {
+    return { blocker: `VISUAL_PREFLIGHT_STALE_RECEIPT:${key}` };
+  }
+  if (receipt.compilerVersion !== VISUAL_PREFLIGHT_COMPILER_VERSION) {
+    return { blocker: `VISUAL_PREFLIGHT_COMPILER_VERSION_MISMATCH:${key}` };
+  }
+  if (receipt.artDirectionVersion !== intent.artDirectionVersion) {
+    return { blocker: `VISUAL_PREFLIGHT_ART_DIRECTION_VERSION_MISMATCH:${key}` };
+  }
+  if (
+    receipt.paidComputeAuthorized !== false ||
+    receipt.allowQualityDowngrade !== false ||
+    receipt.runtimeAuthorized !== false ||
+    receipt.publicationAuthorityGranted !== false
+  ) {
+    return { blocker: `VISUAL_PREFLIGHT_AUTHORITY_VIOLATION:${key}` };
+  }
+  if (receipt.compiledPrompts.length !== 1) {
+    return { blocker: `VISUAL_PREFLIGHT_PROMPT_MISSING:${key}` };
+  }
+  const expected = compileVisualPrompt(intent, "FLUX2_KLEIN_4B", {
+    referenceInputs,
+    referenceInputDigests,
+  });
+  const compiled = receipt.compiledPrompts[0];
+  if (
+    compiled.promptDigest !== expected.promptDigest ||
+    compiled.sourceSpecDigest !== expected.sourceSpecDigest ||
+    compiled.compilerVersion !== expected.compilerVersion ||
+    compiled.maxVariants !== 1 ||
+    !sameStringArray(compiled.referenceInputs, expected.referenceInputs) ||
+    !sameStringArray(compiled.referenceInputDigests, expected.referenceInputDigests) ||
+    canonicalDigest(compiled) !== canonicalDigest(expected)
+  ) {
+    return { blocker: `VISUAL_PREFLIGHT_PROMPT_DIGEST_MISMATCH:${key}` };
+  }
+  return { qualified: { receipt, compiled } };
+}
 
 function basePlan(
   project: PathwayProject,
@@ -270,32 +327,53 @@ export function compileReferenceJobs(
   project: PathwayProject,
   packageDigest: string,
   state: VisualFactoryState,
+  preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
   const prefix = basePlan(project, packageDigest, "REFERENCE_GENERATION");
   if (state.packageDigest !== packageDigest) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
   const locked = new Set(state.referenceLocks.map((item) => item.subjectRef));
-  const jobs = MUSEO_ZERO_VISUAL_SUBJECTS
-    .filter((subject) => !locked.has(subject.subjectRef))
-    .map<VisualGenerationJob>((subject) => ({
+  const pending = MUSEO_ZERO_VISUAL_SUBJECTS.filter((subject) => !locked.has(subject.subjectRef));
+  if (pending.length === 0) {
+    return { ...prefix, decision: "NO_REFERENCE_GENERATION_REQUIRED", jobs: [], blockers: [] };
+  }
+
+  const qualified = pending.map((subject) => ({
+    subject,
+    result: qualifyPreflight(
+      getMuseoZeroReferenceIntent(subject.subjectRef),
+      packageDigest,
+      preflightReceipts,
+      subject.subjectRef,
+    ),
+  }));
+  const blockers = qualified.flatMap((item) => item.result.blocker ? [item.result.blocker] : []);
+  if (blockers.length > 0) {
+    return { ...prefix, decision: "STOP_PREFLIGHT_REQUIRED", jobs: [], blockers };
+  }
+
+  const jobs = qualified.map<VisualGenerationJob>(({ subject, result }) => {
+    const { receipt, compiled } = result.qualified!;
+    return {
       jobId: `reference-${subject.subjectRef}`,
       purpose: subject.purpose,
       subjectRef: subject.subjectRef,
-      workflowFamily: "flux2-klein-4b/v0.2",
-      prompt: `cinematic editorial illustration; polished 2-D illustrated realism; after-hours contemporary museum. ${subject.prompt}`,
-      negativeConstraints: [...COMMON_NEGATIVE],
-      referenceInputs: [],
-      aspectRatio: subject.purpose === "CHARACTER_REFERENCE" ? "3:4" : "4:3",
-      maxVariants: 3,
-    }));
+      workflowFamily: compiled.workflowFamily,
+      prompt: compiled.positivePrompt,
+      negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
+      referenceInputs: [...compiled.referenceInputs],
+      referenceInputDigests: [...compiled.referenceInputDigests],
+      aspectRatio: compiled.aspectRatio,
+      maxVariants: 1,
+      preflightReceiptId: receipt.receiptId,
+      preflightSpecDigest: receipt.specDigest,
+      compiledPromptDigest: compiled.promptDigest,
+      preflightState: "PREFLIGHT_PASS",
+    };
+  });
 
-  return {
-    ...prefix,
-    decision: jobs.length > 0 ? "REFERENCE_GENERATION_READY" : "NO_REFERENCE_GENERATION_REQUIRED",
-    jobs,
-    blockers: [],
-  };
+  return { ...prefix, decision: "REFERENCE_GENERATION_READY", jobs, blockers: [] };
 }
 
 export function ingestVisualCandidates(
@@ -362,6 +440,7 @@ export function lockVisualReference(
     subjectRef,
     assetId,
     assetUrl: candidate.url,
+    assetSha256: candidate.sha256,
     packageDigest,
     lockedAt: new Date().toISOString(),
   });
@@ -379,6 +458,7 @@ export function compileShotJobs(
   project: PathwayProject,
   packageDigest: string,
   state: VisualFactoryState,
+  preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
   const prefix = basePlan(project, packageDigest, "SHOT_GENERATION");
   if (state.packageDigest !== packageDigest) {
@@ -387,35 +467,63 @@ export function compileShotJobs(
   const lockBySubject = new Map(state.referenceLocks.map((item) => [item.subjectRef, item]));
   const missing = MUSEO_ZERO_VISUAL_SUBJECTS
     .map((item) => item.subjectRef)
-    .filter((subjectRef) => !lockBySubject.has(subjectRef));
+    .filter((subjectRef) => {
+      const lock = lockBySubject.get(subjectRef);
+      return !lock || !lock.assetSha256 || !/^[0-9a-f]{64}$/.test(lock.assetSha256);
+    });
 
   if (missing.length > 0) {
     return {
       ...prefix,
       decision: "STOP_REFERENCE_LOCK_REQUIRED",
       jobs: [],
-      blockers: missing.map((subjectRef) => `REFERENCE_NOT_LOCKED:${subjectRef}`),
+      blockers: missing.map((subjectRef) => `REFERENCE_LOCK_PROVENANCE_MISSING:${subjectRef}`),
     };
   }
 
-  const jobs = MUSEO_ZERO_SHOTS.map<VisualGenerationJob>((shot) => ({
-    jobId: `shot-${shot.shotId}`,
-    purpose: "SCENE_FRAME",
-    subjectRef: shot.shotId,
-    shotId: shot.shotId,
-    sceneRef: shot.sceneRef,
-    workflowFamily: "flux2-klein-4b/v0.2",
-    prompt: `cinematic editorial illustration; polished 2-D illustrated realism; believable museum architecture; character-in-world staging. ${shot.prompt}`,
-    negativeConstraints: [...COMMON_NEGATIVE, "website mockup", "floating UI overlay"],
-    referenceInputs: shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl),
-    aspectRatio: "4:3",
-    maxVariants: 3,
-  }));
+  const qualified = MUSEO_ZERO_SHOTS.map((shot) => {
+    const referenceInputs = shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl);
+    const referenceInputDigests = shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetSha256!);
+    return {
+      shot,
+      referenceInputs,
+      referenceInputDigests,
+      result: qualifyPreflight(
+        getMuseoZeroShotIntent(shot.shotId),
+        packageDigest,
+        preflightReceipts,
+        shot.shotId,
+        referenceInputs,
+        referenceInputDigests,
+      ),
+    };
+  });
+  const blockers = qualified.flatMap((item) => item.result.blocker ? [item.result.blocker] : []);
+  if (blockers.length > 0) {
+    return { ...prefix, decision: "STOP_PREFLIGHT_REQUIRED", jobs: [], blockers };
+  }
 
-  return {
-    ...prefix,
-    decision: "SHOT_GENERATION_READY",
-    jobs,
-    blockers: [],
-  };
+  const jobs = qualified.map<VisualGenerationJob>(({ shot, result }) => {
+    const { receipt, compiled } = result.qualified!;
+    return {
+      jobId: `shot-${shot.shotId}`,
+      purpose: "SCENE_FRAME",
+      subjectRef: shot.shotId,
+      shotId: shot.shotId,
+      sceneRef: shot.sceneRef,
+      workflowFamily: compiled.workflowFamily,
+      prompt: compiled.positivePrompt,
+      negativeConstraints: compiled.negativePrompt ? [compiled.negativePrompt] : [],
+      referenceInputs: [...compiled.referenceInputs],
+      referenceInputDigests: [...compiled.referenceInputDigests],
+      aspectRatio: compiled.aspectRatio,
+      maxVariants: 1,
+      preflightReceiptId: receipt.receiptId,
+      preflightSpecDigest: receipt.specDigest,
+      compiledPromptDigest: compiled.promptDigest,
+      preflightState: "PREFLIGHT_PASS",
+    };
+  });
+
+  return { ...prefix, decision: "SHOT_GENERATION_READY", jobs, blockers: [] };
 }

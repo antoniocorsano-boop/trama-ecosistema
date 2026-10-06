@@ -8,14 +8,21 @@ on:
       - "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/museo-zero.visual-shot-plan-v0.2.json"
       - "schemas/atlas-visual-bible.v0.1.schema.json"
       - "schemas/atlas-visual-shot-plan.v0.1.schema.json"
+      - "schemas/atlas-visual-intent-spec.v0.1.schema.json"
+      - "schemas/atlas-visual-preflight-receipt.v0.1.schema.json"
       - "scripts/compile_visual_generation_plan.py"
       - "scripts/deploy_visual_factory_hf_space.py"
       - "services/visual-factory-hf/**"
       - "fixtures/visual-factory-generation/**"
       - "tests/test_visual_generation_plan.py"
       - "tests/test_visual_factory_hf_contract.py"
+      - "tests/test_visual_preflight_contracts.py"
+      - "tests/test_visual_preflight_provider_boundary.py"
       - "tests/test_visual_factory_hf_deploy_zero_gpu.py"
       - "products/studio-atlas/lib/visual-factory*.ts"
+      - "products/studio-atlas/lib/visual-preflight*.ts"
+      - "products/studio-atlas/lib/canonical/museo-zero-visual-intents*.ts"
+      - "products/studio-atlas/scripts/compile-canonical-visual-preflight.ts"
       - "products/studio-atlas/scripts/compile-canonical-reference-plan.ts"
       - "products/studio-atlas/scripts/run-visual-factory-orchestrator.ts"
       - "products/studio-atlas/package.json"
@@ -44,8 +51,11 @@ jobs:
       - name: Require bounded orchestrator qualification surface
         run: |
           test -f .github/workflows/visual-factory-orchestrator-v0.1.yml
+          test -f products/studio-atlas/lib/visual-preflight-evidence-node.ts
+          test -f products/studio-atlas/scripts/compile-canonical-visual-preflight.ts
           test -f products/studio-atlas/scripts/compile-canonical-reference-plan.ts
           test -f products/studio-atlas/scripts/run-visual-factory-orchestrator.ts
+          grep -q '"visual-factory:preflight-references"' products/studio-atlas/package.json
           grep -q '"visual-factory:compile-reference-plan"' products/studio-atlas/package.json
           grep -q '"visual-factory:orchestrate"' products/studio-atlas/package.json
           grep -q 'workflow_dispatch:' .github/workflows/visual-factory-orchestrator-v0.1.yml
@@ -61,10 +71,37 @@ jobs:
           npm run typecheck
           npm run build
 
-      - name: Prove canonical manual reference plan reaches dry-run
+      - name: Qualify canonical references offline before generation planning
+        working-directory: products/studio-atlas
+        run: |
+          npm run visual-factory:preflight-references -- \
+            --output /tmp/canonical-visual-preflight \
+            --human-preflight-pass
+          python - <<'PY'
+          import json,re
+          p=json.load(open("/tmp/canonical-visual-preflight/manifest.json"))
+          assert p["schemaVersion"] == "atlas.visual-preflight-qualification/v0.1"
+          assert p["mode"] == "references"
+          assert re.fullmatch(r"[0-9a-f]{64}", p["packageDigest"])
+          assert p["semanticCriticMode"] == "NOT_AVAILABLE"
+          assert p["humanPreflightDecision"] == "PASS"
+          assert p["providerCallCount"] == 0
+          assert len(p["sourceSpecIds"]) == 5
+          assert len(p["receiptIds"]) == 5
+          assert len(p["compiledPromptDigests"]) == 5
+          assert all(state == "PREFLIGHT_PASS" for state in p["finalStates"])
+          assert all(re.fullmatch(r"[0-9a-f]{64}", digest) for digest in p["compiledPromptDigests"])
+          assert not p["paidComputeAuthorized"]
+          assert not p["allowQualityDowngrade"]
+          assert not p["runtimeAuthorized"]
+          assert not p["publicationAuthorityGranted"]
+          PY
+
+      - name: Prove canonical preflight-bound reference plan reaches dry-run
         working-directory: products/studio-atlas
         run: |
           npm run visual-factory:compile-reference-plan -- \
+            --preflight /tmp/canonical-visual-preflight \
             --output /tmp/canonical-reference-plan.json
           python - <<'PY'
           import json,re
@@ -75,6 +112,11 @@ jobs:
           assert p["blockers"] == []
           assert len(p["jobs"]) == 5
           assert all(j["aspectRatio"] in {"3:4", "4:3"} for j in p["jobs"])
+          assert all(j["maxVariants"] == 1 for j in p["jobs"])
+          assert all(j["preflightState"] == "PREFLIGHT_PASS" for j in p["jobs"])
+          assert all(j["preflightReceiptId"] for j in p["jobs"])
+          assert all(re.fullmatch(r"[0-9a-f]{64}", j["preflightSpecDigest"]) for j in p["jobs"])
+          assert all(re.fullmatch(r"[0-9a-f]{64}", j["compiledPromptDigest"]) for j in p["jobs"])
           assert not p["paidComputeAuthorized"]
           assert not p["runtimeAuthorized"]
           assert not p["publicationAuthorityGranted"]
@@ -82,6 +124,7 @@ jobs:
           npm run visual-factory:orchestrate -- \
             --mode dry-run \
             --plan /tmp/canonical-reference-plan.json \
+            --preflight /tmp/canonical-visual-preflight \
             --output /tmp/canonical-dry-run-evidence
           test -d /tmp/canonical-dry-run-evidence
 
@@ -89,9 +132,11 @@ jobs:
         run: |
           python -m unittest tests/test_visual_generation_plan.py -v
           python -m unittest tests/test_visual_factory_hf_contract.py -v
+          python -m unittest tests/test_visual_preflight_contracts.py -v
+          python -m unittest tests/test_visual_preflight_provider_boundary.py -v
           python -m unittest tests/test_visual_factory_hf_deploy_zero_gpu.py -v
 
-      - name: Compile unlocked reference jobs
+      - name: Compile legacy unlocked reference planning fixture
         run: |
           python scripts/compile_visual_generation_plan.py \
             --visual-bible docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/museo-zero.visual-bible-v0.2.json \
@@ -103,6 +148,7 @@ jobs:
           assert p["decision"] == "REFERENCE_GENERATION_READY"
           assert len(p["jobs"]) == 5
           assert all(j["workflowFamily"] == "flux2-klein-4b/v0.2" for j in p["jobs"])
+          assert all("preflightReceiptId" not in j for j in p["jobs"])
           assert not p["runtimeAuthorized"]
           assert not p["publicationAuthorityGranted"]
           PY
@@ -122,7 +168,7 @@ jobs:
           assert p["blockers"]
           PY
 
-      - name: Compile locked F1-F6 production jobs
+      - name: Compile legacy locked F1-F6 planning fixture
         run: |
           python scripts/compile_visual_generation_plan.py \
             --visual-bible fixtures/visual-factory-generation/museo-zero-locked.visual-bible.json \
@@ -136,6 +182,7 @@ jobs:
           assert [j["shotId"] for j in p["jobs"]] == ["F1","F2","F3","F4","F5","F6"]
           assert all(j["workflowFamily"] == "flux2-klein-4b/v0.2" for j in p["jobs"])
           assert all(j["referenceInputs"] for j in p["jobs"])
+          assert all("preflightReceiptId" not in j for j in p["jobs"])
           assert not p["paidComputeAuthorized"]
           PY
 

@@ -1,7 +1,8 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { createMuseoZeroPilotProject } from "../lib/canonical/museo-zero";
 import { digestAuthoringState } from "../lib/production";
+import type { VisualPreflightReceipt } from "../lib/visual-preflight";
 import {
   compileReferenceJobs,
   createInitialVisualFactoryState,
@@ -14,17 +15,75 @@ function argument(name: string): string | undefined {
   return value && !value.startsWith("--") ? value : undefined;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+async function loadPassPreflightReceipts(
+  preflightDirectory: string,
+  expectedPackageDigest: string,
+): Promise<VisualPreflightReceipt[]> {
+  const root = resolve(preflightDirectory);
+  const manifestRaw: unknown = JSON.parse(await readFile(resolve(root, "manifest.json"), "utf8"));
+  if (!isRecord(manifestRaw)) throw new Error("VF_CANONICAL_PREFLIGHT_MANIFEST_INVALID");
+  if (
+    manifestRaw.schemaVersion !== "atlas.visual-preflight-qualification/v0.1" ||
+    manifestRaw.mode !== "references" ||
+    manifestRaw.packageDigest !== expectedPackageDigest ||
+    manifestRaw.humanPreflightDecision !== "PASS" ||
+    manifestRaw.providerCallCount !== 0 ||
+    !Array.isArray(manifestRaw.sourceSpecIds) ||
+    manifestRaw.sourceSpecIds.length !== 5 ||
+    !manifestRaw.sourceSpecIds.every((value) => typeof value === "string" && value.length > 0)
+  ) {
+    throw new Error("VF_CANONICAL_PREFLIGHT_MANIFEST_INVALID");
+  }
+
+  const receipts: VisualPreflightReceipt[] = [];
+  for (const specId of manifestRaw.sourceSpecIds as string[]) {
+    const raw: unknown = JSON.parse(await readFile(resolve(root, "receipts", `${specId}.json`), "utf8"));
+    if (!isRecord(raw)) throw new Error("VF_CANONICAL_PREFLIGHT_RECEIPT_INVALID");
+    if (
+      raw.schemaVersion !== "atlas.visual-preflight-receipt/v0.1" ||
+      raw.specId !== specId ||
+      raw.packageDigest !== expectedPackageDigest ||
+      raw.finalState !== "PREFLIGHT_PASS" ||
+      raw.humanPreflightDecision !== "PASS" ||
+      raw.paidComputeAuthorized !== false ||
+      raw.allowQualityDowngrade !== false ||
+      raw.runtimeAuthorized !== false ||
+      raw.publicationAuthorityGranted !== false
+    ) {
+      throw new Error("VF_CANONICAL_PREFLIGHT_RECEIPT_INVALID");
+    }
+    receipts.push(raw as unknown as VisualPreflightReceipt);
+  }
+  return receipts;
+}
+
 async function main() {
   const output = argument("--output");
   if (!output) throw new Error("VF_CANONICAL_PLAN_OUTPUT_REQUIRED");
+  const preflight = argument("--preflight");
+  if (!preflight) throw new Error("VF_CANONICAL_PREFLIGHT_DIRECTORY_REQUIRED");
 
   const project = createMuseoZeroPilotProject();
   const packageDigest = await digestAuthoringState(project);
   const state = createInitialVisualFactoryState(packageDigest);
-  const plan = compileReferenceJobs(project, packageDigest, state);
+  const receipts = await loadPassPreflightReceipts(preflight, packageDigest);
+  const plan = compileReferenceJobs(project, packageDigest, state, receipts);
 
   if (plan.decision !== "REFERENCE_GENERATION_READY" || plan.jobs.length !== 5) {
     throw new Error("VF_CANONICAL_REFERENCE_PLAN_NOT_READY");
+  }
+  if (plan.jobs.some((job) =>
+    job.preflightState !== "PREFLIGHT_PASS" ||
+    !job.preflightReceiptId ||
+    !job.preflightSpecDigest ||
+    !job.compiledPromptDigest ||
+    job.maxVariants !== 1
+  )) {
+    throw new Error("VF_CANONICAL_REFERENCE_PLAN_BINDING_INVALID");
   }
 
   const outputPath = resolve(output);

@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-visual-preflight-receipt.v0.1.schema.json",
+  "title": "Atlas Visual Preflight Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "receiptId",
+    "specId",
+    "packageDigest",
+    "specDigest",
+    "compilerVersion",
+    "artDirectionVersion",
+    "deterministicChecks",
+    "semanticCritic",
+    "humanPreflightRequired",
+    "compiledPrompts",
+    "finalState",
+    "createdAt",
+    "paidComputeAuthorized",
+    "allowQualityDowngrade",
+    "runtimeAuthorized",
+    "publicationAuthorityGranted"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "atlas.visual-preflight-receipt/v0.1" },
+    "receiptId": { "type": "string", "minLength": 1 },
+    "specId": { "type": "string", "minLength": 1 },
+    "packageDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "specDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "compilerVersion": { "type": "string", "minLength": 1 },
+    "artDirectionVersion": { "type": "string", "minLength": 1 },
+    "deterministicChecks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "semanticCritic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "result", "findings"],
+      "properties": {
+        "mode": { "enum": ["LOCAL_BROWSER", "LOCAL_CI", "NOT_AVAILABLE"] },
+        "modelRef": { "type": "string", "minLength": 1 },
+        "modelDigest": { "type": "string", "minLength": 1 },
+        "result": { "enum": ["PASS", "REVISE", "NOT_RUN"] },
+        "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } }
+      }
+    },
+    "humanPreflightRequired": { "type": "boolean" },
+    "humanPreflightDecision": { "enum": ["PASS", "REVISE"] },
+    "compiledPrompts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "providerFamily",
+          "workflowFamily",
+          "positivePrompt",
+          "negativePrompt",
+          "referenceInputs",
+          "referenceInputDigests",
+          "aspectRatio",
+          "maxVariants",
+          "promptDigest",
+          "sourceSpecDigest",
+          "compilerVersion"
+        ],
+        "properties": {
+          "providerFamily": { "const": "FLUX2_KLEIN_4B" },
+          "workflowFamily": { "type": "string", "minLength": 1 },
+          "positivePrompt": { "type": "string", "minLength": 1 },
+          "negativePrompt": { "type": "string" },
+          "referenceInputs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "referenceInputDigests": { "type": "array", "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" } },
+          "aspectRatio": { "type": "string", "minLength": 1 },
+          "maxVariants": { "const": 1 },
+          "promptDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "sourceSpecDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "compilerVersion": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "finalState": { "enum": ["PREFLIGHT_PASS", "PREFLIGHT_REVISE"] },
+    "createdAt": { "type": "string", "minLength": 1 },
+    "paidComputeAuthorized": { "const": false },
+    "allowQualityDowngrade": { "const": false },
+    "runtimeAuthorized": { "const": false },
+    "publicationAuthorityGranted": { "const": false }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "mode": { "const": "NOT_AVAILABLE" }
+            },
+            "required": ["mode"]
+          }
+        },
+        "required": ["semanticCritic"]
+      },
+      "then": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "result": { "const": "NOT_RUN" }
+            }
+          },
+          "humanPreflightRequired": { "const": true }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "mode": { "const": "NOT_AVAILABLE" }
+            },
+            "required": ["mode"]
+          },
+          "finalState": { "const": "PREFLIGHT_PASS" }
+        },
+        "required": ["semanticCritic", "finalState"]
+      },
+      "then": {
+        "properties": {
+          "humanPreflightDecision": { "const": "PASS" }
+        },
+        "required": ["humanPreflightDecision"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "semanticCritic": {
+            "properties": {
+              "mode": { "const": "NOT_AVAILABLE" }
+            },
+            "required": ["mode"]
+          },
+          "humanPreflightDecision": { "const": "REVISE" }
+        },
+        "required": ["semanticCritic", "humanPreflightDecision"]
+      },
+      "then": {
+        "properties": {
+          "finalState": { "const": "PREFLIGHT_REVISE" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "dimension", "message", "checkerVersion"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["ERROR", "WARNING", "INFO"] },
+        "dimension": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "sourcePath": { "type": "string", "minLength": 1 },
+        "suggestedResolution": { "type": "string", "minLength": 1 },
+        "checkerVersion": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

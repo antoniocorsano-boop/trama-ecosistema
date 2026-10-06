@@ -31,6 +31,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_VISUAL_FACTORY_SPACE_REPO: ${{ vars.HF_VISUAL_FACTORY_SPACE_REPO }}
+          VISUAL_FACTORY_ADMISSION_SECRET: ${{ secrets.HF_VISUAL_FACTORY_ADMISSION_SECRET }}
         shell: bash
         run: |
           set -euo pipefail
@@ -40,6 +41,10 @@ jobs:
           }
           test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}" || {
             echo "HF_SPACE_BOOTSTRAP_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_VISUAL_FACTORY_SPACE_REPO is not configured" >&2
+            exit 1
+          }
+          test -n "${VISUAL_FACTORY_ADMISSION_SECRET:-}" || {
+            echo "HF_SPACE_BOOTSTRAP_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_VISUAL_FACTORY_ADMISSION_SECRET is not configured" >&2
             exit 1
           }
           python scripts/deploy_visual_factory_hf_space.py \

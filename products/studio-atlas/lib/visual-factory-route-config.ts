@@ -34,6 +34,7 @@ function optionalPositiveNumber(value: string | undefined): number | undefined {
 export function buildVisualProviderConfig(env: EnvLike): VisualProviderRuntimeConfig {
   const nativeHfToken = env.HF_TOKEN?.trim();
   const nativeHfSpace = env.HF_VISUAL_FACTORY_SPACE_REPO?.trim();
+  const admissionSecret = env.VISUAL_FACTORY_ADMISSION_SECRET?.trim();
   const legacyKind = (env.VISUAL_FACTORY_EXECUTOR_KIND ?? "GRADIO").trim().toUpperCase();
   const legacyUrl = env.VISUAL_FACTORY_EXECUTOR_URL?.trim();
   const legacyToken = env.VISUAL_FACTORY_EXECUTOR_TOKEN?.trim();
@@ -41,14 +42,14 @@ export function buildVisualProviderConfig(env: EnvLike): VisualProviderRuntimeCo
   let hf: HfZeroGpuConfig | undefined;
   let migrationState: VisualProviderMigrationState = "NOT_CONFIGURED";
 
-  if (nativeHfToken && nativeHfSpace) {
-    hf = { token: nativeHfToken, spaceUrl: nativeHfSpace };
+  if (nativeHfToken && nativeHfSpace && admissionSecret) {
+    hf = { token: nativeHfToken, spaceUrl: nativeHfSpace, admissionSecret };
     migrationState = "NATIVE";
   } else if (legacyUrl && legacyToken) {
-    if (legacyKind === "GRADIO") {
-      hf = { token: legacyToken, spaceUrl: legacyUrl };
+    if (legacyKind === "GRADIO" && admissionSecret) {
+      hf = { token: legacyToken, spaceUrl: legacyUrl, admissionSecret };
       migrationState = "LEGACY_HF_TRANSLATED";
-    } else {
+    } else if (legacyKind !== "GRADIO") {
       migrationState = "LEGACY_HTTP_REJECTED";
     }
   }
@@ -80,7 +81,7 @@ export function createConfiguredVisualProviderAdapters(
   config: VisualProviderRuntimeConfig,
 ): Partial<Record<VisualProviderId, VisualProviderAdapter>> {
   const adapters: Partial<Record<VisualProviderId, VisualProviderAdapter>> = {};
-  if (config.hf?.token && config.hf.spaceUrl) {
+  if (config.hf?.token && config.hf.spaceUrl && config.hf.admissionSecret) {
     adapters.HF_ZEROGPU = createHfZeroGpuAdapter(config.hf);
   }
   if (
@@ -96,7 +97,7 @@ export function createConfiguredVisualProviderAdapters(
 export function publicVisualProviderConfigSummary(config: VisualProviderRuntimeConfig) {
   return {
     schemaVersion: "atlas.visual-provider-config-summary/v0.1",
-    hfConfigured: Boolean(config.hf?.token && config.hf.spaceUrl),
+    hfConfigured: Boolean(config.hf?.token && config.hf.spaceUrl && config.hf.admissionSecret),
     cloudflareConfigured: Boolean(config.cloudflare?.token && config.cloudflare.accountId),
     cloudflareWorkersFreeAdmitted: config.cloudflare?.workersFreeAdmitted === true,
     migrationState: config.migrationState,

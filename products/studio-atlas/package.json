@@ -7,8 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "tsx --test lib/*.test.ts",
+    "test": "tsx --test lib/*.test.ts lib/canonical/*.test.ts",
     "typecheck": "tsc --noEmit",
+    "visual-factory:preflight-references": "tsx scripts/compile-canonical-visual-preflight.ts --mode references",
     "visual-factory:compile-reference-plan": "tsx scripts/compile-canonical-reference-plan.ts",
     "visual-factory:orchestrate": "tsx scripts/run-visual-factory-orchestrator.ts"
   },
