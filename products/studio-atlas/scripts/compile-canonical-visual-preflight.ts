@@ -67,10 +67,14 @@ function validateShotReferenceLocks(
     if (
       !requiredSubjects.includes(lock.subjectRef) ||
       lockBySubject.has(lock.subjectRef) ||
+      typeof lock.assetId !== "string" ||
+      !lock.assetId ||
       lock.packageDigest !== packageDigest ||
       !lock.assetUrl.startsWith("https://") ||
       !lock.assetSha256 ||
-      !/^[0-9a-f]{64}$/.test(lock.assetSha256)
+      !/^[0-9a-f]{64}$/.test(lock.assetSha256) ||
+      typeof lock.lockedAt !== "string" ||
+      !lock.lockedAt
     ) {
       throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
     }
