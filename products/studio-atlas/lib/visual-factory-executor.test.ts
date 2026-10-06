@@ -12,11 +12,11 @@ import {
   normalizeExecutorResponse,
   normalizeGradioExecutionResult,
 } from "./visual-factory-executor";
-import { createVisualPreflightReceipt } from "./visual-preflight";
+import { createVisualPreflightReceipt, type VisualPreflightReceipt } from "./visual-preflight";
 
 const DIGEST = "d".repeat(64);
 
-function exactPlan(): VisualGenerationPlan {
+function exactFixture(): { plan: VisualGenerationPlan; receipt: VisualPreflightReceipt } {
   const project = createMuseoZeroPilotProject();
   const spec = { ...getMuseoZeroReferenceIntent("lia"), packageDigest: DIGEST };
   const receipt = createVisualPreflightReceipt({
@@ -36,7 +36,10 @@ function exactPlan(): VisualGenerationPlan {
       lockedAt: "2026-10-06T02:00:00.000Z",
     })),
   };
-  return compileReferenceJobs(project, DIGEST, state, [receipt]);
+  return {
+    plan: compileReferenceJobs(project, DIGEST, state, [receipt]),
+    receipt,
+  };
 }
 
 function validReceipt(url = "https://assets.invalid/lia.png") {
@@ -168,7 +171,8 @@ test("same-origin gateway propagates WAITING_FOR_COMPUTE without throwing", asyn
     publicationAuthorityGranted: false,
   }), { status: 503, headers: { "content-type": "application/json" } });
 
-  const receipt = await executeVisualFactoryPlan(exactPlan(), fetchImpl);
+  const { plan, receipt: preflightReceipt } = exactFixture();
+  const receipt = await executeVisualFactoryPlan(plan, [preflightReceipt], fetchImpl);
 
   assert.equal(receipt.status, "WAITING_FOR_COMPUTE");
   assert.equal(receipt.failureCategory, "NO_FREE_PROVIDER");
