@@ -186,22 +186,22 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
         self.assertRegex(workflow, r"HF_TOKEN:\s*\$\{\{\s*secrets\.HF_TOKEN\s*\}\}")
         self.assertRegex(workflow, r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}")
-        self.assertRegex(workflow, r"HF_VISUAL_FACTORY_ADMISSION_SECRET:\s*\$\{\{\s*secrets\.HF_VISUAL_FACTORY_ADMISSION_SECRET\s*\}\}")
+        self.assertRegex(workflow, r"VISUAL_FACTORY_ADMISSION_SECRET:\s*\$\{\{\s*secrets\.HF_VISUAL_FACTORY_ADMISSION_SECRET\s*\}\}")
         self.assertEqual(len(re.findall(r"(?m)^\s*HF_TOKEN:\s*", workflow)), 1)
         self.assertEqual(len(re.findall(r"(?m)^\s*HF_VISUAL_FACTORY_SPACE_REPO:\s*", workflow)), 1)
-        self.assertEqual(len(re.findall(r"(?m)^\s*HF_VISUAL_FACTORY_ADMISSION_SECRET:\s*", workflow)), 1)
+        self.assertEqual(len(re.findall(r"(?m)^\s*VISUAL_FACTORY_ADMISSION_SECRET:\s*", workflow)), 1)
 
     def test_dry_run_is_credential_free_and_live_modes_fail_closed(self):
         workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
         job_prefix = workflow.split("    steps:", 1)[0]
         self.assertNotIn("HF_TOKEN:", job_prefix)
         self.assertNotIn("HF_VISUAL_FACTORY_SPACE_REPO:", job_prefix)
-        self.assertNotIn("HF_VISUAL_FACTORY_ADMISSION_SECRET:", job_prefix)
+        self.assertNotIn("VISUAL_FACTORY_ADMISSION_SECRET:", job_prefix)
         self.assertIn("- name: Execute bounded orchestrator dry-run\n        if: inputs.mode == 'dry-run'", workflow)
         self.assertIn("- name: Execute bounded orchestrator live\n        if: inputs.mode != 'dry-run'", workflow)
         self.assertIn('test -n "${HF_TOKEN:-}"', workflow)
         self.assertIn('test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}"', workflow)
-        self.assertIn('test -n "${HF_VISUAL_FACTORY_ADMISSION_SECRET:-}"', workflow)
+        self.assertIn('test -n "${VISUAL_FACTORY_ADMISSION_SECRET:-}"', workflow)
         self.assertIn("LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING", workflow)
 
     def test_manual_orchestrator_uses_canonical_studio_atlas_reference_plan(self):
@@ -222,8 +222,8 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         self.assertNotRegex(workflow, r"(?m)^\s*pull_request:\s*$")
         self.assertRegex(workflow, r"HF_TOKEN:\s*\$\{\{\s*secrets\.HF_TOKEN\s*\}\}")
         self.assertRegex(workflow, r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}")
-        self.assertRegex(workflow, r"HF_VISUAL_FACTORY_ADMISSION_SECRET:\s*\$\{\{\s*secrets\.HF_VISUAL_FACTORY_ADMISSION_SECRET\s*\}\}")
-        self.assertIn('test -n "${HF_VISUAL_FACTORY_ADMISSION_SECRET:-}"', workflow)
+        self.assertRegex(workflow, r"VISUAL_FACTORY_ADMISSION_SECRET:\s*\$\{\{\s*secrets\.HF_VISUAL_FACTORY_ADMISSION_SECRET\s*\}\}")
+        self.assertIn('test -n "${VISUAL_FACTORY_ADMISSION_SECRET:-}"', workflow)
         self.assertIn("python scripts/deploy_visual_factory_hf_space.py", workflow)
         self.assertIn("services/visual-factory-hf", workflow)
         self.assertIn("zero-a10g", deploy_script)
