@@ -40,6 +40,7 @@ export type CanonicalVisualPreflightQualification = {
   sourceSpecs: VisualIntentSpec[];
   receipts: VisualPreflightReceipt[];
   compiledPromptDigests: string[];
+  referenceLocks?: VisualReferenceLock[];
   paidComputeAuthorized: false;
   allowQualityDowngrade: false;
   runtimeAuthorized: false;
@@ -73,7 +74,7 @@ function validateShotReferenceLocks(
     ) {
       throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
     }
-    lockBySubject.set(lock.subjectRef, lock);
+    lockBySubject.set(lock.subjectRef, structuredClone(lock));
   }
   if (!requiredSubjects.every((subjectRef) => lockBySubject.has(subjectRef))) {
     throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
@@ -94,6 +95,9 @@ export async function compileCanonicalVisualPreflight(
   const lockBySubject = options.mode === "shots"
     ? validateShotReferenceLocks(options.referenceLocks, packageDigest)
     : undefined;
+  const validatedReferenceLocks = lockBySubject
+    ? MUSEO_ZERO_VISUAL_SUBJECTS.map((subject) => structuredClone(lockBySubject.get(subject.subjectRef)!))
+    : undefined;
 
   const receipts = sourceSpecs.map((spec) => {
     const referenceInputs = lockBySubject
@@ -101,6 +105,13 @@ export async function compileCanonicalVisualPreflight(
           const lock = lockBySubject.get(subjectRef);
           if (!lock) throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
           return lock.assetUrl;
+        })
+      : [];
+    const referenceInputDigests = lockBySubject
+      ? spec.subjectRefs.map((subjectRef) => {
+          const lock = lockBySubject.get(subjectRef);
+          if (!lock?.assetSha256) throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
+          return lock.assetSha256;
         })
       : [];
     return createVisualPreflightReceipt({
@@ -112,7 +123,7 @@ export async function compileCanonicalVisualPreflight(
         findings: [],
       },
       ...(options.humanPreflightPass ? { humanPreflightDecision: "PASS" as const } : {}),
-      ...(referenceInputs.length > 0 ? { referenceInputs } : {}),
+      ...(referenceInputs.length > 0 ? { referenceInputs, referenceInputDigests } : {}),
       createdAt,
     });
   });
@@ -128,6 +139,7 @@ export async function compileCanonicalVisualPreflight(
     sourceSpecs,
     receipts,
     compiledPromptDigests: receipts.flatMap((receipt) => receipt.compiledPrompts.map((prompt) => prompt.promptDigest)),
+    ...(validatedReferenceLocks ? { referenceLocks: validatedReferenceLocks } : {}),
     ...PREFLIGHT_AUTHORITY_FLAGS,
   };
 }
@@ -159,7 +171,13 @@ async function loadReferenceLocks(path: string): Promise<VisualReferenceLock[]> 
   } catch {
     throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_UNAVAILABLE");
   }
-  if (!isRecord(parsed) || !Array.isArray(parsed.locks)) {
+  if (
+    !isRecord(parsed) ||
+    parsed.schemaVersion !== "atlas.visual-reference-lock-evidence/v0.1" ||
+    parsed.runtimeAuthorized !== false ||
+    parsed.publicationAuthorityGranted !== false ||
+    !Array.isArray(parsed.locks)
+  ) {
     throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_INVALID");
   }
   return parsed.locks as VisualReferenceLock[];
@@ -169,7 +187,7 @@ async function writeJson(path: string, value: unknown): Promise<void> {
   await writeFile(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
-async function writeQualificationArtifacts(
+export async function writeQualificationArtifacts(
   outputDir: string,
   qualification: CanonicalVisualPreflightQualification,
 ): Promise<void> {
@@ -203,6 +221,20 @@ async function writeQualificationArtifacts(
         receipt,
       }),
     ]);
+  }
+
+  if (qualification.mode === "shots") {
+    if (!qualification.referenceLocks || qualification.referenceLocks.length !== MUSEO_ZERO_VISUAL_SUBJECTS.length) {
+      throw new Error("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_REQUIRED");
+    }
+    await writeJson(resolve(root, "reference-locks.json"), {
+      schemaVersion: "atlas.visual-reference-lock-evidence/v0.1",
+      pathwayId: qualification.pathwayId,
+      packageDigest: qualification.packageDigest,
+      locks: qualification.referenceLocks,
+      runtimeAuthorized: false,
+      publicationAuthorityGranted: false,
+    });
   }
 
   await writeJson(resolve(root, "manifest.json"), {
