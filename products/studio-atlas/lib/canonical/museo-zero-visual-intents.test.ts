@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { compileVisualPrompt, runDeterministicPreflight } from "../visual-preflight";
 import {
@@ -7,6 +8,20 @@ import {
   getMuseoZeroReferenceIntent,
   getMuseoZeroShotIntent,
 } from "./museo-zero-visual-intents";
+
+test("MUSEO ZERO locked visual bible declares a schema-supported v0.4 style direction", () => {
+  const bible = JSON.parse(readFileSync("../../fixtures/visual-factory-generation/museo-zero-locked.visual-bible.json", "utf8"));
+  const schema = JSON.parse(readFileSync("../../schemas/atlas-visual-bible.v0.1.schema.json", "utf8"));
+  const styleDirectionProperties = schema.properties.styleDirection.properties;
+
+  assert.equal(bible.schemaVersion, "atlas.visual-bible/v0.1");
+  assert.equal(bible.styleDirection.version, "museo-zero-art-direction/v0.4");
+  assert.ok(Object.hasOwn(styleDirectionProperties, "version"));
+
+  for (const key of Object.keys(bible.styleDirection)) {
+    assert.ok(Object.hasOwn(styleDirectionProperties, key), `styleDirection.${key} must be declared by the visual bible schema`);
+  }
+});
 
 test("MUSEO ZERO visual intent corpus contains the five canonical references in order", () => {
   assert.deepEqual(
