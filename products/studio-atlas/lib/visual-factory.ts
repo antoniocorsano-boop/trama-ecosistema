@@ -6,6 +6,7 @@ import {
 import {
   canonicalDigest,
   compileVisualPrompt,
+  resolvePreflightState,
   VISUAL_PREFLIGHT_COMPILER_VERSION,
   type CompiledVisualPrompt,
   type VisualIntentSpec,
@@ -181,6 +182,38 @@ function sameStringArray(left: readonly string[], right: readonly string[]): boo
   return left.length === right.length && left.every((item, index) => item === right[index]);
 }
 
+function hasSelfConsistentReceiptBinding(receipt: VisualPreflightReceipt): boolean {
+  const expectedFinalState = resolvePreflightState({
+    deterministicFindings: receipt.deterministicChecks,
+    semanticCritic: receipt.semanticCritic,
+    humanPreflightDecision: receipt.humanPreflightDecision,
+  });
+  const expectedHumanPreflightRequired =
+    receipt.semanticCritic.mode === "NOT_AVAILABLE" && receipt.semanticCritic.result === "NOT_RUN";
+  const bindingDigest = canonicalDigest({
+    specDigest: receipt.specDigest,
+    packageDigest: receipt.packageDigest,
+    compilerVersion: receipt.compilerVersion,
+    artDirectionVersion: receipt.artDirectionVersion,
+    finalState: receipt.finalState,
+    promptDigests: receipt.compiledPrompts.map((prompt) => prompt.promptDigest),
+    semanticCritic: {
+      mode: receipt.semanticCritic.mode,
+      modelRef: receipt.semanticCritic.modelRef ?? null,
+      modelDigest: receipt.semanticCritic.modelDigest ?? null,
+      result: receipt.semanticCritic.result,
+    },
+    humanPreflightDecision: receipt.humanPreflightDecision ?? null,
+  });
+
+  return (
+    receipt.finalState === expectedFinalState &&
+    receipt.humanPreflightRequired === expectedHumanPreflightRequired &&
+    (!expectedHumanPreflightRequired || receipt.humanPreflightDecision === "PASS") &&
+    receipt.receiptId === `vpc-${bindingDigest.slice(0, 32)}`
+  );
+}
+
 function qualifyPreflight(
   intentTemplate: VisualIntentSpec,
   packageDigest: string,
@@ -191,6 +224,9 @@ function qualifyPreflight(
   const intent = bindPackageDigest(intentTemplate, packageDigest);
   const receipt = receipts.find((item) => item.specId === intent.specId);
   if (!receipt) return { blocker: `VISUAL_PREFLIGHT_RECEIPT_MISSING:${key}` };
+  if (!hasSelfConsistentReceiptBinding(receipt)) {
+    return { blocker: `VISUAL_PREFLIGHT_RECEIPT_INTEGRITY_INVALID:${key}` };
+  }
   if (receipt.finalState !== "PREFLIGHT_PASS") {
     return { blocker: `VISUAL_PREFLIGHT_NOT_PASSED:${key}` };
   }
