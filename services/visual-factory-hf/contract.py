@@ -125,6 +125,19 @@ def compile_execution_jobs(plan: dict[str, Any]) -> list[ExecutionJob]:
     return compiled
 
 
+def provider_ready_prompt(job: ExecutionJob) -> str:
+    """Return the exact provider-ready prompt shared by FREE_ONLY fallback adapters.
+
+    Provider adapters may translate transport fields, but they may not add semantic
+    prompt content during fallback. Keep this representation aligned with the
+    Cloudflare adapter's `promptFor` contract.
+    """
+    if not job.negative_constraints:
+        return job.prompt
+    avoid = ", ".join(job.negative_constraints)
+    return f"{job.prompt}\n\nAvoid: {avoid}."
+
+
 def success_receipt(plan: dict[str, Any], assets: list[dict[str, Any]]) -> dict[str, Any]:
     validate_plan(plan)
     return {
