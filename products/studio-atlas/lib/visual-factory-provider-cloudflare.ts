@@ -12,6 +12,7 @@ import type {
   ProviderEligibility,
   VisualProviderAdapter,
 } from "./visual-factory-orchestrator";
+import { assertVisualReferenceBytesMatchDigest } from "./visual-reference-integrity";
 
 const MODEL_REF = "@cf/black-forest-labs/flux-2-klein-4b";
 const WORKFLOW_REF = "cloudflare-workers-ai.flux2-klein-4b/v0.1";
@@ -26,7 +27,7 @@ export type CloudflareWorkersAiConfig = {
 
 export type CloudflareWorkersAiDeps = {
   fetchImpl?: typeof fetch;
-  prepareReferenceImage?: (url: string) => Promise<Blob>;
+  prepareReferenceImage?: (url: string, expectedDigest: string) => Promise<Blob>;
 };
 
 function redact(value: string, config: CloudflareWorkersAiConfig): string {
@@ -43,7 +44,7 @@ function decodeDataUrl(url: string): Uint8Array | null {
   return Uint8Array.from(Buffer.from(match[1], "base64"));
 }
 
-async function defaultPrepareReferenceImage(url: string): Promise<Blob> {
+async function defaultPrepareReferenceImage(url: string, expectedDigest: string): Promise<Blob> {
   let bytes: Uint8Array;
   const inline = decodeDataUrl(url);
   if (inline) {
@@ -54,6 +55,7 @@ async function defaultPrepareReferenceImage(url: string): Promise<Blob> {
     if (!response.ok) throw new Error(`REFERENCE_FETCH_HTTP_${response.status}`);
     bytes = new Uint8Array(await response.arrayBuffer());
   }
+  assertVisualReferenceBytesMatchDigest(bytes, expectedDigest);
 
   const sharp = (await import("sharp")).default;
   const output = await sharp(bytes)
@@ -134,10 +136,14 @@ async function executeJob(
   variant: number,
   config: Required<Pick<CloudflareWorkersAiConfig, "token" | "accountId">> & CloudflareWorkersAiConfig,
   fetchImpl: typeof fetch,
-  prepareReferenceImage: (url: string) => Promise<Blob>,
+  prepareReferenceImage: (url: string, expectedDigest: string) => Promise<Blob>,
 ): Promise<VisualAssetCandidate | ProviderAttemptOutcome> {
   if (job.referenceInputs.length > MAX_REFERENCE_IMAGES) {
     return { kind: "PERMANENT_FAILURE", detail: "CLOUDFLARE_REFERENCE_LIMIT_EXCEEDED" };
+  }
+  const referenceDigests = job.referenceInputDigests ?? [];
+  if (referenceDigests.length !== job.referenceInputs.length) {
+    return { kind: "PERMANENT_FAILURE", detail: "VISUAL_REFERENCE_LOCK_BINDING_INVALID" };
   }
 
   const form = new FormData();
@@ -149,7 +155,7 @@ async function executeJob(
 
   try {
     for (let index = 0; index < job.referenceInputs.length; index += 1) {
-      const image = await prepareReferenceImage(job.referenceInputs[index]);
+      const image = await prepareReferenceImage(job.referenceInputs[index], referenceDigests[index]);
       form.append(`input_image_${index}`, image, `reference-${index}.webp`);
     }
   } catch (error) {
@@ -169,10 +175,7 @@ async function executeJob(
     });
   } catch (error) {
     const detail = redact(error instanceof Error ? error.message : String(error), config);
-    return {
-      kind: isTimeout(error) ? "RETRYABLE_PROVIDER_FAILURE" : "RETRYABLE_PROVIDER_FAILURE",
-      detail,
-    };
+    return { kind: isTimeout(error) ? "RETRYABLE_PROVIDER_FAILURE" : "RETRYABLE_PROVIDER_FAILURE", detail };
   }
 
   if (!response.ok) {
@@ -187,9 +190,7 @@ async function executeJob(
   }
 
   const bytes = Buffer.from(base64, "base64");
-  if (!bytes.length) {
-    return { kind: "PERMANENT_FAILURE", detail: "CLOUDFLARE_EMPTY_IMAGE_RESPONSE" };
-  }
+  if (!bytes.length) return { kind: "PERMANENT_FAILURE", detail: "CLOUDFLARE_EMPTY_IMAGE_RESPONSE" };
   const digest = createHash("sha256").update(bytes).digest("hex");
   const subjectRef = job.subjectRef ?? job.shotId ?? job.jobId;
   return {
@@ -228,54 +229,29 @@ export function createCloudflareWorkersAiAdapter(
 
   return {
     id: "CLOUDFLARE_WORKERS_AI",
-
     async preflight(plan: VisualGenerationPlan): Promise<ProviderEligibility> {
-      if (!isBound(plan)) {
-        return { eligible: false, reason: "VISUAL_PREFLIGHT_BINDING_INVALID" };
-      }
-      if (!config.token?.trim() || !config.accountId?.trim()) {
-        return { eligible: false, reason: "CLOUDFLARE_NOT_CONFIGURED" };
-      }
-      if (config.workersFreeAdmitted !== true) {
-        return { eligible: false, reason: "CLOUDFLARE_FREE_PLAN_NOT_ADMITTED" };
-      }
+      if (!isBound(plan)) return { eligible: false, reason: "VISUAL_PREFLIGHT_BINDING_INVALID" };
+      if (!config.token?.trim() || !config.accountId?.trim()) return { eligible: false, reason: "CLOUDFLARE_NOT_CONFIGURED" };
+      if (config.workersFreeAdmitted !== true) return { eligible: false, reason: "CLOUDFLARE_FREE_PLAN_NOT_ADMITTED" };
       return { eligible: true, reason: "CLOUDFLARE_WORKERS_FREE_ADMITTED" };
     },
-
     async execute(plan: VisualGenerationPlan, _ctx: OrchestrationContext): Promise<ProviderAttemptOutcome> {
-      if (!isBound(plan)) {
-        return { kind: "PERMANENT_FAILURE", detail: "VISUAL_PREFLIGHT_BINDING_INVALID" };
-      }
+      if (!isBound(plan)) return { kind: "PERMANENT_FAILURE", detail: "VISUAL_PREFLIGHT_BINDING_INVALID" };
       if (!config.token?.trim() || !config.accountId?.trim() || config.workersFreeAdmitted !== true) {
         return { kind: "PROVIDER_INELIGIBLE", detail: "CLOUDFLARE_ZERO_COST_GUARD_REJECTED" };
       }
-
-      const admitted = {
-        ...config,
-        token: config.token,
-        accountId: config.accountId,
-      };
+      const admitted = { ...config, token: config.token, accountId: config.accountId };
       const assets: VisualAssetCandidate[] = [];
-
       for (const job of plan.jobs) {
         if (job.referenceInputs.length > MAX_REFERENCE_IMAGES) {
           return { kind: "PERMANENT_FAILURE", detail: "CLOUDFLARE_REFERENCE_LIMIT_EXCEEDED" };
         }
-        const variants = job.maxVariants;
-        for (let variant = 0; variant < variants; variant += 1) {
-          const result = await executeJob(
-            job,
-            plan,
-            variant,
-            admitted,
-            fetchImpl,
-            prepareReferenceImage,
-          );
+        for (let variant = 0; variant < job.maxVariants; variant += 1) {
+          const result = await executeJob(job, plan, variant, admitted, fetchImpl, prepareReferenceImage);
           if (isAttemptOutcome(result)) return result;
           assets.push(result);
         }
       }
-
       return { kind: "SUCCEEDED", receipt: successReceipt(plan, assets) };
     },
   };
