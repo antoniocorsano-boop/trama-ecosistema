@@ -7,7 +7,7 @@ import { createCloudflareWorkersAiAdapter } from "./visual-factory-provider-clou
 const DIGEST = "e".repeat(64);
 const TOKEN = "cf_secret_test_value";
 const ACCOUNT_ID = "account-test";
-const MODEL = "@cf/black-forest-labs/flux-2-klein-9b";
+const MODEL = "@cf/black-forest-labs/flux-2-klein-4b";
 
 function context(): OrchestrationContext {
   return { unfinishedCanonicalReferenceCount: 0, hfConfiguredFloorSeconds: 40, hfSafetyMarginSeconds: 20 };
@@ -60,7 +60,7 @@ test("Cloudflare is ineligible without explicit credentials and Workers Free adm
   assert.equal(calls, 0);
 });
 
-test("Cloudflare uses the exact allowlisted FLUX.2 Klein endpoint", async () => {
+test("Cloudflare uses the exact preflight-authorized FLUX.2 Klein 4B endpoint", async () => {
   let requestedUrl = "";
   const adapter = createCloudflareWorkersAiAdapter({ token: TOKEN, accountId: ACCOUNT_ID, workersFreeAdmitted: true }, {
     fetchImpl: async (input) => { requestedUrl = String(input); return successResponse(); },
@@ -139,7 +139,7 @@ test("valid Cloudflare Base64 output becomes a provenance-complete hashed candid
   const asset = outcome.receipt?.assets[0];
   assert.ok(asset);
   assert.equal(asset.modelRef, MODEL);
-  assert.equal(asset.workflowRef, "cloudflare-workers-ai.flux2-klein-9b/v0.1");
+  assert.equal(asset.workflowRef, "cloudflare-workers-ai.flux2-klein-4b/v0.1");
   assert.match(asset.sha256, /^[0-9a-f]{64}$/);
   assert.equal(asset.provenanceStatus, "RECORDED");
   assert.equal(asset.packageDigest, DIGEST);
