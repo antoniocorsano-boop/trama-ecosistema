@@ -70,6 +70,10 @@ def main() -> int:
         print("NOT_CONFIGURED")
         return 0
 
+    admission_secret = os.environ.get("VISUAL_FACTORY_ADMISSION_SECRET", "").strip()
+    if not admission_secret:
+        raise SystemExit("HF_SPACE_ADMISSION_SECRET_REQUIRED")
+
     source = Path(args.source)
     required = ["app.py", "contract.py", "requirements.txt"]
     missing = [name for name in required if not (source / name).is_file()]
@@ -98,6 +102,13 @@ def main() -> int:
         validate_private_space(space_info)
     except Exception as exc:
         raise SystemExit(f"PRIVATE_SPACE_PRECHECK_FAILED:{exc}") from exc
+
+    api.add_space_secret(
+        repo_id=repo_id,
+        key="VISUAL_FACTORY_ADMISSION_SECRET",
+        value=admission_secret,
+        description="Server-side capability key for bounded Studio Atlas provider admission",
+    )
 
     readme = """---
 title: Studio Atlas Visual Factory
