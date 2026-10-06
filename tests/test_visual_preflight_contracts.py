@@ -2,6 +2,8 @@ import json
 import pathlib
 import unittest
 
+from tests.test_visual_factory_review_regressions import VisualFactoryReviewRegressionTests  # noqa: F401
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 INTENT = ROOT / "schemas" / "atlas-visual-intent-spec.v0.1.schema.json"
 RECEIPT = ROOT / "schemas" / "atlas-visual-preflight-receipt.v0.1.schema.json"
