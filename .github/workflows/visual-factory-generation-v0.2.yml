@@ -51,6 +51,7 @@ jobs:
       - name: Require bounded orchestrator qualification surface
         run: |
           test -f .github/workflows/visual-factory-orchestrator-v0.1.yml
+          test -f products/studio-atlas/lib/visual-preflight-evidence-node.ts
           test -f products/studio-atlas/scripts/compile-canonical-visual-preflight.ts
           test -f products/studio-atlas/scripts/compile-canonical-reference-plan.ts
           test -f products/studio-atlas/scripts/run-visual-factory-orchestrator.ts
@@ -123,6 +124,7 @@ jobs:
           npm run visual-factory:orchestrate -- \
             --mode dry-run \
             --plan /tmp/canonical-reference-plan.json \
+            --preflight /tmp/canonical-visual-preflight \
             --output /tmp/canonical-dry-run-evidence
           test -d /tmp/canonical-dry-run-evidence
 
