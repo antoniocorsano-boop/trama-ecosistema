@@ -1,4 +1,5 @@
 import type { VisualGenerationPlan } from "./visual-factory";
+import { assertVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
 import { normalizeGradioExecutionResult } from "./visual-factory-executor";
 import {
   computeProtectedHfReserve,
@@ -122,6 +123,15 @@ function classifyExecutionError(error: unknown, token?: string): ProviderAttempt
   return { kind: "PERMANENT_FAILURE", detail };
 }
 
+function isBound(plan: VisualGenerationPlan): boolean {
+  try {
+    assertVisualPreflightBoundPlan(plan);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function createHfZeroGpuAdapter(
   config: HfZeroGpuConfig,
   deps: HfZeroGpuDeps = {},
@@ -133,6 +143,9 @@ export function createHfZeroGpuAdapter(
     id: "HF_ZEROGPU",
 
     async preflight(plan: VisualGenerationPlan, ctx: OrchestrationContext): Promise<ProviderEligibility> {
+      if (!isBound(plan)) {
+        return { eligible: false, reason: "VISUAL_PREFLIGHT_BINDING_INVALID" };
+      }
       if (!config.token?.trim() || !config.spaceUrl?.trim()) {
         return { eligible: false, reason: "HF_NOT_CONFIGURED" };
       }
@@ -179,6 +192,9 @@ export function createHfZeroGpuAdapter(
     },
 
     async execute(plan: VisualGenerationPlan): Promise<ProviderAttemptOutcome> {
+      if (!isBound(plan)) {
+        return { kind: "PERMANENT_FAILURE", detail: "VISUAL_PREFLIGHT_BINDING_INVALID" };
+      }
       if (!config.token?.trim() || !config.spaceUrl?.trim()) {
         return { kind: "PROVIDER_INELIGIBLE", detail: "HF_NOT_CONFIGURED" };
       }
