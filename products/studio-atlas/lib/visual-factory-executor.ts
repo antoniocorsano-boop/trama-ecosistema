@@ -6,6 +6,7 @@ import type {
   VisualOrchestrationEvidence,
   VisualProviderAttemptEvidence,
 } from "./visual-factory";
+import { assertVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
 
 function noAuthorityReceipt(
   packageDigest: string,
@@ -179,6 +180,17 @@ export async function executeVisualFactoryPlan(
   plan: VisualGenerationPlan,
   fetchImpl: typeof fetch = fetch,
 ): Promise<VisualExecutionReceipt> {
+  try {
+    assertVisualPreflightBoundPlan(plan);
+  } catch {
+    return noAuthorityReceipt(
+      plan.packageDigest,
+      "FAILED",
+      "INVALID_EXECUTOR_RESPONSE",
+      "VISUAL_PREFLIGHT_BINDING_INVALID",
+    );
+  }
+
   try {
     const response = await fetchImpl("/api/visual-factory/execute", {
       method: "POST",
