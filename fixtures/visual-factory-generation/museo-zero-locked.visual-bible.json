@@ -3,6 +3,7 @@
   "visualBibleId": "MZ-VB-001",
   "pathwayId": "PW-STRATEGY-SELECTION-01",
   "styleDirection": {
+    "version": "museo-zero-art-direction/v0.4",
     "family": "cinematic editorial illustration",
     "finish": "polished 2-D illustrated realism; believable anatomy; restrained graphic-novel finish",
     "palette": "after-hours museum; deep blue/charcoal base with one warm amber projection accent",
@@ -25,8 +26,15 @@
       "characterId": "lia",
       "name": "Lia",
       "role": "exhibition layout / visitor flow",
-      "description": "adult museum crew member, calm focused physicality, practical contemporary setup clothing, clear full-body silhouette, stable hairstyle and one recurring warm accent",
-      "continuityAnchors": ["stable hairstyle", "stable outerwear silhouette", "same adult age band", "warm accent detail"],
+      "description": "adult museum crew member age 30-40 with short dark wavy bob, burnt-orange overshirt over a charcoal base layer, restrained technical crossbody bag, calm focused presence while working in the physical gallery",
+      "continuityAnchors": [
+        "adult 30-40",
+        "short dark wavy bob",
+        "burnt-orange overshirt over charcoal base layer",
+        "restrained technical crossbody bag",
+        "calm focused presence",
+        "visitor-flow task association"
+      ],
       "referenceStatus": "LOCKED",
       "referenceAssetRefs": ["fixture://visual/museo-zero/lia-reference-sheet-v1.png"]
     },
@@ -34,8 +42,15 @@
       "characterId": "omar",
       "name": "Omar",
       "role": "installation",
-      "description": "adult museum installer, practical posture, contemporary work clothing, distinct silhouette, often physically near sensors or installation props, participant rather than teacher",
-      "continuityAnchors": ["stable workwear", "distinct silhouette from Teo", "same adult age band", "installation gesture or small prop"],
+      "description": "adult museum installer age 30-40 with very short dark hair, short beard, olive/moss work jacket, small dark tool bag, practical installation posture near sensors or mounting hardware",
+      "continuityAnchors": [
+        "adult 30-40",
+        "very short dark hair",
+        "short beard",
+        "olive/moss work jacket",
+        "small dark tool bag",
+        "practical installation posture"
+      ],
       "referenceStatus": "LOCKED",
       "referenceAssetRefs": ["fixture://visual/museo-zero/omar-reference-sheet-v1.png"]
     },
@@ -43,8 +58,15 @@
       "characterId": "teo",
       "name": "Teo",
       "role": "control / rehearsal",
-      "description": "adult museum control-room crew member, contemporary practical clothing, observant restrained body language, distinct silhouette, physically connected to rehearsal and control booth",
-      "continuityAnchors": ["stable clothing", "distinct silhouette from Omar", "same adult age band", "control booth association"],
+      "description": "adult museum control-room crew member age 30-40 with short greying hair, thin metal glasses, slate-blue overshirt, measured observant posture near analog controls inside the adjacent booth",
+      "continuityAnchors": [
+        "adult 30-40",
+        "short greying hair",
+        "thin metal glasses",
+        "slate-blue overshirt",
+        "measured observant posture",
+        "near analog controls"
+      ],
       "referenceStatus": "LOCKED",
       "referenceAssetRefs": ["fixture://visual/museo-zero/teo-reference-sheet-v1.png"]
     }
