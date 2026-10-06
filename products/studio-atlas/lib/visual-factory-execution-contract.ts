@@ -2,7 +2,11 @@ import {
   getMuseoZeroReferenceIntent,
   getMuseoZeroShotIntent,
 } from "./canonical/museo-zero-visual-intents";
-import type { VisualGenerationJob, VisualGenerationPlan } from "./visual-factory";
+import type {
+  VisualGenerationJob,
+  VisualGenerationPlan,
+  VisualReferenceLock,
+} from "./visual-factory";
 import {
   VISUAL_PREFLIGHT_COMPILER_VERSION,
   canonicalDigest,
@@ -24,6 +28,7 @@ function bindPackageDigest(spec: VisualIntentSpec, packageDigest: string): Visua
 }
 
 function assertStructuralJobBinding(job: VisualGenerationJob): void {
+  const referenceDigests = job.referenceInputDigests ?? [];
   if (
     job.maxVariants !== 1 ||
     job.preflightState !== "PREFLIGHT_PASS" ||
@@ -32,7 +37,11 @@ function assertStructuralJobBinding(job: VisualGenerationJob): void {
     typeof job.preflightSpecDigest !== "string" ||
     !HEX_64.test(job.preflightSpecDigest) ||
     typeof job.compiledPromptDigest !== "string" ||
-    !HEX_64.test(job.compiledPromptDigest)
+    !HEX_64.test(job.compiledPromptDigest) ||
+    !Array.isArray(job.referenceInputs) ||
+    !Array.isArray(referenceDigests) ||
+    referenceDigests.length !== job.referenceInputs.length ||
+    !referenceDigests.every((digest) => HEX_64.test(digest))
   ) {
     throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
   }
@@ -152,12 +161,59 @@ function assertReceiptIntegrity(receipt: VisualPreflightReceipt): void {
   }
 }
 
+function expectedReferenceLockBindings(
+  plan: VisualGenerationPlan,
+  job: VisualGenerationJob,
+  referenceLocks: readonly VisualReferenceLock[],
+): { urls: string[]; digests: string[] } {
+  if (plan.planType !== "SHOT_GENERATION") return { urls: [], digests: [] };
+  if (!referenceLocks.length) {
+    throw new Error("VISUAL_REFERENCE_LOCK_EVIDENCE_REQUIRED");
+  }
+  const spec = expectedSpec(plan, job);
+  const bySubject = new Map(referenceLocks.map((lock) => [lock.subjectRef, lock]));
+  if (bySubject.size !== referenceLocks.length) {
+    throw new Error("VISUAL_REFERENCE_LOCK_BINDING_INVALID");
+  }
+  const urls: string[] = [];
+  const digests: string[] = [];
+  for (const subjectRef of spec.subjectRefs) {
+    const lock = bySubject.get(subjectRef);
+    if (
+      !lock ||
+      lock.packageDigest !== plan.packageDigest ||
+      typeof lock.assetUrl !== "string" ||
+      !lock.assetUrl.startsWith("https://") ||
+      typeof lock.assetSha256 !== "string" ||
+      !HEX_64.test(lock.assetSha256)
+    ) {
+      throw new Error("VISUAL_REFERENCE_LOCK_BINDING_INVALID");
+    }
+    urls.push(lock.assetUrl);
+    digests.push(lock.assetSha256);
+  }
+  return { urls, digests };
+}
+
 function assertExactJobBinding(
   plan: VisualGenerationPlan,
   job: VisualGenerationJob,
   receipts: readonly VisualPreflightReceipt[],
+  referenceLocks: readonly VisualReferenceLock[],
 ): void {
   assertCanonicalJobSemantics(plan, job);
+
+  if (plan.planType === "SHOT_GENERATION") {
+    const expectedLocks = expectedReferenceLockBindings(plan, job, referenceLocks);
+    if (
+      !sameStrings(job.referenceInputs, expectedLocks.urls) ||
+      !sameStrings(job.referenceInputDigests ?? [], expectedLocks.digests)
+    ) {
+      throw new Error("VISUAL_REFERENCE_LOCK_BINDING_INVALID");
+    }
+  } else if ((job.referenceInputDigests ?? []).length !== 0) {
+    throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
+  }
 
   const receipt = receipts.find((item) => item.receiptId === job.preflightReceiptId);
   if (!receipt) {
@@ -199,12 +255,16 @@ function assertExactJobBinding(
 export function assertExactCanonicalVisualPreflightBoundPlan(
   plan: VisualGenerationPlan,
   receipts: readonly VisualPreflightReceipt[],
+  referenceLocks: readonly VisualReferenceLock[] = [],
 ): void {
   assertCanonicalVisualPlanSemantics(plan);
   if (!Array.isArray(receipts) || receipts.length === 0) {
     throw new Error("VISUAL_PREFLIGHT_EVIDENCE_REQUIRED");
   }
-  for (const job of plan.jobs) assertExactJobBinding(plan, job, receipts);
+  if (plan.planType === "SHOT_GENERATION" && referenceLocks.length === 0) {
+    throw new Error("VISUAL_REFERENCE_LOCK_EVIDENCE_REQUIRED");
+  }
+  for (const job of plan.jobs) assertExactJobBinding(plan, job, receipts, referenceLocks);
 }
 
 export function isVisualPreflightBoundPlan(plan: VisualGenerationPlan): boolean {
@@ -219,9 +279,10 @@ export function isVisualPreflightBoundPlan(plan: VisualGenerationPlan): boolean 
 export function isExactCanonicalVisualPreflightBoundPlan(
   plan: VisualGenerationPlan,
   receipts: readonly VisualPreflightReceipt[],
+  referenceLocks: readonly VisualReferenceLock[] = [],
 ): boolean {
   try {
-    assertExactCanonicalVisualPreflightBoundPlan(plan, receipts);
+    assertExactCanonicalVisualPreflightBoundPlan(plan, receipts, referenceLocks);
     return true;
   } catch {
     return false;
