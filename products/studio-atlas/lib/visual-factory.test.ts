@@ -255,6 +255,23 @@ test("a newer authoring digest invalidates old candidates and locks", () => {
   assert.deepEqual(reconciled.sceneAssets, []);
 });
 
+test("a legacy state without art-direction binding invalidates old candidates and locks", () => {
+  const legacyState = lockedState() as VisualFactoryState & { artDirectionVersion?: string };
+  delete legacyState.artDirectionVersion;
+
+  const reconciled = reconcileVisualFactoryState(legacyState, DIGEST);
+
+  assert.notEqual(reconciled, legacyState);
+  assert.equal(reconciled.stage, "NEEDS_REFERENCES");
+  assert.deepEqual(reconciled.candidates, []);
+  assert.deepEqual(reconciled.referenceLocks, []);
+  assert.deepEqual(reconciled.sceneAssets, []);
+  assert.equal(
+    (reconciled as VisualFactoryState & { artDirectionVersion?: string }).artDirectionVersion,
+    getMuseoZeroReferenceIntent("lia").artDirectionVersion,
+  );
+});
+
 test("the same authoring digest preserves visual review state", () => {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, candidateReceipt());
