@@ -6,7 +6,7 @@ import type {
   VisualOrchestrationEvidence,
   VisualProviderAttemptEvidence,
 } from "./visual-factory";
-import { assertVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
+import { assertExactCanonicalVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
 
 function noAuthorityReceipt(
   packageDigest: string,
@@ -181,7 +181,7 @@ export async function executeVisualFactoryPlan(
   fetchImpl: typeof fetch = fetch,
 ): Promise<VisualExecutionReceipt> {
   try {
-    assertVisualPreflightBoundPlan(plan);
+    assertExactCanonicalVisualPreflightBoundPlan(plan);
   } catch {
     return noAuthorityReceipt(
       plan.packageDigest,
