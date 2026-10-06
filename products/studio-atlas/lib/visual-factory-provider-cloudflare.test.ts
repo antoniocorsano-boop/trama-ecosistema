@@ -60,14 +60,16 @@ test("Cloudflare is ineligible without explicit credentials and Workers Free adm
   assert.equal(calls, 0);
 });
 
-test("Cloudflare uses the exact preflight-authorized FLUX.2 Klein 4B endpoint", async () => {
+test("Cloudflare uses the exact preflight-authorized FLUX.2 Klein 4B endpoint and rejects capacity queuing", async () => {
   let requestedUrl = "";
   const adapter = createCloudflareWorkersAiAdapter({ token: TOKEN, accountId: ACCOUNT_ID, workersFreeAdmitted: true }, {
     fetchImpl: async (input) => { requestedUrl = String(input); return successResponse(); },
   });
   const outcome = await adapter.execute(plan(), context());
   assert.equal(outcome.kind, "SUCCEEDED");
-  assert.equal(requestedUrl, `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/${MODEL}`);
+  const url = new URL(requestedUrl);
+  assert.equal(`${url.origin}${url.pathname}`, `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/${MODEL}`);
+  assert.equal(url.searchParams.get("rejectIfBusy"), "true");
   assert.equal(outcome.receipt?.assets[0]?.modelRef, MODEL);
 });
 
