@@ -89,7 +89,9 @@ function promptFor(job: VisualGenerationJob): string {
 }
 
 function endpoint(accountId: string): string {
-  return `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${MODEL_REF}`;
+  const url = new URL(`https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${MODEL_REF}`);
+  url.searchParams.set("rejectIfBusy", "true");
+  return url.toString();
 }
 
 function successReceipt(plan: VisualGenerationPlan, assets: VisualAssetCandidate[]): VisualExecutionReceipt {
