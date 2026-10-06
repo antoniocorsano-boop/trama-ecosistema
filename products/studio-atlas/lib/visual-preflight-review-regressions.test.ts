@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 import { createMuseoZeroPilotProject } from "./canonical/museo-zero";
 import { getMuseoZeroReferenceIntent } from "./canonical/museo-zero-visual-intents";
@@ -13,6 +16,7 @@ import {
   compileVisualPrompt,
   type VisualIntentSpec,
 } from "./visual-preflight";
+import * as canonicalPreflight from "../scripts/compile-canonical-visual-preflight";
 import {
   compileCanonicalVisualPreflight,
   type CanonicalVisualPreflightOptions,
@@ -47,7 +51,7 @@ test("exactTextRequired is preserved in the positive prompt and prompt digest", 
   assert.notEqual(compiled.promptDigest, base.promptDigest);
 });
 
-test("offline shot preflight binds receipts to the ordered immutable reference locks used by shot compilation", async () => {
+test("offline shot preflight binds receipts to ordered immutable reference URLs and content digests", async () => {
   const project = createMuseoZeroPilotProject();
   const packageDigest = await digestAuthoringState(project);
   const referenceLocks = makeReferenceLocks(packageDigest);
@@ -66,8 +70,13 @@ test("offline shot preflight binds receipts to the ordered immutable reference l
   for (let index = 0; index < qualification.sourceSpecs.length; index += 1) {
     const spec = qualification.sourceSpecs[index];
     const receipt = qualification.receipts[index];
+    const prompt = receipt?.compiledPrompts[0] as (typeof receipt.compiledPrompts)[number] & {
+      referenceInputDigests?: string[];
+    };
     const expectedUrls = spec.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl);
-    assert.deepEqual(receipt?.compiledPrompts[0]?.referenceInputs, expectedUrls);
+    const expectedDigests = spec.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetSha256!);
+    assert.deepEqual(prompt.referenceInputs, expectedUrls);
+    assert.deepEqual(prompt.referenceInputDigests, expectedDigests);
   }
 
   const state = {
@@ -84,6 +93,69 @@ test("offline shot preflight binds receipts to the ordered immutable reference l
       const lock = referenceLocks.find((item) => item.assetUrl === job.referenceInputs[index]);
       assert.equal(job.referenceInputDigests?.[index], lock?.assetSha256);
     }
+  }
+});
+
+test("shot receipt binding changes when locked bytes change at the same URL", async () => {
+  const project = createMuseoZeroPilotProject();
+  const packageDigest = await digestAuthoringState(project);
+  const firstLocks = makeReferenceLocks(packageDigest);
+  const changedLocks = firstLocks.map((lock) =>
+    lock.subjectRef === "lia" ? { ...lock, assetSha256: "f".repeat(64) } : lock,
+  );
+
+  const first = await compileCanonicalVisualPreflight({
+    mode: "shots",
+    humanPreflightPass: true,
+    createdAt: "2026-10-06T05:40:00.000Z",
+    referenceLocks: firstLocks,
+  });
+  const changed = await compileCanonicalVisualPreflight({
+    mode: "shots",
+    humanPreflightPass: true,
+    createdAt: "2026-10-06T05:40:00.000Z",
+    referenceLocks: changedLocks,
+  });
+
+  assert.equal(first.receipts[0]?.compiledPrompts[0]?.referenceInputs[0], changed.receipts[0]?.compiledPrompts[0]?.referenceInputs[0]);
+  assert.notEqual(first.receipts[0]?.compiledPrompts[0]?.promptDigest, changed.receipts[0]?.compiledPrompts[0]?.promptDigest);
+  assert.notEqual(first.receipts[0]?.receiptId, changed.receipts[0]?.receiptId);
+});
+
+test("offline shot qualification persists the exact validated reference-lock envelope", async () => {
+  const project = createMuseoZeroPilotProject();
+  const packageDigest = await digestAuthoringState(project);
+  const referenceLocks = makeReferenceLocks(packageDigest);
+  const qualification = await compileCanonicalVisualPreflight({
+    mode: "shots",
+    humanPreflightPass: true,
+    createdAt: "2026-10-06T05:40:00.000Z",
+    referenceLocks,
+  });
+  const writer = (canonicalPreflight as unknown as {
+    writeQualificationArtifacts?: (outputDir: string, value: typeof qualification) => Promise<void>;
+  }).writeQualificationArtifacts;
+  assert.equal(typeof writer, "function");
+
+  const directory = await mkdtemp(join(tmpdir(), "vpc-shot-review-"));
+  try {
+    await writer!(directory, qualification);
+    const envelope = JSON.parse(await readFile(join(directory, "reference-locks.json"), "utf8")) as {
+      schemaVersion?: string;
+      pathwayId?: string;
+      packageDigest?: string;
+      locks?: VisualReferenceLock[];
+      runtimeAuthorized?: boolean;
+      publicationAuthorityGranted?: boolean;
+    };
+    assert.equal(envelope.schemaVersion, "atlas.visual-reference-lock-evidence/v0.1");
+    assert.equal(envelope.pathwayId, qualification.pathwayId);
+    assert.equal(envelope.packageDigest, packageDigest);
+    assert.deepEqual(envelope.locks, referenceLocks);
+    assert.equal(envelope.runtimeAuthorized, false);
+    assert.equal(envelope.publicationAuthorityGranted, false);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
   }
 });
 
