@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import type { VisualExecutionReceipt, VisualGenerationPlan } from "../../../../lib/visual-factory";
-import { isExactCanonicalVisualPreflightBoundPlan } from "../../../../lib/visual-factory-execution-contract";
+import {
+  assertExactCanonicalVisualPreflightBoundPlan,
+  isVisualPreflightBoundPlan,
+} from "../../../../lib/visual-factory-execution-contract";
 import { waitingForComputeReceipt } from "../../../../lib/visual-factory-executor";
+import { loadPersistedVisualPreflightEvidence } from "../../../../lib/visual-preflight-evidence-node";
 import { orchestrateVisualGeneration } from "../../../../lib/visual-factory-orchestrator";
 import {
   buildVisualProviderConfig,
@@ -32,7 +36,7 @@ function isPlan(value: unknown): value is VisualGenerationPlan {
   ) {
     return false;
   }
-  return isExactCanonicalVisualPreflightBoundPlan(plan as VisualGenerationPlan);
+  return isVisualPreflightBoundPlan(plan as VisualGenerationPlan);
 }
 
 function responseForReceipt(receipt: VisualExecutionReceipt) {
@@ -48,6 +52,23 @@ export async function POST(request: Request) {
   const raw = await request.json().catch(() => null);
   if (!isPlan(raw)) {
     return NextResponse.json({ error: "INVALID_VISUAL_GENERATION_PLAN" }, { status: 400 });
+  }
+
+  const evidenceDirectory = process.env.VISUAL_FACTORY_PREFLIGHT_EVIDENCE_DIR?.trim();
+  if (!evidenceDirectory) {
+    return NextResponse.json({ error: "PREFLIGHT_EVIDENCE_UNAVAILABLE" }, { status: 409 });
+  }
+
+  try {
+    const receipts = await loadPersistedVisualPreflightEvidence(evidenceDirectory, raw);
+    assertExactCanonicalVisualPreflightBoundPlan(raw, receipts);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "VISUAL_PREFLIGHT_EVIDENCE_INVALID";
+    const status = message === "VISUAL_PREFLIGHT_EVIDENCE_UNAVAILABLE" ? 409 : 400;
+    return NextResponse.json(
+      { error: message === "VISUAL_PREFLIGHT_EVIDENCE_UNAVAILABLE" ? "PREFLIGHT_EVIDENCE_UNAVAILABLE" : "INVALID_VISUAL_GENERATION_PLAN" },
+      { status },
+    );
   }
 
   const config = buildVisualProviderConfig(process.env);
