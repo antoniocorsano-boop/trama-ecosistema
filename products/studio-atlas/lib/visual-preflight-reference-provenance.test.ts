@@ -11,9 +11,7 @@ import {
   type VisualFactoryState,
   type VisualReferenceLock,
 } from "./visual-factory";
-import {
-  assertExactCanonicalVisualPreflightBoundPlan,
-} from "./visual-factory-execution-contract";
+import { assertExactCanonicalVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
 import { createVisualPreflightReceipt, type VisualPreflightReceipt } from "./visual-preflight";
 
 const DIGEST = "a".repeat(64);
@@ -30,9 +28,7 @@ function referenceReceipt(): VisualExecutionReceipt {
     assets: SUBJECTS.map((subjectRef, index) => ({
       assetId: `${subjectRef}-locked`,
       subjectRef,
-      purpose: subjectRef === "sala-zero" || subjectRef === "cabina-regia"
-        ? "ENVIRONMENT_REFERENCE" as const
-        : "CHARACTER_REFERENCE" as const,
+      purpose: subjectRef === "sala-zero" || subjectRef === "cabina-regia" ? "ENVIRONMENT_REFERENCE" as const : "CHARACTER_REFERENCE" as const,
       url: `https://assets.invalid/${subjectRef}.png`,
       sha256: `${(index + 10).toString(16)}`.repeat(64),
       modelRef: "fixture/model",
@@ -51,9 +47,7 @@ function referenceReceipt(): VisualExecutionReceipt {
 function lockedState(): VisualFactoryState {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, referenceReceipt());
-  for (const subjectRef of SUBJECTS) {
-    state = lockVisualReference(state, subjectRef, `${subjectRef}-locked`, DIGEST);
-  }
+  for (const subjectRef of SUBJECTS) state = lockVisualReference(state, subjectRef, `${subjectRef}-locked`, DIGEST);
   return state;
 }
 
@@ -77,8 +71,7 @@ test("reference locks preserve the immutable asset digest", () => {
   const state = lockedState();
   for (const lock of state.referenceLocks) {
     const candidate = state.candidates.find((item) => item.assetId === lock.assetId)!;
-    const assetSha256 = (lock as VisualReferenceLock & { assetSha256?: string }).assetSha256;
-    assert.equal(assetSha256, candidate.sha256);
+    assert.equal(lock.assetSha256, candidate.sha256);
   }
 });
 
@@ -88,10 +81,9 @@ test("shot jobs carry content digests aligned with their locked reference inputs
   const plan = compileShotJobs(project, DIGEST, state, shotReceipts(state));
   assert.equal(plan.decision, "SHOT_GENERATION_READY");
   for (const job of plan.jobs) {
-    const referenceInputDigests = (job as typeof job & { referenceInputDigests?: string[] }).referenceInputDigests;
-    assert.ok(Array.isArray(referenceInputDigests));
-    assert.equal(referenceInputDigests?.length, job.referenceInputs.length);
-    assert.ok(referenceInputDigests?.every((digest) => /^[0-9a-f]{64}$/.test(digest)));
+    assert.ok(Array.isArray(job.referenceInputDigests));
+    assert.equal(job.referenceInputDigests?.length, job.referenceInputs.length);
+    assert.ok(job.referenceInputDigests?.every((digest) => /^[0-9a-f]{64}$/.test(digest)));
   }
 });
 
@@ -100,10 +92,7 @@ test("shot admission requires persisted reference-lock evidence", () => {
   const state = lockedState();
   const receipts = shotReceipts(state);
   const plan = compileShotJobs(project, DIGEST, state, receipts);
-  assert.throws(
-    () => assertExactCanonicalVisualPreflightBoundPlan(plan, receipts),
-    /VISUAL_REFERENCE_LOCK_EVIDENCE_REQUIRED/,
-  );
+  assert.throws(() => assertExactCanonicalVisualPreflightBoundPlan(plan, receipts), /VISUAL_REFERENCE_LOCK_EVIDENCE_REQUIRED/);
 });
 
 test("shot admission rejects persisted lock evidence with a mismatched content digest", () => {
@@ -111,15 +100,10 @@ test("shot admission rejects persisted lock evidence with a mismatched content d
   const state = lockedState();
   const receipts = shotReceipts(state);
   const plan = compileShotJobs(project, DIGEST, state, receipts);
-  const locks = structuredClone(state.referenceLocks) as Array<VisualReferenceLock & { assetSha256?: string }>;
+  const locks = structuredClone(state.referenceLocks) as VisualReferenceLock[];
   locks[0].assetSha256 = "f".repeat(64);
-  const validate = assertExactCanonicalVisualPreflightBoundPlan as unknown as (
-    plan: typeof plan,
-    receipts: readonly VisualPreflightReceipt[],
-    referenceLocks: readonly (VisualReferenceLock & { assetSha256?: string })[],
-  ) => void;
   assert.throws(
-    () => validate(plan, receipts, locks),
+    () => assertExactCanonicalVisualPreflightBoundPlan(plan, receipts, locks),
     /VISUAL_REFERENCE_LOCK_BINDING_INVALID/,
   );
 });
