@@ -119,6 +119,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_WORKERS_FREE_ADMITTED: ${{ vars.CLOUDFLARE_WORKERS_FREE_ADMITTED }}
+          VISUAL_FACTORY_CLOUDFLARE_TIMEOUT_MS: ${{ vars.VISUAL_FACTORY_CLOUDFLARE_TIMEOUT_MS }}
         run: |
           set -euo pipefail
           test -n "${HF_TOKEN:-}" || {
