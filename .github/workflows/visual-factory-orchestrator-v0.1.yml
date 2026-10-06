@@ -116,6 +116,7 @@ jobs:
           MODE: ${{ inputs.mode }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_VISUAL_FACTORY_SPACE_REPO: ${{ vars.HF_VISUAL_FACTORY_SPACE_REPO }}
+          VISUAL_FACTORY_ADMISSION_SECRET: ${{ secrets.HF_VISUAL_FACTORY_ADMISSION_SECRET }}
         run: |
           set -euo pipefail
           test -n "${HF_TOKEN:-}" || {
@@ -124,6 +125,10 @@ jobs:
           }
           test -n "${HF_VISUAL_FACTORY_SPACE_REPO:-}" || {
             echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_VISUAL_FACTORY_SPACE_REPO is not configured" >&2
+            exit 1
+          }
+          test -n "${VISUAL_FACTORY_ADMISSION_SECRET:-}" || {
+            echo "LIVE_ZERO_COST_EXECUTION_REQUIRES_TRUSTED_CREDENTIAL_BINDING: HF_VISUAL_FACTORY_ADMISSION_SECRET is not configured" >&2
             exit 1
           }
           npm run visual-factory:orchestrate -- \
