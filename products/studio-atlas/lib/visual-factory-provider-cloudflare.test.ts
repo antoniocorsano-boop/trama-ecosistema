@@ -60,7 +60,7 @@ test("Cloudflare is ineligible without explicit credentials and Workers Free adm
   assert.equal(calls, 0);
 });
 
-test("Cloudflare uses the exact allowlisted FLUX.2 Klein endpoint", async () => {
+test("Cloudflare uses the exact preflight-authorized FLUX.2 Klein 4B endpoint", async () => {
   let requestedUrl = "";
   const adapter = createCloudflareWorkersAiAdapter({ token: TOKEN, accountId: ACCOUNT_ID, workersFreeAdmitted: true }, {
     fetchImpl: async (input) => { requestedUrl = String(input); return successResponse(); },
