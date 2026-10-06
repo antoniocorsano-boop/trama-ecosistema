@@ -1,12 +1,27 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
-import { runDeterministicPreflight } from "../visual-preflight";
+import { compileVisualPrompt, runDeterministicPreflight } from "../visual-preflight";
 import {
   MUSEO_ZERO_REFERENCE_INTENTS,
   MUSEO_ZERO_SHOT_INTENTS,
   getMuseoZeroReferenceIntent,
   getMuseoZeroShotIntent,
 } from "./museo-zero-visual-intents";
+
+test("MUSEO ZERO locked visual bible declares a schema-supported v0.4 style direction", () => {
+  const bible = JSON.parse(readFileSync("../../fixtures/visual-factory-generation/museo-zero-locked.visual-bible.json", "utf8"));
+  const schema = JSON.parse(readFileSync("../../schemas/atlas-visual-bible.v0.1.schema.json", "utf8"));
+  const styleDirectionProperties = schema.properties.styleDirection.properties;
+
+  assert.equal(bible.schemaVersion, "atlas.visual-bible/v0.1");
+  assert.equal(bible.styleDirection.version, "museo-zero-art-direction/v0.4");
+  assert.ok(Object.hasOwn(styleDirectionProperties, "version"));
+
+  for (const key of Object.keys(bible.styleDirection)) {
+    assert.ok(Object.hasOwn(styleDirectionProperties, key), `styleDirection.${key} must be declared by the visual bible schema`);
+  }
+});
 
 test("MUSEO ZERO visual intent corpus contains the five canonical references in order", () => {
   assert.deepEqual(
@@ -26,7 +41,47 @@ test("MUSEO ZERO visual intent corpus contains the five canonical references in 
     assert.ok(spec.negativeConstraints.length > 0);
     assert.ok(spec.forbiddenTextPatterns.length > 0);
     assert.ok(spec.qualityCriteria.length > 0);
-    assert.equal(spec.artDirectionVersion, "museo-zero-art-direction/v0.3");
+    assert.equal(spec.artDirectionVersion, "museo-zero-art-direction/v0.4");
+  }
+});
+
+test("MUSEO ZERO character references use determinate v0.4 identities", () => {
+  const expectedIdentityFacts = new Map([
+    ["lia", ["short dark wavy bob", "burnt-orange overshirt", "charcoal base layer", "technical crossbody bag"]],
+    ["omar", ["very short dark hair", "short beard", "olive/moss work jacket", "small dark tool bag"]],
+    ["teo", ["short greying hair", "thin metal glasses", "slate-blue overshirt", "analog controls"]],
+  ]);
+  const genericIdentityMarkers = [
+    "stable hairstyle",
+    "stable workwear",
+    "stable clothing",
+    "stable outerwear silhouette",
+    "distinct silhouette",
+    "warm accent detail",
+  ];
+
+  for (const [subjectRef, expectedFacts] of expectedIdentityFacts) {
+    const spec = getMuseoZeroReferenceIntent(subjectRef);
+    const semanticText = [
+      spec.narrativeFunction,
+      ...spec.requiredVisualFacts,
+      ...spec.identityAnchors,
+      spec.composition.dominantSubject,
+      spec.composition.spatialRelation,
+      ...spec.materialTextureLanguage,
+      ...spec.qualityCriteria,
+    ].join(" ").toLocaleLowerCase();
+    for (const marker of genericIdentityMarkers) {
+      assert.ok(!semanticText.includes(marker), `${subjectRef} must not use generic marker: ${marker}`);
+    }
+    for (const fact of expectedFacts) {
+      assert.ok(semanticText.includes(fact), `${subjectRef} missing determinate fact: ${fact}`);
+    }
+
+    const prompt = compileVisualPrompt(spec, "FLUX2_KLEIN_4B").positivePrompt.toLocaleLowerCase();
+    for (const fact of expectedFacts) {
+      assert.ok(prompt.includes(fact), `${subjectRef} compiled prompt missing: ${fact}`);
+    }
   }
 });
 
@@ -58,6 +113,7 @@ test("MUSEO ZERO visual intent corpus contains F1 through F6 with continuity fam
     assert.deepEqual(runDeterministicPreflight(spec).filter((item) => item.severity === "ERROR"), []);
     assert.ok((spec.composition.focalActions?.length ?? 0) > 0);
     assert.ok(spec.composition.spatialRelation.length > 0);
+    assert.equal(spec.artDirectionVersion, "museo-zero-art-direction/v0.4");
   }
 
   const thresholdFamily = ["F2", "F3", "F6"].map((id) => getMuseoZeroShotIntent(id).camera.continuityFamily);
