@@ -171,8 +171,8 @@ test("same-origin gateway propagates WAITING_FOR_COMPUTE without throwing", asyn
     publicationAuthorityGranted: false,
   }), { status: 503, headers: { "content-type": "application/json" } });
 
-  const { plan, receipt: preflightReceipt } = exactFixture();
-  const receipt = await executeVisualFactoryPlan(plan, [preflightReceipt], fetchImpl);
+  const { plan } = exactFixture();
+  const receipt = await executeVisualFactoryPlan(plan, fetchImpl);
 
   assert.equal(receipt.status, "WAITING_FOR_COMPUTE");
   assert.equal(receipt.failureCategory, "NO_FREE_PROVIDER");
