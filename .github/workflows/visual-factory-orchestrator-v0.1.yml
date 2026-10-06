@@ -93,7 +93,7 @@ jobs:
 
           # Diagnostic branch only: preserve the exact canonical Lia job and evidence,
           # while removing the other four jobs before provider execution.
-          if [ "$MODE" = "references" ]; then
+          if [ "$MODE" = "references" ] || [ "$MODE" = "dry-run" ]; then
             node - <<'NODE'
           const fs = require("node:fs");
           const path = "/tmp/visual-generation-plan.json";
@@ -102,6 +102,8 @@ jobs:
             throw new Error("DIAGNOSTIC_SINGLE_LIA_PLAN_MISMATCH");
           }
           plan.jobs = [plan.jobs[0]];
+          console.log(`DIAGNOSTIC_SINGLE_LIA_JOB_COUNT=${plan.jobs.length}`);
+          console.log(`DIAGNOSTIC_SINGLE_LIA_JOB_ID=${plan.jobs[0].jobId}`);
           fs.writeFileSync(path, `${JSON.stringify(plan, null, 2)}\n`);
           NODE
           fi
