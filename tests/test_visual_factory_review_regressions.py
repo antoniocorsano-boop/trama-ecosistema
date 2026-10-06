@@ -51,6 +51,17 @@ def valid_plan():
     }
 
 
+def rule_mode(rule):
+    return (
+        rule.get("if", {})
+        .get("properties", {})
+        .get("semanticCritic", {})
+        .get("properties", {})
+        .get("mode", {})
+        .get("const")
+    )
+
+
 class VisualFactoryReviewRegressionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -66,27 +77,30 @@ class VisualFactoryReviewRegressionTests(unittest.TestCase):
     def test_receipt_schema_encodes_not_available_human_preflight_fail_closed_rule(self):
         schema = json.loads(RECEIPT_SCHEMA.read_text(encoding="utf-8"))
         rules = schema.get("allOf", [])
-        unavailable_rule = None
-        for rule in rules:
-            mode = (
-                rule.get("if", {})
-                .get("properties", {})
-                .get("semanticCritic", {})
-                .get("properties", {})
-                .get("mode", {})
-                .get("const")
-            )
-            if mode == "NOT_AVAILABLE":
-                unavailable_rule = rule
-                break
-        self.assertIsNotNone(unavailable_rule)
-        then = unavailable_rule["then"]
-        self.assertTrue(then["properties"]["humanPreflightRequired"]["const"])
-        self.assertIn("humanPreflightDecision", then["required"])
+        unavailable_rules = [rule for rule in rules if rule_mode(rule) == "NOT_AVAILABLE"]
+        self.assertGreaterEqual(len(unavailable_rules), 2)
+
+        base_rule = next(
+            rule for rule in unavailable_rules
+            if "finalState" not in rule.get("if", {}).get("properties", {})
+            and "humanPreflightDecision" not in rule.get("if", {}).get("properties", {})
+        )
+        base_then = base_rule["then"]
+        self.assertTrue(base_then["properties"]["humanPreflightRequired"]["const"])
+        self.assertNotIn("humanPreflightDecision", base_then.get("required", []))
         self.assertEqual(
-            then["properties"]["semanticCritic"]["properties"]["result"]["const"],
+            base_then["properties"]["semanticCritic"]["properties"]["result"]["const"],
             "NOT_RUN",
         )
+
+        pass_rule = next(
+            rule for rule in unavailable_rules
+            if rule.get("if", {}).get("properties", {}).get("finalState", {}).get("const") == "PREFLIGHT_PASS"
+        )
+        pass_then = pass_rule["then"]
+        self.assertIn("humanPreflightDecision", pass_then["required"])
+        self.assertEqual(pass_then["properties"]["humanPreflightDecision"]["const"], "PASS")
+
         encoded = json.dumps(rules, sort_keys=True)
         self.assertIn("PREFLIGHT_PASS", encoded)
         self.assertIn("PREFLIGHT_REVISE", encoded)
@@ -98,17 +112,20 @@ class VisualFactoryReviewRegressionTests(unittest.TestCase):
         execute_start = source.index("def execute_plan")
         gpu_segment = source[gpu_start:execute_start]
         execute_segment = source[execute_start:]
-        self.assertNotIn("_load_references(", gpu_segment)
+        self.assertNotIn("_reference_bytes(", gpu_segment)
+        self.assertNotIn("Image.open(", gpu_segment)
         self.assertIn("_prepare_verified_references(plan)", execute_segment)
         self.assertLess(
             execute_segment.index("_prepare_verified_references(plan)"),
             execute_segment.index("_execute_admitted("),
         )
 
-    def test_offline_shot_cli_requires_reference_lock_evidence(self):
+    def test_offline_shot_cli_requires_and_persists_reference_lock_evidence(self):
         source = OFFLINE_PREFLIGHT.read_text(encoding="utf-8")
         self.assertIn('argument("--reference-locks")', source)
         self.assertIn("VPC_CANONICAL_SHOT_REFERENCE_LOCKS_REQUIRED", source)
+        self.assertIn('"reference-locks.json"', source)
+        self.assertIn("assetSha256", source)
 
 
 if __name__ == "__main__":
