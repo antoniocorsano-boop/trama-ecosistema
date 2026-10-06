@@ -146,6 +146,21 @@ test("stale or revise reference preflight blocks generation", () => {
   assert.ok(revisePlan.blockers.some((item) => item.includes("NOT_PASSED:lia")));
 });
 
+test("tampered PASS receipt with stale receiptId is rejected before job compilation", () => {
+  const project = createMuseoZeroPilotProject();
+  const state = createInitialVisualFactoryState(DIGEST);
+  const receipts = referenceReceipts();
+  receipts[0] = {
+    ...receipts[0],
+    humanPreflightDecision: "REVISE",
+  };
+
+  const plan = compileReferenceJobs(project, DIGEST, state, receipts);
+  assert.equal(plan.decision, "STOP_PREFLIGHT_REQUIRED");
+  assert.deepEqual(plan.jobs, []);
+  assert.ok(plan.blockers.some((item) => item.includes("RECEIPT_INTEGRITY_INVALID:lia")));
+});
+
 test("five exact PASS receipts compile five bound reference jobs", () => {
   const project = createMuseoZeroPilotProject();
   const receipts = referenceReceipts();
