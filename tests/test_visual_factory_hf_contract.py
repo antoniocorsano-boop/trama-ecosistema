@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import re
 import sys
 from pathlib import Path
@@ -6,6 +7,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "services" / "visual-factory-hf" / "contract.py"
+APP = ROOT / "services" / "visual-factory-hf" / "app.py"
 ORCHESTRATOR_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-orchestrator-v0.1.yml"
 DEPLOY_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-hf-space-deploy.yml"
 GENERATION_WORKFLOW = ROOT / ".github" / "workflows" / "visual-factory-generation-v0.2.yml"
@@ -29,6 +31,7 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         cls.contract = load_contract()
 
     def plan(self, purpose="CHARACTER_REFERENCE", aspect_ratio="3:4", refs=None):
+        refs = refs or []
         return {
             "schemaVersion": "atlas.visual-generation-plan/v0.1",
             "pathwayId": "pw-strategy-selection-01-museo-zero",
@@ -44,7 +47,8 @@ class VisualFactoryHfContractTests(unittest.TestCase):
                 "workflowFamily": "flux2-klein-4b/v0.2",
                 "prompt": "cinematic editorial museum scene",
                 "negativeConstraints": ["dashboard aesthetic"],
-                "referenceInputs": refs or [],
+                "referenceInputs": refs,
+                "referenceInputDigests": ["d" * 64 for _ in refs],
                 "aspectRatio": aspect_ratio,
                 "maxVariants": 1,
                 "preflightReceiptId": "vpc-test-receipt",
@@ -85,6 +89,24 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         job = self.contract.compile_execution_jobs(plan)[0]
         self.assertEqual((job.width, job.height), (1024, 768))
         self.assertEqual(job.reference_inputs, tuple(refs))
+        self.assertEqual(job.reference_input_digests, ("d" * 64, "d" * 64))
+
+    def test_scene_reference_digests_are_required_and_aligned(self):
+        plan = self.plan("SCENE_FRAME", "4:3", refs=["https://assets.invalid/lia.png"])
+        plan["jobs"][0].pop("referenceInputDigests")
+        with self.assertRaisesRegex(ValueError, "REFERENCE_INPUT_DIGEST_INVALID"):
+            self.contract.validate_plan(plan)
+        mismatch = self.plan("SCENE_FRAME", "4:3", refs=["https://assets.invalid/lia.png"])
+        mismatch["jobs"][0]["referenceInputDigests"] = []
+        with self.assertRaisesRegex(ValueError, "REFERENCE_INPUT_DIGEST_INVALID"):
+            self.contract.validate_plan(mismatch)
+
+    def test_hf_app_verifies_reference_bytes_before_image_decode(self):
+        source = APP.read_text(encoding="utf-8")
+        self.assertIn("reference_input_digests", source)
+        self.assertIn("REFERENCE_CONTENT_DIGEST_MISMATCH", source)
+        self.assertIn("hashlib.sha256", source)
+        self.assertNotIn("load_image(ref)", source)
 
     def test_paid_or_quality_downgrade_flags_are_rejected(self):
         for field in ("paidComputeAuthorized", "allowQualityDowngrade", "runtimeAuthorized", "publicationAuthorityGranted"):
@@ -112,6 +134,31 @@ class VisualFactoryHfContractTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, error):
                 self.contract.validate_plan(plan)
 
+    def test_signed_provider_admission_is_bound_to_exact_plan_and_expiry(self):
+        plan = self.plan()
+        secret = "server-only-admission-secret"
+        capability = self.contract.create_provider_admission(plan, secret, issued_at_epoch=1_800_000_000, ttl_seconds=120)
+        self.contract.verify_provider_admission(plan, capability, secret, now_epoch=1_800_000_060)
+        forged = json.loads(json.dumps(plan))
+        forged["jobs"][0]["prompt"] += " forged"
+        with self.assertRaisesRegex(ValueError, "PROVIDER_ADMISSION_PLAN_MISMATCH"):
+            self.contract.verify_provider_admission(forged, capability, secret, now_epoch=1_800_000_060)
+        with self.assertRaisesRegex(ValueError, "PROVIDER_ADMISSION_EXPIRED"):
+            self.contract.verify_provider_admission(plan, capability, secret, now_epoch=1_800_000_121)
+
+    def test_wrong_or_missing_provider_admission_secret_fails_closed(self):
+        plan = self.plan()
+        capability = self.contract.create_provider_admission(plan, "issuer-secret", issued_at_epoch=1_800_000_000, ttl_seconds=120)
+        for secret in ("", "wrong-secret"):
+            with self.assertRaisesRegex(ValueError, "PROVIDER_ADMISSION"):
+                self.contract.verify_provider_admission(plan, capability, secret, now_epoch=1_800_000_060)
+
+    def test_hf_execute_endpoint_requires_separate_signed_admission(self):
+        source = APP.read_text(encoding="utf-8")
+        self.assertIn("admission_json", source)
+        self.assertIn("VISUAL_FACTORY_ADMISSION_SECRET", source)
+        self.assertIn("verify_provider_admission", source)
+
     def test_receipt_never_grants_authority(self):
         plan = self.contract.validate_plan(self.plan())
         receipt = self.contract.success_receipt(
@@ -138,10 +185,7 @@ class VisualFactoryHfContractTests(unittest.TestCase):
     def test_manual_orchestrator_binds_hf_credentials_without_hardcoding(self):
         workflow = ORCHESTRATOR_WORKFLOW.read_text(encoding="utf-8")
         self.assertRegex(workflow, r"HF_TOKEN:\s*\$\{\{\s*secrets\.HF_TOKEN\s*\}\}")
-        self.assertRegex(
-            workflow,
-            r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}",
-        )
+        self.assertRegex(workflow, r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}")
         self.assertEqual(len(re.findall(r"(?m)^\s*HF_TOKEN:\s*", workflow)), 1)
         self.assertEqual(len(re.findall(r"(?m)^\s*HF_VISUAL_FACTORY_SPACE_REPO:\s*", workflow)), 1)
 
@@ -172,10 +216,7 @@ class VisualFactoryHfContractTests(unittest.TestCase):
         self.assertNotRegex(workflow, r"(?m)^\s*push:\s*$")
         self.assertNotRegex(workflow, r"(?m)^\s*pull_request:\s*$")
         self.assertRegex(workflow, r"HF_TOKEN:\s*\$\{\{\s*secrets\.HF_TOKEN\s*\}\}")
-        self.assertRegex(
-            workflow,
-            r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}",
-        )
+        self.assertRegex(workflow, r"HF_VISUAL_FACTORY_SPACE_REPO:\s*\$\{\{\s*vars\.HF_VISUAL_FACTORY_SPACE_REPO\s*\}\}")
         self.assertIn("python scripts/deploy_visual_factory_hf_space.py", workflow)
         self.assertIn("services/visual-factory-hf", workflow)
         self.assertIn("zero-a10g", DEPLOY_SCRIPT.read_text(encoding="utf-8"))
