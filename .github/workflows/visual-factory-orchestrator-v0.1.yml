@@ -91,6 +91,27 @@ jobs:
             )
           fi
 
+          # Diagnostic branch only: Lia is already generated and verified.
+          # Preserve the remaining four canonical reference jobs unchanged.
+          if [ "$MODE" = "references" ] || [ "$MODE" = "dry-run" ]; then
+            node - <<'NODE'
+          const fs = require("node:fs");
+          const path = "/tmp/visual-generation-plan.json";
+          const plan = JSON.parse(fs.readFileSync(path, "utf8"));
+          if (plan.planType !== "REFERENCE_GENERATION" || plan.jobs?.[0]?.subjectRef !== "lia") {
+            throw new Error("DIAGNOSTIC_REMAINING_FOUR_PLAN_MISMATCH");
+          }
+          plan.jobs = plan.jobs.filter((job) => job.subjectRef !== "lia");
+          const expected = ["omar", "teo", "sala-zero", "cabina-regia"];
+          if (plan.jobs.length !== 4 || plan.jobs.some((job, index) => job.subjectRef !== expected[index])) {
+            throw new Error("DIAGNOSTIC_REMAINING_FOUR_PLAN_MISMATCH");
+          }
+          console.log(`DIAGNOSTIC_REMAINING_REFERENCE_COUNT=${plan.jobs.length}`);
+          console.log(`DIAGNOSTIC_REMAINING_REFERENCE_IDS=${plan.jobs.map((job) => job.subjectRef).join(",")}`);
+          fs.writeFileSync(path, `${JSON.stringify(plan, null, 2)}\n`);
+          NODE
+          fi
+
           mkdir -p "$VISUAL_FACTORY_EVIDENCE_DIR"
           rm -rf "$VISUAL_FACTORY_EVIDENCE_DIR/preflight"
           cp -R /tmp/canonical-visual-preflight "$VISUAL_FACTORY_EVIDENCE_DIR/preflight"
