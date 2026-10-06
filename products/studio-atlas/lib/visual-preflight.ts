@@ -93,6 +93,7 @@ export type CompiledVisualPrompt = {
   positivePrompt: string;
   negativePrompt: string;
   referenceInputs: string[];
+  referenceInputDigests: string[];
   aspectRatio: string;
   maxVariants: 1;
   promptDigest: string;
@@ -124,6 +125,7 @@ export type VisualPreflightReceipt = {
 export type CompileVisualPromptOptions = {
   compilerVersion?: string;
   referenceInputs?: readonly string[];
+  referenceInputDigests?: readonly string[];
 };
 
 export type CreateVisualPreflightReceiptInput = {
@@ -133,6 +135,7 @@ export type CreateVisualPreflightReceiptInput = {
   humanPreflightDecision?: "PASS" | "REVISE";
   compilerVersion?: string;
   referenceInputs?: readonly string[];
+  referenceInputDigests?: readonly string[];
   createdAt?: string;
 };
 
@@ -330,6 +333,14 @@ export function compileVisualPrompt(
   const compilerVersion = options.compilerVersion ?? VISUAL_PREFLIGHT_COMPILER_VERSION;
   const sourceSpecDigest = canonicalDigest(spec);
   const exactTextSection = joinSection(spec.exactTextRequired ?? []);
+  const referenceInputs = [...(options.referenceInputs ?? [])];
+  const referenceInputDigests = [...(options.referenceInputDigests ?? [])];
+  if (referenceInputDigests.length > 0 && referenceInputDigests.length !== referenceInputs.length) {
+    throw new Error("VISUAL_PREFLIGHT_REFERENCE_DIGEST_ALIGNMENT_INVALID");
+  }
+  if (referenceInputDigests.some((digest) => !/^[0-9a-f]{64}$/.test(digest))) {
+    throw new Error("VISUAL_PREFLIGHT_REFERENCE_DIGEST_INVALID");
+  }
   const positivePrompt = [
     "medium/style: cinematic editorial illustration; polished 2-D illustrated realism",
     `narrative/world: ${joinSection([spec.narrativeFunction, ...spec.worldAnchors])}`,
@@ -363,7 +374,8 @@ export function compileVisualPrompt(
     workflowFamily: "flux2-klein-4b/v0.2",
     positivePrompt,
     negativePrompt,
-    referenceInputs: [...(options.referenceInputs ?? [])],
+    referenceInputs,
+    referenceInputDigests,
     aspectRatio: spec.targetAspectRatio,
     maxVariants: 1 as const,
     sourceSpecDigest,
@@ -392,6 +404,7 @@ export function createVisualPreflightReceipt(
     : [compileVisualPrompt(input.spec, input.providerFamily, {
         compilerVersion,
         referenceInputs: input.referenceInputs,
+        referenceInputDigests: input.referenceInputDigests,
       })];
   const humanPreflightRequired =
     input.semanticCritic.mode === "NOT_AVAILABLE" && input.semanticCritic.result === "NOT_RUN";
