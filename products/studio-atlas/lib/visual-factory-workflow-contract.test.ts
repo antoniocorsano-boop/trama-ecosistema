@@ -32,3 +32,10 @@ test("scoped reference execution preserves the conservative canonical HF reserve
     /VISUAL_FACTORY_UNFINISHED_CANONICAL_REFERENCES:\s*\$\{\{\s*inputs\.mode\s*==\s*'shots'\s*&&\s*'0'\s*\|\|\s*'5'\s*\}\}/,
   );
 });
+
+test("supplied governed plans cannot be silently re-scoped by reference_subject", async () => {
+  const workflow = await readFile(WORKFLOW, "utf8");
+
+  assert.match(workflow, /if \[ -n "\$PLAN_PATH" \] && \[ "\$REFERENCE_SUBJECT" != "all" \]; then/);
+  assert.match(workflow, /PLAN_PATH_REQUIRES_REFERENCE_SUBJECT_ALL/);
+});
