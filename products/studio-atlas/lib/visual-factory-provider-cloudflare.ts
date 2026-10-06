@@ -5,6 +5,7 @@ import type {
   VisualGenerationJob,
   VisualGenerationPlan,
 } from "./visual-factory";
+import { assertVisualPreflightBoundPlan } from "./visual-factory-execution-contract";
 import type {
   OrchestrationContext,
   ProviderAttemptOutcome,
@@ -209,6 +210,15 @@ function isAttemptOutcome(value: VisualAssetCandidate | ProviderAttemptOutcome):
   return "kind" in value;
 }
 
+function isBound(plan: VisualGenerationPlan): boolean {
+  try {
+    assertVisualPreflightBoundPlan(plan);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function createCloudflareWorkersAiAdapter(
   config: CloudflareWorkersAiConfig,
   deps: CloudflareWorkersAiDeps = {},
@@ -219,7 +229,10 @@ export function createCloudflareWorkersAiAdapter(
   return {
     id: "CLOUDFLARE_WORKERS_AI",
 
-    async preflight(): Promise<ProviderEligibility> {
+    async preflight(plan: VisualGenerationPlan): Promise<ProviderEligibility> {
+      if (!isBound(plan)) {
+        return { eligible: false, reason: "VISUAL_PREFLIGHT_BINDING_INVALID" };
+      }
       if (!config.token?.trim() || !config.accountId?.trim()) {
         return { eligible: false, reason: "CLOUDFLARE_NOT_CONFIGURED" };
       }
@@ -230,6 +243,9 @@ export function createCloudflareWorkersAiAdapter(
     },
 
     async execute(plan: VisualGenerationPlan, _ctx: OrchestrationContext): Promise<ProviderAttemptOutcome> {
+      if (!isBound(plan)) {
+        return { kind: "PERMANENT_FAILURE", detail: "VISUAL_PREFLIGHT_BINDING_INVALID" };
+      }
       if (!config.token?.trim() || !config.accountId?.trim() || config.workersFreeAdmitted !== true) {
         return { kind: "PROVIDER_INELIGIBLE", detail: "CLOUDFLARE_ZERO_COST_GUARD_REJECTED" };
       }
@@ -245,7 +261,7 @@ export function createCloudflareWorkersAiAdapter(
         if (job.referenceInputs.length > MAX_REFERENCE_IMAGES) {
           return { kind: "PERMANENT_FAILURE", detail: "CLOUDFLARE_REFERENCE_LIMIT_EXCEEDED" };
         }
-        const variants = Math.max(1, Math.min(3, job.maxVariants));
+        const variants = job.maxVariants;
         for (let variant = 0; variant < variants; variant += 1) {
           const result = await executeJob(
             job,
