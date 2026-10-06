@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { materializeReviewAssets } from "../lib/visual-factory-artifact-materializer";
 import type { VisualGenerationPlan, VisualExecutionReceipt } from "../lib/visual-factory";
+import { assertVisualPreflightBoundPlan } from "../lib/visual-factory-execution-contract";
 import {
   orchestrateVisualGeneration,
   selectProviderOrder,
@@ -64,6 +65,7 @@ function validatePlan(raw: unknown, mode: RunMode): VisualGenerationPlan {
   }
 
   const plan = raw as unknown as VisualGenerationPlan;
+  assertVisualPreflightBoundPlan(plan);
   if (mode === "references" && plan.planType !== "REFERENCE_GENERATION") {
     throw new Error("VF_ORCH_REFERENCE_PLAN_REQUIRED");
   }
