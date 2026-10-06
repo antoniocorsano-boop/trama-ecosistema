@@ -60,16 +60,21 @@ test("Cloudflare is ineligible without explicit credentials and Workers Free adm
   assert.equal(calls, 0);
 });
 
-test("Cloudflare uses the exact preflight-authorized FLUX.2 Klein 4B endpoint and rejects capacity queuing", async () => {
+test("Cloudflare sends rejectIfBusy as REST request options without changing the model endpoint", async () => {
   let requestedUrl = "";
+  let requestOptions = "";
   const adapter = createCloudflareWorkersAiAdapter({ token: TOKEN, accountId: ACCOUNT_ID, workersFreeAdmitted: true }, {
-    fetchImpl: async (input) => { requestedUrl = String(input); return successResponse(); },
+    fetchImpl: async (input, init) => {
+      requestedUrl = String(input);
+      const form = init?.body as FormData;
+      requestOptions = String(form.get("options") ?? "");
+      return successResponse();
+    },
   });
   const outcome = await adapter.execute(plan(), context());
   assert.equal(outcome.kind, "SUCCEEDED");
-  const url = new URL(requestedUrl);
-  assert.equal(`${url.origin}${url.pathname}`, `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/${MODEL}`);
-  assert.equal(url.searchParams.get("rejectIfBusy"), "true");
+  assert.equal(requestOptions, JSON.stringify({ rejectIfBusy: true }));
+  assert.equal(requestedUrl, `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/${MODEL}`);
   assert.equal(outcome.receipt?.assets[0]?.modelRef, MODEL);
 });
 
