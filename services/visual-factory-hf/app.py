@@ -23,6 +23,7 @@ from contract import (
     compile_execution_jobs,
     failed_receipt,
     now_iso,
+    provider_ready_prompt,
     success_receipt,
     validate_plan,
 )
@@ -37,13 +38,6 @@ pipe = Flux2KleinPipeline.from_pretrained(
     MODEL_ID,
     torch_dtype=torch.bfloat16,
 ).to("cuda")
-
-
-def _prompt(job) -> str:
-    if not job.negative_constraints:
-        return job.prompt
-    avoid = ", ".join(job.negative_constraints)
-    return f"{job.prompt}\n\nKeep the authored world coherent. Avoid: {avoid}."
 
 
 def _seed(package_digest: str, job_id: str, variant: int) -> int:
@@ -84,7 +78,7 @@ def execute_plan(plan_json: str):
             variant_count = min(job.max_variants, VARIANTS_PER_JOB)
             for variant in range(variant_count):
                 kwargs = {
-                    "prompt": _prompt(job),
+                    "prompt": provider_ready_prompt(job),
                     "width": job.width,
                     "height": job.height,
                     "guidance_scale": 1.0,
