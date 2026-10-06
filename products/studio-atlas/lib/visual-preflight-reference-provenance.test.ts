@@ -56,12 +56,14 @@ function shotReceipts(state: VisualFactoryState): VisualPreflightReceipt[] {
   return SHOT_IDS.map((shotId) => {
     const spec = { ...getMuseoZeroShotIntent(shotId), packageDigest: DIGEST };
     const referenceInputs = spec.subjectRefs.map((subjectRef) => locks.get(subjectRef)!.assetUrl);
+    const referenceInputDigests = spec.subjectRefs.map((subjectRef) => locks.get(subjectRef)!.assetSha256!);
     return createVisualPreflightReceipt({
       spec,
       providerFamily: "FLUX2_KLEIN_4B",
       semanticCritic: { mode: "NOT_AVAILABLE", result: "NOT_RUN", findings: [] },
       humanPreflightDecision: "PASS",
       referenceInputs,
+      referenceInputDigests,
       createdAt: "2026-10-06T04:00:00.000Z",
     });
   });
