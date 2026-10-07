@@ -27,12 +27,8 @@ jobs:
       - name: Install validation dependency
         run: python -m pip install --disable-pip-version-check --quiet jsonschema
 
-      - name: Generate DOS-M4 finalization files
+      - name: Generate DOS-M4 workflow finalization
         run: python scripts/tmp_dos_m4_finalize.py
-
-      - name: Normalize dossier whitespace
-        shell: bash
-        run: sed -i 's/[[:space:]]\+$//' docs/qualification/DOS-M4-01-runtime-canary.md
 
       - name: Validate maturity evidence registry
         run: python scripts/validate_maturity_evidence_registry.py
@@ -72,35 +68,14 @@ jobs:
           print('DOS_M4_SNAPSHOT_CANONICAL_SEMANTICS_PASS')
           PY
 
-      - name: Publish final validation bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: dos-m4-finalization-bundle-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: error
-          path: |
-            docs/qualification/DOS-M4-01-runtime-canary.md
-            governance/maturity/trama-maturity-evidence-registry-v1.json
-            governance/maturity/trama-maturity-reconciliation-v1.json
-            scripts/test_maturity_evidence_binding.py
-            scripts/test_maturity_reconciliation.py
-            .github/workflows/control-center-snapshot.yml
-            control-center/data/ecosystem-snapshot.json
-
-      - name: Commit canonical finalization and remove temporary harness
+      - name: Stage validated canonical workflow as ordinary blob
         shell: bash
         run: |
+          mkdir -p tmp/dos-m4-finalization
+          cp .github/workflows/control-center-snapshot.yml tmp/dos-m4-finalization/control-center-snapshot.validated.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add \
-            docs/qualification/DOS-M4-01-runtime-canary.md \
-            governance/maturity/trama-maturity-evidence-registry-v1.json \
-            governance/maturity/trama-maturity-reconciliation-v1.json \
-            scripts/test_maturity_evidence_binding.py \
-            scripts/test_maturity_reconciliation.py \
-            .github/workflows/control-center-snapshot.yml \
-            control-center/data/ecosystem-snapshot.json
-          git rm scripts/tmp_dos_m4_finalize.py .github/workflows/tmp-dos-m4-finalize.yml
+          git add tmp/dos-m4-finalization/control-center-snapshot.validated.yml
           git diff --cached --check
-          git commit -m 'DOS-M4-01: finalize L4 evidence projection'
+          git commit -m 'DOS-M4-01: stage validated Control Center workflow blob'
           git push origin HEAD:chore/dos-m4-01-runtime-canary
