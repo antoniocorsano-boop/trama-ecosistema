@@ -1,380 +1,595 @@
-# UDA → Studio Atlas → Materiali → Lezione — design v0.2
+# UDA → Lezione → Studio Atlas → Materiali → Lezione — design v0.3
 
 ## Stato
 
 **DESIGN APPROVED IN CHAT / WRITTEN SPEC AWAITING HUMAN REVIEW**
 
-Questa v0.2 sostituisce il criterio incompleto della v0.1 secondo cui placeholder o sole preview descrittive potevano essere sufficienti per chiudere il flusso. La Human Review reale del 07/10/2026 ha dimostrato che il binding UDA → Atlas → lezione può risultare tecnicamente riuscito pur lasciando il docente senza alcun contenuto da aprire.
+Questa v0.3 sostituisce la v0.2 dopo un rilievo emerso nella Human Review: la sola coerenza con UDA, classe e disciplina non garantisce che il materiale sia adatto alla **singola lezione** alla quale verrà associato.
 
-Finding associato: **HR-03 — MATERIAL_CONTENT_NOT_VIEWABLE**.
+Finding associati:
+
+- **HR-03 — MATERIAL_CONTENT_NOT_VIEWABLE**: il materiale associato deve contenere un artefatto reale, controllabile e riapribile;
+- **HR-04 — LESSON_ALIGNMENT_NOT_GUARANTEED**: il materiale deve essere preparato per una lezione target già nota prima della materializzazione, non associato arbitrariamente dopo la generazione.
 
 ## Scopo
 
-Rendere operativo un flusso teacher-first che parte da una UDA già contestualizzata in Docente OS, apre Studio Atlas senza perdere contesto, permette al docente di preparare e controllare materiali reali, torna in Docente OS per un'associazione esplicita alla lezione e consente di riaprire il contenuto associato dalla lezione.
+Rendere operativo un flusso teacher-first in cui il materiale nasce da una catena didattica esplicita e verificabile:
 
-Il criterio di successo non è più soltanto «il materiale compare in Materiali allegati», ma:
+**curricolo/UDA → lezione target → obiettivo ed esiti della lezione → materiale → preview → binding alla stessa lezione → riapertura**.
 
-**prepara → controlla il contenuto → associa → riapri dalla lezione**.
+Il criterio di successo non è soltanto «il materiale compare in Materiali allegati», ma:
+
+**scegli la lezione → prepara materiale coerente con quella lezione → controlla il contenuto → associa alla stessa lezione → riapri dalla lezione**.
 
 ## Autorità
 
-- **Docente OS** resta autorità su classe/sezione, UDA, lezione e binding persistente dei materiali.
-- **Studio Atlas** resta ambiente di proposta, authoring e preview del materiale di lavoro.
-- **Arena** resta autorità curricolare; nessun contenuto generato da Atlas modifica il curricolo.
-- **TRAMA** governa il contratto di interoperabilità e i gate.
-- Il **docente** decide sempre se il materiale è utilizzabile e se associarlo alla lezione.
-- Nessuna scrittura persistente in Docente OS avviene per effetto dell'apertura di Atlas, della sola preparazione o della sola preview.
+- **Arena** resta autorità curricolare per baseline, provenienza, versione e stato del curricolo.
+- **Docente OS** resta autorità sul contesto operativo: classe/sezione, piano annuale, UDA, lezione canonica, stato della lezione e binding persistente dei materiali.
+- **Studio Atlas** resta ambiente specialistico di proposta, materializzazione e preview del materiale di lavoro.
+- **TRAMA** governa contratto cross-product, versionamento, gate e invarianti.
+- Il **docente** decide quale lezione preparare, quali materiali tenere e se associarli.
+- Nessun materiale viene collegato a una lezione per il solo fatto di essere stato generato o visualizzato.
 - Il binding alla lezione non equivale a pubblicazione Atlas.
 - Nessuna pubblicazione automatica viene introdotta.
 
-Questa separazione è coerente con `docs/contracts/r4-p1-entry-contract.md`, in particolare con il flusso minimo «produzione specialistica → anteprima e confronto → collegamento alla lezione → pubblicazione separata».
+Questa separazione è coerente con `docs/contracts/r4-p1-entry-contract.md`: produzione specialistica, anteprima e confronto, collegamento esplicito alla lezione e pubblicazione separata restano fasi distinte.
 
-## Decisione architetturale v0.2
+## Decisione architetturale v0.3
 
-Si adotta **Artefatto strutturato + preview Studio Atlas + viewer Docente OS**.
+Si adotta:
 
-Non viene introdotto un nuovo backend di storage Atlas, un database parallelo, un account aggiuntivo o un URL pubblico fittizio per ogni bozza.
+**Lezione target prima di Atlas + LessonMaterialBrief canonico + artefatto strutturato + preview Studio Atlas + viewer Docente OS**.
 
-Ogni materiale selezionato deve invece contenere uno **snapshot strutturato e autosufficiente** sufficiente a:
+La v0.3 non introduce:
 
-1. essere mostrato in Studio Atlas prima del ritorno;
-2. attraversare il contratto cross-product;
-3. essere persistito nel record di estensione lezione già esistente in Docente OS;
-4. essere riaperto con un viewer interno Docente OS;
-5. restare distinguibile da una futura risorsa Atlas pubblicata.
+- un database parallelo dei materiali;
+- un nuovo backend Atlas per le bozze;
+- un nuovo account;
+- nuovi secret o provider esterni;
+- URL pubblici fittizi per bozze locali.
 
-La persistenza canonica resta quindi quella già usata da `LessonDesignExtension`; non viene creato un secondo archivio materiali.
+La persistenza del materiale associato resta nel modello canonico già usato da Docente OS (`LessonDesignExtension`).
 
-## Slice v0.2
+## Invariante di allineamento
 
-Origine unica: UDA/focus operativo di Progetta.
+Un materiale è considerato **lesson-aligned** soltanto se:
 
-Destinazione unica: una lezione della sezione corrente.
+1. Docente OS ha identificato una lezione target canonica prima dell'apertura di Atlas;
+2. esiste una proiezione runtime approvata per quella lezione;
+3. il brief passato ad Atlas deriva da quella proiezione senza inventare obiettivi o criteri;
+4. Atlas materializza il contenuto usando il brief della lezione target;
+5. il `MaterialBundle` riporta la stessa identità lezione e lo stesso fingerprint del brief;
+6. Docente OS verifica identità e fingerprint al ritorno;
+7. il binding avviene soltanto alla stessa lezione target.
 
-Tipi materiale:
+Se una di queste condizioni manca, il materiale non può essere rappresentato come pronto per il binding.
 
-- `presentation`
-- `worksheet`
-- `guide`
-- `rubric`
+## Fonte canonica della lezione
 
-La v0.2 richiede contenuti reali e leggibili per tutti e quattro i tipi. Non richiede ancora esportazione in PPTX/PDF/DOCX, pubblicazione Atlas o generazione visuale tramite provider esterni.
+La v0.3 riusa l'autorità già esistente in Docente OS.
 
-Visual Factory e provider live possono arricchire un materiale in futuro, ma **non sono prerequisito** per la fruibilità minima: il materiale deve essere valido anche come artefatto strutturato testuale/accessibile senza dipendere da compute esterno.
+Per una lezione coperta dal runtime, `resolveRuntimeHumanTaskLessonProjection(...)` restituisce una `HumanTaskLessonProjection` approvata. Il modello già contiene almeno:
 
-## Contratti
+- `projectionId`;
+- `grade`;
+- `blockId`;
+- `udaCode`;
+- `udaTitle`;
+- `packCode`;
+- `period`;
+- `title`;
+- `durationMinutes`;
+- `why`;
+- `objective`;
+- `outcomes[]`;
+- `preparation[]`;
+- `steps[]`;
+- `resources[]`;
+- `evidence`;
+- `observation[]`;
+- `assessmentNote`;
+- `continuation`;
+- `sourceAlignment`;
+- `sources[]`.
 
-### TeachingContextSnapshot v0.1
+La v0.3 non crea una seconda definizione di obiettivo o lezione. Costruisce un brief compatto da questa proiezione canonica.
 
-Resta invariato:
+Se la UDA contiene blocchi per i quali non esiste una proiezione runtime approvata, tali blocchi non vengono offerti come lezione target per la preparazione Atlas in questa slice.
 
-- `schema = docente-os.teaching-context/v0.1`
+## UX: scelta della lezione prima di Atlas
+
+La superficie UDA di Docente OS cambia ordine logico.
+
+### Caso A — la lezione è già nel contesto
+
+Se il docente arriva dalla workspace di una lezione o da un focus che contiene già `sectionId + blockId`, Docente OS:
+
+- mostra la lezione target;
+- mostra titolo e obiettivo in linguaggio leggibile;
+- precompila il contesto;
+- abilita **Prepara materiali con Atlas** senza una seconda selezione.
+
+### Caso B — la UDA è aperta dal contesto classe ma senza blockId
+
+Docente OS mostra **Per quale lezione?** con le sole lezioni canoniche della stessa UDA e della stessa sezione per cui esiste una proiezione runtime approvata.
+
+Ogni opzione mostra almeno:
+
+- titolo lezione;
+- posizione/periodo quando utile;
+- obiettivo sintetico.
+
+La CTA **Prepara materiali con Atlas** resta disabilitata finché non viene scelta una lezione.
+
+### Caso C — manca il contesto classe
+
+Il sistema non apre Atlas. Offre un'azione comprensibile per scegliere/aprire la classe, evitando messaggi tecnici.
+
+## LessonMaterialBrief v0.1
+
+Nuovo contratto tipizzato e privo di dati studente.
+
+`schema = docente-os.lesson-material-brief/v0.1`
+
+Campi:
+
+### Identità
+
 - `source = docente-os`
-- `udaId`, `udaTitle`
-- `grade`, `sectionId?`, `sectionLabel?`
+- `workspaceContextRef` non esportato come dato sensibile; il contratto usa soltanto riferimenti operativi necessari al ritorno
+- `sectionId`
+- `sectionLabel`
+- `grade`
 - `discipline`
-- `blockId?`, `packId?`, `period?`
-- `returnUrl`
+- `udaId`
+- `udaTitle`
+- `blockId`
+- `projectionId`
+- `packCode`
+- `period`
 
-Nessun dato studente.
+### Intento didattico
 
-### MaterialBundle v0.2
+- `lessonTitle`
+- `durationMinutes`
+- `why`
+- `objective`
+- `outcomes[]`
+- `evidence`
+- `observation[]`
+- `assessmentNote`
+
+### Riferimenti
+
+- `sourceRefs[]` con soli riferimenti canonici necessari a provenance/allineamento;
+- `returnUrl` allowlistata;
+- `briefFingerprint`.
+
+Non vengono inclusi dati personali degli studenti, risposte, profili, livelli individuali o note nominative.
+
+## Riduzione controllata del brief
+
+La `HumanTaskLessonProjection` completa può essere più ricca del necessario. Il `LessonMaterialBrief` non deve copiarla integralmente.
+
+Per la prima slice sono sufficienti i campi sopra elencati perché consentono di costruire materiali coerenti con:
+
+- tema della lezione;
+- obiettivo;
+- esiti attesi;
+- evidenza richiesta;
+- criteri di osservazione/valutazione;
+- durata e collocazione nel percorso.
+
+`steps[]`, `resources[]`, `preparation[]` e altri dettagli possono restare in Docente OS nella v0.3, salvo prova che un tipo di artefatto necessiti davvero di uno di tali campi. YAGNI: non si allarga il contratto senza un test che lo renda necessario.
+
+## briefFingerprint
+
+Docente OS calcola un fingerprint deterministico del brief canonico normalizzato.
+
+Il fingerprint deve includere almeno:
+
+- `sectionId`;
+- `udaId`;
+- `blockId`;
+- `projectionId`;
+- `lessonTitle`;
+- `objective`;
+- `outcomes`;
+- `evidence`;
+- `observation`;
+- `assessmentNote`.
+
+Studio Atlas non modifica il fingerprint e lo restituisce nel bundle.
+
+### Scopo
+
+Il fingerprint impedisce che un materiale preparato per una versione precedente della lezione venga associato silenziosamente dopo una modifica canonica significativa.
+
+Al ritorno Docente OS ricostruisce il brief corrente della stessa lezione e confronta il fingerprint:
+
+- uguale → binding consentito;
+- diverso → fail-closed con messaggio: **La lezione è cambiata dopo la preparazione dei materiali. Aggiorna i materiali prima di associarli.**
+
+Il fingerprint è un controllo di coerenza, non una firma di sicurezza e non attribuisce autorità ad Atlas.
+
+## Teaching handoff verso Studio Atlas
+
+La v0.3 sostituisce, per questo flusso, il precedente contesto UDA-only con il `LessonMaterialBrief`.
+
+Studio Atlas deve ricevere un brief già completo e validato. Non deve chiedere nuovamente al docente di scegliere UDA, classe o lezione.
+
+La UI Atlas mostra sempre un blocco **Materiali per questa lezione** con almeno:
+
+- classe;
+- UDA;
+- titolo lezione;
+- obiettivo.
+
+In questo modo il docente può controllare visivamente che il materiale venga preparato per la lezione corretta prima ancora di selezionare il tipo di artefatto.
+
+## MaterialBundle v0.3
 
 Nuovo schema:
 
-`studio-atlas.material-bundle/v0.2`
+`schema = studio-atlas.material-bundle/v0.3`
 
 Campi bundle:
 
-- `source = studio-atlas`
-- `bundleId`
-- `sourceUdaId`
-- `generatedAt`
-- `items[]`
+- `source = studio-atlas`;
+- `bundleId`;
+- `generatedAt`;
+- `sourceUdaId`;
+- `targetLesson`;
+- `briefFingerprint`;
+- `items[]`.
+
+### targetLesson
+
+- `sectionId`;
+- `sectionLabel`;
+- `blockId`;
+- `projectionId`;
+- `lessonTitle`.
+
+`targetLesson` è immutabile nel bundle restituito.
+
+## MaterialBundleItem v0.3
 
 Ogni item contiene:
 
-- `materialId`
-- `type`
-- `title`
-- `description`
-- `origin = atlas`
-- `artifact`
-- `provenance`
-- `publicUrl?`
+- `materialId`;
+- `type`;
+- `title`;
+- `description`;
+- `origin = atlas`;
+- `targetBlockId`;
+- `briefFingerprint`;
+- `artifact`;
+- `provenance`;
+- `publicUrl?`.
 
-`publicUrl` è opzionale e indica esclusivamente una risorsa Atlas realmente pubblicata/apribile. Non viene sintetizzato per le bozze.
+Un item privo di `artifact`, `targetBlockId` o `briefFingerprint` non è un materiale v0.3 valido.
 
-### MaterialArtifact v0.1
+`publicUrl` è opzionale e indica esclusivamente una risorsa Atlas realmente pubblicata. Non viene inventato per una bozza.
 
-`artifact` è una discriminated union per tipo materiale.
+## MaterialArtifact v0.1
 
-#### PresentationArtifact
+`artifact` resta una discriminated union tipizzata.
 
-- `kind = presentation`
-- `slides[]`
-  - `slideId`
-  - `title`
-  - `body[]`
-  - `speakerNote?`
+### PresentationArtifact
 
-Criterio minimo: almeno 3 slide non vuote.
+- `kind = presentation`;
+- `slides[]` con `slideId`, `title`, `body[]`, `speakerNote?`;
+- minimo 3 slide non vuote.
 
-#### WorksheetArtifact
+La presentazione deve sviluppare **l'obiettivo della lezione**, non riassumere genericamente l'intera UDA.
 
-- `kind = worksheet`
-- `intro?`
-- `tasks[]`
-  - `taskId`
-  - `prompt`
-  - `responseMode = short-text | long-text | checklist | table`
-  - `support?`
+### WorksheetArtifact
 
-Criterio minimo: almeno 2 attività non vuote.
+- `kind = worksheet`;
+- `intro?`;
+- `tasks[]` con `taskId`, `prompt`, `responseMode`, `support?`;
+- minimo 2 attività non vuote.
 
-#### GuideArtifact
+Le attività devono esercitare almeno uno degli `outcomes` della lezione e produrre, quando pertinente, l'`evidence` prevista.
 
-- `kind = guide`
-- `sections[]`
-  - `sectionId`
-  - `heading`
-  - `paragraphs[]`
-  - `callout?`
+### GuideArtifact
 
-Criterio minimo: almeno 2 sezioni non vuote.
+- `kind = guide`;
+- `sections[]` con `sectionId`, `heading`, `paragraphs[]`, `callout?`;
+- minimo 2 sezioni non vuote.
 
-#### RubricArtifact
+La guida deve sostenere la comprensione dell'obiettivo e dei concetti necessari alla lezione target, non diventare un manuale generico dell'UDA.
 
-- `kind = rubric`
-- `criteria[]`
-  - `criterionId`
-  - `label`
-  - `levels[]`
-    - `level`
-    - `descriptor`
+### RubricArtifact
 
-Criterio minimo: almeno 2 criteri e almeno 3 livelli per criterio.
+- `kind = rubric`;
+- `criteria[]` con `criterionId`, `label`, `levels[]`;
+- minimo 2 criteri e almeno 3 livelli per criterio.
 
-### Provenance v0.1
+I criteri devono derivare prioritariamente da `observation[]`, `evidence` e `assessmentNote`. È vietato introdurre criteri non riconducibili al brief senza marcarli come proposta separata.
+
+## Provenance v0.2
 
 Ogni item conserva almeno:
 
-- `producer = studio-atlas`
-- `sourceUdaId`
-- `generationMode = deterministic-template | assisted | imported | adapted`
-- `sourceRefs[]`
-- `createdAt`
+- `producer = studio-atlas`;
+- `sourceUdaId`;
+- `targetBlockId`;
+- `projectionId`;
+- `briefFingerprint`;
+- `generationMode = deterministic-template | assisted | imported | adapted`;
+- `sourceRefs[]`;
+- `createdAt`.
 
-Nella prima implementazione il percorso può usare `deterministic-template` per produrre artefatti reali senza provider esterno. Questo non deve essere presentato come generazione AI né come materiale pubblicato.
+Nella prima implementazione è ammesso `deterministic-template` per produrre artefatti reali senza provider esterno. Il risultato non deve essere descritto come generazione AI né come materiale pubblicato.
 
-## Regole di materializzazione
+## Regole di materializzazione lesson-first
 
-La v0.2 non deve limitarsi a cambiare il titolo delle card.
+Per ogni tipo, Studio Atlas usa il `LessonMaterialBrief` come boundary obbligatorio.
 
-Per ciascun materiale Studio Atlas deve costruire un contenuto coerente con almeno:
+Regole minime:
 
-- titolo UDA;
-- disciplina;
-- classe/grado;
-- tipo di artefatto;
-- eventuali campi già disponibili nel `TeachingContextSnapshot`.
+1. `lessonTitle` e `objective` devono essere riconoscibili nel materiale;
+2. almeno un `outcome` deve essere concretamente coperto;
+3. worksheet e rubric devono mantenere un legame verificabile con `evidence` e/o `observation`;
+4. il materiale non deve allargarsi all'intera UDA quando il brief riguarda una singola lezione;
+5. se il brief non contiene abbastanza informazioni per un tipo di artefatto, Atlas deve dichiararlo e non produrre un placeholder `COMPLETED`.
 
-La prima implementazione può usare una materializzazione **deterministica e locale**, purché il contenuto sia reale, leggibile e specifico per il contesto ricevuto. Non sono richiesti API token, provider paid o nuovi secret.
-
-È vietato restituire un item considerato `COMPLETED` se contiene solo titolo/descrizione senza `artifact` valido.
+La materializzazione deterministica iniziale deve essere specifica per il brief. Un template che cambia soltanto il titolo non è sufficiente.
 
 ## Preview Studio Atlas
 
-Il flusso Studio Atlas diventa:
+Il flusso diventa:
 
-1. ricezione e validazione del `TeachingContextSnapshot`;
-2. scelta dei tipi di materiale;
-3. materializzazione degli artefatti selezionati;
-4. **preview leggibile dei contenuti**;
-5. possibilità di tornare alla selezione o escludere un materiale;
-6. CTA unica **Continua con N materiali**;
-7. produzione del `MaterialBundle v0.2` soltanto per artefatti validi.
+1. valida `LessonMaterialBrief`;
+2. mostra contesto lezione e obiettivo;
+3. docente sceglie i tipi di materiale;
+4. Atlas materializza gli artefatti selezionati;
+5. mostra **Controlla i materiali** con il contenuto reale;
+6. il docente può escludere un materiale o tornare alla selezione;
+7. Atlas produce `MaterialBundle v0.3` soltanto per artefatti validi;
+8. CTA unica **Continua con N materiali**.
 
-La preview deve mostrare il contenuto essenziale, non soltanto il nome del tipo.
+La preview deve mostrare il contenuto essenziale e il riferimento alla lezione target.
 
-Per mobile, presentazioni e rubriche devono essere consultabili verticalmente senza overflow orizzontale obbligatorio.
+## Ritorno in Docente OS
+
+Il ritorno non deve più presentare un selettore libero di lezione.
+
+La pagina mostra:
+
+- **Materiali preparati per**;
+- classe;
+- titolo della lezione target;
+- UDA;
+- elenco materiali;
+- CTA **Associa a questa lezione**.
+
+Docente OS verifica prima della CTA:
+
+- sezione esistente e appartenente al workspace corrente;
+- `blockId` appartenente alla stessa UDA;
+- `projectionId` corrente;
+- `briefFingerprint` corrente;
+- artefatti validi.
+
+Se i controlli passano, il binding è consentito soltanto alla lezione target del bundle.
+
+## Cambio della lezione target
+
+Il docente può cambiare idea, ma il sistema non deve riusare silenziosamente un materiale preparato per un'altra lezione.
+
+La pagina di ritorno può offrire un'azione secondaria **Prepara per un'altra lezione**.
+
+Questa azione:
+
+- non modifica `targetLesson` nel bundle esistente;
+- non associa i materiali;
+- riporta alla scelta della lezione;
+- richiede una nuova materializzazione o futura operazione esplicita di adattamento.
+
+Nella v0.3 non esiste “sposta questi materiali su un'altra lezione” senza adattamento.
 
 ## Persistenza Docente OS
 
-Dopo conferma «Associa alla lezione», Docente OS continua a creare/accettare `LessonDesignExtension` nel repository canonico già esistente.
+Dopo **Associa a questa lezione**, Docente OS continua a usare `LessonDesignExtension` e il repository canonico già esistente.
 
-Per gli item Atlas, `payload` deve includere:
+Per gli item Atlas, `payload` include almeno:
 
-- `bundleId`
-- `materialId`
-- `materialType`
-- `sourceUdaId`
-- `artifact`
-- `provenance`
-- `publicUrl?`
+- `bundleId`;
+- `materialId`;
+- `materialType`;
+- `sourceUdaId`;
+- `targetBlockId`;
+- `projectionId`;
+- `briefFingerprint`;
+- `artifact`;
+- `provenance`;
+- `publicUrl?`.
 
-Non viene aggiunta una nuova tabella o repository solo per questa slice.
+Non viene aggiunta una tabella o repository parallelo.
 
-Il campo `body` dell'estensione resta una sintesi descrittiva; **non è l'artefatto**. L'artefatto vive nel payload tipizzato.
+Il `body` dell'estensione resta sintesi leggibile; non sostituisce l'artefatto.
 
-La deduplica resta per `sourceUdaId + materialId`.
+La deduplica deve includere almeno `targetBlockId + materialId`, mantenendo l'identità del materiale all'interno della lezione target.
 
 ## Viewer Docente OS
 
-In «Materiali allegati» ogni materiale Atlas valido deve offrire **Apri**.
+In **Materiali allegati**, ogni materiale v0.3 valido offre **Apri**.
 
-`Apri` apre una route/viewer Docente OS autenticata e contestuale alla lezione, non una pagina pubblica nuova.
+`Apri` apre un viewer Docente OS autenticato e contestuale alla lezione.
 
 Il viewer:
 
-- recupera il `LessonDesignExtension` già associato;
-- verifica che appartenga alla lezione corrente;
+- recupera l'estensione associata alla lezione corrente;
+- verifica `targetBlockId` e ownership della lezione;
 - valida `artifact` e `materialType`;
-- renderizza il tipo corretto;
-- mostra titolo e provenienza in linguaggio utente;
+- mostra titolo, contenuto e provenienza in linguaggio utente;
+- mostra **Preparato per: <titolo lezione>**;
 - consente di tornare alla lezione;
-- non espone ID tecnici come contenuto primario.
+- non espone ID tecnici come informazione primaria.
 
-Se `publicUrl` è presente perché il materiale è stato realmente pubblicato in Atlas, può comparire una seconda azione «Apri su Atlas». Per una bozza locale, l'azione canonica resta «Apri» nel viewer Docente OS.
+Se `publicUrl` rappresenta una risorsa realmente pubblicata in Atlas, può comparire una seconda azione **Apri su Atlas**.
 
 ## Viewer per tipo
 
 ### Presentazione
 
-Visualizzazione a schede/slide verticali su mobile, con numerazione e note docente separate dal contenuto principale.
+Slide verticali su mobile, numerazione chiara, note docente separate dal contenuto principale.
 
 ### Scheda di lavoro
 
-Visualizzazione stampabile/leggibile delle attività; nessuna raccolta di risposte studente nella v0.2.
+Attività leggibili e stampabili. Nessuna raccolta di risposte studente nella v0.3.
 
 ### Guida
 
-Visualizzazione editoriale lineare con sezioni e callout.
+Struttura editoriale lineare con sezioni e callout.
 
 ### Rubrica
 
-Visualizzazione accessibile dei criteri; su mobile i livelli possono diventare blocchi verticali invece di una tabella larga.
-
-## UX canonica end-to-end
-
-1. Da UDA contestualizzata: **Prepara materiali con Atlas**.
-2. Studio Atlas: **Scegli i materiali**.
-3. Studio Atlas: **Controlla i materiali** con contenuti reali.
-4. Studio Atlas: **Continua con N materiali**.
-5. Docente OS: **Associa i materiali alla lezione**.
-6. Dopo binding: apertura della lezione canonica.
-7. In **Materiali allegati**, ogni item ha **Apri**.
-8. `Apri` mostra il contenuto persistito anche senza connessione a Studio Atlas.
-
-Il docente non deve tornare in Atlas per leggere una bozza già associata alla propria lezione.
+Criteri e livelli accessibili; su mobile i livelli diventano blocchi verticali quando necessario, evitando tabelle larghe obbligatorie.
 
 ## Trasporto
 
-Il handoff browser può continuare a usare fragment URL versionato e validato perché:
+Il fragment URL versionato può restare il transport adapter iniziale perché non richiede secret né backend server-to-server e non contiene dati studente.
 
-- non introduce secret;
-- non richiede backend server-to-server;
-- il payload non contiene dati studente.
+Il payload v0.3 è però più ricco. L'implementazione deve misurare la dimensione reale di:
 
-Tuttavia il payload v0.2 è più ricco. Devono quindi essere applicati limiti espliciti di dimensione e testati i casi reali dei quattro artefatti.
+- `LessonMaterialBrief`;
+- bundle con un materiale;
+- bundle con quattro materiali minimi validi.
 
-Se il bundle completo supera in modo realistico il limite sicuro del trasporto URL, **l'implementazione deve fermarsi e proporre un transport adapter distinto**; non è autorizzato aumentare arbitrariamente il limite né introdurre storage nascosto come workaround.
+Se il payload realistico supera il limite sicuro scelto e testato, l'implementazione si ferma e propone un transport adapter separato. Non è autorizzato:
 
-Questo è un gate tecnico dell'implementazione, non un'autorizzazione implicita a introdurre backend.
+- aumentare arbitrariamente il limite;
+- comprimere in modo opaco senza contratto;
+- introdurre storage nascosto;
+- passare a query string con contenuto didattico come scorciatoia.
 
 ## Errori e fail-closed
 
 Devono essere distinti almeno:
 
-- contesto UDA invalido;
-- artefatto Atlas non materializzato;
+- UDA senza classe;
+- UDA senza lezione runtime coperta;
+- lezione target non valida;
+- `LessonMaterialBrief` malformato;
+- mismatch `sectionId`;
+- mismatch `udaId`;
+- mismatch `blockId`;
+- mismatch `projectionId`;
+- `briefFingerprint` obsoleto;
+- artefatto non materializzato;
 - artefatto malformato;
 - bundle troppo grande;
-- mismatch UDA;
-- mismatch lezione;
 - errore di persistenza;
 - materiale associato non più decodificabile.
 
-In nessuno di questi casi un placeholder può essere rappresentato come materiale completato.
-
-Un errore dopo la materializzazione non deve cancellare la preview disponibile durante la sessione Atlas.
+Nessuno di questi stati può essere presentato come completamento riuscito.
 
 ## Sicurezza e privacy
 
-- nessun dato studente nel contratto;
+- nessun dato studente;
 - nessun wildcard origin;
 - callback limitata alle origini Docente OS configurate;
 - nessun token/API key nel browser;
-- nessun nuovo secret richiesto dalla v0.2;
-- nessun HTML arbitrario attraversa il contratto: l'artefatto è dati strutturati;
-- il viewer Docente OS renderizza strutture tipizzate, non markup non fidato;
+- nessun nuovo secret richiesto;
+- nessun HTML arbitrario nel contratto;
+- artefatti come dati strutturati tipizzati;
+- viewer Docente OS senza rendering di markup non fidato;
 - nessuna telemetria aggiuntiva richiesta.
 
 ## Accessibilità
 
-Target: WCAG 2.2 AA per le nuove superfici.
+Target: WCAG 2.2 AA.
 
-Minimo richiesto:
+Minimo:
 
 - heading semantici;
-- controllo completo da tastiera;
-- stato selezionato non affidato solo al colore;
+- controllo da tastiera;
+- stato selezionato non affidato al colore;
 - target touch >= 44 px;
-- rubriche fruibili senza scroll orizzontale obbligatorio su mobile;
 - focus visibile;
-- feedback percepibile in caso di errore;
-- contenuto strutturato leggibile da tecnologie assistive.
+- feedback di errore percepibile;
+- nessun overflow orizzontale obbligatorio per rubriche/presentazioni su mobile;
+- contenuto leggibile da tecnologie assistive.
 
 ## Compatibilità
 
-`MaterialBundle v0.1` non viene reinterpretato retroattivamente come artefatto completo.
+### Legacy v0.1
 
-Docente OS può continuare a leggere i binding v0.1 già creati come **legacy metadata-only**, ma non deve mostrare «Apri» quando manca un artefatto valido.
+I binding metadata-only già creati durante la Human Review restano leggibili come legacy ma non mostrano **Apri** se manca un artefatto.
 
-I nuovi binding creati dalla v0.2 devono richiedere `MaterialBundle v0.2`.
+### Design v0.2 non implementato
 
-Non è richiesto migrare automaticamente i quattro materiali creati durante la Human Review precedente.
+La v0.2 della specifica è superseded dalla v0.3 prima della sua implementazione completa. Non deve essere introdotto un nuovo runtime `MaterialBundle v0.2` solo per compatibilità con un design non ancora qualificato.
 
-## Non-obiettivi v0.2
+### Nuovo runtime
+
+I nuovi materiali lesson-aligned usano `MaterialBundle v0.3` e `LessonMaterialBrief v0.1`.
+
+## Non-obiettivi v0.3
 
 - esportazione PPTX/PDF/DOCX;
 - editor ricco completo;
-- generazione visuale live;
 - provider AI esterno;
+- Visual Factory live obbligatoria;
 - storage Atlas persistente delle bozze;
-- condivisione pubblica del materiale;
 - pubblicazione automatica;
+- condivisione pubblica;
 - account studente;
-- raccolta delle risposte degli studenti;
+- raccolta risposte studenti;
+- personalizzazione per singolo studente;
 - modifica del curricolo Arena;
+- adattamento automatico a una lezione diversa;
 - DOS-A1.
 
 ## Test e qualificazione
+
+### Docente OS — lesson selection e brief
+
+TDD obbligatorio:
+
+- dalla UDA mostra soltanto lezioni della stessa UDA/sezione con proiezione runtime approvata;
+- preselect del block quando già presente nel contesto;
+- CTA Atlas disabilitata senza target lesson;
+- costruzione `LessonMaterialBrief` dalla proiezione canonica;
+- nessun obiettivo inventato;
+- fingerprint deterministico;
+- nessun dato studente;
+- browser-safe envelope.
 
 ### Studio Atlas
 
 TDD obbligatorio:
 
-- schema `MaterialBundle v0.2`;
+- validazione `LessonMaterialBrief`;
+- rendering contesto lezione/obiettivo;
+- schema `MaterialBundle v0.3`;
 - validazione discriminata dei quattro artifact;
-- materializzazione contestuale dei quattro tipi;
+- materializzazione lesson-specific dei quattro tipi;
+- worksheet/rubric coerenti con evidence/observation;
 - preview reale prima del ritorno;
-- rifiuto di item metadata-only;
+- rifiuto metadata-only;
+- propagazione immutata di `targetLesson` e `briefFingerprint`;
 - browser runtime senza dipendenze Node-only;
 - limite dimensione envelope;
-- build/typecheck.
+- typecheck/build.
 
-### Docente OS
+### Docente OS — ritorno e binding
 
 TDD obbligatorio:
 
-- decode/validate `MaterialBundle v0.2`;
+- decode/validate `MaterialBundle v0.3`;
+- nessun selettore libero di lezione al ritorno;
+- verifica section/UDA/block/projection/fingerprint;
+- rifiuto di bundle preparato per altra lezione;
 - persistenza artifact nel repository canonico esistente;
 - nessun binding prima della conferma;
-- deduplica invariata;
 - viewer per quattro tipi;
 - ownership lezione/materiale;
-- legacy v0.1 senza falso «Apri»;
+- legacy v0.1 senza falso **Apri**;
 - feedback percepibile;
 - Product CI, Design Policy, HVA, WCAG/browser certification.
 
@@ -382,39 +597,45 @@ TDD obbligatorio:
 
 Il journey di accettazione deve provare realmente:
 
-**UDA 1A → Studio Atlas → seleziona 4 materiali → preview contenuto → continua → Docente OS → seleziona lezione → associa → Materiali allegati → Apri ciascun materiale → contenuto visibile**.
+**UDA 1A → scegli lezione canonica → Atlas mostra titolo+obiettivo della stessa lezione → seleziona 4 materiali → preview lesson-aligned → continua → Docente OS mostra la stessa lezione target → associa → Materiali allegati → Apri ciascun materiale → contenuto visibile e riferito alla stessa lezione**.
 
-Il test può usare contenuti deterministici e non deve dipendere da provider esterni.
+Deve inoltre esistere un caso negativo:
+
+**prepara materiali → cambia la proiezione/fingerprint o tenta un target diverso → binding rifiutato fail-closed**.
+
+Il journey non deve dipendere da provider esterni.
 
 ## Criteri di accettazione
 
 La funzione è completa soltanto se:
 
-- una UDA reale entra in Atlas con contesto corretto;
-- i materiali selezionati vengono materializzati in contenuti reali;
-- il docente può controllarli prima del ritorno;
-- il bundle contiene artifact tipizzati e validi;
-- nessuna associazione avviene prima della conferma in Docente OS;
+- il docente sceglie la lezione prima di Atlas;
+- la lezione è una proiezione runtime canonica, non una stringa libera;
+- Atlas riceve obiettivo/esiti/evidenza derivati dalla lezione target;
+- i materiali sono realmente materializzati;
+- il docente li controlla prima del ritorno;
+- il bundle è vincolato alla stessa lezione tramite identità + fingerprint;
+- Docente OS non consente rebinding silenzioso ad altra lezione;
 - il binding usa la persistenza canonica già esistente;
-- la lezione mostra i materiali associati;
-- ogni nuovo materiale v0.2 è riapribile tramite **Apri**;
-- il viewer mostra il contenuto reale e non soltanto titolo/descrizione;
-- il flusso resta utilizzabile senza provider esterno o secret aggiuntivi;
+- ogni materiale nuovo è riapribile tramite **Apri**;
+- il viewer mostra contenuto reale e la lezione per cui è stato preparato;
+- il flusso funziona senza provider o secret aggiuntivi;
 - tutti i gate automatici sull'exact head sono PASS;
-- Human Review finale mobile e desktop verifica contenuto, comprensibilità e riapertura;
+- Human Review finale mobile e desktop verifica coerenza didattica, contenuto e riapertura;
 - nessun merge/deploy production avviene prima della decisione umana.
 
-## Decisione Human Review HR-03
+## Decisione Human Review
 
 Stato corrente: **REWORK**.
 
-Il flusso v0.1 ha dimostrato:
+Evidenze già acquisite:
 
 - UDA → Atlas: PASS;
-- selezione dei quattro materiali: PASS;
+- selezione materiali: PASS;
 - ritorno Atlas → Docente OS: PASS;
 - associazione alla lezione: PASS;
-- comparsa in «Materiali allegati»: PASS;
-- contenuto realmente visualizzabile: **FAIL**.
+- comparsa in **Materiali allegati**: PASS;
+- contenuto realmente visualizzabile: **FAIL / HR-03**;
+- coerenza con la singola lezione preparata prima della generazione: **NON GARANTITA / HR-04**.
 
-La v0.2 chiude HR-03 solo quando il journey completo «preview → associa → Apri» viene verificato su exact head.
+La v0.3 chiude HR-03 e HR-04 soltanto quando il journey completo lesson-first viene verificato su exact head.
