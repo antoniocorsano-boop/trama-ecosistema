@@ -1,67 +1,108 @@
 # DOS-M4-01 — Docente OS L3 → L4 runtime-canary qualification
 
-**Stato:** PREPARED / RUNTIME-BASELINE-BOUND — CANARY_PENDING  
-**Data:** 6 ottobre 2026  
-**Ambito:** Docente OS product maturity  
-**Authority effect:** NONE  
+**Stato:** CANARY_PASS / L4_PROJECTED — HUMAN_EXACT_HEAD_REVIEW_PENDING
+**Data:** 7 ottobre 2026
+**Ambito:** Docente OS product maturity
+**Authority effect:** NONE
 **DOS-A1:** RUNTIME_DEFERRED
 
 ## 1. Obiettivo
 
-Chiudere il solo gap formale che oggi separa Docente OS da L4 nel modello TRAMA: una evidenza `RUNTIME_CANARY` forte, version-bound e verificabile.
+Chiudere in modo evidence-bound il gap formale che separava Docente OS da L4 nel modello TRAMA, acquisendo una `RUNTIME_CANARY` reale, version-bound e verificabile.
 
-Nessun nuovo sviluppo funzionale è richiesto da questo pacchetto. La qualificazione non autorizza Production, non cambia authority e non abilita DOS-A1.
+La qualificazione non autorizza Production, non cambia authority, non abilita DOS-A1 e non riapre superfici UX deliberate come legacy.
 
-## 2. Baseline candidata
+## 2. Baseline osservata
 
-- repository: `antoniocorsano-boop/docente-os-2026-27`;
+- repository prodotto: `antoniocorsano-boop/docente-os-2026-27`;
 - active development ref: `develop`;
-- exact head candidato: `39bce05fa2e87f3746ee3b6dcd7433065cb2d876`;
+- exact product head: `39bce05fa2e87f3746ee3b6dcd7433065cb2d876`;
 - Beta canonica Render: deploy `dep-db2ke2ajnfac73f3qoog`, LIVE sullo stesso SHA;
-- `/api/build-info`: binding exact-head verificato dal gate H1 post-merge;
-- H1 Human Task Comfort Gate: PASS completo sul runtime Beta exact-head, incluse AAL2, Piano annuale mobile e Progetta.
+- `/api/build-info`: exact-head binding PASS prima della mutazione;
+- AAL2 governato: PASS tramite credenziali tecniche E2E;
+- workflow finale: `https://github.com/antoniocorsano-boop/docente-os-2026-27/actions/runs/37560864731`;
+- artifact finale: `11457120823` (`sha256:8bfab50dd0505a8a1b05c84f16c5ba3fa4610b9f7fa62a122afcaf07cf62ccc1`).
 
-La canary deve essere acquisita su questa baseline. In caso di drift successivo, la prova deve essere ribasata sul nuovo exact head e non riutilizzata sinteticamente.
+La prova resta `RUNTIME_BOUND`: un futuro drift del prodotto richiede una nuova canary e non consente il riuso sintetico di questa evidenza.
 
-## 3. Gap L4 corrente
+## 3. Percorso professionale verificato
 
-Per Docente OS L4 il modello richiede cumulativamente:
+La canary ha eseguito sul runtime Beta reale:
 
-- `DOCUMENT_CANONICAL` — disponibile;
-- `CONTRACT_APPROVED` — disponibile;
-- `PR_EXACT_HEAD` — disponibile;
-- `AUTOMATED_TEST` — disponibile;
-- `HUMAN_REVIEW` — disponibile;
-- `RUNTIME_CANARY` — mancante nel registry canonico.
+1. apertura di **Orario**;
+2. modifica persistente di un dato reale nel workspace tecnico E2E;
+3. impostazione della decorrenza;
+4. **Metti in uso** con mutazione reale Supabase;
+5. riapertura e reload della vista;
+6. verifica della persistenza del marker;
+7. verifica browser della nuova bozza derivata dalla versione attiva;
+8. seconda sostituzione reale per produrre lineage osservabile;
+9. verifica read-only indipendente del datastore: `ACTIVE + DRAFT + ARCHIVED`, con conservazione dei marker nelle versioni precedenti.
 
-La promozione resta evidence-bound e non automatica.
+Esito: **PASS**.
 
-## 4. Canary minima
+## 4. Evidenza browser
 
-La canary deve verificare sul runtime Beta un percorso professionale reale e persistente:
-
-1. aprire **Orario**;
-2. modificare un dato reale;
-3. impostare o verificare la decorrenza;
-4. confermare / mettere in uso;
-5. riaprire la vista;
-6. verificare persistenza, lineage/versioning e assenza di perdita dello storico.
-
-Esito ammesso: `PASS` oppure `FAIL`, senza reinterpretazioni manuali.
-
-## 5. Ricevuta minima richiesta
-
-La ricevuta della canary deve contenere almeno:
+Ricevuta prodotta dal run `37560864731`:
 
 ```yaml
-id: EV-MAT-DOS-RUNTIME-CANARY-2026-10-06
-type: RUNTIME_CANARY
+id: EV-MAT-DOS-RUNTIME-CANARY-BROWSER-2026-10-07
+type: RUNTIME_CANARY_BROWSER
 area: docente-os
 status: PASS
 source:
   repository: antoniocorsano-boop/docente-os-2026-27
   ref: dep-db2ke2ajnfac73f3qoog
-observedAt: <timestamp UTC>
+observedAt: "2026-10-07T02:13:36.899Z"
+freshness:
+  policy: RUNTIME_BOUND
+confidence: HIGH
+binding:
+  areaRef: docente-os
+  releaseRef: dep-db2ke2ajnfac73f3qoog
+  exactHead: 39bce05fa2e87f3746ee3b6dcd7433065cb2d876
+evidence:
+  workflowRun: "https://github.com/antoniocorsano-boop/docente-os-2026-27/actions/runs/37560864731"
+  aal2: true
+  realSupabase: true
+  persistedAfterReload: true
+  replacementPerformed: true
+  nextDraftCopyObserved: true
+  activationCount: 2
+  finalMarker: "DOS-M4-CANARY-1791339228338-HISTORY"
+  effectiveFrom: 2026-10-08
+```
+
+## 5. Verifica indipendente di lineage e storico
+
+Una query **read-only** sul progetto Supabase effettivamente usato dalla Beta ha verificato, per il marker finale della canary:
+
+- una versione `ACTIVE` con decorrenza `2026-10-08` e marker finale presente;
+- una nuova versione `DRAFT` con copia del marker finale;
+- più versioni `ARCHIVED` con intervalli di efficacia chiusi;
+- conservazione del marker precedente nelle versioni storiche;
+- nessuna perdita dello storico osservato.
+
+La lettura Supabase non ha effettuato mutazioni: tutte le scritture della canary sono avvenute esclusivamente attraverso il flusso browser del prodotto.
+
+## 6. Nota sulla route legacy `/orario/gestisci`
+
+La route non costituisce un blocker DOS-M4. PR Docente OS #684 l'ha deliberatamente trasformata in compatibilità verso `/orario/aggiorna?fase=controllo` per preservare il flusso semplice:
+
+`Orario → Modifica → Data → Controlla → Metti in uso → Orario`.
+
+La qualificazione non reintroduce la vecchia UI tecnica: lineage e storico sono stati verificati senza alterare l'esperienza approvata.
+
+## 7. Evidenza canonica promossa nel registry
+
+Questa PR aggiunge al maturity evidence registry:
+
+```yaml
+id: EV-MAT-DOS-RUNTIME-CANARY-2026-10-07
+type: RUNTIME_CANARY
+area: docente-os
+status: PASS
+observedAt: "2026-10-07T02:13:36.899Z"
 freshness:
   policy: RUNTIME_BOUND
 confidence: HIGH
@@ -73,33 +114,28 @@ binding:
   exactHead: 39bce05fa2e87f3746ee3b6dcd7433065cb2d876
 ```
 
-La ricevuta deve essere supportata da prova osservabile della versione runtime, non da una dichiarazione di branch.
+La proiezione resta read-only e `automaticPromotion=false`.
 
-## 6. Chiusura formale
+## 8. Risultato di maturità atteso
 
-Dopo la canary PASS:
+Con la `RUNTIME_CANARY` version-bound disponibile insieme alle evidenze già canoniche, la proiezione deterministica deve risultare:
 
-1. inserire la nuova evidenza `RUNTIME_CANARY` nel maturity evidence registry;
-2. aggiornare o aggiungere i test deterministici affinché la proiezione attesa diventi `Docente OS confirmedLevel = 4`;
-3. rigenerare snapshot e riconciliazione;
-4. eseguire i gate GitHub Actions richiesti sullo stesso exact head;
-5. registrare una Human Exact-Head Review conclusiva che attesti coerenza fra SHA, runtime osservato, risultato della canary e proiezione di maturità;
-6. integrare solo dopo PASS coerenti e assenza di drift.
+- `Docente OS confirmedLevel = 4`;
+- `nextTargetLevel = 5`;
+- `nextRequiredEvidenceTypes = REGRESSION_HISTORY + ADOPTION_EVIDENCE`;
+- `DOS-A1 = RUNTIME_DEFERRED` invariato.
 
-## 7. Stato GitHub Actions
+L4 non implica Production né runtime authorization aggiuntiva.
 
-I gate post-merge sono operativi. Product CI e H1 sono PASS sulla baseline corrente; H1 ha verificato anche il binding della Beta all'exact head corrente.
+## 9. Criterio di uscita della PR
 
-La chiusura formale L4 resta sospesa fino alla `RUNTIME_CANARY` professionale reale e al completamento coerente dei gate richiesti sul perimetro finale.
+DOS-M4-01 può diventare `CLOSED / L4 VERIFIED` soltanto quando, sul **medesimo exact head TRAMA** della PR:
 
-## 8. Criterio di uscita
-
-DOS-M4-01 è `CLOSED / L4 VERIFIED` soltanto quando:
-
-- la `RUNTIME_CANARY` è PASS e version-bound;
-- tutti gli altri tipi di evidenza L4 restano validi;
-- snapshot/registry calcolano deterministically `confirmedLevel = 4`;
-- i gate automatici richiesti sono PASS sullo stesso perimetro;
-- Human Exact-Head Review è PASS;
+- registry e snapshot proiettano deterministicamente `confirmedLevel = 4`;
+- i gate automatici richiesti sono PASS;
+- la riconciliazione è coerente con L4;
+- una Human Exact-Head Review conclusiva attesta coerenza tra product SHA `39bce05fa2e87f3746ee3b6dcd7433065cb2d876`, deploy `dep-db2ke2ajnfac73f3qoog`, run `37560864731`, evidenza Supabase read-only e proiezione di maturità;
 - `DOS-A1=RUNTIME_DEFERRED` resta invariato;
-- nessuna promozione Production è stata implicitamente derivata.
+- nessuna promozione Production viene derivata implicitamente.
+
+Fino a quella review finale, lo stato resta **CANARY_PASS / L4_PROJECTED — HUMAN_EXACT_HEAD_REVIEW_PENDING**.

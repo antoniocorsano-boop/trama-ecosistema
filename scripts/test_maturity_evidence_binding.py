@@ -50,9 +50,9 @@ except ValueError:
 else:
     raise AssertionError("strong evidence with both areaRef and capabilityRef must fail")
 
-# Registry-only expectations are conservative. Atlas still needs the existing
-# governed exit accessibility/human projection; Docente OS intentionally lacks
-# a version-bound runtime canary.
+# Registry-only expectations remain conservative. Atlas still needs the existing
+# governed exit accessibility/human projection; Docente OS now has the
+# version-bound runtime canary required for L4.
 results = {
     area["id"]: evaluate_area(area, registry["evidence"])
     for area in definitions["areas"]
@@ -60,17 +60,17 @@ results = {
 assert results["governance"]["confirmedLevel"] == 4, results["governance"]
 assert results["arena"]["confirmedLevel"] == 4, results["arena"]
 assert results["atlas"]["confirmedLevel"] == 3, results["atlas"]
-assert results["docente-os"]["confirmedLevel"] == 3, results["docente-os"]
+assert results["docente-os"]["confirmedLevel"] == 4, results["docente-os"]
 
 dos_types = set(results["docente-os"]["availableEvidenceTypes"])
 assert "AUTOMATED_TEST" in dos_types
 assert "HUMAN_REVIEW" in dos_types
-assert "RUNTIME_CANARY" not in dos_types
+assert "RUNTIME_CANARY" in dos_types
+assert "EV-MAT-DOS-RUNTIME-CANARY-2026-10-07" in results["docente-os"]["currentEvidenceRefs"]
 
 receipt = (ROOT / "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md").read_text(
     encoding="utf-8"
 )
-assert "no `RUNTIME_CANARY` evidence is promoted by this slice" in receipt
 assert "65a7f5b820b344ec61f8e09d7559012aae521bbc" in receipt
 assert "bc11577eeeeeed9c43ad62ac43fb7561e1197246" in receipt
 assert "06410a7360ccd7eb55e049154c0c3657e6a24714" in receipt

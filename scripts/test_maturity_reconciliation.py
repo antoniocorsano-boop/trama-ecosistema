@@ -58,12 +58,14 @@ assert areas["atlas"]["evidenceBindingStatus"]=="PARTIAL"
 assert areas["atlas"]["nextTargetLevel"]==5
 assert set(areas["atlas"]["nextRequiredEvidenceTypes"])=={"REGRESSION_HISTORY","ADOPTION_EVIDENCE"}
 
-assert areas["docente-os"]["confirmedLevel"]==3
+assert areas["docente-os"]["confirmedLevel"]==4
 assert areas["docente-os"]["evidenceBindingStatus"]=="PARTIAL"
-assert areas["docente-os"]["nextTargetLevel"]==4
-assert areas["docente-os"]["nextRequiredEvidenceTypes"]==["RUNTIME_CANARY"]
-assert not any(
-    item.get("area")=="docente-os" and item.get("type")=="RUNTIME_CANARY"
+assert areas["docente-os"]["nextTargetLevel"]==5
+assert set(areas["docente-os"]["nextRequiredEvidenceTypes"])=={"REGRESSION_HISTORY","ADOPTION_EVIDENCE"}
+assert any(
+    item.get("id")=="EV-MAT-DOS-RUNTIME-CANARY-2026-10-07"
+    and item.get("type")=="RUNTIME_CANARY"
+    and (item.get("binding") or {}).get("exactHead")=="39bce05fa2e87f3746ee3b6dcd7433065cb2d876"
     for item in snapshot["evidence"]
 )
 
@@ -76,7 +78,7 @@ assert areas["studio-atlas"]["nextRequiredEvidenceTypes"]==["CONTRACT_APPROVED"]
 
 assert backlog["policy"]["evidenceBoundOnly"] is True
 assert {x["area"]:x["observedLevel"] for x in backlog["areas"]}=={
-    "governance":4,"arena":4,"atlas":4,"docente-os":3,"studio-atlas":1
+    "governance":4,"arena":4,"atlas":4,"docente-os":4,"studio-atlas":1
 }
 assert backlog["components"]["currentRegistryCount"]==11
 assert backlog["components"]["missingProductCoverage"]==["Studio Atlas"]

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.maturity-evidence-registry/v1",
-  "updatedAt": "2026-10-05",
+  "updatedAt": "2026-10-07",
   "policy": {
     "projectionReadOnly": true,
     "automaticPromotion": false,
@@ -502,6 +502,34 @@
           "level": 1
         }
       ]
+    },
+    {
+      "id": "EV-MAT-DOS-RUNTIME-CANARY-2026-10-07",
+      "type": "RUNTIME_CANARY",
+      "area": "docente-os",
+      "subject": "Docente OS real timetable runtime canary on canonical Beta",
+      "status": "PASS",
+      "source": {
+        "ref": "github-actions:docente-os-2026-27/run/37560864731",
+        "path": "docs/qualification/DOS-M4-01-runtime-canary.md",
+        "repository": "antoniocorsano-boop/docente-os-2026-27",
+        "runId": "37560864731"
+      },
+      "observedAt": "2026-10-07T02:13:36.899Z",
+      "freshness": {
+        "policy": "RUNTIME_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 4
+        }
+      ],
+      "binding": {
+        "areaRef": "docente-os",
+        "releaseRef": "dep-db2ke2ajnfac73f3qoog",
+        "exactHead": "39bce05fa2e87f3746ee3b6dcd7433065cb2d876"
+      }
     }
   ]
 }
