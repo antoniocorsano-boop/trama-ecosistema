@@ -28,6 +28,17 @@ test("TeachingContextSnapshot round-trips through base64url and keeps teacher co
   assert.deepEqual(decodeTeachingContext(encoded, ["https://docente-os-2026-27-beta.onrender.com"]), context);
 });
 
+test("TeachingContextSnapshot decodes in a browser-like runtime without Node Buffer", { concurrency: false }, () => {
+  const encoded = Buffer.from(JSON.stringify(context), "utf8").toString("base64url");
+  const descriptor = Object.getOwnPropertyDescriptor(globalThis, "Buffer");
+  try {
+    Object.defineProperty(globalThis, "Buffer", { value: undefined, configurable: true });
+    assert.deepEqual(decodeTeachingContext(encoded, ["https://docente-os-2026-27-beta.onrender.com"]), context);
+  } finally {
+    if (descriptor) Object.defineProperty(globalThis, "Buffer", descriptor);
+  }
+});
+
 test("TeachingContextSnapshot fails closed for unknown callbacks and missing UDA identity", () => {
   assert.throws(() => parseTeachingContext({ ...context, returnUrl: "https://evil.example/return" }, ["https://docente-os-2026-27-beta.onrender.com"]));
   assert.throws(() => parseTeachingContext({ ...context, udaId: "" }, ["https://docente-os-2026-27-beta.onrender.com"]));
