@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.maturity-reconciliation/v1",
-  "updatedAt": "2026-10-05",
+  "updatedAt": "2026-10-07",
   "policy": {
     "evidenceBoundOnly": true,
     "noSyntheticPromotion": true,
@@ -44,14 +44,13 @@
     },
     {
       "area": "docente-os",
-      "observedLevel": 3,
-      "target": "L4_AFTER_VERSION_BOUND_RUNTIME_CANARY",
+      "observedLevel": 4,
+      "target": "L5_AFTER_STABILITY_AND_ADOPTION",
       "nextWork": [
-        "recover or execute version-bound RUNTIME_CANARY",
-        "preserve active develop ref separately from default main"
+        "collect version-bound regression history",
+        "collect adoption evidence without student tracking"
       ],
       "l5Gap": [
-        "RUNTIME_CANARY",
         "REGRESSION_HISTORY",
         "ADOPTION_EVIDENCE"
       ]

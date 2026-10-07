@@ -1,49 +1,49 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.6.0",
-  "generatedAt": "2026-10-05T18:20:29.282564+00:00",
+  "generatedAt": "2026-10-07T02:24:43.240408+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "ref": "STATUS.md",
       "sha256": "6596307dba9ee81849794a1015e7fd1e20280e452c4b78284846a96c72ba9780"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "ref": "ROADMAP.md",
       "sha256": "1778d9e302950a6431a4a5e6430cf96f27e80938652fb43da32bf835236c98ae"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
     },
     "maturity-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
-      "sha256": "85800e2df6f2ca936dfd585487b57b0807b34157b6b71709b7b6be6d8ddbd7b9"
+      "sha256": "bcbd586cf971a41158c6dfc45fefc3dab24c1d3b65d538cdb68166b80a0a2a33"
     }
   },
   "phases": [
@@ -109,7 +109,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-10-05T18:20:29.282564+00:00"
+      "lastEvaluatedAt": "2026-10-07T02:24:43.240408+00:00"
     },
     {
       "id": "arena",
@@ -136,7 +136,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-10-05T18:20:29.282564+00:00"
+      "lastEvaluatedAt": "2026-10-07T02:24:43.240408+00:00"
     },
     {
       "id": "atlas",
@@ -166,14 +166,14 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-05T18:20:29.282564+00:00"
+      "lastEvaluatedAt": "2026-10-07T02:24:43.240408+00:00"
     },
     {
       "id": "docente-os",
       "name": "Docente OS",
       "ownerDomain": "Docente OS",
-      "confirmedLevel": 3,
-      "candidateLevel": 3,
+      "confirmedLevel": 4,
+      "candidateLevel": 4,
       "confidence": "LOW",
       "status": "PARTIAL",
       "evidenceRefs": [
@@ -181,12 +181,14 @@
         "EV-MAT-DOS-CONTRACT-ADR006",
         "EV-MAT-DOS-PR579-HEAD",
         "EV-MAT-DOS-PR579-CI",
-        "EV-MAT-DOS-ECO02-HUMAN"
+        "EV-MAT-DOS-ECO02-HUMAN",
+        "EV-MAT-DOS-RUNTIME-CANARY-2026-10-07"
       ],
       "evidenceBindingStatus": "PARTIAL",
-      "nextTargetLevel": 4,
+      "nextTargetLevel": 5,
       "nextRequiredEvidenceTypes": [
-        "RUNTIME_CANARY"
+        "ADOPTION_EVIDENCE",
+        "REGRESSION_HISTORY"
       ],
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
@@ -194,7 +196,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-05T18:20:29.282564+00:00"
+      "lastEvaluatedAt": "2026-10-07T02:24:43.240408+00:00"
     },
     {
       "id": "studio-atlas",
@@ -218,7 +220,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-05T18:20:29.282564+00:00"
+      "lastEvaluatedAt": "2026-10-07T02:24:43.240408+00:00"
     }
   ],
   "capabilities": [
@@ -1058,7 +1060,7 @@
         "path": "STATUS.md",
         "sha256": "6596307dba9ee81849794a1015e7fd1e20280e452c4b78284846a96c72ba9780"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1076,7 +1078,7 @@
         "path": "ROADMAP.md",
         "sha256": "1778d9e302950a6431a4a5e6430cf96f27e80938652fb43da32bf835236c98ae"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1094,7 +1096,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1112,7 +1114,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1130,7 +1132,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1148,7 +1150,7 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1164,9 +1166,9 @@
       "status": "PASS",
       "source": {
         "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
-        "sha256": "85800e2df6f2ca936dfd585487b57b0807b34157b6b71709b7b6be6d8ddbd7b9"
+        "sha256": "bcbd586cf971a41158c6dfc45fefc3dab24c1d3b65d538cdb68166b80a0a2a33"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1668,6 +1670,34 @@
       ]
     },
     {
+      "id": "EV-MAT-DOS-RUNTIME-CANARY-2026-10-07",
+      "type": "RUNTIME_CANARY",
+      "area": "docente-os",
+      "subject": "Docente OS real timetable runtime canary on canonical Beta",
+      "status": "PASS",
+      "source": {
+        "ref": "github-actions:docente-os-2026-27/run/37560864731",
+        "path": "docs/qualification/DOS-M4-01-runtime-canary.md",
+        "repository": "antoniocorsano-boop/docente-os-2026-27",
+        "runId": "37560864731"
+      },
+      "observedAt": "2026-10-07T02:13:36.899Z",
+      "freshness": {
+        "policy": "RUNTIME_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 4
+        }
+      ],
+      "binding": {
+        "areaRef": "docente-os",
+        "releaseRef": "dep-db2ke2ajnfac73f3qoog",
+        "exactHead": "39bce05fa2e87f3746ee3b6dcd7433065cb2d876"
+      }
+    },
+    {
       "id": "EV-R3-F0-EXIT-ACCESSIBILITY",
       "type": "ACCESSIBILITY_GATE",
       "area": "atlas",
@@ -1733,7 +1763,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-10-05T18:20:29.282564+00:00",
+      "observedAt": "2026-10-07T02:24:43.240408+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
