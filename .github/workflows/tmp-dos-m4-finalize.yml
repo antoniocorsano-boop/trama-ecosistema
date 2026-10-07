@@ -30,6 +30,10 @@ jobs:
       - name: Generate DOS-M4 finalization files
         run: python scripts/tmp_dos_m4_finalize.py
 
+      - name: Normalize dossier whitespace
+        shell: bash
+        run: sed -i 's/[[:space:]]\+$//' docs/qualification/DOS-M4-01-runtime-canary.md
+
       - name: Validate maturity evidence registry
         run: python scripts/validate_maturity_evidence_registry.py
 
@@ -83,7 +87,7 @@ jobs:
             .github/workflows/control-center-snapshot.yml
             control-center/data/ecosystem-snapshot.json
 
-      - name: Commit validated finalization to PR branch
+      - name: Commit validated non-workflow finalization to PR branch
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
@@ -94,7 +98,6 @@ jobs:
             governance/maturity/trama-maturity-reconciliation-v1.json \
             scripts/test_maturity_evidence_binding.py \
             scripts/test_maturity_reconciliation.py \
-            .github/workflows/control-center-snapshot.yml \
             control-center/data/ecosystem-snapshot.json
           git diff --cached --check
           git commit -m 'DOS-M4-01: promote version-bound runtime canary evidence'
