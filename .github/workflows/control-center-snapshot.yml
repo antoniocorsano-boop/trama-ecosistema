@@ -203,8 +203,8 @@ jobs:
           assert areas["governance"]["confirmedLevel"] == 4, areas["governance"]
           assert areas["arena"]["confirmedLevel"] == 4, areas["arena"]
           assert areas["atlas"]["confirmedLevel"] == 4, areas["atlas"]
-          assert areas["docente-os"]["confirmedLevel"] == 3, areas["docente-os"]
-          assert areas["docente-os"]["nextRequiredEvidenceTypes"] == ["RUNTIME_CANARY"], areas["docente-os"]
+          assert areas["docente-os"]["confirmedLevel"] == 4, areas["docente-os"]
+          assert set(areas["docente-os"]["nextRequiredEvidenceTypes"]) == {"REGRESSION_HISTORY", "ADOPTION_EVIDENCE"}, areas["docente-os"]
           assert areas["studio-atlas"]["confirmedLevel"] == 1, areas["studio-atlas"]
           assert areas["studio-atlas"]["candidateLevel"] == 1, areas["studio-atlas"]
           assert areas["studio-atlas"]["nextTargetLevel"] == 2, areas["studio-atlas"]
@@ -214,8 +214,10 @@ jobs:
               for item in snapshot["evidence"]
           ), snapshot["evidence"]
           assert all(area["evidenceBindingStatus"] == "PARTIAL" for area in areas.values()), areas
-          assert not any(
-              item.get("area") == "docente-os" and item.get("type") == "RUNTIME_CANARY"
+          assert any(
+              item.get("id") == "EV-MAT-DOS-RUNTIME-CANARY-2026-10-07"
+              and item.get("type") == "RUNTIME_CANARY"
+              and (item.get("binding") or {}).get("exactHead") == "39bce05fa2e87f3746ee3b6dcd7433065cb2d876"
               for item in snapshot["evidence"]
           )
           print("TRAMA_MATURITY_WIRING_CONSERVATIVE_PASS")
