@@ -72,7 +72,7 @@ jobs:
           print('DOS_M4_SNAPSHOT_CANONICAL_SEMANTICS_PASS')
           PY
 
-      - name: Upload validated finalization bundle
+      - name: Publish final validation bundle
         uses: actions/upload-artifact@v4
         with:
           name: dos-m4-finalization-bundle-${{ github.run_id }}
@@ -87,7 +87,7 @@ jobs:
             .github/workflows/control-center-snapshot.yml
             control-center/data/ecosystem-snapshot.json
 
-      - name: Commit validated non-workflow finalization to PR branch
+      - name: Commit canonical finalization and remove temporary harness
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
@@ -98,7 +98,9 @@ jobs:
             governance/maturity/trama-maturity-reconciliation-v1.json \
             scripts/test_maturity_evidence_binding.py \
             scripts/test_maturity_reconciliation.py \
+            .github/workflows/control-center-snapshot.yml \
             control-center/data/ecosystem-snapshot.json
+          git rm scripts/tmp_dos_m4_finalize.py .github/workflows/tmp-dos-m4-finalize.yml
           git diff --cached --check
-          git commit -m 'DOS-M4-01: promote version-bound runtime canary evidence'
+          git commit -m 'DOS-M4-01: finalize L4 evidence projection'
           git push origin HEAD:chore/dos-m4-01-runtime-canary
