@@ -39,7 +39,8 @@ jobs:
 
       - name: Refresh only Evidence visual baselines
         working-directory: apps/control-center
-        run: npx playwright test e2e/a6-visual.spec.ts -g "visual parity: evidence" --update-snapshots
+        run: |
+          npx playwright test e2e/a6-visual.spec.ts -g "visual parity: evidence" --update-snapshots
 
       - name: Commit refreshed Evidence baselines
         shell: bash
@@ -47,6 +48,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-*-linux.png
-          git diff --cached --exit-code && { echo 'No baseline changes produced'; exit 1; } || true
+          if git diff --cached --quiet; then
+            echo 'No baseline changes produced'
+            exit 1
+          fi
           git commit -m 'test(control-center): refresh Evidence visual baselines for DOS-M4'
           git push origin HEAD:chore/dos-m4-01-runtime-canary
