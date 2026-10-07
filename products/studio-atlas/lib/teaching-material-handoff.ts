@@ -110,13 +110,20 @@ export function decodeMaterialBundle(encoded: string): MaterialBundle {
 }
 
 function encodeEnvelope(value: unknown) {
-  return Buffer.from(JSON.stringify(value), "utf8").toString("base64url");
+  const bytes = new TextEncoder().encode(JSON.stringify(value));
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
 function decodeEnvelope(value: string): unknown {
   if (!value || value.length > 16_384) throw new Error("Invalid handoff envelope");
   try {
-    return JSON.parse(Buffer.from(value, "base64url").toString("utf8"));
+    const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
   } catch {
     throw new Error("Malformed handoff envelope");
   }
