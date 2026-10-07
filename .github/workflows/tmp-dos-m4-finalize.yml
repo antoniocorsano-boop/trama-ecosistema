@@ -1,0 +1,76 @@
+name: Temporary DOS-M4 Finalization
+
+on:
+  push:
+    branches:
+      - chore/dos-m4-01-runtime-canary
+    paths:
+      - 'scripts/tmp_dos_m4_finalize.py'
+      - '.github/workflows/tmp-dos-m4-finalize.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  generate-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install validation dependency
+        run: python -m pip install --disable-pip-version-check --quiet jsonschema
+
+      - name: Generate DOS-M4 finalization files
+        run: python scripts/tmp_dos_m4_finalize.py
+
+      - name: Validate maturity evidence registry
+        run: python scripts/validate_maturity_evidence_registry.py
+
+      - name: Validate maturity evidence binding
+        run: python scripts/test_maturity_evidence_binding.py
+
+      - name: Validate maturity reconciliation
+        run: python scripts/test_maturity_reconciliation.py
+
+      - name: Validate generated ecosystem snapshot
+        run: python scripts/build_ecosystem_snapshot.py --check
+
+      - name: Verify generated snapshot is deterministic
+        shell: bash
+        run: |
+          cp control-center/data/ecosystem-snapshot.json /tmp/first.json
+          python scripts/build_ecosystem_snapshot.py --output /tmp/second.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          first=json.loads(Path('/tmp/first.json').read_text(encoding='utf-8'))
+          second=json.loads(Path('/tmp/second.json').read_text(encoding='utf-8'))
+          first.pop('generatedAt', None)
+          second.pop('generatedAt', None)
+          for area in first.get('areas', []): area.pop('lastEvaluatedAt', None)
+          for area in second.get('areas', []): area.pop('lastEvaluatedAt', None)
+          assert first == second
+          print('DOS_M4_SNAPSHOT_DETERMINISTIC_PASS')
+          PY
+
+      - name: Upload validated finalization bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: dos-m4-finalization-bundle-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            docs/qualification/DOS-M4-01-runtime-canary.md
+            governance/maturity/trama-maturity-evidence-registry-v1.json
+            governance/maturity/trama-maturity-reconciliation-v1.json
+            scripts/test_maturity_evidence_binding.py
+            scripts/test_maturity_reconciliation.py
+            .github/workflows/control-center-snapshot.yml
+            control-center/data/ecosystem-snapshot.json
