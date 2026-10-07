@@ -1,6 +1,6 @@
 # DOS-M5-00 — Docente OS L4 → L5 evidence contract
 
-**Stato:** DRAFT / CONTRACT_REVIEW_READY  
+**Stato:** CONTRACT_APPROVED / HUMAN_REVIEW_PASS  
 **Data:** 7 ottobre 2026  
 **Ambito:** Docente OS product maturity  
 **Authority effect:** NONE  
@@ -334,4 +334,4 @@ Il dossier può essere chiuso come `CONTRACT_APPROVED` solo quando una Human Rev
 - non viene introdotta alcuna promozione automatica L5;
 - Production, authority e `DOS-A1` restano invariati.
 
-Fino a tale review, lo stato resta **DRAFT / CONTRACT_REVIEW_READY**.
+Lo stato `CONTRACT_APPROVED / HUMAN_REVIEW_PASS` è valido soltanto sul medesimo exact head su cui la Human Review conclusiva è registrata.
