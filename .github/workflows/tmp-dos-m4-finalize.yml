@@ -9,7 +9,7 @@ on:
       - '.github/workflows/tmp-dos-m4-finalize.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate-and-validate:
@@ -82,3 +82,20 @@ jobs:
             scripts/test_maturity_reconciliation.py
             .github/workflows/control-center-snapshot.yml
             control-center/data/ecosystem-snapshot.json
+
+      - name: Commit validated finalization to PR branch
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            docs/qualification/DOS-M4-01-runtime-canary.md \
+            governance/maturity/trama-maturity-evidence-registry-v1.json \
+            governance/maturity/trama-maturity-reconciliation-v1.json \
+            scripts/test_maturity_evidence_binding.py \
+            scripts/test_maturity_reconciliation.py \
+            .github/workflows/control-center-snapshot.yml \
+            control-center/data/ecosystem-snapshot.json
+          git diff --cached --check
+          git commit -m 'DOS-M4-01: promote version-bound runtime canary evidence'
+          git push origin HEAD:chore/dos-m4-01-runtime-canary
