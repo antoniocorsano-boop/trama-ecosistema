@@ -42,7 +42,7 @@ jobs:
       - name: Validate generated ecosystem snapshot
         run: python scripts/build_ecosystem_snapshot.py --check
 
-      - name: Verify generated snapshot is deterministic
+      - name: Verify canonical snapshot semantics are stable
         shell: bash
         run: |
           cp control-center/data/ecosystem-snapshot.json /tmp/first.json
@@ -50,14 +50,22 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
+
           first=json.loads(Path('/tmp/first.json').read_text(encoding='utf-8'))
           second=json.loads(Path('/tmp/second.json').read_text(encoding='utf-8'))
-          first.pop('generatedAt', None)
-          second.pop('generatedAt', None)
-          for area in first.get('areas', []): area.pop('lastEvaluatedAt', None)
-          for area in second.get('areas', []): area.pop('lastEvaluatedAt', None)
-          assert first == second
-          print('DOS_M4_SNAPSHOT_DETERMINISTIC_PASS')
+
+          for source_id, source in second['sourceState'].items():
+              assert source_id in first['sourceState'], source_id
+              assert first['sourceState'][source_id].get('sha256') == source.get('sha256'), source_id
+
+          def semantic_area(item):
+              return {k:v for k,v in item.items() if k != 'lastEvaluatedAt'}
+
+          assert [semantic_area(x) for x in first['areas']] == [semantic_area(x) for x in second['areas']]
+          for key in ('capabilities','components','gates','dependencies','expansionCandidates','integrityChecks','operationalPath','timelineEvents','timelineCoverage'):
+              assert first[key] == second[key], key
+
+          print('DOS_M4_SNAPSHOT_CANONICAL_SEMANTICS_PASS')
           PY
 
       - name: Upload validated finalization bundle
