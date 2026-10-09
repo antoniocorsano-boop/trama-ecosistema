@@ -14,13 +14,13 @@ export function App() {
           </p>
           <h1
             id="gateway-title"
-            className="animate-fade-rise max-w-6xl text-5xl font-normal leading-[0.95] tracking-[-0.035em] text-[hsl(var(--foreground))] sm:text-7xl md:text-8xl"
+            className="trama-copy-reinforced animate-fade-rise max-w-6xl text-5xl font-normal leading-[0.95] tracking-[-0.035em] text-[hsl(var(--foreground))] sm:text-7xl md:text-8xl"
             style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
           >
             Dove <em className="not-italic text-[hsl(var(--muted-foreground))]">curricolo</em>, conoscenza e{' '}
             <em className="not-italic text-[hsl(var(--muted-foreground))]">progettazione diventano esperienza.</em>
           </h1>
-          <p className="animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-lg">
+          <p className="trama-copy-reinforced animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-lg">
             Un ecosistema per progettare, organizzare e trasformare il lavoro didattico, mantenendo unite intenzione educativa, materiali, evidenze e documentazione.
           </p>
           <TramaGlassAction

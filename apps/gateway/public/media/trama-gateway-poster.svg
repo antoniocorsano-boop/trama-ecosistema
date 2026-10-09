@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="">
+  <rect width="1920" height="1080" fill="#003a4e"/>
+  <path d="M120 0h180l760 1080H840L120 0Z" fill="#d7b58b" opacity="0.045"/>
+  <path d="M360 0h120l640 1080H980L360 0Z" fill="#ffffff" opacity="0.025"/>
+  <rect x="1110" y="132" width="640" height="786" rx="48" fill="#002734" opacity="0.56"/>
+
+  <g transform="rotate(-2 1430 530)">
+    <rect x="1140" y="150" width="610" height="740" rx="16" fill="#eee8d8"/>
+    <rect x="1140" y="150" width="610" height="740" rx="16" fill="none" stroke="#fffaf0" stroke-opacity="0.48" stroke-width="2"/>
+    <line x1="1220" y1="235" x2="1670" y2="235" stroke="#214453" stroke-opacity="0.78" stroke-width="3"/>
+    <circle cx="1260" cy="211" r="5" fill="#5a5148"/>
+    <circle cx="1435" cy="211" r="5" fill="#5a5148"/>
+    <circle cx="1610" cy="211" r="5" fill="#5a5148"/>
+    <g stroke="#315463" stroke-opacity="0.46" stroke-width="2">
+      <line x1="1215" y1="282" x2="1680" y2="282"/>
+      <line x1="1215" y1="340" x2="1680" y2="340"/>
+      <line x1="1215" y1="398" x2="1680" y2="398"/>
+      <line x1="1215" y1="456" x2="1680" y2="456"/>
+      <line x1="1215" y1="514" x2="1680" y2="514"/>
+      <line x1="1215" y1="572" x2="1680" y2="572"/>
+      <line x1="1215" y1="630" x2="1680" y2="630"/>
+      <line x1="1215" y1="688" x2="1680" y2="688"/>
+      <line x1="1215" y1="746" x2="1680" y2="746"/>
+      <line x1="1215" y1="804" x2="1680" y2="804"/>
+    </g>
+  </g>
+
+  <g fill="none" stroke-linecap="round">
+    <line x1="245" y1="110" x2="1440" y2="980" stroke="#bd7950" stroke-width="7" opacity="0.88"/>
+    <line x1="115" y1="842" x2="1530" y2="314" stroke="#d2a779" stroke-width="4" opacity="0.72"/>
+    <line x1="615" y1="12" x2="1165" y2="1070" stroke="#e2c294" stroke-width="3" opacity="0.34"/>
+  </g>
+  <circle cx="930" cy="607" r="10" fill="#e0be93" opacity="0.92"/>
+  <circle cx="1121" cy="410" r="7" fill="#c77d55" opacity="0.78"/>
+  <circle cx="682" cy="628" r="6" fill="#dec095" opacity="0.66"/>
+</svg>

@@ -38,6 +38,12 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+.trama-copy-reinforced {
+  text-shadow:
+    0 1px 10px rgba(0, 24, 34, 0.48),
+    0 2px 24px rgba(0, 24, 34, 0.28);
+}
+
 .liquid-glass {
   background: rgba(255, 255, 255, 0.01);
   background-blend-mode: luminosity;
@@ -104,6 +110,10 @@ a {
 }
 
 @media (forced-colors: active) {
+  .trama-copy-reinforced {
+    text-shadow: none;
+  }
+
   .liquid-glass {
     background: Canvas;
     color: CanvasText;
