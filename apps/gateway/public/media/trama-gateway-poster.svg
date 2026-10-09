@@ -3,8 +3,8 @@
   <path d="M96 0h156l620 1080H690L96 0Z" fill="#d7b58b" opacity="0.032"/>
   <path d="M314 0h112l528 1080H824L314 0Z" fill="#ffffff" opacity="0.018"/>
 
-  <rect x="1500" y="118" width="610" height="804" rx="48" fill="#002734" opacity="0.5"/>
-  <g transform="translate(390 0) rotate(-2 1430 530)">
+  <rect x="1600" y="118" width="610" height="804" rx="48" fill="#002734" opacity="0.5"/>
+  <g transform="translate(490 0) rotate(-2 1430 530)">
     <rect x="1140" y="150" width="610" height="740" rx="16" fill="#eee8d8"/>
     <rect x="1140" y="150" width="610" height="740" rx="16" fill="none" stroke="#fffaf0" stroke-opacity="0.42" stroke-width="2"/>
     <line x1="1220" y1="235" x2="1670" y2="235" stroke="#214453" stroke-opacity="0.7" stroke-width="3"/>
