@@ -29,9 +29,9 @@ jobs:
         run: |
           if [ -f apps/gateway/package.json ]; then
             cd apps/gateway
-            npm ci
-            npm run typecheck
+            if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
             npm test
+            npm run typecheck
             npm run build
             if npm run | grep -q 'test:e2e'; then
               npx playwright install --with-deps chromium
