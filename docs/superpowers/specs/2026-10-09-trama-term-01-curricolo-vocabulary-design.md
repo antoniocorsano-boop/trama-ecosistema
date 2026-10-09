@@ -1,7 +1,7 @@
 # TRAMA-TERM-01 — Vocabolario canonico «curricolo di istituto»
 
 **Data:** 2026-10-09  
-**Stato:** DESIGN APPROVATO / SPEC IN REVIEW  
+**Stato:** SPEC APPROVED / IMPLEMENTATION PLAN READY  
 **Baseline TRAMA:** `main@dd8bfab5032137a8591c209004bbd643bf23e8cd`  
 **Perimetro:** TRAMA, CurManLight Arena, Atlas, Studio Atlas, Docente OS  
 **Tipo di intervento:** migrazione semantica cross-ecosystem con compatibilità legacy
