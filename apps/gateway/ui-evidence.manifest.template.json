@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "contract": {
+    "id": "TRAMA-UI-EVIDENCE-01",
+    "version": "1"
+  },
+  "product": {
+    "id": "TRAMA_GATEWAY",
+    "profile": "TRAMA-PARENT-IDENTITY",
+    "profileVersion": "1.0.0"
+  },
+  "change": {
+    "aggregateUiImpact": "NEW",
+    "surfaces": [
+      {
+        "id": "trama-public-gateway",
+        "uiImpact": "NEW",
+        "journeys": ["enter-trama"]
+      }
+    ]
+  },
+  "responsive": {
+    "conditions": {
+      "S": { "applicable": true },
+      "M": { "applicable": true },
+      "L": { "applicable": true },
+      "LIM": { "applicable": true }
+    },
+    "evidence": []
+  },
+  "accessibility": {
+    "evidence": [],
+    "findings": []
+  },
+  "perceptibleWrite": {
+    "classification": "NON_MUTATIVE",
+    "evidence": []
+  },
+  "designSystem": {
+    "tokens": [
+      "TRAMA-PARENT-IDENTITY@1.0.0",
+      "TRAMA-RESPONSIVE@1.0.0",
+      "surface.canvas",
+      "surface.primary",
+      "text.primary",
+      "text.muted",
+      "action.primary",
+      "focus.visible",
+      "motion.standard"
+    ],
+    "components": ["Button"],
+    "newComponents": [
+      "TramaWordmark",
+      "TramaGlassAction",
+      "TramaMediaBackdrop",
+      "TramaNavigation",
+      "TramaGatewayShell"
+    ]
+  },
+  "boundaries": {
+    "authorityImpact": "NONE",
+    "privacyImpact": "NONE",
+    "runtimeImpact": "NONE",
+    "dosA1": "RUNTIME_DEFERRED"
+  },
+  "exceptions": []
+}

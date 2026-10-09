@@ -1,0 +1,92 @@
+name: TRAMA Gateway
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/gateway/**'
+      - 'policies/design-system/**'
+      - 'policies/ui-evidence-producers.v1.json'
+      - 'schemas/ui-evidence.manifest.schema.json'
+      - 'scripts/validate-design-system.mjs'
+      - 'scripts/test-design-system-validator.mjs'
+      - 'scripts/validate-trama-parent-identity.mjs'
+      - 'scripts/test-trama-parent-identity-validator.mjs'
+      - 'scripts/materialize-trama-gateway-ui-evidence.mjs'
+      - 'scripts/test-materialize-trama-gateway-ui-evidence.mjs'
+      - 'scripts/validate-ui-evidence.mjs'
+      - '.github/workflows/trama-gateway.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trama-gateway-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  certify-gateway:
+    runs-on: ubuntu-latest
+    env:
+      VITE_TRAMA_ENTRY_HREF: /ecosistema
+      EXACT_HEAD: ${{ github.event.pull_request.head.sha }}
+      EVIDENCE_DIR: apps/gateway/test-results/evidence
+      MANIFEST_PATH: apps/gateway/test-results/ui-evidence.manifest.json
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/gateway/package-lock.json
+
+      - name: Pin npm resolver
+        run: npm install --global npm@11.6.0
+
+      - name: Validate governed identity
+        run: |
+          node scripts/test-design-system-validator.mjs
+          node scripts/test-trama-parent-identity-validator.mjs
+          node scripts/test-materialize-trama-gateway-ui-evidence.mjs
+
+      - name: Install gateway dependencies
+        working-directory: apps/gateway
+        run: npm ci
+
+      - name: Install Chromium
+        working-directory: apps/gateway
+        run: npx playwright install --with-deps chromium
+
+      - name: Typecheck, unit test and build
+        working-directory: apps/gateway
+        run: |
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Browser certification
+        working-directory: apps/gateway
+        run: npm run test:e2e
+
+      - name: Materialize exact-head UI evidence
+        run: |
+          node scripts/materialize-trama-gateway-ui-evidence.mjs "$EXACT_HEAD" "$EVIDENCE_DIR" "$MANIFEST_PATH" "${{ github.run_id }}"
+          node scripts/validate-ui-evidence.mjs "$MANIFEST_PATH" "$EXACT_HEAD"
+
+      - name: Upload gateway evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trama-gateway-ui-evidence-${{ github.event.pull_request.head.sha }}
+          path: |
+            apps/gateway/test-results/evidence
+            apps/gateway/test-results/ui-evidence.manifest.json
+            apps/gateway/test-results/**/*.zip
+          if-no-files-found: warn
+          retention-days: 14

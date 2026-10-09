@@ -1,6 +1,9 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { expect, test } from '@playwright/test';
 
 const VIDEO_HOST = 'https://d8j0ntlcm91z4.cloudfront.net/**';
+const EVIDENCE_DIR = path.resolve(process.cwd(), 'test-results/evidence');
 
 test.beforeEach(async ({ page }) => {
   await page.route(VIDEO_HOST, (route) => route.abort());
@@ -17,8 +20,9 @@ test('S/M/L/LIM preserve the public threshold without horizontal overflow', asyn
   }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
 
+  fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
   await page.screenshot({
-    path: testInfo.outputPath(`gateway-${testInfo.project.name}.png`),
+    path: path.join(EVIDENCE_DIR, `gateway-${testInfo.project.name}.png`),
     fullPage: true,
   });
 });
