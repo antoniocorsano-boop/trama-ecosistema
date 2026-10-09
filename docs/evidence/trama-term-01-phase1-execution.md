@@ -1,7 +1,7 @@
 # TRAMA-TERM-01 — Evidenze di esecuzione Fase 1
 
 **Perimetro:** governance TRAMA e guardrail terminologico  
-**Stato:** IN_EXECUTION / TASK_4_VERIFICATION_PENDING
+**Stato:** PHASE_1_FINAL_VERIFICATION_PENDING
 
 ## Baseline
 
@@ -30,7 +30,10 @@
 ### Task 4 — superfici attive
 
 - RED `22d945d457182f0af1f04e4b4a9c1d3affee599f`: Governance #1896 FAIL esclusivamente sul controllo dei testi attivi;
-- candidato GREEN `7665aa165c384cab1babc7dd24f98696276db483`: riallineate in un commit atomico le superfici attive previste; verifica exact-head ancora da acquisire.
+- GREEN funzionale `fec62a30d3c5d627c107422aaac940f53bf60020`: Governance #1899 PASS; snapshot e Control Center governati PASS;
+- A6 PWA Parity sullo stesso head: test PWA, typecheck, unit test, build e budget PASS; due soli visual diff sulla pagina Operations causati dal wrapping della nuova etichetta canonica;
+- Human visual check: nessun overflow, sovrapposizione, clipping o perdita di contenuto nei viewport phone e reflow 320;
+- baseline visuali Operations aggiornate con gli screenshot reali prodotti dal job A6 nel commit `4eb930378790e9f257e7893ef05f2bea0a9386eb`, senza variazione di soglie o mascheramento del controllo.
 
 ## Invarianti preservati
 
@@ -40,3 +43,7 @@
 - gli slug infrastrutturali legacy restano invariati finché non esiste una migrazione esplicita;
 - `DOS-A1` resta `RUNTIME_DEFERRED`;
 - la PR resta Draft e non mergiata.
+
+## Gate di uscita Fase 1
+
+La Fase 1 può essere dichiarata VERIFIED solo dopo acquisizione dei gate sull'exact head successivo a questo aggiornamento, incluso A6 PWA Parity.
