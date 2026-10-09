@@ -10,10 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
       - {name: Install governed M1-A HTTP dependency, run: python3 -m pip install --disable-pip-version-check "httpx==0.28.1"}
       - {name: Validate governance, run: python3 scripts/validate_governance.py}
+      - name: Validate TRAMA curricolo vocabulary
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          BASE_SHA="$PR_BASE_SHA"
+          if [ -z "$BASE_SHA" ]; then
+            BASE_SHA="$PUSH_BEFORE_SHA"
+          fi
+          if [ -z "$BASE_SHA" ] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
+            BASE_SHA="HEAD^"
+          fi
+          python3 scripts/validate_curricolo_vocabulary.py --base "$BASE_SHA"
       - {name: Validate governed document registry, run: python3 scripts/validate_governed_document_registry.py}
       - {name: Validate OR-06 cross-ecosystem read-only proof, run: python3 scripts/validate_or06_cross_ecosystem_readonly_proof.py}
       - {name: Test OR-06 cross-ecosystem read-only proof, run: python3 -m unittest tests.test_or06_cross_ecosystem_readonly_proof -v}
