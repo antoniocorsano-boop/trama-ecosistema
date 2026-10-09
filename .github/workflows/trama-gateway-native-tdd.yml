@@ -30,6 +30,8 @@ jobs:
           node scripts/test-trama-parent-identity-validator.mjs
       - name: Gateway package checks when present
         shell: bash
+        env:
+          VITE_TRAMA_ENTRY_HREF: /ecosistema
         run: |
           if [ -f apps/gateway/package.json ]; then
             cd apps/gateway
@@ -42,6 +44,13 @@ jobs:
               npm run test:e2e
             fi
           fi
+      - name: Preserve generated gateway lockfile
+        if: ${{ hashFiles('apps/gateway/package-lock.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gateway-package-lock
+          path: apps/gateway/package-lock.json
+          if-no-files-found: error
       - name: Evidence materializer tests when present
         shell: bash
         run: |
