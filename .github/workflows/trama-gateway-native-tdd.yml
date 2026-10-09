@@ -1,0 +1,46 @@
+name: TRAMA Gateway Native TDD
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'policies/design-system/**'
+      - 'scripts/**'
+      - 'apps/gateway/**'
+      - '.github/workflows/trama-gateway-native-tdd.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  native-tdd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Root validator tests
+        run: |
+          node scripts/test-design-system-validator.mjs
+          node scripts/test-trama-parent-identity-validator.mjs
+      - name: Gateway package checks when present
+        shell: bash
+        run: |
+          if [ -f apps/gateway/package.json ]; then
+            cd apps/gateway
+            npm ci
+            npm run typecheck
+            npm test
+            npm run build
+            if npm run | grep -q 'test:e2e'; then
+              npx playwright install --with-deps chromium
+              npm run test:e2e
+            fi
+          fi
+      - name: Evidence materializer tests when present
+        shell: bash
+        run: |
+          if [ -f scripts/test-materialize-trama-gateway-ui-evidence.mjs ]; then
+            node scripts/test-materialize-trama-gateway-ui-evidence.mjs
+          fi
