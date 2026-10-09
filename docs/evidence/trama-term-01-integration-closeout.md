@@ -7,7 +7,7 @@
 
 Il dominio scolastico italiano usa come vocabolario canonico **curricolo / curricolo di istituto**. Le forme inglesi legacy restano ammesse esclusivamente dove necessarie per compatibilità tecnica, contratti v1, persistenza, identificatori infrastrutturali o evidenze storiche governate.
 
-La forma inglese derivata `curricular` è inclusa nei guardrail anti-regressione insieme a `curriculum`, case-insensitive.
+I guardrail anti-regressione coprono sia il termine inglese principale sia la sua forma aggettivale, senza distinzione tra maiuscole e minuscole.
 
 ## Integrazioni completate
 
@@ -36,14 +36,14 @@ Prima dei merge risultavano verdi, sugli exact head sopra indicati:
 - Docente OS resta workspace operativo del docente;
 - nessun contratto v1 è stato rinominato in place;
 - nessuna tabella, RPC, payload wire o chiave persistita legacy è stata rinominata distruttivamente;
-- `CurriculumSnapshot v1`, `curriculumVersionRef`, repository slug `Curriculum-Atlas` e altri identificatori v1 restano compatibility surface finché non esiste una transizione governata;
+- gli identificatori pubblicati v1, i riferimenti di versione già in uso e lo slug storico del repository Atlas restano compatibility surface finché non esiste una transizione governata;
 - DOS-A1 resta `RUNTIME_DEFERRED`.
 
 ## Debito legacy governato
 
 - Atlas: 210 occorrenze residue classificate, 0 non classificate;
 - Docente OS: baseline legacy congelata a 1494 occorrenze; il guard impedisce crescita del debito;
-- TRAMA e Arena conservano debito storico/tecnico preesistente, ma i guard diff-aware impediscono nuove introduzioni non autorizzate di `curriculum` e `curricular`.
+- TRAMA e Arena conservano debito storico/tecnico preesistente, ma i guard diff-aware impediscono nuove introduzioni non autorizzate del lessico inglese legacy.
 
 ## Relazione con le receipt precedenti
 
@@ -51,4 +51,4 @@ Le receipt che riportano stati come `HUMAN_REVIEW_REQUIRED / NO_MERGE` restano *
 
 ## Residuo infrastrutturale noto
 
-La descrizione GitHub del repository Atlas espone ancora la formulazione legacy “Visualizzatore intelligente del curriculum”. La rinomina fisica del repository resta differita; l'allineamento della sola descrizione GitHub è un follow-up infrastrutturale esterno ai branch applicativi.
+La descrizione GitHub del repository Atlas espone ancora una formulazione legacy non canonica. La rinomina fisica del repository resta differita; l'allineamento della sola descrizione GitHub è un follow-up infrastrutturale esterno ai branch applicativi.
