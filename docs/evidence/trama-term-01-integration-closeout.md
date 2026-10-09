@@ -49,6 +49,6 @@ Prima dei merge risultavano verdi, sugli exact head sopra indicati:
 
 Le receipt che riportano stati come `HUMAN_REVIEW_REQUIRED / NO_MERGE` restano **evidenze storiche pre-integrazione** e non vengono riscritte retroattivamente. La presente ricevuta registra lo stato successivo e prevale come evidenza di closeout dell'integrazione TRAMA-TERM-01.
 
-## Residuo infrastrutturale noto
+## Residuo infrastrutturale chiuso
 
-La descrizione GitHub del repository Atlas espone ancora una formulazione legacy non canonica. La rinomina fisica del repository resta differita; l'allineamento della sola descrizione GitHub è un follow-up infrastrutturale esterno ai branch applicativi.
+La descrizione GitHub del repository Atlas è stata allineata a **“Atlas — visualizzatore intelligente del curricolo di istituto”** il 2026-10-09, senza rinominare il repository né modificare URL, GitHub Pages path, branch predefinito o impostazioni di accesso. La rinomina fisica del repository resta differita e richiederà una transizione governata separata.
