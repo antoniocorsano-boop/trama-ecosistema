@@ -177,7 +177,6 @@ def build_integrity_checks(snapshot: dict, now: datetime) -> list[dict]:
     components = snapshot.get("components", [])
     dependencies = snapshot.get("dependencies", [])
     expansions = snapshot.get("expansionCandidates", [])
-
     evidence_ids = {item["id"] for item in evidence}
     gate_ids = {item["id"] for item in gates}
     area_ids = {item["id"] for item in areas}
@@ -840,7 +839,7 @@ def build_snapshot(root: Path) -> dict:
             },
     ]
     expansion_candidates = [
-        {"id": "R3-P2", "name": "Curriculum pubblico", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
+        {"id": "R3-P2", "name": "Consultazione pubblica del curricolo di istituto", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
         {"id": "R3-P5", "name": "Smart Navigation", "status": "PLANNED", "dependencyRefs": ["GATE-R3-F0-EXIT"]},
     ]
     snapshot = {

@@ -23,7 +23,7 @@ This directory is intentionally isolated from the TRAMA Control Center and from 
 
 - professional authentication
 - remote draft store
-- Arena curriculum search
+- ricerca nel curricolo di Arena
 - story/world editors
 - actual GPU execution
 - public Atlas publication

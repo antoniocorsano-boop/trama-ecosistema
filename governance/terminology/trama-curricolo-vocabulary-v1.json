@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "trama.curricolo-vocabulary/v1",
+  "decisionId": "TRAMA-TERM-01",
+  "canonicalTerms": [
+    "curricolo",
+    "curricolo di istituto",
+    "curricolo verticale di istituto",
+    "unità curricolare",
+    "nodo curricolare",
+    "versione del curricolo",
+    "revisione del curricolo",
+    "contesto curricolare",
+    "riferimento curricolare",
+    "autorità curricolare"
+  ],
+  "forbiddenDomainPatterns": [
+    "(?i)curriculum[A-Za-z0-9_-]*",
+    "(?i)curricular[A-Za-z0-9_-]*"
+  ],
+  "legacyAllowlist": [
+    {
+      "path": "governance/terminology/trama-curricolo-vocabulary-v1.json",
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "Il registro deve codificare i termini legacy che il guardrail vieta e le eccezioni compatibili che governa."
+    },
+    {
+      "path": "tests/test_curricolo_vocabulary_guardrail.py",
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "I fixture avversariali devono contenere intenzionalmente i termini vietati per provare il fail-closed del validator."
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-09-trama-term-01-curricolo-vocabulary-design.md",
+      "pattern": "(?i)curriculum",
+      "reason": "La specifica di migrazione deve nominare esplicitamente il termine legacy e gli identificatori v1 che disciplina."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-09-trama-term-01-master.md",
+      "pattern": "(?i)curriculum",
+      "reason": "Il piano coordinatore descrive le superfici legacy che la migrazione deve confinare senza romperle."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-09-trama-term-01-trama-governance.md",
+      "pattern": "(?i)curriculum",
+      "reason": "Il piano TRAMA descrive test e compatibilità del termine legacy durante l'introduzione del guardrail."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-09-trama-term-01-arena.md",
+      "pattern": "(?i)curriculum",
+      "reason": "Il piano Arena deve riferirsi a tipi, contratti e persistenza legacy esistenti per progettare la migrazione compatibile."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-09-trama-term-01-atlas.md",
+      "pattern": "(?i)curriculum",
+      "reason": "Il piano Atlas deve riferirsi al package e all'export v1 legacy durante la migrazione al dominio Curricolo."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-09-trama-term-01-consumers.md",
+      "pattern": "(?i)curriculum",
+      "reason": "Il piano consumer documenta i residui legacy da eliminare o confinare."
+    },
+    {
+      "path": "docs/contracts/CURRICULUM_SNAPSHOT_V1.schema.json",
+      "pattern": "(?i)curriculum",
+      "reason": "ECO-01 v1 è un contratto pubblicato immutabile; gli identificatori Curriculum* restano legacy compatibility surface."
+    },
+    {
+      "path": "docs/architecture/ecosystem-overview.md",
+      "pattern": "CurriculumSnapshot",
+      "reason": "Il diagramma può citare il nome letterale del contratto ECO-01 v1 finché CurricoloSnapshot v2 non è autorizzato."
+    }
+  ],
+  "excludedPaths": [
+    "node_modules/**",
+    ".next/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.webp",
+    "**/*.gif",
+    "**/*.pdf",
+    "**/*.zip",
+    "**/*.woff",
+    "**/*.woff2",
+    "**/*.ttf",
+    "**/*.ico",
+    "**/*.bin"
+  ]
+}
