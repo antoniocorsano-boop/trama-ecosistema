@@ -14,18 +14,19 @@
     "autorità curricolare"
   ],
   "forbiddenDomainPatterns": [
-    "(?i)curriculum[A-Za-z0-9_-]*"
+    "(?i)curriculum[A-Za-z0-9_-]*",
+    "(?i)curricular[A-Za-z0-9_-]*"
   ],
   "legacyAllowlist": [
     {
       "path": "governance/terminology/trama-curricolo-vocabulary-v1.json",
-      "pattern": "(?i)curriculum",
-      "reason": "Il registro deve codificare il termine legacy che il guardrail vieta e le eccezioni compatibili che governa."
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "Il registro deve codificare i termini legacy che il guardrail vieta e le eccezioni compatibili che governa."
     },
     {
       "path": "tests/test_curricolo_vocabulary_guardrail.py",
-      "pattern": "(?i)curriculum",
-      "reason": "I fixture avversariali devono contenere intenzionalmente il termine vietato per provare il fail-closed del validator."
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "I fixture avversariali devono contenere intenzionalmente i termini vietati per provare il fail-closed del validator."
     },
     {
       "path": "docs/superpowers/specs/2026-10-09-trama-term-01-curricolo-vocabulary-design.md",
