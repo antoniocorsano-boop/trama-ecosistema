@@ -1,4 +1,4 @@
-# TRAMA-ATLAS-01 — Ruolo prodotto, curricolo pubblico, Student Learning Hub e modello di pubblicazione
+# TRAMA-ATLAS-01 — Ruolo prodotto, consultazione pubblica del curricolo di istituto, Student Learning Hub e modello di pubblicazione
 
 **Stato:** APPROVED_GOVERNANCE / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME  
 **Data:** 21 settembre 2026  
@@ -7,7 +7,7 @@
 
 ## 1. Scopo
 
-Questa proposta consolida il ruolo di Curriculum Atlas alla luce dell'architettura TRAMA già approvata:
+Questa proposta consolida il ruolo di Atlas alla luce dell'architettura TRAMA già approvata:
 
 **Arena governa il curricolo; Atlas lo rende intelligibile e pubblica risorse/pagine; Docente OS rende operativo il lavoro docente. I trasferimenti tra i tre prodotti restano quattro flussi distinti, non una pipeline che sposta l'autorità.**
 
@@ -19,7 +19,7 @@ La proposta non modifica l'autorità curricolare di Arena e non trasforma Atlas 
 
 Atlas assolve a quattro domini funzionali sullo stesso modello semantico.
 
-### 2.1 Curriculum pubblico
+### 2.1 Consultazione pubblica del curricolo di istituto
 
 Rende comprensibili a famiglie, studenti, docenti e comunità:
 - cosa si apprende;
@@ -266,7 +266,7 @@ Un asset non eleggibile deve essere escluso, sostituito o determinare `REJECTED`
 
 La forma finale dei due schemi richiede distinta revisione cross-product.
 
-## 6. Visual Grammar of Curriculum
+## 6. Visual Grammar del curricolo
 
 La rappresentazione non deve essere guidata dal componente “card”, ma dalla struttura semantica.
 
@@ -395,7 +395,7 @@ Direzione coerente con TRAMA:
 Dark mode:
 - opzionale;
 - appropriata per Galaxy/Universe e alcune viste immersive;
-- non baseline obbligatoria per curriculum pubblico o Student Hub.
+- non baseline obbligatoria per la consultazione pubblica del curricolo di istituto o per lo Student Learning Hub.
 
 ## 12. Atlas Design Core
 
@@ -457,11 +457,11 @@ Gli identificativi **canonici TRAMA** sono quelli `R3-*`. Le sigle `ATLAS-*` son
 | Canonico TRAMA | Alias Atlas | Capacità |
 | --- | --- | --- |
 | `R3-F0` | `ATLAS-F0` | Product & Design Foundation |
-| `R3-P2` | `ATLAS-P2` | Curriculum pubblico |
+| `R3-P2` | `ATLAS-P2` | Consultazione pubblica del curricolo di istituto |
 | `R3-P3` | `ATLAS-P3` | Student Learning Hub |
 | `R3-P4` | `ATLAS-P4` | Docente OS → Atlas Publication |
 | `R3-P5` | `ATLAS-P5` | Smart Navigation |
-| `R3-P6` | `ATLAS-P6` | Curriculum Health |
+| `R3-P6` | `ATLAS-P6` | Copertura e coerenza del curricolo |
 
 Regola: stato, gate e dipendenze sono registrati una sola volta sul codice canonico `R3-*`; gli alias Atlas servono soltanto alla leggibilità nel contesto del prodotto.
 
@@ -474,7 +474,7 @@ Regola: stato, gate e dipendenze sono registrati una sola volta sul codice canon
 - prototipo;
 - POC mappa 2D.
 
-### R3-P2 / ATLAS-P2 — Curriculum pubblico
+### R3-P2 / ATLAS-P2 — Consultazione pubblica del curricolo di istituto
 - famiglie;
 - studenti;
 - pubblico;
@@ -504,7 +504,7 @@ Regola: stato, gate e dipendenze sono registrati una sola volta sul codice canon
 - semantic zoom;
 - Visuale | Elenco.
 
-### R3-P6 / ATLAS-P6 — Curriculum Health
+### R3-P6 / ATLAS-P6 — Copertura e coerenza del curricolo
 - coverage;
 - gap/overlap;
 - readiness;

@@ -30,11 +30,11 @@ Gli identificativi canonici di roadmap sono quelli **R3-***. Gli identificativi 
 | Canonico TRAMA | Alias Atlas | Capacità |
 | --- | --- | --- |
 | R3-F0 | ATLAS-F0 | Product & Design Foundation |
-| R3-P2 | ATLAS-P2 | Curriculum pubblico |
+| R3-P2 | ATLAS-P2 | Consultazione pubblica del curricolo di istituto |
 | R3-P3 | ATLAS-P3 | Student Learning Hub |
 | R3-P4 | ATLAS-P4 | Docente OS → Atlas Publication |
 | R3-P5 | ATLAS-P5 | Smart Navigation |
-| R3-P6 | ATLAS-P6 | Curriculum Health |
+| R3-P6 | ATLAS-P6 | Copertura e coerenza del curricolo |
 
 Regola: avanzamento, gate e dipendenze sono registrati una sola volta sull'identificativo canonico R3-*.
 
@@ -56,7 +56,7 @@ Secondo incremento integrato: **R3-F0/S2 — Design Core & Accessible Primitives
 Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto statico è integrato con HUMAN EXACT-HEAD REVIEW PASS e `NO_RUNTIME`. **R3-F0/S3-V1 — Rendered Prototype Validation** resta valido come harness tecnico/accessibilità. **R3-F0/S3-V2 — Atlas Product Experience Prototype** è ora **CLOSED / HUMAN EXACT-HEAD REVIEW PASS**: F0 Foundation, F1 Curricolo verticale d’istituto + Materiali pubblici, F2 Esplora relazionale, F3 Materiali+Risorse, F4 Mobile+LIM e F5 Exit sono integrati. L’uscita finale è validata sull’exact head `bc11577eeeeeed9c43ad62ac43fb7561e1197246`, merge Atlas #32 `423444be9dd883f4c35c6c1c89e94f6b0e5405fa`. R3-F0 è quindi CLOSED; questa chiusura non autorizza R3-P4, DOS-A1 o runtime cross-product.
 
 - information architecture pubblica;
-- Visual Grammar of Curriculum;
+- Visual Grammar del curricolo;
 - design token TRAMA/Atlas;
 - primitive accessibili e component catalogue;
 - target WCAG 2.2 AA;
@@ -66,7 +66,7 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - POC di mappa 2D professionale evoluto in RelationCanvas navigabile;
 - conservazione di Galaxy/Spatial come vista specialistica.
 
-### R3-P2 / ATLAS-P2 — Curriculum pubblico
+### R3-P2 / ATLAS-P2 — Consultazione pubblica del curricolo di istituto
 
 - vista per famiglie, studenti e comunità;
 - progressione leggibile per annualità;
@@ -109,7 +109,7 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - semantic zoom;
 - Visuale | Elenco.
 
-### R3-P6 / ATLAS-P6 — Curriculum Health
+### R3-P6 / ATLAS-P6 — Copertura e coerenza del curricolo
 
 - coverage;
 - gap/overlap;
@@ -352,14 +352,14 @@ La roadmap deve essere letta con questa priorità:
 
 Prerequisiti già chiusi: **ECO-02/P1** e **R3-F0/S3-V2**.
 
-1. R3-P2 Curriculum pubblico;
+1. R3-P2 Consultazione pubblica del curricolo di istituto;
 2. R3-P5 Smart Navigation / Percorsi;
 3. continuità d'esperienza Docente OS ↔ Arena ↔ Atlas senza rendere Atlas un passaggio obbligatorio;
 4. R4-P1 Officina materiali;
    - in parallelo resta consentita la progettazione NO_RUNTIME di R4-P2/S1 Professional Practice;
 5. R3-P3 Learning Hub;
 6. R3-P4 solo dopo superfici Atlas mature e una nuova autorizzazione umana/runtime;
-7. R3-P6 Curriculum Health;
+7. R3-P6 Copertura e coerenza del curricolo;
 8. identità prodotto, adozione e pilota di istituto.
 
 ### Regola di portafoglio

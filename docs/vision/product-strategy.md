@@ -26,7 +26,7 @@ La formulazione deve essere validata con docenti, dirigenti e referenti prima de
 | --- | --- | --- |
 | ecosistema | TRAMA | visione, principi e standard comuni |
 | governo | TRAMA Arena | curricolo, fonti, revisioni e approvazioni |
-| conoscenza e pubblicazione | TRAMA Atlas | curricolo pubblico, percorsi, relazioni, lezioni pubblicate e materiali |
+| conoscenza e pubblicazione | TRAMA Atlas | consultazione pubblica del curricolo di istituto, percorsi, relazioni, lezioni pubblicate e materiali |
 | operatività | Docente OS parte di TRAMA | pianificazione, lezioni e riflessione |
 
 ## Offerta ipotizzata
@@ -61,7 +61,7 @@ Stato: **APPROVED_GOVERNANCE / NOT_IMPLEMENTED / NOT_AUTHORIZED_FOR_RUNTIME**.
 La proposta TRAMA-ATLAS-01 estende Atlas da biblioteca semantica/visuale a superficie pubblica e didattica dell'ecosistema, senza modificare i confini di autorità.
 
 Domini proposti:
-- curriculum pubblico per famiglie, studenti e comunità;
+- consultazione pubblica del curricolo di istituto per famiglie, studenti e comunità;
 - Student Learning Hub con vista per lezioni e per obiettivi;
 - biblioteca educativa e Visual Library;
 - Smart Views e navigazione semantica;

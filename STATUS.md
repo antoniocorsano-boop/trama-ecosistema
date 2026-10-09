@@ -40,11 +40,11 @@ flowchart LR
   R3F0 --> S1["S1 IA + Visual Grammar · INTEGRATED"]
   R3F0 --> S2["S2 Design Core · INTEGRATED"]
   R3F0 --> S3["S3 Product Experience · CLOSED / F0-F5 INTEGRATED"]
-  ATLAS --> R3P2["R3-P2 Curriculum pubblico · PLANNED"]
+  ATLAS --> R3P2["R3-P2 Consultazione pubblica del curricolo di istituto · PLANNED"]
   ATLAS --> R3P3["R3-P3 Student Learning Hub · PLANNED"]
   ATLAS --> R3P4["R3-P4 Docente OS → Atlas · NOT AUTHORIZED"]
   ATLAS --> R3P5["R3-P5 Smart Navigation · PLANNED"]
-  ATLAS --> R3P6["R3-P6 Curriculum Health · PLANNED"]
+  ATLAS --> R3P6["R3-P6 Copertura e coerenza del curricolo · PLANNED"]
 
   TRAMA --> R4P1["R4-P1 Officina materiali · PLANNED / NO RUNTIME"]
   ASSURANCE --> TSA["TRAMA-SA-01 · ACTIVE / HOLDOUT NOT RUN"]

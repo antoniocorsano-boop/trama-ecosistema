@@ -1,6 +1,6 @@
 # TRAMA Ecosistema
 
-TRAMA è il livello di governo comune di **CurManLight Arena**, **Curriculum Atlas** e **Docente OS**.
+TRAMA è il livello di governo comune di **CurManLight Arena**, **Atlas** e **Docente OS**.
 
 > Arena governa il curricolo, Atlas rende navigabile la conoscenza, Docente OS sostiene il lavoro professionale.
 

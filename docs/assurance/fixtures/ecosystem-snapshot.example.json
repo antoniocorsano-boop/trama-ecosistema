@@ -46,6 +46,6 @@
   ],
   "dependencies": [],
   "expansionCandidates": [
-    { "id": "R3-P2", "name": "Curriculum pubblico", "status": "PLANNED", "dependencyRefs": ["GATE-ATLAS-F5"] }
+    { "id": "R3-P2", "name": "Consultazione pubblica del curricolo di istituto", "status": "PLANNED", "dependencyRefs": ["GATE-ATLAS-F5"] }
   ]
 }
