@@ -48,3 +48,16 @@ test('keyboard focus is visibly perceivable on gateway controls', async ({ page 
   }
   expect(reachedPrimaryAccess).toBe(true);
 });
+
+test('200% text resize reflows without horizontal page overflow or loss of primary action', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'LIM', 'Text-resize evidence uses the governed 320 CSS px reflow condition.');
+  await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toBeVisible();
+
+  const dimensions = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
+});
