@@ -39,9 +39,7 @@ a {
 }
 
 .trama-copy-reinforced {
-  text-shadow:
-    0 1px 10px rgba(0, 24, 34, 0.48),
-    0 2px 24px rgba(0, 24, 34, 0.28);
+  text-shadow: 0 2px 16px rgba(0, 24, 34, 0.34);
 }
 
 .liquid-glass {
