@@ -8,7 +8,7 @@ describe('TRAMA gateway', () => {
   it('renders the canonical parent identity and gateway copy', () => {
     render(<App />);
     expect(screen.getByRole('main')).toBeInTheDocument();
-    expect(screen.getByText('TRAMA')).toBeVisible();
+    expect(screen.getByRole('link', { name: "TRAMA — torna all'inizio" })).toBeVisible();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Dove curricolo, conoscenza e progettazione diventano esperienza.',
     );
