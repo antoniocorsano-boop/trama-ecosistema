@@ -20,6 +20,13 @@ test('S/M/L/LIM preserve the public threshold without horizontal overflow', asyn
   }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
 
+  await page.addStyleTag({
+    content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
+  });
+  await page.evaluate(async () => {
+    if ('fonts' in document) await document.fonts.ready;
+  });
+
   fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
   await page.screenshot({
     path: path.join(EVIDENCE_DIR, `gateway-${testInfo.project.name}.png`),
