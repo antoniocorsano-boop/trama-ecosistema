@@ -143,6 +143,18 @@ class CurricoloVocabularyValidatorTests(unittest.TestCase):
         violations = validator.scan_added_lines(diff, validator.load_policy(REGISTRY_PATH))
         self.assertEqual(2, len(violations))
 
+    def test_curricular_derivative_is_rejected(self) -> None:
+        validator = self._validator()
+        diff = """diff --git a/docs/new.md b/docs/new.md
+--- a/docs/new.md
++++ b/docs/new.md
+@@ -0,0 +1 @@
++Arena is the curricular authority.
+"""
+        violations = validator.scan_added_lines(diff, validator.load_policy(REGISTRY_PATH))
+        self.assertEqual(1, len(violations))
+        self.assertEqual("curricular", violations[0].token.lower())
+
     def test_policy_rejects_legacy_allowlist_entry_without_reason(self) -> None:
         validator = self._validator()
         invalid_policy = {
