@@ -38,7 +38,7 @@
 
 **Interfaces:**
 - Consumes: shape `CurriculumObjective`, `CurriculumTopic`, `CurriculumBand`, `CurriculumDiscipline`, `InstituteCurriculum`.
-- Produces: `CurricoloObjective`, `CurricoloTopic`, `CurricoloBand`, `CurricoloDiscipline`, `InstituteCurricolo`; compatibility re-export dal package legacy.
+- Produces: `CurricoloObjective`, `CurricoloTopic`, `CurricoloBand`, `CurricoloDiscipline`, `CurricoloIstituto`; compatibility re-export dal package legacy.
 
 - [ ] **Step 1: Write RED compatibility test**
 
