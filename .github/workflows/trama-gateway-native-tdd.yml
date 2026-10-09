@@ -10,7 +10,7 @@ on:
       - '.github/workflows/trama-gateway-native-tdd.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   native-tdd:
@@ -28,29 +28,63 @@ jobs:
         run: |
           node scripts/test-design-system-validator.mjs
           node scripts/test-trama-parent-identity-validator.mjs
-      - name: Gateway package checks when present
+      - name: Detect committed gateway lockfile
+        id: gateway-lock-state
+        shell: bash
+        run: |
+          if git ls-files --error-unmatch apps/gateway/package-lock.json >/dev/null 2>&1; then
+            echo "tracked=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "tracked=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install gateway dependencies
+        if: ${{ hashFiles('apps/gateway/package.json') != '' }}
+        shell: bash
+        run: |
+          cd apps/gateway
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+      - name: Persist generated gateway lockfile
+        if: ${{ steps.gateway-lock-state.outputs.tracked == 'false' && github.event.pull_request.head.repo.full_name == github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.head_ref }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const content = fs.readFileSync('apps/gateway/package-lock.json').toString('base64');
+          const response = await fetch(`https://api.github.com/repos/${process.env.REPOSITORY}/contents/apps/gateway/package-lock.json`, {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+              Accept: 'application/vnd.github+json',
+              'X-GitHub-Api-Version': '2022-11-28',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: 'chore: lock TRAMA gateway dependencies',
+              content,
+              branch: process.env.HEAD_REF,
+            }),
+          });
+          if (!response.ok) throw new Error(`lockfile persistence failed: ${response.status} ${await response.text()}`);
+          console.log('gateway package-lock committed to PR head branch');
+          NODE
+      - name: Gateway package checks
+        if: ${{ hashFiles('apps/gateway/package.json') != '' }}
         shell: bash
         env:
           VITE_TRAMA_ENTRY_HREF: /ecosistema
         run: |
-          if [ -f apps/gateway/package.json ]; then
-            cd apps/gateway
-            if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
-            npm test
-            npm run typecheck
-            npm run build
-            if npm run | grep -q 'test:e2e'; then
-              npx playwright install --with-deps chromium
-              npm run test:e2e
-            fi
+          cd apps/gateway
+          npm test
+          npm run typecheck
+          npm run build
+          if npm run | grep -q 'test:e2e'; then
+            npx playwright install --with-deps chromium
+            npm run test:e2e
           fi
-      - name: Preserve generated gateway lockfile
-        if: ${{ hashFiles('apps/gateway/package-lock.json') != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: gateway-package-lock
-          path: apps/gateway/package-lock.json
-          if-no-files-found: error
       - name: Evidence materializer tests when present
         shell: bash
         run: |
