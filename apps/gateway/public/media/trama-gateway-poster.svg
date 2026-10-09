@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="">
   <rect width="1920" height="1080" fill="#003a4e"/>
-  <path d="M120 0h180l760 1080H840L120 0Z" fill="#d7b58b" opacity="0.045"/>
-  <path d="M360 0h120l640 1080H980L360 0Z" fill="#ffffff" opacity="0.025"/>
-  <rect x="1110" y="132" width="640" height="786" rx="48" fill="#002734" opacity="0.56"/>
+  <path d="M96 0h156l620 1080H690L96 0Z" fill="#d7b58b" opacity="0.032"/>
+  <path d="M314 0h112l528 1080H824L314 0Z" fill="#ffffff" opacity="0.018"/>
 
-  <g transform="rotate(-2 1430 530)">
+  <rect x="1500" y="118" width="610" height="804" rx="48" fill="#002734" opacity="0.5"/>
+  <g transform="translate(390 0) rotate(-2 1430 530)">
     <rect x="1140" y="150" width="610" height="740" rx="16" fill="#eee8d8"/>
-    <rect x="1140" y="150" width="610" height="740" rx="16" fill="none" stroke="#fffaf0" stroke-opacity="0.48" stroke-width="2"/>
-    <line x1="1220" y1="235" x2="1670" y2="235" stroke="#214453" stroke-opacity="0.78" stroke-width="3"/>
+    <rect x="1140" y="150" width="610" height="740" rx="16" fill="none" stroke="#fffaf0" stroke-opacity="0.42" stroke-width="2"/>
+    <line x1="1220" y1="235" x2="1670" y2="235" stroke="#214453" stroke-opacity="0.7" stroke-width="3"/>
     <circle cx="1260" cy="211" r="5" fill="#5a5148"/>
     <circle cx="1435" cy="211" r="5" fill="#5a5148"/>
     <circle cx="1610" cy="211" r="5" fill="#5a5148"/>
-    <g stroke="#315463" stroke-opacity="0.46" stroke-width="2">
+    <g stroke="#315463" stroke-opacity="0.38" stroke-width="2">
       <line x1="1215" y1="282" x2="1680" y2="282"/>
       <line x1="1215" y1="340" x2="1680" y2="340"/>
       <line x1="1215" y1="398" x2="1680" y2="398"/>
@@ -26,11 +26,11 @@
   </g>
 
   <g fill="none" stroke-linecap="round">
-    <line x1="245" y1="110" x2="1440" y2="980" stroke="#bd7950" stroke-width="7" opacity="0.88"/>
-    <line x1="115" y1="842" x2="1530" y2="314" stroke="#d2a779" stroke-width="4" opacity="0.72"/>
-    <line x1="615" y1="12" x2="1165" y2="1070" stroke="#e2c294" stroke-width="3" opacity="0.34"/>
+    <path d="M-80 196 C238 222 338 92 650 -54" stroke="#bd7950" stroke-width="4" opacity="0.36"/>
+    <path d="M-64 946 C236 812 414 872 704 1114" stroke="#d2a779" stroke-width="3" opacity="0.28"/>
+    <path d="M918 -62 C1024 128 1126 170 1328 76" stroke="#e2c294" stroke-width="2" opacity="0.2"/>
   </g>
-  <circle cx="930" cy="607" r="10" fill="#e0be93" opacity="0.92"/>
-  <circle cx="1121" cy="410" r="7" fill="#c77d55" opacity="0.78"/>
-  <circle cx="682" cy="628" r="6" fill="#dec095" opacity="0.66"/>
+  <circle cx="390" cy="154" r="6" fill="#e0be93" opacity="0.42"/>
+  <circle cx="1132" cy="128" r="5" fill="#c77d55" opacity="0.36"/>
+  <circle cx="430" cy="884" r="5" fill="#dec095" opacity="0.34"/>
 </svg>
