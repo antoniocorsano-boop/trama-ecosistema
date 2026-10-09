@@ -4,15 +4,26 @@ import { App } from './App';
 import { gatewayConfig } from '../config/gateway';
 import { gatewayIdentity } from '../lib/identity';
 
-describe('TRAMA gateway foundation', () => {
-  it('renders a semantic public threshold with the TRAMA parent identity', () => {
+describe('TRAMA gateway', () => {
+  it('renders the canonical parent identity and gateway copy', () => {
     render(<App />);
     expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByText('TRAMA')).toBeVisible();
-    expect(gatewayConfig.entryHref.trim().length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Dove curricolo, conoscenza e progettazione diventano esperienza.',
+    );
+    expect(
+      screen.getByText(
+        'Un ecosistema per progettare, organizzare e trasformare il lavoro didattico, mantenendo unite intenzione educativa, materiali, evidenze e documentazione.',
+      ),
+    ).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Entra in TRAMA' })).toHaveAttribute(
+      'href',
+      gatewayConfig.entryHref,
+    );
   });
 
-  it('adapts the canonical parent identity values without inventing local ones', () => {
+  it('adapts canonical parent identity values without inventing local ones', () => {
     expect(gatewayIdentity.colors).toEqual({
       background: '201 100% 13%',
       foreground: '0 0% 100%',
