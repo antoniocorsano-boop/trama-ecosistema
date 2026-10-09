@@ -26,6 +26,36 @@ test('video request failure leaves poster, copy and CTA usable', async ({ page }
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toBeVisible();
 });
 
+test('canonical poster has sufficient intrinsic resolution for large displays', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'L', 'Poster intrinsic-quality evidence is viewport-independent.');
+  await page.route(VIDEO_HOST, (route) => route.abort());
+  await page.goto('/');
+
+  const poster = page.getByTestId('trama-media-poster');
+  await expect(poster).toBeVisible();
+  const dimensions = await poster.evaluate((element) => {
+    const image = element as HTMLImageElement;
+    return { width: image.naturalWidth, height: image.naturalHeight };
+  });
+  expect(dimensions.width).toBeGreaterThanOrEqual(1600);
+  expect(dimensions.height).toBeGreaterThanOrEqual(900);
+});
+
+test('hero copy retains contrast reinforcement over changing media', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'L', 'Media-independent copy contrast is verified on the desktop composition.');
+  await page.route(VIDEO_HOST, (route) => route.abort());
+  await page.goto('/');
+
+  const heading = page.getByRole('heading', { level: 1 });
+  const supportingCopy = page.getByText(/Un ecosistema per progettare/);
+  const styles = await Promise.all([
+    heading.evaluate((element) => getComputedStyle(element).textShadow),
+    supportingCopy.evaluate((element) => getComputedStyle(element).textShadow),
+  ]);
+  expect(styles[0]).not.toBe('none');
+  expect(styles[1]).not.toBe('none');
+});
+
 test('font network failure preserves readable fallback typography', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'L', 'Font fallback evidence is viewport-independent.');
   await page.route(FONT_HOST, (route) => route.abort());
