@@ -1,0 +1,89 @@
+{
+  "policyId": "TRAMA-PARENT-IDENTITY",
+  "version": "1.0.0",
+  "owner": "TRAMA-GOVERNANCE",
+  "wordmark": {
+    "text": "TRAMA",
+    "form": "uppercase-typographic"
+  },
+  "typography": {
+    "display": {
+      "family": "Instrument Serif",
+      "fallback": "Georgia, 'Times New Roman', serif",
+      "role": "identity-display"
+    },
+    "body": {
+      "family": "Inter",
+      "weights": [400, 500],
+      "fallback": "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "role": "interface-body"
+    }
+  },
+  "palette": {
+    "background": "201 100% 13%",
+    "foreground": "0 0% 100%",
+    "mutedForeground": "240 4% 66%",
+    "primary": "0 0% 100%",
+    "primaryForeground": "0 0% 4%",
+    "secondary": "0 0% 10%",
+    "muted": "0 0% 10%",
+    "accent": "0 0% 10%",
+    "border": "0 0% 18%",
+    "input": "0 0% 18%",
+    "warmAccentRole": "subordinate-material-accent"
+  },
+  "motion": {
+    "contentRevealMs": 800,
+    "staggerMs": 200,
+    "easing": "ease-out",
+    "ctaHoverScaleMax": 1.03,
+    "reducedMotion": {
+      "removeNonessential": true,
+      "autoplayVideo": false,
+      "staticPosterRequired": true
+    }
+  },
+  "media": {
+    "role": "material-editorial-cinematic",
+    "temporaryPrototypeVideo": "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4",
+    "prototypeOnly": true,
+    "localPosterRequired": true,
+    "loopDurationSeconds": { "min": 12, "max": 20 },
+    "excludedMotifs": [
+      "glowing-neural-network",
+      "holographic-dashboard",
+      "generic-blue-digital-grid",
+      "humanoid-robot",
+      "decorative-fabric-metaphor",
+      "particle-system",
+      "fake-data-visualisation"
+    ]
+  },
+  "glass": {
+    "scope": ["gateway-shell", "gateway-action"],
+    "blurPx": 4,
+    "fallbackRequired": true
+  },
+  "accessibility": {
+    "wcagTarget": "2.2-A-AA",
+    "keyboardRequired": true,
+    "focusVisibleRequired": true,
+    "fontFailureReadable": true,
+    "reflowCssPx": 320,
+    "zoom": 4
+  },
+  "responsive": {
+    "policyId": "TRAMA-RESPONSIVE",
+    "version": "1.0.0",
+    "conditions": ["S", "M", "L", "LIM"]
+  },
+  "boundaries": {
+    "runtimeImpact": "NONE",
+    "persistence": "NONE",
+    "studentAccountTracking": "NONE",
+    "dosA1": "RUNTIME_DEFERRED",
+    "authenticationAuthority": "NONE",
+    "telemetry": "NONE",
+    "publicationAuthority": "NONE"
+  }
+}
