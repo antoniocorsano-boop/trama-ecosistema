@@ -10,6 +10,51 @@ REGISTRY_PATH = ROOT / "governance" / "terminology" / "trama-curricolo-vocabular
 VALIDATOR_PATH = ROOT / "scripts" / "validate_curricolo_vocabulary.py"
 WORKFLOW_PATH = ROOT / ".github" / "workflows" / "governance.yml"
 
+ACTIVE_PROSE_EXPECTATIONS = {
+    "README.md": {
+        "forbidden": ["Curriculum Atlas"],
+        "required": ["**Atlas**"],
+    },
+    "ROADMAP.md": {
+        "forbidden": ["Curriculum pubblico", "Curriculum Health"],
+        "required": [
+            "Consultazione pubblica del curricolo di istituto",
+            "Copertura e coerenza del curricolo",
+        ],
+    },
+    "STATUS.md": {
+        "forbidden": ["R3-P2 Curriculum pubblico"],
+        "required": ["R3-P2 Consultazione pubblica del curricolo di istituto"],
+    },
+    "docs/vision/product-strategy.md": {
+        "forbidden": ["curriculum pubblico"],
+        "required": ["consultazione pubblica del curricolo di istituto"],
+    },
+    "docs/product/atlas-public-curriculum-learning-hub.md": {
+        "forbidden": [
+            "ruolo di Curriculum Atlas",
+            "### 2.1 Curriculum pubblico",
+            "per curriculum pubblico",
+        ],
+        "required": [
+            "ruolo di Atlas",
+            "### 2.1 Consultazione pubblica del curricolo di istituto",
+        ],
+    },
+    "products/studio-atlas/README.md": {
+        "forbidden": ["Arena curriculum search"],
+        "required": ["ricerca nel curricolo di Arena"],
+    },
+    "scripts/build_ecosystem_snapshot_core.py": {
+        "forbidden": ['"name": "Curriculum pubblico"'],
+        "required": ['"name": "Consultazione pubblica del curricolo di istituto"'],
+    },
+    "docs/assurance/fixtures/ecosystem-snapshot.example.json": {
+        "forbidden": ['"name": "Curriculum pubblico"'],
+        "required": ['"name": "Consultazione pubblica del curricolo di istituto"'],
+    },
+}
+
 
 class CurricoloVocabularyRegistryTests(unittest.TestCase):
     def test_registry_declares_curricolo_and_requires_legacy_reason(self) -> None:
@@ -129,6 +174,15 @@ class CurricoloVocabularyValidatorTests(unittest.TestCase):
         self.assertIn("python3 scripts/validate_curricolo_vocabulary.py", workflow)
         self.assertIn("github.event.pull_request.base.sha", workflow)
         self.assertIn("github.event.before", workflow)
+
+    def test_active_surfaces_use_canonical_curricolo_prose(self) -> None:
+        for relative_path, expectations in ACTIVE_PROSE_EXPECTATIONS.items():
+            with self.subTest(path=relative_path):
+                text = (ROOT / relative_path).read_text(encoding="utf-8")
+                for forbidden in expectations["forbidden"]:
+                    self.assertNotIn(forbidden, text)
+                for required in expectations["required"]:
+                    self.assertIn(required, text)
 
 
 if __name__ == "__main__":
