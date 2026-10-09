@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "governance" / "terminology" / "trama-curricolo-vocabulary-v1.json"
 VALIDATOR_PATH = ROOT / "scripts" / "validate_curricolo_vocabulary.py"
+WORKFLOW_PATH = ROOT / ".github" / "workflows" / "governance.yml"
 
 
 class CurricoloVocabularyRegistryTests(unittest.TestCase):
@@ -41,9 +42,6 @@ class CurricoloVocabularyValidatorTests(unittest.TestCase):
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         return module
-
-    def _policy(self):
-        return self._validator().load_policy(REGISTRY_PATH)
 
     def test_new_forbidden_occurrence_is_reported_with_path_line_and_token(self) -> None:
         validator = self._validator()
@@ -123,6 +121,14 @@ class CurricoloVocabularyValidatorTests(unittest.TestCase):
 +const x = 'Curriculum';
 """
         self.assertEqual([], validator.scan_added_lines(diff, validator.load_policy(REGISTRY_PATH)))
+
+    def test_governance_workflow_enforces_diff_guardrail_from_real_base(self) -> None:
+        workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
+        self.assertIn("fetch-depth: 0", workflow)
+        self.assertIn("Validate TRAMA curricolo vocabulary", workflow)
+        self.assertIn("python3 scripts/validate_curricolo_vocabulary.py", workflow)
+        self.assertIn("github.event.pull_request.base.sha", workflow)
+        self.assertIn("github.event.before", workflow)
 
 
 if __name__ == "__main__":
