@@ -87,6 +87,7 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveAttribute('href', '/ecosistema');
   await expect(page.locator('img.trama-media-visual')).toHaveCount(1);
   await expect(page.locator('video')).toHaveCount(0);
+  await expect(page.getByTestId('trama-experience-accent')).toHaveCSS('color', 'rgb(113, 54, 33)');
 
   const expectedBackground = EXPECTED_BACKGROUND[testInfo.project.name];
   const visual = page.locator('img.trama-media-visual');
