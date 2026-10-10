@@ -8,6 +8,8 @@ const contractPath = path.join(repoRoot, 'governance/access/trama-professional-i
 const schemaPath = path.join(repoRoot, 'governance/access/trama-professional-identity-contract.v1.schema.json');
 const docPath = path.join(repoRoot, 'docs/contracts/TRAMA-PROFESSIONAL-IDENTITY-01.md');
 const validatorPath = path.join(repoRoot, 'scripts/validate-trama-professional-identity-contract.mjs');
+const threatPath = path.join(repoRoot, 'governance/access/trama-professional-identity-threat-model.v1.json');
+const threatDocPath = path.join(repoRoot, 'docs/evidence/access-01/access-01-phase-1-professional-identity-threat-model.md');
 
 assert.ok(fs.existsSync(contractPath), 'canonical professional identity contract must exist');
 assert.ok(fs.existsSync(schemaPath), 'professional identity contract schema must exist');
@@ -117,4 +119,36 @@ expectInvalid('provider outage disables public Gateway', (c) => {
   c.failureModes.publicGateway = 'UNAVAILABLE';
 }, 'PUBLIC_SURFACE_MUST_REMAIN_AVAILABLE');
 
-console.log('PASS: professional identity contract structural and adversarial cases');
+assert.ok(fs.existsSync(threatPath), 'professional identity threat register must exist');
+assert.ok(fs.existsSync(threatDocPath), 'human-readable professional identity threat model must exist');
+
+const threatModel = JSON.parse(fs.readFileSync(threatPath, 'utf8'));
+const threatDoc = fs.readFileSync(threatDocPath, 'utf8');
+const requiredThreatIds = ['T01', 'T02', 'T03', 'T04', 'T05', 'T06', 'T07', 'T08', 'T09', 'T10', 'T11', 'T12'];
+
+assert.equal(threatModel.threatModelId, 'TRAMA-PROFESSIONAL-IDENTITY-THREAT-MODEL-01');
+assert.equal(threatModel.version, '1.0.0');
+assert.equal(threatModel.contractRef, 'TRAMA-PROFESSIONAL-IDENTITY-01@1.0.0');
+assert.deepEqual(threatModel.threats.map((threat) => threat.id), requiredThreatIds);
+for (const threat of threatModel.threats) {
+  assert.ok(threat.asset, `${threat.id}: asset required`);
+  assert.ok(threat.attackOrFailure, `${threat.id}: attackOrFailure required`);
+  assert.ok(Array.isArray(threat.controls) && threat.controls.length > 0, `${threat.id}: controls required`);
+  assert.ok(threat.residualRisk, `${threat.id}: residualRisk required`);
+  assert.ok(threat.verification, `${threat.id}: verification required`);
+}
+
+assert.equal(threatModel.sessionFailureSemantics?.newSignInOnProviderVerificationUnavailable, 'FAIL_CLOSED');
+assert.deepEqual(threatModel.sessionFailureSemantics?.publicSurfacesUnaffected, [
+  'TRAMA_GATEWAY',
+  'CURRICOLO_ATLAS_PUBLIC',
+  'CONTROL_CENTER_PUBLIC',
+]);
+assert.equal(threatModel.sessionFailureSemantics?.existingSession, 'LOCAL_BOUNDED_EXPIRY_NO_NEW_PRIVILEGE');
+assert.equal(threatModel.sessionFailureSemantics?.localLogout, 'MUST_TERMINATE_LOCAL_SESSION_WITHOUT_PROVIDER');
+assert.equal(threatModel.sessionFailureSemantics?.coordinatedLogout, 'BEST_EFFORT_IF_SUPPORTED');
+assert.equal(threatModel.sessionFailureSemantics?.entitlementRevocation, 'NO_LATER_THAN_NEXT_GOVERNED_REVALIDATION');
+assert.ok(threatDoc.includes('T01'), 'human threat model must enumerate T01');
+assert.ok(threatDoc.includes('T12'), 'human threat model must enumerate T12');
+
+console.log('PASS: professional identity contract, adversarial cases and threat coverage');
