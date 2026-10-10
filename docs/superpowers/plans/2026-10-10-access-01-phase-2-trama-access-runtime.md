@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** implementare e qualificare il runtime minimo zero-cost di TRAMA Access con autenticazione passwordless reale, principal governato da `issuer + subject`, sessione locale, entitlement coarse-grained, launcher e failure model fail-closed, senza federare ancora alcun prodotto.
+**Goal:** implementare e qualificare il runtime minimo zero-cost di TRAMA Access con passwordless reale, principal governato da `issuer + subject`, sessione locale, entitlement coarse-grained, launcher e failure model fail-closed, senza federare ancora alcun prodotto.
 
-**Architecture:** `apps/access` sarà una nuova applicazione same-origin: React/Vite per la UI e un backend Node.js dedicato per auth, sessione e accesso server-side allo store. Supabase Auth/Postgres resta dietro adapter sostituibili e non diventa authority di prodotto; il browser non accede direttamente alle tabelle Access. La CI usa repository/provider fake deterministici, mentre il proof live viene eseguito separatamente su un progetto Supabase dedicato e un servizio Render Free soltanto dopo preflight zero-cost.
+**Architecture:** `apps/access` è una nuova applicazione same-origin: React/Vite per la UI e backend Node.js/Fastify per autenticazione, sessione e accesso server-side allo store. Supabase Auth/Postgres è confinato dietro adapter sostituibili e non diventa authority di prodotto; il browser non accede direttamente alle tabelle Access. La CI usa repository/provider fake deterministici; il proof live usa un progetto Supabase dedicato e un servizio Render Free solo dopo preflight zero-cost.
 
-**Tech Stack:** Node.js >=22, TypeScript 7, React 19, Vite 8, Vitest 5, Playwright 1.63, Fastify + cookie/static/security plugins, `@supabase/supabase-js` + helper SSR/PKCE ufficiale, Supabase Postgres, GitHub Actions, Render Free pilot.
+**Tech Stack:** Node.js >=22, TypeScript 7, React 19, Vite 8, Vitest 5, Playwright 1.63, Fastify + plugin cookie/static/security, `@supabase/supabase-js` + helper SSR/PKCE ufficiale, Supabase Postgres, GitHub Actions, Render Free pilot.
 
 **Spec:** `docs/superpowers/specs/2026-10-10-access-01-phase-2-trama-access-runtime-design.md`
 
@@ -15,33 +15,34 @@
 - Zero-cost obbligatorio: nessun piano, add-on o servizio a pagamento è autorizzato.
 - Il preflight Supabase/Render è read-only e deve PASS prima di qualsiasi provisioning live.
 - Supabase è provider Phase 2 sostituibile; Keycloak resta portability/exit option, non runtime parallelo.
-- Login Phase 2: email OTP/Magic Link passwordless, auto-signup disabilitato.
+- Il pilot implementa il ramo **Magic Link** del passwordless email approvato; niente UI OTP manuale salvo nuova decisione.
+- Auto-signup disabilitato; il pilot è chiuso.
 - Email e metadati mutabili non sono authority key e non vengono usati per account linking.
 - Il principal autorevole deriva esclusivamente da `issuer + subject` verificati.
-- `principalId` TRAMA è opaco e non coincide per requisito con UUID locali dei prodotti.
+- `principalId` TRAMA è opaco e non deve coincidere per requisito con UUID locali dei prodotti.
 - Lo store Access contiene soltanto principal, contesto, entitlement e sessioni Access; nessun dato di prodotto o learner.
-- Gli entitlement centrali sono solo le coppie canoniche Phase 1 e non includono permessi fini.
+- Gli entitlement centrali sono solo le cinque coppie canoniche Phase 1 e non includono permessi fini.
 - Sessione Access: secret casuale >=256 bit, digest server-side, cookie `HttpOnly; Secure; SameSite=Lax`, TTL assoluto massimo 8 ore, non sliding.
-- Nessun provider token/session secret/JWT privilegiato in URL applicativi o `localStorage`.
+- Nessun provider token/session secret/JWT privilegiato in URL applicativi, `localStorage` o `sessionStorage`.
 - Logout locale deve riuscire indipendentemente dalla disponibilità del provider.
 - Un entitlement revocato deve sparire alla successiva risoluzione server-side senza richiedere logout globale.
 - Nuovo login o nuova escalation durante provider outage fallisce chiuso.
 - Gateway, Curricolo Atlas pubblico e Control Center pubblico restano indipendenti dal runtime Access.
-- Nessun prodotto viene federato in Phase 2; nessun product URL temporaneo viene usato come falsa integrazione.
+- Nessun prodotto viene federato in Phase 2; nessun URL temporaneo di prodotto viene usato come falsa integrazione.
 - Gateway non viene puntato a TRAMA Access in Phase 2.
 - `localSubjectRef` non viene introdotto prima della Phase 3.
 - Nessun account learner, social login, SMTP a pagamento, migrazione utenti o global logout.
-- Il design system di Access deriva da `TRAMA-PARENT-IDENTITY@1.0.0`; non riutilizzare glass/media del Gateway fuori dallo scope governato gateway-only.
+- Il design di Access deriva da `TRAMA-PARENT-IDENTITY@1.0.0`; non riutilizzare glass/media del Gateway fuori dallo scope governato gateway-only.
 - DOS-A1 resta `RUNTIME_DEFERRED`.
 - Nessun merge su `main` senza decisione umana separata.
 
 ## Review Focus
 
-1. **User enumeration:** indirizzo inesistente, non ammesso o ammesso deve produrre la stessa risposta pubblica alla richiesta passwordless; aggiungere test route-level in Task 5.
-2. **Callback/identity confusion:** code replay, issuer inatteso, subject mancante e provider verification failure devono fallire senza creare principal/sessione; aggiungere test in Task 5.
-3. **Stale privilege:** entitlement revocato o principal disabilitato durante una sessione non deve restare nel launcher; aggiungere test in Tasks 2 e 6.
-4. **Session fixation/CSRF:** login deve ruotare la sessione; POST auth/logout deve richiedere origin esatto e CSRF double-submit; aggiungere test in Task 3.
-5. **Test harness escape:** adapter/route di test non devono poter essere abilitati con `NODE_ENV=production`; aggiungere test di composition/config in Task 1 e browser check in Task 8.
+1. **User enumeration:** indirizzo inesistente, non ammesso o ammesso deve produrre la stessa risposta pubblica alla richiesta passwordless; prova route-level in Task 5.
+2. **Callback/identity confusion:** code replay, issuer inatteso, subject mancante e verification failure devono fallire senza creare principal/sessione; prova in Task 5.
+3. **Stale privilege:** entitlement revocato o principal disabilitato durante una sessione non deve restare nel launcher; prova in Tasks 2 e 6.
+4. **Session fixation/CSRF:** login deve ruotare la sessione; POST auth/logout richiede Origin esatto e CSRF double-submit; prova in Task 3.
+5. **Test harness escape:** adapter/route di test non possono essere abilitati con `NODE_ENV=production`; prova in Tasks 1 e 8.
 
 ---
 
@@ -105,10 +106,10 @@
 - Create: `.github/workflows/trama-access.yml`
 - Modify only at closure: `.github/workflows/governance.yml`
 - Modify only at closure: `governance/access/trama-ecosystem-state-v0.2.json`
+- Create during execution after preflight: `docs/evidence/access-01/access-01-phase-2-zero-cost-preflight.md`
 - Create only at closure: `docs/evidence/access-01/access-01-phase-2-runtime-receipt.md`
-- Create during execution after read-only checks: `docs/evidence/access-01/access-01-phase-2-zero-cost-preflight.md`
 
-The generic Stage-A UI evidence manifest is **not** repurposed for this runtime-bearing surface because its current validator requires `runtimeImpact = NONE`. Phase 2 instead materializes an ACCESS-specific exact-head certification artifact; changing the generic UI evidence contract is out of scope.
+The generic Stage-A UI evidence manifest is **not** repurposed for this runtime-bearing surface because its current validator requires `runtimeImpact = NONE`. Phase 2 uses an ACCESS-specific exact-head certification artifact; changing the generic UI evidence contract is out of scope.
 
 ---
 
@@ -129,7 +130,7 @@ The generic Stage-A UI evidence manifest is **not** repurposed for this runtime-
 
 **Interfaces:**
 - Consumes: approved Phase 2 spec and current free-tier/account state.
-- Produces: a PASS/STOP preflight decision plus package `@trama/access`, deterministic build/test scripts, and `loadAccessConfig(env) -> AccessConfig`.
+- Produces: PASS/STOP preflight, package `@trama/access`, deterministic build/test scripts, and `loadAccessConfig(env) -> AccessConfig`.
 
 - [ ] **Step 1: Run read-only zero-cost preflight before any external write**
 
@@ -140,30 +141,36 @@ Verify and record:
 - a Render Free web service can be created without paid resources;
 - no add-on or paid database is required.
 
-Expected: all five `PASS`. If any item is `FAIL/UNKNOWN`, STOP the plan before provisioning and request a new decision. Do not create resources in this step.
+Expected: all five `PASS`. If any item is `FAIL/UNKNOWN`, STOP before provisioning and request a new decision. Do not create resources in this step.
 
 - [ ] **Step 2: Commit the preflight receipt only if PASS**
 
-The receipt must contain no credentials or pilot email; record provider/workspace capability facts and the zero-cost decision only.
+The receipt contains no credentials or pilot email; record capability facts and the zero-cost decision only.
 
 Commit message: `docs(access): record Phase 2 zero-cost preflight`
 
 - [ ] **Step 3: Write RED config tests**
 
 `loadAccessConfig(env)` must:
-- require `ACCESS_PUBLIC_ORIGIN`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY` in production;
-- require an exact `https://` public origin in production;
+- require in production: `ACCESS_PUBLIC_ORIGIN`, `ACCESS_ALLOWED_ISSUER`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`;
+- require exact `https://` public origin in production;
+- require `ACCESS_ALLOWED_ISSUER` to be an exact `https://` issuer with no wildcard;
 - expose `sessionTtlMs = 28_800_000`;
 - reject `ACCESS_TEST_HARNESS=1` when `NODE_ENV=production`;
 - expose no product destination URLs.
 
 Run: `cd apps/access && npm test -- server/config.test.ts`
 
-Expected: FAIL because the app/config do not exist.
+Expected: FAIL because app/config do not exist.
 
 - [ ] **Step 4: Scaffold the app using repository conventions**
 
-Mirror existing Node >=22 / React 19 / Vite / TypeScript / Vitest / Playwright conventions from `apps/gateway`, but add a server build. Runtime dependencies are limited to React, Fastify server/security/static/cookie plugins, Supabase JS + official SSR/PKCE helper, and the existing small UI utilities needed by the shell.
+Mirror Node >=22 / React 19 / Vite / TypeScript / Vitest / Playwright conventions from `apps/gateway`, adding a server build. Runtime dependencies are limited to React, Fastify server/security/static/cookie plugins, Supabase JS + official SSR/PKCE helper, and small UI utilities needed by the shell.
+
+`vite.config.ts`/Vitest must include tests under:
+- `src/**/*.test.{ts,tsx}`;
+- `server/**/*.test.ts`;
+- `scripts/**/*.test.ts`.
 
 Scripts must include:
 
@@ -177,7 +184,7 @@ test:e2e
 start
 ```
 
-`build` must emit the Vite client plus compiled server; `start` runs only compiled server JS.
+`build` emits Vite client + compiled server; `start` runs compiled server JS only.
 
 - [ ] **Step 5: Implement and verify config GREEN**
 
@@ -191,7 +198,7 @@ npm test -- server/config.test.ts
 npm run build
 ```
 
-Expected: PASS; no network credential is required to build or test.
+Expected: PASS; no live network credential is required.
 
 - [ ] **Step 6: Commit**
 
@@ -226,15 +233,15 @@ type PrincipalContext = { principalId: string; contextType: ContextType; institu
 type ApplicationEntitlement = { principalId: string; application: Application; entitlement: Entitlement; status: EntitlementStatus };
 ```
 
-`AccessRepository` must expose server-side methods for principal lookup/create/status, context reads, active entitlement reads/upsert/revoke, and session persistence; no method accepts email as a principal key.
+`AccessRepository` exposes server-side methods for principal lookup/create/status, context reads, active entitlement reads/upsert/revoke and session persistence. No method accepts email as a principal key.
 
 - [ ] **Step 1: Write RED principal tests**
 
 Assert:
 - same exact `(issuer, subject)` reuses one `principalId`;
-- same email metadata is irrelevant because email is not accepted by the API;
-- different issuer or different subject creates a different principal;
-- `DISABLED` principal resolves to denied;
+- email metadata is irrelevant because email is absent from the API;
+- different issuer or subject gives a distinct principal;
+- `DISABLED` resolves to denied;
 - missing issuer/subject is rejected before persistence.
 
 Run: `cd apps/access && npm test -- server/domain/principal-service.test.ts`
@@ -253,11 +260,11 @@ resolveProfessionalPrincipal(
 ): Promise<{ kind: 'ACTIVE'; principal: ProfessionalPrincipal } | { kind: 'DENIED' }>;
 ```
 
-Creation is allowed only after a provider-verified pilot identity; the provider project itself is the pre-authorization boundary because public signup is disabled.
+Creation is allowed only after a provider-verified identity from the closed pilot provider.
 
 - [ ] **Step 3: Write RED launcher tests**
 
-Assert exact canonical pairs only:
+Allow only:
 
 ```text
 DOCENTE_OS/USE
@@ -267,7 +274,7 @@ ARENA/ENTER
 CONTROL_CENTER/GOVERNANCE_OPERATOR
 ```
 
-Revoked items do not appear. No item contains a product URL in Phase 2. `GOVERNANCE_OPERATOR` is displayed only as application entry status and never as privileged action authority.
+Revoked items do not appear. No item contains product URL. `GOVERNANCE_OPERATOR` is application-entry status only.
 
 - [ ] **Step 4: Implement launcher view model**
 
@@ -277,7 +284,7 @@ Signature:
 buildLauncher(principalId: string, repository: AccessRepository): Promise<LauncherItem[]>;
 ```
 
-Each `LauncherItem` contains `application`, user-facing label, entitlement, and `availability: 'FEDERATION_PENDING'`; no `href` field.
+Each item contains `application`, user-facing label, entitlement and `availability: 'FEDERATION_PENDING'`; no `href`.
 
 - [ ] **Step 5: Verify GREEN**
 
@@ -305,22 +312,43 @@ Commit message: `feat(access): add principal and entitlement domain`
 - Produces:
 
 ```ts
-issueSession(principalId: string, now: Date): Promise<{ secret: string; digest: string; expiresAt: Date }>;
-validateSession(secret: string, now: Date, repository: AccessRepository): Promise<SessionValidation>;
-revokeSession(secret: string, now: Date, repository: AccessRepository): Promise<void>;
+issueSession(
+  principalId: string,
+  now: Date,
+  repository: AccessRepository,
+  predecessorSecret?: string
+): Promise<{ secret: string; digest: string; expiresAt: Date }>;
+
+validateSession(
+  secret: string,
+  now: Date,
+  repository: AccessRepository
+): Promise<SessionValidation>;
+
+revokeSession(
+  secret: string,
+  now: Date,
+  repository: AccessRepository
+): Promise<void>;
+
 createCsrfToken(): string;
-verifyMutationRequest(origin: string | undefined, expectedOrigin: string, cookieToken: string | undefined, headerToken: string | undefined): boolean;
+verifyMutationRequest(
+  origin: string | undefined,
+  expectedOrigin: string,
+  cookieToken: string | undefined,
+  headerToken: string | undefined
+): boolean;
 ```
 
 - [ ] **Step 1: Write RED session tests**
 
 Assert:
-- 32 random bytes minimum before base64url encoding;
+- >=32 random bytes before base64url encoding;
 - persisted value is SHA-256 digest, never raw secret;
-- absolute expiry is exactly `issuedAt + 28_800_000ms` and does not slide;
-- expired/revoked/missing session is invalid;
-- disabled principal invalidates the session on server-side validation;
-- issuing a new login session revokes any supplied predecessor session to prevent fixation.
+- absolute expiry exactly `issuedAt + 28_800_000ms`, non-sliding;
+- expired/revoked/missing session invalid;
+- disabled principal invalidates session on server-side validation;
+- issuing a new login session with `predecessorSecret` revokes predecessor first.
 
 - [ ] **Step 2: Run RED**
 
@@ -332,15 +360,15 @@ Expected: FAIL.
 
 Cookie name: `trama_access_session`.
 
-Production cookie attributes: `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, `Max-Age=28800`.
+Production attributes: `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, `Max-Age=28800`.
 
-Do not serialize principal, entitlement or provider tokens into the cookie.
+Do not serialize principal, entitlement or provider token into cookie.
 
 - [ ] **Step 4: Write and implement CSRF RED→GREEN**
 
-Double-submit token name: `trama_access_csrf`; token is random, non-authoritative and may be readable by the UI. Mutative requests require both exact `Origin === ACCESS_PUBLIC_ORIGIN` and constant-time equality of CSRF cookie/header values.
+Double-submit token name: `trama_access_csrf`; it is non-authoritative and may be readable by the UI. Mutations require exact `Origin === ACCESS_PUBLIC_ORIGIN` and constant-time equality of CSRF cookie/header.
 
-Test mismatched/missing Origin, missing token, mismatched token and valid token.
+Test missing/mismatched Origin, missing/mismatched token and valid token.
 
 Run: `cd apps/access && npm test -- server/security/csrf.test.ts`
 
@@ -376,12 +404,12 @@ Commit message: `feat(access): add bounded local session security`
 
 Require:
 - unique exact `(issuer, subject)`;
-- principal status check `ACTIVE|DISABLED`;
-- context check `PERSONAL|INSTITUTION` with `institution_ref` required only for `INSTITUTION`;
-- entitlement check restricted to the five exact canonical pairs and status `ACTIVE|REVOKED`;
-- session digest only, issuance/expiry/revocation timestamps;
+- principal status `ACTIVE|DISABLED`;
+- context `PERSONAL|INSTITUTION`, with `institution_ref` only required for `INSTITUTION`;
+- entitlement restricted to five exact canonical pairs and status `ACTIVE|REVOKED`;
+- session digest only + issuance/expiry/revocation timestamps;
 - RLS enabled on all four tables;
-- no browser policy granting `anon` or `authenticated` table access;
+- no policy granting browser `anon` or `authenticated` direct table access;
 - no columns for email, lesson, curriculum/curricolo content, materials, class/group, workspace, Studio Atlas draft or learner data.
 
 Run: `cd apps/access && npm test -- scripts/validate-access-migration.test.ts`
@@ -390,15 +418,15 @@ Expected: RED.
 
 - [ ] **Step 2: Create migration and validator**
 
-Use Postgres native UUID generation. Keep migration additive and dedicated to the new Access project; do not reference any product schema.
+Use Postgres native UUID generation. Migration is additive and dedicated to the new Access project; no product schema reference.
 
-- [ ] **Step 3: Write RED repository adapter tests with a fake Supabase client**
+- [ ] **Step 3: Write RED repository-adapter tests with fake Supabase client**
 
-Pin method-to-table mapping and fail-closed behavior for missing/error responses. Test that email never appears in identity lookup filters.
+Pin method-to-table mapping and fail-closed behavior for missing/error responses. Prove email never appears in identity lookup filters.
 
 - [ ] **Step 4: Implement server-only Supabase repository**
 
-The adapter is instantiated only with server credentials. Client-side source files must never import it.
+Instantiate only with server credentials. Client-side source must never import this adapter.
 
 - [ ] **Step 5: Verify GREEN**
 
@@ -433,6 +461,20 @@ Commit message: `feat(access): define isolated Access store`
 - Produces:
 
 ```ts
+type ProviderCookieOptions = {
+  httpOnly?: boolean;
+  secure: boolean;
+  sameSite: 'lax';
+  path: '/';
+  maxAge?: number;
+};
+
+interface ProviderCookieJar {
+  get(name: string): string | undefined;
+  set(name: string, value: string, options: ProviderCookieOptions): void;
+  clear(name: string, options: ProviderCookieOptions): void;
+}
+
 interface PasswordlessProvider {
   requestSignIn(email: string, redirectTo: string, cookies: ProviderCookieJar): Promise<void>;
   completeSignIn(code: string, cookies: ProviderCookieJar): Promise<VerifiedProviderIdentity>;
@@ -451,29 +493,29 @@ POST /api/auth/logout
 - [ ] **Step 1: Write route-level RED tests for request-link**
 
 Assert:
-- valid-looking email receives the same `202` neutral body whether provider reports unknown/not-authorized/accepted;
-- `shouldCreateUser` is false in the provider adapter;
-- exact Origin + CSRF are required;
-- provider outage maps to a neutral failure state without stack/provider details;
-- raw email is not written to application logs in tests.
+- accepted vs unknown/non-authorized membership outcomes produce the same `202` neutral public body;
+- provider adapter uses `shouldCreateUser: false`;
+- exact Origin + CSRF required;
+- global provider outage may return canonical `503 PROVIDER_UNAVAILABLE`, but must not reveal membership or provider internals;
+- raw email is absent from application logs in tests.
 
 - [ ] **Step 2: Write callback RED tests**
 
 Assert:
 - missing/replayed/invalid code fails closed;
-- verified claims must contain exact non-empty `iss` and `sub`;
-- `iss` must match `ACCESS_ALLOWED_ISSUER` exactly;
-- no fallback to email linking exists;
-- provider verification failure creates no principal/session;
-- successful verified pilot identity resolves/creates the principal, issues a fresh Access session, clears transient provider auth cookies and redirects to `/` without token material in the redirect URL.
+- verified claims require exact non-empty `iss` and `sub`;
+- `iss === ACCESS_ALLOWED_ISSUER`, exact, no wildcard;
+- no email-linking fallback;
+- verification failure creates no principal/session;
+- success resolves/creates principal, issues fresh Access session, clears transient provider auth cookies and redirects to `/` with no token material in URL.
 
 - [ ] **Step 3: Implement Supabase passwordless adapter**
 
-Use the official PKCE-capable server/SSR flow. After code exchange, obtain **verified signed claims** and return only `{ issuer: claims.iss, subject: claims.sub }`. Do not use an unverified JWT decode fallback; if the pinned SDK cannot provide verified claims, STOP and revise the plan rather than weakening the boundary.
+Use official PKCE-capable server/SSR flow. After code exchange, obtain **verified signed claims** and return only `{ issuer: claims.iss, subject: claims.sub }`. No unverified JWT decode fallback. If the pinned official SDK cannot provide verified claims, STOP and revise the plan rather than weakening the boundary.
 
 - [ ] **Step 4: Implement auth routes**
 
-Public response copy for request-link is constant. Technical provider errors remain server-side and redacted. Callback error state is stored as a short-lived non-sensitive flash enum/cookie before redirect; do not put provider details in URL parameters.
+Membership-related request-link responses are constant. Technical provider errors are redacted. Callback success writes a short-lived non-sensitive flash `AUTHENTICATED`; callback failures write only canonical flash enums such as `ACCESS_DENIED`/`PROVIDER_UNAVAILABLE`, never provider details in URL.
 
 - [ ] **Step 5: Verify GREEN**
 
@@ -501,8 +543,8 @@ Commit message: `feat(access): add passwordless fail-closed authentication`
 - Test: `apps/access/scripts/access-admin.test.ts`
 
 **Interfaces:**
-- `GET /api/access-state` returns one canonical client view model and no provider token.
-- CLI supports only server-side governed pilot mutations:
+- `GET /api/access-state` returns canonical client state and no provider token.
+- CLI supports only server-side pilot mutations:
 
 ```text
 access-admin.mjs entitlement grant  --principal <uuid> --application <canonical-app>
@@ -510,30 +552,31 @@ access-admin.mjs entitlement revoke --principal <uuid> --application <canonical-
 access-admin.mjs principal disable  --principal <uuid>
 ```
 
-Application determines its entitlement from the canonical pair; CLI does not accept arbitrary entitlement strings.
+Application determines its entitlement from canonical pair; CLI does not accept arbitrary entitlement strings.
 
 - [ ] **Step 1: Write RED access-state tests**
 
-Pin these server outcomes:
+Pin:
 - no cookie → `SIGNED_OUT`;
-- flash request success → `MAGIC_LINK_SENT`;
+- request-link success flash → `MAGIC_LINK_SENT`;
+- callback-success flash + valid session → one-time `AUTHENTICATED`, then next state resolution proceeds to launcher state;
 - valid session/no entitlement → `NO_ENTITLEMENTS`;
 - valid session/active entitlement → `ENTITLEMENTS_AVAILABLE`;
-- expired session → clear session cookie + `SESSION_EXPIRED`;
-- disabled principal → clear session cookie + `ACCESS_DENIED`;
+- expired session → clear cookie + `SESSION_EXPIRED`;
+- disabled principal → clear cookie + `ACCESS_DENIED`;
 - revoked entitlement disappears on next request without re-login.
 
 - [ ] **Step 2: Implement access-state route**
 
-Return only data required by UI: canonical state, optional opaque principal display reference, context type/ref if needed for display, launcher item labels/status. No email or provider token.
+Return only canonical state, optional opaque principal display reference, context type/ref if needed for display, launcher labels/status. No email/provider token. Consuming `AUTHENTICATED` flash is one-shot.
 
 - [ ] **Step 3: Write RED CLI tests**
 
-Reject unknown app, arbitrary entitlement, malformed principal UUID and any attempt to grant product-fine permissions. Prove grant/revoke is idempotent.
+Reject unknown app, arbitrary entitlement, malformed principal UUID and product-fine permission attempts. Grant/revoke must be idempotent.
 
 - [ ] **Step 4: Implement CLI with service credential only**
 
-Do not expose these mutations as HTTP routes in Phase 2.
+Do not expose admin mutations as HTTP routes in Phase 2.
 
 - [ ] **Step 5: Verify GREEN**
 
@@ -563,34 +606,35 @@ Commit message: `feat(access): expose governed Access state and pilot admin cont
 
 **Interfaces:**
 - Consumes: `GET /api/access-state`, `POST /api/auth/request-link`, `POST /api/auth/logout`.
-- Produces visual states exactly:
+- Produces states exactly:
   `SIGNED_OUT`, `MAGIC_LINK_SENT`, `AUTH_CALLBACK_PROCESSING`, `AUTHENTICATED`, `NO_ENTITLEMENTS`, `ENTITLEMENTS_AVAILABLE`, `ACCESS_DENIED`, `PROVIDER_UNAVAILABLE`, `SESSION_EXPIRED`.
 
-- [ ] **Step 1: Write RED UI tests for every canonical state**
+- [ ] **Step 1: Write RED UI tests for all nine canonical states**
 
-Assert human-facing Italian copy contains no `Supabase`, `PKCE`, `issuer`, `subject`, stack/HTTP code or other provider jargon.
+Human-facing Italian copy must not contain `Supabase`, `PKCE`, `issuer`, `subject`, stack/HTTP code or provider jargon.
 
-`ENTITLEMENTS_AVAILABLE` shows application cards/buttons as disabled/non-navigation with copy equivalent to **“Disponibile dalla fase di federazione”**; there are no product `href`s.
+`ENTITLEMENTS_AVAILABLE` shows application items as non-navigation with copy equivalent to **“Disponibile dalla fase di federazione”**; no product `href`.
 
 - [ ] **Step 2: Write RED identity-policy test**
 
-`src/lib/identity.ts` must bind to `TRAMA-PARENT-IDENTITY@1.0.0` palette and typography values. Do not copy Gateway-only glass/media scope. Access may use the TRAMA wordmark, Instrument Serif, Inter, parent palette and warm accent role only.
+`src/lib/identity.ts` binds to `TRAMA-PARENT-IDENTITY@1.0.0` palette/typography. Do not copy Gateway-only glass/media scope. Allowed: TRAMA wordmark, Instrument Serif, Inter, parent palette, warm accent role.
 
 - [ ] **Step 3: Implement the minimal shell**
 
-One professional-access surface, not a dashboard. Required affordances:
+One professional-access surface, not dashboard. Required:
 - TRAMA identity/wordmark;
 - email input + one primary access action when signed out;
-- clear neutral “controlla la tua email” state;
-- explicit status/error panel states;
+- neutral “controlla la tua email” state;
+- callback-processing and authenticated-confirmation states;
+- explicit denied/provider unavailable/session expired states;
 - launcher after auth;
 - visible logout.
 
-Do not add navigation to ecosystem products or extra settings.
+On one-time `AUTHENTICATED`, render confirmation then immediately request the next access-state resolution; it must converge to `NO_ENTITLEMENTS` or `ENTITLEMENTS_AVAILABLE` without creating a second session.
 
 - [ ] **Step 4: Implement access API client**
 
-CSRF token is read from its dedicated cookie and sent in `X-CSRF-Token`; no auth/session token goes into JS storage.
+Read dedicated CSRF cookie and send `X-CSRF-Token`; no auth/session token goes into JS storage.
 
 - [ ] **Step 5: Verify GREEN**
 
@@ -624,52 +668,56 @@ Commit message: `feat(access): add minimal professional access experience`
 
 **Interfaces:**
 - E2E server composes production routes with in-memory repository/fake provider only under `NODE_ENV=test`; production entrypoint cannot import/enable test control routes.
-- Materializer consumes an exact 40-char head plus browser/security outputs and emits `access-phase2-evidence.json` bound to SHA and immutable GitHub run ID.
+- Materializer consumes exact 40-char head + browser/security outputs and emits `access-phase2-evidence.json` bound to SHA and immutable run ID.
 
-- [ ] **Step 1: Write RED e2e tests for canonical states**
+- [ ] **Step 1: Write RED e2e tests for every canonical state**
 
-Capture S/M/L/LIM evidence for at least:
+Certify all nine states:
 - `SIGNED_OUT`;
 - `MAGIC_LINK_SENT`;
+- `AUTH_CALLBACK_PROCESSING`;
+- `AUTHENTICATED`;
 - `NO_ENTITLEMENTS`;
 - `ENTITLEMENTS_AVAILABLE`;
 - `ACCESS_DENIED`;
 - `PROVIDER_UNAVAILABLE`;
 - `SESSION_EXPIRED`.
 
-Run all with deterministic fake adapters; no real email/network.
+For visual evidence, capture each relevant state at the condition(s) needed for review and capture the primary shell at all repository-standard S/M/L/LIM sizes. Fake provider may deliberately delay callback completion to expose `AUTH_CALLBACK_PROCESSING`; no production test-control route is added.
 
-- [ ] **Step 2: Write RED browser security tests**
+- [ ] **Step 2: Write RED browser security/accessibility tests**
 
 Assert:
-- no token/session secret appears in URL, `localStorage` or `sessionStorage`;
-- product links are absent;
+- no token/session secret in URL, `localStorage` or `sessionStorage`;
+- product links absent;
 - logout invalidates state;
 - revoked entitlement disappears after reload;
-- test-control endpoint is unavailable from production composition;
+- test-control endpoint unavailable from production composition;
 - keyboard path reaches input, submit and logout;
 - axe has no blocking A/AA findings on signed-out and authenticated launcher states;
 - 320px reflow has no horizontal overflow.
 
 - [ ] **Step 3: Implement test composition and Playwright config**
 
-Use repository-standard responsive conditions `S=390x844`, `M=768x1024`, `L=1440x900`, `LIM=320x900`.
+Responsive conditions:
+`S=390x844`, `M=768x1024`, `L=1440x900`, `LIM=320x900`.
 
-- [ ] **Step 4: Write RED evidence materializer tests**
+- [ ] **Step 4: Write RED evidence-materializer tests**
 
-Materializer must reject:
+Reject:
 - malformed/stale head;
-- missing S/M/L/LIM screenshots;
+- missing required S/M/L/LIM screenshots;
+- missing canonical-state coverage metadata;
 - missing axe/security reports;
-- any report whose result is not `PASS`.
+- any required report not `PASS`.
 
-The emitted artifact records exact head, run ID, digests and `runtimeBoundary = PHASE2_ACCESS_ONLY_NO_PRODUCT_FEDERATION`.
+Artifact records exact head, run ID, digests and `runtimeBoundary = PHASE2_ACCESS_ONLY_NO_PRODUCT_FEDERATION`.
 
 - [ ] **Step 5: Add dedicated CI workflow**
 
 `.github/workflows/trama-access.yml` must:
 - checkout exact PR head;
-- Node 22 + locked npm resolver consistent with current repository practice;
+- Node 22 + pinned npm resolver consistent with repository practice;
 - `npm ci`, typecheck, unit tests, build;
 - install Chromium;
 - run deterministic browser/adversarial certification;
@@ -698,68 +746,68 @@ Commit message: `test(access): certify Phase 2 runtime deterministically`
 
 ---
 
-### Task 9: Provision the zero-cost pilot and prove the real passwordless flow
+### Task 9: Provision zero-cost pilot and prove real passwordless flow
 
 **Files:**
 - No credential-bearing file is committed.
 - Modify only non-secret deployment documentation if needed.
-- Evidence captured externally and later summarized by Task 10.
+- Live evidence is later summarized by Task 10.
 
 **Interfaces:**
-- Consumes: preflight PASS, code/CI PASS from Tasks 1–8.
-- Produces: dedicated Supabase project, Render Free pilot service, one provider-preauthorized pilot auth user, applied four-table migration, and live proof data.
+- Consumes: preflight PASS and code/CI PASS from Tasks 1–8.
+- Produces: dedicated Supabase Free project, Render Free pilot service, one provider-preauthorized pilot user, applied four-table migration, live proof data.
 
-- [ ] **Step 1: Re-run the zero-cost preflight immediately before provisioning**
+- [ ] **Step 1: Re-run zero-cost preflight immediately before provisioning**
 
-If account state, quotas, email capability or pricing has changed, STOP. Do not substitute a paid service.
+If account state, quotas, email capability or pricing changed, STOP. Do not substitute paid service.
 
-- [ ] **Step 2: Create one dedicated Supabase Free project in an EU region**
+- [ ] **Step 2: Create one dedicated Supabase Free project in EU region**
 
-Name should identify TRAMA Access pilot. Do not reuse Docente OS/Arena/Studio Atlas databases. Enable passwordless email only as required; keep public signup disabled.
+Name identifies TRAMA Access pilot. Do not reuse Docente OS/Arena/Studio Atlas databases. Enable only required passwordless email behavior; public signup remains disabled.
 
-- [ ] **Step 3: Apply the reviewed migration**
+- [ ] **Step 3: Apply reviewed migration**
 
-Verify exactly four application tables exist and direct `anon/authenticated` table access is denied. No product schema/table is created.
+Verify exactly four application tables and direct `anon/authenticated` table access denied. No product schema/table.
 
 - [ ] **Step 4: Pre-authorize one real pilot Auth user administratively**
 
-Use an email compatible with the free provider channel. Do not record the email in repository receipts or logs.
+Use email compatible with free provider channel. Never record email in repository receipt/logs.
 
 - [ ] **Step 5: Create one Render Free web service**
 
-Build command equivalent to:
+Build command equivalent:
 
 ```text
 cd apps/access && npm ci && npm run build
 ```
 
-Start command equivalent to:
+Start command equivalent:
 
 ```text
 cd apps/access && npm start
 ```
 
-Set secrets only in provider-managed environment variables. No Render Postgres. Exact `ACCESS_PUBLIC_ORIGIN` must equal the deployed HTTPS origin. Register only exact callback/redirect URLs; no wildcard.
+Secrets only in provider-managed env vars. No Render Postgres. `ACCESS_PUBLIC_ORIGIN` exactly equals deployed HTTPS origin. `ACCESS_ALLOWED_ISSUER` exactly equals verified Supabase issuer. Exact callback/redirect URLs only; no wildcard.
 
 - [ ] **Step 6: Live proof — first login and principal creation**
 
-Perform a real passwordless sign-in. Verify server logs contain no magic link, OTP, provider access/refresh token, session secret or email. Verify the created Access record contains verified issuer/subject + opaque principal ID only.
+Perform real Magic Link sign-in. Verify logs contain no magic link, OTP, provider access/refresh token, session secret or email. Verify Access principal record contains issuer/subject, opaque principal ID, status/timestamps only.
 
 - [ ] **Step 7: Live proof — entitlement lifecycle**
 
-Initial expected state: `NO_ENTITLEMENTS`.
+Initial state: `NO_ENTITLEMENTS`.
 
-Use the server-side CLI to grant one canonical entitlement; reload → `ENTITLEMENTS_AVAILABLE`. Revoke the same entitlement during the session; reload → item absent/`NO_ENTITLEMENTS` without re-login.
+Use server-side CLI to grant one canonical entitlement; reload → `ENTITLEMENTS_AVAILABLE`. Revoke same entitlement during session; reload → item absent/`NO_ENTITLEMENTS` without re-login.
 
 - [ ] **Step 8: Live proof — logout and bounded failure behavior**
 
-Logout must terminate local Access session. Confirm subsequent authenticated API state is unavailable. Provider-unavailable behavior may be proven deterministically by Task 8; do not intentionally damage provider configuration solely to manufacture a live outage.
+Logout terminates local Access session; subsequent authenticated API state unavailable. Provider-unavailable behavior may be proven deterministically by Task 8; do not damage provider configuration solely to manufacture live outage.
 
 - [ ] **Step 9: Record non-secret live evidence identifiers**
 
-Record project/service identifiers, EU region, deployed URL, code head, timestamps and proof outcomes; never record credentials or pilot email.
+Record project/service identifiers, EU region, deployed URL, code head, timestamps and proof outcomes; never credentials or pilot email.
 
-No commit is required until closure evidence is assembled in Task 10.
+No commit required until closure evidence is assembled in Task 10.
 
 ---
 
@@ -768,37 +816,28 @@ No commit is required until closure evidence is assembled in Task 10.
 **Files:**
 - Create: `docs/evidence/access-01/access-01-phase-2-runtime-receipt.md`
 - Modify: `governance/access/trama-ecosystem-state-v0.2.json`
-- Modify: `.github/workflows/governance.yml` only if a permanent Access validation hook is still missing.
-- Test: existing Governance + TRAMA Access workflow on final exact head.
+- Modify: `.github/workflows/governance.yml` only if permanent Access validation hook is missing.
+- Test: Governance + TRAMA Access workflow on final exact head.
 
 **Interfaces:**
 - Consumes: deterministic exact-head artifact, live pilot proof, Human Review.
 - Produces:
-  - `trama_access.state = REAL` only for the Phase 2 pilot boundary;
+  - `trama_access.state = REAL` only for Phase 2 pilot boundary;
   - `professional_identity.state = PARTIAL`;
   - runtime state equivalent to `ACCESS_RUNTIME_REAL_PRODUCT_FEDERATION_NOT_IMPLEMENTED`;
   - every `trama_access_to_*` product flow and `gateway_to_trama_access` remains `DESIGNED`.
 
-- [ ] **Step 1: Write the receipt with evidence before state promotion**
+- [ ] **Step 1: Write receipt with evidence before state promotion**
 
-Receipt must distinguish:
-- deterministic CI proof;
-- live provider/runtime proof;
-- what is REAL;
-- what remains DESIGNED/PARTIAL;
-- zero-cost result;
-- no product federation;
-- no Gateway cutover.
+Distinguish deterministic CI proof, live provider/runtime proof, what is REAL, what remains DESIGNED/PARTIAL, zero-cost result, no product federation and no Gateway cutover. No secrets, pilot email or provider tokens.
 
-Do not include secrets, pilot email or provider tokens.
+- [ ] **Step 2: Update machine-readable state map conservatively**
 
-- [ ] **Step 2: Update the machine-readable state map conservatively**
-
-Do not promote any product flow. Do not change Docente OS/Arena/Studio Atlas/Curricolo Atlas/Control Center authority states as a side effect of this phase.
+Do not promote product flows or alter Docente OS/Arena/Studio Atlas/Curricolo Atlas/Control Center authority states.
 
 - [ ] **Step 3: Add/confirm permanent Governance validation**
 
-Governance should validate the Phase 2 state delta/receipt invariants without requiring live secrets or live network.
+Validate Phase 2 state delta/receipt invariants without live secrets/network.
 
 - [ ] **Step 4: Run local full regression**
 
@@ -821,7 +860,7 @@ Expected: PASS.
 
 Commit message: `feat(access): qualify Phase 2 TRAMA Access pilot`
 
-- [ ] **Step 6: Certify the final exact head in GitHub Actions**
+- [ ] **Step 6: Certify final exact head in GitHub Actions**
 
 Require simultaneously:
 - `TRAMA Access` workflow PASS;
@@ -829,19 +868,19 @@ Require simultaneously:
 - exact-head Access evidence artifact retrievable;
 - no stale-head evidence.
 
-Because a commit cannot embed its own future SHA/run ID, the immutable exact-head binding is the CI-generated Access artifact plus final PR closure comment; the committed receipt describes the evidence contract and live proof but does not fabricate a self-referential SHA.
+A commit cannot embed its own future SHA/run ID: immutable exact-head binding is the CI-generated Access artifact plus final PR closure comment. The committed receipt describes evidence contract/live proof but does not fabricate self-referential SHA.
 
-- [ ] **Step 7: Human Visual Review on the exact-head pilot**
+- [ ] **Step 7: Human Visual Review on exact-head pilot**
 
 Show real S/M/L/LIM surfaces and verify:
-- sign-in is understandable without provider jargon;
+- sign-in understandable without provider jargon;
 - neutral email-sent state;
-- launcher cannot be mistaken for working product federation;
-- access-denied/provider-unavailable/session-expired states are clear;
-- logout is visible;
-- TRAMA identity is coherent but the surface remains minimal.
+- launcher not mistaken for working product federation;
+- access-denied/provider-unavailable/session-expired states clear;
+- logout visible;
+- TRAMA identity coherent while surface remains minimal.
 
-Decision must be one of `PASS / REWORK / REJECT`.
+Decision: `PASS / REWORK / REJECT`.
 
 - [ ] **Step 8: Independent whole-branch review**
 
@@ -849,7 +888,7 @@ Review security boundaries, migration/RLS, session lifecycle, fail-closed logic,
 
 - [ ] **Step 9: Record human closure without merging automatically**
 
-On PASS, add a PR closure comment naming exact head, Governance run, Access run/artifact and live proof. Leave merge as a separate explicit human decision.
+On PASS, add PR closure comment naming exact head, Governance run, Access run/artifact and live proof. Merge remains a separate explicit human decision.
 
 ---
 
@@ -875,13 +914,13 @@ read-only zero-cost preflight
 
 ## Stop conditions
 
-Execution stops and returns for a new decision if any of these becomes true:
+Execution stops and returns for a new decision if any becomes true:
 
 - zero-cost provisioning is no longer possible;
-- free email delivery cannot support the approved pilot without adding SMTP/provider scope;
-- Supabase SDK cannot provide a verified-claims path for exact issuer/subject without unverified JWT decoding;
-- implementation would require sharing a product database or product-local authorization state;
+- free email delivery cannot support approved pilot without adding SMTP/provider scope;
+- official Supabase SDK path cannot provide verified claims for exact issuer/subject without unverified JWT decoding;
+- implementation would require sharing product database or product-local authorization state;
 - a product must be federated to close Phase 2;
 - Gateway must be modified/cut over to prove Phase 2;
-- a paid Render/Supabase resource is required;
-- security review finds a blocker that cannot be fixed inside the approved boundary.
+- paid Render/Supabase resource is required;
+- security review finds a blocker that cannot be fixed inside approved boundary.
