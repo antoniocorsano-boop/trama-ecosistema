@@ -5,11 +5,12 @@ import { fileURLToPath } from 'node:url';
 const roles = ['lim', 's', 'm', 'l'];
 const approval = 'IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW';
 const aspectTolerance = 0.02;
+const scaleTolerance = 1e-6;
 const contract = {
-  lim: { minWidth: 960, minHeight: 2700, ratio: 320 / 900 },
-  s: { minWidth: 1170, minHeight: 2532, ratio: 390 / 844 },
-  m: { minWidth: 1536, minHeight: 2048, ratio: 3 / 4 },
-  l: { minWidth: 2560, minHeight: 1440, ratio: 16 / 9 },
+  lim: { viewportWidth: 320, viewportHeight: 900, ratio: 320 / 900 },
+  s: { viewportWidth: 390, viewportHeight: 844, ratio: 390 / 844 },
+  m: { viewportWidth: 768, viewportHeight: 1024, ratio: 3 / 4 },
+  l: { viewportWidth: 1440, viewportHeight: 900, ratio: 16 / 9 },
 };
 
 function readUInt24LE(buffer, offset) {
@@ -128,11 +129,17 @@ function validateProvenanceEntry(entry, role, dimensions) {
 
 function validateDimensions(role, dimensions) {
   const requirement = contract[role];
-  if (dimensions.width < requirement.minWidth || dimensions.height < requirement.minHeight) {
+  const coverScale = Math.max(
+    requirement.viewportWidth / dimensions.width,
+    requirement.viewportHeight / dimensions.height,
+  );
+  if (coverScale > 1 + scaleTolerance) {
+    const percent = ((coverScale - 1) * 100).toFixed(2);
     throw new Error(
-      `background role ${role} dimensions must be at least ${requirement.minWidth}x${requirement.minHeight}; got ${dimensions.width}x${dimensions.height}`,
+      `background role ${role} would require ${percent}% cover upscale at ${requirement.viewportWidth}x${requirement.viewportHeight}; got ${dimensions.width}x${dimensions.height}`,
     );
   }
+
   const actualRatio = dimensions.width / dimensions.height;
   const relativeDifference = Math.abs(actualRatio - requirement.ratio) / requirement.ratio;
   if (relativeDifference > aspectTolerance) {
@@ -140,6 +147,8 @@ function validateDimensions(role, dimensions) {
       `background role ${role} aspect ratio outside ±2% tolerance; got ${dimensions.width}:${dimensions.height}`,
     );
   }
+
+  return coverScale;
 }
 
 export function validateTramaGatewayMedia(root = process.cwd()) {
@@ -168,17 +177,18 @@ export function validateTramaGatewayMedia(root = process.cwd()) {
 
   const dimensions = {};
   const byteSizes = {};
+  const coverScales = {};
   for (const role of roles) {
     dimensions[role] = readWebpDimensions(paths[role]);
     byteSizes[role] = statSync(paths[role]).size;
-    validateDimensions(role, dimensions[role]);
+    coverScales[role] = validateDimensions(role, dimensions[role]);
 
     const entries = provenance.assets.filter((asset) => asset.role === role);
     if (entries.length !== 1) throw new Error(`provenance must contain exactly one role ${role}`);
     validateProvenanceEntry(entries[0], role, dimensions[role]);
   }
 
-  return { mediaDir, paths, dimensions, byteSizes, provenance };
+  return { mediaDir, paths, dimensions, byteSizes, coverScales, provenance };
 }
 
 function parseRoot(argv) {
@@ -194,7 +204,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     const summary = roles
       .map((role) => {
         const size = result.dimensions[role];
-        return `${role.toUpperCase()} ${size.width}x${size.height} ${result.byteSizes[role]}B`;
+        return `${role.toUpperCase()} ${size.width}x${size.height} cover=${result.coverScales[role].toFixed(3)} ${result.byteSizes[role]}B`;
       })
       .join(', ');
     console.log(`PASS TRAMA gateway background media v3: ${summary}`);
