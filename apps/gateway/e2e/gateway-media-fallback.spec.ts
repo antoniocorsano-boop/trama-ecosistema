@@ -40,7 +40,7 @@ test('canonical L background is viewport-sufficient for large displays', async (
     const image = element as HTMLImageElement;
     return { width: image.naturalWidth, height: image.naturalHeight, currentSrc: image.currentSrc };
   });
-  expect(dimensions.currentSrc).toContain('trama-gateway-poster-l.webp');
+  expect(dimensions.currentSrc).toContain('trama-gateway-bg-l.webp');
   expect(dimensions.width).toBeGreaterThanOrEqual(1440);
   expect(dimensions.height).toBeGreaterThanOrEqual(900);
 });
