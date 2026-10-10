@@ -13,8 +13,13 @@ import { CSRF_COOKIE_NAME, verifyMutationRequest } from '../security/csrf.js';
 import { SESSION_COOKIE_NAME, sessionCookieOptions } from '../security/session-cookie.js';
 
 export const ACCESS_FLASH_COOKIE_NAME = 'trama_access_flash';
+export type AccessFlashState =
+  | 'MAGIC_LINK_SENT'
+  | 'AUTHENTICATED'
+  | 'ACCESS_DENIED'
+  | 'PROVIDER_UNAVAILABLE';
 
-const flashCookieOptions = {
+export const accessFlashCookieOptions = {
   httpOnly: true,
   secure: true,
   sameSite: 'lax' as const,
@@ -80,8 +85,15 @@ function validEmailBody(body: unknown): body is { email: string } {
   return typeof email === 'string' && email.length <= 320 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function setFlash(reply: FastifyReply, state: 'ACCESS_DENIED' | 'PROVIDER_UNAVAILABLE'): void {
-  reply.setCookie(ACCESS_FLASH_COOKIE_NAME, state, flashCookieOptions);
+export function setAccessFlash(reply: FastifyReply, state: AccessFlashState): void {
+  reply.setCookie(ACCESS_FLASH_COOKIE_NAME, state, accessFlashCookieOptions);
+}
+
+export function clearAccessFlash(reply: FastifyReply): void {
+  reply.setCookie(ACCESS_FLASH_COOKIE_NAME, '', {
+    ...accessFlashCookieOptions,
+    maxAge: 0,
+  });
 }
 
 function clearSessionCookie(reply: FastifyReply): void {
@@ -106,12 +118,15 @@ export function registerAuthRoutes(app: FastifyInstance, deps: AuthRouteDependen
     const jar = new FastifyProviderCookieJar(request, reply);
     try {
       await deps.passwordlessProvider.requestSignIn(request.body.email, callbackUrl, jar);
+      setAccessFlash(reply, 'MAGIC_LINK_SENT');
       return reply.code(202).send({ state: 'MAGIC_LINK_SENT' });
     } catch (error) {
       if (error instanceof PasswordlessAccessDeniedError) {
+        setAccessFlash(reply, 'MAGIC_LINK_SENT');
         return reply.code(202).send({ state: 'MAGIC_LINK_SENT' });
       }
       deps.logger.error('PASSWORDLESS_PROVIDER_UNAVAILABLE');
+      setAccessFlash(reply, 'PROVIDER_UNAVAILABLE');
       return reply.code(503).send({ state: 'PROVIDER_UNAVAILABLE' });
     }
   });
@@ -122,7 +137,7 @@ export function registerAuthRoutes(app: FastifyInstance, deps: AuthRouteDependen
     const jar = new FastifyProviderCookieJar(request, reply);
 
     if (!code) {
-      setFlash(reply, 'ACCESS_DENIED');
+      setAccessFlash(reply, 'ACCESS_DENIED');
       await deps.passwordlessProvider.clearTransientAuth(jar).catch(() => undefined);
       return reply.code(303).redirect('/');
     }
@@ -149,16 +164,16 @@ export function registerAuthRoutes(app: FastifyInstance, deps: AuthRouteDependen
         predecessor,
       );
       reply.setCookie(SESSION_COOKIE_NAME, session.secret, sessionCookieOptions);
-      reply.setCookie(ACCESS_FLASH_COOKIE_NAME, '', { ...flashCookieOptions, maxAge: 0 });
+      setAccessFlash(reply, 'AUTHENTICATED');
       return reply.code(303).redirect('/');
     } catch (error) {
       clearSessionCookie(reply);
       await deps.passwordlessProvider.clearTransientAuth(jar).catch(() => undefined);
       if (error instanceof PasswordlessProviderUnavailableError) {
         deps.logger.error('PASSWORDLESS_PROVIDER_UNAVAILABLE');
-        setFlash(reply, 'PROVIDER_UNAVAILABLE');
+        setAccessFlash(reply, 'PROVIDER_UNAVAILABLE');
       } else {
-        setFlash(reply, 'ACCESS_DENIED');
+        setAccessFlash(reply, 'ACCESS_DENIED');
       }
       return reply.code(303).redirect('/');
     }
@@ -172,6 +187,7 @@ export function registerAuthRoutes(app: FastifyInstance, deps: AuthRouteDependen
     const secret = request.cookies[SESSION_COOKIE_NAME];
     if (secret) await revokeSession(secret, now(), deps.repository);
     clearSessionCookie(reply);
+    clearAccessFlash(reply);
     return reply.code(204).send();
   });
 }
