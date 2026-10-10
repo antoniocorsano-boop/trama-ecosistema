@@ -27,7 +27,7 @@ export function TramaMediaBackdrop({ videoSrc, poster, className }: TramaMediaBa
           data-testid="trama-media-poster"
           src={poster.s}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover"
+          className="trama-media-visual absolute inset-0 h-full w-full object-cover"
         />
       </picture>
       {showVideo ? (
@@ -41,7 +41,7 @@ export function TramaMediaBackdrop({ videoSrc, poster, className }: TramaMediaBa
           playsInline
           preload="metadata"
           onError={() => setVideoFailed(true)}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="trama-media-visual absolute inset-0 h-full w-full object-cover"
         />
       ) : null}
     </div>
