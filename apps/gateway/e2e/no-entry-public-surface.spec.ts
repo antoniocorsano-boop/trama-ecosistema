@@ -8,17 +8,19 @@ test('public Gateway stays visible and professional entry fails closed without a
 
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
-  const heroEntry = page.getByRole('button', { name: 'Entra in TRAMA' });
-  await expect(heroEntry).toBeVisible();
-  await expect(heroEntry).toBeDisabled();
-  await expect(heroEntry).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveCount(0);
+  const unavailableEntries = page.getByRole('button', { name: 'Accesso in preparazione' });
+  await expect(unavailableEntries).toHaveCount(2);
+  await expect(unavailableEntries.first()).toBeVisible();
+  await expect(unavailableEntries.first()).toBeDisabled();
+  await expect(unavailableEntries.first()).toHaveAttribute('aria-disabled', 'true');
+  await expect(unavailableEntries.nth(1)).toBeVisible();
+  await expect(unavailableEntries.nth(1)).toBeDisabled();
+  await expect(unavailableEntries.nth(1)).toHaveAttribute('aria-disabled', 'true');
 
-  const navEntry = page.getByRole('button', { name: 'Accedi' });
-  await expect(navEntry).toBeVisible();
-  await expect(navEntry).toBeDisabled();
-  await expect(navEntry).toHaveAttribute('aria-disabled', 'true');
+  await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Accedi' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Entra in TRAMA' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Accedi' })).toHaveCount(0);
 
   await expect(page.getByRole('link', { name: 'Ecosistema' })).toHaveAttribute('href', '#ecosistema');
   await expect(page.getByRole('link', { name: 'Curricolo' })).toHaveAttribute('href', '#curricolo');
@@ -26,6 +28,11 @@ test('public Gateway stays visible and professional entry fails closed without a
   await expect(page.locator('#ecosistema')).toHaveCount(1);
   await expect(page.locator('#curricolo')).toHaveCount(1);
   await expect(page.locator('#guida')).toHaveCount(1);
+
+  await page.screenshot({
+    path: 'test-results/evidence/gateway-no-entry-L.png',
+    fullPage: true,
+  });
 
   expect(pageErrors).toEqual([]);
 });
