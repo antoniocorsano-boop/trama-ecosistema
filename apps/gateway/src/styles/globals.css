@@ -13,7 +13,7 @@
   --border: 0 0% 18%;
   --input: 0 0% 18%;
   --copper: 24 76% 59%;
-  --copper-readable: 29 90% 72%;
+  --copper-readable: #713621;
   --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color-scheme: dark;
@@ -88,10 +88,10 @@ a {
 }
 
 .trama-copper-text {
-  color: hsl(var(--copper-readable));
+  color: var(--copper-readable);
   text-shadow:
-    0 1px 2px rgba(0, 10, 12, 0.62),
-    0 3px 16px hsl(var(--copper) / 0.20);
+    0 1px 2px rgba(255, 235, 215, 0.16),
+    0 2px 8px rgba(20, 10, 5, 0.16);
 }
 
 .trama-hero-support {
