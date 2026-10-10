@@ -13,6 +13,7 @@
   --border: 0 0% 18%;
   --input: 0 0% 18%;
   --copper: 24 76% 59%;
+  --copper-readable: 29 90% 72%;
   --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color-scheme: dark;
@@ -58,12 +59,43 @@ a {
   transform-origin: center;
 }
 
+.trama-hero-legibility {
+  position: relative;
+  isolation: isolate;
+}
+
+.trama-hero-legibility::before {
+  content: '';
+  position: absolute;
+  inset: -2.4rem 0 -2.1rem;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 46%;
+  background: radial-gradient(
+    ellipse at 50% 46%,
+    rgba(16, 36, 38, 0.24) 0%,
+    rgba(28, 42, 39, 0.16) 44%,
+    rgba(84, 62, 39, 0.055) 67%,
+    transparent 84%
+  );
+  filter: blur(10px);
+}
+
 .trama-copy-reinforced {
-  text-shadow: 0 2px 12px rgba(0, 14, 18, 0.24);
+  text-shadow:
+    0 1px 2px rgba(0, 11, 14, 0.68),
+    0 4px 18px rgba(0, 13, 16, 0.30);
 }
 
 .trama-copper-text {
-  color: hsl(var(--copper));
+  color: hsl(var(--copper-readable));
+  text-shadow:
+    0 1px 2px rgba(0, 10, 12, 0.62),
+    0 3px 16px hsl(var(--copper) / 0.20);
+}
+
+.trama-hero-support {
+  color: hsl(var(--foreground) / 0.96);
 }
 
 .trama-copper-action {
@@ -131,6 +163,17 @@ a {
     filter: brightness(1.05) saturate(1.05) contrast(0.99);
     object-position: 50% 54%;
   }
+
+  .trama-hero-legibility::before {
+    inset: -2.8rem 0 -2.4rem;
+    background: radial-gradient(
+      ellipse at 50% 45%,
+      rgba(16, 36, 38, 0.22) 0%,
+      rgba(30, 43, 39, 0.145) 45%,
+      rgba(84, 62, 39, 0.05) 68%,
+      transparent 85%
+    );
+  }
 }
 
 @media (min-width: 1024px) {
@@ -181,19 +224,32 @@ a {
     transform: translateY(-0.8rem);
   }
 
+  .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-legibility::before {
+    inset: -3.1rem 0 -2.8rem;
+    background: radial-gradient(
+      ellipse at 50% 43%,
+      rgba(15, 35, 37, 0.20) 0%,
+      rgba(29, 42, 39, 0.13) 46%,
+      rgba(84, 62, 39, 0.045) 69%,
+      transparent 86%
+    );
+    filter: blur(12px);
+  }
+
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-title {
     max-width: 61rem;
     font-size: clamp(4.8rem, 6.05vw, 5.8rem);
     line-height: 0.93;
     letter-spacing: -0.038em;
     text-shadow:
-      0 2px 12px rgba(0, 8, 12, 0.27),
+      0 1px 2px rgba(0, 8, 11, 0.70),
+      0 4px 20px rgba(0, 8, 12, 0.31),
       0 14px 42px rgba(0, 7, 10, 0.12);
   }
 
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-support {
     max-width: 49rem;
-    color: hsl(var(--foreground) / 0.92);
+    color: hsl(var(--foreground) / 0.97);
     letter-spacing: -0.008em;
   }
 
@@ -257,7 +313,8 @@ a {
 }
 
 @media (forced-colors: active) {
-  .trama-gateway-stage::before {
+  .trama-gateway-stage::before,
+  .trama-hero-legibility::before {
     display: none;
   }
 
@@ -265,7 +322,8 @@ a {
     filter: none;
   }
 
-  .trama-copy-reinforced {
+  .trama-copy-reinforced,
+  .trama-copper-text {
     text-shadow: none;
   }
 
