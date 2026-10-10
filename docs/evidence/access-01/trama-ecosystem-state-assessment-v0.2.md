@@ -1,134 +1,126 @@
 # TRAMA Ecosystem State Assessment v0.2
 
-**Date:** 2026-10-10  
-**Scope:** AS-IS ecosystem reality versus ACCESS-01 target architecture  
-**Authority:** analytical evidence supporting `TRAMA ACCESS-01`  
-**Machine-readable source:** `governance/access/trama-ecosystem-state-v0.2.json`
+**Data:** 2026-10-10  
+**Ambito:** realtà AS-IS dell'ecosistema rispetto al target ACCESS-01  
+**Autorità:** evidenza analitica a supporto di `TRAMA ACCESS-01`  
+**Fonte machine-readable:** `governance/access/trama-ecosystem-state-v0.2.json`
 
-## Executive conclusion
+## Conclusione
 
-The ecosystem already contains several real and mature nodes, but the connective tissue between them is not yet uniformly real.
+L'ecosistema contiene già diversi nodi reali e maturi, ma il tessuto connettivo tra i prodotti non è ancora uniformemente operativo.
 
-The central finding is therefore:
+> **Un nodo reale non implica un'integrazione reale.**
 
-> **A real node does not imply a real integration.**
+TRAMA oggi è un ecosistema con prodotti e capacità concrete, alcune catene già dimostrate e diversi user flow cross-product ancora parziali o progettati. ACCESS-01 definisce il percorso per rendere coerente l'esperienza utente senza trasferire l'autorità di un prodotto a un altro.
 
-TRAMA today is best described as an ecosystem with substantial real products/capabilities and some real canonical chains, while several cross-product user flows remain partial or designed. ACCESS-01 is the architecture for turning those existing systems into a coherent user experience without collapsing their independent authorities.
+## Cosa è già reale
 
-## What is already real
+- **Docente OS** è l'ambiente operativo teacher-first con identità locale, workspace e autorizzazione propri.
+- **Arena** è l'autorità sul curricolo di istituto.
+- **Curricolo Atlas** è una superficie pubblica reale per navigazione e consultazione di curricolo, materiali e risorse.
+- **Arena → Curricolo Atlas** è una catena governata reale; Arena conserva l'autorità.
+- **Studio Atlas** possiede capacità reali di authoring standalone, pur con capacità professionali/runtime ancora incomplete.
+- **Atlas learner** supporta percorsi learner/preview delimitati e mantiene il principio di nessun account personale per lo studente per impostazione predefinita.
+- **Materiali** esistono in superfici di prodotto reali.
+- **Control Center pubblico** è una superficie reale di stato, evidenze e trasparenza.
+- **TRAMA governance** è un livello reale di contratti, confini, lifecycle ed evidenze.
 
-- **Docente OS** exists as the teacher-first operating environment with its own real identity/workspace authorization model.
-- **Arena** is the authority for the curricolo di istituto.
-- **Curricolo Atlas** is a real public navigation/consultation surface for curricolo, materials and resources.
-- **Arena → Curricolo Atlas** is a real governed chain; Curricolo Atlas does not become curricular authority.
-- **Studio Atlas** has real standalone authoring capability, although important professional-runtime capabilities remain incomplete.
-- **Atlas learner** supports bounded learner/preview experiences and preserves the no-personal-account default.
-- **Materials** already exist in real product surfaces.
-- **Control Center pubblico** is a real public status/evidence/transparency surface.
-- **TRAMA governance** is a real authority layer for contracts, boundaries, lifecycle and evidence.
+## Cosa è parziale
 
-## What is partial
+- **TRAMA Gateway** è reale come soglia pubblica. Il flusso professionale non è ancora disponibile; Phase 0 rende sicura l'assenza della destinazione professionale senza oscurare la landing.
+- **Studio Atlas** resta parziale come prodotto ecosistemico perché federazione professionale, persistenza remota/pubblicazione e altre capacità non sono tutte complete.
+- **Studio Atlas → Atlas learner** è parzialmente reale tramite preview e percorsi governati, ma non va rappresentato come catena di pubblicazione universalmente completa.
+- **Docente OS → Curricolo Atlas/Arena** non è ancora uniformemente certificato come runtime cross-product.
+- **Material Contract ecosistemico** è incompleto: i materiali esistono, ma identità condivisa, ownership, provenance e riferimenti non sono ancora qualificati tra prodotti.
+- **Classi/Gruppi → Atlas learner** richiede un contratto completo e privacy-first per le assegnazioni.
 
-- **TRAMA Gateway** is real as a public UI/soglia, but its professional entry flow is not yet available; production behavior must be made safe so an absent Access destination cannot blank the public surface.
-- **Studio Atlas** remains partial as an ecosystem product because canonical professional federation, remote persistence/publication boundaries and other capabilities are not all complete.
-- **Studio Atlas → Atlas learner** is directionally and partially real through governed preview/experience paths, but should not be represented as a universally complete publication chain.
-- **Docente OS → Curricolo Atlas/Arena** orchestration is not yet uniformly certified as a cross-product runtime flow.
-- **Material Contract ecosistemico** is incomplete: materials exist, but shared identity/ownership/provenance/reference semantics are not yet fully qualified across products.
-- **Classi/Gruppi → Atlas learner** needs a complete privacy-first bounded assignment contract.
+## Cosa è progettato ma non ancora runtime
 
-## What is designed, not yet runtime reality
+- **TRAMA Access** come login/launcher professionale canonico.
+- **Una identità professionale TRAMA / SSO** tra prodotti.
+- **TRAMA Access → Docente OS / Studio Atlas / Arena / Curricolo Atlas professionale**.
+- **Control Center privilegiato** con entitlement dedicato e step-up/MFA.
+- **Gateway → TRAMA Access** come ingresso professionale canonico.
 
-- **TRAMA Access** as the canonical professional login/launcher.
-- **One professional TRAMA identity / SSO** across products.
-- **TRAMA Access → Docente OS / Studio Atlas / Arena / Curricolo Atlas professional** federation paths.
-- **Control Center privilegiato** with dedicated governance entitlement and step-up/MFA.
-- **Gateway → TRAMA Access** as the canonical professional entry path.
+## Catene canoniche
 
-## Canonical chains
-
-### Curricular chain
+### Catena del curricolo
 
 `Arena → Curricolo Atlas`
 
-- Arena = authority for the curricolo di istituto.
-- Curricolo Atlas = consultation/navigation/intelligibility.
-- Product existence and access do not grant curricular mutation authority outside Arena-governed paths.
+- Arena = autorità sul curricolo di istituto.
+- Curricolo Atlas = consultazione, navigazione e intelligibilità.
+- La disponibilità di Curricolo Atlas non concede autorità di modifica fuori dai percorsi governati da Arena.
 
-### Experience chain
+### Catena delle esperienze
 
 `Studio Atlas → Atlas learner`
 
-- Studio Atlas = professional authoring.
-- Atlas learner = learner experience/fruizione.
-- The learner plane remains accountless by default and does not receive the professional session.
+- Studio Atlas = authoring professionale.
+- Atlas learner = fruizione dell'esperienza.
+- Il piano learner resta senza account personale per impostazione predefinita e non riceve la sessione professionale.
 
-## Critical interpretation rule
+## Regola di lettura obbligatoria
 
-The state map distinguishes:
+La state map distingue sempre:
 
-1. **node state** — whether an application/service/capability exists within its stated boundary;
-2. **flow state** — whether the integration/user journey between nodes has been demonstrated end-to-end.
+1. **stato del nodo** — esistenza di applicazione, servizio o capacità nel confine dichiarato;
+2. **stato del flusso** — dimostrazione end-to-end dell'integrazione/user journey tra nodi.
 
-Examples:
+Esempi:
 
-- Docente OS can be `REAL` while `Docente OS → Studio Atlas` remains `DESIGNED`.
-- Curricolo Atlas can be `REAL` while `TRAMA Access → Curricolo Atlas professional` remains `DESIGNED`.
-- Control Center pubblico can be `REAL` while Control Center privilegiato remains `DESIGNED`.
+- Docente OS può essere `REAL` mentre `Docente OS → Studio Atlas` resta `DESIGNED`.
+- Curricolo Atlas può essere `REAL` mentre `TRAMA Access → Curricolo Atlas professionale` resta `DESIGNED`.
+- Control Center pubblico può essere `REAL` mentre Control Center privilegiato resta `DESIGNED`.
 
-This distinction is mandatory in future progress reporting.
+Questa distinzione è obbligatoria nei futuri report di avanzamento.
 
-## Gateway-specific note
+## Nota sul Gateway
 
-The public Gateway must not be treated as unfinished merely because the professional Access destination does not exist yet.
+La soglia pubblica non deve essere considerata incompleta solo perché TRAMA Access non esiste ancora.
 
-The correct boundary is:
+Confine corretto:
 
-- public threshold/UI: real;
-- professional entry destination: not yet real;
-- behavior with missing destination: must fail closed **without destroying the public experience**.
+- UI/soglia pubblica: reale;
+- destinazione professionale: non ancora reale;
+- assenza della destinazione: fail-closed senza distruggere l'esperienza pubblica.
 
-A blank public screen is not an acceptable interpretation of fail-closed.
+Uno schermo pubblico vuoto non è una forma accettabile di fail-closed.
 
-## Materials-specific note
+## Nota sui materiali
 
-`Materiali` must not be represented as a single binary node.
+`Materiali` non è un nodo binario unico:
 
-The accurate model is:
+- materiali/risorse presenti nei prodotti: `REAL`;
+- contratto ecosistemico con identità stabile, ownership, provenance e riferimenti: `PARTIAL` fino alla qualificazione.
 
-- materials/resources in real products: `REAL`;
-- shared ecosystem material contract with stable identity, ownership, provenance and references: `PARTIAL` until qualified.
+## Nota su classi, gruppi e studenti
 
-## Student/class/group-specific note
+L'organizzazione teacher-side di classi e gruppi non equivale all'identità dello studente.
 
-Teacher-side class/group organization is not the same as learner identity.
+Target:
 
-The target boundary is:
+`classe/gruppo docente → riferimento/ticket/codice limitato → Atlas learner`
 
-`teacher class/group → bounded assignment reference/ticket/code → Atlas learner`
+senza esportare per impostazione predefinita un registro nominale e senza richiedere un account personale allo studente.
 
-without exporting a nominal class register or requiring a personal learner account by default.
+## Nota sul Control Center
 
-## Control Center-specific note
+Le superfici pubblica e privilegiata devono rimanere logicamente distinte.
 
-The public and privileged Control Center surfaces must remain logically distinct.
+- Control Center pubblico: stato, evidenze, trasparenza; può restare non autenticato.
+- Control Center privilegiato: diventa reale solo con operazioni protette esplicite, entitlement dedicato, step-up/MFA e audit appropriati.
 
-- Public Control Center: status/evidence/transparency, potentially unauthenticated.
-- Privileged Control Center: only real when there are explicit protected governance operations, a dedicated entitlement, and appropriate step-up/MFA/audit controls.
+## Regola per l'evidenza visuale
 
-## Visual evidence rule
+L'infografica AS-IS/TARGET è una vista derivata da questa analisi e dal file machine-readable.
 
-The AS-IS/TARGET infographic is a **derived view** of this assessment and the machine-readable state file.
+Non è autorità autonoma. Una freccia `REAL` richiede un'evidenza recuperabile che provi esattamente quel confine.
 
-It is not the authority by itself.
+## Conseguenza operativa
 
-A future infographic update must follow a state/evidence update, not precede it. In particular, a green `REAL` arrow must have a retrievable evidence reference for the exact boundary it claims.
+Sequenza canonica:
 
-## Operational consequence
+`Baseline/Gateway safety → Identity contract → TRAMA Access → Docente OS pilot → Studio Atlas → Curricolo Atlas → Arena → Assignment/Learner → Materiali → Control Center privilegiato → Cross-app hardening → Gateway cutover → Ecosystem qualification`
 
-The next work should not be a broad multi-app implementation sprint.
-
-The canonical roadmap is:
-
-`Baseline/Gateway safety → Identity contract → TRAMA Access → Docente OS pilot → Studio Atlas → Curricolo Atlas → Arena → Assignment/Learner → Materials → Privileged Control Center → Cross-app hardening → Gateway cutover → Ecosystem qualification`
-
-Only one implementation phase is active at a time. Every phase closes with implementation, tests, evidence, human review where appropriate, and a state-map delta.
+Una sola fase implementativa è attiva alla volta. Ogni fase si chiude con implementazione, test, evidenze, Human Review quando necessaria e delta della state map.
