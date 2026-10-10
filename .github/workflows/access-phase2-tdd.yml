@@ -9,7 +9,7 @@ on:
       - '.github/workflows/access-phase2-tdd.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: access-phase2-tdd-${{ github.ref }}
@@ -28,15 +28,39 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
-          cache-dependency-path: apps/gateway/package-lock.json
 
-      - name: Install locked repository test toolchain
-        working-directory: apps/gateway
+      - name: Generate lockfile when absent
+        id: lockfile
+        working-directory: apps/access
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "generated=false" >> "$GITHUB_OUTPUT"
+          else
+            npm install --package-lock-only --no-audit --no-fund
+            echo "generated=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit generated lockfile
+        if: steps.lockfile.outputs.generated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/access/package-lock.json
+          git commit -m "chore(access): lock Phase 2 bootstrap dependencies [skip ci]"
+          git push origin HEAD:feat/access-01-phase-2-trama-access-runtime
+
+      - name: Install Access dependencies from lockfile
+        working-directory: apps/access
         run: npm ci --no-audit --no-fund
 
-      - name: Expose locked test toolchain at repository root
-        run: ln -s apps/gateway/node_modules node_modules
+      - name: Typecheck Access
+        working-directory: apps/access
+        run: npm run typecheck
 
-      - name: Run RED config contract
-        run: ./apps/gateway/node_modules/.bin/vitest run apps/access/server/config.test.ts --environment node
+      - name: Run config contract
+        working-directory: apps/access
+        run: npm test -- server/config.test.ts
+
+      - name: Build Access
+        working-directory: apps/access
+        run: npm run build
