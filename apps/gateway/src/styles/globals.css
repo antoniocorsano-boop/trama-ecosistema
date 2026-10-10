@@ -114,7 +114,7 @@ a {
 .trama-copper-text {
   display: block;
   margin-top: 0.08em;
-  color: var(--copper-readable);
+  color: #FFD8AE;
   background-image: radial-gradient(
     ellipse at 50% 52%,
     rgba(255, 241, 226, 0.42) 0%,
@@ -125,12 +125,11 @@ a {
   background-position: center;
   background-repeat: no-repeat;
   background-size: clamp(13rem, 68vw, 25rem) 155%;
-  -webkit-text-stroke: 0.5px rgba(38, 19, 9, 0.58);
+  -webkit-text-stroke: 0.95px rgba(24, 14, 10, 0.82);
   paint-order: stroke fill;
   text-shadow:
-    0 0 1px rgba(255, 255, 255, 0.72),
-    0 0 12px rgba(255, 225, 196, 0.62),
-    0 1px 3px rgba(18, 9, 5, 0.22);
+    0 0 4px rgba(255, 216, 174, 0.22),
+    0 1px 2px rgba(10, 8, 6, 0.22);
 }
 
 .trama-hero-support {
@@ -298,7 +297,7 @@ a {
     display: inline;
     margin-top: 0;
     background-size: 112% 150%;
-    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-width: 0.95px;
   }
 
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-support {
