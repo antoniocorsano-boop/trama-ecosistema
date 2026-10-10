@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { AccessView, App, type AccessApi } from './App';
 import type { AccessState } from './access-state';
@@ -106,7 +106,6 @@ describe('TRAMA Access application lifecycle', () => {
   });
 
   it('automatically resolves one-time AUTHENTICATED into the current launcher state without a second login', async () => {
-    vi.useFakeTimers();
     const api: AccessApi = {
       getState: vi
         .fn()
@@ -123,12 +122,10 @@ describe('TRAMA Access application lifecycle', () => {
       logout: vi.fn(),
     };
 
-    render(<App api={api} authenticatedSettleMs={250} />);
+    render(<App api={api} authenticatedSettleMs={20} />);
     await screen.findByText(/Accesso verificato/i);
-    await vi.advanceTimersByTimeAsync(250);
-    await waitFor(() => expect(screen.getByText(/Nessun ambiente disponibile/i)).toBeVisible());
+    await screen.findByText(/Nessun ambiente disponibile/i, {}, { timeout: 1000 });
     expect(api.getState).toHaveBeenCalledTimes(2);
     expect(api.requestMagicLink).not.toHaveBeenCalled();
-    vi.useRealTimers();
   });
 });
