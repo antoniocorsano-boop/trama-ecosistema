@@ -84,6 +84,10 @@ jobs:
         working-directory: apps/gateway
         run: npm run test:e2e
 
+      - name: No-entry browser certification
+        working-directory: apps/gateway
+        run: npx playwright test --config playwright.no-entry.config.ts
+
       - name: Materialize exact-head UI evidence
         run: |
           node scripts/materialize-trama-gateway-ui-evidence.mjs "$EXACT_HEAD" "$EVIDENCE_DIR" "$MANIFEST_PATH" "${{ github.run_id }}"
