@@ -10,7 +10,7 @@ describe('gatewayConfig poster contract', () => {
     expect(poster).toBeDefined();
     expect(poster?.s ?? '').toMatch(/poster-s\.webp$/);
     expect(poster?.m ?? '').toMatch(/poster-m\.webp$/);
-    expect(poster?.l ?? '').toMatch(/poster-l\.webp$/);
+    expect(poster?.l ?? '').toMatch(/poster-l-approved-v3\.webp$/);
     expect(Object.values(poster ?? {}).every((src) => !src.endsWith('.svg'))).toBe(true);
   });
 
