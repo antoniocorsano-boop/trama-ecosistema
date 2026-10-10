@@ -17,6 +17,13 @@ function setReducedMotion(value: boolean) {
 
 const responsiveProps = {
   videoSrc: '/video.mp4',
+  background: {
+    lim: '/media/trama-gateway-bg-lim.webp',
+    s: '/media/trama-gateway-bg-s.webp',
+    m: '/media/trama-gateway-bg-m.webp',
+    l: '/media/trama-gateway-bg-l.webp',
+  },
+  // Transitional test input: keeps the current implementation renderable during RED.
   poster: {
     s: '/media/trama-gateway-poster-s.webp',
     m: '/media/trama-gateway-poster-m.webp',
@@ -38,31 +45,36 @@ describe('TramaMediaBackdrop', () => {
     expect(video).toHaveAttribute('src', '/video.mp4');
   });
 
-  it('exposes S/M/L static sources through native responsive media', () => {
+  it('exposes L/M/LIM with S fallback through one native responsive picture', () => {
     const { container } = render(<TramaMediaBackdrop {...responsiveProps} />);
     const sources = Array.from(container.querySelectorAll('picture source'));
-    expect(sources).toHaveLength(2);
+    expect(sources).toHaveLength(3);
     expect(sources[0]).toHaveAttribute('media', '(min-width: 1024px)');
-    expect(sources[0]).toHaveAttribute('srcset', '/media/trama-gateway-poster-l.webp');
+    expect(sources[0]).toHaveAttribute('srcset', '/media/trama-gateway-bg-l.webp');
     expect(sources[1]).toHaveAttribute('media', '(min-width: 600px)');
-    expect(sources[1]).toHaveAttribute('srcset', '/media/trama-gateway-poster-m.webp');
+    expect(sources[1]).toHaveAttribute('srcset', '/media/trama-gateway-bg-m.webp');
+    expect(sources[2]).toHaveAttribute('media', '(max-width: 359px)');
+    expect(sources[2]).toHaveAttribute('srcset', '/media/trama-gateway-bg-lim.webp');
+
+    const images = container.querySelectorAll('picture img');
+    expect(images).toHaveLength(1);
     expect(screen.getByTestId('trama-media-poster')).toHaveAttribute(
       'src',
-      '/media/trama-gateway-poster-s.webp',
+      '/media/trama-gateway-bg-s.webp',
     );
   });
 
-  it('uses only the responsive local poster when reduced motion is requested', () => {
+  it('uses only the responsive local background when reduced motion is requested', () => {
     setReducedMotion(true);
     render(<TramaMediaBackdrop {...responsiveProps} />);
     expect(screen.queryByTestId('trama-media-video')).not.toBeInTheDocument();
     expect(screen.getByTestId('trama-media-poster')).toHaveAttribute(
       'src',
-      '/media/trama-gateway-poster-s.webp',
+      '/media/trama-gateway-bg-s.webp',
     );
   });
 
-  it('keeps the responsive poster visible when the prototype video fails', () => {
+  it('keeps the responsive background visible when the prototype video fails', () => {
     render(<TramaMediaBackdrop {...responsiveProps} />);
     const video = screen.getByTestId('trama-media-video');
     fireEvent.error(video);
