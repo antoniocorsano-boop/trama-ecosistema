@@ -126,9 +126,59 @@
         }
       }
     },
-    "session": {"type": "object"},
-    "logout": {"type": "object"},
-    "failureModes": {"type": "object"},
-    "forbiddenPatterns": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["establishment", "owner", "privilegeRevalidation", "boundedExpiry"],
+      "properties": {
+        "establishment": {"const": "verified provider assertion plus local product authorization mapping"},
+        "owner": {"const": "destination_product"},
+        "privilegeRevalidation": {"const": "required before new or elevated privilege is granted"},
+        "boundedExpiry": {"const": true}
+      }
+    },
+    "logout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local", "coordinated", "mustNotFakeGlobalLogout"],
+      "properties": {
+        "local": {"const": "MUST_TERMINATE_LOCAL_SESSION_INDEPENDENTLY_OF_PROVIDER_AVAILABILITY"},
+        "coordinated": {"const": "BEST_EFFORT_WHERE_PROTOCOL_AND_PROVIDER_SUPPORT_IT"},
+        "mustNotFakeGlobalLogout": {"const": true}
+      }
+    },
+    "failureModes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["providerUnavailableNewSignIn", "providerVerificationUnavailable", "publicGateway", "publicCurricoloAtlas", "publicControlCenter", "existingLocalSession"],
+      "properties": {
+        "providerUnavailableNewSignIn": {"const": "FAIL_CLOSED"},
+        "providerVerificationUnavailable": {"const": "FAIL_CLOSED"},
+        "publicGateway": {"const": "REMAIN_AVAILABLE"},
+        "publicCurricoloAtlas": {"const": "REMAIN_AVAILABLE"},
+        "publicControlCenter": {"const": "REMAIN_AVAILABLE"},
+        "existingLocalSession": {"const": "MAY_CONTINUE_ONLY_UNDER_LOCAL_BOUNDED_EXPIRY_WITHOUT_NEW_PRIVILEGE"}
+      }
+    },
+    "forbiddenPatterns": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "EMAIL_AS_AUTHORITY_KEY"},
+        {"const": "MUTABLE_METADATA_AS_AUTHORITY_KEY"},
+        {"const": "WILDCARD_ISSUER"},
+        {"const": "WILDCARD_AUDIENCE"},
+        {"const": "WILDCARD_REDIRECT_URI"},
+        {"const": "IMPLICIT_OR_HYBRID_FLOW"},
+        {"const": "TOKEN_IN_APPLICATION_URL"},
+        {"const": "SHARED_CROSS_PRODUCT_LOCALSTORAGE_TOKEN"},
+        {"const": "GLOBAL_SHARED_PRODUCT_UUID_REQUIREMENT"},
+        {"const": "CENTRAL_PRODUCT_FINE_GRAINED_PERMISSION"},
+        {"const": "LEARNER_IDENTITY_IN_PROFESSIONAL_CONTRACT"},
+        {"const": "IMPLICIT_CROSS_PRODUCT_PRIVILEGE_ESCALATION"}
+      ],
+      "items": false,
+      "minItems": 12,
+      "maxItems": 12
+    }
   }
 }
