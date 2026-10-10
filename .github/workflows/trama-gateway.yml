@@ -54,11 +54,13 @@ jobs:
       - name: Test gateway media validator
         run: node scripts/test-trama-gateway-media-validator.mjs
 
+      - name: Test gateway evidence materializer
+        run: node scripts/test-materialize-trama-gateway-ui-evidence.mjs
+
       - name: Validate governed identity
         run: |
           node scripts/test-design-system-validator.mjs
           node scripts/test-trama-parent-identity-validator.mjs
-          node scripts/test-materialize-trama-gateway-ui-evidence.mjs
 
       - name: Install gateway dependencies
         working-directory: apps/gateway
