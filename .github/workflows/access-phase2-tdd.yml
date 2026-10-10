@@ -28,12 +28,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/gateway/package-lock.json
 
-      - name: Install isolated test runner
-        run: |
-          mkdir -p .access-tdd-runtime
-          npm install --prefix .access-tdd-runtime --no-audit --no-fund vitest@5.0.2
-          ln -s .access-tdd-runtime/node_modules node_modules
+      - name: Install locked repository test toolchain
+        working-directory: apps/gateway
+        run: npm ci --no-audit --no-fund
+
+      - name: Expose locked test toolchain at repository root
+        run: ln -s apps/gateway/node_modules node_modules
 
       - name: Run RED config contract
-        run: .access-tdd-runtime/node_modules/.bin/vitest run apps/access/server/config.test.ts
+        run: ./apps/gateway/node_modules/.bin/vitest run apps/access/server/config.test.ts --environment node
