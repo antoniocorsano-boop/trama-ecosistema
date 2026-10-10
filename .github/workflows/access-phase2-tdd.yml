@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  config-contract:
+  access-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout exact branch head
@@ -42,9 +42,9 @@ jobs:
         working-directory: apps/access
         run: npm run typecheck
 
-      - name: Run config contract
+      - name: Run Access unit tests
         working-directory: apps/access
-        run: npm test -- server/config.test.ts
+        run: npm test
 
       - name: Build Access
         working-directory: apps/access
