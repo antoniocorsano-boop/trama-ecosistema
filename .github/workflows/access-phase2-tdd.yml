@@ -9,7 +9,7 @@ on:
       - '.github/workflows/access-phase2-tdd.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: access-phase2-tdd-${{ github.ref }}
@@ -28,24 +28,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/access/package-lock.json
 
       - name: Pin npm resolver
         run: npm install --global npm@11.6.0
-
-      - name: Refresh lockfile from pinned package manifest
-        working-directory: apps/access
-        run: npm install --package-lock-only --no-audit --no-fund
-
-      - name: Commit lockfile when changed
-        run: |
-          if git diff --quiet -- apps/access/package-lock.json; then
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add apps/access/package-lock.json
-          git commit -m "chore(access): lock auth runtime dependencies [skip ci]"
-          git push origin HEAD:feat/access-01-phase-2-trama-access-runtime
 
       - name: Install Access dependencies from lockfile
         working-directory: apps/access
