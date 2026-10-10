@@ -1,4 +1,5 @@
 import type { UserConfig } from 'vite';
+import { describe, expect, it } from 'vitest';
 import viteConfig from '../vite.config';
 
 describe('Render preview host policy', () => {
