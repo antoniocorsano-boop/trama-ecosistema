@@ -30,6 +30,8 @@ jobs:
           fi
           python3 scripts/validate_curricolo_vocabulary.py --base "$BASE_SHA"
       - {name: Validate governed document registry, run: python3 scripts/validate_governed_document_registry.py}
+      - {name: Validate ACCESS-01 professional identity contract, run: node scripts/validate-trama-professional-identity-contract.mjs}
+      - {name: Test ACCESS-01 professional identity contract adversarial cases, run: node scripts/test-trama-professional-identity-contract-validator.mjs}
       - {name: Validate OR-06 cross-ecosystem read-only proof, run: python3 scripts/validate_or06_cross_ecosystem_readonly_proof.py}
       - {name: Test OR-06 cross-ecosystem read-only proof, run: python3 -m unittest tests.test_or06_cross_ecosystem_readonly_proof -v}
       - {name: Validate OR-07 shared capability layer, run: python3 scripts/validate_or07_shared_capability_layer.py}

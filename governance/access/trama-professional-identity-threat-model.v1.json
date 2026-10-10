@@ -1,0 +1,123 @@
+{
+  "threatModelId": "TRAMA-PROFESSIONAL-IDENTITY-THREAT-MODEL-01",
+  "version": "1.0.0",
+  "contractRef": "TRAMA-PROFESSIONAL-IDENTITY-01@1.0.0",
+  "scope": "professional identity boundary only; no provider runtime",
+  "threats": [
+    {
+      "id": "T01",
+      "asset": "professional tokens and session assertions",
+      "attackOrFailure": "token leakage through application URL, logs, history or referrer",
+      "controls": ["TOKEN_IN_APPLICATION_URL forbidden", "shared localStorage token forbidden", "local product session after verified assertion"],
+      "residualRisk": "provider or product implementation may still mishandle tokens; Phase 2+ implementation review required",
+      "verification": "adversarial test TOKEN_URL_FORBIDDEN and SHARED_LOCALSTORAGE_FORBIDDEN"
+    },
+    {
+      "id": "T02",
+      "asset": "authorization code",
+      "attackOrFailure": "authorization-code interception or substitution",
+      "controls": ["authorization_code flow only", "PKCE S256 required"],
+      "residualRisk": "redirect endpoint compromise remains an application risk",
+      "verification": "adversarial test FLOW_INVALID plus canonical pkce=S256"
+    },
+    {
+      "id": "T03",
+      "asset": "redirect boundary",
+      "attackOrFailure": "redirect injection or open redirect",
+      "controls": ["exact redirect URI allowlist", "wildcards forbidden"],
+      "residualRisk": "misconfigured exact entries remain possible and must be reviewed in Phase 2",
+      "verification": "adversarial test REDIRECT_POLICY_INVALID"
+    },
+    {
+      "id": "T04",
+      "asset": "login transaction integrity",
+      "attackOrFailure": "login CSRF or state mismatch",
+      "controls": ["state required for authorization transaction"],
+      "residualRisk": "application implementation must bind state to the initiating session",
+      "verification": "adversarial test STATE_REQUIRED"
+    },
+    {
+      "id": "T05",
+      "asset": "OIDC assertion freshness",
+      "attackOrFailure": "nonce or assertion replay",
+      "controls": ["nonce required when an ID token is consumed", "bounded local session"],
+      "residualRisk": "provider-specific token lifetime and replay protections require Phase 2 validation",
+      "verification": "adversarial test NONCE_REQUIRED"
+    },
+    {
+      "id": "T06",
+      "asset": "issuer and audience trust",
+      "attackOrFailure": "issuer/audience confusion or confused-deputy acceptance",
+      "controls": ["exact issuer allowlist", "exact client/audience binding"],
+      "residualRisk": "provider discovery/JWKS configuration must be pinned correctly at runtime",
+      "verification": "adversarial tests ISSUER_POLICY_INVALID and AUDIENCE_POLICY_INVALID"
+    },
+    {
+      "id": "T07",
+      "asset": "principal and local identity binding",
+      "attackOrFailure": "account linking takeover using email or mutable metadata",
+      "controls": ["principal derives from issuer + subject", "email not authoritative", "server-side principal/application mapping"],
+      "residualRisk": "migration of existing product users needs an explicit reconciliation process",
+      "verification": "adversarial tests PRINCIPAL_KEY_INVALID, LOCAL_BINDING_KEY_INVALID and EMAIL_BINDING_FORBIDDEN"
+    },
+    {
+      "id": "T08",
+      "asset": "product authorization boundaries",
+      "attackOrFailure": "entitlement escalation or cross-product authority leak",
+      "controls": ["central entitlements are coarse-grained", "fine-grained permissions remain local", "institutional context grants no permission"],
+      "residualRisk": "destination products must independently enforce workspace/RLS/role policy",
+      "verification": "adversarial test ENTITLEMENT_PAIR_INVALID and local-authority contract assertions"
+    },
+    {
+      "id": "T09",
+      "asset": "availability and fail-closed authentication",
+      "attackOrFailure": "provider outage or unavailable discovery/JWKS/login",
+      "controls": ["new sign-in fails closed", "public Gateway remains available", "public Curricolo Atlas remains available", "public Control Center remains available"],
+      "residualRisk": "professional login is unavailable during provider outage by design",
+      "verification": "adversarial test PUBLIC_SURFACE_MUST_REMAIN_AVAILABLE plus failure-mode assertions"
+    },
+    {
+      "id": "T10",
+      "asset": "local product session",
+      "attackOrFailure": "incomplete logout or stale local session",
+      "controls": ["local logout terminates local session without provider", "existing session bounded by local expiry", "no new privilege without revalidation"],
+      "residualRisk": "global logout may be incomplete where the provider or application does not support coordinated logout",
+      "verification": "contract logout/session assertions; Phase 2+ runtime tests required"
+    },
+    {
+      "id": "T11",
+      "asset": "governance operations",
+      "attackOrFailure": "governance step-up bypass",
+      "controls": ["GOVERNANCE_OPERATOR is entry entitlement only", "sensitive actions require separate step-up/MFA boundary"],
+      "residualRisk": "privileged runtime is intentionally deferred to Phase 9",
+      "verification": "adversarial test GOVERNANCE_STEP_UP_REQUIRED"
+    },
+    {
+      "id": "T12",
+      "asset": "learner privacy boundary",
+      "attackOrFailure": "learner identity contamination into professional identity plane",
+      "controls": ["professional contract forbids learner identity", "no learner account created by access architecture"],
+      "residualRisk": "assignment handoff remains to be qualified in Phase 7",
+      "verification": "adversarial test LEARNER_IDENTITY_FORBIDDEN"
+    }
+  ],
+  "sessionFailureSemantics": {
+    "newSignInOnProviderVerificationUnavailable": "FAIL_CLOSED",
+    "publicSurfacesUnaffected": [
+      "TRAMA_GATEWAY",
+      "CURRICOLO_ATLAS_PUBLIC",
+      "CONTROL_CENTER_PUBLIC"
+    ],
+    "existingSession": "LOCAL_BOUNDED_EXPIRY_NO_NEW_PRIVILEGE",
+    "localLogout": "MUST_TERMINATE_LOCAL_SESSION_WITHOUT_PROVIDER",
+    "coordinatedLogout": "BEST_EFFORT_IF_SUPPORTED",
+    "entitlementRevocation": "NO_LATER_THAN_NEXT_GOVERNED_REVALIDATION"
+  },
+  "deferredRuntimeProof": [
+    "provider discovery/JWKS behavior",
+    "actual callback and state binding",
+    "local session expiry and revalidation timing",
+    "coordinated logout support",
+    "MFA/step-up enforcement"
+  ]
+}
