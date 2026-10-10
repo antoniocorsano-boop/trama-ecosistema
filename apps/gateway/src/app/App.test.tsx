@@ -23,6 +23,11 @@ describe('TRAMA gateway', () => {
     );
   });
 
+  it('does not expose the rejected vector poster through the rendered gateway', () => {
+    render(<App />);
+    expect(screen.getByTestId('trama-media-poster').getAttribute('src')).not.toMatch(/\.svg$/);
+  });
+
   it('adapts canonical parent identity values without inventing local ones', () => {
     expect(gatewayIdentity.colors).toEqual({
       background: '201 100% 13%',
