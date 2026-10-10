@@ -89,7 +89,7 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.locator('video')).toHaveCount(0);
 
   const accent = page.getByTestId('trama-experience-accent');
-  await expect(accent).toHaveCSS('color', 'rgb(246, 183, 127)');
+  await expect(accent).toHaveCSS('color', 'rgb(255, 224, 194)');
   const accentState = await accent.evaluate((element) => {
     const style = getComputedStyle(element);
     return {
@@ -97,8 +97,8 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
       backgroundImage: style.backgroundImage,
     };
   });
-  expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.6);
-  expect(accentState.strokeWidth).toBeLessThanOrEqual(0.8);
+  expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.4);
+  expect(accentState.strokeWidth).toBeLessThanOrEqual(0.6);
   expect(accentState.backgroundImage).toContain('radial-gradient');
 
   const quietZone = page.getByTestId('trama-hero-quiet-zone');
