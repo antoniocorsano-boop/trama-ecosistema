@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'apps/gateway/**'
+      - 'governance/access/**'
+      - 'docs/evidence/access-01/**'
+      - 'docs/superpowers/plans/2026-10-10-access-01-phase-0-safe-gateway.md'
       - 'policies/design-system/**'
       - 'policies/ui-evidence-producers.v1.json'
       - 'schemas/ui-evidence.manifest.schema.json'
