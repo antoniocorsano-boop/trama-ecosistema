@@ -4,9 +4,18 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { validateTramaGatewayMedia } from './validate-trama-gateway-media.mjs';
 
-const [exactHead, evidenceDirArg, outputArg, runId = 'local'] = process.argv.slice(2);
-if (!exactHead || !evidenceDirArg || !outputArg) {
-  console.error('usage: node scripts/materialize-trama-gateway-ui-evidence.mjs <exactHead> <evidenceDir> <outputFile> [runId]');
+const args = process.argv.slice(2);
+const [exactHead, evidenceDirArg, outputArg, runId = 'local'] = args;
+const repositoryRootIndex = args.indexOf('--repository-root');
+const sourceRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const repositoryRoot = repositoryRootIndex >= 0
+  ? path.resolve(args[repositoryRootIndex + 1] ?? '')
+  : sourceRoot;
+
+if (!exactHead || !evidenceDirArg || !outputArg || (repositoryRootIndex >= 0 && !args[repositoryRootIndex + 1])) {
+  console.error(
+    'usage: node scripts/materialize-trama-gateway-ui-evidence.mjs <exactHead> <evidenceDir> <outputFile> [runId] [--repository-root <path>]',
+  );
   process.exit(2);
 }
 if (!/^[0-9a-f]{40}$/.test(exactHead)) {
@@ -14,15 +23,14 @@ if (!/^[0-9a-f]{40}$/.test(exactHead)) {
   process.exit(2);
 }
 
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-const evidenceDir = path.resolve(root, evidenceDirArg);
-const outputFile = path.resolve(root, outputArg);
-const templatePath = path.join(root, 'apps/gateway/ui-evidence.manifest.template.json');
+const evidenceDir = path.resolve(repositoryRoot, evidenceDirArg);
+const outputFile = path.resolve(repositoryRoot, outputArg);
+const templatePath = path.join(sourceRoot, 'apps/gateway/ui-evidence.manifest.template.json');
 const required = [
-  'gateway-S.png',
-  'gateway-M.png',
-  'gateway-L.png',
-  'gateway-LIM.png',
+  'background-S.png',
+  'background-M.png',
+  'background-L.png',
+  'background-LIM.png',
   'axe-L.json',
   'keyboard-focus-L.json',
   'text-resize-LIM.json',
@@ -49,7 +57,7 @@ readJsonPass('keyboard-focus-L.json');
 readJsonPass('text-resize-LIM.json');
 
 const digest = (file) => `sha256:${crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')}`;
-const reference = (file) => path.relative(root, file).split(path.sep).join('/');
+const reference = (file) => path.relative(repositoryRoot, file).split(path.sep).join('/');
 const bind = (name, producer, type, evidenceId) => {
   const file = path.join(evidenceDir, name);
   return {
@@ -64,7 +72,7 @@ const bind = (name, producer, type, evidenceId) => {
   };
 };
 const bindRepositoryFile = (relativePath, producer, type, evidenceId) => {
-  const file = path.join(root, relativePath);
+  const file = path.join(repositoryRoot, relativePath);
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
     console.error(`missing required repository evidence: ${relativePath}`);
     process.exit(1);
@@ -81,7 +89,7 @@ const bindRepositoryFile = (relativePath, producer, type, evidenceId) => {
   };
 };
 
-const media = validateTramaGatewayMedia(root);
+const media = validateTramaGatewayMedia(repositoryRoot);
 const visualBaseline = 'docs/superpowers/specs/assets/trama-gateway-approved-desktop-v2.jpg';
 const provenance = 'apps/gateway/public/media/trama-gateway-media-provenance.json';
 
@@ -93,7 +101,12 @@ const dimensions = {
   LIM: { width: 320, height: 900 },
 };
 manifest.responsive.evidence = Object.entries(dimensions).map(([condition, size]) => ({
-  ...bind(`gateway-${condition}.png`, 'playwright', 'responsive', `trama-gateway-responsive-${condition.toLowerCase()}`),
+  ...bind(
+    `background-${condition}.png`,
+    'playwright',
+    'responsive-background',
+    `trama-gateway-background-${condition.toLowerCase()}`,
+  ),
   condition,
   policyId: 'TRAMA-RESPONSIVE',
   policyVersion: '1.0.0',
@@ -108,9 +121,10 @@ manifest.accessibility.evidence = [
 manifest.perceptibleWrite.evidence = [
   bindRepositoryFile(visualBaseline, 'human-governance-review', 'visual-baseline-contract', 'trama-gateway-visual-baseline'),
   bindRepositoryFile(provenance, 'github-actions', 'media-provenance', 'trama-gateway-media-provenance'),
-  bindRepositoryFile(reference(media.paths.s), 'github-actions', 'poster-asset', 'trama-gateway-poster-s'),
-  bindRepositoryFile(reference(media.paths.m), 'github-actions', 'poster-asset', 'trama-gateway-poster-m'),
-  bindRepositoryFile(reference(media.paths.l), 'github-actions', 'poster-asset', 'trama-gateway-poster-l'),
+  bindRepositoryFile(reference(media.paths.lim), 'github-actions', 'background-asset', 'trama-gateway-background-lim'),
+  bindRepositoryFile(reference(media.paths.s), 'github-actions', 'background-asset', 'trama-gateway-background-s'),
+  bindRepositoryFile(reference(media.paths.m), 'github-actions', 'background-asset', 'trama-gateway-background-m'),
+  bindRepositoryFile(reference(media.paths.l), 'github-actions', 'background-asset', 'trama-gateway-background-l'),
 ];
 
 fs.mkdirSync(path.dirname(outputFile), { recursive: true });
