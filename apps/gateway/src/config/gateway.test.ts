@@ -44,4 +44,8 @@ describe('resolveGatewayEntryHref', () => {
   it('keeps the explicit preview-safe fallback outside production', () => {
     expect(resolveGatewayEntryHref(undefined, false)).toBe('/preview');
   });
+
+  it('uses a configured destination outside production when one is supplied', () => {
+    expect(resolveGatewayEntryHref('  /ecosistema  ', false)).toBe('/ecosistema');
+  });
 });
