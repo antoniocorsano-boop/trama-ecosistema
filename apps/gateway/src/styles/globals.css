@@ -14,6 +14,7 @@
   --input: 0 0% 18%;
   --copper: 24 76% 59%;
   --copper-readable: #ffe0c2;
+  --solar-highlight: #ffd86a;
   --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color-scheme: dark;
@@ -111,21 +112,32 @@ a {
     0 4px 18px rgba(0, 13, 16, 0.30);
 }
 
+.trama-solar-wordmark {
+  color: var(--solar-highlight);
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-shadow:
+    0 0 2px rgba(255, 251, 225, 0.92),
+    0 0 9px rgba(255, 216, 106, 0.62),
+    0 0 20px rgba(255, 162, 54, 0.28);
+}
+
 .trama-copper-text {
   display: block;
   margin-top: 0.08em;
-  color: #FFFBEA;
+  color: var(--solar-highlight);
   background-image: none;
   background-clip: border-box;
   -webkit-background-clip: border-box;
-  -webkit-text-fill-color: #FFFBEA;
+  -webkit-text-fill-color: var(--solar-highlight);
   -webkit-text-stroke: 0.30px rgba(52, 29, 10, 0.72);
   paint-order: stroke fill;
   text-shadow:
-    0 0 3px rgba(255, 255, 245, 0.92),
-    0 0 11px rgba(255, 235, 190, 0.72),
-    0 0 26px rgba(255, 198, 112, 0.42),
-    0 0 44px rgba(255, 166, 64, 0.22),
+    0 0 2px rgba(255, 251, 225, 0.95),
+    0 0 8px rgba(255, 216, 106, 0.82),
+    0 0 20px rgba(255, 174, 64, 0.48),
+    0 0 38px rgba(255, 135, 32, 0.24),
     0 1px 2px rgba(10, 8, 6, 0.18);
 }
 
@@ -199,6 +211,10 @@ a {
     object-position: 50% 54%;
   }
 
+  .trama-solar-wordmark {
+    font-size: 2.1rem;
+  }
+
   .trama-hero-composition {
     max-width: 54rem;
     transform: translateY(-3rem);
@@ -222,6 +238,10 @@ a {
   .trama-media-visual {
     filter: brightness(1.04) saturate(1.04) contrast(1);
     object-position: 50% 52%;
+  }
+
+  .trama-solar-wordmark {
+    font-size: 2.25rem;
   }
 
   .trama-gateway-stage[data-visual-revision='approved-l-v3']::before {
@@ -381,7 +401,8 @@ a {
   }
 
   .trama-copy-reinforced,
-  .trama-copper-text {
+  .trama-copper-text,
+  .trama-solar-wordmark {
     text-shadow: none;
   }
 
@@ -392,6 +413,10 @@ a {
     -webkit-background-clip: border-box;
     -webkit-text-fill-color: CanvasText;
     -webkit-text-stroke: 0;
+  }
+
+  .trama-solar-wordmark {
+    color: CanvasText;
   }
 
   .trama-segno-vivo {
