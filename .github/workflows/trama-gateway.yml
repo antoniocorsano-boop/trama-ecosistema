@@ -12,6 +12,8 @@ on:
       - 'scripts/test-design-system-validator.mjs'
       - 'scripts/validate-trama-parent-identity.mjs'
       - 'scripts/test-trama-parent-identity-validator.mjs'
+      - 'scripts/validate-trama-gateway-media.mjs'
+      - 'scripts/test-trama-gateway-media-validator.mjs'
       - 'scripts/materialize-trama-gateway-ui-evidence.mjs'
       - 'scripts/test-materialize-trama-gateway-ui-evidence.mjs'
       - 'scripts/validate-ui-evidence.mjs'
@@ -54,6 +56,9 @@ jobs:
           node scripts/test-design-system-validator.mjs
           node scripts/test-trama-parent-identity-validator.mjs
           node scripts/test-materialize-trama-gateway-ui-evidence.mjs
+
+      - name: Test gateway media validator
+        run: node scripts/test-trama-gateway-media-validator.mjs
 
       - name: Install gateway dependencies
         working-directory: apps/gateway
