@@ -87,7 +87,13 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveAttribute('href', '/ecosistema');
   await expect(page.locator('img.trama-media-visual')).toHaveCount(1);
   await expect(page.locator('video')).toHaveCount(0);
-  await expect(page.getByTestId('trama-experience-accent')).toHaveCSS('color', 'rgb(113, 54, 33)');
+
+  const accent = page.getByTestId('trama-experience-accent');
+  await expect(accent).toHaveCSS('color', 'rgb(113, 54, 33)');
+  const accentStrokeWidth = await accent.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).getPropertyValue('-webkit-text-stroke-width')),
+  );
+  expect(accentStrokeWidth).toBeGreaterThanOrEqual(0.5);
 
   const quietZone = page.getByTestId('trama-hero-quiet-zone');
   await expect(quietZone).toBeVisible();
@@ -102,7 +108,7 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   expect(quietZoneState.maskImage).toContain('radial-gradient');
 
   if (testInfo.project.name !== 'L') {
-    await expect(page.getByTestId('trama-experience-accent')).toHaveCSS('display', 'block');
+    await expect(accent).toHaveCSS('display', 'block');
   }
 
   const expectedBackground = EXPECTED_BACKGROUND[testInfo.project.name];
