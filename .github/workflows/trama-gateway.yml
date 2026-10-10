@@ -51,14 +51,14 @@ jobs:
       - name: Pin npm resolver
         run: npm install --global npm@11.6.0
 
+      - name: Test gateway media validator
+        run: node scripts/test-trama-gateway-media-validator.mjs
+
       - name: Validate governed identity
         run: |
           node scripts/test-design-system-validator.mjs
           node scripts/test-trama-parent-identity-validator.mjs
           node scripts/test-materialize-trama-gateway-ui-evidence.mjs
-
-      - name: Test gateway media validator
-        run: node scripts/test-trama-gateway-media-validator.mjs
 
       - name: Install gateway dependencies
         working-directory: apps/gateway
