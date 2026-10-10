@@ -1,0 +1,249 @@
+:root {
+  --background: 201 100% 13%;
+  --foreground: 0 0% 100%;
+  --muted-foreground: 240 4% 66%;
+  --primary: 0 0% 100%;
+  --primary-foreground: 0 0% 4%;
+  --secondary: 0 0% 10%;
+  --muted: 0 0% 10%;
+  --accent: 0 0% 10%;
+  --border: 0 0% 18%;
+  --input: 0 0% 18%;
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+  font-family: var(--font-body);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 82% 12%, hsl(var(--foreground) / 0.055), transparent 34rem),
+    hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid hsl(var(--foreground));
+  outline-offset: 3px;
+}
+
+.access-stage {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.access-frame {
+  width: min(100%, 44rem);
+}
+
+.access-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0.25rem 1.25rem;
+  border-bottom: 1px solid hsl(var(--foreground) / 0.14);
+}
+
+.access-wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 5vw, 2.4rem);
+  letter-spacing: 0.08em;
+}
+
+.access-product-name,
+.access-kicker {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.access-panel {
+  margin-top: clamp(1.5rem, 5vw, 3.5rem);
+  padding: clamp(1.25rem, 5vw, 3rem);
+  border: 1px solid hsl(var(--foreground) / 0.14);
+  border-radius: 1.25rem;
+  background: hsl(var(--secondary) / 0.28);
+  box-shadow: 0 1.5rem 4rem hsl(0 0% 0% / 0.16);
+}
+
+.access-intro,
+.access-status {
+  max-width: 36rem;
+}
+
+.access-kicker {
+  margin: 0 0 0.8rem;
+}
+
+.access-intro h1,
+.access-status h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 8vw, 4.25rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+.access-intro p:not(.access-kicker),
+.access-status p {
+  margin: 1.15rem 0 0;
+  color: hsl(var(--foreground) / 0.75);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.access-form {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.access-label {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.access-input {
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid hsl(var(--foreground) / 0.22);
+  border-radius: 0.75rem;
+  background: hsl(var(--input) / 0.48);
+  color: hsl(var(--foreground));
+}
+
+.access-input:hover {
+  border-color: hsl(var(--foreground) / 0.38);
+}
+
+.access-primary-action,
+.access-secondary-action {
+  min-height: 3rem;
+  border-radius: 999px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.access-primary-action {
+  margin-top: 0.4rem;
+  border: 1px solid hsl(var(--primary));
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.access-primary-action:disabled {
+  cursor: progress;
+  opacity: 0.68;
+}
+
+.access-secondary-action {
+  margin-top: 1.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid hsl(var(--foreground) / 0.22);
+  background: transparent;
+  color: hsl(var(--foreground));
+}
+
+.access-launcher {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.access-launcher-item {
+  width: 100%;
+  min-height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid hsl(var(--foreground) / 0.14);
+  border-radius: 0.9rem;
+  background: hsl(var(--foreground) / 0.035);
+  color: hsl(var(--foreground));
+  text-align: left;
+}
+
+.access-launcher-item:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.access-launcher-label {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+}
+
+.access-launcher-pending {
+  max-width: 15rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+@media (max-width: 36rem) {
+  .access-stage {
+    align-items: start;
+    padding: 1rem;
+  }
+
+  .access-panel {
+    margin-top: 1.5rem;
+    border-radius: 1rem;
+  }
+
+  .access-launcher-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .access-launcher-pending {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
