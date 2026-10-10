@@ -7,6 +7,7 @@ export function TramaGatewayShell({ children }: PropsWithChildren) {
   return (
     <div
       id="top"
+      data-visual-revision={gatewayConfig.visualRevision}
       className="trama-gateway-stage relative min-h-svh overflow-hidden bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
     >
       <TramaMediaBackdrop
