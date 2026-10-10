@@ -1,0 +1,1 @@
+Binary asset replacement target: trama-gateway-poster-s.webp, trama-gateway-poster-m.webp, trama-gateway-poster-l.webp. Source working files are project-generated derivatives of the approved TRAMA v2 baseline; exact-head CI and Human Visual Review remain required.
