@@ -7,28 +7,30 @@ export function App() {
   return (
     <TramaGatewayShell>
       <TramaNavigation />
-      <main className="relative z-10 flex min-h-[calc(100svh-104px)] flex-col items-center justify-center px-6 pb-24 pt-16 text-center sm:pb-32 sm:pt-20">
-        <section aria-labelledby="gateway-title" className="flex w-full max-w-7xl flex-col items-center">
-          <p className="animate-fade-rise mb-6 text-xs font-medium uppercase tracking-[0.32em] text-[hsl(var(--foreground))] sm:text-sm">
+      <main className="relative z-10 flex min-h-[calc(100svh-96px)] flex-col items-center justify-center px-5 pb-20 pt-10 text-center sm:px-8 sm:pb-24 sm:pt-14 lg:pb-28">
+        <section aria-labelledby="gateway-title" className="flex w-full max-w-6xl flex-col items-center">
+          <p className="animate-fade-rise mb-5 text-[0.68rem] font-medium uppercase tracking-[0.38em] text-[hsl(var(--copper))] sm:mb-6 sm:text-xs">
             TRAMA
           </p>
           <h1
             id="gateway-title"
-            className="trama-copy-reinforced animate-fade-rise max-w-6xl text-5xl font-normal leading-[0.95] tracking-[-0.035em] text-[hsl(var(--foreground))] sm:text-7xl md:text-8xl"
+            className="trama-copy-reinforced animate-fade-rise max-w-5xl text-[2.9rem] font-normal leading-[0.94] tracking-[-0.035em] text-[hsl(var(--foreground))] sm:text-6xl md:text-7xl lg:text-[5.5rem]"
             style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
           >
-            Dove <em className="not-italic text-[hsl(var(--muted-foreground))]">curricolo</em>, conoscenza e{' '}
-            <em className="not-italic text-[hsl(var(--muted-foreground))]">progettazione diventano esperienza.</em>
+            Dove curricolo, conoscenza e progettazione diventano{' '}
+            <em data-testid="trama-experience-accent" className="trama-copper-text italic">
+              esperienza.
+            </em>
           </h1>
-          <p className="trama-copy-reinforced animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-lg">
+          <p className="trama-copy-reinforced animate-fade-rise-delay mt-7 max-w-3xl text-sm leading-relaxed text-[hsl(var(--foreground)/0.88)] sm:mt-8 sm:text-base md:text-lg">
             Un ecosistema per progettare, organizzare e trasformare il lavoro didattico, mantenendo unite intenzione educativa, materiali, evidenze e documentazione.
           </p>
           <TramaGlassAction
             href={gatewayConfig.entryHref}
             size="hero"
-            className="animate-fade-rise-delay-2 mt-12"
+            className="trama-copper-action animate-fade-rise-delay-2 mt-9 sm:mt-10"
           >
-            Entra in TRAMA
+            Entra in TRAMA <span aria-hidden="true" className="ml-2">→</span>
           </TramaGlassAction>
         </section>
       </main>
