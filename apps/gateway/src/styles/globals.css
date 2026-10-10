@@ -114,6 +114,16 @@ a {
   display: block;
   margin-top: 0.08em;
   color: var(--copper-readable);
+  background-image: radial-gradient(
+    ellipse at 50% 52%,
+    rgba(255, 232, 207, 0.34) 0%,
+    rgba(255, 226, 198, 0.20) 42%,
+    rgba(255, 220, 187, 0.07) 63%,
+    transparent 80%
+  );
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: clamp(13rem, 68vw, 25rem) 155%;
   -webkit-text-stroke: 0.7px rgba(255, 228, 201, 0.58);
   paint-order: stroke fill;
   text-shadow:
@@ -285,6 +295,7 @@ a {
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-copper-text {
     display: inline;
     margin-top: 0;
+    background-size: 112% 150%;
     -webkit-text-stroke-width: 0.55px;
   }
 
@@ -379,6 +390,7 @@ a {
 
   .trama-copper-text {
     color: CanvasText;
+    background-image: none;
     -webkit-text-stroke: 0;
   }
 
