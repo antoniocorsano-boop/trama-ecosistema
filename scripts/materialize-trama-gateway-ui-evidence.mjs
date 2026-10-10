@@ -104,7 +104,7 @@ manifest.responsive.evidence = Object.entries(dimensions).map(([condition, size]
   ...bind(
     `background-${condition}.png`,
     'playwright',
-    'responsive-background',
+    'responsive',
     `trama-gateway-background-${condition.toLowerCase()}`,
   ),
   condition,
