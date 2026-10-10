@@ -10,8 +10,12 @@ describe('gatewayConfig poster contract', () => {
     expect(poster).toBeDefined();
     expect(poster?.s ?? '').toMatch(/poster-s\.webp$/);
     expect(poster?.m ?? '').toMatch(/poster-m\.webp$/);
-    expect(poster?.l ?? '').toMatch(/poster-l-approved-v3\.webp$/);
+    expect(poster?.l ?? '').toMatch(/poster-l\.webp$/);
     expect(Object.values(poster ?? {}).every((src) => !src.endsWith('.svg'))).toBe(true);
+  });
+
+  it('binds the current desktop treatment to the approved L v3 visual revision', () => {
+    expect((gatewayConfig as { visualRevision?: string }).visualRevision).toBe('approved-l-v3');
   });
 
   it('keeps the configured entry destination explicit', () => {
