@@ -43,8 +43,8 @@ export function TramaNavigation() {
   return (
     <header className="trama-gateway-header relative z-20 mx-auto w-full max-w-[1280px] px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:pb-5 lg:pt-7">
       <div className="trama-gateway-nav-shell liquid-glass flex min-h-14 items-center justify-between gap-4 rounded-full px-4 py-2.5 sm:px-6 lg:min-h-16 lg:px-8">
-        <a href="#top" aria-label="TRAMA — torna all'inizio" className="shrink-0">
-          <TramaWordmark className="trama-solar-wordmark" />
+        <a href="#top" aria-label="TRAMA — torna all'inizio" className="shrink-0 text-[hsl(var(--foreground))]">
+          <TramaWordmark className="text-2xl tracking-[0.08em] sm:text-3xl" />
         </a>
 
         <nav aria-label="Navigazione principale" className="hidden items-center gap-10 md:flex lg:gap-14">
