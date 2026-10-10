@@ -69,15 +69,17 @@ describe('TRAMA Access canonical states', () => {
   });
 
   it('keeps logout visible for authenticated launcher states', () => {
-    for (const state of [
-      { state: 'AUTHENTICATED', principalId: '00000000-0000-4000-8000-000000000001' } as const,
-      { state: 'NO_ENTITLEMENTS', principalId: '00000000-0000-4000-8000-000000000001', launcher: [] } as const,
+    const authenticatedStates: AccessState[] = [
+      { state: 'AUTHENTICATED', principalId: '00000000-0000-4000-8000-000000000001' },
+      { state: 'NO_ENTITLEMENTS', principalId: '00000000-0000-4000-8000-000000000001', launcher: [] },
       {
         state: 'ENTITLEMENTS_AVAILABLE',
         principalId: '00000000-0000-4000-8000-000000000001',
         launcher,
-      } as const,
-    ]) {
+      },
+    ];
+
+    for (const state of authenticatedStates) {
       const { unmount } = render(
         <AccessView state={state} onRequestLink={vi.fn()} onLogout={vi.fn()} onReset={vi.fn()} />,
       );
