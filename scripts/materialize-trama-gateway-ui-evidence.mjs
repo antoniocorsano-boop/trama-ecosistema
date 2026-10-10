@@ -82,7 +82,7 @@ const bindRepositoryFile = (relativePath, producer, type, evidenceId) => {
 };
 
 const media = validateTramaGatewayMedia(root);
-const visualBaseline = 'docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.jpg';
+const visualBaseline = 'docs/superpowers/specs/assets/trama-gateway-approved-desktop-v2.jpg';
 const provenance = 'apps/gateway/public/media/trama-gateway-media-provenance.json';
 
 const manifest = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
