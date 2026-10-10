@@ -38,13 +38,13 @@ jobs:
         working-directory: apps/access
         run: npm ci --no-audit --no-fund
 
-      - name: Typecheck Access
-        working-directory: apps/access
-        run: npm run typecheck
-
       - name: Run Access unit tests
         working-directory: apps/access
         run: npm test
+
+      - name: Typecheck Access
+        working-directory: apps/access
+        run: npm run typecheck
 
       - name: Build Access
         working-directory: apps/access
