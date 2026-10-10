@@ -1,0 +1,33 @@
+name: ACCESS-01 Phase 2 TDD
+
+on:
+  push:
+    branches:
+      - feat/access-01-phase-2-trama-access-runtime
+    paths:
+      - 'apps/access/**'
+      - '.github/workflows/access-phase2-tdd.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: access-phase2-tdd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  config-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run RED config contract
+        run: npx --yes vitest@5.0.2 run apps/access/server/config.test.ts
