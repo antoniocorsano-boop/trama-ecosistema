@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { usePrefersReducedMotion } from '../../hooks/use-prefers-reduced-motion';
 
-export type TramaPosterSources = {
+export type TramaBackgroundSources = {
+  lim: string;
   s: string;
   m: string;
   l: string;
@@ -9,11 +10,11 @@ export type TramaPosterSources = {
 
 export type TramaMediaBackdropProps = {
   videoSrc: string;
-  poster: TramaPosterSources;
+  background: TramaBackgroundSources;
   className?: string;
 };
 
-export function TramaMediaBackdrop({ videoSrc, poster, className }: TramaMediaBackdropProps) {
+export function TramaMediaBackdrop({ videoSrc, background, className }: TramaMediaBackdropProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [videoFailed, setVideoFailed] = useState(false);
   const showVideo = !prefersReducedMotion && !videoFailed;
@@ -21,11 +22,12 @@ export function TramaMediaBackdrop({ videoSrc, poster, className }: TramaMediaBa
   return (
     <div className={className} aria-hidden="true">
       <picture>
-        <source media="(min-width: 1024px)" srcSet={poster.l} />
-        <source media="(min-width: 600px)" srcSet={poster.m} />
+        <source media="(min-width: 1024px)" srcSet={background.l} />
+        <source media="(min-width: 600px)" srcSet={background.m} />
+        <source media="(max-width: 359px)" srcSet={background.lim} />
         <img
           data-testid="trama-media-poster"
-          src={poster.s}
+          src={background.s}
           alt=""
           className="trama-media-visual absolute inset-0 h-full w-full object-cover"
         />
@@ -34,7 +36,7 @@ export function TramaMediaBackdrop({ videoSrc, poster, className }: TramaMediaBa
         <video
           data-testid="trama-media-video"
           src={videoSrc}
-          poster={poster.l}
+          poster={background.l}
           autoPlay
           loop
           muted

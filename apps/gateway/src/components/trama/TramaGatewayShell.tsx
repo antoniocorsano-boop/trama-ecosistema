@@ -12,7 +12,7 @@ export function TramaGatewayShell({ children }: PropsWithChildren) {
     >
       <TramaMediaBackdrop
         videoSrc={gatewayConfig.prototypeVideoSrc}
-        poster={gatewayConfig.poster}
+        background={gatewayConfig.background}
         className="absolute inset-0 z-0"
       />
       <TramaSegnoVivo />
