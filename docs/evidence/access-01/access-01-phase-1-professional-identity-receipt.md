@@ -3,8 +3,9 @@
 **Data:** 2026-10-10  
 **PR:** #270 — `ACCESS-01 Phase 1 — professional identity contract plan`  
 **Execution:** Native / TDD  
-**Qualification head:** `af6a9ff03b4a7f4acf273422b30017cf51df14d8`  
-**Governance:** run `38082630535` / #2119 — **PASS**
+**Qualification head:** `c12e5b9a523b51ca10c278668d441d75e70ec526`  
+**Governance:** run `38083078813` / #2123 — **PASS**  
+**TRAMA Gateway regression:** run `38083078860` / #185 — **PASS**
 
 ## Decision
 
@@ -42,9 +43,14 @@ La state map conserva quindi:
 ### Task 2 — validator fail-closed e casi avversari
 
 - RED `460414c0de83dea173c26352efd1fc3fe911f65b` — run `38082122169`: validator assente;
-- GREEN `83107654ecdc210de962f745810c931df369b701` — run `38082176800`.
+- GREEN `83107654ecdc210de962f745810c931df369b701` — run `38082176800`;
+- review finding: il validator iniziale verificava le invarianti semantiche principali ma non applicava integralmente lo schema, lasciando passare drift strutturali non autorizzati;
+- RED `d72a36ff5afe377e3267dc526736c5ecec2e2074` — Governance run `38082972922` / #2121: il caso `status = RUNTIME_AUTHORIZED` viene accettato e il test fallisce con `candidate must be rejected`;
+- GREEN `c12e5b9a523b51ca10c278668d441d75e70ec526` — Governance run `38083078813` / #2123: validator canonico, casi avversari e intera Governance **PASS**.
 
-I casi avversari coprono email/mutable metadata come authority, wildcard issuer/audience/redirect, flow implicito, assenza state/nonce, token in URL/localStorage, UUID globale condiviso, permessi fini centrali, applicazioni sconosciute, contaminazione learner, bypass step-up e outage che abbatte superfici pubbliche.
+Il validator ora applica fail-closed il sottoinsieme JSON Schema effettivamente usato dal contratto: `type`, `const`, `enum`, `required`, `additionalProperties: false`, `minLength`, `minItems/maxItems`, `prefixItems` e `items`. Le sezioni `session`, `logout`, `failureModes` e `forbiddenPatterns` sono vincolate strutturalmente e semanticamente.
+
+I casi avversari coprono email/metadati mutabili come authority, wildcard issuer/audience/redirect, flow implicito, assenza state/nonce, token in URL/localStorage, UUID globale condiviso, permessi fini centrali, applicazioni sconosciute, contaminazione learner, bypass step-up, outage che abbatte superfici pubbliche, status non autorizzati, proprietà estranee e drift di session/logout/revalidation.
 
 ### Task 3 — threat model
 
@@ -75,7 +81,7 @@ Il workflow temporaneo TDD è stato rimosso. `.github/workflows/governance.yml` 
 - `Validate ACCESS-01 professional identity contract`;
 - `Test ACCESS-01 professional identity contract adversarial cases`.
 
-Sul qualification head `af6a9ff0…`, entrambi i gate sono **PASS** e l'intera Governance #2119 è **PASS**.
+Sul qualification head `c12e5b9a…`, entrambi i gate sono **PASS** e l'intera Governance #2123 è **PASS**. Sullo stesso exact head anche TRAMA Gateway #185 è **PASS**, inclusi typecheck, test, build e certificazione browser.
 
 ## Confini preservati
 
