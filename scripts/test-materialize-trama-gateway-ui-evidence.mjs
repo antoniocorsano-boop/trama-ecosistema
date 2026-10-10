@@ -77,6 +77,25 @@ try {
       check(newComponents.has(component), `records ${component}`);
     }
     check((manifest.designSystem?.tokens || []).includes('TRAMA-PARENT-IDENTITY@1.0.0'), 'records parent identity policy');
+
+    const perceptibleEvidence = manifest.perceptibleWrite?.evidence || [];
+    const evidenceById = new Map(perceptibleEvidence.map((entry) => [entry.evidenceId, entry]));
+    const requiredMediaEvidence = {
+      'trama-gateway-visual-baseline': 'docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.jpg',
+      'trama-gateway-media-provenance': 'apps/gateway/public/media/trama-gateway-media-provenance.json',
+      'trama-gateway-poster-s': 'apps/gateway/public/media/trama-gateway-poster-s.webp',
+      'trama-gateway-poster-m': 'apps/gateway/public/media/trama-gateway-poster-m.webp',
+      'trama-gateway-poster-l': 'apps/gateway/public/media/trama-gateway-poster-l.webp',
+    };
+    for (const [evidenceId, reference] of Object.entries(requiredMediaEvidence)) {
+      const entry = evidenceById.get(evidenceId);
+      check(Boolean(entry), `records ${evidenceId}`);
+      if (entry) {
+        check(entry.reference === reference, `${evidenceId} binds canonical reference`);
+        check(entry.commitSha === EXACT_HEAD, `${evidenceId} binds exact head`);
+        check(typeof entry.digest === 'string' && entry.digest.startsWith('sha256:'), `${evidenceId} records digest`);
+      }
+    }
   }
 
   fs.rmSync(path.join(evidenceDir, 'gateway-M.png'));
