@@ -9,12 +9,13 @@ describe('TramaGlassAction', () => {
     expect(screen.getByRole('link', { name: 'Accedi' })).toHaveAttribute('href', '/ecosistema');
   });
 
-  it('renders unavailable professional entry as a disabled non-navigation control', () => {
+  it('renders unavailable professional entry as a self-explanatory disabled control', () => {
     render(<TramaGlassAction href={null}>Accedi</TramaGlassAction>);
 
-    const control = screen.getByRole('button', { name: 'Accedi' });
+    const control = screen.getByRole('button', { name: 'Accesso in preparazione' });
     expect(control).toBeDisabled();
     expect(control).toHaveAttribute('aria-disabled', 'true');
     expect(screen.queryByRole('link', { name: 'Accedi' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Accedi' })).not.toBeInTheDocument();
   });
 });
