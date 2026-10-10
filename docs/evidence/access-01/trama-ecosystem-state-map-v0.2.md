@@ -1,19 +1,19 @@
 # TRAMA Ecosystem State Map v0.2 — Evidence Record
 
-**Date:** 2026-10-10  
-**Purpose:** Persistent registration of the approved AS-IS / TARGET ecosystem state map.  
-**Authority:** Derived visual evidence for ACCESS-01; not the source of truth for state transitions.
+**Data:** 2026-10-10  
+**Scopo:** registrazione persistente della state map AS-IS / TARGET approvata.  
+**Autorità:** evidenza visuale derivata per ACCESS-01; non è la fonte autorevole delle transizioni di stato.
 
-## Source hierarchy
+## Gerarchia delle fonti
 
-1. `docs/superpowers/specs/2026-10-10-trama-access-01-ecosystem-access-architecture.md` — architecture authority.
-2. `governance/access/trama-ecosystem-state-v0.2.json` — machine-readable node/flow state authority.
-3. `docs/evidence/access-01/trama-ecosystem-state-assessment-v0.2.md` — analytical interpretation and rationale.
-4. Visual infographic — derived view for human comprehension.
+1. `docs/superpowers/specs/2026-10-10-trama-access-01-ecosystem-access-architecture-design.md` — autorità architetturale.
+2. `governance/access/trama-ecosystem-state-v0.2.json` — autorità machine-readable sullo stato di nodi e flussi.
+3. `docs/evidence/access-01/trama-ecosystem-state-assessment-v0.2.md` — interpretazione analitica e razionale.
+4. Infografica visuale — vista derivata per comprensione umana.
 
-A visual color or arrow does not promote a node/flow state by itself. State promotion requires exact-head evidence and a machine-readable state change first.
+Un colore o una freccia nell'infografica non promuove da solo un nodo o flusso. La promozione richiede prima evidenza exact-head e modifica dello stato machine-readable.
 
-## Registered visual assets
+## Asset visuali registrati
 
 ### PNG master
 
@@ -29,27 +29,27 @@ A visual color or arrow does not promote a node/flow state by itself. State prom
 - SHA-256: `1256c37487f2e3f39c9c4958de55681fac7df634718b09e01712aac515b5d6d6`
 - persistent Library path: `/TRAMA/ACCESS-01/TRAMA-ecosystem-state-map-v0.2.webp`
 
-## Canonical visual interpretation
+## Interpretazione canonica
 
-The infographic deliberately separates:
+L'infografica separa deliberatamente:
 
-- **AS-IS — stato reale oggi**: real nodes, partial flows and missing connective layer;
-- **TARGET — architettura ACCESS-01**: approved target relationships and user flows;
-- **node status** from **flow status**;
-- public, professional, learner and governance planes;
-- Arena → Curricolo Atlas from Studio Atlas → Atlas learner;
-- public Control Center from privileged Control Center;
-- product-local materials/classes from cross-product contracts.
+- **AS-IS — stato reale oggi**: nodi reali, flussi parziali e layer connettivo mancante;
+- **TARGET — architettura ACCESS-01**: relazioni e user flow target approvati;
+- stato dei nodi da stato dei flussi;
+- piani pubblico, professionale, learner e governance;
+- Arena → Curricolo Atlas da Studio Atlas → Atlas learner;
+- Control Center pubblico da Control Center privilegiato;
+- materiali/classi locali dai contratti cross-product.
 
-## Integrity note
+## Regola di integrità
 
-If the visual is regenerated or edited, increment the visual version or replace the registered digest only through a reviewed state/evidence update. Do not silently overwrite the meaning of v0.2.
+Se la visuale viene rigenerata o modificata, incrementare la versione oppure sostituire il digest registrato soltanto tramite aggiornamento reviewato di stato/evidenza. Non sovrascrivere silenziosamente il significato della v0.2.
 
 ## Mermaid fallback — AS-IS core
 
 ```mermaid
 flowchart TB
-  G[TRAMA Gateway\nREAL node / entry blocked] -. DESIGNED .-> A[TRAMA Access\nDESIGNED]
+  G[TRAMA Gateway\nREAL node / professional entry unavailable] -. DESIGNED .-> A[TRAMA Access\nDESIGNED]
   AR[Arena\nREAL] -->|REAL| CA[Curricolo Atlas\nREAL]
   DOS[Docente OS\nREAL] -. PARTIAL .-> CA
   DOS -. PARTIAL .-> AR
