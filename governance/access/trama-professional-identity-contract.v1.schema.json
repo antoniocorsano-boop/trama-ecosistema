@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/TRAMA-PROFESSIONAL-IDENTITY-01/v1",
+  "title": "TRAMA Professional Identity Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractId",
+    "version",
+    "status",
+    "scope",
+    "principal",
+    "institutionalContext",
+    "applicationEntitlement",
+    "localIdentityBinding",
+    "oidcRelyingParty",
+    "session",
+    "logout",
+    "failureModes",
+    "forbiddenPatterns"
+  ],
+  "properties": {
+    "contractId": {"const": "TRAMA-PROFESSIONAL-IDENTITY-01"},
+    "version": {"const": "1.0.0"},
+    "status": {"enum": ["QUALIFIED_CONTRACT_CANDIDATE", "QUALIFIED"]},
+    "scope": {"const": "professional_identity_only"},
+    "principal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoritativeKey", "principalId", "emailAuthoritative", "mutableMetadataAuthoritative"],
+      "properties": {
+        "authoritativeKey": {
+          "type": "array",
+          "prefixItems": [{"const": "issuer"}, {"const": "subject"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "principalId": {"type": "string", "minLength": 1},
+        "emailAuthoritative": {"const": false},
+        "mutableMetadataAuthoritative": {"const": false}
+      }
+    },
+    "institutionalContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["types", "institution", "grantsProductPermission"],
+      "properties": {
+        "types": {
+          "type": "array",
+          "prefixItems": [{"const": "PERSONAL"}, {"const": "INSTITUTION"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "institution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requiredRef", "refSemantics"],
+          "properties": {
+            "requiredRef": {"const": "institutionRef"},
+            "refSemantics": {"const": "opaque governed reference"}
+          }
+        },
+        "grantsProductPermission": {"const": false}
+      }
+    },
+    "applicationEntitlement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "fineGrainedPermissionsRemainLocal", "canonicalPairs", "governanceOperatorRequiresSeparateStepUpForSensitiveActions"],
+      "properties": {
+        "scope": {"const": "application_entry_or_mode_only"},
+        "fineGrainedPermissionsRemainLocal": {"const": true},
+        "canonicalPairs": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["application", "entitlement"],
+            "properties": {
+              "application": {"enum": ["DOCENTE_OS", "CURRICOLO_ATLAS", "STUDIO_ATLAS", "ARENA", "CONTROL_CENTER"]},
+              "entitlement": {"enum": ["USE", "READ", "AUTHOR", "ENTER", "GOVERNANCE_OPERATOR"]}
+            }
+          }
+        },
+        "governanceOperatorRequiresSeparateStepUpForSensitiveActions": {"const": true}
+      }
+    },
+    "localIdentityBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "resolver", "result", "requiresMatchingUuid", "emailBindingAllowed"],
+      "properties": {
+        "key": {"const": "(principalId, application)"},
+        "resolver": {"const": "server_side_governed_mapping"},
+        "result": {"const": "localSubjectRef"},
+        "requiresMatchingUuid": {"const": false},
+        "emailBindingAllowed": {"const": false}
+      }
+    },
+    "oidcRelyingParty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protocol", "oauthProfile", "flow", "pkce", "issuerValidation", "audienceValidation", "stateRequired", "nonceRequiredWhenIdTokenConsumed", "redirectUriPolicy", "tokenTransport"],
+      "properties": {
+        "protocol": {"const": "OpenID Connect"},
+        "oauthProfile": {"const": "OAuth 2.x"},
+        "flow": {"const": "authorization_code"},
+        "pkce": {"const": "S256"},
+        "issuerValidation": {"const": "exact_allowlist"},
+        "audienceValidation": {"const": "exact_client_binding"},
+        "stateRequired": {"const": true},
+        "nonceRequiredWhenIdTokenConsumed": {"const": true},
+        "redirectUriPolicy": {"const": "exact_allowlist_no_wildcards"},
+        "tokenTransport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["applicationUrls", "sharedLocalStorage"],
+          "properties": {
+            "applicationUrls": {"const": "FORBIDDEN"},
+            "sharedLocalStorage": {"const": "FORBIDDEN"}
+          }
+        }
+      }
+    },
+    "session": {"type": "object"},
+    "logout": {"type": "object"},
+    "failureModes": {"type": "object"},
+    "forbiddenPatterns": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}
