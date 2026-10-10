@@ -23,6 +23,19 @@ describe('TRAMA gateway', () => {
     );
   });
 
+  it('implements the approved v2 hero emphasis and Segno vivo layer', () => {
+    render(<App />);
+    expect(screen.getByTestId('trama-segno-vivo')).toBeInTheDocument();
+    expect(screen.getAllByTestId('trama-copper-curve').length).toBeGreaterThanOrEqual(3);
+
+    const experience = screen.getByTestId('trama-experience-accent');
+    expect(experience).toHaveTextContent('esperienza.');
+    expect(experience).toHaveClass('trama-copper-text');
+
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).not.toHaveTextContent('curricolo, conoscenza e progettazione diventano esperienza. esperienza.');
+  });
+
   it('does not expose the rejected vector poster through the rendered gateway', () => {
     render(<App />);
     expect(screen.getByTestId('trama-media-poster').getAttribute('src')).not.toMatch(/\.svg$/);
