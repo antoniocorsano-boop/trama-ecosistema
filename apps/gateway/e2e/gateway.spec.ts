@@ -79,8 +79,32 @@ test('background-only S/M/L/LIM evidence resolves exactly one native static scen
   });
 });
 
-test('primary access destination remains explicit outside background review', async ({ page }) => {
+test('complete gateway S/M/L/LIM evidence renders the production UI over the approved background', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await openGateway(page);
+
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveAttribute('href', '/ecosistema');
+  await expect(page.locator('img.trama-media-visual')).toHaveCount(1);
+  await expect(page.locator('video')).toHaveCount(0);
+
+  const expectedBackground = EXPECTED_BACKGROUND[testInfo.project.name];
+  const visual = page.locator('img.trama-media-visual');
+  await expect.poll(async () => visual.evaluate((element) => (element as HTMLImageElement).currentSrc)).toContain(
+    expectedBackground,
+  );
+  await expect.poll(async () => visual.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+
+  await page.evaluate(async () => {
+    if ('fonts' in document) await document.fonts.ready;
+  });
+  await page.addStyleTag({
+    content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
+  });
+
+  fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
+  await page.screenshot({
+    path: path.join(EVIDENCE_DIR, `gateway-complete-${testInfo.project.name}.png`),
+    fullPage: false,
+  });
 });
