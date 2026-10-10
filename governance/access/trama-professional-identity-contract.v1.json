@@ -1,0 +1,87 @@
+{
+  "contractId": "TRAMA-PROFESSIONAL-IDENTITY-01",
+  "version": "1.0.0",
+  "status": "QUALIFIED_CONTRACT_CANDIDATE",
+  "scope": "professional_identity_only",
+  "principal": {
+    "authoritativeKey": ["issuer", "subject"],
+    "principalId": "opaque TRAMA identifier resolved from exact issuer + subject",
+    "emailAuthoritative": false,
+    "mutableMetadataAuthoritative": false
+  },
+  "institutionalContext": {
+    "types": ["PERSONAL", "INSTITUTION"],
+    "institution": {
+      "requiredRef": "institutionRef",
+      "refSemantics": "opaque governed reference"
+    },
+    "grantsProductPermission": false
+  },
+  "applicationEntitlement": {
+    "scope": "application_entry_or_mode_only",
+    "fineGrainedPermissionsRemainLocal": true,
+    "canonicalPairs": [
+      {"application": "DOCENTE_OS", "entitlement": "USE"},
+      {"application": "CURRICOLO_ATLAS", "entitlement": "READ"},
+      {"application": "STUDIO_ATLAS", "entitlement": "AUTHOR"},
+      {"application": "ARENA", "entitlement": "ENTER"},
+      {"application": "CONTROL_CENTER", "entitlement": "GOVERNANCE_OPERATOR"}
+    ],
+    "governanceOperatorRequiresSeparateStepUpForSensitiveActions": true
+  },
+  "localIdentityBinding": {
+    "key": "(principalId, application)",
+    "resolver": "server_side_governed_mapping",
+    "result": "localSubjectRef",
+    "requiresMatchingUuid": false,
+    "emailBindingAllowed": false
+  },
+  "oidcRelyingParty": {
+    "protocol": "OpenID Connect",
+    "oauthProfile": "OAuth 2.x",
+    "flow": "authorization_code",
+    "pkce": "S256",
+    "issuerValidation": "exact_allowlist",
+    "audienceValidation": "exact_client_binding",
+    "stateRequired": true,
+    "nonceRequiredWhenIdTokenConsumed": true,
+    "redirectUriPolicy": "exact_allowlist_no_wildcards",
+    "tokenTransport": {
+      "applicationUrls": "FORBIDDEN",
+      "sharedLocalStorage": "FORBIDDEN"
+    }
+  },
+  "session": {
+    "establishment": "verified provider assertion plus local product authorization mapping",
+    "owner": "destination_product",
+    "privilegeRevalidation": "required before new or elevated privilege is granted",
+    "boundedExpiry": true
+  },
+  "logout": {
+    "local": "MUST_TERMINATE_LOCAL_SESSION_INDEPENDENTLY_OF_PROVIDER_AVAILABILITY",
+    "coordinated": "BEST_EFFORT_WHERE_PROTOCOL_AND_PROVIDER_SUPPORT_IT",
+    "mustNotFakeGlobalLogout": true
+  },
+  "failureModes": {
+    "providerUnavailableNewSignIn": "FAIL_CLOSED",
+    "providerVerificationUnavailable": "FAIL_CLOSED",
+    "publicGateway": "REMAIN_AVAILABLE",
+    "publicCurricoloAtlas": "REMAIN_AVAILABLE",
+    "publicControlCenter": "REMAIN_AVAILABLE",
+    "existingLocalSession": "MAY_CONTINUE_ONLY_UNDER_LOCAL_BOUNDED_EXPIRY_WITHOUT_NEW_PRIVILEGE"
+  },
+  "forbiddenPatterns": [
+    "EMAIL_AS_AUTHORITY_KEY",
+    "MUTABLE_METADATA_AS_AUTHORITY_KEY",
+    "WILDCARD_ISSUER",
+    "WILDCARD_AUDIENCE",
+    "WILDCARD_REDIRECT_URI",
+    "IMPLICIT_OR_HYBRID_FLOW",
+    "TOKEN_IN_APPLICATION_URL",
+    "SHARED_CROSS_PRODUCT_LOCALSTORAGE_TOKEN",
+    "GLOBAL_SHARED_PRODUCT_UUID_REQUIREMENT",
+    "CENTRAL_PRODUCT_FINE_GRAINED_PERMISSION",
+    "LEARNER_IDENTITY_IN_PROFESSIONAL_CONTRACT",
+    "IMPLICIT_CROSS_PRODUCT_PRIVILEGE_ESCALATION"
+  ]
+}
