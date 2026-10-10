@@ -89,7 +89,7 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.locator('video')).toHaveCount(0);
 
   const accent = page.getByTestId('trama-experience-accent');
-  await expect(accent).toHaveCSS('color', 'rgb(233, 164, 110)');
+  await expect(accent).toHaveCSS('color', 'rgb(243, 166, 106)');
   const accentState = await accent.evaluate((element) => {
     const style = getComputedStyle(element);
     return {
