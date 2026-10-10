@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: { outDir: 'dist', emptyOutDir: true, sourcemap: true },
+  preview: {
+    allowedHosts: ['trama-gateway.onrender.com'],
+  },
   test: {
     include: ['src/**/*.test.{ts,tsx}'],
     environment: 'jsdom',
