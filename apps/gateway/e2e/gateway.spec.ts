@@ -89,6 +89,20 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.locator('video')).toHaveCount(0);
   await expect(page.getByTestId('trama-experience-accent')).toHaveCSS('color', 'rgb(113, 54, 33)');
 
+  const quietZone = await page.locator('.trama-hero-legibility').evaluate((element) => {
+    const style = getComputedStyle(element, '::before');
+    return {
+      backdropFilter: style.backdropFilter || style.getPropertyValue('-webkit-backdrop-filter'),
+      maskImage: style.maskImage || style.getPropertyValue('-webkit-mask-image'),
+    };
+  });
+  expect(quietZone.backdropFilter).toContain('blur(');
+  expect(quietZone.maskImage).toContain('radial-gradient');
+
+  if (testInfo.project.name !== 'L') {
+    await expect(page.getByTestId('trama-experience-accent')).toHaveCSS('display', 'block');
+  }
+
   const expectedBackground = EXPECTED_BACKGROUND[testInfo.project.name];
   const visual = page.locator('img.trama-media-visual');
   await expect.poll(async () => visual.evaluate((element) => (element as HTMLImageElement).currentSrc)).toContain(
