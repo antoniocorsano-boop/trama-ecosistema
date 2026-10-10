@@ -46,6 +46,12 @@ describe('TRAMA gateway', () => {
     curves.forEach((curve) => expect(curve).toHaveAttribute('data-zone', 'peripheral'));
   });
 
+  it('marks the hero composition for subtle local legibility support', () => {
+    render(<App />);
+    const composition = screen.getByRole('heading', { level: 1 }).closest('section');
+    expect(composition).toHaveClass('trama-hero-legibility');
+  });
+
   it('binds the rendered gateway to the Human-approved L v3 visual treatment', () => {
     render(<App />);
     const stage = screen.getByRole('main').parentElement;
