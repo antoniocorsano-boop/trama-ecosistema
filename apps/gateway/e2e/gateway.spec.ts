@@ -89,21 +89,28 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.locator('video')).toHaveCount(0);
 
   const accent = page.getByTestId('trama-experience-accent');
-  await expect(accent).toHaveCSS('color', 'rgb(255, 216, 174)');
+  await expect(accent).toHaveCSS('color', 'rgba(0, 0, 0, 0)');
   await expect(accent).toHaveCSS(
     'text-shadow',
-    'rgba(255, 216, 174, 0.22) 0px 0px 4px, rgba(10, 8, 6, 0.22) 0px 1px 2px',
+    'rgba(255, 195, 107, 0.32) 0px 0px 7px, rgba(255, 224, 166, 0.16) 0px 0px 18px, rgba(10, 8, 6, 0.26) 0px 1px 2px',
   );
   const accentState = await accent.evaluate((element) => {
     const style = getComputedStyle(element);
     return {
       strokeWidth: Number.parseFloat(style.getPropertyValue('-webkit-text-stroke-width')),
       backgroundImage: style.backgroundImage,
+      backgroundClip: style.backgroundClip || style.getPropertyValue('-webkit-background-clip'),
+      textFillColor: style.getPropertyValue('-webkit-text-fill-color'),
     };
   });
   expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.94);
   expect(accentState.strokeWidth).toBeLessThanOrEqual(0.96);
-  expect(accentState.backgroundImage).toContain('radial-gradient');
+  expect(accentState.backgroundImage).toContain('linear-gradient');
+  expect(accentState.backgroundImage).toContain('rgb(255, 247, 230)');
+  expect(accentState.backgroundImage).toContain('rgb(255, 224, 166)');
+  expect(accentState.backgroundImage).toContain('rgb(255, 195, 107)');
+  expect(accentState.backgroundClip).toContain('text');
+  expect(accentState.textFillColor).toBe('rgba(0, 0, 0, 0)');
 
   const quietZone = page.getByTestId('trama-hero-quiet-zone');
   await expect(quietZone).toBeVisible();
