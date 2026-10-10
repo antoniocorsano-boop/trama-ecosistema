@@ -18,7 +18,7 @@ export function TramaGlassAction({
         aria-disabled="true"
         className={cn('cursor-not-allowed', className)}
       >
-        {children}
+        Accesso in preparazione
       </Button>
     );
   }
