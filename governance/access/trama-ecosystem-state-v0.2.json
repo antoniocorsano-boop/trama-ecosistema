@@ -3,8 +3,8 @@
   "asOf": "2026-10-10",
   "authority": "ACCESS-01 design baseline",
   "canonicalTerminology": {
-    "curriculumSurface": "Curricolo Atlas",
-    "forbiddenDisplayName": "Curriculum Atlas"
+    "curricoloSurface": "Curricolo Atlas",
+    "institutionDomain": "curricolo di istituto"
   },
   "legend": {
     "node": {
@@ -26,9 +26,17 @@
       "label": "TRAMA Gateway",
       "plane": "PUBLIC",
       "state": "REAL",
-      "runtimeState": "BLOCKED_ENTRY",
-      "note": "Public UI exists; professional ecosystem entry remains fail-closed until canonical TRAMA Access exists. Current production must be made safe so missing entry configuration does not blank the public surface.",
-      "roadmapPhase": 0
+      "runtimeState": "PUBLIC_SAFE_ENTRY_UNAVAILABLE",
+      "note": "Public UI renders in production mode even when the professional entry destination is absent; professional actions fail closed as disabled non-navigation controls.",
+      "roadmapPhase": 0,
+      "evidence": [
+        {
+          "head": "86939ac41aaeadabb861dcfde35f0e93c4a1dcfd",
+          "workflow": "TRAMA Gateway",
+          "runId": 38079870875,
+          "proof": "configured Browser Certification PASS and No-entry Browser Certification PASS"
+        }
+      ]
     },
     {
       "id": "trama_access",
@@ -43,7 +51,7 @@
       "label": "Identità professionale TRAMA",
       "plane": "PROFESSIONAL",
       "state": "DESIGNED",
-      "note": "One ecosystem professional principal is approved as target; provider-neutral contract and runtime remain to be implemented.",
+      "note": "One ecosystem professional principal is the approved target; provider-neutral contract and runtime remain to be implemented.",
       "roadmapPhase": 1
     },
     {
@@ -51,7 +59,7 @@
       "label": "Docente OS",
       "plane": "PROFESSIONAL",
       "state": "REAL",
-      "note": "Teacher operating environment with real local authentication/workspace authorization.",
+      "note": "Teacher operating environment with real local authentication and workspace authorization.",
       "roadmapPhase": 3
     },
     {
@@ -91,7 +99,7 @@
       "label": "Materiali nei prodotti",
       "plane": "CROSS_CUTTING",
       "state": "REAL",
-      "note": "Material surfaces/resources exist in real products.",
+      "note": "Material surfaces and resources exist in real products.",
       "roadmapPhase": 8
     },
     {
@@ -131,7 +139,7 @@
       "label": "Control Center privilegiato",
       "plane": "GOVERNANCE",
       "state": "DESIGNED",
-      "note": "Privileged governance operations with dedicated entitlement and step-up/MFA are target architecture, not current general runtime authority.",
+      "note": "Privileged operations with dedicated governance entitlement and step-up/MFA are target architecture, not current general runtime authority.",
       "roadmapPhase": 9
     },
     {
@@ -148,16 +156,24 @@
       "id": "public_to_gateway",
       "from": "public",
       "to": "gateway",
-      "state": "PARTIAL",
-      "note": "Public service exists but current production entry configuration can break the rendered surface; Phase 0 must restore safe public behavior.",
-      "roadmapPhase": 0
+      "state": "REAL",
+      "note": "Public Gateway remains rendered and usable when professional entry configuration is absent; professional entry fails closed without blanking the public surface.",
+      "roadmapPhase": 0,
+      "evidence": [
+        {
+          "head": "86939ac41aaeadabb861dcfde35f0e93c4a1dcfd",
+          "workflow": "TRAMA Gateway",
+          "runId": 38079870875,
+          "proof": "No-entry Browser Certification PASS"
+        }
+      ]
     },
     {
       "id": "gateway_to_curricolo_atlas_public",
       "from": "gateway",
       "to": "curricolo_atlas",
       "state": "DESIGNED",
-      "note": "Canonical public navigation path in ACCESS-01 target; certify actual live navigation before marking REAL.",
+      "note": "Canonical public navigation path in ACCESS-01 target; actual live navigation must be certified before promotion.",
       "roadmapPhase": 11
     },
     {
@@ -173,7 +189,7 @@
       "from": "gateway",
       "to": "trama_access",
       "state": "DESIGNED",
-      "note": "Must remain fail-closed until canonical TRAMA Access is certified.",
+      "note": "Remains fail-closed until canonical TRAMA Access is certified.",
       "roadmapPhase": 11
     },
     {
@@ -205,7 +221,7 @@
       "from": "docente_os",
       "to": "studio_atlas",
       "state": "DESIGNED",
-      "note": "Teacher workflow target; do not infer integration from the existence of both products.",
+      "note": "Teacher workflow target; integration is not inferred from the existence of both products.",
       "roadmapPhase": 10
     },
     {
@@ -229,7 +245,7 @@
       "from": "assignment_to_atlas",
       "to": "atlas_learner",
       "state": "PARTIAL",
-      "note": "Bounded code/ticket/link flow is target direction; full ecosystem contract not yet qualified.",
+      "note": "Bounded code/ticket/link is the target direction; the full ecosystem contract is not yet qualified.",
       "roadmapPhase": 7
     },
     {
@@ -261,7 +277,7 @@
       "from": "trama_access",
       "to": "arena",
       "state": "DESIGNED",
-      "note": "Professional entry target; Arena retains internal curricular authorization.",
+      "note": "Professional entry target; Arena retains internal authorization over the curricolo.",
       "roadmapPhase": 6
     },
     {
@@ -269,7 +285,7 @@
       "from": "trama_access",
       "to": "control_center_privileged",
       "state": "DESIGNED",
-      "note": "Requires dedicated governance entitlement and step-up/MFA when privileged operations exist.",
+      "note": "Requires dedicated governance entitlement and step-up/MFA when protected operations exist.",
       "roadmapPhase": 9
     }
   ],
