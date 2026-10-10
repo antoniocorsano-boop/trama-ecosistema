@@ -1,0 +1,92 @@
+{
+  "version": 3,
+  "visualBaseline": "docs/superpowers/specs/assets/README-trama-gateway-background-v3-references.md",
+  "dimensionContract": "docs/superpowers/specs/2026-10-10-trama-gateway-background-assets-v3-viewport-sufficiency-amendment.md",
+  "approvalGate": "HUMAN_VISUAL_REVIEW_REQUIRED",
+  "assets": [
+    {
+      "path": "/media/trama-gateway-bg-lim.webp",
+      "role": "lim",
+      "dimensions": {
+        "width": 748,
+        "height": 2103
+      },
+      "source": "Human-approved ChatGPT-generated TRAMA atelier background from the current design session; transcoded from the saved PNG to WebP without geometric resize or upscaling.",
+      "artDirection": "Independent LIM composition: tall foreground worktable with books, open sketchbook, pens and pencils; vertical window and horizon retained as the opening axis; no embedded interface.",
+      "encoding": {
+        "format": "webp",
+        "quality": 92,
+        "resized": false
+      },
+      "date": "2026-10-10",
+      "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
+      "identifiablePersons": false,
+      "studentData": false,
+      "uiEmbedded": false,
+      "segnoVivoEmbedded": false
+    },
+    {
+      "path": "/media/trama-gateway-bg-s.webp",
+      "role": "s",
+      "dimensions": {
+        "width": 853,
+        "height": 1844
+      },
+      "source": "Human-approved ChatGPT-generated TRAMA atelier background from the current design session; transcoded from the saved PNG to WebP without geometric resize or upscaling.",
+      "artDirection": "Independent S composition: desk and drawing materials dominate the lower foreground while the full-height window preserves depth, sunset and horizon; no embedded interface.",
+      "encoding": {
+        "format": "webp",
+        "quality": 92,
+        "resized": false
+      },
+      "date": "2026-10-10",
+      "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
+      "identifiablePersons": false,
+      "studentData": false,
+      "uiEmbedded": false,
+      "segnoVivoEmbedded": false
+    },
+    {
+      "path": "/media/trama-gateway-bg-m.webp",
+      "role": "m",
+      "dimensions": {
+        "width": 1086,
+        "height": 1448
+      },
+      "source": "Human-approved ChatGPT-generated TRAMA atelier background from the current design session; transcoded from the saved PNG to WebP without geometric resize or upscaling.",
+      "artDirection": "Independent M composition: substantial foreground desk with sketchbook, books and writing tools balanced against the atelier depth and panoramic opening; no embedded interface.",
+      "encoding": {
+        "format": "webp",
+        "quality": 92,
+        "resized": false
+      },
+      "date": "2026-10-10",
+      "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
+      "identifiablePersons": false,
+      "studentData": false,
+      "uiEmbedded": false,
+      "segnoVivoEmbedded": false
+    },
+    {
+      "path": "/media/trama-gateway-bg-l.webp",
+      "role": "l",
+      "dimensions": {
+        "width": 1672,
+        "height": 941
+      },
+      "source": "Human-approved ChatGPT-generated TRAMA atelier background from the current design session; transcoded from the saved PNG to WebP without geometric resize or upscaling.",
+      "artDirection": "Independent L composition: broad desk-first foreground with open sketchbook, books, pens and pencils; atelier framing remains peripheral and the window/horizon provides visual opening; no embedded interface.",
+      "encoding": {
+        "format": "webp",
+        "quality": 92,
+        "resized": false
+      },
+      "date": "2026-10-10",
+      "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
+      "identifiablePersons": false,
+      "studentData": false,
+      "uiEmbedded": false,
+      "segnoVivoEmbedded": false
+    }
+  ]
+}

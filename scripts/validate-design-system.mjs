@@ -5,7 +5,7 @@ const file=process.argv[2]; if(!file) process.exit(2);
 const p=JSON.parse(fs.readFileSync(file,'utf8')); const errors=[];
 const root=path.resolve(path.dirname(new URL(import.meta.url).pathname),'..');
 const registry=JSON.parse(fs.readFileSync(path.join(root,'policies/design-system/authority-registry.v1.json'),'utf8'));
-const products=['ARENA','ATLAS','DOCENTE_OS','TRAMA_CONTROL_CENTER'];
+const products=['ARENA','ATLAS','STUDIO_ATLAS','DOCENTE_OS','TRAMA_CONTROL_CENTER'];
 const dimensions=['voice','paletteTonalCharacter','typographicVoice','densitySpatialRhythm','shapeElevation','composition','navigation','dataVisualisation','motionCharacter','iconographyIllustration'];
 const authority=(id,scope)=>Boolean(registry.authorities?.[id]?.scope?.includes(scope));
 if(p.contract!=='TRAMA-DESIGN-TOKENS-01') errors.push('wrong contract');
@@ -31,7 +31,7 @@ for(const product of products){
  if(!authority(x.owner,product)) errors.push(`untrusted PVIP owner ${product}`);
  if(!x.pvipVersion) errors.push(`missing PVIP version ${product}`);
  for(const d of dimensions){const v=x.identity?.[d]; if(!v) errors.push(`missing PVIP dimension ${product}.${d}`); else if(v.applicable===true&&!v.value) errors.push(`missing applicable PVIP value ${product}.${d}`); else if(v.applicable===false&&!v.reason) errors.push(`missing PVIP non-applicable reason ${product}.${d}`);}
- for(const [alias,target] of Object.entries(x.aliases||{})){ if(!tokenNames.has(target)) errors.push(`missing alias target ${product}.${alias} -> ${target}`); if(p.tokens[target]?.layer!=='ecosystem-semantic') errors.push(`unauthorized product alias layer ${product}.${alias}`); if(target.startsWith('products.')||target.startsWith('ARENA.')||target.startsWith('ATLAS.')||target.startsWith('DOCENTE_OS.')||target.startsWith('TRAMA_CONTROL_CENTER.')) errors.push(`cross-product alias ${product}.${alias}`); }
+ for(const [alias,target] of Object.entries(x.aliases||{})){ if(!tokenNames.has(target)) errors.push(`missing alias target ${product}.${alias} -> ${target}`); if(p.tokens[target]?.layer!=='ecosystem-semantic') errors.push(`unauthorized product alias layer ${product}.${alias}`); if(target.startsWith('products.')||target.startsWith('ARENA.')||target.startsWith('ATLAS.')||target.startsWith('STUDIO_ATLAS.')||target.startsWith('DOCENTE_OS.')||target.startsWith('TRAMA_CONTROL_CENTER.')) errors.push(`cross-product alias ${product}.${alias}`); }
 }
 for(const state of ['default','hover','focus-visible','active','pressed','selected','disabled','pending','loading']) if(!p.interactionStates?.includes(state)) errors.push(`missing interaction state ${state}`);
 for(const mode of ['light','dark','system','forced-colors']) if(!p.presentationModes?.includes(mode)) errors.push(`missing presentation mode ${mode}`);
