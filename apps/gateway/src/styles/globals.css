@@ -129,7 +129,7 @@ a {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.95px rgba(24, 14, 10, 0.82);
+  -webkit-text-stroke: 0.55px rgba(24, 14, 10, 0.82);
   paint-order: stroke fill;
   text-shadow:
     0 0 7px rgba(255, 195, 107, 0.32),
