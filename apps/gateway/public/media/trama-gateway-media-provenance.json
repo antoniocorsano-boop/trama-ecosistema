@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "visualBaseline": "docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.jpg",
+  "approvalGate": "HUMAN_VISUAL_REVIEW_REQUIRED",
+  "assets": [
+    {
+      "path": "/media/trama-gateway-poster-s.webp",
+      "role": "s",
+      "source": "Derived from the Human-approved TRAMA visual baseline; UI-free material scene reconstructed and art-directed for smartphone composition.",
+      "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
+      "date": "2026-10-10",
+      "identifiablePersons": false,
+      "studentData": false,
+      "notes": "Project-generated derivative. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
+    },
+    {
+      "path": "/media/trama-gateway-poster-m.webp",
+      "role": "m",
+      "source": "Derived from the Human-approved TRAMA visual baseline; UI-free material scene reconstructed and art-directed for tablet composition.",
+      "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
+      "date": "2026-10-10",
+      "identifiablePersons": false,
+      "studentData": false,
+      "notes": "Project-generated derivative. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
+    },
+    {
+      "path": "/media/trama-gateway-poster-l.webp",
+      "role": "l",
+      "source": "Derived from the Human-approved TRAMA visual baseline; UI-free material scene reconstructed and art-directed for desktop composition.",
+      "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
+      "date": "2026-10-10",
+      "identifiablePersons": false,
+      "studentData": false,
+      "notes": "Project-generated derivative. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
+    }
+  ]
+}
