@@ -1,16 +1,16 @@
 # TRAMA ACCESS-01 — Ecosystem Access Architecture
 
-**Status:** APPROVED DESIGN — awaiting written-spec human review  
-**Date:** 2026-10-10  
-**Scope:** ecosystem access, professional identity, public access, learner access, governance access  
+**Status:** APPROVED DESIGN  
+**Data:** 2026-10-10  
+**Ambito:** accesso ecosistema, identità professionale, accesso pubblico, learner e governance  
 **Repository:** `antoniocorsano-boop/trama-ecosistema`  
-**Baseline:** `main@72989b065a598012d0aa43fc6cb3568dcfeb4fcf`
+**Baseline iniziale:** `main@72989b065a598012d0aa43fc6cb3568dcfeb4fcf`
 
-## 1. Purpose
+## 1. Scopo
 
-This specification freezes the access architecture for the whole TRAMA ecosystem so that the model does not remain only a conversational analysis or a visual diagram.
+Questa specifica congela l'architettura di accesso dell'intero ecosistema TRAMA affinché il modello non resti una semplice analisi conversazionale o un diagramma.
 
-The design must cover all user-facing surfaces and all relevant cross-cutting capabilities currently in scope:
+Il perimetro comprende:
 
 - TRAMA Gateway;
 - TRAMA Access;
@@ -18,178 +18,169 @@ The design must cover all user-facing surfaces and all relevant cross-cutting ca
 - Arena;
 - **Curricolo Atlas**;
 - Studio Atlas;
-- Atlas learner/student experience;
-- Materials;
-- student/class/group assignment capability;
+- Atlas learner;
+- Materiali;
+- classi, gruppi e assegnazioni;
 - Control Center;
-- TRAMA governance and shared services where they influence access boundaries.
+- TRAMA governance e servizi condivisi quando incidono sui confini di accesso.
 
-This specification deliberately distinguishes applications, cross-cutting resources/capabilities, public surfaces, professional surfaces, learner surfaces, governance surfaces, and non-user-facing services.
+La specifica distingue applicazioni, capacità trasversali, superfici pubbliche, professionali, learner, governance e servizi non destinati direttamente agli utenti.
 
-## 2. Canonical terminology
+## 2. Terminologia canonica
 
-The canonical name is **Curricolo Atlas**.
+Il nome canonico della superficie Atlas dedicata al curricolo è **Curricolo Atlas**.
 
-`Curriculum Atlas` is non-canonical and MUST NOT be introduced in new user-facing copy, governance text, architecture documents, capability identifiers intended for display, or future product specifications.
+Il dominio scolastico di riferimento è il **curricolo di istituto**. Arena è la superficie autorevole di gestione; Curricolo Atlas è la superficie di navigazione, consultazione e intelligibilità dello stato governato da Arena.
 
-The curriculum domain in TRAMA is the **curricolo di istituto**. Arena is its authoritative management surface; Curricolo Atlas is the navigation/consultation/intelligence surface over that authoritative curriculum.
+Ogni nuova UI, documento, contratto e metadato ACCESS-01 usa questa terminologia.
 
-## 3. Governing principles
+## 3. Principi di governo
 
-### 3.1 One professional identity, independent product authorities
+### 3.1 Una identità professionale, autorità di prodotto indipendenti
 
-TRAMA SHALL provide one shared professional identity for adult/professional users.
+TRAMA fornisce una identità condivisa per utenti adulti/professionali.
 
-That identity SHALL NOT make any one product the authority over the others. Docente OS, Arena, Studio Atlas, Curricolo Atlas and Control Center keep their own product responsibilities and local authorization rules.
+L'identità non rende nessun prodotto autorità sugli altri. Docente OS, Arena, Studio Atlas, Curricolo Atlas e Control Center conservano responsabilità e regole locali di autorizzazione.
 
-Authentication answers **who the professional is**. Authorization answers **what that professional may do in a specific product/context**. Those concerns MUST remain separate.
+- autenticazione: **chi è il professionista**;
+- autorizzazione: **cosa può fare in un prodotto e contesto specifico**.
 
-### 3.2 No personal learner account by default
+I due livelli restano separati.
 
-Atlas learner/student experiences SHALL remain usable without a personal TRAMA or Atlas account by default.
+### 3.2 Nessun account personale learner per impostazione predefinita
 
-No learner login, learner email address, learner-wide server-side profile, or cross-experience behavioural tracking may be introduced merely to make product routing easier.
+Atlas learner resta utilizzabile senza account personale TRAMA/Atlas per impostazione predefinita.
 
-Where a teacher must address a class, group, or assignment, TRAMA SHALL prefer bounded assignment references, experience tickets/codes, or other privacy-preserving access mechanisms rather than exporting nominal student identity into Atlas.
+Non si introducono login learner, email learner, profili personali server-side globali o tracking cross-experience per semplificare il routing.
 
-### 3.3 Public, professional, learner and governance access are different planes
+Quando il docente assegna un'esperienza a classe o gruppo, si preferiscono riferimenti limitati, ticket/codici o meccanismi equivalenti privacy-first invece di esportare identità nominali verso Atlas.
 
-TRAMA SHALL distinguish at least four access planes:
+### 3.3 Quattro piani distinti
 
-1. **Public plane** — no professional identity required.
-2. **Professional plane** — authenticated adult/professional identity.
-3. **Learner plane** — child-safe access to Atlas experiences without a personal account by default.
-4. **Governance plane** — privileged operational/governance access; may require stronger authorization and step-up authentication.
+TRAMA distingue almeno:
 
-A surface may expose both a public and a privileged mode, but those modes MUST be explicitly separated.
+1. **Piano pubblico** — nessuna identità professionale richiesta.
+2. **Piano professionale** — identità adulta/professionale autenticata.
+3. **Piano learner** — accesso child-safe alle esperienze senza account personale per impostazione predefinita.
+4. **Piano governance** — accesso operativo privilegiato, con autorizzazione più forte e step-up quando richiesto.
 
-### 3.4 No application becomes the implicit ecosystem shell
+Una stessa famiglia di prodotto può avere modalità pubblica e privilegiata, ma i due confini devono essere espliciti.
 
-Docente OS is the teacher's operational environment, not the ecosystem identity provider.
+### 3.4 Nessuna app diventa shell implicita dell'ecosistema
 
-Arena is the curricular authority, not the general professional portal.
+- Docente OS è l'ambiente operativo del docente, non l'identity provider dell'ecosistema.
+- Arena è l'autorità sul curricolo di istituto, non il portale professionale generale.
+- Studio Atlas è l'ambiente di authoring, non il runtime studente.
+- Control Center è osservabilità/governance, non il launcher ordinario.
+- TRAMA Access è identità + ingresso/launcher, non una nuova dashboard completa.
 
-Studio Atlas is the experience authoring environment, not the student runtime.
+### 3.5 Risorse trasversali non sono automaticamente applicazioni
 
-Control Center is observability/governance, not the normal launcher.
+Materiali e organizzazione classi/gruppi/assegnazioni sono capacità trasversali. Non diventano app autonome soltanto perché consumate da più prodotti.
 
-TRAMA Access is identity + entry/launch context, not another full dashboard.
+Si preferiscono contratti condivisi e ownership esplicita rispetto a copie concorrenti.
 
-### 3.5 Resources are not automatically applications
+## 4. Mappa delle superfici
 
-Materials and student/group assignment are cross-cutting capabilities/resources. They MUST NOT be promoted to standalone applications solely because multiple products consume them.
-
-The architecture SHALL prefer shared contracts and explicit ownership over duplicated copies.
-
-## 4. Ecosystem surface map
-
-| Surface / capability | Nature | Primary audience | Access plane | Core authority |
+| Superficie/capacità | Natura | Utente principale | Piano | Autorità principale |
 | --- | --- | --- | --- | --- |
-| TRAMA Gateway | public threshold | anyone | Public | none over product data |
-| TRAMA Access | identity + launcher | professionals/adults | Professional | identity/entry only |
-| Docente OS | teacher operating environment | teachers | Professional | teacher workspace/workflow |
-| Arena | curricular authority | authorized professionals | Professional | curricolo di istituto |
-| Curricolo Atlas | curriculum navigation/intelligence | public/professional per policy | Public + Professional | read/navigation over Arena authority |
-| Studio Atlas | experience authoring | teachers/authors | Professional | authoring lifecycle |
-| Atlas learner | learner runtime | students | Learner/Public bounded entry | experience execution, not personal identity |
-| Materials | shared resource capability | professionals; indirectly learners | Cross-cutting | ownership/provenance/references |
-| Assignment / class / group targeting | pedagogical addressing capability | teachers | Professional → Learner boundary | teacher-side targeting, not learner identity authority |
-| Control Center public | status/evidence surface | anyone | Public | public observability only |
-| Control Center privileged | governance/operations | authorized operators | Governance | governed operational actions |
-| TRAMA governance | contracts/policy/authority | ecosystem | Governance | contracts, boundaries, lifecycle |
-| shared services / adapters | infrastructure | applications/services | machine-to-machine | bounded service responsibility |
+| TRAMA Gateway | soglia pubblica | chiunque | Pubblico | nessuna sui dati di prodotto |
+| TRAMA Access | identità + launcher | professionisti/adulti | Professionale | identità/ingresso |
+| Docente OS | ambiente operativo | docenti | Professionale | workspace/workflow docente |
+| Arena | autorità sul curricolo | professionisti autorizzati | Professionale | curricolo di istituto |
+| Curricolo Atlas | navigazione/intelligibilità | pubblico/professionisti secondo policy | Pubblico + Professionale | lettura/navigazione su stato Arena |
+| Studio Atlas | authoring esperienze | docenti/autori | Professionale | lifecycle authoring |
+| Atlas learner | learner runtime | studenti | Learner | esecuzione esperienza, non identità personale |
+| Materiali | risorsa condivisa | professionisti; learner indirettamente | Trasversale | ownership/provenance/riferimenti |
+| Classi/Gruppi/Assegnazioni | targeting didattico | docenti | Professionale → Learner | targeting teacher-side |
+| Control Center pubblico | stato/evidenze | chiunque | Pubblico | osservabilità pubblica |
+| Control Center privilegiato | governance/operazioni | operatori autorizzati | Governance | operazioni governate |
+| TRAMA governance | contratti/policy/confini | ecosistema | Governance | lifecycle e authority boundaries |
+| Servizi/adapters condivisi | infrastruttura | app/servizi | machine-to-machine | responsabilità limitata |
 
-## 5. The two canonical product chains
+## 5. Due catene canoniche distinte
 
-TRAMA has two distinct chains that MUST NOT be collapsed.
-
-### 5.1 Curricular chain
+### 5.1 Catena del curricolo
 
 ```text
 Arena
-  │ authoritative curricolo di istituto
+  │ stato autorevole del curricolo di istituto
   ▼
 Curricolo Atlas
-  │ navigation / consultation / intelligibility
+  │ navigazione / consultazione / intelligibilità
   ▼
-Docente OS / Studio Atlas / other professional contexts
+Docente OS / Studio Atlas / altri contesti professionali
 ```
 
-Rules:
+Regole:
 
-- Arena owns curricular mutation and approval authority.
-- Curricolo Atlas does not become a second curricular authority.
-- Curricolo Atlas may expose public and professional views, but writes to the canonical curriculum require an Arena-governed path.
-- Docente OS and Studio Atlas may deep-link to Curricolo Atlas for context without copying the curriculum into their own authority domain.
+- Arena conserva authority di modifica e approvazione.
+- Curricolo Atlas non diventa una seconda authority.
+- Le modalità pubblica e professionale di Curricolo Atlas possono differire, ma ogni scrittura sullo stato canonico passa da un percorso governato Arena.
+- Docente OS e Studio Atlas possono collegarsi a Curricolo Atlas senza copiare l'authority del curricolo nei propri domini.
 
-### 5.2 Experience chain
+### 5.2 Catena delle esperienze
 
 ```text
 Studio Atlas
-   │ author / validate / publish under governance
+   │ author / validate / publish sotto governance
    ▼
 Atlas learner
-   │ learner experience
+   │ esperienza learner
    ▼
-Student
+Studente
 ```
 
-Rules:
+Regole:
 
-- Studio Atlas is professional authoring.
-- Atlas learner is not a professional authoring environment.
-- Student access does not imply a personal TRAMA account.
-- Studio Atlas preview/publication paths MUST preserve the existing separation between professional authoring identity and learner runtime identity.
+- Studio Atlas è authoring professionale.
+- Atlas learner non è ambiente di authoring.
+- L'accesso studente non implica account personale TRAMA.
+- Preview e pubblicazione preservano la separazione tra sessione professionale e runtime learner.
 
-## 6. Role of Docente OS
+## 6. Ruolo di Docente OS
 
-Docente OS is the canonical operational environment for the teacher.
+Docente OS è l'ambiente operativo canonico del docente.
 
-It may orchestrate navigation into other governed surfaces, for example:
+Può orchestrare altri domini:
 
 ```text
-Lesson / planning context
-  ├── consult curriculum → Curricolo Atlas
-  ├── govern curriculum → Arena (when authorized)
-  ├── use/reference material → Materials
-  ├── create experience → Studio Atlas
-  └── open/assign experience → Atlas learner
+Lezione / progettazione
+  ├── consulta curricolo → Curricolo Atlas
+  ├── governa curricolo → Arena, se autorizzato
+  ├── usa/riferisce materiale → Materiali
+  ├── crea esperienza → Studio Atlas
+  └── apre/assegna esperienza → Atlas learner
 ```
 
-This orchestration is an integration concern, not ownership transfer.
+L'orchestrazione è integrazione, non trasferimento di ownership.
 
-Docente OS MUST NOT become the identity provider for TRAMA merely because it already has a real authentication and workspace model.
-
-Docente OS SHALL continue to own its local workspace membership and data authorization rules.
+Docente OS mantiene le proprie regole locali di workspace membership e autorizzazione dati.
 
 ## 7. TRAMA Access
 
-### 7.1 Responsibility
+### 7.1 Responsabilità
 
-TRAMA Access is intentionally small.
+TRAMA Access possiede soltanto:
 
-It owns:
+- ingresso/sign-in professionale;
+- stabilimento/federazione della sessione professionale;
+- contesto istituzionale/professionale minimo per il routing;
+- entitlement a livello applicazione;
+- launch verso applicazioni autorizzate;
+- coordinamento logout dove tecnicamente supportato.
 
-- professional sign-in entry;
-- professional identity session establishment/federation;
-- minimal institutional/professional context needed for launch decisions;
-- application-level entitlements;
-- routing/launch into authorized applications;
-- ecosystem-level sign-out coordination where technically supported.
+Non possiede:
 
-It does not own:
+- dati del curricolo;
+- lezioni;
+- contenuto dei materiali;
+- draft Studio Atlas;
+- profili/progressi learner personali;
+- permessi fini interni ai prodotti;
+- decisioni di governance appartenenti al Control Center/TRAMA.
 
-- curriculum data;
-- lesson data;
-- materials content;
-- Studio Atlas drafts;
-- learner progress/profile data;
-- product-specific fine-grained permissions;
-- governance decisions belonging to Control Center/TRAMA authority.
-
-### 7.2 Minimal data model
-
-The minimum conceptual model is:
+### 7.2 Modello minimo
 
 ```text
 Principal
@@ -197,7 +188,7 @@ Principal
   └── ApplicationEntitlement
 ```
 
-Illustrative entitlements:
+Esempi:
 
 ```text
 DOCENTE_OS      USE
@@ -207,262 +198,240 @@ ARENA           ENTER
 CONTROL_CENTER  GOVERNANCE_OPERATOR
 ```
 
-These entitlements allow entry to a product or mode. Fine-grained authorization remains local to the product.
+Gli entitlement permettono l'ingresso in un prodotto/modalità. I permessi fini restano locali.
 
-### 7.3 Launcher behavior
+### 7.3 Launcher
 
-TRAMA Access MUST NOT become a duplicate dashboard.
+TRAMA Access resta un launcher/context selector leggero. Se una sola destinazione è rilevante, può essere usata continuazione diretta.
 
-Its normal post-authentication surface should remain a lightweight launcher/context selector. If only one authorized destination is materially relevant, direct continuation may be used.
+Le destinazioni derivano da configurazione/entitlement governati e non da una lista UI permanente hard-coded.
 
-The launcher MUST derive available applications from governed configuration/entitlements, not from a permanent hard-coded list in the UI.
+## 8. Architettura dell'identità professionale
 
-## 8. Professional identity architecture
+### 8.1 Provider dedicato e separato dai dati di prodotto
 
-### 8.1 Recommended architecture
+TRAMA usa un identity provider dedicato all'ecosistema, separato dai database di prodotto.
 
-TRAMA SHOULD use a dedicated ecosystem identity provider, separate from product databases.
+La prima implementazione può usare un progetto Supabase Auth dedicato se le app si integrano tramite contratti standard OAuth/OIDC e non dipendono da dettagli interni del database di un prodotto.
 
-Initial implementation may use a dedicated Supabase Auth project provided that applications integrate through standard OAuth/OIDC contracts and do not couple directly to product-specific database internals.
+Il piano identitario non contiene lezioni Docente OS, dati Arena, draft Studio Atlas, contenuti Materiali o registri learner.
 
-The identity provider MUST NOT contain Docente OS lessons, Arena curriculum data, Studio Atlas drafts, materials content, or learner records.
+### 8.2 Identità ecosistemica e identità locale
 
-### 8.2 Identity versus local product identity
+Esiste concettualmente un principal professionale TRAMA stabile.
 
-A stable ecosystem-level professional principal SHALL exist conceptually.
+Le applicazioni possono mantenere identificatori/sessioni locali propri. Non è richiesto che gli UUID locali coincidano tra prodotti.
 
-Applications may maintain their own local user/session identifiers. A local `auth.uid()` or equivalent need not be numerically identical across products.
+Un adapter governato può associare il principal TRAMA all'identità locale.
 
-A governed mapping/adaptation layer MAY map a TRAMA principal to a local application identity.
+### 8.3 Portabilità provider
 
-This prevents the ecosystem from requiring one shared product database or one shared authorization schema.
+Il confine usa protocolli standard OAuth 2.x / OpenID Connect per evitare dipendenza architetturale da un singolo provider.
 
-### 8.3 Provider portability
+Il provider è sostituibile; il contratto TRAMA è l'autorità architetturale.
 
-The ecosystem boundary SHOULD be based on standard identity protocols (OAuth 2.x / OpenID Connect) so the implementation can later move from one identity provider to another without rewriting product authorization models.
+## 9. Curricolo Atlas
 
-The provider implementation is therefore replaceable; the TRAMA identity contract is the architectural authority.
+### 9.1 Modalità pubblica
 
-## 9. Curricolo Atlas access model
+Quando lo stato dell'istituto è pubblicabile sotto governance, Curricolo Atlas consente consultazione non autenticata.
 
-Curricolo Atlas may expose at least two modes.
+La modalità pubblica non espone dati professionali solo perché la stessa UI può renderizzare entrambe le modalità.
 
-### 9.1 Public mode
+### 9.2 Modalità professionale
 
-If the institution's curricolo is public/publishable under governance, Curricolo Atlas may permit unauthenticated consultation.
+Il professionista autenticato può ricevere contesto aggiuntivo verso progettazioni, materiali o authoring.
 
-Public mode MUST NOT expose professional-only data merely because the same frontend can render both modes.
+Il contesto professionale non concede authority di modifica: le scritture restano governate da Arena.
 
-### 9.2 Professional mode
+## 10. Arena
 
-Authenticated professionals may receive richer context such as links to their planning, materials or authoring workflows.
+Arena richiede identità professionale per la gestione privilegiata del curricolo.
 
-Professional context does not grant curriculum mutation authority. Writes remain governed by Arena.
+TRAMA Access concede al massimo entitlement di ingresso; Arena governa i propri ruoli read/edit/approve/publish.
 
-## 10. Arena access model
+Il contesto istituzionale è parte essenziale dell'autorizzazione.
 
-Arena requires professional identity for privileged curriculum management.
+## 11. Studio Atlas
 
-TRAMA Access may grant an application-level entitlement to enter Arena, but Arena owns its internal role model, for example read/edit/approve/publish capabilities.
+Studio Atlas adotta l'identità professionale TRAMA invece di creare un login concorrente.
 
-Institutional context is especially important for Arena because curricular authority belongs to an institution/context, not merely to an individual account.
+Conserva ownership e autorizzazione dei propri draft.
 
-## 11. Studio Atlas access model
+Il percorso `Vedi come studente` attraversa un confine governato verso Atlas learner e non trasferisce la sessione professionale.
 
-Studio Atlas SHALL adopt TRAMA professional identity rather than creating a competing standalone professional login system.
+## 12. Atlas learner
 
-Studio Atlas keeps its own authoring authorization and draft ownership semantics.
+Atlas learner resta fuori dal piano identitario professionale.
 
-Its learner preview path MUST continue to cross into Atlas through a governed learner-preview boundary, not by handing the learner the professional session.
-
-## 12. Atlas learner/student access model
-
-Atlas learner SHALL remain outside the professional identity plane.
-
-Where experiences are assigned to a class/group, the teacher-side system may issue a bounded assignment reference or access code.
-
-Illustrative boundary:
+Per classi/gruppi il sistema teacher-side può emettere un riferimento o codice limitato:
 
 ```text
-Docente OS / professional context
-   │ class/group selection
+Docente OS / contesto professionale
+   │ selezione classe/gruppo
    ▼
 Assignment
-   │ experience reference + bounded token/code
+   │ experience reference + token/codice limitato
    ▼
 Atlas learner
 ```
 
-The default handoff SHOULD NOT include a nominal class register or a learner-wide personal identifier.
+Il handoff predefinito non include il registro nominale né un identificatore personale learner valido tra esperienze.
 
-Any future exception requires explicit CHILD-SAFE/privacy governance and necessity analysis.
+Ogni eccezione richiede decisione CHILD-SAFE/privacy esplicita e analisi di necessità.
 
-## 13. Materials as a cross-cutting resource
+## 13. Materiali
 
-Materials SHALL be modeled as a shared governed resource/capability before considering a standalone application.
+I Materiali sono prima di tutto risorsa/capacità governata condivisa.
 
-The canonical material contract should be able to express at least:
+Il contratto deve poter esprimere almeno:
 
-- stable material identifier;
-- owner/workspace or governing context;
-- author/origin;
+- identificatore stabile;
+- owner/workspace/contesto;
+- autore/origine;
 - provenance;
-- discipline/domain metadata where relevant;
-- curricular references;
-- lesson/planning references;
-- Studio Atlas / Atlas experience references where relevant;
-- sharing/presentation/export mode;
-- lifecycle/versioning information where required.
+- disciplina/dominio quando rilevante;
+- riferimenti al curricolo;
+- riferimenti a lezioni/progettazione;
+- riferimenti Studio Atlas / esperienza Atlas;
+- condivisione/proiezione/export;
+- lifecycle/versioning quando necessario.
 
-The same material should be referenced from multiple products rather than copied into multiple competing authorities whenever technically and legally appropriate.
+Si referenzia la stessa risorsa tra prodotti invece di creare copie concorrenti quando appropriato.
 
-## 14. Student/class/group organization
+## 14. Classi, gruppi e assegnazioni
 
-Teacher-side organization of students/classes/groups is a pedagogical capability, not proof that Atlas needs personal student accounts.
+L'organizzazione teacher-side non dimostra né richiede account personali Atlas.
 
-Docente OS or another authorized professional system may manage class/group structure needed for planning and assignment.
+Docente OS o altro sistema professionale autorizzato può gestire classi e gruppi per progettazione e assegnazione.
 
-The learner boundary SHOULD receive the minimum data needed to open the experience.
-
-Teacher-side nominal data MUST NOT silently propagate to Atlas learner merely for convenience.
+Il confine learner riceve solo i dati minimi per aprire l'esperienza. Dati nominali teacher-side non propagano silenziosamente verso Atlas.
 
 ## 15. Control Center
 
-Control Center has two logically distinct access surfaces.
+### 15.1 Pubblico
 
-### 15.1 Public Control Center
+Può mostrare informazioni governate non sensibili: stato ecosistema, evidenze, maturità, contratti e release.
 
-May expose governed non-sensitive information such as ecosystem status, evidence, maturity, contracts or public release/state information.
+Può restare non autenticato.
 
-This mode may remain unauthenticated.
+### 15.2 Privilegiato
 
-### 15.2 Privileged Control Center
+Se esistono operazioni sensibili o irreversibili — authority changes, promozioni, mutazioni configurazione, runtime actions, approvazioni governate — il semplice login professionale non basta.
 
-If/when Control Center can perform sensitive or irreversible operations — such as authority changes, promotion, configuration mutation, runtime actions or governed approvals — professional authentication alone is insufficient.
+Servono entitlement governance dedicato e step-up/MFA dove richiesto.
 
-Privileged Control Center SHALL require a dedicated governance entitlement and SHOULD support step-up authentication/MFA for sensitive operations.
+Un utente TRAMA ordinario non acquisisce poteri di governance perché autenticato.
 
-An ordinary authenticated TRAMA user MUST NOT acquire governance authority simply by being signed in.
+## 16. Gateway
 
-## 16. Gateway behavior
+TRAMA Gateway resta soglia pubblica e superficie identitaria/narrativa.
 
-TRAMA Gateway remains a public threshold and identity/narrative surface.
+Non conserva credenziali, non diventa IdP e non inferisce autorizzazioni di prodotto.
 
-It SHALL NOT store credentials, become the IdP, or infer product authorization.
+`Entra in TRAMA` e `Accedi` puntano in futuro al TRAMA Access canonico.
 
-`Entra in TRAMA` and `Accedi` SHOULD eventually route to the canonical TRAMA Access entry point.
+Fino a quel momento, l'assenza di `VITE_TRAMA_ENTRY_HREF` resta fail-closed **senza abbattere la landing pubblica**. Non si inventa un URL temporaneo di prodotto.
 
-The current production requirement for an explicit `VITE_TRAMA_ENTRY_HREF` MUST remain fail-closed until a governed TRAMA Access destination exists. A temporary product URL MUST NOT be invented merely to make the button functional.
+## 17. Navigazione e deep link
 
-## 17. Public versus authenticated navigation
+Dopo autenticazione, i deep link possono evitare un ritorno obbligatorio al launcher.
 
-The ecosystem should support direct deep links after professional authentication without forcing a return through the launcher for every transition.
+Un URL non contiene bearer token, credenziali raw, JWT privilegiati o contesto personale sensibile.
 
-A deep link MUST NOT carry bearer tokens, raw session credentials, privileged JWTs, or sensitive personal context in the URL.
+I riferimenti di contesto sono opachi/limitati e risolti dall'app destinazione sotto la propria autorizzazione.
 
-Context references should be opaque/bounded and resolved by the destination application under its own authorization rules.
+## 18. Servizi machine-to-machine
 
-## 18. Machine-to-machine services
+Knowledge/evidence, connector/runtime, sync/import, Visual Factory, Runtime Adapter e servizi analoghi non sono destinazioni del launcher.
 
-Knowledge/evidence services, connector/runtime services, sync/import, Visual Factory, Runtime Adapter and similar infrastructure are not launcher destinations.
+Usano contratti machine-to-machine separati e restano subordinati ai rispettivi confini di governance.
 
-They require separate machine-to-machine authorization contracts and remain subordinate to their existing authority/governance boundaries.
+DOS-A1 resta `RUNTIME_DEFERRED` salvo decisione autorizzata separata.
 
-DOS-A1 remains `RUNTIME_DEFERRED` unless separately changed by an authorized decision.
+## 19. Invarianti sicurezza/privacy
 
-## 19. Security and privacy invariants
+- niente password o bearer token persistenti tra app tramite URL;
+- niente hack di token condivisi via `localStorage`;
+- niente autorizzazione basata soltanto su email/metadati mutabili;
+- niente escalation implicita cross-product;
+- niente account learner creato per comodità delle assegnazioni;
+- niente registro nominale esportato in Atlas per impostazione predefinita;
+- dati di prodotto sotto RLS/autorizzazione locale equivalente;
+- operazioni Control Center privilegiate con entitlement esplicito;
+- Gateway non autorevole per autenticazione o permessi di prodotto.
 
-The architecture SHALL preserve these invariants:
+## 20. Classi di utente iniziali
 
-- no passwords or long-lived bearer tokens passed between apps in URLs;
-- no shared `localStorage` token hack across applications;
-- no authorization based solely on mutable email or display metadata;
-- no implicit cross-product privilege escalation;
-- no learner account introduced merely to support assignments;
-- no learner nominal register exported to Atlas by default;
-- product data remains under product-specific authorization/RLS or equivalent controls;
-- privileged Control Center operations require explicit governance authorization;
-- Gateway remains non-authoritative for authentication and product permissions.
-
-## 20. Initial user classes
-
-The architecture must support at least these classes without conflating them:
-
-| User class | Personal account | Typical surfaces |
+| Classe | Account personale | Superfici tipiche |
 | --- | --- | --- |
-| Public visitor | no | Gateway, public Curricolo Atlas, public Control Center |
-| Learner/student | no personal TRAMA account by default | Atlas learner |
-| Teacher/professional | yes | Docente OS, Curricolo Atlas, Studio Atlas as entitled |
-| Curriculum responsible/authorized professional | yes | professional surfaces + Arena roles |
-| Governance/operator | yes + stronger authorization as needed | privileged Control Center |
+| Visitatore pubblico | no | Gateway, Curricolo Atlas pubblico, Control Center pubblico |
+| Studente/learner | no account personale TRAMA di default | Atlas learner |
+| Docente/professionista | sì | Docente OS, Curricolo Atlas, Studio Atlas secondo entitlement |
+| Responsabile del curricolo / professionista autorizzato | sì | superfici professionali + ruoli Arena |
+| Operatore governance | sì + verifica forte quando necessaria | Control Center privilegiato |
 
-## 21. Implementation sequence
+## 21. Sequenza implementativa
 
-Implementation MUST be incremental and reversible.
+1. congelare e approvare ACCESS-01;
+2. definire il contratto provider-neutral di identità professionale;
+3. creare identity provider candidato senza dati di prodotto;
+4. costruire TRAMA Access minimale;
+5. federare Docente OS come primo pilot;
+6. provare login, autorizzazione locale, logout e failure mode end-to-end;
+7. federare Studio Atlas;
+8. definire modalità pubblica/professionale di Curricolo Atlas;
+9. integrare Arena con contesto istituzionale e ruoli locali;
+10. formalizzare Control Center pubblico/privilegiato e step-up;
+11. definire contratto assegnazioni/learner;
+12. definire Material Contract condiviso;
+13. solo dopo certificazione di TRAMA Access, configurare `VITE_TRAMA_ENTRY_HREF` sul suo endpoint canonico.
 
-Recommended order:
+## 22. Evidenze e qualificazione
 
-1. freeze and approve this ACCESS-01 specification;
-2. define the provider-neutral TRAMA professional identity contract;
-3. establish a dedicated candidate identity provider with no product data;
-4. build the minimal TRAMA Access login/launcher boundary;
-5. federate Docente OS as the first pilot relying application because real authentication/workspace rules already exist there;
-6. prove login, local authorization, sign-out and failure modes end-to-end;
-7. federate Studio Atlas;
-8. define public/professional modes for Curricolo Atlas;
-9. integrate Arena with institutional context and local curricular roles;
-10. formalize Control Center public versus privileged access and step-up requirements;
-11. define the assignment/learner-access contract;
-12. define the shared material resource contract;
-13. only after a canonical TRAMA Access endpoint is certified, point Gateway `VITE_TRAMA_ENTRY_HREF` to it.
+ACCESS-01 non è implementato solo perché esiste una schermata di login.
 
-## 22. Evidence and qualification requirements
+Le evidenze devono dimostrare almeno:
 
-ACCESS-01 is not considered implemented merely because login screens render.
+- Gateway sempre utilizzabile pubblicamente;
+- autenticazione professionale attraverso il confine canonico;
+- route professionali non autenticate fail-closed o redirect sicuro;
+- launch autorizzato nelle app pilot;
+- autorizzazioni locali ancora efficaci dopo federazione;
+- logout/scadenza sessione definiti e testati;
+- nessuna credenziale nei URL/evidenze pubbliche;
+- separazione modalità pubblica/professionale Curricolo Atlas;
+- authority Arena non ottenibile dal solo accesso Curricolo Atlas;
+- sessione Studio Atlas mai trasferita ad Atlas learner;
+- learner senza account personale;
+- assegnazione senza export nominale learner di default;
+- Control Center pubblico separato da operazioni privilegiate;
+- governance privilegiata con entitlement e verifica forte quando specificato;
+- riferimenti Materiali con provenance/ownership preservati;
+- terminologia **Curricolo Atlas** coerente.
 
-Qualification evidence must demonstrate, at minimum:
+Le prove sono exact-head, riproducibili e legate a contratti governati, non soltanto screenshot.
 
-- Gateway remains usable publicly;
-- professional authentication succeeds through the canonical identity boundary;
-- unauthenticated professional routes fail closed or redirect safely;
-- authorized launch into each pilot product works;
-- product-local authorization remains effective after federation;
-- logout/session expiry behavior is defined and tested;
-- no credentials/tokens leak into URLs or public evidence;
-- Curricolo Atlas public and professional modes do not cross-leak data;
-- Arena write authority cannot be obtained from Curricolo Atlas access alone;
-- Studio Atlas professional session is never handed to Atlas learner;
-- learner access works without a personal account;
-- assignment access does not require nominal learner export by default;
-- Control Center public data is separated from privileged operations;
-- privileged governance operations require explicit entitlement and stronger verification where specified;
-- material references preserve provenance/ownership across consuming products;
-- architecture terminology uses **Curricolo Atlas** consistently.
+## 23. Non-obiettivi
 
-Evidence should be exact-head, reproducible, and tied to governed contracts rather than screenshots alone.
+ACCESS-01 non autorizza:
 
-## 23. Non-goals of ACCESS-01
+- acquisto immediato di un nuovo identity provider;
+- migrazione immediata di tutti gli utenti;
+- UI completa di amministrazione organizzazioni/tenant;
+- account learner;
+- una nuova app Materiali;
+- trasferimento di ownership tra Arena, Studio Atlas e Docente OS;
+- operazioni write privilegiate Control Center senza decisione separata;
+- merge/deploy automatici;
+- modifica dello stato DOS-A1.
 
-This design does not authorize:
+## 24. Dichiarazione canonica
 
-- immediate creation of a new paid identity provider;
-- immediate migration of all existing users;
-- immediate organization/tenant administration UI;
-- learner accounts;
-- a new Materials application;
-- restructuring Arena, Studio Atlas or Docente OS product ownership;
-- privileged Control Center write operations;
-- automatic deployment/merge;
-- any change to DOS-A1 runtime status.
-
-## 24. Canonical architecture statement
-
-The ecosystem SHALL be governed by the following statement:
-
-> **TRAMA provides one professional identity and one coherent entry architecture while preserving independent product authorities. Public access, professional access, learner access and governance access are distinct planes. Arena is authoritative for the curricolo di istituto; Curricolo Atlas provides its navigation/intelligence surface. Studio Atlas authors experiences; Atlas learner executes them without requiring a personal learner account by default. Docente OS orchestrates teacher work without becoming ecosystem authority. Materials and student/group assignment are cross-cutting capabilities. Control Center separates public observability from privileged governance.**
+> **TRAMA fornisce una identità professionale e un'architettura di ingresso coerente preservando autorità di prodotto indipendenti. Accesso pubblico, professionale, learner e governance sono piani distinti. Arena è autorevole per il curricolo di istituto; Curricolo Atlas ne fornisce navigazione e intelligibilità. Studio Atlas crea esperienze; Atlas learner le esegue senza richiedere per impostazione predefinita un account personale. Docente OS orchestra il lavoro docente senza diventare authority dell'ecosistema. Materiali e assegnazioni sono capacità trasversali. Control Center separa osservabilità pubblica da governance privilegiata.**
 
 ## 25. Decision record
 
-Human design direction approved in conversation on 2026-10-10.
+Direzione di design approvata il 2026-10-10 e governata tramite PR #268.
 
-This file is the persistent repository evidence of that decision. Any future architecture change that materially alters identity authority, learner-account policy, Arena/Curricolo Atlas boundaries, Studio Atlas/Atlas learner boundaries, or public-versus-privileged Control Center access requires a new governed decision rather than silent drift.
+Ogni futura modifica materiale a identity authority, politica learner, confine Arena/Curricolo Atlas, confine Studio Atlas/Atlas learner o separazione Control Center pubblico/privilegiato richiede una nuova decisione governata.
