@@ -114,6 +114,12 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
 
   if (testInfo.project.name !== 'L') {
     await expect(accent).toHaveCSS('display', 'block');
+    const heroOffsetY = await page.locator('.trama-hero-composition').evaluate((element) => {
+      const transform = getComputedStyle(element).transform;
+      if (transform === 'none') return 0;
+      return new DOMMatrixReadOnly(transform).m42;
+    });
+    expect(heroOffsetY).toBeLessThanOrEqual(-32);
   }
 
   const expectedBackground = EXPECTED_BACKGROUND[testInfo.project.name];
