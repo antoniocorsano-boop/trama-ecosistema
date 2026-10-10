@@ -85,7 +85,7 @@ export function App() {
               </p>
               <h2
                 id={`${section.id}-title`}
-                className="max-w-sm text-3xl font-normal leading-tight sm:text-4xl"
+                className="max-w-sm text-2xl font-normal leading-tight sm:text-4xl"
                 style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
               >
                 {section.title}
