@@ -176,3 +176,23 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
     fullPage: false,
   });
 });
+
+test('desktop secondary navigation reaches real landing sections', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'L', 'Internal landing navigation is exercised on the desktop header.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await openGateway(page);
+
+  for (const [label, id] of [
+    ['Ecosistema', 'ecosistema'],
+    ['Curricolo', 'curricolo'],
+    ['Guida', 'guida'],
+  ] as const) {
+    const link = page.getByRole('link', { name: label });
+    const section = page.locator(`#${id}`);
+    await expect(link).toHaveAttribute('href', `#${id}`);
+    await expect(section).toHaveAttribute('aria-labelledby', `${id}-title`);
+    await link.click();
+    await expect(page).toHaveURL(new RegExp(`#${id}$`));
+    await expect(section).toBeVisible();
+  }
+});
