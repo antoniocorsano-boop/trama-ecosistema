@@ -51,8 +51,19 @@
       "label": "Identità professionale TRAMA",
       "plane": "PROFESSIONAL",
       "state": "DESIGNED",
-      "note": "One ecosystem professional principal is the approved target; provider-neutral contract and runtime remain to be implemented.",
-      "roadmapPhase": 1
+      "contractStatus": "QUALIFIED",
+      "runtimeState": "NOT_IMPLEMENTED",
+      "providerCandidateStatus": "CANDIDATE_ONLY_NOT_RUNTIME_AUTHORIZED",
+      "note": "The provider-neutral professional identity contract and threat model are qualified by Governance; no identity runtime, SSO or product federation is implemented. Supabase Auth is only a conditional Phase 2 candidate and does not change the provider-neutral contract.",
+      "roadmapPhase": 1,
+      "evidence": [
+        {
+          "head": "9bb3a89fe1cd7d16e1977f0c99315669d5b42fdf",
+          "workflow": "Governance",
+          "runId": 38082552731,
+          "proof": "Validate ACCESS-01 professional identity contract PASS; adversarial cases PASS; full Governance PASS"
+        }
+      ]
     },
     {
       "id": "docente_os",
