@@ -117,11 +117,15 @@ a {
   color: transparent;
   background-image: linear-gradient(
     100deg,
-    #FFC36B 0%,
-    #FFE0A6 31%,
-    #FFF7E6 50%,
-    #FFE0A6 69%,
-    #FFC36B 100%
+    #FFD36A 0%,
+    #FFE9A8 18%,
+    #FFF7D6 34%,
+    #FFFDF2 46%,
+    #FFFFFF 50%,
+    #FFFDF2 54%,
+    #FFF7D6 66%,
+    #FFE9A8 82%,
+    #FFD36A 100%
   );
   background-position: center;
   background-repeat: no-repeat;
