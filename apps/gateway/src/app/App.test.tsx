@@ -23,6 +23,23 @@ describe('TRAMA gateway', () => {
     );
   });
 
+  it('resolves every secondary navigation anchor to a real landing section', () => {
+    render(<App />);
+
+    const destinations = [
+      ['Ecosistema', 'ecosistema'],
+      ['Curricolo', 'curricolo'],
+      ['Guida', 'guida'],
+    ] as const;
+
+    destinations.forEach(([label, id]) => {
+      expect(screen.getByRole('link', { name: label })).toHaveAttribute('href', `#${id}`);
+      const section = document.getElementById(id);
+      expect(section).toBeInTheDocument();
+      expect(section).toHaveAttribute('aria-labelledby', `${id}-title`);
+    });
+  });
+
   it('implements the approved v2 hero emphasis and Segno vivo layer', () => {
     render(<App />);
     expect(screen.getByTestId('trama-segno-vivo')).toBeInTheDocument();
