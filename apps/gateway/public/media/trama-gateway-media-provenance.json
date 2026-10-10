@@ -1,37 +1,39 @@
 {
-  "version": 1,
-  "visualBaseline": "docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.jpg",
+  "version": 2,
+  "visualBaseline": "docs/superpowers/specs/assets/trama-gateway-approved-desktop-v2.jpg",
+  "responsiveBaseline": "docs/superpowers/specs/assets/trama-gateway-approved-responsive-v2.jpg",
+  "approvalReceipt": "docs/superpowers/specs/2026-10-10-trama-gateway-approved-baseline-v2.md",
   "approvalGate": "HUMAN_VISUAL_REVIEW_REQUIRED",
   "assets": [
     {
       "path": "/media/trama-gateway-poster-s.webp",
       "role": "s",
-      "source": "Derived from the Human-approved TRAMA visual baseline; UI-free material scene reconstructed and art-directed for smartphone composition.",
+      "source": "Deterministically derived from the Human-approved TRAMA v2 mockups through UI-free scene reconstruction and smartphone-specific art direction.",
       "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
       "date": "2026-10-10",
       "identifiablePersons": false,
       "studentData": false,
-      "notes": "Project-generated derivative. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
+      "notes": "900x1600 WebP. Project-generated derivative of the approved v2 design reference; no embedded navigation, hero copy or CTA. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
     },
     {
       "path": "/media/trama-gateway-poster-m.webp",
       "role": "m",
-      "source": "Derived from the Human-approved TRAMA visual baseline; UI-free material scene reconstructed and art-directed for tablet composition.",
+      "source": "Deterministically derived from the Human-approved TRAMA v2 mockups through UI-free scene reconstruction and tablet-specific art direction.",
       "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
       "date": "2026-10-10",
       "identifiablePersons": false,
       "studentData": false,
-      "notes": "Project-generated derivative. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
+      "notes": "1400x1600 WebP. Project-generated derivative of the approved v2 design reference; no embedded navigation, hero copy or CTA. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
     },
     {
       "path": "/media/trama-gateway-poster-l.webp",
       "role": "l",
-      "source": "Derived from the Human-approved TRAMA visual baseline; UI-free material scene reconstructed and art-directed for desktop composition.",
+      "source": "Deterministically derived from the Human-approved TRAMA v2 desktop mockup through UI-free scene reconstruction and desktop art direction.",
       "approval": "IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW",
       "date": "2026-10-10",
       "identifiablePersons": false,
       "studentData": false,
-      "notes": "Project-generated derivative. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
+      "notes": "1920x1080 WebP. Project-generated derivative of the approved v2 design reference; no embedded navigation, hero copy or CTA. No third-party imagery or licence claim is asserted. Final use remains gated by exact-head Human Visual Review."
     }
   ]
 }
