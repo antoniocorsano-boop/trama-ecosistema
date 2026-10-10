@@ -114,31 +114,19 @@ a {
 .trama-copper-text {
   display: block;
   margin-top: 0.08em;
-  color: transparent;
-  background-image: linear-gradient(
-    100deg,
-    #FFD36A 0%,
-    #FFE9A8 18%,
-    #FFF7D6 34%,
-    #FFFDF2 46%,
-    #FFFFFF 50%,
-    #FFFDF2 54%,
-    #FFF7D6 66%,
-    #FFE9A8 82%,
-    #FFD36A 100%
-  );
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.55px rgba(24, 14, 10, 0.82);
+  color: #FFFBEA;
+  background-image: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  -webkit-text-fill-color: #FFFBEA;
+  -webkit-text-stroke: 0.30px rgba(52, 29, 10, 0.72);
   paint-order: stroke fill;
   text-shadow:
-    0 0 7px rgba(255, 195, 107, 0.32),
-    0 0 18px rgba(255, 224, 166, 0.16),
-    0 1px 2px rgba(10, 8, 6, 0.26);
+    0 0 3px rgba(255, 255, 245, 0.92),
+    0 0 11px rgba(255, 235, 190, 0.72),
+    0 0 26px rgba(255, 198, 112, 0.42),
+    0 0 44px rgba(255, 166, 64, 0.22),
+    0 1px 2px rgba(10, 8, 6, 0.18);
 }
 
 .trama-hero-support {
@@ -305,8 +293,7 @@ a {
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-copper-text {
     display: inline;
     margin-top: 0;
-    background-size: 112% 150%;
-    -webkit-text-stroke-width: 0.95px;
+    -webkit-text-stroke-width: 0.45px;
   }
 
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-support {
