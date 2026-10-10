@@ -2,6 +2,14 @@ import { randomBytes, timingSafeEqual } from 'node:crypto';
 
 export const CSRF_COOKIE_NAME = 'trama_access_csrf';
 
+export const csrfCookieOptions = {
+  httpOnly: false,
+  secure: true,
+  sameSite: 'lax',
+  path: '/',
+  maxAge: 28_800,
+} as const;
+
 export function createCsrfToken(): string {
   return randomBytes(32).toString('base64url');
 }
