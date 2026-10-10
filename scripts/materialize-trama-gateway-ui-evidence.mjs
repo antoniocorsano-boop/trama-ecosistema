@@ -2,6 +2,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { validateTramaGatewayMedia } from './validate-trama-gateway-media.mjs';
 
 const [exactHead, evidenceDirArg, outputArg, runId = 'local'] = process.argv.slice(2);
 if (!exactHead || !evidenceDirArg || !outputArg) {
@@ -62,6 +63,27 @@ const bind = (name, producer, type, evidenceId) => {
     immutableRunId: `github-actions:${runId}`,
   };
 };
+const bindRepositoryFile = (relativePath, producer, type, evidenceId) => {
+  const file = path.join(root, relativePath);
+  if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
+    console.error(`missing required repository evidence: ${relativePath}`);
+    process.exit(1);
+  }
+  return {
+    evidenceId,
+    type,
+    result: 'PASS',
+    commitSha: exactHead,
+    producer,
+    reference: relativePath,
+    digest: digest(file),
+    immutableRunId: `github-actions:${runId}`,
+  };
+};
+
+const media = validateTramaGatewayMedia(root);
+const visualBaseline = 'docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.jpg';
+const provenance = 'apps/gateway/public/media/trama-gateway-media-provenance.json';
 
 const manifest = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
 const dimensions = {
@@ -83,6 +105,13 @@ manifest.accessibility.evidence = [
   bind('keyboard-focus-L.json', 'playwright', 'keyboard-focus-automated', 'trama-gateway-keyboard-focus-l'),
   bind('text-resize-LIM.json', 'playwright', 'text-resize-reflow', 'trama-gateway-text-resize-lim'),
 ];
+manifest.perceptibleWrite.evidence = [
+  bindRepositoryFile(visualBaseline, 'human-visual-review', 'visual-baseline-contract', 'trama-gateway-visual-baseline'),
+  bindRepositoryFile(provenance, 'trama-media-validator', 'media-provenance', 'trama-gateway-media-provenance'),
+  bindRepositoryFile(reference(media.paths.s), 'trama-media-validator', 'poster-asset', 'trama-gateway-poster-s'),
+  bindRepositoryFile(reference(media.paths.m), 'trama-media-validator', 'poster-asset', 'trama-gateway-poster-m'),
+  bindRepositoryFile(reference(media.paths.l), 'trama-media-validator', 'poster-asset', 'trama-gateway-poster-l'),
+];
 
 fs.mkdirSync(path.dirname(outputFile), { recursive: true });
 fs.writeFileSync(outputFile, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -93,5 +122,6 @@ console.log(JSON.stringify({
   output: reference(outputFile),
   responsiveEvidence: manifest.responsive.evidence.length,
   accessibilityEvidence: manifest.accessibility.evidence.length,
+  governedMediaEvidence: manifest.perceptibleWrite.evidence.length,
   result: 'PASS',
 }, null, 2));
