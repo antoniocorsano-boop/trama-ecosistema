@@ -13,21 +13,30 @@ export function TramaSegnoVivo() {
       >
         <path
           data-testid="trama-copper-curve"
-          className="trama-copper-curve"
-          d="M-120 145 C 260 165, 430 290, 690 390 S 1190 450, 1710 70"
-        />
-        <path
-          data-testid="trama-copper-curve"
+          data-zone="peripheral"
           className="trama-copper-curve trama-copper-curve-soft"
-          d="M-80 250 C 340 305, 500 390, 780 520 S 1230 585, 1690 330"
+          d="M-130 180 C 150 95, 390 105, 655 238"
         />
         <path
           data-testid="trama-copper-curve"
+          data-zone="peripheral"
           className="trama-copper-curve"
-          d="M430 930 C 790 710, 1090 770, 1320 550 S 1500 270, 1660 160"
+          d="M930 78 C 1190 15, 1450 70, 1715 255"
         />
-        <circle className="trama-copper-node" cx="1320" cy="550" r="4" />
-        <circle className="trama-copper-node" cx="1445" cy="410" r="3" />
+        <path
+          data-testid="trama-copper-curve"
+          data-zone="peripheral"
+          className="trama-copper-curve"
+          d="M430 955 C 780 785, 1115 770, 1360 585 S 1540 365, 1715 285"
+        />
+        <path
+          data-testid="trama-copper-curve"
+          data-zone="peripheral"
+          className="trama-copper-curve trama-copper-curve-soft"
+          d="M1265 690 C 1450 585, 1555 455, 1700 330"
+        />
+        <circle className="trama-copper-node" cx="1360" cy="585" r="3.6" />
+        <circle className="trama-copper-node" cx="1510" cy="430" r="2.8" />
       </svg>
 
       <svg
@@ -38,20 +47,29 @@ export function TramaSegnoVivo() {
       >
         <path
           data-testid="trama-copper-curve"
-          className="trama-copper-curve"
-          d="M-55 205 C 70 260, 125 345, 220 405 S 355 405, 455 290"
-        />
-        <path
-          data-testid="trama-copper-curve"
+          data-zone="peripheral"
           className="trama-copper-curve trama-copper-curve-soft"
-          d="M-40 340 C 105 390, 170 470, 245 545 S 355 620, 435 585"
+          d="M-60 185 C 25 150, 75 170, 125 235"
         />
         <path
           data-testid="trama-copper-curve"
+          data-zone="peripheral"
           className="trama-copper-curve"
-          d="M85 900 C 205 770, 270 740, 325 625 S 365 470, 430 395"
+          d="M430 185 C 365 275, 365 390, 430 515"
         />
-        <circle className="trama-copper-node" cx="325" cy="625" r="3.5" />
+        <path
+          data-testid="trama-copper-curve"
+          data-zone="peripheral"
+          className="trama-copper-curve"
+          d="M-45 795 C 90 715, 235 760, 430 635"
+        />
+        <path
+          data-testid="trama-copper-curve"
+          data-zone="peripheral"
+          className="trama-copper-curve trama-copper-curve-soft"
+          d="M350 715 C 390 660, 405 590, 435 535"
+        />
+        <circle className="trama-copper-node" cx="355" cy="684" r="3" />
       </svg>
     </div>
   );
