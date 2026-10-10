@@ -36,6 +36,16 @@ describe('TRAMA gateway', () => {
     expect(heading).not.toHaveTextContent('curricolo, conoscenza e progettazione diventano esperienza. esperienza.');
   });
 
+  it('keeps the approved reading zone free from corrective blackout and crossing copper paths', () => {
+    render(<App />);
+    const stage = screen.getByRole('main').parentElement;
+    expect(stage).toHaveClass('trama-gateway-stage');
+
+    const curves = screen.getAllByTestId('trama-copper-curve');
+    expect(curves.length).toBeGreaterThanOrEqual(3);
+    curves.forEach((curve) => expect(curve).toHaveAttribute('data-zone', 'peripheral'));
+  });
+
   it('does not expose the rejected vector poster through the rendered gateway', () => {
     render(<App />);
     expect(screen.getByTestId('trama-media-poster').getAttribute('src')).not.toMatch(/\.svg$/);
