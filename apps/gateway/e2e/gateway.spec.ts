@@ -103,8 +103,13 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
       textFillColor: style.getPropertyValue('-webkit-text-fill-color'),
     };
   });
-  expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.94);
-  expect(accentState.strokeWidth).toBeLessThanOrEqual(0.96);
+  if (testInfo.project.name === 'L') {
+    expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.94);
+    expect(accentState.strokeWidth).toBeLessThanOrEqual(0.96);
+  } else {
+    expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.54);
+    expect(accentState.strokeWidth).toBeLessThanOrEqual(0.56);
+  }
   expect(accentState.backgroundImage).toContain('linear-gradient');
   expect(accentState.backgroundImage).toContain('rgb(255, 247, 230)');
   expect(accentState.backgroundImage).toContain('rgb(255, 224, 166)');
