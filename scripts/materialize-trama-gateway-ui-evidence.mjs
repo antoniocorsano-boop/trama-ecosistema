@@ -106,11 +106,11 @@ manifest.accessibility.evidence = [
   bind('text-resize-LIM.json', 'playwright', 'text-resize-reflow', 'trama-gateway-text-resize-lim'),
 ];
 manifest.perceptibleWrite.evidence = [
-  bindRepositoryFile(visualBaseline, 'human-visual-review', 'visual-baseline-contract', 'trama-gateway-visual-baseline'),
-  bindRepositoryFile(provenance, 'trama-media-validator', 'media-provenance', 'trama-gateway-media-provenance'),
-  bindRepositoryFile(reference(media.paths.s), 'trama-media-validator', 'poster-asset', 'trama-gateway-poster-s'),
-  bindRepositoryFile(reference(media.paths.m), 'trama-media-validator', 'poster-asset', 'trama-gateway-poster-m'),
-  bindRepositoryFile(reference(media.paths.l), 'trama-media-validator', 'poster-asset', 'trama-gateway-poster-l'),
+  bindRepositoryFile(visualBaseline, 'human-governance-review', 'visual-baseline-contract', 'trama-gateway-visual-baseline'),
+  bindRepositoryFile(provenance, 'github-actions', 'media-provenance', 'trama-gateway-media-provenance'),
+  bindRepositoryFile(reference(media.paths.s), 'github-actions', 'poster-asset', 'trama-gateway-poster-s'),
+  bindRepositoryFile(reference(media.paths.m), 'github-actions', 'poster-asset', 'trama-gateway-poster-m'),
+  bindRepositoryFile(reference(media.paths.l), 'github-actions', 'poster-asset', 'trama-gateway-poster-l'),
 ];
 
 fs.mkdirSync(path.dirname(outputFile), { recursive: true });
