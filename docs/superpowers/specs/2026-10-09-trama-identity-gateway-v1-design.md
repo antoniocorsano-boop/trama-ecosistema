@@ -4,7 +4,7 @@
 **Design approval:** 2026-10-10  
 **Applies to:** TRAMA ecosystem · public gateway · Arena · Atlas · Studio Atlas · Docente OS · TRAMA Control Center  
 **Baseline:** `main@9a6d546733ae2503a0f17f342850964bb8c8da75`  
-**Approved visual reference:** `docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.png`  
+**Approved visual reference:** `docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.jpg`  
 **Runtime/publication authority:** NOT GRANTED  
 **DOS-A1:** RUNTIME_DEFERRED
 
@@ -18,20 +18,20 @@ The relationship remains:
 
 `TRAMA parent identity → shared semantic grammar → product-specific PVIP → local product composition`
 
-TRAMA coherence must therefore preserve differentiation between Arena, Atlas, Studio Atlas, Docente OS and Control Center.
+TRAMA coherence must preserve differentiation between Arena, Atlas, Studio Atlas, Docente OS and Control Center.
 
 ## 2. Approved Human Review decision
 
 The design direction **Segno vivo** is approved.
 
-Human Visual Review also produced one binding correction to the first coded implementation:
+Human Visual Review produced one binding correction to the first coded implementation:
 
-- the flat/vectored blue poster is **REJECTED as the final parent identity background**;
+- the flat/vector blue poster is **REJECTED as the final parent identity background**;
 - a technically clean or accessible hero is not sufficient if it reads as a generic coloured landing page;
 - the gateway must derive identity from **real material imagery, cinematic light, spatial depth and editorial composition**;
 - the static poster must already be an excellent TRAMA surface without requiring the optional video layer.
 
-The approved image stored at the canonical reference path is now the visual baseline against which implementation fidelity is judged.
+The approved image stored at the canonical reference path is the visual baseline against which implementation fidelity is judged.
 
 The image is a **design contract**, not merely inspiration.
 
@@ -149,7 +149,7 @@ Requirements:
 - it must use photographic/material depth consistent with the approved baseline;
 - it must preserve the quiet reading zone;
 - it must remain sharp on desktop and large displays;
-- it must have art-directed variants/crops for S/M/L/LIM where necessary;
+- it must have art-directed variants/crops for S/M/L where necessary;
 - it must not be replaced by a flat vector abstraction as the final design.
 
 The previous vector poster may remain only as a development fallback if useful, but it is **not approved for production identity or Human Visual Review**.
@@ -277,9 +277,9 @@ Reduced motion:
 
 ## 15. Responsive composition
 
-The gateway must be art-directed, not mechanically scaled.
+The gateway must follow `TRAMA-RESPONSIVE@1.0.0` and be art-directed rather than mechanically scaled.
 
-### S — smartphone
+### S — 320–599 px
 
 - short line measure;
 - mobile crop keeps material atmosphere but removes clutter behind copy;
@@ -287,23 +287,28 @@ The gateway must be art-directed, not mechanically scaled.
 - CTA remains reachable;
 - no horizontal overflow.
 
-### M — tablet
+### M — 600–1023 px
 
 - preserve editorial hierarchy;
 - maintain a clear reading zone;
 - use a dedicated crop/position when the desktop focal point would interfere with copy.
 
-### L — desktop
+### L — ≥1024 px
 
 - express the full cinematic relation between material scene, typography and glass header;
 - hero remains vertically balanced;
 - key material objects should sit mainly outside the core reading zone.
 
-### LIM — large display/presentation
+### LIM — LIMITED_REFLOW
 
-- poster remains high-resolution;
-- text measure stays constrained;
-- material scene may expand without making the copy excessively wide or visually weak.
+LIM is **not** a large-display breakpoint. It is the governed accessibility/reflow condition:
+
+- `maxInlineSize: 320`;
+- `zoom: 4`;
+- `requiresReflow: true`;
+- evidence dimensions required.
+
+LIM should use the S-compatible static composition and prove that text, focus, navigation and CTA reflow without horizontal overflow or loss of operability.
 
 ## 16. Parent identity propagation model
 
@@ -384,7 +389,7 @@ The gateway must prove:
 - visible focus over representative media states;
 - readable font fallback;
 - 200% text zoom and reflow;
-- no horizontal overflow in S/M/L/LIM;
+- no horizontal overflow in S/M/L and LIM;
 - reduced-motion behavior;
 - poster/media fallback;
 - stable text contrast over approved crops;
@@ -467,7 +472,9 @@ This design does not authorise:
 
 Design direction and visual baseline are approved.
 
-Implementation is authorised only within the bounded gateway scope and must follow the dedicated implementation specification/plan.
+Implementation is authorised only within the bounded gateway scope and must follow:
+
+`docs/superpowers/specs/2026-10-10-trama-gateway-v1-implementation-spec.md`
 
 The existing coded gateway at the pre-baseline Human Review state is explicitly **REWORK REQUIRED** because its flat/vector poster does not satisfy the approved visual baseline, even though automated CI and accessibility checks passed.
 
