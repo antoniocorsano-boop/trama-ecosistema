@@ -25,6 +25,17 @@ Repository review renditions:
 - desktop v2: 1024×576, SHA-256 `87787590bb98e7a94c9f8ff2ec7649884ec520013c2579c4e934fe5bf958fd90`
 - responsive v2: 1024×576, SHA-256 `8cea7bd7f916404af6db72773d2b64d8905e4743bfbda0b1bb7ab620087d0ae5`
 
+### 1.1 Explicit Human re-confirmation from uploaded review exports
+
+At 2026-10-10 10:44 Europe/Rome, Human Review explicitly reconfirmed both shown mockups as **APPROVED** by uploading the two review exports in the active review thread.
+
+The uploaded review exports are 1536×864 px JPEG payloads and are identified by:
+
+- responsive review export: SHA-256 `575d3f8dea8b3c5b86c3ede41c57f616e7877493106ff2bacde2d795a43a188c`
+- desktop review export: SHA-256 `6a4593997db0952ad8de19d1af197f610b3554b02d94f9d018774a6a7fb2eaae`
+
+This second confirmation removes any ambiguity about which visual direction is Human-approved. These uploaded exports confirm the same v2 contract represented by the repository review renditions; they do not authorise shipping UI-baked imagery as production media.
+
 ## 2. What this approval fixes
 
 The v2 baseline supersedes the previously rejected production evidence as the visual target. It fixes the following qualities:
