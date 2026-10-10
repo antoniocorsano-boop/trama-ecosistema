@@ -39,8 +39,28 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+.trama-gateway-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 14% 42%, rgba(246, 183, 111, 0.16) 0%, rgba(246, 183, 111, 0.06) 25%, transparent 48%),
+    radial-gradient(ellipse at 88% 37%, rgba(220, 128, 73, 0.12) 0%, rgba(220, 128, 73, 0.04) 22%, transparent 43%),
+    radial-gradient(ellipse at 48% 88%, rgba(236, 170, 104, 0.08) 0%, transparent 42%);
+  mix-blend-mode: screen;
+}
+
+.trama-media-visual {
+  filter: brightness(1.38) saturate(1.14) contrast(0.92);
+  object-position: 50% 56%;
+  transform: scale(1.008);
+  transform-origin: center;
+}
+
 .trama-copy-reinforced {
-  text-shadow: 0 2px 14px rgba(0, 14, 18, 0.28);
+  text-shadow: 0 2px 12px rgba(0, 14, 18, 0.24);
 }
 
 .trama-copper-text {
@@ -61,24 +81,24 @@ a {
 
 .trama-copper-curve {
   fill: none;
-  stroke: hsl(var(--copper) / 0.78);
-  stroke-width: 1.7;
+  stroke: hsl(var(--copper) / 0.68);
+  stroke-width: 1.45;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 4px hsl(var(--copper) / 0.28));
+  filter: drop-shadow(0 0 4px hsl(var(--copper) / 0.22));
 }
 
 .trama-copper-curve-soft {
-  stroke: hsl(var(--copper) / 0.5);
-  stroke-width: 1.15;
+  stroke: hsl(var(--copper) / 0.42);
+  stroke-width: 1.05;
 }
 
 .trama-copper-node {
-  fill: hsl(var(--copper) / 0.9);
-  filter: drop-shadow(0 0 7px hsl(var(--copper) / 0.5));
+  fill: hsl(var(--copper) / 0.82);
+  filter: drop-shadow(0 0 6px hsl(var(--copper) / 0.42));
 }
 
 .liquid-glass {
-  background: rgba(7, 18, 24, 0.34);
+  background: rgba(7, 18, 24, 0.30);
   background-blend-mode: luminosity;
   backdrop-filter: blur(14px) saturate(115%);
   -webkit-backdrop-filter: blur(14px) saturate(115%);
@@ -107,9 +127,23 @@ a {
   pointer-events: none;
 }
 
+@media (min-width: 600px) {
+  .trama-media-visual {
+    filter: brightness(1.42) saturate(1.16) contrast(0.91);
+    object-position: 50% 54%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .trama-media-visual {
+    filter: brightness(1.48) saturate(1.18) contrast(0.90);
+    object-position: 50% 52%;
+  }
+}
+
 @supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
   .liquid-glass {
-    background: rgba(0, 26, 38, 0.82);
+    background: rgba(0, 26, 38, 0.78);
   }
 }
 
@@ -141,6 +175,14 @@ a {
 }
 
 @media (forced-colors: active) {
+  .trama-gateway-stage::before {
+    display: none;
+  }
+
+  .trama-media-visual {
+    filter: none;
+  }
+
   .trama-copy-reinforced {
     text-shadow: none;
   }
