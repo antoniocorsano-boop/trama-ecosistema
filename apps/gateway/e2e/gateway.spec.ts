@@ -115,21 +115,24 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   expect(accentState.backgroundClip).toBe('border-box');
   expect(accentState.textFillColor).toBe(solarColor);
 
-  const wordmark = page.locator('.trama-solar-wordmark');
-  await expect(wordmark).toBeVisible();
-  await expect(wordmark).toHaveCSS('color', solarColor);
-  await expect(wordmark).toHaveCSS(
+  const eyebrow = page.getByTestId('trama-hero-wordmark');
+  await expect(eyebrow).toBeVisible();
+  await expect(eyebrow).toHaveCSS('color', solarColor);
+  await expect(eyebrow).toHaveCSS(
     'text-shadow',
     'rgba(255, 251, 225, 0.92) 0px 0px 2px, rgba(255, 216, 106, 0.62) 0px 0px 9px, rgba(255, 162, 54, 0.28) 0px 0px 20px',
   );
-  const wordmarkFontSize = await wordmark.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  const eyebrowFontSize = await eyebrow.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
   if (testInfo.project.name === 'L') {
-    expect(wordmarkFontSize).toBeGreaterThanOrEqual(36);
+    expect(eyebrowFontSize).toBeGreaterThanOrEqual(18);
   } else if (testInfo.project.name === 'M') {
-    expect(wordmarkFontSize).toBeGreaterThanOrEqual(33.5);
+    expect(eyebrowFontSize).toBeGreaterThanOrEqual(16);
   } else {
-    expect(wordmarkFontSize).toBeGreaterThanOrEqual(30);
+    expect(eyebrowFontSize).toBeGreaterThanOrEqual(14);
   }
+
+  const navWordmark = page.getByRole('link', { name: "TRAMA — torna all'inizio" }).locator('span');
+  await expect(navWordmark).toHaveCSS('color', 'rgb(255, 255, 255)');
 
   const quietZone = page.getByTestId('trama-hero-quiet-zone');
   await expect(quietZone).toBeVisible();
