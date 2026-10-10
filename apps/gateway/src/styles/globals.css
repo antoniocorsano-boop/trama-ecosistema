@@ -68,11 +68,10 @@ a {
   isolation: isolate;
 }
 
-.trama-hero-legibility::before {
-  content: '';
+.trama-hero-quiet-zone {
   position: absolute;
   inset: -2.1rem -1rem -1.8rem;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   border-radius: 50%;
   background: radial-gradient(
@@ -98,6 +97,11 @@ a {
     rgba(0, 0, 0, 0.66) 72%,
     transparent 100%
   );
+}
+
+.trama-hero-content {
+  position: relative;
+  z-index: 1;
 }
 
 .trama-copy-reinforced {
@@ -190,7 +194,7 @@ a {
     max-width: 54rem;
   }
 
-  .trama-hero-legibility::before {
+  .trama-hero-quiet-zone {
     inset: -2.5rem -1.5rem -2.2rem;
     background: radial-gradient(
       ellipse at 50% 46%,
@@ -252,7 +256,7 @@ a {
     transform: translateY(-0.8rem);
   }
 
-  .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-legibility::before {
+  .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-quiet-zone {
     inset: -2.8rem -1.7rem -2.5rem;
     background: radial-gradient(
       ellipse at 50% 44%,
@@ -318,7 +322,7 @@ a {
     background: rgba(0, 26, 38, 0.78);
   }
 
-  .trama-hero-legibility::before {
+  .trama-hero-quiet-zone {
     background: radial-gradient(
       ellipse at 50% 48%,
       rgba(56, 48, 42, 0.22) 0%,
@@ -357,7 +361,7 @@ a {
 
 @media (forced-colors: active) {
   .trama-gateway-stage::before,
-  .trama-hero-legibility::before {
+  .trama-hero-quiet-zone {
     display: none;
   }
 
