@@ -39,9 +39,22 @@ function normalizeSql(sql) {
   return sql.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, ' ');
 }
 
+function collectColumnIdentifiers(sql) {
+  const identifiers = new Set();
+  const typePattern = '(?:uuid|text|timestamptz|timestamp|jsonb|json|integer|bigint|boolean|bytea|numeric)';
+
+  for (const match of sql.matchAll(new RegExp(`^\\s*([a-z_][a-z0-9_]*)\\s+${typePattern}\\b`, 'gim'))) {
+    identifiers.add(match[1].toLowerCase());
+  }
+  for (const match of sql.matchAll(/alter\s+table\s+[a-z_][a-z0-9_]*\s+add\s+column\s+([a-z_][a-z0-9_]*)/gi)) {
+    identifiers.add(match[1].toLowerCase());
+  }
+
+  return [...identifiers];
+}
+
 export function validateAccessMigration(sql) {
   const normalized = normalizeSql(sql);
-  const lower = normalized.toLowerCase();
   const errors = [];
   const tables = [...normalized.matchAll(/create\s+table\s+([a-z_][a-z0-9_]*)/gi)].map((match) =>
     match[1].toLowerCase(),
@@ -94,8 +107,9 @@ export function validateAccessMigration(sql) {
     errors.push('browser-facing anon/authenticated policy forbidden');
   }
 
-  const forbiddenIdentifiers = FORBIDDEN_IDENTIFIERS.filter((identifier) =>
-    new RegExp(`\\b[a-z0-9_]*${identifier}[a-z0-9_]*\\b`, 'i').test(lower),
+  const columns = collectColumnIdentifiers(normalized);
+  const forbiddenIdentifiers = columns.filter((column) =>
+    FORBIDDEN_IDENTIFIERS.some((identifier) => column.includes(identifier)),
   );
   if (forbiddenIdentifiers.length) {
     errors.push(`forbidden Access identifiers: ${forbiddenIdentifiers.join(', ')}`);
