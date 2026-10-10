@@ -8,10 +8,19 @@ const contractPath = path.join(
   repoRoot,
   'governance/access/trama-professional-identity-contract.v1.json',
 );
+const schemaPath = path.join(
+  repoRoot,
+  'governance/access/trama-professional-identity-contract.v1.schema.json',
+);
+const docPath = path.join(repoRoot, 'docs/contracts/TRAMA-PROFESSIONAL-IDENTITY-01.md');
 
 assert.ok(fs.existsSync(contractPath), 'canonical professional identity contract must exist');
+assert.ok(fs.existsSync(schemaPath), 'professional identity contract schema must exist');
+assert.ok(fs.existsSync(docPath), 'human-readable normative identity contract must exist');
 
 const contract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
+const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+const doc = fs.readFileSync(docPath, 'utf8');
 
 assert.equal(contract.contractId, 'TRAMA-PROFESSIONAL-IDENTITY-01');
 assert.equal(contract.version, '1.0.0');
@@ -32,5 +41,9 @@ assert.deepEqual(contract.applicationEntitlement?.canonicalPairs, [
 ]);
 
 assert.equal(contract.learnerIdentity, undefined, 'professional contract must not define learner identity');
+assert.equal(schema.$id, 'https://trama.local/schemas/TRAMA-PROFESSIONAL-IDENTITY-01/v1');
+assert.ok(schema.required?.includes('oidcRelyingParty'), 'schema must require OIDC relying-party semantics');
+assert.ok(doc.includes('issuer + subject'), 'normative document must describe issuer + subject authority');
+assert.ok(doc.includes('Curricolo Atlas'), 'normative document must use canonical Curricolo Atlas terminology');
 
 console.log('PASS: Task 1 professional identity contract semantics');
