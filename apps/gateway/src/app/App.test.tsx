@@ -46,6 +46,12 @@ describe('TRAMA gateway', () => {
     curves.forEach((curve) => expect(curve).toHaveAttribute('data-zone', 'peripheral'));
   });
 
+  it('binds the rendered gateway to the Human-approved L v3 visual treatment', () => {
+    render(<App />);
+    const stage = screen.getByRole('main').parentElement;
+    expect(stage).toHaveAttribute('data-visual-revision', 'approved-l-v3');
+  });
+
   it('does not expose the rejected vector poster through the rendered gateway', () => {
     render(<App />);
     expect(screen.getByTestId('trama-media-poster').getAttribute('src')).not.toMatch(/\.svg$/);
