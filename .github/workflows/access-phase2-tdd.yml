@@ -29,5 +29,11 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install isolated test runner
+        run: |
+          mkdir -p .access-tdd-runtime
+          npm install --prefix .access-tdd-runtime --no-audit --no-fund vitest@5.0.2
+          ln -s .access-tdd-runtime/node_modules node_modules
+
       - name: Run RED config contract
-        run: npx --yes vitest@5.0.2 run apps/access/server/config.test.ts
+        run: .access-tdd-runtime/node_modules/.bin/vitest run apps/access/server/config.test.ts
