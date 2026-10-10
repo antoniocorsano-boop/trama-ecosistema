@@ -89,10 +89,10 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.locator('video')).toHaveCount(0);
 
   const accent = page.getByTestId('trama-experience-accent');
-  await expect(accent).toHaveCSS('color', 'rgba(0, 0, 0, 0)');
+  await expect(accent).toHaveCSS('color', 'rgb(255, 251, 234)');
   await expect(accent).toHaveCSS(
     'text-shadow',
-    'rgba(255, 195, 107, 0.32) 0px 0px 7px, rgba(255, 224, 166, 0.16) 0px 0px 18px, rgba(10, 8, 6, 0.26) 0px 1px 2px',
+    'rgba(255, 255, 245, 0.92) 0px 0px 3px, rgba(255, 235, 190, 0.72) 0px 0px 11px, rgba(255, 198, 112, 0.42) 0px 0px 26px, rgba(255, 166, 64, 0.22) 0px 0px 44px, rgba(10, 8, 6, 0.18) 0px 1px 2px',
   );
   const accentState = await accent.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -104,24 +104,15 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
     };
   });
   if (testInfo.project.name === 'L') {
-    expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.94);
-    expect(accentState.strokeWidth).toBeLessThanOrEqual(0.96);
+    expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.44);
+    expect(accentState.strokeWidth).toBeLessThanOrEqual(0.46);
   } else {
-    expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.54);
-    expect(accentState.strokeWidth).toBeLessThanOrEqual(0.56);
+    expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.29);
+    expect(accentState.strokeWidth).toBeLessThanOrEqual(0.31);
   }
-  expect(accentState.backgroundImage).toContain('linear-gradient');
-  expect(accentState.backgroundImage).toContain('rgb(255, 211, 106) 0%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 233, 168) 18%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 247, 214) 34%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 253, 242) 46%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 255, 255) 50%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 253, 242) 54%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 247, 214) 66%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 233, 168) 82%');
-  expect(accentState.backgroundImage).toContain('rgb(255, 211, 106) 100%');
-  expect(accentState.backgroundClip).toContain('text');
-  expect(accentState.textFillColor).toBe('rgba(0, 0, 0, 0)');
+  expect(accentState.backgroundImage).toBe('none');
+  expect(accentState.backgroundClip).toBe('border-box');
+  expect(accentState.textFillColor).toBe('rgb(255, 251, 234)');
 
   const quietZone = page.getByTestId('trama-hero-quiet-zone');
   await expect(quietZone).toBeVisible();
