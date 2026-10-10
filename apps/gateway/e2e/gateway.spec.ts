@@ -88,11 +88,12 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   await expect(page.locator('img.trama-media-visual')).toHaveCount(1);
   await expect(page.locator('video')).toHaveCount(0);
 
+  const solarColor = 'rgb(255, 216, 106)';
   const accent = page.getByTestId('trama-experience-accent');
-  await expect(accent).toHaveCSS('color', 'rgb(255, 251, 234)');
+  await expect(accent).toHaveCSS('color', solarColor);
   await expect(accent).toHaveCSS(
     'text-shadow',
-    'rgba(255, 255, 245, 0.92) 0px 0px 3px, rgba(255, 235, 190, 0.72) 0px 0px 11px, rgba(255, 198, 112, 0.42) 0px 0px 26px, rgba(255, 166, 64, 0.22) 0px 0px 44px, rgba(10, 8, 6, 0.18) 0px 1px 2px',
+    'rgba(255, 251, 225, 0.95) 0px 0px 2px, rgba(255, 216, 106, 0.82) 0px 0px 8px, rgba(255, 174, 64, 0.48) 0px 0px 20px, rgba(255, 135, 32, 0.24) 0px 0px 38px, rgba(10, 8, 6, 0.18) 0px 1px 2px',
   );
   const accentState = await accent.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -112,7 +113,23 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
   }
   expect(accentState.backgroundImage).toBe('none');
   expect(accentState.backgroundClip).toBe('border-box');
-  expect(accentState.textFillColor).toBe('rgb(255, 251, 234)');
+  expect(accentState.textFillColor).toBe(solarColor);
+
+  const wordmark = page.locator('.trama-solar-wordmark');
+  await expect(wordmark).toBeVisible();
+  await expect(wordmark).toHaveCSS('color', solarColor);
+  await expect(wordmark).toHaveCSS(
+    'text-shadow',
+    'rgba(255, 251, 225, 0.92) 0px 0px 2px, rgba(255, 216, 106, 0.62) 0px 0px 9px, rgba(255, 162, 54, 0.28) 0px 0px 20px',
+  );
+  const wordmarkFontSize = await wordmark.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  if (testInfo.project.name === 'L') {
+    expect(wordmarkFontSize).toBeGreaterThanOrEqual(36);
+  } else if (testInfo.project.name === 'M') {
+    expect(wordmarkFontSize).toBeGreaterThanOrEqual(33.5);
+  } else {
+    expect(wordmarkFontSize).toBeGreaterThanOrEqual(30);
+  }
 
   const quietZone = page.getByTestId('trama-hero-quiet-zone');
   await expect(quietZone).toBeVisible();
