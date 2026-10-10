@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyReply } from 'fastify';
 import { buildLauncher } from '../domain/launcher-service.js';
 import { validateSession } from '../domain/session-service.js';
 import type { AccessRepository } from '../ports/access-repository.js';
+import { CSRF_COOKIE_NAME, createCsrfToken, csrfCookieOptions } from '../security/csrf.js';
 import { SESSION_COOKIE_NAME, sessionCookieOptions } from '../security/session-cookie.js';
 import {
   ACCESS_FLASH_COOKIE_NAME,
@@ -46,6 +47,10 @@ export function registerAccessStateRoute(
   const now = deps.now ?? (() => new Date());
 
   app.get('/api/access-state', async (request, reply) => {
+    if (!request.cookies[CSRF_COOKIE_NAME]) {
+      reply.setCookie(CSRF_COOKIE_NAME, createCsrfToken(), csrfCookieOptions);
+    }
+
     const flash = readFlash(request.cookies[ACCESS_FLASH_COOKIE_NAME]);
 
     if (flash && PUBLIC_FLASH_STATES.has(flash)) {
