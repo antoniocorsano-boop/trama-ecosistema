@@ -18,7 +18,10 @@ export function App() {
             className="trama-hero-quiet-zone"
           />
           <div className="trama-hero-content relative z-10 flex w-full flex-col items-center">
-            <p className="animate-fade-rise mb-5 text-[0.68rem] font-medium uppercase tracking-[0.38em] text-[hsl(var(--copper))] sm:mb-6 sm:text-xs">
+            <p
+              data-testid="trama-hero-wordmark"
+              className="trama-solar-eyebrow animate-fade-rise mb-5 font-medium uppercase sm:mb-6"
+            >
               TRAMA
             </p>
             <h1
