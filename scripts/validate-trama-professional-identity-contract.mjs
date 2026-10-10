@@ -2,6 +2,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(scriptDir, '..');
+const schemaPath = path.join(repoRoot, 'governance/access/trama-professional-identity-contract.v1.schema.json');
+const CONTRACT_SCHEMA = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+
 const CANONICAL_PAIRS = [
   { application: 'DOCENTE_OS', entitlement: 'USE' },
   { application: 'CURRICOLO_ATLAS', entitlement: 'READ' },
@@ -34,6 +39,92 @@ function isObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
+function matchesType(value, expectedType) {
+  if (expectedType === 'object') return isObject(value);
+  if (expectedType === 'array') return Array.isArray(value);
+  if (expectedType === 'string') return typeof value === 'string';
+  if (expectedType === 'boolean') return typeof value === 'boolean';
+  if (expectedType === 'number') return typeof value === 'number' && Number.isFinite(value);
+  if (expectedType === 'integer') return Number.isInteger(value);
+  if (expectedType === 'null') return value === null;
+  return false;
+}
+
+function validateSchemaNode(value, schema, valuePath = '$') {
+  const errors = [];
+  const violation = (rule) => errors.push(`SCHEMA_VIOLATION:${valuePath}:${rule}`);
+
+  if (!isObject(schema)) {
+    violation('schema_node_invalid');
+    return errors;
+  }
+
+  if (schema.type && !matchesType(value, schema.type)) {
+    violation(`type=${schema.type}`);
+    return errors;
+  }
+
+  if (Object.hasOwn(schema, 'const') && !sameJson(value, schema.const)) {
+    violation('const');
+  }
+
+  if (Array.isArray(schema.enum) && !schema.enum.some((candidate) => sameJson(value, candidate))) {
+    violation('enum');
+  }
+
+  if (typeof value === 'string' && Number.isInteger(schema.minLength) && value.length < schema.minLength) {
+    violation(`minLength=${schema.minLength}`);
+  }
+
+  if (isObject(value)) {
+    const properties = isObject(schema.properties) ? schema.properties : {};
+
+    if (Array.isArray(schema.required)) {
+      for (const key of schema.required) {
+        if (!Object.hasOwn(value, key)) violation(`required=${key}`);
+      }
+    }
+
+    if (schema.additionalProperties === false) {
+      for (const key of Object.keys(value)) {
+        if (!Object.hasOwn(properties, key)) violation(`additionalProperties=${key}`);
+      }
+    }
+
+    for (const [key, childSchema] of Object.entries(properties)) {
+      if (Object.hasOwn(value, key)) {
+        errors.push(...validateSchemaNode(value[key], childSchema, `${valuePath}.${key}`));
+      }
+    }
+  }
+
+  if (Array.isArray(value)) {
+    if (Number.isInteger(schema.minItems) && value.length < schema.minItems) {
+      violation(`minItems=${schema.minItems}`);
+    }
+    if (Number.isInteger(schema.maxItems) && value.length > schema.maxItems) {
+      violation(`maxItems=${schema.maxItems}`);
+    }
+
+    const prefixItems = Array.isArray(schema.prefixItems) ? schema.prefixItems : [];
+    for (let index = 0; index < Math.min(prefixItems.length, value.length); index += 1) {
+      errors.push(...validateSchemaNode(value[index], prefixItems[index], `${valuePath}[${index}]`));
+    }
+
+    if (schema.items === false && value.length > prefixItems.length) {
+      for (let index = prefixItems.length; index < value.length; index += 1) {
+        errors.push(`SCHEMA_VIOLATION:${valuePath}[${index}]:items=false`);
+      }
+    } else if (isObject(schema.items)) {
+      for (let index = prefixItems.length; index < value.length; index += 1) {
+        errors.push(...validateSchemaNode(value[index], schema.items, `${valuePath}[${index}]`));
+      }
+    }
+  }
+
+  return errors;
+}
+
 export function validateContract(contract) {
   const errors = [];
   const fail = (code) => {
@@ -41,6 +132,8 @@ export function validateContract(contract) {
   };
 
   if (!isObject(contract)) return { valid: false, errors: ['CONTRACT_NOT_OBJECT'] };
+
+  for (const schemaError of validateSchemaNode(contract, CONTRACT_SCHEMA)) fail(schemaError);
 
   for (const section of REQUIRED_SECTIONS) {
     if (!(section in contract)) fail(`MISSING_SECTION:${section}`);
@@ -105,8 +198,6 @@ export function validateContract(contract) {
 }
 
 function runCli() {
-  const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-  const repoRoot = path.resolve(scriptDir, '..');
   const contractPath = process.argv[2]
     ? path.resolve(process.cwd(), process.argv[2])
     : path.join(repoRoot, 'governance/access/trama-professional-identity-contract.v1.json');
