@@ -81,7 +81,7 @@ try {
     const perceptibleEvidence = manifest.perceptibleWrite?.evidence || [];
     const evidenceById = new Map(perceptibleEvidence.map((entry) => [entry.evidenceId, entry]));
     const requiredMediaEvidence = {
-      'trama-gateway-visual-baseline': 'docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.jpg',
+      'trama-gateway-visual-baseline': 'docs/superpowers/specs/assets/trama-gateway-approved-desktop-v2.jpg',
       'trama-gateway-media-provenance': 'apps/gateway/public/media/trama-gateway-media-provenance.json',
       'trama-gateway-poster-s': 'apps/gateway/public/media/trama-gateway-poster-s.webp',
       'trama-gateway-poster-m': 'apps/gateway/public/media/trama-gateway-poster-m.webp',
