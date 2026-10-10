@@ -90,10 +90,15 @@ test('complete gateway S/M/L/LIM evidence renders the production UI over the app
 
   const accent = page.getByTestId('trama-experience-accent');
   await expect(accent).toHaveCSS('color', 'rgb(113, 54, 33)');
-  const accentStrokeWidth = await accent.evaluate((element) =>
-    Number.parseFloat(getComputedStyle(element).getPropertyValue('-webkit-text-stroke-width')),
-  );
-  expect(accentStrokeWidth).toBeGreaterThanOrEqual(0.5);
+  const accentState = await accent.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      strokeWidth: Number.parseFloat(style.getPropertyValue('-webkit-text-stroke-width')),
+      backgroundImage: style.backgroundImage,
+    };
+  });
+  expect(accentState.strokeWidth).toBeGreaterThanOrEqual(0.5);
+  expect(accentState.backgroundImage).toContain('radial-gradient');
 
   const quietZone = page.getByTestId('trama-hero-quiet-zone');
   await expect(quietZone).toBeVisible();
