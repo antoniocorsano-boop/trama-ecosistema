@@ -8,11 +8,17 @@ const validator = resolve('scripts/validate-trama-gateway-media.mjs');
 assert.equal(existsSync(validator), true, 'validator script must exist before fixture checks can run');
 
 const ROLES = ['lim', 's', 'm', 'l'];
-const REQUIRED = {
-  lim: { width: 960, height: 2700 },
-  s: { width: 1170, height: 2532 },
-  m: { width: 1536, height: 2048 },
-  l: { width: 2560, height: 1440 },
+const VIEWPORTS = {
+  lim: { width: 320, height: 900, ratio: 320 / 900 },
+  s: { width: 390, height: 844, ratio: 390 / 844 },
+  m: { width: 768, height: 1024, ratio: 3 / 4 },
+  l: { width: 1440, height: 900, ratio: 16 / 9 },
+};
+const VIEWPORT_SUFFICIENT = {
+  lim: { width: 748, height: 2103 },
+  s: { width: 853, height: 1844 },
+  m: { width: 1086, height: 1448 },
+  l: { width: 1672, height: 941 },
 };
 
 function writeUInt24LE(buffer, value, offset) {
@@ -51,7 +57,7 @@ function makeFixture({
 
   const actual = {};
   for (const role of ROLES) {
-    const roleDimensions = dimensions[role] ?? REQUIRED[role];
+    const roleDimensions = dimensions[role] ?? VIEWPORT_SUFFICIENT[role];
     actual[role] = roleDimensions;
     if (role === missingRole) continue;
     writeFileSync(
@@ -73,7 +79,7 @@ function makeFixture({
       dimensions: { width: recorded.width, height: recorded.height },
       source: 'native test fixture',
       artDirection: `independent ${role} composition`,
-      encoding: { format: 'webp', quality: 90 },
+      encoding: { format: 'webp', quality: 92 },
       approval: 'IMPLEMENTATION_CANDIDATE_PENDING_HUMAN_REVIEW',
       date: '2026-10-10',
       identifiablePersons: false,
@@ -129,11 +135,16 @@ expectFailure(
 );
 expectFailure('legacy-runtime-config', { legacyConfig: true }, /legacy|poster|background.*config/i);
 
+expectFailure(
+  'desktop-source-requiring-cover-upscale',
+  { dimensions: { l: { width: 1536, height: 864 } } },
+  /l.*upscale|upscale.*l|cover.*l|l.*viewport/i,
+);
 for (const role of ROLES) {
   expectFailure(
-    `undersized-${role}`,
-    { dimensions: { [role]: { width: REQUIRED[role].width - 1, height: REQUIRED[role].height } } },
-    new RegExp(`${role}.*dimensions|dimensions.*${role}`, 'i'),
+    `viewport-insufficient-${role}`,
+    { dimensions: { [role]: { width: VIEWPORTS[role].width - 1, height: VIEWPORTS[role].height - 1 } } },
+    new RegExp(`${role}.*upscale|upscale.*${role}|${role}.*viewport|viewport.*${role}`, 'i'),
   );
 }
 
@@ -144,7 +155,7 @@ expectFailure(
 );
 expectFailure(
   'provenance-dimensions-mismatch',
-  { provenanceDimensions: { l: { width: 3000, height: 1440 } } },
+  { provenanceDimensions: { l: { width: 1800, height: 941 } } },
   /dimensions.*mismatch|mismatch.*dimensions/i,
 );
 expectFailure(
@@ -167,4 +178,4 @@ expectFailure(
   { entryOverrides: { lim: { segnoVivoEmbedded: true } } },
   /segno.*vivo|segnoVivoEmbedded/i,
 );
-expectPass('four-role-v3-positive');
+expectPass('approved-four-role-viewport-sufficient-family');
