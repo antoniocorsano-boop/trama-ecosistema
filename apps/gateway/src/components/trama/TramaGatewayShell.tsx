@@ -5,7 +5,10 @@ import { TramaSegnoVivo } from './TramaSegnoVivo';
 
 export function TramaGatewayShell({ children }: PropsWithChildren) {
   return (
-    <div id="top" className="relative min-h-svh overflow-hidden bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+    <div
+      id="top"
+      className="trama-gateway-stage relative min-h-svh overflow-hidden bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+    >
       <TramaMediaBackdrop
         videoSrc={gatewayConfig.prototypeVideoSrc}
         poster={gatewayConfig.poster}
