@@ -83,50 +83,17 @@ test('200% text resize reflows without horizontal page overflow or loss of prima
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toBeVisible();
 
-  const diagnostics = await page.evaluate(() => {
-    const root = document.documentElement;
-    const clientWidth = root.clientWidth;
-    const offenders = Array.from(document.querySelectorAll<HTMLElement>('body *'))
-      .map((element) => {
-        const rect = element.getBoundingClientRect();
-        const style = getComputedStyle(element);
-        const visible = style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
-        const exceedsRight = rect.right > clientWidth + 0.5;
-        const exceedsLeft = rect.left < -0.5;
-        if (!visible || (!exceedsRight && !exceedsLeft)) return null;
-        return {
-          tag: element.tagName.toLowerCase(),
-          id: element.id || null,
-          className: typeof element.className === 'string' ? element.className : null,
-          text: (element.textContent ?? '').trim().replace(/\s+/g, ' ').slice(0, 120),
-          left: Number(rect.left.toFixed(2)),
-          right: Number(rect.right.toFixed(2)),
-          width: Number(rect.width.toFixed(2)),
-          overflowRight: Number(Math.max(0, rect.right - clientWidth).toFixed(2)),
-          fontSize: style.fontSize,
-          whiteSpace: style.whiteSpace,
-          overflowWrap: style.overflowWrap,
-          wordBreak: style.wordBreak,
-        };
-      })
-      .filter((item): item is NonNullable<typeof item> => item !== null)
-      .sort((a, b) => b.overflowRight - a.overflowRight)
-      .slice(0, 20);
-
-    return {
-      scrollWidth: root.scrollWidth,
-      clientWidth,
-      offenders,
-    };
-  });
-
-  const overflow = diagnostics.scrollWidth > diagnostics.clientWidth;
+  const dimensions = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  const overflow = dimensions.scrollWidth > dimensions.clientWidth;
   writeEvidence('text-resize-LIM.json', {
     result: overflow ? 'FAIL' : 'PASS',
     percent: 200,
-    ...diagnostics,
+    scrollWidth: dimensions.scrollWidth,
+    clientWidth: dimensions.clientWidth,
     overflow,
   });
-  console.log('LIM 200% overflow diagnostics', JSON.stringify(diagnostics, null, 2));
   expect(overflow).toBe(false);
 });
