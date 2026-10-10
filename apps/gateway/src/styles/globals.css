@@ -59,6 +59,10 @@ a {
   transform-origin: center;
 }
 
+.trama-hero-composition {
+  max-width: 58rem;
+}
+
 .trama-hero-legibility {
   position: relative;
   isolation: isolate;
@@ -67,18 +71,33 @@ a {
 .trama-hero-legibility::before {
   content: '';
   position: absolute;
-  inset: -2.4rem 0 -2.1rem;
+  inset: -2.1rem -1rem -1.8rem;
   z-index: -1;
   pointer-events: none;
-  border-radius: 46%;
+  border-radius: 50%;
   background: radial-gradient(
-    ellipse at 50% 46%,
-    rgba(16, 36, 38, 0.24) 0%,
-    rgba(28, 42, 39, 0.16) 44%,
-    rgba(84, 62, 39, 0.055) 67%,
-    transparent 84%
+    ellipse at 50% 48%,
+    rgba(66, 54, 43, 0.14) 0%,
+    rgba(74, 59, 46, 0.095) 48%,
+    rgba(108, 79, 51, 0.035) 68%,
+    transparent 88%
   );
-  filter: blur(10px);
+  backdrop-filter: blur(3px) saturate(72%) contrast(84%);
+  -webkit-backdrop-filter: blur(3px) saturate(72%) contrast(84%);
+  -webkit-mask-image: radial-gradient(
+    ellipse at 50% 48%,
+    #000 0%,
+    rgba(0, 0, 0, 0.98) 54%,
+    rgba(0, 0, 0, 0.66) 72%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse at 50% 48%,
+    #000 0%,
+    rgba(0, 0, 0, 0.98) 54%,
+    rgba(0, 0, 0, 0.66) 72%,
+    transparent 100%
+  );
 }
 
 .trama-copy-reinforced {
@@ -88,10 +107,13 @@ a {
 }
 
 .trama-copper-text {
+  display: block;
+  margin-top: 0.08em;
   color: var(--copper-readable);
   text-shadow:
-    0 1px 2px rgba(255, 235, 215, 0.16),
-    0 2px 8px rgba(20, 10, 5, 0.16);
+    0 1px 0 rgba(255, 230, 198, 0.30),
+    0 0 12px rgba(255, 224, 190, 0.18),
+    0 2px 10px rgba(24, 12, 7, 0.24);
 }
 
 .trama-hero-support {
@@ -164,15 +186,21 @@ a {
     object-position: 50% 54%;
   }
 
+  .trama-hero-composition {
+    max-width: 54rem;
+  }
+
   .trama-hero-legibility::before {
-    inset: -2.8rem 0 -2.4rem;
+    inset: -2.5rem -1.5rem -2.2rem;
     background: radial-gradient(
-      ellipse at 50% 45%,
-      rgba(16, 36, 38, 0.22) 0%,
-      rgba(30, 43, 39, 0.145) 45%,
-      rgba(84, 62, 39, 0.05) 68%,
-      transparent 85%
+      ellipse at 50% 46%,
+      rgba(61, 51, 43, 0.145) 0%,
+      rgba(75, 60, 47, 0.10) 50%,
+      rgba(110, 81, 53, 0.038) 70%,
+      transparent 90%
     );
+    backdrop-filter: blur(3.2px) saturate(70%) contrast(82%);
+    -webkit-backdrop-filter: blur(3.2px) saturate(70%) contrast(82%);
   }
 }
 
@@ -220,24 +248,25 @@ a {
   }
 
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-composition {
-    max-width: 68rem;
+    max-width: 62rem;
     transform: translateY(-0.8rem);
   }
 
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-legibility::before {
-    inset: -3.1rem 0 -2.8rem;
+    inset: -2.8rem -1.7rem -2.5rem;
     background: radial-gradient(
-      ellipse at 50% 43%,
-      rgba(15, 35, 37, 0.20) 0%,
-      rgba(29, 42, 39, 0.13) 46%,
-      rgba(84, 62, 39, 0.045) 69%,
-      transparent 86%
+      ellipse at 50% 44%,
+      rgba(62, 52, 44, 0.12) 0%,
+      rgba(78, 63, 50, 0.078) 52%,
+      rgba(112, 84, 57, 0.03) 72%,
+      transparent 91%
     );
-    filter: blur(12px);
+    backdrop-filter: blur(2.4px) saturate(78%) contrast(88%);
+    -webkit-backdrop-filter: blur(2.4px) saturate(78%) contrast(88%);
   }
 
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-title {
-    max-width: 61rem;
+    max-width: 58rem;
     font-size: clamp(4.8rem, 6.05vw, 5.8rem);
     line-height: 0.93;
     letter-spacing: -0.038em;
@@ -247,8 +276,13 @@ a {
       0 14px 42px rgba(0, 7, 10, 0.12);
   }
 
+  .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-copper-text {
+    display: inline;
+    margin-top: 0;
+  }
+
   .trama-gateway-stage[data-visual-revision='approved-l-v3'] .trama-hero-support {
-    max-width: 49rem;
+    max-width: 47rem;
     color: hsl(var(--foreground) / 0.97);
     letter-spacing: -0.008em;
   }
@@ -282,6 +316,15 @@ a {
 @supports not ((backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px))) {
   .liquid-glass {
     background: rgba(0, 26, 38, 0.78);
+  }
+
+  .trama-hero-legibility::before {
+    background: radial-gradient(
+      ellipse at 50% 48%,
+      rgba(56, 48, 42, 0.22) 0%,
+      rgba(72, 58, 47, 0.14) 54%,
+      transparent 88%
+    );
   }
 }
 
