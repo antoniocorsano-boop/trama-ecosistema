@@ -40,6 +40,13 @@ describe('TRAMA gateway', () => {
     });
   });
 
+  it('keeps the stage vertically scrollable for below-fold landing content', () => {
+    render(<App />);
+    const stage = screen.getByRole('main').parentElement;
+    expect(stage).toHaveClass('overflow-x-hidden');
+    expect(stage).not.toHaveClass('overflow-hidden');
+  });
+
   it('implements the approved v2 hero emphasis and Segno vivo layer', () => {
     render(<App />);
     expect(screen.getByTestId('trama-segno-vivo')).toBeInTheDocument();
