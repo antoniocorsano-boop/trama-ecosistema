@@ -1,0 +1,293 @@
+{
+  "schemaVersion": "trama.ecosystem.state/v0.2",
+  "asOf": "2026-10-10",
+  "authority": "ACCESS-01 design baseline",
+  "canonicalTerminology": {
+    "curricoloSurface": "Curricolo Atlas",
+    "institutionDomain": "curricolo di istituto"
+  },
+  "legend": {
+    "node": {
+      "REAL": "implemented/available within its stated boundary",
+      "PARTIAL": "implemented only for part of the intended boundary",
+      "DESIGNED": "approved/design-defined but not implemented as runtime",
+      "DEFERRED": "explicitly postponed or not active"
+    },
+    "flow": {
+      "REAL": "end-to-end integration/user flow demonstrated",
+      "PARTIAL": "integration exists only for a bounded subset or incomplete path",
+      "DESIGNED": "approved path not yet implemented",
+      "DEFERRED": "not active or intentionally postponed"
+    }
+  },
+  "nodes": [
+    {
+      "id": "gateway",
+      "label": "TRAMA Gateway",
+      "plane": "PUBLIC",
+      "state": "REAL",
+      "runtimeState": "PUBLIC_SAFE_ENTRY_UNAVAILABLE",
+      "note": "Public UI renders in production mode even when the professional entry destination is absent; professional actions fail closed as disabled non-navigation controls.",
+      "roadmapPhase": 0,
+      "evidence": [
+        {
+          "head": "86939ac41aaeadabb861dcfde35f0e93c4a1dcfd",
+          "workflow": "TRAMA Gateway",
+          "runId": 38079870875,
+          "proof": "configured Browser Certification PASS and No-entry Browser Certification PASS"
+        }
+      ]
+    },
+    {
+      "id": "trama_access",
+      "label": "TRAMA Access",
+      "plane": "PROFESSIONAL",
+      "state": "DESIGNED",
+      "note": "Identity/session/launcher boundary defined by ACCESS-01; no canonical runtime yet.",
+      "roadmapPhase": 2
+    },
+    {
+      "id": "professional_identity",
+      "label": "Identità professionale TRAMA",
+      "plane": "PROFESSIONAL",
+      "state": "DESIGNED",
+      "note": "One ecosystem professional principal is the approved target; provider-neutral contract and runtime remain to be implemented.",
+      "roadmapPhase": 1
+    },
+    {
+      "id": "docente_os",
+      "label": "Docente OS",
+      "plane": "PROFESSIONAL",
+      "state": "REAL",
+      "note": "Teacher operating environment with real local authentication and workspace authorization.",
+      "roadmapPhase": 3
+    },
+    {
+      "id": "arena",
+      "label": "Arena",
+      "plane": "PROFESSIONAL",
+      "state": "REAL",
+      "note": "Authority for the curricolo di istituto.",
+      "roadmapPhase": 6
+    },
+    {
+      "id": "curricolo_atlas",
+      "label": "Curricolo Atlas",
+      "plane": "PUBLIC_PROFESSIONAL",
+      "state": "REAL",
+      "note": "Public navigation/consultation surface for curricolo, materials and resources; Arena remains authority.",
+      "roadmapPhase": 5
+    },
+    {
+      "id": "studio_atlas",
+      "label": "Studio Atlas",
+      "plane": "PROFESSIONAL",
+      "state": "PARTIAL",
+      "note": "Standalone authoring is real; canonical professional federation and some remote/runtime capabilities remain incomplete.",
+      "roadmapPhase": 4
+    },
+    {
+      "id": "atlas_learner",
+      "label": "Atlas learner",
+      "plane": "LEARNER",
+      "state": "PARTIAL",
+      "note": "Learner runtime exists for bounded experience/preview paths; no personal learner account by default.",
+      "roadmapPhase": 7
+    },
+    {
+      "id": "materials_in_products",
+      "label": "Materiali nei prodotti",
+      "plane": "CROSS_CUTTING",
+      "state": "REAL",
+      "note": "Material surfaces and resources exist in real products.",
+      "roadmapPhase": 8
+    },
+    {
+      "id": "material_contract",
+      "label": "Material Contract ecosistemico",
+      "plane": "CROSS_CUTTING",
+      "state": "PARTIAL",
+      "note": "A complete shared ownership/provenance/reference contract is not yet qualified across products.",
+      "roadmapPhase": 8
+    },
+    {
+      "id": "teacher_classes_groups",
+      "label": "Classi e gruppi docente",
+      "plane": "CROSS_CUTTING",
+      "state": "REAL",
+      "note": "Teacher-side organization exists; it is not learner identity authority.",
+      "roadmapPhase": 7
+    },
+    {
+      "id": "assignment_to_atlas",
+      "label": "Assignment verso Atlas",
+      "plane": "PROFESSIONAL_LEARNER_BOUNDARY",
+      "state": "PARTIAL",
+      "note": "Privacy-first bounded assignment contract toward Atlas learner is not yet complete.",
+      "roadmapPhase": 7
+    },
+    {
+      "id": "control_center_public",
+      "label": "Control Center pubblico",
+      "plane": "PUBLIC",
+      "state": "REAL",
+      "note": "Public status/evidence/transparency surface is deployed and evidence-backed.",
+      "roadmapPhase": 0
+    },
+    {
+      "id": "control_center_privileged",
+      "label": "Control Center privilegiato",
+      "plane": "GOVERNANCE",
+      "state": "DESIGNED",
+      "note": "Privileged operations with dedicated governance entitlement and step-up/MFA are target architecture, not current general runtime authority.",
+      "roadmapPhase": 9
+    },
+    {
+      "id": "trama_governance",
+      "label": "TRAMA governance",
+      "plane": "GOVERNANCE_FOUNDATION",
+      "state": "REAL",
+      "note": "Contracts, boundaries, lifecycle and evidence authority underpin the ecosystem.",
+      "roadmapPhase": 0
+    }
+  ],
+  "flows": [
+    {
+      "id": "public_to_gateway",
+      "from": "public",
+      "to": "gateway",
+      "state": "REAL",
+      "note": "Public Gateway remains rendered and usable when professional entry configuration is absent; professional entry fails closed without blanking the public surface.",
+      "roadmapPhase": 0,
+      "evidence": [
+        {
+          "head": "86939ac41aaeadabb861dcfde35f0e93c4a1dcfd",
+          "workflow": "TRAMA Gateway",
+          "runId": 38079870875,
+          "proof": "No-entry Browser Certification PASS"
+        }
+      ]
+    },
+    {
+      "id": "gateway_to_curricolo_atlas_public",
+      "from": "gateway",
+      "to": "curricolo_atlas",
+      "state": "DESIGNED",
+      "note": "Canonical public navigation path in ACCESS-01 target; actual live navigation must be certified before promotion.",
+      "roadmapPhase": 11
+    },
+    {
+      "id": "gateway_to_control_center_public",
+      "from": "gateway",
+      "to": "control_center_public",
+      "state": "DESIGNED",
+      "note": "Target public navigation path; destination itself is REAL.",
+      "roadmapPhase": 11
+    },
+    {
+      "id": "gateway_to_trama_access",
+      "from": "gateway",
+      "to": "trama_access",
+      "state": "DESIGNED",
+      "note": "Remains fail-closed until canonical TRAMA Access is certified.",
+      "roadmapPhase": 11
+    },
+    {
+      "id": "arena_to_curricolo_atlas",
+      "from": "arena",
+      "to": "curricolo_atlas",
+      "state": "REAL",
+      "note": "Governed Arena → Curricolo Atlas synchronization is established; Arena remains authority.",
+      "roadmapPhase": 0
+    },
+    {
+      "id": "docente_os_to_curricolo_atlas",
+      "from": "docente_os",
+      "to": "curricolo_atlas",
+      "state": "PARTIAL",
+      "note": "Products are real but the full runtime/deep-link professional flow is not yet certified as ecosystem integration.",
+      "roadmapPhase": 5
+    },
+    {
+      "id": "docente_os_to_arena",
+      "from": "docente_os",
+      "to": "arena",
+      "state": "PARTIAL",
+      "note": "Target orchestration is valid; complete governed runtime path and authority checks remain to be proven.",
+      "roadmapPhase": 6
+    },
+    {
+      "id": "docente_os_to_studio_atlas",
+      "from": "docente_os",
+      "to": "studio_atlas",
+      "state": "DESIGNED",
+      "note": "Teacher workflow target; integration is not inferred from the existence of both products.",
+      "roadmapPhase": 10
+    },
+    {
+      "id": "studio_atlas_to_atlas_learner",
+      "from": "studio_atlas",
+      "to": "atlas_learner",
+      "state": "PARTIAL",
+      "note": "Governed preview path exists; publication/runtime completeness remains bounded.",
+      "roadmapPhase": 4
+    },
+    {
+      "id": "teacher_classes_to_assignment",
+      "from": "teacher_classes_groups",
+      "to": "assignment_to_atlas",
+      "state": "PARTIAL",
+      "note": "Teacher targeting exists, but the canonical privacy-first assignment boundary requires qualification.",
+      "roadmapPhase": 7
+    },
+    {
+      "id": "assignment_to_atlas_learner",
+      "from": "assignment_to_atlas",
+      "to": "atlas_learner",
+      "state": "PARTIAL",
+      "note": "Bounded code/ticket/link is the target direction; the full ecosystem contract is not yet qualified.",
+      "roadmapPhase": 7
+    },
+    {
+      "id": "trama_access_to_docente_os",
+      "from": "trama_access",
+      "to": "docente_os",
+      "state": "DESIGNED",
+      "note": "First federation pilot in roadmap.",
+      "roadmapPhase": 3
+    },
+    {
+      "id": "trama_access_to_studio_atlas",
+      "from": "trama_access",
+      "to": "studio_atlas",
+      "state": "DESIGNED",
+      "note": "Professional federation target.",
+      "roadmapPhase": 4
+    },
+    {
+      "id": "trama_access_to_curricolo_atlas_professional",
+      "from": "trama_access",
+      "to": "curricolo_atlas",
+      "state": "DESIGNED",
+      "note": "Professional enrichment target; public mode remains independent.",
+      "roadmapPhase": 5
+    },
+    {
+      "id": "trama_access_to_arena",
+      "from": "trama_access",
+      "to": "arena",
+      "state": "DESIGNED",
+      "note": "Professional entry target; Arena retains internal authorization over the curricolo.",
+      "roadmapPhase": 6
+    },
+    {
+      "id": "trama_access_to_control_center_privileged",
+      "from": "trama_access",
+      "to": "control_center_privileged",
+      "state": "DESIGNED",
+      "note": "Requires dedicated governance entitlement and step-up/MFA when protected operations exist.",
+      "roadmapPhase": 9
+    }
+  ],
+  "progressRule": "A node or flow may move to REAL only when a retrievable exact-head evidence reference proves the stated boundary. Visual diagrams are derived views and are never the authority by themselves."
+}

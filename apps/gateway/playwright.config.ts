@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: 'no-entry-public-surface.spec.ts',
   fullyParallel: true,
   retries: 0,
   outputDir: 'test-results',
