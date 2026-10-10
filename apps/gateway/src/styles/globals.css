@@ -114,22 +114,27 @@ a {
 .trama-copper-text {
   display: block;
   margin-top: 0.08em;
-  color: #FFD8AE;
-  background-image: radial-gradient(
-    ellipse at 50% 52%,
-    rgba(255, 241, 226, 0.42) 0%,
-    rgba(255, 230, 205, 0.24) 42%,
-    rgba(255, 218, 181, 0.08) 63%,
-    transparent 80%
+  color: transparent;
+  background-image: linear-gradient(
+    100deg,
+    #FFC36B 0%,
+    #FFE0A6 31%,
+    #FFF7E6 50%,
+    #FFE0A6 69%,
+    #FFC36B 100%
   );
   background-position: center;
   background-repeat: no-repeat;
-  background-size: clamp(13rem, 68vw, 25rem) 155%;
+  background-size: 100% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 0.95px rgba(24, 14, 10, 0.82);
   paint-order: stroke fill;
   text-shadow:
-    0 0 4px rgba(255, 216, 174, 0.22),
-    0 1px 2px rgba(10, 8, 6, 0.22);
+    0 0 7px rgba(255, 195, 107, 0.32),
+    0 0 18px rgba(255, 224, 166, 0.16),
+    0 1px 2px rgba(10, 8, 6, 0.26);
 }
 
 .trama-hero-support {
@@ -392,6 +397,9 @@ a {
   .trama-copper-text {
     color: CanvasText;
     background-image: none;
+    background-clip: border-box;
+    -webkit-background-clip: border-box;
+    -webkit-text-fill-color: CanvasText;
     -webkit-text-stroke: 0;
   }
 
