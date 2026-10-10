@@ -46,13 +46,18 @@ test('keyboard focus is visibly perceivable on gateway controls', async ({ page 
   });
   expect(hasVisibleFocus(firstStyle)).toBe(true);
 
+  const target = testInfo.project.name === 'S'
+    ? page.getByRole('link', { name: 'Entra in TRAMA' })
+    : page.getByRole('link', { name: 'Accedi' });
+  await expect(target).toBeVisible();
+
   let reachedPrimaryAccess = false;
   let primaryFocusVisible = false;
-  for (let index = 0; index < 8; index += 1) {
-    const focusedText = await page.locator(':focus').textContent();
-    if (focusedText?.includes('Accedi')) {
+  for (let index = 0; index < 10; index += 1) {
+    const isTargetFocused = await target.evaluate((element) => document.activeElement === element);
+    if (isTargetFocused) {
       reachedPrimaryAccess = true;
-      const style = await page.locator(':focus').evaluate((element) => {
+      const style = await target.evaluate((element) => {
         const computed = getComputedStyle(element);
         return { outlineStyle: computed.outlineStyle, outlineWidth: computed.outlineWidth, boxShadow: computed.boxShadow };
       });
