@@ -1,5 +1,4 @@
 import { createServerClient } from '@supabase/ssr';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import type { VerifiedProviderIdentity } from '../../domain/types.js';
 import {
   PasswordlessAccessDeniedError,
@@ -54,7 +53,6 @@ export class SupabasePasswordlessProvider implements PasswordlessProvider {
     const exchange = await client.exchangeCodeForSession(code);
     if (exchange.error) throw providerError(exchange.error);
 
-    // getClaims() verifies the JWT signature/issuer material before claims are consumed.
     const verified = await client.getClaims();
     if (verified.error) throw providerError(verified.error);
     const issuer = verified.data?.claims?.iss;
@@ -96,28 +94,25 @@ class OfficialSupabaseAuthClientFactory implements SupabaseAuthClientFactory {
         setAll: (cookiesToSet) => cookies.setAll(cookiesToSet),
       },
     });
-    return wrapOfficialAuth(client);
-  }
-}
 
-function wrapOfficialAuth(client: SupabaseClient): SupabaseAuthClient {
-  return {
-    async signInWithOtp(credentials) {
-      const result = await client.auth.signInWithOtp(credentials);
-      return { data: result.data, error: result.error };
-    },
-    async exchangeCodeForSession(code) {
-      const result = await client.auth.exchangeCodeForSession(code);
-      return { data: result.data, error: result.error };
-    },
-    async getClaims() {
-      const result = await client.auth.getClaims();
-      return {
-        data: result.data ? { claims: result.data.claims as Record<string, unknown> } : null,
-        error: result.error,
-      };
-    },
-  };
+    return {
+      async signInWithOtp(credentials) {
+        const result = await client.auth.signInWithOtp(credentials);
+        return { data: result.data, error: result.error };
+      },
+      async exchangeCodeForSession(code) {
+        const result = await client.auth.exchangeCodeForSession(code);
+        return { data: result.data, error: result.error };
+      },
+      async getClaims() {
+        const result = await client.auth.getClaims();
+        return {
+          data: result.data ? { claims: result.data.claims as Record<string, unknown> } : null,
+          error: result.error,
+        };
+      },
+    };
+  }
 }
 
 export function createSupabasePasswordlessProvider(
