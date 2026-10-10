@@ -7,7 +7,7 @@ export function TramaGatewayShell({ children }: PropsWithChildren) {
     <div id="top" className="relative min-h-svh overflow-hidden bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
       <TramaMediaBackdrop
         videoSrc={gatewayConfig.prototypeVideoSrc}
-        posterSrc={gatewayConfig.posterSrc}
+        poster={gatewayConfig.poster}
         className="absolute inset-0 z-0"
       />
       {children}
