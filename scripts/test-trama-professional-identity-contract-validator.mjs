@@ -55,6 +55,17 @@ function expectInvalid(name, mutate, expectedCode) {
   assert.ok(result.errors.includes(expectedCode), `${name}: expected ${expectedCode}; got ${result.errors.join(', ')}`);
 }
 
+function expectSchemaInvalid(name, mutate) {
+  const candidate = structuredClone(contract);
+  mutate(candidate);
+  const result = validateContract(candidate);
+  assert.equal(result.valid, false, `${name}: candidate must be rejected`);
+  assert.ok(
+    result.errors.some((error) => error.startsWith('SCHEMA_VIOLATION:')),
+    `${name}: expected schema violation; got ${result.errors.join(', ')}`,
+  );
+}
+
 expectInvalid('email as principal key', (c) => {
   c.principal.authoritativeKey = ['email'];
 }, 'PRINCIPAL_KEY_INVALID');
@@ -118,6 +129,42 @@ expectInvalid('governance step-up bypass', (c) => {
 expectInvalid('provider outage disables public Gateway', (c) => {
   c.failureModes.publicGateway = 'UNAVAILABLE';
 }, 'PUBLIC_SURFACE_MUST_REMAIN_AVAILABLE');
+
+expectSchemaInvalid('unsupported contract status', (c) => {
+  c.status = 'RUNTIME_AUTHORIZED';
+});
+
+expectSchemaInvalid('unexpected top-level property', (c) => {
+  c.runtimeProvider = 'supabase';
+});
+
+expectSchemaInvalid('unexpected nested principal property', (c) => {
+  c.principal.displayName = 'mutable metadata';
+});
+
+expectSchemaInvalid('session ownership drift', (c) => {
+  c.session.owner = 'identity_provider';
+});
+
+expectSchemaInvalid('session revalidation drift', (c) => {
+  c.session.privilegeRevalidation = 'optional';
+});
+
+expectSchemaInvalid('coordinated logout overclaim', (c) => {
+  c.logout.coordinated = 'GUARANTEED_GLOBAL_LOGOUT';
+});
+
+expectSchemaInvalid('fake global logout allowed', (c) => {
+  c.logout.mustNotFakeGlobalLogout = false;
+});
+
+expectSchemaInvalid('existing local session policy drift', (c) => {
+  c.failureModes.existingLocalSession = 'MAY_GAIN_PRIVILEGE_WITHOUT_REVALIDATION';
+});
+
+expectSchemaInvalid('forbidden pattern set weakened', (c) => {
+  c.forbiddenPatterns.pop();
+});
 
 assert.ok(fs.existsSync(threatPath), 'professional identity threat register must exist');
 assert.ok(fs.existsSync(threatDocPath), 'human-readable professional identity threat model must exist');
