@@ -135,6 +135,7 @@ try {
       check(Boolean(entry), `${condition} background evidence exists`);
       if (entry) {
         check(entry.reference.endsWith(`background-${condition}.png`), `${condition} binds background-only screenshot`);
+        check(entry.type === 'responsive', `${condition} evidence uses responsive schema type`);
         check(entry.commitSha === EXACT_HEAD, `${condition} binds exact head`);
         check(entry.width === expectedDimensions[condition][0] && entry.height === expectedDimensions[condition][1], `${condition} dimensions are concrete`);
       }
