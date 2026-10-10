@@ -29,6 +29,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Pin npm resolver
+        run: npm install --global npm@11.6.0
+
       - name: Generate lockfile when absent
         id: lockfile
         working-directory: apps/access
