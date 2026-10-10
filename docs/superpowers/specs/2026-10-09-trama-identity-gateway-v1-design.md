@@ -1,40 +1,55 @@
 # TRAMA-IDENTITY-01 — Ecosystem identity and public gateway v1
 
-**Status:** PROPOSED DESIGN / HUMAN REVIEW REQUIRED  
-**Date:** 2026-10-09  
+**Status:** APPROVED DESIGN / VISUAL BASELINE APPROVED / CURRENT IMPLEMENTATION REWORK REQUIRED  
+**Design approval:** 2026-10-10  
 **Applies to:** TRAMA ecosystem · public gateway · Arena · Atlas · Studio Atlas · Docente OS · TRAMA Control Center  
 **Baseline:** `main@9a6d546733ae2503a0f17f342850964bb8c8da75`  
+**Approved visual reference:** `docs/superpowers/specs/assets/trama-identity-gateway-v1-approved-baseline.png`  
 **Runtime/publication authority:** NOT GRANTED  
 **DOS-A1:** RUNTIME_DEFERRED
 
 ## 1. Purpose
 
-TRAMA-IDENTITY-01 establishes a recognisable parent identity for the TRAMA ecosystem and defines the first surface that expresses it: a cinematic public gateway.
+TRAMA-IDENTITY-01 establishes the recognisable parent identity of the TRAMA ecosystem and defines its first expression: the public TRAMA gateway.
 
-This work does **not** replace the existing product-specific visual identities. It operationalises the existing TRAMA design-governance principle that ecosystem coherence must preserve product differentiation.
+The gateway is a threshold, not a dashboard and not a restyled Control Center. It must communicate what TRAMA is before exposing the complexity of the individual products.
 
-The intended relationship is:
+The relationship remains:
 
 `TRAMA parent identity → shared semantic grammar → product-specific PVIP → local product composition`
 
-The gateway is therefore not a generic marketing landing page and not a restyled Control Center. It is the public threshold of the ecosystem: a quiet, high-quality surface that communicates what TRAMA is before exposing the complexity of its products.
+TRAMA coherence must therefore preserve differentiation between Arena, Atlas, Studio Atlas, Docente OS and Control Center.
 
-## 2. Shared understanding and success criteria
+## 2. Approved Human Review decision
 
-The product need is to stop treating visual identity as an incidental result of individual interfaces. TRAMA must become recognisable as a coherent ecosystem while Arena, Atlas, Studio Atlas, Docente OS and Control Center remain appropriate to their distinct roles.
+The design direction **Segno vivo** is approved.
+
+Human Visual Review also produced one binding correction to the first coded implementation:
+
+- the flat/vectored blue poster is **REJECTED as the final parent identity background**;
+- a technically clean or accessible hero is not sufficient if it reads as a generic coloured landing page;
+- the gateway must derive identity from **real material imagery, cinematic light, spatial depth and editorial composition**;
+- the static poster must already be an excellent TRAMA surface without requiring the optional video layer.
+
+The approved image stored at the canonical reference path is now the visual baseline against which implementation fidelity is judged.
+
+The image is a **design contract**, not merely inspiration.
+
+## 3. Success criteria
 
 TRAMA-IDENTITY-01 is successful when:
 
 1. a user can recognise a TRAMA surface before reading technical product labels;
-2. the identity communicates education, knowledge, design and connection without generic "AI/tech" imagery;
-3. the public gateway has one clear primary action and does not expose architecture as a product diagram;
-4. the identity can be propagated through semantic tokens and governed profile aliases rather than copied CSS;
-5. Arena, Atlas, Studio Atlas, Docente OS and Control Center retain distinct visual character;
-6. motion, typography and media degrade safely under reduced-motion, loading, small-screen and accessibility conditions;
-7. no student account, tracking, new persistence authority or DOS-A1 runtime authority is introduced;
-8. the implementation can be visually certified with deterministic responsive evidence and Human Visual Review.
+2. the identity communicates education, knowledge, design and connection without generic AI/tech imagery;
+3. the gateway has one clear primary action and does not expose the ecosystem as a technical architecture diagram;
+4. the hero has memorable visual depth even when motion is disabled;
+5. the identity can propagate through semantic tokens and governed profile aliases rather than copied CSS;
+6. product-specific identities remain distinct;
+7. motion, typography and media degrade safely under reduced motion, loading, small-screen and accessibility conditions;
+8. no student account, tracking, new persistence authority or DOS-A1 runtime authority is introduced;
+9. the final implementation passes deterministic responsive/accessibility evidence and Human Visual Review against the approved baseline.
 
-## 3. Existing contracts preserved
+## 4. Existing contracts preserved
 
 This design extends rather than replaces:
 
@@ -45,15 +60,13 @@ This design extends rather than replaces:
 - `TRAMA-UI-EVIDENCE-01` — responsive, accessibility and visual evidence;
 - `TRAMA-PW-01` — perceptible outcomes.
 
-The gateway must satisfy Stage B requirements as a new user-facing surface.
+The gateway is a Stage B user-facing surface.
 
-## 4. Identity thesis — "Segno vivo"
+## 5. Identity thesis — Segno vivo
 
-The selected identity direction is **editorial-cinematic**, with the working name **Segno vivo**.
+TRAMA is represented by **connection made visible through traces**: pages, margins, annotations, lines, light paths, layered material and relationships between fragments that acquire meaning together.
 
-TRAMA is not represented by a literal woven fabric, a network diagram, a glowing neural mesh or a generic digital grid. Its visual metaphor is **connection made visible through traces**: lines, margins, pages, marks, light paths, layered material and transitions between fragments that acquire meaning when seen together.
-
-The conceptual keywords are:
+Conceptual keywords:
 
 - connection;
 - knowledge;
@@ -64,149 +77,150 @@ The conceptual keywords are:
 - continuity;
 - discovery.
 
-The identity must feel cultural and designed, not corporate-technological. It should be cinematic without becoming theatrical, editorial without becoming nostalgic, and modern without adopting generic dashboard aesthetics.
+TRAMA must feel cultural and designed, not corporate-technological; cinematic without theatrical excess; editorial without nostalgia; modern without generic dashboard aesthetics.
 
-## 5. Core visual principles
+## 6. Canonical visual composition
 
-### 5.1 Quiet authority
+The approved gateway composition has three layers.
 
-TRAMA uses large typographic hierarchy, controlled spacing and few simultaneous actions. Visual confidence comes from proportion and restraint rather than decoration.
+### 6.1 Material media layer
 
-### 5.2 Connection before containment
+A real or convincingly photographic scene provides depth. Typical elements include:
 
-The ecosystem should prefer relationships, rails, transitions, lines and spatial continuity over card-first composition. Containers are used only when they carry a semantic boundary.
+- books, notebooks and printed pages;
+- diagrams, technical drawings and annotations;
+- paper, wood, metal, glass and writing tools;
+- shelves or a studio/work surface in soft focus;
+- warm directional light and controlled bokeh.
 
-### 5.3 Material before synthetic
+The media must leave a deliberate **quiet reading zone** for the hero copy. Text must never have to fight a bright object or high-frequency detail.
 
-Imagery should favour books, paper, diagrams, tools, surfaces, light, architectural or laboratory detail, hand-made traces and educational artefacts. Synthetic "future technology" motifs are excluded from the parent identity.
+### 6.2 Segno vivo layer
 
-### 5.4 Cinematic depth from real media
+Very restrained copper/earth lines may connect parts of the scene.
 
-The gateway derives depth from image/video, typography and glass surfaces. Decorative blobs, radial gradients and gratuitous background effects are not part of the identity.
+They are secondary traces, not decoration and not the main visual subject. They must never cross important copy in a way that harms reading.
 
-### 5.5 Accessibility is part of the identity
+### 6.3 Interface layer
 
-Reduced motion, readable fallback typography, visible focus, contrast and reflow are not fallback styling; they are canonical modes of the system.
+The interface contains:
 
-## 6. Wordmark and typography
+- TRAMA wordmark;
+- sparse navigation;
+- one editorial hero statement;
+- concise supporting copy;
+- one primary CTA;
+- restrained glass surfaces.
 
-### 6.1 Wordmark
+The interface remains visually quiet enough to let the material scene establish identity.
 
-The canonical parent wordmark is the text **TRAMA** in uppercase, with generous but controlled tracking. It must remain typographic rather than becoming an illustrative logo in v1.
+## 7. Canonical subject language
 
-The wordmark may appear in two forms:
+Approved parent imagery may include:
 
-- **TRAMA** — parent identity;
-- **TRAMA / Product** — ecosystem signature for transitional or shared surfaces where product ownership must remain explicit.
+- open books and printed pages;
+- notebooks, marginalia and sketches;
+- technical and educational drawings;
+- maps and annotations;
+- tools of writing or making;
+- workshop, laboratory, architecture or study details;
+- natural/material light;
+- hands only when necessary and non-identifying.
 
-The wordmark must not replace the actual accessible product/page heading where semantic HTML requires a distinct heading.
+Excluded parent imagery:
 
-### 6.2 Display typography
+- glowing neural networks;
+- holographic dashboards;
+- generic blue digital grids;
+- humanoid robots;
+- stock-photo classrooms;
+- literal woven-fabric metaphors used only because the name is TRAMA;
+- excessive particles;
+- fake data visualisations without semantic meaning;
+- a plain colour field presented as the finished hero identity.
+
+## 8. Static poster is primary-quality media
+
+The static poster is not an emergency placeholder. It is a first-class canonical state.
+
+Requirements:
+
+- it must deliver the full identity without video;
+- it must use photographic/material depth consistent with the approved baseline;
+- it must preserve the quiet reading zone;
+- it must remain sharp on desktop and large displays;
+- it must have art-directed variants/crops for S/M/L/LIM where necessary;
+- it must not be replaced by a flat vector abstraction as the final design.
+
+The previous vector poster may remain only as a development fallback if useful, but it is **not approved for production identity or Human Visual Review**.
+
+## 9. Optional video layer
+
+Video is an enhancement, not a dependency of identity.
+
+If introduced, the target is a silent 12–20 second seamless loop with restrained movement and material light.
+
+Preferred narrative:
+
+1. a material detail emerges from darkness;
+2. light reveals pages, marks or a technical drawing;
+3. the camera reveals a relationship between separate elements;
+4. the loop closes without a visible cut.
+
+The external CloudFront video from the initial prototype is non-canonical until provenance, ownership and reliability are verified.
+
+Failure, loading delay or reduced-motion preference must expose the canonical static poster without degrading the composition.
+
+## 10. Wordmark and typography
+
+### 10.1 Wordmark
+
+Canonical parent wordmark: **TRAMA**, uppercase, generous controlled tracking.
+
+Permitted ecosystem signature: **TRAMA / Product** where product ownership must remain explicit.
+
+### 10.2 Display typography
 
 Preferred display family: **Instrument Serif**.
 
-Semantic use:
+Use for major identity statements and selected entry moments, not dense operational UI.
 
-- gateway wordmark;
-- major editorial statements;
-- selected product-entry moments;
-- high-level section titles where the product PVIP allows it.
+### 10.3 Interface/body typography
 
-The display family must not be imposed on dense operational UI, data tables or repetitive control labels.
+Preferred family: **Inter**, initial weights 400 and 500.
 
-### 6.3 Interface/body typography
+Fallbacks must preserve readable layout before/without web-font loading.
 
-Preferred body/interface family: **Inter**, weights 400 and 500 for the initial gateway profile.
+### 10.4 Relationship
 
-Fallback policy must preserve readability before/without web-font acquisition. The implementation must use `font-display` behavior that avoids invisible text and should minimise layout shift.
+Instrument Serif expresses identity and meaning. Inter expresses operation and clarity.
 
-### 6.4 Typography relationship
+## 11. Parent palette
 
-Instrument Serif expresses meaning and identity; Inter expresses operation and clarity.
-
-The ecosystem must not turn this into a simplistic rule that every heading uses Instrument Serif. Product PVIPs decide where display typography is appropriate.
-
-## 7. Parent palette
-
-The parent palette is intentionally narrow. Product-facing code must consume semantic aliases, not literal colour names.
-
-Initial reference primitives for the identity seed:
+Reference seed:
 
 - **Ink / deep navy:** `hsl(201 100% 13%)`;
 - **Paper / foreground:** `hsl(0 0% 100%)` in dark presentation contexts;
 - **Muted text:** `hsl(240 4% 66%)`;
 - **Dark secondary surface:** `hsl(0 0% 10%)`;
 - **Border/reference line:** `hsl(0 0% 18%)`;
-- **Warm material accent:** a restrained copper/earth family, used only as an identity accent and never as the sole carrier of status or interaction state.
+- **Warm material accent:** restrained copper/earth.
 
-The warm accent is intentionally subordinate. The recognisable parent identity is primarily the relationship between deep ink, light typography, material imagery and editorial composition.
+The recognisable identity is the relationship among deep ink, warm material light, readable light typography and real imagery. Copper is subordinate and must never become the sole carrier of state or meaning.
 
-Status colours remain governed by ecosystem feedback semantics and must not be repurposed as brand colours.
-
-## 8. Imaging and video art direction
-
-### 8.1 Canonical subject language
-
-Parent-identity imagery may include:
-
-- open books and printed pages;
-- technical and educational drawings;
-- maps, annotations and marginalia;
-- paper, wood, metal, glass and laboratory/workshop material;
-- architectural or classroom detail without identifiable student data;
-- light moving across pages or surfaces;
-- hands only when necessary and non-identifying;
-- transitions between physical traces and abstract relational lines.
-
-### 8.2 Excluded visual language
-
-Do not use as canonical parent imagery:
-
-- glowing neural networks;
-- floating holographic dashboards;
-- generic blue digital grids;
-- humanoid robots;
-- anonymous stock-photo classrooms;
-- decorative fibre/fabric imagery used merely because the name is TRAMA;
-- excessive particle systems;
-- fake data visualisations without semantic meaning.
-
-### 8.3 Gateway hero video
-
-The target gateway video is a slow, seamless loop, approximately 12–20 seconds, silent, with restrained camera movement and natural/material light.
-
-Preferred narrative:
-
-1. a close material detail emerges from darkness;
-2. light reveals pages, marks or a technical drawing;
-3. the camera exposes a relationship between separate elements;
-4. the loop closes without a visible cut.
-
-The media itself must remain secondary to legibility. The title and primary action must remain readable throughout the loop.
-
-The external CloudFront video used in the initial brief may be used only as a **temporary prototype asset** after licence/ownership and reliability are verified. It is not automatically the canonical TRAMA identity asset.
-
-### 8.4 Poster and failure mode
-
-A canonical poster image is required. If video fails, is disabled or is inappropriate for user preferences, the poster must still deliver a complete hero composition.
-
-## 9. Gateway information architecture
+## 12. Gateway information architecture
 
 The gateway is a threshold, not a dashboard.
 
-### 9.1 Header
+### 12.1 Header
 
-Desktop structure:
+Desktop direction:
 
 `TRAMA | Ecosistema · Curricolo · Guida | Accedi`
 
-The exact secondary destinations may evolve, but the header must remain sparse. Product names should not dominate the first-level navigation unless a later user-journey study proves direct product selection is the primary need.
+The header remains sparse. On small screens secondary navigation collapses behind an accessible disclosure.
 
-On small screens, secondary navigation collapses behind an accessible disclosure. The primary access action remains directly available when space permits.
-
-### 9.2 Hero
-
-Canonical content direction:
+### 12.2 Hero copy
 
 **Wordmark:** `TRAMA`
 
@@ -219,286 +233,242 @@ Canonical content direction:
 **Primary action:**  
 `Entra in TRAMA`
 
-The statement is identity copy, not a technical product description. It must remain concise enough to coexist with moving imagery.
+### 12.3 CTA authority boundary
 
-### 9.3 Meaning of "Entra in TRAMA"
+`Entra in TRAMA` does not authorise a new authentication system.
 
-The CTA does **not** implicitly authorise a new authentication system.
+It must navigate to an explicitly configured existing destination or delegate authentication only to a product that already owns that capability.
 
-In v1 it must resolve to an explicitly designed gateway action, such as:
+## 13. Glass expression
 
-- opening the ecosystem destination chooser;
-- navigating to the appropriate existing public entry route;
-- delegating authentication only to a product that already owns that capability.
+Glass is supporting treatment, not the identity itself.
 
-No new identity/account authority is created by visual design.
+Appropriate uses:
 
-## 10. Glass expression
-
-Glass is a supporting surface treatment, not the identity itself.
-
-The gateway may use a shared `liquid-glass` expression for:
-
-- the header shell;
-- the primary CTA;
+- header shell;
+- primary CTA;
 - selected overlay controls.
 
-Reference treatment:
+Requirements:
 
-```css
-.liquid-glass {
-  background: rgba(255, 255, 255, 0.01);
-  background-blend-mode: luminosity;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-```
+- subtle translucency;
+- restrained blur;
+- thin luminous edge where appropriate;
+- visible focus;
+- non-backdrop-filter fallback;
+- no propagation of decorative glass into ordinary operational product views.
 
-A pseudo-element may render the thin luminous perimeter used in the approved visual direction. The implementation must provide a non-backdrop-filter fallback and must not sacrifice focus visibility.
+## 14. Motion language
 
-Glass styling must not propagate indiscriminately to product operational interfaces.
+TRAMA uses slow reveal rather than ornamental continuous animation.
 
-## 11. Motion language
+Reference roles:
 
-The parent identity uses **slow reveal**, not continuous ornamental animation.
+- reveal ≈ 800 ms ease-out;
+- stagger ≈ 200 ms;
+- CTA hover scale ≤ 1.03;
+- no CSS parallax in v1.
 
-Initial motion roles:
+Reduced motion:
 
-- content reveal: approximately 800 ms, ease-out;
-- stagger: approximately 200 ms;
-- hover scale on primary CTA: maximum approximately 1.03;
-- video movement: source media only, not CSS parallax in v1.
+- entrance becomes immediate;
+- static canonical poster is used;
+- no meaning depends on motion.
 
-Reference entrance motion:
+## 15. Responsive composition
 
-```css
-@keyframes fade-rise {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-```
-
-Reduced-motion behavior is mandatory:
-
-- entrance animations become immediate;
-- no essential meaning depends on movement;
-- autoplaying background media must have a safe reduced-motion strategy, with poster/static presentation preferred when required by the implementation policy.
-
-## 12. Responsive composition
-
-The gateway must be intentionally composed for the governed S/M/L/LIM conditions rather than scaled mechanically.
+The gateway must be art-directed, not mechanically scaled.
 
 ### S — smartphone
 
-- wordmark remains legible but reduced;
-- hero copy uses a shorter line measure;
+- short line measure;
+- mobile crop keeps material atmosphere but removes clutter behind copy;
 - navigation collapses;
-- CTA remains reachable without horizontal overflow;
-- video cropping prioritises material detail rather than a desktop focal point;
-- no text may depend on a specific video area remaining empty.
+- CTA remains reachable;
+- no horizontal overflow.
 
 ### M — tablet
 
 - preserve editorial hierarchy;
-- allow more breathing room without reproducing the full desktop header density;
-- maintain comfortable tap targets.
+- maintain a clear reading zone;
+- use a dedicated crop/position when the desktop focal point would interfere with copy.
 
 ### L — desktop
 
-- cinematic composition may use the full spatial relationship between media, typography and glass header;
-- hero should remain vertically balanced rather than simply top-padded.
+- express the full cinematic relation between material scene, typography and glass header;
+- hero remains vertically balanced;
+- key material objects should sit mainly outside the core reading zone.
 
 ### LIM — large display/presentation
 
-- typography must not become excessively wide;
-- readable measure remains constrained;
-- media can expand, but text hierarchy remains stable.
+- poster remains high-resolution;
+- text measure stays constrained;
+- material scene may expand without making the copy excessively wide or visually weak.
 
-## 13. Parent identity propagation model
+## 16. Parent identity propagation model
 
-TRAMA identity propagates through **invariants + aliases + selective signatures**, not through full visual duplication.
+TRAMA identity propagates through **invariants + aliases + selective signatures**, not visual duplication.
 
-### 13.1 Shared parent invariants
-
-Eligible shared identity elements:
+Shared eligible invariants:
 
 - TRAMA wordmark/signature;
-- semantic parent palette references;
-- typography roles and approved font families;
-- focus and interaction-state semantics;
+- semantic palette references;
+- typography roles;
+- focus and interaction semantics;
 - motion roles;
-- shared spacing rhythm references;
-- ecosystem transition/relationship patterns;
-- iconographic principles;
-- shared media/illustration art direction;
+- spacing rhythm;
+- connective motifs;
+- image/illustration art direction;
 - accessibility behavior.
 
-### 13.2 Product expression
+### Arena
 
-#### Arena
+Editorial authority, structured/provenance-first. No default cinematic background in operational views.
 
-TRAMA connection: editorial typography, ink/material references and ecosystem signature.
+### Atlas
 
-Local character: authoritative, structured, provenance-first, denser and document-oriented. Cinematic media is not a default operational background.
+Exploratory and public-readable; may use the broadest visual storytelling range while inheriting parent materiality and connective composition.
 
-#### Atlas
+### Studio Atlas
 
-TRAMA connection: material imagery, expressive typography and connective spatial composition.
+Creative authoring workspace with explicit PVIP, stronger media surfaces and scene/review focus. It does not silently inherit Atlas runtime identity.
 
-Local character: brighter, more exploratory, public-readable and discovery-oriented. Atlas may use the broadest visual storytelling range.
+### Docente OS
 
-#### Studio Atlas
+Operational calm, teacher-first flows and low noise. Parent identity appears selectively at entry/high-level moments; background video is inappropriate for routine working screens.
 
-Studio Atlas becomes a formally registered identity profile rather than inheriting Atlas implicitly.
+### TRAMA Control Center
 
-TRAMA connection: same parent semantic grammar and image art direction.
+Analytical and evidence-dense. Parent identity must never reduce status or traceability legibility.
 
-Local character: creative authoring workspace, visual production, scene/review focus and stronger use of media surfaces than Atlas runtime.
+## 17. Token and implementation architecture
 
-A follow-up governance update must register Studio Atlas in the relevant PVIP/token scope; it must not silently bypass existing contracts.
+Authoritative identity/token artifacts live in `trama-ecosistema`.
 
-#### Docente OS
+Each product owns a local adapter/profile to its implementation technology. Validators check semantic compatibility and authority. No shared cross-repository runtime package is required in v1.
 
-TRAMA connection: typography signature at entry/high-level moments, parent navigation/signature where appropriate, semantic colours and motion grammar.
+A future shared package requires demonstrated maintenance value and must not weaken product autonomy.
 
-Local character: operational calm, stable actions, compact teacher-first flows, low noise. Background video and decorative glass are inappropriate for ordinary work views.
+## 18. Distinctive shared components
 
-#### TRAMA Control Center
+Permitted initial identity components:
 
-TRAMA connection: parent wordmark, ink palette, typography hierarchy and connective ecosystem motifs.
+- `TramaWordmark`;
+- `TramaGatewayShell`;
+- `TramaGlassAction`;
+- `EcosystemSignature`;
+- `TramaMediaBackdrop`.
 
-Local character: analytical, evidence-dense, state/traceability focused. Identity must never reduce status legibility.
+They express identity but do not create a generic ecosystem component library before repeated reuse is proven.
 
-## 14. Token and implementation architecture
+## 19. Technology direction
 
-The canonical identity must not initially require all products to consume a shared runtime package.
-
-Recommended v1 architecture:
-
-1. **authoritative machine-readable identity/token artifacts live in `trama-ecosistema`;**
-2. shared ecosystem semantics and parent identity primitives are versioned there;
-3. each product owns a local adapter/profile mapping to its implementation technology;
-4. validators check semantic compatibility and profile ownership;
-5. cross-repository runtime coupling is deferred until reuse evidence justifies a package.
-
-This preserves ecosystem authority without making one repository a fragile runtime dependency for all products.
-
-A future shared package is permitted only if the implementation plan demonstrates that versioned token distribution solves a real maintenance problem without weakening product autonomy.
-
-## 15. Distinctive shared components
-
-The first implementation may introduce a small number of TRAMA-owned identity components:
-
-- `TramaWordmark` — canonical accessible parent signature;
-- `TramaGatewayShell` — gateway-only full-screen composition;
-- `TramaGlassAction` — identity CTA treatment built on an accessible button primitive;
-- `EcosystemSignature` — compact TRAMA/product relationship marker;
-- `TramaMediaBackdrop` — video/poster wrapper with loading and reduced-motion behavior.
-
-These components own expression but must reuse native or mature behavioural primitives where appropriate.
-
-They are not a licence to create a generic ecosystem component library before repeated use is proven.
-
-## 16. Technology direction
-
-The gateway target stack is:
+Gateway target stack:
 
 - React;
 - Vite;
 - TypeScript;
 - Tailwind CSS;
-- shadcn/ui/open-code composition where an accessible primitive is useful;
-- native `<video>` for background media;
+- shadcn/ui/open-code composition where useful;
+- native `<video>` only for optional media enhancement;
 - semantic CSS variables for identity tokens.
 
-The stack is subordinate to existing repository dependency policy. Any new dependency requires the normal supply-chain/lifecycle assessment.
+New dependencies remain subject to repository supply-chain/lifecycle policy.
 
-## 17. Accessibility and resilience
+## 20. Accessibility and resilience
 
-The gateway must prove at least:
+The gateway must prove:
 
-- WCAG 2.2 applicable A/AA criteria for the new surface;
-- keyboard access to every interactive element;
-- visible focus over both bright and dark video frames;
-- readable text during font loading/failure;
-- 200% text zoom and responsive reflow;
-- no horizontal overflow in S/M/L/LIM evidence;
+- applicable WCAG 2.2 A/AA criteria;
+- full keyboard access;
+- visible focus over representative media states;
+- readable font fallback;
+- 200% text zoom and reflow;
+- no horizontal overflow in S/M/L/LIM;
 - reduced-motion behavior;
-- media/poster fallback;
-- sufficient text/background contrast over representative video frames;
-- accessible navigation disclosure on mobile;
-- no information available only through colour, transparency or motion.
+- poster/media fallback;
+- stable text contrast over approved crops;
+- accessible mobile navigation;
+- no information carried only by colour, transparency or motion.
 
-If moving media makes contrast unstable, the correct fix is art direction/cropping/media selection or a localised text-support treatment. A generic full-screen dark overlay is not the default solution because the selected visual direction relies on the source media providing visual depth.
+If contrast becomes unstable, fix art direction, crop, media selection or a localised copy support treatment. A generic full-screen dark overlay is not the default solution.
 
-## 18. Evidence and Human Visual Review
+## 21. Evidence and Human Visual Review
 
-A polished mockup is not sufficient for promotion.
+Automated success is necessary but not sufficient.
 
-The gateway implementation must produce:
+The implementation must produce:
 
 - exact-head screenshots for S/M/L/LIM;
-- representative screenshots from multiple video frames or deterministic poster state;
+- deterministic static-poster evidence;
 - reduced-motion evidence;
 - keyboard/focus evidence;
-- automated accessibility result plus required human checks;
+- automated accessibility results plus human checks;
 - no-overflow evidence;
 - token/component traceability;
 - media provenance/licence record;
-- Human Visual Review against this specification.
+- visual comparison against the approved baseline image.
 
-Human review must assess not only whether the surface is attractive, but whether it communicates the intended TRAMA identity: quiet authority, knowledge, connection, materiality and coherence.
+Human Visual Review must explicitly answer:
 
-## 19. Rollout sequence
+1. does the gateway look like the approved TRAMA identity rather than a generic dark landing page?;
+2. is there real material/cinematic depth?;
+3. is the reading zone clear on every viewport?;
+4. are glass and copper traces restrained?;
+5. does the static state remain excellent without video?;
+6. is the parent identity strong without erasing future product differentiation?
+
+Possible outcomes remain **PASS / REWORK / REJECT**.
+
+## 22. Rollout sequence
 
 ### Phase A — identity foundation
 
-- freeze this design after Human Review;
-- create machine-readable parent identity/token seed;
-- register Studio Atlas as an explicit visual-identity profile;
-- define the initial TRAMA parent PVIP/signature rules;
-- add validator coverage for ownership/alias boundaries.
+- parent identity/token seed;
+- Studio Atlas explicit PVIP;
+- validator coverage.
 
 ### Phase B — gateway implementation
 
-- build the gateway as a distinct public surface;
-- implement poster/video media boundary;
-- implement typography, glass treatment, motion and responsive composition;
-- keep destination/auth behavior explicitly bounded;
-- certify S/M/L/LIM + accessibility + Human Visual Review.
+- standalone public gateway;
+- approved photographic/material poster family;
+- optional video boundary;
+- typography, glass, motion and responsive composition;
+- exact-head accessibility/visual certification;
+- Human Visual Review.
 
 ### Phase C — controlled propagation
 
-Propagate only the approved parent invariants, product by product:
+Propagate only approved invariants product by product:
 
-1. ecosystem signatures and typography/token adapters;
-2. product-specific PVIP adjustments;
+1. signature and token adapters;
+2. local PVIP adjustments;
 3. one representative surface per product;
-4. visual/accessibility review before wider adoption.
+4. visual/accessibility review;
+5. wider adoption only after evidence.
 
 No big-bang restyling is authorised.
 
-## 20. Out of scope
+## 23. Out of scope
 
-TRAMA-IDENTITY-01 does not authorise:
+This design does not authorise:
 
-- redesigning all existing product screens;
-- replacing existing authentication;
+- redesign of every product screen;
+- replacement of existing authentication;
 - student accounts or tracking;
-- a unified runtime component package;
-- automatic application of glass/video backgrounds across products;
-- changes to Arena/Atlas/Docente OS authority boundaries;
-- production use of the temporary CloudFront video without provenance review;
+- unified runtime component package;
+- automatic glass/video backgrounds across products;
+- authority-boundary changes;
+- production use of temporary external media without provenance review;
 - automatic visual approval;
-- merge to `main` without normal review and evidence.
+- merge to `main` without normal review/evidence.
 
-## 21. Implementation decision boundary
+## 24. Implementation decision boundary
 
-The next step after Human Review of this written design is a dedicated implementation plan.
+Design direction and visual baseline are approved.
 
-That plan must first verify the current repository/deployment structure and choose the smallest architecture that preserves separation between the public gateway and the analytical Control Center. The preferred direction is a distinct gateway surface rather than visually converting the Control Center into the ecosystem entrance.
+Implementation is authorised only within the bounded gateway scope and must follow the dedicated implementation specification/plan.
 
-No implementation code is authorised by this design document alone.
+The existing coded gateway at the pre-baseline Human Review state is explicitly **REWORK REQUIRED** because its flat/vector poster does not satisfy the approved visual baseline, even though automated CI and accessibility checks passed.
+
+No merge or production publication is authorised until the revised exact-head implementation obtains a fresh Human Visual Review PASS.
