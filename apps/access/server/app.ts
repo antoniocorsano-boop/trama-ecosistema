@@ -2,6 +2,7 @@ import cookie from '@fastify/cookie';
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AccessRepository } from './ports/access-repository.js';
 import type { PasswordlessProvider } from './ports/passwordless-provider.js';
+import { registerAccessStateRoute } from './routes/access-state-route.js';
 import { registerAuthRoutes, type AuthRouteLogger } from './routes/auth-routes.js';
 
 export type AccessServerDependencies = {
@@ -27,6 +28,10 @@ export function buildAccessServer(deps: AccessServerDependencies): FastifyInstan
       publicOrigin: deps.publicOrigin,
       allowedIssuer: deps.allowedIssuer,
       logger: deps.logger ?? quietLogger,
+      now: deps.now,
+    });
+    registerAccessStateRoute(instance, {
+      repository: deps.repository,
       now: deps.now,
     });
   });
