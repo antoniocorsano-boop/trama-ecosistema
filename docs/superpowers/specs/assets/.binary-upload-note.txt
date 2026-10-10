@@ -1,1 +1,0 @@
-Binary poster assets for TRAMA gateway v2 are committed through Git blob/tree objects; this note records the governed asset-swap operation on 2026-10-10.
