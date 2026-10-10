@@ -77,6 +77,9 @@ jobs:
           npm test
           npm run build
 
+      - name: Validate production gateway background assets
+        run: node scripts/validate-trama-gateway-media.mjs
+
       - name: Browser certification
         working-directory: apps/gateway
         run: npm run test:e2e
