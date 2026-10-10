@@ -10,7 +10,7 @@ export function App() {
       <main className="trama-hero-main relative z-10 flex min-h-[calc(100svh-96px)] flex-col items-center justify-center px-5 pb-20 pt-10 text-center sm:px-8 sm:pb-24 sm:pt-14 lg:pb-28">
         <section
           aria-labelledby="gateway-title"
-          className="trama-hero-composition flex w-full max-w-6xl flex-col items-center"
+          className="trama-hero-composition trama-hero-legibility flex w-full max-w-6xl flex-col items-center"
         >
           <p className="animate-fade-rise mb-5 text-[0.68rem] font-medium uppercase tracking-[0.38em] text-[hsl(var(--copper))] sm:mb-6 sm:text-xs">
             TRAMA
