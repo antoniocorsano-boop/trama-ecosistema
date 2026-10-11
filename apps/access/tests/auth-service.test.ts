@@ -5,6 +5,10 @@ import { InMemorySessionStore } from '../src/testing/in-memory-session-store.ts'
 import { FakeAuthProvider } from '../src/testing/fake-auth-provider.ts';
 import { requestPilotOtp, verifyPilotOtp } from '../src/domain/auth-service.ts';
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function fixture() {
   const repo = new InMemoryIdentityRepository({
     principals: [{ principalId: 'p1', status: 'ACTIVE' }],
@@ -44,6 +48,50 @@ test('request path uses the same public response floor without sending OTP to un
   assert.ok(allowedElapsed >= 70, `allowed path returned too early: ${allowedElapsed}ms`);
   assert.ok(unknownElapsed >= 70, `unknown path returned too early: ${unknownElapsed}ms`);
   assert.ok(Math.abs(allowedElapsed - unknownElapsed) < 30, `request timing diverged: allowed=${allowedElapsed} unknown=${unknownElapsed}`);
+});
+
+test('request timing budget includes the membership-sensitive alias lookup', async () => {
+  const timing = { providerBudgetMs: 120, publicFloorMs: 160 };
+
+  const allowed = fixture();
+  const allowedLookup = allowed.repo.findAliasByEmail.bind(allowed.repo);
+  allowed.repo.findAliasByEmail = async (email) => {
+    await sleep(80);
+    return allowedLookup(email);
+  };
+  allowed.provider.requestDelayMs = 120;
+  const allowedStarted = performance.now();
+  assert.deepEqual(await requestPilotOtp({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', timing }), { status: 'OTP_REQUESTED' });
+  const allowedElapsed = performance.now() - allowedStarted;
+
+  const unknown = fixture();
+  const unknownLookup = unknown.repo.findAliasByEmail.bind(unknown.repo);
+  unknown.repo.findAliasByEmail = async (email) => {
+    await sleep(80);
+    return unknownLookup(email);
+  };
+  unknown.provider.requestDelayMs = 120;
+  const unknownStarted = performance.now();
+  assert.deepEqual(await requestPilotOtp({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', timing }), { status: 'OTP_REQUESTED' });
+  const unknownElapsed = performance.now() - unknownStarted;
+
+  assert.equal(allowed.provider.requestCount, 1);
+  assert.equal(unknown.provider.requestCount, 0);
+  assert.ok(allowedElapsed < 190, `allowed path exceeded common deadline: ${allowedElapsed}ms`);
+  assert.ok(unknownElapsed < 190, `unknown path exceeded common deadline: ${unknownElapsed}ms`);
+  assert.ok(Math.abs(allowedElapsed - unknownElapsed) < 25, `lookup reopened timing oracle: allowed=${allowedElapsed} unknown=${unknownElapsed}`);
+});
+
+test('provider send is actually aborted when the request budget expires', async () => {
+  const f = fixture();
+  f.provider.requestDelayMs = 200;
+  const timing = { providerBudgetMs: 40, publicFloorMs: 70 };
+
+  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', timing }), { status: 'OTP_REQUESTED' });
+  assert.equal(f.provider.requestCount, 1);
+  await sleep(180);
+  assert.equal(f.provider.requestAbortCount, 1);
+  assert.equal(f.provider.requestCompletionCount, 0);
 });
 
 test('send-time provider failure remains neutral to avoid allowlist enumeration', async () => {
