@@ -7,12 +7,7 @@ export type MagicLinkCallbackInput =
 
 export interface AuthProviderAdapter {
   checkAvailability(input: { signal: AbortSignal }): Promise<boolean>;
-
-  // Transitional optionality: Task 3 makes these required after all consumers migrate.
-  requestEmailMagicLink?(input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void>;
-  verifyEmailMagicLink?(input: MagicLinkCallbackInput & { signal: AbortSignal }): Promise<VerifiedExternalIdentity>;
-
-  requestEmailOtp(input: { email: string; signal: AbortSignal }): Promise<void>;
-  verifyEmailOtp(input: { email: string; otp: string; signal: AbortSignal }): Promise<VerifiedExternalIdentity>;
+  requestEmailMagicLink(input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void>;
+  verifyEmailMagicLink(input: MagicLinkCallbackInput & { signal: AbortSignal }): Promise<VerifiedExternalIdentity>;
   bestEffortLogout?(): Promise<void>;
 }
