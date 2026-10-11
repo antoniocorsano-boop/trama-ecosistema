@@ -1,28 +1,26 @@
+import { createHash } from 'node:crypto';
 import type { AuthProviderAdapter, MagicLinkCallbackInput, MagicLinkEmailOtpType } from '../../ports/auth-provider.ts';
 import type { VerifiedExternalIdentity } from '../../domain/types.ts';
 
-type ProviderError = { message?: string } | null;
-type ProviderUser = { id: string; email?: string | null } | null;
-type ProviderAuthResult = {
-  data: { user: ProviderUser; session?: unknown };
-  error: ProviderError;
-};
+const PKCE_VERIFIER_PATTERN = /^[A-Za-z0-9_-]{43,128}$/;
 
-type SupabaseAuthClientLike = {
-  auth: {
-    signInWithOtp(input: {
-      email: string;
-      options: { shouldCreateUser: boolean; emailRedirectTo: string };
-    }): Promise<{ data: unknown; error: ProviderError }>;
-    exchangeCodeForSession(code: string): Promise<ProviderAuthResult>;
-    verifyOtp(input: { token_hash: string; type: MagicLinkEmailOtpType }): Promise<ProviderAuthResult>;
-    signOut(): Promise<{ error: ProviderError }>;
-  };
+type ProviderUser = { id: string; email?: string | null } | null;
+type ProviderTokenResponse = {
+  user?: ProviderUser;
+  access_token?: string | null;
+  refresh_token?: string | null;
+  session?: {
+    access_token?: string | null;
+    refresh_token?: string | null;
+    user?: ProviderUser;
+  } | null;
 };
 
 export interface SupabaseAuthProviderInput {
   issuer: string;
-  createClientForSignal: (signal: AbortSignal) => SupabaseAuthClientLike;
+  projectUrl: string;
+  publishableKey: string;
+  fetchImpl?: typeof fetch;
   availabilityProbe: (signal: AbortSignal) => Promise<boolean>;
 }
 
@@ -30,24 +28,53 @@ function throwIfAborted(signal: AbortSignal): void {
   if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
 }
 
-function reduceVerifiedIdentity(issuer: string, result: ProviderAuthResult): VerifiedExternalIdentity {
-  if (result.error) throw new Error('MAGIC_LINK_INVALID');
-  if (!result.data.user?.id) throw new Error('PROVIDER_IDENTITY_INVALID');
+function normalizedProjectUrl(raw: string): string {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  return url.origin;
+}
+
+function assertVerifier(verifier: string, failure: 'PROVIDER_UNAVAILABLE' | 'MAGIC_LINK_INVALID'): void {
+  if (!PKCE_VERIFIER_PATTERN.test(verifier)) throw new Error(failure);
+}
+
+function pkceChallenge(verifier: string): string {
+  return createHash('sha256').update(verifier).digest('base64url');
+}
+
+function providerIdentity(issuer: string, payload: ProviderTokenResponse): VerifiedExternalIdentity {
+  const user = payload.user ?? payload.session?.user ?? null;
+  if (!user?.id) throw new Error('PROVIDER_IDENTITY_INVALID');
   return {
     issuer,
-    subject: result.data.user.id,
-    verifiedEmail: result.data.user.email ?? undefined,
+    subject: user.id,
+    verifiedEmail: user.email ?? undefined,
   };
+}
+
+function accessToken(payload: ProviderTokenResponse): string | null {
+  return payload.access_token ?? payload.session?.access_token ?? null;
 }
 
 export class SupabaseAuthProvider implements AuthProviderAdapter {
   readonly issuer: string;
-  private readonly createClientForSignal: (signal: AbortSignal) => SupabaseAuthClientLike;
+  private readonly projectUrl: string;
+  private readonly publishableKey: string;
+  private readonly fetchImpl: typeof fetch;
   private readonly availabilityProbe: (signal: AbortSignal) => Promise<boolean>;
 
   constructor(input: SupabaseAuthProviderInput) {
     this.issuer = input.issuer;
-    this.createClientForSignal = input.createClientForSignal;
+    this.projectUrl = normalizedProjectUrl(input.projectUrl);
+    this.publishableKey = input.publishableKey;
+    this.fetchImpl = input.fetchImpl ?? fetch;
     this.availabilityProbe = input.availabilityProbe;
   }
 
@@ -60,18 +87,29 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
     }
   }
 
-  async requestEmailMagicLink(input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void> {
-    const client = this.createClientForSignal(input.signal);
+  async requestEmailMagicLink(input: { email: string; redirectTo: string; codeVerifier: string; signal: AbortSignal }): Promise<void> {
     throwIfAborted(input.signal);
+    assertVerifier(input.codeVerifier, 'PROVIDER_UNAVAILABLE');
     try {
-      const { error } = await client.auth.signInWithOtp({
-        email: input.email,
-        options: {
-          shouldCreateUser: false,
-          emailRedirectTo: input.redirectTo,
+      const url = new URL('/auth/v1/otp', this.projectUrl);
+      url.searchParams.set('redirect_to', input.redirectTo);
+      const response = await this.fetchImpl(url.toString(), {
+        method: 'POST',
+        headers: {
+          apikey: this.publishableKey,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          email: input.email,
+          create_user: false,
+          code_challenge: pkceChallenge(input.codeVerifier),
+          code_challenge_method: 's256',
+        }),
+        cache: 'no-store',
+        signal: input.signal,
       });
-      if (error) throw new Error('PROVIDER_UNAVAILABLE');
+      if (!response.ok) throw new Error('PROVIDER_UNAVAILABLE');
     } catch (error) {
       if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
       if (error instanceof Error && error.message === 'PROVIDER_UNAVAILABLE') throw error;
@@ -80,18 +118,47 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
   }
 
   async verifyEmailMagicLink(input: MagicLinkCallbackInput & { signal: AbortSignal }): Promise<VerifiedExternalIdentity> {
-    const client = this.createClientForSignal(input.signal);
     throwIfAborted(input.signal);
     try {
-      const result = 'code' in input && typeof input.code === 'string'
-        ? await client.auth.exchangeCodeForSession(input.code)
-        : await client.auth.verifyOtp({ token_hash: input.tokenHash, type: input.type });
-      const identity = reduceVerifiedIdentity(this.issuer, result);
-      try {
-        await client.auth.signOut();
-      } catch {
-        // Provider session cleanup is best-effort; TRAMA never persists provider tokens/session state.
+      let response: Response;
+      if ('code' in input && typeof input.code === 'string') {
+        assertVerifier(input.codeVerifier, 'MAGIC_LINK_INVALID');
+        response = await this.fetchImpl(`${this.projectUrl}/auth/v1/token?grant_type=pkce`, {
+          method: 'POST',
+          headers: {
+            apikey: this.publishableKey,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ auth_code: input.code, code_verifier: input.codeVerifier }),
+          cache: 'no-store',
+          signal: input.signal,
+        });
+      } else {
+        response = await this.fetchImpl(`${this.projectUrl}/auth/v1/verify`, {
+          method: 'POST',
+          headers: {
+            apikey: this.publishableKey,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token_hash: input.tokenHash, type: input.type as MagicLinkEmailOtpType }),
+          cache: 'no-store',
+          signal: input.signal,
+        });
       }
+
+      if (!response.ok) throw new Error('MAGIC_LINK_INVALID');
+      let payload: ProviderTokenResponse;
+      try {
+        payload = await response.json() as ProviderTokenResponse;
+      } catch {
+        throw new Error('MAGIC_LINK_INVALID');
+      }
+
+      const token = accessToken(payload);
+      const identity = providerIdentity(this.issuer, payload);
+      if (token) await this.logoutTransientSession(token, input.signal);
       return identity;
     } catch (error) {
       if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
@@ -100,13 +167,25 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
     }
   }
 
-  async bestEffortLogout(): Promise<void> {
-    const controller = new AbortController();
+  private async logoutTransientSession(token: string, signal: AbortSignal): Promise<void> {
+    if (signal.aborted) return;
     try {
-      const client = this.createClientForSignal(controller.signal);
-      await client.auth.signOut();
+      await this.fetchImpl(`${this.projectUrl}/auth/v1/logout?scope=local`, {
+        method: 'POST',
+        headers: {
+          apikey: this.publishableKey,
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+        cache: 'no-store',
+        signal,
+      });
     } catch {
-      // Local AccessSession revocation is authoritative; provider logout is best-effort only.
+      // Provider cleanup is best-effort. TRAMA never persists provider token/session state.
     }
+  }
+
+  async bestEffortLogout(): Promise<void> {
+    // The callback transport discards and best-effort revokes provider tokens before returning identity.
   }
 }
