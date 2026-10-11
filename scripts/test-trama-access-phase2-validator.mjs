@@ -21,6 +21,8 @@ expectViolation('auto provisioning', { ...safe, 'apps/access/src/server/handlers
 expectViolation('gateway routing mutation', safe, ['apps/gateway/src/config/entry.ts'], /Gateway/i);
 expectViolation('unsafe production defaults', { ...safe, 'apps/access/src/config/access-config.ts': `const providerKind = env.ACCESS_PROVIDER_KIND ?? 'fake'; const storeKind = env.ACCESS_STORE_KIND ?? 'memory'; export const sessionTtlSeconds = 28800;` }, [], /production|fake|memory/i);
 expectViolation('session ttl too high', { ...safe, 'apps/access/src/config/access-config.ts': `export const sessionTtlSeconds = 30000;` }, [], /28800|TTL/i);
-expectViolation('product data in access migration', { ...safe, 'apps/access/supabase/migrations/20261011.sql': `create table access_student_progress(id uuid);` }, [], /student/i);
+expectViolation('student data in access migration', { ...safe, 'apps/access/supabase/migrations/20261011.sql': `create table access_student_progress(id uuid);` }, [], /student/i);
+expectViolation('materials data in access migration', { ...safe, 'apps/access/supabase/migrations/20261012.sql': `create table access_materiali(id uuid);` }, [], /material/i);
+expectViolation('english material data in access migration', { ...safe, 'apps/access/supabase/migrations/20261013.sql': `create table access_material(id uuid);` }, [], /material/i);
 
 console.log('PASS: ACCESS-01 Phase 2 validator adversarial cases');
