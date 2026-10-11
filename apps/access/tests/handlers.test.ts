@@ -43,6 +43,16 @@ test('request OTP is neutral for allowed and unknown aliases', async () => {
   assert.deepEqual(await unknown.json(), { status: 'OTP_REQUESTED' });
 });
 
+test('send-time OTP failure stays publicly neutral', async () => {
+  const r = runtime();
+  (r.authProvider as FakeAuthProvider).requestFailure = true;
+  const allowed = await handleRequestOtp(req('/api/auth/request-otp', { email: 'teacher@example.test' }), r);
+  const unknown = await handleRequestOtp(req('/api/auth/request-otp', { email: 'unknown@example.test' }), r);
+  assert.equal(allowed.status, 202); assert.equal(unknown.status, 202);
+  assert.deepEqual(await allowed.json(), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await unknown.json(), { status: 'OTP_REQUESTED' });
+});
+
 test('request OTP rejects malformed payload and provider outage safely', async () => {
   const r = runtime();
   const malformed = await handleRequestOtp(req('/api/auth/request-otp', { email: 'not-an-email' }), r);
@@ -62,10 +72,18 @@ test('verify OTP establishes opaque Access cookie', async () => {
   assert.match(cookie, /HttpOnly/);
 });
 
-test('verify OTP maps invalid and access denied to generic statuses', async () => {
+test('verify OTP does not reveal allowlist membership for invalid codes', async () => {
   const r = runtime();
-  const invalid = await handleVerifyOtp(req('/api/auth/verify-otp', { email: 'teacher@example.test', otp: '000000' }), r);
-  assert.equal(invalid.status, 401);
+  const invalidAllowed = await handleVerifyOtp(req('/api/auth/verify-otp', { email: 'teacher@example.test', otp: '000000' }), r);
+  const invalidUnknown = await handleVerifyOtp(req('/api/auth/verify-otp', { email: 'unknown@example.test', otp: '000000' }), r);
+  assert.equal(invalidAllowed.status, 401);
+  assert.equal(invalidUnknown.status, 401);
+  assert.deepEqual(await invalidAllowed.json(), { status: 'OTP_INVALID' });
+  assert.deepEqual(await invalidUnknown.json(), { status: 'OTP_INVALID' });
+});
+
+test('verified but unbound identity remains denied', async () => {
+  const r = runtime();
   (r.authProvider as FakeAuthProvider).subject = 'other-subject';
   const denied = await handleVerifyOtp(req('/api/auth/verify-otp', { email: 'teacher@example.test', otp: '123456' }), r);
   assert.equal(denied.status, 403);
@@ -96,6 +114,21 @@ test('launch fails closed and never redirects in phase 2', async () => {
   const pair2 = (auth2.headers.get('set-cookie') ?? '').split(';')[0]!;
   const denied = await handleLaunch(req('/api/launch', { applicationKey: 'DOCENTE_OS' }, pair2), noEntitlementRuntime);
   assert.equal(denied.status, 403);
+});
+
+test('launch rejects a session after its bound alias is revoked or rebound', async () => {
+  const r = runtime();
+  const auth = await handleVerifyOtp(req('/api/auth/verify-otp', { email: 'teacher@example.test', otp: '123456' }), r);
+  const pair = (auth.headers.get('set-cookie') ?? '').split(';')[0]!;
+  const repo = r.identityRepository as InMemoryIdentityRepository;
+  repo.aliases[0]!.status = 'DISABLED';
+  const disabled = await handleLaunch(req('/api/launch', { applicationKey: 'DOCENTE_OS' }, pair), r);
+  assert.equal(disabled.status, 403);
+
+  repo.aliases[0]!.status = 'ACTIVE';
+  repo.aliases[0]!.providerSubject = 'subject-rebound';
+  const rebound = await handleLaunch(req('/api/launch', { applicationKey: 'DOCENTE_OS' }, pair), r);
+  assert.equal(rebound.status, 403);
 });
 
 test('every mutation rejects mismatched origin', async () => {
