@@ -44,10 +44,10 @@ export async function verifyPilotOtp(input: { repo: IdentityRepository; provider
   let verified;
   try {
     verified = await input.provider.verifyEmailOtp({ email, otp: input.otp });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : '';
-    if (message === 'OTP_EXPIRED') return { status: 'OTP_EXPIRED' };
-    if (message === 'PROVIDER_UNAVAILABLE') return { status: 'PROVIDER_UNAVAILABLE' };
+  } catch {
+    // Once the address-independent availability check has succeeded, every
+    // verification failure is publicized identically. Distinguishing expired,
+    // invalid, or transient provider failures here would reveal allowlist membership.
     return { status: 'OTP_INVALID' };
   }
   const resolution = await resolvePrincipalForVerifiedIdentity(input.repo, verified);
