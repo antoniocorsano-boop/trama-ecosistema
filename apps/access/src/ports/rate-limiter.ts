@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-export type RateLimitScope = 'OTP_REQUEST' | 'OTP_VERIFY' | 'OTP_VERIFY_GLOBAL';
+export type RateLimitScope = 'OTP_REQUEST' | 'OTP_REQUEST_GLOBAL' | 'OTP_VERIFY' | 'OTP_VERIFY_GLOBAL';
 export interface RateLimitDecision { allowed: boolean; remaining: number; resetAt: Date; }
 export interface RateLimiter {
   consume(input: { scope: RateLimitScope; keyDigest: string; now: Date }): Promise<RateLimitDecision>;
