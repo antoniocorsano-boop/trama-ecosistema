@@ -40,16 +40,19 @@ export async function verifyPilotOtp(input: { repo: IdentityRepository; provider
   let available = false;
   try { available = await input.provider.checkAvailability(); } catch { available = false; }
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
-  if (!(await isPilotAliasAllowed(input.repo, email))) return { status: 'OTP_INVALID' };
+
+  const allowed = await isPilotAliasAllowed(input.repo, email);
   let verified;
   try {
+    // Always execute provider verification after the address-independent health
+    // check, even for an unknown/not-allowed alias. Returning early before this
+    // remote operation would leave a repeatable response-time membership oracle.
     verified = await input.provider.verifyEmailOtp({ email, otp: input.otp });
   } catch {
-    // Once the address-independent availability check has succeeded, every
-    // verification failure is publicized identically. Distinguishing expired,
-    // invalid, or transient provider failures here would reveal allowlist membership.
     return { status: 'OTP_INVALID' };
   }
+  if (!allowed) return { status: 'OTP_INVALID' };
+
   const resolution = await resolvePrincipalForVerifiedIdentity(input.repo, verified);
   if (!resolution.ok) return { status: 'ACCESS_DENIED' };
   const { secret } = await issueAccessSession({
