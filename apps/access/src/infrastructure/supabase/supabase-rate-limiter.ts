@@ -9,7 +9,7 @@ const LIMITS: Record<RateLimitScope, number> = {
   OTP_VERIFY_GLOBAL: 20,
 };
 
-type RateLimitRow = { allowed: boolean; retry_after_seconds: number };
+type RateLimitRow = { allowed: boolean; remaining: number; reset_at: string };
 
 export class SupabaseRateLimiter implements RateLimiter {
   constructor(private readonly client: SupabaseRpcClientLike) {}
@@ -22,10 +22,15 @@ export class SupabaseRateLimiter implements RateLimiter {
       p_limit: LIMITS[input.scope],
       p_window_seconds: WINDOW_SECONDS,
     });
-    if (!row || typeof row.allowed !== 'boolean') throw new Error('ACCESS_STORE_UNAVAILABLE');
+    if (!row || typeof row.allowed !== 'boolean' || !Number.isFinite(Number(row.remaining)) || !row.reset_at) {
+      throw new Error('ACCESS_STORE_UNAVAILABLE');
+    }
+    const resetAt = new Date(row.reset_at);
+    if (Number.isNaN(resetAt.getTime())) throw new Error('ACCESS_STORE_UNAVAILABLE');
     return {
       allowed: row.allowed,
-      retryAfterSeconds: Math.max(0, Number(row.retry_after_seconds) || 0),
+      remaining: Math.max(0, Number(row.remaining)),
+      resetAt,
     };
   }
 }
