@@ -9,6 +9,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   otp: string;
   identities: Record<string, FakeIdentity>;
   requestCount = 0;
+  verifyCount = 0;
   available = true;
   requestFailure = false;
   verifyFailure: 'INVALID' | 'EXPIRED' | 'UNAVAILABLE' | null = null;
@@ -21,6 +22,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
     if (this.requestFailure) throw new Error('PROVIDER_UNAVAILABLE');
   }
   async verifyEmailOtp(input: { email: string; otp: string }): Promise<VerifiedExternalIdentity> {
+    this.verifyCount += 1;
     if (this.verifyFailure === 'UNAVAILABLE') throw new Error('PROVIDER_UNAVAILABLE');
     if (this.verifyFailure === 'EXPIRED') throw new Error('OTP_EXPIRED');
     if (this.verifyFailure === 'INVALID' || input.otp !== this.otp) throw new Error('OTP_INVALID');
