@@ -58,9 +58,33 @@ export function validatePhase2Snapshot({ files, changedFiles = [] }) {
     if (/\blocalStorage\b/.test(source) && /(?:token|session|auth|bearer|jwt)/i.test(source)) {
       errors.push(`${file}: localStorage must not carry Access authentication/session material`);
     }
-    if (/magic\s*link/i.test(source)) {
-      errors.push(`${file}: Magic Link is outside the approved OTP-only Phase 2 runtime`);
+    if (/shouldCreateUser\s*:\s*true/i.test(source) || /\.auth\.signUp\s*\(/.test(source)) {
+      errors.push(`${file}: Magic Link pilot must remain fail-closed with shouldCreateUser:false and no runtime auto-signup`);
     }
+    if (/(?:Codice OTP|Verifica codice|Invia codice)/i.test(source)) {
+      errors.push(`${file}: numeric OTP user flow is superseded by the approved Magic Link pilot`);
+    }
+  }
+
+  const magicProvider = files['apps/access/src/infrastructure/supabase/supabase-auth-provider.ts'];
+  if (magicProvider) {
+    if (!/requestEmailMagicLink/.test(magicProvider) || !/shouldCreateUser\s*:\s*false/.test(magicProvider) || !/emailRedirectTo/.test(magicProvider)) {
+      errors.push('apps/access/src/infrastructure/supabase/supabase-auth-provider.ts: Magic Link request must pin shouldCreateUser:false and an explicit emailRedirectTo');
+    }
+  }
+
+  const magicRequestHandler = files['apps/access/src/server/handlers/request-magic-link.ts'];
+  if (magicRequestHandler) {
+    if (!/runtime\.config\.origin/.test(magicRequestHandler)) {
+      errors.push('apps/access/src/server/handlers/request-magic-link.ts: Magic Link redirect must derive from configured Access origin');
+    }
+    if (/request\.headers|headers\s*\(|x-forwarded-host|x-forwarded-proto/i.test(magicRequestHandler)) {
+      errors.push('apps/access/src/server/handlers/request-magic-link.ts: request headers must not control the Magic Link redirect origin');
+    }
+  }
+
+  for (const file of ['apps/access/app/api/auth/request-otp/route.ts', 'apps/access/app/api/auth/verify-otp/route.ts']) {
+    if (files[file]) errors.push(`${file}: numeric OTP route is superseded by the approved Magic Link pilot`);
   }
 
   const registry = files['apps/access/src/config/application-registry.ts'];
