@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { provisionTask11Pilot } from '../scripts/provision-task11-pilot.ts';
+import { createLiveTask11ProvisioningDeps, provisionTask11Pilot } from '../scripts/provision-task11-pilot.ts';
 
 type User = { id: string; email?: string | null };
 
@@ -49,6 +49,23 @@ test('Task 11 provisioning refuses zero or multiple pilot emails before mutation
     assert.deepEqual(h.order, []);
     assert.deepEqual(h.counts(), { createCount: 0, provisionCount: 0 });
   }
+});
+
+test('live Task 11 provisioning rejects non-https Supabase URL before any request', () => {
+  let fetchCount = 0;
+  const fetchImpl: typeof fetch = async () => {
+    fetchCount += 1;
+    return new Response('{}', { status: 200, headers: { 'content-type': 'application/json' } });
+  };
+  assert.throws(
+    () => createLiveTask11ProvisioningDeps({
+      url: 'http://project-ref.supabase.co',
+      secretKey: 'sb_secret_test_value_that_must_never_escape',
+      fetchImpl,
+    }),
+    /SUPABASE_URL_INVALID/,
+  );
+  assert.equal(fetchCount, 0);
 });
 
 test('Task 11 provisioning rejects any provider project that already contains another user', async () => {
