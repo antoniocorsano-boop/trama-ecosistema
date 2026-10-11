@@ -157,9 +157,11 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
       }
 
       const token = accessToken(payload);
-      const identity = providerIdentity(this.issuer, payload);
-      if (token) await this.logoutTransientSession(token, input.signal);
-      return identity;
+      try {
+        return providerIdentity(this.issuer, payload);
+      } finally {
+        if (token) await this.logoutTransientSession(token, input.signal);
+      }
     } catch (error) {
       if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
       if (error instanceof Error && error.message === 'PROVIDER_IDENTITY_INVALID') throw error;
