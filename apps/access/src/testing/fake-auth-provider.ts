@@ -23,7 +23,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   lastMagicLinkRedirectTo: string | null = null;
   lastMagicLinkEmail: string | null = null;
 
-  constructor(seed: { issuer: string; subject: string; email: string; identities?: Record<string, FakeIdentity> }) {
+  constructor(seed: { issuer: string; subject: string; email: string; identities?: Record<string, FakeIdentity>; otp?: string }) {
     this.issuer = seed.issuer;
     this.subject = seed.subject;
     this.email = seed.email;
