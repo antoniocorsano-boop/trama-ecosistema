@@ -89,7 +89,13 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
       const result = 'code' in input && typeof input.code === 'string'
         ? await client.auth.exchangeCodeForSession(input.code)
         : await client.auth.verifyOtp({ token_hash: input.tokenHash, type: input.type });
-      return reduceVerifiedIdentity(this.issuer, result);
+      const identity = reduceVerifiedIdentity(this.issuer, result);
+      try {
+        await client.auth.signOut();
+      } catch {
+        // Provider session cleanup is best-effort; TRAMA never persists provider tokens/session state.
+      }
+      return identity;
     } catch (error) {
       if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
       if (error instanceof Error && error.message === 'PROVIDER_IDENTITY_INVALID') throw error;
@@ -97,7 +103,7 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
     }
   }
 
-  // Transitional OTP methods retained until Task 3 migrates all domain consumers.
+  // Transitional OTP methods retained for historical regression coverage only; no public route exposes them.
   async requestEmailOtp(input: { email: string; signal: AbortSignal }): Promise<void> {
     const client = this.createClientForSignal(input.signal);
     throwIfAborted(input.signal);
