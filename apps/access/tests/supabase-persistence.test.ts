@@ -128,12 +128,12 @@ test('Supabase session store persists the existing digest only and round-trips g
   await store.create({
     sessionDigest: 'digest-only', principalId: 'principal-1', contextId: 'context-1', aliasId: 'alias-1',
     providerIssuer: 'https://project.supabase.co/auth/v1', providerSubject: 'subject-1', createdAt: now,
-    absoluteExpiresAt: new Date(now.getTime() + 28_800_000), authMethod: 'EMAIL_OTP', lastEntitlementCheckAt: now,
+    absoluteExpiresAt: new Date(now.getTime() + 28_800_000), authMethod: 'EMAIL_MAGIC_LINK', lastEntitlementCheckAt: now,
   });
   assert.equal(JSON.stringify([...shared.sessions.values()]).includes('raw-session-secret'), false);
   const found = await store.findByDigest('digest-only');
   assert.equal(found?.sessionDigest, 'digest-only');
-  assert.equal(found?.authMethod, 'EMAIL_OTP');
+  assert.equal(found?.authMethod, 'EMAIL_MAGIC_LINK');
   await store.revoke('digest-only', new Date(now.getTime() + 1000));
   assert.ok((await store.findByDigest('digest-only'))?.revokedAt instanceof Date);
 });
