@@ -10,6 +10,7 @@ function sleep(ms: number): Promise<void> {
 }
 
 const redirectTo = 'https://access.example.test/auth/confirm';
+const codeVerifier = 'v'.repeat(43);
 
 function fixture() {
   const repo = new InMemoryIdentityRepository({
@@ -24,9 +25,9 @@ function fixture() {
 
 test('allowed and unknown email return same neutral Magic Link request result', async () => {
   const f = fixture();
-  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, codeVerifier }), { status: 'MAGIC_LINK_REQUESTED' });
   assert.equal(f.provider.requestCount, 1);
-  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'nobody@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'nobody@example.test', redirectTo, codeVerifier }), { status: 'MAGIC_LINK_REQUESTED' });
   assert.equal(f.provider.requestCount, 1);
 });
 
@@ -36,14 +37,14 @@ test('request path uses the same public response floor without sending to unknow
   const allowed = fixture();
   allowed.provider.requestDelayMs = 40;
   const allowedStarted = performance.now();
-  assert.deepEqual(await requestPilotMagicLink({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', redirectTo, codeVerifier, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const allowedElapsed = performance.now() - allowedStarted;
   assert.equal(allowed.provider.requestCount, 1);
 
   const unknown = fixture();
   unknown.provider.requestDelayMs = 40;
   const unknownStarted = performance.now();
-  assert.deepEqual(await requestPilotMagicLink({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', redirectTo, codeVerifier, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const unknownElapsed = performance.now() - unknownStarted;
   assert.equal(unknown.provider.requestCount, 0);
 
@@ -63,7 +64,7 @@ test('request timing budget includes the membership-sensitive alias lookup', asy
   };
   allowed.provider.requestDelayMs = 120;
   const allowedStarted = performance.now();
-  assert.deepEqual(await requestPilotMagicLink({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', redirectTo, codeVerifier, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const allowedElapsed = performance.now() - allowedStarted;
 
   const unknown = fixture();
@@ -74,7 +75,7 @@ test('request timing budget includes the membership-sensitive alias lookup', asy
   };
   unknown.provider.requestDelayMs = 120;
   const unknownStarted = performance.now();
-  assert.deepEqual(await requestPilotMagicLink({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', redirectTo, codeVerifier, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const unknownElapsed = performance.now() - unknownStarted;
 
   assert.equal(allowed.provider.requestCount, 1);
@@ -89,7 +90,7 @@ test('provider send is actually aborted when the request budget expires', async 
   f.provider.requestDelayMs = 200;
   const timing = { providerBudgetMs: 40, publicFloorMs: 70 };
 
-  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, codeVerifier, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   assert.equal(f.provider.requestCount, 1);
   await sleep(180);
   assert.equal(f.provider.requestAbortCount, 1);
@@ -103,7 +104,7 @@ test('synchronous provider send failure remains neutral', async () => {
   };
   const timing = { providerBudgetMs: 30, publicFloorMs: 50 };
   assert.deepEqual(
-    await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, timing }),
+    await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, codeVerifier, timing }),
     { status: 'MAGIC_LINK_REQUESTED' },
   );
 });
@@ -111,14 +112,14 @@ test('synchronous provider send failure remains neutral', async () => {
 test('send-time provider failure remains neutral to avoid allowlist enumeration', async () => {
   const f = fixture();
   f.provider.requestFailure = true;
-  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
-  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'nobody@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, codeVerifier }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'nobody@example.test', redirectTo, codeVerifier }), { status: 'MAGIC_LINK_REQUESTED' });
 });
 
 test('invalid Magic Link callback creates no local session', async () => {
   const f = fixture();
   f.provider.verifyFailure = 'INVALID';
-  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'invalid' }, now: new Date(), verifyProviderBudgetMs: 50 });
+  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'invalid', codeVerifier }, now: new Date(), verifyProviderBudgetMs: 50 });
   assert.deepEqual(result, { status: 'MAGIC_LINK_INVALID' });
   assert.equal(f.store.records.length, 0);
 });
@@ -127,7 +128,7 @@ test('provider verification is bounded and actually aborted', async () => {
   const f = fixture();
   f.provider.verifyDelayMs = 200;
   const result = await Promise.race([
-    verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'slow' }, now: new Date(), verifyProviderBudgetMs: 40 }),
+    verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'slow', codeVerifier }, now: new Date(), verifyProviderBudgetMs: 40 }),
     sleep(200).then(() => ({ status: 'TEST_TIMEOUT' as const })),
   ]);
   assert.deepEqual(result, { status: 'MAGIC_LINK_INVALID' });
@@ -138,15 +139,15 @@ test('provider verification is bounded and actually aborted', async () => {
 test('provider callback failures map to neutral invalid-link result after a healthy availability check', async () => {
   const f = fixture();
   f.provider.verifyFailure = 'UNAVAILABLE';
-  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'provider-failed' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'MAGIC_LINK_INVALID' });
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'provider-failed', codeVerifier }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'MAGIC_LINK_INVALID' });
   f.provider.verifyFailure = 'EXPIRED';
-  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'expired' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'MAGIC_LINK_INVALID' });
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'expired', codeVerifier }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'MAGIC_LINK_INVALID' });
   assert.equal(f.store.records.length, 0);
 });
 
 test('valid Magic Link and exact governed binding with entitlement creates access session', async () => {
   const f = fixture();
-  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid' }, now: new Date('2026-10-11T10:00:00Z') });
+  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid', codeVerifier }, now: new Date('2026-10-11T10:00:00Z') });
   assert.equal(result.status, 'AUTHENTICATED');
   if (result.status === 'AUTHENTICATED') assert.equal(result.principalId, 'p1');
   assert.equal(f.store.records.length, 1);
@@ -155,7 +156,7 @@ test('valid Magic Link and exact governed binding with entitlement creates acces
 test('unbound provider subject creates no session and logs provider out', async () => {
   const f = fixture();
   f.provider.subject = 'subject-other';
-  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'ACCESS_DENIED' });
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid', codeVerifier }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'ACCESS_DENIED' });
   assert.equal(f.store.records.length, 0);
   assert.equal(f.provider.logoutCount, 1);
 });
@@ -163,6 +164,6 @@ test('unbound provider subject creates no session and logs provider out', async 
 test('verified email mismatch fails closed without email-based linking', async () => {
   const f = fixture();
   f.provider.email = 'other@example.test';
-  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'ACCESS_DENIED' });
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid', codeVerifier }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'ACCESS_DENIED' });
   assert.equal(f.store.records.length, 0);
 });
