@@ -10,7 +10,7 @@ on:
       - '.github/workflows/trama-access.yml'
       - '.github/workflows/governance.yml'
 permissions:
-  contents: read
+  contents: write
 jobs:
   phase2:
     runs-on: ubuntu-latest
@@ -44,29 +44,15 @@ jobs:
         run: node scripts/test-trama-access-phase2-validator.mjs
       - name: Validate Phase 2 branch scope and runtime invariants
         run: node scripts/validate-trama-access-phase2.mjs --base origin/main
-      - name: Prepare Task 9 generated artifacts
+      - name: Materialize dependency lock on the phase branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/phase/access-01-phase-2-trama-access-runtime'
         run: |
-          mkdir -p _generated
-          cp apps/access/package-lock.json _generated/package-lock.json
-          python3 - <<'PY'
-          from pathlib import Path
-          source = Path('.github/workflows/governance.yml').read_text()
-          needle = '      - {name: Test ACCESS-01 professional identity contract adversarial cases, run: node scripts/test-trama-professional-identity-contract-validator.mjs}\n'
-          addition = (
-              needle
-              + '      - {name: Validate ACCESS-01 Phase 2 runtime invariants, run: node scripts/validate-trama-access-phase2.mjs}\n'
-              + '      - {name: Test ACCESS-01 Phase 2 validator adversarial cases, run: node scripts/test-trama-access-phase2-validator.mjs}\n'
-          )
-          if source.count(needle) != 1:
-              raise SystemExit('Phase 1 Governance anchor missing or ambiguous')
-          Path('_generated/governance.yml').write_text(source.replace(needle, addition, 1))
-          PY
-      - name: Upload Task 9 generated artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: access-phase2-task9-generated
-          path: |
-            _generated/package-lock.json
-            _generated/governance.yml
-          if-no-files-found: error
-          retention-days: 1
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add apps/access/package-lock.json
+          if git diff --cached --quiet; then
+            echo 'package-lock already committed'
+          else
+            git commit -m 'ci(access): lock phase 2 dependencies'
+            git push origin HEAD:phase/access-01-phase-2-trama-access-runtime
+          fi
