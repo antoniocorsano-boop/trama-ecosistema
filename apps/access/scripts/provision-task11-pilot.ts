@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { createSupabaseServerClient } from '../src/infrastructure/supabase/supabase-client.ts';
 import { SupabaseIdentityRepository } from '../src/infrastructure/supabase/supabase-identity-repository.ts';
-import { runAccessRpc, type SupabaseRpcClientLike } from '../src/infrastructure/supabase/supabase-rpc.ts';
+import { runAccessRpc } from '../src/infrastructure/supabase/supabase-rpc.ts';
 
 type ProviderUser = { id: string; email?: string | null };
 type GovernedAlias = { providerIssuer: string; providerSubject: string };
@@ -102,26 +102,67 @@ function requiredEnv(name: string): string {
   return value;
 }
 
-export function createLiveTask11ProvisioningDeps(input: { url: string; secretKey: string }): Task11ProvisioningDeps {
-  const client = createSupabaseServerClient(input);
-  const repository = new SupabaseIdentityRepository(client as unknown as SupabaseRpcClientLike);
+async function adminRequest<T>(input: {
+  url: string;
+  secretKey: string;
+  fetchImpl: typeof fetch;
+  path: string;
+  method: 'GET' | 'POST';
+  body?: unknown;
+}): Promise<T> {
+  const response = await input.fetchImpl(`${input.url.replace(/\/$/, '')}${input.path}`, {
+    method: input.method,
+    headers: {
+      apikey: input.secretKey,
+      Accept: 'application/json',
+      ...(input.body === undefined ? {} : { 'Content-Type': 'application/json' }),
+    },
+    ...(input.body === undefined ? {} : { body: JSON.stringify(input.body) }),
+    cache: 'no-store',
+  });
+  if (!response.ok) throw new Error('PROVIDER_ADMIN_UNAVAILABLE');
+  return await response.json() as T;
+}
+
+export function createLiveTask11ProvisioningDeps(input: {
+  url: string;
+  secretKey: string;
+  fetchImpl?: typeof fetch;
+}): Task11ProvisioningDeps {
+  const fetchImpl = input.fetchImpl ?? fetch;
+  const client = createSupabaseServerClient({ ...input, fetchImpl });
+  const repository = new SupabaseIdentityRepository(client);
   return {
     async listProviderUsers() {
-      const { data, error } = await client.auth.admin.listUsers({ page: 1, perPage: 2 });
-      if (error) throw new Error('PROVIDER_ADMIN_UNAVAILABLE');
+      const data = await adminRequest<{ users?: ProviderUser[] }>({
+        url: input.url,
+        secretKey: input.secretKey,
+        fetchImpl,
+        path: '/auth/v1/admin/users?page=1&per_page=2',
+        method: 'GET',
+      });
+      if (!Array.isArray(data.users)) throw new Error('PROVIDER_ADMIN_UNAVAILABLE');
       return data.users.map((user) => ({ id: user.id, email: user.email }));
     },
     async createProviderUser(email: string) {
-      const { data, error } = await client.auth.admin.createUser({ email, email_confirm: true });
-      if (error || !data.user?.id) throw new Error('PROVIDER_USER_CREATE_FAILED');
-      return { id: data.user.id, email: data.user.email };
+      const data = await adminRequest<ProviderUser | { user?: ProviderUser }>({
+        url: input.url,
+        secretKey: input.secretKey,
+        fetchImpl,
+        path: '/auth/v1/admin/users',
+        method: 'POST',
+        body: { email, email_confirm: true },
+      });
+      const user = 'user' in data ? data.user : data;
+      if (!user?.id) throw new Error('PROVIDER_USER_CREATE_FAILED');
+      return { id: user.id, email: user.email };
     },
     async findGovernedAlias(email: string) {
       const alias = await repository.findAliasByEmail(email);
       return alias ? { providerIssuer: alias.providerIssuer, providerSubject: alias.providerSubject } : null;
     },
     async provisionGovernedPilot(governed) {
-      await runAccessRpc<null>(client as unknown as SupabaseRpcClientLike, 'access_provision_pilot', {
+      await runAccessRpc<null>(client, 'access_provision_pilot', {
         p_principal_id: randomUUID(),
         p_alias_id: randomUUID(),
         p_context_id: randomUUID(),
