@@ -1,192 +1,158 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { SupabaseAuthProvider } from '../src/infrastructure/supabase/supabase-auth-provider.ts';
 
-type SignalClient = {
-  auth: {
-    signInWithOtp(input: { email: string; options: { shouldCreateUser: boolean; emailRedirectTo: string } }): Promise<{ data: unknown; error: null | { message: string } }>;
-    exchangeCodeForSession(code: string): Promise<{
-      data: { user: null | { id: string; email?: string | null }; session?: { access_token?: string; refresh_token?: string } | null };
-      error: null | { message: string };
-    }>;
-    verifyOtp(input: { token_hash: string; type: 'email' | 'magiclink' | 'signup' | 'invite' | 'recovery' | 'email_change' }): Promise<{
-      data: { user: null | { id: string; email?: string | null }; session?: { access_token?: string; refresh_token?: string } | null };
-      error: null | { message: string };
-    }>;
-    signOut(): Promise<{ error: null | { message: string } }>;
-  };
-};
+const projectUrl = 'https://project-ref.supabase.co';
+const issuer = `${projectUrl}/auth/v1`;
+const publishableKey = 'sb_publishable_test_only';
+const verifier = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
 
-function providerWith(factory: (signal: AbortSignal) => SignalClient) {
+function challenge(value: string): string {
+  return createHash('sha256').update(value).digest('base64url');
+}
+
+function providerWith(fetchImpl: typeof fetch) {
   return new SupabaseAuthProvider({
-    issuer: 'https://project-ref.supabase.co/auth/v1',
-    createClientForSignal: factory,
+    issuer,
+    projectUrl,
+    publishableKey,
+    fetchImpl,
     availabilityProbe: async () => true,
   });
 }
 
-test('SupabaseAuthProvider requests Magic Link with redirect and shouldCreateUser false', async () => {
-  let captured: unknown;
-  const provider = providerWith(() => ({
-    auth: {
-      async signInWithOtp(input) { captured = input; return { data: { user: null, session: null }, error: null }; },
-      async exchangeCodeForSession() { throw new Error('unused'); },
-      async verifyOtp() { throw new Error('unused'); },
-      async signOut() { return { error: null }; },
-    },
-  }));
+test('SupabaseAuthProvider requests default-template Magic Link as PKCE with create_user false', async () => {
+  let capturedUrl = '';
+  let capturedInit: RequestInit | undefined;
+  const provider = providerWith(async (input, init) => {
+    capturedUrl = String(input);
+    capturedInit = init;
+    return new Response('{}', { status: 200, headers: { 'content-type': 'application/json' } });
+  });
 
   await provider.requestEmailMagicLink({
     email: 'pilot@example.test',
     redirectTo: 'https://access.example.test/auth/confirm',
+    codeVerifier: verifier,
     signal: new AbortController().signal,
   });
-  assert.deepEqual(captured, {
-    email: 'pilot@example.test',
-    options: {
-      shouldCreateUser: false,
-      emailRedirectTo: 'https://access.example.test/auth/confirm',
-    },
-  });
+
+  const url = new URL(capturedUrl);
+  assert.equal(url.origin + url.pathname, `${projectUrl}/auth/v1/otp`);
+  assert.equal(url.searchParams.get('redirect_to'), 'https://access.example.test/auth/confirm');
+  const headers = new Headers(capturedInit?.headers);
+  assert.equal(headers.get('apikey'), publishableKey);
+  assert.equal(headers.has('authorization'), false, 'publishable request must not invent a provider session bearer');
+  const body = JSON.parse(String(capturedInit?.body));
+  assert.equal(body.email, 'pilot@example.test');
+  assert.equal(body.create_user, false);
+  assert.equal(body.code_challenge_method, 's256');
+  assert.equal(body.code_challenge, challenge(verifier));
 });
 
-test('SupabaseAuthProvider verifies PKCE code and reduces provider payload to governed identity', async () => {
-  const provider = providerWith(() => ({
-    auth: {
-      async signInWithOtp() { throw new Error('unused'); },
-      async exchangeCodeForSession(code) {
-        assert.equal(code, 'pkce-code');
-        return {
-          data: {
-            user: { id: 'provider-subject-1', email: 'pilot@example.test' },
-            session: { access_token: 'access-secret', refresh_token: 'refresh-secret' },
-          },
-          error: null,
-        };
-      },
-      async verifyOtp() { throw new Error('unused'); },
-      async signOut() { return { error: null }; },
-    },
-  }));
-
-  const result = await provider.verifyEmailMagicLink({ code: 'pkce-code', signal: new AbortController().signal });
-  assert.deepEqual(result, {
-    issuer: 'https://project-ref.supabase.co/auth/v1',
-    subject: 'provider-subject-1',
-    verifiedEmail: 'pilot@example.test',
+test('SupabaseAuthProvider exchanges PKCE auth code with the exact verifier and clears transient provider session', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const provider = providerWith(async (input, init) => {
+    const url = String(input);
+    calls.push({ url, init });
+    if (url.includes('/token?grant_type=pkce')) {
+      return new Response(JSON.stringify({
+        access_token: 'access-secret',
+        refresh_token: 'refresh-secret',
+        user: { id: 'provider-subject-1', email: 'pilot@example.test' },
+      }), { status: 200, headers: { 'content-type': 'application/json' } });
+    }
+    if (url.includes('/logout')) return new Response(null, { status: 204 });
+    throw new Error(`unexpected request ${url}`);
   });
+
+  const result = await provider.verifyEmailMagicLink({
+    code: '009e5066-fc11-4eca-8c8c-6fd82aa263f2',
+    codeVerifier: verifier,
+    signal: new AbortController().signal,
+  });
+
+  assert.deepEqual(result, { issuer, subject: 'provider-subject-1', verifiedEmail: 'pilot@example.test' });
+  const exchange = calls.find((call) => call.url.includes('/token?grant_type=pkce'));
+  assert.ok(exchange);
+  assert.deepEqual(JSON.parse(String(exchange.init?.body)), {
+    auth_code: '009e5066-fc11-4eca-8c8c-6fd82aa263f2',
+    code_verifier: verifier,
+  });
+  const logout = calls.find((call) => call.url.includes('/logout'));
+  assert.ok(logout, 'transient Supabase session must be revoked best-effort after identity reduction');
+  const logoutHeaders = new Headers(logout.init?.headers);
+  assert.equal(logoutHeaders.get('authorization'), 'Bearer access-secret');
+  assert.equal(logoutHeaders.get('apikey'), publishableKey);
   assert.equal(JSON.stringify(result).includes('access-secret'), false);
   assert.equal(JSON.stringify(result).includes('refresh-secret'), false);
 });
 
-test('SupabaseAuthProvider verifies token hash callback and reduces provider payload to governed identity', async () => {
-  const provider = providerWith(() => ({
-    auth: {
-      async signInWithOtp() { throw new Error('unused'); },
-      async exchangeCodeForSession() { throw new Error('unused'); },
-      async verifyOtp(input) {
-        assert.deepEqual(input, { token_hash: 'token-hash', type: 'magiclink' });
-        return {
-          data: {
-            user: { id: 'provider-subject-2', email: 'pilot@example.test' },
-            session: { access_token: 'must-not-leak' },
-          },
-          error: null,
-        };
-      },
-      async signOut() { return { error: null }; },
-    },
-  }));
+test('SupabaseAuthProvider verifies token hash and clears returned transient provider session', async () => {
+  const calls: string[] = [];
+  const provider = providerWith(async (input, init) => {
+    const url = String(input);
+    calls.push(url);
+    if (url.endsWith('/auth/v1/verify')) {
+      assert.deepEqual(JSON.parse(String(init?.body)), { token_hash: 'token-hash', type: 'email' });
+      return new Response(JSON.stringify({
+        access_token: 'token-hash-access',
+        user: { id: 'provider-subject-2', email: 'pilot@example.test' },
+      }), { status: 200, headers: { 'content-type': 'application/json' } });
+    }
+    if (url.includes('/logout')) return new Response(null, { status: 204 });
+    throw new Error(`unexpected request ${url}`);
+  });
 
   const result = await provider.verifyEmailMagicLink({
     tokenHash: 'token-hash',
-    type: 'magiclink',
+    type: 'email',
     signal: new AbortController().signal,
   });
-  assert.deepEqual(result, {
-    issuer: 'https://project-ref.supabase.co/auth/v1',
-    subject: 'provider-subject-2',
-    verifiedEmail: 'pilot@example.test',
-  });
-  assert.equal(JSON.stringify(result).includes('must-not-leak'), false);
-});
-
-test('SupabaseAuthProvider clears the transient provider session on the same callback client', async () => {
-  let signOutCount = 0;
-  const provider = providerWith(() => ({
-    auth: {
-      async signInWithOtp() { throw new Error('unused'); },
-      async exchangeCodeForSession() {
-        return {
-          data: {
-            user: { id: 'provider-subject-3', email: 'pilot@example.test' },
-            session: { access_token: 'transient-only', refresh_token: 'transient-refresh' },
-          },
-          error: null,
-        };
-      },
-      async verifyOtp() { throw new Error('unused'); },
-      async signOut() { signOutCount += 1; return { error: null }; },
-    },
-  }));
-
-  await provider.verifyEmailMagicLink({ code: 'pkce-code', signal: new AbortController().signal });
-  assert.equal(signOutCount, 1, 'verified provider session must be cleared before returning governed identity');
+  assert.deepEqual(result, { issuer, subject: 'provider-subject-2', verifiedEmail: 'pilot@example.test' });
+  assert.equal(calls.filter((url) => url.includes('/logout')).length, 1);
 });
 
 test('SupabaseAuthProvider fails closed when callback returns no user', async () => {
-  const provider = providerWith(() => ({
-    auth: {
-      async signInWithOtp() { throw new Error('unused'); },
-      async exchangeCodeForSession() { return { data: { user: null, session: null }, error: null }; },
-      async verifyOtp() { throw new Error('unused'); },
-      async signOut() { return { error: null }; },
-    },
-  }));
+  const provider = providerWith(async (input) => {
+    const url = String(input);
+    if (url.includes('/token?grant_type=pkce')) {
+      return new Response(JSON.stringify({ access_token: 'transient', user: null }), { status: 200, headers: { 'content-type': 'application/json' } });
+    }
+    if (url.includes('/logout')) return new Response(null, { status: 204 });
+    throw new Error(`unexpected request ${url}`);
+  });
 
   await assert.rejects(
-    () => provider.verifyEmailMagicLink({ code: 'pkce-code', signal: new AbortController().signal }),
+    () => provider.verifyEmailMagicLink({ code: '009e5066-fc11-4eca-8c8c-6fd82aa263f2', codeVerifier: verifier, signal: new AbortController().signal }),
     /PROVIDER_IDENTITY_INVALID/,
   );
 });
 
 test('SupabaseAuthProvider maps request and callback failures to stable internal errors', async () => {
-  const provider = providerWith(() => ({
-    auth: {
-      async signInWithOtp() { return { data: null, error: { message: 'provider detail must not escape' } }; },
-      async exchangeCodeForSession() { return { data: { user: null, session: null }, error: { message: 'provider detail must not escape' } }; },
-      async verifyOtp() { return { data: { user: null, session: null }, error: { message: 'provider detail must not escape' } }; },
-      async signOut() { return { error: null }; },
-    },
-  }));
+  const provider = providerWith(async () => new Response(JSON.stringify({ message: 'provider detail must not escape' }), { status: 400, headers: { 'content-type': 'application/json' } }));
 
   await assert.rejects(
-    () => provider.requestEmailMagicLink({ email: 'pilot@example.test', redirectTo: 'https://access.example.test/auth/confirm', signal: new AbortController().signal }),
+    () => provider.requestEmailMagicLink({ email: 'pilot@example.test', redirectTo: 'https://access.example.test/auth/confirm', codeVerifier: verifier, signal: new AbortController().signal }),
     (error: Error) => error.message === 'PROVIDER_UNAVAILABLE',
   );
   await assert.rejects(
-    () => provider.verifyEmailMagicLink({ code: 'bad-code', signal: new AbortController().signal }),
+    () => provider.verifyEmailMagicLink({ code: '009e5066-fc11-4eca-8c8c-6fd82aa263f2', codeVerifier: verifier, signal: new AbortController().signal }),
     (error: Error) => error.message === 'MAGIC_LINK_INVALID',
   );
 });
 
-test('SupabaseAuthProvider supplies caller AbortSignal to request-scoped clients', async () => {
-  const seen: AbortSignal[] = [];
-  const provider = providerWith((signal) => {
-    seen.push(signal);
-    return {
-      auth: {
-        async signInWithOtp() { if (signal.aborted) throw new DOMException('Aborted', 'AbortError'); return { data: null, error: null }; },
-        async exchangeCodeForSession() { if (signal.aborted) throw new DOMException('Aborted', 'AbortError'); return { data: { user: { id: 'subject' }, session: null }, error: null }; },
-        async verifyOtp() { if (signal.aborted) throw new DOMException('Aborted', 'AbortError'); return { data: { user: { id: 'subject' }, session: null }, error: null }; },
-        async signOut() { return { error: null }; },
-      },
-    };
+test('SupabaseAuthProvider supplies caller AbortSignal directly to PKCE transport', async () => {
+  let fetchCount = 0;
+  const provider = providerWith(async (_input, init) => {
+    fetchCount += 1;
+    assert.equal(init?.signal?.aborted, true);
+    throw new DOMException('Aborted', 'AbortError');
   });
   const controller = new AbortController();
   controller.abort();
 
-  await assert.rejects(() => provider.requestEmailMagicLink({ email: 'pilot@example.test', redirectTo: 'https://access.example.test/auth/confirm', signal: controller.signal }));
-  assert.equal(seen.length, 1);
-  assert.equal(seen[0], controller.signal);
+  await assert.rejects(() => provider.requestEmailMagicLink({ email: 'pilot@example.test', redirectTo: 'https://access.example.test/auth/confirm', codeVerifier: verifier, signal: controller.signal }));
+  assert.equal(fetchCount, 0, 'already-aborted work must fail before network transport');
 });
