@@ -12,6 +12,7 @@ function sleep(ms: number): Promise<void> {
 }
 
 const redirectTo = 'https://access.example.test/auth/confirm';
+const codeVerifier = 'v'.repeat(43);
 
 function repository() {
   return new InMemoryIdentityRepository({
@@ -71,7 +72,7 @@ test('negative Magic Link authorization is padded to one common public deadline'
       repo: repository(),
       provider: callbackProvider(subject, delayMs),
       store: new InMemorySessionStore(),
-      callback: { code: 'valid-provider-code' },
+      callback: { code: 'valid-provider-code', codeVerifier },
       now: new Date(),
     });
     return { result, elapsed: performance.now() - started };
@@ -106,8 +107,8 @@ test('provider availability is bounded and aborted in both Magic Link request an
     async verifyEmailMagicLink(): Promise<VerifiedExternalIdentity> { throw new Error('VERIFY_MUST_NOT_RUN_AFTER_AVAILABILITY_TIMEOUT'); },
   };
 
-  const request = requestPilotMagicLink({ repo: repository(), provider, email: 'teacher@example.test', redirectTo });
-  const verify = verifyPilotMagicLink({ repo: repository(), provider, store: new InMemorySessionStore(), callback: { code: 'valid-provider-code' }, now: new Date() });
+  const request = requestPilotMagicLink({ repo: repository(), provider, email: 'teacher@example.test', redirectTo, codeVerifier });
+  const verify = verifyPilotMagicLink({ repo: repository(), provider, store: new InMemorySessionStore(), callback: { code: 'valid-provider-code', codeVerifier }, now: new Date() });
 
   const result = await Promise.race([
     Promise.all([request, verify]),
@@ -151,7 +152,7 @@ test('request alias lookup is bounded and aborted by the shared provider deadlin
   };
 
   const result = await Promise.race([
-    requestPilotMagicLink({ repo, provider, email: 'teacher@example.test', redirectTo, timing: { providerBudgetMs: 30, publicFloorMs: 60 } }),
+    requestPilotMagicLink({ repo, provider, email: 'teacher@example.test', redirectTo, codeVerifier, timing: { providerBudgetMs: 30, publicFloorMs: 60 } }),
     sleep(150).then(() => 'TEST_TIMEOUT' as const),
   ]);
 
