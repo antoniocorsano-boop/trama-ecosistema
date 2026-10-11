@@ -55,8 +55,6 @@ function abortableDelay(ms: number, signal: AbortSignal): Promise<void> {
 function callbackProvider(subject: string, delayMs = 0): AuthProviderAdapter {
   return {
     async checkAvailability() { return true; },
-    async requestEmailOtp() { throw new Error('legacy-unused'); },
-    async verifyEmailOtp(): Promise<VerifiedExternalIdentity> { throw new Error('legacy-unused'); },
     async requestEmailMagicLink() {},
     async verifyEmailMagicLink(input): Promise<VerifiedExternalIdentity> {
       if (delayMs) await abortableDelay(delayMs, input.signal);
@@ -104,8 +102,6 @@ test('provider availability is bounded and aborted in both Magic Link request an
         else input.signal.addEventListener('abort', onAbort, { once: true });
       });
     },
-    async requestEmailOtp() { throw new Error('legacy-unused'); },
-    async verifyEmailOtp(): Promise<VerifiedExternalIdentity> { throw new Error('legacy-unused'); },
     async requestEmailMagicLink() { throw new Error('REQUEST_MUST_NOT_RUN_AFTER_AVAILABILITY_TIMEOUT'); },
     async verifyEmailMagicLink(): Promise<VerifiedExternalIdentity> { throw new Error('VERIFY_MUST_NOT_RUN_AFTER_AVAILABILITY_TIMEOUT'); },
   };
@@ -150,8 +146,6 @@ test('request alias lookup is bounded and aborted by the shared provider deadlin
   };
   const provider: AuthProviderAdapter = {
     async checkAvailability() { return true; },
-    async requestEmailOtp() { throw new Error('legacy-unused'); },
-    async verifyEmailOtp(): Promise<VerifiedExternalIdentity> { throw new Error('legacy-unused'); },
     async requestEmailMagicLink() { throw new Error('REQUEST_MUST_NOT_RUN_AFTER_ALIAS_LOOKUP_TIMEOUT'); },
     async verifyEmailMagicLink(): Promise<VerifiedExternalIdentity> { throw new Error('VERIFY_MUST_NOT_RUN'); },
   };
