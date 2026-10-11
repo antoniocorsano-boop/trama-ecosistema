@@ -56,8 +56,6 @@ test('rotating email addresses cannot exceed the shared Magic Link request-work 
       availabilityCount += 1;
       return true;
     },
-    async requestEmailOtp() { throw new Error('legacy-unused'); },
-    async verifyEmailOtp(): Promise<VerifiedExternalIdentity> { throw new Error('legacy-unused'); },
     async requestEmailMagicLink() {
       throw new Error('SEND_MUST_NOT_RUN_FOR_UNKNOWN_ALIAS');
     },
