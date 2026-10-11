@@ -42,7 +42,7 @@ test('wrong OTP and provider unavailable are non-technical', async ({ page }) =>
 });
 
 test('invalid existing session is presented as expired and logout clears a valid session', async ({ page, context }) => {
-  await context.addCookies([{ name: '__Host-trama_access_session', value: 'invalid', url: 'http://localhost:3100', httpOnly: true, secure: true, sameSite: 'Lax' }]);
+  await context.addCookies([{ name: '__Host-trama_access_session', value: 'invalid', url: 'https://localhost:3100', httpOnly: true, secure: true, sameSite: 'Lax' }]);
   await page.goto('/');
   await expect(page.getByText('La sessione è scaduta. Accedi di nuovo.')).toBeVisible();
   await context.clearCookies();
