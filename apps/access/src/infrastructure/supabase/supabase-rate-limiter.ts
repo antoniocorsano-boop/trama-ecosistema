@@ -18,7 +18,6 @@ export class SupabaseRateLimiter implements RateLimiter {
     const row = await runAccessRpc<RateLimitRow>(this.client, 'access_rate_limit_consume', {
       p_scope: input.scope,
       p_key_digest: input.keyDigest,
-      p_now: input.now.toISOString(),
       p_limit: LIMITS[input.scope],
       p_window_seconds: WINDOW_SECONDS,
     });
