@@ -74,23 +74,23 @@ The claim is intentionally durable: if an external provider mutation fails, retr
 - Provider users: exactly one pre-authorized pilot
 - Public deploy/federation: not authorized by Task 11
 
-## Implementation qualification before this evidence update
+## Exact-head qualification
 
-Implementation baseline: `2acb0f9ad6c38f0adc1d208ee9c95ec0a0155cc8`
+Exact head before this evidence-only qualification commit: `68354f28cb77baa90b528687131aeb816e997075`.
 
-Fresh checks on that exact implementation baseline:
+Fresh checks on that exact head:
 
-- TRAMA Access run `38172855553` / #262 — PASS
+- TRAMA Access run `38173042195` / #263 — PASS
   - unit tests — PASS
   - typecheck — PASS
   - build — PASS
   - Browser Certification — PASS
   - Phase 2 invariant-validator adversarial tests — PASS
   - Phase 2 branch/runtime invariant validation — PASS
-- Governance run `38172855579` / #2320 — PASS
-- TRAMA Gateway run `38172855502` / #351 — PASS
+- Governance run `38173042068` / #2321 — PASS
+- TRAMA Gateway run `38173042090` / #352 — PASS
 
-The documentation commit that contains this note requires its own exact-head qualification before independent review or provider mutation.
+The commit containing this evidence update must also be qualified before independent review or provider mutation.
 
 ## Canonical supporting documents
 
