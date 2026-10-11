@@ -7,7 +7,6 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   issuer: string;
   subject: string;
   email: string;
-  otp: string;
   identities: Record<string, FakeIdentity>;
   requestCount = 0;
   requestCompletionCount = 0;
@@ -24,11 +23,10 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   lastMagicLinkRedirectTo: string | null = null;
   lastMagicLinkEmail: string | null = null;
 
-  constructor(seed: { issuer: string; subject: string; email: string; otp: string; identities?: Record<string, FakeIdentity> }) {
+  constructor(seed: { issuer: string; subject: string; email: string; identities?: Record<string, FakeIdentity>; otp?: string }) {
     this.issuer = seed.issuer;
     this.subject = seed.subject;
     this.email = seed.email;
-    this.otp = seed.otp;
     this.identities = seed.identities ?? {};
   }
 
@@ -84,24 +82,5 @@ export class FakeAuthProvider implements AuthProviderAdapter {
 
   async bestEffortLogout(): Promise<void> {
     this.logoutCount += 1;
-  }
-
-  // Transitional OTP compatibility while Task 3 migrates domain consumers.
-  async requestEmailOtp(input: { email: string; signal: AbortSignal }): Promise<void> {
-    this.requestCount += 1;
-    await this.delayOrAbort({ signal: input.signal, delayMs: this.requestDelayMs, phase: 'request' });
-    if (this.requestFailure) throw new Error('PROVIDER_UNAVAILABLE');
-    this.requestCompletionCount += 1;
-  }
-
-  async verifyEmailOtp(input: { email: string; otp: string; signal: AbortSignal }): Promise<VerifiedExternalIdentity> {
-    this.verifyCount += 1;
-    await this.delayOrAbort({ signal: input.signal, delayMs: this.verifyDelayMs, phase: 'verify' });
-    if (this.verifyFailure === 'UNAVAILABLE') throw new Error('PROVIDER_UNAVAILABLE');
-    if (this.verifyFailure === 'EXPIRED') throw new Error('OTP_EXPIRED');
-    if (this.verifyFailure === 'INVALID' || input.otp !== this.otp) throw new Error('OTP_INVALID');
-    const identity = this.identities[input.email];
-    this.verifyCompletionCount += 1;
-    return { issuer: this.issuer, subject: identity?.subject ?? this.subject, verifiedEmail: identity?.email ?? this.email };
   }
 }
