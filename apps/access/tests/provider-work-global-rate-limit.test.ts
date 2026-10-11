@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { verifyPilotOtp } from '../src/domain/auth-service.ts';
+import type { AuthProviderAdapter } from '../src/ports/auth-provider.ts';
+import type { VerifiedExternalIdentity } from '../src/domain/types.ts';
+import { requestPilotOtp, verifyPilotOtp } from '../src/domain/auth-service.ts';
 import { InMemoryIdentityRepository } from '../src/testing/in-memory-identity-repository.ts';
 import { InMemoryRateLimiter } from '../src/testing/in-memory-rate-limiter.ts';
 import { InMemorySessionStore } from '../src/testing/in-memory-session-store.ts';
@@ -37,5 +39,43 @@ test('rotating email addresses cannot exceed the shared provider verification bu
     results.filter((result) => result.status === 'RATE_LIMITED').length,
     1,
     'the first attempt beyond the shared provider budget must be rejected before provider work',
+  );
+});
+
+test('rotating email addresses cannot exceed the shared provider request-work budget', async () => {
+  let availabilityCount = 0;
+  const provider: AuthProviderAdapter = {
+    async checkAvailability() {
+      availabilityCount += 1;
+      return true;
+    },
+    async requestEmailOtp() {
+      throw new Error('SEND_MUST_NOT_RUN_FOR_UNKNOWN_ALIAS');
+    },
+    async verifyEmailOtp(): Promise<VerifiedExternalIdentity> {
+      throw new Error('VERIFY_MUST_NOT_RUN');
+    },
+  };
+  const rateLimiter = new InMemoryRateLimiter();
+  const repo = new InMemoryIdentityRepository();
+  const now = new Date('2026-10-11T10:00:00Z');
+
+  const results = [];
+  for (let index = 0; index < 21; index += 1) {
+    results.push(await requestPilotOtp({
+      repo,
+      provider,
+      rateLimiter,
+      email: `request-rotating-${index}@example.test`,
+      now,
+      timing: { providerBudgetMs: 2, publicFloorMs: 5 },
+    }));
+  }
+
+  assert.equal(availabilityCount, 20, 'provider request work must have a global cap across rotating email keys');
+  assert.equal(
+    results.filter((result) => result.status === 'OTP_REQUESTED').length,
+    21,
+    'request throttling must preserve the neutral public request result',
   );
 });
