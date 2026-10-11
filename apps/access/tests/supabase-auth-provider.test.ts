@@ -114,13 +114,17 @@ test('SupabaseAuthProvider verifies token hash and clears returned transient pro
   assert.equal(calls.filter((url) => url.includes('/logout')).length, 1);
 });
 
-test('SupabaseAuthProvider fails closed when callback returns no user', async () => {
+test('SupabaseAuthProvider fails closed and revokes transient session when callback returns no user', async () => {
+  let logoutCount = 0;
   const provider = providerWith(async (input) => {
     const url = String(input);
     if (url.includes('/token?grant_type=pkce')) {
       return new Response(JSON.stringify({ access_token: 'transient', user: null }), { status: 200, headers: { 'content-type': 'application/json' } });
     }
-    if (url.includes('/logout')) return new Response(null, { status: 204 });
+    if (url.includes('/logout')) {
+      logoutCount += 1;
+      return new Response(null, { status: 204 });
+    }
     throw new Error(`unexpected request ${url}`);
   });
 
@@ -128,6 +132,7 @@ test('SupabaseAuthProvider fails closed when callback returns no user', async ()
     () => provider.verifyEmailMagicLink({ code: '009e5066-fc11-4eca-8c8c-6fd82aa263f2', codeVerifier: verifier, signal: new AbortController().signal }),
     /PROVIDER_IDENTITY_INVALID/,
   );
+  assert.equal(logoutCount, 1, 'transient provider token must be revoked even when identity reduction fails');
 });
 
 test('SupabaseAuthProvider maps request and callback failures to stable internal errors', async () => {
