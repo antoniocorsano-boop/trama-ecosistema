@@ -22,7 +22,7 @@ export interface AccessRuntime {
 class DisabledProvider implements AuthProviderAdapter {
   async checkAvailability(): Promise<boolean> { return false; }
   async requestEmailOtp(_input: { email: string; signal: AbortSignal }): Promise<void> { throw new Error('PROVIDER_UNAVAILABLE'); }
-  async verifyEmailOtp(_input: { email: string; otp: string }): Promise<VerifiedExternalIdentity> { throw new Error('PROVIDER_UNAVAILABLE'); }
+  async verifyEmailOtp(_input: { email: string; otp: string; signal: AbortSignal }): Promise<VerifiedExternalIdentity> { throw new Error('PROVIDER_UNAVAILABLE'); }
 }
 
 declare global {
