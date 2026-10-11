@@ -56,20 +56,21 @@ create table if not exists trama_access_private.access_sessions (
   check (absolute_expires_at > created_at)
 );
 
-create table if not exists trama_access_private.rate_limit_counters (
+create table if not exists trama_access_private.rate_limit_events (
+  event_id bigint generated always as identity primary key,
   scope text not null check (scope in ('OTP_REQUEST','OTP_REQUEST_GLOBAL','OTP_VERIFY','OTP_VERIFY_GLOBAL')),
   key_digest text not null,
-  window_started_at timestamptz not null,
-  count integer not null check (count > 0),
-  primary key (scope, key_digest, window_started_at)
+  attempted_at timestamptz not null
 );
+create index if not exists access_rate_limit_events_lookup
+  on trama_access_private.rate_limit_events(scope, key_digest, attempted_at);
 
 alter table trama_access_private.principals enable row level security;
 alter table trama_access_private.login_aliases enable row level security;
 alter table trama_access_private.institutional_contexts enable row level security;
 alter table trama_access_private.application_entitlements enable row level security;
 alter table trama_access_private.access_sessions enable row level security;
-alter table trama_access_private.rate_limit_counters enable row level security;
+alter table trama_access_private.rate_limit_events enable row level security;
 
 revoke all on all tables in schema trama_access_private from public, anon, authenticated;
 revoke all on all sequences in schema trama_access_private from public, anon, authenticated;
@@ -174,25 +175,49 @@ returns jsonb
 language plpgsql security definer set search_path = ''
 as $$
 declare
-  v_window_start timestamptz;
+  v_expected_limit integer;
   v_count integer;
-  v_retry integer;
+  v_first timestamptz;
+  v_reset_at timestamptz;
 begin
-  if p_scope not in ('OTP_REQUEST','OTP_REQUEST_GLOBAL','OTP_VERIFY','OTP_VERIFY_GLOBAL') then
-    raise exception 'invalid rate limit scope';
+  v_expected_limit := case p_scope
+    when 'OTP_REQUEST' then 5
+    when 'OTP_REQUEST_GLOBAL' then 20
+    when 'OTP_VERIFY' then 10
+    when 'OTP_VERIFY_GLOBAL' then 20
+    else null
+  end;
+  if v_expected_limit is null or p_limit <> v_expected_limit or p_window_seconds <> 900 then
+    raise exception 'invalid rate limit contract';
   end if;
-  if p_limit < 1 or p_window_seconds < 1 then raise exception 'invalid rate limit parameters'; end if;
 
-  v_window_start := to_timestamp(floor(extract(epoch from p_now) / p_window_seconds) * p_window_seconds);
+  -- Serialize one scope/key across all application instances. Hash collisions only
+  -- reduce concurrency; they cannot weaken enforcement.
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(p_scope || ':' || p_key_digest, 0));
 
-  insert into trama_access_private.rate_limit_counters(scope, key_digest, window_started_at, count)
-  values (p_scope, p_key_digest, v_window_start, 1)
-  on conflict (scope, key_digest, window_started_at)
-  do update set count = trama_access_private.rate_limit_counters.count + 1
-  returning count into v_count;
+  delete from trama_access_private.rate_limit_events
+  where scope = p_scope
+    and key_digest = p_key_digest
+    and attempted_at <= p_now - (p_window_seconds * interval '1 second');
 
-  v_retry := greatest(0, ceil(extract(epoch from (v_window_start + make_interval(secs => p_window_seconds) - p_now)))::integer);
-  return jsonb_build_object('allowed', v_count <= p_limit, 'retry_after_seconds', case when v_count <= p_limit then 0 else v_retry end);
+  select count(*)::integer, min(attempted_at)
+    into v_count, v_first
+  from trama_access_private.rate_limit_events
+  where scope = p_scope and key_digest = p_key_digest;
+
+  if v_count >= v_expected_limit then
+    v_reset_at := v_first + (p_window_seconds * interval '1 second');
+    return pg_catalog.jsonb_build_object('allowed', false, 'remaining', 0, 'reset_at', v_reset_at);
+  end if;
+
+  insert into trama_access_private.rate_limit_events(scope, key_digest, attempted_at)
+  values (p_scope, p_key_digest, p_now);
+
+  return pg_catalog.jsonb_build_object(
+    'allowed', true,
+    'remaining', v_expected_limit - v_count - 1,
+    'reset_at', p_now + (p_window_seconds * interval '1 second')
+  );
 end
 $$;
 
