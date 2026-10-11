@@ -2,6 +2,7 @@ import type { MagicLinkCallbackInput, MagicLinkEmailOtpType } from '../../ports/
 import type { AccessRuntime } from '../runtime.ts';
 import { verifyPilotMagicLink } from '../../domain/auth-service.ts';
 import { serializeAccessSessionCookie } from '../session-cookie.ts';
+import { clearPkceVerifierCookie, readPkceVerifier } from '../pkce-cookie.ts';
 
 const EMAIL_LINK_TYPES = new Set<MagicLinkEmailOtpType>(['email', 'magiclink', 'signup', 'invite', 'recovery', 'email_change']);
 
@@ -11,13 +12,16 @@ function configuredLocation(runtime: AccessRuntime, auth?: 'invalid' | 'denied' 
   return url.toString();
 }
 
-function callbackFromUrl(url: URL): MagicLinkCallbackInput | null {
+function callbackFromRequest(request: Request, url: URL): MagicLinkCallbackInput | null {
   const codes = url.searchParams.getAll('code');
   const tokenHashes = url.searchParams.getAll('token_hash');
   const types = url.searchParams.getAll('type');
 
   const hasCodeForm = codes.length === 1 && codes[0]!.trim().length > 0 && tokenHashes.length === 0 && types.length === 0;
-  if (hasCodeForm) return { code: codes[0]! };
+  if (hasCodeForm) {
+    const codeVerifier = readPkceVerifier(request);
+    return codeVerifier ? { code: codes[0]!, codeVerifier } : null;
+  }
 
   const hasTokenHashForm = codes.length === 0
     && tokenHashes.length === 1
@@ -31,17 +35,24 @@ function callbackFromUrl(url: URL): MagicLinkCallbackInput | null {
   return null;
 }
 
+function redirectWithPkceClear(location: string, accessSessionSecret?: string): Response {
+  const headers = new Headers({ Location: location });
+  if (accessSessionSecret) headers.append('Set-Cookie', serializeAccessSessionCookie(accessSessionSecret));
+  headers.append('Set-Cookie', clearPkceVerifierCookie());
+  return new Response(null, { status: 303, headers });
+}
+
 export async function handleMagicLinkCallback(request: Request, runtime: AccessRuntime): Promise<Response> {
   let url: URL;
   try {
     url = new URL(request.url);
   } catch {
-    return new Response(null, { status: 303, headers: { Location: configuredLocation(runtime, 'invalid') } });
+    return redirectWithPkceClear(configuredLocation(runtime, 'invalid'));
   }
 
-  const callback = callbackFromUrl(url);
+  const callback = callbackFromRequest(request, url);
   if (!callback) {
-    return new Response(null, { status: 303, headers: { Location: configuredLocation(runtime, 'invalid') } });
+    return redirectWithPkceClear(configuredLocation(runtime, 'invalid'));
   }
 
   const result = await verifyPilotMagicLink({
@@ -54,20 +65,13 @@ export async function handleMagicLinkCallback(request: Request, runtime: AccessR
   });
 
   if (result.status === 'AUTHENTICATED') {
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: configuredLocation(runtime),
-        'Set-Cookie': serializeAccessSessionCookie(result.sessionSecret),
-      },
-    });
+    return redirectWithPkceClear(configuredLocation(runtime), result.sessionSecret);
   }
-
   if (result.status === 'PROVIDER_UNAVAILABLE') {
-    return new Response(null, { status: 303, headers: { Location: configuredLocation(runtime, 'unavailable') } });
+    return redirectWithPkceClear(configuredLocation(runtime, 'unavailable'));
   }
   if (result.status === 'MAGIC_LINK_INVALID') {
-    return new Response(null, { status: 303, headers: { Location: configuredLocation(runtime, 'invalid') } });
+    return redirectWithPkceClear(configuredLocation(runtime, 'invalid'));
   }
-  return new Response(null, { status: 303, headers: { Location: configuredLocation(runtime, 'denied') } });
+  return redirectWithPkceClear(configuredLocation(runtime, 'denied'));
 }
