@@ -6,6 +6,7 @@ import { runAccessRpc } from '../src/infrastructure/supabase/supabase-rpc.ts';
 
 type ProviderUser = { id: string; email?: string | null };
 type GovernedAlias = { providerIssuer: string; providerSubject: string };
+type PilotClaimState = 'CLAIMED' | 'ALREADY_CLAIMED';
 
 export interface Task11ProvisioningInput {
   pilotEmails: string[];
@@ -16,6 +17,7 @@ export interface Task11ProvisioningInput {
 }
 
 export interface Task11ProvisioningDeps {
+  claimPilot(email: string): Promise<{ state: PilotClaimState }>;
   listProviderUsers(): Promise<ProviderUser[]>;
   createProviderUser(email: string): Promise<ProviderUser>;
   findGovernedAlias(email: string): Promise<GovernedAlias | null>;
@@ -61,6 +63,12 @@ export async function provisionTask11Pilot(
   deps: Task11ProvisioningDeps,
 ): Promise<Task11ProvisioningReceipt> {
   const email = normalizedPilotEmail(input);
+
+  // Durable project-wide reservation must precede any provider inspection or mutation.
+  // A failed external creation can be safely retried for the same email, but another
+  // email cannot race into the one-pilot boundary.
+  await deps.claimPilot(email);
+
   const providerUsers = await deps.listProviderUsers();
   if (providerUsers.length > 1) throw new Error('PROVIDER_SCOPE_VIOLATION');
 
@@ -79,6 +87,15 @@ export async function provisionTask11Pilot(
     ) {
       throw new Error('SUBJECT_BINDING_MISMATCH');
     }
+
+    // Idempotent success is not a shortcut: the governed RPC revalidates the
+    // principal, institutional context and entitlement before we report success.
+    await deps.provisionGovernedPilot({
+      normalizedEmail: email,
+      providerIssuer: input.providerIssuer,
+      providerSubject: existingProviderUser.id,
+      institutionRef: input.institutionRef.trim(),
+    });
     return receipt('ALREADY_PROVISIONED');
   }
 
@@ -147,6 +164,12 @@ export function createLiveTask11ProvisioningDeps(input: {
   const client = createSupabaseServerClient({ url: normalizedUrl, secretKey: input.secretKey, fetchImpl });
   const repository = new SupabaseIdentityRepository(client);
   return {
+    async claimPilot(email: string) {
+      const state = await runAccessRpc<string>(client, 'access_claim_pilot', { p_normalized_email: email });
+      if (state === 'CONFLICT') throw new Error('PILOT_SCOPE_VIOLATION');
+      if (state !== 'CLAIMED' && state !== 'ALREADY_CLAIMED') throw new Error('PILOT_SCOPE_INVALID');
+      return { state };
+    },
     async listProviderUsers() {
       const data = await adminRequest<{ users?: ProviderUser[] }>({
         url: normalizedUrl,
