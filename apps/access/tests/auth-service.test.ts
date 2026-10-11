@@ -94,6 +94,18 @@ test('provider send is actually aborted when the request budget expires', async 
   assert.equal(f.provider.requestCompletionCount, 0);
 });
 
+test('synchronous provider send failure remains neutral', async () => {
+  const f = fixture();
+  f.provider.requestEmailOtp = () => {
+    throw new Error('SYNC_PROVIDER_FAILURE');
+  };
+  const timing = { providerBudgetMs: 30, publicFloorMs: 50 };
+  assert.deepEqual(
+    await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', timing }),
+    { status: 'OTP_REQUESTED' },
+  );
+});
+
 test('send-time provider failure remains neutral to avoid allowlist enumeration', async () => {
   const f = fixture();
   f.provider.requestFailure = true;
@@ -118,6 +130,30 @@ test('unknown and allowed aliases both perform provider verification work', asyn
   const unknown = fixture();
   assert.deepEqual(await verifyPilotOtp({ repo: unknown.repo, provider: unknown.provider, store: unknown.store, email: 'nobody@example.test', otp: '000000', now: new Date() }), { status: 'OTP_INVALID' });
   assert.equal(unknown.provider.verifyCount, 1);
+});
+
+test('provider verification is bounded and actually aborted', async () => {
+  const f = fixture();
+  let verifyAborted = false;
+  f.provider.verifyEmailOtp = (input: { email: string; otp: string; signal?: AbortSignal }) => new Promise((_, reject) => {
+    if (input.signal?.aborted) {
+      verifyAborted = true;
+      reject(new Error('OTP_VERIFY_ABORTED'));
+      return;
+    }
+    input.signal?.addEventListener('abort', () => {
+      verifyAborted = true;
+      reject(new Error('OTP_VERIFY_ABORTED'));
+    }, { once: true });
+  });
+
+  const result = await Promise.race([
+    verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() }),
+    sleep(1400).then(() => ({ status: 'TEST_TIMEOUT' as const })),
+  ]);
+
+  assert.deepEqual(result, { status: 'OTP_INVALID' });
+  assert.equal(verifyAborted, true);
 });
 
 test('verify-time provider failures remain membership-neutral after a healthy availability check', async () => {
