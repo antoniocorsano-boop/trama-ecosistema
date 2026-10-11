@@ -2,8 +2,12 @@ import type { IdentityRepository } from '../ports/identity-repository.ts';
 import type { AccessSessionRecord, InstitutionalContext, PrincipalResolution, VerifiedExternalIdentity } from './types.ts';
 import { normalizeLoginEmail } from './email.ts';
 
-export async function isPilotAliasAllowed(repo: IdentityRepository, email: string): Promise<boolean> {
-  const alias = await repo.findAliasByEmail(normalizeLoginEmail(email));
+export async function isPilotAliasAllowed(
+  repo: IdentityRepository,
+  email: string,
+  input?: { signal?: AbortSignal },
+): Promise<boolean> {
+  const alias = await repo.findAliasByEmail(normalizeLoginEmail(email), input);
   return Boolean(alias && alias.status === 'ACTIVE' && alias.pilotAllowed);
 }
 
