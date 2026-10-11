@@ -7,8 +7,46 @@ import { isPilotAliasAllowed, resolvePrincipalForVerifiedIdentity } from './prin
 import { issueAccessSession } from './session-service.ts';
 import { normalizeLoginEmail } from './email.ts';
 
+export type OtpRequestTimingPolicy = {
+  providerBudgetMs: number;
+  publicFloorMs: number;
+};
+
+export const DEFAULT_OTP_REQUEST_TIMING: OtpRequestTimingPolicy = {
+  providerBudgetMs: 1200,
+  publicFloorMs: 1500,
+};
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function settleWithinBudget(work: Promise<void>, budgetMs: number): Promise<void> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const budget = new Promise<void>((resolve) => {
+    timeout = setTimeout(resolve, budgetMs);
+  });
+  try {
+    await Promise.race([work.catch(() => undefined), budget]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
+
+async function waitForPublicFloor(startedAtMs: number, publicFloorMs: number): Promise<void> {
+  const remaining = startedAtMs + publicFloorMs - performance.now();
+  if (remaining > 0) await sleep(remaining);
+}
+
 export type RequestPilotOtpResult = { status: 'OTP_REQUESTED' | 'PROVIDER_UNAVAILABLE' };
-export async function requestPilotOtp(input: { repo: IdentityRepository; provider: AuthProviderAdapter; email: string; rateLimiter?: RateLimiter; now?: Date }): Promise<RequestPilotOtpResult> {
+export async function requestPilotOtp(input: {
+  repo: IdentityRepository;
+  provider: AuthProviderAdapter;
+  email: string;
+  rateLimiter?: RateLimiter;
+  now?: Date;
+  timing?: OtpRequestTimingPolicy;
+}): Promise<RequestPilotOtpResult> {
   const email = normalizeLoginEmail(input.email);
   const now = input.now ?? new Date();
   if (input.rateLimiter) {
@@ -18,13 +56,22 @@ export async function requestPilotOtp(input: { repo: IdentityRepository; provide
   let available = false;
   try { available = await input.provider.checkAvailability(); } catch { available = false; }
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
-  const allowed = await isPilotAliasAllowed(input.repo, email);
-  if (!allowed) return { status: 'OTP_REQUESTED' };
-  try {
-    await input.provider.requestEmailOtp({ email });
-  } catch {
-    return { status: 'OTP_REQUESTED' };
+
+  const timing = input.timing ?? DEFAULT_OTP_REQUEST_TIMING;
+  if (timing.providerBudgetMs < 0 || timing.publicFloorMs <= timing.providerBudgetMs) {
+    throw new Error('INVALID_OTP_REQUEST_TIMING_POLICY');
   }
+
+  // Once the address-independent provider health check has succeeded, every
+  // membership-sensitive branch is hidden behind the same public response floor.
+  // The provider send operation is budgeted strictly below that floor, so an
+  // unknown alias never needs a delivery attempt merely to reproduce provider latency.
+  const startedAtMs = performance.now();
+  const allowed = await isPilotAliasAllowed(input.repo, email);
+  if (allowed) {
+    await settleWithinBudget(input.provider.requestEmailOtp({ email }), timing.providerBudgetMs);
+  }
+  await waitForPublicFloor(startedAtMs, timing.publicFloorMs);
   return { status: 'OTP_REQUESTED' };
 }
 
