@@ -38,8 +38,14 @@ test('supabase plus supabase constructs only the live adapters', () => {
   assert.ok(runtime.rateLimiter instanceof SupabaseRateLimiter);
 });
 
-test('live availability probe is abortable and project-wide rather than alias-specific', async () => {
-  const seen: Array<{ url: string; method: string; signal: AbortSignal | null; apikey: string | null }> = [];
+test('live availability probe is abortable, project-wide and uses secret key only as apikey', async () => {
+  const seen: Array<{
+    url: string;
+    method: string;
+    signal: AbortSignal | null;
+    apikey: string | null;
+    authorization: string | null;
+  }> = [];
   const fetchImpl: typeof fetch = async (input, init) => {
     const headers = new Headers(init?.headers);
     seen.push({
@@ -47,6 +53,7 @@ test('live availability probe is abortable and project-wide rather than alias-sp
       method: init?.method ?? 'GET',
       signal: init?.signal ?? null,
       apikey: headers.get('apikey'),
+      authorization: headers.get('authorization'),
     });
     if (init?.signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     return new Response('{}', { status: 200 });
@@ -59,6 +66,7 @@ test('live availability probe is abortable and project-wide rather than alias-sp
   assert.equal(seen[0]?.method, 'GET');
   assert.equal(seen[0]?.signal, controller.signal);
   assert.equal(seen[0]?.apikey, secret);
+  assert.equal(seen[0]?.authorization, null);
 
   controller.abort();
   assert.equal(await runtime.authProvider.checkAvailability({ signal: controller.signal }), false);
