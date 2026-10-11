@@ -21,7 +21,7 @@ declare
   v_email text := pg_catalog.lower(pg_catalog.btrim(p_normalized_email));
   v_existing_email text;
 begin
-  if v_email is null or v_email = '' or pg_catalog.position('@' in v_email) <= 1 then
+  if v_email is null or v_email = '' or position('@' in v_email) <= 1 then
     raise exception 'invalid pilot claim contract';
   end if;
 
