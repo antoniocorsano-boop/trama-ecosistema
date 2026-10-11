@@ -7,6 +7,7 @@ import { InMemoryRateLimiter } from '../src/testing/in-memory-rate-limiter.ts';
 import { FakeAuthProvider } from '../src/testing/fake-auth-provider.ts';
 
 const now = new Date('2026-10-11T10:00:00Z');
+const codeVerifier = 'v'.repeat(43);
 
 function fixture(entitled = true) {
   const repo = new InMemoryIdentityRepository({
@@ -23,18 +24,19 @@ function fixture(entitled = true) {
 test('Magic Link request is neutral and sends only for the pre-authorized alias', async () => {
   const f = fixture();
   const redirectTo = 'https://access.example.test/auth/confirm';
-  const allowed = await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, now, timing: { providerBudgetMs: 50, publicFloorMs: 60 } });
-  const unknown = await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'unknown@example.test', redirectTo, now, timing: { providerBudgetMs: 50, publicFloorMs: 60 } });
+  const allowed = await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, codeVerifier, now, timing: { providerBudgetMs: 50, publicFloorMs: 60 } });
+  const unknown = await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'unknown@example.test', redirectTo, codeVerifier, now, timing: { providerBudgetMs: 50, publicFloorMs: 60 } });
   assert.deepEqual(allowed, { status: 'MAGIC_LINK_REQUESTED' });
   assert.deepEqual(unknown, { status: 'MAGIC_LINK_REQUESTED' });
   assert.equal(f.provider.requestCount, 1);
   assert.equal(f.provider.lastMagicLinkEmail, 'teacher@example.test');
   assert.equal(f.provider.lastMagicLinkRedirectTo, redirectTo);
+  assert.equal(f.provider.lastMagicLinkCodeVerifier, codeVerifier);
 });
 
 test('valid Magic Link callback with exact binding and active entitlement creates one local session', async () => {
   const f = fixture(true);
-  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid-code' }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 100 });
+  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid-code', codeVerifier }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 100 });
   assert.equal(result.status, 'AUTHENTICATED');
   assert.equal(f.store.records.length, 1);
   assert.equal(f.store.records[0]?.providerIssuer, 'issuer-1');
@@ -44,7 +46,7 @@ test('valid Magic Link callback with exact binding and active entitlement create
 test('verified email cannot relink an unexpected provider subject', async () => {
   const f = fixture(true);
   f.provider.subject = 'different-subject';
-  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid-code' }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 100 });
+  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid-code', codeVerifier }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 100 });
   assert.equal(result.status, 'ACCESS_DENIED');
   assert.equal(f.store.records.length, 0);
   assert.equal(f.provider.logoutCount, 1);
@@ -61,7 +63,7 @@ test('provider-authenticated identity without an active entitlement fails closed
 test('Magic Link provider timeout creates no local session', async () => {
   const f = fixture(true);
   f.provider.verifyDelayMs = 80;
-  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'slow-code' }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 20 });
+  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'slow-code', codeVerifier }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 20 });
   assert.equal(result.status, 'MAGIC_LINK_INVALID');
   assert.equal(f.store.records.length, 0);
   assert.equal(f.provider.verifyAbortCount, 1);
