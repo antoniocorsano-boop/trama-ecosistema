@@ -13,12 +13,18 @@ test('zero entitlement yields empty authenticated launcher', () => {
   assert.deepEqual(buildLauncher({ entitlements: [], registry: APPLICATION_REGISTRY, at: new Date('2026-10-11T10:00:00Z') }), []);
 });
 
-test('active entitlement shows non-federated disabled card', () => {
+test('active canonical entitlement shows non-federated disabled card', () => {
   const cards = buildLauncher({ entitlements: [activeEntitlement('DOCENTE_OS','USE')], registry: APPLICATION_REGISTRY, at: new Date('2026-10-11T10:00:00Z') });
   assert.equal(cards.length, 1);
   assert.equal(cards[0]!.applicationKey, 'DOCENTE_OS');
   assert.equal(cards[0]!.launchAllowed, false);
   assert.equal(cards[0]!.availability, 'CONNECTION_NOT_AVAILABLE');
+});
+
+test('noncanonical entitlement pair grants neither launcher card nor launch authorization', () => {
+  const wrong = activeEntitlement('DOCENTE_OS', 'READ');
+  assert.deepEqual(buildLauncher({ entitlements: [wrong], registry: APPLICATION_REGISTRY, at: new Date('2026-10-11T10:00:00Z') }), []);
+  assert.deepEqual(authorizeLaunch({ applicationKey: 'DOCENTE_OS', entitlements: [wrong], registry: APPLICATION_REGISTRY, at: new Date('2026-10-11T10:00:00Z') }), { allowed: false, code: 'NO_ENTITLEMENT' });
 });
 
 test('revoked or expired entitlement does not become launchable', () => {
