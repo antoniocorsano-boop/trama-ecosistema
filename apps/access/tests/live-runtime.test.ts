@@ -24,6 +24,13 @@ test('live runtime fails closed when Supabase URL, secret or publishable key is 
   assert.throws(() => createAccessRuntime({ ...baseEnv, ACCESS_SUPABASE_PUBLISHABLE_KEY: undefined }), /SUPABASE_CONFIG_MISSING/);
 });
 
+test('live runtime rejects a secret key placed in the publishable-key slot before constructing transport', () => {
+  assert.throws(
+    () => createAccessRuntime({ ...baseEnv, ACCESS_SUPABASE_PUBLISHABLE_KEY: secret }),
+    (error: Error) => error.message === 'SUPABASE_PUBLISHABLE_KEY_INVALID' && !error.message.includes(secret),
+  );
+});
+
 test('live runtime requires an https Supabase project URL and never exposes keys in config/errors', () => {
   assert.throws(
     () => createAccessRuntime({ ...baseEnv, ACCESS_SUPABASE_URL: 'http://project-ref.supabase.co' }),
