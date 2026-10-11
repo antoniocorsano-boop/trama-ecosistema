@@ -9,12 +9,11 @@ import { InMemoryIdentityRepository } from '../testing/in-memory-identity-reposi
 import { InMemorySessionStore } from '../testing/in-memory-session-store.ts';
 import { InMemoryRateLimiter } from '../testing/in-memory-rate-limiter.ts';
 import { FakeAuthProvider } from '../testing/fake-auth-provider.ts';
-import { createSupabaseServerClient } from '../infrastructure/supabase/supabase-client.ts';
+import { createSupabaseAuthClient, createSupabaseServerClient } from '../infrastructure/supabase/supabase-client.ts';
 import { SupabaseAuthProvider } from '../infrastructure/supabase/supabase-auth-provider.ts';
 import { SupabaseIdentityRepository } from '../infrastructure/supabase/supabase-identity-repository.ts';
 import { SupabaseSessionStore } from '../infrastructure/supabase/supabase-session-store.ts';
 import { SupabaseRateLimiter } from '../infrastructure/supabase/supabase-rate-limiter.ts';
-import type { SupabaseRpcClientLike } from '../infrastructure/supabase/supabase-rpc.ts';
 
 export interface AccessRuntime {
   config: AccessConfig;
@@ -35,10 +34,11 @@ declare global {
   var __tramaAccessPhase2Runtime: AccessRuntime | undefined;
 }
 
-function requiredSupabaseConfig(env: NodeJS.ProcessEnv): { url: string; secretKey: string; issuer: string } {
+function requiredSupabaseConfig(env: NodeJS.ProcessEnv): { url: string; secretKey: string; publishableKey: string; issuer: string } {
   const rawUrl = env.ACCESS_SUPABASE_URL?.trim();
   const secretKey = env.ACCESS_SUPABASE_SECRET_KEY?.trim();
-  if (!rawUrl || !secretKey) throw new Error('SUPABASE_CONFIG_MISSING');
+  const publishableKey = env.ACCESS_SUPABASE_PUBLISHABLE_KEY?.trim();
+  if (!rawUrl || !secretKey || !publishableKey) throw new Error('SUPABASE_CONFIG_MISSING');
   let url: URL;
   try {
     url = new URL(rawUrl);
@@ -49,21 +49,21 @@ function requiredSupabaseConfig(env: NodeJS.ProcessEnv): { url: string; secretKe
     throw new Error('SUPABASE_URL_INVALID');
   }
   const normalizedUrl = url.origin;
-  return { url: normalizedUrl, secretKey, issuer: `${normalizedUrl}/auth/v1` };
+  return { url: normalizedUrl, secretKey, publishableKey, issuer: `${normalizedUrl}/auth/v1` };
 }
 
 function createAvailabilityProbe(
   url: string,
-  secretKey: string,
+  publishableKey: string,
   fetchImpl: typeof fetch,
 ): (signal: AbortSignal) => Promise<boolean> {
   return async (signal) => {
     if (signal.aborted) return false;
     try {
-      const response = await fetchImpl(`${url}/rest/v1/`, {
+      const response = await fetchImpl(`${url}/auth/v1/health`, {
         method: 'GET',
         headers: {
-          apikey: secretKey,
+          apikey: publishableKey,
           Accept: 'application/json',
         },
         cache: 'no-store',
@@ -82,14 +82,18 @@ export function createAccessRuntime(env: NodeJS.ProcessEnv = process.env, fetchI
 
   if (config.providerKind === 'supabase' && config.storeKind === 'supabase') {
     const live = requiredSupabaseConfig(env);
-    const rpcClient = createSupabaseServerClient({ url: live.url, secretKey: live.secretKey }) as unknown as SupabaseRpcClientLike;
+    const rpcClient = createSupabaseServerClient({ url: live.url, secretKey: live.secretKey });
     const identityRepository = new SupabaseIdentityRepository(rpcClient);
     const sessionStore = new SupabaseSessionStore(rpcClient);
     const rateLimiter = new SupabaseRateLimiter(rpcClient);
     const authProvider = new SupabaseAuthProvider({
       issuer: live.issuer,
-      createClientForSignal: (signal) => createSupabaseServerClient({ url: live.url, secretKey: live.secretKey, signal }),
-      availabilityProbe: createAvailabilityProbe(live.url, live.secretKey, fetchImpl),
+      createClientForSignal: (signal) => createSupabaseAuthClient({
+        url: live.url,
+        publishableKey: live.publishableKey,
+        signal,
+      }),
+      availabilityProbe: createAvailabilityProbe(live.url, live.publishableKey, fetchImpl),
     });
     return { config, identityRepository, sessionStore, rateLimiter, authProvider, applicationRegistry: APPLICATION_REGISTRY, now: () => new Date() };
   }
