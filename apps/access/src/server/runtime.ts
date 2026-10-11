@@ -39,6 +39,7 @@ function requiredSupabaseConfig(env: NodeJS.ProcessEnv): { url: string; secretKe
   const secretKey = env.ACCESS_SUPABASE_SECRET_KEY?.trim();
   const publishableKey = env.ACCESS_SUPABASE_PUBLISHABLE_KEY?.trim();
   if (!rawUrl || !secretKey || !publishableKey) throw new Error('SUPABASE_CONFIG_MISSING');
+  if (publishableKey.startsWith('sb_secret_')) throw new Error('SUPABASE_PUBLISHABLE_KEY_INVALID');
   let url: URL;
   try {
     url = new URL(rawUrl);
