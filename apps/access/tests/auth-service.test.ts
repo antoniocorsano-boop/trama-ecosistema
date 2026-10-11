@@ -24,6 +24,28 @@ test('allowed and unknown email return same neutral request result', async () =>
   assert.equal(f.provider.requestCount, 1);
 });
 
+test('request path uses the same public response floor without sending OTP to unknown aliases', async () => {
+  const timing = { providerBudgetMs: 60, publicFloorMs: 80 };
+
+  const allowed = fixture();
+  allowed.provider.requestDelayMs = 40;
+  const allowedStarted = performance.now();
+  assert.deepEqual(await requestPilotOtp({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', timing }), { status: 'OTP_REQUESTED' });
+  const allowedElapsed = performance.now() - allowedStarted;
+  assert.equal(allowed.provider.requestCount, 1);
+
+  const unknown = fixture();
+  unknown.provider.requestDelayMs = 40;
+  const unknownStarted = performance.now();
+  assert.deepEqual(await requestPilotOtp({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', timing }), { status: 'OTP_REQUESTED' });
+  const unknownElapsed = performance.now() - unknownStarted;
+  assert.equal(unknown.provider.requestCount, 0);
+
+  assert.ok(allowedElapsed >= 70, `allowed path returned too early: ${allowedElapsed}ms`);
+  assert.ok(unknownElapsed >= 70, `unknown path returned too early: ${unknownElapsed}ms`);
+  assert.ok(Math.abs(allowedElapsed - unknownElapsed) < 30, `request timing diverged: allowed=${allowedElapsed} unknown=${unknownElapsed}`);
+});
+
 test('send-time provider failure remains neutral to avoid allowlist enumeration', async () => {
   const f = fixture();
   f.provider.requestFailure = true;
