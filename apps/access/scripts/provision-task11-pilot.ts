@@ -102,6 +102,19 @@ function requiredEnv(name: string): string {
   return value;
 }
 
+function normalizeSupabaseProjectUrl(rawUrl: string): string {
+  let url: URL;
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  return url.origin;
+}
+
 async function adminRequest<T>(input: {
   url: string;
   secretKey: string;
@@ -129,13 +142,14 @@ export function createLiveTask11ProvisioningDeps(input: {
   secretKey: string;
   fetchImpl?: typeof fetch;
 }): Task11ProvisioningDeps {
+  const normalizedUrl = normalizeSupabaseProjectUrl(input.url);
   const fetchImpl = input.fetchImpl ?? fetch;
-  const client = createSupabaseServerClient({ ...input, fetchImpl });
+  const client = createSupabaseServerClient({ url: normalizedUrl, secretKey: input.secretKey, fetchImpl });
   const repository = new SupabaseIdentityRepository(client);
   return {
     async listProviderUsers() {
       const data = await adminRequest<{ users?: ProviderUser[] }>({
-        url: input.url,
+        url: normalizedUrl,
         secretKey: input.secretKey,
         fetchImpl,
         path: '/auth/v1/admin/users?page=1&per_page=2',
@@ -146,7 +160,7 @@ export function createLiveTask11ProvisioningDeps(input: {
     },
     async createProviderUser(email: string) {
       const data = await adminRequest<{ id?: string; email?: string | null; user?: ProviderUser }>({
-        url: input.url,
+        url: normalizedUrl,
         secretKey: input.secretKey,
         fetchImpl,
         path: '/auth/v1/admin/users',
@@ -178,14 +192,14 @@ export function createLiveTask11ProvisioningDeps(input: {
 }
 
 async function main() {
-  const url = requiredEnv('ACCESS_SUPABASE_URL');
+  const url = normalizeSupabaseProjectUrl(requiredEnv('ACCESS_SUPABASE_URL'));
   const secretKey = requiredEnv('ACCESS_SUPABASE_SECRET_KEY');
   const pilotEmail = requiredEnv('TASK11_PILOT_EMAIL');
   const institutionRef = requiredEnv('TASK11_INSTITUTION_REF');
   const region = requiredEnv('TASK11_REGION');
   const plan = requiredEnv('TASK11_PLAN');
   if (plan !== 'free') throw new Error('TASK11_SCOPE_INVALID');
-  const providerIssuer = `${new URL(url).origin}/auth/v1`;
+  const providerIssuer = `${url}/auth/v1`;
   const result = await provisionTask11Pilot({
     pilotEmails: [pilotEmail],
     providerIssuer,
