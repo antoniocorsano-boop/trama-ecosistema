@@ -3,45 +3,47 @@ import assert from 'node:assert/strict';
 import { InMemoryIdentityRepository } from '../src/testing/in-memory-identity-repository.ts';
 import { InMemorySessionStore } from '../src/testing/in-memory-session-store.ts';
 import { FakeAuthProvider } from '../src/testing/fake-auth-provider.ts';
-import { requestPilotOtp, verifyPilotOtp } from '../src/domain/auth-service.ts';
+import { requestPilotMagicLink, verifyPilotMagicLink } from '../src/domain/auth-service.ts';
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const redirectTo = 'https://access.example.test/auth/confirm';
 
 function fixture() {
   const repo = new InMemoryIdentityRepository({
     principals: [{ principalId: 'p1', status: 'ACTIVE' }],
     aliases: [{ aliasId: 'a1', principalId: 'p1', kind: 'EMAIL', normalizedValue: 'teacher@example.test', status: 'ACTIVE', providerIssuer: 'issuer-1', providerSubject: 'subject-1', pilotAllowed: true }],
     contexts: [{ contextId: 'c1', principalId: 'p1', contextType: 'INSTITUTION', institutionRef: 'inst:1', status: 'ACTIVE' }],
-    entitlements: []
+    entitlements: [{ entitlementId: 'e1', principalId: 'p1', contextId: 'c1', applicationKey: 'DOCENTE_OS', entitlementKey: 'USE', status: 'ACTIVE', validFrom: new Date('2026-01-01T00:00:00Z') }],
   });
-  const provider = new FakeAuthProvider({ issuer: 'issuer-1', subject: 'subject-1', email: 'teacher@example.test', otp: '123456' });
+  const provider = new FakeAuthProvider({ issuer: 'issuer-1', subject: 'subject-1', email: 'teacher@example.test', otp: 'legacy-unused' });
   return { repo, provider, store: new InMemorySessionStore() };
 }
 
-test('allowed and unknown email return same neutral request result', async () => {
+test('allowed and unknown email return same neutral Magic Link request result', async () => {
   const f = fixture();
-  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test' }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
   assert.equal(f.provider.requestCount, 1);
-  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'nobody@example.test' }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'nobody@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
   assert.equal(f.provider.requestCount, 1);
 });
 
-test('request path uses the same public response floor without sending OTP to unknown aliases', async () => {
+test('request path uses the same public response floor without sending to unknown aliases', async () => {
   const timing = { providerBudgetMs: 60, publicFloorMs: 80 };
 
   const allowed = fixture();
   allowed.provider.requestDelayMs = 40;
   const allowedStarted = performance.now();
-  assert.deepEqual(await requestPilotOtp({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', timing }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const allowedElapsed = performance.now() - allowedStarted;
   assert.equal(allowed.provider.requestCount, 1);
 
   const unknown = fixture();
   unknown.provider.requestDelayMs = 40;
   const unknownStarted = performance.now();
-  assert.deepEqual(await requestPilotOtp({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', timing }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const unknownElapsed = performance.now() - unknownStarted;
   assert.equal(unknown.provider.requestCount, 0);
 
@@ -61,7 +63,7 @@ test('request timing budget includes the membership-sensitive alias lookup', asy
   };
   allowed.provider.requestDelayMs = 120;
   const allowedStarted = performance.now();
-  assert.deepEqual(await requestPilotOtp({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', timing }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: allowed.repo, provider: allowed.provider, email: 'teacher@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const allowedElapsed = performance.now() - allowedStarted;
 
   const unknown = fixture();
@@ -72,7 +74,7 @@ test('request timing budget includes the membership-sensitive alias lookup', asy
   };
   unknown.provider.requestDelayMs = 120;
   const unknownStarted = performance.now();
-  assert.deepEqual(await requestPilotOtp({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', timing }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: unknown.repo, provider: unknown.provider, email: 'nobody@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   const unknownElapsed = performance.now() - unknownStarted;
 
   assert.equal(allowed.provider.requestCount, 1);
@@ -87,7 +89,7 @@ test('provider send is actually aborted when the request budget expires', async 
   f.provider.requestDelayMs = 200;
   const timing = { providerBudgetMs: 40, publicFloorMs: 70 };
 
-  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', timing }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, timing }), { status: 'MAGIC_LINK_REQUESTED' });
   assert.equal(f.provider.requestCount, 1);
   await sleep(180);
   assert.equal(f.provider.requestAbortCount, 1);
@@ -96,100 +98,71 @@ test('provider send is actually aborted when the request budget expires', async 
 
 test('synchronous provider send failure remains neutral', async () => {
   const f = fixture();
-  f.provider.requestEmailOtp = () => {
+  f.provider.requestEmailMagicLink = () => {
     throw new Error('SYNC_PROVIDER_FAILURE');
   };
   const timing = { providerBudgetMs: 30, publicFloorMs: 50 };
   assert.deepEqual(
-    await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', timing }),
-    { status: 'OTP_REQUESTED' },
+    await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo, timing }),
+    { status: 'MAGIC_LINK_REQUESTED' },
   );
 });
 
 test('send-time provider failure remains neutral to avoid allowlist enumeration', async () => {
   const f = fixture();
   f.provider.requestFailure = true;
-  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test' }), { status: 'OTP_REQUESTED' });
-  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'nobody@example.test' }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'teacher@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.deepEqual(await requestPilotMagicLink({ repo: f.repo, provider: f.provider, email: 'nobody@example.test', redirectTo }), { status: 'MAGIC_LINK_REQUESTED' });
 });
 
-test('unknown and allowed aliases with invalid OTP return the same public result', async () => {
+test('invalid Magic Link callback creates no local session', async () => {
   const f = fixture();
-  const allowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '000000', now: new Date() });
-  const unknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '000000', now: new Date() });
-  assert.deepEqual(allowed, { status: 'OTP_INVALID' });
-  assert.deepEqual(unknown, { status: 'OTP_INVALID' });
+  f.provider.verifyFailure = 'INVALID';
+  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'invalid' }, now: new Date(), verifyProviderBudgetMs: 50 });
+  assert.deepEqual(result, { status: 'MAGIC_LINK_INVALID' });
   assert.equal(f.store.records.length, 0);
-});
-
-test('unknown and allowed aliases both perform provider verification work', async () => {
-  const allowed = fixture();
-  assert.deepEqual(await verifyPilotOtp({ repo: allowed.repo, provider: allowed.provider, store: allowed.store, email: 'teacher@example.test', otp: '000000', now: new Date() }), { status: 'OTP_INVALID' });
-  assert.equal(allowed.provider.verifyCount, 1);
-
-  const unknown = fixture();
-  assert.deepEqual(await verifyPilotOtp({ repo: unknown.repo, provider: unknown.provider, store: unknown.store, email: 'nobody@example.test', otp: '000000', now: new Date() }), { status: 'OTP_INVALID' });
-  assert.equal(unknown.provider.verifyCount, 1);
 });
 
 test('provider verification is bounded and actually aborted', async () => {
   const f = fixture();
-  let verifyAborted = false;
-  f.provider.verifyEmailOtp = (input: { email: string; otp: string; signal?: AbortSignal }) => new Promise((_, reject) => {
-    if (input.signal?.aborted) {
-      verifyAborted = true;
-      reject(new Error('OTP_VERIFY_ABORTED'));
-      return;
-    }
-    input.signal?.addEventListener('abort', () => {
-      verifyAborted = true;
-      reject(new Error('OTP_VERIFY_ABORTED'));
-    }, { once: true });
-  });
-
+  f.provider.verifyDelayMs = 200;
   const result = await Promise.race([
-    verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() }),
-    sleep(1400).then(() => ({ status: 'TEST_TIMEOUT' as const })),
+    verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'slow' }, now: new Date(), verifyProviderBudgetMs: 40 }),
+    sleep(200).then(() => ({ status: 'TEST_TIMEOUT' as const })),
   ]);
-
-  assert.deepEqual(result, { status: 'OTP_INVALID' });
-  assert.equal(verifyAborted, true);
+  assert.deepEqual(result, { status: 'MAGIC_LINK_INVALID' });
+  assert.equal(f.provider.verifyAbortCount, 1);
+  assert.equal(f.store.records.length, 0);
 });
 
-test('verify-time provider failures remain membership-neutral after a healthy availability check', async () => {
+test('provider callback failures map to neutral invalid-link result after a healthy availability check', async () => {
   const f = fixture();
   f.provider.verifyFailure = 'UNAVAILABLE';
-  const unavailableAllowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() });
-  const unavailableUnknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '123456', now: new Date() });
-  assert.deepEqual(unavailableAllowed, { status: 'OTP_INVALID' });
-  assert.deepEqual(unavailableUnknown, { status: 'OTP_INVALID' });
-
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'provider-failed' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'MAGIC_LINK_INVALID' });
   f.provider.verifyFailure = 'EXPIRED';
-  const expiredAllowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() });
-  const expiredUnknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '123456', now: new Date() });
-  assert.deepEqual(expiredAllowed, { status: 'OTP_INVALID' });
-  assert.deepEqual(expiredUnknown, { status: 'OTP_INVALID' });
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'expired' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'MAGIC_LINK_INVALID' });
   assert.equal(f.store.records.length, 0);
 });
 
-test('valid OTP and exact binding creates access session even with zero entitlements', async () => {
+test('valid Magic Link and exact governed binding with entitlement creates access session', async () => {
   const f = fixture();
-  const result = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date('2026-10-11T10:00:00Z') });
+  const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid' }, now: new Date('2026-10-11T10:00:00Z') });
   assert.equal(result.status, 'AUTHENTICATED');
   if (result.status === 'AUTHENTICATED') assert.equal(result.principalId, 'p1');
+  assert.equal(f.store.records.length, 1);
 });
 
-test('wrong OTP and unbound subject create no session', async () => {
+test('unbound provider subject creates no session and logs provider out', async () => {
   const f = fixture();
-  assert.deepEqual(await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '000000', now: new Date() }), { status: 'OTP_INVALID' });
-  assert.equal(f.store.records.length, 0);
   f.provider.subject = 'subject-other';
-  assert.deepEqual(await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() }), { status: 'ACCESS_DENIED' });
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'ACCESS_DENIED' });
   assert.equal(f.store.records.length, 0);
+  assert.equal(f.provider.logoutCount, 1);
 });
 
-test('verified email mismatch fails closed', async () => {
+test('verified email mismatch fails closed without email-based linking', async () => {
   const f = fixture();
   f.provider.email = 'other@example.test';
-  assert.deepEqual(await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() }), { status: 'ACCESS_DENIED' });
+  assert.deepEqual(await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid' }, now: new Date(), verifyProviderBudgetMs: 50 }), { status: 'ACCESS_DENIED' });
+  assert.equal(f.store.records.length, 0);
 });
