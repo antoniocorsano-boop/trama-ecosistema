@@ -18,7 +18,7 @@ type SupabaseAuthClientLike = {
 export interface SupabaseAuthProviderInput {
   issuer: string;
   createClientForSignal: (signal: AbortSignal) => SupabaseAuthClientLike;
-  availabilityProbe?: (signal: AbortSignal) => Promise<boolean>;
+  availabilityProbe: (signal: AbortSignal) => Promise<boolean>;
 }
 
 function throwIfAborted(signal: AbortSignal): void {
@@ -28,7 +28,7 @@ function throwIfAborted(signal: AbortSignal): void {
 export class SupabaseAuthProvider implements AuthProviderAdapter {
   readonly issuer: string;
   private readonly createClientForSignal: (signal: AbortSignal) => SupabaseAuthClientLike;
-  private readonly availabilityProbe?: (signal: AbortSignal) => Promise<boolean>;
+  private readonly availabilityProbe: (signal: AbortSignal) => Promise<boolean>;
 
   constructor(input: SupabaseAuthProviderInput) {
     this.issuer = input.issuer;
@@ -38,7 +38,6 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
 
   async checkAvailability(input: { signal: AbortSignal }): Promise<boolean> {
     if (input.signal.aborted) return false;
-    if (!this.availabilityProbe) return true;
     try {
       return Boolean(await this.availabilityProbe(input.signal)) && !input.signal.aborted;
     } catch {
