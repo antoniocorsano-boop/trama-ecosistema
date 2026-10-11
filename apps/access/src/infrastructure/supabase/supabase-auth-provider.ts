@@ -12,13 +12,10 @@ type SupabaseAuthClientLike = {
   auth: {
     signInWithOtp(input: {
       email: string;
-      options: { shouldCreateUser: boolean; emailRedirectTo?: string };
+      options: { shouldCreateUser: boolean; emailRedirectTo: string };
     }): Promise<{ data: unknown; error: ProviderError }>;
     exchangeCodeForSession(code: string): Promise<ProviderAuthResult>;
-    verifyOtp(input:
-      | { email: string; token: string; type: 'email' }
-      | { token_hash: string; type: MagicLinkEmailOtpType }
-    ): Promise<ProviderAuthResult>;
+    verifyOtp(input: { token_hash: string; type: MagicLinkEmailOtpType }): Promise<ProviderAuthResult>;
     signOut(): Promise<{ error: ProviderError }>;
   };
 };
@@ -100,46 +97,6 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
       if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
       if (error instanceof Error && error.message === 'PROVIDER_IDENTITY_INVALID') throw error;
       throw new Error('MAGIC_LINK_INVALID');
-    }
-  }
-
-  // Transitional OTP methods retained for historical regression coverage only; no public route exposes them.
-  async requestEmailOtp(input: { email: string; signal: AbortSignal }): Promise<void> {
-    const client = this.createClientForSignal(input.signal);
-    throwIfAborted(input.signal);
-    try {
-      const { error } = await client.auth.signInWithOtp({
-        email: input.email,
-        options: { shouldCreateUser: false },
-      });
-      if (error) throw new Error('PROVIDER_UNAVAILABLE');
-    } catch (error) {
-      if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
-      if (error instanceof Error && error.message === 'PROVIDER_UNAVAILABLE') throw error;
-      throw new Error('PROVIDER_UNAVAILABLE');
-    }
-  }
-
-  async verifyEmailOtp(input: { email: string; otp: string; signal: AbortSignal }): Promise<VerifiedExternalIdentity> {
-    const client = this.createClientForSignal(input.signal);
-    throwIfAborted(input.signal);
-    try {
-      const { data, error } = await client.auth.verifyOtp({
-        email: input.email,
-        token: input.otp,
-        type: 'email',
-      });
-      if (error) throw new Error('OTP_INVALID');
-      if (!data.user?.id) throw new Error('PROVIDER_IDENTITY_INVALID');
-      return {
-        issuer: this.issuer,
-        subject: data.user.id,
-        verifiedEmail: data.user.email ?? undefined,
-      };
-    } catch (error) {
-      if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
-      if (error instanceof Error && (error.message === 'OTP_INVALID' || error.message === 'PROVIDER_IDENTITY_INVALID')) throw error;
-      throw new Error('OTP_INVALID');
     }
   }
 
