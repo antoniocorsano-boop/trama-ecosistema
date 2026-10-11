@@ -3,7 +3,7 @@ import { APPLICATION_REGISTRY, type ApplicationRegistryEntry } from '../config/a
 import type { IdentityRepository } from '../ports/identity-repository.ts';
 import type { SessionStore } from '../ports/session-store.ts';
 import type { RateLimiter } from '../ports/rate-limiter.ts';
-import type { AuthProviderAdapter } from '../ports/auth-provider.ts';
+import type { AuthProviderAdapter, MagicLinkCallbackInput } from '../ports/auth-provider.ts';
 import type { VerifiedExternalIdentity } from '../domain/types.ts';
 import { InMemoryIdentityRepository } from '../testing/in-memory-identity-repository.ts';
 import { InMemorySessionStore } from '../testing/in-memory-session-store.ts';
@@ -26,8 +26,8 @@ export interface AccessRuntime {
 }
 class DisabledProvider implements AuthProviderAdapter {
   async checkAvailability(_input: { signal: AbortSignal }): Promise<boolean> { return false; }
-  async requestEmailOtp(_input: { email: string; signal: AbortSignal }): Promise<void> { throw new Error('PROVIDER_UNAVAILABLE'); }
-  async verifyEmailOtp(_input: { email: string; otp: string; signal: AbortSignal }): Promise<VerifiedExternalIdentity> { throw new Error('PROVIDER_UNAVAILABLE'); }
+  async requestEmailMagicLink(_input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void> { throw new Error('PROVIDER_UNAVAILABLE'); }
+  async verifyEmailMagicLink(_input: MagicLinkCallbackInput & { signal: AbortSignal }): Promise<VerifiedExternalIdentity> { throw new Error('PROVIDER_UNAVAILABLE'); }
 }
 
 declare global {
