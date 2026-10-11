@@ -21,9 +21,8 @@ export interface SupabaseAuthProviderInput {
   availabilityProbe?: (signal: AbortSignal) => Promise<boolean>;
 }
 
-function aborted(signal: AbortSignal): never {
+function throwIfAborted(signal: AbortSignal): void {
   if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-  throw new Error('UNREACHABLE');
 }
 
 export class SupabaseAuthProvider implements AuthProviderAdapter {
@@ -48,8 +47,8 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
   }
 
   async requestEmailOtp(input: { email: string; signal: AbortSignal }): Promise<void> {
-    if (input.signal.aborted) aborted(input.signal);
     const client = this.createClientForSignal(input.signal);
+    throwIfAborted(input.signal);
     try {
       const { error } = await client.auth.signInWithOtp({
         email: input.email,
@@ -64,8 +63,8 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
   }
 
   async verifyEmailOtp(input: { email: string; otp: string; signal: AbortSignal }): Promise<VerifiedExternalIdentity> {
-    if (input.signal.aborted) aborted(input.signal);
     const client = this.createClientForSignal(input.signal);
+    throwIfAborted(input.signal);
     try {
       const { data, error } = await client.auth.verifyOtp({
         email: input.email,
