@@ -3,6 +3,7 @@ import { AccessAuthPanel } from '../components/access-auth-panel';
 import { AccessLauncher } from '../components/access-launcher';
 import { AccessStatus } from '../components/access-status';
 import { buildLauncher } from '../src/domain/launcher-service.ts';
+import { isSessionBindingCurrent } from '../src/domain/principal-service.ts';
 import { sha256SessionSecret } from '../src/domain/session-service.ts';
 import { getRuntime } from '../src/server/runtime.ts';
 import { ACCESS_SESSION_COOKIE } from '../src/server/session-cookie.ts';
@@ -24,7 +25,8 @@ export default async function Page() {
       const principal = await runtime.identityRepository.getPrincipal(record.principalId);
       const contexts = await runtime.identityRepository.listActiveContexts(record.principalId);
       const context = contexts.length === 1 ? contexts[0] : undefined;
-      if (!principal || principal.status !== 'ACTIVE' || !context || context.status !== 'ACTIVE' || context.contextId !== record.contextId) {
+      const bindingCurrent = await isSessionBindingCurrent(runtime.identityRepository, record);
+      if (!principal || principal.status !== 'ACTIVE' || !context || context.status !== 'ACTIVE' || context.contextId !== record.contextId || !bindingCurrent) {
         sessionExpired = true;
       } else {
         const entitlements = await runtime.identityRepository.listEntitlements(record.principalId, record.contextId, now);
