@@ -10,6 +10,7 @@ import { requestPilotMagicLink } from '../src/domain/auth-service.ts';
 
 const now = new Date('2026-10-11T10:00:00Z');
 const redirectTo = 'https://access.example.test/auth/confirm';
+const codeVerifier = 'v'.repeat(43);
 
 test('rate limiter enforces 5 request and 10 verify attempts per 15 minutes', async () => {
   const limiter = new InMemoryRateLimiter();
@@ -58,8 +59,8 @@ test('provider outage does not reveal allowlist membership', async () => {
   });
   const provider = new FakeAuthProvider({ issuer: 'issuer-1', subject: 'subject-1', email: 'teacher@example.test', otp: 'legacy-unused' });
   provider.available = false;
-  const allowed = await requestPilotMagicLink({ repo, provider, email: 'teacher@example.test', redirectTo });
-  const unknown = await requestPilotMagicLink({ repo, provider, email: 'unknown@example.test', redirectTo });
+  const allowed = await requestPilotMagicLink({ repo, provider, email: 'teacher@example.test', redirectTo, codeVerifier });
+  const unknown = await requestPilotMagicLink({ repo, provider, email: 'unknown@example.test', redirectTo, codeVerifier });
   assert.deepEqual(allowed, { status: 'PROVIDER_UNAVAILABLE' });
   assert.deepEqual(unknown, { status: 'PROVIDER_UNAVAILABLE' });
 });
