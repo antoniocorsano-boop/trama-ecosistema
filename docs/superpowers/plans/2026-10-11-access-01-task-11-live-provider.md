@@ -24,13 +24,15 @@
 - Provider secret is server-only and MUST NOT appear in repository, browser, URL, log, test snapshot, receipt or artifact.
 - AccessSession TTL remains exactly `28800` seconds, absolute and non-sliding.
 - Live rate limiter is shared/persistent and preserves: `OTP_REQUEST=5/15m`, `OTP_VERIFY=10/15m`, `OTP_REQUEST_GLOBAL=20/15m`, `OTP_VERIFY_GLOBAL=20/15m`.
+- Every one of the four live rate-limit scopes MUST be proven across separate limiter instances under concurrent consumption before qualification.
 - `IdentityRepository.findAliasByEmail(..., { signal })` must propagate cancellation to the underlying live query and release it on abort.
 - No product federation, learner identity/data, custom SMTP, public/production deploy, or product authorization migration belongs to Task 11.
 - Native/TDD: every implementation task begins with witnessed RED, then minimal GREEN, then focused suite, then commit.
+- After Tasks 1–5, the exact pushed head MUST pass repository qualification and an independent Codex review with zero open P1/P2 blockers before Task 6 may perform any provider mutation. Any code change after that review invalidates the gate and requires fresh exact-head qualification/review before provider mutation.
 
 ## Review Focus
 
-1. Rotating aliases across independent runtime instances must still hit one atomic global provider-work budget before any remote provider operation.
+1. All four limiter scopes must preserve their exact limits atomically across separate runtime instances under concurrent consumption: per-alias request/verify and both global provider-work budgets.
 2. Aborting `findAliasByEmail` must cancel the underlying Supabase/PostgREST query, not merely stop awaiting its promise.
 3. `signInWithOtp` must never create a provider user when the email is absent, even if provider defaults change.
 4. A valid OTP that yields an unexpected `issuer + subject` must fail closed without email-based linking or session creation.
@@ -119,21 +121,24 @@ git commit -m "feat(access): add supabase auth provider adapter"
   - `SupabaseRateLimiter implements RateLimiter`
   - one atomic database operation for rate-limit consumption keyed by `(scope, key_digest, window)`.
 
-- [ ] **Step 1: Write failing persistence tests**
+- [ ] **Step 1: Write failing persistence and four-scope cross-instance limiter tests**
 
 Tests must prove:
 - alias lookup returns the same domain shape as the in-memory repository;
 - session secret is persisted only as the existing digest, never plaintext;
-- the 21st distinct-email request and verify attempts are denied globally before provider work;
-- two separate `SupabaseRateLimiter` instances share the same counters;
-- concurrent consume calls cannot exceed the configured limit;
+- `OTP_REQUEST` on the same alias digest permits at most 5 total consumes / 15m across at least two separate `SupabaseRateLimiter` instances under concurrent consumption; the 6th total consume is denied;
+- `OTP_VERIFY` on the same alias digest permits at most 10 total consumes / 15m across at least two separate limiter instances under concurrent consumption; the 11th total consume is denied;
+- `OTP_REQUEST_GLOBAL` permits at most 20 total consumes / 15m across at least two separate limiter instances under concurrent consumption; the 21st total consume is denied before provider work;
+- `OTP_VERIFY_GLOBAL` permits at most 20 total consumes / 15m across at least two separate limiter instances under concurrent consumption; the 21st total consume is denied before provider work;
+- each of those four tests uses the scope's real keying rule (`normalized-email digest` for alias scopes, fixed non-personal technical digest for global scopes), not one generic surrogate scope;
+- concurrent consumes racing at each boundary cannot exceed the configured scope limit;
 - no product/learner/material tables or columns are introduced.
 
 - [ ] **Step 2: Run focused tests and witness RED**
 
-Run: `cd apps/access && npm test -- --test-name-pattern="Supabase persistence|shared rate limiter"`
+Run: `cd apps/access && npm test -- --test-name-pattern="Supabase persistence|shared rate limiter|OTP_REQUEST|OTP_VERIFY"`
 
-Expected: FAIL because persistent implementations/migration do not exist.
+Expected: FAIL because persistent implementations/migration and explicit four-scope cross-instance guarantees do not exist.
 
 - [ ] **Step 3: Create the migration**
 
@@ -141,23 +146,23 @@ Create only the Access identity/context/entitlement/session/rate-limit structure
 
 - [ ] **Step 4: Implement repositories and rate limiter**
 
-Map database rows to existing domain types; do not leak database UUID/table semantics into domain authority. `SupabaseSessionStore` persists the existing SHA-256 session digest only.
+Map database rows to existing domain types; do not leak database UUID/table semantics into domain authority. `SupabaseSessionStore` persists the existing SHA-256 session digest only. The persistent limiter must enforce the exact configured limit separately for each `RateLimitScope` and share counters across runtime instances.
 
 - [ ] **Step 5: Extend the permanent validator**
 
-Keep all existing product/learner/material prohibitions and add an adversarial fixture proving the live migration remains inside the Access boundary.
+Keep all existing product/learner/material prohibitions and add adversarial fixtures proving the live migration remains inside the Access boundary and that all four canonical rate-limit scope names remain represented by the live implementation/tests.
 
 - [ ] **Step 6: Run focused tests and validator**
 
 Run:
 
 ```bash
-cd apps/access && npm test -- --test-name-pattern="Supabase persistence|shared rate limiter"
+cd apps/access && npm test -- --test-name-pattern="Supabase persistence|shared rate limiter|OTP_REQUEST|OTP_VERIFY"
 cd ../.. && node scripts/test-trama-access-phase2-validator.mjs
 node scripts/validate-trama-access-phase2.mjs
 ```
 
-Expected: PASS.
+Expected: PASS, including the separate cross-instance/concurrent boundary test for each of the four scopes.
 
 - [ ] **Step 7: Commit**
 
@@ -292,12 +297,32 @@ Run: `cd apps/access && npm test -- --test-name-pattern="Task 11 provisioning"`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Run full pre-mutation qualification on the exact pushed head**
+
+Run:
 
 ```bash
-git add apps/access/scripts/provision-task11-pilot.ts apps/access/tests/provision-task11-pilot.test.ts docs/evidence/access-01/access-01-task-11-live-receipt.template.md
-git commit -m "feat(access): add guarded task11 pilot provisioning"
+cd apps/access && npm test
+npm run typecheck
+npm run build
+npm run test:e2e
+cd ../.. && node scripts/test-trama-access-phase2-validator.mjs
+node scripts/validate-trama-access-phase2.mjs
 ```
+
+Then require the repository Governance/TRAMA Access workflows on that exact pushed head.
+
+Expected: all PASS before any provider resource is created or modified.
+
+- [ ] **Step 6: Request independent Codex review on that exact head**
+
+Review Tasks 1–5 with focus on provider adapter, `shouldCreateUser:false`, exact subject authority, token/secret isolation, persistent four-scope rate limiting, real abort propagation, migration boundary and provisioning idempotency/privacy.
+
+Required gate: review completed on the same exact head, **zero open P1/P2 blockers**. If the review produces a code/documentation change, repeat Step 5 and Step 6 on the new exact head. **Do not proceed to Task 6 until this gate is clean.**
+
+- [ ] **Step 7: Commit only if review remediation changed tracked files**
+
+Any remediation commit invalidates the prior exact-head gate; re-run Steps 5–6 after the commit. If no remediation is needed, do not create a ceremonial commit.
 
 ### Task 6: Execute authorized provider provisioning and live qualification
 
@@ -306,34 +331,43 @@ git commit -m "feat(access): add guarded task11 pilot provisioning"
 - Modify only if needed for evidence hooks: `.github/workflows/trama-access.yml`
 
 **Interfaces:**
-- Consumes: the explicitly approved authorization decision, eligible team pilot email, provider Free project, live environment secrets.
+- Consumes: the explicitly approved authorization decision, eligible team pilot email, provider Free project, live environment secrets, and the clean pre-mutation exact-head review gate from Task 5.
 - Produces: one sanitized live qualification receipt and no public deployment.
 
-- [ ] **Step 1: Re-check the human gate before any external mutation**
+- [ ] **Step 1: Re-check the human gate and pre-mutation review gate before any external mutation**
 
-Required state: explicit authorization of `docs/evidence/access-01/access-01-task-11-provider-authorization-decision.md`. If absent, STOP with no provider mutations.
+Required state:
+- explicit authorization of `docs/evidence/access-01/access-01-task-11-provider-authorization-decision.md`;
+- Tasks 1–5 exact-head qualification PASS;
+- independent Codex review completed on the same exact head with zero open P1/P2 blockers.
+
+If any condition is absent, stale, or refers to another head, STOP with no provider mutations.
 
 - [ ] **Step 2: Check Free quota, Frankfurt availability and built-in SMTP eligibility**
 
-If any condition is not satisfied, STOP `AWAITING_HUMAN_DECISION`; do not choose another region, paid plan or custom SMTP.
+This step is read-only preflight. If any condition is not satisfied, STOP `AWAITING_HUMAN_DECISION`; do not choose another region, paid plan or custom SMTP.
 
-- [ ] **Step 3: Create/configure the dedicated provider project and live Access store**
+- [ ] **Step 3: Reconfirm exact head immediately before the first provider mutation**
 
-Apply only the approved project, OTP-only template, one-user, secret and migration scope. Never print the secret.
+Assert that no tracked code/documentation change has occurred since the clean Task 5 review. If the head moved, STOP and repeat Task 5 Steps 5–6 before mutation.
 
-- [ ] **Step 4: Run the provisioning command for exactly one pilot**
+- [ ] **Step 4: Create/configure the dedicated provider project and live Access store**
+
+This is the **first external provider mutation**. Apply only the approved project, OTP-only template, one-user, secret and migration scope. Never print the secret.
+
+- [ ] **Step 5: Run the provisioning command for exactly one pilot**
 
 Verify provider user pre-exists before requesting OTP and that the exact external subject is bound server-side.
 
-- [ ] **Step 5: Run one controlled live OTP smoke**
+- [ ] **Step 6: Run one controlled live OTP smoke**
 
 Execute request → human reads OTP from the authorized mailbox → verify → exact identity resolution → AccessSession → launcher → logout. The OTP must be supplied ephemerally and never echoed, logged or written to evidence.
 
-- [ ] **Step 6: Run negative live checks**
+- [ ] **Step 7: Run negative live checks**
 
-At minimum: unknown alias, invalid OTP, subject mismatch fixture, provider outage/failure mapping, alias revocation, entitlement revocation, session expiry/logout behavior, cross-instance rate-limit proof, aborted alias query proof.
+At minimum: unknown alias, invalid OTP, subject mismatch fixture, provider outage/failure mapping, alias revocation, entitlement revocation, session expiry/logout behavior, aborted alias query proof, and live cross-instance/concurrent proof for each of `OTP_REQUEST`, `OTP_VERIFY`, `OTP_REQUEST_GLOBAL`, `OTP_VERIFY_GLOBAL` at its exact configured limit.
 
-- [ ] **Step 7: Run full exact-head qualification**
+- [ ] **Step 8: Run full post-live exact-head qualification**
 
 Run:
 
@@ -350,21 +384,22 @@ Then require the repository Governance/TRAMA Access workflows on the exact pushe
 
 Expected: all PASS; zero open blocker.
 
-- [ ] **Step 8: Write the sanitized receipt**
+- [ ] **Step 9: Write the sanitized receipt**
 
-Record only approved non-secret metadata, exact head, region/Free/built-in-email confirmations and test/check outcomes. No email, OTP, provider subject, provider tokens, secret or session cookie.
+Record only approved non-secret metadata, exact head, region/Free/built-in-email confirmations and test/check outcomes. Include the four per-scope live rate-limit results without recording alias/email/key digests. No email, OTP, provider subject, provider tokens, secret or session cookie.
 
-- [ ] **Step 9: Request fresh independent Codex review**
+- [ ] **Step 10: Request fresh independent post-live Codex review**
 
-Review exact head with focus on provider adapter, auto-provision prevention, token isolation, persistent rate limiting, real abort propagation, secret hygiene, subject binding and migration boundary.
+Review exact head with focus on provider adapter, auto-provision prevention, token isolation, persistent four-scope rate limiting, real abort propagation, secret hygiene, subject binding, migration boundary and sanitized evidence.
 
-- [ ] **Step 10: Stop at qualification boundary**
+- [ ] **Step 11: Stop at qualification boundary**
 
-Even after a clean review, do **not** deploy publicly and do **not** implement federation. Final state is `TASK_11_QUALIFIED_AWAITING_DEPLOY_DECISION`.
+Even after a clean post-live review, do **not** deploy publicly and do **not** implement federation. Final state is `TASK_11_QUALIFIED_AWAITING_DEPLOY_DECISION`.
 
 ## Self-Review Result
 
 - Spec coverage: all authorization scope, stop conditions, provider/live-store hardening, live smoke, evidence and review gates are mapped to Tasks 1–6.
 - Type consistency: all implementations remain behind the existing Phase 2 ports; no new domain authority interface is introduced.
-- Review focus coverage: cross-instance limiter (Task 2/6), real abort (Task 3/6), no auto-create (Task 1/6), subject mismatch (Task 5/6), token minimization (Task 1/6).
-- Proportion: provider provisioning and live mutation remain a final separate task so code can be reviewed before external state changes.
+- Review focus coverage: all four scopes have separate cross-instance/concurrent boundary tests in Task 2 and live proof in Task 6; real abort is Task 3/6; no auto-create is Task 1/6; subject mismatch is Task 5/6; token minimization is Task 1/6.
+- Sequencing: Tasks 1–5 are fully qualified and independently reviewed on an exact head before Task 6 may perform the first provider mutation; any intervening tracked change invalidates that gate.
+- Proportion: external provider mutation remains isolated in Task 6; code, tests, validator, provisioning guard and pre-mutation independent review are completed first.
