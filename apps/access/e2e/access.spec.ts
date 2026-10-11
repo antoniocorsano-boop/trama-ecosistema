@@ -51,6 +51,7 @@ test('invalid existing session is presented as expired and logout clears a valid
   await page.getByRole('button', { name: 'Invia codice' }).click();
   await page.getByLabel('Codice OTP').fill('123456');
   await page.getByRole('button', { name: 'Verifica codice' }).click();
+  await expect(page.getByRole('heading', { name: 'Le tue applicazioni' })).toBeVisible();
   await page.getByRole('button', { name: 'Esci' }).click();
   await expect(page.getByLabel('Email professionale')).toBeVisible();
 });
@@ -63,6 +64,7 @@ test('signed-out and launcher surfaces have no serious accessibility violations'
   await page.getByRole('button', { name: 'Invia codice' }).click();
   await page.getByLabel('Codice OTP').fill('123456');
   await page.getByRole('button', { name: 'Verifica codice' }).click();
+  await expect(page.getByRole('heading', { name: 'Le tue applicazioni' })).toBeVisible();
   results = await new AxeBuilder({ page }).analyze();
   expect(results.violations.filter((v) => ['serious', 'critical'].includes(v.impact ?? ''))).toEqual([]);
 });
