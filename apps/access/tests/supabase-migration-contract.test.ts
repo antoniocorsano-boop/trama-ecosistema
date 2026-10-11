@@ -56,6 +56,11 @@ test('pilot singleton claim is additive, global and sorts after already-applied 
   assert.match(sql, /TASK11:GLOBAL/i, 'claim and provisioning must serialize on one project-wide advisory-lock namespace');
   assert.match(sql, /pilot_allowed\s+is\s+true/i, 'final provisioning must enforce a project-wide governed-pilot count/boundary');
   assert.match(sql, /provider_subject/i, 'final provisioning must still bind the provider subject');
+  assert.doesNotMatch(
+    sql,
+    /pg_catalog\.position\s*\(/i,
+    'POSITION(... IN ...) is PostgreSQL special syntax and must not be schema-qualified',
+  );
 });
 
 test('live shared limiter derives sliding-window time from the database clock', () => {
