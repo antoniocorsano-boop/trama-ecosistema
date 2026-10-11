@@ -9,7 +9,7 @@ import { InMemoryIdentityRepository } from '../testing/in-memory-identity-reposi
 import { InMemorySessionStore } from '../testing/in-memory-session-store.ts';
 import { InMemoryRateLimiter } from '../testing/in-memory-rate-limiter.ts';
 import { FakeAuthProvider } from '../testing/fake-auth-provider.ts';
-import { createSupabaseAuthClient, createSupabaseServerClient } from '../infrastructure/supabase/supabase-client.ts';
+import { createSupabaseServerClient } from '../infrastructure/supabase/supabase-client.ts';
 import { SupabaseAuthProvider } from '../infrastructure/supabase/supabase-auth-provider.ts';
 import { SupabaseIdentityRepository } from '../infrastructure/supabase/supabase-identity-repository.ts';
 import { SupabaseSessionStore } from '../infrastructure/supabase/supabase-session-store.ts';
@@ -26,7 +26,7 @@ export interface AccessRuntime {
 }
 class DisabledProvider implements AuthProviderAdapter {
   async checkAvailability(_input: { signal: AbortSignal }): Promise<boolean> { return false; }
-  async requestEmailMagicLink(_input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void> { throw new Error('PROVIDER_UNAVAILABLE'); }
+  async requestEmailMagicLink(_input: { email: string; redirectTo: string; codeVerifier: string; signal: AbortSignal }): Promise<void> { throw new Error('PROVIDER_UNAVAILABLE'); }
   async verifyEmailMagicLink(_input: MagicLinkCallbackInput & { signal: AbortSignal }): Promise<VerifiedExternalIdentity> { throw new Error('PROVIDER_UNAVAILABLE'); }
 }
 
@@ -89,11 +89,9 @@ export function createAccessRuntime(env: NodeJS.ProcessEnv = process.env, fetchI
     const rateLimiter = new SupabaseRateLimiter(rpcClient);
     const authProvider = new SupabaseAuthProvider({
       issuer: live.issuer,
-      createClientForSignal: (signal) => createSupabaseAuthClient({
-        url: live.url,
-        publishableKey: live.publishableKey,
-        signal,
-      }),
+      projectUrl: live.url,
+      publishableKey: live.publishableKey,
+      fetchImpl,
       availabilityProbe: createAvailabilityProbe(live.url, live.publishableKey, fetchImpl),
     });
     return { config, identityRepository, sessionStore, rateLimiter, authProvider, applicationRegistry: APPLICATION_REGISTRY, now: () => new Date() };
