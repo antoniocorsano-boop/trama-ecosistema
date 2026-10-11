@@ -23,7 +23,7 @@ pre-authorized email alias
   -> /auth/confirm?code=<provider auth code>
   -> /auth/v1/token?grant_type=pkce with auth_code + code_verifier
   -> transient provider token/session reduced to verified issuer + subject + email
-  -> provider token/session discarded and best-effort revoked
+  -> independent bounded best-effort provider-session revocation
   -> exact governed issuer + subject binding
   -> ACTIVE principal
   -> exactly one ACTIVE institutional context with institution reference
@@ -43,6 +43,7 @@ The governed `token_hash` callback form remains accepted for compatibility, but 
 - Email matching never replaces exact `issuer + subject` authority after provider verification.
 - No provider access token, refresh token, session object, Magic Link code, token hash, or PKCE verifier is persisted in TRAMA state.
 - Provider tokens returned by a callback are best-effort revoked even if provider identity reduction fails.
+- Transient provider-session cleanup is **outside the Magic Link verification deadline** and uses an independent finite `500 ms` abort budget; cleanup latency or failure cannot change an already established verified-identity result.
 - Provider-authenticated identities that fail TRAMA authorization create no local session.
 - AccessSession TTL remains absolute `28800` seconds.
 - The private Access store, RLS/grants boundary, entitlement model, and four shared limiter scopes remain unchanged except for forward additive migrations.
@@ -75,19 +76,19 @@ The claim is intentionally durable: if an external provider mutation fails, retr
 
 ## Implementation qualification before this evidence update
 
-Implementation baseline: `45460f2791e6cd3be746218524ab6a3ade6372e1`
+Implementation baseline: `2acb0f9ad6c38f0adc1d208ee9c95ec0a0155cc8`
 
 Fresh checks on that exact implementation baseline:
 
-- TRAMA Access run `38171772398` / #258 — PASS
+- TRAMA Access run `38172855553` / #262 — PASS
   - unit tests — PASS
   - typecheck — PASS
   - build — PASS
   - Browser Certification — PASS
   - Phase 2 invariant-validator adversarial tests — PASS
   - Phase 2 branch/runtime invariant validation — PASS
-- Governance run `38171772375` / #2316 — PASS
-- TRAMA Gateway run `38171772377` / #347 — PASS
+- Governance run `38172855579` / #2320 — PASS
+- TRAMA Gateway run `38172855502` / #351 — PASS
 
 The documentation commit that contains this note requires its own exact-head qualification before independent review or provider mutation.
 
