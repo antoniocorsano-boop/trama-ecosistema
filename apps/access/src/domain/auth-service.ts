@@ -6,6 +6,7 @@ import { digestRateLimitKey } from '../ports/rate-limiter.ts';
 import { isPilotAliasAllowed, resolvePrincipalForVerifiedIdentity } from './principal-service.ts';
 import { issueAccessSession } from './session-service.ts';
 import { normalizeLoginEmail } from './email.ts';
+import type { VerifiedExternalIdentity } from './types.ts';
 
 export type OtpRequestTimingPolicy = {
   providerBudgetMs: number;
@@ -16,6 +17,8 @@ export const DEFAULT_OTP_REQUEST_TIMING: OtpRequestTimingPolicy = {
   providerBudgetMs: 1200,
   publicFloorMs: 1500,
 };
+
+export const DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS = 1200;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -31,7 +34,11 @@ async function settleSendBeforeDeadline(
 
   const controller = new AbortController();
   let timeout: ReturnType<typeof setTimeout> | undefined;
-  const work = provider.requestEmailOtp({ email, signal: controller.signal }).catch(() => undefined);
+  // Invoke the adapter inside a promise boundary so a synchronous throw is
+  // normalized exactly like an asynchronously rejected provider operation.
+  const work = Promise.resolve()
+    .then(() => provider.requestEmailOtp({ email, signal: controller.signal }))
+    .catch(() => undefined);
   const deadline = new Promise<void>((resolve) => {
     timeout = setTimeout(() => {
       controller.abort();
@@ -41,6 +48,35 @@ async function settleSendBeforeDeadline(
 
   try {
     await Promise.race([work, deadline]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
+
+async function verifyWithinBudget(input: {
+  provider: AuthProviderAdapter;
+  email: string;
+  otp: string;
+  budgetMs: number;
+}): Promise<VerifiedExternalIdentity | null> {
+  if (input.budgetMs <= 0) throw new Error('INVALID_OTP_VERIFY_TIMING_POLICY');
+
+  const controller = new AbortController();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const work = Promise.resolve()
+    .then(() => input.provider.verifyEmailOtp({ email: input.email, otp: input.otp, signal: controller.signal }))
+    .then((identity) => ({ ok: true as const, identity }))
+    .catch(() => ({ ok: false as const }));
+  const deadline = new Promise<{ ok: false }>((resolve) => {
+    timeout = setTimeout(() => {
+      controller.abort();
+      resolve({ ok: false });
+    }, input.budgetMs);
+  });
+
+  try {
+    const outcome = await Promise.race([work, deadline]);
+    return outcome.ok ? outcome.identity : null;
   } finally {
     if (timeout) clearTimeout(timeout);
   }
@@ -93,7 +129,16 @@ export async function requestPilotOtp(input: {
 export type VerifyPilotOtpResult =
   | { status: 'AUTHENTICATED'; principalId: string; contextId: string; sessionSecret: string }
   | { status: 'OTP_INVALID' | 'OTP_EXPIRED' | 'PROVIDER_UNAVAILABLE' | 'ACCESS_DENIED' | 'RATE_LIMITED' };
-export async function verifyPilotOtp(input: { repo: IdentityRepository; provider: AuthProviderAdapter; store: SessionStore; email: string; otp: string; now: Date; rateLimiter?: RateLimiter }): Promise<VerifyPilotOtpResult> {
+export async function verifyPilotOtp(input: {
+  repo: IdentityRepository;
+  provider: AuthProviderAdapter;
+  store: SessionStore;
+  email: string;
+  otp: string;
+  now: Date;
+  rateLimiter?: RateLimiter;
+  verifyProviderBudgetMs?: number;
+}): Promise<VerifyPilotOtpResult> {
   const email = normalizeLoginEmail(input.email);
   if (input.rateLimiter) {
     const rate = await input.rateLimiter.consume({ scope: 'OTP_VERIFY', keyDigest: digestRateLimitKey(email), now: input.now });
@@ -104,16 +149,18 @@ export async function verifyPilotOtp(input: { repo: IdentityRepository; provider
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
 
   const allowed = await isPilotAliasAllowed(input.repo, email);
-  let verified;
-  try {
-    // Always execute provider verification after the address-independent health
-    // check, even for an unknown/not-allowed alias. Returning early before this
-    // remote operation would leave a repeatable response-time membership oracle.
-    verified = await input.provider.verifyEmailOtp({ email, otp: input.otp });
-  } catch {
-    return { status: 'OTP_INVALID' };
-  }
-  if (!allowed) return { status: 'OTP_INVALID' };
+  // Always execute bounded provider verification after the address-independent
+  // health check, even for an unknown/not-allowed alias. Both membership
+  // branches therefore perform the same remote operation class, while an
+  // enforceable AbortSignal prevents provider tail latency from retaining an
+  // unauthenticated request indefinitely.
+  const verified = await verifyWithinBudget({
+    provider: input.provider,
+    email,
+    otp: input.otp,
+    budgetMs: input.verifyProviderBudgetMs ?? DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS,
+  });
+  if (!verified || !allowed) return { status: 'OTP_INVALID' };
 
   const resolution = await resolvePrincipalForVerifiedIdentity(input.repo, verified);
   if (!resolution.ok) return { status: 'ACCESS_DENIED' };
