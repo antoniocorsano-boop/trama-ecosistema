@@ -76,21 +76,21 @@ The claim is intentionally durable: if an external provider mutation fails, retr
 
 ## Exact-head qualification
 
-Exact head before this evidence-only qualification commit: `68354f28cb77baa90b528687131aeb816e997075`.
+Qualified head: `9a6e6e57bd04048471996a81a23e5b6cc537d68e`.
 
 Fresh checks on that exact head:
 
-- TRAMA Access run `38173042195` / #263 — PASS
+- TRAMA Access run `38173195936` / #264 — PASS
   - unit tests — PASS
   - typecheck — PASS
   - build — PASS
   - Browser Certification — PASS
   - Phase 2 invariant-validator adversarial tests — PASS
   - Phase 2 branch/runtime invariant validation — PASS
-- Governance run `38173042068` / #2321 — PASS
-- TRAMA Gateway run `38173042090` / #352 — PASS
+- Governance run `38173196010` / #2322 — PASS
+- TRAMA Gateway run `38173196056` / #353 — PASS
 
-The commit containing this evidence update must also be qualified before independent review or provider mutation.
+No provider/database mutation is authorized by this qualification alone. A fresh independent review on the exact head is required before live preflight or provisioning.
 
 ## Canonical supporting documents
 
