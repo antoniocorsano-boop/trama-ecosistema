@@ -10,6 +10,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   identities: Record<string, FakeIdentity>;
   requestCount = 0;
   verifyCount = 0;
+  requestDelayMs = 0;
   available = true;
   requestFailure = false;
   verifyFailure: 'INVALID' | 'EXPIRED' | 'UNAVAILABLE' | null = null;
@@ -19,6 +20,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   async checkAvailability(): Promise<boolean> { return this.available; }
   async requestEmailOtp(_input: { email: string }): Promise<void> {
     this.requestCount += 1;
+    if (this.requestDelayMs > 0) await new Promise((resolve) => setTimeout(resolve, this.requestDelayMs));
     if (this.requestFailure) throw new Error('PROVIDER_UNAVAILABLE');
   }
   async verifyEmailOtp(input: { email: string; otp: string }): Promise<VerifiedExternalIdentity> {
