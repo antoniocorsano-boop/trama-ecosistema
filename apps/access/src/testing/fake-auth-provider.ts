@@ -22,7 +22,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   constructor(seed: { issuer: string; subject: string; email: string; otp: string; identities?: Record<string, FakeIdentity> }) {
     this.issuer = seed.issuer; this.subject = seed.subject; this.email = seed.email; this.otp = seed.otp; this.identities = seed.identities ?? {};
   }
-  async checkAvailability(): Promise<boolean> { return this.available; }
+  async checkAvailability(_input: { signal: AbortSignal }): Promise<boolean> { return this.available; }
   async requestEmailOtp(input: { email: string; signal: AbortSignal }): Promise<void> {
     this.requestCount += 1;
     if (this.requestDelayMs > 0) {

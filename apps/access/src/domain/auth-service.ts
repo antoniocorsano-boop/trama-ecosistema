@@ -24,6 +24,33 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function checkAvailabilityBeforeDeadline(
+  provider: AuthProviderAdapter,
+  deadlineAtMs: number,
+): Promise<boolean> {
+  const remainingMs = deadlineAtMs - performance.now();
+  if (remainingMs <= 0) return false;
+
+  const controller = new AbortController();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const work = Promise.resolve()
+    .then(() => provider.checkAvailability({ signal: controller.signal }))
+    .then((available) => Boolean(available))
+    .catch(() => false);
+  const deadline = new Promise<boolean>((resolve) => {
+    timeout = setTimeout(() => {
+      controller.abort();
+      resolve(false);
+    }, remainingMs);
+  });
+
+  try {
+    return await Promise.race([work, deadline]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
+
 async function settleSendBeforeDeadline(
   provider: AuthProviderAdapter,
   email: string,
@@ -53,13 +80,14 @@ async function settleSendBeforeDeadline(
   }
 }
 
-async function verifyWithinBudget(input: {
+async function verifyBeforeDeadline(input: {
   provider: AuthProviderAdapter;
   email: string;
   otp: string;
-  budgetMs: number;
+  deadlineAtMs: number;
 }): Promise<VerifiedExternalIdentity | null> {
-  if (input.budgetMs <= 0) throw new Error('INVALID_OTP_VERIFY_TIMING_POLICY');
+  const remainingMs = input.deadlineAtMs - performance.now();
+  if (remainingMs <= 0) return null;
 
   const controller = new AbortController();
   let timeout: ReturnType<typeof setTimeout> | undefined;
@@ -71,7 +99,7 @@ async function verifyWithinBudget(input: {
     timeout = setTimeout(() => {
       controller.abort();
       resolve({ ok: false });
-    }, input.budgetMs);
+    }, remainingMs);
   });
 
   try {
@@ -102,25 +130,23 @@ export async function requestPilotOtp(input: {
     const rate = await input.rateLimiter.consume({ scope: 'OTP_REQUEST', keyDigest: digestRateLimitKey(email), now });
     if (!rate.allowed) return { status: 'OTP_REQUESTED' };
   }
-  let available = false;
-  try { available = await input.provider.checkAvailability(); } catch { available = false; }
-  if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
 
   const timing = input.timing ?? DEFAULT_OTP_REQUEST_TIMING;
   if (timing.providerBudgetMs < 0 || timing.publicFloorMs <= timing.providerBudgetMs) {
     throw new Error('INVALID_OTP_REQUEST_TIMING_POLICY');
   }
 
-  // The membership-sensitive interval starts before the alias lookup. The
-  // lookup and any real provider send therefore share one deadline; a slow
-  // lookup reduces the remaining send budget instead of extending the allowed
-  // branch beyond the unknown branch. The provider receives an AbortSignal so
-  // expiry also cancels the underlying delivery attempt rather than detaching it.
+  // Availability, alias lookup and any real provider send share one absolute
+  // provider deadline. A stalled availability probe is actively aborted rather
+  // than retaining an unauthenticated request indefinitely.
   const startedAtMs = performance.now();
-  const sensitiveDeadlineAtMs = startedAtMs + timing.providerBudgetMs;
+  const providerDeadlineAtMs = startedAtMs + timing.providerBudgetMs;
+  const available = await checkAvailabilityBeforeDeadline(input.provider, providerDeadlineAtMs);
+  if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
+
   const allowed = await isPilotAliasAllowed(input.repo, email);
   if (allowed) {
-    await settleSendBeforeDeadline(input.provider, email, sensitiveDeadlineAtMs);
+    await settleSendBeforeDeadline(input.provider, email, providerDeadlineAtMs);
   }
   await waitForPublicFloor(startedAtMs, timing.publicFloorMs);
   return { status: 'OTP_REQUESTED' };
@@ -144,26 +170,35 @@ export async function verifyPilotOtp(input: {
     const rate = await input.rateLimiter.consume({ scope: 'OTP_VERIFY', keyDigest: digestRateLimitKey(email), now: input.now });
     if (!rate.allowed) return { status: 'RATE_LIMITED' };
   }
-  let available = false;
-  try { available = await input.provider.checkAvailability(); } catch { available = false; }
+
+  const providerBudgetMs = input.verifyProviderBudgetMs ?? DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS;
+  if (providerBudgetMs <= 0) throw new Error('INVALID_OTP_VERIFY_TIMING_POLICY');
+
+  // Availability and verification share one provider deadline. Negative public
+  // verification outcomes are not released before that same deadline, removing
+  // response-time distinctions between fast and slow provider rejection paths.
+  const startedAtMs = performance.now();
+  const providerDeadlineAtMs = startedAtMs + providerBudgetMs;
+  const available = await checkAvailabilityBeforeDeadline(input.provider, providerDeadlineAtMs);
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
 
   const allowed = await isPilotAliasAllowed(input.repo, email);
-  // Always execute bounded provider verification after the address-independent
-  // health check, even for an unknown/not-allowed alias. Both membership
-  // branches therefore perform the same remote operation class, while an
-  // enforceable AbortSignal prevents provider tail latency from retaining an
-  // unauthenticated request indefinitely.
-  const verified = await verifyWithinBudget({
+  const verified = await verifyBeforeDeadline({
     provider: input.provider,
     email,
     otp: input.otp,
-    budgetMs: input.verifyProviderBudgetMs ?? DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS,
+    deadlineAtMs: providerDeadlineAtMs,
   });
-  if (!verified || !allowed) return { status: 'OTP_INVALID' };
+  if (!verified || !allowed) {
+    await waitForPublicFloor(startedAtMs, providerBudgetMs);
+    return { status: 'OTP_INVALID' };
+  }
 
   const resolution = await resolvePrincipalForVerifiedIdentity(input.repo, verified);
-  if (!resolution.ok) return { status: 'ACCESS_DENIED' };
+  if (!resolution.ok) {
+    await waitForPublicFloor(startedAtMs, providerBudgetMs);
+    return { status: 'ACCESS_DENIED' };
+  }
   const { secret } = await issueAccessSession({
     store: input.store,
     principalId: resolution.principal.principalId,
