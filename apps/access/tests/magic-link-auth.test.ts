@@ -47,13 +47,15 @@ test('verified email cannot relink an unexpected provider subject', async () => 
   const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { code: 'valid-code' }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 100 });
   assert.equal(result.status, 'ACCESS_DENIED');
   assert.equal(f.store.records.length, 0);
+  assert.equal(f.provider.logoutCount, 1);
 });
 
-test('provider-authenticated identity without an active entitlement fails closed', async () => {
+test('provider-authenticated identity without an active entitlement fails closed and logs provider out', async () => {
   const f = fixture(false);
   const result = await verifyPilotMagicLink({ repo: f.repo, provider: f.provider, store: f.store, callback: { tokenHash: 'valid-hash', type: 'magiclink' }, now, rateLimiter: f.rateLimiter, verifyProviderBudgetMs: 100 });
   assert.equal(result.status, 'ACCESS_DENIED');
   assert.equal(f.store.records.length, 0);
+  assert.equal(f.provider.logoutCount, 1);
 });
 
 test('Magic Link provider timeout creates no local session', async () => {
