@@ -9,6 +9,12 @@ import { InMemoryIdentityRepository } from '../testing/in-memory-identity-reposi
 import { InMemorySessionStore } from '../testing/in-memory-session-store.ts';
 import { InMemoryRateLimiter } from '../testing/in-memory-rate-limiter.ts';
 import { FakeAuthProvider } from '../testing/fake-auth-provider.ts';
+import { createSupabaseServerClient } from '../infrastructure/supabase/supabase-client.ts';
+import { SupabaseAuthProvider } from '../infrastructure/supabase/supabase-auth-provider.ts';
+import { SupabaseIdentityRepository } from '../infrastructure/supabase/supabase-identity-repository.ts';
+import { SupabaseSessionStore } from '../infrastructure/supabase/supabase-session-store.ts';
+import { SupabaseRateLimiter } from '../infrastructure/supabase/supabase-rate-limiter.ts';
+import type { SupabaseRpcClientLike } from '../infrastructure/supabase/supabase-rpc.ts';
 
 export interface AccessRuntime {
   config: AccessConfig;
@@ -29,10 +35,66 @@ declare global {
   var __tramaAccessPhase2Runtime: AccessRuntime | undefined;
 }
 
-function createRuntime(): AccessRuntime {
-  const config = loadAccessConfig(process.env);
-  if (config.providerKind === 'supabase' || config.storeKind === 'supabase') throw new Error('SUPABASE_ADAPTER_NOT_AUTHORIZED');
-  const e2eSeed = process.env.ACCESS_E2E_SEED === '1' && config.providerKind === 'fake' && config.storeKind === 'memory';
+function requiredSupabaseConfig(env: NodeJS.ProcessEnv): { url: string; secretKey: string; issuer: string } {
+  const rawUrl = env.ACCESS_SUPABASE_URL?.trim();
+  const secretKey = env.ACCESS_SUPABASE_SECRET_KEY?.trim();
+  if (!rawUrl || !secretKey) throw new Error('SUPABASE_CONFIG_MISSING');
+  let url: URL;
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  const normalizedUrl = url.origin;
+  return { url: normalizedUrl, secretKey, issuer: `${normalizedUrl}/auth/v1` };
+}
+
+function createAvailabilityProbe(
+  url: string,
+  secretKey: string,
+  fetchImpl: typeof fetch,
+): (signal: AbortSignal) => Promise<boolean> {
+  return async (signal) => {
+    if (signal.aborted) return false;
+    try {
+      const response = await fetchImpl(`${url}/rest/v1/`, {
+        method: 'GET',
+        headers: {
+          apikey: secretKey,
+          Authorization: `Bearer ${secretKey}`,
+          Accept: 'application/json',
+        },
+        cache: 'no-store',
+        signal,
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  };
+}
+
+export function createAccessRuntime(env: NodeJS.ProcessEnv = process.env, fetchImpl: typeof fetch = fetch): AccessRuntime {
+  const config = loadAccessConfig(env);
+  const e2eSeed = env.ACCESS_E2E_SEED === '1' && config.providerKind === 'fake' && config.storeKind === 'memory';
+
+  if (config.providerKind === 'supabase' && config.storeKind === 'supabase') {
+    const live = requiredSupabaseConfig(env);
+    const rpcClient = createSupabaseServerClient({ url: live.url, secretKey: live.secretKey }) as unknown as SupabaseRpcClientLike;
+    const identityRepository = new SupabaseIdentityRepository(rpcClient);
+    const sessionStore = new SupabaseSessionStore(rpcClient);
+    const rateLimiter = new SupabaseRateLimiter(rpcClient);
+    const authProvider = new SupabaseAuthProvider({
+      issuer: live.issuer,
+      createClientForSignal: (signal) => createSupabaseServerClient({ url: live.url, secretKey: live.secretKey, signal }),
+      availabilityProbe: createAvailabilityProbe(live.url, live.secretKey, fetchImpl),
+    });
+    return { config, identityRepository, sessionStore, rateLimiter, authProvider, applicationRegistry: APPLICATION_REGISTRY, now: () => new Date() };
+  }
+
   const identityRepository = e2eSeed ? new InMemoryIdentityRepository({
     principals: [
       { principalId: 'p-teacher', status: 'ACTIVE' },
@@ -54,7 +116,7 @@ function createRuntime(): AccessRuntime {
   const rateLimiter = new InMemoryRateLimiter();
   const authProvider: AuthProviderAdapter = config.providerKind === 'fake'
     ? new FakeAuthProvider({
-        issuer: 'test-issuer', subject: 'test-subject', email: 'pilot@example.test', otp: process.env.ACCESS_TEST_OTP ?? '123456',
+        issuer: 'test-issuer', subject: 'test-subject', email: 'pilot@example.test', otp: env.ACCESS_TEST_OTP ?? '123456',
         identities: e2eSeed ? {
           'teacher@example.test': { subject: 'subject-teacher', email: 'teacher@example.test' },
           'empty@example.test': { subject: 'subject-empty', email: 'empty@example.test' },
@@ -66,7 +128,7 @@ function createRuntime(): AccessRuntime {
 
 export function getRuntime(): AccessRuntime {
   if (globalThis.__tramaAccessPhase2Runtime) return globalThis.__tramaAccessPhase2Runtime;
-  const runtime = createRuntime();
+  const runtime = createAccessRuntime(process.env);
   if (runtime.config.nodeEnv !== 'production') globalThis.__tramaAccessPhase2Runtime = runtime;
   return runtime;
 }
