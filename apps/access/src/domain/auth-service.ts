@@ -19,6 +19,7 @@ export const DEFAULT_OTP_REQUEST_TIMING: OtpRequestTimingPolicy = {
 };
 
 export const DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS = 1200;
+const GLOBAL_PROVIDER_VERIFY_KEY_DIGEST = digestRateLimitKey('trama-access:otp-verify:global');
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -169,6 +170,12 @@ export async function verifyPilotOtp(input: {
   if (input.rateLimiter) {
     const rate = await input.rateLimiter.consume({ scope: 'OTP_VERIFY', keyDigest: digestRateLimitKey(email), now: input.now });
     if (!rate.allowed) return { status: 'RATE_LIMITED' };
+    const globalRate = await input.rateLimiter.consume({
+      scope: 'OTP_VERIFY_GLOBAL',
+      keyDigest: GLOBAL_PROVIDER_VERIFY_KEY_DIGEST,
+      now: input.now,
+    });
+    if (!globalRate.allowed) return { status: 'RATE_LIMITED' };
   }
 
   const providerBudgetMs = input.verifyProviderBudgetMs ?? DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS;
