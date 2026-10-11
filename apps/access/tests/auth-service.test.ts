@@ -40,6 +40,16 @@ test('unknown and allowed aliases with invalid OTP return the same public result
   assert.equal(f.store.records.length, 0);
 });
 
+test('unknown and allowed aliases both perform provider verification work', async () => {
+  const allowed = fixture();
+  assert.deepEqual(await verifyPilotOtp({ repo: allowed.repo, provider: allowed.provider, store: allowed.store, email: 'teacher@example.test', otp: '000000', now: new Date() }), { status: 'OTP_INVALID' });
+  assert.equal(allowed.provider.verifyCount, 1);
+
+  const unknown = fixture();
+  assert.deepEqual(await verifyPilotOtp({ repo: unknown.repo, provider: unknown.provider, store: unknown.store, email: 'nobody@example.test', otp: '000000', now: new Date() }), { status: 'OTP_INVALID' });
+  assert.equal(unknown.provider.verifyCount, 1);
+});
+
 test('verify-time provider failures remain membership-neutral after a healthy availability check', async () => {
   const f = fixture();
   f.provider.verifyFailure = 'UNAVAILABLE';
