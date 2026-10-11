@@ -89,6 +89,54 @@ test('SupabaseAuthProvider exchanges PKCE auth code with the exact verifier and 
   assert.equal(JSON.stringify(result).includes('refresh-secret'), false);
 });
 
+test('SupabaseAuthProvider keeps best-effort logout outside verification deadline with its own bounded signal', async () => {
+  const caller = new AbortController();
+  let logoutSignal: AbortSignal | null = null;
+  let resolveCleanupAbort!: () => void;
+  const cleanupAborted = new Promise<void>((resolve) => { resolveCleanupAbort = resolve; });
+
+  const provider = providerWith(async (input, init) => {
+    const url = String(input);
+    if (url.includes('/token?grant_type=pkce')) {
+      return new Response(JSON.stringify({
+        access_token: 'access-secret',
+        user: { id: 'provider-subject-1', email: 'pilot@example.test' },
+      }), { status: 200, headers: { 'content-type': 'application/json' } });
+    }
+    if (url.includes('/logout')) {
+      logoutSignal = init?.signal ?? null;
+      return await new Promise<Response>((resolve) => {
+        logoutSignal?.addEventListener('abort', () => {
+          resolveCleanupAbort();
+          resolve(new Response(null, { status: 204 }));
+        }, { once: true });
+      });
+    }
+    throw new Error(`unexpected request ${url}`);
+  });
+
+  const verification = provider.verifyEmailMagicLink({
+    code: '009e5066-fc11-4eca-8c8c-6fd82aa263f2',
+    codeVerifier: verifier,
+    signal: caller.signal,
+  });
+  const outcome = await Promise.race([
+    verification,
+    new Promise<'TIMEOUT'>((resolve) => setTimeout(() => resolve('TIMEOUT'), 100)),
+  ]);
+
+  assert.notEqual(outcome, 'TIMEOUT', 'verified identity must not await best-effort provider logout');
+  assert.deepEqual(outcome, { issuer, subject: 'provider-subject-1', verifiedEmail: 'pilot@example.test' });
+  assert.ok(logoutSignal, 'cleanup must still be attempted');
+  assert.notEqual(logoutSignal, caller.signal, 'cleanup must not reuse the verification deadline signal');
+
+  const bounded = await Promise.race([
+    cleanupAborted.then(() => true),
+    new Promise<false>((resolve) => setTimeout(() => resolve(false), 1500)),
+  ]);
+  assert.equal(bounded, true, 'cleanup signal must abort within a finite independent budget');
+});
+
 test('SupabaseAuthProvider verifies token hash and clears returned transient provider session', async () => {
   const calls: string[] = [];
   const provider = providerWith(async (input, init) => {
