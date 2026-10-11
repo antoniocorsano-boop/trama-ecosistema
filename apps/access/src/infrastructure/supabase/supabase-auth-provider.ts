@@ -3,6 +3,7 @@ import type { AuthProviderAdapter, MagicLinkCallbackInput, MagicLinkEmailOtpType
 import type { VerifiedExternalIdentity } from '../../domain/types.ts';
 
 const PKCE_VERIFIER_PATTERN = /^[A-Za-z0-9_-]{43,128}$/;
+const TRANSIENT_LOGOUT_TIMEOUT_MS = 500;
 
 type ProviderUser = { id: string; email?: string | null } | null;
 type ProviderTokenResponse = {
@@ -160,13 +161,18 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
       try {
         return providerIdentity(this.issuer, payload);
       } finally {
-        if (token) await this.logoutTransientSession(token, input.signal);
+        if (token) this.scheduleTransientSessionLogout(token);
       }
     } catch (error) {
       if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
       if (error instanceof Error && error.message === 'PROVIDER_IDENTITY_INVALID') throw error;
       throw new Error('MAGIC_LINK_INVALID');
     }
+  }
+
+  private scheduleTransientSessionLogout(token: string): void {
+    const signal = AbortSignal.timeout(TRANSIENT_LOGOUT_TIMEOUT_MS);
+    void this.logoutTransientSession(token, signal);
   }
 
   private async logoutTransientSession(token: string, signal: AbortSignal): Promise<void> {
