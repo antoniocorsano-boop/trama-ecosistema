@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 const RUNTIME_EXT = /\.(?:ts|tsx|js|jsx|mjs|cjs)$/i;
 const MIGRATION_RE = /^apps\/access\/supabase\/migrations\/.*\.sql$/i;
 const PRODUCT_DATA_TERMS = /(?:^|[^a-z0-9])(?:lesson|curricolo|student|learner|class|group|studio_draft|material|materials|materiale|materiali)(?:[^a-z0-9]|$)/i;
+const CANONICAL_RATE_SCOPES = ['OTP_REQUEST', 'OTP_REQUEST_GLOBAL', 'OTP_VERIFY', 'OTP_VERIFY_GLOBAL'];
+const ALLOWED_CANONICAL_METADATA_LITERALS = ['CURRICOLO_ATLAS'];
 
 function isRuntimeSource(file) {
   if (!file.startsWith('apps/access/')) return false;
@@ -36,6 +38,15 @@ function objectBlocks(source) {
     }
   }
   return blocks;
+}
+
+function migrationContentWithoutCanonicalMetadata(source) {
+  let result = source;
+  for (const literal of ALLOWED_CANONICAL_METADATA_LITERALS) {
+    result = result.replaceAll(`'${literal}'`, "'CANONICAL_APPLICATION'");
+    result = result.replaceAll(`\"${literal}\"`, '"CANONICAL_APPLICATION"');
+  }
+  return result;
 }
 
 export function validatePhase2Snapshot({ files, changedFiles = [] }) {
@@ -90,10 +101,19 @@ export function validatePhase2Snapshot({ files, changedFiles = [] }) {
   }
 
   for (const [file, source] of entries) {
-    if (MIGRATION_RE.test(file)) {
-      const hit = source.match(PRODUCT_DATA_TERMS);
-      if (hit) errors.push(`${file}: product/learner data term forbidden in Access store migration: ${hit[0]}`);
+    if (!MIGRATION_RE.test(file)) continue;
+    const contentForBoundaryScan = migrationContentWithoutCanonicalMetadata(source);
+    const hit = contentForBoundaryScan.match(PRODUCT_DATA_TERMS);
+    if (hit) errors.push(`${file}: product/learner data term forbidden in Access store migration: ${hit[0]}`);
+
+    if (/rate_limit_counters|access_rate_limit_consume/i.test(source)) {
+      for (const scope of CANONICAL_RATE_SCOPES) {
+        if (!source.includes(scope)) errors.push(`${file}: live rate limiter migration must represent canonical scope ${scope}`);
+      }
     }
+
+    const unsafeGrant = source.match(/grant\s+(?:select|insert|update|delete|all|usage)\b[^;]*\bto\s+(?:anon|authenticated)\b/i);
+    if (unsafeGrant) errors.push(`${file}: Access private store must not grant Data API access to anon/authenticated roles`);
   }
 
   return errors;
