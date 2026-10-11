@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { AuthProviderAdapter } from '../src/ports/auth-provider.ts';
+import type { IdentityRepository } from '../src/ports/identity-repository.ts';
 import type { VerifiedExternalIdentity } from '../src/domain/types.ts';
 import { InMemoryIdentityRepository } from '../src/testing/in-memory-identity-repository.ts';
 import { InMemorySessionStore } from '../src/testing/in-memory-session-store.ts';
@@ -137,4 +138,51 @@ test('provider availability is bounded and aborted in both request and verify fl
     { status: 'PROVIDER_UNAVAILABLE' },
   ]);
   assert.equal(abortCount, 2, 'both availability probes must be actively aborted at the provider deadline');
+});
+
+test('request alias lookup is bounded and aborted by the shared provider deadline', async () => {
+  let aliasLookupAbortCount = 0;
+  const base = repository();
+  const repo: IdentityRepository = {
+    findAliasByEmail(_normalizedEmail: string, input?: { signal?: AbortSignal }) {
+      return new Promise((_resolve, reject) => {
+        const signal = input?.signal;
+        if (!signal) return;
+        const onAbort = () => {
+          aliasLookupAbortCount += 1;
+          reject(new Error('ALIAS_LOOKUP_ABORTED'));
+        };
+        if (signal.aborted) onAbort();
+        else signal.addEventListener('abort', onAbort, { once: true });
+      });
+    },
+    findAliasByExternalIdentity: (identity) => base.findAliasByExternalIdentity(identity),
+    getAlias: (aliasId) => base.getAlias(aliasId),
+    getPrincipal: (principalId) => base.getPrincipal(principalId),
+    listActiveContexts: (principalId) => base.listActiveContexts(principalId),
+    listEntitlements: (principalId, contextId, at) => base.listEntitlements(principalId, contextId, at),
+  };
+  const provider: AuthProviderAdapter = {
+    async checkAvailability() { return true; },
+    async requestEmailOtp() {
+      throw new Error('REQUEST_MUST_NOT_RUN_AFTER_ALIAS_LOOKUP_TIMEOUT');
+    },
+    async verifyEmailOtp(): Promise<VerifiedExternalIdentity> {
+      throw new Error('VERIFY_MUST_NOT_RUN');
+    },
+  };
+
+  const result = await Promise.race([
+    requestPilotOtp({
+      repo,
+      provider,
+      email: 'teacher@example.test',
+      timing: { providerBudgetMs: 30, publicFloorMs: 60 },
+    }),
+    sleep(150).then(() => 'TEST_TIMEOUT' as const),
+  ]);
+
+  assert.notEqual(result, 'TEST_TIMEOUT', 'alias lookup remained unbounded past the request deadline');
+  assert.deepEqual(result, { status: 'OTP_REQUESTED' });
+  assert.equal(aliasLookupAbortCount, 1, 'the alias lookup must be actively aborted at the shared request deadline');
 });
