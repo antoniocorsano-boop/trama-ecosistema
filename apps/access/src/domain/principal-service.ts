@@ -1,10 +1,19 @@
 import type { IdentityRepository } from '../ports/identity-repository.ts';
-import type { AccessSessionRecord, PrincipalResolution, VerifiedExternalIdentity } from './types.ts';
+import type { AccessSessionRecord, InstitutionalContext, PrincipalResolution, VerifiedExternalIdentity } from './types.ts';
 import { normalizeLoginEmail } from './email.ts';
 
 export async function isPilotAliasAllowed(repo: IdentityRepository, email: string): Promise<boolean> {
   const alias = await repo.findAliasByEmail(normalizeLoginEmail(email));
   return Boolean(alias && alias.status === 'ACTIVE' && alias.pilotAllowed);
+}
+
+export function isActivePilotInstitutionalContext(context: InstitutionalContext | undefined): context is InstitutionalContext {
+  return Boolean(
+    context
+    && context.status === 'ACTIVE'
+    && context.contextType === 'INSTITUTION'
+    && context.institutionRef?.trim()
+  );
 }
 
 export async function isSessionBindingCurrent(repo: IdentityRepository, record: AccessSessionRecord): Promise<boolean> {
@@ -31,8 +40,6 @@ export async function resolvePrincipalForVerifiedIdentity(
   const contexts = await repo.listActiveContexts(principal.principalId);
   if (contexts.length !== 1) return { ok: false, code: 'ACCESS_DENIED' };
   const context = contexts[0]!;
-  if (context.status !== 'ACTIVE' || context.contextType !== 'INSTITUTION' || !context.institutionRef?.trim()) {
-    return { ok: false, code: 'ACCESS_DENIED' };
-  }
+  if (!isActivePilotInstitutionalContext(context)) return { ok: false, code: 'ACCESS_DENIED' };
   return { ok: true, principal, alias, context };
 }
