@@ -4,7 +4,7 @@ State: `APPROVED_2026-10-11`
 
 ## Decision
 
-The numeric email OTP transport described by the original ACCESS-01 Task 11 authorization/implementation material is superseded for the pilot by **Supabase email Magic Link**.
+The numeric email OTP transport described by the original ACCESS-01 Task 11 authorization/implementation material is superseded for the pilot by **Supabase email Magic Link** using the provider's default email template plus **PKCE**.
 
 This note changes authentication transport only. It does not broaden authority, deployment, federation, data scope, provider count, plan, or pilot population.
 
@@ -12,27 +12,54 @@ This note changes authentication transport only. It does not broaden authority, 
 
 ```text
 pre-authorized email alias
-  -> Supabase signInWithOtp(..., shouldCreateUser=false, emailRedirectTo=<configured TRAMA Access callback>)
-  -> Magic Link callback (PKCE code or governed token-hash form)
-  -> verified provider issuer + subject
+  -> server generates high-entropy PKCE code_verifier
+  -> host-only HttpOnly/Secure/SameSite=Lax PKCE verifier cookie
+  -> Supabase /auth/v1/otp
+       create_user=false
+       redirect_to=<configured TRAMA Access callback>
+       code_challenge=<S256(verifier)>
+       code_challenge_method=s256
+  -> Supabase default Magic Link email
+  -> /auth/confirm?code=<provider auth code>
+  -> /auth/v1/token?grant_type=pkce with auth_code + code_verifier
+  -> transient provider token/session reduced to verified issuer + subject + email
+  -> provider token/session discarded and best-effort revoked
+  -> exact governed issuer + subject binding
   -> ACTIVE principal
-  -> ACTIVE context
+  -> exactly one ACTIVE institutional context with institution reference
   -> ACTIVE/time-valid entitlement
   -> local TRAMA Access session (EMAIL_MAGIC_LINK)
+  -> PKCE verifier cookie cleared
 ```
 
-A valid Supabase authentication result is necessary but is not sufficient for TRAMA authorization.
+The governed `token_hash` callback form remains accepted for compatibility, but the controlled pilot does not depend on a customized email template. A valid Supabase authentication result is necessary but is not sufficient for TRAMA authorization.
 
 ## Preserved security invariants
 
-- `shouldCreateUser=false`; unknown emails cannot create provider users through the runtime.
-- Unknown/disallowed aliases do not trigger a provider email send and receive a neutral public request result.
+- Automatic provider-user creation is disabled (`create_user=false`); unknown emails cannot create provider users through the runtime.
+- The Magic Link redirect derives only from the configured TRAMA Access origin; request headers cannot select the callback origin.
+- Unknown/disallowed aliases do not trigger a provider email send and receive the same neutral public request result shape.
+- PKCE is bound with S256; a `code` callback without the corresponding verifier cookie fails closed.
 - Email matching never replaces exact `issuer + subject` authority after provider verification.
-- No provider access token, refresh token, session object, Magic Link code, or token hash is persisted in TRAMA state.
-- Provider-authenticated identities that fail TRAMA authorization create no local session and trigger best-effort provider logout.
+- No provider access token, refresh token, session object, Magic Link code, token hash, or PKCE verifier is persisted in TRAMA state.
+- Provider tokens returned by a callback are best-effort revoked even if provider identity reduction fails.
+- Provider-authenticated identities that fail TRAMA authorization create no local session.
 - AccessSession TTL remains absolute `28800` seconds.
-- The private Access store, RLS/grants boundary, entitlement model, and four shared limiter scopes remain unchanged except for the forward auth-method migration.
-- The existing `OTP_*` limiter scope names are retained as internal historical identifiers only; they no longer describe the user-facing transport.
+- The private Access store, RLS/grants boundary, entitlement model, and four shared limiter scopes remain unchanged except for forward additive migrations.
+- The existing `OTP_*` limiter scope names are retained as internal historical datastore identifiers only; they no longer describe the user-facing transport.
+
+## One-pilot provisioning guard
+
+The single-pilot boundary is now reserved **before any Supabase Auth inspection or user creation**:
+
+1. `access_claim_pilot(normalized_email)` acquires the project-wide `TASK11:GLOBAL` transaction lock and persists one private singleton claim;
+2. a retry for the same normalized email is allowed;
+3. a different email conflicts before provider mutation;
+4. only after the claim may the provisioning command inspect/create the provider user;
+5. `access_provision_pilot(...)` reacquires the same global lock, requires the matching claim and enforces the global `pilot_allowed` boundary;
+6. the idempotent existing-binding path re-enters the governed provisioning RPC and revalidates principal, context and entitlement before reporting `ALREADY_PROVISIONED`.
+
+The claim is intentionally durable: if an external provider mutation fails, retry remains confined to the same authorized pilot identity rather than reopening the one-user race.
 
 ## Infrastructure scope
 
@@ -41,9 +68,28 @@ A valid Supabase authentication result is necessary but is not sufficient for TR
 - Region: `eu-central-1`
 - Plan: Free
 - Email delivery: Supabase built-in email for the single authorized pilot
+- Email template: provider default Magic Link template
 - Custom SMTP: not authorized / not required for this pilot
 - Provider users: exactly one pre-authorized pilot
 - Public deploy/federation: not authorized by Task 11
+
+## Implementation qualification before this evidence update
+
+Implementation baseline: `45460f2791e6cd3be746218524ab6a3ade6372e1`
+
+Fresh checks on that exact implementation baseline:
+
+- TRAMA Access run `38171772398` / #258 — PASS
+  - unit tests — PASS
+  - typecheck — PASS
+  - build — PASS
+  - Browser Certification — PASS
+  - Phase 2 invariant-validator adversarial tests — PASS
+  - Phase 2 branch/runtime invariant validation — PASS
+- Governance run `38171772375` / #2316 — PASS
+- TRAMA Gateway run `38171772377` / #347 — PASS
+
+The documentation commit that contains this note requires its own exact-head qualification before independent review or provider mutation.
 
 ## Canonical supporting documents
 
