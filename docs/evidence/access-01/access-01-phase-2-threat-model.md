@@ -2,7 +2,7 @@
 
 **Data:** 2026-10-11  
 **Stato:** `PREFLIGHT / NO_PROVIDER_RUNTIME`  
-**Source head:** `5122cc9cfc11eedb8ee11447a01328776bdb25d1`  
+**Source head:** `b3a3a226e9be902bc3d59d82fb7e851369afb2da`  
 **Contratto:** `TRAMA-PROFESSIONAL-IDENTITY-01@1.0.0`  
 **Ambito:** OTP professionale, LoginAlias, exact subject binding, sessione Access, provider outage, entitlement e configurazione pilot.
 
@@ -47,7 +47,7 @@ Gateway e prodotti restano fuori dal boundary Phase 2.
 | P2-T04 | **Auto-provisioning involontario** | Principal, alias, subject binding, context ed entitlement esistono prima del login; runtime non espone create/upsert; provider OTP deve disabilitare user creation. | Validator vieta funzioni di auto-provisioning; adapter live deve avere test specifico. |
 | P2-T05 | **Leak di secret amministrativa** | secret key solo backend, nessun `NEXT_PUBLIC_*`, nessun log; admin client separato, session persistence disabilitata. | Task 11 adapter contract + secret scan. La secret bypassa RLS: impatto critico se esposta. |
 | P2-T06 | **Session theft / fixation / stale cookie** | secret casuale ≥256 bit; datastore conserva SHA-256 digest; cookie `__Host-`, `HttpOnly`, `Secure`, `SameSite=Lax`, no Domain; TTL assoluto 8h; revoca immediata. | Unit test session/cookie; browser logout/expired state. |
-| P2-T07 | **Rate-limit bypass o restart del processo** | limiti 5 request / 10 verify per 15m; key = digest email. | L'implementazione in-memory è soltanto dev/test. **Task 11 deve usare uno store condiviso/persistente**; un limiter per-processo non è qualificabile come runtime live. |
+| P2-T07 | **Rate-limit bypass, rotazione alias o restart del processo** | limiti per alias: 5 request / 10 verify per 15m su digest email; in più la verifica provider ha un budget globale di 20 tentativi / 15m su chiave tecnica costante, consumato prima di availability/verify. Nessun header IP non governato diventa authority del limiter. | Il test di regressione usa 21 email differenti e prova che la 21ª verifica viene bloccata prima del provider. L'implementazione in-memory è soltanto dev/test. **Task 11 deve usare uno store condiviso/persistente** che preservi sia i limiti per alias sia il budget globale tra istanze; un limiter per-processo non è qualificabile come runtime live. |
 | P2-T08 | **Provider outage** | nuovo login fail-closed; availability non dipende dall'allowlist; sessione Access già valida può restare entro TTL senza escalation. | Domain/security test; superfici pubbliche non dipendono da Access. |
 | P2-T09 | **Entitlement stale/revoked** | launcher e launch leggono entitlement correnti server-side; revocato/sospeso/expired non diventa launchable; Phase 2 non produce redirect. | Launcher + handler tests. |
 | P2-T10 | **Fake/memory adapter accidentalmente in produzione** | config rifiuta `fake + memory` in production; validator permanente; `supabase` runtime non è ancora autorizzato. | Config tests + Phase 2 validator + CI. |
@@ -76,7 +76,7 @@ Devono restare veri in qualunque adapter live:
 10. Logout Access invalida il secret locale anche durante outage provider.
 11. Provider outage non abbatte Gateway, Curricolo Atlas pubblico o Control Center pubblico.
 12. Fake/memory adapter non sono ammessi nel runtime production/live.
-13. Il limiter live non può essere soltanto memoria di processo.
+13. Il limiter live non può essere soltanto memoria di processo e deve preservare tra istanze sia i limiti per alias sia il budget globale di verifica provider.
 14. Nessuna federazione prodotto o learner identity viene introdotta in Phase 2.
 
 ## 4. Failure model
@@ -120,7 +120,7 @@ Task 11 non è qualificabile senza:
 - Auth client server-side con `autoRefreshToken:false`, `persistSession:false`, `detectSessionInUrl:false`;
 - Access store separato;
 - RLS/no public policies per tabelle Access quando applicabile;
-- persistent/shared rate-limit store;
+- persistent/shared rate-limit store che implementi limiti per alias e budget globale di verifica provider tra istanze;
 - exact region UE verificata;
 - nessuna dipendenza del dominio da `auth.users` o da email come authority;
 - una prova negativa di subject mismatch;
