@@ -20,10 +20,15 @@ class SharedFakeAccessRpc {
   readonly events = new Map<string, number[]>();
   readonly sessions = new Map<string, Record<string, unknown>>();
   readonly seenSignals: AbortSignal[] = [];
+  private databaseNowMs = Date.parse('2026-10-11T08:00:00.000Z');
   aliases = [{
     alias_id: 'alias-1', principal_id: 'principal-1', kind: 'EMAIL', normalized_value: 'pilot@example.test',
     status: 'ACTIVE', provider_issuer: 'https://project.supabase.co/auth/v1', provider_subject: 'subject-1', pilot_allowed: true,
   }];
+
+  setDatabaseNow(value: Date) {
+    this.databaseNowMs = value.getTime();
+  }
 
   client() {
     return {
@@ -64,7 +69,7 @@ class SharedFakeAccessRpc {
         if (fn === 'access_rate_limit_consume') {
           const scope = String(params.p_scope);
           const key = String(params.p_key_digest);
-          const nowMs = Date.parse(String(params.p_now));
+          const nowMs = this.databaseNowMs;
           const limit = Number(params.p_limit);
           const windowMs = Number(params.p_window_seconds) * 1000;
           const counterKey = `${scope}:${key}`;
@@ -149,12 +154,14 @@ test('OTP_VERIFY_GLOBAL is shared and atomic across limiter instances at 20/15m'
   await assertConcurrentLimit('OTP_VERIFY_GLOBAL', 20, 'fixed-non-personal-global-digest');
 });
 
-test('shared limiter preserves sliding-window semantics across a 15-minute boundary', async () => {
+test('shared limiter preserves sliding-window semantics across a 15-minute database-clock boundary', async () => {
   const shared = new SharedFakeAccessRpc();
   const limiter = new SupabaseRateLimiter(shared.client());
   for (let i = 0; i < 5; i++) assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now })).allowed, true);
   const justBefore = new Date(now.getTime() + 15 * 60 * 1000 - 1);
-  assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now: justBefore })).allowed, false);
+  shared.setDatabaseNow(justBefore);
+  assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now })).allowed, false);
   const justAfter = new Date(now.getTime() + 15 * 60 * 1000 + 1);
-  assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now: justAfter })).allowed, true);
+  shared.setDatabaseNow(justAfter);
+  assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now })).allowed, true);
 });
