@@ -1,16 +1,24 @@
-import type { AuthProviderAdapter } from '../../ports/auth-provider.ts';
+import type { AuthProviderAdapter, MagicLinkCallbackInput, MagicLinkEmailOtpType } from '../../ports/auth-provider.ts';
 import type { VerifiedExternalIdentity } from '../../domain/types.ts';
 
 type ProviderError = { message?: string } | null;
 type ProviderUser = { id: string; email?: string | null } | null;
+type ProviderAuthResult = {
+  data: { user: ProviderUser; session?: unknown };
+  error: ProviderError;
+};
 
 type SupabaseAuthClientLike = {
   auth: {
-    signInWithOtp(input: { email: string; options: { shouldCreateUser: boolean } }): Promise<{ data: unknown; error: ProviderError }>;
-    verifyOtp(input: { email: string; token: string; type: 'email' }): Promise<{
-      data: { user: ProviderUser; session?: unknown };
-      error: ProviderError;
-    }>;
+    signInWithOtp(input: {
+      email: string;
+      options: { shouldCreateUser: boolean; emailRedirectTo?: string };
+    }): Promise<{ data: unknown; error: ProviderError }>;
+    exchangeCodeForSession(code: string): Promise<ProviderAuthResult>;
+    verifyOtp(input:
+      | { email: string; token: string; type: 'email' }
+      | { token_hash: string; type: MagicLinkEmailOtpType }
+    ): Promise<ProviderAuthResult>;
     signOut(): Promise<{ error: ProviderError }>;
   };
 };
@@ -23,6 +31,16 @@ export interface SupabaseAuthProviderInput {
 
 function throwIfAborted(signal: AbortSignal): void {
   if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
+}
+
+function reduceVerifiedIdentity(issuer: string, result: ProviderAuthResult): VerifiedExternalIdentity {
+  if (result.error) throw new Error('MAGIC_LINK_INVALID');
+  if (!result.data.user?.id) throw new Error('PROVIDER_IDENTITY_INVALID');
+  return {
+    issuer,
+    subject: result.data.user.id,
+    verifiedEmail: result.data.user.email ?? undefined,
+  };
 }
 
 export class SupabaseAuthProvider implements AuthProviderAdapter {
@@ -45,6 +63,41 @@ export class SupabaseAuthProvider implements AuthProviderAdapter {
     }
   }
 
+  async requestEmailMagicLink(input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void> {
+    const client = this.createClientForSignal(input.signal);
+    throwIfAborted(input.signal);
+    try {
+      const { error } = await client.auth.signInWithOtp({
+        email: input.email,
+        options: {
+          shouldCreateUser: false,
+          emailRedirectTo: input.redirectTo,
+        },
+      });
+      if (error) throw new Error('PROVIDER_UNAVAILABLE');
+    } catch (error) {
+      if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
+      if (error instanceof Error && error.message === 'PROVIDER_UNAVAILABLE') throw error;
+      throw new Error('PROVIDER_UNAVAILABLE');
+    }
+  }
+
+  async verifyEmailMagicLink(input: MagicLinkCallbackInput & { signal: AbortSignal }): Promise<VerifiedExternalIdentity> {
+    const client = this.createClientForSignal(input.signal);
+    throwIfAborted(input.signal);
+    try {
+      const result = 'code' in input && typeof input.code === 'string'
+        ? await client.auth.exchangeCodeForSession(input.code)
+        : await client.auth.verifyOtp({ token_hash: input.tokenHash, type: input.type });
+      return reduceVerifiedIdentity(this.issuer, result);
+    } catch (error) {
+      if (input.signal.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
+      if (error instanceof Error && error.message === 'PROVIDER_IDENTITY_INVALID') throw error;
+      throw new Error('MAGIC_LINK_INVALID');
+    }
+  }
+
+  // Transitional OTP methods retained until Task 3 migrates all domain consumers.
   async requestEmailOtp(input: { email: string; signal: AbortSignal }): Promise<void> {
     const client = this.createClientForSignal(input.signal);
     throwIfAborted(input.signal);
