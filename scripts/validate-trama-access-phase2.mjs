@@ -58,8 +58,8 @@ export function validatePhase2Snapshot({ files, changedFiles = [] }) {
     if (/\blocalStorage\b/.test(source) && /(?:token|session|auth|bearer|jwt)/i.test(source)) {
       errors.push(`${file}: localStorage must not carry Access authentication/session material`);
     }
-    if (/shouldCreateUser\s*:\s*true/i.test(source) || /\.auth\.signUp\s*\(/.test(source)) {
-      errors.push(`${file}: Magic Link pilot must remain fail-closed with shouldCreateUser:false and no runtime auto-signup`);
+    if (/shouldCreateUser\s*:\s*true/i.test(source) || /create_user\s*:\s*true/i.test(source) || /\.auth\.signUp\s*\(/.test(source)) {
+      errors.push(`${file}: Magic Link pilot must remain fail-closed with automatic user creation disabled and no runtime auto-signup`);
     }
     if (/(?:Codice OTP|Verifica codice|Invia codice)/i.test(source)) {
       errors.push(`${file}: numeric OTP user flow is superseded by the approved Magic Link pilot`);
@@ -68,8 +68,16 @@ export function validatePhase2Snapshot({ files, changedFiles = [] }) {
 
   const magicProvider = files['apps/access/src/infrastructure/supabase/supabase-auth-provider.ts'];
   if (magicProvider) {
-    if (!/requestEmailMagicLink/.test(magicProvider) || !/shouldCreateUser\s*:\s*false/.test(magicProvider) || !/emailRedirectTo/.test(magicProvider)) {
-      errors.push('apps/access/src/infrastructure/supabase/supabase-auth-provider.ts: Magic Link request must pin shouldCreateUser:false and an explicit emailRedirectTo');
+    const hasMagicRequest = /requestEmailMagicLink/.test(magicProvider);
+    const hasCreateUserFalse = /create_user\s*:\s*false/i.test(magicProvider);
+    const hasExplicitRedirect = /['"]redirect_to['"]/.test(magicProvider) && /input\.redirectTo/.test(magicProvider);
+    const hasPkceChallenge = /code_challenge\s*:/.test(magicProvider)
+      && /code_challenge_method\s*:\s*['"]s256['"]/i.test(magicProvider);
+    const hasPkceExchange = /grant_type=pkce/.test(magicProvider)
+      && /code_verifier\s*:/.test(magicProvider)
+      && /auth_code\s*:/.test(magicProvider);
+    if (!hasMagicRequest || !hasCreateUserFalse || !hasExplicitRedirect || !hasPkceChallenge || !hasPkceExchange) {
+      errors.push('apps/access/src/infrastructure/supabase/supabase-auth-provider.ts: Magic Link request must disable auto-creation, pin redirect_to, and bind request/callback with S256 PKCE code_challenge + code_verifier');
     }
   }
 
