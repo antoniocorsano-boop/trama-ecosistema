@@ -15,6 +15,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   verifyCount = 0;
   verifyCompletionCount = 0;
   verifyAbortCount = 0;
+  logoutCount = 0;
   requestDelayMs = 0;
   verifyDelayMs = 0;
   available = true;
@@ -62,6 +63,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
 
   async requestEmailMagicLink(input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void> {
     this.requestCount += 1;
+    this.email = input.email;
     this.lastMagicLinkEmail = input.email;
     this.lastMagicLinkRedirectTo = input.redirectTo;
     await this.delayOrAbort({ signal: input.signal, delayMs: this.requestDelayMs, phase: 'request' });
@@ -78,6 +80,10 @@ export class FakeAuthProvider implements AuthProviderAdapter {
     this.verifyCompletionCount += 1;
     const identity = this.identities[this.email];
     return { issuer: this.issuer, subject: identity?.subject ?? this.subject, verifiedEmail: identity?.email ?? this.email };
+  }
+
+  async bestEffortLogout(): Promise<void> {
+    this.logoutCount += 1;
   }
 
   // Transitional OTP compatibility while Task 3 migrates domain consumers.
