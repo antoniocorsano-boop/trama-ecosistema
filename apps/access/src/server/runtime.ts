@@ -64,7 +64,6 @@ function createAvailabilityProbe(
         method: 'GET',
         headers: {
           apikey: secretKey,
-          Authorization: `Bearer ${secretKey}`,
           Accept: 'application/json',
         },
         cache: 'no-store',
