@@ -43,6 +43,9 @@ export interface AccessSessionRecord {
   sessionDigest: string;
   principalId: string;
   contextId: string;
+  aliasId: string;
+  providerIssuer: string;
+  providerSubject: string;
   createdAt: Date;
   absoluteExpiresAt: Date;
   revokedAt?: Date;
