@@ -29,6 +29,10 @@ export async function resolvePrincipalForVerifiedIdentity(
   const principal = await repo.getPrincipal(alias.principalId);
   if (!principal || principal.status !== 'ACTIVE') return { ok: false, code: 'ACCESS_DENIED' };
   const contexts = await repo.listActiveContexts(principal.principalId);
-  if (contexts.length !== 1 || contexts[0]!.status !== 'ACTIVE') return { ok: false, code: 'ACCESS_DENIED' };
-  return { ok: true, principal, alias, context: contexts[0]! };
+  if (contexts.length !== 1) return { ok: false, code: 'ACCESS_DENIED' };
+  const context = contexts[0]!;
+  if (context.status !== 'ACTIVE' || context.contextType !== 'INSTITUTION' || !context.institutionRef?.trim()) {
+    return { ok: false, code: 'ACCESS_DENIED' };
+  }
+  return { ok: true, principal, alias, context };
 }
