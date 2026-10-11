@@ -37,6 +37,15 @@ test('fails for disabled principal and invalid context cardinality', async () =>
   assert.deepEqual(await resolvePrincipalForVerifiedIdentity(repo, { issuer: 'issuer-1', subject: 'subject-1' }), { ok: false, code: 'ACCESS_DENIED' });
 });
 
+test('pilot requires one active institutional context with an institution reference', async () => {
+  const repo = seed();
+  repo.contexts[0] = { contextId: 'c1', principalId: 'p1', contextType: 'PERSONAL', status: 'ACTIVE' };
+  assert.deepEqual(await resolvePrincipalForVerifiedIdentity(repo, { issuer: 'issuer-1', subject: 'subject-1' }), { ok: false, code: 'ACCESS_DENIED' });
+
+  repo.contexts[0] = { contextId: 'c1', principalId: 'p1', contextType: 'INSTITUTION', status: 'ACTIVE' };
+  assert.deepEqual(await resolvePrincipalForVerifiedIdentity(repo, { issuer: 'issuer-1', subject: 'subject-1' }), { ok: false, code: 'ACCESS_DENIED' });
+});
+
 test('verified email mismatch is consistency failure not linking fallback', async () => {
   const repo = seed();
   const result = await resolvePrincipalForVerifiedIdentity(repo, { issuer: 'issuer-1', subject: 'subject-1', verifiedEmail: 'other@example.test' });
