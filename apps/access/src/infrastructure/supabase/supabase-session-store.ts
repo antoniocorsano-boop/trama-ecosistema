@@ -12,7 +12,7 @@ type SessionRow = {
   created_at: string;
   absolute_expires_at: string;
   revoked_at?: string | null;
-  auth_method: 'EMAIL_OTP';
+  auth_method: 'EMAIL_MAGIC_LINK';
   last_entitlement_check_at: string;
 };
 
