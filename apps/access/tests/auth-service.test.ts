@@ -24,10 +24,20 @@ test('allowed and unknown email return same neutral request result', async () =>
   assert.equal(f.provider.requestCount, 1);
 });
 
-test('provider request outage maps to provider unavailable', async () => {
+test('send-time provider failure remains neutral to avoid allowlist enumeration', async () => {
   const f = fixture();
   f.provider.requestFailure = true;
-  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test' }), { status: 'PROVIDER_UNAVAILABLE' });
+  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'teacher@example.test' }), { status: 'OTP_REQUESTED' });
+  assert.deepEqual(await requestPilotOtp({ repo: f.repo, provider: f.provider, email: 'nobody@example.test' }), { status: 'OTP_REQUESTED' });
+});
+
+test('unknown and allowed aliases with invalid OTP return the same public result', async () => {
+  const f = fixture();
+  const allowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '000000', now: new Date() });
+  const unknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '000000', now: new Date() });
+  assert.deepEqual(allowed, { status: 'OTP_INVALID' });
+  assert.deepEqual(unknown, { status: 'OTP_INVALID' });
+  assert.equal(f.store.records.length, 0);
 });
 
 test('valid OTP and exact binding creates access session even with zero entitlements', async () => {
