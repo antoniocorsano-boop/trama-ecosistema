@@ -19,6 +19,7 @@ export const DEFAULT_OTP_REQUEST_TIMING: OtpRequestTimingPolicy = {
 };
 
 export const DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS = 1200;
+const GLOBAL_PROVIDER_REQUEST_KEY_DIGEST = digestRateLimitKey('trama-access:otp-request:global');
 const GLOBAL_PROVIDER_VERIFY_KEY_DIGEST = digestRateLimitKey('trama-access:otp-verify:global');
 
 function sleep(ms: number): Promise<void> {
@@ -37,6 +38,34 @@ async function checkAvailabilityBeforeDeadline(
   const work = Promise.resolve()
     .then(() => provider.checkAvailability({ signal: controller.signal }))
     .then((available) => Boolean(available))
+    .catch(() => false);
+  const deadline = new Promise<boolean>((resolve) => {
+    timeout = setTimeout(() => {
+      controller.abort();
+      resolve(false);
+    }, remainingMs);
+  });
+
+  try {
+    return await Promise.race([work, deadline]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
+
+async function isPilotAliasAllowedBeforeDeadline(
+  repo: IdentityRepository,
+  email: string,
+  deadlineAtMs: number,
+): Promise<boolean> {
+  const remainingMs = deadlineAtMs - performance.now();
+  if (remainingMs <= 0) return false;
+
+  const controller = new AbortController();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const work = Promise.resolve()
+    .then(() => isPilotAliasAllowed(repo, email, { signal: controller.signal }))
+    .then((allowed) => Boolean(allowed))
     .catch(() => false);
   const deadline = new Promise<boolean>((resolve) => {
     timeout = setTimeout(() => {
@@ -130,6 +159,12 @@ export async function requestPilotOtp(input: {
   if (input.rateLimiter) {
     const rate = await input.rateLimiter.consume({ scope: 'OTP_REQUEST', keyDigest: digestRateLimitKey(email), now });
     if (!rate.allowed) return { status: 'OTP_REQUESTED' };
+    const globalRate = await input.rateLimiter.consume({
+      scope: 'OTP_REQUEST_GLOBAL',
+      keyDigest: GLOBAL_PROVIDER_REQUEST_KEY_DIGEST,
+      now,
+    });
+    if (!globalRate.allowed) return { status: 'OTP_REQUESTED' };
   }
 
   const timing = input.timing ?? DEFAULT_OTP_REQUEST_TIMING;
@@ -138,14 +173,14 @@ export async function requestPilotOtp(input: {
   }
 
   // Availability, alias lookup and any real provider send share one absolute
-  // provider deadline. A stalled availability probe is actively aborted rather
-  // than retaining an unauthenticated request indefinitely.
+  // provider deadline. Each remote operation is actively cancellable rather
+  // than merely receiving a time budget that it can overrun in the background.
   const startedAtMs = performance.now();
   const providerDeadlineAtMs = startedAtMs + timing.providerBudgetMs;
   const available = await checkAvailabilityBeforeDeadline(input.provider, providerDeadlineAtMs);
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
 
-  const allowed = await isPilotAliasAllowed(input.repo, email);
+  const allowed = await isPilotAliasAllowedBeforeDeadline(input.repo, email, providerDeadlineAtMs);
   if (allowed) {
     await settleSendBeforeDeadline(input.provider, email, providerDeadlineAtMs);
   }
@@ -181,15 +216,14 @@ export async function verifyPilotOtp(input: {
   const providerBudgetMs = input.verifyProviderBudgetMs ?? DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS;
   if (providerBudgetMs <= 0) throw new Error('INVALID_OTP_VERIFY_TIMING_POLICY');
 
-  // Availability and verification share one provider deadline. Negative public
-  // verification outcomes are not released before that same deadline, removing
-  // response-time distinctions between fast and slow provider rejection paths.
+  // Availability, alias lookup and verification share one provider deadline.
+  // Negative public outcomes are not released before that same deadline.
   const startedAtMs = performance.now();
   const providerDeadlineAtMs = startedAtMs + providerBudgetMs;
   const available = await checkAvailabilityBeforeDeadline(input.provider, providerDeadlineAtMs);
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
 
-  const allowed = await isPilotAliasAllowed(input.repo, email);
+  const allowed = await isPilotAliasAllowedBeforeDeadline(input.repo, email, providerDeadlineAtMs);
   const verified = await verifyBeforeDeadline({
     provider: input.provider,
     email,
