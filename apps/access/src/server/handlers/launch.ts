@@ -2,6 +2,7 @@ import type { AccessRuntime } from '../runtime.ts';
 import { assertSameOrigin } from '../origin-guard.ts';
 import { readAccessSessionSecret } from '../session-cookie.ts';
 import { sha256SessionSecret } from '../../domain/session-service.ts';
+import { isSessionBindingCurrent } from '../../domain/principal-service.ts';
 import { authorizeLaunch } from '../../domain/launcher-service.ts';
 import type { CanonicalApplicationKey } from '../../domain/types.ts';
 export async function handleLaunch(request: Request, runtime: AccessRuntime): Promise<Response> {
@@ -12,7 +13,8 @@ export async function handleLaunch(request: Request, runtime: AccessRuntime): Pr
   if (!record || record.revokedAt || runtime.now() >= record.absoluteExpiresAt) return Response.json({ status: 'ACCESS_DENIED' }, { status: 401 });
   const principal = await runtime.identityRepository.getPrincipal(record.principalId);
   const contexts = await runtime.identityRepository.listActiveContexts(record.principalId);
-  if (!principal || principal.status !== 'ACTIVE' || contexts.length !== 1 || contexts[0]!.contextId !== record.contextId) return Response.json({ status: 'ACCESS_DENIED' }, { status: 403 });
+  const bindingCurrent = await isSessionBindingCurrent(runtime.identityRepository, record);
+  if (!principal || principal.status !== 'ACTIVE' || contexts.length !== 1 || contexts[0]!.contextId !== record.contextId || !bindingCurrent) return Response.json({ status: 'ACCESS_DENIED' }, { status: 403 });
   let body: unknown;
   try { body = await request.json(); } catch { return Response.json({ status: 'INVALID_REQUEST' }, { status: 400 }); }
   const applicationKey = typeof body === 'object' && body !== null && 'applicationKey' in body ? (body as { applicationKey?: unknown }).applicationKey : undefined;
