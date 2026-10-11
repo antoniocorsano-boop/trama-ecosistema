@@ -17,6 +17,7 @@ function providerWith(factory: (signal: AbortSignal) => SignalClient) {
   return new SupabaseAuthProvider({
     issuer: 'https://project-ref.supabase.co/auth/v1',
     createClientForSignal: factory,
+    availabilityProbe: async () => true,
   });
 }
 
