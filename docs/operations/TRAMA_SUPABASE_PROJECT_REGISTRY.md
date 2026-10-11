@@ -20,28 +20,36 @@ Evidence labels:
 
 | Project | Ref | Region | Observed lifecycle state | Ecosystem role | Auth pattern evidence | Evidence status | Explicit unknowns |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| TRAMA Access | `toxhflbmipnwtgxgevfj` | `eu-central-1` | `ACTIVE_HEALTHY` | Dedicated TRAMA identity/access provider and private Access store | Task 11 baseline used email OTP; decision 2026-10-11 changes the pilot to Supabase Magic Link with `shouldCreateUser=false`, exact issuer+subject binding, pre-authorized alias, context and entitlement checks | `VERIFIED/OBSERVED` + `VERIFIED/CODE-EVIDENCE` | Current Dashboard template remains Supabase default Magic Link; no custom SMTP is authorized for the pilot |
+| TRAMA Access | `toxhflbmipnwtgxgevfj` | `eu-central-1` | `ACTIVE_HEALTHY` | Dedicated TRAMA identity/access provider and private Access store | Controlled pilot uses Supabase default email Magic Link with S256 PKCE, `create_user=false`, callback origin pinned to TRAMA Access, exact issuer+subject binding, pre-authorized alias, institutional context and entitlement checks; one provider pilot is reserved by a durable project-wide claim before Auth mutation | `VERIFIED/OBSERVED` + `VERIFIED/CODE-EVIDENCE` | Current Dashboard template remains Supabase default Magic Link; no custom SMTP is authorized for the pilot; live pilot provisioning/smoke remains separately gated |
 | DOCENTE OS MFA Test | `xyowtnivxnzgwewvvmyz` | `eu-west-1` | `INACTIVE` | Historical MFA test environment | Dedicated MFA test project; not selected as the TRAMA Access baseline | `VERIFIED/OBSERVED` | Current Auth provider configuration not asserted while project is inactive |
 | CurManLight Arena Beta | `ysgaokenrutmgzkhcxvy` | `eu-west-1` | `INACTIVE` | Arena Beta identity/data environment | Arena Beta application code uses email/password sign-up/sign-in, email confirmation and password recovery | `VERIFIED/OBSERVED` + `HISTORICAL/CODE-EVIDENCE` | Current paused-project Dashboard Auth settings not inferred from code |
 | `corsano.antonio@icdonmilaniariano.edu.it's Project` | `gnshgapmwyjamhmlikeg` | `eu-west-1` | `ACTIVE_HEALTHY` | Historical Supabase project in the same organization | Live `auth.users` observation: 4 users with provider `email`; all 4 had password credentials, confirmed email and sign-in activity at verification time | `VERIFIED/OBSERVED` | Application ownership/long-term ecosystem role remains historical unless explicitly reassigned |
 | DOCENTE OS Production | `xpxhlmpsvfzgsjxgieks` | `eu-central-1` | `INACTIVE` | DOCENTE OS production Supabase project | DOCENTE OS architecture contains a passwordless Magic Link implementation: `signInWithOtp`, `/auth/confirm`, PKCE code exchange/token-hash verification; the P1 identity baseline records live E2E Magic Link verification | `VERIFIED/OBSERVED` + `HISTORICAL/CODE-EVIDENCE` | Current paused-project Dashboard Auth settings are not inferred from the repository |
 
-## Canonical precedent for TRAMA Access
+## Canonical precedent and current TRAMA Access specialization
 
-DOCENTE OS is the ecosystem precedent for the Supabase **Magic Link transport pattern**, not for TRAMA authorization. TRAMA Access preserves the stricter chain:
+DOCENTE OS is the ecosystem precedent for the Supabase **Magic Link transport pattern**, not for TRAMA authorization. TRAMA Access now specializes that precedent for the default Supabase email template by binding the request and callback with server-generated S256 PKCE:
 
 ```text
 pre-authorized email alias
-  -> signInWithOtp(..., shouldCreateUser=false)
-  -> Magic Link callback verification
+  -> server-generated PKCE verifier + host-only HttpOnly cookie
+  -> Supabase /auth/v1/otp
+       create_user=false
+       redirect_to=<configured TRAMA Access callback>
+       code_challenge=<S256(verifier)>
+  -> default Supabase Magic Link
+  -> /auth/confirm?code=...
+  -> PKCE auth-code exchange using the matching verifier
   -> exact provider issuer + subject
   -> ACTIVE principal
-  -> ACTIVE context
+  -> exactly one ACTIVE institutional context
   -> ACTIVE/time-valid entitlement
   -> local TRAMA Access session
 ```
 
-A valid Supabase session alone never grants a TRAMA Access session.
+A valid Supabase session alone never grants a TRAMA Access session. Provider session/token material is transient and is not persisted by TRAMA.
+
+The one-pilot provisioning boundary is also project-wide: a private singleton claim for the normalized pilot email is acquired before any provider-user inspection or creation. A different email cannot race past that reservation; an idempotent retry for the same pilot must still revalidate the governed principal/context/entitlement graph before succeeding.
 
 ## Safety rules
 
@@ -53,6 +61,7 @@ This file must never contain credential values or authentication artifacts. In p
 - bearer/access/refresh tokens;
 - SMTP credentials;
 - Magic Link codes or token hashes;
+- PKCE verifiers;
 - provider session objects;
 - user secrets.
 
