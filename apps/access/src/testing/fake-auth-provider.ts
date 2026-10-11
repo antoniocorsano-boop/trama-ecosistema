@@ -22,6 +22,7 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   verifyFailure: 'INVALID' | 'EXPIRED' | 'UNAVAILABLE' | null = null;
   lastMagicLinkRedirectTo: string | null = null;
   lastMagicLinkEmail: string | null = null;
+  lastMagicLinkCodeVerifier: string | null = null;
 
   constructor(seed: { issuer: string; subject: string; email: string; identities?: Record<string, FakeIdentity>; otp?: string }) {
     this.issuer = seed.issuer;
@@ -59,11 +60,12 @@ export class FakeAuthProvider implements AuthProviderAdapter {
     });
   }
 
-  async requestEmailMagicLink(input: { email: string; redirectTo: string; signal: AbortSignal }): Promise<void> {
+  async requestEmailMagicLink(input: { email: string; redirectTo: string; codeVerifier: string; signal: AbortSignal }): Promise<void> {
     this.requestCount += 1;
     this.email = input.email;
     this.lastMagicLinkEmail = input.email;
     this.lastMagicLinkRedirectTo = input.redirectTo;
+    this.lastMagicLinkCodeVerifier = input.codeVerifier;
     await this.delayOrAbort({ signal: input.signal, delayMs: this.requestDelayMs, phase: 'request' });
     if (this.requestFailure) throw new Error('PROVIDER_UNAVAILABLE');
     this.requestCompletionCount += 1;
