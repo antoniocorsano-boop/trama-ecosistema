@@ -85,6 +85,7 @@ async function settleMagicLinkSendBeforeDeadline(input: {
   provider: AuthProviderAdapter;
   email: string;
   redirectTo: string;
+  codeVerifier: string;
   deadlineAtMs: number;
 }): Promise<void> {
   const remainingMs = input.deadlineAtMs - performance.now();
@@ -96,6 +97,7 @@ async function settleMagicLinkSendBeforeDeadline(input: {
     .then(() => input.provider.requestEmailMagicLink({
       email: input.email,
       redirectTo: input.redirectTo,
+      codeVerifier: input.codeVerifier,
       signal: controller.signal,
     }))
     .catch(() => undefined);
@@ -153,6 +155,7 @@ export async function requestPilotMagicLink(input: {
   provider: AuthProviderAdapter;
   email: string;
   redirectTo: string;
+  codeVerifier: string;
   rateLimiter?: RateLimiter;
   now?: Date;
   timing?: OtpRequestTimingPolicy;
@@ -186,6 +189,7 @@ export async function requestPilotMagicLink(input: {
       provider: input.provider,
       email,
       redirectTo: input.redirectTo,
+      codeVerifier: input.codeVerifier,
       deadlineAtMs: providerDeadlineAtMs,
     });
   }
