@@ -145,7 +145,7 @@ export function createLiveTask11ProvisioningDeps(input: {
       return data.users.map((user) => ({ id: user.id, email: user.email }));
     },
     async createProviderUser(email: string) {
-      const data = await adminRequest<ProviderUser | { user?: ProviderUser }>({
+      const data = await adminRequest<{ id?: string; email?: string | null; user?: ProviderUser }>({
         url: input.url,
         secretKey: input.secretKey,
         fetchImpl,
@@ -153,7 +153,7 @@ export function createLiveTask11ProvisioningDeps(input: {
         method: 'POST',
         body: { email, email_confirm: true },
       });
-      const user = 'user' in data ? data.user : data;
+      const user = data.user ?? (data.id ? { id: data.id, email: data.email } : undefined);
       if (!user?.id) throw new Error('PROVIDER_USER_CREATE_FAILED');
       return { id: user.id, email: user.email };
     },
