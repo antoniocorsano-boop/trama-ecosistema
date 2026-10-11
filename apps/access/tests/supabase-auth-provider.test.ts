@@ -111,6 +111,29 @@ test('SupabaseAuthProvider verifies token hash callback and reduces provider pay
   assert.equal(JSON.stringify(result).includes('must-not-leak'), false);
 });
 
+test('SupabaseAuthProvider clears the transient provider session on the same callback client', async () => {
+  let signOutCount = 0;
+  const provider = providerWith(() => ({
+    auth: {
+      async signInWithOtp() { throw new Error('unused'); },
+      async exchangeCodeForSession() {
+        return {
+          data: {
+            user: { id: 'provider-subject-3', email: 'pilot@example.test' },
+            session: { access_token: 'transient-only', refresh_token: 'transient-refresh' },
+          },
+          error: null,
+        };
+      },
+      async verifyOtp() { throw new Error('unused'); },
+      async signOut() { signOutCount += 1; return { error: null }; },
+    },
+  }));
+
+  await provider.verifyEmailMagicLink({ code: 'pkce-code', signal: new AbortController().signal });
+  assert.equal(signOutCount, 1, 'verified provider session must be cleared before returning governed identity');
+});
+
 test('SupabaseAuthProvider fails closed when callback returns no user', async () => {
   const provider = providerWith(() => ({
     auth: {
