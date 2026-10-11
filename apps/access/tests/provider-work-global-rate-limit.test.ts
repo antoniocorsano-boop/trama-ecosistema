@@ -10,7 +10,7 @@ import { FakeAuthProvider } from '../src/testing/fake-auth-provider.ts';
 
 const redirectTo = 'https://access.example.test/auth/confirm';
 
-test('rotating callbacks cannot exceed the shared provider verification budget', async () => {
+test('rotating callbacks are globally capped while repeated verified identity is also capped', async () => {
   const provider = new FakeAuthProvider({
     issuer: 'issuer-1',
     subject: 'subject-1',
@@ -35,12 +35,18 @@ test('rotating callbacks cannot exceed the shared provider verification budget',
     }));
   }
 
-  assert.equal(provider.verifyCount, 20, 'provider verification must have a global cap across callback attempts');
+  const globalConsumes = rateLimiter.entries.filter((entry) => entry.scope === 'OTP_VERIFY_GLOBAL').length;
+  const identityConsumes = rateLimiter.entries.filter((entry) => entry.scope === 'OTP_VERIFY').length;
+
+  assert.equal(provider.verifyCount, 20, 'the global budget must stop provider verification before attempt 21');
+  assert.equal(globalConsumes, 20, 'the shared global verification budget must contain exactly 20 accepted consumptions');
+  assert.equal(identityConsumes, 10, 'the repeated verified identity must stop consuming after its 10-attempt budget');
   assert.equal(
     results.filter((result) => result.status === 'RATE_LIMITED').length,
-    1,
-    'the first attempt beyond the shared provider budget must be rejected before provider work',
+    11,
+    'attempts 11-20 are denied by the identity budget and attempt 21 by the global provider budget',
   );
+  assert.equal(results[20]?.status, 'RATE_LIMITED', 'the first attempt beyond the global provider budget must be rejected before provider work');
 });
 
 test('rotating email addresses cannot exceed the shared Magic Link request-work budget', async () => {
