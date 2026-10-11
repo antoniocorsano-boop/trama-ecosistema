@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const RUNTIME_EXT = /\.(?:ts|tsx|js|jsx|mjs|cjs)$/i;
 const MIGRATION_RE = /^apps\/access\/supabase\/migrations\/.*\.sql$/i;
-const PRODUCT_DATA_TERMS = /(?:lesson|curricolo|student|learner|class|group|studio_draft)/i;
+const PRODUCT_DATA_TERMS = /(?:^|[^a-z0-9])(?:lesson|curricolo|student|learner|class|group|studio_draft|material|materials|materiale|materiali)(?:[^a-z0-9]|$)/i;
 
 function isRuntimeSource(file) {
   if (!file.startsWith('apps/access/')) return false;
