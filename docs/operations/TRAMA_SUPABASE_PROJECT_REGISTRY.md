@@ -51,6 +51,20 @@ A valid Supabase session alone never grants a TRAMA Access session. Provider ses
 
 The one-pilot provisioning boundary is also project-wide: a private singleton claim for the normalized pilot email is acquired before any provider-user inspection or creation. A different email cannot race past that reservation; an idempotent retry for the same pilot must still revalidate the governed principal/context/entitlement graph before succeeding.
 
+## TRAMA Access live postflight — 2026-10-11
+
+Direct live observation on project `toxhflbmipnwtgxgevfj` after exact-head qualification and independent review:
+
+- applied migrations: `access_live`, `access_pilot_provision`, `access_magic_link_auth_method`, `access_pilot_claim_guard`;
+- `access_sessions.auth_method` is constrained to `EMAIL_MAGIC_LINK`;
+- `trama_access_private.pilot_provision_claim` exists with RLS enabled and no direct non-`postgres` table grants;
+- `public.access_claim_pilot(text)` exists and EXECUTE is granted only to `postgres` and `service_role`;
+- live counts remain zero for `auth.users`, `auth.identities`, principals, login aliases, institutional contexts, application entitlements, Access sessions, rate-limit events and pilot claims;
+- no pilot provider user has been created and no Magic Link has been sent yet;
+- Supabase Security Advisor reports only INFO `rls_enabled_no_policy` findings for the seven private tables. This is consistent with the current private-store model: direct client table grants are absent and access is mediated through service-role-only governed RPCs.
+
+The pilot-claim migration initially failed transactionally because `POSITION(... IN ...)` had been written as the invalid schema-qualified form `pg_catalog.position(...)`. The failure left no claim table/function behind. A regression test reproduced the defect (101/102 tests PASS, one intentional RED), the migration was corrected to valid PostgreSQL syntax, exact head `a9d710bf8ad92464465d19254f6e8bc703d154b6` passed TRAMA Access #267, Governance #2325 and TRAMA Gateway #356, and fresh Codex review reported no major P1/P2 issue before the corrected migration was applied live.
+
 ## Safety rules
 
 This file must never contain credential values or authentication artifacts. In particular, do not store:
