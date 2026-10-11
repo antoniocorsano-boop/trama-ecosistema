@@ -1,0 +1,39 @@
+name: TRAMA Access
+on:
+  push:
+    branches:
+      - 'phase/access-01-phase-2-trama-access-runtime'
+  pull_request:
+    paths:
+      - 'apps/access/**'
+      - 'scripts/*trama-access-phase2*'
+      - '.github/workflows/trama-access.yml'
+permissions:
+  contents: read
+jobs:
+  phase2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Access dependencies
+        working-directory: apps/access
+        run: npm install --no-audit --no-fund
+      - name: Unit tests
+        working-directory: apps/access
+        run: npm test
+      - name: Typecheck
+        working-directory: apps/access
+        run: npm run typecheck
+      - name: Build
+        working-directory: apps/access
+        run: npm run build
+      - name: Install Chromium
+        working-directory: apps/access
+        run: npx playwright install --with-deps chromium
+      - name: Browser certification
+        working-directory: apps/access
+        run: npm run test:e2e

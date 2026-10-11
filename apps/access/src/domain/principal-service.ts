@@ -1,0 +1,22 @@
+import type { IdentityRepository } from '../ports/identity-repository.ts';
+import type { PrincipalResolution, VerifiedExternalIdentity } from './types.ts';
+import { normalizeLoginEmail } from './email.ts';
+
+export async function isPilotAliasAllowed(repo: IdentityRepository, email: string): Promise<boolean> {
+  const alias = await repo.findAliasByEmail(normalizeLoginEmail(email));
+  return Boolean(alias && alias.status === 'ACTIVE' && alias.pilotAllowed);
+}
+
+export async function resolvePrincipalForVerifiedIdentity(
+  repo: IdentityRepository,
+  input: VerifiedExternalIdentity,
+): Promise<PrincipalResolution> {
+  const alias = await repo.findAliasByExternalIdentity({ issuer: input.issuer, subject: input.subject });
+  if (!alias || alias.status !== 'ACTIVE' || !alias.pilotAllowed) return { ok: false, code: 'ACCESS_DENIED' };
+  if (input.verifiedEmail && normalizeLoginEmail(input.verifiedEmail) !== alias.normalizedValue) return { ok: false, code: 'ACCESS_DENIED' };
+  const principal = await repo.getPrincipal(alias.principalId);
+  if (!principal || principal.status !== 'ACTIVE') return { ok: false, code: 'ACCESS_DENIED' };
+  const contexts = await repo.listActiveContexts(principal.principalId);
+  if (contexts.length !== 1 || contexts[0]!.status !== 'ACTIVE') return { ok: false, code: 'ACCESS_DENIED' };
+  return { ok: true, principal, alias, context: contexts[0]! };
+}
