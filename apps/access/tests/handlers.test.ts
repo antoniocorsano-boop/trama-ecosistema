@@ -11,6 +11,9 @@ import { handleMagicLinkCallback } from '../src/server/handlers/magic-link-callb
 import { handleLogout } from '../src/server/handlers/logout.ts';
 import { handleLaunch } from '../src/server/handlers/launch.ts';
 
+const PKCE_COOKIE = '__Host-trama_access_pkce';
+const ACCESS_COOKIE = '__Host-trama_access_session';
+
 function runtime(entitled = true): AccessRuntime {
   const repo = new InMemoryIdentityRepository({
     principals: [{ principalId: 'p1', status: 'ACTIVE' }],
@@ -35,14 +38,25 @@ const post = (path: string, body: unknown, cookie?: string, origin = 'https://ac
   body: JSON.stringify(body),
 });
 
-async function authenticate(r: AccessRuntime): Promise<string> {
+function cookiePair(setCookie: string, name: string): string {
+  const match = setCookie.match(new RegExp(`(?:^|,\\s*)${name}=([^;]*)`));
+  assert.ok(match, `${name} missing from Set-Cookie`);
+  return `${name}=${match[1]}`;
+}
+
+async function requestPkce(r: AccessRuntime): Promise<string> {
   const requested = await handleRequestMagicLink(post('/api/auth/request-magic-link', { email: 'teacher@example.test' }), r);
   assert.equal(requested.status, 202);
-  const callback = await handleMagicLinkCallback(new Request('https://access.example.test/auth/confirm?code=valid-code'), r);
+  return cookiePair(requested.headers.get('set-cookie') ?? '', PKCE_COOKIE);
+}
+
+async function authenticate(r: AccessRuntime): Promise<string> {
+  const pkce = await requestPkce(r);
+  const callback = await handleMagicLinkCallback(new Request('https://access.example.test/auth/confirm?code=valid-code', {
+    headers: { Cookie: pkce },
+  }), r);
   assert.equal(callback.status, 303);
-  const pair = (callback.headers.get('set-cookie') ?? '').split(';')[0]!;
-  assert.match(pair, /^__Host-trama_access_session=/);
-  return pair;
+  return cookiePair(callback.headers.get('set-cookie') ?? '', ACCESS_COOKIE);
 }
 
 test('request Magic Link is neutral for allowed and unknown aliases', async () => {
@@ -53,6 +67,8 @@ test('request Magic Link is neutral for allowed and unknown aliases', async () =
   assert.equal(unknown.status, 202);
   assert.deepEqual(await allowed.json(), { status: 'MAGIC_LINK_REQUESTED' });
   assert.deepEqual(await unknown.json(), { status: 'MAGIC_LINK_REQUESTED' });
+  assert.match(allowed.headers.get('set-cookie') ?? '', new RegExp(`${PKCE_COOKIE}=`));
+  assert.match(unknown.headers.get('set-cookie') ?? '', new RegExp(`${PKCE_COOKIE}=`));
 });
 
 test('send-time Magic Link failure stays publicly neutral', async () => {
@@ -78,30 +94,34 @@ test('request Magic Link rejects malformed payload and provider outage safely', 
 
 test('Magic Link callback establishes opaque Access cookie only after governed authorization', async () => {
   const r = runtime();
-  await handleRequestMagicLink(post('/api/auth/request-magic-link', { email: 'teacher@example.test' }), r);
-  const response = await handleMagicLinkCallback(new Request('https://access.example.test/auth/confirm?code=valid-code'), r);
-  assert.equal(response.status, 303);
-  const cookie = response.headers.get('set-cookie') ?? '';
-  assert.match(cookie, /__Host-trama_access_session=/);
-  assert.match(cookie, /HttpOnly/);
+  const pair = await authenticate(r);
+  assert.match(pair, new RegExp(`^${ACCESS_COOKIE}=`));
 });
 
-test('invalid Magic Link callback never creates a cookie', async () => {
+test('invalid Magic Link callback never creates a local Access session cookie', async () => {
   const r = runtime();
+  const pkce = await requestPkce(r);
   (r.authProvider as FakeAuthProvider).verifyFailure = 'INVALID';
-  const response = await handleMagicLinkCallback(new Request('https://access.example.test/auth/confirm?code=invalid-code'), r);
+  const response = await handleMagicLinkCallback(new Request('https://access.example.test/auth/confirm?code=invalid-code', {
+    headers: { Cookie: pkce },
+  }), r);
   assert.equal(response.status, 303);
   assert.equal(response.headers.get('location'), 'https://access.example.test/?auth=invalid');
-  assert.equal(response.headers.has('set-cookie'), false);
+  const setCookie = response.headers.get('set-cookie') ?? '';
+  assert.doesNotMatch(setCookie, new RegExp(`${ACCESS_COOKIE}=`));
+  assert.match(setCookie, new RegExp(`${PKCE_COOKIE}=;`));
 });
 
 test('verified but unbound identity remains denied', async () => {
   const r = runtime();
+  const pkce = await requestPkce(r);
   (r.authProvider as FakeAuthProvider).subject = 'other-subject';
-  const denied = await handleMagicLinkCallback(new Request('https://access.example.test/auth/confirm?code=valid-code'), r);
+  const denied = await handleMagicLinkCallback(new Request('https://access.example.test/auth/confirm?code=valid-code', {
+    headers: { Cookie: pkce },
+  }), r);
   assert.equal(denied.status, 303);
   assert.equal(denied.headers.get('location'), 'https://access.example.test/?auth=denied');
-  assert.equal(denied.headers.has('set-cookie'), false);
+  assert.doesNotMatch(denied.headers.get('set-cookie') ?? '', new RegExp(`${ACCESS_COOKIE}=`));
 });
 
 test('logout is idempotent, revokes Magic Link session and always clears cookie', async () => {
