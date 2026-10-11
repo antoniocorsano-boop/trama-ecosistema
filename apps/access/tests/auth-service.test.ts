@@ -40,6 +40,16 @@ test('unknown and allowed aliases with invalid OTP return the same public result
   assert.equal(f.store.records.length, 0);
 });
 
+test('verify-time provider failure remains membership-neutral after a healthy availability check', async () => {
+  const f = fixture();
+  f.provider.verifyFailure = 'UNAVAILABLE';
+  const allowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() });
+  const unknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '123456', now: new Date() });
+  assert.deepEqual(allowed, { status: 'OTP_INVALID' });
+  assert.deepEqual(unknown, { status: 'OTP_INVALID' });
+  assert.equal(f.store.records.length, 0);
+});
+
 test('valid OTP and exact binding creates access session even with zero entitlements', async () => {
   const f = fixture();
   const result = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date('2026-10-11T10:00:00Z') });
