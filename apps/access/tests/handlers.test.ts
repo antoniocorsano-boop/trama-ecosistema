@@ -131,6 +131,26 @@ test('launch rejects a session after its bound alias is revoked or rebound', asy
   assert.equal(rebound.status, 403);
 });
 
+test('launch rejects a session after its context is downgraded to PERSONAL', async () => {
+  const r = runtime();
+  const auth = await handleVerifyOtp(req('/api/auth/verify-otp', { email: 'teacher@example.test', otp: '123456' }), r);
+  const pair = (auth.headers.get('set-cookie') ?? '').split(';')[0]!;
+  const repo = r.identityRepository as InMemoryIdentityRepository;
+  repo.contexts[0]!.contextType = 'PERSONAL';
+  const denied = await handleLaunch(req('/api/launch', { applicationKey: 'DOCENTE_OS' }, pair), r);
+  assert.equal(denied.status, 403);
+});
+
+test('launch rejects a session after its institutional reference is removed', async () => {
+  const r = runtime();
+  const auth = await handleVerifyOtp(req('/api/auth/verify-otp', { email: 'teacher@example.test', otp: '123456' }), r);
+  const pair = (auth.headers.get('set-cookie') ?? '').split(';')[0]!;
+  const repo = r.identityRepository as InMemoryIdentityRepository;
+  repo.contexts[0]!.institutionRef = undefined;
+  const denied = await handleLaunch(req('/api/launch', { applicationKey: 'DOCENTE_OS' }, pair), r);
+  assert.equal(denied.status, 403);
+});
+
 test('every mutation rejects mismatched origin', async () => {
   const r = runtime();
   const bad = new Request('https://access.example.test/api/auth/request-otp', { method: 'POST', headers: { Origin: 'https://evil.test', 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'teacher@example.test' }) });
