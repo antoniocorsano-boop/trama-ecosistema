@@ -9,6 +9,8 @@ export class FakeAuthProvider implements AuthProviderAdapter {
   otp: string;
   identities: Record<string, FakeIdentity>;
   requestCount = 0;
+  requestCompletionCount = 0;
+  requestAbortCount = 0;
   verifyCount = 0;
   requestDelayMs = 0;
   available = true;
@@ -18,10 +20,31 @@ export class FakeAuthProvider implements AuthProviderAdapter {
     this.issuer = seed.issuer; this.subject = seed.subject; this.email = seed.email; this.otp = seed.otp; this.identities = seed.identities ?? {};
   }
   async checkAvailability(): Promise<boolean> { return this.available; }
-  async requestEmailOtp(_input: { email: string }): Promise<void> {
+  async requestEmailOtp(input: { email: string; signal?: AbortSignal }): Promise<void> {
     this.requestCount += 1;
-    if (this.requestDelayMs > 0) await new Promise((resolve) => setTimeout(resolve, this.requestDelayMs));
+    if (this.requestDelayMs > 0) {
+      await new Promise<void>((resolve, reject) => {
+        let settled = false;
+        const finish = (callback: () => void) => {
+          if (settled) return;
+          settled = true;
+          input.signal?.removeEventListener('abort', onAbort);
+          callback();
+        };
+        const timer = setTimeout(() => finish(resolve), this.requestDelayMs);
+        const onAbort = () => {
+          clearTimeout(timer);
+          finish(() => {
+            this.requestAbortCount += 1;
+            reject(new Error('OTP_REQUEST_ABORTED'));
+          });
+        };
+        if (input.signal?.aborted) onAbort();
+        else input.signal?.addEventListener('abort', onAbort, { once: true });
+      });
+    }
     if (this.requestFailure) throw new Error('PROVIDER_UNAVAILABLE');
+    this.requestCompletionCount += 1;
   }
   async verifyEmailOtp(input: { email: string; otp: string }): Promise<VerifiedExternalIdentity> {
     this.verifyCount += 1;
