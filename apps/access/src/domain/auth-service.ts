@@ -21,13 +21,26 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function settleWithinBudget(work: Promise<void>, budgetMs: number): Promise<void> {
+async function settleSendBeforeDeadline(
+  provider: AuthProviderAdapter,
+  email: string,
+  deadlineAtMs: number,
+): Promise<void> {
+  const remainingMs = deadlineAtMs - performance.now();
+  if (remainingMs <= 0) return;
+
+  const controller = new AbortController();
   let timeout: ReturnType<typeof setTimeout> | undefined;
-  const budget = new Promise<void>((resolve) => {
-    timeout = setTimeout(resolve, budgetMs);
+  const work = provider.requestEmailOtp({ email, signal: controller.signal }).catch(() => undefined);
+  const deadline = new Promise<void>((resolve) => {
+    timeout = setTimeout(() => {
+      controller.abort();
+      resolve();
+    }, remainingMs);
   });
+
   try {
-    await Promise.race([work.catch(() => undefined), budget]);
+    await Promise.race([work, deadline]);
   } finally {
     if (timeout) clearTimeout(timeout);
   }
@@ -62,14 +75,16 @@ export async function requestPilotOtp(input: {
     throw new Error('INVALID_OTP_REQUEST_TIMING_POLICY');
   }
 
-  // Once the address-independent provider health check has succeeded, every
-  // membership-sensitive branch is hidden behind the same public response floor.
-  // The provider send operation is budgeted strictly below that floor, so an
-  // unknown alias never needs a delivery attempt merely to reproduce provider latency.
+  // The membership-sensitive interval starts before the alias lookup. The
+  // lookup and any real provider send therefore share one deadline; a slow
+  // lookup reduces the remaining send budget instead of extending the allowed
+  // branch beyond the unknown branch. The provider receives an AbortSignal so
+  // expiry also cancels the underlying delivery attempt rather than detaching it.
   const startedAtMs = performance.now();
+  const sensitiveDeadlineAtMs = startedAtMs + timing.providerBudgetMs;
   const allowed = await isPilotAliasAllowed(input.repo, email);
   if (allowed) {
-    await settleWithinBudget(input.provider.requestEmailOtp({ email }), timing.providerBudgetMs);
+    await settleSendBeforeDeadline(input.provider, email, sensitiveDeadlineAtMs);
   }
   await waitForPublicFloor(startedAtMs, timing.publicFloorMs);
   return { status: 'OTP_REQUESTED' };
