@@ -1,6 +1,11 @@
 import type { RateLimiter, RateLimitScope, RateLimitDecision } from '../ports/rate-limiter.ts';
 const WINDOW_MS = 15 * 60 * 1000;
-const LIMITS: Record<RateLimitScope, number> = { OTP_REQUEST: 5, OTP_VERIFY: 10, OTP_VERIFY_GLOBAL: 20 };
+const LIMITS: Record<RateLimitScope, number> = {
+  OTP_REQUEST: 5,
+  OTP_REQUEST_GLOBAL: 20,
+  OTP_VERIFY: 10,
+  OTP_VERIFY_GLOBAL: 20,
+};
 export class InMemoryRateLimiter implements RateLimiter {
   entries: Array<{ scope: RateLimitScope; keyDigest: string; at: Date }> = [];
   async consume(input: { scope: RateLimitScope; keyDigest: string; now: Date }): Promise<RateLimitDecision> {
