@@ -22,10 +22,10 @@ export async function requestPilotOtp(input: { repo: IdentityRepository; provide
   if (!allowed) return { status: 'OTP_REQUESTED' };
   try {
     await input.provider.requestEmailOtp({ email });
-    return { status: 'OTP_REQUESTED' };
   } catch {
-    return { status: 'PROVIDER_UNAVAILABLE' };
+    return { status: 'OTP_REQUESTED' };
   }
+  return { status: 'OTP_REQUESTED' };
 }
 
 export type VerifyPilotOtpResult =
@@ -40,7 +40,7 @@ export async function verifyPilotOtp(input: { repo: IdentityRepository; provider
   let available = false;
   try { available = await input.provider.checkAvailability(); } catch { available = false; }
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
-  if (!(await isPilotAliasAllowed(input.repo, email))) return { status: 'ACCESS_DENIED' };
+  if (!(await isPilotAliasAllowed(input.repo, email))) return { status: 'OTP_INVALID' };
   let verified;
   try {
     verified = await input.provider.verifyEmailOtp({ email, otp: input.otp });
@@ -52,6 +52,14 @@ export async function verifyPilotOtp(input: { repo: IdentityRepository; provider
   }
   const resolution = await resolvePrincipalForVerifiedIdentity(input.repo, verified);
   if (!resolution.ok) return { status: 'ACCESS_DENIED' };
-  const { secret } = await issueAccessSession({ store: input.store, principalId: resolution.principal.principalId, contextId: resolution.context.contextId, now: input.now });
+  const { secret } = await issueAccessSession({
+    store: input.store,
+    principalId: resolution.principal.principalId,
+    contextId: resolution.context.contextId,
+    aliasId: resolution.alias.aliasId,
+    providerIssuer: resolution.alias.providerIssuer,
+    providerSubject: resolution.alias.providerSubject,
+    now: input.now,
+  });
   return { status: 'AUTHENTICATED', principalId: resolution.principal.principalId, contextId: resolution.context.contextId, sessionSecret: secret };
 }
