@@ -9,6 +9,7 @@ import { InMemorySessionStore } from '../src/testing/in-memory-session-store.ts'
 import { FakeAuthProvider } from '../src/testing/fake-auth-provider.ts';
 
 const redirectTo = 'https://access.example.test/auth/confirm';
+const codeVerifier = 'v'.repeat(43);
 
 test('rotating callbacks are globally capped while repeated verified identity is also capped', async () => {
   const provider = new FakeAuthProvider({
@@ -29,7 +30,7 @@ test('rotating callbacks are globally capped while repeated verified identity is
       provider,
       store,
       rateLimiter,
-      callback: { code: `rotating-${index}` },
+      callback: { code: `rotating-${index}`, codeVerifier },
       now,
       verifyProviderBudgetMs: 2,
     }));
@@ -75,6 +76,7 @@ test('rotating email addresses cannot exceed the shared Magic Link request-work 
       rateLimiter,
       email: `request-rotating-${index}@example.test`,
       redirectTo,
+      codeVerifier,
       now,
       timing: { providerBudgetMs: 2, publicFloorMs: 5 },
     }));
