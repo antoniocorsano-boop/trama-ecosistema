@@ -17,7 +17,7 @@ class FakeRpcResult<T> implements PromiseLike<{ data: T; error: null }> {
 }
 
 class SharedFakeAccessRpc {
-  readonly counters = new Map<string, { count: number; windowStartMs: number }>();
+  readonly events = new Map<string, number[]>();
   readonly sessions = new Map<string, Record<string, unknown>>();
   readonly seenSignals: AbortSignal[] = [];
   aliases = [{
@@ -66,15 +66,23 @@ class SharedFakeAccessRpc {
           const key = String(params.p_key_digest);
           const nowMs = Date.parse(String(params.p_now));
           const limit = Number(params.p_limit);
-          const windowSeconds = Number(params.p_window_seconds);
-          const bucket = Math.floor(nowMs / (windowSeconds * 1000)) * windowSeconds * 1000;
-          const counterKey = `${scope}:${key}:${bucket}`;
-          const current = this.counters.get(counterKey) ?? { count: 0, windowStartMs: bucket };
-          current.count += 1;
-          this.counters.set(counterKey, current);
+          const windowMs = Number(params.p_window_seconds) * 1000;
+          const counterKey = `${scope}:${key}`;
+          const active = (this.events.get(counterKey) ?? []).filter((at) => at > nowMs - windowMs);
+          if (active.length >= limit) {
+            this.events.set(counterKey, active);
+            return {
+              allowed: false,
+              remaining: 0,
+              reset_at: new Date(active[0]! + windowMs).toISOString(),
+            } as T;
+          }
+          active.push(nowMs);
+          this.events.set(counterKey, active);
           return {
-            allowed: current.count <= limit,
-            retry_after_seconds: current.count <= limit ? 0 : Math.max(1, Math.ceil((bucket + windowSeconds * 1000 - nowMs) / 1000)),
+            allowed: true,
+            remaining: limit - active.length,
+            reset_at: new Date(nowMs + windowMs).toISOString(),
           } as T;
         }
         throw new Error(`unexpected rpc ${fn}`);
@@ -93,6 +101,8 @@ async function assertConcurrentLimit(scope: RateLimitScope, limit: number, keyDi
   const results = await Promise.all(attempts);
   assert.equal(results.filter((result) => result.allowed).length, limit);
   assert.equal(results.filter((result) => !result.allowed).length, 1);
+  assert.equal(results.at(-1)?.remaining, 0);
+  assert.ok(results.every((result) => result.resetAt instanceof Date && !Number.isNaN(result.resetAt.getTime())));
 }
 
 test('Supabase identity repository maps governed alias rows and propagates AbortSignal', async () => {
@@ -137,4 +147,14 @@ test('OTP_REQUEST_GLOBAL is shared and atomic across limiter instances at 20/15m
 
 test('OTP_VERIFY_GLOBAL is shared and atomic across limiter instances at 20/15m', async () => {
   await assertConcurrentLimit('OTP_VERIFY_GLOBAL', 20, 'fixed-non-personal-global-digest');
+});
+
+test('shared limiter preserves sliding-window semantics across a 15-minute boundary', async () => {
+  const shared = new SharedFakeAccessRpc();
+  const limiter = new SupabaseRateLimiter(shared.client());
+  for (let i = 0; i < 5; i++) assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now })).allowed, true);
+  const justBefore = new Date(now.getTime() + 15 * 60 * 1000 - 1);
+  assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now: justBefore })).allowed, false);
+  const justAfter = new Date(now.getTime() + 15 * 60 * 1000 + 1);
+  assert.equal((await limiter.consume({ scope: 'OTP_REQUEST', keyDigest: 'alias-digest', now: justAfter })).allowed, true);
 });
