@@ -40,13 +40,19 @@ test('unknown and allowed aliases with invalid OTP return the same public result
   assert.equal(f.store.records.length, 0);
 });
 
-test('verify-time provider failure remains membership-neutral after a healthy availability check', async () => {
+test('verify-time provider failures remain membership-neutral after a healthy availability check', async () => {
   const f = fixture();
   f.provider.verifyFailure = 'UNAVAILABLE';
-  const allowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() });
-  const unknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '123456', now: new Date() });
-  assert.deepEqual(allowed, { status: 'OTP_INVALID' });
-  assert.deepEqual(unknown, { status: 'OTP_INVALID' });
+  const unavailableAllowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() });
+  const unavailableUnknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '123456', now: new Date() });
+  assert.deepEqual(unavailableAllowed, { status: 'OTP_INVALID' });
+  assert.deepEqual(unavailableUnknown, { status: 'OTP_INVALID' });
+
+  f.provider.verifyFailure = 'EXPIRED';
+  const expiredAllowed = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'teacher@example.test', otp: '123456', now: new Date() });
+  const expiredUnknown = await verifyPilotOtp({ repo: f.repo, provider: f.provider, store: f.store, email: 'nobody@example.test', otp: '123456', now: new Date() });
+  assert.deepEqual(expiredAllowed, { status: 'OTP_INVALID' });
+  assert.deepEqual(expiredUnknown, { status: 'OTP_INVALID' });
   assert.equal(f.store.records.length, 0);
 });
 
