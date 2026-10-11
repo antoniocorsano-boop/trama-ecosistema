@@ -1,10 +1,22 @@
 import type { IdentityRepository } from '../ports/identity-repository.ts';
-import type { PrincipalResolution, VerifiedExternalIdentity } from './types.ts';
+import type { AccessSessionRecord, PrincipalResolution, VerifiedExternalIdentity } from './types.ts';
 import { normalizeLoginEmail } from './email.ts';
 
 export async function isPilotAliasAllowed(repo: IdentityRepository, email: string): Promise<boolean> {
   const alias = await repo.findAliasByEmail(normalizeLoginEmail(email));
   return Boolean(alias && alias.status === 'ACTIVE' && alias.pilotAllowed);
+}
+
+export async function isSessionBindingCurrent(repo: IdentityRepository, record: AccessSessionRecord): Promise<boolean> {
+  const alias = await repo.getAlias(record.aliasId);
+  return Boolean(
+    alias
+    && alias.status === 'ACTIVE'
+    && alias.pilotAllowed
+    && alias.principalId === record.principalId
+    && alias.providerIssuer === record.providerIssuer
+    && alias.providerSubject === record.providerSubject
+  );
 }
 
 export async function resolvePrincipalForVerifiedIdentity(
