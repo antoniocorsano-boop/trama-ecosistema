@@ -297,7 +297,17 @@ Run: `cd apps/access && npm test -- --test-name-pattern="Task 11 provisioning"`
 
 Expected: PASS.
 
-- [ ] **Step 5: Run full pre-mutation qualification on the exact pushed head**
+- [ ] **Step 5: Commit all Task 5 artifacts before qualification**
+
+```bash
+git add apps/access/scripts/provision-task11-pilot.ts apps/access/tests/provision-task11-pilot.test.ts docs/evidence/access-01/access-01-task-11-live-receipt.template.md
+git commit -m "feat(access): add guarded task11 pilot provisioning"
+git push
+```
+
+Required invariant: the pushed exact head used for qualification/review MUST contain the provisioning script, its tests, and the sanitized receipt template that would later be used by Task 6. Do not qualify an uncommitted or merely working-tree version of these artifacts.
+
+- [ ] **Step 6: Run full pre-mutation qualification on that exact pushed head**
 
 Run:
 
@@ -314,15 +324,15 @@ Then require the repository Governance/TRAMA Access workflows on that exact push
 
 Expected: all PASS before any provider resource is created or modified.
 
-- [ ] **Step 6: Request independent Codex review on that exact head**
+- [ ] **Step 7: Request independent Codex review on that exact head**
 
 Review Tasks 1–5 with focus on provider adapter, `shouldCreateUser:false`, exact subject authority, token/secret isolation, persistent four-scope rate limiting, real abort propagation, migration boundary and provisioning idempotency/privacy.
 
-Required gate: review completed on the same exact head, **zero open P1/P2 blockers**. If the review produces a code/documentation change, repeat Step 5 and Step 6 on the new exact head. **Do not proceed to Task 6 until this gate is clean.**
+Required gate: review completed on the same exact head, **zero open P1/P2 blockers**. If the review produces a code/documentation change, commit and push that remediation, then repeat Step 6 and Step 7 on the new exact head. **Do not proceed to Task 6 until this gate is clean.**
 
-- [ ] **Step 7: Commit only if review remediation changed tracked files**
+- [ ] **Step 8: Preserve the reviewed head until Task 6**
 
-Any remediation commit invalidates the prior exact-head gate; re-run Steps 5–6 after the commit. If no remediation is needed, do not create a ceremonial commit.
+Do not create a ceremonial commit after a clean review. Any tracked remediation or other code/documentation commit invalidates the prior exact-head gate and requires a new push plus repetition of Steps 6–7.
 
 ### Task 6: Execute authorized provider provisioning and live qualification
 
@@ -349,7 +359,7 @@ This step is read-only preflight. If any condition is not satisfied, STOP `AWAIT
 
 - [ ] **Step 3: Reconfirm exact head immediately before the first provider mutation**
 
-Assert that no tracked code/documentation change has occurred since the clean Task 5 review. If the head moved, STOP and repeat Task 5 Steps 5–6 before mutation.
+Assert that no tracked code/documentation change has occurred since the clean Task 5 review. If the head moved, STOP and repeat Task 5 Steps 6–7 before mutation.
 
 - [ ] **Step 4: Create/configure the dedicated provider project and live Access store**
 
@@ -401,5 +411,5 @@ Even after a clean post-live review, do **not** deploy publicly and do **not** i
 - Spec coverage: all authorization scope, stop conditions, provider/live-store hardening, live smoke, evidence and review gates are mapped to Tasks 1–6.
 - Type consistency: all implementations remain behind the existing Phase 2 ports; no new domain authority interface is introduced.
 - Review focus coverage: all four scopes have separate cross-instance/concurrent boundary tests in Task 2 and live proof in Task 6; real abort is Task 3/6; no auto-create is Task 1/6; subject mismatch is Task 5/6; token minimization is Task 1/6.
-- Sequencing: Tasks 1–5 are fully qualified and independently reviewed on an exact head before Task 6 may perform the first provider mutation; any intervening tracked change invalidates that gate.
+- Sequencing: Tasks 1–5 are committed/pushed, fully qualified and independently reviewed on the same exact head before Task 6 may perform the first provider mutation; any intervening tracked change invalidates that gate.
 - Proportion: external provider mutation remains isolated in Task 6; code, tests, validator, provisioning guard and pre-mutation independent review are completed first.
