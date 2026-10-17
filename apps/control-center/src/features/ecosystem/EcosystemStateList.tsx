@@ -1,6 +1,6 @@
 import type { EcosystemGraphProjection } from "../../domain/ecosystem/model";
 
-function authorityLabel(owner:string|null,refs:string[]){return owner ?? refs.join(", ") || "—";}
+function authorityLabel(owner:string|null,refs:string[]){return (owner ?? refs.join(", ")) || "—";}
 function evidenceLabel(refs:string[]){return refs.join(", ") || "—";}
 
 export function EcosystemStateList({graph,selectedFlowId,onSelectFlow}:{graph:EcosystemGraphProjection;selectedFlowId:string|null;onSelectFlow:(id:string)=>void}){
