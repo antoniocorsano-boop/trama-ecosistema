@@ -6,6 +6,12 @@ on:
       - "control-center/**"
       - "config/**"
       - "status/**"
+      - "governance/access/trama-ecosystem-state-v0.3.json"
+      - "schemas/trama-ecosystem-state-v0.3.schema.json"
+      - "scripts/validate_ecosystem_state_v03.py"
+      - "scripts/test_ecosystem_state_v03_contract.py"
+      - "scripts/test_ecosystem_graph_projection.py"
+      - "docs/evidence/access-01/trama-access-state-promotion-v0.3-2026-10-17.md"
       - "docs/decisions/**"
       - "scripts/build_ecosystem_snapshot.py"
       - "scripts/build_project_context_snapshot.py"
@@ -59,6 +65,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 1
+      - name: Validate ecosystem state v0.3 before snapshot generation
+        run: |
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          python scripts/validate_ecosystem_state_v03.py
+          python scripts/test_ecosystem_state_v03_contract.py
+          python scripts/test_ecosystem_graph_projection.py
       - name: Regenerate candidate snapshot on PR head
         run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.generated.json
       - name: Promote only semantic changes
@@ -168,6 +180,12 @@ jobs:
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.sha }}
           fetch-depth: 1
+      - name: Validate ecosystem state v0.3 before snapshot generation
+        run: |
+          python -m pip install --disable-pip-version-check --quiet jsonschema
+          python scripts/validate_ecosystem_state_v03.py
+          python scripts/test_ecosystem_state_v03_contract.py
+          python scripts/test_ecosystem_graph_projection.py
       - name: Regenerate governed snapshot
         run: python scripts/build_ecosystem_snapshot.py --output control-center/data/ecosystem-snapshot.generated.json
       - name: Preserve generated snapshot evidence
