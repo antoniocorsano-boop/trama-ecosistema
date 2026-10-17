@@ -75,7 +75,9 @@ Non viene introdotta alcuna regola speciale per Docente OS: il livello deve emer
 
 ### Control Center projection reconciliation
 
-Lo snapshot `control-center/data/ecosystem-snapshot.json` è stato rigenerato dal builder canonico della repository dopo la registrazione delle due evidenze L5. Le proiezioni `project-context-snapshot` e `project-knowledge` sono state quindi riallineate dal normale workflow governato al nuovo hash dello snapshot. Il materialeizzatore temporaneo usato per ottenere l'artefatto esatto è stato rimosso dalla branch e non fa parte del candidato finale.
+Lo snapshot `control-center/data/ecosystem-snapshot.json` è stato rigenerato dal builder canonico della repository dopo la registrazione delle due evidenze L5. Le proiezioni `project-context-snapshot` e `project-knowledge` sono state riallineate dal normale workflow governato al nuovo hash dello snapshot. Gli helper temporanei usati esclusivamente per materializzare e normalizzare le proiezioni sono stati rimossi e non fanno parte del candidato finale.
+
+Il candidato è quindi congelato sul contenuto governato finale: registry, reconciliation, test, snapshot e proiezioni derivate sono coerenti tra loro; qualsiasi ulteriore variazione richiede una nuova exact-head verification.
 
 ## 6. Confini
 
