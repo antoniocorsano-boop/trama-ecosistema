@@ -36,6 +36,13 @@ test("Ecosystem v0.3 preserves canonical state, flow parity and GAP semantics", 
   await expect(accessDos).toBeVisible();
   await expect(accessDos).toContainText(String(canonicalFlows.get("trama_access_to_docente_os").state));
 
+  const studioAuthoring=canonicalFlows.get("docente_os_to_studio_atlas");
+  expect(studioAuthoring.nextAllowedIntervention.preconditions).not.toEqual([]);
+  expect(studioAuthoring.nextAllowedIntervention.forbiddenUntil).not.toEqual([]);
+  expect(
+    `${studioAuthoring.nextAllowedIntervention.preconditions.join(" ")} ${studioAuthoring.nextAllowedIntervention.forbiddenUntil.join(" ")}`.toLowerCase(),
+  ).toContain("contratto");
+
   await page.getByRole("button",{name:"AS IS → GAP → TO BE"}).click();
   await expect(page.getByRole("button",{name:"AS IS → GAP → TO BE"})).toHaveAttribute("aria-pressed","true");
   const gapView=page.getByLabel("Vista AS IS GAP TO BE");
@@ -45,6 +52,9 @@ test("Ecosystem v0.3 preserves canonical state, flow parity and GAP semantics", 
   await expect(gapView).toContainText("Prerequisiti");
   await expect(gapView).toContainText(String(canonicalFlows.get("trama_access_to_docente_os").nextAllowedIntervention.preconditions[0]));
   await expect(gapView).toContainText("Bloccato fino a");
+  await expect(gapView).toContainText("Docente OS → Studio Atlas");
+  await expect(gapView).toContainText(String(studioAuthoring.nextAllowedIntervention.preconditions[0]));
+  await expect(gapView).toContainText(String(studioAuthoring.nextAllowedIntervention.forbiddenUntil[0]));
   for (const nodeId of ["gateway","arena","curricolo_atlas","trama_governance"]) {
     await expect(gapView).toContainText(String(canonicalNodes.get(nodeId).gap.summary));
   }
