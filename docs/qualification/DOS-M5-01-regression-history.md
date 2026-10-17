@@ -1,7 +1,7 @@
 # DOS-M5-01 — Docente OS L5 regression history
 
-**Stato:** DRAFT / CHECKPOINTS_PENDING  
-**Data:** 7 ottobre 2026  
+**Stato:** DRAFT / EVIDENCE_READY / HUMAN_REVIEW_PENDING  
+**Data:** 17 ottobre 2026  
 **Ambito:** Docente OS product maturity  
 **Contratto:** `docs/qualification/DOS-M5-00-evidence-contract.md`  
 **Authority effect:** NONE  
@@ -12,7 +12,7 @@
 
 Costruire la `REGRESSION_HISTORY` richiesta per Docente OS L5, distinguendo regressioni di prodotto, test harness e infrastruttura, documentando remediation e non ricorrenza e acquisendo almeno due checkpoint post-L4 realmente distinti secondo il contratto DOS-M5-00.
 
-DOS-M5-01 non promuove L5, non modifica il maturity registry e non genera automaticamente una evidenza `REGRESSION_HISTORY` canonica finché tutti i criteri PASS non sono soddisfatti.
+DOS-M5-01 non promuove L5, non modifica il maturity registry e non genera automaticamente una evidenza `REGRESSION_HISTORY` canonica finché la Human Review conclusiva non è PASS sul medesimo exact head.
 
 ## 2. Baseline canonica
 
@@ -20,21 +20,24 @@ Baseline TRAMA di apertura:
 
 - repository: `antoniocorsano-boop/trama-ecosistema`;
 - ref: `main`;
-- exact head: `dd8bfab5032137a8591c209004bbd643bf23e8cd`;
+- exact head all'apertura: `dd8bfab5032137a8591c209004bbd643bf23e8cd`;
 - DOS-M5-00: `CONTRACT_APPROVED / HUMAN_REVIEW_PASS / INTEGRATED`.
 
 Baseline prodotto L4:
 
 - repository: `antoniocorsano-boop/docente-os-2026-27`;
-- active ref: `develop`;
-- exact head: `39bce05fa2e87f3746ee3b6dcd7433065cb2d876`;
-- `develop` verificato ancora sul medesimo SHA all'apertura di DOS-M5-01;
+- exact head L4: `39bce05fa2e87f3746ee3b6dcd7433065cb2d876`;
 - runtime canary DOS-M4-01: PASS;
 - `Docente OS confirmedLevel = 4`;
 - next target: `5`;
 - next required evidence: `REGRESSION_HISTORY + ADOPTION_EVIDENCE`.
 
-Poiché `develop` non è avanzato oltre `39bce05f…`, all'apertura di questo dossier **non esiste ancora una modifica prodotto post-L4** che possa essere usata onestamente come checkpoint `COMPATIBLE_CHANGE`.
+Baseline prodotto congelata dopo i checkpoint post-L4 e il closeout lean:
+
+- `develop@3f2b4fbac475109fdc331415aa16af680fd96c87`;
+- merge #716 `DOS-CLOSE-01`;
+- nessun nuovo ciclo funzionale autorizzato;
+- DOC-04 completo resta residuo separato e non viene usato per gonfiare il livello di maturità.
 
 ## 3. Regole applicate
 
@@ -77,9 +80,9 @@ status: CLOSED
 
 **Root cause.** Assunzione statica nel layout (`repeat(5, …)`) non coerente con membership dinamica della bottom navigation.
 
-**Remediation.** Colonne derivate implicitamente dalle destinazioni renderizzate tramite `grid-auto-flow: column` e `grid-auto-columns: minmax(0,1fr)`; aggiunto il regression contract sul selettore reale della bottom navigation.
+**Remediation.** Colonne derivate dagli elementi renderizzati e regression contract sul selettore reale della bottom navigation.
 
-**Non ricorrenza / ricertificazione.** PR #688 registra HR-01 `CLOSED / PASS` sull'exact head `97239044…`, con Product CI, Design Policy, Browser Certification/HVA, WCAG, P6, X3 e X4 PASS prima del merge. Il merge in `develop` è `2039bb97…`.
+**Non ricorrenza / ricertificazione.** PR #688 registra HR-01 `CLOSED / PASS` sull'exact head `97239044…`, con Product CI e gate visuali/di accessibilità PASS prima del merge `2039bb97…`.
 
 Verdetto storico: **regressione prodotto reale identificata, corretta e ricertificata**.
 
@@ -99,11 +102,11 @@ status: CLOSED
 
 **Sintomo osservato.** H1 attendeva direttamente `/workspace` dopo password; il runtime Beta applicava correttamente AAL2 e redirigeva a `/mfa?next=/workspace`.
 
-**Root cause.** Harness H1 rimasto al percorso AAL1 mentre l'applicazione e gli altri gate governati usavano già MFA/TOTP.
+**Root cause.** Harness H1 rimasto al percorso AAL1 mentre l'applicazione usava già MFA/TOTP.
 
-**Remediation.** H1 è stato riallineato al supporto canonico `loginE2E()` + TOTP e alla concurrency MFA governata. Nessuna modifica al prodotto o all'autenticazione applicativa.
+**Remediation.** H1 riallineato al supporto canonico di login + TOTP. Nessuna modifica al prodotto o all'autenticazione applicativa.
 
-**Non ricorrenza / ricertificazione.** Sul merge commit `5d2afea7…`, Product CI, Human Interaction Model e X3 risultano PASS. H1 supera il confine AAL2 e fallisce successivamente sul Piano annuale, rivelando un finding differente poi isolato in #690. La regressione AAL2 non ricorre nella successiva baseline `39bce05f…`, dove H1 è PASS.
+**Non ricorrenza / ricertificazione.** La regressione AAL2 non ricorre nella successiva baseline `39bce05f…`, dove H1 è PASS.
 
 Verdetto storico: **regressione del test harness, non regressione prodotto**.
 
@@ -121,18 +124,13 @@ mergeCommit: 39bce05fa2e87f3746ee3b6dcd7433065cb2d876
 status: CLOSED
 ```
 
-**Sintomo osservato.** Dopo il corretto login AAL2, H1 continuava ad aspettare `.annualTable` visibile su mobile, mentre la vista canonica sotto `760px` mostrava `.annualMobileBlockList` / `.annualMobileBlockCard` e nascondeva la tabella desktop.
+**Sintomo osservato.** Dopo il corretto login AAL2, H1 continuava ad aspettare la tabella desktop visibile su mobile, mentre la vista canonica usava la lista verticale mobile.
 
 **Root cause.** Aspettativa del test non aggiornata alla rappresentazione mobile già qualificata; nessun difetto della UI prodotto.
 
-**Remediation.** H1 verifica la prima `.annualMobileBlockCard`, contenuto didattico visibile, tabella desktop nascosta e assenza di scroll laterale.
+**Remediation.** H1 verifica la rappresentazione mobile canonica, la tabella desktop nascosta e l'assenza di scroll laterale.
 
-**Non ricorrenza / ricertificazione.** Sul merge commit `39bce05f…` risultano PASS almeno:
-
-- H1 Human Task Comfort Gate — run `37516630871`;
-- Product CI — run `37516630876`;
-- Human Interaction Model — run `37516630932`;
-- X3 E2E Mobile Gate — run `37516630967`.
+**Non ricorrenza / ricertificazione.** Sul merge commit `39bce05f…` H1, Product CI, Human Interaction Model e X3 risultano PASS.
 
 Verdetto storico: **regressione del test harness chiusa sulla baseline L4**.
 
@@ -156,82 +154,101 @@ CP0 è la baseline iniziale stabilizzata prevista da DOS-M5-00. **Non conta come
 
 ## 6. Checkpoint post-L4
 
-### DOS-M5-01-CP1
+### DOS-M5-01-CP1 — MATERIAL-CORE-01
 
 ```yaml
 checkpointId: DOS-M5-01-CP1
-status: PENDING
-observedAt: null
-triggerType: null
-triggerRef: null
-exactHead: null
-runtimeRef: null
-evidenceRefs: []
-verdict: null
+status: COMPLETE
+observedAt: 2026-10-17T03:27:50Z
+triggerType: COMPATIBLE_CHANGE
+triggerRef: github:docente-os-2026-27/pull/712:merge:83e98f8955b52e02367f4c166b3df65e1c0d9de6
+exactHead: 7e0eca972e3fe2b823e0369272bb0635a8163b6b
+mergeCommit: 83e98f8955b52e02367f4c166b3df65e1c0d9de6
+evidenceRefs:
+  - github:docente-os-2026-27/pull/712
+  - github-actions:docente-os-2026-27/run/38997476198
+  - github-actions:docente-os-2026-27/run/38997820114
+verdict: NO_REGRESSION
 ```
 
-Condizione di popolamento: il primo evento successivo alla baseline L4 che soddisfa realmente uno dei trigger ammessi dal contratto.
+**Perché è ammissibile.** #712 è una modifica prodotto post-L4 distinta, classificata `COMPATIBLE`, integrata dopo qualificazione exact-head. Il Product CI finale `38997476198` è PASS con typecheck, suite completa, lint, build e replay dell'intera catena Supabase. La Candidate Qualification `38997820114` è PASS sullo stesso exact head, includendo HVA, WCAG 2.2 AA, ASVS, K1, P6, X3/X4 e DB assurance.
 
-### DOS-M5-01-CP2
+**Finding interno gestito.** La review finale ha individuato un problema di composizione cross-block prima dell'integrazione. È stato osservato un RED specifico, corretto e ricertificato sul final head `7e0eca…`; non resta una regressione critica aperta nel checkpoint integrato.
+
+Verdetto CP1: **stabilità preservata dopo un cambiamento sostanziale dell'autorità canonica dei materiali, con finding reale gestito prima dell'integrazione**.
+
+### DOS-M5-01-CP2 — MATERIAL-TASK-UX-01
 
 ```yaml
 checkpointId: DOS-M5-01-CP2
-status: PENDING
-observedAt: null
-triggerType: null
-triggerRef: null
-exactHead: null
-runtimeRef: null
-evidenceRefs: []
-verdict: null
+status: COMPLETE
+observedAt: 2026-10-17T05:11:50Z
+triggerType: COMPATIBLE_CHANGE
+triggerRef: github:docente-os-2026-27/pull/713:merge:0b1dca72a940d02961cbc2a9ba3f7365dda43e2f
+exactHead: 0adc4817590c7a1855eea6510b63163123f5e1a4
+mergeCommit: 0b1dca72a940d02961cbc2a9ba3f7365dda43e2f
+evidenceRefs:
+  - github:docente-os-2026-27/pull/713
+  - github-actions:docente-os-2026-27/run/39002587011
+  - github-actions:docente-os-2026-27/run/39004275203
+  - github-actions:docente-os-2026-27/run/39004275305
+verdict: NO_REGRESSION
 ```
 
-Condizione di popolamento: un secondo evento indipendente, con `triggerRef` diverso da CP1 e non derivato dallo stesso run, retry o occasione professionale.
+**Perché è ammissibile.** #713 è un secondo cambiamento post-L4, distinto da #712 e costruito sopra il relativo merge commit. Introduce la UX teacher-first `Riutilizza / Adatta / Crea nuovo` senza cambiare schema o autorità. Sul final head `0adc481…` risultano PASS Product CI `39002587011`, DOS-CRM QL-1 `39004275203` e CV2 Candidate Qualification `39004275305`, oltre ai gate di design, interazione, sicurezza e vocabolario governato.
 
-## 7. Trigger ammissibili per i checkpoint mancanti
+**Finding harness gestito.** La prima verifica ha mostrato che i test UX non venivano realmente selezionati per l'interpretazione dei bracket come glob. Il contratto è stato corretto fino a ottenere un RED reale sulla UX mancante e successivo GREEN. Questo finding è classificato come problema del test harness/contratto di esecuzione, non come falsa regressione prodotto.
 
-Il dossier può usare, quando avvengono realmente:
+Verdetto CP2: **secondo checkpoint indipendente con ricertificazione completa e corretta distinzione fra difetto prodotto e test harness**.
 
-1. **HUMAN_REAL_USE_PERIOD** — un periodo/occasione professionale reale con binding positivo; può essere condiviso con DOS-M5-02 solo se il `triggerRef` rimane univoco nel ledger e l'evidenza non viene doppio-contata;
-2. **COMPATIBLE_CHANGE** — una modifica compatibile integrata in Docente OS, con nuovo exact head e ricertificazione appropriata;
-3. **REGRESSION_REMEDIATION** — un finding reale successivo a L4, correttamente classificato, corretto e ricertificato;
-4. **PERIODIC_RECERTIFICATION** — una ricertificazione separata da un trigger operativo indipendente, non un rerun consecutivo creato per soddisfare la soglia.
+## 7. Verifica successiva di congelamento
+
+Il checkpoint di chiusura prodotto #716 **non viene contato come CP3** e non riusa i trigger CP1/CP2. Serve solo come evidenza di non ricorrenza successiva:
+
+```yaml
+verificationId: DOS-M5-01-FREEZE-VERIFY
+productBaseline: develop@3f2b4fbac475109fdc331415aa16af680fd96c87
+verifiedCheckpointHead: 1d01e715c2e736819c4370b05ffdd0152b8b1792
+sourceRef: github:docente-os-2026-27/pull/716
+evidenceRef: github-actions:docente-os-2026-27/run/39017397468
+result: PASS
+role: NON_COUNTING_STABILITY_CONFIRMATION
+```
+
+La regressione completa sul checkpoint di closeout ha confermato Product CI PASS con typecheck, product tests, lint, build e runtime release preflight. Il deep replay Supabase è stato selettivamente omesso perché la PR era esclusivamente documentale e non conteneva mutazioni prodotto/schema.
 
 ## 8. Anti-gaming decision
 
-Alla data di apertura di DOS-M5-01:
+I requisiti post-L4 sono soddisfatti senza rerun artificiali:
 
-- `develop` è ancora `39bce05f…`;
-- non è presente un nuovo compatible product head;
-- non sono stati identificati due trigger post-L4 indipendenti già qualificabili;
-- eseguire ora due H1/X3 consecutivi sulla stessa baseline con il solo scopo di riempire CP1/CP2 violerebbe il contratto DOS-M5-00.
+- CP1 e CP2 derivano da **due PR prodotto integrate differenti**;
+- i `triggerRef` sono distinti;
+- gli exact head sono distinti;
+- CP2 nasce sopra il merge di CP1 e non è un retry dello stesso cambiamento;
+- i workflow usati come evidenza appartengono ai rispettivi trigger e non vengono doppio-contati;
+- #716 è conservata come sola conferma di stabilità successiva e **non aumenta il conteggio dei checkpoint**.
 
-Per questo il dossier resta correttamente `CHECKPOINTS_PENDING`.
+## 9. Valutazione contro il criterio DOS-M5-00
 
-## 9. Criterio di uscita
+- baseline M4 presente: **PASS**;
+- almeno due checkpoint post-L4: **PASS**;
+- `checkpointId` e `triggerRef` distinti: **PASS**;
+- nessuna regressione prodotto critica aperta nelle evidenze riesaminate: **PASS**;
+- regressioni harness distinte dai difetti prodotto: **PASS**;
+- checkpoint bound a exact head e workflow verificabili: **PASS**;
+- non ricorrenza supportata anche dalla regressione di closeout: **PASS**;
+- Human Review conclusiva: **PENDING**.
 
-DOS-M5-01 può diventare `REGRESSION_HISTORY_PASS` soltanto quando:
+Stato tecnico del dossier: **EVIDENCE_READY**.
 
-- il ledger storico #688/#689/#690 rimane verificabile e coerente;
-- CP0 è conservato come baseline L4;
-- CP1 e CP2 sono entrambi `COMPLETE`;
-- CP1 e CP2 hanno `triggerRef` distinti e non condividono lo stesso run/attempt/evento;
-- ogni finding è classificato correttamente;
-- nessuna regressione prodotto critica rimane aperta;
-- le remediation, quando presenti, hanno evidenza di non ricorrenza;
-- una Human Review conclude che la storia dimostra stabilità nel tempo e capacità di gestione delle regressioni;
-- solo allora può essere preparata una evidenza canonica `REGRESSION_HISTORY` per DOS-M5-03.
-
-Fino ad allora:
-
-**stato = DRAFT / CHECKPOINTS_PENDING**.
+`REGRESSION_HISTORY` può diventare evidenza canonica **solo** dopo Human Review PASS sul medesimo exact head di questa PR.
 
 ## 10. Confini invariati
 
 DOS-M5-01 non autorizza:
 
 - promozione L5;
-- modifica del maturity registry o snapshot come se `REGRESSION_HISTORY` fosse già PASS;
+- modifica del maturity registry o snapshot prima di DOS-M5-03;
 - Production;
 - cambio authority;
 - modifica di `DOS-A1`;
