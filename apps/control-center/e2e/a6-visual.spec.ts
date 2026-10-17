@@ -11,22 +11,17 @@ const routes = [
 
 async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test").Page) {
   await expect(page.getByLabel("Elenco accessibile del grafo canonico")).toBeVisible();
-  const geometry = await page.evaluate(async () => {
+  const stableHeight = await page.evaluate(async () => {
     await document.fonts.ready;
-    const samples:{bottom:number;documentScrollHeight:number;bodyScrollHeight:number}[]=[];
+    const bottoms:number[]=[];
     for(let index=0;index<8;index+=1){
       await new Promise<void>((resolve)=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
       const shell=document.querySelector<HTMLElement>(".app-shell");
       if(!shell) throw new Error("Missing .app-shell for ecosystem visual capture");
-      samples.push({
-        bottom:shell.getBoundingClientRect().bottom + window.scrollY,
-        documentScrollHeight:document.documentElement.scrollHeight,
-        bodyScrollHeight:document.body.scrollHeight,
-      });
+      bottoms.push(shell.getBoundingClientRect().bottom + window.scrollY);
     }
-    return {samples,stableHeight:Math.ceil(Math.max(...samples.map((sample)=>sample.bottom)))};
+    return Math.ceil(Math.max(...bottoms));
   });
-  console.log("ECOSYSTEM_VISUAL_GEOMETRY", JSON.stringify(geometry));
   await page.evaluate((height) => {
     for (const element of [document.documentElement,document.body]) {
       element.style.height=`${height}px`;
@@ -34,7 +29,7 @@ async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test")
       element.style.maxHeight=`${height}px`;
       element.style.overflow="hidden";
     }
-  }, geometry.stableHeight);
+  }, stableHeight);
 }
 
 const overviewVisualKnowledge = {
