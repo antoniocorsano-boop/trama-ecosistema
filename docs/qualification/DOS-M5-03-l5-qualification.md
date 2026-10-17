@@ -77,7 +77,22 @@ Non viene introdotta alcuna regola speciale per Docente OS: il livello deve emer
 
 Lo snapshot `control-center/data/ecosystem-snapshot.json` è stato rigenerato dal builder canonico della repository dopo la registrazione delle due evidenze L5. Le proiezioni `project-context-snapshot` e `project-knowledge` sono state riallineate dal normale workflow governato al nuovo hash dello snapshot. Gli helper temporanei usati esclusivamente per materializzare e normalizzare le proiezioni sono stati rimossi e non fanno parte del candidato finale.
 
-Il candidato è quindi congelato sul contenuto governato finale: registry, reconciliation, test, snapshot e proiezioni derivate sono coerenti tra loro; qualsiasi ulteriore variazione richiede una nuova exact-head verification.
+### Visual baseline reconciliation
+
+Il passaggio Docente OS a L5 modifica intenzionalmente il contenuto governato reso dal Control Center nelle superfici **Maturità** ed **Evidenze**, senza modificare componenti, CSS o interaction model. La regressione visuale A6 ha quindi rilevato baseline statiche obsolete, mentre typecheck, test unitari, build, PWA parity e browser funzionale risultavano PASS.
+
+Le baseline sono state rigenerate con lo stesso runner Playwright/Linux della CI mantenendo invariata la soglia `maxDiffPixelRatio`. Un guard esplicito ha autorizzato esclusivamente sei file già identificati dal RED:
+
+- `maturity-desktop-linux.png`;
+- `maturity-lim-linux.png`;
+- `evidence-desktop-linux.png`;
+- `evidence-lim-linux.png`;
+- `evidence-phone-linux.png`;
+- `evidence-reflow-320-linux.png`.
+
+Qualsiasi ulteriore modifica visuale avrebbe fatto fallire il refresh. L'helper temporaneo di rigenerazione è stato rimosso e non fa parte del candidato finale.
+
+Il candidato è quindi congelato sul contenuto governato finale: registry, reconciliation, test, snapshot, proiezioni derivate e baseline visuali sono coerenti tra loro; qualsiasi ulteriore variazione richiede una nuova exact-head verification.
 
 ## 6. Confini
 
