@@ -11,6 +11,7 @@ on:
       - "schemas/trama-ecosystem-state-v0.3.schema.json"
       - "scripts/validate_ecosystem_state_v03.py"
       - "scripts/test_ecosystem_state_v03_contract.py"
+      - "scripts/test_ecosystem_graph_projection.py"
       - "docs/evidence/access-01/trama-access-state-promotion-v0.3-2026-10-17.md"
       - ".github/workflows/control-center-projection.yml"
 
@@ -33,6 +34,9 @@ jobs:
 
       - name: Validate ecosystem state v0.3 contract
         run: python scripts/test_ecosystem_state_v03_contract.py
+
+      - name: Validate ecosystem graph projection contract
+        run: python scripts/test_ecosystem_graph_projection.py
 
       - name: Regenerate governed projection in workspace
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json
