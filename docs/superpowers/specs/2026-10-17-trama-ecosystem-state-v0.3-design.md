@@ -288,8 +288,8 @@ This matrix defines the intended v0.3 baseline. Implementation SHALL bind every 
 | TRAMA Access | `PARTIAL` | `REAL` | TRAMA | `null` | Runtime and live private store exist, but no completed live professional pilot/session/launcher proof | Complete the bounded live pilot and bind evidence; no federation before pilot qualification |
 | Identità professionale TRAMA | `PARTIAL` | `REAL` | TRAMA identity contract | `null` | Provider-neutral contract and live provider infrastructure exist; no live governed identity has yet been demonstrated | Complete one authorized professional identity pilot; preserve issuer+subject authority and data minimization |
 | Docente OS | `REAL` | `REAL` | Docente OS teacher-context authority | `docente-os` | No maturity gap currently required for L5 | `NONE` for maturity; product work only when tied to a separate governed gap |
-| Arena | `REAL` | `REAL` | Arena curriculum authority | `arena` | L5 evidence gap exists, but product realization is already real | Collect regression-history evidence only when it serves the maturity program; no authority redesign |
-| Curricolo Atlas | `REAL` | `REAL` | Atlas publication/navigation; Arena curriculum authority preserved | `atlas` | L5 stability/adoption evidence gap; professional deep-link/federation flows remain separate | Preserve public surface; qualify specific professional flows separately |
+| Arena | `REAL` | `REAL` | autorità curricolare di Arena | `arena` | L5 evidence gap exists, but product realization is already real | Collect regression-history evidence only when it serves the maturity program; no authority redesign |
+| Curricolo Atlas | `REAL` | `REAL` | Atlas publication/navigation; autorità curricolare di Arena preserved | `atlas` | L5 stability/adoption evidence gap; professional deep-link/federation flows remain separate | Preserve public surface; qualify specific professional flows separately |
 | Studio Atlas | `PARTIAL` | `REAL` | Studio Atlas authoring boundary | `studio-atlas` | Canonical cross-product authority contract and subsequent evidence chain are incomplete | Approve/bind the canonical Studio Atlas cross-product authority contract before broader ecosystem promotion |
 | Atlas learner | `PARTIAL` | `REAL` | Atlas learner/runtime authority | `atlas` | Bounded learner/preview paths exist; complete governed publication/assignment boundary is not proven | Qualify only the required learner paths; retain privacy-first no-personal-account default |
 | Materiali nei prodotti | `REAL` | `REAL` | Product-local authorities | `null` | No node-existence gap; cross-product semantics are a separate contract | Do not reopen product existence; close only cross-product reference/ownership gaps |
@@ -321,12 +321,12 @@ The human-readable authority-boundary column below MUST be encoded during implem
 | Flow | AS-IS | Target | Authority boundary | Governed gap | Next allowed intervention |
 |---|---|---|---|---|---|
 | Public → Gateway | `REAL` | `REAL` | TRAMA public-entry boundary | none within declared public-entry boundary | Preserve regression evidence |
-| Gateway → Curricolo Atlas public | `DESIGNED` | `REAL` | Governed TRAMA/Atlas navigation; no curriculum-authority transfer | canonical live navigation not yet promoted by graph evidence | Certify actual navigation before promotion |
+| Gateway → Curricolo Atlas public | `DESIGNED` | `REAL` | Governed TRAMA/Atlas navigation; no autorità-curricolare transfer | canonical live navigation not yet promoted by graph evidence | Certify actual navigation before promotion |
 | Gateway → Control Center public | `DESIGNED` | `REAL` | TRAMA public navigation | canonical live navigation not yet promoted by graph evidence | Certify actual navigation before promotion |
 | Gateway → TRAMA Access | `DESIGNED` | `REAL` | TRAMA professional-entry boundary | Access professional entry not yet qualified as public end-to-end route | Complete Access pilot, then certify Gateway entry |
-| Arena → Curricolo Atlas | `REAL` | `REAL` | Arena retains curriculum authority; Atlas is publication/navigation surface | none for governed synchronization boundary | Preserve authority and regression proof |
+| Arena → Curricolo Atlas | `REAL` | `REAL` | Arena retains autorità curricolare; Atlas is publication/navigation surface | none for governed synchronization boundary | Preserve authority and regression proof |
 | Docente OS → Curricolo Atlas | `PARTIAL` | `REAL` | Teacher-context and Atlas presentation boundaries remain distinct | full professional runtime/deep-link path not uniformly certified | Qualify only the explicit teacher journey required |
-| Docente OS → Arena | `PARTIAL` | `REAL` | Arena curriculum authority + Docente OS teacher-context authority | governed runtime path not fully proven end-to-end | Close the specific orchestration gap without moving Arena authority |
+| Docente OS → Arena | `PARTIAL` | `REAL` | autorità curricolare di Arena + Docente OS teacher-context authority | governed runtime path not fully proven end-to-end | Close the specific orchestration gap without moving Arena authority |
 | Docente OS → Studio Atlas | `DESIGNED` | `REAL` | Cross-product contract required; local authorities preserved | no canonical integrated teacher flow | First bind Studio Atlas authority contract; then qualify a bounded launch/authoring flow |
 | Studio Atlas → Atlas learner | `PARTIAL` | `REAL` | Authoring/runtime contract; learner boundary remains Atlas | preview exists but general publication/runtime completeness is unproven | Qualify the minimal publication boundary needed by real journeys |
 | Classi/Gruppi → Assignment | `PARTIAL` | `REAL` | Teacher-context targeting authority | canonical privacy-first targeting contract incomplete | Define and qualify minimal assignment reference contract |
@@ -334,7 +334,7 @@ The human-readable authority-boundary column below MUST be encoded during implem
 | TRAMA Access → Docente OS | `DESIGNED` | `REAL` | Access coarse entitlement + Docente OS local authorization | product federation not implemented | After Access pilot, implement first bounded federation pilot; retain Docente OS fine-grained authorization |
 | TRAMA Access → Studio Atlas | `DESIGNED` | `REAL` | Access coarse entitlement + Studio Atlas local authority | federation not implemented | Only after Access pilot and Studio Atlas contract qualification |
 | TRAMA Access → Curricolo Atlas professional | `DESIGNED` | `REAL` | Access coarse entitlement + Atlas local authority | professional enrichment/federation not implemented | Qualify after Access core pilot; public Atlas remains independent |
-| TRAMA Access → Arena | `DESIGNED` | `REAL` | Access coarse entitlement + Arena curriculum authorization | federation not implemented | Qualify after Access core pilot; Arena retains curriculum authorization |
+| TRAMA Access → Arena | `DESIGNED` | `REAL` | Access coarse entitlement + autorizzazione curricolare di Arena | federation not implemented | Qualify after Access core pilot; Arena retains autorizzazione curricolare |
 | TRAMA Access → Control Center privileged | `DESIGNED` | `REAL` | TRAMA governance protected-operation authority | no protected runtime authority exists yet | Defer until a concrete protected operation requires entitlement + step-up/MFA |
 
 No additional synthetic flows are authorized by this specification.
@@ -474,7 +474,7 @@ Implementation SHALL add deterministic validation for:
 12. visual/projection edges cannot exceed canonical flows;
 13. no overall maturity percentage is generated;
 14. `DOS-A1=RUNTIME_DEFERRED` remains enforced;
-15. Arena curriculum authority is not transferred by integration metadata;
+15. autorità curricolare di Arena is not transferred by integration metadata;
 16. learner paths do not imply personal learner accounts or nominal roster export;
 17. Control Center remains read-only/no-auto-promotion.
 

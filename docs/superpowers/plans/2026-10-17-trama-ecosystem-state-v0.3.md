@@ -31,7 +31,7 @@
 
 1. **False promotion of Access:** source code, healthy Supabase infrastructure or successful CI must never make `trama_access`, `professional_identity` or a federation flow `REAL`; tests must pin `PARTIAL`/`DESIGNED` boundaries.
 2. **Synthetic topology:** unresolved endpoints, undeclared external actors or renderer-created edges must fail validation rather than appear in the UI.
-3. **Authority leakage:** joint flows with `authorityOwner=null` require governed `authorityRefs[]`; Arena curriculum authority must remain explicit through Atlas/Docente OS integrations.
+3. **Authority leakage:** joint flows with `authorityOwner=null` require governed `authorityRefs[]`; autorità curricolare di Arena must remain explicit through Atlas/Docente OS integrations.
 4. **Reference drift:** missing evidence paths, unknown maturity refs and stale canonical snapshot projections must fail CI.
 5. **Degraded/mobile UI:** invalid/unavailable snapshots must fail closed without inferred relations; graph and GAP information must remain usable at desktop, phone, LIM and 320px reflow with no horizontal overflow and zero axe violations.
 
