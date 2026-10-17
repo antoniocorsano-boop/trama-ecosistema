@@ -32,7 +32,7 @@ assert "A1 ECO-02/P1 e A2 Atlas R3-F0/S3 sono chiusi e verificati" in plan_text
 
 snapshot=snapshot_builder.build_snapshot(ROOT)
 snapshot_builder.validate(snapshot)
-assert snapshot["schemaVersion"]=="1.6.0"
+assert snapshot["schemaVersion"]=="1.7.0"
 
 areas={a["id"]:a for a in snapshot["areas"]}
 assert set(areas)=={"governance","arena","atlas","docente-os","studio-atlas"}
