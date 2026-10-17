@@ -16,6 +16,7 @@ test('issues 256-bit opaque secret and stores digest with absolute 8h expiry plu
   assert.equal(record.aliasId, 'a1');
   assert.equal(record.providerIssuer, 'issuer-1');
   assert.equal(record.providerSubject, 'subject-1');
+  assert.equal(record.authMethod, 'EMAIL_MAGIC_LINK');
   assert.equal(store.records[0]!.sessionDigest, record.sessionDigest);
   assert.equal(JSON.stringify(store.records).includes(secret), false);
 });
