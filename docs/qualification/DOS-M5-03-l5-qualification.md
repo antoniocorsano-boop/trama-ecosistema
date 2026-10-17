@@ -73,6 +73,10 @@ nextRequiredEvidenceTypes = []
 
 Non viene introdotta alcuna regola speciale per Docente OS: il livello deve emergere dal valutatore di maturità esistente e dalle evidenze registrate.
 
+### Control Center projection reconciliation
+
+Lo snapshot `control-center/data/ecosystem-snapshot.json` è stato rigenerato dal builder canonico della repository dopo la registrazione delle due evidenze L5. Le proiezioni `project-context-snapshot` e `project-knowledge` sono state quindi riallineate dal normale workflow governato al nuovo hash dello snapshot. Il materialeizzatore temporaneo usato per ottenere l'artefatto esatto è stato rimosso dalla branch e non fa parte del candidato finale.
+
 ## 6. Confini
 
 M5-03 non autorizza:
