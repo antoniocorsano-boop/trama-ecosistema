@@ -1,49 +1,55 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-  "schemaVersion": "1.6.0",
-  "generatedAt": "2026-10-17T09:58:13.512061+00:00",
+  "schemaVersion": "1.7.0",
+  "generatedAt": "2026-10-17T11:25:28.687449+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "ref": "STATUS.md",
       "sha256": "4a65c0e99f0d22f4a315166131f6cd909ff8cdf5a3e071b0eb16507860680527"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "ref": "ROADMAP.md",
       "sha256": "44c4ab50ac68971c99e9096a67818a4fd9c57530adfd9729ea5b8acb8066467a"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
     },
     "maturity-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
       "sha256": "123608e1546a2c40c88fca9c7db7ba702a429e2e9da5b0b78d78fbc4773d63df"
+    },
+    "ecosystem-state-v0.3": {
+      "status": "FRESH",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "ref": "governance/access/trama-ecosystem-state-v0.3.json",
+      "sha256": "0fb0176aa42a40d9f5eb1818af1755afa8c3673234f3fa32a7df5cc795893bb5"
     }
   },
   "phases": [
@@ -109,7 +115,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-10-17T09:58:13.512061+00:00"
+      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
     },
     {
       "id": "arena",
@@ -136,7 +142,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-10-17T09:58:13.512061+00:00"
+      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
     },
     {
       "id": "atlas",
@@ -166,7 +172,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T09:58:13.512061+00:00"
+      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
     },
     {
       "id": "docente-os",
@@ -195,7 +201,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T09:58:13.512061+00:00"
+      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
     },
     {
       "id": "studio-atlas",
@@ -219,7 +225,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T09:58:13.512061+00:00"
+      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
     }
   ],
   "capabilities": [
@@ -402,6 +408,1444 @@
       "sourceUpdatedAt": "2026-09-25"
     }
   ],
+  "ecosystemGraph": {
+    "schemaVersion": "trama.ecosystem.state/v0.3",
+    "asOf": "2026-10-17",
+    "sourceRef": "governance/access/trama-ecosystem-state-v0.3.json",
+    "authorityPolicy": {
+      "graphState": "this-document",
+      "capabilityLifecycle": "status/ecosystem-status.json",
+      "maturity": "governance/maturity/trama-maturity-reconciliation-v1.json",
+      "evidence": "reference-only",
+      "projection": "control-center/data/ecosystem-snapshot.json",
+      "autoPromotion": false
+    },
+    "legend": {
+      "states": {
+        "REAL": "Implementato e dimostrato entro il confine dichiarato.",
+        "PARTIAL": "Implementazione esistente ma confine incompleto o solo parzialmente dimostrato.",
+        "DESIGNED": "Confine approvato/definito ma non dimostrato a runtime.",
+        "DEFERRED": "Esplicitamente differito da decisione governata."
+      }
+    },
+    "externalActors": [
+      {
+        "id": "public",
+        "label": "Pubblico",
+        "kind": "HUMAN_ACTOR"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "gateway",
+        "label": "TRAMA Gateway",
+        "plane": "PUBLIC",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Ingresso pubblico TRAMA implementato entro il confine pubblico sicuro.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Ingresso pubblico TRAMA governato e pubblico.",
+          "value": "Ingresso pubblico coerente e sicuro"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "trama_access",
+        "label": "TRAMA Access",
+        "plane": "PROFESSIONAL",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Runtime professionale e store privato esistono, ma il viaggio live professionale non è ancora provato end-to-end.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:docs/evidence/access-01/trama-access-state-promotion-v0.3-2026-10-17.md"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Runtime professionale e store privato esistono, ma il viaggio live professionale non è ancora provato end-to-end.",
+          "missing": [
+            "identità professionale pilota autorizzata",
+            "sessione live governata",
+            "prova launcher live"
+          ]
+        },
+        "target": {
+          "boundary": "Login e launcher professionale canonico TRAMA.",
+          "value": "Ingresso professionale unico e governato"
+        },
+        "nextAllowedIntervention": {
+          "action": "Completare il pilota live limitato e vincolare le evidenze.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": "2026-10-17",
+        "decisionRefs": []
+      },
+      {
+        "id": "professional_identity",
+        "label": "Identità professionale TRAMA",
+        "plane": "PROFESSIONAL",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Contratto provider-neutral e infrastruttura provider live esistono; nessuna identità professionale live governata è ancora dimostrata.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:docs/evidence/access-01/trama-access-state-promotion-v0.3-2026-10-17.md"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Contratto provider-neutral e infrastruttura provider live esistono; nessuna identità professionale live governata è ancora dimostrata.",
+          "missing": [
+            "identità professionale autorizzata",
+            "prova issuer+subject live"
+          ]
+        },
+        "target": {
+          "boundary": "Identità professionale TRAMA governata e minimizzata.",
+          "value": "Identità professionale riusabile senza duplicazioni"
+        },
+        "nextAllowedIntervention": {
+          "action": "Completare una singola identità professionale pilota autorizzata.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": "2026-10-17",
+        "decisionRefs": []
+      },
+      {
+        "id": "docente_os",
+        "label": "Docente OS",
+        "plane": "PROFESSIONAL",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Ambiente operativo docente reale entro il proprio confine di autorità.",
+        "authorityOwner": "docente-os",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os"
+        ],
+        "maturityRef": "docente-os",
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Ambiente operativo docente reale e governato.",
+          "value": "Operatività docente stabile"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": [],
+        "maturityContext": {
+          "confirmedLevel": 5,
+          "candidateLevel": 5,
+          "evidenceBindingStatus": "COMPLETE",
+          "nextTargetLevel": null,
+          "nextRequiredEvidenceTypes": [],
+          "interpretation": "BOUND_EVIDENCE_ONLY",
+          "sourceRef": "snapshot:areas/docente-os",
+          "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json"
+        }
+      },
+      {
+        "id": "arena",
+        "label": "Arena",
+        "plane": "PROFESSIONAL",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Autorità curricolare Arena reale.",
+        "authorityOwner": "arena",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "arena"
+        ],
+        "maturityRef": "arena",
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Autorità curricolare Arena preservata.",
+          "value": "Autorità curricolare non ambigua"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": [],
+        "maturityContext": {
+          "confirmedLevel": 4,
+          "candidateLevel": 4,
+          "evidenceBindingStatus": "PARTIAL",
+          "nextTargetLevel": 5,
+          "nextRequiredEvidenceTypes": [
+            "REGRESSION_HISTORY"
+          ],
+          "interpretation": "BOUND_EVIDENCE_ONLY",
+          "sourceRef": "snapshot:areas/arena",
+          "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json"
+        }
+      },
+      {
+        "id": "curricolo_atlas",
+        "label": "Curricolo Atlas",
+        "plane": "CROSS_CUTTING",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Superficie Curricolo Atlas reale; i flussi professionali restano qualificati separatamente.",
+        "authorityOwner": "atlas",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "atlas"
+        ],
+        "maturityRef": "atlas",
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Superficie Curricolo Atlas pubblica/professionale governata.",
+          "value": "Navigazione e pubblicazione curricolare"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": [],
+        "maturityContext": {
+          "confirmedLevel": 4,
+          "candidateLevel": 4,
+          "evidenceBindingStatus": "PARTIAL",
+          "nextTargetLevel": 5,
+          "nextRequiredEvidenceTypes": [
+            "ADOPTION_EVIDENCE",
+            "REGRESSION_HISTORY"
+          ],
+          "interpretation": "BOUND_EVIDENCE_ONLY",
+          "sourceRef": "snapshot:areas/atlas",
+          "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json"
+        }
+      },
+      {
+        "id": "studio_atlas",
+        "label": "Studio Atlas",
+        "plane": "PROFESSIONAL",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Studio Atlas esiste in forma parziale; il contratto canonico cross-product non è ancora approvato e vincolato.",
+        "authorityOwner": "studio-atlas",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "studio-atlas"
+        ],
+        "maturityRef": "studio-atlas",
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Studio Atlas esiste in forma parziale; il contratto canonico cross-product non è ancora approvato e vincolato.",
+          "missing": [
+            "contratto canonico cross-product",
+            "catena evidenziale successiva"
+          ]
+        },
+        "target": {
+          "boundary": "Studio Atlas reale entro un confine di authoring canonico.",
+          "value": "Authoring professionale interoperabile"
+        },
+        "nextAllowedIntervention": {
+          "action": "Approvare e vincolare il contratto canonico cross-product di Studio Atlas.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": [],
+        "maturityContext": {
+          "confirmedLevel": 1,
+          "candidateLevel": 1,
+          "evidenceBindingStatus": "PARTIAL",
+          "nextTargetLevel": 2,
+          "nextRequiredEvidenceTypes": [
+            "CONTRACT_APPROVED"
+          ],
+          "interpretation": "BOUND_EVIDENCE_ONLY",
+          "sourceRef": "snapshot:areas/studio-atlas",
+          "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json"
+        }
+      },
+      {
+        "id": "atlas_learner",
+        "label": "Atlas learner",
+        "plane": "LEARNER",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Percorsi learner/preview limitati esistono; pubblicazione e assignment end-to-end non sono pienamente provati.",
+        "authorityOwner": "atlas",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "atlas"
+        ],
+        "maturityRef": "atlas",
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Percorsi learner/preview limitati esistono; pubblicazione e assignment end-to-end non sono pienamente provati.",
+          "missing": [
+            "confine minimo di pubblicazione learner",
+            "handoff assignment privacy-first"
+          ]
+        },
+        "target": {
+          "boundary": "Runtime learner Atlas governato senza account nominale predefinito.",
+          "value": "Esperienza learner privacy-first"
+        },
+        "nextAllowedIntervention": {
+          "action": "Qualificare soltanto i percorsi learner richiesti dai casi reali.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": [],
+        "maturityContext": {
+          "confirmedLevel": 4,
+          "candidateLevel": 4,
+          "evidenceBindingStatus": "PARTIAL",
+          "nextTargetLevel": 5,
+          "nextRequiredEvidenceTypes": [
+            "ADOPTION_EVIDENCE",
+            "REGRESSION_HISTORY"
+          ],
+          "interpretation": "BOUND_EVIDENCE_ONLY",
+          "sourceRef": "snapshot:areas/atlas",
+          "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json"
+        }
+      },
+      {
+        "id": "materials_in_products",
+        "label": "Materiali nei prodotti",
+        "plane": "CROSS_CUTTING",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "I materiali esistono nei prodotti; la semantica cross-product è un contratto distinto.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "arena",
+          "atlas",
+          "docente-os",
+          "studio-atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Materiali reali nei prodotti con ownership locale preservata.",
+          "value": "Disponibilità dei materiali nei prodotti"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "material_contract",
+        "label": "Material Contract ecosistemico",
+        "plane": "CROSS_CUTTING",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Identità, ownership, provenienza e riferimenti condivisi non sono ancora qualificati in modo uniforme.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama",
+          "arena",
+          "atlas",
+          "docente-os",
+          "studio-atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Identità, ownership, provenienza e riferimenti condivisi non sono ancora qualificati in modo uniforme.",
+          "missing": [
+            "contratto riferimenti materiali cross-product"
+          ]
+        },
+        "target": {
+          "boundary": "Contratto materiali ecosistemico governato senza centralizzare ownership.",
+          "value": "Riferimenti materiali interoperabili"
+        },
+        "nextAllowedIntervention": {
+          "action": "Qualificare il contratto cross-product dei riferimenti materiali.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "teacher_classes_groups",
+        "label": "Classi e gruppi docente",
+        "plane": "CROSS_CUTTING",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Organizzazione docente di classi e gruppi reale; non costituisce identità learner.",
+        "authorityOwner": "docente-os",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os"
+        ],
+        "maturityRef": "docente-os",
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Classi e gruppi docente reali entro il teacher-context.",
+          "value": "Organizzazione del contesto docente"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": [],
+        "maturityContext": {
+          "confirmedLevel": 5,
+          "candidateLevel": 5,
+          "evidenceBindingStatus": "COMPLETE",
+          "nextTargetLevel": null,
+          "nextRequiredEvidenceTypes": [],
+          "interpretation": "BOUND_EVIDENCE_ONLY",
+          "sourceRef": "snapshot:areas/docente-os",
+          "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json"
+        }
+      },
+      {
+        "id": "assignment_to_atlas",
+        "label": "Assignment verso Atlas",
+        "plane": "CROSS_CUTTING",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Il contratto assignment end-to-end privacy-first è incompleto.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Il contratto assignment end-to-end privacy-first è incompleto.",
+          "missing": [
+            "ticket/code/link minimo governato",
+            "prova end-to-end senza registro nominale learner"
+          ]
+        },
+        "target": {
+          "boundary": "Assignment verso Atlas reale con handoff minimo privacy-first.",
+          "value": "Assegnazione learner minima e privacy-first"
+        },
+        "nextAllowedIntervention": {
+          "action": "Qualificare semantica ticket/code/link prima di flussi dati più ricchi.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "control_center_public",
+        "label": "Control Center pubblico",
+        "plane": "PUBLIC",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Control Center pubblico read-only reale.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Control Center pubblico come proiezione read-only governata.",
+          "value": "Trasparenza pubblica read-only"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "control_center_privileged",
+        "label": "Control Center privilegiato",
+        "plane": "GOVERNANCE",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Operazioni protette, entitlement, step-up/MFA e audit non sono runtime-real.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Operazioni protette, entitlement, step-up/MFA e audit non sono runtime-real.",
+          "missing": [
+            "bisogno esplicito di operazione protetta",
+            "confine entitlement e step-up/MFA",
+            "audit governato"
+          ]
+        },
+        "target": {
+          "boundary": "Control Center privilegiato per sole operazioni protette esplicitamente autorizzate.",
+          "value": "Operazioni protette solo quando giustificate"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": [
+            "pilota Access qualificato"
+          ]
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "trama_governance",
+        "label": "TRAMA governance",
+        "plane": "GOVERNANCE",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Fondazione di governance TRAMA reale.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": "governance",
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Governance TRAMA reale e evidence-bound.",
+          "value": "Confini, decisioni ed evidenze governati"
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": [],
+        "maturityContext": {
+          "confirmedLevel": 4,
+          "candidateLevel": 4,
+          "evidenceBindingStatus": "PARTIAL",
+          "nextTargetLevel": 5,
+          "nextRequiredEvidenceTypes": [
+            "REGRESSION_HISTORY"
+          ],
+          "interpretation": "BOUND_EVIDENCE_ONLY",
+          "sourceRef": "snapshot:areas/governance",
+          "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json"
+        }
+      }
+    ],
+    "flows": [
+      {
+        "id": "public_to_gateway",
+        "from": "public",
+        "to": "gateway",
+        "kind": "NAVIGATION",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Ingresso pubblico verso Gateway.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Ingresso pubblico verso Gateway.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "gateway_to_curricolo_atlas_public",
+        "from": "gateway",
+        "to": "curricolo_atlas",
+        "kind": "NAVIGATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Navigazione Gateway verso Curricolo Atlas pubblico non ancora promossa da evidenza canonica.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Navigazione Gateway verso Curricolo Atlas pubblico non ancora promossa da evidenza canonica.",
+          "missing": [
+            "prova di navigazione live governata"
+          ]
+        },
+        "target": {
+          "boundary": "Navigazione pubblica Gateway → Curricolo Atlas.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Certificare la navigazione effettiva prima della promozione.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "gateway_to_control_center_public",
+        "from": "gateway",
+        "to": "control_center_public",
+        "kind": "NAVIGATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Navigazione Gateway verso Control Center pubblico non ancora promossa da evidenza canonica.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Navigazione Gateway verso Control Center pubblico non ancora promossa da evidenza canonica.",
+          "missing": [
+            "prova di navigazione live governata"
+          ]
+        },
+        "target": {
+          "boundary": "Navigazione pubblica Gateway → Control Center.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Certificare la navigazione effettiva prima della promozione.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "gateway_to_trama_access",
+        "from": "gateway",
+        "to": "trama_access",
+        "kind": "AUTHENTICATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Ingresso professionale Gateway → Access non ancora qualificato end-to-end.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Ingresso professionale Gateway → Access non ancora qualificato end-to-end.",
+          "missing": [
+            "pilota Access live qualificato",
+            "prova ingresso Gateway → Access"
+          ]
+        },
+        "target": {
+          "boundary": "Ingresso professionale canonico dal Gateway.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Completare prima il pilota Access, poi certificare l’ingresso Gateway.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "arena_to_curricolo_atlas",
+        "from": "arena",
+        "to": "curricolo_atlas",
+        "kind": "PUBLICATION",
+        "state": "REAL",
+        "targetState": "REAL",
+        "boundary": "Sincronizzazione Arena → Curricolo Atlas reale con autorità curricolare Arena preservata.",
+        "authorityOwner": "arena",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "arena",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "none",
+          "missing": []
+        },
+        "target": {
+          "boundary": "Pubblicazione curricolare governata Arena → Atlas.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "docente_os_to_curricolo_atlas",
+        "from": "docente_os",
+        "to": "curricolo_atlas",
+        "kind": "NAVIGATION",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Il percorso professionale Docente OS → Curricolo Atlas è solo parzialmente qualificato.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Il percorso professionale Docente OS → Curricolo Atlas è solo parzialmente qualificato.",
+          "missing": [
+            "journey docente esplicito end-to-end"
+          ]
+        },
+        "target": {
+          "boundary": "Percorso professionale Docente OS → Curricolo Atlas governato.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Qualificare soltanto il journey docente necessario.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "docente_os_to_arena",
+        "from": "docente_os",
+        "to": "arena",
+        "kind": "AUTHORITY",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Il percorso Docente OS → Arena è parzialmente provato; l’autorità curricolare resta Arena.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os",
+          "arena"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Il percorso Docente OS → Arena è parzialmente provato; l’autorità curricolare resta Arena.",
+          "missing": [
+            "orchestrazione end-to-end governata"
+          ]
+        },
+        "target": {
+          "boundary": "Orchestrazione docente verso Arena senza trasferimento di autorità.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Chiudere il gap di orchestrazione specifico.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "docente_os_to_studio_atlas",
+        "from": "docente_os",
+        "to": "studio_atlas",
+        "kind": "AUTHORING",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Nessun flusso docente integrato canonico verso Studio Atlas.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os",
+          "studio-atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Nessun flusso docente integrato canonico verso Studio Atlas.",
+          "missing": [
+            "contratto cross-product Studio Atlas",
+            "launch/authoring flow qualificato"
+          ]
+        },
+        "target": {
+          "boundary": "Avvio e authoring Studio Atlas dal contesto docente.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Prima vincolare il contratto Studio Atlas, poi qualificare un flusso limitato.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "studio_atlas_to_atlas_learner",
+        "from": "studio_atlas",
+        "to": "atlas_learner",
+        "kind": "PUBLICATION",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Preview esiste; il confine generale di pubblicazione learner non è completo.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "studio-atlas",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Preview esiste; il confine generale di pubblicazione learner non è completo.",
+          "missing": [
+            "confine minimo di pubblicazione qualificato"
+          ]
+        },
+        "target": {
+          "boundary": "Pubblicazione Studio Atlas → learner Atlas governata.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Qualificare il minimo confine di pubblicazione richiesto.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "teacher_classes_to_assignment",
+        "from": "teacher_classes_groups",
+        "to": "assignment_to_atlas",
+        "kind": "ASSIGNMENT",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "Il targeting privacy-first classi/gruppi → assignment è incompleto.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Il targeting privacy-first classi/gruppi → assignment è incompleto.",
+          "missing": [
+            "contratto minimo di targeting"
+          ]
+        },
+        "target": {
+          "boundary": "Targeting docente verso assignment governato.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Definire e qualificare il riferimento minimo di assignment.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "assignment_to_atlas_learner",
+        "from": "assignment_to_atlas",
+        "to": "atlas_learner",
+        "kind": "ASSIGNMENT",
+        "state": "PARTIAL",
+        "targetState": "REAL",
+        "boundary": "L’handoff assignment → learner non è pienamente qualificato.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "docente-os",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "L’handoff assignment → learner non è pienamente qualificato.",
+          "missing": [
+            "prova end-to-end ticket/code/link senza registro nominale"
+          ]
+        },
+        "target": {
+          "boundary": "Handoff assignment → learner Atlas privacy-first.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Dimostrare end-to-end l’handoff senza registro nominale learner.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "trama_access_to_docente_os",
+        "from": "trama_access",
+        "to": "docente_os",
+        "kind": "AUTHENTICATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Federazione Access → Docente OS non implementata.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama",
+          "docente-os"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Federazione Access → Docente OS non implementata.",
+          "missing": [
+            "pilota Access core qualificato",
+            "federazione limitata qualificata"
+          ]
+        },
+        "target": {
+          "boundary": "Federazione professionale verso Docente OS con autorizzazione fine-grained locale.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Dopo il pilota Access, implementare il primo pilot di federazione limitato.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "trama_access_to_studio_atlas",
+        "from": "trama_access",
+        "to": "studio_atlas",
+        "kind": "AUTHENTICATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Federazione Access → Studio Atlas non implementata.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama",
+          "studio-atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Federazione Access → Studio Atlas non implementata.",
+          "missing": [
+            "pilota Access qualificato",
+            "contratto Studio Atlas qualificato"
+          ]
+        },
+        "target": {
+          "boundary": "Federazione professionale verso Studio Atlas.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Solo dopo pilota Access e contratto Studio Atlas.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "trama_access_to_curricolo_atlas_professional",
+        "from": "trama_access",
+        "to": "curricolo_atlas",
+        "kind": "AUTHENTICATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Arricchimento/federazione professionale Access → Curricolo Atlas non implementata.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama",
+          "atlas"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Arricchimento/federazione professionale Access → Curricolo Atlas non implementata.",
+          "missing": [
+            "pilota Access core qualificato"
+          ]
+        },
+        "target": {
+          "boundary": "Access professionale arricchito a Curricolo Atlas mantenendo indipendente la superficie pubblica.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Qualificare dopo il pilota core Access.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "trama_access_to_arena",
+        "from": "trama_access",
+        "to": "arena",
+        "kind": "AUTHENTICATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Federazione Access → Arena non implementata.",
+        "authorityOwner": null,
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama",
+          "arena"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Federazione Access → Arena non implementata.",
+          "missing": [
+            "pilota Access core qualificato"
+          ]
+        },
+        "target": {
+          "boundary": "Federazione professionale verso Arena con autorità curricolare Arena preservata.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "Qualificare dopo il pilota core Access.",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      },
+      {
+        "id": "trama_access_to_control_center_privileged",
+        "from": "trama_access",
+        "to": "control_center_privileged",
+        "kind": "AUTHENTICATION",
+        "state": "DESIGNED",
+        "targetState": "REAL",
+        "boundary": "Nessuna autorità runtime protetta esiste ancora per il Control Center privilegiato.",
+        "authorityOwner": "trama",
+        "authorityRefs": [
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "implementationOwners": [
+          "trama"
+        ],
+        "maturityRef": null,
+        "evidenceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json"
+        ],
+        "blockerRefs": [],
+        "gap": {
+          "summary": "Nessuna autorità runtime protetta esiste ancora per il Control Center privilegiato.",
+          "missing": [
+            "operazione protetta esplicita",
+            "entitlement + step-up/MFA",
+            "audit governato"
+          ]
+        },
+        "target": {
+          "boundary": "Access protetto al Control Center privilegiato solo per operazioni autorizzate.",
+          "value": "Chiudere esclusivamente il confine ecosistemico approvato."
+        },
+        "nextAllowedIntervention": {
+          "action": "NONE",
+          "preconditions": [],
+          "forbiddenUntil": []
+        },
+        "sourceRefs": [
+          "path:governance/access/trama-ecosystem-state-v0.2.json",
+          "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        ],
+        "lastSignificantChange": null,
+        "decisionRefs": []
+      }
+    ],
+    "views": {
+      "fullEcosystemState": {
+        "source": "nodes+flows",
+        "manualDataset": false
+      },
+      "asIsGapToBe": {
+        "source": "nodes+flows",
+        "filter": "state!=targetState OR gap.missing non-empty",
+        "manualDataset": false
+      }
+    },
+    "transitionPolicy": {
+      "autoPromotion": false,
+      "promotionRequiresRetrievableEvidence": true,
+      "preserveV02History": true,
+      "humanReviewWhen": [
+        "AUTHORITY",
+        "SECURITY",
+        "IRREVERSIBILITY"
+      ]
+    }
+  },
   "components": [
     {
       "componentId": "ARENA.DIALOG_CONFIRM.LEGACY",
@@ -1059,7 +2503,7 @@
         "path": "STATUS.md",
         "sha256": "4a65c0e99f0d22f4a315166131f6cd909ff8cdf5a3e071b0eb16507860680527"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1077,7 +2521,7 @@
         "path": "ROADMAP.md",
         "sha256": "44c4ab50ac68971c99e9096a67818a4fd9c57530adfd9729ea5b8acb8066467a"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1095,7 +2539,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1113,7 +2557,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1131,7 +2575,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1149,7 +2593,7 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1167,7 +2611,7 @@
         "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
         "sha256": "123608e1546a2c40c88fca9c7db7ba702a429e2e9da5b0b78d78fbc4773d63df"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -1816,7 +3260,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-10-17T09:58:13.512061+00:00",
+      "observedAt": "2026-10-17T11:25:28.687449+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
