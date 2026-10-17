@@ -15,6 +15,20 @@ export function EcosystemStateList({graph,selectedFlowId,onSelectFlow}:{graph:Ec
             <div><dt>Authority</dt><dd>{authorityDisplayLabel(node.authorityOwner,node.authorityRefs)}</dd></div>
             <div><dt>Evidenze</dt><dd>{evidenceLabel(node.evidenceRefs)}</dd></div>
             <div><dt>NEXT</dt><dd>{node.nextAllowedIntervention.action}</dd></div>
+            {node.maturityContext ? <div className="state-maturity">
+              <dt>Maturità</dt>
+              <dd>
+                <details>
+                  <summary>L{node.maturityContext.confirmedLevel} confermato</summary>
+                  <small>Candidato L{node.maturityContext.candidateLevel} · Evidenze {node.maturityContext.evidenceBindingStatus}</small>
+                  <small>Prossimo target: {node.maturityContext.nextTargetLevel === null ? "—" : `L${node.maturityContext.nextTargetLevel}`}</small>
+                  <small>Prossime evidenze: {node.maturityContext.nextRequiredEvidenceTypes.join(", ") || "—"}</small>
+                  <small>Interpretazione: {node.maturityContext.interpretation}</small>
+                  <small>Fonte: {node.maturityContext.sourceRef}</small>
+                  <small>Autorità: {node.maturityContext.authorityRef}</small>
+                </details>
+              </dd>
+            </div> : null}
           </dl>
         </article>)}
       </div></section>
