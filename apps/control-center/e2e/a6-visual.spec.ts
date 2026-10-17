@@ -11,6 +11,17 @@ const routes = [
 
 async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test").Page, readyLabel = "Elenco accessibile del grafo canonico") {
   await expect(page.getByLabel(readyLabel)).toBeVisible();
+  await page.evaluate(() => {
+    const root=document.getElementById("root");
+    const shell=document.querySelector<HTMLElement>(".app-shell");
+    if(!root || !shell) throw new Error("Missing visual capture root");
+    for (const element of [document.documentElement,document.body,root,shell]) {
+      element.style.removeProperty("height");
+      element.style.removeProperty("min-height");
+      element.style.removeProperty("max-height");
+      element.style.removeProperty("overflow");
+    }
+  });
   const stableHeight = await page.evaluate(async () => {
     await document.fonts.ready;
     const bottoms:number[]=[];
