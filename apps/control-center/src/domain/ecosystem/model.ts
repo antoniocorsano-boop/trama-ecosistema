@@ -99,7 +99,10 @@ export function selectGapEntries(
 ): GapEntry[] {
   const fromNode = (node: EcosystemGraphNode): GapEntry | null => {
     const hasGap = node.state !== node.targetState || node.gap.missing.length > 0;
-    const safeguard = !hasGap && node.nextAllowedIntervention.action === "NONE";
+    const safeguard = node.state === "REAL"
+      && node.targetState === "REAL"
+      && !hasGap
+      && node.nextAllowedIntervention.action === "NONE";
     if (!hasGap && !(includeSafeguards && safeguard)) return null;
     return {
       id: `node:${node.id}`,
@@ -125,7 +128,10 @@ export function selectGapEntries(
 
   const fromFlow = (flow: EcosystemGraphFlow): GapEntry | null => {
     const hasGap = flow.state !== flow.targetState || flow.gap.missing.length > 0;
-    const safeguard = !hasGap && flow.nextAllowedIntervention.action === "NONE";
+    const safeguard = flow.state === "REAL"
+      && flow.targetState === "REAL"
+      && !hasGap
+      && flow.nextAllowedIntervention.action === "NONE";
     if (!hasGap && !(includeSafeguards && safeguard)) return null;
     return {
       id: `flow:${flow.id}`,
