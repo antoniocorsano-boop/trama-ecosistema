@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { loadEcosystemSnapshot, type SnapshotLoadState } from "../../data/client";
 import {
+  authorityDisplayLabel,
   capabilityStateLabel,
   relationKindLabel,
   relationTone,
@@ -147,7 +148,7 @@ function CanonicalFlowDetail({flow}:{flow:EcosystemGraphFlow|null}){
         <div><dt>AS IS</dt><dd>{flow.state}</dd></div>
         <div><dt>TO BE</dt><dd>{flow.targetState}</dd></div>
         <div><dt>GAP</dt><dd>{flow.gap.summary}</dd></div>
-        <div><dt>Authority</dt><dd>{flow.authorityOwner || flow.authorityRefs.join(", ")}</dd></div>
+        <div><dt>Authority</dt><dd>{authorityDisplayLabel(flow.authorityOwner,flow.authorityRefs)}</dd></div>
         <div><dt>Evidenze</dt><dd>{flow.evidenceRefs.join(", ") || "Nessuna"}</dd></div>
       </dl>
     </aside>
