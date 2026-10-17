@@ -9,9 +9,9 @@ const routes = [
   ["assurance", "/#/assurance"],
 ] as const;
 
-async function ecosystemScreenshotClip(page: import("@playwright/test").Page) {
+async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test").Page) {
   await expect(page.getByLabel("Elenco accessibile del grafo canonico")).toBeVisible();
-  return page.evaluate(async () => {
+  const stableHeight = await page.evaluate(async () => {
     await document.fonts.ready;
     const bottoms:number[]=[];
     for(let index=0;index<8;index+=1){
@@ -20,13 +20,16 @@ async function ecosystemScreenshotClip(page: import("@playwright/test").Page) {
       if(!shell) throw new Error("Missing .app-shell for ecosystem visual capture");
       bottoms.push(shell.getBoundingClientRect().bottom + window.scrollY);
     }
-    return {
-      x: 0,
-      y: 0,
-      width: window.innerWidth,
-      height: Math.ceil(Math.max(...bottoms)),
-    };
+    return Math.ceil(Math.max(...bottoms));
   });
+  await page.evaluate((height) => {
+    for (const element of [document.documentElement,document.body]) {
+      element.style.height=`${height}px`;
+      element.style.minHeight=`${height}px`;
+      element.style.maxHeight=`${height}px`;
+      element.style.overflow="hidden";
+    }
+  }, stableHeight);
 }
 
 const overviewVisualKnowledge = {
@@ -74,13 +77,7 @@ for (const [name, route] of routes) {
       await document.fonts.ready;
     });
     if (name === "ecosystem") {
-      const clip = await ecosystemScreenshotClip(page);
-      await expect(page).toHaveScreenshot(`${name}.png`, {
-        clip,
-        animations: "disabled",
-        maxDiffPixelRatio: 0.005,
-      });
-      return;
+      await stabilizeEcosystemFullPageHeight(page);
     }
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
