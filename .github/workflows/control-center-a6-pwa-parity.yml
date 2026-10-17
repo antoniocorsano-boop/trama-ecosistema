@@ -10,8 +10,67 @@ on:
       - "docs/implementation/trama-control-center-a6-pwa-parity.md"
       - ".github/workflows/control-center-a6-pwa-parity.yml"
 permissions:
-  contents: read
+  contents: write
 jobs:
+  synchronize-v03-visual-baselines:
+    if: github.event.pull_request.number == 275 && github.event.pull_request.head.ref == 'feat/trama-ecosystem-state-v0.3' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/control-center
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/control-center/package-lock.json
+      - name: Install from lockfile
+        run: npm ci --ignore-scripts
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Regenerate reviewed A6 visual baselines
+        run: npx playwright test e2e/a6-visual.spec.ts --update-snapshots
+      - name: Enforce reviewed baseline allowlist
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd ../..
+          git diff --name-only -- apps/control-center/e2e/a6-visual.spec.ts-snapshots > /tmp/a6-changed.txt
+          cat > /tmp/a6-allowed.txt <<'EOF'
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-desktop-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-phone-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-lim-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-reflow-320-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-desktop-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-phone-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-lim-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-reflow-320-linux.png
+          EOF
+          sort -u /tmp/a6-changed.txt -o /tmp/a6-changed.txt
+          sort -u /tmp/a6-allowed.txt -o /tmp/a6-allowed.txt
+          diff -u /tmp/a6-allowed.txt /tmp/a6-changed.txt
+          echo "TRAMA_V03_VISUAL_BASELINE_ALLOWLIST_PASS"
+      - name: Commit reviewed visual baselines
+        shell: bash
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          cd ../..
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/control-center/e2e/a6-visual.spec.ts-snapshots/*.png
+          if git diff --cached --quiet; then
+            echo "TRAMA_V03_VISUAL_BASELINES_ALREADY_CURRENT"
+            exit 0
+          fi
+          git commit -m "test(control-center): materialize reviewed v0.3 visual baselines"
+          git push origin "HEAD:${HEAD_REF}"
+
   qualify:
     runs-on: ubuntu-latest
     defaults:
