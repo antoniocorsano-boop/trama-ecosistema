@@ -12,6 +12,11 @@ DEFAULT_GRAPH_PATH = ROOT / "governance/access/trama-ecosystem-state-v0.3.json"
 MATURITY_PATH = Path("governance/maturity/trama-maturity-reconciliation-v1.json")
 DECISION_REGISTER_PATH = Path("docs/decisions/decision-register.json")
 ACTIVE_DECISION_STATUSES = {"APPROVED", "IMPLEMENTED"}
+GOVERNED_EVIDENCE_ROOTS = (Path("docs/evidence"),)
+GOVERNED_EVIDENCE_FILES = {
+    Path("governance/access/trama-ecosystem-state-v0.2.json"),
+}
+REQUIRED_ARENA_AUTHORITY_REF = "decision:TRAMA-ADR-002"
 
 
 class EcosystemStateValidationError(ValueError):
@@ -36,7 +41,7 @@ def _ids(items: Iterable[dict], label: str) -> set[str]:
     return seen
 
 
-def _resolve_path_reference(ref: str, root: Path) -> None:
+def _path_reference_candidate(ref: str, root: Path) -> Path:
     if not ref.startswith("path:"):
         _fail(f"unsupported unresolved reference: {ref}")
     relative = ref.removeprefix("path:")
@@ -47,6 +52,27 @@ def _resolve_path_reference(ref: str, root: Path) -> None:
         _fail(f"path reference escapes repository root: {ref}")
     if not candidate.exists():
         _fail(f"unresolved path reference: {relative}")
+    if not candidate.is_file():
+        _fail(f"path reference must resolve to a file: {relative}")
+    return candidate
+
+
+def _resolve_path_reference(ref: str, root: Path) -> None:
+    _path_reference_candidate(ref, root)
+
+
+def _resolve_evidence_reference(ref: str, root: Path) -> None:
+    candidate = _path_reference_candidate(ref, root)
+    relative = candidate.relative_to(root.resolve())
+    if relative in GOVERNED_EVIDENCE_FILES:
+        return
+    for evidence_root in GOVERNED_EVIDENCE_ROOTS:
+        try:
+            relative.relative_to(evidence_root)
+        except ValueError:
+            continue
+        return
+    _fail(f"evidence reference is not a governed evidence artifact: {ref}")
 
 
 def _decision_registry(root: Path, document: dict) -> dict[str, dict]:
@@ -60,6 +86,8 @@ def _decision_registry(root: Path, document: dict) -> dict[str, dict]:
         _fail("governed decision register escapes repository root")
     if not path.exists():
         _fail(f"governed decision register missing: {DECISION_REGISTER_PATH.as_posix()}")
+    if not path.is_file():
+        _fail(f"governed decision register must be a file: {DECISION_REGISTER_PATH.as_posix()}")
     register = _load_json(path)
     decisions: dict[str, dict] = {}
     for item in register.get("decisions", []):
@@ -95,6 +123,8 @@ def _maturity_ids(root: Path) -> set[str]:
     path = root / MATURITY_PATH
     if not path.exists():
         _fail(f"maturity authority missing: {MATURITY_PATH.as_posix()}")
+    if not path.is_file():
+        _fail(f"maturity authority must be a file: {MATURITY_PATH.as_posix()}")
     document = _load_json(path)
     result: set[str] = set()
     for area in document.get("areas", []):
@@ -131,7 +161,9 @@ def _validate_subject(subject: dict, root: Path, maturity_ids: set[str], decisio
 
     for ref in subject.get("authorityRefs", []):
         _resolve_authority_reference(ref, root, decisions)
-    for field in ("evidenceRefs", "sourceRefs", "blockerRefs"):
+    for ref in subject.get("evidenceRefs", []):
+        _resolve_evidence_reference(ref, root)
+    for field in ("sourceRefs", "blockerRefs"):
         for ref in subject.get(field, []):
             _resolve_path_reference(ref, root)
     for ref in subject.get("decisionRefs", []):
@@ -181,19 +213,26 @@ def validate_graph(document: dict, root: Path = ROOT) -> None:
 
     node_by_id = {item.get("id"): item for item in nodes}
     flow_by_id = {item.get("id"): item for item in flows}
-    protected_arena_owners = {
+    protected_arena_invariants = {
         ("node", "arena"): "arena",
         ("flow", "arena_to_curricolo_atlas"): "arena",
         ("flow", "docente_os_to_arena"): None,
         ("flow", "trama_access_to_arena"): None,
     }
-    for (subject_type, subject_id), expected_owner in protected_arena_owners.items():
+    for (subject_type, subject_id), expected_owner in protected_arena_invariants.items():
         collection = node_by_id if subject_type == "node" else flow_by_id
         subject = collection.get(subject_id)
-        if subject is not None and subject.get("authorityOwner") != expected_owner:
+        if subject is None:
+            continue
+        if subject.get("authorityOwner") != expected_owner:
             _fail(
                 f"arena authority invariant violated by {subject_id}: "
                 f"expected {expected_owner!r}, got {subject.get('authorityOwner')!r}"
+            )
+        if REQUIRED_ARENA_AUTHORITY_REF not in subject.get("authorityRefs", []):
+            _fail(
+                f"arena authority invariant violated by {subject_id}: "
+                f"missing required {REQUIRED_ARENA_AUTHORITY_REF}"
             )
 
 
