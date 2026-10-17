@@ -99,8 +99,11 @@ button, a { font: inherit; }
 
 @media (max-width: 390px) {
   .status-grid { grid-template-columns: 1fr; }
-  .primary-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .app-shell { padding-bottom: 7.5rem; }
+  .primary-nav {
+    position: static;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .app-shell { padding-bottom: var(--cc-space-4); }
 }
 
 @media (prefers-reduced-motion: reduce) {
