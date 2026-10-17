@@ -168,6 +168,30 @@ def main() -> int:
         doc["flows"][0]["authorityRefs"] = ["path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"]
         validate_graph(doc, root)
 
+    graph_path = ROOT / "governance/access/trama-ecosystem-state-v0.3.json"
+    receipt_path = ROOT / "docs/evidence/access-01/trama-access-state-promotion-v0.3-2026-10-17.md"
+    assert graph_path.exists(), "RED_EXPECTED: canonical trama-ecosystem-state-v0.3.json is missing"
+    assert receipt_path.exists(), "RED_EXPECTED: Access v0.3 promotion receipt is missing"
+
+    canonical = json.loads(graph_path.read_text(encoding="utf-8"))
+    validate_graph(canonical, ROOT)
+    nodes = {item["id"]: item for item in canonical["nodes"]}
+    flows = {item["id"]: item for item in canonical["flows"]}
+    actors = {item["id"] for item in canonical["externalActors"]}
+
+    assert nodes["trama_access"]["state"] == "PARTIAL"
+    assert nodes["professional_identity"]["state"] == "PARTIAL"
+    assert flows["gateway_to_trama_access"]["state"] == "DESIGNED"
+    assert flows["trama_access_to_docente_os"]["state"] == "DESIGNED"
+    assert flows["arena_to_curricolo_atlas"]["state"] == "REAL"
+    assert nodes["docente_os"]["maturityRef"] == "docente-os"
+    assert nodes["studio_atlas"]["maturityRef"] == "studio-atlas"
+    assert "public" in actors
+
+    serialized = json.dumps(canonical, ensure_ascii=False).lower()
+    for forbidden in ("@", "supabase.co", "service_role", "anon key", "student roster", "session token"):
+        assert forbidden not in serialized, forbidden
+
     print("TRAMA_ECOSYSTEM_STATE_V03_CONTRACT_PASS")
     return 0
 
