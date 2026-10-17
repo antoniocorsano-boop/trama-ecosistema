@@ -18,6 +18,10 @@ def main() -> int:
     graph = snapshot["ecosystemGraph"]
     assert graph["schemaVersion"] == "trama.ecosystem.state/v0.3"
     assert graph["sourceRef"] == "governance/access/trama-ecosystem-state-v0.3.json"
+    graph_source = snapshot["sourceState"]["ecosystem-state-v0.3"]
+    assert graph_source["status"] == "FRESH"
+    assert graph_source["ref"] == "governance/access/trama-ecosystem-state-v0.3.json"
+    assert len(graph_source["sha256"]) == 64
 
     canonical = snapshot_builder.core.load_json(ROOT / "governance/access/trama-ecosystem-state-v0.3.json")
     assert len(graph["nodes"]) == len(canonical["nodes"])
