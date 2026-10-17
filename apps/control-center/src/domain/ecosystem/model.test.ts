@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { relationKindLabel, relationTone, selectGapEntries, toEcosystemModel } from "./model";
+import { relationKindLabel, relationTone, selectGapEntries, toEcosystemModel, type EcosystemGraphProjection } from "./model";
 
-const canonicalGraph = {
+const canonicalGraph: EcosystemGraphProjection = {
   schemaVersion: "trama.ecosystem.state/v0.3",
   asOf: "2026-10-17",
   sourceRef: "governance/access/trama-ecosystem-state-v0.3.json",
