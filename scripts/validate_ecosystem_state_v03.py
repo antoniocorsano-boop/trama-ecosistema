@@ -12,10 +12,14 @@ DEFAULT_GRAPH_PATH = ROOT / "governance/access/trama-ecosystem-state-v0.3.json"
 MATURITY_PATH = Path("governance/maturity/trama-maturity-reconciliation-v1.json")
 DECISION_REGISTER_PATH = Path("docs/decisions/decision-register.json")
 ACTIVE_DECISION_STATUSES = {"APPROVED", "IMPLEMENTED"}
+IMPLEMENTED_REALIZATION_STATES = {"REAL", "PARTIAL"}
 GOVERNED_EVIDENCE_ROOTS = (Path("docs/evidence"),)
 GOVERNED_EVIDENCE_FILES = {
     Path("governance/access/trama-ecosystem-state-v0.2.json"),
 }
+GOVERNED_AUTHORITY_ROOTS = (
+    Path("docs/superpowers/specs"),
+)
 REQUIRED_ARENA_AUTHORITY_REF = "decision:TRAMA-ADR-002"
 
 
@@ -116,7 +120,15 @@ def _resolve_authority_reference(ref: str, root: Path, decisions: dict[str, dict
     if ref.startswith("decision:"):
         _resolve_decision_reference(ref, decisions)
         return
-    _resolve_path_reference(ref, root)
+    candidate = _path_reference_candidate(ref, root)
+    relative = candidate.relative_to(root.resolve())
+    for authority_root in GOVERNED_AUTHORITY_ROOTS:
+        try:
+            relative.relative_to(authority_root)
+        except ValueError:
+            continue
+        return
+    _fail(f"authority reference is not a governed authority artifact: {ref}")
 
 
 def _maturity_ids(root: Path) -> set[str]:
@@ -149,8 +161,12 @@ def _validate_schema(document: dict) -> None:
 
 
 def _validate_subject(subject: dict, root: Path, maturity_ids: set[str], decisions: dict[str, dict]) -> None:
-    if subject.get("state") == "DEFERRED" and not subject.get("decisionRefs"):
+    state = subject.get("state")
+    if state == "DEFERRED" and not subject.get("decisionRefs"):
         _fail(f"DEFERRED requires decisionRefs: {subject.get('id')}")
+
+    if state in IMPLEMENTED_REALIZATION_STATES and not subject.get("evidenceRefs"):
+        _fail(f"evidenceRefs required for implemented realization state {state}: {subject.get('id')}")
 
     if subject.get("authorityOwner") is None and not subject.get("authorityRefs"):
         _fail(f"authorityRefs required when authorityOwner is null: {subject.get('id')}")
@@ -169,14 +185,14 @@ def _validate_subject(subject: dict, root: Path, maturity_ids: set[str], decisio
     for ref in subject.get("decisionRefs", []):
         _resolve_decision_reference(ref, decisions)
 
-    if subject.get("state") != subject.get("targetState"):
+    if state != subject.get("targetState"):
         gap = subject.get("gap") or {}
         summary = str(gap.get("summary") or "").strip()
         missing = gap.get("missing") or []
         if summary.lower() in {"", "none", "n/a", "na", "todo", "tbd"} or not missing:
             _fail(f"gap must be explicit for non-terminal target: {subject.get('id')}")
 
-    if subject.get("id") == "DOS-A1" and subject.get("state") != "DEFERRED":
+    if subject.get("id") == "DOS-A1" and state != "DEFERRED":
         _fail("DOS-A1 must remain DEFERRED")
 
 
