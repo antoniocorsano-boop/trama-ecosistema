@@ -9,6 +9,23 @@ const routes = [
   ["assurance", "/#/assurance"],
 ] as const;
 
+
+async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test").Page) {
+  await expect(page.getByLabel("Elenco accessibile del grafo canonico")).toBeVisible();
+  const stableHeight = await page.evaluate(async () => {
+    const heights:number[]=[];
+    for(let index=0;index<8;index+=1){
+      await new Promise<void>((resolve)=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
+      heights.push(document.documentElement.scrollHeight);
+    }
+    return Math.max(...heights);
+  });
+  await page.evaluate((height) => {
+    document.documentElement.style.minHeight=`${height}px`;
+    document.body.style.minHeight=`${height}px`;
+  }, stableHeight);
+}
+
 const overviewVisualKnowledge = {
   schemaVersion: "1.0.0",
   subject: "project-knowledge",
@@ -53,6 +70,9 @@ for (const [name, route] of routes) {
     await page.evaluate(async () => {
       await document.fonts.ready;
     });
+    if (name === "ecosystem") {
+      await stabilizeEcosystemFullPageHeight(page);
+    }
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
       animations: "disabled",
