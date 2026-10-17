@@ -17,6 +17,10 @@ on:
       - "governance/maturity/trama-maturity-evidence-registry-v1.json"
       - "schemas/maturity-evidence-registry.schema.json"
       - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/test_ecosystem_graph_projection.py"
+      - "scripts/validate_ecosystem_state_v03.py"
+      - "schemas/trama-ecosystem-state-v0.3.schema.json"
+      - "governance/access/trama-ecosystem-state-v0.3.json"
       - "control-center/data/ecosystem-snapshot.json"
       - "scripts/build_ecosystem_snapshot_core.py"
       - "docs/contracts/trama-component-maturity-projection-v1.md"
@@ -58,6 +62,10 @@ on:
       - "governance/maturity/trama-maturity-evidence-registry-v1.json"
       - "schemas/maturity-evidence-registry.schema.json"
       - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/test_ecosystem_graph_projection.py"
+      - "scripts/validate_ecosystem_state_v03.py"
+      - "schemas/trama-ecosystem-state-v0.3.schema.json"
+      - "governance/access/trama-ecosystem-state-v0.3.json"
       - "control-center/data/ecosystem-snapshot.json"
       - "governance/ui-development/trama-component-evidence-registry-v1.json"
       - "scripts/project_component_maturity.py"
@@ -127,6 +135,7 @@ jobs:
           assert committed["components"] == generated["components"]
           assert committed["gates"] == generated["gates"]
           assert committed["dependencies"] == generated["dependencies"]
+          assert committed["ecosystemGraph"] == generated["ecosystemGraph"]
           assert committed["expansionCandidates"] == generated["expansionCandidates"]
           assert committed["integrityChecks"] == generated["integrityChecks"]
           assert committed["operationalPath"] == generated["operationalPath"]
@@ -292,7 +301,7 @@ jobs:
           source = json.loads(Path("governance/ui-development/trama-component-evidence-registry-v1.json").read_text(encoding="utf-8"))
           projected = {item["componentId"]: item for item in snapshot["components"]}
           assert set(projected) == {item["componentId"] for item in source["entries"]}, projected
-          assert snapshot["schemaVersion"] == "1.6.0", snapshot["schemaVersion"]
+          assert snapshot["schemaVersion"] == "1.7.0", snapshot["schemaVersion"]
           assert snapshot["sourceState"]["component-evidence-registry"]["status"] == "FRESH"
           assert len(projected) == 11, len(projected)
           assert {item["product"] for item in snapshot["components"]} == {"ARENA","ATLAS","DOCENTE_OS","TRAMA_CONTROL_CENTER"}

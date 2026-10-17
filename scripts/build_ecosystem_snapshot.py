@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the governed snapshot and bind explicit human-review evidence."""
+"""Build the governed snapshot, including ecosystemGraph v0.3, and bind explicit human-review evidence."""
 
 from __future__ import annotations
 
