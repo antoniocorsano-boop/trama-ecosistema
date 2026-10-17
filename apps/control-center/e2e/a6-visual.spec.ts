@@ -9,26 +9,24 @@ const routes = [
   ["assurance", "/#/assurance"],
 ] as const;
 
-
-async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test").Page) {
+async function ecosystemScreenshotClip(page: import("@playwright/test").Page) {
   await expect(page.getByLabel("Elenco accessibile del grafo canonico")).toBeVisible();
-  const stableHeight = await page.evaluate(async () => {
-    const heights:number[]=[];
+  return page.evaluate(async () => {
+    await document.fonts.ready;
+    const bottoms:number[]=[];
     for(let index=0;index<8;index+=1){
       await new Promise<void>((resolve)=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
-      heights.push(document.documentElement.scrollHeight);
+      const shell=document.querySelector<HTMLElement>(".app-shell");
+      if(!shell) throw new Error("Missing .app-shell for ecosystem visual capture");
+      bottoms.push(shell.getBoundingClientRect().bottom + window.scrollY);
     }
-    return Math.max(...heights);
+    return {
+      x: 0,
+      y: 0,
+      width: window.innerWidth,
+      height: Math.ceil(Math.max(...bottoms)),
+    };
   });
-  await page.evaluate((height) => {
-    const pinnedHeight=Math.ceil(height);
-    for (const element of [document.documentElement,document.body]) {
-      element.style.height=`${pinnedHeight}px`;
-      element.style.minHeight=`${pinnedHeight}px`;
-      element.style.maxHeight=`${pinnedHeight}px`;
-      element.style.overflow="hidden";
-    }
-  }, stableHeight);
 }
 
 const overviewVisualKnowledge = {
@@ -76,7 +74,13 @@ for (const [name, route] of routes) {
       await document.fonts.ready;
     });
     if (name === "ecosystem") {
-      await stabilizeEcosystemFullPageHeight(page);
+      const clip = await ecosystemScreenshotClip(page);
+      await expect(page).toHaveScreenshot(`${name}.png`, {
+        clip,
+        animations: "disabled",
+        maxDiffPixelRatio: 0.005,
+      });
+      continue;
     }
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
