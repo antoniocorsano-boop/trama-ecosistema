@@ -1,0 +1,54 @@
+name: M5 Refresh Visual Baselines
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.head_ref == 'docs/dos-m5-03-l5-qualification'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: docs/dos-m5-03-l5-qualification
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/control-center/package-lock.json
+      - name: Install from lockfile
+        working-directory: apps/control-center
+        run: npm ci --ignore-scripts
+      - name: Install Chromium
+        working-directory: apps/control-center
+        run: npx playwright install --with-deps chromium
+      - name: Refresh A6 visual baselines
+        working-directory: apps/control-center
+        run: npx playwright test e2e/a6-visual.spec.ts --update-snapshots --workers=1
+      - name: Enforce bounded snapshot delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --name-only -- apps/control-center/e2e/a6-visual.spec.ts-snapshots | sort > /tmp/actual.txt
+          cat > /tmp/expected.txt <<'EOF'
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-desktop-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-lim-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-phone-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-reflow-320-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/maturity-desktop-linux.png
+          apps/control-center/e2e/a6-visual.spec.ts-snapshots/maturity-lim-linux.png
+          EOF
+          diff -u /tmp/expected.txt /tmp/actual.txt
+      - name: Commit bounded visual refresh and remove helper
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/control-center/e2e/a6-visual.spec.ts-snapshots/*.png
+          git rm .github/workflows/m5-refresh-visual-baselines.yml
+          git commit -m "DOS-M5-03 refresh L5 visual evidence baselines"
+          git push origin HEAD:docs/dos-m5-03-l5-qualification
