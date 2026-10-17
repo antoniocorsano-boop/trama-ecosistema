@@ -10,7 +10,7 @@ on:
       - "docs/implementation/trama-control-center-a6-pwa-parity.md"
       - ".github/workflows/control-center-a6-pwa-parity.yml"
 permissions:
-  contents: write
+  contents: read
 jobs:
   qualify:
     runs-on: ubuntu-latest
@@ -48,43 +48,7 @@ jobs:
       - name: A6 browser PWA parity qualification
         run: npx playwright test e2e/a6-pwa-parity.spec.ts
       - name: A6 visual regression
-        id: visual
-        continue-on-error: true
         run: npx playwright test e2e/a6-visual.spec.ts
-      - name: Refresh six reviewed 320px baselines
-        if: steps.visual.outcome == 'failure'
-        working-directory: .
-        env:
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/trama-reviewed-320
-          cp apps/control-center/test-results/a6-visual-visual-parity-overview-reflow-320/overview-actual.png /tmp/trama-reviewed-320/overview.png
-          cp apps/control-center/test-results/a6-visual-visual-parity-maturity-reflow-320/maturity-actual.png /tmp/trama-reviewed-320/maturity.png
-          cp apps/control-center/test-results/a6-visual-visual-parity-ecosystem-reflow-320/ecosystem-actual.png /tmp/trama-reviewed-320/ecosystem.png
-          cp apps/control-center/test-results/a6-visual-visual-parity-evidence-reflow-320/evidence-actual.png /tmp/trama-reviewed-320/evidence.png
-          cp apps/control-center/test-results/a6-visual-visual-parity-operations-reflow-320/operations-actual.png /tmp/trama-reviewed-320/operations.png
-          cp apps/control-center/test-results/a6-visual-visual-parity-assurance-reflow-320/assurance-actual.png /tmp/trama-reviewed-320/assurance.png
-          git fetch origin "$HEAD_REF"
-          git checkout -B "$HEAD_REF" "origin/$HEAD_REF"
-          cp /tmp/trama-reviewed-320/overview.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/overview-reflow-320-linux.png
-          cp /tmp/trama-reviewed-320/maturity.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/maturity-reflow-320-linux.png
-          cp /tmp/trama-reviewed-320/ecosystem.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-reflow-320-linux.png
-          cp /tmp/trama-reviewed-320/evidence.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-reflow-320-linux.png
-          cp /tmp/trama-reviewed-320/operations.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/operations-reflow-320-linux.png
-          cp /tmp/trama-reviewed-320/assurance.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/assurance-reflow-320-linux.png
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/overview-reflow-320-linux.png \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/maturity-reflow-320-linux.png \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-reflow-320-linux.png \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/evidence-reflow-320-linux.png \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/operations-reflow-320-linux.png \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/assurance-reflow-320-linux.png
-          test "$(git diff --cached --name-only | wc -l)" -eq 6
-          git commit -m "test(control-center): refresh reviewed 320px baselines"
-          git push origin "HEAD:$HEAD_REF"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
