@@ -26,7 +26,7 @@ It does not authorize merge, public deployment, runtime cutover, Access live-pil
 
 - TRAMA Access remains `PARTIAL`; no live professional E2E journey is claimed.
 - all five `trama_access_to_*` federation flows remain `DESIGNED`; runtime existence does not promote federation.
-- Arena curricular authority is bound to governed decision `TRAMA-ADR-002` and protected by cross-record validation.
+- Arena is the authority for the curricolo, bound to governed decision `TRAMA-ADR-002` and protected by cross-record validation.
 - `DEFERRED` can be justified only through a governed decision in `docs/decisions/decision-register.json` with active status `APPROVED` or `IMPLEMENTED`; an arbitrary existing path is rejected.
 - DOS-A1 remains `RUNTIME_DEFERRED`.
 - maturity remains referenced separately from graph realization state; no overall ecosystem percentage or score is introduced.
