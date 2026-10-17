@@ -1,55 +1,55 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.7.0",
-  "generatedAt": "2026-10-17T11:25:28.687449+00:00",
+  "generatedAt": "2026-10-17T12:05:17.309953+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "STATUS.md",
       "sha256": "4a65c0e99f0d22f4a315166131f6cd909ff8cdf5a3e071b0eb16507860680527"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "ROADMAP.md",
       "sha256": "44c4ab50ac68971c99e9096a67818a4fd9c57530adfd9729ea5b8acb8066467a"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
     },
     "maturity-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
       "sha256": "123608e1546a2c40c88fca9c7db7ba702a429e2e9da5b0b78d78fbc4773d63df"
     },
     "ecosystem-state-v0.3": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "ref": "governance/access/trama-ecosystem-state-v0.3.json",
-      "sha256": "0fb0176aa42a40d9f5eb1818af1755afa8c3673234f3fa32a7df5cc795893bb5"
+      "sha256": "f4bf957258c9b4bd1ade0c6f7af0541b96cc6a1b4a2a53536e709ef6c470a5ea"
     }
   },
   "phases": [
@@ -115,7 +115,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
+      "lastEvaluatedAt": "2026-10-17T12:05:17.309953+00:00"
     },
     {
       "id": "arena",
@@ -142,7 +142,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
+      "lastEvaluatedAt": "2026-10-17T12:05:17.309953+00:00"
     },
     {
       "id": "atlas",
@@ -172,7 +172,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
+      "lastEvaluatedAt": "2026-10-17T12:05:17.309953+00:00"
     },
     {
       "id": "docente-os",
@@ -201,7 +201,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
+      "lastEvaluatedAt": "2026-10-17T12:05:17.309953+00:00"
     },
     {
       "id": "studio-atlas",
@@ -225,7 +225,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T11:25:28.687449+00:00"
+      "lastEvaluatedAt": "2026-10-17T12:05:17.309953+00:00"
     }
   ],
   "capabilities": [
@@ -1295,8 +1295,12 @@
         },
         "nextAllowedIntervention": {
           "action": "Completare prima il pilota Access, poi certificare l’ingresso Gateway.",
-          "preconditions": [],
-          "forbiddenUntil": []
+          "preconditions": [
+            "pilota Access live qualificato"
+          ],
+          "forbiddenUntil": [
+            "pilota Access live qualificato"
+          ]
         },
         "sourceRefs": [
           "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1639,8 +1643,12 @@
         },
         "nextAllowedIntervention": {
           "action": "Dopo il pilota Access, implementare il primo pilot di federazione limitato.",
-          "preconditions": [],
-          "forbiddenUntil": []
+          "preconditions": [
+            "pilota Access core qualificato"
+          ],
+          "forbiddenUntil": [
+            "pilota Access core qualificato"
+          ]
         },
         "sourceRefs": [
           "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1683,8 +1691,14 @@
         },
         "nextAllowedIntervention": {
           "action": "Solo dopo pilota Access e contratto Studio Atlas.",
-          "preconditions": [],
-          "forbiddenUntil": []
+          "preconditions": [
+            "pilota Access qualificato",
+            "contratto Studio Atlas qualificato"
+          ],
+          "forbiddenUntil": [
+            "pilota Access qualificato",
+            "contratto Studio Atlas qualificato"
+          ]
         },
         "sourceRefs": [
           "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1726,8 +1740,12 @@
         },
         "nextAllowedIntervention": {
           "action": "Qualificare dopo il pilota core Access.",
-          "preconditions": [],
-          "forbiddenUntil": []
+          "preconditions": [
+            "pilota Access core qualificato"
+          ],
+          "forbiddenUntil": [
+            "pilota Access core qualificato"
+          ]
         },
         "sourceRefs": [
           "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1769,8 +1787,12 @@
         },
         "nextAllowedIntervention": {
           "action": "Qualificare dopo il pilota core Access.",
-          "preconditions": [],
-          "forbiddenUntil": []
+          "preconditions": [
+            "pilota Access core qualificato"
+          ],
+          "forbiddenUntil": [
+            "pilota Access core qualificato"
+          ]
         },
         "sourceRefs": [
           "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1813,8 +1835,16 @@
         },
         "nextAllowedIntervention": {
           "action": "NONE",
-          "preconditions": [],
-          "forbiddenUntil": []
+          "preconditions": [
+            "pilota Access qualificato",
+            "operazione protetta esplicita governata",
+            "entitlement e step-up/MFA governati"
+          ],
+          "forbiddenUntil": [
+            "pilota Access qualificato",
+            "operazione protetta esplicita governata",
+            "entitlement e step-up/MFA governati"
+          ]
         },
         "sourceRefs": [
           "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -2503,7 +2533,7 @@
         "path": "STATUS.md",
         "sha256": "4a65c0e99f0d22f4a315166131f6cd909ff8cdf5a3e071b0eb16507860680527"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2521,7 +2551,7 @@
         "path": "ROADMAP.md",
         "sha256": "44c4ab50ac68971c99e9096a67818a4fd9c57530adfd9729ea5b8acb8066467a"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2539,7 +2569,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2557,7 +2587,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2575,7 +2605,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2593,7 +2623,7 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2611,7 +2641,7 @@
         "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
         "sha256": "123608e1546a2c40c88fca9c7db7ba702a429e2e9da5b0b78d78fbc4773d63df"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -3260,7 +3290,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-10-17T11:25:28.687449+00:00",
+      "observedAt": "2026-10-17T12:05:17.309953+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
