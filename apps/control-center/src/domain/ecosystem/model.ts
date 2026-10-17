@@ -151,6 +151,12 @@ export function selectGapEntries(
   ];
 }
 
+export function authorityDisplayLabel(owner: string | null, refs: string[]) {
+  const ownerLabel = owner?.trim() ?? "";
+  const refsLabel = refs.join(", ").trim();
+  return [ownerLabel, refsLabel].filter(Boolean).join(" · ") || "—";
+}
+
 export function realizationStateLabel(state: RealizationState) {
   return ({ REAL: "Reale", PARTIAL: "Parziale", DESIGNED: "Progettato", DEFERRED: "Differito" } as const)[state];
 }
