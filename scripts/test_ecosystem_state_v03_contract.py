@@ -19,6 +19,9 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from validate_ecosystem_state_v03 import EcosystemStateValidationError, validate_graph  # noqa: E402
 
 
+EVIDENCE_FIXTURE = "path:docs/evidence/test/ecosystem-state-fixture.md"
+
+
 def base_document() -> dict:
     return {
         "schemaVersion": "trama.ecosystem.state/v0.3",
@@ -40,7 +43,7 @@ def base_document() -> dict:
                 "authorityRefs": ["path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"],
                 "implementationOwners": ["trama"],
                 "maturityRef": None,
-                "evidenceRefs": ["path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"],
+                "evidenceRefs": [EVIDENCE_FIXTURE],
                 "blockerRefs": [],
                 "gap": {"summary": "none", "missing": []},
                 "target": {"boundary": "Ingresso pubblico governato", "value": "Accesso pubblico"},
@@ -60,7 +63,7 @@ def base_document() -> dict:
                 "authorityRefs": ["path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"],
                 "implementationOwners": ["atlas"],
                 "maturityRef": "atlas",
-                "evidenceRefs": ["path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"],
+                "evidenceRefs": [EVIDENCE_FIXTURE],
                 "blockerRefs": [],
                 "gap": {"summary": "Manca la prova completa del confine", "missing": ["prova end-to-end"]},
                 "target": {"boundary": "Pubblicazione curricolare governata", "value": "Navigazione curricolare"},
@@ -83,7 +86,7 @@ def base_document() -> dict:
                 "authorityRefs": ["path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"],
                 "implementationOwners": ["trama"],
                 "maturityRef": None,
-                "evidenceRefs": ["path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"],
+                "evidenceRefs": [EVIDENCE_FIXTURE],
                 "blockerRefs": [],
                 "gap": {"summary": "none", "missing": []},
                 "target": {"boundary": "Ingresso pubblico", "value": "Accesso pubblico"},
@@ -108,6 +111,9 @@ def prepare_root(path: Path) -> None:
     target = path / "docs/superpowers/specs"
     target.mkdir(parents=True)
     (target / "2026-10-17-trama-ecosystem-state-v0.3-design.md").write_text("spec", encoding="utf-8")
+    evidence = path / "docs/evidence/test"
+    evidence.mkdir(parents=True)
+    (evidence / "ecosystem-state-fixture.md").write_text("evidence receipt", encoding="utf-8")
     decisions = path / "docs/decisions"
     decisions.mkdir(parents=True)
     (decisions / "decision-register.json").write_text(
@@ -208,6 +214,19 @@ def main() -> int:
         expect_invalid(doc, root, "does-not-exist")
 
         doc = base_document()
+        (root / "README.md").write_text("not governed evidence", encoding="utf-8")
+        doc["nodes"][0]["evidenceRefs"] = ["path:README.md"]
+        expect_invalid(doc, root, "evidence")
+
+        doc = base_document()
+        doc["nodes"][0]["evidenceRefs"] = ["path:docs/evidence"]
+        expect_invalid(doc, root, "file")
+
+        doc = base_document()
+        doc["nodes"][0]["evidenceRefs"] = [EVIDENCE_FIXTURE]
+        validate_graph(doc, root)
+
+        doc = base_document()
         doc["nodes"][0]["evidenceRefs"] = ["EV-NONEXISTENT"]
         expect_invalid(doc, root, "reference")
 
@@ -266,6 +285,21 @@ def main() -> int:
         subject = next(item for item in collection if item["id"] == subject_id)
         subject["authorityOwner"] = invalid_owner
         expect_invalid(mutated, ROOT, "arena")
+
+    protected_arena_bindings = [
+        ("node", "arena"),
+        ("flow", "arena_to_curricolo_atlas"),
+        ("flow", "docente_os_to_arena"),
+        ("flow", "trama_access_to_arena"),
+    ]
+    for subject_type, subject_id in protected_arena_bindings:
+        mutated = copy.deepcopy(canonical)
+        collection = mutated["nodes"] if subject_type == "node" else mutated["flows"]
+        subject = next(item for item in collection if item["id"] == subject_id)
+        subject["authorityRefs"] = [
+            ref for ref in subject["authorityRefs"] if ref != "decision:TRAMA-ADR-002"
+        ]
+        expect_invalid(mutated, ROOT, "TRAMA-ADR-002")
 
     access_federations = [
         "trama_access_to_docente_os",
