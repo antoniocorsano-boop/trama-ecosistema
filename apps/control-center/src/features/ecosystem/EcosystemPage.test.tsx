@@ -47,10 +47,10 @@ describe("EcosystemView v0.3",()=>{
     expect(screen.getByText("Manca la prova live end-to-end")).toBeInTheDocument();
     expect(screen.getByText("TRAMA Access → Docente OS")).toBeInTheDocument();
     expect(screen.getByText("Federazione non implementata")).toBeInTheDocument();
-    expect(screen.getByText("Prerequisiti")).toBeInTheDocument();
-    expect(screen.getByText("pilota Access qualificato")).toBeInTheDocument();
-    expect(screen.getByText("Bloccato fino a")).toBeInTheDocument();
-    expect(screen.getByText("federazione non autorizzata prima del pilota")).toBeInTheDocument();
+    const prerequisites=screen.getByText("Prerequisiti").parentElement;
+    expect(prerequisites).toHaveTextContent("pilota Access qualificato");
+    const blockedUntil=screen.getByText("Bloccato fino a").parentElement;
+    expect(blockedUntil).toHaveTextContent("federazione non autorizzata prima del pilota");
   });
 
   it("fails closed when the governed snapshot is invalid",async()=>{
