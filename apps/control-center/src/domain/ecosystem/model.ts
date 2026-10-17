@@ -74,12 +74,22 @@ const EMPTY_GRAPH: EcosystemGraphProjection = {
   transitionPolicy: {},
 };
 
+function isEcosystemGraphProjection(value: unknown): value is EcosystemGraphProjection {
+  if (!value || typeof value !== "object") return false;
+  const graph=value as Partial<EcosystemGraphProjection>;
+  return graph.schemaVersion === "trama.ecosystem.state/v0.3"
+    && typeof graph.sourceRef === "string"
+    && Array.isArray(graph.externalActors)
+    && Array.isArray(graph.nodes)
+    && Array.isArray(graph.flows);
+}
+
 export function toEcosystemModel(snapshot: EcosystemSnapshot): EcosystemModel {
   return {
     generatedAt: snapshot.generatedAt,
     capabilities: Array.isArray(snapshot.capabilities) ? snapshot.capabilities as Capability[] : [],
     dependencies: Array.isArray(snapshot.dependencies) ? snapshot.dependencies as Dependency[] : [],
-    ecosystemGraph: snapshot.ecosystemGraph ?? EMPTY_GRAPH,
+    ecosystemGraph: isEcosystemGraphProjection(snapshot.ecosystemGraph) ? snapshot.ecosystemGraph : EMPTY_GRAPH,
   };
 }
 

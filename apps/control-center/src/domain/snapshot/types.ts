@@ -80,5 +80,5 @@ export type EcosystemGraphProjectionData = {
 export type EcosystemSnapshot = Record<string, unknown> & {
   schemaVersion: string;
   generatedAt: string;
-  ecosystemGraph?: EcosystemGraphProjectionData;
+  ecosystemGraph?: unknown;
 };
