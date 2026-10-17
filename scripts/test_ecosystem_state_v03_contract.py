@@ -108,6 +108,17 @@ def prepare_root(path: Path) -> None:
     target = path / "docs/superpowers/specs"
     target.mkdir(parents=True)
     (target / "2026-10-17-trama-ecosystem-state-v0.3-design.md").write_text("spec", encoding="utf-8")
+    decisions = path / "docs/decisions"
+    decisions.mkdir(parents=True)
+    (decisions / "decision-register.json").write_text(
+        json.dumps({
+            "decisions": [
+                {"id": "TRAMA-ADR-002", "status": "APPROVED"},
+                {"id": "TRAMA-ADR-004", "status": "APPROVED"},
+            ]
+        }),
+        encoding="utf-8",
+    )
 
 
 def expect_invalid(document: dict, root: Path, needle: str) -> None:
@@ -168,6 +179,22 @@ def main() -> int:
         expect_invalid(doc, root, "deferred")
 
         doc = base_document()
+        doc["nodes"][1]["state"] = "DEFERRED"
+        doc["nodes"][1]["decisionRefs"] = ["path:README.md"]
+        (root / "README.md").write_text("not a governed decision", encoding="utf-8")
+        expect_invalid(doc, root, "decision")
+
+        doc = base_document()
+        doc["nodes"][1]["state"] = "DEFERRED"
+        doc["nodes"][1]["decisionRefs"] = ["decision:TRAMA-ADR-004"]
+        validate_graph(doc, root)
+
+        doc = base_document()
+        doc["nodes"][1]["state"] = "DEFERRED"
+        doc["nodes"][1]["decisionRefs"] = ["decision:TRAMA-ADR-999"]
+        expect_invalid(doc, root, "decision")
+
+        doc = base_document()
         doc["flows"][0]["authorityOwner"] = None
         doc["flows"][0]["authorityRefs"] = []
         expect_invalid(doc, root, "authorityrefs")
@@ -213,6 +240,33 @@ def main() -> int:
     assert flows["gateway_to_trama_access"]["state"] == "DESIGNED"
     assert flows["trama_access_to_docente_os"]["state"] == "DESIGNED"
     assert flows["arena_to_curricolo_atlas"]["state"] == "REAL"
+    assert canonical["authorityPolicy"]["decisions"] == "docs/decisions/decision-register.json"
+
+    approved_open_gaps = ["gateway", "arena", "curricolo_atlas", "trama_governance"]
+    for node_id in approved_open_gaps:
+        assert nodes[node_id]["gap"]["missing"], f"{node_id} lost its approved governed gap"
+        assert nodes[node_id]["nextAllowedIntervention"]["action"] != "", node_id
+
+    privileged = nodes["control_center_privileged"]["nextAllowedIntervention"]
+    assert privileged["preconditions"], "privileged Control Center missing structured preconditions"
+    assert privileged["forbiddenUntil"], "privileged Control Center missing structured blockers"
+    privileged_text = " ".join(privileged["preconditions"] + privileged["forbiddenUntil"]).lower()
+    for needle in ("operazione protetta", "entitlement", "mfa", "audit", "access"):
+        assert needle in privileged_text, f"privileged Control Center missing {needle}"
+
+    protected_owner_cases = [
+        ("node", "arena", "trama"),
+        ("flow", "arena_to_curricolo_atlas", "atlas"),
+        ("flow", "docente_os_to_arena", "docente-os"),
+        ("flow", "trama_access_to_arena", "trama"),
+    ]
+    for subject_type, subject_id, invalid_owner in protected_owner_cases:
+        mutated = copy.deepcopy(canonical)
+        collection = mutated["nodes"] if subject_type == "node" else mutated["flows"]
+        subject = next(item for item in collection if item["id"] == subject_id)
+        subject["authorityOwner"] = invalid_owner
+        expect_invalid(mutated, ROOT, "arena")
+
     access_federations = [
         "trama_access_to_docente_os",
         "trama_access_to_studio_atlas",

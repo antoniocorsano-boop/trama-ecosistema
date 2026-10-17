@@ -14,7 +14,7 @@ const graph: EcosystemGraphProjection = {
     { id:"docente_os",label:"Docente OS",plane:"PROFESSIONAL",state:"REAL",targetState:"REAL",boundary:"Ambiente docente reale",authorityOwner:"docente-os",authorityRefs:["A"],implementationOwners:["docente-os"],maturityRef:"docente-os",evidenceRefs:["E"],blockerRefs:[],gap:{summary:"none",missing:[]},target:{boundary:"Ambiente docente reale",value:"Operatività docente"},nextAllowedIntervention:{action:"NONE",preconditions:[],forbiddenUntil:[]},sourceRefs:["S"],lastSignificantChange:null,decisionRefs:[],maturityContext:{confirmedLevel:5,candidateLevel:5,evidenceBindingStatus:"COMPLETE",nextTargetLevel:null,nextRequiredEvidenceTypes:[],interpretation:"BOUND_EVIDENCE_ONLY",sourceRef:"snapshot:areas/docente-os",authorityRef:"governance/maturity/trama-maturity-reconciliation-v1.json"} },
   ],
   flows: [
-    { id:"trama_access_to_docente_os",from:"trama_access",to:"docente_os",kind:"AUTHENTICATION",state:"DESIGNED",targetState:"REAL",boundary:"Federazione non implementata",authorityOwner:null,authorityRefs:["A"],implementationOwners:["trama","docente-os"],maturityRef:null,evidenceRefs:["E"],blockerRefs:[],gap:{summary:"Federazione non implementata",missing:["pilota Access qualificato"]},target:{boundary:"Federazione professionale limitata",value:"Accesso professionale"},nextAllowedIntervention:{action:"Dopo il pilota Access, qualificare il primo pilot di federazione",preconditions:[],forbiddenUntil:[]},sourceRefs:["S"],lastSignificantChange:null,decisionRefs:[] },
+    { id:"trama_access_to_docente_os",from:"trama_access",to:"docente_os",kind:"AUTHENTICATION",state:"DESIGNED",targetState:"REAL",boundary:"Federazione non implementata",authorityOwner:null,authorityRefs:["A"],implementationOwners:["trama","docente-os"],maturityRef:null,evidenceRefs:["E"],blockerRefs:[],gap:{summary:"Federazione non implementata",missing:["pilota Access qualificato"]},target:{boundary:"Federazione professionale limitata",value:"Accesso professionale"},nextAllowedIntervention:{action:"Dopo il pilota Access, qualificare il primo pilot di federazione",preconditions:["pilota Access qualificato"],forbiddenUntil:["federazione non autorizzata prima del pilota"]},sourceRefs:["S"],lastSignificantChange:null,decisionRefs:[] },
   ],
   views:{},transitionPolicy:{},
 };
@@ -47,6 +47,10 @@ describe("EcosystemView v0.3",()=>{
     expect(screen.getByText("Manca la prova live end-to-end")).toBeInTheDocument();
     expect(screen.getByText("TRAMA Access → Docente OS")).toBeInTheDocument();
     expect(screen.getByText("Federazione non implementata")).toBeInTheDocument();
+    expect(screen.getByText("Prerequisiti")).toBeInTheDocument();
+    expect(screen.getByText("pilota Access qualificato")).toBeInTheDocument();
+    expect(screen.getByText("Bloccato fino a")).toBeInTheDocument();
+    expect(screen.getByText("federazione non autorizzata prima del pilota")).toBeInTheDocument();
   });
 
   it("fails closed when the governed snapshot is invalid",async()=>{

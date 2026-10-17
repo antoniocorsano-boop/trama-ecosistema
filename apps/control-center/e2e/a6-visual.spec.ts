@@ -84,5 +84,15 @@ for (const [name, route] of routes) {
       animations: "disabled",
       maxDiffPixelRatio: 0.005,
     });
+    if (name === "ecosystem") {
+      await page.getByRole("button", { name: "AS IS → GAP → TO BE" }).click();
+      await expect(page.getByLabel("Vista AS IS GAP TO BE")).toBeVisible();
+      await stabilizeEcosystemFullPageHeight(page);
+      await expect(page).toHaveScreenshot("ecosystem-gap.png", {
+        fullPage: true,
+        animations: "disabled",
+        maxDiffPixelRatio: 0.005,
+      });
+    }
   });
 }

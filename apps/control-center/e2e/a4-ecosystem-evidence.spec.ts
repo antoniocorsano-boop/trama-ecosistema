@@ -42,6 +42,12 @@ test("Ecosystem v0.3 preserves canonical state, flow parity and GAP semantics", 
   await expect(gapView).toContainText(String(canonicalNodes.get("trama_access").gap.summary));
   await expect(gapView).toContainText("TRAMA Access → Docente OS");
   await expect(gapView).toContainText(String(canonicalFlows.get("trama_access_to_docente_os").gap.summary));
+  await expect(gapView).toContainText("Prerequisiti");
+  await expect(gapView).toContainText(String(canonicalFlows.get("trama_access_to_docente_os").nextAllowedIntervention.preconditions[0]));
+  await expect(gapView).toContainText("Bloccato fino a");
+  for (const nodeId of ["gateway","arena","curricolo_atlas","trama_governance"]) {
+    await expect(gapView).toContainText(String(canonicalNodes.get(nodeId).gap.summary));
+  }
 
   const bodyText=await page.locator("body").innerText();
   expect(bodyText).not.toMatch(/\b\d+(?:[.,]\d+)?%\b/);
