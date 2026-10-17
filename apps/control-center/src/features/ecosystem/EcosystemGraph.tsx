@@ -1,83 +1,34 @@
 import { Background, Controls, MarkerType, ReactFlow, type Edge, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { relationKindLabel, relationTone, type Dependency } from "../../domain/ecosystem/model";
+import { relationKindLabel, type EcosystemGraphProjection } from "../../domain/ecosystem/model";
 
-const positions: Record<string,{x:number;y:number}> = {
-  TRAMA:{x:300,y:20},
-  Arena:{x:40,y:220},
-  "Docente OS":{x:300,y:220},
-  Atlas:{x:560,y:220},
-};
+const planeX:Record<string,number>={PUBLIC:40,PROFESSIONAL:330,CROSS_CUTTING:620,LEARNER:910,GOVERNANCE:1200};
+const stateStroke:Record<string,string>={REAL:"#55d79a",PARTIAL:"#58bff7",DESIGNED:"#ae88ff",DEFERRED:"#b2b9c0"};
 
-export function EcosystemGraph({
-  dependencies,
-  selectedId,
-  onSelect,
-}:{
-  dependencies:Dependency[];
-  selectedId:string|null;
-  onSelect:(id:string)=>void;
-}) {
-  const domains=[...new Set(dependencies.flatMap((d)=>[d.from,d.to]))];
-  const nodes:Node[] = domains.map((id)=>({
-    id,
-    position:positions[id] ?? {x:300,y:120},
-    data:{label:id},
-    draggable:false,
-    selectable:false,
-    ariaLabel:`${id}, dominio dell'ecosistema`,
-    style:{
-      background:"#0e2b42",
-      border:"1px solid #2a607e",
-      borderRadius:12,
-      color:"#f4f8fb",
-      minWidth:140,
-      textAlign:"center",
-      fontWeight:750,
-    },
+export function EcosystemGraph({graph,selectedId,onSelect}:{graph:EcosystemGraphProjection;selectedId:string|null;onSelect:(id:string)=>void}) {
+  const perPlane=new Map<string,number>();
+  const nodes:Node[] = [
+    ...graph.externalActors.map((actor,index)=>({
+      id:actor.id,position:{x:40,y:20+index*90},data:{label:`${actor.label} · attore esterno`},draggable:false,selectable:false,
+      ariaLabel:`${actor.label}, attore esterno dichiarato`,style:{background:"#132536",border:"1px dashed #6f8798",borderRadius:12,color:"#f4f8fb",minWidth:170,textAlign:"center" as const,fontWeight:700},
+    })),
+    ...graph.nodes.map((item)=>{
+      const row=perPlane.get(item.plane) ?? 0; perPlane.set(item.plane,row+1);
+      return {
+        id:item.id,position:{x:planeX[item.plane] ?? 620,y:120+row*115},data:{label:`${item.label} · ${item.state}`},draggable:false,selectable:false,
+        ariaLabel:`${item.label}, stato ${item.state}`,style:{background:"#0e2b42",border:`2px solid ${stateStroke[item.state]}`,borderRadius:12,color:"#f4f8fb",minWidth:190,textAlign:"center" as const,fontWeight:750},
+      };
+    }),
+  ];
+  const edges:Edge[]=graph.flows.map((flow)=>({
+    id:flow.id,source:flow.from,target:flow.to,label:relationKindLabel(flow.kind),animated:false,focusable:true,selectable:true,selected:flow.id===selectedId,
+    ariaLabel:`${flow.from} verso ${flow.to}: ${relationKindLabel(flow.kind)}, stato ${flow.state}`,markerEnd:{type:MarkerType.ArrowClosed,color:stateStroke[flow.state]},
+    style:{stroke:stateStroke[flow.state],strokeWidth:flow.id===selectedId?4:2},labelStyle:{fill:"#d8e6ee",fontSize:11},
   }));
-  const edges:Edge[] = dependencies.map((d)=>{
-    const tone=relationTone(d.kind);
-    const color=tone==="authority"?"#55d79a":tone==="future"?"#ae88ff":"#58bff7";
-    return {
-      id:d.id,
-      source:d.from,
-      target:d.to,
-      label:relationKindLabel(d.kind),
-      animated:false,
-      focusable:true,
-      selectable:true,
-      selected:d.id===selectedId,
-      ariaLabel:`${d.from} verso ${d.to}: ${relationKindLabel(d.kind)}, stato ${d.status}`,
-      markerEnd:{type:MarkerType.ArrowClosed,color},
-      style:{stroke:color,strokeWidth:d.id===selectedId?4:2},
-      labelStyle:{fill:"#d8e6ee",fontSize:11},
-    };
-  });
-
   return (
     <div className="ecosystem-graph" aria-label="Mappa grafica delle relazioni governate">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        fitView
-        minZoom={0.6}
-        maxZoom={1.6}
-        nodesDraggable={false}
-        nodesConnectable={false}
-        nodesFocusable
-        edgesFocusable
-        elementsSelectable
-        onEdgeClick={(_,edge)=>onSelect(edge.id)}
-        ariaLabelConfig={{
-          "controls.ariaLabel":"Controlli della mappa",
-          "controls.zoomIn.ariaLabel":"Aumenta zoom",
-          "controls.zoomOut.ariaLabel":"Riduci zoom",
-          "controls.fitView.ariaLabel":"Adatta mappa",
-        }}
-      >
-        <Background gap={18} size={1} color="#14354d" />
-        <Controls showInteractive={false} />
+      <ReactFlow nodes={nodes} edges={edges} fitView minZoom={0.3} maxZoom={1.6} nodesDraggable={false} nodesConnectable={false} nodesFocusable edgesFocusable elementsSelectable onEdgeClick={(_,edge)=>onSelect(edge.id)} ariaLabelConfig={{"controls.ariaLabel":"Controlli della mappa","controls.zoomIn.ariaLabel":"Aumenta zoom","controls.zoomOut.ariaLabel":"Riduci zoom","controls.fitView.ariaLabel":"Adatta mappa"}}>
+        <Background gap={18} size={1} color="#14354d" /><Controls showInteractive={false} />
       </ReactFlow>
     </div>
   );
