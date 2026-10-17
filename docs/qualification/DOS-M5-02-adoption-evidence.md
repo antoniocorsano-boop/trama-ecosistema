@@ -1,7 +1,7 @@
 # DOS-M5-02 — Docente OS L5 adoption evidence
 
 **Stato:** DRAFT / EVIDENCE_READY / HUMAN_REVIEW_PENDING  
-**Data:** 7 ottobre 2026  
+**Data:** 17 ottobre 2026  
 **Ambito:** Docente OS product maturity  
 **Contratto:** `docs/qualification/DOS-M5-00-evidence-contract.md`  
 **Authority effect:** NONE  
@@ -20,25 +20,30 @@ Baseline TRAMA di apertura:
 
 - repository: `antoniocorsano-boop/trama-ecosistema`;
 - ref: `main`;
-- exact head: `dd8bfab5032137a8591c209004bbd643bf23e8cd`;
+- exact head all'apertura: `dd8bfab5032137a8591c209004bbd643bf23e8cd`;
 - DOS-M5-00: `CONTRACT_APPROVED / HUMAN_REVIEW_PASS / INTEGRATED`.
 
-Baseline prodotto qualificata:
+Baseline prodotto L4 di qualificazione:
 
 - repository: `antoniocorsano-boop/docente-os-2026-27`;
-- ref qualificato: `develop`;
 - product head L4: `39bce05fa2e87f3746ee3b6dcd7433065cb2d876`;
 - runtime canary L4: PASS;
 - `confirmedLevel = 4`;
 - next target: `5`.
 
+Baseline prodotto corrente congelata dopo DOS-CLOSE-01:
+
+- `develop@3f2b4fbac475109fdc331415aa16af680fd96c87`;
+- nessuna nuova capability è richiesta per DOS-M5;
+- l'avanzamento L5 resta probatorio, non funzionale.
+
 Le occasioni di adozione riportate qui sono storiche e precedono la formalizzazione di DOS-M5-00. Il contratto `ADOPTION_EVIDENCE` non impone che esse siano post-L4; impone invece origine professionale reale, positive binding verificabile, separazione da synthetic use e privacy minimization.
 
-Di conseguenza queste occasioni possono concorrere a DOS-M5-02 ma **non** possono essere riutilizzate come checkpoint post-L4 di DOS-M5-01.
+Di conseguenza queste occasioni possono concorrere a DOS-M5-02 ma **non** vengono riutilizzate come checkpoint post-L4 di DOS-M5-01.
 
 ## 3. Metodo read-only
 
-La verifica è stata eseguita esclusivamente in lettura sul datastore Beta già esistente.
+La verifica originaria è stata eseguita esclusivamente in lettura sul datastore Beta già esistente.
 
 Sono state osservate le superfici necessarie alla classificazione:
 
@@ -52,6 +57,8 @@ Sono state osservate le superfici necessarie alla classificazione:
 - metadata auth usati transitoriamente solo per distinguere account tecnici/synthetic da account professionali.
 
 Nessuna query ha creato, modificato o cancellato record.
+
+Il refresh del 17 ottobre non ricrea le occasioni e non muta il datastore: riallinea soltanto il dossier alla baseline prodotto congelata e allo stato corrente di DOS-M5-01.
 
 ### 3.1 Positive actor binding
 
@@ -119,7 +126,7 @@ verdict: ADMISSIBLE
 
 AE1 è un evento di dominio persistito del normale workflow docente. È collegato a versione e slot di orario, ha durata effettiva registrata, registration receipt distinta, evidence receipt e una osservazione collegata. L'attore è positivamente bound al profilo docente/workspace professionale descritto al §3.1.
 
-L'exact deploy storico attivo il 21 settembre non viene ricostruito né inventato: la prova è bound al periodo professionale, all'evento persistito e alla sua receipt. Il product head L4 è riportato come baseline corrente di qualificazione, non come affermazione sul binario storico della data dell'evento.
+L'exact deploy storico attivo il 21 settembre non viene ricostruito né inventato: la prova è bound al periodo professionale, all'evento persistito e alla sua receipt. Il product head L4 è riportato come baseline di qualificazione del dossier, non come affermazione sul binario storico della data dell'evento.
 
 ## 5. Adoption occasion AE2
 
@@ -148,7 +155,7 @@ verdict: ADMISSIBLE
 
 AE2 è indipendente da AE1: data professionale e `positiveBindingRef` sono distinti. Anche AE2 nasce dal workflow `PROJECTED_OCCURRENCE`, è collegato a versione e slot di orario, ha durata effettiva e registration receipt propria; è inoltre presente evidenza professionale persistita senza pubblicarne il testo.
 
-Come per AE1, il runtime storico non viene inferito. La prova resta riesaminabile tramite il binding minimizzato e la query read-only sul datastore Beta.
+Come per AE1, il runtime storico non viene inferito. La prova resta riesaminabile tramite il binding minimizzato e la verifica read-only prevista dal contratto.
 
 ## 6. Verifica della soglia DOS-M5-00
 
@@ -166,7 +173,7 @@ Come per AE1, il runtime storico non viene inferito. La prova resta riesaminabil
 | PII nella receipt | nessuna | PASS |
 | Human Review finale | non ancora eseguita | PENDING |
 
-La soglia quantitativa/qualitativa del §7.5 di DOS-M5-00 risulta quindi tecnicamente soddisfatta, ma il dossier resta fail-closed fino alla Human Review.
+La soglia quantitativa/qualitativa del §7.5 di DOS-M5-00 risulta tecnicamente soddisfatta, ma il dossier resta fail-closed fino alla Human Review.
 
 ## 7. Receipt aggregata candidata
 
@@ -178,7 +185,8 @@ observedPeriod:
   from: 2026-09-21
   to: 2026-09-25
 qualificationBaseline:
-  productHead: 39bce05fa2e87f3746ee3b6dcd7433065cb2d876
+  l4ProductHead: 39bce05fa2e87f3746ee3b6dcd7433065cb2d876
+  currentFrozenProductHead: 3f2b4fbac475109fdc331415aa16af680fd96c87
 humanRealUseOccasions: 2
 distinctProfessionalDates: 2
 professionalSurfaces:
@@ -216,15 +224,17 @@ La confidenza è `HIGH_FOR_HUMAN_REAL_USE` perché entrambe le occasioni combina
 
 Il dossier non afferma quale exact deploy fosse attivo nelle due date storiche. Questo limite è esplicito e non viene colmato per inferenza.
 
+Il refresh corrente non afferma di aver rieseguito la query storica: preserva l'evidenza read-only già raccolta e ne aggiorna soltanto il raccordo con lo stato corrente del prodotto.
+
 ## 9. Relazione con DOS-M5-01
 
 AE1 e AE2 sono antecedenti alla baseline L4 e pertanto:
 
 - possono concorrere a `ADOPTION_EVIDENCE` secondo DOS-M5-00;
-- **non** soddisfano `DOS-M5-01-CP1` o `DOS-M5-01-CP2`, che richiedono checkpoint post-L4;
-- non devono essere riciclati come trigger post-L4.
+- non soddisfano e non vengono conteggiate in `DOS-M5-01-CP1` o `DOS-M5-01-CP2`;
+- non vengono riciclate come trigger post-L4.
 
-DOS-M5-01 resta indipendentemente `CHECKPOINTS_PENDING` finché non emergono due trigger reali e distinti successivi a L4.
+Al 17 ottobre 2026, DOS-M5-01 ha acquisito due checkpoint post-L4 indipendenti basati su MATERIAL-CORE-01 (#712) e MATERIAL-TASK-UX-01 (#713). La relazione tra i due dossier resta quindi pulita: **adozione storica reale in M5-02; stabilità post-L4 in M5-01**.
 
 ## 10. Criterio di uscita
 
