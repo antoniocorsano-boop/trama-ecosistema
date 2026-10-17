@@ -1,55 +1,55 @@
 {
   "$schema": "../../schemas/ecosystem-snapshot.schema.json",
   "schemaVersion": "1.7.0",
-  "generatedAt": "2026-10-17T14:31:28.966884+00:00",
+  "generatedAt": "2026-10-17T15:27:56.504719+00:00",
   "sourceState": {
     "trama-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "STATUS.md",
       "sha256": "4a65c0e99f0d22f4a315166131f6cd909ff8cdf5a3e071b0eb16507860680527"
     },
     "trama-roadmap": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "ROADMAP.md",
       "sha256": "44c4ab50ac68971c99e9096a67818a4fd9c57530adfd9729ea5b8acb8066467a"
     },
     "ecosystem-status": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "status/ecosystem-status.json",
       "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
     },
     "decision-register": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "docs/decisions/decision-register.json",
       "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
     },
     "governed-events": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "status/governed-events.json",
       "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
     },
     "component-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "governance/ui-development/trama-component-evidence-registry-v1.json",
       "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
     },
     "maturity-evidence-registry": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "governance/maturity/trama-maturity-evidence-registry-v1.json",
       "sha256": "123608e1546a2c40c88fca9c7db7ba702a429e2e9da5b0b78d78fbc4773d63df"
     },
     "ecosystem-state-v0.3": {
       "status": "FRESH",
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "ref": "governance/access/trama-ecosystem-state-v0.3.json",
-      "sha256": "2c9a86a129e47a536fb8a85fbba68916a9c76663434752cafcdf809186d028bf"
+      "sha256": "bded0e1ee888f7335845f3ef52948dd3995995d7eccc1839a1aa639fa91b1cd8"
     }
   },
   "phases": [
@@ -115,7 +115,7 @@
       "interpretation": "BOUND_EVIDENCE_ONLY",
       "blockingGateRefs": [],
       "dependencies": [],
-      "lastEvaluatedAt": "2026-10-17T14:31:28.966884+00:00"
+      "lastEvaluatedAt": "2026-10-17T15:27:56.504719+00:00"
     },
     {
       "id": "arena",
@@ -142,7 +142,7 @@
       "dependencies": [
         "governance"
       ],
-      "lastEvaluatedAt": "2026-10-17T14:31:28.966884+00:00"
+      "lastEvaluatedAt": "2026-10-17T15:27:56.504719+00:00"
     },
     {
       "id": "atlas",
@@ -172,7 +172,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T14:31:28.966884+00:00"
+      "lastEvaluatedAt": "2026-10-17T15:27:56.504719+00:00"
     },
     {
       "id": "docente-os",
@@ -201,7 +201,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T14:31:28.966884+00:00"
+      "lastEvaluatedAt": "2026-10-17T15:27:56.504719+00:00"
     },
     {
       "id": "studio-atlas",
@@ -225,7 +225,7 @@
         "governance",
         "arena"
       ],
-      "lastEvaluatedAt": "2026-10-17T14:31:28.966884+00:00"
+      "lastEvaluatedAt": "2026-10-17T15:27:56.504719+00:00"
     }
   ],
   "capabilities": [
@@ -1492,8 +1492,12 @@
         },
         "nextAllowedIntervention": {
           "action": "Prima vincolare il contratto Studio Atlas, poi qualificare un flusso limitato.",
-          "preconditions": [],
-          "forbiddenUntil": []
+          "preconditions": [
+            "contratto cross-product Studio Atlas approvato e vincolato"
+          ],
+          "forbiddenUntil": [
+            "launch/authoring flow non ammesso finché il contratto cross-product Studio Atlas non è approvato e vincolato"
+          ]
         },
         "sourceRefs": [
           "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -2556,7 +2560,7 @@
         "path": "STATUS.md",
         "sha256": "4a65c0e99f0d22f4a315166131f6cd909ff8cdf5a3e071b0eb16507860680527"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2574,7 +2578,7 @@
         "path": "ROADMAP.md",
         "sha256": "44c4ab50ac68971c99e9096a67818a4fd9c57530adfd9729ea5b8acb8066467a"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2592,7 +2596,7 @@
         "path": "status/ecosystem-status.json",
         "sha256": "8f239bbb87572818884949cacfbcd53adc3cef8a3fde061963b39bc09194815a"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2610,7 +2614,7 @@
         "path": "docs/decisions/decision-register.json",
         "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2628,7 +2632,7 @@
         "path": "status/governed-events.json",
         "sha256": "f5175bfa8d890073caeae72be78cd628dff2243edf27f3f23b8ef96d2b8b5dc3"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2646,7 +2650,7 @@
         "path": "governance/ui-development/trama-component-evidence-registry-v1.json",
         "sha256": "d2018d6431a540e0e8d6142e4b8ff49d213f61467b86571bb872bad8c26872a4"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -2664,7 +2668,7 @@
         "path": "governance/maturity/trama-maturity-evidence-registry-v1.json",
         "sha256": "123608e1546a2c40c88fca9c7db7ba702a429e2e9da5b0b78d78fbc4773d63df"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
@@ -3313,7 +3317,7 @@
         "path": "docs/decisions/decision-register.json",
         "ref": "TRAMA-ADR-014"
       },
-      "observedAt": "2026-10-17T14:31:28.966884+00:00",
+      "observedAt": "2026-10-17T15:27:56.504719+00:00",
       "freshness": {
         "policy": "UNTIL_CHANGE",
         "expiresAt": null
