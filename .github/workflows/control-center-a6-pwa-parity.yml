@@ -10,7 +10,7 @@ on:
       - "docs/implementation/trama-control-center-a6-pwa-parity.md"
       - ".github/workflows/control-center-a6-pwa-parity.yml"
 permissions:
-  contents: write
+  contents: read
 jobs:
   qualify:
     runs-on: ubuntu-latest
@@ -48,38 +48,7 @@ jobs:
       - name: A6 browser PWA parity qualification
         run: npx playwright test e2e/a6-pwa-parity.spec.ts
       - name: A6 visual regression
-        id: visual
-        continue-on-error: true
         run: npx playwright test e2e/a6-visual.spec.ts
-      - name: Refresh inspected ecosystem map baselines
-        if: steps.visual.outcome == 'failure'
-        working-directory: .
-        run: |
-          set -euo pipefail
-          desktop="apps/control-center/test-results/a6-visual-visual-parity-ecosystem-desktop/ecosystem-actual.png"
-          lim="apps/control-center/test-results/a6-visual-visual-parity-ecosystem-lim/ecosystem-actual.png"
-          reflow="apps/control-center/test-results/a6-visual-visual-parity-ecosystem-reflow-320/ecosystem-actual.png"
-          test -s "$desktop"
-          test -s "$lim"
-          test -s "$reflow"
-          cp "$desktop" /tmp/ecosystem-desktop-linux.png
-          cp "$lim" /tmp/ecosystem-lim-linux.png
-          cp "$reflow" /tmp/ecosystem-reflow-320-linux.png
-          branch="${{ github.event.pull_request.head.ref }}"
-          git fetch origin "$branch"
-          git checkout -B "$branch" "origin/$branch"
-          cp /tmp/ecosystem-desktop-linux.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-desktop-linux.png
-          cp /tmp/ecosystem-lim-linux.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-lim-linux.png
-          cp /tmp/ecosystem-reflow-320-linux.png apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-reflow-320-linux.png
-          git add \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-desktop-linux.png \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-lim-linux.png \
-            apps/control-center/e2e/a6-visual.spec.ts-snapshots/ecosystem-reflow-320-linux.png
-          git diff --cached --quiet && exit 0
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "test(control-center): refresh stabilized ecosystem baselines"
-          git push origin HEAD:"$branch"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
