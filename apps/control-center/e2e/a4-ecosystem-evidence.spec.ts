@@ -1,7 +1,15 @@
+import { readFileSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-test("Ecosystem preserves governed relation semantics and accessible graph/list parity", async ({ page }, testInfo) => {
+const governedSnapshot=JSON.parse(
+  readFileSync(new URL("../../../control-center/data/ecosystem-snapshot.json",import.meta.url),"utf-8"),
+);
+const canonicalGraph=governedSnapshot.ecosystemGraph;
+const canonicalNodes=new Map(canonicalGraph.nodes.map((item:any)=>[item.id,item]));
+const canonicalFlows=new Map(canonicalGraph.flows.map((item:any)=>[item.id,item]));
+
+test("Ecosystem v0.3 preserves canonical state, flow parity and GAP semantics", async ({ page }, testInfo) => {
   const externalRequests:string[]=[];
   page.on("request",(request)=>{
     const url=new URL(request.url());
@@ -9,17 +17,35 @@ test("Ecosystem preserves governed relation semantics and accessible graph/list 
   });
 
   await page.goto("/#/ecosystem");
-
   await expect(page.getByRole("heading",{name:"Capability e relazioni governate"})).toBeVisible();
   await expect(page.getByLabel("Mappa grafica delle relazioni governate")).toBeVisible();
-  const list=page.getByLabel("Elenco equivalente delle relazioni");
-  await expect(list.getByRole("button",{name:/Docente OS → Atlas/i})).toBeVisible();
-  await list.getByRole("button",{name:/Docente OS → Atlas/i}).click();
+  await expect(page.getByRole("button",{name:"Mappa governata"})).toHaveAttribute("aria-pressed","true");
 
-  const detail=page.getByLabel("Elenco equivalente delle relazioni").locator("..").locator("..").locator("aside");
-  await expect(page.getByText("Futuro non autorizzato",{exact:true}).first()).toBeVisible();
-  await expect(page.getByText("NOT AUTHORIZED",{exact:true}).first()).toBeVisible();
-  await expect(page.getByText("DEFERRED",{exact:true}).first()).toBeVisible();
+  await expect(page.getByText(`${canonicalGraph.nodes.length} nodi`,{exact:true})).toBeVisible();
+  await expect(page.getByText(`${canonicalGraph.flows.length} flussi`,{exact:true})).toBeVisible();
+
+  const stateList=page.getByLabel("Elenco accessibile del grafo canonico");
+  const canonicalFlowButtons=stateList.locator(".state-flow");
+  await expect(canonicalFlowButtons).toHaveCount(canonicalGraph.flows.length);
+
+  const accessNode=stateList.locator(".state-node").filter({hasText:"TRAMA Access"});
+  await expect(accessNode).toContainText(String(canonicalNodes.get("trama_access").state));
+  await expect(accessNode).toContainText(String(canonicalNodes.get("trama_access").nextAllowedIntervention.action));
+
+  const accessDos=stateList.getByRole("button",{name:/TRAMA Access → Docente OS/i});
+  await expect(accessDos).toBeVisible();
+  await expect(accessDos).toContainText(String(canonicalFlows.get("trama_access_to_docente_os").state));
+
+  await page.getByRole("button",{name:"AS IS → GAP → TO BE"}).click();
+  await expect(page.getByRole("button",{name:"AS IS → GAP → TO BE"})).toHaveAttribute("aria-pressed","true");
+  const gapView=page.getByLabel("Vista AS IS GAP TO BE");
+  await expect(gapView).toContainText(String(canonicalNodes.get("trama_access").gap.summary));
+  await expect(gapView).toContainText("TRAMA Access → Docente OS");
+  await expect(gapView).toContainText(String(canonicalFlows.get("trama_access_to_docente_os").gap.summary));
+
+  const bodyText=await page.locator("body").innerText();
+  expect(bodyText).not.toMatch(/\b\d+(?:[.,]\d+)?%\b/);
+  expect(bodyText.toLowerCase()).not.toContain("score complessivo");
 
   const bodyWidth=await page.evaluate(()=>document.body.scrollWidth);
   const viewportWidth=await page.evaluate(()=>window.innerWidth);
@@ -29,7 +55,7 @@ test("Ecosystem preserves governed relation semantics and accessible graph/list 
   const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21aa","wcag22aa"]).analyze();
   expect(axe.violations).toEqual([]);
 
-  await page.screenshot({path:testInfo.outputPath(`ecosystem-${testInfo.project.name}.png`),fullPage:true});
+  await page.screenshot({path:testInfo.outputPath(`ecosystem-v03-${testInfo.project.name}.png`),fullPage:true});
 });
 
 test("Evidence Explorer filters governed data and integrity has no overall score", async ({ page }, testInfo) => {
