@@ -20,7 +20,7 @@ The v0.3 graph is not a wishlist and is not a new overall maturity score. It exi
 
 - what exists now;
 - what state is proven;
-- who owns the authority boundary;
+- which authority boundary governs it;
 - which maturity evidence applies, if any;
 - what evidence supports the state;
 - what prevents the target boundary from being real;
@@ -96,6 +96,8 @@ Examples that remain valid:
 
 The graph SHALL store `maturityRef`, not a manually duplicated maturity score, wherever a canonical maturity area exists.
 
+A node's `maturityRef` links it to domain maturity context; it SHALL NOT be presented as a node-specific score unless the maturity authority explicitly defines that node as its area.
+
 The Control Center projection MAY resolve the current confirmed level from the maturity authority at snapshot build time.
 
 No overall ecosystem percentage or overall maturity score is authorized.
@@ -104,8 +106,11 @@ No overall ecosystem percentage or overall maturity score is authorized.
 
 Every node and flow SHALL distinguish:
 
-- `authorityOwner` — domain that owns the meaning, contract or decision boundary;
+- `authorityOwner` — stable domain identifier when one canonical domain owns the semantic decision boundary;
+- `authorityRefs[]` — contracts/ADRs/authority sources that define or constrain the boundary;
 - `implementationOwners[]` — product/domain actors permitted to implement the governed delta.
+
+For a genuinely joint cross-product boundary, `authorityOwner` MAY be `null` only when `authorityRefs[]` is non-empty and identifies the governing contract. A free-form composite owner string is not canonical authority.
 
 An integration SHALL NOT transfer product authority merely because another product implements a connector or UI.
 
@@ -146,9 +151,10 @@ Minimum top-level structure:
 ```json
 {
   "schemaVersion": "trama.ecosystem.state/v0.3",
-  "asOf": "YYYY-MM-DD",
+  "asOf": "2026-10-17",
   "authorityPolicy": {},
   "legend": {},
+  "externalActors": [],
   "nodes": [],
   "flows": [],
   "views": {},
@@ -156,7 +162,23 @@ Minimum top-level structure:
 }
 ```
 
-### 4.1 Node contract
+### 4.1 External actor contract
+
+User/system actors that participate in flows but are not ecosystem products or services SHALL be declared explicitly rather than invented by a renderer.
+
+Example:
+
+```json
+{
+  "id": "public",
+  "label": "Pubblico",
+  "kind": "HUMAN_ACTOR"
+}
+```
+
+Initial actor vocabulary SHALL include only actors actually referenced by canonical flows, such as `public`, `professional_user`, `governance_operator` and `learner`, when needed.
+
+### 4.2 Node contract
 
 Each node SHALL support:
 
@@ -164,53 +186,67 @@ Each node SHALL support:
 {
   "id": "stable_id",
   "label": "Human label",
-  "plane": "PUBLIC|PROFESSIONAL|LEARNER|GOVERNANCE|CROSS_CUTTING|...",
-  "state": "REAL|PARTIAL|DESIGNED|DEFERRED",
-  "targetState": "REAL|PARTIAL|DESIGNED|DEFERRED",
+  "plane": "PUBLIC",
+  "state": "REAL",
+  "targetState": "REAL",
   "boundary": "precise current boundary",
-  "authorityOwner": "canonical domain",
+  "authorityOwner": "trama",
+  "authorityRefs": ["canonical-authority-ref"],
   "implementationOwners": ["domain"],
-  "maturityRef": "area-id-or-null",
+  "maturityRef": null,
   "evidenceRefs": ["evidence-id"],
   "blockerRefs": ["blocker-or-gate-id"],
   "gap": {
     "summary": "short governed gap",
-    "missing": ["specific missing condition"]
+    "missing": []
   },
   "target": {
     "boundary": "approved target boundary",
     "value": "why this target matters"
   },
   "nextAllowedIntervention": {
-    "action": "single next intervention or NONE",
-    "preconditions": ["required condition"],
-    "forbiddenUntil": ["work that must not start yet"]
+    "action": "NONE",
+    "preconditions": [],
+    "forbiddenUntil": []
   },
   "sourceRefs": ["canonical source"],
-  "lastSignificantChange": "ISO date or null"
+  "lastSignificantChange": null
 }
 ```
 
-### 4.2 Flow contract
+### 4.3 Flow contract
 
 Each flow SHALL use the same state/gap/target discipline plus:
 
 ```json
 {
   "id": "stable_flow_id",
-  "from": "node_id",
-  "to": "node_id",
-  "kind": "NAVIGATION|AUTHENTICATION|AUTHORITY|DATA|AUTHORING|PUBLICATION|ASSIGNMENT|GOVERNANCE|OTHER",
-  "state": "REAL|PARTIAL|DESIGNED|DEFERRED",
-  "targetState": "REAL|PARTIAL|DESIGNED|DEFERRED",
-  "authorityOwner": "canonical domain",
-  "implementationOwners": ["domain"],
+  "from": "node-or-actor-id",
+  "to": "node-or-actor-id",
+  "kind": "NAVIGATION",
+  "state": "DESIGNED",
+  "targetState": "REAL",
+  "authorityOwner": null,
+  "authorityRefs": ["governing-contract-ref"],
+  "implementationOwners": ["domain-a", "domain-b"],
   "evidenceRefs": [],
-  "gap": {},
-  "target": {},
-  "nextAllowedIntervention": {}
+  "gap": {
+    "summary": "precise missing boundary",
+    "missing": ["proof or capability"]
+  },
+  "target": {
+    "boundary": "approved end-to-end boundary",
+    "value": "user/ecosystem value"
+  },
+  "nextAllowedIntervention": {
+    "action": "single governed action",
+    "preconditions": [],
+    "forbiddenUntil": []
+  }
 }
 ```
+
+Allowed flow kinds SHALL be a governed finite vocabulary, initially including `NAVIGATION`, `AUTHENTICATION`, `AUTHORITY`, `DATA`, `AUTHORING`, `PUBLICATION`, `ASSIGNMENT`, `GOVERNANCE` and `OTHER`.
 
 A visual edge SHALL NOT exist unless a corresponding `flows[]` record exists.
 
@@ -246,22 +282,22 @@ Lifecycle and graph realization state SHALL NOT be conflated.
 
 This matrix defines the intended v0.3 baseline. Implementation SHALL bind every promotion from v0.2 to retrievable evidence before the machine-readable artifact becomes authoritative.
 
-| Node | AS-IS | Target | Authority owner | Maturity ref | Governed gap | Next allowed intervention |
+| Node | AS-IS | Target | Authority boundary | Maturity ref | Governed gap | Next allowed intervention |
 |---|---|---|---|---|---|---|
 | TRAMA Gateway | `REAL` | `REAL` | TRAMA | `null` | Professional destination not yet live; this does not reduce the public boundary | Preserve public safety; enable professional entry only after Access entry certification |
 | TRAMA Access | `PARTIAL` | `REAL` | TRAMA | `null` | Runtime and live private store exist, but no completed live professional pilot/session/launcher proof | Complete the bounded live pilot and bind evidence; no federation before pilot qualification |
-| Identità professionale TRAMA | `PARTIAL` | `REAL` | TRAMA | `null` | Provider-neutral contract and live provider infrastructure exist; no live governed identity has yet been demonstrated | Complete one authorized professional identity pilot; preserve issuer+subject authority and data minimization |
-| Docente OS | `REAL` | `REAL` | Docente OS | `docente-os` | No maturity gap currently required for L5 | `NONE` for maturity; product work only when tied to a separate governed gap |
-| Arena | `REAL` | `REAL` | Arena | `arena` | L5 evidence gap exists, but product realization is already real | Collect regression-history evidence only when it serves the maturity program; no authority redesign |
-| Curricolo Atlas | `REAL` | `REAL` | Atlas with Arena curriculum authority preserved | `atlas` | L5 stability/adoption evidence gap; professional deep-link/federation flows remain separate | Preserve public surface; qualify specific professional flows separately |
-| Studio Atlas | `PARTIAL` | `REAL` | Studio Atlas | `studio-atlas` | Canonical cross-product authority contract and subsequent evidence chain are incomplete | Approve/bind the canonical Studio Atlas cross-product authority contract before broader ecosystem promotion |
-| Atlas learner | `PARTIAL` | `REAL` | Atlas | `atlas` | Bounded learner/preview paths exist; complete governed publication/assignment boundary is not proven | Qualify only the required learner paths; retain privacy-first no-personal-account default |
+| Identità professionale TRAMA | `PARTIAL` | `REAL` | TRAMA identity contract | `null` | Provider-neutral contract and live provider infrastructure exist; no live governed identity has yet been demonstrated | Complete one authorized professional identity pilot; preserve issuer+subject authority and data minimization |
+| Docente OS | `REAL` | `REAL` | Docente OS teacher-context authority | `docente-os` | No maturity gap currently required for L5 | `NONE` for maturity; product work only when tied to a separate governed gap |
+| Arena | `REAL` | `REAL` | Arena curriculum authority | `arena` | L5 evidence gap exists, but product realization is already real | Collect regression-history evidence only when it serves the maturity program; no authority redesign |
+| Curricolo Atlas | `REAL` | `REAL` | Atlas publication/navigation; Arena curriculum authority preserved | `atlas` | L5 stability/adoption evidence gap; professional deep-link/federation flows remain separate | Preserve public surface; qualify specific professional flows separately |
+| Studio Atlas | `PARTIAL` | `REAL` | Studio Atlas authoring boundary | `studio-atlas` | Canonical cross-product authority contract and subsequent evidence chain are incomplete | Approve/bind the canonical Studio Atlas cross-product authority contract before broader ecosystem promotion |
+| Atlas learner | `PARTIAL` | `REAL` | Atlas learner/runtime authority | `atlas` | Bounded learner/preview paths exist; complete governed publication/assignment boundary is not proven | Qualify only the required learner paths; retain privacy-first no-personal-account default |
 | Materiali nei prodotti | `REAL` | `REAL` | Product-local authorities | `null` | No node-existence gap; cross-product semantics are a separate contract | Do not reopen product existence; close only cross-product reference/ownership gaps |
-| Material Contract ecosistemico | `PARTIAL` | `REAL` | TRAMA + product authorities by contract | `null` | Shared identity/ownership/provenance/reference semantics are not yet qualified across products | Qualify the cross-product material reference contract without centralizing product ownership |
+| Material Contract ecosistemico | `PARTIAL` | `REAL` | Joint contract; no centralized product ownership | `null` | Shared identity/ownership/provenance/reference semantics are not yet qualified across products | Qualify the cross-product material reference contract without centralizing product ownership |
 | Classi e gruppi docente | `REAL` | `REAL` | Docente OS / teacher-context authority | `docente-os` | Teacher-side organization is real; it is not learner identity | Preserve local authority; expose only minimal governed assignment references |
-| Assignment verso Atlas | `PARTIAL` | `REAL` | Teacher-context + Atlas boundary contract | `null` | Privacy-first end-to-end assignment contract is incomplete | Qualify bounded ticket/code/link semantics before any richer student-data flow |
-| Control Center pubblico | `REAL` | `REAL` | TRAMA governance | `governance` | No authority gap for public read-only transparency | Keep read-only; add v0.3 projection without creating write authority |
-| Control Center privilegiato | `DESIGNED` | `REAL` | TRAMA governance | `governance` | Protected operations, entitlement, step-up/MFA and audit boundary are not runtime-real | No implementation until an explicit protected operation and authority need exists |
+| Assignment verso Atlas | `PARTIAL` | `REAL` | Joint teacher-context / Atlas boundary contract | `null` | Privacy-first end-to-end assignment contract is incomplete | Qualify bounded ticket/code/link semantics before any richer student-data flow |
+| Control Center pubblico | `REAL` | `REAL` | TRAMA governance projection boundary | `null` | No authority gap for public read-only transparency | Keep read-only; add v0.3 projection without creating write authority |
+| Control Center privilegiato | `DESIGNED` | `REAL` | TRAMA governance protected-operations boundary | `null` | Protected operations, entitlement, step-up/MFA and audit boundary are not runtime-real | No implementation until an explicit protected operation and authority need exists |
 | TRAMA governance | `REAL` | `REAL` | TRAMA | `governance` | L5 regression-history gap only | Collect governed stability evidence; do not change authority merely to increase maturity |
 
 ### 6.1 TRAMA Access promotion rationale
@@ -280,32 +316,34 @@ Before machine-readable promotion, implementation SHALL persist the current live
 
 ## 7. Canonical AS-IS baseline — flows, 2026-10-17
 
-| Flow | AS-IS | Target | Authority owner | Governed gap | Next allowed intervention |
+The human-readable authority-boundary column below MUST be encoded during implementation through `authorityOwner` plus `authorityRefs`; it is not itself a machine authority identifier.
+
+| Flow | AS-IS | Target | Authority boundary | Governed gap | Next allowed intervention |
 |---|---|---|---|---|---|
-| Public → Gateway | `REAL` | `REAL` | TRAMA | none within declared public-entry boundary | Preserve regression evidence |
-| Gateway → Curricolo Atlas public | `DESIGNED` | `REAL` | TRAMA/Atlas navigation boundary | canonical live navigation not yet promoted by graph evidence | Certify actual navigation before promotion |
-| Gateway → Control Center public | `DESIGNED` | `REAL` | TRAMA | canonical live navigation not yet promoted by graph evidence | Certify actual navigation before promotion |
-| Gateway → TRAMA Access | `DESIGNED` | `REAL` | TRAMA | Access professional entry not yet qualified as public end-to-end route | Complete Access pilot, then certify Gateway entry |
-| Arena → Curricolo Atlas | `REAL` | `REAL` | Arena curriculum authority | none for governed synchronization boundary | Preserve authority and regression proof |
-| Docente OS → Curricolo Atlas | `PARTIAL` | `REAL` | Docente OS/Atlas bounded flow | full professional runtime/deep-link path not uniformly certified | Qualify only the explicit teacher journey required |
-| Docente OS → Arena | `PARTIAL` | `REAL` | Arena authority + Docente OS teacher context | governed runtime path not fully proven end-to-end | Close the specific orchestration gap without moving Arena authority |
-| Docente OS → Studio Atlas | `DESIGNED` | `REAL` | Docente OS/Studio Atlas boundary | no canonical integrated teacher flow | First bind Studio Atlas authority contract; then qualify a bounded launch/authoring flow |
-| Studio Atlas → Atlas learner | `PARTIAL` | `REAL` | Atlas/Studio Atlas contract | preview exists but general publication/runtime completeness is unproven | Qualify the minimal publication boundary needed by real journeys |
-| Classi/Gruppi → Assignment | `PARTIAL` | `REAL` | Teacher-context authority | canonical privacy-first targeting contract incomplete | Define and qualify minimal assignment reference contract |
-| Assignment → Atlas learner | `PARTIAL` | `REAL` | Atlas learner boundary | bounded ticket/code/link E2E not fully qualified | Demonstrate privacy-first E2E assignment without nominal learner registry |
-| TRAMA Access → Docente OS | `DESIGNED` | `REAL` | TRAMA Access + Docente OS local authority | product federation not implemented | After Access pilot, implement first bounded federation pilot; retain Docente OS fine-grained authorization |
-| TRAMA Access → Studio Atlas | `DESIGNED` | `REAL` | TRAMA Access + Studio Atlas | federation not implemented | Only after Access pilot and Studio Atlas contract qualification |
-| TRAMA Access → Curricolo Atlas professional | `DESIGNED` | `REAL` | TRAMA Access + Atlas | professional enrichment/federation not implemented | Qualify after Access core pilot; public Atlas remains independent |
-| TRAMA Access → Arena | `DESIGNED` | `REAL` | TRAMA Access + Arena | federation not implemented | Qualify after Access core pilot; Arena retains curriculum authorization |
-| TRAMA Access → Control Center privileged | `DESIGNED` | `REAL` | TRAMA governance | no protected runtime authority exists yet | Defer until a concrete protected operation requires entitlement + step-up/MFA |
+| Public → Gateway | `REAL` | `REAL` | TRAMA public-entry boundary | none within declared public-entry boundary | Preserve regression evidence |
+| Gateway → Curricolo Atlas public | `DESIGNED` | `REAL` | Governed TRAMA/Atlas navigation; no curriculum-authority transfer | canonical live navigation not yet promoted by graph evidence | Certify actual navigation before promotion |
+| Gateway → Control Center public | `DESIGNED` | `REAL` | TRAMA public navigation | canonical live navigation not yet promoted by graph evidence | Certify actual navigation before promotion |
+| Gateway → TRAMA Access | `DESIGNED` | `REAL` | TRAMA professional-entry boundary | Access professional entry not yet qualified as public end-to-end route | Complete Access pilot, then certify Gateway entry |
+| Arena → Curricolo Atlas | `REAL` | `REAL` | Arena retains curriculum authority; Atlas is publication/navigation surface | none for governed synchronization boundary | Preserve authority and regression proof |
+| Docente OS → Curricolo Atlas | `PARTIAL` | `REAL` | Teacher-context and Atlas presentation boundaries remain distinct | full professional runtime/deep-link path not uniformly certified | Qualify only the explicit teacher journey required |
+| Docente OS → Arena | `PARTIAL` | `REAL` | Arena curriculum authority + Docente OS teacher-context authority | governed runtime path not fully proven end-to-end | Close the specific orchestration gap without moving Arena authority |
+| Docente OS → Studio Atlas | `DESIGNED` | `REAL` | Cross-product contract required; local authorities preserved | no canonical integrated teacher flow | First bind Studio Atlas authority contract; then qualify a bounded launch/authoring flow |
+| Studio Atlas → Atlas learner | `PARTIAL` | `REAL` | Authoring/runtime contract; learner boundary remains Atlas | preview exists but general publication/runtime completeness is unproven | Qualify the minimal publication boundary needed by real journeys |
+| Classi/Gruppi → Assignment | `PARTIAL` | `REAL` | Teacher-context targeting authority | canonical privacy-first targeting contract incomplete | Define and qualify minimal assignment reference contract |
+| Assignment → Atlas learner | `PARTIAL` | `REAL` | Joint assignment/learner boundary; no learner identity authority exported | bounded ticket/code/link E2E not fully qualified | Demonstrate privacy-first E2E assignment without nominal learner registry |
+| TRAMA Access → Docente OS | `DESIGNED` | `REAL` | Access coarse entitlement + Docente OS local authorization | product federation not implemented | After Access pilot, implement first bounded federation pilot; retain Docente OS fine-grained authorization |
+| TRAMA Access → Studio Atlas | `DESIGNED` | `REAL` | Access coarse entitlement + Studio Atlas local authority | federation not implemented | Only after Access pilot and Studio Atlas contract qualification |
+| TRAMA Access → Curricolo Atlas professional | `DESIGNED` | `REAL` | Access coarse entitlement + Atlas local authority | professional enrichment/federation not implemented | Qualify after Access core pilot; public Atlas remains independent |
+| TRAMA Access → Arena | `DESIGNED` | `REAL` | Access coarse entitlement + Arena curriculum authorization | federation not implemented | Qualify after Access core pilot; Arena retains curriculum authorization |
+| TRAMA Access → Control Center privileged | `DESIGNED` | `REAL` | TRAMA governance protected-operation authority | no protected runtime authority exists yet | Defer until a concrete protected operation requires entitlement + step-up/MFA |
 
 No additional synthetic flows are authorized by this specification.
 
 ## 8. GAP model
 
-Every non-terminal node/flow SHALL contain one explicit `gap` object.
+Every governed node/flow SHALL contain a `gap` object. For terminal boundaries already equal to target, `gap.missing` MAY be empty and `nextAllowedIntervention.action` MAY be `NONE`.
 
-A gap SHALL be:
+A non-empty gap SHALL be:
 
 - boundary-specific;
 - evidence-testable;
@@ -334,7 +372,7 @@ Assignment: privacy-first bounded learner handoff not qualified end-to-end
 
 Rules:
 
-1. exactly one primary intervention SHOULD be active for a gap;
+1. exactly one primary intervention SHOULD be active for a non-empty gap;
 2. prerequisites SHALL be explicit;
 3. work blocked by unmet prerequisites SHALL be listed in `forbiddenUntil`;
 4. `NONE` is a valid and important value when no ecosystem gap justifies work;
@@ -423,20 +461,22 @@ The browser SHALL NOT query GitHub, Supabase or product runtimes to infer state.
 Implementation SHALL add deterministic validation for:
 
 1. schemaVersion is exactly supported;
-2. node IDs are unique;
-3. flow IDs are unique;
-4. every flow endpoint references an existing node or explicitly declared external actor;
-5. realization states use only the four canonical values;
-6. `DEFERRED` entries include a governed decision reference;
-7. every non-REAL entry has a non-empty governed gap unless its target is intentionally equal to current state;
-8. every `maturityRef` resolves to an existing maturity area or is null;
-9. evidence references resolve or fail validation;
-10. visual/projection edges cannot exceed canonical flows;
-11. no overall maturity percentage is generated;
-12. `DOS-A1=RUNTIME_DEFERRED` remains enforced;
-13. Arena curriculum authority is not transferred by integration metadata;
-14. learner paths do not imply personal learner accounts or nominal roster export;
-15. Control Center remains read-only/no-auto-promotion.
+2. external actor IDs are unique;
+3. node IDs are unique;
+4. flow IDs are unique;
+5. every flow endpoint references an existing node or declared external actor;
+6. realization states use only the four canonical values;
+7. `DEFERRED` entries include a governed decision reference;
+8. `authorityOwner = null` requires non-empty `authorityRefs`;
+9. every non-REAL entry whose target differs from current state has a non-empty governed gap;
+10. every `maturityRef` resolves to an existing maturity area or is null;
+11. evidence references resolve or fail validation;
+12. visual/projection edges cannot exceed canonical flows;
+13. no overall maturity percentage is generated;
+14. `DOS-A1=RUNTIME_DEFERRED` remains enforced;
+15. Arena curriculum authority is not transferred by integration metadata;
+16. learner paths do not imply personal learner accounts or nominal roster export;
+17. Control Center remains read-only/no-auto-promotion.
 
 ## 13. State transition protocol
 
@@ -476,7 +516,7 @@ The graph SHOULD support `lastSignificantChange` only when a source-specific eve
 
 - realization state;
 - target boundary;
-- authority owner;
+- authority boundary;
 - approved gap;
 - next allowed intervention;
 - existence/removal of a governed flow.
@@ -536,7 +576,8 @@ The implementation is acceptable only when all of the following are true:
 
 - v0.3 is machine-readable and schema-valid;
 - v0.2 remains preserved and meaningfully immutable;
-- every node and flow exposes current state, authority, gap, target and next allowed intervention;
+- every node and flow exposes current state, authority boundary, gap, target and next allowed intervention;
+- every external actor used by a flow is explicitly declared;
 - maturity is referenced, not duplicated as independent truth;
 - evidence is reference-based and retrievable;
 - TRAMA Access is promoted only with persisted evidence supporting `PARTIAL` and not `REAL`;
@@ -557,7 +598,7 @@ Its defining addition is not visual complexity but governed delta semantics:
 
 ```text
 CURRENT STATE
-+ AUTHORITY
++ AUTHORITY BOUNDARY
 + EVIDENCE REFERENCE
 + MATURITY REFERENCE
 + GOVERNED GAP
