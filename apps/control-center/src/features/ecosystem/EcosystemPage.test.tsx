@@ -30,16 +30,15 @@ describe("EcosystemView v0.3",()=>{
     expect(screen.getByRole("button",{name:"AS IS → GAP → TO BE"})).toBeInTheDocument();
     expect(screen.getByText("TRAMA Access")).toBeInTheDocument();
     expect(screen.getByText("PARTIAL",{exact:true})).toBeInTheDocument();
-    expect(screen.getByText("15 nodi",{exact:false})).not.toBeInTheDocument();
+    expect(screen.queryByText("15 nodi",{exact:false})).not.toBeInTheDocument();
   });
 
   it("derives AS IS → GAP → TO BE from the same canonical graph",()=>{
     render(<EcosystemView model={model} />);
     fireEvent.click(screen.getByRole("button",{name:"AS IS → GAP → TO BE"}));
-    expect(screen.getByText("AS IS",{exact:true})).toBeInTheDocument();
-    expect(screen.getByText("GAP",{exact:true})).toBeInTheDocument();
-    expect(screen.getByText("TO BE",{exact:true})).toBeInTheDocument();
-    expect(screen.getByText("NEXT",{exact:true})).toBeInTheDocument();
+    for (const label of ["AS IS","GAP","TO BE","NEXT"]) {
+      expect(screen.getAllByText(label,{exact:true}).length).toBeGreaterThan(0);
+    }
     expect(screen.getByText("Manca la prova live end-to-end")).toBeInTheDocument();
     expect(screen.getByText("TRAMA Access → Docente OS")).toBeInTheDocument();
     expect(screen.getByText("Federazione non implementata")).toBeInTheDocument();
