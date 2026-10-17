@@ -80,7 +80,7 @@ for (const [name, route] of routes) {
         animations: "disabled",
         maxDiffPixelRatio: 0.005,
       });
-      continue;
+      return;
     }
     await expect(page).toHaveScreenshot(`${name}.png`, {
       fullPage: true,
