@@ -4,6 +4,7 @@ from __future__ import annotations
 import copy
 import json
 import sys
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -118,7 +119,27 @@ def expect_invalid(document: dict, root: Path, needle: str) -> None:
         raise AssertionError(f"Expected invalid graph containing: {needle}")
 
 
+def assert_builder_imports_without_jsonschema() -> None:
+    code = r'''
+import importlib.abc
+import sys
+class BlockJsonschema(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == "jsonschema" or fullname.startswith("jsonschema."):
+            raise ModuleNotFoundError("jsonschema intentionally blocked")
+        return None
+sys.meta_path.insert(0, BlockJsonschema())
+sys.path.insert(0, "scripts")
+import build_ecosystem_snapshot_core
+print("TRAMA_BUILDER_IMPORT_WITHOUT_JSONSCHEMA_PASS")
+'''
+    result = subprocess.run([sys.executable, "-c", code], cwd=ROOT, text=True, capture_output=True)
+    assert result.returncode == 0, result.stderr or result.stdout
+    assert "TRAMA_BUILDER_IMPORT_WITHOUT_JSONSCHEMA_PASS" in result.stdout
+
+
 def main() -> int:
+    assert_builder_imports_without_jsonschema()
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         prepare_root(root)
@@ -160,6 +181,14 @@ def main() -> int:
         expect_invalid(doc, root, "does-not-exist")
 
         doc = base_document()
+        doc["nodes"][0]["evidenceRefs"] = ["EV-NONEXISTENT"]
+        expect_invalid(doc, root, "reference")
+
+        doc = base_document()
+        doc["nodes"][0]["decisionRefs"] = ["DECISION-NONEXISTENT"]
+        expect_invalid(doc, root, "reference")
+
+        doc = base_document()
         doc["nodes"][1]["gap"] = {"summary": "", "missing": []}
         expect_invalid(doc, root, "gap")
 
@@ -184,6 +213,18 @@ def main() -> int:
     assert flows["gateway_to_trama_access"]["state"] == "DESIGNED"
     assert flows["trama_access_to_docente_os"]["state"] == "DESIGNED"
     assert flows["arena_to_curricolo_atlas"]["state"] == "REAL"
+    access_federations = [
+        "trama_access_to_docente_os",
+        "trama_access_to_studio_atlas",
+        "trama_access_to_curricolo_atlas_professional",
+        "trama_access_to_arena",
+        "trama_access_to_control_center_privileged",
+    ]
+    for flow_id in access_federations:
+        intervention = flows[flow_id]["nextAllowedIntervention"]
+        assert intervention["preconditions"], f"{flow_id} missing structured preconditions"
+        assert intervention["forbiddenUntil"], f"{flow_id} missing structured forbiddenUntil"
+
     assert nodes["docente_os"]["maturityRef"] == "docente-os"
     assert nodes["studio_atlas"]["maturityRef"] == "studio-atlas"
     assert "public" in actors
