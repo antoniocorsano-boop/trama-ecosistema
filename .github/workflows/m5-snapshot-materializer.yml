@@ -1,0 +1,23 @@
+name: M5 Snapshot Materializer
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build canonical snapshot
+        run: python scripts/build_ecosystem_snapshot.py --output m5-generated-snapshot.json
+      - name: Upload canonical snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: m5-generated-snapshot
+          path: m5-generated-snapshot.json
+          if-no-files-found: error
