@@ -50,18 +50,21 @@ async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test")
   ).toBe(stableHeight);
 }
 
-async function expectCompactReservedNavigation(page: import("@playwright/test").Page) {
+async function expectCompactNonOverlappingNavigation(page: import("@playwright/test").Page) {
   const metrics=await page.evaluate(() => {
     const nav=document.querySelector<HTMLElement>(".primary-nav");
-    const shell=document.querySelector<HTMLElement>(".app-shell");
-    if(!nav || !shell) throw new Error("Missing shell navigation for reflow review");
+    const main=document.querySelector<HTMLElement>("#main-content");
+    if(!nav || !main) throw new Error("Missing shell navigation or main content for reflow review");
+    const navRect=nav.getBoundingClientRect();
+    const mainRect=main.getBoundingClientRect();
     return {
-      navHeight: nav.getBoundingClientRect().height,
-      shellPaddingBottom: Number.parseFloat(getComputedStyle(shell).paddingBottom),
+      navHeight: navRect.height,
+      navBottom: navRect.bottom,
+      mainTop: mainRect.top,
     };
   });
   expect(metrics.navHeight).toBeLessThanOrEqual(128);
-  expect(metrics.shellPaddingBottom).toBeGreaterThanOrEqual(metrics.navHeight);
+  expect(metrics.navBottom).toBeLessThanOrEqual(metrics.mainTop);
 }
 
 const overviewVisualKnowledge = {
@@ -129,13 +132,13 @@ for (const [name, route] of routes) {
   });
 }
 
-test("reflow 320 reserves content space for the fixed navigation in map and GAP views", async ({ page }, testInfo) => {
+test("reflow 320 keeps compact navigation outside main content in map and GAP views", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "reflow-320", "Human-review regression is specific to the 320 px reflow breakpoint");
   await page.goto("/#/ecosystem");
   await expect(page.getByLabel("Elenco accessibile del grafo canonico")).toBeVisible();
-  await expectCompactReservedNavigation(page);
+  await expectCompactNonOverlappingNavigation(page);
 
   await page.getByRole("button", { name: "AS IS → GAP → TO BE" }).click();
   await expect(page.getByLabel("Vista AS IS GAP TO BE")).toBeVisible();
-  await expectCompactReservedNavigation(page);
+  await expectCompactNonOverlappingNavigation(page);
 });
