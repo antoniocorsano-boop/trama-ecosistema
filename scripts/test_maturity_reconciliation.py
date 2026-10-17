@@ -58,14 +58,27 @@ assert areas["atlas"]["evidenceBindingStatus"]=="PARTIAL"
 assert areas["atlas"]["nextTargetLevel"]==5
 assert set(areas["atlas"]["nextRequiredEvidenceTypes"])=={"REGRESSION_HISTORY","ADOPTION_EVIDENCE"}
 
-assert areas["docente-os"]["confirmedLevel"]==4
-assert areas["docente-os"]["evidenceBindingStatus"]=="PARTIAL"
-assert areas["docente-os"]["nextTargetLevel"]==5
-assert set(areas["docente-os"]["nextRequiredEvidenceTypes"])=={"REGRESSION_HISTORY","ADOPTION_EVIDENCE"}
+assert areas["docente-os"]["confirmedLevel"]==5
+assert areas["docente-os"]["candidateLevel"]==5
+assert areas["docente-os"]["evidenceBindingStatus"]=="COMPLETE"
+assert areas["docente-os"]["nextTargetLevel"] is None
+assert areas["docente-os"]["nextRequiredEvidenceTypes"]==[]
 assert any(
     item.get("id")=="EV-MAT-DOS-RUNTIME-CANARY-2026-10-07"
     and item.get("type")=="RUNTIME_CANARY"
     and (item.get("binding") or {}).get("exactHead")=="39bce05fa2e87f3746ee3b6dcd7433065cb2d876"
+    for item in snapshot["evidence"]
+)
+assert any(
+    item.get("id")=="EV-MAT-DOS-REGRESSION-HISTORY-2026-10-17"
+    and item.get("type")=="REGRESSION_HISTORY"
+    and item.get("status")=="PASS"
+    for item in snapshot["evidence"]
+)
+assert any(
+    item.get("id")=="EV-MAT-DOS-ADOPTION-EVIDENCE-2026-10-17"
+    and item.get("type")=="ADOPTION_EVIDENCE"
+    and item.get("status")=="PASS"
     for item in snapshot["evidence"]
 )
 
@@ -78,7 +91,7 @@ assert areas["studio-atlas"]["nextRequiredEvidenceTypes"]==["CONTRACT_APPROVED"]
 
 assert backlog["policy"]["evidenceBoundOnly"] is True
 assert {x["area"]:x["observedLevel"] for x in backlog["areas"]}=={
-    "governance":4,"arena":4,"atlas":4,"docente-os":4,"studio-atlas":1
+    "governance":4,"arena":4,"atlas":4,"docente-os":5,"studio-atlas":1
 }
 assert backlog["components"]["currentRegistryCount"]==11
 assert backlog["components"]["missingProductCoverage"]==["Studio Atlas"]
