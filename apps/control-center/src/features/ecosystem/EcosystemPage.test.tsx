@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { EcosystemView } from "./EcosystemPage";
+import { describe, expect, it, vi } from "vitest";
+const { loadSnapshotMock } = vi.hoisted(()=>({loadSnapshotMock:vi.fn()}));
+vi.mock("../../data/client",()=>({loadEcosystemSnapshot:loadSnapshotMock}));
+import { EcosystemPage, EcosystemView } from "./EcosystemPage";
 import type { EcosystemModel, EcosystemGraphProjection } from "../../domain/ecosystem/model";
 
 const graph: EcosystemGraphProjection = {
@@ -30,6 +32,9 @@ describe("EcosystemView v0.3",()=>{
     expect(screen.getByRole("button",{name:"AS IS → GAP → TO BE"})).toBeInTheDocument();
     expect(screen.getByText("TRAMA Access")).toBeInTheDocument();
     expect(screen.getByText("PARTIAL",{exact:true})).toBeInTheDocument();
+    expect(screen.getByText("trama",{exact:true})).toBeInTheDocument();
+    expect(screen.getAllByText("E",{exact:true}).length).toBeGreaterThan(0);
+    expect(screen.getByText("Completare il pilota live limitato",{exact:true})).toBeInTheDocument();
     expect(screen.queryByText("15 nodi",{exact:false})).not.toBeInTheDocument();
   });
 
@@ -42,6 +47,14 @@ describe("EcosystemView v0.3",()=>{
     expect(screen.getByText("Manca la prova live end-to-end")).toBeInTheDocument();
     expect(screen.getByText("TRAMA Access → Docente OS")).toBeInTheDocument();
     expect(screen.getByText("Federazione non implementata")).toBeInTheDocument();
+  });
+
+  it("fails closed when the governed snapshot is invalid",async()=>{
+    loadSnapshotMock.mockResolvedValueOnce({status:"INVALID",error:new Error("invalid")});
+    render(<EcosystemPage />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Snapshot non utilizzabile. Nessuna relazione viene inferita.");
+    expect(screen.queryByLabelText("Mappa grafica delle relazioni governate")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Elenco accessibile del grafo canonico")).not.toBeInTheDocument();
   });
 
   it("shows terminal safeguards only on explicit request",()=>{
