@@ -99,6 +99,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Install ecosystem schema validator
+        run: python -m pip install --disable-pip-version-check --quiet jsonschema
       - name: Validate snapshot foundation
         run: python scripts/build_ecosystem_snapshot.py --check
       - name: Build snapshot fixture

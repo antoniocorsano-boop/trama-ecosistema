@@ -802,8 +802,12 @@
       },
       "nextAllowedIntervention": {
         "action": "Completare prima il pilota Access, poi certificare l’ingresso Gateway.",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "preconditions": [
+          "pilota Access live qualificato"
+        ],
+        "forbiddenUntil": [
+          "pilota Access live qualificato"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1146,8 +1150,12 @@
       },
       "nextAllowedIntervention": {
         "action": "Dopo il pilota Access, implementare il primo pilot di federazione limitato.",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "preconditions": [
+          "pilota Access core qualificato"
+        ],
+        "forbiddenUntil": [
+          "pilota Access core qualificato"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1190,8 +1198,14 @@
       },
       "nextAllowedIntervention": {
         "action": "Solo dopo pilota Access e contratto Studio Atlas.",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "preconditions": [
+          "pilota Access qualificato",
+          "contratto Studio Atlas qualificato"
+        ],
+        "forbiddenUntil": [
+          "pilota Access qualificato",
+          "contratto Studio Atlas qualificato"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1233,8 +1247,12 @@
       },
       "nextAllowedIntervention": {
         "action": "Qualificare dopo il pilota core Access.",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "preconditions": [
+          "pilota Access core qualificato"
+        ],
+        "forbiddenUntil": [
+          "pilota Access core qualificato"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1276,8 +1294,12 @@
       },
       "nextAllowedIntervention": {
         "action": "Qualificare dopo il pilota core Access.",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "preconditions": [
+          "pilota Access core qualificato"
+        ],
+        "forbiddenUntil": [
+          "pilota Access core qualificato"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -1320,8 +1342,16 @@
       },
       "nextAllowedIntervention": {
         "action": "NONE",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "preconditions": [
+          "pilota Access qualificato",
+          "operazione protetta esplicita governata",
+          "entitlement e step-up/MFA governati"
+        ],
+        "forbiddenUntil": [
+          "pilota Access qualificato",
+          "operazione protetta esplicita governata",
+          "entitlement e step-up/MFA governati"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",

@@ -19,6 +19,9 @@ jobs:
           ref: feat/studio-atlas-visual-factory-consolidated-v0.2
           fetch-depth: 0
 
+      - name: Install ecosystem schema validator
+        run: python -m pip install --disable-pip-version-check --quiet jsonschema
+
       - name: Reconcile current governed status
         run: |
           python - <<'PY'

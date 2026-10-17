@@ -6,8 +6,6 @@ import json
 from pathlib import Path
 from typing import Iterable
 
-from jsonschema import Draft202012Validator, FormatChecker
-
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas/trama-ecosystem-state-v0.3.schema.json"
 DEFAULT_GRAPH_PATH = ROOT / "governance/access/trama-ecosystem-state-v0.3.json"
@@ -36,9 +34,9 @@ def _ids(items: Iterable[dict], label: str) -> set[str]:
     return seen
 
 
-def _resolve_path_ref(ref: str, root: Path) -> None:
+def _resolve_reference(ref: str, root: Path) -> None:
     if not ref.startswith("path:"):
-        return
+        _fail(f"unsupported unresolved reference: {ref}")
     relative = ref.removeprefix("path:")
     candidate = (root / relative).resolve()
     try:
@@ -63,6 +61,8 @@ def _maturity_ids(root: Path) -> set[str]:
 
 
 def _validate_schema(document: dict) -> None:
+    from jsonschema import Draft202012Validator, FormatChecker
+
     schema = _load_json(SCHEMA_PATH)
     Draft202012Validator.check_schema(schema)
     validator = Draft202012Validator(schema, format_checker=FormatChecker())
@@ -87,7 +87,7 @@ def _validate_subject(subject: dict, root: Path, maturity_ids: set[str]) -> None
 
     for field in ("authorityRefs", "evidenceRefs", "sourceRefs", "decisionRefs", "blockerRefs"):
         for ref in subject.get(field, []):
-            _resolve_path_ref(ref, root)
+            _resolve_reference(ref, root)
 
     if subject.get("state") != subject.get("targetState"):
         gap = subject.get("gap") or {}
