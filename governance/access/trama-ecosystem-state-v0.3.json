@@ -999,8 +999,12 @@
       },
       "nextAllowedIntervention": {
         "action": "Prima vincolare il contratto Studio Atlas, poi qualificare un flusso limitato.",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "preconditions": [
+          "contratto cross-product Studio Atlas approvato e vincolato"
+        ],
+        "forbiddenUntil": [
+          "launch/authoring flow non ammesso finché il contratto cross-product Studio Atlas non è approvato e vincolato"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",
