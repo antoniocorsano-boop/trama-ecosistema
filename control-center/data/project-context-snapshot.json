@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-10-17T12:05:17Z",
+  "generatedAt": "2026-10-17T14:31:29Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -1736,7 +1736,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "f336af8caf557951ce2787f93c13b6c5f03a95f25dbd7a5ad34056380c5dc0d1"
+      "sha256": "831931aec073992353fec85b349e46a5e63e9545b4854760375ff17fcc35c128"
     },
     {
       "id": "source-registry",
