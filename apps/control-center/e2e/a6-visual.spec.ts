@@ -21,8 +21,13 @@ async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test")
     return Math.max(...heights);
   });
   await page.evaluate((height) => {
-    document.documentElement.style.minHeight=`${height}px`;
-    document.body.style.minHeight=`${height}px`;
+    const pinnedHeight=Math.ceil(height);
+    for (const element of [document.documentElement,document.body]) {
+      element.style.height=`${pinnedHeight}px`;
+      element.style.minHeight=`${pinnedHeight}px`;
+      element.style.maxHeight=`${pinnedHeight}px`;
+      element.style.overflow="hidden";
+    }
   }, stableHeight);
 }
 
