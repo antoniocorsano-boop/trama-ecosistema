@@ -7,7 +7,8 @@
     "maturity": "governance/maturity/trama-maturity-reconciliation-v1.json",
     "evidence": "reference-only",
     "projection": "control-center/data/ecosystem-snapshot.json",
-    "autoPromotion": false
+    "autoPromotion": false,
+    "decisions": "docs/decisions/decision-register.json"
   },
   "legend": {
     "states": {
@@ -45,17 +46,23 @@
       ],
       "blockerRefs": [],
       "gap": {
-        "summary": "none",
-        "missing": []
+        "summary": "La destinazione professionale non è ancora live; il confine pubblico resta reale.",
+        "missing": [
+          "certificazione dell’ingresso professionale dopo la qualificazione Access"
+        ]
       },
       "target": {
         "boundary": "Ingresso pubblico TRAMA governato e pubblico.",
         "value": "Ingresso pubblico coerente e sicuro"
       },
       "nextAllowedIntervention": {
-        "action": "NONE",
-        "preconditions": [],
-        "forbiddenUntil": []
+        "action": "Preservare la sicurezza pubblica e certificare l’ingresso professionale solo dopo Access.",
+        "preconditions": [
+          "pilota Access qualificato"
+        ],
+        "forbiddenUntil": [
+          "ingresso Access professionale non certificato"
+        ]
       },
       "sourceRefs": [
         "path:governance/access/trama-ecosystem-state-v0.2.json",
@@ -197,7 +204,8 @@
       "boundary": "Autorità curricolare Arena reale.",
       "authorityOwner": "arena",
       "authorityRefs": [
-        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "decision:TRAMA-ADR-002"
       ],
       "implementationOwners": [
         "arena"
@@ -208,15 +216,17 @@
       ],
       "blockerRefs": [],
       "gap": {
-        "summary": "none",
-        "missing": []
+        "summary": "Gap di evidenza L5: la realizzazione è reale, ma manca una storia di regressione sufficiente.",
+        "missing": [
+          "storia di regressione sufficiente per qualificare L5"
+        ]
       },
       "target": {
         "boundary": "Autorità curricolare Arena preservata.",
         "value": "Autorità curricolare non ambigua"
       },
       "nextAllowedIntervention": {
-        "action": "NONE",
+        "action": "Raccogliere evidenza di regressione e stabilità senza ridisegnare l’autorità curricolare.",
         "preconditions": [],
         "forbiddenUntil": []
       },
@@ -247,15 +257,17 @@
       ],
       "blockerRefs": [],
       "gap": {
-        "summary": "none",
-        "missing": []
+        "summary": "Gap L5 di stabilità e adozione; i flussi professionali restano qualificati separatamente.",
+        "missing": [
+          "evidenza di stabilità e adozione sufficiente per qualificare L5"
+        ]
       },
       "target": {
         "boundary": "Superficie Curricolo Atlas pubblica/professionale governata.",
         "value": "Navigazione e pubblicazione curricolare"
       },
       "nextAllowedIntervention": {
-        "action": "NONE",
+        "action": "Preservare la superficie pubblica e raccogliere evidenza di stabilità/adozione senza tracciamento studente.",
         "preconditions": [],
         "forbiddenUntil": []
       },
@@ -591,9 +603,15 @@
       },
       "nextAllowedIntervention": {
         "action": "NONE",
-        "preconditions": [],
+        "preconditions": [
+          "bisogno esplicito di operazione protetta documentato",
+          "confine entitlement definito",
+          "step-up/MFA definito",
+          "audit governato definito"
+        ],
         "forbiddenUntil": [
-          "pilota Access qualificato"
+          "pilota Access qualificato",
+          "operazione protetta esplicitamente autorizzata"
         ]
       },
       "sourceRefs": [
@@ -623,15 +641,17 @@
       ],
       "blockerRefs": [],
       "gap": {
-        "summary": "none",
-        "missing": []
+        "summary": "Gap di evidenza L5: manca una storia di regressione sufficiente della governance.",
+        "missing": [
+          "storia di regressione e stabilità governata sufficiente per qualificare L5"
+        ]
       },
       "target": {
         "boundary": "Governance TRAMA reale e evidence-bound.",
         "value": "Confini, decisioni ed evidenze governati"
       },
       "nextAllowedIntervention": {
-        "action": "NONE",
+        "action": "Raccogliere evidenza governata di stabilità senza modificare l’autorità per aumentare la maturità.",
         "preconditions": [],
         "forbiddenUntil": []
       },
@@ -826,7 +846,8 @@
       "boundary": "Sincronizzazione Arena → Curricolo Atlas reale con autorità curricolare Arena preservata.",
       "authorityOwner": "arena",
       "authorityRefs": [
-        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "decision:TRAMA-ADR-002"
       ],
       "implementationOwners": [
         "arena",
@@ -910,7 +931,8 @@
       "boundary": "Il percorso Docente OS → Arena è parzialmente provato; l’autorità curricolare resta Arena.",
       "authorityOwner": null,
       "authorityRefs": [
-        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "decision:TRAMA-ADR-002"
       ],
       "implementationOwners": [
         "docente-os",
@@ -1271,7 +1293,8 @@
       "boundary": "Federazione Access → Arena non implementata.",
       "authorityOwner": null,
       "authorityRefs": [
-        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md"
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "decision:TRAMA-ADR-002"
       ],
       "implementationOwners": [
         "trama",

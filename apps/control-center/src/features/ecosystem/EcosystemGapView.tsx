@@ -10,7 +10,7 @@ export function EcosystemGapView({entries}:{entries:GapEntry[]}){
         <div className="gap-cell"><small>AS IS</small><strong>{entry.currentState}</strong></div>
         <div className="gap-cell"><small>GAP</small><strong>{entry.safeguard?"Confine già soddisfatto":entry.gapSummary}</strong>{!entry.safeguard && entry.missing.length>0?<ul>{entry.missing.map((item)=><li key={item}>{item}</li>)}</ul>:null}</div>
         <div className="gap-cell"><small>TO BE</small><strong>{entry.targetState}</strong><p>{entry.targetBoundary}</p></div>
-        <div className="gap-cell"><small>NEXT</small><strong>{entry.safeguard?"Nessun intervento ecosistemico ammesso":entry.nextAction}</strong></div>
+        <div className="gap-cell gap-next"><small>NEXT</small><strong>{entry.safeguard?"Nessun intervento ecosistemico ammesso":entry.nextAction}</strong>{entry.preconditions.length>0?<div className="gap-guardrails"><b>Prerequisiti</b><ul>{entry.preconditions.map((item)=><li key={item}>{item}</li>)}</ul></div>:null}{entry.forbiddenUntil.length>0?<div className="gap-guardrails"><b>Bloccato fino a</b><ul>{entry.forbiddenUntil.map((item)=><li key={item}>{item}</li>)}</ul></div>:null}</div>
       </article>)}
     </div>
   );

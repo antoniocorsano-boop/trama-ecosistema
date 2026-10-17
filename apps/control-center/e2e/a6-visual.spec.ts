@@ -9,8 +9,8 @@ const routes = [
   ["assurance", "/#/assurance"],
 ] as const;
 
-async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test").Page) {
-  await expect(page.getByLabel("Elenco accessibile del grafo canonico")).toBeVisible();
+async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test").Page, readyLabel = "Elenco accessibile del grafo canonico") {
+  await expect(page.getByLabel(readyLabel)).toBeVisible();
   const stableHeight = await page.evaluate(async () => {
     await document.fonts.ready;
     const bottoms:number[]=[];
@@ -87,7 +87,7 @@ for (const [name, route] of routes) {
     if (name === "ecosystem") {
       await page.getByRole("button", { name: "AS IS → GAP → TO BE" }).click();
       await expect(page.getByLabel("Vista AS IS GAP TO BE")).toBeVisible();
-      await stabilizeEcosystemFullPageHeight(page);
+      await stabilizeEcosystemFullPageHeight(page, "Vista AS IS GAP TO BE");
       await expect(page).toHaveScreenshot("ecosystem-gap.png", {
         fullPage: true,
         animations: "disabled",

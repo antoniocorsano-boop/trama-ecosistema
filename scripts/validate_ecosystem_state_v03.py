@@ -10,6 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas/trama-ecosystem-state-v0.3.schema.json"
 DEFAULT_GRAPH_PATH = ROOT / "governance/access/trama-ecosystem-state-v0.3.json"
 MATURITY_PATH = Path("governance/maturity/trama-maturity-reconciliation-v1.json")
+DECISION_REGISTER_PATH = Path("docs/decisions/decision-register.json")
+ACTIVE_DECISION_STATUSES = {"APPROVED", "IMPLEMENTED"}
 
 
 class EcosystemStateValidationError(ValueError):
@@ -34,7 +36,7 @@ def _ids(items: Iterable[dict], label: str) -> set[str]:
     return seen
 
 
-def _resolve_reference(ref: str, root: Path) -> None:
+def _resolve_path_reference(ref: str, root: Path) -> None:
     if not ref.startswith("path:"):
         _fail(f"unsupported unresolved reference: {ref}")
     relative = ref.removeprefix("path:")
@@ -45,6 +47,48 @@ def _resolve_reference(ref: str, root: Path) -> None:
         _fail(f"path reference escapes repository root: {ref}")
     if not candidate.exists():
         _fail(f"unresolved path reference: {relative}")
+
+
+def _decision_registry(root: Path, document: dict) -> dict[str, dict]:
+    configured = (document.get("authorityPolicy") or {}).get("decisions")
+    if configured is not None and Path(configured) != DECISION_REGISTER_PATH:
+        _fail(f"unsupported governed decision register: {configured}")
+    path = (root / DECISION_REGISTER_PATH).resolve()
+    try:
+        path.relative_to(root.resolve())
+    except ValueError:
+        _fail("governed decision register escapes repository root")
+    if not path.exists():
+        _fail(f"governed decision register missing: {DECISION_REGISTER_PATH.as_posix()}")
+    register = _load_json(path)
+    decisions: dict[str, dict] = {}
+    for item in register.get("decisions", []):
+        decision_id = item.get("id")
+        if not decision_id:
+            continue
+        decision_id = str(decision_id)
+        if decision_id in decisions:
+            _fail(f"duplicate governed decision: {decision_id}")
+        decisions[decision_id] = item
+    return decisions
+
+
+def _resolve_decision_reference(ref: str, decisions: dict[str, dict]) -> None:
+    if not ref.startswith("decision:"):
+        _fail(f"decision reference must bind a governed decision: {ref}")
+    decision_id = ref.removeprefix("decision:")
+    decision = decisions.get(decision_id)
+    if decision is None:
+        _fail(f"unresolved governed decision: {decision_id}")
+    if decision.get("status") not in ACTIVE_DECISION_STATUSES:
+        _fail(f"inactive governed decision {decision_id}: {decision.get('status')}")
+
+
+def _resolve_authority_reference(ref: str, root: Path, decisions: dict[str, dict]) -> None:
+    if ref.startswith("decision:"):
+        _resolve_decision_reference(ref, decisions)
+        return
+    _resolve_path_reference(ref, root)
 
 
 def _maturity_ids(root: Path) -> set[str]:
@@ -74,7 +118,7 @@ def _validate_schema(document: dict) -> None:
     _fail(f"schema {path}: {first.message}")
 
 
-def _validate_subject(subject: dict, root: Path, maturity_ids: set[str]) -> None:
+def _validate_subject(subject: dict, root: Path, maturity_ids: set[str], decisions: dict[str, dict]) -> None:
     if subject.get("state") == "DEFERRED" and not subject.get("decisionRefs"):
         _fail(f"DEFERRED requires decisionRefs: {subject.get('id')}")
 
@@ -85,9 +129,13 @@ def _validate_subject(subject: dict, root: Path, maturity_ids: set[str]) -> None
     if maturity_ref is not None and maturity_ref not in maturity_ids:
         _fail(f"unknown maturityRef {maturity_ref}: {subject.get('id')}")
 
-    for field in ("authorityRefs", "evidenceRefs", "sourceRefs", "decisionRefs", "blockerRefs"):
+    for ref in subject.get("authorityRefs", []):
+        _resolve_authority_reference(ref, root, decisions)
+    for field in ("evidenceRefs", "sourceRefs", "blockerRefs"):
         for ref in subject.get(field, []):
-            _resolve_reference(ref, root)
+            _resolve_path_reference(ref, root)
+    for ref in subject.get("decisionRefs", []):
+        _resolve_decision_reference(ref, decisions)
 
     if subject.get("state") != subject.get("targetState"):
         gap = subject.get("gap") or {}
@@ -118,16 +166,34 @@ def validate_graph(document: dict, root: Path = ROOT) -> None:
 
     endpoints = actor_ids | node_ids
     maturity_ids = _maturity_ids(root)
+    decisions = _decision_registry(root, document)
 
     for subject in nodes:
-        _validate_subject(subject, root, maturity_ids)
+        _validate_subject(subject, root, maturity_ids, decisions)
 
     for flow in flows:
-        _validate_subject(flow, root, maturity_ids)
+        _validate_subject(flow, root, maturity_ids, decisions)
         if flow.get("from") not in endpoints or flow.get("to") not in endpoints:
             _fail(
                 f"unresolved flow endpoint {flow.get('id')}: "
                 f"{flow.get('from')} -> {flow.get('to')}"
+            )
+
+    node_by_id = {item.get("id"): item for item in nodes}
+    flow_by_id = {item.get("id"): item for item in flows}
+    protected_arena_owners = {
+        ("node", "arena"): "arena",
+        ("flow", "arena_to_curricolo_atlas"): "arena",
+        ("flow", "docente_os_to_arena"): None,
+        ("flow", "trama_access_to_arena"): None,
+    }
+    for (subject_type, subject_id), expected_owner in protected_arena_owners.items():
+        collection = node_by_id if subject_type == "node" else flow_by_id
+        subject = collection.get(subject_id)
+        if subject is not None and subject.get("authorityOwner") != expected_owner:
+            _fail(
+                f"arena authority invariant violated by {subject_id}: "
+                f"expected {expected_owner!r}, got {subject.get('authorityOwner')!r}"
             )
 
 

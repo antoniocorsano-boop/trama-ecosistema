@@ -15,3 +15,8 @@
 @media(max-width:1050px){.gap-columns{display:none}.gap-row{grid-template-columns:repeat(2,minmax(0,1fr))}.gap-row header{grid-column:1/-1}}
 @media(max-width:800px){.ecosystem-canonical-layout,.ecosystem-relationship-layout{grid-template-columns:1fr}.relation-detail{position:static}.capability-list,.state-node-grid{grid-template-columns:1fr}.gap-title-row{align-items:start;flex-direction:column}}
 @media(max-width:700px){.state-meta{grid-template-columns:1fr 1fr}.ecosystem-summary,.evidence-summary,.ecosystem-filters,.evidence-filters{grid-template-columns:1fr}.ecosystem-graph,.graph-loading{height:340px}.gap-row{grid-template-columns:1fr}.gap-row header{grid-column:auto}}
+
+.gap-guardrails { margin-top: .65rem; }
+.gap-guardrails b { display: block; font-size: .78rem; margin-bottom: .2rem; }
+.gap-guardrails ul { margin: .2rem 0 0; padding-left: 1.05rem; }
+.gap-guardrails li { overflow-wrap: anywhere; }
