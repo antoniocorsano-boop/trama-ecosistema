@@ -23,13 +23,20 @@ async function stabilizeEcosystemFullPageHeight(page: import("@playwright/test")
     return Math.ceil(Math.max(...bottoms));
   });
   await page.evaluate((height) => {
-    for (const element of [document.documentElement,document.body]) {
+    const root=document.getElementById("root");
+    const shell=document.querySelector<HTMLElement>(".app-shell");
+    if(!root || !shell) throw new Error("Missing visual capture root");
+    for (const element of [document.documentElement,document.body,root,shell]) {
       element.style.height=`${height}px`;
       element.style.minHeight=`${height}px`;
       element.style.maxHeight=`${height}px`;
       element.style.overflow="hidden";
     }
   }, stableHeight);
+  await expect.poll(
+    () => page.evaluate(() => document.documentElement.scrollHeight),
+    { message: "ecosystem full-page height must be deterministic before visual capture" },
+  ).toBe(stableHeight);
 }
 
 const overviewVisualKnowledge = {
