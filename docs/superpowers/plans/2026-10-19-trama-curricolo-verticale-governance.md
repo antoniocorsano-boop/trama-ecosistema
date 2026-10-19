@@ -4,7 +4,7 @@
 
 **Goal:** Pubblicare il contratto governato che descrive una versione completa del curricolo verticale di istituto Arena destinata all'adozione operativa esplicita in Docente OS.
 
-**Architecture:** Il contratto TRAMA è una nuova superficie v1, distinta e additiva rispetto a ECO-01 `CURRICULUM_SNAPSHOT_V1`. Usa terminologia canonica `curricolo`, conserva l'autorità Arena e codifica manifest di completezza, segmenti, nodi, relazioni verticali, stato di autorità e policy downstream fail-closed.
+**Architecture:** Il contratto TRAMA è una nuova superficie v1, distinta e additiva rispetto a ECO-01 `CURRICULUM_SNAPSHOT_V1`. Usa terminologia canonica `curricolo`, conserva l'autorità Arena e codifica manifest di completezza, segmenti, nodi, relazioni verticali, stato di autorità e policy downstream fail-closed. Il contratto struttura la dichiarazione di completezza; il giudizio semantico `SATISFIED` appartiene ad Arena e include perimetro atteso più utilizzabilità per la programmazione dei segmenti obbligatori.
 
 **Tech Stack:** JSON Schema Draft 2020-12, Python 3, `jsonschema`, pytest.
 
@@ -17,16 +17,17 @@
 - `sourceProduct = ARENA`; `targetProduct = DOCENTE_OS`.
 - `acceptanceRequired = true`; `automaticWriteAllowed = false`.
 - Infanzia non ha `yearLevel` numerico obbligatorio.
-- Il manifest è authority-owned da Arena; Docente OS non inventa il perimetro atteso.
+- Il manifest è authority-owned da Arena; Docente OS non inventa il perimetro atteso né ricalcola il giudizio di completezza.
+- `SATISFIED` significa che Arena dichiara coperto il perimetro atteso e utilizzabili per la programmazione tutti i segmenti obbligatori.
 - `PROVISIONAL_COMPLETE` e `APPROVED` restano distinti.
 
 ## Review Focus
 
 - Payload che omette un segmento atteso deve fallire o dichiarare manifest non soddisfatto.
+- Manifest `SATISFIED` con un segmento obbligatorio dichiarato non utilizzabile per la programmazione deve essere semanticamente invalido lato Arena.
 - `APPROVED` senza receipt/evidenza Arena deve fallire.
 - Infanzia con `yearLevel` forzato deve fallire la fixture canonica.
-- Primaria fuori 1–5 e secondaria fuori 1–3 devono fallire.
-- `automaticWriteAllowed=true` deve fallire.
+- Primaria fuori 1–5, secondaria fuori 1–3 e `automaticWriteAllowed=true` devono fallire.
 
 ---
 
@@ -42,108 +43,87 @@
 - Create: `tests/test_curricolo_verticale_release_v1.py`
 
 **Interfaces:**
-- Produces contract literal: `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1`.
-- Produces schema fields: `institutionRef`, `schoolYearRef`, `version`, `authority`, `manifest`, `segments`, `nodes`, `verticalLinks`, `structuralFootprint`, `issuedAt`, `downstreamPolicy`.
+- Contract literal: `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1`.
+- Schema fields: `institutionRef`, `schoolYearRef`, `version`, `authority`, `manifest`, `segments`, `nodes`, `verticalLinks`, `structuralFootprint`, `issuedAt`, `downstreamPolicy`.
 - `manifest.coverageStatus`: `SATISFIED | INCOMPLETE`.
+- Manifest includes Arena-issued planning-usability evidence/status for mandatory expected scopes so consumers can verify the declaration without recomputing Arena policy.
 - `authority.state`: `PROVISIONAL_COMPLETE | APPROVED`.
-- Segment order values: `INFANZIA | PRIMARIA | SECONDARIA_I_GRADO`.
+- Segment orders: `INFANZIA | PRIMARIA | SECONDARIA_I_GRADO`.
 
-- [ ] **Step 1: Write the failing schema tests**
+- [ ] **Step 1: Write failing schema tests**
 
-Tests assert:
-- `valid-full.json` validates;
-- all four invalid fixtures produce at least one validation error;
-- valid fixture contains all three school orders;
-- primary scope covers boundaries 1 and 5;
-- secondary scope covers boundaries 1 and 3;
-- infancy segment has no numeric `yearLevel` requirement;
-- downstream policy is human-controlled.
+Assert valid full fixture validates; invalid fixtures fail; all three orders appear; primary boundaries 1/5 and secondary 1/3 are valid; infancy needs no numeric `yearLevel`; downstream policy is human-controlled.
 
 - [ ] **Step 2: Run RED**
 
 Run: `python -m pytest tests/test_curricolo_verticale_release_v1.py -q`
 Expected: FAIL because schema/fixtures do not yet exist.
 
-- [ ] **Step 3: Implement the JSON Schema**
+- [ ] **Step 3: Implement JSON Schema**
 
 Use Draft 2020-12 conditional validation:
 - `INFANZIA`: `yearLevel` absent;
-- `PRIMARIA`: `yearLevel` integer 1–5 when scope is grade;
-- `SECONDARIA_I_GRADO`: `yearLevel` integer 1–3 when scope is grade;
+- `PRIMARIA`: grade scope integer 1–5;
+- `SECONDARIA_I_GRADO`: grade scope integer 1–3;
 - `APPROVED`: authority receipt required and `requiresRevalidationOnApproval=false`;
 - `PROVISIONAL_COMPLETE`: no institutional approval receipt and `requiresRevalidationOnApproval=true`;
-- `downstreamPolicy.acceptanceRequired=true`, `automaticWriteAllowed=false` constants.
+- downstream policy constants.
+
+The JSON Schema validates the presence/shape/consistency of Arena's completeness declaration; Arena's implementation tests prove the semantic truth of `SATISFIED` against its governed model.
 
 - [ ] **Step 4: Run GREEN**
 
-Run: `python -m pytest tests/test_curricolo_verticale_release_v1.py -q`
-Expected: PASS.
+Run focused test; expected PASS.
 
 - [ ] **Step 5: Run terminology guardrail**
 
-Run the repository's existing TERM-01/terminology validation command used by CI.
-Expected: PASS; the only legacy terminology remains in immutable/allowlisted compatibility surfaces.
+Run repository TERM-01 validation; expected PASS. Exact legacy identifiers are permitted only through the path-scoped, reasoned allowlist entries added for these implementation plans.
 
 - [ ] **Step 6: Commit**
 
-Commit message: `feat(contract): define vertical institute curricolo release v1`
+`feat(contract): define vertical institute curricolo release v1`
 
 ### Task 2: Contract semantics document and compatibility boundary
 
 **Files:**
 - Create: `docs/contracts/trama-curricolo-verticale-release-v1.md`
-- Modify only if required by existing contract index: the canonical contract index file discovered in repo at execution time.
+- Modify only if required by existing contract index: canonical contract index discovered on execution head.
 - Test: `tests/test_curricolo_verticale_release_v1.py`
 
 **Interfaces:**
-- Defines canonical interpretation of manifest completeness and authority.
-- Explicitly declares ECO-01 v1 immutable and this contract additive.
+- Defines manifest completeness/authority semantics.
+- Declares ECO-01 v1 immutable and the new contract additive.
 
 - [ ] **Step 1: Extend tests to pin compatibility**
 
-Assertions:
-- ECO-01 schema file still exists and its SHA/content is not modified by this task;
-- new contract does not declare automatic write authority;
-- new contract does not make Docente OS a curriculum authority.
+Assert ECO-01 schema remains unchanged; new contract grants no automatic write authority and does not make Docente OS a curricolo authority.
 
-- [ ] **Step 2: Run RED for missing semantic document/index entry**
+- [ ] **Step 2: RED for missing semantics document/index**
 
-Run: `python -m pytest tests/test_curricolo_verticale_release_v1.py -q`
-Expected: FAIL on the new documentation/index assertion only.
+- [ ] **Step 3: Write semantics**
 
-- [ ] **Step 3: Write the semantic contract document**
+Document package identity/versioning, Arena-owned completeness, authority, order scoping, structural fingerprint meaning, human acceptance, updates/supersession, and the distinction between structural footprint and independently verified institutional approval evidence.
 
-Document:
-- package identity and versioning;
-- manifest rules;
-- authority rules;
-- segment scoping for each order;
-- fingerprint meaning (structural identity, not a cryptographic institutional signature unless separately attested);
-- downstream human acceptance;
-- update/supersession semantics.
-
-- [ ] **Step 4: Run GREEN and repository governance suite**
-
-Expected: focused tests and existing governance checks PASS.
+- [ ] **Step 4: GREEN + governance suite**
 
 - [ ] **Step 5: Commit**
 
-Commit message: `docs(contract): govern vertical curricolo adoption semantics`
+`docs(contract): govern vertical curricolo adoption semantics`
 
 ### Task 3: Record contract evidence without activating runtime
 
 **Files:**
-- Modify only the repository's normal evidence/status surfaces after their exact current paths are re-read.
+- Modify only normal evidence/status surfaces after re-reading exact current paths.
 
 **Interfaces:**
-- Produces a governance receipt: contract `DEFINED / NOT_RUNTIME_ACTIVATED`.
+- Governance receipt: contract `DEFINED / NOT_RUNTIME_ACTIVATED`.
 
-- [ ] **Step 1: Add evidence that names exact contract head and focused test result**
+- [ ] **Step 1: Record exact contract head and focused test evidence**
 
-- [ ] **Step 2: Keep capability state non-runtime until Arena and Docente OS both qualify**
+- [ ] **Step 2: Keep runtime capability non-active until Arena and Docente OS qualify**
 
-- [ ] **Step 3: Run Control Center/snapshot validators if status files changed**
+- [ ] **Step 3: Run Control Center/snapshot validators if status files change**
 
 - [ ] **Step 4: Commit**
 
-Commit message: `docs(governance): record vertical curricolo contract evidence`
+`docs(governance): record vertical curricolo contract evidence`
