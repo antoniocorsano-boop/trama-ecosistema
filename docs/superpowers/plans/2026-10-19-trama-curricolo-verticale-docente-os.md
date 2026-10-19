@@ -116,7 +116,7 @@ Rules:
 - no client grants on trusted receipt table;
 - anon has no access.
 
-The mechanism that populates a trusted receipt from a future signed/server-to-server Arena channel is outside the local-upload path; until such evidence exists, `APPROVED` correctly remains fail-closed.
+The trusted receipt table is a verification sink, not a second approval authority: its rows may be written only by a separately authorized server-side Arena verification path that validates the Arena-issued authority evidence against the exact version/fingerprint. This implementation tranche defines and tests the fail-closed consumer boundary but does not invent that upstream authority signal. Until a verified row exists, `APPROVED` adoption remains blocked; the complete `PROVISIONAL_COMPLETE` path remains usable for planning and is sufficient for the current Beta unblock.
 
 Do not insert rows into `annual_plan_curriculum_adoptions`.
 
