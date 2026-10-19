@@ -4,7 +4,7 @@
 
 **Goal:** Rendere il curricolo verticale di istituto governato da Arena una singola baseline adottabile e risolvibile operativamente in Docente OS per infanzia, primaria 1ª–5ª e secondaria di primo grado 1ª–3ª, senza copie per classe e senza bypass dell'autorità curricolare.
 
-**Architecture:** TRAMA pubblica il contratto di scambio verticale; Arena emette una versione completa con manifest, segmenti, nodi e relazioni; Docente OS conserva una sola adozione corrente per workspace/anno e risolve dinamicamente il segmento pertinente dal ProfessionalContext del docente. Le superfici legacy ECO-01/ECO-02 e `annual_plan_curriculum_adoptions` restano compatibilità/storico, non fonte canonica del nuovo flusso.
+**Architecture:** TRAMA pubblica il contratto di scambio verticale; Arena emette una versione completa con manifest, segmenti, nodi e relazioni; Docente OS conserva una sola adozione corrente per workspace/anno e risolve dinamicamente il segmento pertinente dal ProfessionalContext del docente. Arena possiede anche il giudizio di completezza/planning-usability; Docente OS verifica il pacchetto e l'assegnazione ma non reinterpreta la completezza. Le superfici legacy ECO-01/ECO-02 e `annual_plan_curriculum_adoptions` restano compatibilità/storico, non fonte canonica del nuovo flusso.
 
 **Tech Stack:** JSON Schema Draft 2020-12 + Python/jsonschema (TRAMA); TypeScript/Vitest/Dexie (Arena); Next.js 16/TypeScript/Supabase/PostgreSQL/Node test runner/Playwright (Docente OS).
 
@@ -18,20 +18,22 @@
 - Infanzia non richiede né riceve una classe numerica artificiale.
 - L'intero curricolo è consultabile; l'operatività è limitata alle assegnazioni reali del docente.
 - Una baseline `PROVISIONAL_COMPLETE` può essere usata per la programmazione ma non può essere promossa da Docente OS ad approvata.
+- `APPROVED` in Docente OS richiede evidenza Arena verificata lato server sull'esatta versione/impronta; un file locale non basta.
 - ECO-01 v1 resta immutabile; ECO-02/P1 viene mantenuto solo come compatibilità/migrazione.
 - Nessuna scrittura cross-product automatica; l'adozione richiede conferma umana autenticata.
 - Nessun dato studente, nessun tracking studente.
 - Nessun merge automatico e nessun deploy di produzione.
 - Ogni tranche usa TDD RED → GREEN → suite; nessun GREEN dichiarato senza il test specifico che prima fallisce.
 - La promozione Beta, quando tecnicamente qualificata, richiede autorizzazione separata.
+- Preparazioni ed esecuzioni storiche restano vincolate alla versione/segmento Arena effettivamente usati.
 
 ## Review Focus
 
-- **Manifest incompleto:** Arena non deve poter emettere `SATISFIED` se un segmento atteso non è presente né dichiarato non applicabile; coperto nella Tranche A.
+- **Manifest incompleto o segmento non utilizzabile:** Arena non deve poter emettere `SATISFIED`; coperto nella Tranche A.
 - **Infanzia:** nessun resolver o schema deve richiedere `yearLevel`; coperto nelle Tranche A, C e D.
 - **Mismatch professionale:** un segmento valido ma non assegnato al docente deve restare consultabile e non operativo; coperto nella Tranche C.
-- **Aggiornamento Arena:** una nuova versione non deve sovrascrivere silenziosamente quella adottata né riscrivere le lezioni storiche; coperto nelle Tranche B e D.
-- **Autorità:** payload locali/provvisori non possono attestare `APPROVED_INSTITUTIONAL`; coperto nelle Tranche A e B.
+- **Aggiornamento Arena:** una nuova versione non deve sovrascrivere silenziosamente quella adottata né riscrivere ricevute/lezioni storiche; coperto nelle Tranche B e D.
+- **Autorità:** payload locali/provvisori non possono attestare `APPROVED_INSTITUTIONAL`; `APPROVED` richiede ricevuta privata verificata; coperto nelle Tranche A e B.
 
 ---
 
@@ -58,7 +60,7 @@ C1 Universal ProfessionalContext + schema migration
   ↓
 D1 Resolver baseline → segment → assignment
   ↓
-D2 Lesson/annual-plan integration + compatibility bridge
+D2 Lesson/annual-plan integration + immutable receipt binding
   ↓
 E1 ECO-02 migration + real Arena package
   ↓
@@ -99,11 +101,11 @@ Expected: one reviewable contract tranche; no product/runtime mutation.
 
 - [ ] **Step 1: Implement pure release construction and validation with TDD**
 
-Expected: complete infanzia/primaria/secondaria fixture passes; missing expected segment and invalid authority fail.
+Expected: complete infanzia/primaria/secondaria fixture passes; missing expected segment, required segment not planning-usable and invalid authority fail.
 
 - [ ] **Step 2: Bind the release builder to Arena's productive version/segment/node/link repositories**
 
-Expected: no second curriculum store and no reconstruction from UI labels.
+Expected: no second legacy curricolo store and no reconstruction from UI labels.
 
 - [ ] **Step 3: Prove deterministic output and legacy CML compatibility**
 
@@ -126,7 +128,7 @@ Expected RED: valid full vertical package cannot yet be parsed/adopted.
 
 - [ ] **Step 2: Add institute-level adoption schema/RPC with DB-enforced invariants**
 
-Expected: wrong workspace/year/fingerprint/authority fails in SQL; exact replay is idempotent.
+Expected: wrong workspace/year/fingerprint/authority fails in SQL; exact replay is idempotent. `APPROVED` fails without an exact private verified Arena authority receipt; complete `PROVISIONAL_COMPLETE` remains usable without pretending approval.
 
 - [ ] **Step 3: Keep `annual_plan_curriculum_adoptions` as legacy compatibility only**
 
@@ -152,14 +154,14 @@ Expected: primary accepts 1–5; secondary 1–3; infancy requires `yearLevel = 
 
 Expected: existing Technology timetable and assignments remain unchanged; fields of experience can be represented without claiming they are disciplines in the new domain API.
 
-### Task 5: Resolve one adopted vertical baseline into the operational slice
+### Task 5: Resolve one adopted vertical baseline into the operational slice and immutable lesson history
 
 **Files:**
 - Execute Tasks 6–7 of the Docente OS plan.
 
 **Interfaces:**
 - Consumes: institute adoption + universal ProfessionalContext.
-- Produces: `resolveCurricoloOperativo(...)` result with baseline identity, exact segment, node/link references, authority state and operational authorization.
+- Produces: `resolveCurricoloOperativo(...)`, preparation receipt schema v2 with exact adoption/version/segment identity, and TeachingSession link to the immutable preparation receipt.
 
 - [ ] **Step 1: RED on the real structural gap**
 
@@ -171,16 +173,16 @@ Expected: correct segment resolves; adjacent grade/order/domain mismatches fail 
 
 - [ ] **Step 3: Wire lesson-preparation approval to the new resolver**
 
-Expected: `Curricolo da rivalidare` disappears only when the adopted segment actually satisfies the existing approval invariants.
+Expected: `Curricolo da rivalidare` disappears only when the adopted segment and manifest are valid under the existing fail-closed lifecycle.
 
-- [ ] **Step 4: Preserve historical version identity on execution receipts**
+- [ ] **Step 4: Persist exact historical identity**
 
-Expected: a later Arena adoption cannot change the version/segment referenced by an already registered lesson.
+Expected: preparation receipt v2 stores adoption/version/fingerprint/segment; task-centric TeachingSession points to that append-only receipt. A later Arena adoption cannot change the version/segment referenced by an already registered lesson.
 
 ### Task 6: Migrate ECO-02 and materialize the real institute release
 
 **Files:**
-- Docente OS migration task from repo plan.
+- Docente OS compatibility task from repo plan.
 - Arena export fixture/artifact from repo plan.
 
 **Interfaces:**
@@ -219,7 +221,7 @@ Expected: PASS.
 
 - [ ] **Step 3: Supabase migration replay from clean baseline**
 
-Expected: all migrations through the new migration number replay successfully; second replay is idempotent where applicable.
+Expected: all migrations through `0106` (or revalidated replacement numbers) replay successfully; idempotent operations stay idempotent.
 
 - [ ] **Step 4: Browser qualification across the three school orders**
 
@@ -248,9 +250,10 @@ Do not repeat OGGI→VISUALIZZA unless regression evidence requires it.
 The program is complete only when:
 
 1. one Arena institute version is adopted once in Docente OS;
-2. its manifest covers infanzia, primary 1–5 and lower-secondary 1–3 according to Arena's own declared institutional perimeter;
+2. its manifest covers infanzia, primary 1–5 and lower-secondary 1–3 according to Arena's own declared institutional perimeter and planning-usability rules;
 3. no class-level copy of the full baseline is generated;
 4. the same resolver serves all orders;
 5. current secondary workflows remain regression-green;
-6. the 3ª E/B01 Beta Human Review completes through CONTINUA without bypass;
-7. no production deployment has occurred without a separate authorization.
+6. historical preparation/execution receipts remain pinned to the Arena adoption/version/segment actually used;
+7. the 3ª E/B01 Beta Human Review completes through CONTINUA without bypass;
+8. no production deployment has occurred without a separate authorization.
