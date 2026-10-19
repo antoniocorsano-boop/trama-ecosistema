@@ -67,6 +67,26 @@
       "path": "docs/architecture/ecosystem-overview.md",
       "pattern": "CurriculumSnapshot",
       "reason": "Il diagramma può citare il nome letterale del contratto ECO-01 v1 finché CurricoloSnapshot v2 non è autorizzato."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-19-trama-curricolo-verticale-arena-docente-os-master.md",
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "Il piano coordinatore deve citare esattamente tabelle e identificatori legacy esistenti durante la migrazione al dominio canonico Curricolo."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-19-trama-curricolo-verticale-governance.md",
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "Il piano di governance deve nominare il contratto ECO-01 v1 immutabile e le superfici legacy che il nuovo contratto non modifica."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-19-trama-curricolo-verticale-arena.md",
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "Il piano Arena deve citare i nomi esatti dei tipi e repository legacy esistenti per costruire una migrazione compatibile senza rinominare simboli storici."
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-19-trama-curricolo-verticale-docente-os.md",
+      "pattern": "(?i)curricul(?:um|ar)",
+      "reason": "Il piano Docente OS deve citare tabelle, repository e file legacy esistenti per confinare ECO-02 e migrare verso il nuovo dominio Curricolo senza ambiguità."
     }
   ],
   "excludedPaths": [
