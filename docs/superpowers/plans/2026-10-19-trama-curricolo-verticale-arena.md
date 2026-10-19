@@ -4,7 +4,7 @@
 
 **Goal:** Fare di Arena il sender produttivo e deterministico dell'intera versione del curricolo verticale di istituto, conforme a `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1`.
 
-**Architecture:** Il nuovo exporter legge esclusivamente il modello produttivo Arena (`InstituteCurriculumVersion`, `CurriculumSegment`, `CurriculumNode`, `VerticalCurriculumLink`) tramite i repository esistenti. Il pacchetto verticale è additivo ai CML handoff class-context v1/v2 e non li sostituisce; manifest e fingerprint sono costruiti in modo puro e validati prima della serializzazione.
+**Architecture:** Il nuovo exporter legge esclusivamente il modello produttivo Arena (`InstituteCurriculumVersion`, `CurriculumSegment`, `CurriculumNode`, `VerticalCurriculumLink`) tramite i repository esistenti. Il pacchetto verticale è additivo ai CML handoff class-context v1/v2 e non li sostituisce; manifest e fingerprint sono costruiti in modo puro e validati prima della serializzazione. Arena, non Docente OS, è responsabile della semantica di completezza: `SATISFIED` significa non solo “segmento presente”, ma perimetro atteso coperto e segmenti richiesti utilizzabili per la programmazione secondo lo stato/applicabilità governati da Arena.
 
 **Tech Stack:** TypeScript, Vitest, existing Arena curriculum persistence repositories, existing deterministic serialization/signature helpers.
 
@@ -17,13 +17,14 @@
 - New domain naming uses `curricolo` terminology; legacy CML compatibility identifiers remain untouched.
 - Infanzia is represented by school-level/cohort scope without invented numeric class.
 - Package release requires explicit institutional perimeter input; “present segments” alone may not define completeness.
+- `manifest.coverageStatus = SATISFIED` requires both scope coverage and Arena-owned planning usability/applicability of every mandatory segment; Docente OS must not reconstruct this judgment downstream.
 - Approved authority is accepted only when it is already present in Arena's governed version/evidence; the exporter never infers approval.
 - Output has `acceptanceRequired=true` and `automaticWriteAllowed=false`.
 
 ## Review Focus
 
 - Persisted nodes/links from another version must be rejected.
-- A missing expected segment must produce `INCOMPLETE`, never `SATISFIED`.
+- A missing expected segment or a required segment not usable for planning must produce `INCOMPLETE`, never `SATISFIED`.
 - Grade-range segments must cover requested years without expanding them into fake copies.
 - Empty mandatory content cannot be declared complete.
 - Same semantic input with different repository iteration order must produce same fingerprint.
@@ -60,7 +61,8 @@ Tests create one version with:
 Assertions:
 - release names all three orders;
 - infancy has no numeric year level;
-- manifest is `SATISFIED` only when every expected scope is represented or explicitly N/A;
+- manifest is `SATISFIED` only when every expected scope is represented or explicitly N/A **and** every mandatory represented segment satisfies the Arena-owned planning-usability/applicability rule;
+- one expected-but-not-usable segment forces `INCOMPLETE`;
 - downstream policy is immutable human-control policy.
 
 - [ ] **Step 2: Run RED**
@@ -75,7 +77,7 @@ Normalize segment identity from productive `CurriculumSegment.scope`:
 - `{type:'grade', grade}` → exact year;
 - `{type:'grade-range', grades}` → range/set without fan-out copies.
 
-Manifest comparison must use canonical keys sorted lexicographically.
+Manifest comparison must use canonical keys sorted lexicographically. Planning usability must be derived only from Arena's governed segment/applicability state; it must not be guessed from UI labels or from mere row presence.
 
 - [ ] **Step 4: Implement release creation and validation**
 
@@ -103,7 +105,7 @@ Validator must reject:
 - version-id mismatch on segments/nodes/links;
 - link endpoints absent from included nodes;
 - invalid authority combinations;
-- `SATISFIED` manifest with unresolved expected scopes;
+- `SATISFIED` manifest with unresolved expected scopes or a mandatory segment not planning-usable;
 - no usable segments.
 
 - [ ] **Step 5: Implement deterministic footprint**
@@ -156,7 +158,7 @@ Use:
 
 Do not read UI state or legacy `curriculumKB` as authority when productive version data exists.
 
-- [ ] **Step 4: Reject graph or perimeter incompleteness before serialization**
+- [ ] **Step 4: Reject graph, perimeter or planning-usability incompleteness before serialization**
 
 Return/throw a typed release validation error; do not emit a superficially complete package.
 
