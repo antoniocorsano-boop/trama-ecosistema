@@ -1,10 +1,10 @@
 # TRAMA — Adozione del curricolo verticale di istituto Arena → Docente OS
 
-**Status:** DRAFT FOR HUMAN REVIEW / NO_RUNTIME  
+**Status:** HUMAN REVIEW APPROVED / IMPLEMENTATION PLANNED / NO_RUNTIME  
 **Date:** 2026-10-19  
 **Scope:** TRAMA · Arena · Docente OS  
 **Authority:** Arena per il dominio curricolare; Docente OS per l'operatività docente  
-**Human review:** REQUIRED  
+**Human review:** APPROVED 2026-10-19  
 **Runtime authorization:** NONE
 
 ## 1. Scopo
