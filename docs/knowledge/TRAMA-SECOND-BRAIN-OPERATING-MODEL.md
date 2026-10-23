@@ -170,6 +170,13 @@ The closure check SHALL ask:
 8. If future sessions need the result for continuity, ensure its subjects/updateTriggers make it retrievable by Project Knowledge / Session Bootstrap.
 9. Run the relevant deterministic validators before considering the documentation closed.
 
+### Reusable lesson evaluation
+
+10. Perform a **reusable lesson evaluation** before closing significant work. Ask whether the cycle produced durable **failure/process learning** that should prevent recurrence or improve future execution.
+11. If reusable learning exists, create a governed **lesson candidate** bound to concrete source evidence; do not silently promote it to canonical memory.
+12. A lesson candidate reaches canonical Project Knowledge only after the required exact-PR/exact-head **human decision**. CI, agents and workflow state do not substitute for that decision.
+13. If no reusable lesson exists, record no lesson merely to satisfy process formality.
+
 A chat summary, pull-request description, review comment or assistant memory is not sufficient durable closure.
 
 ### Closure states
@@ -184,4 +191,3 @@ A workstream with closure state `BLOCKED` may continue technically when safe, bu
 ### Process ownership
 
 The person requesting the work is not responsible for remembering this gate. It is part of the TRAMA development process and should be applied by the working agent/process whenever a significant reusable result is produced.
-

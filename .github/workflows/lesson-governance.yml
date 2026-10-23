@@ -1,0 +1,135 @@
+name: Lesson Governance
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    paths:
+      - "docs/knowledge/lessons/candidates/**"
+      - "config/lesson-governance.json"
+      - "scripts/validate_lesson_proposal.py"
+      - "scripts/verify_lesson_human_gate.py"
+      - "schemas/lesson-proposal.schema.json"
+      - ".github/workflows/lesson-governance.yml"
+      - "tests/test_lesson_governance.py"
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  lesson-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate lesson candidates
+        id: candidates
+        shell: bash
+        run: |
+          shopt -s nullglob
+          candidates=(docs/knowledge/lessons/candidates/*.json)
+          if (( ${#candidates[@]} == 0 )); then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "NO_LESSON_CANDIDATE"
+            exit 0
+          fi
+          for candidate in "${candidates[@]}"; do
+            python3 scripts/validate_lesson_proposal.py "$candidate"
+          done
+          echo "present=true" >> "$GITHUB_OUTPUT"
+
+      - name: Collect exact-head human decisions
+        if: steps.candidates.outputs.present == 'true'
+        uses: actions/github-script@v7
+        env:
+          DECISION_FILE: /tmp/lesson-decisions.json
+          GOVERNANCE_CONFIG: config/lesson-governance.json
+          EXACT_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          script: |
+            const fs = require('fs');
+            const config = JSON.parse(fs.readFileSync(process.env.GOVERNANCE_CONFIG, 'utf8'));
+            const authorized = new Set(config.authorizedHumanReviewers || []);
+            const token = config.explicitDecisionToken || 'APPROVE_CANONICAL';
+            const head = process.env.EXACT_HEAD;
+            const pull_number = Number(process.env.PR_NUMBER);
+            const { owner, repo } = context.repo;
+            const artifacts = [];
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner, repo, pull_number, per_page: 100
+            });
+            for (const review of reviews) {
+              const actor = review.user?.login;
+              if (
+                review.state === 'APPROVED' &&
+                review.commit_id === head &&
+                authorized.has(actor) &&
+                !/\[bot\]$|-bot$|^bot-/i.test(actor || '')
+              ) {
+                artifacts.push({
+                  kind: 'PR_REVIEW_APPROVAL',
+                  state: 'APPROVED',
+                  actor,
+                  pullRequest: pull_number,
+                  headSha: head,
+                  decisionRef: `github:${owner}/${repo}/pull/${pull_number}/review/${review.id}`,
+                  decidedAt: review.submitted_at
+                });
+              }
+            }
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number: pull_number, per_page: 100
+            });
+            const exactMarker = new RegExp(`(^|\\s)${token.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}\\s+${head}($|\\s)`);
+            for (const comment of comments) {
+              const actor = comment.user?.login;
+              if (
+                authorized.has(actor) &&
+                !/\[bot\]$|-bot$|^bot-/i.test(actor || '') &&
+                exactMarker.test(comment.body || '')
+              ) {
+                artifacts.push({
+                  kind: 'PR_EXPLICIT_DECISION',
+                  token,
+                  actor,
+                  pullRequest: pull_number,
+                  headSha: head,
+                  decisionRef: `github:${owner}/${repo}/pull/${pull_number}/comment/${comment.id}`,
+                  decidedAt: comment.created_at
+                });
+              }
+            }
+
+            fs.writeFileSync(process.env.DECISION_FILE, JSON.stringify(artifacts, null, 2));
+
+      - name: Verify exact-head human gate
+        if: steps.candidates.outputs.present == 'true'
+        id: human_gate
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 scripts/verify_lesson_human_gate.py /tmp/lesson-decisions.json \
+            --pull-request "${{ github.event.pull_request.number }}" \
+            --head-sha "${{ github.event.pull_request.head.sha }}" \
+            > /tmp/lesson-human-decision.json
+
+      - name: Report lesson governance state
+        if: steps.candidates.outputs.present == 'true'
+        shell: bash
+        run: |
+          if [ "${{ steps.human_gate.outcome }}" = "success" ]; then
+            echo "APPROVED_FOR_CANONICAL_MATERIALIZATION"
+            cat /tmp/lesson-human-decision.json
+          else
+            echo "AWAITING_HUMAN_DECISION"
+          fi
