@@ -52,6 +52,12 @@ class LessonGovernanceWorkflowTests(unittest.TestCase):
         self.assertIn("github.event.pull_request.head.sha", text)
         self.assertIn("APPROVE_CANONICAL", text)
 
+    def test_lesson_governance_invokes_gate_with_named_artifacts_argument(self):
+        self.assertTrue(LESSON_GOVERNANCE.is_file(), "missing .github/workflows/lesson-governance.yml")
+        text = LESSON_GOVERNANCE.read_text(encoding="utf-8")
+        self.assertIn("--artifacts /tmp/lesson-decisions.json", text)
+        self.assertNotIn("verify_lesson_human_gate.py /tmp/lesson-decisions.json", text)
+
     def test_second_brain_closure_requires_reusable_lesson_evaluation(self):
         text = OPERATING_MODEL.read_text(encoding="utf-8").casefold()
         self.assertIn("reusable lesson evaluation", text)
