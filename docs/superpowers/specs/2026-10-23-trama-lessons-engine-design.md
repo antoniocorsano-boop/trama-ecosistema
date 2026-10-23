@@ -1,6 +1,6 @@
 # TRAMA Lessons Engine — Governed Project Knowledge Extension v0.1
 
-**Status:** APPROVED DESIGN / READY FOR IMPLEMENTATION PLAN  
+**Status:** APPROVED DESIGN / IMPLEMENTATION IN PROGRESS  
 **Date:** 2026-10-23  
 **Baseline:** `main@f666239cfdb359ecf52342ed3502f4a60233ea45`  
 **Authority:** human decision required for canonical promotion  
@@ -216,12 +216,19 @@ A candidate must include at least:
 - `learnedPrinciple`;
 - `proposedRule`;
 - `evidenceStrength`;
+- `causalStatus`;
 - `relatedLessons`;
 - `supersedes`;
 - `proposedBy`;
 - `createdAt`.
 
 A candidate must fail validation if it asserts causal certainty that the bound evidence does not support.
+
+### Implemented Task 1 contract
+
+Task 1 materializes `trama.lesson-proposal/v1` with fail-closed candidate states and deterministic fingerprints. Direct causal certification is allowed only when at least one source reference is explicitly typed as `DIRECT_EXCEPTION`, `FAILED_ASSERTION` or `CONTROLLED_REPRODUCTION`; `WORKFLOW_STEP_FAILURE` alone cannot certify causality.
+
+The first acceptance fixture, `LL-TDD-RED-001`, is deliberately `LOCALIZED`: it binds Docente OS PR #736, exact RED head `ca3950cadf645e8c250d9192373d27794dab3457` and workflow run `40018037974` without claiming that an unobserved module-not-found exception was seen directly.
 
 ## 11. Capture protocol
 
@@ -258,96 +265,82 @@ Agents must not load all lessons.
 
 Session Bootstrap resolves applicable lessons using:
 
-- subject/capability;
-- repository/domain;
-- task phase/category;
-- risk class;
-- current/superseded status.
+- subject intersection;
+- repository/scope where applicable;
+- category relevant to the task;
+- active status;
+- deterministic fingerprint/recurrence hints only when needed.
 
-The central machine index is consulted first; only matching canonical lesson documents are opened when deeper detail is needed.
+Only selected compact index entries are loaded first. Full canonical lesson documents are opened only when relevant.
 
-`FAILURE_LEARNING` remains available through Project Knowledge negative-knowledge paths, so the new index accelerates discovery without bypassing existing Context Pack semantics.
+## 14. Recurrence
 
-## 14. Recurrence detection
+A canonical lesson may emit `POSSIBLE_RECURRENCE` when a later task matches its governed failure pattern.
 
-When a new task exhibits a pattern already covered by a canonical lesson, the system may emit a `RECURRENCE_WARNING` in the task receipt or CI output.
+The signal is advisory. It must identify:
 
-The warning must identify:
+- lesson ID;
+- matching subject/category/fingerprint reason;
+- task/source context;
+- whether Session Bootstrap had surfaced the lesson.
 
-- applicable lesson ID;
-- observed evidence;
-- task/repository context;
-- whether the lesson was retrieved during bootstrap;
-- the point where the canonical rule should have affected execution.
+It cannot create a new canonical event, change authority or block execution by itself.
 
-A recurrence warning is diagnostic only. It does not mutate Project Knowledge automatically.
+## 15. Governance invariants
 
-## 15. Initial lesson
+1. Candidate preparation is not canonical promotion.
+2. CI success is not human approval.
+3. A bot review is not human approval.
+4. `CANONICAL` cannot appear in a candidate contract.
+5. A candidate cannot certify causal evidence that its source references do not support.
+6. Canonical document and `FAILURE_LEARNING` event must agree on lesson ID and fingerprint.
+7. Generated indices must match canonical state exactly.
+8. `SUPERSEDED` lessons remain historical but are not active retrieval rules.
+9. No auto-merge.
+10. No automatic widening of scope.
+11. No lesson may become authority merely because it was retrieved frequently.
+12. Volatile GitHub state remains Live Observation, not durable lesson state.
 
-The first real candidate is:
+## 16. Initial acceptance case
 
-**LL-TDD-RED-001 — RED localizzato != RED causale certificato**
+`LL-TDD-RED-001 — RED localizzato non equivale a RED causale certificato`
 
-Origin:
+Source evidence:
 
 - repository: `antoniocorsano-boop/docente-os-2026-27`;
 - PR: `#736`;
-- RED head: `ca3950cadf645e8c250d9192373d27794dab3457`;
+- RED exact head: `ca3950cadf645e8c250d9192373d27794dab3457`;
 - Product CI run: `40018037974`;
-- observed state: workflow failure localized to `Run product tests`, but the precise expected `ERR_MODULE_NOT_FOUND: provision-hva-baseline.mjs` exception was not yet directly available from the connector.
+- observed fact: the job passes preliminary steps and fails in `Run product tests`;
+- evidence limitation: the exact exception text was not available from the observed connector output.
 
-Candidate principle:
+Therefore the candidate starts with:
 
-> A workflow failure at the expected test step establishes a localized RED, not automatically a causally certified TDD RED. Before writing the GREEN, the expected causal failure must be directly observable or reproduced equivalently in a controlled environment.
+`causalStatus: LOCALIZED`
 
-The initial implementation must use this lesson as an end-to-end acceptance case without promoting it automatically.
+and must not claim the hypothesized exception as direct evidence.
 
-## 16. Deterministic controls
-
-CI must reject at least:
-
-- duplicate lesson IDs;
-- malformed proposal objects;
-- candidate files present in the canonical set;
-- canonical lesson without matching `FAILURE_LEARNING` event;
-- `FAILURE_LEARNING` lesson metadata without canonical document;
-- generated index drift;
-- `SUPERSEDED` lesson surfaced as active;
-- promotion without authorized human review evidence;
-- automatic merge configuration for lesson promotion;
-- missing source provenance for evidence-bearing claims.
-
-## 17. Security, privacy and scope
-
-Lesson records must not contain secrets, student data, authentication material or unnecessary personal data.
-
-Evidence should reference repository artifacts, PRs, exact SHAs, workflow runs, receipts or controlled test output rather than copying sensitive logs into the lesson document.
-
-Cross-repository capture must remain read-only toward product/runtime data. The only governed write target is the TRAMA documentation/Project Knowledge branch created for the proposal.
-
-## 18. Success criteria
+## 17. Success criteria
 
 The design is successful when:
 
-1. a significant reusable learning is proposed without requiring the operator to remember the step;
-2. the candidate is bound to verifiable evidence;
-3. the system detects duplicate/related lessons before promotion;
-4. only a human can authorize canonical promotion;
-5. the approved lesson becomes a Project Knowledge `FAILURE_LEARNING` event;
-6. the central index is regenerated deterministically;
-7. a later relevant Session Bootstrap surfaces the lesson automatically;
-8. recurrence can be detected without granting the detector mutation authority;
-9. no parallel knowledge base or per-repository index is introduced.
+1. reusable learning is captured without depending on operator memory;
+2. candidate evidence and provenance are deterministic and reviewable;
+3. human GitHub approval is technically required for canonical promotion;
+4. canonical lessons become existing Project Knowledge, not a second authority;
+5. one generated central index stays consistent with canonical state;
+6. Session Bootstrap returns only relevant active lessons;
+7. recurrence is detectable without granting write authority;
+8. the first real candidate can travel end-to-end without overstating the evidence;
+9. no merge, deploy, publication or runtime execution can be triggered by lesson automation alone.
 
-## 19. Governance boundary
+## 18. Current implementation checkpoint
 
-This design authorizes only the implementation of the lesson-management mechanism under normal TRAMA review discipline.
+Task 1 completed RED → GREEN on the implementation branch:
 
-It does **not** authorize:
+- RED exact head: `fc57158b563c93af25681e548e1553ace245bba5`;
+- RED Governance run: `40021484127`, with exactly five expected lesson-test failures caused by missing implementation;
+- GREEN implementation head before documentation-status commits: `149171b5c3d5f0bb2695cc67a824c6663a85068f`;
+- GREEN Governance run: `40021783693`, PASS with `337 tests / OK`.
 
-- merge of any implementation PR;
-- automatic approval;
-- product deploy;
-- runtime publication;
-- tenant/data mutation;
-- widening of existing agent authority.
+No canonical lesson promotion, merge, deploy or runtime authority has been exercised.
