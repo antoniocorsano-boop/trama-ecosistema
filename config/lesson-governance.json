@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "trama.lesson-governance/v1",
+  "authorizedHumanReviewers": [
+    "antoniocorsano-boop"
+  ],
+  "allowedDecisionKinds": [
+    "PR_REVIEW_APPROVAL",
+    "PR_EXPLICIT_DECISION"
+  ],
+  "explicitDecisionToken": "APPROVE_CANONICAL",
+  "autoMergeAllowed": false
+}
