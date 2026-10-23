@@ -16,6 +16,7 @@ SCHEMA = ROOT / "schemas/lesson-proposal.schema.json"
 GATE = ROOT / "scripts/verify_lesson_human_gate.py"
 PROMOTION = ROOT / "scripts/promote_lesson_proposal.py"
 INDEX_BUILDER = ROOT / "scripts/build_lessons_index.py"
+BOOTSTRAP = ROOT / "scripts/build_session_bootstrap.py"
 GOVERNANCE_CONFIG = ROOT / "config/lesson-governance.json"
 TEST_PR = 278
 TEST_HEAD = "a" * 40
@@ -332,6 +333,125 @@ class LessonIndexContractTests(unittest.TestCase):
         self.assertEqual(item["sourceRefs"][0]["workflowRun"], "123456789")
         self.assertEqual(item["supersedes"], ["LL-INDEX-001"])
         self.assertEqual(item["canonicalDocument"], "docs/knowledge/lessons/canonical/LL-INDEX-002.md")
+
+
+class LessonBootstrapRetrievalTests(unittest.TestCase):
+    def setUp(self):
+        self.snapshot = load_json(ROOT / "control-center/data/project-context-snapshot.json")
+        self.registry = load_json(ROOT / "docs/knowledge/governed-document-registry.json")
+        self.resolver = load_json(ROOT / "config/session-bootstrap-subjects.json")
+        self.fingerprint = "sha256:" + "7" * 64
+
+    def bootstrap(self):
+        return load_module(self, "build_session_bootstrap", BOOTSTRAP)
+
+    def lesson_index(self, *, status="CURRENT", active=True):
+        return {
+            "schemaVersion": "trama.lessons-index/v1",
+            "lessons": [
+                {
+                    "lessonId": "LL-TDD-RED-001",
+                    "title": "RED localizzato non equivale a RED causale certificato",
+                    "status": status,
+                    "active": active,
+                    "category": "TDD_CI",
+                    "scope": "TRAMA",
+                    "priority": "HIGH",
+                    "subjects": ["test-driven-development", "ci-qualification", "failure-learning"],
+                    "fingerprint": self.fingerprint,
+                    "causalStatus": "LOCALIZED",
+                    "sourceRepository": "antoniocorsano-boop/docente-os-2026-27",
+                    "sourceRefs": [
+                        {
+                            "repository": "antoniocorsano-boop/docente-os-2026-27",
+                            "pullRequest": 736,
+                            "exactHead": "ca3950cadf645e8c250d9192373d27794dab3457",
+                            "workflowRun": "40018037974",
+                            "ref": "github-actions:workflow-run/40018037974",
+                            "evidenceKind": "WORKFLOW_FAILURE",
+                        }
+                    ],
+                    "canonicalDocument": "docs/knowledge/lessons/canonical/LL-TDD-RED-001.md",
+                    "supersedes": [],
+                    "humanDecisionRef": "github:trama-ecosistema/pull/278/comment/2001",
+                }
+            ],
+        }
+
+    def build(self, query: str, *, lesson_index=None, recurrence_context=None):
+        return self.bootstrap().build_receipt(
+            query,
+            deepcopy(self.snapshot),
+            deepcopy(self.registry),
+            deepcopy(self.resolver),
+            lesson_index=deepcopy(lesson_index if lesson_index is not None else self.lesson_index()),
+            recurrence_context=deepcopy(recurrence_context),
+        )
+
+    def test_tdd_query_selects_only_current_applicable_lesson_with_provenance(self):
+        receipt = self.build("Il RED TDD della CI qualification deve avere causalità osservabile")
+        lessons = receipt["governedContext"]["applicableLessons"]
+        self.assertEqual([item["lessonId"] for item in lessons], ["LL-TDD-RED-001"])
+        refs = receipt["sourceRefs"]
+        self.assertIn(
+            {
+                "kind": "LESSON_INDEX",
+                "path": "docs/knowledge/lessons/LESSONS_INDEX.json",
+            },
+            refs,
+        )
+        self.assertIn(
+            {
+                "kind": "CANONICAL_LESSON",
+                "lessonId": "LL-TDD-RED-001",
+                "path": "docs/knowledge/lessons/canonical/LL-TDD-RED-001.md",
+            },
+            refs,
+        )
+
+    def test_unrelated_query_does_not_load_lesson(self):
+        receipt = self.build("Museo Zero personaggi e ritmo narrativo")
+        self.assertEqual(receipt["governedContext"]["applicableLessons"], [])
+        self.assertEqual(receipt["governedContext"]["lessonRecurrence"]["status"], "NONE")
+
+    def test_superseded_lesson_is_excluded_from_applicable_lessons(self):
+        receipt = self.build(
+            "TDD RED CI qualification",
+            lesson_index=self.lesson_index(status="SUPERSEDED", active=False),
+        )
+        self.assertEqual(receipt["governedContext"]["applicableLessons"], [])
+
+    def test_repeated_failure_semantics_produces_advisory_recurrence_only(self):
+        index = self.lesson_index()
+        before = deepcopy(index)
+        receipt = self.build(
+            "TDD RED CI qualification",
+            lesson_index=index,
+            recurrence_context={
+                "subjects": ["test-driven-development", "ci-qualification"],
+                "category": "TDD_CI",
+                "fingerprint": self.fingerprint,
+            },
+        )
+        recurrence = receipt["governedContext"]["lessonRecurrence"]
+        self.assertEqual(recurrence["status"], "POSSIBLE_RECURRENCE")
+        self.assertEqual(recurrence["lessonId"], "LL-TDD-RED-001")
+        self.assertEqual(recurrence["reason"], "FINGERPRINT_MATCH")
+        self.assertIs(receipt["authority"]["createsAuthority"], False)
+        self.assertIs(receipt["authority"]["authorizesWrite"], False)
+        self.assertEqual(index, before)
+
+    def test_subject_resolution_is_bounded_to_governed_tdd_aliases(self):
+        bootstrap = self.bootstrap()
+        resolution = bootstrap.resolve_subjects(
+            "Il RED TDD della CI qualification deve essere causalmente osservabile",
+            deepcopy(self.resolver),
+        )
+        self.assertEqual(resolution["status"], "RESOLVED")
+        subjects = set(resolution["contextSubjects"])
+        self.assertIn("test-driven-development", subjects)
+        self.assertIn("ci-qualification", subjects)
+        self.assertIn("failure-learning", subjects)
 
 
 if __name__ == "__main__":
