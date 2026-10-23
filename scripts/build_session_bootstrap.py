@@ -6,12 +6,15 @@ import importlib.util
 import json
 import re
 import unicodedata
+from copy import deepcopy
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SNAPSHOT = Path("control-center/data/project-context-snapshot.json")
 DEFAULT_REGISTRY = Path("docs/knowledge/governed-document-registry.json")
 DEFAULT_RESOLVER = Path("config/session-bootstrap-subjects.json")
+DEFAULT_LESSONS_INDEX = Path("docs/knowledge/lessons/LESSONS_INDEX.json")
+LESSONS_INDEX_SCHEMA_VERSION = "trama.lessons-index/v1"
 
 
 class BootstrapError(RuntimeError):
@@ -197,7 +200,111 @@ def _effective_summary(effective_context):
     }
 
 
-def build_receipt(query, snapshot, registry, resolver, explicit_subject=None, effective_context=None):
+def _validated_lesson_index(lesson_index):
+    if not isinstance(lesson_index, dict) or lesson_index.get("schemaVersion") != LESSONS_INDEX_SCHEMA_VERSION:
+        raise BootstrapError("LESSONS_INDEX_IDENTITY_INVALID")
+    lessons = lesson_index.get("lessons")
+    if not isinstance(lessons, list):
+        raise BootstrapError("LESSONS_INDEX_INVALID")
+
+    seen = set()
+    validated = []
+    for lesson in lessons:
+        if not isinstance(lesson, dict):
+            raise BootstrapError("LESSONS_INDEX_ENTRY_INVALID")
+        lesson_id = lesson.get("lessonId")
+        subjects = lesson.get("subjects")
+        canonical_document = lesson.get("canonicalDocument")
+        status = lesson.get("status")
+        active = lesson.get("active")
+        if not isinstance(lesson_id, str) or not lesson_id:
+            raise BootstrapError("LESSONS_INDEX_ENTRY_INVALID")
+        if lesson_id in seen:
+            raise BootstrapError("LESSONS_INDEX_DUPLICATE_LESSON_ID")
+        seen.add(lesson_id)
+        if not isinstance(subjects, list) or any(not isinstance(item, str) or not item for item in subjects):
+            raise BootstrapError("LESSONS_INDEX_ENTRY_SUBJECTS_INVALID")
+        if not isinstance(canonical_document, str) or not canonical_document:
+            raise BootstrapError("LESSONS_INDEX_ENTRY_DOCUMENT_INVALID")
+        if status not in {"CURRENT", "SUPERSEDED"}:
+            raise BootstrapError("LESSONS_INDEX_ENTRY_STATUS_INVALID")
+        if not isinstance(active, bool) or active is not (status == "CURRENT"):
+            raise BootstrapError("LESSONS_INDEX_ENTRY_ACTIVE_INVALID")
+        validated.append(deepcopy(lesson))
+    return validated
+
+
+def applicable_lessons(lesson_index: dict, subjects: list[str]):
+    normalized_subjects = {normalize(item) for item in subjects if isinstance(item, str) and item}
+    selected = []
+    for lesson in _validated_lesson_index(lesson_index):
+        if lesson["status"] != "CURRENT" or lesson["active"] is not True:
+            continue
+        lesson_subjects = {normalize(item) for item in lesson.get("subjects", [])}
+        if normalized_subjects & lesson_subjects:
+            selected.append(lesson)
+    selected.sort(key=lambda item: item["lessonId"])
+    return selected
+
+
+def detect_lesson_recurrence(lessons: list[dict], recurrence_context):
+    if recurrence_context is None:
+        return {"status": "NONE"}
+    if not isinstance(recurrence_context, dict):
+        raise BootstrapError("LESSON_RECURRENCE_CONTEXT_INVALID")
+
+    fingerprint = recurrence_context.get("fingerprint")
+    recurrence_subjects = recurrence_context.get("subjects", [])
+    category = recurrence_context.get("category")
+    if fingerprint is not None and (not isinstance(fingerprint, str) or not fingerprint):
+        raise BootstrapError("LESSON_RECURRENCE_CONTEXT_INVALID")
+    if not isinstance(recurrence_subjects, list) or any(not isinstance(item, str) or not item for item in recurrence_subjects):
+        raise BootstrapError("LESSON_RECURRENCE_CONTEXT_INVALID")
+    if category is not None and not isinstance(category, str):
+        raise BootstrapError("LESSON_RECURRENCE_CONTEXT_INVALID")
+
+    normalized_subjects = {normalize(item) for item in recurrence_subjects}
+    for lesson in lessons:
+        if not fingerprint or lesson.get("fingerprint") != fingerprint:
+            continue
+        lesson_subjects = {normalize(item) for item in lesson.get("subjects", [])}
+        if normalized_subjects and not (normalized_subjects & lesson_subjects):
+            continue
+        if category and lesson.get("category") != category:
+            continue
+        return {
+            "status": "POSSIBLE_RECURRENCE",
+            "lessonId": lesson["lessonId"],
+            "reason": "FINGERPRINT_MATCH",
+        }
+    return {"status": "NONE"}
+
+
+def _lesson_source_refs(lessons: list[dict]):
+    if not lessons:
+        return []
+    refs = [{
+        "kind": "LESSON_INDEX",
+        "path": str(DEFAULT_LESSONS_INDEX),
+    }]
+    refs.extend({
+        "kind": "CANONICAL_LESSON",
+        "lessonId": lesson["lessonId"],
+        "path": lesson["canonicalDocument"],
+    } for lesson in lessons)
+    return refs
+
+
+def build_receipt(
+    query,
+    snapshot,
+    registry,
+    resolver,
+    explicit_subject=None,
+    effective_context=None,
+    lesson_index=None,
+    recurrence_context=None,
+):
     if snapshot.get("project") != "TRAMA" or snapshot.get("schemaVersion") != "1.0.0":
         raise BootstrapError("PROJECT_CONTEXT_SNAPSHOT_IDENTITY_INVALID")
 
@@ -205,6 +312,10 @@ def build_receipt(query, snapshot, registry, resolver, explicit_subject=None, ef
     documents = relevant_documents(registry, resolution["contextSubjects"])
     composed = merge_packs(resolution["contextSubjects"], snapshot, effective_context)
     live = _effective_summary(effective_context)
+    if lesson_index is None:
+        lesson_index = load_json(DEFAULT_LESSONS_INDEX)
+    lessons = applicable_lessons(lesson_index, resolution["contextSubjects"])
+    recurrence = detect_lesson_recurrence(lessons, recurrence_context)
 
     governed_context_found = bool(
         documents
@@ -212,6 +323,7 @@ def build_receipt(query, snapshot, registry, resolver, explicit_subject=None, ef
         or composed["decisions"]
         or composed["activeInvariants"]
         or composed["evidence"]
+        or lessons
     )
     negative_knowledge_checked = "knownRejectedApproaches" in composed
 
@@ -232,6 +344,7 @@ def build_receipt(query, snapshot, registry, resolver, explicit_subject=None, ef
         for doc in documents
         if doc.get("id") and doc.get("path")
     )
+    source_refs.extend(_lesson_source_refs(lessons))
     source_refs = unique_objects(source_refs)
 
     return {
@@ -253,6 +366,8 @@ def build_receipt(query, snapshot, registry, resolver, explicit_subject=None, ef
             "knownConflicts": composed["knownConflicts"],
             "knownRejectedApproaches": composed["knownRejectedApproaches"],
             "nextCandidateActions": composed["nextCandidateActions"],
+            "applicableLessons": lessons,
+            "lessonRecurrence": recurrence,
             "negativeKnowledgeChecked": negative_knowledge_checked,
         },
         "liveVerification": live,
@@ -289,6 +404,27 @@ def validate_receipt(receipt):
         "BLOCKED",
     }:
         raise BootstrapError("BOOTSTRAP_STATUS_INVALID")
+
+    governed = receipt["governedContext"]
+    lessons = governed.get("applicableLessons")
+    recurrence = governed.get("lessonRecurrence")
+    if not isinstance(lessons, list):
+        raise BootstrapError("APPLICABLE_LESSONS_INVALID")
+    if any(
+        not isinstance(item, dict)
+        or item.get("status") != "CURRENT"
+        or item.get("active") is not True
+        for item in lessons
+    ):
+        raise BootstrapError("APPLICABLE_LESSONS_INVALID")
+    if not isinstance(recurrence, dict) or recurrence.get("status") not in {"NONE", "POSSIBLE_RECURRENCE"}:
+        raise BootstrapError("LESSON_RECURRENCE_INVALID")
+    if recurrence.get("status") == "POSSIBLE_RECURRENCE":
+        if not recurrence.get("lessonId") or recurrence.get("reason") != "FINGERPRINT_MATCH":
+            raise BootstrapError("LESSON_RECURRENCE_INVALID")
+        if recurrence["lessonId"] not in {item.get("lessonId") for item in lessons}:
+            raise BootstrapError("LESSON_RECURRENCE_NOT_APPLICABLE")
+
     authority = receipt["authority"]
     if any(authority.get(key) for key in (
         "createsAuthority",
@@ -310,6 +446,7 @@ def main():
     ap.add_argument("--snapshot", default=str(DEFAULT_SNAPSHOT))
     ap.add_argument("--registry", default=str(DEFAULT_REGISTRY))
     ap.add_argument("--resolver", default=str(DEFAULT_RESOLVER))
+    ap.add_argument("--lessons-index", default=str(DEFAULT_LESSONS_INDEX))
     ap.add_argument("--effective-context")
     ap.add_argument("--output")
     args = ap.parse_args()
@@ -317,6 +454,7 @@ def main():
     snapshot = load_json(Path(args.snapshot))
     registry = load_json(Path(args.registry))
     resolver = load_json(Path(args.resolver))
+    lesson_index = load_json(Path(args.lessons_index))
     effective = load_json(Path(args.effective_context)) if args.effective_context else None
 
     receipt = build_receipt(
@@ -326,6 +464,7 @@ def main():
         resolver,
         explicit_subject=args.subject,
         effective_context=effective,
+        lesson_index=lesson_index,
     )
     validate_receipt(receipt)
     body = json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
