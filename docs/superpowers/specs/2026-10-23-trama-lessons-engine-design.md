@@ -340,7 +340,7 @@ Task 1 completed RED → GREEN on the implementation branch:
 
 - RED exact head: `fc57158b563c93af25681e548e1553ace245bba5`;
 - RED Governance run: `40021484127`, with exactly five expected lesson-test failures caused by missing implementation;
-- GREEN implementation head before documentation-status commits: `149171b5c3d5f0bb2695cc67a824c6663a85068f`;
+- GREEN implementation head: `149171b5c3d5f0bb2695cc67a824c6663a85068f`;
 - GREEN Governance run: `40021783693`, PASS with `337 tests / OK`.
 
 No canonical lesson promotion, merge, deploy or runtime authority has been exercised.
