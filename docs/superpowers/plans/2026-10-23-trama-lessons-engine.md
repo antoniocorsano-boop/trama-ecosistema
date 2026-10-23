@@ -493,6 +493,14 @@ Do not auto-merge. Report exact head, workflow results, human decision reference
 
 ---
 
+## Current implementation status
+
+- Task 1: **GREEN / qualified**.
+- Task 2: **next** — human GitHub decision gate and deterministic promotion.
+- Tasks 3–6: not started.
+- No canonical lesson has yet been promoted.
+- No merge, deploy, publication, tenant mutation or runtime authority has been exercised.
+
 ## Final self-review
 
 - Spec coverage: all design requirements map to Tasks 1–6.
