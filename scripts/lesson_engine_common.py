@@ -10,6 +10,8 @@ DIRECT_CAUSAL_EVIDENCE_KINDS = {
     "FAILED_ASSERTION",
     "CONTROLLED_REPRODUCTION",
 }
+LESSON_EVENT_TYPE = "FAILURE_LEARNING"
+LESSON_INDEXABLE_STATUSES = {"CURRENT", "SUPERSEDED"}
 
 
 def normalize_text(value: str) -> str:
@@ -54,3 +56,15 @@ def lesson_fingerprint(proposal: dict) -> str:
         separators=(",", ":"),
     ).encode("utf-8")
     return "sha256:" + hashlib.sha256(payload).hexdigest()
+
+
+def is_lessons_engine_event(event: object) -> bool:
+    """Return True only for FAILURE_LEARNING events carrying Lessons Engine metadata."""
+    if not isinstance(event, dict) or event.get("type") != LESSON_EVENT_TYPE:
+        return False
+    lesson = event.get("lesson")
+    return (
+        isinstance(lesson, dict)
+        and isinstance(lesson.get("lessonId"), str)
+        and bool(lesson["lessonId"].strip())
+    )
