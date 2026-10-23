@@ -164,10 +164,11 @@ Task 1 implementation is materialized on the branch through exact head `149171b5
 - `config/lesson-governance.json` must declare `authorizedHumanReviewers: ["antoniocorsano-boop"]`, `allowedDecisionKinds: ["PR_REVIEW_APPROVAL", "PR_EXPLICIT_DECISION"]`, `explicitDecisionToken: "APPROVE_CANONICAL"`, and `autoMergeAllowed: false`.
 - The caller supplies `proposalBinding.pullRequest` and `proposalBinding.headSha` in the runtime config passed to `verify_human_gate`; these dynamic values are not persisted in the static governance config.
 
-- [ ] **Step 1: Write failing human-gate and promotion tests**
+- [x] **Step 1: Write failing human-gate and promotion tests**
 
-Add:
+Added:
 
+- `test_static_governance_config_is_fail_closed()`;
 - `test_bot_approval_does_not_satisfy_human_gate()`;
 - `test_unlisted_human_does_not_satisfy_human_gate()`;
 - `test_stale_head_human_decision_does_not_satisfy_gate()`;
@@ -176,6 +177,8 @@ Add:
 - `test_promotion_produces_failure_learning_event_and_markdown()`;
 - `test_promotion_preserves_source_pr_sha_and_run()`;
 - `test_promotion_rejects_candidate_without_human_gate()`.
+
+Test-only RED head: `016b641e92c95fd60437ae6725af94835170efa7`.
 
 The canonical event must contain:
 
@@ -496,7 +499,7 @@ Do not auto-merge. Report exact head, workflow results, human decision reference
 ## Current implementation status
 
 - Task 1: **GREEN / qualified**.
-- Task 2: **contract frozen; next mutation must be test-only RED**.
+- Task 2: **test-only RED on `016b641e92c95fd60437ae6725af94835170efa7`; awaiting causal CI observation before implementation**.
 - Tasks 3–6: not started.
 - No canonical lesson has yet been promoted.
 - No merge, deploy, publication, tenant mutation or runtime authority has been exercised.
