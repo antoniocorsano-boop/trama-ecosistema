@@ -499,7 +499,7 @@ Do not auto-merge. Report exact head, workflow results, human decision reference
 ## Current implementation status
 
 - Task 1: **GREEN / qualified**.
-- Task 2: **test-only RED on `016b641e92c95fd60437ae6725af94835170efa7`; awaiting causal CI observation before implementation**.
+- Task 2: **test-only RED defined at `016b641e92c95fd60437ae6725af94835170efa7`; use that immutable head for causal RED evidence even if later documentation-only commits exist**.
 - Tasks 3–6: not started.
 - No canonical lesson has yet been promoted.
 - No merge, deploy, publication, tenant mutation or runtime authority has been exercised.
