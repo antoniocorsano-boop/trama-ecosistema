@@ -81,7 +81,7 @@
 - Proposal `causalStatus`: `NOT_APPLICABLE | LOCALIZED | CERTIFIED`
 - Direct causal evidence kinds: `DIRECT_EXCEPTION | FAILED_ASSERTION | CONTROLLED_REPRODUCTION`
 
-- [ ] **Step 1: Write the failing candidate-validation tests**
+- [x] **Step 1: Write the failing candidate-validation tests**
 
 Add tests named:
 
@@ -101,7 +101,7 @@ The PR #736 fixture must assert:
 - `causalStatus == "LOCALIZED"`;
 - the candidate text does not claim that `ERR_MODULE_NOT_FOUND: provision-hva-baseline.mjs` was directly observed.
 
-- [ ] **Step 2: Run the focused tests and verify RED**
+- [x] **Step 2: Run the focused tests and verify RED**
 
 Run:
 
@@ -111,7 +111,9 @@ python3 tests/test_lessons_engine.py
 
 Expected: FAIL because proposal schema/helpers/validator do not exist yet.
 
-- [ ] **Step 3: Implement the minimal proposal schema and helpers**
+**Observed equivalent CI evidence:** Governance #40021484127 on exact head `fc57158b563c93af25681e548e1553ace245bba5` reached the full unit-test step and failed with exactly five lesson-contract failures, each caused by the intentionally missing Task 1 implementation; all preceding workflow steps passed.
+
+- [x] **Step 3: Implement the minimal proposal schema and helpers**
 
 `lesson-proposal.schema.json` must require:
 
@@ -121,13 +123,13 @@ Candidate status is exactly `CANDIDATE | VALIDATED | AWAITING_HUMAN_DECISION | N
 
 `validate_proposal(data)` must:
 
-- validate JSON Schema;
+- validate the JSON Schema contract;
 - reject duplicate evidence refs;
 - reject `causalStatus=CERTIFIED` unless `direct_causal_evidence()` returns at least one item;
 - compute and return a deterministic fingerprint;
 - never infer causal certification from a workflow-step failure alone.
 
-- [ ] **Step 4: Run the focused tests and verify GREEN**
+- [x] **Step 4: Run the focused tests and verify GREEN**
 
 Run:
 
@@ -138,12 +140,11 @@ python3 scripts/validate_lesson_proposal.py tests/fixtures/lessons/LL-TDD-RED-00
 
 Expected: PASS; validator prints the lesson ID, fingerprint and `causalStatus=LOCALIZED`.
 
-- [ ] **Step 5: Commit**
+**Observed equivalent CI evidence:** Governance #40021783693 on exact head `149171b5c3d5f0bb2695cc67a824c6663a85068f` completed PASS; the five Task 1 tests all passed inside the full `337 tests / OK` suite.
 
-```bash
-git add schemas/lesson-proposal.schema.json scripts/lesson_engine_common.py scripts/validate_lesson_proposal.py tests/test_lessons_engine.py tests/fixtures/lessons/LL-TDD-RED-001.localized.json
-git commit -m "feat: add governed lesson proposal contract"
-```
+- [x] **Step 5: Commit**
+
+Task 1 implementation is materialized on the branch through exact head `149171b5c3d5f0bb2695cc67a824c6663a85068f` before this plan-status update.
 
 ---
 
@@ -218,82 +219,87 @@ python3 scripts/verify_lesson_human_gate.py --help
 python3 scripts/promote_lesson_proposal.py --help
 ```
 
-Expected: PASS; no repository mutation occurs without `--write`.
+Expected: PASS.
 
 - [ ] **Step 6: Commit**
 
 ```bash
 git add config/lesson-governance.json scripts/verify_lesson_human_gate.py scripts/promote_lesson_proposal.py tests/test_lessons_engine.py
-git commit -m "feat: require human lesson promotion decision"
+git commit -m "feat: add human lesson promotion gate"
 ```
 
 ---
 
-### Task 3: Canonical storage and generated central index
+### Task 3: Central lesson index and canonical consistency
 
 **Files:**
 - Create: `scripts/build_lessons_index.py`
 - Create: `docs/knowledge/lessons/README.md`
 - Create: `docs/knowledge/lessons/LESSONS_INDEX.json`
 - Create: `docs/knowledge/lessons/LESSONS_INDEX.md`
+- Modify: `scripts/lesson_engine_common.py`
 - Modify: `tests/test_lessons_engine.py`
 
 **Interfaces:**
-- Consumes canonical `FAILURE_LEARNING` events from `status/project-knowledge-events.json`.
-- Produces: `build_lessons_index.collect_lessons(events: dict, root: Path) -> list[dict]`.
-- Produces: `build_lessons_index.build_json_index(lessons: list[dict]) -> dict`.
-- Produces: `build_lessons_index.render_markdown(index: dict) -> str`.
-- CLI supports `--check` and `--write`; `--check` must not modify files.
+- Consumes canonical `FAILURE_LEARNING` KnowledgeEvents and canonical lesson documents.
+- Produces `build_lessons_index.build_index(events: dict, lesson_root: Path) -> dict`.
+- Produces `build_lessons_index.render_markdown(index: dict) -> str`.
+- Produces deterministic projections only; index files are never authority.
 
-- [ ] **Step 1: Write failing index tests**
+- [ ] **Step 1: Write failing index-consistency tests**
 
-Add:
+Add tests for:
 
-- `test_index_requires_unique_lesson_ids()`;
-- `test_index_requires_matching_canonical_document()`;
-- `test_index_excludes_superseded_from_active_view()`;
-- `test_index_preserves_supersession_history()`;
-- `test_markdown_and_json_indexes_have_same_active_ids()`;
-- `test_check_mode_detects_generated_index_drift()`.
+- duplicate canonical lesson IDs fail closed;
+- a `CURRENT` lesson event without its canonical document fails closed;
+- a canonical document without the matching current event fails closed;
+- `SUPERSEDED` lesson remains indexed historically but is marked inactive;
+- JSON and Markdown order is deterministic by lesson ID;
+- the index records source repository, PR, exact SHA/run and supersession metadata.
 
-- [ ] **Step 2: Run tests and verify RED**
+- [ ] **Step 2: Verify RED**
 
 Run `python3 tests/test_lessons_engine.py`.
 
-Expected: index tests FAIL because builder/index files do not exist.
+Expected: index tests FAIL because builder/index do not exist.
 
-- [ ] **Step 3: Implement canonical index collection**
+- [ ] **Step 3: Implement the minimal index builder**
 
-`collect_lessons()` must accept only events with `type=FAILURE_LEARNING` and lesson metadata. For every such event it must verify that the declared canonical lesson document exists. Duplicate lesson IDs or duplicate canonical document paths are fatal.
+`build_index()` must select only KnowledgeEvents with `type == FAILURE_LEARNING`, require lesson metadata, resolve the canonical document path, reject duplicates/mismatches, and preserve `CURRENT`/`SUPERSEDED` status.
 
-The JSON index must expose separate `activeLessons` and `historicalLessons` arrays. `SUPERSEDED` items may appear only in the historical array.
+`LESSONS_INDEX.json` schema version:
 
-- [ ] **Step 4: Implement deterministic Markdown rendering and drift check**
+`trama.lessons-index/v1`
 
-`LESSONS_INDEX.md` is a compact table with ID, title, category, scope, priority, subjects, status and document link. It is generated from the JSON index object, never edited independently.
+Each entry must remain compact and contain only lookup metadata, not duplicate the full lesson text.
 
-- [ ] **Step 5: Generate the empty/current baseline index and verify**
+- [ ] **Step 4: Generate both projections**
 
 Run:
 
 ```bash
 python3 scripts/build_lessons_index.py --write
 python3 scripts/build_lessons_index.py --check
-python3 tests/test_lessons_engine.py
 ```
 
-Expected: PASS. If main currently has no lesson-tagged `FAILURE_LEARNING` events, the active index is valid and empty rather than synthetic.
+Expected: both commands PASS and second command reports no drift.
+
+- [ ] **Step 5: Run tests and verify GREEN**
+
+Run `python3 tests/test_lessons_engine.py`.
+
+Expected: PASS.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add scripts/build_lessons_index.py docs/knowledge/lessons tests/test_lessons_engine.py
-git commit -m "feat: add generated central lessons index"
+git add scripts/build_lessons_index.py scripts/lesson_engine_common.py tests/test_lessons_engine.py docs/knowledge/lessons
+git commit -m "feat: add canonical lessons index"
 ```
 
 ---
 
-### Task 4: Contextual Session Bootstrap retrieval
+### Task 4: Contextual Session Bootstrap retrieval and recurrence warning
 
 **Files:**
 - Modify: `scripts/build_session_bootstrap.py`
@@ -304,21 +310,21 @@ git commit -m "feat: add generated central lessons index"
 
 **Interfaces:**
 - Consumes: `docs/knowledge/lessons/LESSONS_INDEX.json`.
-- Produces: `build_session_bootstrap.relevant_lessons(index: dict, subjects: list[str]) -> list[dict]`.
-- Receipt adds `governedContext.lessonsIndexRef` and `governedContext.applicableLessons`.
-- Each applicable lesson entry contains only compact metadata and canonical document path; full lesson Markdown is not loaded by default.
+- Produces receipt field `governedContext.applicableLessons`.
+- Produces lesson provenance in `sourceRefs`.
+- Recurrence result is advisory only: `NONE | POSSIBLE_RECURRENCE`; it never mutates state or blocks by itself.
 
-- [ ] **Step 1: Write failing bootstrap retrieval tests**
+- [ ] **Step 1: Write failing retrieval tests**
 
-Add cases proving:
+Add tests proving:
 
-- a TDD/CI query retrieves `LL-TDD-RED-001` from a fixture index;
-- unrelated subject queries do not retrieve it;
-- `SUPERSEDED` lesson entries are not returned as applicable;
-- duplicate lesson IDs in the index fail closed;
-- existing `knownRejectedApproaches` behavior remains unchanged.
+- query/subject for TDD or CI qualification returns `LL-TDD-RED-001` when canonical/current;
+- unrelated subject does not load it;
+- `SUPERSEDED` lessons are excluded from active applicable lessons;
+- lesson index/document provenance is present;
+- repeated failure semantics can produce `POSSIBLE_RECURRENCE` without creating a new canonical event.
 
-- [ ] **Step 2: Run bootstrap tests and verify RED**
+- [ ] **Step 2: Verify RED**
 
 Run:
 
@@ -327,198 +333,169 @@ python3 scripts/test_session_bootstrap.py
 python3 tests/test_lessons_engine.py
 ```
 
-Expected: new applicable-lesson assertions FAIL.
+Expected: new retrieval assertions FAIL.
 
-- [ ] **Step 3: Add subject aliases and compact lesson resolution**
+- [ ] **Step 3: Extend subject resolution and receipt schema**
 
-Add resolver coverage for the existing development-continuity domain using aliases sufficient to resolve TDD/RED/GREEN/CI qualification work. Do not replace ecosystem-first bootstrap rules.
+Add aliases/subjects for TDD, RED, CI qualification and failure learning without broad keyword guessing. Extend the receipt schema with bounded `applicableLessons` entries and advisory recurrence status.
 
-`relevant_lessons()` must match normalized subject intersection and return only active lessons.
+- [ ] **Step 4: Implement contextual retrieval**
 
-- [ ] **Step 4: Extend receipt schema and builder**
+`build_session_bootstrap.py` must read the compact index, filter by intersection with resolved context subjects, include only active/current lessons and add only the selected entries to the receipt.
 
-`governedContext.lessonsIndexRef` is the fixed path `docs/knowledge/lessons/LESSONS_INDEX.json`.
+Do not load every lesson document into the receipt.
 
-`governedContext.applicableLessons` is an array of compact index entries. Existing authority, negative knowledge and live-verification semantics must remain unchanged.
+- [ ] **Step 5: Implement recurrence signal**
 
-- [ ] **Step 5: Run Project Knowledge regression suite**
+Use deterministic subject/category/fingerprint-compatible matching. A recurrence warning must contain the lesson ID and reason but cannot modify Project Knowledge or change authority.
 
-Run:
+- [ ] **Step 6: Run all bootstrap and lesson tests**
 
-```bash
-python3 scripts/build_project_context_snapshot.py --check
-python3 scripts/test_project_knowledge_runtime.py
-python3 scripts/test_session_bootstrap.py
-python3 scripts/validate_project_knowledge_schemas.py
-python3 tests/test_lessons_engine.py
-```
-
-Expected: all PASS.
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add scripts/build_session_bootstrap.py schemas/session-bootstrap-receipt.schema.json scripts/test_session_bootstrap.py config/session-bootstrap-subjects.json tests/test_lessons_engine.py
-git commit -m "feat: surface applicable lessons in session bootstrap"
-```
-
----
-
-### Task 5: Governance CI, automatic closure evaluation and no-auto-merge boundary
-
-**Files:**
-- Create: `.github/workflows/lesson-governance.yml`
-- Modify: `.github/workflows/governance.yml`
-- Modify: `docs/knowledge/TRAMA-SECOND-BRAIN-OPERATING-MODEL.md`
-- Modify: `tests/test_lessons_engine.py`
-
-**Interfaces:**
-- `governance.yml` runs proposal/index deterministic checks on repository content.
-- `lesson-governance.yml` reacts to lesson candidate PR/review events, reads GitHub review state and verifies the human gate; it has no merge step.
-- Second Brain documentation closure gains a mandatory automatic lesson-evaluation question after significant work.
-
-- [ ] **Step 1: Write failing workflow/policy contract tests**
-
-Add text/structure tests asserting:
-
-- governance workflow runs `python3 scripts/build_lessons_index.py --check`;
-- governance workflow runs the lesson-engine test suite;
-- lesson-governance workflow contains no `gh pr merge`, merge API call or auto-merge action;
-- lesson-governance workflow obtains PR review data and calls `verify_lesson_human_gate.py`;
-- Second Brain closure protocol contains the lesson-evaluation gate and states that the operator is not responsible for remembering it.
-
-- [ ] **Step 2: Run tests and verify RED**
-
-Run `python3 tests/test_lessons_engine.py`.
-
-Expected: workflow/policy assertions FAIL.
-
-- [ ] **Step 3: Extend Governance CI**
-
-Add steps for:
-
-```bash
-python3 tests/test_lessons_engine.py
-python3 scripts/build_lessons_index.py --check
-```
-
-Do not remove or weaken any existing governance validator.
-
-- [ ] **Step 4: Add lesson PR/review workflow**
-
-`lesson-governance.yml` must:
-
-- trigger only for lesson candidate paths/review events;
-- use read permissions by default;
-- fetch review data with the repository-scoped GitHub token;
-- call `verify_lesson_human_gate.py`;
-- report `AWAITING_HUMAN_DECISION` until the gate is satisfied;
-- never approve its own PR;
-- never enable auto-merge;
-- never merge;
-- never write product/runtime data.
-
-If later automatic branch materialization is desired, it must be a separate explicitly reviewed increment; v0.1 keeps promotion writes under the working agent/process after the human gate.
-
-- [ ] **Step 5: Extend the Second Brain closure gate**
-
-After durable-documentation closure, add the automatic lesson evaluation:
-
-1. detect reusable failure/process/diagnostic learning;
-2. search the central lesson index;
-3. update an existing candidate when semantically equivalent;
-4. otherwise prepare one Draft candidate proposal;
-5. never promote without human GitHub decision.
-
-- [ ] **Step 6: Run governance regression checks**
-
-Run:
-
-```bash
-python3 tests/test_lessons_engine.py
-python3 scripts/build_lessons_index.py --check
-python3 scripts/validate_governed_document_registry.py
-python3 scripts/build_project_context_snapshot.py --check
-python3 scripts/test_session_bootstrap.py
-```
-
-Expected: all PASS.
+Expected: PASS.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add .github/workflows/lesson-governance.yml .github/workflows/governance.yml docs/knowledge/TRAMA-SECOND-BRAIN-OPERATING-MODEL.md tests/test_lessons_engine.py
-git commit -m "ci: enforce governed lesson lifecycle"
+git add scripts/build_session_bootstrap.py schemas/session-bootstrap-receipt.schema.json scripts/test_session_bootstrap.py config/session-bootstrap-subjects.json tests/test_lessons_engine.py
+git commit -m "feat: surface lessons in session bootstrap"
 ```
 
 ---
 
-### Task 6: End-to-end acceptance without unauthorized promotion
+### Task 5: Governance CI and automatic closure evaluation
 
 **Files:**
-- Modify only if required by defects discovered during acceptance: files from Tasks 1–5.
-- Do not add `LL-TDD-RED-001` to canonical Project Knowledge in this implementation PR.
+- Modify: `.github/workflows/governance.yml`
+- Create: `.github/workflows/lesson-governance.yml`
+- Modify: `docs/knowledge/TRAMA-SECOND-BRAIN-OPERATING-MODEL.md`
+- Modify: `tests/test_lessons_engine.py`
 
 **Interfaces:**
-- Consumes the real-shaped fixture `tests/fixtures/lessons/LL-TDD-RED-001.localized.json`.
-- Produces a validated promotion preview only; canonical write requires a later dedicated lesson PR and human approval.
+- Governance CI consumes the proposal schema, canonical events/documents and generated index.
+- Lesson governance workflow validates candidate PRs and reports human-gate state; it never approves or merges.
 
-- [ ] **Step 1: Validate the real-shaped first candidate**
+- [ ] **Step 1: Write failing governance tests**
 
-Run:
+Pin:
+
+- generated index drift fails;
+- duplicate lesson ID fails;
+- candidate artifact under `docs/knowledge/lessons/candidates/` cannot be merged to `main` as canonical state;
+- workflow has no `pull-requests: write` or `contents: write` permission for automatic promotion/merge;
+- workflow has no auto-merge command/action;
+- Second Brain closure gate explicitly requires lesson evaluation after significant reusable failure/process learning.
+
+- [ ] **Step 2: Verify RED**
+
+Expected: new workflow/governance assertions FAIL.
+
+- [ ] **Step 3: Extend Governance workflow**
+
+Run deterministic lesson checks in existing Governance CI:
 
 ```bash
-python3 scripts/validate_lesson_proposal.py tests/fixtures/lessons/LL-TDD-RED-001.localized.json
+python3 scripts/build_lessons_index.py --check
+python3 -m unittest tests.test_lessons_engine -v
 ```
 
-Expected: PASS with `causalStatus=LOCALIZED`.
+Also fail if a candidate artifact is present in a main-bound canonical diff without promotion materialization.
 
-- [ ] **Step 2: Prove the causal guard is effective**
+- [ ] **Step 4: Add read-only lesson governance workflow**
 
-Create a temporary copy of the fixture changing only `causalStatus` to `CERTIFIED` without adding direct causal evidence, then run the validator.
+`lesson-governance.yml` may use `pull-requests: read` and `contents: read`. It validates candidate artifacts and checks whether the configured authorized human approval exists. It must report state only.
 
-Expected: FAIL with the causal-evidence guard. Delete the temporary file.
+No write permission, review mutation, merge or branch mutation.
 
-- [ ] **Step 3: Run the full relevant suite**
+- [ ] **Step 5: Update documentation closure gate**
+
+Add the reusable-lesson evaluation step to the existing Second Brain operating model; do not create a separate process authority.
+
+- [ ] **Step 6: Run workflow-contract tests and Governance validation**
+
+Expected: PASS.
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add .github/workflows/governance.yml .github/workflows/lesson-governance.yml docs/knowledge/TRAMA-SECOND-BRAIN-OPERATING-MODEL.md tests/test_lessons_engine.py
+git commit -m "ci: govern lesson capture and index drift"
+```
+
+---
+
+### Task 6: First real candidate, human gate rehearsal and closeout
+
+**Files:**
+- Candidate branch only: `docs/knowledge/lessons/candidates/LL-TDD-RED-001.json`
+- After explicit human approval only: `docs/knowledge/lessons/canonical/LL-TDD-RED-001.md`
+- After explicit human approval only: `status/project-knowledge-events.json`
+- Generated after approved materialization: `docs/knowledge/lessons/LESSONS_INDEX.json`
+- Generated after approved materialization: `docs/knowledge/lessons/LESSONS_INDEX.md`
+
+**Interfaces:**
+- Uses all Tasks 1–5.
+- Demonstrates end-to-end lifecycle without bypassing human authority.
+
+- [ ] **Step 1: Materialize the real candidate from the Task 7 evidence**
+
+Copy the acceptance fixture into the candidate location and validate it.
+
+It must remain `causalStatus=LOCALIZED` until direct evidence exists. Do not retroactively claim that the module-not-found exception was observed.
+
+- [ ] **Step 2: Run duplicate lookup and proposal validation**
+
+Expected: candidate is valid, not canonical, and no existing lesson with the same fingerprint is silently overwritten.
+
+- [ ] **Step 3: Open/update the Draft lesson PR and stop at human gate**
+
+The workflow must report `AWAITING_HUMAN_DECISION` when no authorized approval exists.
+
+No canonical document/Event/index mutation is allowed yet.
+
+- [ ] **Step 4: Human decision**
+
+An authorized human chooses one:
+
+- approve for canonical promotion;
+- local only;
+- needs evidence;
+- reject.
+
+Automation cannot perform this step.
+
+- [ ] **Step 5: If and only if approved, materialize canonical outputs**
+
+Run the promotion tool with the bound human decision, regenerate the index, run full tests and leave the PR unmerged for final human merge.
+
+If the decision is not canonical approval, do not create a `CURRENT FAILURE_LEARNING` event.
+
+- [ ] **Step 6: Full verification**
 
 Run:
 
 ```bash
-python3 tests/test_lessons_engine.py
+python3 scripts/validate_lesson_proposal.py docs/knowledge/lessons/candidates/LL-TDD-RED-001.json
 python3 scripts/build_lessons_index.py --check
-python3 scripts/build_project_context_snapshot.py --check
 python3 scripts/test_project_knowledge_runtime.py
 python3 scripts/test_session_bootstrap.py
-python3 scripts/validate_project_knowledge_schemas.py
+python3 -m unittest discover -s tests -v
 python3 scripts/validate_governed_document_registry.py
 ```
 
-Expected: all PASS.
+Expected: PASS for all applicable checks on the exact candidate head.
 
-- [ ] **Step 4: Verify scope and authority boundaries**
+- [ ] **Step 7: Human merge decision**
 
-Check the branch diff and assert:
-
-- no product/runtime application code changed;
-- no tenant/data migration changed;
-- no auto-merge configuration exists;
-- no canonical `LL-TDD-RED-001` event was written;
-- generated index is deterministic;
-- all new writes are confined to Project Knowledge/governance/test infrastructure.
-
-- [ ] **Step 5: Commit any acceptance-only corrections**
-
-Only if Task 6 exposed a defect:
-
-```bash
-git add <minimal affected files>
-git commit -m "fix: close lessons engine acceptance gaps"
-```
+Do not auto-merge. Report exact head, workflow results, human decision reference, canonical lesson state and remaining scope.
 
 ---
 
-## Post-implementation handoff
+## Final self-review
 
-After the engine implementation PR is independently qualified and merged by human decision, create a **separate Draft lesson proposal PR** for `LL-TDD-RED-001` using the real Docente OS PR #736 evidence.
-
-That proposal starts as `causalStatus=LOCALIZED`. It may move to `CERTIFIED` only if the precise expected exception or an equivalent controlled reproduction becomes directly observable. The lesson itself still requires the normal human GitHub promotion decision before entering canonical Project Knowledge.
+- Spec coverage: all design requirements map to Tasks 1–6.
+- Authority boundary: promotion and merge remain human-controlled; no automation owns approval.
+- Existing architecture: `FAILURE_LEARNING`, Project Knowledge, Context Pack and Session Bootstrap are extended rather than duplicated.
+- First acceptance case preserves the known evidence limit from PR #736 instead of inventing causal certainty.
+- Central index is generated from canonical state and cannot become a second authority.
+- Recurrence detection is advisory and cannot mutate state.
+- No runtime/deploy/student-data authority is introduced.
