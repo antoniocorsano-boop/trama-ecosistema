@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import tempfile
 import unittest
 from copy import deepcopy
 from pathlib import Path
@@ -14,6 +15,7 @@ COMMON = ROOT / "scripts/lesson_engine_common.py"
 SCHEMA = ROOT / "schemas/lesson-proposal.schema.json"
 GATE = ROOT / "scripts/verify_lesson_human_gate.py"
 PROMOTION = ROOT / "scripts/promote_lesson_proposal.py"
+INDEX_BUILDER = ROOT / "scripts/build_lessons_index.py"
 GOVERNANCE_CONFIG = ROOT / "config/lesson-governance.json"
 TEST_PR = 278
 TEST_HEAD = "a" * 40
@@ -205,6 +207,131 @@ class LessonHumanGateAndPromotionTests(unittest.TestCase):
         promotion = self.promotion()
         with self.assertRaisesRegex(promotion.LessonPromotionError, "HUMAN_GATE_REQUIRED"):
             promotion.build_failure_learning_event(deepcopy(self.proposal), {})
+
+
+class LessonIndexContractTests(unittest.TestCase):
+    def index_builder(self):
+        return load_module(self, "build_lessons_index", INDEX_BUILDER)
+
+    def event(self, lesson_id: str, *, status="CURRENT", title=None, supersedes=None):
+        title = title or f"Lesson {lesson_id}"
+        fingerprint = "sha256:" + ("1" if lesson_id.endswith("001") else "2") * 64
+        return {
+            "eventId": f"TRAMA-EVT-LESSON-{lesson_id}",
+            "type": "FAILURE_LEARNING",
+            "subject": "test-driven-development",
+            "statement": f"Principle for {lesson_id}",
+            "status": status,
+            "rationale": f"Rule for {lesson_id}",
+            "sourceRefs": [
+                {
+                    "repository": "example/repo",
+                    "pullRequest": 42,
+                    "exactHead": "c" * 40,
+                    "workflowRun": "123456789",
+                    "ref": "github-actions:workflow-run/123456789",
+                    "evidenceKind": "FAILED_ASSERTION",
+                }
+            ],
+            "validFrom": "2026-10-23T21:10:00Z",
+            "supersedes": [f"TRAMA-EVT-LESSON-{item}" for item in (supersedes or [])],
+            "invalidatedBy": [],
+            "freshness": {"policy": "UNTIL_CHANGE"},
+            "lesson": {
+                "lessonId": lesson_id,
+                "title": title,
+                "category": "TDD_CI",
+                "scope": "TRAMA",
+                "priority": "HIGH",
+                "subjects": ["test-driven-development", "ci-qualification"],
+                "fingerprint": fingerprint,
+                "causalStatus": "CERTIFIED",
+                "humanDecisionRef": "github:example/repo/pull/42/comment/9",
+                "humanDecisionKind": "PR_EXPLICIT_DECISION",
+                "humanDecisionHead": "d" * 40,
+                "humanReviewer": "authorized-human",
+                "canonicalDocument": f"docs/knowledge/lessons/canonical/{lesson_id}.md",
+                "supersedes": list(supersedes or []),
+            },
+        }
+
+    def write_doc(self, lesson_root: Path, event: dict):
+        lesson = event["lesson"]
+        path = lesson_root / f"{lesson['lessonId']}.md"
+        path.write_text(
+            f"# {lesson['lessonId']} — {lesson['title']}\n\n"
+            f"**Status:** CANONICAL  \n"
+            f"**Fingerprint:** `{lesson['fingerprint']}`\n",
+            encoding="utf-8",
+        )
+        return path
+
+    def test_duplicate_canonical_lesson_ids_fail_closed(self):
+        builder = self.index_builder()
+        first = self.event("LL-INDEX-001")
+        second = deepcopy(first)
+        second["eventId"] = "TRAMA-EVT-LESSON-DUPLICATE"
+        with tempfile.TemporaryDirectory() as tmp:
+            lesson_root = Path(tmp)
+            self.write_doc(lesson_root, first)
+            with self.assertRaisesRegex(builder.LessonIndexError, "DUPLICATE_LESSON_ID"):
+                builder.build_index({"events": [first, second]}, lesson_root)
+
+    def test_current_event_without_canonical_document_fails_closed(self):
+        builder = self.index_builder()
+        event = self.event("LL-INDEX-001")
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(builder.LessonIndexError, "CANONICAL_LESSON_DOCUMENT_MISSING"):
+                builder.build_index({"events": [event]}, Path(tmp))
+
+    def test_canonical_document_without_matching_event_fails_closed(self):
+        builder = self.index_builder()
+        orphan = self.event("LL-INDEX-001")
+        with tempfile.TemporaryDirectory() as tmp:
+            lesson_root = Path(tmp)
+            self.write_doc(lesson_root, orphan)
+            with self.assertRaisesRegex(builder.LessonIndexError, "ORPHAN_CANONICAL_LESSON_DOCUMENT"):
+                builder.build_index({"events": []}, lesson_root)
+
+    def test_superseded_lesson_remains_indexed_but_inactive(self):
+        builder = self.index_builder()
+        event = self.event("LL-INDEX-001", status="SUPERSEDED")
+        with tempfile.TemporaryDirectory() as tmp:
+            lesson_root = Path(tmp)
+            self.write_doc(lesson_root, event)
+            index = builder.build_index({"events": [event]}, lesson_root)
+        self.assertEqual(index["schemaVersion"], "trama.lessons-index/v1")
+        self.assertEqual(len(index["lessons"]), 1)
+        self.assertEqual(index["lessons"][0]["status"], "SUPERSEDED")
+        self.assertIs(index["lessons"][0]["active"], False)
+
+    def test_json_and_markdown_order_is_deterministic_by_lesson_id(self):
+        builder = self.index_builder()
+        event_b = self.event("LL-INDEX-002", title="Second")
+        event_a = self.event("LL-INDEX-001", title="First")
+        with tempfile.TemporaryDirectory() as tmp:
+            lesson_root = Path(tmp)
+            self.write_doc(lesson_root, event_b)
+            self.write_doc(lesson_root, event_a)
+            index = builder.build_index({"events": [event_b, event_a]}, lesson_root)
+            markdown = builder.render_markdown(index)
+        self.assertEqual([item["lessonId"] for item in index["lessons"]], ["LL-INDEX-001", "LL-INDEX-002"])
+        self.assertLess(markdown.index("LL-INDEX-001"), markdown.index("LL-INDEX-002"))
+
+    def test_index_preserves_provenance_and_supersession_metadata(self):
+        builder = self.index_builder()
+        event = self.event("LL-INDEX-002", supersedes=["LL-INDEX-001"])
+        with tempfile.TemporaryDirectory() as tmp:
+            lesson_root = Path(tmp)
+            self.write_doc(lesson_root, event)
+            index = builder.build_index({"events": [event]}, lesson_root)
+        item = index["lessons"][0]
+        self.assertEqual(item["sourceRepository"], "example/repo")
+        self.assertEqual(item["sourceRefs"][0]["pullRequest"], 42)
+        self.assertEqual(item["sourceRefs"][0]["exactHead"], "c" * 40)
+        self.assertEqual(item["sourceRefs"][0]["workflowRun"], "123456789")
+        self.assertEqual(item["supersedes"], ["LL-INDEX-001"])
+        self.assertEqual(item["canonicalDocument"], "docs/knowledge/lessons/canonical/LL-INDEX-002.md")
 
 
 if __name__ == "__main__":
