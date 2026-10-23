@@ -15,7 +15,7 @@
 - Do not create a parallel knowledge base; Project Knowledge remains the operational memory authority.
 - Canonical lessons are `FAILURE_LEARNING` KnowledgeEvents plus readable canonical lesson documents.
 - Human GitHub decision is mandatory before canonical promotion.
-- No automatic actor may approve or merge a lesson PR.
+- No automatic actor may approve, emit the governed human-decision marker, or merge a lesson PR.
 - Candidate preparation may be automated; canonical promotion may not be self-authorized.
 - One central index only; no per-repository index copies.
 - Chat history and assistant memory are never canonical technical state.
@@ -27,7 +27,7 @@
 ## Review Focus
 
 1. A candidate marked causally `CERTIFIED` without direct exception/assertion/controlled-reproduction evidence must be rejected by validation — pinned in Task 1.
-2. A bot or non-authorized reviewer must never satisfy the human promotion gate — pinned in Task 2.
+2. A bot/non-authorized identity, stale-head approval or automated decision marker must never satisfy the human promotion gate — pinned in Task 2.
 3. Index generation must fail closed on canonical-document/event mismatch and duplicate lesson IDs — pinned in Task 3.
 4. Session Bootstrap must return only relevant `CURRENT` lessons and exclude `SUPERSEDED` lessons — pinned in Task 4.
 5. Governance CI must detect generated-index drift and candidate artifacts accidentally prepared for canonical merge — pinned in Task 5.
@@ -39,10 +39,10 @@
 ### New files
 
 - `schemas/lesson-proposal.schema.json` — machine-readable candidate contract.
-- `config/lesson-governance.json` — human-review authority and no-auto-merge policy.
+- `config/lesson-governance.json` — human-review/decision authority and no-auto-merge policy.
 - `scripts/lesson_engine_common.py` — normalized IDs, fingerprints, evidence helpers and canonical lesson selection.
 - `scripts/validate_lesson_proposal.py` — deterministic candidate validation.
-- `scripts/verify_lesson_human_gate.py` — authorized human-review check over GitHub review data.
+- `scripts/verify_lesson_human_gate.py` — authorized human GitHub decision check over PR review/discussion data.
 - `scripts/promote_lesson_proposal.py` — deterministic candidate-to-canonical transformation; no GitHub merge action.
 - `scripts/build_lessons_index.py` — generated JSON/Markdown index builder and `--check` mode.
 - `tests/test_lessons_engine.py` — proposal, promotion, index and recurrence contract tests.
@@ -60,7 +60,7 @@
 - `config/session-bootstrap-subjects.json` — aliases/subjects needed to resolve lesson contexts such as TDD and CI qualification.
 - `docs/knowledge/TRAMA-SECOND-BRAIN-OPERATING-MODEL.md` — automatic lesson-evaluation closure gate.
 - `.github/workflows/governance.yml` — lesson schema/index deterministic checks.
-- `.github/workflows/lesson-governance.yml` — PR/review gate for candidate validation and human approval verification; never merges.
+- `.github/workflows/lesson-governance.yml` — PR decision gate for candidate validation and human-decision verification; never merges.
 
 ---
 
@@ -144,7 +144,7 @@ Expected: PASS; validator prints the lesson ID, fingerprint and `causalStatus=LO
 
 - [x] **Step 5: Commit**
 
-Task 1 implementation is materialized on the branch through exact head `149171b5c3d5f0bb2695cc67a824c6663a85068f` before this plan-status update.
+Task 1 implementation is materialized on the branch through exact head `149171b5c3d5f0bb2695cc67a824c6663a85068f` before the documentation-status updates.
 
 ---
 
@@ -158,10 +158,11 @@ Task 1 implementation is materialized on the branch through exact head `149171b5
 
 **Interfaces:**
 - Consumes: `validate_proposal(data: dict) -> dict` from Task 1.
-- Produces: `verify_lesson_human_gate.verify_human_gate(reviews: list[dict], config: dict) -> str` returning the authorized reviewer login or raising `LessonGateError`.
+- Produces: `verify_lesson_human_gate.verify_human_gate(decision_artifacts: list[dict], config: dict) -> dict` returning the exact-head-bound authorized human decision or raising `LessonGateError`.
 - Produces: `promote_lesson_proposal.build_failure_learning_event(proposal: dict, decision: dict) -> dict`.
 - Produces: `promote_lesson_proposal.render_canonical_markdown(proposal: dict, decision: dict) -> str`.
-- `config/lesson-governance.json` must declare `authorizedHumanReviewers: ["antoniocorsano-boop"]` and `autoMergeAllowed: false`.
+- `config/lesson-governance.json` must declare `authorizedHumanReviewers: ["antoniocorsano-boop"]`, `allowedDecisionKinds: ["PR_REVIEW_APPROVAL", "PR_EXPLICIT_DECISION"]`, `explicitDecisionToken: "APPROVE_CANONICAL"`, and `autoMergeAllowed: false`.
+- The caller supplies `proposalBinding.pullRequest` and `proposalBinding.headSha` in the runtime config passed to `verify_human_gate`; these dynamic values are not persisted in the static governance config.
 
 - [ ] **Step 1: Write failing human-gate and promotion tests**
 
@@ -169,7 +170,9 @@ Add:
 
 - `test_bot_approval_does_not_satisfy_human_gate()`;
 - `test_unlisted_human_does_not_satisfy_human_gate()`;
-- `test_authorized_human_approval_satisfies_gate()`;
+- `test_stale_head_human_decision_does_not_satisfy_gate()`;
+- `test_authorized_human_review_approval_satisfies_gate()`;
+- `test_authorized_explicit_pr_decision_satisfies_gate()`;
 - `test_promotion_produces_failure_learning_event_and_markdown()`;
 - `test_promotion_preserves_source_pr_sha_and_run()`;
 - `test_promotion_rejects_candidate_without_human_gate()`.
@@ -190,14 +193,14 @@ Expected: new gate/promotion tests FAIL because implementations do not exist.
 
 - [ ] **Step 3: Implement the gate**
 
-`verify_human_gate()` must accept only a review with:
+`verify_human_gate()` must accept exactly two decision forms:
 
-- `state == "APPROVED"`;
-- reviewer login present in `authorizedHumanReviewers`;
-- reviewer login not ending in `[bot]`;
-- review bound to the proposal PR/head supplied by the caller.
+1. `PR_REVIEW_APPROVAL`: state `APPROVED`, authorized human identity, exact PR/head binding;
+2. `PR_EXPLICIT_DECISION`: exact token `APPROVE_CANONICAL`, authorized human author, exact PR/head binding.
 
-It must not create reviews, labels, commits or merges.
+Both forms must reject bot identities, unauthorized humans, stale/mismatched heads and mismatched PR numbers. CI status, labels and automated comments do not count.
+
+It must not create reviews, comments, labels, commits or merges.
 
 - [ ] **Step 4: Implement deterministic promotion rendering**
 
@@ -265,7 +268,7 @@ Expected: index tests FAIL because builder/index do not exist.
 
 - [ ] **Step 3: Implement the minimal index builder**
 
-`build_index()` must select only KnowledgeEvents with `type == FAILURE_LEARNING`, require lesson metadata, resolve the canonical document path, reject duplicates/mismatches, and preserve `CURRENT`/`SUPERSEDED` status.
+`build_index()` must select Lessons Engine `FAILURE_LEARNING` KnowledgeEvents carrying lesson metadata, require the canonical document path, reject duplicates/mismatches, and preserve `CURRENT`/`SUPERSEDED` status. Pre-existing legacy `FAILURE_LEARNING` events without Lessons Engine metadata remain valid Project Knowledge and are not silently reclassified as indexed lessons.
 
 `LESSONS_INDEX.json` schema version:
 
@@ -402,9 +405,9 @@ Also fail if a candidate artifact is present in a main-bound canonical diff with
 
 - [ ] **Step 4: Add read-only lesson governance workflow**
 
-`lesson-governance.yml` may use `pull-requests: read` and `contents: read`. It validates candidate artifacts and checks whether the configured authorized human approval exists. It must report state only.
+`lesson-governance.yml` may use `pull-requests: read` and `contents: read`. It validates candidate artifacts and checks whether the configured authorized human decision exists. It must report state only.
 
-No write permission, review mutation, merge or branch mutation.
+No write permission, review/comment mutation, merge or branch mutation.
 
 - [ ] **Step 5: Update documentation closure gate**
 
@@ -448,7 +451,7 @@ Expected: candidate is valid, not canonical, and no existing lesson with the sam
 
 - [ ] **Step 3: Open/update the Draft lesson PR and stop at human gate**
 
-The workflow must report `AWAITING_HUMAN_DECISION` when no authorized approval exists.
+The workflow must report `AWAITING_HUMAN_DECISION` when no authorized decision artifact exists.
 
 No canonical document/Event/index mutation is allowed yet.
 
@@ -461,7 +464,7 @@ An authorized human chooses one:
 - needs evidence;
 - reject.
 
-Automation cannot perform this step.
+The decision must be expressed through an eligible GitHub approval review or the governed exact-head-bound PR decision marker. Automation cannot perform this step.
 
 - [ ] **Step 5: If and only if approved, materialize canonical outputs**
 
@@ -493,7 +496,7 @@ Do not auto-merge. Report exact head, workflow results, human decision reference
 ## Final self-review
 
 - Spec coverage: all design requirements map to Tasks 1–6.
-- Authority boundary: promotion and merge remain human-controlled; no automation owns approval.
+- Authority boundary: promotion and merge remain human-controlled; no automation owns approval or the explicit human-decision marker.
 - Existing architecture: `FAILURE_LEARNING`, Project Knowledge, Context Pack and Session Bootstrap are extended rather than duplicated.
 - First acceptance case preserves the known evidence limit from PR #736 instead of inventing causal certainty.
 - Central index is generated from canonical state and cannot become a second authority.
