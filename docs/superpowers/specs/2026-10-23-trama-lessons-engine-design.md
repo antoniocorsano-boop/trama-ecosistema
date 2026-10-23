@@ -93,6 +93,12 @@ Automation may not:
 
 Canonical promotion requires a human GitHub decision. The durable decision reference is the reviewed/merged PR.
 
+### Human decision semantics
+
+The governed human decision is distinct from the mechanical act of merging a pull request. The Lessons Engine must verify a positive human decision artifact bound to the exact candidate PR/head before it may materialize canonical lesson outputs. A later human merge remains a separate integration decision.
+
+An ordinary PR approval review may be used as the decision artifact when repository policy permits the author to receive such a review. For self-authored or solo-maintained repositories where self-approval is not available, the approved design also permits an explicit human decision marker on the PR discussion, provided the future gate implementation verifies author identity, exact PR/head binding and an unambiguous `APPROVE_CANONICAL` decision. CI success, labels applied by automation and bot comments never satisfy this gate.
+
 ## 7. Lifecycle
 
 ```text
@@ -248,7 +254,7 @@ The capture step is automatic in the development protocol; the authority decisio
 
 The candidate PR remains Draft while evidence is incomplete.
 
-Before canonical materialization, the system must verify an explicit approval from an authorized human reviewer configured for lesson governance. The promotion step then:
+Before canonical materialization, the system must verify an explicit positive decision from an authorized human configured for lesson governance and bound to the exact candidate PR/head. The decision may be represented by an eligible GitHub approval review or, where self-review is unavailable, by the governed explicit PR decision marker defined by the implementation contract. The promotion step then:
 
 1. removes the candidate artifact;
 2. creates/updates the canonical lesson document;
@@ -257,7 +263,7 @@ Before canonical materialization, the system must verify an explicit approval fr
 5. runs Project Knowledge, Session Bootstrap and governance checks;
 6. leaves the PR unmerged for final human merge.
 
-No automatic actor may approve or merge the PR.
+No automatic actor may approve, emit the human decision marker or merge the PR.
 
 ## 13. Contextual retrieval
 
@@ -290,7 +296,7 @@ It cannot create a new canonical event, change authority or block execution by i
 
 1. Candidate preparation is not canonical promotion.
 2. CI success is not human approval.
-3. A bot review is not human approval.
+3. A bot review or bot-authored decision marker is not human approval.
 4. `CANONICAL` cannot appear in a candidate contract.
 5. A candidate cannot certify causal evidence that its source references do not support.
 6. Canonical document and `FAILURE_LEARNING` event must agree on lesson ID and fingerprint.
@@ -300,6 +306,7 @@ It cannot create a new canonical event, change authority or block execution by i
 10. No automatic widening of scope.
 11. No lesson may become authority merely because it was retrieved frequently.
 12. Volatile GitHub state remains Live Observation, not durable lesson state.
+13. The human decision artifact must be exact-head-bound and cannot be synthesized from CI success.
 
 ## 16. Initial acceptance case
 
@@ -326,7 +333,7 @@ The design is successful when:
 
 1. reusable learning is captured without depending on operator memory;
 2. candidate evidence and provenance are deterministic and reviewable;
-3. human GitHub approval is technically required for canonical promotion;
+3. human GitHub approval or an equivalent governed explicit PR decision is technically required for canonical promotion;
 4. canonical lessons become existing Project Knowledge, not a second authority;
 5. one generated central index stays consistent with canonical state;
 6. Session Bootstrap returns only relevant active lessons;
