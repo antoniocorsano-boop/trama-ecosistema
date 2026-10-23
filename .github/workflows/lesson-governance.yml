@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Validate lesson governance workflow contract
+        run: python3 -m unittest tests.test_lesson_governance -v
+
       - name: Validate lesson candidates
         id: candidates
         shell: bash
