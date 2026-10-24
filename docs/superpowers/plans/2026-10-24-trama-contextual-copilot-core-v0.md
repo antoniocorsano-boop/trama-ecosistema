@@ -3,7 +3,8 @@
 **Data:** 2026-10-24  
 **Stato:** IMPLEMENTATION AUTHORIZED / NO MERGE / NO DEPLOY  
 **Baseline:** `main@f666239cfdb359ecf52342ed3502f4a60233ea45`  
-**Design:** `docs/superpowers/specs/2026-10-22-trama-contextual-copilot-core-design.md`  
+**Contratto canonico:** `docs/superpowers/specs/2026-10-24-trama-contextual-copilot-core-v0-contract.md`  
+**Baseline di ricerca preservata:** ramo `docs/contextual-copilot-core`  
 **Contratti subordinanti:** OR-07 Shared Capability Layer · OR-08 Runtime Portability
 
 ## Obiettivo
@@ -37,6 +38,8 @@ Il pacchetto è `private` nel primo incremento: la qualifica riguarda il contrat
 - `WRITE_REVERSIBLE` e `WRITE_EXTERNAL` richiedono gate umano prima dell'esecuzione;
 - classi studente protette mai inviate automaticamente a provider remoto;
 - la semantica può riordinare solo azioni già autorizzate, mai crearne di nuove;
+- un errore semantico degrada al ranking deterministico;
+- un errore della policy fallisce chiuso senza raggiungere l'esecutore;
 - modalità senza provider generativo pienamente valida;
 - nessun merge o deploy implicito.
 
@@ -64,7 +67,8 @@ Implementare:
 - policy engine fail-closed;
 - risoluzione azioni provider-neutral;
 - dispatch con secondo controllo policy e gate umano;
-- ranking semantico opzionale limitato alle azioni già ammesse.
+- ranking semantico opzionale limitato alle azioni già ammesse;
+- isolamento dei guasti semantici e policy.
 
 ## Task 3 — superficie di import stabile
 
@@ -100,7 +104,8 @@ CORE-01 v0 è tecnicamente candidato quando:
 2. nessun branching applicativo compare nel Core;
 3. policy e gate umano sono verificati;
 4. `npm pack --dry-run` produce un artefatto stabile;
-5. i gate TRAMA dell'exact head risultano verdi;
-6. nessun merge/deploy è stato eseguito.
+5. il vocabolario è conforme a TERM-01;
+6. i gate TRAMA dell'exact head risultano verdi;
+7. nessun merge/deploy è stato eseguito.
 
 Solo dopo questo confine `registro-docente` può avviare LIB-01B consumando l'artefatto condiviso, senza resolver sostitutivi locali.
