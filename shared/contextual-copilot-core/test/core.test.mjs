@@ -106,6 +106,47 @@ test('semantic ranking can reorder allowed actions but cannot add capabilities',
   assert.ok(!resolved.some((action) => action.capability === 'CREATE'));
 });
 
+test('semantic ranking failure falls back to deterministic allowed actions', async () => {
+  const semanticPort = {
+    async rank() {
+      throw new Error('semantic runtime unavailable');
+    },
+  };
+  const core = createContextualCopilotCore({
+    registry: createActionRegistry(actions),
+    policyEngine: createFailClosedPolicyEngine(),
+    semanticPort,
+  });
+
+  const resolved = await core.resolveActions(registroContext);
+  assert.deepEqual(resolved.map((action) => action.id), ['annotate', 'review', 'search']);
+});
+
+test('policy engine failure fails closed and never reaches the executor', async () => {
+  const policyEngine = {
+    async evaluate() {
+      throw new Error('policy unavailable');
+    },
+  };
+  const core = createContextualCopilotCore({
+    registry: createActionRegistry(actions),
+    policyEngine,
+  });
+
+  let executions = 0;
+  const resolved = await core.resolveActions({ ...docenteContext, capabilities: ['OPEN'] });
+  assert.deepEqual(resolved, []);
+
+  const result = await core.dispatch({
+    context: { ...docenteContext, capabilities: ['OPEN'] },
+    actionId: 'open',
+    executor: async () => { executions += 1; return { ok: true }; },
+  });
+  assert.equal(result.status, 'DENIED');
+  assert.equal(result.reason, 'POLICY_EVALUATION_FAILED');
+  assert.equal(executions, 0);
+});
+
 test('policy is evaluated before dispatch and a denied action never reaches the executor', async () => {
   const events = [];
   const policyEngine = {
