@@ -25,7 +25,7 @@ export const ACTION_RISKS = Object.freeze([
 export const DATA_CLASSES = Object.freeze([
   'PUBLIC_APP',
   'TEACHER_PROFESSIONAL',
-  'CURRICULUM',
+  'CURRICOLO',
   'STUDENT_PERSONAL',
   'STUDENT_SENSITIVE',
   'INSTITUTIONAL',
