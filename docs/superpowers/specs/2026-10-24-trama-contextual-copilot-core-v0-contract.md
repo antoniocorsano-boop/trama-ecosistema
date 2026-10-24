@@ -33,7 +33,7 @@ Policy > capability dichiarate dall'app > stato > semantica > preferenze
 
 Nessun modello, embedding, ranking o preferenza locale può introdurre una capability che il consumer non abbia già dichiarato.
 
-I guardrail minimi di rischio definiti dal Core sono invarianti: una policy iniettata può restringere ulteriormente ciò che è consentito, ma non può rendere più permissivo il nucleo condiviso.
+I guardrail minimi di rischio e privacy definiti dal Core sono invarianti: una policy iniettata può restringere ulteriormente ciò che è consentito, ma non può rendere più permissivo il nucleo condiviso.
 
 ## 3. ContextSnapshot
 
@@ -43,9 +43,9 @@ Contratto minimo:
 interface ContextSnapshot {
   appId: string
   surface: string
-  entities: ContextEntity[]
-  capabilities: CapabilityId[]
-  permissions: string[]
+  entities: readonly ContextEntity[]
+  capabilities: readonly CapabilityId[]
+  permissions: readonly string[]
   privacy: PrivacyContext
   temporal?: TemporalContext
   state?: string
@@ -59,7 +59,10 @@ Regole:
 - `entities` contiene solo riferimenti necessari alla richiesta corrente;
 - `capabilities` delimita ciò che il consumer può chiedere al Core;
 - `permissions` e `privacy` restano esplicite;
-- nessun oggetto specifico di provider entra nel contratto condiviso.
+- nessun oggetto specifico di provider entra nel contratto condiviso;
+- dopo la validazione, il Core costruisce uno **snapshot difensivo read-only** per policy, Semantic Port ed executor;
+- array e campi privacy rilevanti per capability/permission/routing remoto non vengono passati per riferimento al chiamante;
+- un'estensione non può mutare il contesto del consumer per rendere più permissiva una chiamata successiva.
 
 ## 4. Capability comuni v0
 
@@ -119,9 +122,15 @@ Principi:
 - il Core non riclassifica autonomamente dati protetti in classi più permissive;
 - l'adapter espone solo i dati necessari alla richiesta corrente.
 
-## 7. Modalità senza provider generativo
+## 7. Modalità generativa
 
-Il Core deve restare utile senza provider generativo.
+Il Core deve restare utile senza provider generativo e possiede una modalità esplicita:
+
+```text
+generativeMode = none | local | remote
+```
+
+`none` è il default fail-closed.
 
 Devono continuare a funzionare, quando dichiarate dal consumer:
 
@@ -132,7 +141,14 @@ Devono continuare a funzionare, quando dichiarate dal consumer:
 - collegamento governato;
 - ordinamento deterministico delle azioni.
 
-Le azioni che richiedono esplicitamente generazione vengono negate quando il provider non è disponibile o non è autorizzato.
+Per le azioni `requiresGenerativeAI = true`, il Core applica una guardia propria **prima** della policy iniettata:
+
+- `none` → `GENERATIVE_PROVIDER_UNAVAILABLE`;
+- `remote` senza `privacy.remoteProviderAllowed` → `REMOTE_PROVIDER_NOT_AUTHORIZED`;
+- `remote` con `STUDENT_PERSONAL` o `STUDENT_SENSITIVE` → `PROTECTED_DATA_REMOTE_DENIED`;
+- `local` resta subordinata alle capability e alle ulteriori policy del consumer.
+
+Un `PolicyEngine` personalizzato può restringere questi esiti, non aggirarli.
 
 ## 8. Semantica opzionale
 
@@ -154,7 +170,8 @@ Vincoli:
 - un Semantic Port `remote` può ricevere il contesto solo quando `privacy.remoteProviderAllowed = true`;
 - `STUDENT_PERSONAL` e `STUDENT_SENSITIVE` non vengono inoltrati al Semantic Port remoto dal Core;
 - quando l'accesso semantico remoto non è autorizzato o il contesto contiene classi studente protette, il ranking opzionale degrada al comportamento deterministico;
-- un'azione che richiede esplicitamente ricerca semantica viene negata se il Semantic Port necessario non è disponibile o non è autorizzato.
+- un'azione che richiede esplicitamente ricerca semantica viene negata se il Semantic Port necessario non è disponibile o non è autorizzato;
+- policy, ranking ed executor ricevono uno snapshot difensivo: mutazioni tentate da estensioni non possono alterare il contesto originale del consumer.
 
 ## 9. Policy fail-closed
 
@@ -169,7 +186,8 @@ Un `PolicyEngine` iniettato può introdurre ulteriori restrizioni o richiedere u
 
 - autorizzare `INSTITUTIONAL_DECISION` nel Core generico;
 - rimuovere la conferma umana richiesta da `WRITE_REVERSIBLE` o `WRITE_EXTERNAL`;
-- aggirare i vincoli privacy che proteggono i flussi remoti.
+- aggirare i vincoli privacy che proteggono i flussi remoti semantici o generativi;
+- mutare lo snapshot ricevuto per ampliare capability, permessi o autorizzazioni remote del consumer.
 
 ## 10. Confine degli adapter
 
@@ -204,8 +222,9 @@ Il gate deve dimostrare che:
 - ogni azione restituita appartiene alle capability dichiarate;
 - nessun identificatore dei due consumer compare come branching nel sorgente del Core;
 - una policy negativa impedisce sempre il dispatch;
-- una policy permissiva non può aggirare i guardrail minimi di rischio;
+- una policy permissiva non può aggirare i guardrail minimi di rischio o privacy generativa;
 - il ranking semantico non crea nuove capability;
+- un'estensione non può mutare il contesto del chiamante per introdurre capability o autorizzazioni successive;
 - un errore semantico degrada al comportamento deterministico;
 - un Semantic Port remoto non riceve contesto protetto o non autorizzato;
 - un errore della policy fallisce chiuso;
@@ -245,12 +264,13 @@ Il lavoro di ricerca sul posizionamento adattivo del FAB resta preservato sul ra
 Il candidato è qualificabile quando:
 
 1. test cross-app e regressioni fail-closed sono verdi;
-2. i guardrail minimi di rischio risultano non aggirabili da policy iniettate;
+2. i guardrail minimi di rischio e privacy generativa risultano non aggirabili da policy iniettate;
 3. i flussi semantici remoti rispettano la classificazione privacy;
-4. il vocabolario è conforme a TERM-01;
-5. nessun branching applicativo compare nel Core;
-6. l'artefatto a secco contiene solo la superficie prevista;
-7. Governance CI passa sullo stesso exact SHA;
-8. nessun merge, deploy o publish è stato eseguito.
+4. le estensioni non possono mutare il `ContextSnapshot` del consumer per ampliare authority o capability;
+5. il vocabolario è conforme a TERM-01;
+6. nessun branching applicativo compare nel Core;
+7. l'artefatto a secco contiene solo la superficie prevista;
+8. Governance CI passa sullo stesso exact SHA;
+9. nessun merge, deploy o publish è stato eseguito.
 
 Solo dopo questo confine LIB-01B può collegare la Biblioteca privata al Core tramite un adapter sottile, senza un resolver sostitutivo locale.
