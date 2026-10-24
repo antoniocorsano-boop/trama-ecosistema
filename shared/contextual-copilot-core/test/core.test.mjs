@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import {
   CAPABILITIES,
   ACTION_RISKS,
+  DATA_CLASSES,
   createActionRegistry,
   createContextualCopilotCore,
   createFailClosedPolicyEngine,
@@ -47,10 +48,12 @@ const registroContext = {
   privacy,
 };
 
-test('exports the approved common capability and risk vocabularies', () => {
+test('exports the approved common capability, risk and data vocabularies', () => {
   assert.ok(CAPABILITIES.includes('ASK'));
   assert.ok(CAPABILITIES.includes('IMPORT'));
   assert.ok(ACTION_RISKS.includes('INSTITUTIONAL_DECISION'));
+  assert.ok(DATA_CLASSES.includes('CURRICOLO'));
+  assert.equal(DATA_CLASSES.includes('CURRICULUM'), false);
 });
 
 test('validates a minimal provider-neutral ContextSnapshot', () => {
