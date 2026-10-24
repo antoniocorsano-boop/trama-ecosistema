@@ -36,6 +36,7 @@ const RISK_SET = new Set(ACTION_RISKS);
 const DATA_CLASS_SET = new Set(DATA_CLASSES);
 const PROTECTED_REMOTE_CLASSES = new Set(['STUDENT_PERSONAL', 'STUDENT_SENSITIVE']);
 const HUMAN_CONFIRMATION_RISKS = new Set(['WRITE_REVERSIBLE', 'WRITE_EXTERNAL']);
+const SEMANTIC_MODES = new Set(['local', 'remote']);
 
 function invariant(condition, message) {
   if (!condition) throw new TypeError(message);
@@ -168,20 +169,53 @@ function scoreMapFromRanked(ranked, allowedIds) {
 export function createContextualCopilotCore({ registry, policyEngine, semanticPort = null }) {
   invariant(registry && typeof registry.list === 'function' && typeof registry.get === 'function', 'registry must implement list() and get()');
   invariant(policyEngine && typeof policyEngine.evaluate === 'function', 'policyEngine.evaluate is required');
-  if (semanticPort !== null) invariant(typeof semanticPort === 'object', 'semanticPort must be an object or null');
+  if (semanticPort !== null) {
+    invariant(typeof semanticPort === 'object', 'semanticPort must be an object or null');
+    invariant(SEMANTIC_MODES.has(semanticPort.mode), 'semanticPort.mode must be local or remote');
+  }
+
+  function coreRiskGuard(action) {
+    if (action.risk === 'INSTITUTIONAL_DECISION') {
+      return {
+        allowed: false,
+        reason: 'INSTITUTIONAL_DECISION_REQUIRES_VERTICAL_AUTHORITY',
+        humanConfirmationRequired: true,
+      };
+    }
+    return {
+      allowed: true,
+      reason: 'ALLOWED',
+      humanConfirmationRequired: HUMAN_CONFIRMATION_RISKS.has(action.risk),
+    };
+  }
 
   async function evaluate(context, action, phase) {
+    const guard = coreRiskGuard(action);
+    if (!guard.allowed) return guard;
     try {
       const decision = await policyEngine.evaluate({ context, action, phase });
       invariant(decision && typeof decision.allowed === 'boolean', 'Policy decision must include allowed');
       return {
         allowed: decision.allowed,
         reason: nonEmptyString(decision.reason) ? decision.reason : (decision.allowed ? 'ALLOWED' : 'DENIED'),
-        humanConfirmationRequired: Boolean(decision.humanConfirmationRequired),
+        humanConfirmationRequired: guard.humanConfirmationRequired || Boolean(decision.humanConfirmationRequired),
       };
     } catch {
-      return { allowed: false, reason: 'POLICY_EVALUATION_FAILED', humanConfirmationRequired: false };
+      return { allowed: false, reason: 'POLICY_EVALUATION_FAILED', humanConfirmationRequired: guard.humanConfirmationRequired };
     }
+  }
+
+  function semanticAccess(context) {
+    if (!semanticPort) return { allowed: false, reason: 'SEMANTIC_PORT_UNAVAILABLE' };
+    if (semanticPort.mode === 'remote') {
+      if (!context.privacy.remoteProviderAllowed) {
+        return { allowed: false, reason: 'REMOTE_PROVIDER_NOT_AUTHORIZED' };
+      }
+      if (context.privacy.dataClasses.some((dataClass) => PROTECTED_REMOTE_CLASSES.has(dataClass))) {
+        return { allowed: false, reason: 'PROTECTED_DATA_REMOTE_DENIED' };
+      }
+    }
+    return { allowed: true, reason: 'ALLOWED' };
   }
 
   function deterministicOrder(actions) {
@@ -193,14 +227,15 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
       const context = validateContextSnapshot(rawContext);
       const candidates = registry.list().filter((action) => context.capabilities.includes(action.capability));
       const allowed = [];
+      const semantic = semanticAccess(context);
 
       for (const action of candidates) {
-        if (action.requiresSemanticSearch && (!semanticPort || typeof semanticPort.search !== 'function')) continue;
+        if (action.requiresSemanticSearch && (!semantic.allowed || typeof semanticPort?.search !== 'function')) continue;
         const policy = await evaluate(context, action, 'RESOLVE');
         if (policy.allowed) allowed.push(Object.freeze({ ...action, policy }));
       }
 
-      if (!semanticPort || typeof semanticPort.rank !== 'function' || allowed.length < 2) {
+      if (!semantic.allowed || typeof semanticPort?.rank !== 'function' || allowed.length < 2) {
         return deterministicOrder(allowed);
       }
 
@@ -232,8 +267,12 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
       if (!action || !context.capabilities.includes(action.capability)) {
         return Object.freeze({ status: 'DENIED', reason: 'CAPABILITY_NOT_DECLARED' });
       }
-      if (action.requiresSemanticSearch && (!semanticPort || typeof semanticPort.search !== 'function')) {
-        return Object.freeze({ status: 'DENIED', reason: 'SEMANTIC_PORT_UNAVAILABLE' });
+      if (action.requiresSemanticSearch) {
+        const semantic = semanticAccess(context);
+        if (!semantic.allowed) return Object.freeze({ status: 'DENIED', reason: semantic.reason });
+        if (typeof semanticPort?.search !== 'function') {
+          return Object.freeze({ status: 'DENIED', reason: 'SEMANTIC_PORT_UNAVAILABLE' });
+        }
       }
 
       const policy = await evaluate(context, action, 'DISPATCH');
