@@ -17,7 +17,7 @@ class ContextualCopilotCoreTests(unittest.TestCase):
             capture_output=True,
         )
         self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
-        self.assertIn("# pass 10", result.stdout)
+        self.assertIn("# pass 13", result.stdout)
         self.assertIn("# fail 0", result.stdout)
 
     def test_package_surface_is_bounded_and_reproducible(self):
