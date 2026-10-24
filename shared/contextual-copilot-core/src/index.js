@@ -37,6 +37,7 @@ const DATA_CLASS_SET = new Set(DATA_CLASSES);
 const PROTECTED_REMOTE_CLASSES = new Set(['STUDENT_PERSONAL', 'STUDENT_SENSITIVE']);
 const HUMAN_CONFIRMATION_RISKS = new Set(['WRITE_REVERSIBLE', 'WRITE_EXTERNAL']);
 const SEMANTIC_MODES = new Set(['local', 'remote']);
+const GENERATIVE_MODES = new Set(['none', 'local', 'remote']);
 
 function invariant(condition, message) {
   if (!condition) throw new TypeError(message);
@@ -49,6 +50,28 @@ function nonEmptyString(value) {
 function assertStringArray(value, name) {
   invariant(Array.isArray(value), `${name} must be an array`);
   for (const item of value) invariant(nonEmptyString(item), `${name} must contain non-empty strings`);
+}
+
+function createDefensiveContextSnapshot(context) {
+  const entities = Object.freeze(context.entities.map((entity) => Object.freeze({ ...entity })));
+  const capabilities = Object.freeze([...context.capabilities]);
+  const permissions = Object.freeze([...context.permissions]);
+  const privacy = Object.freeze({
+    ...context.privacy,
+    dataClasses: Object.freeze([...context.privacy.dataClasses]),
+  });
+  const temporal = context.temporal === undefined
+    ? undefined
+    : Object.freeze({ ...context.temporal });
+
+  return Object.freeze({
+    ...context,
+    entities,
+    capabilities,
+    permissions,
+    privacy,
+    ...(temporal === undefined ? {} : { temporal }),
+  });
 }
 
 export function validateContextSnapshot(context) {
@@ -76,7 +99,7 @@ export function validateContextSnapshot(context) {
     invariant(context.temporal && typeof context.temporal === 'object' && !Array.isArray(context.temporal), 'ContextSnapshot.temporal must be an object');
   }
   if (context.state !== undefined) invariant(typeof context.state === 'string', 'ContextSnapshot.state must be a string');
-  return context;
+  return createDefensiveContextSnapshot(context);
 }
 
 function validateAction(action) {
@@ -112,7 +135,7 @@ export function createActionRegistry(actions) {
 export function createFailClosedPolicyEngine(options = {}) {
   const generativeMode = options.generativeMode ?? 'none';
   const externalWriteAllowed = options.externalWriteAllowed ?? false;
-  invariant(['none', 'local', 'remote'].includes(generativeMode), 'generativeMode must be none, local or remote');
+  invariant(GENERATIVE_MODES.has(generativeMode), 'generativeMode must be none, local or remote');
   invariant(typeof externalWriteAllowed === 'boolean', 'externalWriteAllowed must be boolean');
 
   return Object.freeze({
@@ -166,9 +189,10 @@ function scoreMapFromRanked(ranked, allowedIds) {
   return scores;
 }
 
-export function createContextualCopilotCore({ registry, policyEngine, semanticPort = null }) {
+export function createContextualCopilotCore({ registry, policyEngine, semanticPort = null, generativeMode = 'none' }) {
   invariant(registry && typeof registry.list === 'function' && typeof registry.get === 'function', 'registry must implement list() and get()');
   invariant(policyEngine && typeof policyEngine.evaluate === 'function', 'policyEngine.evaluate is required');
+  invariant(GENERATIVE_MODES.has(generativeMode), 'generativeMode must be none, local or remote');
   if (semanticPort !== null) {
     invariant(typeof semanticPort === 'object', 'semanticPort must be an object or null');
     invariant(SEMANTIC_MODES.has(semanticPort.mode), 'semanticPort.mode must be local or remote');
@@ -189,19 +213,39 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
     };
   }
 
+  function coreGenerativePrivacyGuard(context, action) {
+    if (!action.requiresGenerativeAI) {
+      return { allowed: true, reason: 'ALLOWED', humanConfirmationRequired: false };
+    }
+    if (generativeMode === 'none') {
+      return { allowed: false, reason: 'GENERATIVE_PROVIDER_UNAVAILABLE', humanConfirmationRequired: false };
+    }
+    if (generativeMode === 'remote') {
+      if (!context.privacy.remoteProviderAllowed) {
+        return { allowed: false, reason: 'REMOTE_PROVIDER_NOT_AUTHORIZED', humanConfirmationRequired: false };
+      }
+      if (context.privacy.dataClasses.some((dataClass) => PROTECTED_REMOTE_CLASSES.has(dataClass))) {
+        return { allowed: false, reason: 'PROTECTED_DATA_REMOTE_DENIED', humanConfirmationRequired: false };
+      }
+    }
+    return { allowed: true, reason: 'ALLOWED', humanConfirmationRequired: false };
+  }
+
   async function evaluate(context, action, phase) {
-    const guard = coreRiskGuard(action);
-    if (!guard.allowed) return guard;
+    const riskGuard = coreRiskGuard(action);
+    if (!riskGuard.allowed) return riskGuard;
+    const privacyGuard = coreGenerativePrivacyGuard(context, action);
+    if (!privacyGuard.allowed) return privacyGuard;
     try {
       const decision = await policyEngine.evaluate({ context, action, phase });
       invariant(decision && typeof decision.allowed === 'boolean', 'Policy decision must include allowed');
       return {
         allowed: decision.allowed,
         reason: nonEmptyString(decision.reason) ? decision.reason : (decision.allowed ? 'ALLOWED' : 'DENIED'),
-        humanConfirmationRequired: guard.humanConfirmationRequired || Boolean(decision.humanConfirmationRequired),
+        humanConfirmationRequired: riskGuard.humanConfirmationRequired || Boolean(decision.humanConfirmationRequired),
       };
     } catch {
-      return { allowed: false, reason: 'POLICY_EVALUATION_FAILED', humanConfirmationRequired: guard.humanConfirmationRequired };
+      return { allowed: false, reason: 'POLICY_EVALUATION_FAILED', humanConfirmationRequired: riskGuard.humanConfirmationRequired };
     }
   }
 
