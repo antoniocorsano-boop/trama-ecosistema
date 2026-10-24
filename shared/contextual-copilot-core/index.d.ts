@@ -20,7 +20,7 @@ export interface ContextEntity {
 }
 
 export interface PrivacyContext {
-  dataClasses: DataClass[];
+  dataClasses: readonly DataClass[];
   remoteProviderAllowed: boolean;
   [key: string]: unknown;
 }
@@ -32,9 +32,9 @@ export interface TemporalContext {
 export interface ContextSnapshot {
   appId: string;
   surface: string;
-  entities: ContextEntity[];
-  capabilities: CapabilityId[];
-  permissions: string[];
+  entities: readonly ContextEntity[];
+  capabilities: readonly CapabilityId[];
+  permissions: readonly string[];
   privacy: PrivacyContext;
   temporal?: TemporalContext;
   state?: string;
@@ -108,4 +108,5 @@ export function createContextualCopilotCore(input: {
   registry: ActionRegistry;
   policyEngine: PolicyEngine;
   semanticPort?: SemanticPort | null;
+  generativeMode?: 'none' | 'local' | 'remote';
 }): ContextualCopilotCore;
