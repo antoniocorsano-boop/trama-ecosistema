@@ -90,6 +90,7 @@ test('remote generative actions fail closed when remote provider flow is not aut
 
 test('semantic ranking can reorder allowed actions but cannot add capabilities', async () => {
   const semanticPort = {
+    mode: 'local',
     async rank() {
       return [
         { actionId: 'search', score: 0.99 },
@@ -112,6 +113,7 @@ test('semantic ranking can reorder allowed actions but cannot add capabilities',
 
 test('semantic ranking failure falls back to deterministic allowed actions', async () => {
   const semanticPort = {
+    mode: 'local',
     async rank() {
       throw new Error('semantic runtime unavailable');
     },
