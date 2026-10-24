@@ -70,6 +70,7 @@ export interface SemanticRank {
 }
 
 export interface SemanticPort {
+  mode: 'local' | 'remote';
   search?(request: unknown): Promise<unknown>;
   rank?(input: { context: ContextSnapshot; actions: readonly ResolvedAction[] }): Promise<SemanticRank[]>;
 }
