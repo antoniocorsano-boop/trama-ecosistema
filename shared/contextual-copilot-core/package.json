@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "files": [
+    "src",
+    "index.d.ts",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "types": "./index.d.ts",
