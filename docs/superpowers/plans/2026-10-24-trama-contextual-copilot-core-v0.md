@@ -1,0 +1,106 @@
+# TRAMA Contextual Copilot Core v0 — implementation plan
+
+**Data:** 2026-10-24  
+**Stato:** IMPLEMENTATION AUTHORIZED / NO MERGE / NO DEPLOY  
+**Baseline:** `main@f666239cfdb359ecf52342ed3502f4a60233ea45`  
+**Design:** `docs/superpowers/specs/2026-10-22-trama-contextual-copilot-core-design.md`  
+**Contratti subordinanti:** OR-07 Shared Capability Layer · OR-08 Runtime Portability
+
+## Obiettivo
+
+Materializzare il minimo nucleo headless condiviso necessario a Docente OS, `registro-docente` e futuri consumer senza creare un secondo prodotto, un server centrale o un'autorità sui dati di dominio.
+
+Il risultato deve essere un artefatto importabile e versionato, privo di dipendenze da provider e da tipi verticali, che applichi l'ordine:
+
+```text
+Policy > capability dichiarate dall'app > stato > semantica > preferenze
+```
+
+## Collocazione
+
+Il modulo vive in:
+
+`shared/contextual-copilot-core/`
+
+con un proprio `package.json` e nessuna dipendenza JavaScript alla radice di TRAMA.
+
+Il pacchetto è `private` nel primo incremento: la qualifica riguarda il contratto e l'artefatto riproducibile, non la pubblicazione su un registro esterno.
+
+## Vincoli
+
+- nessun branching per `appId` nel Core;
+- nessun import di route, componenti o tipi verticali;
+- nessuna dipendenza da provider generativo, embedding o vector store;
+- nessuna rete necessaria per i test;
+- nessuna authority di write trasferita al Core;
+- `INSTITUTIONAL_DECISION` sempre negata dal motore generico;
+- `WRITE_REVERSIBLE` e `WRITE_EXTERNAL` richiedono gate umano prima dell'esecuzione;
+- classi studente protette mai inviate automaticamente a provider remoto;
+- la semantica può riordinare solo azioni già autorizzate, mai crearne di nuove;
+- modalità senza provider generativo pienamente valida;
+- nessun merge o deploy implicito.
+
+## Task 1 — RED causale cross-app
+
+Creare una suite con fixture Docente OS e `registro-docente` che richieda:
+
+- stesso resolver per entrambi i consumer;
+- filtraggio sulle capability dichiarate;
+- policy prima del dispatch;
+- nessuna esecuzione dopo deny;
+- conferma umana prima di write reversibile;
+- ranking semantico incapace di introdurre capability;
+- assenza di identificatori applicativi nel sorgente del Core.
+
+Il RED è valido quando fallisce per assenza dell'implementazione `src/index.js`.
+
+## Task 2 — GREEN minimo
+
+Implementare:
+
+- vocabolari `CapabilityId`, `ActionRisk`, data classification;
+- validazione `ContextSnapshot`;
+- `ActionRegistry` deterministico;
+- policy engine fail-closed;
+- risoluzione azioni provider-neutral;
+- dispatch con secondo controllo policy e gate umano;
+- ranking semantico opzionale limitato alle azioni già ammesse.
+
+## Task 3 — superficie di import stabile
+
+Esporre:
+
+- `src/index.js` come runtime ESM;
+- `index.d.ts` come contratto TypeScript pubblico;
+- `package.json` con export esplicito;
+- `README.md` con confini OR-07/OR-08 e modalità di verifica.
+
+Nessuna nuova dipendenza esterna.
+
+## Task 4 — qualifica dell'artefatto
+
+Eseguire sul candidato esatto:
+
+```bash
+npm test
+npm pack --dry-run
+```
+
+Il pacchetto deve includere soltanto runtime, tipi e README; nessuna fixture o documento di governance deve entrare nell'artefatto distribuibile.
+
+## Task 5 — integrazione CI e review
+
+Aggiungere il test del Core alla qualifica TRAMA esistente senza cambiare authority o runtime. Aprire PR Draft verso `main`, registrare RED e GREEN exact-SHA e attendere i gate automatici prima di qualunque decisione di integrazione.
+
+## Criterio di uscita
+
+CORE-01 v0 è tecnicamente candidato quando:
+
+1. la prova cross-app è GREEN;
+2. nessun branching applicativo compare nel Core;
+3. policy e gate umano sono verificati;
+4. `npm pack --dry-run` produce un artefatto stabile;
+5. i gate TRAMA dell'exact head risultano verdi;
+6. nessun merge/deploy è stato eseguito.
+
+Solo dopo questo confine `registro-docente` può avviare LIB-01B consumando l'artefatto condiviso, senza resolver sostitutivi locali.
