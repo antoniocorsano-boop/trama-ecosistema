@@ -171,13 +171,21 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
   if (semanticPort !== null) invariant(typeof semanticPort === 'object', 'semanticPort must be an object or null');
 
   async function evaluate(context, action, phase) {
-    const decision = await policyEngine.evaluate({ context, action, phase });
-    invariant(decision && typeof decision.allowed === 'boolean', 'Policy decision must include allowed');
-    return {
-      allowed: decision.allowed,
-      reason: nonEmptyString(decision.reason) ? decision.reason : (decision.allowed ? 'ALLOWED' : 'DENIED'),
-      humanConfirmationRequired: Boolean(decision.humanConfirmationRequired),
-    };
+    try {
+      const decision = await policyEngine.evaluate({ context, action, phase });
+      invariant(decision && typeof decision.allowed === 'boolean', 'Policy decision must include allowed');
+      return {
+        allowed: decision.allowed,
+        reason: nonEmptyString(decision.reason) ? decision.reason : (decision.allowed ? 'ALLOWED' : 'DENIED'),
+        humanConfirmationRequired: Boolean(decision.humanConfirmationRequired),
+      };
+    } catch {
+      return { allowed: false, reason: 'POLICY_EVALUATION_FAILED', humanConfirmationRequired: false };
+    }
+  }
+
+  function deterministicOrder(actions) {
+    return Object.freeze([...actions].sort((a, b) => b.priority - a.priority || a.id.localeCompare(b.id)));
   }
 
   return Object.freeze({
@@ -193,10 +201,15 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
       }
 
       if (!semanticPort || typeof semanticPort.rank !== 'function' || allowed.length < 2) {
-        return Object.freeze([...allowed].sort((a, b) => b.priority - a.priority || a.id.localeCompare(b.id)));
+        return deterministicOrder(allowed);
       }
 
-      const ranked = await semanticPort.rank({ context, actions: Object.freeze([...allowed]) });
+      let ranked;
+      try {
+        ranked = await semanticPort.rank({ context, actions: Object.freeze([...allowed]) });
+      } catch {
+        return deterministicOrder(allowed);
+      }
       const allowedIds = new Set(allowed.map((action) => action.id));
       const scores = scoreMapFromRanked(ranked, allowedIds);
 
