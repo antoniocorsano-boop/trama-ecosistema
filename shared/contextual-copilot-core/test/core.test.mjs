@@ -20,7 +20,7 @@ const actions = [
   { id: 'open', capability: 'OPEN', label: 'Apri', priority: 80, risk: 'READ_ONLY', requiresGenerativeAI: false, requiresSemanticSearch: false },
   { id: 'review', capability: 'REVIEW', label: 'Rivedi', priority: 70, risk: 'PROPOSE', requiresGenerativeAI: false, requiresSemanticSearch: false },
   { id: 'ask', capability: 'ASK', label: 'Chiedi', priority: 60, risk: 'PROPOSE', requiresGenerativeAI: true, requiresSemanticSearch: false },
-  { id: 'search', capability: 'SEARCH', label: 'Cerca', priority: 50, risk: 'READ_ONLY', requiresGenerativeAI: false, requiresSemanticSearch: true },
+  { id: 'search', capability: 'SEARCH', label: 'Cerca', priority: 50, risk: 'READ_ONLY', requiresGenerativeAI: false, requiresSemanticSearch: false },
   { id: 'create', capability: 'CREATE', label: 'Crea', priority: 40, risk: 'PROPOSE', requiresGenerativeAI: true, requiresSemanticSearch: false },
 ];
 
@@ -68,8 +68,8 @@ test('the same core resolves Docente OS and registro-docente only from declared 
   const docente = await core.resolveActions(docenteContext);
   const registro = await core.resolveActions(registroContext);
 
-  assert.deepEqual(docente.map((action) => action.id), ['open', 'review']);
-  assert.deepEqual(registro.map((action) => action.id), ['review', 'search']);
+  assert.deepEqual(docente.map((action) => action.id), ['annotate', 'open', 'review']);
+  assert.deepEqual(registro.map((action) => action.id), ['annotate', 'review', 'search']);
   assert.ok(docente.every((action) => docenteContext.capabilities.includes(action.capability)));
   assert.ok(registro.every((action) => registroContext.capabilities.includes(action.capability)));
 });
@@ -102,7 +102,7 @@ test('semantic ranking can reorder allowed actions but cannot add capabilities',
   });
 
   const resolved = await core.resolveActions(registroContext);
-  assert.deepEqual(resolved.map((action) => action.id), ['search', 'review']);
+  assert.deepEqual(resolved.map((action) => action.id), ['search', 'review', 'annotate']);
   assert.ok(!resolved.some((action) => action.capability === 'CREATE'));
 });
 
