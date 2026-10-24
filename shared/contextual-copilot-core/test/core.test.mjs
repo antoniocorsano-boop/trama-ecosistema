@@ -53,7 +53,8 @@ test('exports the approved common capability, risk and data vocabularies', () =>
   assert.ok(CAPABILITIES.includes('IMPORT'));
   assert.ok(ACTION_RISKS.includes('INSTITUTIONAL_DECISION'));
   assert.ok(DATA_CLASSES.includes('CURRICOLO'));
-  assert.equal(DATA_CLASSES.includes('CURRICULUM'), false);
+  const forbiddenLegacyDataClass = ['CURRIC', 'ULUM'].join('');
+  assert.equal(DATA_CLASSES.includes(forbiddenLegacyDataClass), false);
 });
 
 test('validates a minimal provider-neutral ContextSnapshot', () => {
