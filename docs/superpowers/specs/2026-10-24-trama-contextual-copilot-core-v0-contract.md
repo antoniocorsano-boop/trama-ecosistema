@@ -33,6 +33,8 @@ Policy > capability dichiarate dall'app > stato > semantica > preferenze
 
 Nessun modello, embedding, ranking o preferenza locale può introdurre una capability che il consumer non abbia già dichiarato.
 
+I guardrail minimi di rischio definiti dal Core sono invarianti: una policy iniettata può restringere ulteriormente ciò che è consentito, ma non può rendere più permissivo il nucleo condiviso.
+
 ## 3. ContextSnapshot
 
 Contratto minimo:
@@ -95,7 +97,8 @@ Regole v0:
 - `PROPOSE`: nessuna scrittura canonica automatica;
 - `WRITE_REVERSIBLE`: richiede conferma umana prima dell'esecutore;
 - `WRITE_EXTERNAL`: negata per impostazione predefinita e, quando autorizzata dalla verticale, richiede comunque conferma umana;
-- `INSTITUTIONAL_DECISION`: sempre negata dal motore generico; l'autorità resta nella verticale e nella decisione umana.
+- `INSTITUTIONAL_DECISION`: sempre negata dal motore generico; l'autorità resta nella verticale e nella decisione umana;
+- i requisiti di conferma e il divieto sulle decisioni istituzionali sono guardrail del Core e non possono essere rimossi da un `PolicyEngine` personalizzato.
 
 ## 6. Classificazione dati minima
 
@@ -135,12 +138,23 @@ Le azioni che richiedono esplicitamente generazione vengono negate quando il pro
 
 Un `SemanticPort` può cercare o riordinare azioni già ammesse.
 
+Ogni `SemanticPort` dichiara obbligatoriamente:
+
+```text
+mode = local | remote
+```
+
 Vincoli:
 
 - nessuna dipendenza obbligatoria da un motore specifico;
 - il ranking non può introdurre azioni o capability;
 - errore del ranking → fallback deterministico sulle azioni già consentite;
-- assenza del Semantic Port non invalida il Core.
+- assenza del Semantic Port non invalida il Core;
+- un Semantic Port `local` opera sotto le normali policy del Core;
+- un Semantic Port `remote` può ricevere il contesto solo quando `privacy.remoteProviderAllowed = true`;
+- `STUDENT_PERSONAL` e `STUDENT_SENSITIVE` non vengono inoltrati al Semantic Port remoto dal Core;
+- quando l'accesso semantico remoto non è autorizzato o il contesto contiene classi studente protette, il ranking opzionale degrada al comportamento deterministico;
+- un'azione che richiede esplicitamente ricerca semantica viene negata se il Semantic Port necessario non è disponibile o non è autorizzato.
 
 ## 9. Policy fail-closed
 
@@ -150,6 +164,12 @@ La policy viene valutata:
 2. nuovamente prima del dispatch.
 
 Se il policy engine fallisce, l'azione non viene eseguita. Il risultato deve essere un deny esplicito e l'esecutore non deve essere invocato.
+
+Un `PolicyEngine` iniettato può introdurre ulteriori restrizioni o richiedere ulteriore conferma, ma non può:
+
+- autorizzare `INSTITUTIONAL_DECISION` nel Core generico;
+- rimuovere la conferma umana richiesta da `WRITE_REVERSIBLE` o `WRITE_EXTERNAL`;
+- aggirare i vincoli privacy che proteggono i flussi remoti.
 
 ## 10. Confine degli adapter
 
@@ -184,8 +204,10 @@ Il gate deve dimostrare che:
 - ogni azione restituita appartiene alle capability dichiarate;
 - nessun identificatore dei due consumer compare come branching nel sorgente del Core;
 - una policy negativa impedisce sempre il dispatch;
+- una policy permissiva non può aggirare i guardrail minimi di rischio;
 - il ranking semantico non crea nuove capability;
 - un errore semantico degrada al comportamento deterministico;
+- un Semantic Port remoto non riceve contesto protetto o non autorizzato;
 - un errore della policy fallisce chiuso;
 - una write reversibile non raggiunge l'esecutore senza conferma umana.
 
@@ -223,10 +245,12 @@ Il lavoro di ricerca sul posizionamento adattivo del FAB resta preservato sul ra
 Il candidato è qualificabile quando:
 
 1. test cross-app e regressioni fail-closed sono verdi;
-2. il vocabolario è conforme a TERM-01;
-3. nessun branching applicativo compare nel Core;
-4. l'artefatto a secco contiene solo la superficie prevista;
-5. Governance CI passa sullo stesso exact SHA;
-6. nessun merge, deploy o publish è stato eseguito.
+2. i guardrail minimi di rischio risultano non aggirabili da policy iniettate;
+3. i flussi semantici remoti rispettano la classificazione privacy;
+4. il vocabolario è conforme a TERM-01;
+5. nessun branching applicativo compare nel Core;
+6. l'artefatto a secco contiene solo la superficie prevista;
+7. Governance CI passa sullo stesso exact SHA;
+8. nessun merge, deploy o publish è stato eseguito.
 
 Solo dopo questo confine LIB-01B può collegare la Biblioteca privata al Core tramite un adapter sottile, senza un resolver sostitutivo locale.
