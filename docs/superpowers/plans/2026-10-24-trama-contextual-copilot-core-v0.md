@@ -36,7 +36,10 @@ Il pacchetto è `private` nel primo incremento: la qualifica riguarda il contrat
 - nessuna authority di write trasferita al Core;
 - `INSTITUTIONAL_DECISION` sempre negata dal motore generico;
 - `WRITE_REVERSIBLE` e `WRITE_EXTERNAL` richiedono gate umano prima dell'esecuzione;
+- i guardrail minimi di rischio sono invarianti del Core e non sono indebolibili da policy iniettate;
 - classi studente protette mai inviate automaticamente a provider remoto;
+- ogni Semantic Port dichiara esplicitamente `local` o `remote`;
+- un Semantic Port remoto non riceve contesto protetto o non autorizzato;
 - la semantica può riordinare solo azioni già autorizzate, mai crearne di nuove;
 - un errore semantico degrada al ranking deterministico;
 - un errore della policy fallisce chiuso senza raggiungere l'esecutore;
@@ -65,8 +68,10 @@ Implementare:
 - validazione `ContextSnapshot`;
 - `ActionRegistry` deterministico;
 - policy engine fail-closed;
+- guardrail di rischio obbligatori applicati dal Core prima delle policy iniettate;
 - risoluzione azioni provider-neutral;
 - dispatch con secondo controllo policy e gate umano;
+- Semantic Port con località esplicita e filtro privacy per i flussi remoti;
 - ranking semantico opzionale limitato alle azioni già ammesse;
 - isolamento dei guasti semantici e policy.
 
@@ -96,16 +101,19 @@ Il pacchetto deve includere soltanto runtime, tipi e README; nessuna fixture o d
 
 Aggiungere il test del Core alla qualifica TRAMA esistente senza cambiare authority o runtime. Aprire PR Draft verso `main`, registrare RED e GREEN exact-SHA e attendere i gate automatici prima di qualunque decisione di integrazione.
 
+La review finale deve includere prove causali che una policy permissiva non possa aggirare i guardrail del Core e che un Semantic Port remoto non riceva contesti protetti o non autorizzati.
+
 ## Criterio di uscita
 
 CORE-01 v0 è tecnicamente candidato quando:
 
 1. la prova cross-app è GREEN;
 2. nessun branching applicativo compare nel Core;
-3. policy e gate umano sono verificati;
-4. `npm pack --dry-run` produce un artefatto stabile;
-5. il vocabolario è conforme a TERM-01;
-6. i gate TRAMA dell'exact head risultano verdi;
-7. nessun merge/deploy è stato eseguito.
+3. policy, guardrail obbligatori e gate umano sono verificati;
+4. località e privacy del Semantic Port sono verificate;
+5. `npm pack --dry-run` produce un artefatto stabile;
+6. il vocabolario è conforme a TERM-01;
+7. i gate TRAMA dell'exact head risultano verdi;
+8. nessun merge/deploy è stato eseguito.
 
 Solo dopo questo confine `registro-docente` può avviare LIB-01B consumando l'artefatto condiviso, senza resolver sostitutivi locali.
