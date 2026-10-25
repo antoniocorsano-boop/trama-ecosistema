@@ -221,3 +221,68 @@ test('cheap no-match cases return before embedding', async () => {
     assert.deepEqual(calls, []);
   }
 });
+
+test('invalid message embedding vectors reject instead of becoming no-match', async () => {
+  for (const invalidVector of [null, {}, [], [NaN, 0], [Infinity, 0], [0, 0]]) {
+    const port = createEmbeddingIntentPort({
+      embed: async (text) => (text === 'messaggio' ? invalidVector : [1, 0]),
+      intents: [{ actionId: 'a', examples: ['example'] }],
+    });
+
+    await assert.rejects(
+      port.resolve({ context: {}, message: 'messaggio', actions: [action('a')] }),
+      /embedding|vector|finite|norm/i,
+    );
+  }
+});
+
+test('invalid example vectors and dimension mismatch reject the entire call', async () => {
+  for (const invalidVector of [null, {}, [], [NaN, 0], [0, 0], [1, 0, 0]]) {
+    const port = createEmbeddingIntentPort({
+      embed: async (text) => (text === 'messaggio' ? [1, 0] : invalidVector),
+      intents: [{ actionId: 'a', examples: ['example'] }],
+    });
+
+    await assert.rejects(
+      port.discover({ context: {}, message: 'messaggio', actions: [action('a')] }),
+      /embedding|vector|finite|norm|dimension/i,
+    );
+  }
+});
+
+test('embedding provider failures propagate unchanged', async () => {
+  const sentinel = new Error('LOCAL_EMBEDDING_UNAVAILABLE');
+  const port = createEmbeddingIntentPort({
+    embed: async () => { throw sentinel; },
+    intents: [{ actionId: 'a', examples: ['example'] }],
+  });
+
+  await assert.rejects(
+    port.resolve({ context: {}, message: 'messaggio', actions: [action('a')] }),
+    (error) => error === sentinel,
+  );
+});
+
+test('catalog snapshot and action inputs remain isolated from consumer mutation', async () => {
+  const mutableExamples = ['original example'];
+  const mutableCatalog = [{ actionId: 'a', examples: mutableExamples }];
+  const calls = [];
+  const actions = [{ id: 'a' }];
+  const actionsBefore = structuredClone(actions);
+  const port = createEmbeddingIntentPort({
+    embed: vectorEmbed([
+      ['messaggio', [1, 0]],
+      ['original example', [1, 0]],
+    ], calls),
+    intents: mutableCatalog,
+  });
+
+  mutableExamples[0] = 'mutated example';
+  mutableCatalog[0].actionId = 'mutated-action';
+
+  const matches = await port.resolve({ context: {}, message: 'messaggio', actions });
+
+  assert.deepEqual(matches.map(({ actionId }) => actionId), ['a']);
+  assert.deepEqual(calls, ['messaggio', 'original example']);
+  assert.deepEqual(actions, actionsBefore);
+});
