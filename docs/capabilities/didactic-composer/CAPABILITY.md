@@ -1,7 +1,7 @@
 # CAP-DIDACTIC-COMPOSER — Capability Record
 
 **Name:** TRAMA Didactic Composer  
-**Status:** G0/G1/G2 APPROVED · G3 DESIGN APPROVED · IMPLEMENTATION PLANNING MATERIALIZED  
+**Status:** G0/G1/G2 APPROVED · G3 DESIGN APPROVED · G4_IMPLEMENTED · G5_QUALIFIED_OFFLINE  
 **Runtime:** NOT_AUTHORIZED  
 **Date:** 2026-10-25  
 **Owner of shared contract:** TRAMA  
@@ -47,7 +47,7 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 
 ## Prerequisites discovered during validation
 
-1. **Product identity evolution.** OR-07/OR-10 v0 do not yet enumerate `REGISTRO_DOCENTE` or `STUDIO_ATLAS`; real cross-product wiring requires an additive contract evolution. They must remain distinct identities, not aliases of Docente OS or Atlas.
+1. **Product identity evolution — satisfied by DC-00.** The governed identity registry now includes `REGISTRO_DOCENTE` and `STUDIO_ATLAS` as distinct first-class identities, with no alias to Docente OS or Atlas.
 2. **Drive deferred write slice.** OR-07 v0 permits only `READ_ONLY`/`PROPOSE_ONLY`; Drive export is `WRITE_EXTERNAL`, therefore it is outside the first Composer Core and requires separate governance/write semantics.
 3. **Docente OS two-stage projection.** A composition may first be an `UNBOUND_PLANNING_PROPOSAL`; only a product-resolved valid `planBinding` can produce a `BOUND_HUMAN_TASK_CANDIDATE`.
 4. **Explicit caller identity.** `OTHER_GOVERNED` is not an authorized v1 caller; a future product must first be registered through governed product-identity evolution.
@@ -154,9 +154,17 @@ Implementation-local decisions fixed by the approved plan include the SHA-256 se
 
 **DESIGN APPROVED.** Request/proposal/adoption/projection semantics and acceptance criteria are materialized. Implementation planning for DC-00/DC-01 is authorized; runtime is not.
 
-### G4+
+### G4 Implementation
 
-**NOT STARTED / NOT AUTHORIZED FOR RUNTIME.**
+**IMPLEMENTED.** DC-00 product identity registry and DC-01 Core contract/fixture/validator/tests are materialized. No product adapter or live provider is included.
+
+### G5 Qualification
+
+**QUALIFIED_OFFLINE.** Governance #2609 and Build TRAMA Control Center Bundle #1080 are `SUCCESS` on exact implementation candidate `782c8f9107ce68cfbe77b3a7680b2111bfcfd678`. Qualification receipt: `docs/evidence/didactic-composer-dc01-qualification.md`.
+
+### G6+ / Runtime
+
+**NOT_AUTHORIZED.** Offline qualification does not authorize live runtime, product adapters, external writes, publication, merge or deploy.
 
 ## Canonical design
 
@@ -170,6 +178,10 @@ Implementation-local decisions fixed by the approved plan include the SHA-256 se
 
 `docs/evidence/didactic-composer-validation-2026-10-25.md`
 
+## DC-01 offline qualification receipt
+
+`docs/evidence/didactic-composer-dc01-qualification.md`
+
 ## Human approval receipt
 
 `docs/evidence/didactic-composer-human-design-approval-2026-10-25.md`
@@ -180,4 +192,4 @@ Implementation-local decisions fixed by the approved plan include the SHA-256 se
 
 ## Next governed action
 
-Execute DC-00 first under TDD. DC-01 may begin only after DC-00 identity qualification is GREEN. No product adapter, provider-live work, external write, merge or deploy is authorized by this capability record.
+DC-00 and DC-01 are qualified offline. The next possible work is a separately governed product-adapter planning slice, beginning from the target product authority and adoption boundary. No product adapter, live provider, external write, Atlas publication, merge or deploy is authorized by this capability record.
