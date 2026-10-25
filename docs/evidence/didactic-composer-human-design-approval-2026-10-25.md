@@ -53,4 +53,8 @@ DC-00 — governed product identity prerequisite
 → DC-01 — Didactic Composer Core contract + offline qualification
 ```
 
+Canonical plan:
+
+`docs/superpowers/plans/2026-10-25-trama-didactic-composer-dc00-dc01.md`
+
 It does not authorize product adapters, live providers, external writes, merge, deploy, Atlas publication, lesson execution, automatic consuntivo, automatic assessment or DOS-A1.
