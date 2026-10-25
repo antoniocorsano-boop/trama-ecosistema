@@ -87,7 +87,7 @@ L'adozione è attestata fuori dalla capability con `DIDACTIC_COMPOSITION_ADOPTIO
 Regole:
 
 - `decidedBy = HUMAN`;
-- decisione tra `ADOPTED | REJECTED | REPLACED`;
+- decisione tra `ADOPTED | REJECTED | SUPERSEDED`;
 - id/version/digest corrispondono alla proposta;
 - il receipt appartiene a un prodotto locale;
 - non esiste approvazione globale o adozione automatica degli altri prodotti.

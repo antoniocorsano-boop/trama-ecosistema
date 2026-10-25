@@ -74,6 +74,9 @@ def validate_proposal(request: dict[str, Any], proposal: dict[str, Any]) -> list
     errors: list[str] = []
     if proposal.get("status") != "PROPOSAL":
         errors.append("DC-09")
+    version = proposal.get("compositionVersion")
+    if not isinstance(version, int) or isinstance(version, bool) or version < 1:
+        errors.append("DC-14")
 
     request_context = request.get("curricoloContext", {})
     binding = proposal.get("curricoloBinding") if isinstance(proposal.get("curricoloBinding"), dict) else {}
@@ -107,7 +110,7 @@ def validate_adoption_receipt(receipt: dict[str, Any], proposal: dict[str, Any])
         receipt.get("contract") != "DIDACTIC_COMPOSITION_ADOPTION_RECEIPT_V1"
         or receipt.get("contractVersion") != 1
         or receipt.get("decidedBy") != "HUMAN"
-        or receipt.get("decision") not in {"ADOPTED", "REJECTED", "REPLACED"}
+        or receipt.get("decision") not in {"ADOPTED", "REJECTED", "SUPERSEDED"}
         or "globalApproval" in receipt
         or "adoptedProducts" in receipt
     ):
