@@ -1,17 +1,17 @@
 # CAP-DIDACTIC-COMPOSER — Capability Record
 
 **Name:** TRAMA Didactic Composer  
-**Status:** G0/G1/G2 MATERIALIZED · G3 DESIGN CANDIDATE · HUMAN REVIEW REQUIRED  
+**Status:** G0/G1/G2 APPROVED · G3 DESIGN APPROVED · IMPLEMENTATION PLANNING MATERIALIZED  
 **Runtime:** NOT_AUTHORIZED  
 **Date:** 2026-10-25  
 **Owner of shared contract:** TRAMA  
 **Decision owner of didactic adoption:** HUMAN / product-local  
-**Autorità del curricolo:** Arena  
+**Authority del curricolo:** Arena  
 **DOS-A1:** RUNTIME_DEFERRED
 
 ## Problem / opportunity
 
-Il docente deve poter trasformare intenzioni, fonti professionali e contesto di curricolo in UDA, attività, lezioni e materiali coerenti senza ricostruire manualmente lo stesso oggetto in Registro Docente, Docente OS, Studio Atlas/Atlas e nei documenti professionali.
+Il docente deve poter trasformare intenzioni, fonti professionali e contesto del curricolo in UDA, attività, lezioni e materiali coerenti senza ricostruire manualmente lo stesso oggetto in Registro Docente, Docente OS, Studio Atlas/Atlas e nei documenti professionali.
 
 Il problema non è soltanto generare contenuti: è mantenere distinti authority, progettazione, preparazione, pubblicazione, svolgimento, consuntivo e valutazione.
 
@@ -33,7 +33,7 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 - Studio Atlas come professional pathway authoring domain;
 - Atlas come public/learner publication domain;
 - Drive come human document workspace/archive;
-- Contextual Copilot Core come possible interaction adapter senza authority.
+- Contextual Copilot Core come possibile interaction adapter senza authority.
 
 ## Scope v1
 
@@ -47,9 +47,10 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 
 ## Prerequisites discovered during validation
 
-1. **Product identity evolution.** OR-07/OR-10 v0 do not yet enumerate `REGISTRO_DOCENTE` or `STUDIO_ATLAS`; real cross-product wiring requires an additive contract evolution. They remain distinct identities, not aliases of Docente OS or Atlas.
-2. **Drive deferred write slice.** OR-07 v0 permits only `READ_ONLY`/`PROPOSE_ONLY`; Drive export is `WRITE_EXTERNAL`, therefore outside the first Composer Core and separately governed.
+1. **Product identity evolution.** OR-07/OR-10 v0 do not yet enumerate `REGISTRO_DOCENTE` or `STUDIO_ATLAS`; real cross-product wiring requires an additive contract evolution. They must remain distinct identities, not aliases of Docente OS or Atlas.
+2. **Drive deferred write slice.** OR-07 v0 permits only `READ_ONLY`/`PROPOSE_ONLY`; Drive export is `WRITE_EXTERNAL`, therefore it is outside the first Composer Core and requires separate governance/write semantics.
 3. **Docente OS two-stage projection.** A composition may first be an `UNBOUND_PLANNING_PROPOSAL`; only a product-resolved valid `planBinding` can produce a `BOUND_HUMAN_TASK_CANDIDATE`.
+4. **Explicit caller identity.** `OTHER_GOVERNED` is not an authorized v1 caller; a future product must first be registered through governed product-identity evolution.
 
 ## Non-goals v1
 
@@ -72,17 +73,18 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 3. Adoption is human and product-local.
 4. Product projections do not inherit one another's decision state.
 5. `PLANNED != PREPARED != PUBLISHED != TAUGHT != RECORDED != ASSESSED`.
-6. Arena remains authority of the curricolo and `TRANSITIONAL` is preserved when APPROVED+VIGENTE.
+6. Arena remains authority for the curricolo and `TRANSITIONAL` is preserved when APPROVED+VIGENTE.
 7. Docente OS projection cannot bypass current plan/projection gates.
 8. Registro projection starts preview-only and does not force `UdaRecord` → `MasterProgram` migration or fan-out to every class.
 9. Studio Atlas is the authoring handoff for new Atlas pathways/experiences; Composer does not publish directly to public Atlas.
 10. Drive stores declared human-readable copies only through a separately governed explicit write.
+11. Runtime callers are exact governed product ids; no generic or aliased caller inherits authority.
 
 ## Privacy / data classification
 
 Composer v1 accepts only `PROFESSIONAL_NON_PERSONAL`.
 
-Student identity, grades, diagnoses, individual behavior notes, health data and identifiable learner submissions are excluded. Future evidence refs containing protected target-local information remain opaque and are not dereferenced by the Composer.
+Student identity, grades, diagnoses, individual behavior notes, health data and identifiable learner submissions are excluded. Any future evidence refs containing protected target-local information remain opaque and are not dereferenced by the Composer.
 
 ## Human control impact
 
@@ -123,43 +125,44 @@ The system can propose and prepare projections, but adoption and target-product 
 - Composer → public Atlas direct publication — rejected;
 - Drive as canonical UDA store — rejected;
 - alias Registro as Docente OS / Studio Atlas as Atlas — rejected;
+- generic `OTHER_GOVERNED` runtime caller — rejected for v1;
 - immediate Registro planning-domain migration — deferred/rejected for v1;
 - cross-product automatic synchronization — deferred;
 - Drive external write in first Core — deferred.
 
 ## Open questions
 
-No blocking governance question remains for Human Design Review.
+No blocking architecture question remains for DC-00/DC-01 implementation planning.
 
-Implementation-local decisions intentionally remain open: digest algorithm qualification, concrete local snapshot stores, transport, UI and later `MasterProgram` mapping.
+Implementation-local decisions fixed by the approved plan include the SHA-256 semantic digest, exact governed caller registry and offline fake-adapter qualification. Product adapter transport, UI and later `MasterProgram` mapping remain outside this phase.
 
 ## Current gate assessment
 
 ### G0 Intake
 
-**PASS candidate.** Stable capability ID, actors, problem, scope, non-goals and runtime state are explicit.
+**APPROVED.** Stable capability ID, actors, problem, scope, non-goals and runtime state are explicit.
 
 ### G1 Discovery
 
-**PASS candidate.** Relevant product contracts/current downstream constraints were inspected; alternatives, conflicts and negative knowledge are recorded.
+**APPROVED.** Relevant product contracts/current downstream constraints were inspected; alternatives, conflicts and negative knowledge are recorded.
 
 ### G2 Governance
 
-**PASS candidate subject to human approval.** Authority, product identities, privacy, Drive write boundary, runtime and DOS-A1 are explicit; ADR-022 is proposed.
+**APPROVED.** Authority, product identities, privacy, Drive write boundary, runtime and DOS-A1 are explicit; ADR-022 has Human Design Approval.
 
 ### G3 Specification
 
-**DESIGN CANDIDATE.** Request/proposal/adoption/projection semantics and acceptance criteria are materialized; schema/validator implementation is not authorized.
+**DESIGN APPROVED.** Request/proposal/adoption/projection semantics and acceptance criteria are materialized. Implementation planning for DC-00/DC-01 is authorized; runtime is not.
 
 ### G4+
 
-**NOT STARTED / NOT AUTHORIZED.**
+**NOT STARTED / NOT AUTHORIZED FOR RUNTIME.**
 
-## Canonical design candidate
+## Canonical design
 
 `docs/superpowers/specs/2026-10-25-trama-didactic-composer-v1-design.md`
 
-## Associated ADR candidate
+## Associated ADR
 
 `docs/decisions/trama-adr-022-didactic-composition-projection-boundary.md`
 
@@ -167,6 +170,14 @@ Implementation-local decisions intentionally remain open: digest algorithm quali
 
 `docs/evidence/didactic-composer-validation-2026-10-25.md`
 
+## Human approval receipt
+
+`docs/evidence/didactic-composer-human-design-approval-2026-10-25.md`
+
+## Approved implementation plan
+
+`docs/superpowers/plans/2026-10-25-trama-didactic-composer-dc00-dc01.md`
+
 ## Next governed action
 
-Human Design Review of design spec + ADR + validation evidence. If approved, invoke implementation planning; no product code before that decision.
+Execute DC-00 first under TDD. DC-01 may begin only after DC-00 identity qualification is GREEN. No product adapter, provider-live work, external write, merge or deploy is authorized by this capability record.
