@@ -6,12 +6,12 @@
 **Date:** 2026-10-25  
 **Owner of shared contract:** TRAMA  
 **Decision owner of didactic adoption:** HUMAN / product-local  
-**Curriculum authority:** Arena  
+**Autorità del curricolo:** Arena  
 **DOS-A1:** RUNTIME_DEFERRED
 
 ## Problem / opportunity
 
-Il docente deve poter trasformare intenzioni, fonti professionali e contesto curricolare in UDA, attività, lezioni e materiali coerenti senza ricostruire manualmente lo stesso oggetto in Registro Docente, Docente OS, Studio Atlas/Atlas e nei documenti professionali.
+Il docente deve poter trasformare intenzioni, fonti professionali e contesto di curricolo in UDA, attività, lezioni e materiali coerenti senza ricostruire manualmente lo stesso oggetto in Registro Docente, Docente OS, Studio Atlas/Atlas e nei documenti professionali.
 
 Il problema non è soltanto generare contenuti: è mantenere distinti authority, progettazione, preparazione, pubblicazione, svolgimento, consuntivo e valutazione.
 
@@ -27,13 +27,13 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 ## Actors
 
 - docente;
-- Arena come curriculum authority;
+- Arena come autorità del curricolo;
 - Docente OS come teacher-first operational domain;
 - Registro Docente come planning/consuntivo/assessment professional domain;
 - Studio Atlas come professional pathway authoring domain;
 - Atlas come public/learner publication domain;
 - Drive come human document workspace/archive;
-- Contextual Copilot Core come possibile interaction adapter senza authority.
+- Contextual Copilot Core come possible interaction adapter senza authority.
 
 ## Scope v1
 
@@ -47,8 +47,8 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 
 ## Prerequisites discovered during validation
 
-1. **Product identity evolution.** OR-07/OR-10 v0 do not yet enumerate `REGISTRO_DOCENTE` or `STUDIO_ATLAS`; real cross-product wiring requires an additive contract evolution. They must remain distinct identities, not aliases of Docente OS or Atlas.
-2. **Drive deferred write slice.** OR-07 v0 permits only `READ_ONLY`/`PROPOSE_ONLY`; Drive export is `WRITE_EXTERNAL`, therefore it is outside the first Composer Core and requires separate governance/write semantics.
+1. **Product identity evolution.** OR-07/OR-10 v0 do not yet enumerate `REGISTRO_DOCENTE` or `STUDIO_ATLAS`; real cross-product wiring requires an additive contract evolution. They remain distinct identities, not aliases of Docente OS or Atlas.
+2. **Drive deferred write slice.** OR-07 v0 permits only `READ_ONLY`/`PROPOSE_ONLY`; Drive export is `WRITE_EXTERNAL`, therefore outside the first Composer Core and separately governed.
 3. **Docente OS two-stage projection.** A composition may first be an `UNBOUND_PLANNING_PROPOSAL`; only a product-resolved valid `planBinding` can produce a `BOUND_HUMAN_TASK_CANDIDATE`.
 
 ## Non-goals v1
@@ -72,7 +72,7 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 3. Adoption is human and product-local.
 4. Product projections do not inherit one another's decision state.
 5. `PLANNED != PREPARED != PUBLISHED != TAUGHT != RECORDED != ASSESSED`.
-6. Arena remains curriculum authority and `TRANSITIONAL` is preserved when APPROVED+VIGENTE.
+6. Arena remains authority of the curricolo and `TRANSITIONAL` is preserved when APPROVED+VIGENTE.
 7. Docente OS projection cannot bypass current plan/projection gates.
 8. Registro projection starts preview-only and does not force `UdaRecord` → `MasterProgram` migration or fan-out to every class.
 9. Studio Atlas is the authoring handoff for new Atlas pathways/experiences; Composer does not publish directly to public Atlas.
@@ -82,7 +82,7 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 
 Composer v1 accepts only `PROFESSIONAL_NON_PERSONAL`.
 
-Student identity, grades, diagnoses, individual behavior notes, health data and identifiable learner submissions are excluded. Any future evidence refs containing protected target-local information remain opaque and are not dereferenced by the Composer.
+Student identity, grades, diagnoses, individual behavior notes, health data and identifiable learner submissions are excluded. Future evidence refs containing protected target-local information remain opaque and are not dereferenced by the Composer.
 
 ## Human control impact
 
@@ -94,7 +94,7 @@ The system can propose and prepare projections, but adoption and target-product 
 
 - TRAMA OR-07 Shared Capability Layer;
 - TRAMA OR-10 Product Integrations;
-- Arena accepted curriculum/planning context contracts;
+- Arena accepted curricolo/planning context contracts;
 - Contextual Copilot Core intent/policy/dispatch separation;
 - Docente OS Human Task projection recipe / `planBinding`;
 - Registro `UdaRecord` / `UdaLesson` and `PlanningStateV1` separation;
