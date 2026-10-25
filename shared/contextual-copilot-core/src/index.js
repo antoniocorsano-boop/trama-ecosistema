@@ -102,6 +102,21 @@ export function validateContextSnapshot(context) {
   return createDefensiveContextSnapshot(context);
 }
 
+function validateCopilotRequest(request) {
+  invariant(request && typeof request === 'object' && !Array.isArray(request), 'CopilotRequest must be an object');
+  const context = validateContextSnapshot(request.context);
+  invariant(nonEmptyString(request.message), 'CopilotRequest.message must be a non-empty string');
+  invariant(Array.isArray(request.allowedCapabilities), 'CopilotRequest.allowedCapabilities must be an array');
+  for (const capability of request.allowedCapabilities) {
+    invariant(CAPABILITY_SET.has(capability), `Unknown allowed capability: ${String(capability)}`);
+  }
+  return Object.freeze({
+    context,
+    message: request.message,
+    allowedCapabilities: Object.freeze([...request.allowedCapabilities]),
+  });
+}
+
 function validateAction(action) {
   invariant(action && typeof action === 'object' && !Array.isArray(action), 'ContextualAction must be an object');
   invariant(nonEmptyString(action.id), 'ContextualAction.id must be a non-empty string');
@@ -266,41 +281,58 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
     return Object.freeze([...actions].sort((a, b) => b.priority - a.priority || a.id.localeCompare(b.id)));
   }
 
+  async function resolveActions(rawContext) {
+    const context = validateContextSnapshot(rawContext);
+    const candidates = registry.list().filter((action) => context.capabilities.includes(action.capability));
+    const allowed = [];
+    const semantic = semanticAccess(context);
+
+    for (const action of candidates) {
+      if (action.requiresSemanticSearch && (!semantic.allowed || typeof semanticPort?.search !== 'function')) continue;
+      const policy = await evaluate(context, action, 'RESOLVE');
+      if (policy.allowed) allowed.push(Object.freeze({ ...action, policy }));
+    }
+
+    if (!semantic.allowed || typeof semanticPort?.rank !== 'function' || allowed.length < 2) {
+      return deterministicOrder(allowed);
+    }
+
+    let ranked;
+    try {
+      ranked = await semanticPort.rank({ context, actions: Object.freeze([...allowed]) });
+    } catch {
+      return deterministicOrder(allowed);
+    }
+    const allowedIds = new Set(allowed.map((action) => action.id));
+    const scores = scoreMapFromRanked(ranked, allowedIds);
+
+    return Object.freeze([...allowed].sort((a, b) => {
+      const aRanked = scores.has(a.id);
+      const bRanked = scores.has(b.id);
+      if (aRanked && bRanked) return scores.get(b.id) - scores.get(a.id) || b.priority - a.priority || a.id.localeCompare(b.id);
+      if (aRanked) return -1;
+      if (bRanked) return 1;
+      return b.priority - a.priority || a.id.localeCompare(b.id);
+    }));
+  }
+
+  async function resolveRequest(rawRequest) {
+    const request = validateCopilotRequest(rawRequest);
+    const allowedCapabilities = new Set(request.allowedCapabilities);
+    const actions = Object.freeze(
+      (await resolveActions(request.context)).filter((action) => allowedCapabilities.has(action.capability)),
+    );
+
+    if (actions.length === 0) {
+      return Object.freeze({ status: 'UNRESOLVED', reason: 'NO_ALLOWED_ACTIONS', actions });
+    }
+
+    return Object.freeze({ status: 'UNRESOLVED', reason: 'INTENT_PORT_UNAVAILABLE', actions });
+  }
+
   return Object.freeze({
-    async resolveActions(rawContext) {
-      const context = validateContextSnapshot(rawContext);
-      const candidates = registry.list().filter((action) => context.capabilities.includes(action.capability));
-      const allowed = [];
-      const semantic = semanticAccess(context);
-
-      for (const action of candidates) {
-        if (action.requiresSemanticSearch && (!semantic.allowed || typeof semanticPort?.search !== 'function')) continue;
-        const policy = await evaluate(context, action, 'RESOLVE');
-        if (policy.allowed) allowed.push(Object.freeze({ ...action, policy }));
-      }
-
-      if (!semantic.allowed || typeof semanticPort?.rank !== 'function' || allowed.length < 2) {
-        return deterministicOrder(allowed);
-      }
-
-      let ranked;
-      try {
-        ranked = await semanticPort.rank({ context, actions: Object.freeze([...allowed]) });
-      } catch {
-        return deterministicOrder(allowed);
-      }
-      const allowedIds = new Set(allowed.map((action) => action.id));
-      const scores = scoreMapFromRanked(ranked, allowedIds);
-
-      return Object.freeze([...allowed].sort((a, b) => {
-        const aRanked = scores.has(a.id);
-        const bRanked = scores.has(b.id);
-        if (aRanked && bRanked) return scores.get(b.id) - scores.get(a.id) || b.priority - a.priority || a.id.localeCompare(b.id);
-        if (aRanked) return -1;
-        if (bRanked) return 1;
-        return b.priority - a.priority || a.id.localeCompare(b.id);
-      }));
-    },
+    resolveActions,
+    resolveRequest,
 
     async dispatch({ context: rawContext, actionId, executor, humanConfirmed = false }) {
       const context = validateContextSnapshot(rawContext);
