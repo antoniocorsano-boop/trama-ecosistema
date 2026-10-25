@@ -4,7 +4,10 @@ import copy, json
 from pathlib import Path
 from typing import Any
 
-from scripts.validate_governed_product_identities import is_registered_product, load_product_registry
+try:
+    from scripts.validate_governed_product_identities import is_registered_product, load_product_registry
+except ModuleNotFoundError:
+    from validate_governed_product_identities import is_registered_product, load_product_registry
 
 ROOT=Path(__file__).resolve().parents[1]
 FIXTURES=ROOT/"governance/runtime/or07-p1-fixtures.json"

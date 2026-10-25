@@ -2,7 +2,10 @@
 import json
 from pathlib import Path
 
-from scripts.validate_governed_product_identities import is_registered_product, load_product_registry
+try:
+    from scripts.validate_governed_product_identities import is_registered_product, load_product_registry
+except ModuleNotFoundError:
+    from validate_governed_product_identities import is_registered_product, load_product_registry
 
 ROOT=Path(__file__).resolve().parents[1]
 PATH=ROOT/"governance/runtime/or10-x-evidence-alignment.json"
