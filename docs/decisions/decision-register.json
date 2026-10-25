@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
-  "registerVersion": "1.19.0",
-  "updatedAt": "2026-10-04",
+  "registerVersion": "1.20.0",
+  "updatedAt": "2026-10-25",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -303,6 +303,23 @@
         "Visual Factory"
       ],
       "decision": "La Visual Factory separa policy e provisioning: TRAMA Compute Policy filtra provider realmente autorizzati e FREE_ONLY; SkyPilot orchestra provisioning/failover soltanto tra candidati ammessi. Nessun paid fallback, retry illimitato o quality downgrade automatico.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-022",
+      "title": "Didactic Composer come capability stateless di composizione e proiezione governata",
+      "status": "APPROVED",
+      "date": "2026-10-25",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Registro Docente",
+        "Studio Atlas"
+      ],
+      "decision": "È approvato Didactic Composer v1 come shared capability stateless e provider-neutral esclusivamente PROPOSE_ONLY: produce un artifact di composizione didattica immutabile/versionato, mentre adozione, persistenza e decisioni restano product-local e umane. Non introduce un domain store centrale, nuove write authority, export Drive nel Core, pubblicazione Atlas automatica o attivazione di DOS-A1.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
