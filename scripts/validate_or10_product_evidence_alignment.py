@@ -2,8 +2,11 @@
 import json
 from pathlib import Path
 
+from scripts.validate_governed_product_identities import is_registered_product, load_product_registry
+
 ROOT=Path(__file__).resolve().parents[1]
 PATH=ROOT/"governance/runtime/or10-x-evidence-alignment.json"
+PRODUCT_REGISTRY=load_product_registry()
 
 def main():
     data=json.loads(PATH.read_text(encoding="utf-8"))
@@ -11,6 +14,7 @@ def main():
     if data.get("schemaVersion")!="trama.or10-x-evidence-alignment/v1": errors.append("schemaVersion")
     products={p.get("product"):p for p in data.get("products",[])}
     if set(products)!={"ARENA","DOCENTE_OS","ATLAS"}: errors.append("products")
+    if any(not is_registered_product(product,PRODUCT_REGISTRY) for product in products): errors.append("unregisteredProduct")
     if products.get("ARENA",{}).get("authority")!="ARENA": errors.append("arenaAuthority")
     if products.get("DOCENTE_OS",{}).get("authority")!="TEACHER": errors.append("teacherAuthority")
     if products.get("ATLAS",{}).get("authority")!="NONE_FOR_CURRICULUM": errors.append("atlasAuthority")
