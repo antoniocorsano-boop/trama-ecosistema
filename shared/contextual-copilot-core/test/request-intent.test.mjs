@@ -246,3 +246,55 @@ test('authorized professional remote Intent Port may resolve within the existing
   assert.deepEqual(result.actions.map((action) => action.id), ['review']);
   assert.equal(calls, 1);
 });
+
+test('local intent discovery can recognize PREPARE without making it executable', async () => {
+  const discoveryActions = [
+    { id: 'review', capability: 'REVIEW', label: 'Rivedi', priority: 70, risk: 'PROPOSE', requiresGenerativeAI: false, requiresSemanticSearch: false },
+    { id: 'prepare', capability: 'PREPARE', label: 'Prepara', priority: 60, risk: 'PROPOSE', requiresGenerativeAI: true, requiresSemanticSearch: false },
+  ];
+  const discoveryContext = {
+    ...context,
+    capabilities: ['REVIEW', 'PREPARE'],
+  };
+  let discoverCalls = 0;
+
+  const core = createContextualCopilotCore({
+    registry: createActionRegistry(discoveryActions),
+    policyEngine: createFailClosedPolicyEngine({ generativeMode: 'none' }),
+    generativeMode: 'none',
+    intentPort: {
+      mode: 'local',
+      async resolve() {
+        return [{ actionId: 'review', score: 1 }];
+      },
+      async discover() {
+        discoverCalls += 1;
+        return [{ actionId: 'prepare', score: 1 }];
+      },
+    },
+  });
+
+  const resolvedActions = await core.resolveActions(discoveryContext);
+  assert.deepEqual(resolvedActions.map((action) => action.id), ['review']);
+
+  const resolvedRequest = await core.resolveRequest({
+    context: discoveryContext,
+    message: 'Trasforma questa fonte in una attività',
+    allowedCapabilities: ['REVIEW', 'PREPARE'],
+  });
+  assert.equal(resolvedRequest.status, 'RESOLVED');
+  assert.deepEqual(resolvedRequest.actions.map((action) => action.id), ['review']);
+
+  const discovered = await core.discoverRequestIntent({
+    context: discoveryContext,
+    message: 'Trasforma questa fonte in una attività',
+    allowedCapabilities: ['REVIEW', 'PREPARE'],
+  });
+
+  assert.deepEqual(discovered, {
+    status: 'DISCOVERED',
+    reason: 'INTENT_DISCOVERED',
+    intents: [{ actionId: 'prepare', capability: 'PREPARE' }],
+  });
+  assert.equal(discoverCalls, 1);
+});
