@@ -142,5 +142,6 @@ export function createContextualCopilotCore(input: {
   registry: ActionRegistry;
   policyEngine: PolicyEngine;
   semanticPort?: SemanticPort | null;
+  intentPort?: IntentPort | null;
   generativeMode?: 'none' | 'local' | 'remote';
 }): ContextualCopilotCore;

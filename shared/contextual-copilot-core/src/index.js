@@ -204,13 +204,18 @@ function scoreMapFromRanked(ranked, allowedIds) {
   return scores;
 }
 
-export function createContextualCopilotCore({ registry, policyEngine, semanticPort = null, generativeMode = 'none' }) {
+export function createContextualCopilotCore({ registry, policyEngine, semanticPort = null, intentPort = null, generativeMode = 'none' }) {
   invariant(registry && typeof registry.list === 'function' && typeof registry.get === 'function', 'registry must implement list() and get()');
   invariant(policyEngine && typeof policyEngine.evaluate === 'function', 'policyEngine.evaluate is required');
   invariant(GENERATIVE_MODES.has(generativeMode), 'generativeMode must be none, local or remote');
   if (semanticPort !== null) {
     invariant(typeof semanticPort === 'object', 'semanticPort must be an object or null');
     invariant(SEMANTIC_MODES.has(semanticPort.mode), 'semanticPort.mode must be local or remote');
+  }
+  if (intentPort !== null) {
+    invariant(typeof intentPort === 'object', 'intentPort must be an object or null');
+    invariant(SEMANTIC_MODES.has(intentPort.mode), 'intentPort.mode must be local or remote');
+    invariant(typeof intentPort.resolve === 'function', 'intentPort.resolve must be a function');
   }
 
   function coreRiskGuard(action) {
@@ -264,16 +269,25 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
     }
   }
 
+  function remoteAccess(context) {
+    if (!context.privacy.remoteProviderAllowed) {
+      return { allowed: false, reason: 'REMOTE_PROVIDER_NOT_AUTHORIZED' };
+    }
+    if (context.privacy.dataClasses.some((dataClass) => PROTECTED_REMOTE_CLASSES.has(dataClass))) {
+      return { allowed: false, reason: 'PROTECTED_DATA_REMOTE_DENIED' };
+    }
+    return { allowed: true, reason: 'ALLOWED' };
+  }
+
   function semanticAccess(context) {
     if (!semanticPort) return { allowed: false, reason: 'SEMANTIC_PORT_UNAVAILABLE' };
-    if (semanticPort.mode === 'remote') {
-      if (!context.privacy.remoteProviderAllowed) {
-        return { allowed: false, reason: 'REMOTE_PROVIDER_NOT_AUTHORIZED' };
-      }
-      if (context.privacy.dataClasses.some((dataClass) => PROTECTED_REMOTE_CLASSES.has(dataClass))) {
-        return { allowed: false, reason: 'PROTECTED_DATA_REMOTE_DENIED' };
-      }
-    }
+    if (semanticPort.mode === 'remote') return remoteAccess(context);
+    return { allowed: true, reason: 'ALLOWED' };
+  }
+
+  function intentAccess(context) {
+    if (!intentPort) return { allowed: false, reason: 'INTENT_PORT_UNAVAILABLE' };
+    if (intentPort.mode === 'remote') return remoteAccess(context);
     return { allowed: true, reason: 'ALLOWED' };
   }
 
@@ -327,7 +341,35 @@ export function createContextualCopilotCore({ registry, policyEngine, semanticPo
       return Object.freeze({ status: 'UNRESOLVED', reason: 'NO_ALLOWED_ACTIONS', actions });
     }
 
-    return Object.freeze({ status: 'UNRESOLVED', reason: 'INTENT_PORT_UNAVAILABLE', actions });
+    const intent = intentAccess(request.context);
+    if (!intent.allowed) {
+      return Object.freeze({ status: 'UNRESOLVED', reason: intent.reason, actions });
+    }
+
+    let ranked;
+    try {
+      ranked = await intentPort.resolve({
+        context: request.context,
+        message: request.message,
+        actions: Object.freeze([...actions]),
+      });
+    } catch {
+      return Object.freeze({ status: 'UNRESOLVED', reason: 'INTENT_RESOLUTION_FAILED', actions });
+    }
+
+    const allowedIds = new Set(actions.map((action) => action.id));
+    const scores = scoreMapFromRanked(ranked, allowedIds);
+    if (scores.size === 0) {
+      return Object.freeze({ status: 'UNRESOLVED', reason: 'NO_INTENT_MATCH', actions });
+    }
+
+    const matched = Object.freeze(
+      actions
+        .filter((action) => scores.has(action.id))
+        .sort((a, b) => scores.get(b.id) - scores.get(a.id) || b.priority - a.priority || a.id.localeCompare(b.id)),
+    );
+
+    return Object.freeze({ status: 'RESOLVED', reason: 'INTENT_RESOLVED', actions: matched });
   }
 
   return Object.freeze({
