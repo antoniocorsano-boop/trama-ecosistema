@@ -286,3 +286,32 @@ test('catalog snapshot and action inputs remain isolated from consumer mutation'
   assert.deepEqual(calls, ['messaggio', 'original example']);
   assert.deepEqual(actions, actionsBefore);
 });
+
+test('cosine similarity remains finite for very large finite vectors', async () => {
+  const huge = [1e308, 1e308];
+  const port = createEmbeddingIntentPort({
+    embed: async () => huge,
+    intents: [{ actionId: 'a', examples: ['example'] }],
+  });
+
+  const matches = await port.resolve({ context: {}, message: 'messaggio', actions: [action('a')] });
+
+  assert.equal(matches.length, 1);
+  assert.equal(matches[0].actionId, 'a');
+  assert.ok(Number.isFinite(matches[0].score));
+  assert.ok(Math.abs(matches[0].score - 1) < 1e-12);
+});
+
+test('very small non-zero finite vectors are valid and produce a finite cosine score', async () => {
+  const tiny = [1e-308, 1e-308];
+  const port = createEmbeddingIntentPort({
+    embed: async () => tiny,
+    intents: [{ actionId: 'a', examples: ['example'] }],
+  });
+
+  const matches = await port.discover({ context: {}, message: 'messaggio', actions: [action('a')] });
+
+  assert.equal(matches.length, 1);
+  assert.ok(Number.isFinite(matches[0].score));
+  assert.ok(Math.abs(matches[0].score - 1) < 1e-12);
+});
