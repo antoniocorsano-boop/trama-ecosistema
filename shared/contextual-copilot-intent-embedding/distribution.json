@@ -6,7 +6,7 @@
   },
   "source": {
     "repository": "antoniocorsano-boop/trama-ecosistema",
-    "commit": "89e549b2584500a46265ceb52907010ecefeeb6c",
+    "commit": "4cd5d41176a63f15939162b7c33275fbb4130ac5",
     "path": "shared/contextual-copilot-intent-embedding"
   },
   "consumerMode": "vendored-file-package",
@@ -15,19 +15,19 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "489ac4e1afeb28c0835e7e9c73e7095db15e11098815aacefcd11ee61a8d4eba"
+      "sha256": "84d5220832578cd9fa01cd372dfb833f5a2a003799b9078e5cc0fc05fb9ed3dd"
     },
     {
       "path": "index.d.ts",
-      "sha256": "0acc5887641a8daee0dfb4e0b15313d6e1265cbcc8221f1ffa0141b7d04d3ecb"
+      "sha256": "f2c7d425f37cc525f6cabb671c0dc4ec36896ef7f76fb348fabb9791af21d403"
     },
     {
       "path": "package.json",
-      "sha256": "7dbc927d411aee59db1a131425748fabec213fb99a92aeced95bdcd8db51e0c7"
+      "sha256": "c0eb015cfc7ee7f649edbb8bab39e3986810e48d18b2a7ee596aa6c173ff09ac"
     },
     {
       "path": "src/index.js",
-      "sha256": "0cee76e400356dc2bcebfd6a6b5b9845e0291b72de231f88b5de2445814f584c"
+      "sha256": "edcf38132434b90294012b9bff5ab20e2c750d4757877f5b16c58aa20d69ab39"
     }
   ]
 }
