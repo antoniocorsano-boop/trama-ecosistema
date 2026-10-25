@@ -25,6 +25,26 @@
       ]
     },
     {
+      "id": "lesson-tdd-ci",
+      "aliases": [
+        "tdd",
+        "test driven development",
+        "test-driven-development",
+        "ci qualification",
+        "ci-qualification",
+        "red causale",
+        "red tdd",
+        "failure learning",
+        "failure-learning"
+      ],
+      "contextSubjects": [
+        "test-driven-development",
+        "ci-qualification",
+        "failure-learning",
+        "project-knowledge"
+      ]
+    },
+    {
       "id": "control-center",
       "aliases": [
         "control center",

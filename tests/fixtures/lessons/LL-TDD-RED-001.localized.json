@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "trama.lesson-proposal/v1",
+  "lessonId": "LL-TDD-RED-001",
+  "title": "RED localizzato non equivale a RED causale certificato",
+  "status": "CANDIDATE",
+  "category": "TDD_CI",
+  "scope": "TRAMA",
+  "priority": "HIGH",
+  "subjects": [
+    "test-driven-development",
+    "ci-qualification",
+    "failure-learning"
+  ],
+  "sourceRepository": "antoniocorsano-boop/docente-os-2026-27",
+  "sourceRefs": [
+    {
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "pullRequest": 736,
+      "exactHead": "ca3950cadf645e8c250d9192373d27794dab3457",
+      "workflowRun": "40018037974",
+      "ref": "github-actions:workflow-run/40018037974",
+      "evidenceKind": "WORKFLOW_STEP_FAILURE"
+    }
+  ],
+  "observedProblem": "Il workflow Product CI fallisce nello step Run product tests, mentre gli step preliminari risultano superati; il testo puntuale dell'eccezione non e disponibile come evidenza diretta.",
+  "previousBehavior": "Un fallimento localizzato nello step atteso poteva essere trattato come prova sufficiente della causa ipotizzata.",
+  "learnedPrinciple": "Un RED localizzato dimostra dove il workflow fallisce, non dimostra da solo la causa puntuale richiesta dal ciclo TDD.",
+  "proposedRule": "Prima di passare al GREEN, la causa prevista dal RED deve essere direttamente osservabile tramite eccezione, asserzione fallita o riproduzione controllata equivalente.",
+  "evidenceStrength": "HIGH",
+  "causalStatus": "LOCALIZED",
+  "relatedLessons": [],
+  "supersedes": [],
+  "proposedBy": "trama-lessons-engine",
+  "createdAt": "2026-10-23T20:31:00Z"
+}

@@ -76,4 +76,14 @@ assert explicit["subjectResolution"]["status"] == "RESOLVED"
 assert explicit["subjectResolution"]["contextSubjects"][0] == "atlas-percorsi"
 assert any("PR #96" in x.get("statement", "") for x in explicit["governedContext"]["evidence"])
 
+lesson_resolution = bootstrap.resolve_subjects(
+    "Il RED TDD della CI qualification deve essere causalmente osservabile",
+    resolver,
+)
+lesson_subjects = set(lesson_resolution["contextSubjects"])
+assert lesson_resolution["status"] == "RESOLVED", "missing lesson bootstrap subject resolution"
+assert "test-driven-development" in lesson_subjects, "missing TDD subject mapping"
+assert "ci-qualification" in lesson_subjects, "missing CI qualification subject mapping"
+assert "failure-learning" in lesson_subjects, "missing failure-learning subject mapping"
+
 print("TRAMA_SESSION_BOOTSTRAP_01_PASS")
