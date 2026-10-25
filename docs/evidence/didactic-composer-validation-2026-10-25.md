@@ -5,15 +5,15 @@
 **TRAMA baseline inspected:** `d11112434bb45364e7bddbee6d4df1a86f9b351a`  
 **Arena baseline inspected:** `d8b1bf43388cb5c4cdcc940b0c558bb128976c4c`  
 **Registro Docente baseline inspected:** `38b7f0dd874806aaf56dd0ecef7e93d01ce34039`  
-**Docente OS baseline inspected:** `develop@1c50c1bc620cdd0b7bafcff0dc5c613367df3298`  
+**Docente OS develop baseline inspected:** `1c50c1bc620cdd0b7bafcff0dc5c613367df3298`  
 **Atlas baseline inspected:** `c322b07a68d4508ec437941f8688012765e88848`  
-**Result:** DESIGN_CANDIDATE_VALIDATED / HUMAN_REVIEW_REQUIRED / RUNTIME_NOT_AUTHORIZED
+**Result:** DESIGN_CANDIDATE_VALIDATED / HUMAN_APPROVED / RUNTIME_NOT_AUTHORIZED
 
 ## Purpose
 
 Validate the proposed Didactic Composer architecture against current ecosystem contracts and product boundaries before any implementation planning or code.
 
-This evidence record is design-only. It does not authorize merge, deployment, persistence, cross-product write, public publication or DOS-A1.
+This evidence record is design-only. It does not authorize deployment, persistence, cross-product write, public publication or DOS-A1.
 
 ## Sources inspected
 
@@ -58,7 +58,7 @@ This evidence record is design-only. It does not authorize merge, deployment, pe
 | --- | --- | --- | --- |
 | Can Composer become a central product/store? | OR-07/OR-10 say shared layer is not product, database, write authority or orchestrator | Composer must be stateless `PROPOSE_ONLY`; persistence remains product-local | PASS |
 | Can one adopted UDA be a shared mutable record? | Product-local ownership forbids central domain state | Use immutable/content-addressed composition version + local receipts | PASS |
-| Does Composer own authority over the curricolo? | Arena remains unique authority of the curricolo | Composer consumes accepted Arena refs and preserves authority/provenance | PASS |
+| Does Composer own authority for the curricolo? | Arena remains unique authority for the curricolo | Composer consumes accepted Arena refs and preserves authority/provenance | PASS |
 | Can Arena transition applicability be flattened? | Arena contract supports `APPLICABLE | TRANSITIONAL` | Preserve applicability + regime in request/proposal/provenance | PASS after correction |
 | Are Registro/Studio Atlas already OR-07 callers? | v0 caller/product enums do not enumerate them | Add DC-00 contract evolution before real wiring; no aliases | PASS after correction |
 | Can Drive export be part of first Core? | OR-07 v0 only `READ_ONLY/PROPOSE_ONLY`; Drive is external write | Defer Drive to separate `WRITE_EXTERNAL` slice | PASS after correction |
@@ -70,7 +70,7 @@ This evidence record is design-only. It does not authorize merge, deployment, pe
 | Can evidence plan create grades? | Registro grades are student-specific domain records | Explicitly forbidden; assessment plan is only design intent | PASS |
 | Can Composer publish directly to public Atlas? | Studio Atlas owns professional authoring; public publication is separate | Composition → Studio Atlas seed → publication candidate → Atlas gate | PASS |
 | Can lesson/class state be transferred into Studio Atlas seed? | Studio Atlas is reusable/class-independent and does not own TeachingSession | Seed is minimized/class-independent | PASS |
-| Can Drive become source of truth? | ADR-003 federated knowledge rule says Drive stores human docs/copies | Drive copy has no authority; re-import becomes a new source/version | PASS |
+| Can Drive become source of truth? | Federated knowledge rule says Drive stores human docs/copies | Drive copy has no authority; re-import becomes a new source/version | PASS |
 | Can student personal data enter Composer? | OR-07 baseline excludes student personal data; architecture is privacy-first | Composer v1 restricted to `PROFESSIONAL_NON_PERSONAL` | PASS |
 | Can protected evidence refs be dereferenced by Composer? | Would cross privacy/domain boundaries | Only non-personal refs or opaque target-local refs; no dereference | PASS after correction |
 | Does the proposal activate DOS-A1? | DOS-A1 remains explicitly deferred | `RUNTIME_DEFERRED` unchanged | PASS |
@@ -103,17 +103,19 @@ Arena's qualified planning context explicitly distinguishes `APPLICABLE` and `TR
 
 ### C4 — Docente OS binding level
 
-Initial wording could be misread as though every adopted composition could be projected directly into lesson runtime.
+Initial wording could be misread as though every adopted composition could be projected directly into the lesson runtime.
 
 Existing Docente OS contracts require exact candidate/source generations, canonical block coherence, `planBinding` and human approval.
 
-**Resolution:** distinguish `UNBOUND_PLANNING_PROPOSAL` from `BOUND_HUMAN_TASK_CANDIDATE`.
+**Resolution:** explicitly distinguish `UNBOUND_PLANNING_PROPOSAL` from `BOUND_HUMAN_TASK_CANDIDATE`.
 
-### C5 — TRAMA-TERM-01 terminology guardrail
+### C5 — Generic caller placeholder
 
-The first documentation candidate introduced legacy English domain tokens for the curricolo in prose and candidate field names. The Governance workflow correctly failed at the dedicated vocabulary step.
+The design candidate used `OTHER_GOVERNED` as a forward-looking placeholder.
 
-**Resolution:** replace all newly introduced legacy domain tokens with canonical `curricolo` terminology. No allowlist and no validator weakening.
+That placeholder would undermine DC-00 if interpreted as a runtime identity.
+
+**Resolution after Human Design Approval:** implementation v1 accepts only exact ids in the governed product identity registry. `OTHER_GOVERNED` fails closed until a future governed product is explicitly registered.
 
 ## Selected architecture
 
@@ -155,39 +157,32 @@ Drive export: separate future WRITE_EXTERNAL slice.
 8. Atlas publication remains explicitly governed.
 9. Docente OS runtime requires existing product gates.
 10. DOS-A1 remains `RUNTIME_DEFERRED`.
+11. Runtime caller identity is explicit and governed; no generic or aliased caller is accepted.
 
 ## Builder check
 
-After applying C1–C5 to the design, no remaining question was found that would force an implementer to guess about authority, product ownership, privacy, execution semantics, publication boundary, Drive write classification, terminology or Docente OS plan binding.
+After applying C1–C5, no remaining question was found that would force an implementer to guess about authority, product ownership, privacy, execution semantics, publication boundary, Drive write classification, product identity or Docente OS plan binding.
 
-Implementation-local decisions intentionally deferred until an implementation plan exists:
+Implementation-local choices for DC-00/DC-01 are now fixed in the implementation plan, including deterministic SHA-256 semantic digesting and exact caller registry semantics.
 
-- exact digest algorithm qualification;
-- concrete local snapshot persistence per consumer;
-- transport mechanism;
-- UI details;
-- later Registro `MasterProgram` mapping;
-- manual revision/sync UX.
-
-**Builder-check result: nothing important left for architecture planning.**
+**Builder-check result: nothing important left for DC-00/DC-01 planning.**
 
 ## Validation decision
 
-**PASS AS DESIGN CANDIDATE**, subject to the Governance workflow being green on the corrected exact head and to Human Design Review.
+**PASS AS DESIGN CANDIDATE → HUMAN APPROVED.**
 
-Meaning:
+Human approval binds the exact design candidate:
 
-- G0/G1 evidence is sufficient for Human Design Review;
-- G2 governance boundary is materially resolved and represented by proposed ADR-022;
-- G3 design candidate is coherent enough to plan after approval;
-- no product code, schema migration, runtime, deploy, publication or cross-product write is authorized.
+```text
+97056b05c9a7aa66deeffff13daf705fb91d032a
+```
 
-## Required next action
+Approval receipt:
 
-Human Design Review of:
+`docs/evidence/didactic-composer-human-design-approval-2026-10-25.md`
 
-1. `docs/superpowers/specs/2026-10-25-trama-didactic-composer-v1-design.md`;
-2. `docs/decisions/trama-adr-022-didactic-composition-projection-boundary.md`;
-3. this validation record.
+Approved implementation plan:
 
-Only after explicit approval should the implementation-planning workflow begin.
+`docs/superpowers/plans/2026-10-25-trama-didactic-composer-dc00-dc01.md`
+
+The approval authorizes implementation planning and later TDD execution of DC-00 followed by DC-01. It does not authorize runtime, product adapters, external writes, merge, deploy or DOS-A1.
