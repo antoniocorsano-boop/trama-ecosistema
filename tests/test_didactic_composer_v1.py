@@ -36,6 +36,11 @@ class DidacticComposerV1Tests(unittest.TestCase):
         self.assertEqual(validate_proposal(self.request, self.alpha), [])
         self.assertEqual(validate_proposal(self.request, self.beta), [])
 
+    def test_composition_version_must_be_positive(self):
+        proposal = copy.deepcopy(self.alpha)
+        proposal["compositionVersion"] = 0
+        self.assertIn("DC-14", validate_proposal(self.request, proposal))
+
     def test_two_fake_adapters_have_same_semantic_digest_but_distinct_provenance(self):
         self.assertEqual(
             semantic_composition_payload(self.alpha),
@@ -55,6 +60,15 @@ class DidacticComposerV1Tests(unittest.TestCase):
 
     def test_valid_adoption_receipt_passes(self):
         self.assertEqual(validate_adoption_receipt(self.receipt, self.alpha), [])
+
+    def test_receipt_supports_superseded_not_replaced(self):
+        superseded = copy.deepcopy(self.receipt)
+        superseded["decision"] = "SUPERSEDED"
+        self.assertEqual(validate_adoption_receipt(superseded, self.alpha), [])
+
+        replaced = copy.deepcopy(self.receipt)
+        replaced["decision"] = "REPLACED"
+        self.assertIn("DC-13", validate_adoption_receipt(replaced, self.alpha))
 
     def test_valid_matrix_qualifies(self):
         result = qualify_matrix(self.matrix, self.registry)
