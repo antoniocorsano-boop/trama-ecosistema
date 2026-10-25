@@ -5,7 +5,7 @@
 **TRAMA baseline inspected:** `d11112434bb45364e7bddbee6d4df1a86f9b351a`  
 **Arena baseline inspected:** `d8b1bf43388cb5c4cdcc940b0c558bb128976c4c`  
 **Registro Docente baseline inspected:** `38b7f0dd874806aaf56dd0ecef7e93d01ce34039`  
-**Docente OS develop baseline inspected:** `1c50c1bc620cdd0b7bafcff0dc5c613367df3298`  
+**Docente OS baseline inspected:** `develop@1c50c1bc620cdd0b7bafcff0dc5c613367df3298`  
 **Atlas baseline inspected:** `c322b07a68d4508ec437941f8688012765e88848`  
 **Result:** DESIGN_CANDIDATE_VALIDATED / HUMAN_REVIEW_REQUIRED / RUNTIME_NOT_AUTHORIZED
 
@@ -13,7 +13,7 @@
 
 Validate the proposed Didactic Composer architecture against current ecosystem contracts and product boundaries before any implementation planning or code.
 
-This evidence record is intentionally design-only. It does not authorize merge, deployment, persistence, cross-product write, public publication or DOS-A1.
+This evidence record is design-only. It does not authorize merge, deployment, persistence, cross-product write, public publication or DOS-A1.
 
 ## Sources inspected
 
@@ -58,7 +58,7 @@ This evidence record is intentionally design-only. It does not authorize merge, 
 | --- | --- | --- | --- |
 | Can Composer become a central product/store? | OR-07/OR-10 say shared layer is not product, database, write authority or orchestrator | Composer must be stateless `PROPOSE_ONLY`; persistence remains product-local | PASS |
 | Can one adopted UDA be a shared mutable record? | Product-local ownership forbids central domain state | Use immutable/content-addressed composition version + local receipts | PASS |
-| Does Composer own curriculum authority? | Arena remains unique curriculum authority | Composer consumes accepted Arena refs and preserves authority/provenance | PASS |
+| Does Composer own authority over the curricolo? | Arena remains unique authority of the curricolo | Composer consumes accepted Arena refs and preserves authority/provenance | PASS |
 | Can Arena transition applicability be flattened? | Arena contract supports `APPLICABLE | TRANSITIONAL` | Preserve applicability + regime in request/proposal/provenance | PASS after correction |
 | Are Registro/Studio Atlas already OR-07 callers? | v0 caller/product enums do not enumerate them | Add DC-00 contract evolution before real wiring; no aliases | PASS after correction |
 | Can Drive export be part of first Core? | OR-07 v0 only `READ_ONLY/PROPOSE_ONLY`; Drive is external write | Defer Drive to separate `WRITE_EXTERNAL` slice | PASS after correction |
@@ -103,11 +103,17 @@ Arena's qualified planning context explicitly distinguishes `APPLICABLE` and `TR
 
 ### C4 — Docente OS binding level
 
-Initial wording could be misread as though every adopted composition could be projected directly into the lesson runtime.
+Initial wording could be misread as though every adopted composition could be projected directly into lesson runtime.
 
 Existing Docente OS contracts require exact candidate/source generations, canonical block coherence, `planBinding` and human approval.
 
-**Resolution:** explicitly distinguish `UNBOUND_PLANNING_PROPOSAL` from `BOUND_HUMAN_TASK_CANDIDATE`.
+**Resolution:** distinguish `UNBOUND_PLANNING_PROPOSAL` from `BOUND_HUMAN_TASK_CANDIDATE`.
+
+### C5 — TRAMA-TERM-01 terminology guardrail
+
+The first documentation candidate introduced legacy English domain tokens for the curricolo in prose and candidate field names. The Governance workflow correctly failed at the dedicated vocabulary step.
+
+**Resolution:** replace all newly introduced legacy domain tokens with canonical `curricolo` terminology. No allowlist and no validator weakening.
 
 ## Selected architecture
 
@@ -152,9 +158,9 @@ Drive export: separate future WRITE_EXTERNAL slice.
 
 ## Builder check
 
-After applying C1–C4 to the design, no remaining question was found that would force an implementer to guess about authority, product ownership, privacy, execution semantics, publication boundary, Drive write classification, or Docente OS plan binding.
+After applying C1–C5 to the design, no remaining question was found that would force an implementer to guess about authority, product ownership, privacy, execution semantics, publication boundary, Drive write classification, terminology or Docente OS plan binding.
 
-The following are implementation-local and intentionally deferred until an implementation plan exists:
+Implementation-local decisions intentionally deferred until an implementation plan exists:
 
 - exact digest algorithm qualification;
 - concrete local snapshot persistence per consumer;
@@ -167,7 +173,7 @@ The following are implementation-local and intentionally deferred until an imple
 
 ## Validation decision
 
-**PASS AS DESIGN CANDIDATE.**
+**PASS AS DESIGN CANDIDATE**, subject to the Governance workflow being green on the corrected exact head and to Human Design Review.
 
 Meaning:
 
