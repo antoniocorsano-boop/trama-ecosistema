@@ -1,6 +1,6 @@
 # TRAMA-ADR-022 — Didactic Composer come capability condivisa stateless con proiezioni product-local
 
-**Stato:** PROPOSED / HUMAN_REVIEW_REQUIRED  
+**Stato:** HUMAN_APPROVED / IMPLEMENTATION_PLANNING_AUTHORIZED / RUNTIME_NOT_AUTHORIZED  
 **Data:** 2026-10-25  
 **Perimetro:** TRAMA · Arena · Docente OS · Registro Docente · Studio Atlas · Atlas · Drive  
 **Runtime:** NOT_AUTHORIZED  
@@ -9,11 +9,11 @@
 
 ## Contesto
 
-L'ecosistema deve poter trasformare un intento del docente, fonti professionali e contesto curricolare governato in una UDA/attività/lezione strutturata riusabile nei diversi prodotti.
+L'ecosistema deve poter trasformare un intento del docente, fonti professionali e contesto del curricolo governato in una UDA/attività/lezione strutturata riusabile nei diversi prodotti.
 
 Una soluzione ingenua introdurrebbe una nuova applicazione centrale o una singola copia mutabile della UDA condivisa da tutti i prodotti. Questo entrerebbe in conflitto con i principi già governati:
 
-- Arena resta autorità curricolare;
+- Arena resta autorità del curricolo;
 - TRAMA governa contratti ma non diventa una quarta applicazione;
 - Shared Capability Layer non è database, write authority o orchestratore centrale;
 - ogni prodotto conserva stato, regole decisionali e persistenza del proprio dominio;
@@ -31,7 +31,7 @@ La validazione cross-contract ha evidenziato tre ulteriori vincoli:
 
 ## Decisione
 
-È proposta `CAP-DIDACTIC-COMPOSER` come **shared capability stateless, provider-neutral e `PROPOSE_ONLY`**.
+È approvata `CAP-DIDACTIC-COMPOSER` come **shared capability stateless, provider-neutral e `PROPOSE_ONLY`**.
 
 Identity iniziale:
 
@@ -41,7 +41,7 @@ didactic.composition.propose@1
 
 La capability:
 
-1. riceve un contesto curricolare Arena già risolto/accettato dal prodotto chiamante;
+1. riceve un contesto del curricolo Arena già risolto/accettato dal prodotto chiamante;
 2. accetta `applicabilityStatus = APPLICABLE | TRANSITIONAL` soltanto con `authorityState = APPROVED` e `vigencyStatus = VIGENTE`, preservando `regimeRef` e stato di applicabilità nella provenance;
 3. riceve soltanto contesto professionale minimizzato e non personale;
 4. produce una `DidacticCompositionProposalV1` strutturata, source-bound e authority-bound;
@@ -80,6 +80,8 @@ STUDIO_ATLAS = ATLAS
 ```
 
 L'estensione dell'enum non trasferisce authority e deve restare backward-compatible con i consumer v0.
+
+`OTHER_GOVERNED` non è un caller runtime autorizzato in v1: nuovi prodotti devono essere registrati esplicitamente prima di poter invocare la capability.
 
 ## Proiezioni governate
 
@@ -207,6 +209,10 @@ Scartato perché contraddice la knowledge architecture federata: Drive resta wor
 
 Scartato perché nasconderebbe confini di ownership e authority: Registro Docente non è Docente OS e Studio Atlas non è Atlas pubblico.
 
+### Caller generico v1
+
+Scartato per v1: `OTHER_GOVERNED` non può sostituire la registrazione esplicita di un prodotto reale.
+
 ## Conseguenze
 
 Positive:
@@ -216,7 +222,7 @@ Positive:
 - provenance/versioning confrontabili tra prodotti;
 - compatibilità con la privacy-first architecture;
 - evoluzione indipendente degli adapter;
-- mantenimento esplicito del regime transitorio curricolare.
+- mantenimento esplicito del regime transitorio del curricolo.
 
 Costi accettati:
 
@@ -227,21 +233,42 @@ Costi accettati:
 - il primo wiring cross-product richiede prima l'estensione delle product identities;
 - Drive richiede governance distinta come write esterno.
 
+## Human Design Approval
+
+Il design è stato approvato dall'utente il 2026-10-25 sul candidate esatto:
+
+```text
+97056b05c9a7aa66deeffff13daf705fb91d032a
+```
+
+Receipt:
+
+`docs/evidence/didactic-composer-human-design-approval-2026-10-25.md`
+
+L'approvazione autorizza la pianificazione implementativa `DC-00 → DC-01`, non runtime o integrazioni live.
+
 ## Stato di autorizzazione
 
-Questa ADR è esclusivamente una proposta architetturale.
+Questa ADR autorizza **implementation planning** per:
+
+```text
+DC-00 — governed product identity prerequisite
+DC-01 — Didactic Composer Core contract + offline qualification
+```
 
 Non autorizza:
 
-- implementazione;
-- estensione runtime automatica dei product ids;
+- product adapters;
+- live provider wiring;
 - nuovi write cross-product;
-- schema migration;
-- merge;
+- schema migration dei prodotti downstream;
+- merge automatico;
 - deploy;
 - export Drive;
 - pubblicazione Atlas;
 - runtime Docente OS;
 - DOS-A1.
 
-L'implementazione richiede Human Design Review, ADR approval, implementation plan separato e qualification per slice.
+Implementation plan canonico:
+
+`docs/superpowers/plans/2026-10-25-trama-didactic-composer-dc00-dc01.md`
