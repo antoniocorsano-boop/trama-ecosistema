@@ -30,7 +30,7 @@ Nel Registro Docente esiste già una infrastruttura embedding locale qualificata
 - cache in memoria;
 - cosine similarity già usata da LIB-05A per `query -> LibrarySource`.
 
-Quella infrastruttura è però verticale al Registro e non deve essere copiata dentro Docente OS né importata nel Core.
+Quella infrastruttura è verticale al Registro e non deve essere copiata dentro Docente OS né importata nel Core.
 
 Serve quindi un livello intermedio condiviso:
 
@@ -61,6 +61,7 @@ IntentPort.resolve() / IntentPort.discover()
 12. Nessun keyword parser parallelo viene introdotto.
 13. Nessun vector index persistente, RAG, chunking o retrieval di documenti entra nel package.
 14. LIB-05A resta concettualmente separato: retrieval di fonti e intent classification possono riusare lo stesso provider embedding ma non condividono authority o score.
+15. Errori tecnici dell'embedding non devono essere mascherati come `NO_INTENT_MATCH`.
 
 ## 4. Approcci considerati
 
@@ -162,7 +163,7 @@ Requisiti:
 - `actionId` non vuoto;
 - almeno un esempio non vuoto;
 - action id duplicati rifiutati;
-- esempi normalizzati soltanto per whitespace, senza stemming/keyword rules verticali.
+- esempi normalizzati soltanto per whitespace, senza stemming o keyword rules verticali.
 
 ### 6.3 Opzioni algoritmiche
 
@@ -198,6 +199,31 @@ mode: 'local'
 
 ed implementare sia `resolve()` sia `discover()`.
 
+### 6.5 Dipendenza dal contratto Core
+
+Il package deve dipendere dal Core soltanto per la superficie tipologica pubblica, non per il runtime di ranking.
+
+Proposta:
+
+```json
+{
+  "peerDependencies": {
+    "@trama/contextual-copilot-core": "^0.3.0"
+  }
+}
+```
+
+La dichiarazione TypeScript può usare `import type` per `IntentPort`, `IntentMatch`, `ResolvedAction` e `IntentActionCandidate`; il runtime JavaScript non deve importare codice dal Core.
+
+Conseguenze:
+
+- un solo contratto canonico dei tipi di intent;
+- nessuna duplicazione strutturale dei tipi Core;
+- nessuna dipendenza runtime aggiuntiva;
+- conformance test contro l'exact Core 0.3 qualificato.
+
+Se il packaging vendored dimostra che `peerDependencies` introduce attrito non necessario, il piano può sostituirlo con una dependency locale esplicita, ma non può duplicare i tipi Core nel nuovo package.
+
 ## 7. Motore semantico condiviso
 
 Entrambi i metodi usano lo stesso motore interno:
@@ -219,23 +245,24 @@ Sequenza proposta:
 4. se non restano candidate, restituire `[]`;
 5. ottenere embedding del messaggio;
 6. ottenere embedding degli esempi delle sole candidate;
-7. validare vettori:
+7. validare ogni vettore:
    - array non vuoto;
-   - componenti finite;
-   - dimensione coerente;
+   - componenti tutte finite;
+   - dimensione coerente con il vettore del messaggio;
    - norma non zero;
-8. calcolare cosine similarity fra messaggio e ciascun esempio;
-9. per ogni action usare il miglior similarity score fra i suoi esempi;
-10. scartare score sotto `minSimilarity`;
-11. ordinare score desc, poi action id asc come ordine locale stabile;
-12. se i primi due match sono troppo vicini (`delta < minMargin`), degradare a nessun match;
-13. restituire `IntentMatch[]` con action id e score finito.
+8. un output embedding tecnicamente invalido provoca errore del port, non `[]`;
+9. calcolare cosine similarity fra messaggio e ciascun esempio;
+10. per ogni action usare il miglior similarity score fra i suoi esempi;
+11. scartare score sotto `minSimilarity`;
+12. ordinare score desc, poi action id asc come ordine locale stabile;
+13. se esistono almeno due match sopra soglia e i primi due sono troppo vicini (`delta < minMargin`), degradare a `[]`;
+14. restituire `IntentMatch[]` con action id e score finito.
 
 Il Core resta responsabile del filtering finale, del tie-break con priority e dell'authority.
 
 ## 8. Perché "best example" e non centroid/prototype persistente
 
-Per v1 si usa il miglior esempio per action anziché costruire un centroid persistente.
+Per v0.1 si usa il miglior esempio per action anziché costruire un centroid persistente.
 
 Motivazioni:
 
@@ -247,23 +274,27 @@ Motivazioni:
 
 Un prototype/centroid precomputato può essere valutato in una versione futura se emergono problemi reali di latenza.
 
-## 9. Ambiguità e fail-closed
+## 9. No-match vs errore tecnico
 
-Il package deve preferire `[]` a un match debole o ambiguo.
+Il package deve distinguere semanticamente due classi di esito.
 
-Condizioni di no-match:
+### No-match valido → `[]`
 
-- messaggio vuoto;
+- messaggio vuoto quando il port viene usato fuori dal Core;
 - nessuna action con esempi configurati;
-- embedding del messaggio vuoto/non valido;
-- tutti gli score sotto soglia;
-- mismatch di dimensione;
-- norme zero;
-- componenti non finite;
-- primo e secondo match troppo vicini secondo `minMargin`;
-- eccezione dell'embedding function.
+- tutti gli score sotto `minSimilarity`;
+- primo e secondo match sopra soglia ma troppo vicini secondo `minMargin`.
 
-L'eccezione non deve essere convertita in un action match. Il Core trasformerà l'errore del port nel proprio risultato fail-closed (`INTENT_RESOLUTION_FAILED` o `INTENT_DISCOVERY_FAILED`) quando appropriato.
+### Errore tecnico → eccezione propagata al Core
+
+- `embed()` rifiuta/fallisce;
+- embedding vuoto quando era richiesto un vettore;
+- dimensioni incoerenti;
+- componenti `NaN` / `Infinity`;
+- norma zero;
+- forma del vettore non valida.
+
+L'errore non viene convertito in `[]`: il Core deve poter produrre `INTENT_RESOLUTION_FAILED` o `INTENT_DISCOVERY_FAILED` e distinguere un guasto del motore da un vero `NO_INTENT_MATCH`.
 
 ## 10. Sicurezza e privacy
 
@@ -371,18 +402,19 @@ Il primo RED deve dimostrare che il package non esiste ancora e che un consumer 
 1. factory restituisce `mode: 'local'` e implementa `resolve` + `discover`;
 2. `resolve()` vede soltanto action id presenti nell'input;
 3. `discover()` vede soltanto action id presenti nell'input;
-4. action id inventati nel catalogo non possono comparire in output se assenti dall'input;
+4. action id presenti nel catalogo ma assenti dall'input non possono comparire in output;
 5. best-example similarity ordina correttamente due action;
 6. score sotto soglia → `[]`;
 7. gap sotto `minMargin` → `[]`;
-8. vettori con dimensioni diverse → fail-closed;
-9. `NaN` / `Infinity` → fail-closed;
-10. norma zero → fail-closed;
-11. embedding function che fallisce → nessun widening; il port può propagare l'errore al Core;
-12. catalogo duplicato o invalido rifiutato alla costruzione;
-13. input action array e catalogo non vengono mutati;
-14. nessun `fetch`, provider SDK o storage dependency nel package;
-15. package surface e distribution receipt riproducibili.
+8. vettori con dimensioni diverse → eccezione;
+9. `NaN` / `Infinity` → eccezione;
+10. norma zero → eccezione;
+11. embedding function che fallisce → eccezione propagata al Core;
+12. il Core traduce la failure in `INTENT_RESOLUTION_FAILED` / `INTENT_DISCOVERY_FAILED`;
+13. catalogo duplicato o invalido rifiutato alla costruzione;
+14. input action array e catalogo non vengono mutati;
+15. nessun `fetch`, provider SDK o storage dependency nel runtime package;
+16. package surface e distribution receipt riproducibili.
 
 ### Core conformance test
 
@@ -391,7 +423,8 @@ Con il package collegato al Core 0.3 in test:
 - `resolveRequest()` può classificare soltanto azioni autorizzate;
 - `discoverRequestIntent()` può riconoscere PREPARE con `generativeMode: 'none'`;
 - `DISCOVERED PREPARE` non produce dispatch;
-- `INSTITUTIONAL_DECISION` e `WRITE_EXTERNAL` restano esclusi dal Core prima del port.
+- `INSTITUTIONAL_DECISION` e `WRITE_EXTERNAL` restano esclusi dal Core prima del port;
+- failure tecnica dell'adapter resta distinguibile da `NO_INTENT_MATCH`.
 
 ## 15. Distribution e versioning
 
@@ -453,7 +486,7 @@ Solo dopo integrazione shared:
 - nessun persisted vector index;
 - nessun multi-source orchestration;
 - nessun hybrid lexical/semantic intent score;
-- nessun modifica a `discoverRequestIntent()` o ai guardrail Core 0.3;
+- nessuna modifica a `discoverRequestIntent()` o ai guardrail Core 0.3;
 - nessuna UI;
 - nessun deploy.
 
@@ -476,6 +509,12 @@ Solo dopo integrazione shared:
 **Rischio:** esempi sovrapposti producono falsi positivi.
 
 **Mitigazione:** threshold + ambiguity margin + fail-closed; catalogo versionato/testato dal consumer.
+
+### Errore tecnico mascherato da no-match
+
+**Rischio:** un provider locale guasto appare come se il docente non avesse espresso alcun intento.
+
+**Mitigazione:** output embedding invalido o exception propagano; è il Core a produrre `INTENT_*_FAILED`.
 
 ### Coupling al Registro
 
@@ -504,6 +543,8 @@ Approvare o richiedere modifiche alla seguente architettura:
 - `embed(text)` iniettato dal consumer;
 - catalogo di esempi posseduto dal consumer e keyed per action id;
 - algoritmo best-example cosine similarity con threshold + ambiguity margin;
+- errori embedding propagati al Core e distinti dal no-match;
+- dipendenza dal Core solo tipologica/peer, nessun runtime coupling;
 - `mode: 'local'`, nessun percorso remoto;
 - primo consumer Registro limitato a REVIEW/LINK/PREPARE;
 - nessuna modifica al Core 0.3.
