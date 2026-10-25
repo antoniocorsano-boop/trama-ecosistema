@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CORE = ROOT / "shared" / "contextual-copilot-core"
 MANIFEST = CORE / "distribution.json"
 EXPECTED_FILES = {"README.md", "index.d.ts", "package.json", "src/index.js"}
-EXPECTED_SOURCE_COMMIT = "4de1de1daf2a68ebee4d52b0140420b45ae1ef3e"
+EXPECTED_SOURCE_COMMIT = "404db9ebf12fe669181f4d503110b04221684212"
 
 
 def sha256(path: Path) -> str:
@@ -25,7 +25,7 @@ class ContextualCopilotCoreDistributionTests(unittest.TestCase):
         manifest = self.load_manifest()
         self.assertEqual(manifest["schemaVersion"], "trama.contextual-copilot-core-distribution/v1")
         self.assertEqual(manifest["package"]["name"], "@trama/contextual-copilot-core")
-        self.assertEqual(manifest["package"]["version"], "0.1.0")
+        self.assertEqual(manifest["package"]["version"], "0.2.0")
         self.assertEqual(manifest["source"]["repository"], "antoniocorsano-boop/trama-ecosistema")
         self.assertEqual(manifest["source"]["commit"], EXPECTED_SOURCE_COMMIT)
         self.assertEqual(manifest["source"]["path"], "shared/contextual-copilot-core")
