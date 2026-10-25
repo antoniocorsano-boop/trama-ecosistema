@@ -11,7 +11,7 @@
 
 ## Problem / opportunity
 
-Il docente deve poter trasformare intenzioni, fonti professionali e contesto curricolare in UDA, attività, lezioni e materiali coerenti senza ricostruire manualmente lo stesso oggetto in Registro Docente, Docente OS, Studio Atlas/Atlas e Drive.
+Il docente deve poter trasformare intenzioni, fonti professionali e contesto curricolare in UDA, attività, lezioni e materiali coerenti senza ricostruire manualmente lo stesso oggetto in Registro Docente, Docente OS, Studio Atlas/Atlas e nei documenti professionali.
 
 Il problema non è soltanto generare contenuti: è mantenere distinti authority, progettazione, preparazione, pubblicazione, svolgimento, consuntivo e valutazione.
 
@@ -33,16 +33,23 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 - Studio Atlas come professional pathway authoring domain;
 - Atlas come public/learner publication domain;
 - Drive come human document workspace/archive;
-- Contextual Copilot Core come possibile interaction/orchestration adapter senza authority.
+- Contextual Copilot Core come possibile interaction adapter senza authority.
 
 ## Scope v1
 
-- shared capability `didactic.composition.propose@1`;
+- shared capability candidate `didactic.composition.propose@1`;
 - structured proposal artifact;
 - local human adoption receipt;
 - product-local projection contracts;
 - privacy class `PROFESSIONAL_NON_PERSONAL`;
+- preservation of Arena `APPLICABLE | TRANSITIONAL` applicability;
 - execution-observation concept for future Docente OS → Registro continuity.
+
+## Prerequisites discovered during validation
+
+1. **Product identity evolution.** OR-07/OR-10 v0 do not yet enumerate `REGISTRO_DOCENTE` or `STUDIO_ATLAS`; real cross-product wiring requires an additive contract evolution. They must remain distinct identities, not aliases of Docente OS or Atlas.
+2. **Drive deferred write slice.** OR-07 v0 permits only `READ_ONLY`/`PROPOSE_ONLY`; Drive export is `WRITE_EXTERNAL`, therefore it is outside the first Composer Core and requires separate governance/write semantics.
+3. **Docente OS two-stage projection.** A composition may first be an `UNBOUND_PLANNING_PROPOSAL`; only a product-resolved valid `planBinding` can produce a `BOUND_HUMAN_TASK_CANDIDATE`.
 
 ## Non-goals v1
 
@@ -54,6 +61,7 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 - automatic grades;
 - Registro domain migration;
 - Atlas public authoring;
+- Drive write inside Core v1;
 - DOS-A1 activation;
 - runtime authorization.
 
@@ -64,17 +72,17 @@ Il problema non è soltanto generare contenuti: è mantenere distinti authority,
 3. Adoption is human and product-local.
 4. Product projections do not inherit one another's decision state.
 5. `PLANNED != PREPARED != PUBLISHED != TAUGHT != RECORDED != ASSESSED`.
-6. Arena remains curriculum authority.
+6. Arena remains curriculum authority and `TRANSITIONAL` is preserved when APPROVED+VIGENTE.
 7. Docente OS projection cannot bypass current plan/projection gates.
-8. Registro projection starts preview-only and does not force `UdaRecord` → `MasterProgram` migration.
+8. Registro projection starts preview-only and does not force `UdaRecord` → `MasterProgram` migration or fan-out to every class.
 9. Studio Atlas is the authoring handoff for new Atlas pathways/experiences; Composer does not publish directly to public Atlas.
-10. Drive stores declared human-readable copies, not technical authority.
+10. Drive stores declared human-readable copies only through a separately governed explicit write.
 
 ## Privacy / data classification
 
 Composer v1 accepts only `PROFESSIONAL_NON_PERSONAL`.
 
-Student identity, grades, diagnoses, individual behavior notes, health data and identifiable learner submissions are excluded.
+Student identity, grades, diagnoses, individual behavior notes, health data and identifiable learner submissions are excluded. Any future evidence refs containing protected target-local information remain opaque and are not dereferenced by the Composer.
 
 ## Human control impact
 
@@ -88,7 +96,7 @@ The system can propose and prepare projections, but adoption and target-product 
 - TRAMA OR-10 Product Integrations;
 - Arena accepted curriculum/planning context contracts;
 - Contextual Copilot Core intent/policy/dispatch separation;
-- Docente OS Human Task projection recipe / planBinding;
+- Docente OS Human Task projection recipe / `planBinding`;
 - Registro `UdaRecord` / `UdaLesson` and `PlanningStateV1` separation;
 - Studio Atlas Product Foundation / Atlas Handoff direction;
 - TRAMA Drive federated knowledge rule.
@@ -102,7 +110,7 @@ The system can propose and prepare projections, but adoption and target-product 
 - `docs/superpowers/specs/2026-10-25-contextual-copilot-intent-discovery-design.md`;
 - downstream observed `ARENA_REGISTRO_PLANNING_CONTEXT_V1`;
 - downstream observed Registro `2026-10-25-lib-03a-planning-context-bridge-design.md`;
-- downstream observed Docente OS `HUMAN_TASK_PROJECTION_RECIPE.md` and source contract.
+- downstream observed Docente OS Human Task projection contracts.
 
 ## Accepted approach
 
@@ -114,36 +122,38 @@ The system can propose and prepare projections, but adoption and target-product 
 - duplicated product-specific composers — rejected;
 - Composer → public Atlas direct publication — rejected;
 - Drive as canonical UDA store — rejected;
+- alias Registro as Docente OS / Studio Atlas as Atlas — rejected;
 - immediate Registro planning-domain migration — deferred/rejected for v1;
-- cross-product automatic synchronization — deferred.
+- cross-product automatic synchronization — deferred;
+- Drive external write in first Core — deferred.
 
 ## Open questions
 
-No blocking governance question remains for design review.
+No blocking governance question remains for Human Design Review.
 
-Implementation-local decisions remain intentionally open: digest algorithm qualification, concrete local snapshot stores, transport, UI and later `MasterProgram` mapping.
+Implementation-local decisions intentionally remain open: digest algorithm qualification, concrete local snapshot stores, transport, UI and later `MasterProgram` mapping.
 
 ## Current gate assessment
 
 ### G0 Intake
 
-PASS candidate: stable capability ID, actors, problem, scope, non-goals and runtime state are explicit.
+**PASS candidate.** Stable capability ID, actors, problem, scope, non-goals and runtime state are explicit.
 
 ### G1 Discovery
 
-PASS candidate: relevant product contracts and current downstream constraints have been inspected; alternatives and risks are recorded.
+**PASS candidate.** Relevant product contracts/current downstream constraints were inspected; alternatives, conflicts and negative knowledge are recorded.
 
 ### G2 Governance
 
-PASS candidate subject to human review: authority, product boundaries, privacy, runtime and DOS-A1 are explicit; ADR-022 proposed.
+**PASS candidate subject to human approval.** Authority, product identities, privacy, Drive write boundary, runtime and DOS-A1 are explicit; ADR-022 is proposed.
 
 ### G3 Specification
 
-DESIGN CANDIDATE: request/proposal/adoption/projection semantics and acceptance criteria are materialized in the design spec, but schema/validator implementation is not authorized.
+**DESIGN CANDIDATE.** Request/proposal/adoption/projection semantics and acceptance criteria are materialized; schema/validator implementation is not authorized.
 
 ### G4+
 
-NOT STARTED / NOT AUTHORIZED.
+**NOT STARTED / NOT AUTHORIZED.**
 
 ## Canonical design candidate
 
@@ -153,6 +163,10 @@ NOT STARTED / NOT AUTHORIZED.
 
 `docs/decisions/trama-adr-022-didactic-composition-projection-boundary.md`
 
+## Validation evidence
+
+`docs/evidence/didactic-composer-validation-2026-10-25.md`
+
 ## Next governed action
 
-Human Design Review of the design spec + ADR. If approved, invoke implementation planning; no code before that decision.
+Human Design Review of design spec + ADR + validation evidence. If approved, invoke implementation planning; no product code before that decision.
