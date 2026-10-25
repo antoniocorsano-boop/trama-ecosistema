@@ -27,7 +27,7 @@
 ## Review Focus
 
 - Azione generativa `PREPARE` con `generativeMode: 'none'` → discoverable localmente, ma ancora assente da `resolveActions()` e non dispatchabile.
-- Custom policy che nega `phase: 'DISCOVER'` → candidato escluso anche se capability e registry lo consentono.
+- Custom policy che nega o fallisce su `phase: 'DISCOVER'` → candidato escluso/fail-closed senza contaminare `RESOLVE` o `DISPATCH`.
 - Intent Port 0.2 con solo `resolve()` → `resolveRequest()` identico a prima; `discoverRequestIntent()` restituisce `INTENT_DISCOVERY_UNAVAILABLE` senza chiamare `resolve()`.
 - Port remoto con contesto non autorizzato/protetto → zero chiamate a `discover()` e nessun inoltro del messaggio.
 - `discover()` restituisce id inventati, duplicati o score non finiti / tenta mutazioni → output filtrato e deterministico; snapshot/candidate restano frozen e nessuna authority viene ampliata.
@@ -55,7 +55,15 @@ Assertions:
 - `discoverRequestIntent()` is expected to return `{ status: 'DISCOVERED', reason: 'INTENT_DISCOVERED', intents: [{ actionId: 'prepare', capability: 'PREPARE' }] }`;
 - no executor/provider path is invoked.
 
-- [ ] **Step 2: Run the focused test and prove RED**
+- [ ] **Step 2: Write failing candidate-boundary tests**
+
+Add focused tests proving:
+- a registry action whose capability is absent from `context.capabilities` never reaches `discover()`;
+- `allowedCapabilities` removes an otherwise discoverable action before the port is called;
+- if the intersection is empty, result is `UNRESOLVED / NO_DISCOVERABLE_ACTIONS` with `intents: []`;
+- with no Intent Port, a non-empty candidate set returns `UNRESOLVED / INTENT_PORT_UNAVAILABLE`.
+
+- [ ] **Step 3: Run the focused tests and prove RED**
 
 Run from `shared/contextual-copilot-core`:
 
@@ -63,7 +71,7 @@ Run from `shared/contextual-copilot-core`:
 
 Expected: FAIL specifically because `discoverRequestIntent` / discovery contract does not exist; all pre-existing 0.2 request tests remain green.
 
-- [ ] **Step 3: Add public declarations without changing 0.2 signatures**
+- [ ] **Step 4: Add public declarations without changing 0.2 signatures**
 
 In `index.d.ts`:
 - define `PolicyPhase = 'DISCOVER' | 'RESOLVE' | 'DISPATCH'` and use it in `PolicyEngine.evaluate(...phase?)`;
@@ -73,7 +81,7 @@ In `index.d.ts`:
 - add `DiscoveredIntent`, `CopilotIntentDiscovery` with the reasons fixed by the spec;
 - add `ContextualCopilotCore.discoverRequestIntent(request: CopilotRequest): Promise<CopilotIntentDiscovery>`.
 
-- [ ] **Step 4: Implement the minimum discovery path**
+- [ ] **Step 5: Implement the minimum discovery path**
 
 In `src/index.js`, add `discoverRequestIntent(rawRequest)` that:
 - reuses `validateCopilotRequest()`;
@@ -90,12 +98,12 @@ In `src/index.js`, add `discoverRequestIntent(rawRequest)` that:
 - sorts by score desc, priority desc, id asc;
 - maps matches to `{ actionId, capability }` only.
 
-- [ ] **Step 5: Run focused package tests**
+- [ ] **Step 6: Run focused package tests**
 
 Run: `node --test test/request-intent.test.mjs`.
-Expected: new causal case GREEN and every pre-existing request/resolve test unchanged and GREEN.
+Expected: causal and candidate-boundary cases GREEN and every pre-existing request/resolve test unchanged and GREEN.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 Commit message: `feat(core): add non-executable intent discovery contract`.
 
@@ -124,12 +132,16 @@ Add tests proving that with `createFailClosedPolicyEngine({ generativeMode: 'non
 
 Use a policy engine that records `phase` and returns denied for one candidate only when `phase === 'DISCOVER'`. Assert the candidate is absent and that the policy actually received `DISCOVER`.
 
-- [ ] **Step 3: Run focused tests and verify RED**
+- [ ] **Step 3: Add policy-failure fail-closed test**
+
+Use a custom policy that throws only for `phase === 'DISCOVER'`. Assert the failed candidate is not sent to the Intent Port; if it was the sole candidate, return `NO_DISCOVERABLE_ACTIONS`. Verify existing `RESOLVE`/`DISPATCH` tests preserve their previous behavior.
+
+- [ ] **Step 4: Run focused tests and verify RED**
 
 Run: `node --test test/request-intent.test.mjs test/core-boundaries.test.mjs`.
 Expected: FAIL because the current fail-closed engine ignores `phase` and current core generative guard applies execution availability before any discovery-specific semantics.
 
-- [ ] **Step 4: Implement phase-aware default policy**
+- [ ] **Step 5: Implement phase-aware default policy**
 
 Change `createFailClosedPolicyEngine().evaluate` to accept `phase = 'RESOLVE'`.
 For `DISCOVER` only:
@@ -138,14 +150,14 @@ For `DISCOVER` only:
 - skip generative runtime availability checks because no generation/execution occurs.
 For `RESOLVE` and `DISPATCH`, preserve exact 0.2 behavior.
 
-Keep the existing execution guard path (`coreGenerativePrivacyGuard`) untouched for normal resolution and dispatch; discovery must use its own evaluation path rather than weakening that guard globally.
+Keep the existing execution guard path (`coreGenerativePrivacyGuard`) untouched for normal resolution and dispatch; discovery must use its own evaluation path rather than weakening that guard globally. Policy exceptions during discovery exclude that candidate fail-closed.
 
-- [ ] **Step 5: Run focused tests**
+- [ ] **Step 6: Run focused tests**
 
 Run: `node --test test/request-intent.test.mjs test/core-boundaries.test.mjs`.
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 Commit message: `feat(core): separate discovery policy from execution availability`.
 
@@ -180,18 +192,22 @@ Assert:
 - [ ] **Step 3: Add match sanitization tests**
 
 `discover()` returns allowed id, invented id, duplicated id with lower/higher score, non-finite score and an id filtered out by `allowedCapabilities`.
-Assert output contains only the best finite match per discoverable action in deterministic order and never exposes scores.
+Assert output contains only the best finite match per discoverable action in deterministic order and never exposes scores. When no valid finite match survives, assert `UNRESOLVED / NO_INTENT_MATCH` with `intents: []`.
 
-- [ ] **Step 4: Add defensive-isolation test**
+- [ ] **Step 4: Add discovery-runtime failure test**
+
+Make `discover()` throw. Assert `UNRESOLVED / INTENT_DISCOVERY_FAILED`, `intents: []`, no fallback to `resolve()`, and no mutation/execution.
+
+- [ ] **Step 5: Add defensive-isolation test**
 
 Inside `discover()` assert mutation attempts against `context.capabilities`, `context.privacy`, candidate array and candidate objects throw or are ineffective. Then prove a later `resolveActions()` / `dispatch()` call has unchanged authority.
 
-- [ ] **Step 5: Run package suite**
+- [ ] **Step 6: Run package suite**
 
 Run from `shared/contextual-copilot-core`: `npm test`.
 Expected: all request, core-boundary, extension-isolation and legacy tests PASS with `# fail 0`.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 Commit message: `test(core): harden intent discovery privacy and compatibility`.
 
