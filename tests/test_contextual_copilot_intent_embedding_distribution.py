@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "shared" / "contextual-copilot-intent-embedding"
 MANIFEST = PACKAGE / "distribution.json"
 EXPECTED_FILES = {"README.md", "index.d.ts", "package.json", "src/index.js"}
-EXPECTED_SOURCE_COMMIT = "89e549b2584500a46265ceb52907010ecefeeb6c"
+EXPECTED_SOURCE_COMMIT = "4cd5d41176a63f15939162b7c33275fbb4130ac5"
 
 
 def sha256(path: Path) -> str:
