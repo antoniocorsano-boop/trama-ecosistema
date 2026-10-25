@@ -52,6 +52,29 @@ function snapshotCatalog(intents) {
   return catalog;
 }
 
+function validateEmbeddingVector(vector, expectedDimension = null) {
+  if (!Array.isArray(vector) || vector.length === 0) {
+    throw new TypeError('embedding vector must be a non-empty array');
+  }
+  if (expectedDimension !== null && vector.length !== expectedDimension) {
+    throw new TypeError(`embedding vector dimension mismatch: expected ${expectedDimension}, received ${vector.length}`);
+  }
+
+  let normSquared = 0;
+  for (const component of vector) {
+    if (typeof component !== 'number' || !Number.isFinite(component)) {
+      throw new TypeError('embedding vector components must be finite numbers');
+    }
+    normSquared += component * component;
+  }
+
+  if (normSquared === 0) {
+    throw new TypeError('embedding vector norm must be non-zero');
+  }
+
+  return vector;
+}
+
 function cosineSimilarity(left, right) {
   let dot = 0;
   let leftNorm = 0;
@@ -92,7 +115,7 @@ async function rankMessageAgainstActions({
     return [];
   }
 
-  const messageVector = await embed(message);
+  const messageVector = validateEmbeddingVector(await embed(message));
   const matches = [];
 
   for (const [actionId, examples] of catalog) {
@@ -102,7 +125,7 @@ async function rankMessageAgainstActions({
 
     let bestScore = -Infinity;
     for (const example of examples) {
-      const exampleVector = await embed(example);
+      const exampleVector = validateEmbeddingVector(await embed(example), messageVector.length);
       const score = cosineSimilarity(messageVector, exampleVector);
       if (score > bestScore) {
         bestScore = score;
