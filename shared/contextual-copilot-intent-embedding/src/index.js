@@ -60,15 +60,17 @@ function validateEmbeddingVector(vector, expectedDimension = null) {
     throw new TypeError(`embedding vector dimension mismatch: expected ${expectedDimension}, received ${vector.length}`);
   }
 
-  let normSquared = 0;
+  let hasNonZeroComponent = false;
   for (const component of vector) {
     if (typeof component !== 'number' || !Number.isFinite(component)) {
       throw new TypeError('embedding vector components must be finite numbers');
     }
-    normSquared += component * component;
+    if (component !== 0) {
+      hasNonZeroComponent = true;
+    }
   }
 
-  if (normSquared === 0) {
+  if (!hasNonZeroComponent) {
     throw new TypeError('embedding vector norm must be non-zero');
   }
 
@@ -76,17 +78,32 @@ function validateEmbeddingVector(vector, expectedDimension = null) {
 }
 
 function cosineSimilarity(left, right) {
+  let leftScale = 0;
+  let rightScale = 0;
+
+  for (let index = 0; index < left.length; index += 1) {
+    leftScale = Math.max(leftScale, Math.abs(left[index]));
+    rightScale = Math.max(rightScale, Math.abs(right[index]));
+  }
+
   let dot = 0;
   let leftNorm = 0;
   let rightNorm = 0;
 
   for (let index = 0; index < left.length; index += 1) {
-    dot += left[index] * right[index];
-    leftNorm += left[index] * left[index];
-    rightNorm += right[index] * right[index];
+    const leftComponent = left[index] / leftScale;
+    const rightComponent = right[index] / rightScale;
+    dot += leftComponent * rightComponent;
+    leftNorm += leftComponent * leftComponent;
+    rightNorm += rightComponent * rightComponent;
   }
 
-  return dot / (Math.sqrt(leftNorm) * Math.sqrt(rightNorm));
+  const score = dot / (Math.sqrt(leftNorm) * Math.sqrt(rightNorm));
+  if (!Number.isFinite(score)) {
+    throw new TypeError('cosine similarity score must be finite');
+  }
+
+  return Math.max(-1, Math.min(1, score));
 }
 
 async function rankMessageAgainstActions({
