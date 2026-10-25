@@ -52,6 +52,82 @@ function snapshotCatalog(intents) {
   return catalog;
 }
 
+function cosineSimilarity(left, right) {
+  let dot = 0;
+  let leftNorm = 0;
+  let rightNorm = 0;
+
+  for (let index = 0; index < left.length; index += 1) {
+    dot += left[index] * right[index];
+    leftNorm += left[index] * left[index];
+    rightNorm += right[index] * right[index];
+  }
+
+  return dot / (Math.sqrt(leftNorm) * Math.sqrt(rightNorm));
+}
+
+async function rankMessageAgainstActions({
+  message,
+  actions,
+  catalog,
+  embed,
+  minSimilarity,
+  minMargin,
+}) {
+  if (typeof message !== 'string' || !message.trim()) {
+    return [];
+  }
+  if (!Array.isArray(actions) || actions.length === 0) {
+    return [];
+  }
+
+  const eligibleIds = new Set();
+  for (const action of actions) {
+    if (action && typeof action.id === 'string' && catalog.has(action.id)) {
+      eligibleIds.add(action.id);
+    }
+  }
+
+  if (eligibleIds.size === 0) {
+    return [];
+  }
+
+  const messageVector = await embed(message);
+  const matches = [];
+
+  for (const [actionId, examples] of catalog) {
+    if (!eligibleIds.has(actionId)) {
+      continue;
+    }
+
+    let bestScore = -Infinity;
+    for (const example of examples) {
+      const exampleVector = await embed(example);
+      const score = cosineSimilarity(messageVector, exampleVector);
+      if (score > bestScore) {
+        bestScore = score;
+      }
+    }
+
+    if (bestScore >= minSimilarity) {
+      matches.push({ actionId, score: bestScore });
+    }
+  }
+
+  matches.sort((left, right) => (
+    (right.score - left.score) || left.actionId.localeCompare(right.actionId)
+  ));
+
+  if (
+    matches.length >= 2
+    && (matches[0].score - matches[1].score) < minMargin
+  ) {
+    return [];
+  }
+
+  return matches;
+}
+
 export function createEmbeddingIntentPort(options) {
   if (!options || typeof options !== 'object') {
     throw new TypeError('options are required');
@@ -74,17 +150,18 @@ export function createEmbeddingIntentPort(options) {
   );
   const catalog = snapshotCatalog(options.intents);
 
-  void minSimilarity;
-  void minMargin;
-  void catalog;
+  const rank = (input) => rankMessageAgainstActions({
+    message: input?.message,
+    actions: input?.actions,
+    catalog,
+    embed: options.embed,
+    minSimilarity,
+    minMargin,
+  });
 
   return Object.freeze({
     mode: 'local',
-    async resolve() {
-      return [];
-    },
-    async discover() {
-      return [];
-    },
+    resolve: rank,
+    discover: rank,
   });
 }
