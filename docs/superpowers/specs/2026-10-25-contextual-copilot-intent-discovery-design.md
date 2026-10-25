@@ -14,7 +14,7 @@ Separare in modo esplicito due concetti che oggi sono accoppiati nel Contextual 
 1. **capire cosa il docente sta chiedendo**;
 2. **stabilire se quella azione è attualmente autorizzata ed eseguibile**.
 
-La separazione è necessaria per consentire a un `IntentPort` locale di riconoscere, per esempio, che «trasforma questa fonte in un'attività» corrisponde a `PREPARE`, anche quando il consumer corrente è configurato con `generativeMode: 'none'` e quindi `PREPARE` non è ancora eseguibile.
+La separazione deve consentire a un `IntentPort` locale di riconoscere, per esempio, che «trasforma questa fonte in un'attività» corrisponde a `PREPARE`, anche quando il consumer corrente è configurato con `generativeMode: 'none'` e quindi `PREPARE` non è ancora eseguibile.
 
 Il riconoscimento dell'intento non deve mai produrre authority, effettuare dispatch, abilitare provider, concedere consenso remoto o trasformare un'azione vietata in un'azione eseguibile.
 
@@ -22,11 +22,11 @@ Il riconoscimento dell'intento non deve mai produrre authority, effettuare dispa
 
 Il Core 0.2.0 implementa correttamente il principio di narrowing: `resolveRequest()` risolve prima le azioni ammesse da `resolveActions()` e soltanto dopo invoca `IntentPort` sul sottoinsieme rimasto.
 
-Questo garantisce sicurezza, ma ha una conseguenza nel consumer Registro Docente:
+Nel consumer Registro Docente questo produce un gap preciso:
 
 - il Core locale è costruito con `generativeMode: 'none'`;
 - `PREPARE` e `SUMMARIZE` richiedono generative AI;
-- quindi vengono esclusi prima dell'interpretazione del messaggio;
+- vengono quindi esclusi prima dell'interpretazione del messaggio;
 - il testo libero non può essere riconosciuto semanticamente come richiesta di `PREPARE`, anche se l'esecuzione di `PREPARE` è già disponibile più avanti attraverso un handoff governato separato con classificazione privacy, provider disclosure e consenso one-shot.
 
 Il problema non è quindi «manca una policy permissiva», ma «manca un contratto di discovery semanticamente leggibile che non equivalga ad autorizzazione».
@@ -43,6 +43,7 @@ Il problema non è quindi «manca una policy permissiva», ma «manca un contrat
 8. Un Intent Port locale può interpretare il messaggio senza autorizzare trasferimenti remoti successivi.
 9. Il consumer continua a dichiarare esplicitamente `allowedCapabilities`; la discovery non può ampliarle.
 10. Il Core condiviso resta provider-neutral e non importa embedding, modelli o SDK verticali.
+11. La nuova superficie deve essere **additiva**: non si cambia il contratto di `IntentPort.resolve()` già pubblicato in 0.2.0.
 
 ## 4. Approcci considerati
 
@@ -50,7 +51,7 @@ Il problema non è quindi «manca una policy permissiva», ma «manca un contrat
 
 Scartato.
 
-Far arrivare a `IntentPort` anche azioni attualmente negate e poi restituirle nello stesso `CopilotRequestResolution` confonderebbe «riconosciuta» con «autorizzata». Aumenterebbe il rischio di UI o consumer che trattano un match semantico come azione disponibile.
+Far arrivare a `IntentPort.resolve()` anche azioni attualmente negate e poi restituirle nello stesso `CopilotRequestResolution` confonderebbe «riconosciuta» con «autorizzata». Aumenterebbe il rischio che UI o consumer trattino un match semantico come azione disponibile.
 
 ### B. Modificare `generativeMode: 'none'` nel consumer Registro
 
@@ -78,11 +79,9 @@ type PolicyPhase = 'DISCOVER' | 'RESOLVE' | 'DISPATCH'
 
 Non significa che l'azione sia disponibile, autorizzata per un provider o dispatchable.
 
-### 5.2 IntentPort input
+### 5.2 Descriptor per la discovery
 
-Per evitare che il port riceva oggetti il cui nome implichi già autorizzazione, l'input dell'IntentPort dovrebbe essere espresso in termini di azioni candidate, non di `ResolvedAction`.
-
-Proposta:
+Per evitare che la discovery lavori su oggetti il cui nome implichi già autorizzazione, introdurre un descriptor privo di `policy`:
 
 ```ts
 export interface IntentActionCandidate {
@@ -94,10 +93,27 @@ export interface IntentActionCandidate {
   requiresGenerativeAI: boolean
   requiresSemanticSearch: boolean
 }
+```
 
+Il Core costruisce copie difensive e frozen a partire dalle azioni del registry che superano i gate di discovery.
+
+### 5.3 Evoluzione additiva di IntentPort
+
+`IntentPort.resolve()` resta **esattamente** compatibile con 0.2.0 e continua a ricevere soltanto `ResolvedAction[]` già autorizzate dal percorso normale.
+
+Si aggiunge un metodo opzionale dedicato:
+
+```ts
 export interface IntentPort {
   mode: 'local' | 'remote'
+
   resolve(input: {
+    context: ContextSnapshot
+    message: string
+    actions: readonly ResolvedAction[]
+  }): Promise<readonly IntentMatch[]>
+
+  discover?(input: {
     context: ContextSnapshot
     message: string
     actions: readonly IntentActionCandidate[]
@@ -105,13 +121,14 @@ export interface IntentPort {
 }
 ```
 
-`ResolvedAction` è strutturalmente più ricco ma il port non deve usare `policy` come segnale semantico. Il Core costruisce copie difensive/frozen dei candidate descriptor.
+Conseguenze:
 
-Questa modifica richiede re-qualificazione dei consumer che implementassero già un IntentPort. Al momento il consumer Registro non ne implementa uno reale; il rischio di migrazione è quindi contenuto, ma deve essere comunque trattato come modifica pubblica del package.
+- un IntentPort 0.2 esistente continua a funzionare senza modifiche con `resolveRequest()`;
+- `discoverRequestIntent()` è disponibile soltanto quando il port implementa `discover()`;
+- l'assenza di `discover()` non viene mascherata usando impropriamente `resolve()`;
+- un futuro adapter locale embedding può implementare sia `resolve()` sia `discover()` riusando lo stesso motore semantico senza confondere gli insiemi di azioni.
 
-### 5.3 Nuovo output
-
-Proposta:
+### 5.4 Nuovo output
 
 ```ts
 export interface DiscoveredIntent {
@@ -125,6 +142,7 @@ export interface CopilotIntentDiscovery {
     | 'INTENT_DISCOVERED'
     | 'NO_DISCOVERABLE_ACTIONS'
     | 'INTENT_PORT_UNAVAILABLE'
+    | 'INTENT_DISCOVERY_UNAVAILABLE'
     | 'REMOTE_PROVIDER_NOT_AUTHORIZED'
     | 'PROTECTED_DATA_REMOTE_DENIED'
     | 'INTENT_DISCOVERY_FAILED'
@@ -135,7 +153,7 @@ export interface CopilotIntentDiscovery {
 
 Il Core non espone il punteggio grezzo del provider come authority. L'ordinamento dei match è sufficiente al consumer; soglia/confidenza restano responsabilità dell'IntentPort concreto.
 
-### 5.4 Nuovo metodo
+### 5.5 Nuovo metodo
 
 ```ts
 ContextualCopilotCore.discoverRequestIntent(
@@ -151,16 +169,17 @@ Sequenza proposta:
 4. valutare la policy con `phase: 'DISCOVER'`;
 5. escludere ogni action che la policy di discovery nega;
 6. se non restano candidate → `NO_DISCOVERABLE_ACTIONS`;
-7. verificare accesso all'IntentPort:
+7. verificare esistenza di IntentPort e di `intentPort.discover`;
+8. verificare accesso al port:
    - locale: ammesso senza trasformarlo in autorizzazione remota;
    - remoto: applicare gli stessi remote access guards del Core prima di trasmettere messaggio/contesto;
-8. invocare l'IntentPort con snapshot e candidate descriptor frozen;
-9. ignorare action id sconosciuti, fuori candidate set o score non finiti;
-10. ordinare score desc, poi priority, poi id;
-11. restituire soltanto `actionId + capability` dei match validi;
-12. nessun match → `NO_INTENT_MATCH`;
-13. errore del port → `INTENT_DISCOVERY_FAILED`;
-14. nessuna esecuzione, nessun dispatch, nessuna mutazione.
+9. invocare `intentPort.discover()` con snapshot e candidate descriptor frozen;
+10. ignorare action id sconosciuti, fuori candidate set o score non finiti;
+11. ordinare score desc, poi priority, poi id;
+12. restituire soltanto `actionId + capability` dei match validi;
+13. nessun match → `NO_INTENT_MATCH`;
+14. errore del port → `INTENT_DISCOVERY_FAILED`;
+15. nessuna esecuzione, nessun dispatch, nessuna mutazione.
 
 ## 6. Semantica della policy DISCOVER
 
@@ -187,17 +206,18 @@ Motivazione: discovery locale non chiama il provider generativo e non esegue l'a
 
 Per questa prima versione la proposta è conservativa: azioni `WRITE_EXTERNAL` non vengono rese discoverable attraverso il nuovo percorso finché non esiste un contratto esplicito per rappresentare «intent riconosciuto ma operazione esterna indisponibile». Questo non limita i casi Biblioteca attuali.
 
-## 7. Compatibilità
+## 7. Compatibilità e versionamento
 
 - `resolveActions()` invariato.
 - `resolveRequest()` invariato nel comportamento osservabile.
 - `dispatch()` invariato.
+- `IntentPort.resolve()` invariato.
 - `SemanticPort` invariato.
 - nessuna nuova dipendenza runtime.
+- `IntentPort.discover?()` è additivo.
 - `discoverRequestIntent()` è additivo.
-- l'unica superficie da trattare con attenzione è il tipo dell'array `actions` ricevuto da `IntentPort`; tutti i test di compatibilità devono dimostrare che il comportamento 0.2 resta integro.
 
-La versione prevista, se i test dimostrano compatibilità sufficiente, è `0.3.0`. Se il cambio di tipo dell'IntentPort risultasse realmente breaking per consumer esistenti, la numerazione deve essere rivalutata prima della distribuzione; non va forzato un minor version per convenienza.
+Questa forma è compatibile con un bump `0.3.0`, soggetto comunque a package tests e distribution audit. Nessun consumer esistente è obbligato a implementare `discover()`.
 
 ## 8. Downstream Registro Docente — uso previsto, non ancora autorizzato
 
@@ -209,7 +229,7 @@ Dopo la qualificazione e distribuzione del Core aggiornato, un blocco downstream
 2. implementare un IntentPort **locale** usando l'infrastruttura embedding già esistente;
 3. confrontare il messaggio del docente esclusivamente con descriptor/intent examples delle azioni già dichiarate;
 4. usare `discoverRequestIntent()` per riconoscere REVIEW/LINK/PREPARE/SUMMARIZE;
-5. per azioni già eseguibili (es. LINK) continuare a usare i gate esistenti;
+5. per azioni già eseguibili (es. LINK) continuare a usare `resolveRequest()` e i gate esistenti;
 6. per PREPARE riconosciuto aprire il proposal handoff già qualificato, senza dispatch generativo automatico;
 7. mantenere provider disclosure e consenso one-shot nel punto in cui i dati stanno davvero per attraversare il confine remoto.
 
@@ -239,7 +259,7 @@ Con registry contenente:
 - `review` — `REVIEW`, non generativa;
 - `prepare` — `PREPARE`, generativa;
 
-contesto con capability `REVIEW` + `PREPARE`, Core con `generativeMode: 'none'`, IntentPort locale che riconosce `prepare`:
+contesto con capability `REVIEW` + `PREPARE`, Core con `generativeMode: 'none'`, IntentPort locale che implementa `discover()` e riconosce `prepare`:
 
 - `resolveActions()` deve continuare a restituire solo `review`;
 - `resolveRequest()` deve conservare la semantica attuale;
@@ -257,10 +277,12 @@ contesto con capability `REVIEW` + `PREPARE`, Core con `generativeMode: 'none'`,
 6. IntentPort remoto non invocato senza remote authorization;
 7. student personal/sensitive non raggiunge IntentPort remoto;
 8. IntentPort locale può funzionare senza remote authorization;
-9. eccezione del port degrada fail-closed;
-10. input a estensione frozen/defensive;
-11. regressioni complete `resolveActions`, `resolveRequest`, `dispatch` verdi;
-12. package surface e distribution manifest riproducibili.
+9. IntentPort senza `discover()` lascia `resolveRequest()` intatto e restituisce `INTENT_DISCOVERY_UNAVAILABLE` nel nuovo metodo;
+10. eccezione di `discover()` degrada fail-closed;
+11. input a estensione frozen/defensive;
+12. regressioni complete `resolveActions`, `resolveRequest`, `dispatch` verdi;
+13. i test 0.2 di `IntentPort.resolve()` restano invariati;
+14. package surface e distribution manifest riproducibili.
 
 ## 11. Gate di qualificazione
 
@@ -289,15 +311,17 @@ Solo dopo integrazione del Core:
 - **Authority leak:** UI tratta `DISCOVERED PREPARE` come `PREPARE allowed`.
   - Mitigazione: output discovery non contiene `ResolvedAction` né policy `allowed`.
 - **Remote privacy leak:** IntentPort remoto riceve testo prima dei guardrail.
-  - Mitigazione: `intentAccess()` prima dell'invocazione, come nel Core attuale.
+  - Mitigazione: access check prima dell'invocazione di `discover()`.
 - **Consumer-specific parser drift:** Registro introduce keyword mapping parallelo.
   - Mitigazione: interpretazione soltanto tramite port condiviso.
 - **Provider coupling:** Core importa embedding SDK.
   - Mitigazione: port provider-neutral, zero dipendenze modello.
 - **Semantic score becomes authority:** punteggio usato per auto-dispatch.
   - Mitigazione: discovery non espone executor e il Core non dispatcha.
-- **Regression 0.2:** `resolveRequest()` cambia accidentalmente fallback o policy.
-  - Mitigazione: test snapshot/comportamentali invariati e nuovi test additivi.
+- **Regression 0.2:** `resolveRequest()` o `IntentPort.resolve()` cambiano accidentalmente semantica.
+  - Mitigazione: test 0.2 invariati e nuovi test esclusivamente additivi.
+- **Fallback improprio:** un port senza `discover()` viene chiamato via `resolve()` con candidate non autorizzate.
+  - Mitigazione: vietato dal contratto; discovery fail-closed con reason dedicata.
 
 ## 13. Criterio di uscita del design
 
@@ -305,6 +329,7 @@ Questo design è pronto per un implementation plan soltanto se viene confermato 
 
 - la separazione discovery/esecuzione è il confine desiderato;
 - `discoverRequestIntent()` è preferibile a rendere più permissivo `resolveRequest()`;
+- `IntentPort.discover?()` additivo è preferibile a modificare `IntentPort.resolve()`;
 - `PREPARE` può essere riconosciuto localmente senza essere autorizzato;
 - il proposal flow remoto esistente resta l'unica via per rendere PREPARE operativo nel Registro;
 - il prossimo intervento è prima nel Core condiviso, non nel consumer.
