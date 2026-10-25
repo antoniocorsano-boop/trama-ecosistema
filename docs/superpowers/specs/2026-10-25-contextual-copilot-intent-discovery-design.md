@@ -5,7 +5,7 @@
 **Baseline:** `main@8c47c34048acc943a1f4a2067b29629eb880e7ef`  
 **Downstream osservato:** `antoniocorsano-boop/registro-docente@72a7413ec8f764b7711592919d6ebcb430b18df3`  
 **Pacchetto corrente:** `@trama/contextual-copilot-core@0.2.0`  
-**Stato:** DESIGN PROPOSAL · DOCS ONLY · NO IMPLEMENTATION AUTHORIZED
+**Stato:** DESIGN APPROVED · IMPLEMENTATION PLAN READY · NO PRODUCT CODE AUTHORIZED
 
 ## 1. Intento
 
@@ -325,13 +325,8 @@ Solo dopo integrazione del Core:
 
 ## 13. Criterio di uscita del design
 
-Questo design è pronto per un implementation plan soltanto se viene confermato che:
+Il design è stato approvato il 2026-10-25. Il piano esecutivo canonico è:
 
-- la separazione discovery/esecuzione è il confine desiderato;
-- `discoverRequestIntent()` è preferibile a rendere più permissivo `resolveRequest()`;
-- `IntentPort.discover?()` additivo è preferibile a modificare `IntentPort.resolve()`;
-- `PREPARE` può essere riconosciuto localmente senza essere autorizzato;
-- il proposal flow remoto esistente resta l'unica via per rendere PREPARE operativo nel Registro;
-- il prossimo intervento è prima nel Core condiviso, non nel consumer.
+`docs/superpowers/plans/2026-10-25-contextual-copilot-intent-discovery.md`
 
-Fino a tale approvazione: **nessun codice prodotto viene modificato**.
+L'implementazione resta separata dalla PR docs-only e richiede una decisione esplicita successiva. Fino a tale decisione: **nessun codice prodotto viene modificato**.
