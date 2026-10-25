@@ -36,6 +36,8 @@ jobs:
       - {name: Test ACCESS-01 Phase 2 validator adversarial cases, run: node scripts/test-trama-access-phase2-validator.mjs}
       - {name: Validate OR-06 cross-ecosystem read-only proof, run: python3 scripts/validate_or06_cross_ecosystem_readonly_proof.py}
       - {name: Test OR-06 cross-ecosystem read-only proof, run: python3 -m unittest tests.test_or06_cross_ecosystem_readonly_proof -v}
+      - {name: Validate governed product identities, run: python3 scripts/validate_governed_product_identities.py}
+      - {name: Test governed product identities, run: python3 -m unittest tests.test_governed_product_identities -v}
       - {name: Validate OR-07 shared capability layer, run: python3 scripts/validate_or07_shared_capability_layer.py}
       - {name: Test OR-07 shared capability layer, run: python3 -m unittest tests.test_or07_shared_capability_layer -v}
       - {name: Validate OR-08 runtime portability, run: python3 scripts/validate_or08_runtime_portability.py}
