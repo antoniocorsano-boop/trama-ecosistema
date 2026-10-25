@@ -5,10 +5,10 @@
 **Shared capability candidate:** `didactic.composition.propose@1`  
 **Repository:** `antoniocorsano-boop/trama-ecosistema`  
 **Baseline TRAMA:** `main@d11112434bb45364e7bddbee6d4df1a86f9b351a`  
-**Observed Arena:** `antoniocorsano-boop/CurManLight_arena@d8b1bf43388cb5c4cdcc940b0c558bb128976c4c`  
-**Observed Registro Docente:** `antoniocorsano-boop/registro-docente@38b7f0dd874806aaf56dd0ecef7e93d01ce34039`  
-**Observed Docente OS develop:** `antoniocorsano-boop/docente-os-2026-27@1c50c1bc620cdd0b7bafcff0dc5c613367df3298`  
-**Observed Atlas main:** `antoniocorsano-boop/Curriculum-Atlas@c322b07a68d4508ec437941f8688012765e88848`  
+**Observed Arena:** `main@d8b1bf43388cb5c4cdcc940b0c558bb128976c4c`  
+**Observed Registro Docente:** `main@38b7f0dd874806aaf56dd0ecef7e93d01ce34039`  
+**Observed Docente OS:** `develop@1c50c1bc620cdd0b7bafcff0dc5c613367df3298`  
+**Observed Atlas:** `main@c322b07a68d4508ec437941f8688012765e88848`  
 **Status:** DESIGN MATERIALIZED · CROSS-CONTRACT VALIDATED · HUMAN DESIGN REVIEW PENDING · NO IMPLEMENTATION AUTHORIZED  
 **Runtime:** NOT_AUTHORIZED  
 **Authority change:** NONE  
@@ -18,13 +18,13 @@
 
 ## 1. Intento
 
-Definire una capability condivisa che trasformi un intento professionale del docente, fonti pertinenti e un contesto curricolare governato in una **proposta di composizione didattica strutturata**: UDA, attività, lezione, laboratorio, verifica, recupero o estensione.
+Definire una capability condivisa che trasformi un intento professionale del docente, fonti pertinenti e un contesto di curricolo governato in una **proposta di composizione didattica strutturata**: UDA, attività, lezione, laboratorio, verifica, recupero o estensione.
 
 La capability deve permettere il riuso della stessa composizione tra Docente OS, Registro Docente, Studio Atlas/Atlas e document workspace senza introdurre una nuova authority centrale.
 
-Il problema non è soltanto generare contenuti. Il problema architetturale è preservare contemporaneamente:
+Il problema non è soltanto generare contenuti. Il disegno deve preservare contemporaneamente:
 
-1. autorità curricolare Arena;
+1. autorità del curricolo Arena;
 2. decisione professionale del docente;
 3. ownership e persistenza product-local;
 4. privacy-first;
@@ -39,61 +39,55 @@ La direzione è valida soltanto nella forma seguente:
 
 > **Shared capability stateless `PROPOSE_ONLY` + artifact di composizione immutabile/versionato + adoption receipt product-local + projection adapters governati.**
 
-La validazione sui repository e contratti correnti ha prodotto cinque correzioni rispetto a una prima formulazione più semplice.
+La validazione sui contratti correnti ha prodotto cinque correzioni sostanziali.
 
 ### V1 — Nessun nuovo prodotto centrale
 
-OR-07 e OR-10 vietano che il layer condiviso diventi database, write authority o orchestratore centrale. Il Composer non può quindi essere una nuova applicazione TRAMA con store canonico proprio.
+OR-07 e OR-10 vietano che il layer condiviso diventi database, write authority o orchestratore centrale. Il Composer non può essere una nuova applicazione TRAMA con store canonico proprio.
 
-### V2 — Registro e Studio Atlas richiedono un'estensione esplicita dei caller contracts
+### V2 — Registro e Studio Atlas richiedono una product identity esplicita
 
-OR-07/OR-10 v0 enumerano i prodotti storici e **non includono ancora `REGISTRO_DOCENTE` e `STUDIO_ATLAS` come caller identity**.
+OR-07/OR-10 v0 enumerano i prodotti storici e non includono ancora `REGISTRO_DOCENTE` e `STUDIO_ATLAS` come caller identity.
 
-Questa specifica può definire i consumer futuri, ma **nessuna implementazione/runtime cross-product può considerarli già autorizzati**.
-
-Prima del wiring reale deve esistere una evoluzione additiva del contract registry/envelope che registri esplicitamente queste product identities senza assimilarle impropriamente a `DOCENTE_OS` o `ATLAS`.
+Prima del wiring reale deve esistere una evoluzione additiva del contract registry/envelope che registri queste identità senza assimilarle a `DOCENTE_OS` o `ATLAS`.
 
 ### V3 — Drive non appartiene alla prima capability OR-07
 
 OR-07 v0 ammette soltanto `READ_ONLY` e `PROPOSE_ONLY`. Un export Drive è `WRITE_EXTERNAL`.
 
-Quindi:
+Quindi Drive resta nel journey, ma l'export:
 
-- Drive resta nel disegno complessivo;
-- l'export è una **slice separata e successiva**;
-- non fa parte del primo Core `didactic.composition.propose@1`;
-- richiede un proprio write contract, feedback percepibile e autorizzazione utente;
-- non è discoverable automaticamente tramite l'attuale percorso Contextual Copilot che esclude `WRITE_EXTERNAL` dalla prima Intent Discovery.
+- è una slice separata;
+- non fa parte del Core `didactic.composition.propose@1`;
+- richiede un proprio write contract;
+- richiede feedback percepibile e autorizzazione utente;
+- non può assumere che l'attuale Intent Discovery esponga `WRITE_EXTERNAL`.
 
 ### V4 — Arena `TRANSITIONAL` deve essere preservato
 
 Il contratto Arena → Registro distingue `applicabilityStatus = APPLICABLE | TRANSITIONAL`.
 
-Il Composer v1 può accettare un contesto `TRANSITIONAL` quando:
+Il Composer può accettare `TRANSITIONAL` quando:
 
 - `authorityState = APPROVED`;
 - `vigencyStatus = VIGENTE`;
-- il caller lo ha validato/accettato con il proprio contratto;
+- il caller ha validato/accettato il contesto;
 - `regimeRef` e `applicabilityStatus` vengono preservati nella provenance e nella composizione.
-
-`TRANSITIONAL` non deve essere normalizzato silenziosamente in `APPLICABLE`.
 
 ### V5 — Docente OS necessita due livelli di proiezione
 
-Una composizione didattica nuova non coincide automaticamente con una Human Task già legata a un blocco CAN-PLAN/PACK.
+Una composizione didattica nuova non coincide automaticamente con una Human Task legata a un blocco Piano/PACK.
 
-La proiezione Docente OS deve quindi distinguere:
+La proiezione distingue:
 
-1. **UNBOUND_PLANNING_PROPOSAL** — nucleo didattico utilizzabile in `Progetta`, ma non ancora collegato a un `planBinding` eseguibile;
-2. **BOUND_HUMAN_TASK_CANDIDATE** — possibile soltanto quando il prodotto risolve un blocco Piano coerente e supera i gate esistenti.
-
-La presenza del Composer non crea un bypass alla Human Task pipeline.
+1. `UNBOUND_PLANNING_PROPOSAL` — nucleo didattico per `Progetta`, non ancora eseguibile;
+2. `BOUND_HUMAN_TASK_CANDIDATE` — possibile soltanto quando Docente OS risolve un `planBinding` coerente e supera i gate correnti.
 
 ---
 
 ## 3. Vincoli canonici non riapribili
 
-- Arena resta l'autorità curricolare.
+- Arena resta l'autorità del curricolo.
 - TRAMA governa decisioni e contratti trasversali senza diventare una quarta applicazione.
 - Shared Capability Layer non è domain store, write authority o orchestratore centrale.
 - Ogni prodotto conserva stato, regole decisionali, persistenza e UI propri.
@@ -101,7 +95,7 @@ La presenza del Composer non crea un bypass alla Human Task pipeline.
 - Docente OS resta teacher-first e proprietario dello stato operativo lezione/classe.
 - Registro Docente resta proprietario di programmazione, consuntivo e valutazione nel proprio dominio.
 - Studio Atlas possiede l'authoring professionale dei Percorsi.
-- Atlas pubblico possiede identity/version/publication state delle proprie risorse, non l'authoring professionale.
+- Atlas pubblico possiede identity/version/publication state delle proprie risorse.
 - Drive ospita documenti umani e copie dichiarate, non una replica tecnica autorevole completa.
 - Control Center osserva soltanto.
 - DOS-A1 resta `RUNTIME_DEFERRED`.
@@ -121,16 +115,16 @@ automaticWriteAllowed = false
 applicabilityStatus = APPLICABLE | TRANSITIONAL
 ```
 
-Il Composer non introduce un nuovo write verso Arena.
+Il Composer non introduce write verso Arena.
 
 ### 4.2 Registro Docente
 
-Il repository mantiene due domini intenzionalmente distinti:
+Il repository mantiene due domini distinti:
 
-- `UdaRecord` / `UdaLesson`: dominio operativo realmente usato;
+- `UdaRecord` / `UdaLesson`: dominio operativo oggi usato;
 - `PlanningStateV1`: profili annuali, contesto Arena e strutture future `MasterProgram` / `ClassProgramInstance`.
 
-`MasterProgram` non è ancora la fonte operativa canonica. La prima integrazione Composer non deve anticipare quella migrazione.
+Il primo adapter Composer non anticipa la migrazione a `MasterProgram`.
 
 ### 4.3 Docente OS
 
@@ -143,11 +137,11 @@ La pipeline Human Task corrente usa:
 - `READY_FOR_HUMAN_APPROVAL`;
 - promozione separata con decisione umana.
 
-Il Composer deve entrare prima o accanto a tali gate, non sostituirli.
+Il Composer entra prima o accanto a tali gate, non li sostituisce.
 
 ### 4.4 Studio Atlas / Atlas
 
-Studio Atlas è un dominio professionale separabile per authoring; Atlas pubblico resta learner/public facing.
+Studio Atlas è dominio professionale di authoring; Atlas pubblico resta learner/public facing.
 
 Il percorso corretto per un nuovo Percorso è:
 
@@ -163,37 +157,19 @@ Il Core separa intent discovery, policy e dispatch. Il Composer non implementa u
 
 ## 5. Approcci considerati
 
-### A. Nuovo prodotto/store centrale “TRAMA Composer”
+### A. Nuovo prodotto/store centrale
 
-**Scartato.**
-
-Pro: un solo store e una sola UI.
-
-Contro:
-
-- nuova authority pratica;
-- conflitto con OR-07/OR-10;
-- sincronizzazione cross-product permanente;
-- duplicazione di Progetta/Programmazione/Studio Atlas.
+**Scartato.** Introduce nuova authority pratica, conflitto con OR-07/OR-10 e sincronizzazione permanente.
 
 ### B. Composer separato in ogni prodotto
 
-**Scartato.**
-
-Pro: ownership locale semplice.
-
-Contro:
-
-- drift semantico;
-- prompt/policy duplicati;
-- risultati incompatibili;
-- provenance frammentata.
+**Scartato.** Produce drift semantico, policy duplicate e provenance frammentata.
 
 ### C. Shared capability stateless + artifact versionato + adapter product-local
 
 **Selezionato.**
 
-Pro:
+Vantaggi:
 
 - una semantica condivisa;
 - nessun nuovo store autorevole;
@@ -209,8 +185,6 @@ Trade-off accettato: nessun sync mutativo automatico. Ogni revisione produce una
 ## 6. Decisione architetturale
 
 ### 6.1 Capability identity
-
-Candidate identity:
 
 ```text
 didactic.composition.propose@1
@@ -230,7 +204,7 @@ Candidate descriptor:
 }
 ```
 
-`ownerDomain: TRAMA` significa ownership del contratto condiviso, non curriculum/didactic authority.
+`ownerDomain: TRAMA` significa ownership del contratto condiviso, non autorità didattica o del curricolo.
 
 ### 6.2 “Una UDA, più proiezioni”
 
@@ -265,9 +239,9 @@ Non esiste un `APPROVED` globale emesso dalla capability.
 
 ```text
                          ARENA
-                 curriculum authority
+               autorità del curricolo
                          │
-             accepted/validated context
+              contesto accettato/valido
                          ▼
                  CALLING PRODUCT
             Docente OS / Registro / future
@@ -314,19 +288,19 @@ PLANNED
 != ASSESSED
 ```
 
-Conseguenze normative:
+Conseguenze:
 
-- una fase progettata non è preparata;
-- una lezione preparata non è svolta;
-- una risorsa pubblicata non è necessariamente usata;
-- una lezione svolta non è automaticamente consuntivata;
-- un'evidenza raccolta non è un voto;
-- un'interazione Atlas non è una valutazione del Registro;
-- una composizione adottata in un prodotto non è adottata negli altri.
+- progettato non significa preparato;
+- preparato non significa svolto;
+- pubblicato non significa usato;
+- svolto non significa consuntivato;
+- evidenza raccolta non significa voto;
+- interazione Atlas non significa valutazione del Registro;
+- adozione in un prodotto non significa adozione negli altri.
 
 ---
 
-## 9. OR-07 / OR-10 product identity extension prerequisite
+## 9. Product identity extension prerequisite
 
 Prima del wiring reale con Registro o Studio Atlas deve essere approvata un'evoluzione additiva del product/caller registry.
 
@@ -346,11 +320,8 @@ Regole:
 
 - nessun alias `REGISTRO_DOCENTE → DOCENTE_OS`;
 - nessun alias `STUDIO_ATLAS → ATLAS`;
-- l'espansione dell'enum non trasferisce authority;
-- Control Center resta non-caller per mutazioni/proposte operative se non esplicitamente consentito da contratto;
-- la compatibilità con consumer v0 va preservata.
-
-Questa prerequisite è **governance/contract work**, non implementation del Composer.
+- l'espansione non trasferisce authority;
+- compatibilità con consumer v0 preservata.
 
 ---
 
@@ -389,7 +360,7 @@ interface DidacticCompositionRequestV1 {
     currentWorkRef?: string
   }
 
-  curriculumContext: {
+  curricoloContext: {
     authorityProduct: 'ARENA'
     acceptedContextRef: string
     authorityState: 'APPROVED'
@@ -397,7 +368,7 @@ interface DidacticCompositionRequestV1 {
     applicabilityStatus: 'APPLICABLE' | 'TRANSITIONAL'
     regimeRef: string
     sourceRefs: readonly string[]
-    curriculumItems: readonly CurriculumContextItem[]
+    curricoloItems: readonly CurricoloContextItem[]
   }
 
   professionalSources: readonly ProfessionalSourceRef[]
@@ -419,12 +390,12 @@ interface DidacticCompositionRequestV1 {
 - no grades;
 - no diagnoses or named PEI/PDP;
 - no individual behavior/health notes;
-- `classRef` may identify a teaching section but not an individual student;
+- `classRef` may identify a teaching section but not a student;
 - `TRANSITIONAL` is allowed and preserved;
 - `PROVISIONAL_COMPLETE` or `NON_VIGENTE` is not accepted as authoritative input v1;
 - stale/ambiguous Arena context fails closed;
-- the caller is responsible for qualified resolution/acceptance of Arena context;
-- the Composer never writes Arena;
+- caller responsible for qualified resolution/acceptance;
+- Composer never writes Arena;
 - remote provider access remains subject to caller/Core privacy and consent gates.
 
 ---
@@ -445,7 +416,7 @@ interface DidacticCompositionProposalV1 {
   title: string
   rationale: string
 
-  curriculumBinding: {
+  curricoloBinding: {
     acceptedContextRef: string
     applicabilityStatus: 'APPLICABLE' | 'TRANSITIONAL'
     regimeRef: string
@@ -491,17 +462,7 @@ interface DidacticCompositionProposalV1 {
 }
 ```
 
-### 11.1 Proposal rules
-
-La proposta non è:
-
-- curriculum Arena;
-- adozione professionale;
-- lesson runtime;
-- consuntivo;
-- pubblicazione Atlas;
-- voto;
-- write authorization.
+La proposta non è curricolo Arena, adozione professionale, lesson runtime, consuntivo, pubblicazione Atlas, voto o write authorization.
 
 ---
 
@@ -523,13 +484,7 @@ interface DidacticCompositionAdoptionReceiptV1 {
 }
 ```
 
-Regole:
-
-- il receipt è product-local;
-- non modifica la proposta originale;
-- non promuove altri prodotti;
-- una revisione adottata produce una nuova composition version/receipt;
-- una versione precedente resta storico e può diventare stale/superseded localmente.
+Il receipt è product-local e non promuove altri prodotti.
 
 ---
 
@@ -542,45 +497,22 @@ UNBOUND_PLANNING_PROPOSAL
 BOUND_HUMAN_TASK_CANDIDATE
 ```
 
-#### UNBOUND_PLANNING_PROPOSAL
+`UNBOUND_PLANNING_PROPOSAL` supporta `Progetta`, il nucleo comune di grado e la selezione di materiali. Non può entrare in `Conduci`.
 
-Usata quando la composizione è pertinente a `Progetta` ma non esiste ancora un `planBinding` valido.
-
-Può supportare:
-
-- nucleo comune di grado;
-- progettazione/bozza;
-- selezione di materiali;
-- successivo raccordo umano al Piano.
-
-Non può entrare in `Conduci`.
-
-#### BOUND_HUMAN_TASK_CANDIDATE
-
-Possibile solo dopo risoluzione product-local di:
-
-- grade;
-- block;
-- `planBinding`;
-- UDA/pack/segment/title richiesti dal contratto corrente;
-- generation/provenance delle fonti;
-- Human Task candidate gate.
+`BOUND_HUMAN_TASK_CANDIDATE` è possibile solo dopo risoluzione product-local di grade, block, `planBinding`, UDA/PACK/segment/title e provenance delle fonti.
 
 ### 13.2 Blocking rules
 
 Fallire chiuso se:
 
 - anno/grado/disciplina divergono;
-- il block non esiste;
+- block non esiste;
 - `planBinding` diverge;
 - composition version è stale;
-- l'adapter inventa attività/materiali/tempi non sostenuti;
-- si tenta promozione runtime senza Human Approval;
-- si tenta di presentare il Composer come sostituto dei recipe/gate correnti.
+- adapter inventa attività/materiali/tempi non sostenuti;
+- si tenta promozione runtime senza Human Approval.
 
-### 13.3 State ownership
-
-`IN_PREPARATION`, `IN_PROGRESS`, `PARTIAL`, `COMPLETED` sono Docente OS-owned e derivano da evidenza operativa reale, non dal Composer.
+Gli stati operativi `IN_PREPARATION`, `IN_PROGRESS`, `PARTIAL`, `COMPLETED` restano Docente OS-owned.
 
 ---
 
@@ -604,24 +536,18 @@ Regole:
 - nessuna migrazione implicita a `MasterProgram`;
 - nessun write prima di accettazione locale;
 - nessun fan-out automatico verso tutte le classi;
-- una composizione grade-common può produrre preview per una classe soltanto quando il target class è scelto esplicitamente;
-- local override/adattamento di classe resta separato dal common nucleus.
+- target class scelto esplicitamente;
+- local override di classe separato dal common nucleus.
 
 ### 14.3 Planned vs taught
 
-Le `phases` possono diventare lezioni **previste**, non `UdaLesson` svolte.
+Le `phases` possono diventare lezioni previste, non lezioni svolte.
 
-Per materializzare un consuntivo reale serve un evento/observation confermato dal docente.
+Per il consuntivo reale serve un evento/observation confermato dal docente.
 
 ### 14.4 Assessment boundary
 
-`EvidencePlan` e `AssessmentPlan` non possono generare automaticamente:
-
-- `Grade`;
-- `BehaviorRecord`;
-- competence level;
-- online test score;
-- giudizio individuale.
+`EvidencePlan` e `AssessmentPlan` non generano automaticamente `Grade`, comportamento, livello di competenza, test score o giudizio individuale.
 
 ---
 
@@ -636,17 +562,17 @@ publicPublicationAllowed = false
 classIndependent = true
 ```
 
-### 15.2 Allowed seed data
+Allowed:
 
 - didactic idea/problem;
 - objectives;
-- minimized curriculum binding;
+- minimized curricolo binding;
 - narrative seed;
 - reusable material refs with rights/provenance;
 - learning-object intent;
 - evidence/provenance refs.
 
-### 15.3 Forbidden seed data
+Forbidden:
 
 - student identity;
 - grades;
@@ -655,17 +581,13 @@ classIndependent = true
 - Registro student data;
 - automatic publication instruction.
 
-### 15.4 Public publication
-
 `PUBLISHED` remains Atlas-owned.
-
-The Composer does not supersede the already governed Docente OS → Atlas publication contract. It only adds the Studio Atlas authoring route when a new pathway/experience must be created.
 
 ---
 
 ## 16. Drive export — deferred write slice
 
-Drive remains part of the user journey but **outside Core v1 implementation**.
+Drive remains part of the user journey but outside Core v1 implementation.
 
 Future candidate:
 
@@ -676,23 +598,21 @@ requiresExplicitUserWrite = true
 authorityClass = NONE
 ```
 
-Preconditions before implementation:
+Preconditions:
 
 1. explicit write contract outside OR-07 v0 or governed OR-07 evolution;
 2. perceptible-write feedback;
-3. explicit user target/destination;
-4. idempotence/duplicate behavior defined;
+3. explicit user destination;
+4. idempotence/duplicate behavior;
 5. failure/retry semantics;
-6. no assumption that Intent Discovery current version exposes `WRITE_EXTERNAL`;
+6. no assumption that current Intent Discovery exposes `WRITE_EXTERNAL`;
 7. no Drive-to-product automatic sync.
 
-Drive copies may carry composition/version/digest metadata, but editing a Drive file does not mutate adopted product state. Re-import is a new professional source and produces a new proposal/version.
+Editing a Drive copy does not mutate adopted product state. Re-import is a new professional source and produces a new proposal/version.
 
 ---
 
 ## 17. Execution observation / closing the loop
-
-Conceptual contract:
 
 ```ts
 interface DidacticExecutionObservationV1 {
@@ -713,30 +633,17 @@ interface DidacticExecutionObservationV1 {
 }
 ```
 
-### 17.1 Privacy rule for evidence refs
+`evidenceRefs` possono essere soltanto professionali/non personali oppure opaque target-local refs che il Composer non dereferenzia.
 
-`evidenceRefs` may contain only:
+Registro può usare l'observation come consuntivo preview. Il write finale resta una decisione del Registro/docente.
 
-- professional/non-personal evidence; or
-- opaque target-local references whose protected content is **not dereferenced by the Composer**.
-
-Student-personal evidence remains inside the owning product.
-
-### 17.2 Registro consumption
-
-Registro may use the observation as **consuntivo preview**.
-
-Teacher confirmation is still required for the Registro write.
-
-### 17.3 Continuity
-
-An observation may become professional context for a later composition request such as «prepara la prossima attività», but the previous composition version remains immutable.
+Una observation può alimentare una richiesta successiva come «prepara la prossima attività», ma non muta la composizione precedente.
 
 ---
 
 ## 18. Independent state axes
 
-No single global `status`.
+Non esiste un unico global status.
 
 ### Composition
 
@@ -747,7 +654,7 @@ REJECTED_LOCAL
 SUPERSEDED_LOCAL
 ```
 
-### Docente OS projection
+### Docente OS
 
 ```text
 NOT_PROJECTED
@@ -756,8 +663,6 @@ BOUND_HUMAN_TASK_CANDIDATE
 READY_FOR_HUMAN_APPROVAL
 ADOPTED_IN_PRODUCT
 ```
-
-Operational states remain product-owned.
 
 ### Registro
 
@@ -768,8 +673,6 @@ ADOPTED_IN_PLANNING
 CONSUNTIVO_PREVIEW
 ```
 
-Actual recorded state remains Registro-owned.
-
 ### Studio Atlas
 
 ```text
@@ -779,7 +682,7 @@ ADOPTED_IN_AUTHORING
 PUBLICATION_CANDIDATE
 ```
 
-`PUBLISHED` is Atlas-owned.
+`PUBLISHED` resta Atlas-owned.
 
 ### Drive
 
@@ -789,42 +692,35 @@ EXPORTED_COPY
 OUTDATED_COPY
 ```
 
-No authority semantics.
-
 ---
 
 ## 19. Contextual Copilot integration
 
-The Composer is headless and does not require conversational UI.
+Il Composer è headless.
 
-A consumer using Contextual Copilot may:
+Un consumer può:
 
-1. discover intent (`PREPARE` or equivalent);
-2. apply caller policy;
-3. build `DidacticCompositionRequestV1`;
-4. invoke the proposal capability;
-5. show the proposal;
-6. request local human adoption;
-7. offer only target projections currently allowed by target contracts.
+1. discover intent;
+2. applicare caller policy;
+3. costruire `DidacticCompositionRequestV1`;
+4. invocare la proposal capability;
+5. mostrare la proposta;
+6. chiedere local human adoption;
+7. offrire soltanto proiezioni consentite dai target contracts.
 
-Rules:
-
-- intent discovery != authorization;
-- proposal generation != write permission;
-- current `WRITE_EXTERNAL` discovery limitation remains unchanged;
-- no new Core capability is authorized by this design alone.
+Intent discovery non equivale ad authorization. Proposal generation non equivale a write permission.
 
 ---
 
 ## 20. Privacy and minimization
 
-### Composer v1 privacy class
+Composer v1 accetta soltanto:
 
 ```text
-PROFESSIONAL_NON_PERSONAL only
+PROFESSIONAL_NON_PERSONAL
 ```
 
-Forbidden input/output payload content:
+Forbidden:
 
 - student names/ids;
 - individual grades;
@@ -834,53 +730,38 @@ Forbidden input/output payload content:
 - individual behavior notes;
 - identifiable learner submissions.
 
-Inclusive needs may be represented only in aggregate/progettuale form when necessary.
-
-Products may own richer data internally but must minimize before Composer invocation.
-
-Atlas learner access remains anonymous/local-first according to Atlas contracts; the Composer does not create student accounts or identified telemetry.
+Inclusive needs possono essere rappresentati solo in forma aggregata/progettuale.
 
 ---
 
 ## 21. Provenance, versioning, freshness
 
-Every proposal must be traceable to:
+Ogni proposta deve essere traceable a:
 
 - request id;
 - capability id/version;
 - provider/adapter identity;
 - accepted Arena context ref;
 - `applicabilityStatus` + `regimeRef`;
-- selected curriculum item refs;
+- selected curricolo item refs;
 - professional source refs;
 - producedAt;
 - content digest.
 
-### 21.1 Revision semantics
+Revision semantics:
 
-- `compositionId` identifies the logical composition lineage;
-- `compositionVersion` increments for material revisions;
-- `contentDigest` identifies exact content;
-- revisions never overwrite prior adopted projections silently.
+- `compositionId` identifica la lineage logica;
+- `compositionVersion` incrementa per revisioni materiali;
+- `contentDigest` identifica contenuto esatto;
+- revisioni non sovrascrivono proiezioni precedenti.
 
-### 21.2 Stale triggers
-
-At minimum:
-
-- Arena authority/vigency/applicability materially changes;
-- professional source revision changes;
-- composition digest/version changes;
-- Docente OS `planBinding` changes;
-- consumer teaching identity changes;
-- adapter contract major version changes.
-
-Stale snapshots remain readable as history but cannot be represented as current.
+Stale triggers includono cambi materiali a Arena authority/vigency/applicability, source revisions, composition digest/version, Docente OS `planBinding`, consumer teaching identity o adapter major version.
 
 ---
 
 ## 22. Failure semantics
 
-### Composer result reasons
+Composer reasons:
 
 ```text
 SUCCEEDED
@@ -892,7 +773,7 @@ AMBIGUOUS_CONTEXT
 REVIEW_REQUIRED
 ```
 
-### Projection adapter reasons
+Projection adapter reasons:
 
 ```text
 SOURCE_STALE
@@ -905,7 +786,7 @@ UNSUPPORTED_MAPPING
 PLAN_BINDING_REQUIRED
 ```
 
-No implicit mutative fallback.
+Nessun fallback mutativo implicito.
 
 ---
 
@@ -913,34 +794,24 @@ No implicit mutative fallback.
 
 ### Gate C1 — Adopt composition
 
-Human/product-local decision.
+Decisione umana/product-local. Consente local adoption receipt e preview/candidate di proiezione.
 
-Allows local adoption receipt and target **preview/candidate** generation only.
-
-Does not imply:
-
-- Atlas publication;
-- lesson execution;
-- Registro consuntivo;
-- grades;
-- Drive export.
+Non implica Atlas publication, lesson execution, Registro consuntivo, grades o Drive export.
 
 ### Gate C2 — Student publication
 
-Not owned by Composer.
+Non appartiene al Composer.
 
-Uses existing/future target publication gates:
+Usa i gate target esistenti/futuri:
 
-- Docente OS → Atlas publication contract where applicable;
-- Studio Atlas → publication candidate → Atlas gate for authored pathways.
-
-No extra global micro-approval layer is introduced for normal product-local actions that already have qualified write semantics.
+- Docente OS → Atlas publication contract quando applicabile;
+- Studio Atlas → publication candidate → Atlas gate per Percorsi.
 
 ---
 
 ## 24. UX principles
 
-The teacher should see human actions, not infrastructure:
+La superficie primaria usa azioni umane:
 
 ```text
 Usa questa proposta
@@ -950,116 +821,59 @@ Crea un percorso/materiale per gli studenti
 Archivia una copia dei documenti
 ```
 
-Technical detail is progressive disclosure:
-
-- composition id/version;
-- digest;
-- authority refs;
-- provenance;
-- adapter version;
-- stale reason.
-
-User-initiated writes must have perceptible feedback under the relevant write contract.
+Dettagli tecnici sono progressive disclosure: composition id/version, digest, authority refs, provenance, adapter version e stale reason.
 
 ---
 
 ## 25. Negative knowledge / explicit prohibitions
 
-V1 must not:
+V1 non deve:
 
-- create a central TRAMA UDA database;
-- add a new student account system;
-- automatically sync adopted copies across products;
-- use Drive as technical source of truth;
-- use Atlas public as professional editor;
-- bypass Studio Atlas for authored pathways;
-- bypass Docente OS plan/projection gates;
-- auto-map an unbound composition directly into `Conduci`;
-- migrate Registro `UdaRecord` to `MasterProgram`;
-- fan out one UDA to all classes automatically;
-- treat planned lesson as taught;
-- treat evidence plan as grade;
-- send student-personal content to Composer;
-- dereference protected student evidence refs;
-- mutate Arena;
-- activate DOS-A1;
-- authorize merge/deploy/runtime.
+- creare un database centrale TRAMA delle UDA;
+- aggiungere student accounts;
+- sincronizzare automaticamente copie adottate;
+- usare Drive come technical source of truth;
+- usare Atlas pubblico come editor professionale;
+- bypassare Studio Atlas per Percorsi authored;
+- bypassare Docente OS plan/projection gates;
+- portare una unbound composition direttamente in `Conduci`;
+- migrare Registro `UdaRecord` a `MasterProgram`;
+- fan-out automatico di una UDA a tutte le classi;
+- trattare planned lesson come taught;
+- trattare evidence plan come grade;
+- inviare student-personal content al Composer;
+- dereferenziare protected student evidence refs;
+- mutare Arena;
+- attivare DOS-A1;
+- autorizzare merge/deploy/runtime.
 
 ---
 
 ## 26. Compatibility strategy
 
-### Arena
-
-Reuse caller-accepted context. No new Arena transport required for first Core slice.
-
-### Registro
-
-Preview adapter against current operational UDA domain; annual-domain migration remains separate.
-
-### Docente OS
-
-Unbound planning proposal first; bound Human Task candidate only after current product gates resolve.
-
-### Studio Atlas
-
-Minimized seed; no direct public publication.
-
-### Contextual Copilot
-
-Reuse discovery/policy/dispatch separation. No second parser/chat engine.
-
-### Drive
-
-Deferred explicit write slice.
+- **Arena:** reuse caller-accepted context; nessun nuovo transport nel primo Core.
+- **Registro:** preview adapter verso current operational UDA domain; annual-domain migration separata.
+- **Docente OS:** unbound planning first; bound Human Task solo dopo current gates.
+- **Studio Atlas:** minimized seed; no public publish.
+- **Contextual Copilot:** reuse discovery/policy/dispatch; no second parser/chat engine.
+- **Drive:** deferred explicit write slice.
 
 ---
 
 ## 27. Candidate slices — NOT AUTHORIZED
 
-These are decomposition candidates only, not an implementation plan.
+- **DC-00 — Product identity contract evolution:** registrare `REGISTRO_DOCENTE` e `STUDIO_ATLAS` come identità distinte.
+- **DC-01 — Contract Core:** request/proposal types, validation, deterministic serialization/digest, fake provider.
+- **DC-02 — Adoption receipt:** formato product-neutral, persistenza local.
+- **DC-03 — Registro preview adapter:** proposal → `UdaRecord` preview, target class esplicita, no write/migration.
+- **DC-04A — Docente OS unbound planning adapter:** proposal → Progetta common nucleus candidate.
+- **DC-04B — Docente OS bound Human Task adapter:** solo con real `planBinding` e candidate gates.
+- **DC-05 — Studio Atlas seed adapter:** minimized class-independent seed.
+- **DC-06 — Drive export:** deferred `WRITE_EXTERNAL`.
+- **DC-07 — Execution observation:** teacher-confirmed summary → Registro consuntivo preview.
+- **DC-08 — Contextual Copilot wiring:** consumer-local intent → Composer handoff, no new Core authority.
 
-### DC-00 — Product identity contract evolution
-
-Register `REGISTRO_DOCENTE` and `STUDIO_ATLAS` as distinct governed product identities in the shared integration envelope. Preserve v0 compatibility.
-
-### DC-01 — Contract Core
-
-Request/proposal types, validation, deterministic serialization/digest, fake provider, no external write.
-
-### DC-02 — Adoption receipt
-
-Product-neutral receipt format; consumer persists locally.
-
-### DC-03 — Registro preview adapter
-
-Proposal → `UdaRecord` preview only; explicit target class; no write/migration.
-
-### DC-04A — Docente OS unbound planning adapter
-
-Proposal → Progetta common nucleus candidate.
-
-### DC-04B — Docente OS bound Human Task adapter
-
-Only after real `planBinding` and existing candidate gates.
-
-### DC-05 — Studio Atlas seed adapter
-
-Minimized class-independent seed.
-
-### DC-06 — Drive export
-
-Deferred `WRITE_EXTERNAL`; separate governance/authorization.
-
-### DC-07 — Execution observation
-
-Teacher-confirmed Docente OS summary → Registro consuntivo preview.
-
-### DC-08 — Contextual Copilot wiring
-
-Consumer-local intent → Composer handoff; no new Core authority.
-
-Actual order must be decided only after human design approval and implementation planning.
+Actual order is decided only after Human Design Review and a separate implementation plan.
 
 ---
 
@@ -1069,10 +883,10 @@ A future implementation must prove:
 
 1. Composer is `PROPOSE_ONLY` and has no domain store;
 2. proposal is source-bound, authority-bound, versioned and deterministically digestable;
-3. `TRANSITIONAL` Arena context is preserved rather than collapsed;
+3. `TRANSITIONAL` is preserved;
 4. stale/ambiguous/non-vigente context fails closed;
-5. no student-personal data enters the Composer;
-6. OR-07/OR-10 product identity expansion happens before real Registro/Studio Atlas wiring;
+5. no student-personal data enters Composer;
+6. product identity expansion happens before Registro/Studio Atlas runtime wiring;
 7. Registro remains preview-only before local acceptance;
 8. grade-common composition does not auto-fan-out to classes;
 9. Registro planning does not imply taught/recorded;
@@ -1081,7 +895,7 @@ A future implementation must prove:
 12. bound Docente OS projections cannot bypass `planBinding`/Human Approval;
 13. Studio Atlas receives a seed, not a publication;
 14. Atlas `PUBLISHED` remains target-owned;
-15. Drive export is excluded from Core v1 and requires separate write authorization;
+15. Drive export is excluded from Core v1;
 16. new composition version does not silently overwrite old projections;
 17. execution observations contain no student-personal payload;
 18. failure/stale paths cause no mutation;
@@ -1092,23 +906,21 @@ A future implementation must prove:
 
 ## 29. Builder check
 
-An implementer should not have to guess:
+Un implementatore non deve dover scegliere o indovinare:
 
-- who owns curriculum authority;
-- whether the Composer stores canonical UDA state;
-- whether adoption is global;
-- whether Registro/Studio Atlas are already OR-07 callers;
-- whether Drive belongs to the first Core capability;
-- how `TRANSITIONAL` is treated;
-- whether an unbound Docente OS composition can reach runtime;
-- whether Atlas can be published directly;
-- whether planned means taught;
-- whether evidence plan means grade;
-- whether student data are allowed.
+- chi possiede l'autorità del curricolo;
+- se il Composer memorizza uno stato UDA canonico;
+- se l'adozione è globale;
+- se Registro/Studio Atlas sono già caller OR-07;
+- se Drive appartiene al primo Core;
+- come viene trattato `TRANSITIONAL`;
+- se una composizione unbound Docente OS può raggiungere runtime;
+- se Atlas può essere pubblicato direttamente;
+- se planned significa taught;
+- se evidence plan significa grade;
+- se student data sono ammessi.
 
-These are closed here.
-
-Implementation-local decisions intentionally left open:
+Decisioni implementation-local intenzionalmente aperte:
 
 - exact digest algorithm qualification (`sha256` candidate);
 - exact local snapshot stores;
@@ -1117,7 +929,7 @@ Implementation-local decisions intentionally left open:
 - later `MasterProgram` mapping;
 - manual revision/sync UX.
 
-None changes authority boundaries.
+Nessuna modifica i confini di authority.
 
 ---
 
@@ -1125,12 +937,12 @@ None changes authority boundaries.
 
 **STOP after Human Design Review.**
 
-If approved:
+Se approvato:
 
-1. approve/register ADR-022;
-2. invoke implementation-planning workflow;
-3. decide whether DC-00 is prerequisite implementation slice or separate OR-07/OR-10 evolution;
-4. define exact schema/validator for DC-01;
-5. obtain causal RED tests for authority/privacy/versioning;
-6. implement only the first authorized slice;
-7. no merge/deploy/runtime without existing ecosystem gates.
+1. approvare/registrare ADR-022;
+2. invocare implementation-planning workflow;
+3. decidere se DC-00 è prerequisite slice o evoluzione OR-07/OR-10 separata;
+4. definire schema/validator esatto per DC-01;
+5. ottenere causal RED tests per authority/privacy/versioning;
+6. implementare soltanto la prima slice autorizzata;
+7. nessun merge/deploy/runtime senza i gate esistenti.
