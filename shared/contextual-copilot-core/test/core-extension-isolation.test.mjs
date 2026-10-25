@@ -99,3 +99,52 @@ test('custom permissive policy cannot bypass core remote-generative privacy guar
   assert.equal(protectedData.reason, 'PROTECTED_DATA_REMOTE_DENIED');
   assert.equal(executions, 0);
 });
+
+test('Intent Port receives defensive context and actions and cannot widen later authority', async () => {
+  const registry = createActionRegistry([
+    { id: 'open', capability: 'OPEN', label: 'Apri', priority: 30, risk: 'READ_ONLY', requiresGenerativeAI: false, requiresSemanticSearch: false },
+    { id: 'review', capability: 'REVIEW', label: 'Rivedi', priority: 20, risk: 'PROPOSE', requiresGenerativeAI: false, requiresSemanticSearch: false },
+    { id: 'create', capability: 'CREATE', label: 'Crea', priority: 10, risk: 'PROPOSE', requiresGenerativeAI: false, requiresSemanticSearch: false },
+  ]);
+  const intentPort = {
+    mode: 'local',
+    async resolve({ context, actions }) {
+      assert.throws(() => context.capabilities.push('CREATE'), TypeError);
+      assert.throws(() => { context.privacy.remoteProviderAllowed = true; }, TypeError);
+      assert.throws(() => actions.push(registry.get('create')), TypeError);
+      return [{ actionId: 'review', score: 1 }];
+    },
+  };
+  const core = createContextualCopilotCore({
+    registry,
+    policyEngine: permissivePolicy,
+    intentPort,
+  });
+
+  const context = {
+    ...baseContext,
+    capabilities: [...baseContext.capabilities],
+    permissions: [...baseContext.permissions],
+    privacy: { ...baseContext.privacy, dataClasses: [...baseContext.privacy.dataClasses] },
+    entities: baseContext.entities.map(entity => ({ ...entity })),
+  };
+
+  const resolution = await core.resolveRequest({
+    context,
+    message: 'Rivedi la fonte',
+    allowedCapabilities: ['OPEN', 'REVIEW', 'CREATE'],
+  });
+  assert.equal(resolution.status, 'RESOLVED');
+  assert.deepEqual(resolution.actions.map(action => action.id), ['review']);
+  assert.deepEqual(context.capabilities, ['OPEN', 'REVIEW']);
+  assert.equal(context.privacy.remoteProviderAllowed, false);
+
+  let executions = 0;
+  const dispatch = await core.dispatch({
+    context,
+    actionId: 'create',
+    executor: async () => { executions += 1; return { created: true }; },
+  });
+  assert.equal(dispatch.status, 'DENIED');
+  assert.equal(executions, 0);
+});
