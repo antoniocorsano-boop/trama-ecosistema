@@ -160,7 +160,7 @@ Implementation-local decisions fixed by the approved plan include the SHA-256 se
 
 ### G5 Qualification
 
-**QUALIFIED_OFFLINE.** Governance #2614 / run `40268710812` and Build TRAMA Control Center Bundle #1086 / run `40268710794` are `SUCCESS` on exact implementation candidate `587217440fc5c8bc1893820b879367866d43c76a`, after independent-review hardening. `Test Didactic Composer v1` is 19/19 PASS on that candidate. The refreshed qualification receipt is `docs/evidence/didactic-composer-dc01-qualification.md`.
+**QUALIFIED_OFFLINE.** The functional implementation candidate is `587217440fc5c8bc1893820b879367866d43c76a`, qualified by Governance #2614 / run `40268710812` and Build TRAMA Control Center Bundle #1086 / run `40268710794`, with `Test Didactic Composer v1` 19/19 PASS. Final governance/documentation alignment is captured by `docs/evidence/didactic-composer-dc01-qualification.md`; runtime remains unauthorized.
 
 ### G6+ / Runtime
 
