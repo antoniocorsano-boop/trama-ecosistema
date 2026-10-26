@@ -17,6 +17,9 @@ FIXTURES = ROOT / "governance/runtime/didactic-composer-v1-fixtures.json"
 SUPPORTED_CALLERS = {"DOCENTE_OS", "REGISTRO_DOCENTE", "STUDIO_ATLAS"}
 FORBIDDEN_PERSONAL_KEYS = {"studentName", "studentId", "studentEmail", "grade", "diagnosis", "healthData"}
 SEMANTIC_KEYS = ("requestedKind", "title", "rationale", "curricoloBinding", "design", "projectionHints", "review")
+REQUIRED_FAIL_CLOSED_CODES = {f"DC-{number:02d}" for number in range(1, 15)}
+REQUEST_CONTRACT = "DIDACTIC_COMPOSITION_REQUEST_V1"
+PROPOSAL_CONTRACT = "DIDACTIC_COMPOSITION_PROPOSAL_V1"
 
 
 def canonical_json(value: Any) -> str:
@@ -44,6 +47,14 @@ def walk_keys(value: Any):
 
 def validate_request(request: dict[str, Any], registry: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    contract_version = request.get("contractVersion")
+    if (
+        request.get("contract") != REQUEST_CONTRACT
+        or contract_version != 1
+        or isinstance(contract_version, bool)
+    ):
+        errors.append("DC-14")
+
     caller = request.get("caller") if isinstance(request.get("caller"), dict) else {}
     product = caller.get("product")
     if not isinstance(product, str) or not is_registered_product(product, registry):
@@ -74,6 +85,13 @@ def validate_request(request: dict[str, Any], registry: dict[str, Any]) -> list[
 
 def validate_proposal(request: dict[str, Any], proposal: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    contract_version = proposal.get("contractVersion")
+    if (
+        proposal.get("contract") != PROPOSAL_CONTRACT
+        or contract_version != 1
+        or isinstance(contract_version, bool)
+    ):
+        errors.append("DC-14")
     if proposal.get("status") != "PROPOSAL":
         errors.append("DC-09")
     version = proposal.get("compositionVersion")
@@ -193,13 +211,41 @@ def qualify_matrix(matrix: dict[str, Any], registry: dict[str, Any]) -> dict[str
         "authorityClass": "HUMAN_REQUIRED",
     }:
         valid_errors.append("capability")
-    valid_errors.extend(validate_state(matrix.get("request", {}), matrix.get("proposals", []), matrix.get("adoptionReceipt", {}), registry))
+
+    proposals = matrix.get("proposals", [])
+    if not isinstance(proposals, list):
+        proposals = []
+    adapter_refs = {
+        proposal.get("provenance", {}).get("adapterRef")
+        for proposal in proposals
+        if isinstance(proposal, dict)
+        and isinstance(proposal.get("provenance"), dict)
+        and isinstance(proposal.get("provenance", {}).get("adapterRef"), str)
+        and proposal.get("provenance", {}).get("adapterRef")
+    }
+    if len(proposals) < 2 or len(adapter_refs) < 2:
+        valid_errors.append("distinctAdapters")
+
+    invalid_fixtures = matrix.get("invalid", [])
+    if not isinstance(invalid_fixtures, list):
+        invalid_fixtures = []
+    covered_codes = {
+        code
+        for item in invalid_fixtures
+        if isinstance(item, dict)
+        for code in item.get("expect", [])
+        if isinstance(code, str)
+    }
+    if covered_codes != REQUIRED_FAIL_CLOSED_CODES:
+        valid_errors.append("failClosedCoverage")
+
+    valid_errors.extend(validate_state(matrix.get("request", {}), proposals, matrix.get("adoptionReceipt", {}), registry))
     valid_errors = sorted(set(valid_errors))
 
     invalid_results = []
-    for item in matrix.get("invalid", []):
-        request, proposals, receipt = materialize_invalid(matrix, item)
-        errors = validate_state(request, proposals, receipt, registry)
+    for item in invalid_fixtures:
+        request, invalid_proposals, receipt = materialize_invalid(matrix, item)
+        errors = validate_state(request, invalid_proposals, receipt, registry)
         expected = sorted(set(item.get("expect", [])))
         invalid_results.append({
             "id": item.get("id"),
@@ -207,7 +253,11 @@ def qualify_matrix(matrix: dict[str, Any], registry: dict[str, Any]) -> dict[str
             "expected": expected,
             "pass": bool(errors) and all(code in errors for code in expected),
         })
-    passed = not valid_errors and len(invalid_results) >= 14 and all(item["pass"] for item in invalid_results)
+    passed = (
+        not valid_errors
+        and len(invalid_results) >= 14
+        and all(item["pass"] for item in invalid_results)
+    )
     return {"validPass": not valid_errors, "validErrors": valid_errors, "invalidResults": invalid_results, "pass": passed}
 
 
