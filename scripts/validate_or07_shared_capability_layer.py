@@ -4,10 +4,16 @@ import copy, json
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.validate_governed_product_identities import is_registered_product, load_product_registry
+except ModuleNotFoundError:
+    from validate_governed_product_identities import is_registered_product, load_product_registry
+
 ROOT=Path(__file__).resolve().parents[1]
 FIXTURES=ROOT/"governance/runtime/or07-p1-fixtures.json"
 PROVIDER_TOKENS={"dsh","codex","openai","anthropic","gemini"}
 FORBIDDEN_KEYS={"openaiModel","providerCommand","runtimeCommand","studentName","studentId","studentEmail"}
+PRODUCT_REGISTRY=load_product_registry()
 
 def deep_merge(base:Any,patch:Any)->Any:
     if isinstance(base,dict) and isinstance(patch,dict):
@@ -41,8 +47,11 @@ def validate_case(case:dict[str,Any])->list[str]:
         e.append("SC-02")
     caller=req.get("caller")
     owner=req.get("authorityContext",{}).get("decisionOwner")
-    if not isinstance(caller,dict) or not caller.get("product") or not owner:
+    caller_product=caller.get("product") if isinstance(caller,dict) else None
+    if not isinstance(caller,dict) or not caller_product or not owner:
         e.append("SC-03")
+    elif not is_registered_product(caller_product,PRODUCT_REGISTRY):
+        e.append("SC-11")
     if cap.get("mode") not in {"READ_ONLY","PROPOSE_ONLY"}:
         e.extend(["SC-04","SC-10"])
     if any(not a.get("result",{}).get("evidenceRefs") for a in adapters):

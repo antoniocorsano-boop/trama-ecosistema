@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.governed-document-registry/v1",
-  "updatedAt": "2026-10-03",
+  "updatedAt": "2026-10-25",
   "policy": {
     "purpose": "Durable index of foundational and normative TRAMA documents used by Project Knowledge and development continuity.",
     "chatIsAuthority": false,
@@ -1763,6 +1763,101 @@
         "PATHWAY_AUTHORING_WORKFLOW_CHANGE",
         "LOCAL_GROWTH_MODEL_CHANGE",
         "TERRITORY_GOVERNANCE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-DIDACTIC-COMPOSER-ADR-022",
+      "path": "docs/decisions/trama-adr-022-didactic-composition-projection-boundary.md",
+      "kind": "ADR",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "didactic-composer",
+        "shared-capability-layer",
+        "product-projections",
+        "authority-boundary",
+        "human-control"
+      ],
+      "decisionRef": "TRAMA-ADR-022",
+      "dependsOn": [
+        "DOC-OR-07-SHARED-CAPABILITY-LAYER",
+        "DOC-OR-10-PRODUCT-INTEGRATIONS"
+      ],
+      "updateTriggers": [
+        "DIDACTIC_COMPOSER_ARCHITECTURE_CHANGE",
+        "PRODUCT_IDENTITY_BOUNDARY_CHANGE",
+        "AUTHORITY_BOUNDARY_CHANGE",
+        "RUNTIME_AUTHORIZATION_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-DIDACTIC-COMPOSER-DESIGN-V1",
+      "path": "docs/superpowers/specs/2026-10-25-trama-didactic-composer-v1-design.md",
+      "kind": "ARCHITECTURE",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "didactic-composer",
+        "didactic-composition",
+        "curricolo",
+        "product-projections",
+        "privacy-first"
+      ],
+      "decisionRef": "TRAMA-ADR-022",
+      "dependsOn": [
+        "DOC-DIDACTIC-COMPOSER-ADR-022"
+      ],
+      "updateTriggers": [
+        "DIDACTIC_COMPOSER_DESIGN_CHANGE",
+        "COMPOSITION_CONTRACT_CHANGE",
+        "PRODUCT_PROJECTION_CHANGE",
+        "CURRICOLO_AUTHORITY_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-DIDACTIC-COMPOSER-CAPABILITY",
+      "path": "docs/capabilities/didactic-composer/CAPABILITY.md",
+      "kind": "CONTRACT",
+      "status": "PROPOSED",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "didactic-composer",
+        "capability",
+        "propose-only",
+        "provider-portability",
+        "qualification"
+      ],
+      "decisionRef": "TRAMA-ADR-022",
+      "dependsOn": [
+        "DOC-DIDACTIC-COMPOSER-ADR-022"
+      ],
+      "updateTriggers": [
+        "DIDACTIC_COMPOSER_CAPABILITY_CHANGE",
+        "QUALIFICATION_STATE_CHANGE",
+        "RUNTIME_AUTHORIZATION_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-DIDACTIC-COMPOSER-HUMAN-APPROVAL",
+      "path": "docs/evidence/didactic-composer-human-design-approval-2026-10-25.md",
+      "kind": "GUIDE",
+      "status": "CURRENT",
+      "priority": "NORMATIVE",
+      "subjects": [
+        "didactic-composer",
+        "human-review",
+        "design-approval",
+        "exact-head",
+        "evidence"
+      ],
+      "decisionRef": "TRAMA-ADR-022",
+      "dependsOn": [
+        "DOC-DIDACTIC-COMPOSER-ADR-022"
+      ],
+      "updateTriggers": [
+        "HUMAN_DECISION_CHANGE",
+        "DESIGN_CANDIDATE_CHANGE",
+        "RUNTIME_AUTHORIZATION_CHANGE"
       ]
     }
   ]

@@ -1,0 +1,575 @@
+{
+  "schemaVersion": "trama.didactic-composer-v1-fixtures/v1",
+  "capability": {
+    "capabilityId": "didactic.composition.propose",
+    "capabilityVersion": "1",
+    "mode": "PROPOSE_ONLY",
+    "ownerDomain": "TRAMA",
+    "authorityClass": "HUMAN_REQUIRED"
+  },
+  "request": {
+    "contract": "DIDACTIC_COMPOSITION_REQUEST_V1",
+    "contractVersion": 1,
+    "requestId": "dc01-request-001",
+    "caller": {
+      "product": "REGISTRO_DOCENTE",
+      "surface": "planning-preview"
+    },
+    "intent": {
+      "message": "Progetta una UDA su forme, fonti e trasformazioni dell’energia.",
+      "requestedKind": "UDA"
+    },
+    "teachingContext": {
+      "schoolYear": "2026-27",
+      "schoolOrder": "SECONDARIA_I_GRADO",
+      "subjectCode": "TECNOLOGIA",
+      "gradeLevel": 3,
+      "classRef": "3A",
+      "currentWorkRef": "uda:energia:01"
+    },
+    "curricoloContext": {
+      "authorityProduct": "ARENA",
+      "acceptedContextRef": "arena:technology-grade3:energy:v2025",
+      "authorityState": "APPROVED",
+      "vigencyStatus": "VIGENTE",
+      "applicabilityStatus": "TRANSITIONAL",
+      "regimeRef": "dm-221-2025:transition:2026-27:grade3",
+      "sourceRefs": [
+        "arena:in2025:technology:grade3",
+        "arena:istituto:verticale:technology:v1"
+      ],
+      "curricoloItems": [
+        {
+          "ref": "arena:item:energy-transformations",
+          "kind": "COMPETENCE"
+        },
+        {
+          "ref": "arena:item:technology-consequences",
+          "kind": "OBJECTIVE"
+        }
+      ]
+    },
+    "professionalSources": [
+      {
+        "ref": "teacher:source:energy-textbook",
+        "kind": "DOCUMENT"
+      },
+      {
+        "ref": "teacher:source:phet-energy-forms",
+        "kind": "WEB_RESOURCE"
+      }
+    ],
+    "constraints": {
+      "durationMinutes": 300,
+      "inclusionNeedsAggregate": [
+        "visual-scaffolding",
+        "guided-vocabulary"
+      ],
+      "availableResources": [
+        "textbook",
+        "projector",
+        "notebook"
+      ],
+      "requestedOutputs": [
+        "teacher-guide",
+        "student-sheet",
+        "presentation"
+      ]
+    },
+    "privacyClass": "PROFESSIONAL_NON_PERSONAL"
+  },
+  "proposals": [
+    {
+      "contract": "DIDACTIC_COMPOSITION_PROPOSAL_V1",
+      "contractVersion": 1,
+      "compositionId": "composition:energy-grade3:001",
+      "compositionVersion": 1,
+      "contentDigest": "sha256:458aaafa797d6aab4582c08ff4ac2cc664c46265d0b9d53c2cf6645c8fe273bf",
+      "status": "PROPOSAL",
+      "requestedKind": "UDA",
+      "title": "Energia: forme, fonti e trasformazioni",
+      "rationale": "Comprendere l’energia come grandezza e come sistema di trasformazioni, collegando fonti, usi, conseguenze e decisioni tecnologiche.",
+      "curricoloBinding": {
+        "acceptedContextRef": "arena:technology-grade3:energy:v2025",
+        "applicabilityStatus": "TRANSITIONAL",
+        "regimeRef": "dm-221-2025:transition:2026-27:grade3",
+        "sourceRefs": [
+          "arena:in2025:technology:grade3",
+          "arena:istituto:verticale:technology:v1"
+        ],
+        "selectedItemRefs": [
+          "arena:item:energy-transformations",
+          "arena:item:technology-consequences"
+        ]
+      },
+      "design": {
+        "drivingQuestion": "Come riconosciamo l’energia, da dove proviene e come cambia forma nei sistemi tecnologici?",
+        "competencies": [
+          "Riconoscere processi di trasformazione e produzione e le forme di energia coinvolte."
+        ],
+        "objectives": [
+          "Distinguere forme e fonti di energia.",
+          "Descrivere trasformazioni energetiche in semplici sistemi tecnologici."
+        ],
+        "knowledge": [
+          "energia",
+          "forme di energia",
+          "fonti rinnovabili e non rinnovabili",
+          "trasformazioni energetiche"
+        ],
+        "phases": [
+          {
+            "id": "phase-1",
+            "title": "Che cos’è l’energia?",
+            "durationMinutes": 60
+          },
+          {
+            "id": "phase-2",
+            "title": "Forme e trasformazioni",
+            "durationMinutes": 90
+          },
+          {
+            "id": "phase-3",
+            "title": "Fonti e sistemi",
+            "durationMinutes": 90
+          },
+          {
+            "id": "phase-4",
+            "title": "Decisione e sintesi",
+            "durationMinutes": 60
+          }
+        ],
+        "evidencePlan": [
+          {
+            "id": "ev-1",
+            "kind": "NOTEBOOK_RESPONSE"
+          },
+          {
+            "id": "ev-2",
+            "kind": "GROUP_EXPLANATION"
+          }
+        ],
+        "assessmentPlan": {
+          "mode": "TEACHER_REVIEW",
+          "automaticGrade": false
+        },
+        "inclusionPlan": {
+          "sameAuthenticTask": true,
+          "supports": [
+            "guided-vocabulary",
+            "visual-scaffolding"
+          ]
+        },
+        "interdisciplinaryLinks": [
+          {
+            "subject": "SCIENZE",
+            "relation": "energia e trasformazioni"
+          },
+          {
+            "subject": "MATEMATICA",
+            "relation": "grandezze e dati"
+          }
+        ]
+      },
+      "projectionHints": {
+        "docenteOs": {
+          "mode": "UNBOUND_PLANNING_PROPOSAL"
+        },
+        "registro": {
+          "mode": "PREVIEW_ONLY"
+        },
+        "studioAtlas": {
+          "mode": "AUTHORING_SEED"
+        },
+        "driveExport": "DEFERRED_WRITE_SLICE"
+      },
+      "review": {
+        "blockingIssues": [],
+        "warnings": [],
+        "assumptions": [
+          "Il docente conferma il contesto professionale prima dell’adozione locale."
+        ]
+      },
+      "provenance": {
+        "requestId": "dc01-request-001",
+        "capabilityId": "didactic.composition.propose",
+        "capabilityVersion": "1",
+        "providerRef": "fixture:alpha",
+        "adapterRef": "fake-adapter-alpha",
+        "professionalSourceRefs": [
+          "teacher:source:energy-textbook",
+          "teacher:source:phet-energy-forms"
+        ]
+      },
+      "producedAt": "2026-10-25T21:40:00Z"
+    },
+    {
+      "contract": "DIDACTIC_COMPOSITION_PROPOSAL_V1",
+      "contractVersion": 1,
+      "compositionId": "composition:energy-grade3:001",
+      "compositionVersion": 1,
+      "contentDigest": "sha256:458aaafa797d6aab4582c08ff4ac2cc664c46265d0b9d53c2cf6645c8fe273bf",
+      "status": "PROPOSAL",
+      "requestedKind": "UDA",
+      "title": "Energia: forme, fonti e trasformazioni",
+      "rationale": "Comprendere l’energia come grandezza e come sistema di trasformazioni, collegando fonti, usi, conseguenze e decisioni tecnologiche.",
+      "curricoloBinding": {
+        "acceptedContextRef": "arena:technology-grade3:energy:v2025",
+        "applicabilityStatus": "TRANSITIONAL",
+        "regimeRef": "dm-221-2025:transition:2026-27:grade3",
+        "sourceRefs": [
+          "arena:in2025:technology:grade3",
+          "arena:istituto:verticale:technology:v1"
+        ],
+        "selectedItemRefs": [
+          "arena:item:energy-transformations",
+          "arena:item:technology-consequences"
+        ]
+      },
+      "design": {
+        "drivingQuestion": "Come riconosciamo l’energia, da dove proviene e come cambia forma nei sistemi tecnologici?",
+        "competencies": [
+          "Riconoscere processi di trasformazione e produzione e le forme di energia coinvolte."
+        ],
+        "objectives": [
+          "Distinguere forme e fonti di energia.",
+          "Descrivere trasformazioni energetiche in semplici sistemi tecnologici."
+        ],
+        "knowledge": [
+          "energia",
+          "forme di energia",
+          "fonti rinnovabili e non rinnovabili",
+          "trasformazioni energetiche"
+        ],
+        "phases": [
+          {
+            "id": "phase-1",
+            "title": "Che cos’è l’energia?",
+            "durationMinutes": 60
+          },
+          {
+            "id": "phase-2",
+            "title": "Forme e trasformazioni",
+            "durationMinutes": 90
+          },
+          {
+            "id": "phase-3",
+            "title": "Fonti e sistemi",
+            "durationMinutes": 90
+          },
+          {
+            "id": "phase-4",
+            "title": "Decisione e sintesi",
+            "durationMinutes": 60
+          }
+        ],
+        "evidencePlan": [
+          {
+            "id": "ev-1",
+            "kind": "NOTEBOOK_RESPONSE"
+          },
+          {
+            "id": "ev-2",
+            "kind": "GROUP_EXPLANATION"
+          }
+        ],
+        "assessmentPlan": {
+          "mode": "TEACHER_REVIEW",
+          "automaticGrade": false
+        },
+        "inclusionPlan": {
+          "sameAuthenticTask": true,
+          "supports": [
+            "guided-vocabulary",
+            "visual-scaffolding"
+          ]
+        },
+        "interdisciplinaryLinks": [
+          {
+            "subject": "SCIENZE",
+            "relation": "energia e trasformazioni"
+          },
+          {
+            "subject": "MATEMATICA",
+            "relation": "grandezze e dati"
+          }
+        ]
+      },
+      "projectionHints": {
+        "docenteOs": {
+          "mode": "UNBOUND_PLANNING_PROPOSAL"
+        },
+        "registro": {
+          "mode": "PREVIEW_ONLY"
+        },
+        "studioAtlas": {
+          "mode": "AUTHORING_SEED"
+        },
+        "driveExport": "DEFERRED_WRITE_SLICE"
+      },
+      "review": {
+        "blockingIssues": [],
+        "warnings": [],
+        "assumptions": [
+          "Il docente conferma il contesto professionale prima dell’adozione locale."
+        ]
+      },
+      "provenance": {
+        "requestId": "dc01-request-001",
+        "capabilityId": "didactic.composition.propose",
+        "capabilityVersion": "1",
+        "providerRef": "fixture:beta",
+        "adapterRef": "fake-adapter-beta",
+        "professionalSourceRefs": [
+          "teacher:source:energy-textbook",
+          "teacher:source:phet-energy-forms"
+        ]
+      },
+      "producedAt": "2026-10-25T21:40:01Z"
+    }
+  ],
+  "adoptionReceipt": {
+    "contract": "DIDACTIC_COMPOSITION_ADOPTION_RECEIPT_V1",
+    "contractVersion": 1,
+    "receiptId": "dc01-adoption-001",
+    "product": "REGISTRO_DOCENTE",
+    "compositionId": "composition:energy-grade3:001",
+    "compositionVersion": 1,
+    "contentDigest": "sha256:458aaafa797d6aab4582c08ff4ac2cc664c46265d0b9d53c2cf6645c8fe273bf",
+    "decision": "ADOPTED",
+    "decidedBy": "HUMAN",
+    "decidedAt": "2026-10-25T21:41:00Z"
+  },
+  "invalid": [
+    {
+      "id": "unknown-caller",
+      "target": "request",
+      "expect": [
+        "DC-01"
+      ],
+      "patch": {
+        "caller": {
+          "product": "UNKNOWN_PRODUCT"
+        }
+      }
+    },
+    {
+      "id": "unsupported-caller",
+      "target": "request",
+      "expect": [
+        "DC-02"
+      ],
+      "patch": {
+        "caller": {
+          "product": "ARENA"
+        }
+      }
+    },
+    {
+      "id": "personal-student-name",
+      "target": "request",
+      "expect": [
+        "DC-03"
+      ],
+      "patch": {
+        "constraints": {
+          "privateContext": {
+            "studentName": "Fixture Student"
+          }
+        }
+      }
+    },
+    {
+      "id": "personal-student-id",
+      "target": "request",
+      "expect": [
+        "DC-03"
+      ],
+      "patch": {
+        "constraints": {
+          "privateContext": {
+            "studentId": "student-001"
+          }
+        }
+      }
+    },
+    {
+      "id": "personal-student-email",
+      "target": "request",
+      "expect": [
+        "DC-03"
+      ],
+      "patch": {
+        "professionalSources": {
+          "privateContext": {
+            "studentEmail": "student@example.invalid"
+          }
+        }
+      }
+    },
+    {
+      "id": "personal-grade",
+      "target": "request",
+      "expect": [
+        "DC-03"
+      ],
+      "patch": {
+        "constraints": {
+          "privateContext": {
+            "grade": 8
+          }
+        }
+      }
+    },
+    {
+      "id": "personal-diagnosis",
+      "target": "request",
+      "expect": [
+        "DC-03"
+      ],
+      "patch": {
+        "constraints": {
+          "privateContext": {
+            "diagnosis": "fixture"
+          }
+        }
+      }
+    },
+    {
+      "id": "personal-health-data",
+      "target": "request",
+      "expect": [
+        "DC-03"
+      ],
+      "patch": {
+        "constraints": {
+          "privateContext": {
+            "healthData": "fixture"
+          }
+        }
+      }
+    },
+    {
+      "id": "invalid-arena-authority",
+      "target": "request",
+      "expect": [
+        "DC-04"
+      ],
+      "patch": {
+        "curricoloContext": {
+          "authorityProduct": "ATLAS"
+        }
+      }
+    },
+    {
+      "id": "non-vigente",
+      "target": "request",
+      "expect": [
+        "DC-05"
+      ],
+      "patch": {
+        "curricoloContext": {
+          "vigencyStatus": "NON_VIGENTE"
+        }
+      }
+    },
+    {
+      "id": "invalid-applicability",
+      "target": "request",
+      "expect": [
+        "DC-06"
+      ],
+      "patch": {
+        "curricoloContext": {
+          "applicabilityStatus": "RETIRED"
+        }
+      }
+    },
+    {
+      "id": "missing-regime-ref",
+      "target": "request",
+      "expect": [
+        "DC-07"
+      ],
+      "patch": {
+        "curricoloContext": {
+          "regimeRef": ""
+        }
+      }
+    },
+    {
+      "id": "transitional-not-preserved",
+      "target": "proposal:1",
+      "expect": [
+        "DC-08"
+      ],
+      "patch": {
+        "curricoloBinding": {
+          "applicabilityStatus": "APPLICABLE"
+        }
+      }
+    },
+    {
+      "id": "non-proposal-state",
+      "target": "proposal:0",
+      "expect": [
+        "DC-09"
+      ],
+      "patch": {
+        "status": "APPROVED"
+      }
+    },
+    {
+      "id": "write-escalation",
+      "target": "proposal:0",
+      "expect": [
+        "DC-10"
+      ],
+      "patch": {
+        "projectionHints": {
+          "driveExport": "WRITE_EXTERNAL"
+        }
+      }
+    },
+    {
+      "id": "provider-semantics-drift",
+      "target": "proposal:1",
+      "expect": [
+        "DC-11"
+      ],
+      "patch": {
+        "title": "Energia: titolo semanticamente diverso"
+      }
+    },
+    {
+      "id": "content-digest-mismatch",
+      "target": "proposal:0",
+      "expect": [
+        "DC-12"
+      ],
+      "patch": {
+        "contentDigest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "id": "non-human-adoption",
+      "target": "adoptionReceipt",
+      "expect": [
+        "DC-13"
+      ],
+      "patch": {
+        "decidedBy": "SYSTEM"
+      }
+    },
+    {
+      "id": "composition-identity-mismatch",
+      "target": "proposal:1",
+      "expect": [
+        "DC-14"
+      ],
+      "patch": {
+        "compositionId": "composition:other:999"
+      }
+    }
+  ]
+}

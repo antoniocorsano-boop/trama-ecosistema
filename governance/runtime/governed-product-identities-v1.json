@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "trama.governed-product-identities/v1",
+  "products": [
+    {
+      "id": "ARENA",
+      "domainRole": "CURRICOLO_AUTHORITY",
+      "sharedCapabilityCaller": true,
+      "controlClass": "DOMAIN_BOUND",
+      "aliasOf": null
+    },
+    {
+      "id": "ATLAS",
+      "domainRole": "PUBLIC_LEARNER_SURFACE",
+      "sharedCapabilityCaller": true,
+      "controlClass": "DOMAIN_BOUND",
+      "aliasOf": null
+    },
+    {
+      "id": "DOCENTE_OS",
+      "domainRole": "TEACHER_OPERATIONAL",
+      "sharedCapabilityCaller": true,
+      "controlClass": "DOMAIN_BOUND",
+      "aliasOf": null
+    },
+    {
+      "id": "REGISTRO_DOCENTE",
+      "domainRole": "TEACHER_RECORD",
+      "sharedCapabilityCaller": true,
+      "controlClass": "DOMAIN_BOUND",
+      "aliasOf": null
+    },
+    {
+      "id": "STUDIO_ATLAS",
+      "domainRole": "PROFESSIONAL_AUTHORING",
+      "sharedCapabilityCaller": true,
+      "controlClass": "DOMAIN_BOUND",
+      "aliasOf": null
+    },
+    {
+      "id": "CONTROL_CENTER",
+      "domainRole": "READ_ONLY_OBSERVER",
+      "sharedCapabilityCaller": true,
+      "controlClass": "READ_ONLY",
+      "aliasOf": null
+    }
+  ]
+}

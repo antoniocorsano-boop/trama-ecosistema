@@ -12,6 +12,12 @@ DECISIONS=ROOT/"docs/decisions/decision-register.json"
 ALLOWED_KINDS={"OPERATING_MODEL","ADR","ARCHITECTURE","CONTRACT","UI_CONTRACT","POLICY","GUIDE"}
 ALLOWED_STATUS={"CURRENT","PROPOSED","SUPERSEDED","RETIRED"}
 ALLOWED_PRIORITY={"FOUNDATIONAL","NORMATIVE","SUPPORTING"}
+REQUIRED_DIDACTIC_COMPOSER_DOCUMENTS={
+    "DOC-DIDACTIC-COMPOSER-ADR-022",
+    "DOC-DIDACTIC-COMPOSER-DESIGN-V1",
+    "DOC-DIDACTIC-COMPOSER-CAPABILITY",
+    "DOC-DIDACTIC-COMPOSER-HUMAN-APPROVAL",
+}
 
 def load(path):
     return json.loads(path.read_text(encoding="utf-8"))
@@ -28,7 +34,13 @@ def main():
     if not isinstance(documents,list) or not documents:
         fail("documents")
 
-    decision_ids={x.get("id") for x in decisions.get("decisions",[])}
+    decision_by_id={x.get("id"):x for x in decisions.get("decisions",[])}
+    adr_022=decision_by_id.get("TRAMA-ADR-022")
+    if not adr_022:
+        fail("TRAMA-ADR-022 not registered")
+    if adr_022.get("status")!="APPROVED":
+        fail("TRAMA-ADR-022 must be APPROVED")
+    decision_ids=set(decision_by_id)
     ids=set()
     paths=set()
 
@@ -67,6 +79,10 @@ def main():
             fail(f"{did}: ADR requires decisionRef")
         if decision_ref and decision_ref not in decision_ids:
             fail(f"{did}: decisionRef not registered: {decision_ref}")
+
+    missing_composer_docs=REQUIRED_DIDACTIC_COMPOSER_DOCUMENTS-ids
+    if missing_composer_docs:
+        fail("missing Didactic Composer governed documents: "+", ".join(sorted(missing_composer_docs)))
 
     for item in documents:
         for dep in item.get("dependsOn",[]):

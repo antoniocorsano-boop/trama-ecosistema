@@ -7,6 +7,11 @@ class Or07SharedCapabilityLayerTests(unittest.TestCase):
         cls.matrix=load_matrix()
         cls.base={k:copy.deepcopy(v) for k,v in cls.matrix.items() if k!="invalid"}
 
+    def case_with_product(self,product):
+        case=copy.deepcopy(self.base)
+        case["request"]["caller"]["product"]=product
+        return case
+
     def test_valid_fixture_passes(self):
         self.assertEqual(validate_case(self.base),[])
 
@@ -14,6 +19,16 @@ class Or07SharedCapabilityLayerTests(unittest.TestCase):
         outputs=[a["result"]["output"] for a in self.base["adapters"]]
         self.assertEqual(outputs[0],outputs[1])
         self.assertNotEqual(self.base["adapters"][0]["providerId"],self.base["adapters"][1]["providerId"])
+
+    def test_governed_new_product_callers_are_registered(self):
+        for product in ("REGISTRO_DOCENTE","STUDIO_ATLAS"):
+            with self.subTest(product=product):
+                self.assertNotIn("SC-11",validate_case(self.case_with_product(product)))
+
+    def test_unregistered_product_callers_fail_closed(self):
+        for product in ("OTHER_GOVERNED","UNKNOWN_PRODUCT"):
+            with self.subTest(product=product):
+                self.assertIn("SC-11",validate_case(self.case_with_product(product)))
 
     def test_all_negative_fixtures_fail_closed(self):
         self.assertGreaterEqual(len(self.matrix["invalid"]),8)
