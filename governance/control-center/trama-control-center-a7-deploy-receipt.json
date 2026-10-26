@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "trama.control-center-a7-deploy-receipt/v1",
+  "id": "TRAMA-CC-APP-A7-DEPLOY-RECEIPT-01",
+  "status": "DEPLOY_LIVE_PUBLIC_SMOKE_PARTIAL",
+  "candidateHead": "4ffb11dcd1edad19fb0c2850415542f756508aac",
+  "mergeCommit": "41bc34c37ecdda577aab6c9b2d226ff44b3d16b0",
+  "humanReview": {
+    "type": "PUBLIC_CUTOVER_HUMAN_REVIEW",
+    "status": "PASS",
+    "decisionRef": "PR-192 comment 5913639286"
+  },
+  "render": {
+    "workspaceId": "tea-d4qbl9be5dus73eku8rg",
+    "serviceId": "srv-dape3shsrm7s73f5krpg",
+    "serviceName": "trama-control-center",
+    "deployId": "dep-daui5gjbc2fs73cn5ug0",
+    "deployedCommit": "41bc34c37ecdda577aab6c9b2d226ff44b3d16b0",
+    "status": "live",
+    "publicUrl": "https://trama-control-center.onrender.com",
+    "buildCommand": "bash scripts/build_control_center_render.sh",
+    "publishPath": "public",
+    "autoDeploy": true
+  },
+  "buildEvidence": {
+    "modularBuild": "PASS",
+    "pwaManifest": "PASS",
+    "serviceWorker": "PASS",
+    "precacheEntries": 11,
+    "liveComponentEvidenceMaterialized": "PASS",
+    "liveProjectKnowledgeMaterialized": "PASS",
+    "candidateBuildMarker": "TRAMA_A7_CANDIDATE_BUILD_PASS"
+  },
+  "publicSmoke": {
+    "renderDeployLive": "PASS",
+    "rootHttp": "UNVERIFIED_FROM_CURRENT_CLIENT",
+    "legacyFallbackHttp": "UNVERIFIED_FROM_CURRENT_CLIENT",
+    "manifestHttp": "UNVERIFIED_FROM_CURRENT_CLIENT",
+    "governedSnapshotHttp": "UNVERIFIED_FROM_CURRENT_CLIENT",
+    "reason": "Current execution environment could not resolve the onrender.com hostname; no synthetic PASS was recorded."
+  },
+  "rollback": {
+    "preservedLegacyBuilder": "scripts/build_control_center_render_legacy.sh",
+    "fallbackPath": "/legacy/",
+    "primaryAction": "REVERT_PUBLIC_SWITCH_MERGE_ON_MAIN",
+    "preSwitchBaseline": "b6d8b250278f064fefed3a6a286d80bc9728a4fe"
+  },
+  "invariants": {
+    "controlCenterReadOnly": true,
+    "browserGithubAuthority": false,
+    "automaticMaturityPromotion": false,
+    "dosA1": "RUNTIME_DEFERRED"
+  }
+}
