@@ -36,6 +36,24 @@ class DidacticComposerV1Tests(unittest.TestCase):
         self.assertEqual(validate_proposal(self.request, self.alpha), [])
         self.assertEqual(validate_proposal(self.request, self.beta), [])
 
+    def test_request_contract_and_version_fail_closed(self):
+        wrong_contract = copy.deepcopy(self.request)
+        wrong_contract["contract"] = "DIDACTIC_COMPOSITION_REQUEST_V2"
+        self.assertIn("DC-14", validate_request(wrong_contract, self.registry))
+
+        future_version = copy.deepcopy(self.request)
+        future_version["contractVersion"] = 2
+        self.assertIn("DC-14", validate_request(future_version, self.registry))
+
+    def test_proposal_contract_and_version_fail_closed(self):
+        wrong_contract = copy.deepcopy(self.alpha)
+        wrong_contract["contract"] = "DIDACTIC_COMPOSITION_PROPOSAL_V2"
+        self.assertIn("DC-14", validate_proposal(self.request, wrong_contract))
+
+        future_version = copy.deepcopy(self.alpha)
+        future_version["contractVersion"] = 2
+        self.assertIn("DC-14", validate_proposal(self.request, future_version))
+
     def test_composition_version_must_be_positive(self):
         proposal = copy.deepcopy(self.alpha)
         proposal["compositionVersion"] = 0
@@ -89,6 +107,20 @@ class DidacticComposerV1Tests(unittest.TestCase):
         result = qualify_matrix(self.matrix, self.registry)
         self.assertTrue(result["pass"])
         self.assertEqual(result["validErrors"], [])
+
+    def test_qualification_requires_complete_dc01_dc14_coverage(self):
+        matrix = copy.deepcopy(self.matrix)
+        matrix["invalid"] = [
+            item for item in matrix["invalid"] if "DC-14" not in item.get("expect", [])
+        ]
+        result = qualify_matrix(matrix, self.registry)
+        self.assertFalse(result["pass"])
+
+    def test_qualification_requires_two_distinct_adapters(self):
+        matrix = copy.deepcopy(self.matrix)
+        matrix["proposals"] = [copy.deepcopy(self.alpha), copy.deepcopy(self.alpha)]
+        result = qualify_matrix(matrix, self.registry)
+        self.assertFalse(result["pass"])
 
     def test_all_adversarial_fixtures_fail_with_expected_codes(self):
         self.assertGreaterEqual(len(self.matrix["invalid"]), 14)
