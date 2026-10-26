@@ -3,7 +3,7 @@
 **Name:** TRAMA Didactic Composer  
 **Status:** G0/G1/G2 APPROVED · G3 DESIGN APPROVED · G4_IMPLEMENTED · G5_QUALIFIED_OFFLINE  
 **Runtime:** NOT_AUTHORIZED  
-**Date:** 2026-10-25  
+**Date:** 2026-10-26  
 **Owner of shared contract:** TRAMA  
 **Decision owner of didactic adoption:** HUMAN / product-local  
 **Authority del curricolo:** Arena  
@@ -160,7 +160,7 @@ Implementation-local decisions fixed by the approved plan include the SHA-256 se
 
 ### G5 Qualification
 
-**QUALIFIED_OFFLINE.** Governance #2609 and Build TRAMA Control Center Bundle #1080 are `SUCCESS` on exact implementation candidate `782c8f9107ce68cfbe77b3a7680b2111bfcfd678`. Qualification receipt: `docs/evidence/didactic-composer-dc01-qualification.md`.
+**QUALIFIED_OFFLINE.** Governance #2614 / run `40268710812` and Build TRAMA Control Center Bundle #1086 / run `40268710794` are `SUCCESS` on exact implementation candidate `587217440fc5c8bc1893820b879367866d43c76a`, after independent-review hardening. `Test Didactic Composer v1` is 19/19 PASS on that candidate. The refreshed qualification receipt is `docs/evidence/didactic-composer-dc01-qualification.md`.
 
 ### G6+ / Runtime
 
