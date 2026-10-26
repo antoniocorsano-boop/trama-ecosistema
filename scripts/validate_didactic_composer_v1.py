@@ -57,6 +57,8 @@ def validate_request(request: dict[str, Any], registry: dict[str, Any]) -> list[
     context = request.get("curricoloContext") if isinstance(request.get("curricoloContext"), dict) else {}
     if context.get("authorityProduct") != "ARENA" or context.get("authorityState") != "APPROVED":
         errors.append("DC-04")
+    if not isinstance(context.get("acceptedContextRef"), str) or not context.get("acceptedContextRef"):
+        errors.append("DC-04")
     if context.get("vigencyStatus") != "VIGENTE":
         errors.append("DC-05")
     if context.get("applicabilityStatus") not in {"APPLICABLE", "TRANSITIONAL"}:
@@ -80,8 +82,11 @@ def validate_proposal(request: dict[str, Any], proposal: dict[str, Any]) -> list
 
     request_context = request.get("curricoloContext", {})
     binding = proposal.get("curricoloBinding") if isinstance(proposal.get("curricoloBinding"), dict) else {}
+    accepted_context_ref = binding.get("acceptedContextRef")
     if (
-        binding.get("acceptedContextRef") != request_context.get("acceptedContextRef")
+        not isinstance(accepted_context_ref, str)
+        or not accepted_context_ref
+        or accepted_context_ref != request_context.get("acceptedContextRef")
         or binding.get("applicabilityStatus") != request_context.get("applicabilityStatus")
         or binding.get("regimeRef") != request_context.get("regimeRef")
     ):
@@ -151,6 +156,9 @@ def validate_state(request: dict[str, Any], proposals: list[dict[str, Any]], rec
             errors.append("DC-14")
     if proposals:
         errors.extend(validate_adoption_receipt(receipt, proposals[0]))
+        caller = request.get("caller") if isinstance(request.get("caller"), dict) else {}
+        if receipt.get("product") != caller.get("product"):
+            errors.append("DC-13")
     return sorted(set(errors))
 
 
