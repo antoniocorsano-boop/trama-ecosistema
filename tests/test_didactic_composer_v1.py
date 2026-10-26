@@ -70,6 +70,21 @@ class DidacticComposerV1Tests(unittest.TestCase):
         replaced["decision"] = "REPLACED"
         self.assertIn("DC-13", validate_adoption_receipt(replaced, self.alpha))
 
+    def test_adoption_receipt_product_must_match_request_caller(self):
+        matrix = copy.deepcopy(self.matrix)
+        matrix["adoptionReceipt"]["product"] = "STUDIO_ATLAS"
+        result = qualify_matrix(matrix, self.registry)
+        self.assertFalse(result["pass"])
+        self.assertIn("DC-13", result["validErrors"])
+
+    def test_accepted_context_ref_is_required_on_request_and_binding(self):
+        request = copy.deepcopy(self.request)
+        proposal = copy.deepcopy(self.alpha)
+        request["curricoloContext"].pop("acceptedContextRef")
+        proposal["curricoloBinding"].pop("acceptedContextRef")
+        self.assertIn("DC-04", validate_request(request, self.registry))
+        self.assertIn("DC-08", validate_proposal(request, proposal))
+
     def test_valid_matrix_qualifies(self):
         result = qualify_matrix(self.matrix, self.registry)
         self.assertTrue(result["pass"])
