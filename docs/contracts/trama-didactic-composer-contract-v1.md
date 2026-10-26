@@ -1,7 +1,7 @@
 # TRAMA DC-01 — Didactic Composer Core Contract v1
 
 **Stato:** IMPLEMENTATION CANDIDATE / OFFLINE QUALIFICATION  
-**Data:** 2026-10-25  
+**Data:** 2026-10-26  
 **Decisione:** `TRAMA-ADR-022`  
 **Capability:** `didactic.composition.propose@1`  
 **Mode:** `PROPOSE_ONLY`  
@@ -25,6 +25,8 @@ La request è accettabile solo se il product id è presente nel registro DC-00 e
 
 Un product id sconosciuto fallisce come `DC-01`. Un prodotto registrato ma non supportato dal Core fallisce come `DC-02`. `OTHER_GOVERNED` non è un caller valido.
 
+La request deve inoltre dichiarare esattamente l'envelope v1: `contract = DIDACTIC_COMPOSITION_REQUEST_V1` e `contractVersion = 1`. Contract identity o versioni diverse/future falliscono chiuse con `DC-14`.
+
 ## 3. Privacy-first
 
 `privacyClass` deve essere `PROFESSIONAL_NON_PERSONAL`.
@@ -39,16 +41,23 @@ Il Core accetta contesto autorevole solo quando:
 
 - `authorityProduct = ARENA`;
 - `authorityState = APPROVED`;
+- `acceptedContextRef` è una stringa concreta, non vuota, che identifica il contesto Arena accettato dal prodotto chiamante;
 - `vigencyStatus = VIGENTE`;
 - `applicabilityStatus = APPLICABLE | TRANSITIONAL`;
 - `regimeRef` è presente;
 - source refs e item di curricolo sono presenti.
 
+L'assenza di `acceptedContextRef` nella request è un errore `DC-04`.
+
+La proposta deve mantenere lo stesso `acceptedContextRef` nel proprio `curricoloBinding`; assenza o mismatch rispetto alla request falliscono chiusi con `DC-08`.
+
 `TRANSITIONAL` deve essere preservato nella proposta; non può essere appiattito a `APPLICABLE`.
 
 ## 5. Proposta
 
-La proposta deve restare `status = PROPOSAL` e mantenere il binding al contesto di curricolo della request.
+La proposta deve dichiarare esattamente l'envelope v1: `contract = DIDACTIC_COMPOSITION_PROPOSAL_V1` e `contractVersion = 1`. Contract identity o versioni diverse/future falliscono chiuse con `DC-14`.
+
+La proposta deve restare `status = PROPOSAL` e mantenere il binding al contesto di curricolo della request, incluso lo stesso `acceptedContextRef`, lo stesso `applicabilityStatus` e lo stesso `regimeRef`.
 
 `projectionHints.driveExport` deve essere esattamente `DEFERRED_WRITE_SLICE`. Qualunque promozione a write esterno nel Core fallisce chiusa.
 
@@ -89,37 +98,41 @@ Regole:
 - `decidedBy = HUMAN`;
 - decisione tra `ADOPTED | REJECTED | SUPERSEDED`;
 - id/version/digest corrispondono alla proposta;
-- il receipt appartiene a un prodotto locale;
+- `receipt.product` deve essere esattamente uguale a `request.caller.product`;
+- il receipt vale soltanto per quel prodotto chiamante e non può essere riutilizzato per un altro consumer;
 - non esiste approvazione globale o adozione automatica degli altri prodotti.
+
+Un receipt associato a un prodotto diverso dal caller fallisce chiuso con `DC-13`.
 
 ## 8. Codici fail-closed
 
 - `DC-01` — unknown caller;
 - `DC-02` — registered but unsupported caller;
 - `DC-03` — personal student data;
-- `DC-04` — Arena authority invalid;
+- `DC-04` — Arena authority/context invalid o `acceptedContextRef` mancante nella request;
 - `DC-05` — Arena vigency invalid;
 - `DC-06` — applicability invalid;
 - `DC-07` — regime ref required;
-- `DC-08` — transitional/binding state not preserved;
+- `DC-08` — accepted-context/transitional binding state not preserved;
 - `DC-09` — non-proposal state;
 - `DC-10` — write escalation;
 - `DC-11` — provider semantic drift;
 - `DC-12` — content digest mismatch;
-- `DC-13` — non-human/global adoption;
-- `DC-14` — content identity/provenance mismatch.
+- `DC-13` — non-human/global/cross-product adoption;
+- `DC-14` — request/proposal envelope, content identity o provenance mismatch.
 
 ## 9. Qualification
 
 DC-01 è qualificabile soltanto offline con:
 
-- almeno due fake adapter distinti;
+- almeno due fake adapter con `adapterRef` distinti e non vuoti;
 - semantic equivalence provider-neutral;
 - digest deterministico;
-- casi avversariali per i quattordici codici;
+- copertura dichiarata esattamente `DC-01`…`DC-14`, non soltanto un conteggio minimo di casi;
 - privacy ricorsiva;
+- `acceptedContextRef` Arena obbligatorio e preservato;
 - `TRANSITIONAL` preservato;
-- adoption receipt umano e product-local;
+- adoption receipt umano e product-local, legato esattamente al caller corrente;
 - Governance completa verde sullo stesso exact SHA.
 
 ## 10. Non-obiettivi
