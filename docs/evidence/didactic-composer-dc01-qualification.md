@@ -1,8 +1,8 @@
 # CAP-DIDACTIC-COMPOSER — DC-01 Offline Qualification Receipt
 
-**Date:** 2026-10-25  
+**Date:** 2026-10-26  
 **Scope:** DC-00 governed product identities + DC-01 Didactic Composer Core  
-**Qualified implementation candidate:** `782c8f9107ce68cfbe77b3a7680b2111bfcfd678`  
+**Qualified implementation candidate:** `587217440fc5c8bc1893820b879367866d43c76a`  
 **PR:** #287  
 **Qualification state:** `G4_IMPLEMENTED · G5_QUALIFIED_OFFLINE`  
 **runtimeAuthorized:** `false`  
@@ -10,15 +10,16 @@
 
 ## 1. Qualification result
 
-The bounded implementation authorized by the Human Design Approval is qualified **offline** on the exact candidate SHA above.
+The bounded implementation authorized by the Human Design Approval is qualified **offline** on the exact candidate SHA above after corrective review hardening.
 
 The qualification does not authorize product adapters, live providers, external writes, Atlas publication, lesson execution, automatic recording, automatic assessment, merge or deploy.
 
 ## 2. Exact-SHA gates
 
-- Governance #2609 / run `40236572694`: **SUCCESS** on `782c8f9107ce68cfbe77b3a7680b2111bfcfd678`.
-- Build TRAMA Control Center Bundle #1080 / run `40236572519`: **SUCCESS** on the same exact SHA.
+- Governance #2614 / run `40268710812`: **SUCCESS** on `587217440fc5c8bc1893820b879367866d43c76a`.
+- Build TRAMA Control Center Bundle #1086 / run `40268710794`: **SUCCESS** on the same exact SHA.
 - The Governance run includes the dedicated DC-00 and DC-01 validators/tests and the repository-wide test suite.
+- `Test Didactic Composer v1`: **19/19 PASS** on the qualified candidate.
 
 ## 3. DC-00 evidence
 
@@ -53,50 +54,61 @@ Core qualification artifacts:
 - `scripts/validate_didactic_composer_v1.py`;
 - `tests/test_didactic_composer_v1.py`.
 
-The valid fixture uses two distinct fake provider/adapter provenances with identical semantic composition and identical SHA-256 content digest. The digest excludes provider/adapter identity, timestamps, receipt metadata and composition identity/version.
+The valid fixture uses two distinct fake provider/adapter provenances with identical semantic composition and identical SHA-256 content digest. The standalone qualifier now requires at least two proposals backed by at least two distinct non-empty `adapterRef` values.
 
 The valid request preserves an Arena context with:
 
 ```text
 authorityState = APPROVED
+acceptedContextRef = arena:technology-grade3:energy:v2025
 vigencyStatus = VIGENTE
 applicabilityStatus = TRANSITIONAL
 ```
 
+`acceptedContextRef` is mandatory in the accepted Arena request context and must be preserved concretely by the proposal binding. Missing request context fails with `DC-04`; missing or mismatched proposal binding fails with `DC-08`.
+
 The valid proposal remains `PROPOSAL`, preserves `TRANSITIONAL`, keeps `driveExport = DEFERRED_WRITE_SLICE`, and has `compositionVersion >= 1`.
 
-The local adoption receipt requires `decidedBy = HUMAN` and accepts only `ADOPTED | REJECTED | SUPERSEDED`.
+Request and proposal envelopes fail closed unless their `contract` and `contractVersion` are exactly the v1 contract identities. Envelope/version drift is rejected with `DC-14`.
+
+The local adoption receipt requires `decidedBy = HUMAN`, accepts only `ADOPTED | REJECTED | SUPERSEDED`, and its `product` must equal the current request `caller.product`. Adoption cannot be transferred across product consumers.
 
 ## 5. Fail-closed matrix
+
+The standalone qualifier requires the declared adversarial coverage set to be **exactly** `DC-01`…`DC-14`; case count alone is not sufficient.
 
 | Code | Invalid condition | Qualification behavior |
 |---|---|---|
 | `DC-01` | unknown caller | reject |
 | `DC-02` | registered but unsupported caller | reject |
 | `DC-03` | personal student data, including nested fields | reject |
-| `DC-04` | Arena authority/context invalid | reject |
+| `DC-04` | Arena authority/context invalid or missing accepted context reference | reject |
 | `DC-05` | Arena context not `VIGENTE` | reject |
 | `DC-06` | applicability outside `APPLICABLE | TRANSITIONAL` | reject |
 | `DC-07` | missing `regimeRef` | reject |
-| `DC-08` | Arena binding / `TRANSITIONAL` not preserved | reject |
+| `DC-08` | Arena accepted-context binding / `TRANSITIONAL` not preserved | reject |
 | `DC-09` | state promoted beyond `PROPOSAL` | reject |
 | `DC-10` | implicit write escalation / Drive write in Core | reject |
 | `DC-11` | provider semantic drift | reject |
 | `DC-12` | content digest mismatch | reject |
-| `DC-13` | non-human or global adoption semantics | reject |
-| `DC-14` | composition/provenance identity mismatch or non-positive version | reject |
+| `DC-13` | non-human, global or cross-product adoption semantics | reject |
+| `DC-14` | request/proposal envelope, composition or provenance identity mismatch, or non-positive version | reject |
 
 Recursive privacy cases explicitly cover student name, id, email, grade, diagnosis and health data.
 
-## 6. TDD evidence
+## 6. TDD and corrective-review evidence
 
-The implementation was produced through causal RED → GREEN cycles:
+The implementation was produced and hardened through causal RED → GREEN cycles:
 
 1. ADR/document ratification RED on the governed document registry, then GREEN after `TRAMA-ADR-022` registration.
 2. DC-00 identity tests RED because the registry validator did not exist, then GREEN after the minimal registry implementation.
 3. OR-07 binding RED for unregistered callers, then GREEN after `SC-11` binding; a direct-script import defect was isolated and corrected without changing semantics.
 4. DC-01 tests RED because the Core validator did not exist, then GREEN after the offline Core implementation.
-5. Final contract self-review produced a micro-RED for `compositionVersion >= 1` and `SUPERSEDED`; both were corrected and the exact candidate returned GREEN.
+5. Contract self-review produced a micro-RED for `compositionVersion >= 1` and `SUPERSEDED`; both were corrected.
+6. Independent review P1 hardening: test-only commit `661fbd145bd2dabcb9b9d2e00109f2e79d369e87` produced exactly two DC-01 failures for missing `acceptedContextRef` and cross-product adoption. Minimal fix `4f8e188b233da647a9e3e4968186ad3ee9bf321d` returned both tests GREEN; Governance #2612 / run `40268493013` and Bundle #1084 / run `40268493064` were SUCCESS.
+7. Independent review P2 hardening: test-only commit `a51937815c93bdc138724f809f4a292f402ac5ae` produced exactly four DC-01 failures for request envelope, proposal envelope, incomplete DC-01…DC-14 coverage, and non-distinct adapters; Governance #2613 / run `40268618888` failed precisely at `Test Didactic Composer v1`. Minimal fix `587217440fc5c8bc1893820b879367866d43c76a` returned all 19 DC-01 tests GREEN and passed the exact-SHA gates recorded above.
+
+The corrective cycle did not expand runtime authority or product scope.
 
 ## 7. Boundary after qualification
 
