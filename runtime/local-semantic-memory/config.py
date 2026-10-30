@@ -52,4 +52,9 @@ def load_runtime_config(env=None) -> RuntimeConfig:
     embedding_model = env.get('TRAMA_EMBEDDING_MODEL', 'embeddinggemma-2')
     vec_raw = env.get('TRAMA_SQLITE_VEC_PATH','').strip()
     vec_path = Path(vec_raw).expanduser() if vec_raw else None
+    if vec_path is not None:
+        if not vec_path.is_absolute():
+            raise ConfigError('sqlite-vec path must be absolute')
+        if not vec_path.is_file():
+            raise ConfigError('sqlite-vec path must reference an existing file')
     return RuntimeConfig(host, port, db_path, token_file, origins, embedding_url.rstrip('/'), embedding_model, vec_path)

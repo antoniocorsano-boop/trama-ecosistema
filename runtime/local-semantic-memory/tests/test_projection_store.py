@@ -15,8 +15,7 @@ def projection(rev='r1', text='alpha', data_class='TEACHER_PROFESSIONAL'):
 def upsert_req(p, expected):
     return {'schema':'trama.semantic-memory-upsert-request/v1','projection':p,'expectedRevision':expected}
 
-def remove_req(expected):
-    return {'schema':'trama.semantic-memory-remove-request/v1','sourceAppId':'registro','sourceType':'library','sourceId':'1','expectedRevision':expected}
+def remove_req(expected): return {'schema':'trama.semantic-memory-remove-request/v1','source':{'sourceAppId':'registro','sourceType':'library','sourceId':'1'},'expectedRevision':expected}
 
 class ProjectionStoreTests(unittest.TestCase):
     def setUp(self):

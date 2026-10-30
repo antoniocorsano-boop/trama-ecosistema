@@ -24,6 +24,7 @@ class ProjectionStore:
         with self._connection() as c:
             c.executescript('''
             CREATE TABLE IF NOT EXISTS runtime_meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
+            INSERT OR IGNORE INTO runtime_meta(key,value) VALUES('index_revision','0');
             CREATE TABLE IF NOT EXISTS projections(
               source_app_id TEXT NOT NULL, source_type TEXT NOT NULL, source_id TEXT NOT NULL,
               revision TEXT NOT NULL, namespace TEXT NOT NULL, title TEXT, text TEXT NOT NULL,
@@ -66,8 +67,9 @@ class ProjectionStore:
         r = validate_upsert_request(request); p = r['projection']; ident = projection_identity(p)
         with self._connection() as c:
             c.execute('BEGIN IMMEDIATE'); current = self._current(c, ident); status,h = self._decision(current,p,r['expectedRevision'])
-            if status != 'unchanged': self._write_projection(c,p,h)
-            return {'status':status,'revision':p['revision']}
+            if status != 'unchanged':
+                self._write_projection(c,p,h); self._bump_index_revision(c)
+            return self._upsert_receipt(status,p)
     def commit_indexed(self, request, chunks, vectors, *, model_id=None, dimensions=None, before_commit=None):
         r=validate_upsert_request(request); p=r['projection']; ident=projection_identity(p)
         with self._connection() as c:
@@ -86,17 +88,26 @@ class ProjectionStore:
             if dimensions is not None:
                 c.execute("INSERT INTO runtime_meta(key,value) VALUES('dimensions',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(dimensions),))
             if before_commit: before_commit(c)
-            return {'status':status,'revision':p['revision']}
+            self._bump_index_revision(c)
+            return self._upsert_receipt(status,p)
+    def _source(self,p):
+        return {'sourceAppId':p['sourceAppId'],'sourceType':p['sourceType'],'sourceId':p['sourceId']}
+    def _upsert_receipt(self,status,p):
+        return {'schema':'trama.semantic-memory-upsert-receipt/v1','status':status,'source':self._source(p),'revision':p['revision']}
+    def _bump_index_revision(self,c):
+        current=int(c.execute("SELECT value FROM runtime_meta WHERE key='index_revision'").fetchone()[0])
+        c.execute("UPDATE runtime_meta SET value=? WHERE key='index_revision'",(str(current+1),))
     def remove(self, request):
-        r=validate_remove_request(request); ident=(r['sourceAppId'],r['sourceType'],r['sourceId'])
+        r=validate_remove_request(request); src=r['source']; ident=(src['sourceAppId'],src['sourceType'],src['sourceId'])
         with self._connection() as c:
             c.execute('BEGIN IMMEDIATE'); current=self._current(c,ident)
             if current is None:
-                if r['expectedRevision'] is None: return {'status':'absent'}
+                if r['expectedRevision'] is None: return {'schema':'trama.semantic-memory-remove-receipt/v1','status':'absent','source':src,'revision':None}
                 raise RevisionConflictError('revision conflict')
             if r['expectedRevision'] != current['revision']: raise RevisionConflictError('revision conflict')
             c.execute('DELETE FROM projections WHERE source_app_id=? AND source_type=? AND source_id=?', ident)
-            return {'status':'removed','revision':current['revision']}
+            self._bump_index_revision(c)
+            return {'schema':'trama.semantic-memory-remove-receipt/v1','status':'removed','source':src,'revision':current['revision']}
     def get_projection(self, identity):
         with self._connection() as c:
             r=self._current(c,identity)
@@ -117,6 +128,8 @@ class ProjectionStore:
     def index_signature(self):
         model=self.get_meta('model_id'); dims=self.get_meta('dimensions')
         return (model, int(dims)) if model and dims else None
+    def index_revision(self):
+        return self.get_meta('index_revision') or '0'
     def count_vectors(self):
         with self._connection() as c: return c.execute('SELECT COUNT(*) FROM vectors').fetchone()[0]
     def rows_for_search(self, namespaces, data_classes):

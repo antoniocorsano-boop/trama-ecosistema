@@ -21,7 +21,7 @@ class SemanticIndexer:
         # Validation + CAS preflight happen before any embedding call.
         pre=self.store.preflight_upsert(request)
         if pre['status']=='unchanged':
-            return {'status':'unchanged','revision':pre['projection']['revision']}
+            p=pre['projection']; return {'schema':'trama.semantic-memory-upsert-receipt/v1','status':'unchanged','source':{'sourceAppId':p['sourceAppId'],'sourceType':p['sourceType'],'sourceId':p['sourceId']},'revision':p['revision']}
         p=pre['projection']; chunks=self._chunk_rows(p)
         vectors=[]; signature=None
         for ch in chunks:
@@ -45,5 +45,5 @@ class SemanticIndexer:
         rebuild=self.store.get_meta('rebuild_required')
         sig=self.store.index_signature()
         return {'schema':'trama.semantic-memory-health/v1','status':'rebuild-required' if rebuild else 'ready',
-                'modelId':sig[0] if sig else None,'dimensions':sig[1] if sig else None,
-                'indexSize':self.store.count_vectors()}
+                'protocolVersion':1,'modelId':sig[0] if sig else None,'dimensions':sig[1] if sig else None,
+                'indexRevision':self.store.index_revision()}
