@@ -45,6 +45,15 @@ class SemanticMemoryContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, readme)
 
+    def test_type_surface_exposes_the_local_semantic_memory_port(self):
+        declarations = (PACKAGE / "index.d.ts").read_text(encoding="utf-8")
+        self.assertIn("export interface LocalSemanticMemoryPort", declarations)
+        self.assertIn("mode: 'local'", declarations)
+        self.assertIn("health(): Promise<SemanticMemoryHealthV1>", declarations)
+        self.assertIn("upsert(request: SemanticMemoryUpsertRequestV1): Promise<SemanticMemoryUpsertReceiptV1>", declarations)
+        self.assertIn("remove(request: SemanticMemoryRemoveRequestV1): Promise<SemanticMemoryRemoveReceiptV1>", declarations)
+        self.assertIn("search(request: SemanticMemorySearchRequestV1): Promise<SemanticMemorySearchResponseV1>", declarations)
+
     def test_pack_surface_is_exactly_four_importable_files(self):
         result = subprocess.run(
             ["npm", "pack", "--dry-run", "--json"],
