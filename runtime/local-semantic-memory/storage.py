@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pathlib import Path
 import json, sqlite3
+from contextlib import contextmanager
 from contracts import validate_upsert_request, validate_remove_request, projection_identity, semantic_content_hash, RevisionConflictError
 
 class ProjectionStore:
@@ -11,8 +12,16 @@ class ProjectionStore:
         c.row_factory = sqlite3.Row
         c.execute('PRAGMA foreign_keys=ON')
         return c
+    @contextmanager
+    def _connection(self):
+        c=self._connect()
+        try:
+            with c:
+                yield c
+        finally:
+            c.close()
     def _init(self):
-        with self._connect() as c:
+        with self._connection() as c:
             c.executescript('''
             CREATE TABLE IF NOT EXISTS runtime_meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS projections(
@@ -42,6 +51,11 @@ class ProjectionStore:
             if h == current['content_hash']: return 'unchanged', h
             raise RevisionConflictError('same revision with different semantic payload')
         return 'replaced', h
+    def preflight_upsert(self, request):
+        r=validate_upsert_request(request); p=r['projection']; ident=projection_identity(p)
+        with self._connection() as c:
+            current=self._current(c,ident); status,h=self._decision(current,p,r['expectedRevision'])
+            return {'status':status,'content_hash':h,'projection':p}
     def _write_projection(self, c, p, h):
         c.execute('''INSERT INTO projections(source_app_id,source_type,source_id,revision,namespace,title,text,data_class,canonical_ref,updated_at,metadata_json,content_hash)
         VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(source_app_id,source_type,source_id) DO UPDATE SET
@@ -50,13 +64,13 @@ class ProjectionStore:
         (p['sourceAppId'],p['sourceType'],p['sourceId'],p['revision'],p['namespace'],p.get('title'),p['text'],p['dataClass'],p['canonicalRef'],p['updatedAt'],json.dumps(p.get('metadata',{}),ensure_ascii=False,sort_keys=True),h))
     def upsert(self, request):
         r = validate_upsert_request(request); p = r['projection']; ident = projection_identity(p)
-        with self._connect() as c:
+        with self._connection() as c:
             c.execute('BEGIN IMMEDIATE'); current = self._current(c, ident); status,h = self._decision(current,p,r['expectedRevision'])
             if status != 'unchanged': self._write_projection(c,p,h)
             return {'status':status,'revision':p['revision']}
-    def commit_indexed(self, request, chunks, vectors, before_commit=None):
+    def commit_indexed(self, request, chunks, vectors, *, model_id=None, dimensions=None, before_commit=None):
         r=validate_upsert_request(request); p=r['projection']; ident=projection_identity(p)
-        with self._connect() as c:
+        with self._connection() as c:
             c.execute('BEGIN IMMEDIATE'); current=self._current(c,ident); status,h=self._decision(current,p,r['expectedRevision'])
             if status == 'unchanged': return {'status':'unchanged','revision':p['revision']}
             self._write_projection(c,p,h)
@@ -67,11 +81,15 @@ class ProjectionStore:
             for v in vectors:
                 c.execute('INSERT INTO vectors(chunk_id,model_id,dimensions,embedding) VALUES(?,?,?,?)',
                           (v['chunk_id'],v['model_id'],v['dimensions'],v['embedding']))
+            if model_id is not None:
+                c.execute("INSERT INTO runtime_meta(key,value) VALUES('model_id',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(model_id),))
+            if dimensions is not None:
+                c.execute("INSERT INTO runtime_meta(key,value) VALUES('dimensions',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(dimensions),))
             if before_commit: before_commit(c)
             return {'status':status,'revision':p['revision']}
     def remove(self, request):
         r=validate_remove_request(request); ident=(r['sourceAppId'],r['sourceType'],r['sourceId'])
-        with self._connect() as c:
+        with self._connection() as c:
             c.execute('BEGIN IMMEDIATE'); current=self._current(c,ident)
             if current is None:
                 if r['expectedRevision'] is None: return {'status':'absent'}
@@ -80,26 +98,31 @@ class ProjectionStore:
             c.execute('DELETE FROM projections WHERE source_app_id=? AND source_type=? AND source_id=?', ident)
             return {'status':'removed','revision':current['revision']}
     def get_projection(self, identity):
-        with self._connect() as c:
+        with self._connection() as c:
             r=self._current(c,identity)
             if not r: return None
             return {'sourceAppId':r['source_app_id'],'sourceType':r['source_type'],'sourceId':r['source_id'],'revision':r['revision'],'namespace':r['namespace'],'title':r['title'],'text':r['text'],'dataClass':r['data_class'],'canonicalRef':r['canonical_ref'],'updatedAt':r['updated_at'],'metadata':json.loads(r['metadata_json']),'contentHash':r['content_hash']}
     def list_indexable(self):
-        with self._connect() as c:
+        with self._connection() as c:
             rows=c.execute('SELECT source_app_id,source_type,source_id,revision FROM projections ORDER BY source_app_id,source_type,source_id').fetchall()
             return [dict(r) for r in rows]
     def get_meta(self,key):
-        with self._connect() as c:
+        with self._connection() as c:
             r=c.execute('SELECT value FROM runtime_meta WHERE key=?',(key,)).fetchone(); return r['value'] if r else None
     def set_meta(self,key,value):
-        with self._connect() as c:
+        with self._connection() as c:
             c.execute('INSERT INTO runtime_meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',(key,str(value)))
+    def delete_meta(self,key):
+        with self._connection() as c: c.execute('DELETE FROM runtime_meta WHERE key=?',(key,))
+    def index_signature(self):
+        model=self.get_meta('model_id'); dims=self.get_meta('dimensions')
+        return (model, int(dims)) if model and dims else None
     def count_vectors(self):
-        with self._connect() as c: return c.execute('SELECT COUNT(*) FROM vectors').fetchone()[0]
+        with self._connection() as c: return c.execute('SELECT COUNT(*) FROM vectors').fetchone()[0]
     def rows_for_search(self, namespaces, data_classes):
         if not namespaces or not data_classes: return []
         qn=','.join('?'*len(namespaces)); qd=','.join('?'*len(data_classes))
         sql=f'''SELECT p.*,c.chunk_id,c.text AS chunk_text,c.ordinal,v.model_id,v.dimensions,v.embedding
         FROM projections p JOIN chunks c USING(source_app_id,source_type,source_id) JOIN vectors v USING(chunk_id)
         WHERE p.namespace IN ({qn}) AND p.data_class IN ({qd})'''
-        with self._connect() as c: return c.execute(sql,(*namespaces,*data_classes)).fetchall()
+        with self._connection() as c: return c.execute(sql,(*namespaces,*data_classes)).fetchall()
