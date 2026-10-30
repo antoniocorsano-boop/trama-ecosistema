@@ -65,6 +65,44 @@ class VectorBackendTests(unittest.TestCase):
             for (_, a), (_, b) in zip(accelerated, linear):
                 self.assertAlmostEqual(a, b, places=6)
 
+
+    def test_sqlite_vec_loads_extension_once_per_rank(self):
+        from unittest.mock import patch
+        from vector_backend import SqliteVecBackend
+
+        class Cursor:
+            def __init__(self, value): self.value = value
+            def fetchone(self): return (self.value,)
+
+        class FakeConn:
+            def __init__(self):
+                self.load_calls = 0
+                self.distance_calls = 0
+                self.closed = False
+            def enable_load_extension(self, enabled): pass
+            def load_extension(self, path): self.load_calls += 1
+            def execute(self, sql, params=()):
+                if 'vec_distance_cosine' in sql:
+                    self.distance_calls += 1
+                    left_blob, right_blob = params
+                    vals = lambda blob: struct.unpack('<' + 'f' * (len(blob)//4), blob)
+                    a, b = vals(left_blob), vals(right_blob)
+                    import math
+                    dot = sum(x*y for x,y in zip(a,b)); na=math.sqrt(sum(x*x for x in a)); nb=math.sqrt(sum(y*y for y in b))
+                    return Cursor(1.0 - (dot/(na*nb) if na and nb else 0.0))
+                raise AssertionError(sql)
+            def close(self): self.closed = True
+
+        conn = FakeConn()
+        rows = [_row(1, (1.0, 0.0)), _row(2, (0.0, 1.0)), _row(3, (1.0, 1.0))]
+        backend = SqliteVecBackend('/tmp/fake-vec0.so', version='v-test')
+        with patch('vector_backend.sqlite3.connect', return_value=conn):
+            ranked = backend.rank(rows, (1.0, 0.0), model_id='m1', dimensions=2, limit=3)
+        self.assertEqual(conn.load_calls, 1)
+        self.assertEqual(conn.distance_calls, 3)
+        self.assertTrue(conn.closed)
+        self.assertEqual([x[0]['source_id'] for x in ranked], ['1', '3', '2'])
+
     def test_service_health_reports_degraded_when_optional_probe_failed(self):
         from service import MemoryService
         from vector_backend import LinearVectorBackend

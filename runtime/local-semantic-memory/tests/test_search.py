@@ -54,5 +54,7 @@ class SearchTests(unittest.TestCase):
         with self.assertRaises(ValidationError): self.search.search(search_req(limit=21))
         self.seed(); self.emb.dims=3
         with self.assertRaises(RebuildRequiredError): self.search.search(search_req('alpha'))
+        self.assertIsNotNone(self.store.get_meta('rebuild_required'))
+        self.assertEqual(self.idx.health()['status'], 'rebuild-required')
 
 if __name__=='__main__': unittest.main()

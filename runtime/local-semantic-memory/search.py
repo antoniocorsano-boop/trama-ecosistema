@@ -29,8 +29,14 @@ class SemanticSearchService:
         q = self.embedder.embed(r['query'])
         sig = self.store.index_signature()
         if sig and (q.model_id, q.dimensions) != sig:
+            self.store.set_meta('rebuild_required', f'{sig}->{(q.model_id, q.dimensions)}')
             raise RebuildRequiredError('query embedding is incompatible with index')
         if len(q.vector) != q.dimensions:
+            self.store.set_meta('rebuild_required', 'query-embedding-dimensions-inconsistent')
             raise RebuildRequiredError('query embedding dimensions inconsistent')
-        ranked = self.backend.rank(rows, q.vector, model_id=q.model_id, dimensions=q.dimensions, limit=r['limit'])
+        try:
+            ranked = self.backend.rank(rows, q.vector, model_id=q.model_id, dimensions=q.dimensions, limit=r['limit'])
+        except RebuildRequiredError:
+            self.store.set_meta('rebuild_required', 'stored-vector-incompatible-with-query')
+            raise
         return {'schema':'trama.semantic-memory-search-response/v1','hits':[_hit(row, score) for row, score in ranked]}

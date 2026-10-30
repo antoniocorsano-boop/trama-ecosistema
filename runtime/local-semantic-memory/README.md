@@ -93,6 +93,16 @@ Una PWA pubblica deve essere servita da un **contesto sicuro HTTPS** e usare COR
 
 Il primo tentativo di connessione **non deve partire automaticamente al caricamento della pagina o da un service worker**. Deve essere attivato da un **gesto esplicito** dell'utente, per esempio un pulsante “Collega memoria locale”, dopo aver spiegato perché è richiesto l'accesso al servizio sul dispositivo.
 
+Nel consumer Chromium che effettuerà il collegamento, la richiesta al loopback deve inoltre dichiarare esplicitamente lo spazio di indirizzamento quando l'API del browser lo supporta, per esempio:
+
+```js
+await fetch('http://127.0.0.1:8765/v1/health', {
+  targetAddressSpace: 'loopback'
+});
+```
+
+Questo dettaglio appartiene al futuro adapter PWA/consumer, non al daemon LSM-01B.
+
 Non aggiungere le vecchie intestazioni Private Network Access come meccanismo di compatibilità: il runtime usa CORS standard e il consumer deve gestire l'autorizzazione browser.
 
 ## 6. Rebuild esplicito

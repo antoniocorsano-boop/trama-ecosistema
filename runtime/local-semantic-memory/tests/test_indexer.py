@@ -59,4 +59,15 @@ class IndexerTests(unittest.TestCase):
         self.assertEqual(self.idx.remove(remove_req('r1'))['status'],'removed')
         self.assertEqual(self.store.count_vectors(),0)
 
+    def test_empty_index_can_adopt_new_embedding_signature_without_rebuild(self):
+        self.idx.upsert(upsert_req(projection(),None))
+        self.assertEqual(self.idx.remove(remove_req('r1'))['status'],'removed')
+        self.assertEqual(self.store.count_vectors(),0)
+        self.assertIsNone(self.store.index_signature())
+        self.emb.model='m2'
+        receipt=self.idx.upsert(upsert_req(projection('r2','beta'),None))
+        self.assertEqual(receipt['status'],'inserted')
+        self.assertEqual(self.idx.health()['status'],'ready')
+        self.assertEqual(self.store.index_signature(),('m2',3))
+
 if __name__=='__main__': unittest.main()

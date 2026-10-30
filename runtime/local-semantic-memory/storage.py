@@ -74,7 +74,7 @@ class ProjectionStore:
         r=validate_upsert_request(request); p=r['projection']; ident=projection_identity(p)
         with self._connection() as c:
             c.execute('BEGIN IMMEDIATE'); current=self._current(c,ident); status,h=self._decision(current,p,r['expectedRevision'])
-            if status == 'unchanged': return {'status':'unchanged','revision':p['revision']}
+            if status == 'unchanged': return self._upsert_receipt('unchanged', p)
             self._write_projection(c,p,h)
             c.execute('DELETE FROM chunks WHERE source_app_id=? AND source_type=? AND source_id=?', ident)
             for ch in chunks:
@@ -106,6 +106,8 @@ class ProjectionStore:
                 raise RevisionConflictError('revision conflict')
             if r['expectedRevision'] != current['revision']: raise RevisionConflictError('revision conflict')
             c.execute('DELETE FROM projections WHERE source_app_id=? AND source_type=? AND source_id=?', ident)
+            if c.execute('SELECT COUNT(*) FROM vectors').fetchone()[0] == 0:
+                c.execute("DELETE FROM runtime_meta WHERE key IN ('model_id','dimensions','rebuild_required')")
             self._bump_index_revision(c)
             return {'schema':'trama.semantic-memory-remove-receipt/v1','status':'removed','source':src,'revision':current['revision']}
     def get_projection(self, identity):

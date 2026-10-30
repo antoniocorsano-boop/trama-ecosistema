@@ -52,6 +52,14 @@ class ProjectionStoreTests(unittest.TestCase):
         with self.assertRaises(ValidationError): self.store.upsert(upsert_req(projection(data_class='STUDENT_PERSONAL'), None))
         self.assertEqual(self.store.list_indexable(), [])
 
+    def test_commit_indexed_unchanged_returns_complete_contract_receipt(self):
+        self.store.upsert(upsert_req(projection(), None))
+        receipt = self.store.commit_indexed(upsert_req(projection(), 'r1'), [], [])
+        self.assertEqual(receipt['schema'], 'trama.semantic-memory-upsert-receipt/v1')
+        self.assertEqual(receipt['status'], 'unchanged')
+        self.assertEqual(receipt['source'], {'sourceAppId':'registro','sourceType':'library','sourceId':'1'})
+        self.assertEqual(receipt['revision'], 'r1')
+
     def test_index_refresh_failure_rolls_back_projection(self):
         self.store.upsert(upsert_req(projection(), None))
         with self.assertRaises(RuntimeError):

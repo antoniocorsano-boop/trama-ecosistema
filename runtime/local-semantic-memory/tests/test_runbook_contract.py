@@ -50,6 +50,7 @@ class RunbookContractTests(unittest.TestCase):
         self.assertIn('--embedding', readme)
         self.assertIn('127.0.0.1', readme)
         self.assertIn('loopback-network', readme)
+        self.assertIn("targetAddressSpace: 'loopback'", readme)
         self.assertIn('gesto esplicito', readme.lower())
         self.assertIn('rebuild', readme.lower())
         self.assertNotIn('TRAMA_MEMORY_ALLOWED_ORIGINS=*', readme)

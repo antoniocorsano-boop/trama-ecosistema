@@ -59,9 +59,7 @@ class SqliteVecBackend(LinearVectorBackend):
         self.version = version
         self.native_distance = native_distance
 
-    def rank(self, rows, query_vector, *, model_id, dimensions, limit):
-        if self.native_distance is None:
-            return super().rank(rows, query_vector, model_id=model_id, dimensions=dimensions, limit=limit)
+    def _rank_with_distance(self, rows, query_vector, *, model_id, dimensions, limit, distance_fn):
         query_blob = struct.pack('<' + 'f' * dimensions, *query_vector)
         ranked = []
         for row in rows:
@@ -69,7 +67,9 @@ class SqliteVecBackend(LinearVectorBackend):
             if dims != dimensions or row['model_id'] != model_id:
                 raise RebuildRequiredError('stored vector is incompatible with query embedding')
             try:
-                distance = float(self.native_distance(row['embedding'], query_blob))
+                distance = float(distance_fn(row['embedding'], query_blob))
+            except RebuildRequiredError:
+                raise
             except Exception as exc:
                 raise StorageError('sqlite-vec distance failed') from exc
             score = 1.0 - distance
@@ -81,6 +81,22 @@ class SqliteVecBackend(LinearVectorBackend):
             item[0]['source_id'], item[0]['chunk_id']
         ))
         return ranked[:limit]
+
+    def rank(self, rows, query_vector, *, model_id, dimensions, limit):
+        if self.native_distance is not None:
+            return self._rank_with_distance(rows, query_vector, model_id=model_id, dimensions=dimensions, limit=limit, distance_fn=self.native_distance)
+        conn = sqlite3.connect(':memory:')
+        try:
+            conn.enable_load_extension(True)
+            try:
+                conn.load_extension(str(self.extension_path))
+            finally:
+                conn.enable_load_extension(False)
+            def distance(left_blob, right_blob):
+                return conn.execute('SELECT vec_distance_cosine(?, ?)', (left_blob, right_blob)).fetchone()[0]
+            return self._rank_with_distance(rows, query_vector, model_id=model_id, dimensions=dimensions, limit=limit, distance_fn=distance)
+        finally:
+            conn.close()
 
 
 def _probe_sqlite_vec(path):
@@ -99,21 +115,6 @@ def _probe_sqlite_vec(path):
         conn.close()
 
 
-def _native_distance_from_extension(path):
-    def distance(left_blob, right_blob):
-        conn = sqlite3.connect(':memory:')
-        try:
-            conn.enable_load_extension(True)
-            try:
-                conn.load_extension(str(path))
-            finally:
-                conn.enable_load_extension(False)
-            return conn.execute('SELECT vec_distance_cosine(?, ?)', (left_blob, right_blob)).fetchone()[0]
-        finally:
-            conn.close()
-    return distance
-
-
 def select_vector_backend(extension_path, *, probe=None, native_distance=None):
     if extension_path is None:
         return LinearVectorBackend()
@@ -123,4 +124,4 @@ def select_vector_backend(extension_path, *, probe=None, native_distance=None):
         version = probe_fn(path)
     except Exception:
         return LinearVectorBackend(degraded_reason='sqlite-vec-unavailable')
-    return SqliteVecBackend(path, version=version, native_distance=native_distance or _native_distance_from_extension(path))
+    return SqliteVecBackend(path, version=version, native_distance=native_distance)
