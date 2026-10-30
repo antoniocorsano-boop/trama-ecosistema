@@ -114,3 +114,14 @@ test('rejects response hits outside request namespace or data-class scope', () =
     /dataClass/i
   );
 });
+
+test('rejects a response that exceeds the request limit', () => {
+  const request = validateSemanticMemorySearchRequest({ ...requestInput(), limit: 1 });
+  assert.throws(
+    () => validateSemanticMemorySearchResponse({
+      schema: 'trama.semantic-memory-search-response/v1',
+      hits: [hitInput({ chunkId: 'chunk-1' }), hitInput({ chunkId: 'chunk-2' })]
+    }, request),
+    /limit/i
+  );
+});
