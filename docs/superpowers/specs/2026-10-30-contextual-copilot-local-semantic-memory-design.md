@@ -89,7 +89,7 @@ export type SemanticMemoryDataClass =
   | 'AGGREGATED_NON_IDENTIFIABLE';
 ```
 
-`CURRICOLO` è usato invece di introdurre un secondo termine `CURRICULUM`. I consumer che oggi usano classificazioni verticali come `CURRICULUM_PLANNING` devono mapparle esplicitamente nel proprio adapter; il runtime non inventa la mappatura.
+`CURRICOLO` è l'unico termine canonico per questa classe nel contratto LSM. I consumer che usano etichette verticali pregresse per la pianificazione devono mapparle esplicitamente nel proprio adapter; il runtime non inventa la mappatura.
 
 ### 6.2 Projection
 

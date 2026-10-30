@@ -65,7 +65,7 @@ const valid = validateSemanticMemoryProjection({
 });
 ```
 
-Assert: defensive copy/freeze; data class vietate, campi identity/revision/canonicalRef vuoti, testo vuoto e metadata non stringa sono rifiutati. Verificare esplicitamente `CURRICOLO` ammesso e `CURRICULUM` rifiutato.
+Assert: defensive copy/freeze; data class vietate, campi identity/revision/canonicalRef vuoti, testo vuoto e metadata non stringa sono rifiutati. Verificare esplicitamente `CURRICOLO` ammesso e una classe non prevista rifiutata.
 
 - [ ] **Step 2: eseguire RED**
 
