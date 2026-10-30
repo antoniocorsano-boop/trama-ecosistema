@@ -162,3 +162,104 @@ export function validateSemanticMemorySearchResponse(input, request) {
     hits: Object.freeze(hits)
   });
 }
+
+export function validateSemanticMemorySourceRef(input) {
+  const value = requireRecord(input);
+  return Object.freeze({
+    sourceAppId: requireNonBlankString(value.sourceAppId, 'sourceAppId'),
+    sourceType: requireNonBlankString(value.sourceType, 'sourceType'),
+    sourceId: requireNonBlankString(value.sourceId, 'sourceId')
+  });
+}
+
+function requireExpectedRevision(value, object) {
+  if (!Object.prototype.hasOwnProperty.call(object, 'expectedRevision')) {
+    throw new TypeError('expectedRevision is required');
+  }
+  if (value === null) return null;
+  return requireNonBlankString(value, 'expectedRevision');
+}
+
+export function validateSemanticMemoryUpsertRequest(input) {
+  const value = requireRecord(input);
+  const schema = 'trama.semantic-memory-upsert-request/v1';
+  if (value.schema !== schema) throw new TypeError(`schema must equal ${schema}`);
+  return Object.freeze({
+    schema,
+    projection: validateSemanticMemoryProjection(value.projection),
+    expectedRevision: requireExpectedRevision(value.expectedRevision, value)
+  });
+}
+
+export function validateSemanticMemoryRemoveRequest(input) {
+  const value = requireRecord(input);
+  const schema = 'trama.semantic-memory-remove-request/v1';
+  if (value.schema !== schema) throw new TypeError(`schema must equal ${schema}`);
+  return Object.freeze({
+    schema,
+    source: validateSemanticMemorySourceRef(value.source),
+    expectedRevision: requireExpectedRevision(value.expectedRevision, value)
+  });
+}
+
+export function validateSemanticMemoryHealth(input) {
+  const value = requireRecord(input);
+  const schema = 'trama.semantic-memory-health/v1';
+  if (value.schema !== schema) throw new TypeError(`schema must equal ${schema}`);
+  if (!['ready', 'degraded', 'rebuild-required'].includes(value.status)) {
+    throw new TypeError('status must be ready, degraded or rebuild-required');
+  }
+  if (value.protocolVersion !== 1) {
+    throw new TypeError('protocolVersion must equal 1');
+  }
+  const modelId = value.modelId === null ? null : requireNonBlankString(value.modelId, 'modelId');
+  const dimensions = value.dimensions === null ? null : value.dimensions;
+  if (dimensions !== null && (!Number.isInteger(dimensions) || dimensions < 1)) {
+    throw new TypeError('dimensions must be null or a positive integer');
+  }
+  return Object.freeze({
+    schema,
+    status: value.status,
+    protocolVersion: 1,
+    modelId,
+    dimensions,
+    indexRevision: requireNonBlankString(value.indexRevision, 'indexRevision')
+  });
+}
+
+export function validateSemanticMemoryUpsertReceipt(input) {
+  const value = requireRecord(input);
+  const schema = 'trama.semantic-memory-upsert-receipt/v1';
+  if (value.schema !== schema) throw new TypeError(`schema must equal ${schema}`);
+  if (!['inserted', 'replaced', 'unchanged'].includes(value.status)) {
+    throw new TypeError('status must be inserted, replaced or unchanged');
+  }
+  return Object.freeze({
+    schema,
+    status: value.status,
+    source: validateSemanticMemorySourceRef(value.source),
+    revision: requireNonBlankString(value.revision, 'revision')
+  });
+}
+
+export function validateSemanticMemoryRemoveReceipt(input) {
+  const value = requireRecord(input);
+  const schema = 'trama.semantic-memory-remove-receipt/v1';
+  if (value.schema !== schema) throw new TypeError(`schema must equal ${schema}`);
+  if (!['removed', 'absent'].includes(value.status)) {
+    throw new TypeError('status must be removed or absent');
+  }
+  const revision = value.revision === null ? null : requireNonBlankString(value.revision, 'revision');
+  if (value.status === 'removed' && revision === null) {
+    throw new TypeError('revision is required when status is removed');
+  }
+  if (value.status === 'absent' && revision !== null) {
+    throw new TypeError('revision must be null when status is absent');
+  }
+  return Object.freeze({
+    schema,
+    status: value.status,
+    source: validateSemanticMemorySourceRef(value.source),
+    revision
+  });
+}
