@@ -63,3 +63,19 @@ def semantic_content_hash(p):
     body = {k:p.get(k) for k in ('sourceAppId','sourceType','sourceId','revision','namespace','title','text','dataClass','canonicalRef','updatedAt','metadata')}
     raw = json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(',',':')).encode('utf-8')
     return hashlib.sha256(raw).hexdigest()
+
+def validate_search_request(r):
+    if not isinstance(r, dict) or r.get('schema') != 'trama.semantic-memory-search-request/v1':
+        raise ValidationError('invalid search schema')
+    query=r.get('query')
+    if not isinstance(query,str): raise ValidationError('query must be string')
+    namespaces=r.get('namespaces')
+    classes=r.get('allowedDataClasses')
+    if not isinstance(namespaces,list) or any(not isinstance(x,str) or not x for x in namespaces):
+        raise ValidationError('namespaces must be string array')
+    if not isinstance(classes,list) or any(not isinstance(x,str) or x not in ALLOWED_DATA_CLASSES for x in classes):
+        raise ValidationError('allowedDataClasses invalid')
+    limit=r.get('limit')
+    if isinstance(limit,bool) or not isinstance(limit,int) or not 1 <= limit <= 20:
+        raise ValidationError('limit must be 1..20')
+    return {'schema':r['schema'],'query':query,'namespaces':tuple(namespaces),'allowedDataClasses':tuple(classes),'limit':limit}
