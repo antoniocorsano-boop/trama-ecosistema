@@ -6,7 +6,7 @@
   },
   "source": {
     "repository": "antoniocorsano-boop/trama-ecosistema",
-    "commit": "34e5e8a75ace1d32bc54b692c4abcc39e7561e9b",
+    "commit": "fc85d33fd0e9ef3f452f3c823027a0b2b9a74808",
     "path": "shared/contextual-copilot-semantic-memory"
   },
   "consumerMode": "vendored-file-package",
@@ -19,7 +19,7 @@
     },
     {
       "path": "index.d.ts",
-      "sha256": "29f0b7630d6f50ccdb692a592d463bd50c59ac37189cb7d1f819c54433070dd8"
+      "sha256": "04a1c7045b28fd21fd4f4bdb2558f5e460d4ab582b0702dbc76b03c76efb8ccf"
     },
     {
       "path": "package.json",
@@ -27,7 +27,7 @@
     },
     {
       "path": "src/index.js",
-      "sha256": "7f565e543e95d55846b0b410f372a4c012de9898c6bb516fdec1dc53c7b4045c"
+      "sha256": "5be6d22caeab3d6052cf0a2efb5a44c30d4dd60125a3b12820c59543b0edd676"
     }
   ]
 }
