@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "trama.contextual-copilot-semantic-memory-distribution/v1",
+  "package": {
+    "name": "@trama/contextual-copilot-semantic-memory",
+    "version": "0.1.0"
+  },
+  "source": {
+    "repository": "antoniocorsano-boop/trama-ecosistema",
+    "commit": "34e5e8a75ace1d32bc54b692c4abcc39e7561e9b",
+    "path": "shared/contextual-copilot-semantic-memory"
+  },
+  "consumerMode": "vendored-file-package",
+  "networkRequiredAtBuild": false,
+  "externalRegistryRequired": false,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "3b171c79c1ab8080bedccff2c89f4d555c90b76886aa6af503158d3bbfe2ad76"
+    },
+    {
+      "path": "index.d.ts",
+      "sha256": "29f0b7630d6f50ccdb692a592d463bd50c59ac37189cb7d1f819c54433070dd8"
+    },
+    {
+      "path": "package.json",
+      "sha256": "49795e6bbe91ddc521b7b06eba4fc13f49d836e8f038da056d8ccaa0221a4a04"
+    },
+    {
+      "path": "src/index.js",
+      "sha256": "7f565e543e95d55846b0b410f372a4c012de9898c6bb516fdec1dc53c7b4045c"
+    }
+  ]
+}
