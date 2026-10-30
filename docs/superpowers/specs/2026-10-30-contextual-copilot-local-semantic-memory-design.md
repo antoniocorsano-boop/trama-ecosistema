@@ -8,42 +8,19 @@
 
 ## 1. Intento
 
-Realizzare una memoria semantica locale condivisibile dai prodotti TRAMA senza creare una seconda fonte di verità professionale e senza trasformare un modello di embedding o un indice vettoriale in autorità applicativa.
+Realizzare una memoria semantica locale condivisibile dai prodotti TRAMA senza creare una seconda fonte di verità professionale e senza trasformare embedding o indice vettoriale in autorità applicativa.
 
-L'obiettivo operativo è consentire a Contextual Copilot, Biblioteca, Registro Docente, Docente OS e futuri consumer di recuperare localmente materiali, memorie professionali e riferimenti curricolari pertinenti tramite un unico confine semantico, mantenendo però la proprietà canonica dei dati nel prodotto che li governa.
+L'obiettivo è consentire a Contextual Copilot e ai consumer di recuperare localmente materiali, memorie professionali e riferimenti curricolari pertinenti tramite un unico confine semantico, mantenendo la proprietà canonica dei dati nel prodotto che li governa.
 
-Il profilo di riferimento iniziale è Android + Termux + `llama.cpp` + EmbeddingGemma 2, ma nessuno di questi elementi deve diventare dipendenza obbligatoria del Core o dei consumer.
+Il profilo di riferimento iniziale è Android + Termux + `llama.cpp` + EmbeddingGemma 2, ma nessuno di questi elementi diventa dipendenza obbligatoria del Core o dei consumer.
 
-## 2. Evidenze già esistenti da preservare
+## 2. Baseline da preservare
 
-### 2.1 Contextual Copilot Core
+TRAMA possiede già `@trama/contextual-copilot-core@0.3.0`, `SemanticPort`, `IntentPort`, policy fail-closed e `@trama/contextual-copilot-intent-embedding@0.1.0`. Registro Docente possiede già un `embeddingService` loopback con supporto OpenAI-compatible/llama.cpp/Ollama, configurazione `embeddinggemma-2.gguf`, ricerca semantica locale della Biblioteca e una `ProfessionalMemoryStateV1` canonica con provenance, privacy e correzione docente.
 
-TRAMA possiede già:
-
-- `@trama/contextual-copilot-core@0.3.0`;
-- `SemanticPort` provider-neutral con modalità `local | remote`;
-- `IntentPort` separato dall'autorità applicativa;
-- `@trama/contextual-copilot-intent-embedding@0.1.0`, local-only e stateless;
-- policy fail-closed, capability filtering e dispatch sotto autorità del Core.
-
-LSM-01 non deve modificare il significato di questi contratti né attribuire authority alla ricerca semantica.
-
-### 2.2 Registro Docente
-
-Registro possiede già un `embeddingService` con:
-
-- endpoint locale esclusivamente loopback;
-- supporto OpenAI-compatible `/v1/embeddings`, `llama.cpp /embedding` e Ollama `/api/embeddings`;
-- classificazione del flusso dati locale/remoto;
-- configurazione locale con modello `models/embeddinggemma-2.gguf`;
-- ricerca semantica locale esplicita nella Biblioteca;
-- `ProfessionalMemoryStateV1` persistente con provenienza, classificazione privacy, correzione docente e selezione di un working set contestuale.
-
-Questi elementi dimostrano che il problema non è più "aggiungere embedding", ma introdurre un indice condiviso senza duplicare memoria, policy o resolver.
+Quindi LSM-01 non aggiunge un secondo resolver né una seconda memoria professionale: introduce un indice condiviso, derivato e ricostruibile.
 
 ## 3. Principio di autorità
-
-La memoria semantica locale è **derivata e ricostruibile**.
 
 ```text
 PRODOTTI CANONICI
@@ -52,7 +29,7 @@ PRODOTTI CANONICI
   ├─ Arena: curricolo autorizzato
   └─ altri corpus consentiti
           │
-          │ export/projection governata
+          │ projection governata
           ▼
 LOCAL SEMANTIC MEMORY
   ├─ chunk normalizzati
@@ -74,49 +51,49 @@ Il runtime locale:
 - non corregge né consolida autonomamente i dati sorgente;
 - non produce write canoniche;
 - può essere eliminato e ricostruito dalle fonti autorizzate;
-- restituisce riferimenti e frammenti con provenance sufficiente a risalire all'oggetto canonico.
+- restituisce riferimenti e frammenti con provenance verso l'oggetto canonico.
 
 ## 4. Approcci considerati
 
 ### A. Indice separato in ogni prodotto
 
-**Vantaggi:** implementazione iniziale minima; nessun nuovo processo locale.  
-**Svantaggi:** duplicazione, nessuna memoria cross-app reale, modelli/configurazioni divergenti.  
-**Decisione:** insufficiente come fondazione condivisa.
+Rapido, ma duplica modelli, configurazioni e retrieval e non crea memoria cross-app. **Scartato come fondazione condivisa.**
 
 ### B. Termux come archivio canonico unico
 
-**Vantaggi:** modello semplice "one memory, every agent".  
-**Svantaggi:** crea una seconda authority concorrente con Professional Memory, Biblioteca, Arena e stato applicativo; difficile governare correzioni, cancellazioni e provenance.  
-**Decisione:** scartato.
+Semplice come metafora “one memory, every agent”, ma crea authority concorrente con Professional Memory, Biblioteca, Arena e stato applicativo. **Scartato.**
 
 ### C. Runtime locale condiviso come indice derivato
 
-**Vantaggi:** una sola superficie di retrieval, nessuna duplicazione di authority, rebuild possibile, privacy locale, riuso cross-app.  
-**Svantaggi:** richiede protocollo di projection/invalidation e health/versioning rigorosi.  
-**Decisione:** selezionato.
+Una sola superficie di retrieval, rebuild possibile, privacy locale e nessuna duplicazione di authority. Richiede protocollo rigoroso di projection, concorrenza e invalidation. **Selezionato.**
 
-## 5. Decomposizione del lavoro
+## 5. Decomposizione
 
-LSM-01 è diviso in tre incrementi indipendenti:
+1. **LSM-01A — Shared Contract**: envelope, provenance, concurrency contract, validatori e distribution receipt.
+2. **LSM-01B — Termux Reference Runtime**: loopback locale, SQLite, embedding locale e retrieval.
+3. **LSM-01C — Consumer Adoption**: Registro per primo, poi Docente OS, senza duplicare persistenza canonica.
 
-1. **LSM-01A — Shared Contract**: envelope, policy, provenance, client/port e test di confine in TRAMA.
-2. **LSM-01B — Termux Reference Runtime**: servizio loopback locale, SQLite + indice vettoriale, adapter verso endpoint embedding locale.
-3. **LSM-01C — Consumer Adoption**: primo consumer Registro, poi Docente OS, con proiezioni governate e nessuna duplicazione della persistenza canonica.
-
-Ogni incremento richiede qualificazione propria. LSM-01C non è autorizzato da LSM-01A/B.
+Ogni incremento richiede qualificazione e decisione umana separate.
 
 ## 6. Contratto dati LSM-01A
 
-### 6.1 Projection document
+### 6.1 Data class
+
+Il vocabolario LSM si allinea al Core TRAMA dove esiste già un equivalente:
 
 ```ts
 export type SemanticMemoryDataClass =
   | 'PUBLIC_APP'
   | 'TEACHER_PROFESSIONAL'
-  | 'CURRICULUM'
+  | 'CURRICOLO'
   | 'AGGREGATED_NON_IDENTIFIABLE';
+```
 
+`CURRICOLO` è usato invece di introdurre un secondo termine `CURRICULUM`. I consumer che oggi usano classificazioni verticali come `CURRICULUM_PLANNING` devono mapparle esplicitamente nel proprio adapter; il runtime non inventa la mappatura.
+
+### 6.2 Projection
+
+```ts
 export interface SemanticMemoryProjectionV1 {
   schema: 'trama.semantic-memory-projection/v1';
   sourceAppId: string;
@@ -136,13 +113,35 @@ export interface SemanticMemoryProjectionV1 {
 Regole:
 
 - `sourceAppId + sourceType + sourceId` identifica la sorgente logica;
-- `revision` deve cambiare quando cambia il contenuto semantico proiettato;
-- `canonicalRef` è obbligatorio e rimanda all'oggetto canonico;
-- `text` contiene solo il testo autorizzato alla proiezione;
-- metadata è allowlist string-to-string, mai payload arbitrario;
-- `STUDENT_PERSONAL`, `STUDENT_SENSITIVE`, `INSTITUTIONAL` e classificazioni ambigue non appartengono al tipo ammesso v1.
+- `revision` è un token opaco che cambia quando cambia il contenuto semantico proiettato;
+- `canonicalRef` rimanda all'oggetto canonico;
+- `text` contiene solo testo autorizzato alla proiezione;
+- metadata è string-to-string e mai payload arbitrario;
+- classi studente, `INSTITUTIONAL`, `UNKNOWN` e `AMBIGUOUS` sono negate in v1.
 
-### 6.2 Hit di retrieval
+### 6.3 Concorrenza e upsert
+
+Poiché `revision` è opaca, il runtime **non ordina** revisioni e non presume che timestamp o hash siano monotoni.
+
+```ts
+export interface SemanticMemoryUpsertRequestV1 {
+  schema: 'trama.semantic-memory-upsert-request/v1';
+  projection: SemanticMemoryProjectionV1;
+  expectedRevision: string | null;
+}
+```
+
+Semantica:
+
+- prima creazione: `expectedRevision = null`; se la sorgente esiste già -> conflict;
+- sostituzione: `expectedRevision` deve coincidere con la revision corrente;
+- stessa projection/revision/hash può risultare `unchanged`;
+- mismatch -> `REVISION_CONFLICT`, nessun confronto “più vecchio/più nuovo” e nessuna modifica;
+- rebuild completo può usare un percorso amministrativo locale esplicito, non un bypass implicito del CAS.
+
+La stessa regola vale per `remove`, che deve poter includere `expectedRevision` per non cancellare una versione aggiornata da un altro consumer.
+
+### 6.4 Hit
 
 ```ts
 export interface SemanticMemoryHitV1 {
@@ -162,23 +161,21 @@ export interface SemanticMemoryHitV1 {
 
 Uno hit è evidenza di pertinenza, non authority.
 
-### 6.3 Port
+### 6.5 Port
 
 ```ts
 export interface LocalSemanticMemoryPort {
   mode: 'local';
   health(): Promise<SemanticMemoryHealthV1>;
-  upsert(projection: SemanticMemoryProjectionV1): Promise<SemanticMemoryUpsertReceiptV1>;
-  remove(source: SemanticMemorySourceRefV1): Promise<SemanticMemoryRemoveReceiptV1>;
-  search(request: SemanticMemorySearchRequestV1): Promise<readonly SemanticMemoryHitV1[]>;
+  upsert(request: SemanticMemoryUpsertRequestV1): Promise<SemanticMemoryUpsertReceiptV1>;
+  remove(request: SemanticMemoryRemoveRequestV1): Promise<SemanticMemoryRemoveReceiptV1>;
+  search(request: SemanticMemorySearchRequestV1): Promise<SemanticMemorySearchResponseV1>;
 }
 ```
 
-Il package shared non implementa SQLite, rete, modello o file system. Può fornire validatori puri e un client loopback separato soltanto se il protocollo di rete è esplicitamente configurato dal consumer.
+Il package shared contiene soltanto tipi/validatori puri: niente SQLite, rete, modello, file system o branch verticali.
 
 ## 7. Protocollo locale LSM-01B
-
-Il runtime di riferimento espone esclusivamente loopback.
 
 Endpoint v1:
 
@@ -191,104 +188,73 @@ POST   /v1/search
 
 Vincoli:
 
-- bind predefinito `127.0.0.1`;
-- nessun bind `0.0.0.0` nel profilo di riferimento;
-- nessun accesso remoto, discovery LAN o telemetria;
-- payload JSON con schema/versione espliciti;
-- limiti di dimensione e timeout definiti;
-- errori tecnici distinti dal no-match (`hits: []`);
-- nessun endpoint generico di SQL, file read o arbitrary path.
+- bind predefinito e consentito `127.0.0.1`/loopback;
+- nessun `0.0.0.0`, LAN sharing, discovery o telemetria;
+- POST autenticati con token locale casuale;
+- CORS solo per origini esplicitamente configurate, mai wildcard sugli endpoint autenticati;
+- JSON versionato, limite payload e timeout bounded;
+- nessun endpoint generico SQL, file, shell o arbitrary path;
+- errori tecnici distinti da no-match.
 
-## 8. Persistenza locale
+Per PWA pubbliche, la connessione iniziale al loopback deve essere avviata da un gesto esplicito dell'utente e il consumer deve rispettare il moderno modello di Loopback Network Access/CORS del browser. Nessun probe automatico all'avvio della pagina.
 
-Il runtime usa SQLite come store derivato.
+## 8. Persistenza derivata
 
-Schema logico minimo:
+SQLite conserva almeno:
 
 ```text
+runtime_meta
 projections
-  source_app_id
-  source_type
-  source_id
-  revision
-  namespace
-  canonical_ref
-  data_class
-  title
-  updated_at
-  metadata_json
-  content_hash
-
 chunks
-  chunk_id
-  source identity
-  ordinal
-  text
-  text_hash
-
 vectors
-  chunk_id
-  model_id
-  dimensions
-  embedding
 ```
 
-L'indice vettoriale può usare `sqlite-vec` quando disponibile. L'implementazione deve avere un adapter di storage isolato così da poter usare una ricerca lineare controllata nei test e come fallback di sviluppo senza cambiare il contratto.
+`projections` mantiene identity, revision, namespace, canonicalRef, dataClass, updatedAt, metadata e content hash. `chunks` conserva chunk deterministici. `vectors` conserva chunkId, modelId, dimensions ed embedding.
 
-La base SQLite non è un backup professionale e non deve essere inclusa automaticamente nei backup canonici dei prodotti.
+`sqlite-vec` può accelerare il retrieval quando disponibile; la correttezza v1 deve esistere anche con backend lineare controllato. SQLite non è un backup professionale.
 
 ## 9. Chunking
 
-V1 è text-only.
+V1 è text-only:
 
-Regole iniziali:
+- deterministico e riproducibile;
+- nessuna dipendenza dal tokenizer del modello;
+- overlap piccolo e fisso;
+- chunk id derivato da identity + revision + ordinal + text hash;
+- sostituzione CAS riuscita aggiorna projection/chunk/vector in un'unica unità atomica.
 
-- preservare il testo originale della projection a livello di hash, non come authority;
-- chunk deterministici e riproducibili;
-- limite espresso in caratteri UTF-8 o token stimati senza dipendere dal tokenizer del modello;
-- overlap piccolo e deterministico;
-- chunk id derivato da identità sorgente + revision + ordinal + text hash;
-- cambio `revision` invalida tutti i chunk precedenti della stessa sorgente in una transazione.
-
-I valori esatti sono fissati dal piano di implementazione, non dal Core.
+I valori esatti sono fissati dal piano LSM-01B.
 
 ## 10. Embedding runtime
-
-Il runtime non incorpora EmbeddingGemma 2 nel contratto.
 
 Profilo di riferimento:
 
 ```text
-Android
-  └─ Termux
-      ├─ llama-server / altro endpoint locale embeddings
-      └─ trama-semantic-memoryd
-           ├─ SQLite
-           └─ adapter embedding loopback
+Android / Termux
+  ├─ llama-server (embedding locale)
+  └─ trama-semantic-memoryd
+       ├─ SQLite
+       └─ embedding adapter loopback
 ```
 
 Requisiti:
 
 - endpoint embedding esclusivamente loopback;
-- modello e dimensione rilevati dal risultato/configurazione e registrati con l'indice;
-- nessun fallback remoto automatico;
-- cambio modello o dimensione rende l'indice incompatibile e richiede rebuild esplicito;
-- failure del modello non viene tradotta in no-match.
+- nessun fallback remoto;
+- model id e dimensionalità registrati nell'indice;
+- cambio modello/dimensione su indice popolato -> `rebuild-required`;
+- failure embedding non diventa no-match.
 
-EmbeddingGemma 2 è il modello di riferimento perché è progettato per embedding locali e supporta testo/codice con encoder dedicato; il protocollo rimane però compatibile con qualunque provider locale conforme.
-
-V1 **non forza la truncation a 256 dimensioni**. Conserva la dimensionalità restituita dal runtime locale. L'ottimizzazione MRL a 256d può essere valutata in un incremento successivo con benchmark sul corpus reale.
+EmbeddingGemma 2 è il modello di riferimento, non il contratto. V1 conserva la dimensionalità restituita dal provider; l'eventuale riduzione MRL a 256d richiede benchmark separato sul corpus reale.
 
 ## 11. Privacy
-
-LSM-01 applica un allowlist di classi memorizzabili.
 
 Ammesse v1:
 
 ```text
 PUBLIC_APP
 TEACHER_PROFESSIONAL
-CURRICULUM
+CURRICOLO
 AGGREGATED_NON_IDENTIFIABLE
 ```
 
@@ -298,52 +264,45 @@ Negate v1:
 STUDENT_PERSONAL
 STUDENT_SENSITIVE
 INSTITUTIONAL
-AMBIGUOUS / UNKNOWN
+UNKNOWN
+AMBIGUOUS
 ```
 
-Principi:
-
-- la classificazione è fornita dal consumer canonico; il runtime non la inventa;
-- il runtime rivalida l'allowlist e fallisce chiuso;
-- un namespace non può rendere ammesso un dato vietato;
-- il retrieval non restituisce hit di classi diverse da quelle richieste/consentite;
-- nessun contenuto indicizzato viene inviato a provider remoto dal runtime v1.
+La classificazione arriva dal consumer canonico ed è rivalidata dal runtime. Namespace e pertinenza non possono rendere ammesso un dato vietato. Nessun contenuto indicizzato viene inviato a provider remoto dal runtime v1.
 
 ## 12. Namespace
 
-Il namespace organizza, non autorizza.
-
-Esempi candidati:
+Esempi:
 
 ```text
 shared-professional
 registro/library
 registro/professional-memory
 docente-os/materials
-curriculum/approved
+curricolo/approved
 ```
 
-Le query possono limitare i namespace, ma policy e data class restano controlli separati.
+Il namespace organizza e restringe query; non autorizza.
 
 ## 13. Rebuild e invalidation
 
-Il runtime deve supportare questi casi senza residui:
+Casi richiesti:
 
-1. nuovo oggetto canonico -> upsert projection;
-2. stesso oggetto, stessa revision -> operazione idempotente;
-3. stesso oggetto, revision nuova -> sostituzione atomica chunk/vector;
-4. cancellazione canonica -> remove per identity;
-5. cambio modello/dimensione -> indice dichiarato stale e rebuild;
-6. database locale perso/cancellato -> rebuild completo dai consumer, senza perdita canonica.
+1. nuovo oggetto -> create con `expectedRevision = null`;
+2. replay identico -> `unchanged`;
+3. aggiornamento -> replace solo con `expectedRevision` coincidente;
+4. conflict -> nessun write;
+5. remove -> CAS sulla revision corrente;
+6. modello/dimensione incompatibile -> `rebuild-required`;
+7. database perso -> rebuild completo dai consumer, senza perdita canonica.
 
-La sincronizzazione automatica continua non è richiesta in v1. Il primo consumer può usare refresh esplicito o projection-on-change.
+La sincronizzazione continua non è richiesta in v1; il primo consumer può usare refresh esplicito o projection-on-change.
 
 ## 14. Retrieval
 
-`search()` riceve almeno:
-
 ```ts
 export interface SemanticMemorySearchRequestV1 {
+  schema: 'trama.semantic-memory-search-request/v1';
   query: string;
   namespaces: readonly string[];
   allowedDataClasses: readonly SemanticMemoryDataClass[];
@@ -353,142 +312,96 @@ export interface SemanticMemorySearchRequestV1 {
 
 Regole:
 
-- query vuota -> `[]` senza embedding call;
-- `limit` con hard cap;
-- risultati ordinati per score decrescente e tie-break deterministico;
-- nessun match -> `[]`;
-- errore embedding/storage/protocollo -> eccezione/failure tipizzata;
-- il caller decide come usare gli hit e resta soggetto al Core/policy prima di qualsiasi azione.
+- query vuota -> `hits: []` senza embedding call;
+- hard cap `limit`;
+- score decrescente + tie-break deterministico;
+- nessun candidato -> `hits: []`;
+- errori embedding/storage/protocollo -> failure tecnica;
+- caller/Core restano responsabili di policy e azioni successive.
 
 ## 15. Scritture professionali
 
 LSM-01 non espone `remember`, `adopt`, `update UDA`, `register lesson` o equivalenti.
 
-Se il Copilot trova un contenuto utile:
-
 ```text
 semantic hit
-   -> canonicalRef
-   -> consumer apre/recupera l'oggetto canonico
-   -> eventuale proposta
-   -> policy Core
-   -> conferma docente dove richiesta
-   -> write nel prodotto proprietario
-   -> nuova projection/revision verso LSM
+ -> canonicalRef
+ -> consumer recupera l'oggetto canonico
+ -> eventuale proposta
+ -> policy Core
+ -> conferma docente dove richiesta
+ -> write nel prodotto proprietario
+ -> nuova projection CAS verso LSM
 ```
 
-Il ciclo impedisce che l'indice diventi un canale di write laterale.
+## 16. Professional Memory e Biblioteca
 
-## 16. Relazione con Professional Memory
+`ProfessionalMemoryStateV1` resta canonica nel Registro. LSM può ricevere solo entry attive e consentite; proietta il `summary`, non eventi grezzi. Correzione/rimozione docente produce replace/remove CAS.
 
-`ProfessionalMemoryStateV1` resta canonico nel Registro.
+Le fonti Biblioteca restano canoniche nel Registro. V1 indicizza soltanto fonti con testo già disponibile localmente e classificazione ammessa. URL senza contenuto, `unknown`, dati studente e payload non normalizzati restano fuori.
 
-LSM può ricevere projection solo di `ProfessionalMemoryEntryV1` attive e consentite, con:
+## 17. Termux è riferimento, non requisito prodotto
 
-- `sourceType = professional-memory-entry`;
-- `sourceId = entry.id`;
-- `revision` derivata da `updatedAt` + hash del summary autorizzato;
-- `canonicalRef` verso la entry Registro;
-- testo = summary, non eventi grezzi salvo futura decisione esplicita.
+LSM-01B serve a dimostrare loopback reale, embedding locale, indice persistente e retrieval senza rete esterna. In seguito lo stesso contratto potrà essere implementato nativamente su Android o desktop senza cambiare i consumer.
 
-La correzione o rimozione docente produce invalidation/upsert; LSM non consolida inferenze proprie nella Professional Memory.
+## 18. Failure mode obbligatori
 
-## 17. Relazione con Biblioteca
+Il sistema deve degradare in modo sicuro quando:
 
-Le fonti Biblioteca restano canoniche nel Registro.
+- daemon assente;
+- endpoint embedding irraggiungibile;
+- modello non compatibile o dimensionalità cambiata;
+- SQLite vuoto/perso;
+- data class negata;
+- `expectedRevision` non coincide;
+- namespace assente;
+- canonicalRef non più valido;
+- browser nega accesso loopback/CORS;
+- input eccede i limiti.
 
-V1 può indicizzare soltanto fonti con contenuto testuale già disponibile localmente e classificazione ammessa. URL prive di contenuto, `unknown`, dati studente e payload non normalizzati restano fuori dall'indice.
+Il prodotto degrada verso funzioni non semantiche già disponibili, mai verso provider remoto implicito.
 
-La provenance deve permettere di tornare sempre alla fonte Biblioteca originale.
+## 19. Non-obiettivi v1
 
-## 18. Termux come profilo di riferimento, non requisito prodotto
+Fuori scope: multimodalità, OCR/captioning, generazione locale, chat history canonica, dati personali studente, cloud sync, LAN sharing, agenti autonomi che scrivono memoria, GraphRAG, ANN obbligatorio, dimensione vettoriale fissa e sostituzione di Professional Memory/Biblioteca/Planning/Arena.
 
-Il primo runtime qualificato può essere distribuito come script/servizio Termux per Android ARM64.
-
-Questo profilo serve a dimostrare:
-
-- loopback locale reale;
-- modello embedding reale;
-- indice persistente locale;
-- query da browser/PWA locale quando consentito dalla piattaforma;
-- nessuna rete esterna durante indexing/search.
-
-Successivamente lo stesso contratto può essere implementato nativamente su Android/LiteRT/ML Kit o desktop senza modificare i consumer.
-
-## 19. Failure modes obbligatori
-
-Il design deve restare corretto quando:
-
-- il daemon non è in esecuzione;
-- l'endpoint embedding è irraggiungibile;
-- il modello non supporta embedding o cambia dimensione;
-- SQLite è vuoto o ricostruito;
-- una projection ha data class negata;
-- una revision vecchia arriva dopo una più nuova;
-- un consumer richiede namespace non presenti;
-- un hit punta a un canonicalRef ormai non valido;
-- un browser non può raggiungere il loopback per policy/CORS;
-- il runtime riceve input oltre i limiti.
-
-Il prodotto deve degradare verso le funzioni non semantiche già disponibili, non verso provider remoti impliciti.
-
-## 20. Non-obiettivi v1
-
-Fuori scope:
-
-- multimodalità immagini/audio/video;
-- OCR o captioning automatico;
-- generazione locale;
-- chat history come memoria canonica;
-- dati personali studente;
-- sync cloud dell'indice;
-- LAN sharing;
-- agenti autonomi che scrivono memoria;
-- GraphRAG o knowledge graph;
-- ANN obbligatorio;
-- compressione/quantizzazione vettori obbligatoria;
-- selezione definitiva di 128/256/512 dimensioni;
-- sostituzione di Professional Memory, Biblioteca, Planning o Arena.
-
-## 21. Criteri di accettazione LSM-01A
-
-Il contratto shared è qualificabile quando:
+## 20. Criteri di accettazione LSM-01A
 
 1. rifiuta classi non ammesse e payload malformati;
-2. rende identity/revision/provenance obbligatorie;
-3. distingue no-match da failure tecnica;
-4. non contiene dipendenze SQLite, modello, rete o consumer verticali;
-5. non crea capability/authority;
-6. dispone di test cross-app con due `sourceAppId` senza branching applicativo;
-7. ha una distribution receipt exact-SHA coerente con il modello TRAMA esistente.
+2. identity/revision/provenance sono obbligatorie;
+3. upsert/remove sono CAS tramite `expectedRevision`;
+4. no-match e failure tecnica restano distinti;
+5. package senza storage/rete/modello/consumer verticali;
+6. nessuna capability/authority creata;
+7. prova cross-app senza branching;
+8. distribution receipt exact-SHA.
 
-## 22. Criteri di accettazione LSM-01B
+## 21. Criteri di accettazione LSM-01B
 
-Il runtime Termux di riferimento è qualificabile quando:
+1. bind loopback only;
+2. API autenticata e CORS allowlist;
+3. upsert/remove idempotenti e CAS-safe;
+4. SQLite ricostruibile;
+5. provider embedding local-only senza fallback remoto;
+6. model/dimension mismatch -> rebuild;
+7. classi negate non persistite né embeddizzate;
+8. query vuota non chiama embedding;
+9. no-match distinto da failure;
+10. nessun endpoint generico file/SQL/shell;
+11. test senza modello reale + smoke separato Termux/EmbeddingGemma 2.
 
-1. fa bind solo su loopback per default;
-2. upsert/search/remove sono idempotenti e revision-aware;
-3. SQLite può essere cancellato e ricostruito senza perdita canonica;
-4. il provider embedding è locale-only e non ha fallback remoto;
-5. modello/dimensione incompatibili richiedono rebuild;
-6. data class negate non vengono persistite né embeddizzate;
-7. query vuota non chiama il modello;
-8. no-match e failure tecnica restano distinti;
-9. i test non richiedono un modello reale, ma esiste uno smoke separato per Termux + embedding reale;
-10. nessun endpoint permette accesso generico a file, SQL o rete.
-
-## 23. Sequenza raccomandata
+## 22. Sequenza
 
 ```text
 LSM-01 design
-  -> LSM-01A shared contract
-  -> qualification + human integration
-  -> LSM-01B Termux reference runtime
-  -> qualification + real-device smoke
-  -> Registro projection adapter
-  -> authentic teacher validation
-  -> Docente OS projection adapter
-  -> eventuale multimodalità / runtime Android nativo
+ -> LSM-01A shared contract
+ -> qualification + human integration
+ -> LSM-01B Termux runtime
+ -> qualification + real-device smoke
+ -> Registro projection adapter
+ -> authentic teacher validation
+ -> Docente OS projection adapter
+ -> eventuale multimodalità / runtime Android nativo
 ```
 
-Questa sequenza preserva la regola centrale: **un solo indice semantico locale può servire molti agenti, ma nessun agente acquisisce per questo la proprietà dei dati professionali.**
+Regola centrale: **un solo indice semantico locale può servire molti agenti, ma nessun agente acquisisce per questo la proprietà dei dati professionali.**
