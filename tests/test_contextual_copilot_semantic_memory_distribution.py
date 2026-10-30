@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "shared" / "contextual-copilot-semantic-memory"
 MANIFEST = PACKAGE / "distribution.json"
 EXPECTED_FILES = {"README.md", "index.d.ts", "package.json", "src/index.js"}
-EXPECTED_SOURCE_COMMIT = "34e5e8a75ace1d32bc54b692c4abcc39e7561e9b"
+EXPECTED_SOURCE_COMMIT = "fc85d33fd0e9ef3f452f3c823027a0b2b9a74808"
 
 
 def sha256(path: Path) -> str:
