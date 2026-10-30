@@ -51,7 +51,12 @@ function copyMetadata(value) {
     if (typeof item !== 'string') {
       throw new TypeError('metadata values must be strings');
     }
-    output[key] = item;
+    Object.defineProperty(output, key, {
+      value: item,
+      enumerable: true,
+      writable: false,
+      configurable: false
+    });
   }
   return Object.freeze(output);
 }
@@ -147,6 +152,9 @@ export function validateSemanticMemorySearchResponse(input, request) {
     throw new TypeError('hits must be an array');
   }
   const validatedRequest = request === undefined ? null : validateSemanticMemorySearchRequest(request);
+  if (validatedRequest && value.hits.length > validatedRequest.limit) {
+    throw new TypeError(`hits exceed request limit: ${validatedRequest.limit}`);
+  }
   const hits = value.hits.map(hit => {
     const validatedHit = validateSemanticMemoryHit(hit);
     if (validatedRequest && !validatedRequest.namespaces.includes(validatedHit.namespace)) {
