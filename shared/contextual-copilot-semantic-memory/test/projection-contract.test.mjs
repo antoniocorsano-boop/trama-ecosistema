@@ -53,7 +53,7 @@ test('rejects prohibited or unknown privacy classes', () => {
     'INSTITUTIONAL',
     'UNKNOWN',
     'AMBIGUOUS',
-    'CURRICULUM'
+    'NOT_ALLOWED'
   ]) {
     assert.throws(
       () => validateSemanticMemoryProjection({ ...validProjection(), dataClass }),
@@ -95,4 +95,14 @@ test('rejects metadata that is not a plain string-to-string record', () => {
     () => validateSemanticMemoryProjection({ ...validProjection(), metadata: Object.create({ polluted: 'yes' }) }),
     /metadata/i
   );
+});
+
+test('preserves magic metadata keys without prototype mutation', () => {
+  const metadata = JSON.parse('{"__proto__":"safe","constructor":"also-safe"}');
+  const output = validateSemanticMemoryProjection({ ...validProjection(), metadata });
+  assert.equal(Object.hasOwn(output.metadata, '__proto__'), true);
+  assert.equal(output.metadata.__proto__, 'safe');
+  assert.equal(output.metadata.constructor, 'also-safe');
+  assert.equal(Object.getPrototypeOf(output.metadata), Object.prototype);
+  assert.equal({}.polluted, undefined);
 });
