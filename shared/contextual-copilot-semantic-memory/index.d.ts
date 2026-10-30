@@ -89,6 +89,14 @@ export interface SemanticMemoryRemoveReceiptV1 {
   revision: string | null;
 }
 
+export interface LocalSemanticMemoryPort {
+  mode: 'local';
+  health(): Promise<SemanticMemoryHealthV1>;
+  upsert(request: SemanticMemoryUpsertRequestV1): Promise<SemanticMemoryUpsertReceiptV1>;
+  remove(request: SemanticMemoryRemoveRequestV1): Promise<SemanticMemoryRemoveReceiptV1>;
+  search(request: SemanticMemorySearchRequestV1): Promise<SemanticMemorySearchResponseV1>;
+}
+
 export function validateSemanticMemoryProjection(input: unknown): SemanticMemoryProjectionV1;
 export function validateSemanticMemorySearchRequest(input: unknown): SemanticMemorySearchRequestV1;
 export function validateSemanticMemoryHit(input: unknown): SemanticMemoryHitV1;
