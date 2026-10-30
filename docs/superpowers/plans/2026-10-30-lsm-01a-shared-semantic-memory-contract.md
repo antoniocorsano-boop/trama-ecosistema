@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** creare un package shared provider-neutral che definisca e validi proiezioni, richieste e hit della memoria semantica locale senza introdurre storage, rete, modello o authority applicativa.
+**Goal:** creare un package shared provider-neutral che definisca e validi proiezioni, richieste, concorrenza e hit della memoria semantica locale senza introdurre storage, rete, modello o authority applicativa.
 
-**Architecture:** nuovo package `@trama/contextual-copilot-semantic-memory@0.1.0`, autonomo dal Core a runtime, con tipi TypeScript e validatori JavaScript puri. Il package descrive l'envelope cross-app e i fail-closed invariants; il runtime Termux e i consumer saranno incrementi separati.
+**Architecture:** nuovo package `@trama/contextual-copilot-semantic-memory@0.1.0`, autonomo dal Core a runtime, con tipi TypeScript e validatori JavaScript puri. `revision` resta un token opaco; upsert/remove usano `expectedRevision` come confronto ottimistico. Runtime Termux e consumer sono incrementi separati.
 
 **Tech Stack:** ESM JavaScript, TypeScript declaration file, Node `node:test`, Python `unittest` per distribution receipt, npm pack offline.
 
@@ -13,21 +13,24 @@
 ## Global Constraints
 
 - Nessuna dipendenza runtime da SQLite, `sqlite-vec`, HTTP, `fetch`, provider, modello o consumer verticale.
-- Nessuna classe `STUDENT_PERSONAL`, `STUDENT_SENSITIVE`, `INSTITUTIONAL`, `UNKNOWN` o `AMBIGUOUS` può essere rappresentata come data class ammessa v1.
+- Data class ammesse esatte: `PUBLIC_APP`, `TEACHER_PROFESSIONAL`, `CURRICOLO`, `AGGREGATED_NON_IDENTIFIABLE`.
+- `STUDENT_PERSONAL`, `STUDENT_SENSITIVE`, `INSTITUTIONAL`, `UNKNOWN`, `AMBIGUOUS` non sono rappresentabili come classi ammesse v1.
 - `canonicalRef`, identity sorgente e `revision` sono obbligatori per ogni projection.
-- Metadata limitati a string-to-string e copiati difensivamente.
-- No-match è rappresentato da `hits: []`; i validatori non trasformano failure tecniche in no-match.
-- Il package non modifica `@trama/contextual-copilot-core` e non crea capability, policy o dispatch.
+- `revision` è opaca: il package non la ordina né interpreta temporalmente.
+- Upsert/remove esprimono concorrenza tramite `expectedRevision: string | null`.
+- Metadata solo string-to-string e copiati difensivamente.
+- No-match = `hits: []`; failure tecniche non vengono mascherate.
+- Nessuna modifica a `@trama/contextual-copilot-core`; nessuna capability, policy o dispatch introdotti.
 - Package surface distribuibile: `README.md`, `index.d.ts`, `package.json`, `src/index.js`.
 - Consumer mode: `vendored-file-package`; nessuna rete necessaria a build/runtime del package.
 
 ## Review Focus
 
-- Projection con classification vietata: deve essere rifiutata prima di qualunque uso downstream.
-- Metadata con valori non stringa o chiavi/prototipi anomali: devono essere rifiutati o normalizzati senza prototype pollution.
-- Identità/revision vuote o whitespace-only: devono fallire, non produrre un oggetto apparentemente valido.
-- Search `limit` fuori range e namespace vuoti/duplicati: comportamento deterministico e bounded.
-- Hit restituito con score non finito o data class non richiesta: validazione fail-closed.
+- Projection con data class vietata: rifiutata prima di qualunque uso downstream.
+- Metadata non stringa o oggetti con prototype anomalo: rifiutati senza prototype pollution.
+- Identity/revision/canonicalRef whitespace-only: failure.
+- `expectedRevision` mancante o di tipo errato: failure; nessun confronto lessicografico o timestamp implicito.
+- Search con limit fuori range, score non finito o hit di classe non richiesta: fail-closed.
 
 ---
 
@@ -40,11 +43,11 @@
 - Create: `shared/contextual-copilot-semantic-memory/test/projection-contract.test.mjs`
 
 **Interfaces:**
-- Produces: `SEMANTIC_MEMORY_DATA_CLASSES`, `validateSemanticMemoryProjection(input)` e i tipi `SemanticMemoryProjectionV1`, `SemanticMemoryDataClass`.
+- Produces: `SEMANTIC_MEMORY_DATA_CLASSES`, `validateSemanticMemoryProjection(input)` e tipi `SemanticMemoryProjectionV1`, `SemanticMemoryDataClass`.
 
 - [ ] **Step 1: scrivere il RED del package/projection**
 
-Aggiungere test che richiedano:
+Aggiungere un caso valido:
 
 ```js
 const valid = validateSemanticMemoryProjection({
@@ -62,14 +65,14 @@ const valid = validateSemanticMemoryProjection({
 });
 ```
 
-Assert: output frozen/copiato difensivamente; data class vietate, campi identity vuoti, metadata non stringa e testo vuoto sono rifiutati.
+Assert: defensive copy/freeze; data class vietate, campi identity/revision/canonicalRef vuoti, testo vuoto e metadata non stringa sono rifiutati. Verificare esplicitamente `CURRICOLO` ammesso e `CURRICULUM` rifiutato.
 
-- [ ] **Step 2: eseguire il RED**
+- [ ] **Step 2: eseguire RED**
 
 Run: `node --test shared/contextual-copilot-semantic-memory/test/projection-contract.test.mjs`  
 Expected: FAIL perché package/validator non esistono.
 
-- [ ] **Step 3: implementare package minimo e `validateSemanticMemoryProjection(input)`**
+- [ ] **Step 3: implementare package minimo**
 
 Firma:
 
@@ -77,18 +80,16 @@ Firma:
 export function validateSemanticMemoryProjection(input: unknown): SemanticMemoryProjectionV1;
 ```
 
-Valori ammessi esatti:
+Allowlist esatta:
 
 ```text
 PUBLIC_APP
 TEACHER_PROFESSIONAL
-CURRICULUM
+CURRICOLO
 AGGREGATED_NON_IDENTIFIABLE
 ```
 
-Non accettare oggetti metadata con valori non stringa. Copiare e congelare projection + metadata.
-
-- [ ] **Step 4: eseguire il GREEN Task 1**
+- [ ] **Step 4: GREEN Task 1**
 
 Run: `npm test --prefix shared/contextual-copilot-semantic-memory`  
 Expected: PASS.
@@ -100,7 +101,7 @@ git add shared/contextual-copilot-semantic-memory
 git commit -m "feat(memory): define semantic projection contract"
 ```
 
-### Task 2: Search request, hit e response semantics
+### Task 2: Search request, hit e response
 
 **Files:**
 - Modify: `shared/contextual-copilot-semantic-memory/index.d.ts`
@@ -108,30 +109,29 @@ git commit -m "feat(memory): define semantic projection contract"
 - Create: `shared/contextual-copilot-semantic-memory/test/search-contract.test.mjs`
 
 **Interfaces:**
-- Consumes: `SemanticMemoryDataClass` e validator helpers Task 1.
-- Produces: `validateSemanticMemorySearchRequest(input)`, `validateSemanticMemoryHit(input)`, `validateSemanticMemorySearchResponse(input)` e relativi tipi.
+- Consumes: data class e helper Task 1.
+- Produces: `validateSemanticMemorySearchRequest`, `validateSemanticMemoryHit`, `validateSemanticMemorySearchResponse`.
 
 - [ ] **Step 1: scrivere RED search/hit**
 
 Testare:
 
-- query whitespace -> request valido ma normalizzato a query vuota solo se il caller vuole short-circuit; il validator non chiama servizi;
-- `namespaces` non vuoto, trimmed, deduplicato in ordine stabile;
-- `allowedDataClasses` subset dell'allowlist;
+- schema `trama.semantic-memory-search-request/v1`;
+- query trimmed; whitespace-only ammessa come input normalizzato a `''` per consentire short-circuit al runtime;
+- namespaces non vuoti, trimmed, deduplicati in ordine stabile;
+- allowedDataClasses subset dell'allowlist;
 - `limit` intero `1..20`;
 - score hit finito;
-- identity/revision/canonicalRef obbligatorie anche sugli hit;
-- response `{ schema: 'trama.semantic-memory-search-response/v1', hits: [] }` valida come no-match;
-- hit con data class non compresa in `allowedDataClasses` rifiutato dal validator di response quando riceve la request di riferimento.
+- identity/revision/canonicalRef obbligatorie sugli hit;
+- `{ schema: 'trama.semantic-memory-search-response/v1', hits: [] }` è no-match valido;
+- response validator con request di riferimento rifiuta hit con namespace/data class fuori scope.
 
 - [ ] **Step 2: eseguire RED**
 
 Run: `node --test shared/contextual-copilot-semantic-memory/test/search-contract.test.mjs`  
 Expected: FAIL per API mancanti.
 
-- [ ] **Step 3: implementare le API**
-
-Firme:
+- [ ] **Step 3: implementare API**
 
 ```ts
 export function validateSemanticMemorySearchRequest(input: unknown): SemanticMemorySearchRequestV1;
@@ -142,7 +142,7 @@ export function validateSemanticMemorySearchResponse(
 ): SemanticMemorySearchResponseV1;
 ```
 
-- [ ] **Step 4: GREEN search**
+- [ ] **Step 4: GREEN Task 2**
 
 Run: `npm test --prefix shared/contextual-copilot-semantic-memory`  
 Expected: PASS.
@@ -154,7 +154,7 @@ git add shared/contextual-copilot-semantic-memory
 git commit -m "feat(memory): validate semantic search envelopes"
 ```
 
-### Task 3: Health, source ref e receipts di mutazione derivata
+### Task 3: CAS request, source ref, health e receipts
 
 **Files:**
 - Modify: `shared/contextual-copilot-semantic-memory/index.d.ts`
@@ -162,11 +162,29 @@ git commit -m "feat(memory): validate semantic search envelopes"
 - Create: `shared/contextual-copilot-semantic-memory/test/runtime-envelope-contract.test.mjs`
 
 **Interfaces:**
-- Produces: `validateSemanticMemorySourceRef`, `validateSemanticMemoryHealth`, `validateSemanticMemoryUpsertReceipt`, `validateSemanticMemoryRemoveReceipt`.
+- Produces: validator e tipi per `SemanticMemoryUpsertRequestV1`, `SemanticMemoryRemoveRequestV1`, source ref, health, upsert/remove receipt.
 
-- [ ] **Step 1: scrivere RED**
+- [ ] **Step 1: scrivere RED CAS/runtime envelopes**
 
-Richiedere contratti esatti:
+Richiedere:
+
+```ts
+interface SemanticMemoryUpsertRequestV1 {
+  schema: 'trama.semantic-memory-upsert-request/v1';
+  projection: SemanticMemoryProjectionV1;
+  expectedRevision: string | null;
+}
+
+interface SemanticMemoryRemoveRequestV1 {
+  schema: 'trama.semantic-memory-remove-request/v1';
+  source: SemanticMemorySourceRefV1;
+  expectedRevision: string | null;
+}
+```
+
+Testare che `expectedRevision` sia obbligatorio anche quando `null`; stringa non vuota quando presente; nessun validator provi a ordinare revisioni.
+
+Schemi receipt/health:
 
 ```text
 trama.semantic-memory-health/v1
@@ -174,9 +192,7 @@ trama.semantic-memory-upsert-receipt/v1
 trama.semantic-memory-remove-receipt/v1
 ```
 
-Health deve riportare almeno `status: ready|degraded|rebuild-required`, `protocolVersion: 1`, `modelId`, `dimensions`, `indexRevision`. `dimensions` può essere `null` solo prima del primo indice/modello disponibile.
-
-Upsert receipt deve distinguere `inserted | replaced | unchanged`; remove `removed | absent`; entrambi includono identity e revision pertinente senza contenuto testuale.
+Health: `status: ready|degraded|rebuild-required`, `protocolVersion: 1`, `modelId`, `dimensions`, `indexRevision`; dimensions può essere `null` prima del primo indice. Upsert: `inserted|replaced|unchanged`; remove: `removed|absent`; receipt senza testo indicizzato.
 
 - [ ] **Step 2: eseguire RED**
 
@@ -185,9 +201,18 @@ Expected: FAIL.
 
 - [ ] **Step 3: implementare validator/types**
 
-Nessuna rete o persistenza: soltanto validazione e defensive copy.
+Firme minime:
 
-- [ ] **Step 4: GREEN completo package**
+```ts
+export function validateSemanticMemoryUpsertRequest(input: unknown): SemanticMemoryUpsertRequestV1;
+export function validateSemanticMemoryRemoveRequest(input: unknown): SemanticMemoryRemoveRequestV1;
+export function validateSemanticMemorySourceRef(input: unknown): SemanticMemorySourceRefV1;
+export function validateSemanticMemoryHealth(input: unknown): SemanticMemoryHealthV1;
+export function validateSemanticMemoryUpsertReceipt(input: unknown): SemanticMemoryUpsertReceiptV1;
+export function validateSemanticMemoryRemoveReceipt(input: unknown): SemanticMemoryRemoveReceiptV1;
+```
+
+- [ ] **Step 4: GREEN Task 3**
 
 Run: `npm test --prefix shared/contextual-copilot-semantic-memory`  
 Expected: PASS.
@@ -196,7 +221,7 @@ Expected: PASS.
 
 ```bash
 git add shared/contextual-copilot-semantic-memory
-git commit -m "feat(memory): add local runtime envelope contracts"
+git commit -m "feat(memory): add CAS runtime envelope contracts"
 ```
 
 ### Task 4: Cross-app invariants e bounded package
@@ -208,37 +233,34 @@ git commit -m "feat(memory): add local runtime envelope contracts"
 
 **Interfaces:**
 - Consumes: API Tasks 1-3.
-- Produces: prova che lo stesso contratto accetta Registro e Docente OS senza branch applicativi e che il package resta provider-neutral.
+- Produces: prova cross-app e provider-neutral.
 
-- [ ] **Step 1: RED repository-level**
+- [ ] **Step 1: scrivere RED repository-level**
 
-Il test Python deve fallire finché README/surface non dimostrano:
+Il test deve richiedere:
 
-- nessun `fetch(`, SQLite, `sqlite-vec`, provider/model name o endpoint nel runtime package;
-- nessun action id verticale;
+- nessun `fetch(`, SQLite, `sqlite-vec`, provider/model name, endpoint o action id verticale nel runtime package;
 - package `private: true`, Node >=20;
-- `npm pack --dry-run --json` contiene solo i quattro file importabili.
-
-Il test JS deve usare due projection con `sourceAppId` diversi e lo stesso validator senza configurazione specifica.
+- `npm pack --dry-run --json` limitato ai quattro file importabili;
+- due projection con `sourceAppId` diversi passano attraverso lo stesso validator;
+- `expectedRevision` funziona come dato opaco e il package non contiene helper di ordinamento revisioni.
 
 - [ ] **Step 2: eseguire RED**
-
-Run:
 
 ```bash
 node --test shared/contextual-copilot-semantic-memory/test/*.test.mjs
 python3 -m unittest tests.test_contextual_copilot_semantic_memory_contract -v
 ```
 
-Expected: repository test RED sulle garanzie ancora mancanti.
+Expected: RED sulle garanzie mancanti.
 
-- [ ] **Step 3: aggiungere README e bounded-surface guarantees**
+- [ ] **Step 3: aggiungere README/boundary**
 
-README deve dichiarare esplicitamente: derived index, no authority, no storage/network/model, allowed classes, provenance, consumer responsibilities.
+README deve dichiarare: indice derivato, no authority, no storage/network/model, CAS `expectedRevision`, data class, provenance e responsabilità consumer.
 
 - [ ] **Step 4: GREEN**
 
-Run: gli stessi due comandi.  
+Run: stessi comandi.  
 Expected: PASS.
 
 - [ ] **Step 5: commit**
@@ -248,7 +270,7 @@ git add shared/contextual-copilot-semantic-memory tests/test_contextual_copilot_
 git commit -m "test(memory): enforce cross-app semantic memory boundary"
 ```
 
-### Task 5: Distribution receipt exact-SHA e governance qualification
+### Task 5: Distribution receipt exact-SHA e qualification
 
 **Files:**
 - Create: `shared/contextual-copilot-semantic-memory/distribution.json`
@@ -256,13 +278,11 @@ git commit -m "test(memory): enforce cross-app semantic memory boundary"
 
 **Interfaces:**
 - Consumes: package source congelato Tasks 1-4.
-- Produces: receipt verificabile per consumo vendorizzato futuro.
+- Produces: receipt per futuro consumo vendorizzato.
 
 - [ ] **Step 1: congelare source commit e scrivere RED receipt**
 
-`EXPECTED_SOURCE_COMMIT` deve essere l'exact commit che contiene i quattro file package definitivi prima della receipt.
-
-Il test richiede:
+Richiedere:
 
 ```text
 schemaVersion = trama.contextual-copilot-semantic-memory-distribution/v1
@@ -272,20 +292,18 @@ networkRequiredAtBuild = false
 externalRegistryRequired = false
 ```
 
-con SHA-256 esatto di `README.md`, `index.d.ts`, `package.json`, `src/index.js`.
+con SHA-256 di `README.md`, `index.d.ts`, `package.json`, `src/index.js` e `EXPECTED_SOURCE_COMMIT` uguale al source freeze.
 
-- [ ] **Step 2: eseguire RED receipt**
+- [ ] **Step 2: RED receipt**
 
 Run: `python3 -m unittest tests.test_contextual_copilot_semantic_memory_distribution -v`  
-Expected: FAIL perché receipt assente/stale.
+Expected: FAIL finché receipt assente/stale.
 
-- [ ] **Step 3: creare `distribution.json` dal source freeze**
+- [ ] **Step 3: creare `distribution.json`**
 
-Non modificare più i quattro file distribuibili dopo il source freeze; se cambiano, creare un nuovo source freeze e aggiornare il test.
+Dopo il source freeze non modificare i quattro file distribuibili; se cambiano, creare nuovo source freeze.
 
-- [ ] **Step 4: qualificazione completa**
-
-Run:
+- [ ] **Step 4: qualification completa**
 
 ```bash
 npm test --prefix shared/contextual-copilot-semantic-memory
@@ -303,6 +321,6 @@ git add shared/contextual-copilot-semantic-memory/distribution.json tests/test_c
 git commit -m "chore(memory): freeze semantic memory distribution receipt"
 ```
 
-- [ ] **Step 6: aprire/aggiornare Draft PR e fermarsi prima del merge**
+- [ ] **Step 6: Draft PR e stop prima del merge**
 
-Registrare exact head, source freeze, test count e confini. Nessun consumer wiring, runtime Termux, deploy o publish in LSM-01A.
+Registrare exact head, source freeze, test count e confini. Nessun runtime Termux, consumer wiring, deploy o publish in LSM-01A.
