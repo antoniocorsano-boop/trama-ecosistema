@@ -2,7 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 import json, sqlite3
 from contextlib import contextmanager
-from contracts import validate_upsert_request, validate_remove_request, projection_identity, semantic_content_hash, RevisionConflictError
+from contracts import validate_upsert_request, validate_remove_request, projection_identity, semantic_content_hash, RevisionConflictError, RebuildRequiredError
 
 class ProjectionStore:
     def __init__(self, path):
@@ -70,26 +70,38 @@ class ProjectionStore:
             if status != 'unchanged':
                 self._write_projection(c,p,h); self._bump_index_revision(c)
             return self._upsert_receipt(status,p)
+    def _index_signature_in_connection(self, c):
+        model=c.execute("SELECT value FROM runtime_meta WHERE key='model_id'").fetchone()
+        dims=c.execute("SELECT value FROM runtime_meta WHERE key='dimensions'").fetchone()
+        return (model['value'], int(dims['value'])) if model and dims else None
     def commit_indexed(self, request, chunks, vectors, *, model_id=None, dimensions=None, before_commit=None):
-        r=validate_upsert_request(request); p=r['projection']; ident=projection_identity(p)
+        r=validate_upsert_request(request); p=r['projection']; ident=projection_identity(p); mismatch=None
         with self._connection() as c:
             c.execute('BEGIN IMMEDIATE'); current=self._current(c,ident); status,h=self._decision(current,p,r['expectedRevision'])
             if status == 'unchanged': return self._upsert_receipt('unchanged', p)
-            self._write_projection(c,p,h)
-            c.execute('DELETE FROM chunks WHERE source_app_id=? AND source_type=? AND source_id=?', ident)
-            for ch in chunks:
-                c.execute('INSERT INTO chunks(chunk_id,source_app_id,source_type,source_id,ordinal,text,text_hash) VALUES(?,?,?,?,?,?,?)',
-                          (ch['chunk_id'],*ident,ch['ordinal'],ch['text'],ch['text_hash']))
-            for v in vectors:
-                c.execute('INSERT INTO vectors(chunk_id,model_id,dimensions,embedding) VALUES(?,?,?,?)',
-                          (v['chunk_id'],v['model_id'],v['dimensions'],v['embedding']))
-            if model_id is not None:
-                c.execute("INSERT INTO runtime_meta(key,value) VALUES('model_id',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(model_id),))
-            if dimensions is not None:
-                c.execute("INSERT INTO runtime_meta(key,value) VALUES('dimensions',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(dimensions),))
-            if before_commit: before_commit(c)
-            self._bump_index_revision(c)
-            return self._upsert_receipt(status,p)
+            incoming=(str(model_id), int(dimensions)) if model_id is not None and dimensions is not None else None
+            existing=self._index_signature_in_connection(c)
+            if incoming and existing and incoming != existing:
+                mismatch=(existing, incoming)
+                c.execute("INSERT INTO runtime_meta(key,value) VALUES('rebuild_required',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(f'{existing}->{incoming}',))
+            else:
+                self._write_projection(c,p,h)
+                c.execute('DELETE FROM chunks WHERE source_app_id=? AND source_type=? AND source_id=?', ident)
+                for ch in chunks:
+                    c.execute('INSERT INTO chunks(chunk_id,source_app_id,source_type,source_id,ordinal,text,text_hash) VALUES(?,?,?,?,?,?,?)',
+                              (ch['chunk_id'],*ident,ch['ordinal'],ch['text'],ch['text_hash']))
+                for v in vectors:
+                    c.execute('INSERT INTO vectors(chunk_id,model_id,dimensions,embedding) VALUES(?,?,?,?)',
+                              (v['chunk_id'],v['model_id'],v['dimensions'],v['embedding']))
+                if model_id is not None:
+                    c.execute("INSERT INTO runtime_meta(key,value) VALUES('model_id',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(model_id),))
+                if dimensions is not None:
+                    c.execute("INSERT INTO runtime_meta(key,value) VALUES('dimensions',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(dimensions),))
+                if before_commit: before_commit(c)
+                self._bump_index_revision(c)
+        if mismatch:
+            raise RebuildRequiredError('embedding model or dimensions changed; rebuild required')
+        return self._upsert_receipt(status,p)
     def _source(self,p):
         return {'sourceAppId':p['sourceAppId'],'sourceType':p['sourceType'],'sourceId':p['sourceId']}
     def _upsert_receipt(self,status,p):

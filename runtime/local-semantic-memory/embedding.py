@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from urllib.parse import urlparse
-from urllib.request import Request, urlopen
+from urllib.request import Request, ProxyHandler, build_opener
 from urllib.error import HTTPError, URLError
 import json, math, socket
 from contracts import EmbeddingError
@@ -21,12 +21,13 @@ class LocalEmbeddingClient:
             raise EmbeddingError('embedding endpoint must be http loopback')
         if not model_id: raise EmbeddingError('model id required')
         self.base_url=base_url.rstrip('/'); self.model_id=model_id; self.timeout=float(timeout)
+        self._opener=build_opener(ProxyHandler({}))
         if self.timeout <= 0: raise EmbeddingError('timeout must be positive')
     def embed(self, text: str) -> EmbeddingResult:
         payload=json.dumps({'model':self.model_id,'input':text},separators=(',',':')).encode()
         req=Request(self.base_url+'/v1/embeddings',data=payload,headers={'Content-Type':'application/json'},method='POST')
         try:
-            with urlopen(req, timeout=self.timeout) as resp:
+            with self._opener.open(req, timeout=self.timeout) as resp:
                 raw=resp.read()
         except (HTTPError, URLError, socket.timeout, TimeoutError, OSError) as exc:
             raise EmbeddingError('local embedding request failed') from exc
