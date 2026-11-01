@@ -145,16 +145,63 @@ def install_stack(
     embedding_run = render_embedding_run(config)
     memoryd_run = render_memoryd_run(config)
 
-    _atomic_write(config_path, rendered_config, 0o600)
-    _atomic_write(wrapper_path, rendered_wrapper, 0o755)
-    for service_name, run_script in (
-        ('trama-embedding', embedding_run),
-        ('trama-memoryd', memoryd_run),
-    ):
-        service_dir = service_root / service_name
-        _atomic_write(service_dir / 'run', run_script, 0o755)
-        # runit interprets an existing `down` file as "do not auto-start".
-        _atomic_write(service_dir / 'down', '', 0o644)
+    targets = [
+        (config_path, rendered_config, 0o600),
+        (wrapper_path, rendered_wrapper, 0o755),
+        (service_root / 'trama-embedding' / 'run', embedding_run, 0o755),
+        (service_root / 'trama-embedding' / 'down', '', 0o644),
+        (service_root / 'trama-memoryd' / 'run', memoryd_run, 0o755),
+        (service_root / 'trama-memoryd' / 'down', '', 0o644),
+    ]
+
+    snapshots: dict[Path, tuple[bool, str, int]] = {}
+    missing_dirs: set[Path] = set()
+    for path, _content, _mode in targets:
+        if path.exists():
+            if not path.is_file():
+                raise ValueError(f'Percorso installazione non valido: {path}')
+            snapshots[path] = (True, path.read_text(encoding='utf-8'), path.stat().st_mode & 0o777)
+        else:
+            snapshots[path] = (False, '', 0)
+        parent = path.parent
+        while not parent.exists():
+            missing_dirs.add(parent)
+            parent = parent.parent
+
+    attempted: list[Path] = []
+    try:
+        for path, content, mode in targets:
+            attempted.append(path)
+            _atomic_write(path, content, mode)
+    except Exception as exc:
+        rollback_errors: list[str] = []
+        for path in reversed(attempted):
+            existed, previous_content, previous_mode = snapshots[path]
+            try:
+                if existed:
+                    _atomic_write(path, previous_content, previous_mode)
+                elif path.exists():
+                    if path.is_file() or path.is_symlink():
+                        path.unlink()
+                    else:
+                        raise OSError(f'percorso non-file durante rollback: {path}')
+            except Exception as rollback_exc:
+                rollback_errors.append(f'{path}: {rollback_exc}')
+
+        for directory in sorted(missing_dirs, key=lambda item: len(item.parts), reverse=True):
+            try:
+                directory.rmdir()
+            except FileNotFoundError:
+                pass
+            except OSError:
+                # A non-empty directory is preserved; file rollback errors above
+                # carry the actionable diagnostic when restoration is incomplete.
+                pass
+
+        if rollback_errors:
+            details = '; '.join(rollback_errors)
+            raise RuntimeError(f'Installazione fallita; rollback incompleto: {details}') from exc
+        raise
 
     return InstalledStack(
         home=home_path,
@@ -265,34 +312,52 @@ def _ensure_success(result: object, label: str) -> None:
         raise RuntimeError(f'{label} non riuscito' + (f': {stderr}' if stderr else '.'))
 
 
+def _stop_stack_best_effort(
+    installed: InstalledStack,
+    *,
+    runner: Callable[..., object] = subprocess.run,
+) -> list[str]:
+    errors: list[str] = []
+    for service_name, label in (
+        ('trama-memoryd', 'Arresto memoria'),
+        ('trama-embedding', 'Arresto embedding'),
+    ):
+        try:
+            result = _run_sv(installed, 'down', service_name, runner=runner)
+        except OSError as exc:
+            errors.append(f'{label}: {exc}')
+            continue
+        if getattr(result, 'returncode', 1) != 0:
+            stderr = str(getattr(result, 'stderr', '')).strip()
+            errors.append(label + (f': {stderr}' if stderr else ' non riuscito.'))
+    return errors
+
+
 def start_stack(
     installed: InstalledStack,
     *,
     runner: Callable[..., object] = subprocess.run,
     health_check: Callable[..., bool] = wait_http_ready,
 ) -> None:
-    result = _run_sv(installed, 'up', 'trama-embedding', runner=runner)
-    _ensure_success(result, 'Avvio embedding')
-
-    embedding_health = f'http://127.0.0.1:{installed.config.embedding_port}/health'
-    if not health_check(embedding_health, timeout_seconds=60):
-        _run_sv(installed, 'down', 'trama-embedding', runner=runner)
-        raise RuntimeError('Embedding locale non disponibile; memoria non avviata.')
-
     try:
+        result = _run_sv(installed, 'up', 'trama-embedding', runner=runner)
+        _ensure_success(result, 'Avvio embedding')
+
+        embedding_health = f'http://127.0.0.1:{installed.config.embedding_port}/health'
+        if not health_check(embedding_health, timeout_seconds=60):
+            raise RuntimeError('Embedding locale non disponibile; memoria non avviata.')
+
         result = _run_sv(installed, 'up', 'trama-memoryd', runner=runner)
         _ensure_success(result, 'Avvio memoria')
         memory_health = f'http://127.0.0.1:{installed.config.memory_port}/v1/health'
         if not health_check(memory_health, timeout_seconds=60):
             raise RuntimeError('Memoria locale non disponibile dopo l’avvio.')
-    except Exception:
-        # A failed stack start must not leave the embedding server consuming
-        # phone resources after memoryd has failed to become usable.
-        for service_name in ('trama-memoryd', 'trama-embedding'):
-            try:
-                _run_sv(installed, 'down', service_name, runner=runner)
-            except OSError:
-                pass
+    except Exception as exc:
+        cleanup_errors = _stop_stack_best_effort(installed, runner=runner)
+        if cleanup_errors:
+            raise RuntimeError(
+                f'{exc} Cleanup incompleto: {"; ".join(cleanup_errors)}'
+            ) from exc
         raise
 
 
@@ -301,10 +366,9 @@ def stop_stack(
     *,
     runner: Callable[..., object] = subprocess.run,
 ) -> None:
-    first = _run_sv(installed, 'down', 'trama-memoryd', runner=runner)
-    second = _run_sv(installed, 'down', 'trama-embedding', runner=runner)
-    _ensure_success(first, 'Arresto memoria')
-    _ensure_success(second, 'Arresto embedding')
+    errors = _stop_stack_best_effort(installed, runner=runner)
+    if errors:
+        raise RuntimeError(f'Arresto stack incompleto: {"; ".join(errors)}')
 
 
 def status_stack(

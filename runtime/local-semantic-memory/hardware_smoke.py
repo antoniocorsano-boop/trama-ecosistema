@@ -276,7 +276,7 @@ def run_smoke(
     exact_origin = validate_origin(origin)
     client: SmokeTransport = transport or JsonHttpTransport()
 
-    inserted = False
+    cleanup_required = False
     cleanup_status = 'not-required'
     primary_error: Exception | None = None
     report: dict[str, Any] | None = None
@@ -289,6 +289,7 @@ def run_smoke(
         first_token, session_health = _issue_session(client, base, exact_origin)
         _require_ready_health(session_health)
 
+        cleanup_required = True
         status, _receipt, _headers, upsert_ms = _timed_request(
             client,
             'POST',
@@ -299,7 +300,6 @@ def run_smoke(
             timeout_seconds=30,
         )
         _require_status(status, 200, 'Indicizzazione sintetica')
-        inserted = True
 
         status, search_before, _headers, search_before_ms = _timed_request(
             client,
@@ -361,7 +361,7 @@ def run_smoke(
     except Exception as exc:
         primary_error = exc if isinstance(exc, SmokeFailure) else SmokeFailure(str(exc))
     finally:
-        if inserted:
+        if cleanup_required:
             try:
                 cleanup_status = _cleanup_projection(client, base, exact_origin)
             except Exception as cleanup_exc:
