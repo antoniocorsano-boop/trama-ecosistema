@@ -149,10 +149,10 @@ def install_stack(
     targets = [
         (config_path, rendered_config, 0o600),
         (wrapper_path, rendered_wrapper, 0o755),
-        (service_root / 'trama-embedding' / 'run', embedding_run, 0o755),
         (service_root / 'trama-embedding' / 'down', '', 0o644),
-        (service_root / 'trama-memoryd' / 'run', memoryd_run, 0o755),
+        (service_root / 'trama-embedding' / 'run', embedding_run, 0o755),
         (service_root / 'trama-memoryd' / 'down', '', 0o644),
+        (service_root / 'trama-memoryd' / 'run', memoryd_run, 0o755),
     ]
 
     snapshots: dict[Path, tuple[bool, str, int]] = {}
