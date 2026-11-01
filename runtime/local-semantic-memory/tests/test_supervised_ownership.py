@@ -34,7 +34,7 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
             origins=('http://127.0.0.1:4174',),
         )
 
-    def test_start_fails_closed_when_listener_is_not_owned_by_runit_service(self):
+    def test_start_fails_closed_when_listener_is_not_owned_by_running_runit_service(self):
         commands = []
 
         def runner(args, **kwargs):
@@ -42,9 +42,9 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
             commands.append(rendered)
 
             class Result:
-                stdout = ''
-                stderr = 'service is down' if 'check' in rendered else ''
-                returncode = 1 if 'check' in rendered else 0
+                stdout = 'down: service: 1s, normally up\n' if 'status' in rendered else ''
+                stderr = ''
+                returncode = 0
 
             return Result()
 
@@ -57,10 +57,10 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
                 )
 
         rendered = [' '.join(command) for command in commands]
-        self.assertTrue(any('check' in command and 'trama-embedding' in command for command in rendered))
+        self.assertTrue(any('status' in command and 'trama-embedding' in command for command in rendered))
         self.assertFalse(any('up' in command and 'trama-embedding' in command for command in rendered))
 
-    def test_status_uses_sv_check_instead_of_status_exit_code_as_active_signal(self):
+    def test_status_parses_actual_sv_status_output_instead_of_requested_state(self):
         commands = []
 
         def runner(args, **kwargs):
@@ -68,9 +68,9 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
             commands.append(rendered)
 
             class Result:
-                stdout = 'down: service: 1s\n'
+                stdout = 'down: service: 1s, normally up\n'
                 stderr = ''
-                returncode = 1 if 'check' in rendered else 0
+                returncode = 0
 
             return Result()
 
@@ -83,9 +83,9 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
         self.assertFalse(status['embedding_service'])
         self.assertFalse(status['memory_service'])
         rendered = [' '.join(command) for command in commands]
-        self.assertTrue(any('check' in command and 'trama-embedding' in command for command in rendered))
-        self.assertTrue(any('check' in command and 'trama-memoryd' in command for command in rendered))
-        self.assertFalse(any(' status ' in f' {command} ' for command in rendered))
+        self.assertTrue(any('status' in command and 'trama-embedding' in command for command in rendered))
+        self.assertTrue(any('status' in command and 'trama-memoryd' in command for command in rendered))
+        self.assertFalse(any(' check ' in f' {command} ' for command in rendered))
 
 
 if __name__ == '__main__':
