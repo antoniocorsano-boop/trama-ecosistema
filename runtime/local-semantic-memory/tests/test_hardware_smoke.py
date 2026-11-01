@@ -12,10 +12,22 @@ class FakeTransport:
         self.fail_first_search = False
         self.fail_after_upsert_commit = False
         self.fail_remove = False
+        self.empty_health_until_upsert = False
         self.search_calls = 0
 
     def restart(self):
         self.generation += 1
+
+    def _health(self):
+        uninitialized = self.empty_health_until_upsert and self.projection is None
+        return {
+            'schema': 'trama.semantic-memory-health/v1',
+            'status': 'ready',
+            'protocolVersion': 1,
+            'modelId': None if uninitialized else 'embeddinggemma-2-local',
+            'dimensions': None if uninitialized else 768,
+            'indexRevision': '7',
+        }
 
     def request(self, method, url, *, origin=None, bearer=None, payload=None, timeout_seconds=10):
         path = '/' + url.split('/', 3)[3] if url.count('/') >= 3 else '/'
@@ -27,14 +39,7 @@ class FakeTransport:
             'payload': payload,
         })
         if method == 'GET' and path == '/v1/health':
-            return 200, {
-                'schema': 'trama.semantic-memory-health/v1',
-                'status': 'ready',
-                'protocolVersion': 1,
-                'modelId': 'embeddinggemma-2-local',
-                'dimensions': 768,
-                'indexRevision': '7',
-            }, {}
+            return 200, self._health(), {}
         if method == 'POST' and path == '/v1/session':
             self.session_count += 1
             token = f'cap-{self.generation}-{self.session_count}'
@@ -42,14 +47,7 @@ class FakeTransport:
                 'schema': 'trama.semantic-memory-session/v1',
                 'token': token,
                 'expiresAt': '2026-11-01T12:00:00Z',
-                'health': {
-                    'schema': 'trama.semantic-memory-health/v1',
-                    'status': 'ready',
-                    'protocolVersion': 1,
-                    'modelId': 'embeddinggemma-2-local',
-                    'dimensions': 768,
-                    'indexRevision': '7',
-                },
+                'health': self._health(),
             }, {'Access-Control-Allow-Origin': origin}
 
         expected = None
@@ -153,6 +151,23 @@ class HardwareSmokeContractTests(unittest.TestCase):
         serialized = json.dumps(report, sort_keys=True)
         self.assertNotIn('cap-', serialized)
         self.assertNotIn('Bearer', serialized)
+
+    def test_smoke_accepts_ready_uninitialized_index_before_first_upsert(self):
+        transport = FakeTransport()
+        transport.empty_health_until_upsert = True
+        control = FakeControl(transport)
+
+        report = self.module.run_smoke(
+            base_url='http://127.0.0.1:8765',
+            origin='http://127.0.0.1:4174',
+            control=control,
+            transport=transport,
+        )
+
+        self.assertTrue(report['passed'])
+        self.assertEqual(report['modelId'], 'embeddinggemma-2-local')
+        self.assertEqual(report['dimensions'], 768)
+        self.assertEqual(report['cleanup'], 'removed')
 
     def test_smoke_attempts_cleanup_when_a_post_upsert_check_fails(self):
         transport = FakeTransport()
