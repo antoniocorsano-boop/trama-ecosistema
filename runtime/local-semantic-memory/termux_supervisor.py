@@ -75,6 +75,7 @@ def render_embedding_run(config: SupervisorConfig) -> str:
     return '\n'.join([
         '#!/data/data/com.termux/files/usr/bin/sh',
         'set -eu',
+        'exec 2>&1',
         f'exec {llama} -m {model} --embedding --host 127.0.0.1 --port {config.embedding_port} --no-webui',
         '',
     ])
@@ -90,6 +91,7 @@ def render_memoryd_run(config: SupervisorConfig) -> str:
     lines = [
         '#!/data/data/com.termux/files/usr/bin/sh',
         'set -eu',
+        'exec 2>&1',
         f'EMBEDDING_HEALTH={_double_quote(health_url)}',
         'ready=0',
         'attempt=0',
