@@ -356,12 +356,22 @@ def _ensure_listener_is_supervised(
 ) -> None:
     if not _loopback_port_in_use(port):
         return
-    if _service_is_active(installed, service_name, runner=runner):
-        return
-    raise RuntimeError(
-        f'Porta locale {port} già in uso da un processo non supervisionato; '
-        f'arresta il listener legacy prima di avviare {service_name}.'
-    )
+    if not _service_is_active(installed, service_name, runner=runner):
+        raise RuntimeError(
+            f'Porta locale {port} già in uso da un processo non supervisionato; '
+            f'arresta il listener legacy prima di avviare {service_name}.'
+        )
+
+    down = _run_sv(installed, 'down', service_name, runner=runner)
+    _ensure_success(down, f'Arresto temporaneo {service_name} per verifica ownership')
+    if _loopback_port_in_use(port):
+        raise RuntimeError(
+            f'Porta locale {port} resta in uso dopo l’arresto del servizio supervisionato; '
+            f'listener non supervisionato rilevato prima di avviare {service_name}.'
+        )
+
+    up = _run_sv(installed, 'up', service_name, runner=runner)
+    _ensure_success(up, f'Ripristino {service_name} dopo verifica ownership')
 
 
 def _stop_stack_best_effort(
