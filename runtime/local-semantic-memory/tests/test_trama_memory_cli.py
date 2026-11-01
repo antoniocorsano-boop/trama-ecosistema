@@ -247,6 +247,27 @@ class TramaMemoryCliContractTests(unittest.TestCase):
                 health_check=lambda url, timeout_seconds=0: url.endswith(':8080/health'),
             )
 
+    def test_smoke_restart_waits_for_confirmed_stop_before_up(self):
+        installed = self.install()
+        commands = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+
+            class Result:
+                returncode = 0
+                stdout = ''
+                stderr = ''
+
+            return Result()
+
+        control = self.module.ServiceSmokeControl(installed, runner=runner)
+        control.restart_memoryd()
+
+        actions = [command[1] for command in commands]
+        self.assertEqual(actions, ['stop', 'up'])
+
     def test_install_rolls_back_all_stack_files_when_a_late_write_fails(self):
         config_path = self.home / '.config' / 'trama-memory' / 'config.env'
         config_path.parent.mkdir(parents=True)
