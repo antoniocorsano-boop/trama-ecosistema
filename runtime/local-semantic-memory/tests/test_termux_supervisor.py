@@ -42,6 +42,7 @@ class TermuxSupervisorContractTests(unittest.TestCase):
         self.assertNotIn('curl | sh', embedding)
         self.assertNotIn('wget', embedding)
         self.assertIn('127.0.0.1:8080', memoryd)
+        self.assertIn("curl --noproxy '*' --fail", memoryd)
         self.assertIn('TRAMA_MEMORY_HOST="127.0.0.1"', memoryd)
         self.assertIn('TRAMA_MEMORY_PORT="8765"', memoryd)
         self.assertIn('TRAMA_MEMORY_ALLOWED_ORIGINS="http://127.0.0.1:4174"', memoryd)
