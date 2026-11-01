@@ -112,6 +112,32 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
         actions = [command[1] for command in commands]
         self.assertEqual(actions, ['status', 'down', 'up'])
 
+    def test_running_service_waits_for_transient_listener_release_after_down(self):
+        commands = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+
+            class Result:
+                stdout = 'run: service: (pid 42) 12s\n' if 'status' in rendered else ''
+                stderr = ''
+                returncode = 0
+
+            return Result()
+
+        with patch.object(self.module, '_loopback_port_in_use', side_effect=[True, True, False]):
+            with patch.object(self.module.time, 'sleep', return_value=None):
+                self.module._ensure_listener_is_supervised(
+                    self.installed,
+                    'trama-embedding',
+                    8080,
+                    runner=runner,
+                )
+
+        actions = [command[1] for command in commands]
+        self.assertEqual(actions, ['status', 'down', 'up'])
+
     def test_status_parses_actual_sv_status_output_instead_of_requested_state(self):
         commands = []
 
