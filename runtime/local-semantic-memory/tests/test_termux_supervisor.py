@@ -58,6 +58,17 @@ class TermuxSupervisorContractTests(unittest.TestCase):
         self.assertNotIn('curl', boot)
         self.assertNotIn('wget', boot)
 
+    def test_boot_script_waits_for_runit_supervisors_before_sv_up(self):
+        boot = self.module.render_boot_script(Path('/data/data/com.termux/files/usr'))
+        embedding_ready = '$SVDIR/trama-embedding/supervise/ok'
+        memory_ready = '$SVDIR/trama-memoryd/supervise/ok'
+        self.assertIn(embedding_ready, boot)
+        self.assertIn(memory_ready, boot)
+        self.assertIn('while', boot)
+        self.assertIn('sleep 1', boot)
+        self.assertLess(boot.index(embedding_ready), boot.index('sv up trama-embedding'))
+        self.assertLess(boot.index(memory_ready), boot.index('sv up trama-memoryd'))
+
 
 if __name__ == '__main__':
     unittest.main()
