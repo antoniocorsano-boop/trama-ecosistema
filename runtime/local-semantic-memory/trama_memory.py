@@ -399,6 +399,18 @@ def _ensure_listener_is_supervised(
     runner: Callable[..., object] = subprocess.run,
 ) -> None:
     if not _loopback_port_in_use(port):
+        if not _service_is_active(installed, service_name, runner=runner):
+            return
+        stopped = _run_sv(installed, 'stop', service_name, runner=runner)
+        _ensure_success(
+            stopped,
+            f'Arresto {service_name} per applicare la configurazione corrente',
+        )
+        restarted = _run_sv(installed, 'up', service_name, runner=runner)
+        _ensure_success(
+            restarted,
+            f'Ripristino {service_name} con la configurazione corrente',
+        )
         return
     if not _service_is_active(installed, service_name, runner=runner):
         raise RuntimeError(
@@ -555,8 +567,8 @@ class ServiceSmokeControl:
         self.runner = runner
 
     def restart_memoryd(self) -> None:
-        down = _run_sv(self.installed, 'down', 'trama-memoryd', runner=self.runner)
-        _ensure_success(down, 'Arresto memoria per smoke')
+        stopped = _run_sv(self.installed, 'stop', 'trama-memoryd', runner=self.runner)
+        _ensure_success(stopped, 'Arresto memoria per smoke')
         up = _run_sv(self.installed, 'up', 'trama-memoryd', runner=self.runner)
         _ensure_success(up, 'Riavvio memoria per smoke')
 
