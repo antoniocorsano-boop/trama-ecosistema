@@ -182,6 +182,75 @@ class TramaMemoryCliContractTests(unittest.TestCase):
         self.assertTrue(any('down' in cmd and 'trama-memoryd' in cmd for cmd in joined))
         self.assertTrue(any('down' in cmd and 'trama-embedding' in cmd for cmd in joined))
 
+    def test_initial_embedding_start_failure_attempts_full_stack_cleanup(self):
+        installed = self.install()
+        commands = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+            class Result:
+                stdout = ''
+                stderr = 'embedding start failed'
+                returncode = 1 if 'up' in rendered and 'trama-embedding' in ' '.join(rendered) else 0
+            return Result()
+
+        with self.assertRaises(RuntimeError):
+            self.module.start_stack(
+                installed,
+                runner=runner,
+                health_check=lambda *args, **kwargs: self.fail('health must not run'),
+            )
+
+        joined = [' '.join(cmd) for cmd in commands]
+        self.assertTrue(any('down' in cmd and 'trama-memoryd' in cmd for cmd in joined))
+        self.assertTrue(any('down' in cmd and 'trama-embedding' in cmd for cmd in joined))
+
+    def test_failed_start_surfaces_incomplete_cleanup(self):
+        installed = self.install()
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            class Result:
+                stdout = ''
+                stderr = 'cannot stop embedding' if 'down' in rendered and 'trama-embedding' in ' '.join(rendered) else ''
+                returncode = 1 if 'down' in rendered and 'trama-embedding' in ' '.join(rendered) else 0
+            return Result()
+
+        with self.assertRaisesRegex(RuntimeError, 'cleanup|ripristino|arresto'):
+            self.module.start_stack(
+                installed,
+                runner=runner,
+                health_check=lambda url, timeout_seconds=0: url.endswith(':8080/health'),
+            )
+
+    def test_install_rolls_back_all_stack_files_when_a_late_write_fails(self):
+        config_path = self.home / '.config' / 'trama-memory' / 'config.env'
+        config_path.parent.mkdir(parents=True)
+        config_path.write_text('LEGACY_CONFIG=true\n', encoding='utf-8')
+        config_path.chmod(0o600)
+        wrapper_path = self.prefix / 'bin' / 'trama-memory'
+        service_root = self.prefix / 'var' / 'service'
+
+        real_atomic_write = self.module._atomic_write
+        calls = {'count': 0}
+
+        def flaky_atomic_write(path, content, mode):
+            calls['count'] += 1
+            if calls['count'] == 3:
+                raise OSError('simulated late write failure')
+            return real_atomic_write(path, content, mode)
+
+        with patch.object(self.module, '_atomic_write', side_effect=flaky_atomic_write):
+            with self.assertRaises(OSError):
+                self.install()
+
+        self.assertEqual(config_path.read_text(encoding='utf-8'), 'LEGACY_CONFIG=true\n')
+        self.assertEqual(config_path.stat().st_mode & 0o777, 0o600)
+        self.assertFalse(wrapper_path.exists())
+        self.assertFalse((service_root / 'trama-embedding').exists())
+        self.assertFalse((service_root / 'trama-memoryd').exists())
+
     def test_status_and_boot_install_are_secret_free(self):
         installed = self.install()
 

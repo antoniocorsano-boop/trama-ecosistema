@@ -10,6 +10,7 @@ class FakeTransport:
         self.projection = None
         self.requests = []
         self.fail_first_search = False
+        self.fail_after_upsert_commit = False
         self.search_calls = 0
 
     def restart(self):
@@ -60,6 +61,8 @@ class FakeTransport:
 
         if method == 'POST' and path == '/v1/projections/upsert':
             self.projection = payload['projection']
+            if self.fail_after_upsert_commit:
+                raise RuntimeError('simulated response loss after committed upsert')
             return 200, {
                 'schema': 'trama.semantic-memory-upsert-receipt/v1',
                 'status': 'indexed',
@@ -160,6 +163,20 @@ class HardwareSmokeContractTests(unittest.TestCase):
                 transport=transport,
             )
         self.assertIsNone(transport.projection)
+
+    def test_smoke_cleans_up_when_upsert_commits_but_response_is_lost(self):
+        transport = FakeTransport()
+        transport.fail_after_upsert_commit = True
+        control = FakeControl(transport)
+        with self.assertRaises(self.module.SmokeFailure):
+            self.module.run_smoke(
+                base_url='http://127.0.0.1:8765',
+                origin='http://127.0.0.1:4174',
+                control=control,
+                transport=transport,
+            )
+        self.assertIsNone(transport.projection)
+        self.assertTrue(any(r['path'] == '/v1/projections/remove' for r in transport.requests))
 
     def test_cli_exposes_smoke_as_a_single_command(self):
         cli = importlib.import_module('trama_memory')
