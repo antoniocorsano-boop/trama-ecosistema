@@ -98,6 +98,16 @@ def _render_wrapper(runtime_dir: Path) -> str:
     ])
 
 
+def _render_service_log_run(prefix: Path) -> str:
+    svlogger = prefix / 'share' / 'termux-services' / 'svlogger'
+    return '\n'.join([
+        '#!/data/data/com.termux/files/usr/bin/sh',
+        'set -eu',
+        f'exec {shlex.quote(str(svlogger))}',
+        '',
+    ])
+
+
 def install_stack(
     *,
     home: str | os.PathLike[str] | Path,
@@ -143,6 +153,7 @@ def install_stack(
 
     rendered_config = _render_config(config)
     rendered_wrapper = _render_wrapper(runtime_path)
+    service_log_run = _render_service_log_run(prefix_path)
     embedding_run = render_embedding_run(config)
     memoryd_run = render_memoryd_run(config)
 
@@ -150,8 +161,10 @@ def install_stack(
         (config_path, rendered_config, 0o600),
         (wrapper_path, rendered_wrapper, 0o755),
         (service_root / 'trama-embedding' / 'down', '', 0o644),
+        (service_root / 'trama-embedding' / 'log' / 'run', service_log_run, 0o755),
         (service_root / 'trama-embedding' / 'run', embedding_run, 0o755),
         (service_root / 'trama-memoryd' / 'down', '', 0o644),
+        (service_root / 'trama-memoryd' / 'log' / 'run', service_log_run, 0o755),
         (service_root / 'trama-memoryd' / 'run', memoryd_run, 0o755),
     ]
 
