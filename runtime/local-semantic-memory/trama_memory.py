@@ -334,6 +334,22 @@ def _loopback_port_in_use(port: int, timeout_seconds: float = 0.2) -> bool:
         return False
 
 
+def _wait_loopback_port_free(
+    port: int,
+    *,
+    attempts: int = 30,
+    interval_seconds: float = 0.1,
+) -> bool:
+    bounded_attempts = max(1, int(attempts))
+    bounded_interval = max(0.0, float(interval_seconds))
+    for attempt in range(bounded_attempts):
+        if not _loopback_port_in_use(port):
+            return True
+        if attempt + 1 < bounded_attempts:
+            time.sleep(bounded_interval)
+    return False
+
+
 def _service_is_active(
     installed: InstalledStack,
     service_name: str,
@@ -364,7 +380,7 @@ def _ensure_listener_is_supervised(
 
     down = _run_sv(installed, 'down', service_name, runner=runner)
     _ensure_success(down, f'Arresto temporaneo {service_name} per verifica ownership')
-    if _loopback_port_in_use(port):
+    if not _wait_loopback_port_free(port):
         raise RuntimeError(
             f'Porta locale {port} resta in uso dopo l’arresto del servizio supervisionato; '
             f'listener non supervisionato rilevato prima di avviare {service_name}.'
