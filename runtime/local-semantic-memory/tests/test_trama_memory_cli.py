@@ -121,7 +121,8 @@ class TramaMemoryCliContractTests(unittest.TestCase):
             }
             url = f'http://127.0.0.1:{server.server_port}/health'
             with patch.dict(os.environ, proxy_env, clear=False):
-                self.assertTrue(self.module.wait_http_ready(url, timeout_seconds=0.5))
+                with patch.object(self.module.urllib.request, '_opener', None):
+                    self.assertTrue(self.module.wait_http_ready(url, timeout_seconds=0.5))
         finally:
             server.shutdown()
             server.server_close()
