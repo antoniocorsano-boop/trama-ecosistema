@@ -13,19 +13,21 @@ from termux_supervisor import validate_origin
 
 _LOOPBACK_HOSTS = {'127.0.0.1', 'localhost', '::1'}
 _SYNTHETIC_SOURCE = {
+    'schema': 'trama.semantic-memory-projection/v1',
     'namespace': 'trama-smoke',
     'sourceAppId': 'trama-lsm-smoke',
     'sourceType': 'synthetic',
     'sourceId': 'lsm-01e-hardware-smoke',
     'revision': 'smoke-r1',
     'canonicalRef': 'trama-smoke://lsm-01e-hardware-smoke',
+    'updatedAt': '2026-11-01T00:00:00Z',
     'title': 'Smoke LSM-01E',
     'text': (
         'Il cartone ondulato può essere riutilizzato per costruire semplici '
         'modelli didattici di strutture resistenti.'
     ),
     'dataClass': 'TEACHER_PROFESSIONAL',
-    'metadata': {'synthetic': True, 'purpose': 'lsm-01e-hardware-smoke'},
+    'metadata': {'synthetic': 'true', 'purpose': 'lsm-01e-hardware-smoke'},
 }
 _SEARCH_QUERY = 'materiali riciclati per costruire modelli resistenti'
 
@@ -196,10 +198,8 @@ def _search_payload() -> dict[str, Any]:
     return {
         'schema': 'trama.semantic-memory-search-request/v1',
         'query': _SEARCH_QUERY,
-        'scope': {
-            'namespaces': [_SYNTHETIC_SOURCE['namespace']],
-            'allowedDataClasses': [_SYNTHETIC_SOURCE['dataClass']],
-        },
+        'namespaces': [_SYNTHETIC_SOURCE['namespace']],
+        'allowedDataClasses': [_SYNTHETIC_SOURCE['dataClass']],
         'limit': 5,
     }
 
