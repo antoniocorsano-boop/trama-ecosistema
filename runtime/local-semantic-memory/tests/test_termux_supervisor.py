@@ -50,6 +50,22 @@ class TermuxSupervisorContractTests(unittest.TestCase):
         self.assertLess(memoryd.index('127.0.0.1:8080'), memoryd.index('main.py'))
         self.assertNotIn('0.0.0.0', memoryd)
 
+    def test_supervised_services_route_stderr_into_svlogger_pipe(self):
+        SupervisorConfig = self.module.SupervisorConfig
+        config = SupervisorConfig(
+            runtime_dir=Path('/data/data/com.termux/files/home/trama/runtime/local-semantic-memory'),
+            llama_server=Path('/data/data/com.termux/files/usr/bin/llama-server'),
+            model=Path('/data/data/com.termux/files/home/models/embeddinggemma-2.gguf'),
+            memory_home=Path('/data/data/com.termux/files/home/.local/share/trama-semantic-memory'),
+            allowed_origins=('http://127.0.0.1:4174',),
+        )
+        embedding = self.module.render_embedding_run(config)
+        memoryd = self.module.render_memoryd_run(config)
+        for name, script in (('embedding', embedding), ('memoryd', memoryd)):
+            with self.subTest(service=name):
+                self.assertIn('exec 2>&1', script)
+                self.assertLess(script.index('exec 2>&1'), script.index('exec ', script.index('exec 2>&1') + 1))
+
     def test_boot_script_uses_termux_services_without_secrets(self):
         boot = self.module.render_boot_script(Path('/data/data/com.termux/files/usr'))
         self.assertIn('start-services.sh', boot)
