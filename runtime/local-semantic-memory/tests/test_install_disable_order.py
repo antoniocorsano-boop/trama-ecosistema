@@ -26,6 +26,16 @@ class InstallDisableOrderContractTests(unittest.TestCase):
         self.model.parent.mkdir()
         self.model.write_bytes(b'gguf-synthetic')
 
+    def _install(self):
+        return self.module.install_stack(
+            home=self.home,
+            prefix=self.prefix,
+            runtime_dir=self.runtime,
+            llama_server=self.llama,
+            model=self.model,
+            origins=('http://127.0.0.1:4174',),
+        )
+
     def test_install_writes_down_marker_before_run_script_for_each_service(self):
         writes = []
         real_atomic_write = self.module._atomic_write
@@ -35,14 +45,7 @@ class InstallDisableOrderContractTests(unittest.TestCase):
             return real_atomic_write(path, content, mode)
 
         with patch.object(self.module, '_atomic_write', side_effect=recording_write):
-            installed = self.module.install_stack(
-                home=self.home,
-                prefix=self.prefix,
-                runtime_dir=self.runtime,
-                llama_server=self.llama,
-                model=self.model,
-                origins=('http://127.0.0.1:4174',),
-            )
+            installed = self._install()
 
         for service_name in ('trama-embedding', 'trama-memoryd'):
             service = installed.service_root / service_name
@@ -51,6 +54,17 @@ class InstallDisableOrderContractTests(unittest.TestCase):
                 writes.index(service / 'run'),
                 f'{service_name}: il marker down deve esistere prima che runsvdir possa vedere il run script',
             )
+
+    def test_install_wires_svlogger_for_each_service(self):
+        installed = self._install()
+
+        for service_name in ('trama-embedding', 'trama-memoryd'):
+            log_run = installed.service_root / service_name / 'log' / 'run'
+            self.assertTrue(log_run.is_file(), f'{service_name}: manca log/run')
+            self.assertTrue(log_run.stat().st_mode & 0o111, f'{service_name}: log/run non eseguibile')
+            content = log_run.read_text(encoding='utf-8')
+            self.assertIn(str(self.prefix / 'share' / 'termux-services' / 'svlogger'), content)
+            self.assertNotIn('TOKEN', content.upper())
 
 
 if __name__ == '__main__':
