@@ -94,7 +94,7 @@ def render_memoryd_run(config: SupervisorConfig) -> str:
         'ready=0',
         'attempt=0',
         'while [ "$attempt" -lt 60 ]; do',
-        '  if curl --fail --silent --show-error "$EMBEDDING_HEALTH" >/dev/null 2>&1; then',
+        '  if curl --noproxy \'*\' --fail --silent --show-error "$EMBEDDING_HEALTH" >/dev/null 2>&1; then',
         '    ready=1',
         '    break',
         '  fi',
