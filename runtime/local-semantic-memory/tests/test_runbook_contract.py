@@ -91,6 +91,8 @@ class RunbookContractTests(unittest.TestCase):
         self.assertIn('nessun download automatico', lower)
         self.assertIn('prima installazione assoluta', lower)
         self.assertIn('python3 trama_memory.py install', lower)
+        self.assertIn('riavviare la shell termux', lower)
+        self.assertIn('aprire termux:boot almeno una volta', lower)
 
     def test_end_to_end_smoke_persists_across_restart(self):
         from auth import load_or_create_local_token
