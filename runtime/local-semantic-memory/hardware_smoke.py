@@ -365,11 +365,16 @@ def run_smoke(
             try:
                 cleanup_status = _cleanup_projection(client, base, exact_origin)
             except Exception as cleanup_exc:
+                cleanup_failure = (
+                    cleanup_exc
+                    if isinstance(cleanup_exc, SmokeFailure)
+                    else SmokeFailure(str(cleanup_exc))
+                )
                 if primary_error is None:
-                    primary_error = (
-                        cleanup_exc
-                        if isinstance(cleanup_exc, SmokeFailure)
-                        else SmokeFailure(str(cleanup_exc))
+                    primary_error = cleanup_failure
+                else:
+                    primary_error = SmokeFailure(
+                        f'{primary_error} Cleanup smoke non completato: {cleanup_failure}'
                     )
         if report is not None:
             report['cleanup'] = cleanup_status

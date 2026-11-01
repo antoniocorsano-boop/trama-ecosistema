@@ -352,7 +352,7 @@ def start_stack(
         memory_health = f'http://127.0.0.1:{installed.config.memory_port}/v1/health'
         if not health_check(memory_health, timeout_seconds=60):
             raise RuntimeError('Memoria locale non disponibile dopo l’avvio.')
-    except Exception as exc:
+    except BaseException as exc:
         cleanup_errors = _stop_stack_best_effort(installed, runner=runner)
         if cleanup_errors:
             raise RuntimeError(
