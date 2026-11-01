@@ -41,6 +41,8 @@ LSM-01E rende Termux infrastruttura supervisionata: nell'uso quotidiano il docen
 pkg install termux-services
 ```
 
+Terminata l'installazione, **riavviare la shell Termux** una sola volta affinché il `service-daemon` venga avviato dal profilo di `termux-services`. Questo passaggio appartiene esclusivamente alla configurazione iniziale, non all'uso quotidiano.
+
 2. Con runtime LSM, `llama-server` e GGUF già presenti sul dispositivo, eseguire il bootstrap. **Alla prima installazione assoluta** il comando stabile `trama-memory` non esiste ancora, perché viene creato proprio dall'installazione: entrare quindi nella directory del runtime ed eseguire direttamente il modulo Python. L'origine deve essere esatta e non può contenere caratteri jolly:
 
 ```sh
@@ -71,7 +73,7 @@ trama-memory status
 trama-memory stop
 ```
 
-4. Facoltativamente, per riattivare i servizi dopo un riavvio Android, installare lo script di **Termux:Boot**:
+4. Facoltativamente, per riattivare i servizi dopo un riavvio Android, usare **Termux:Boot**. Come prerequisito, installare l'applicazione e **aprire Termux:Boot almeno una volta** dal launcher Android; solo dopo installare lo script di avvio:
 
 ```sh
 trama-memory install-boot
