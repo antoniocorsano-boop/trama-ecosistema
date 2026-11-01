@@ -2,7 +2,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json, socket
-from auth import load_or_create_local_token, bearer_matches
+from auth import load_or_create_local_token, bearer_authorized
 from contracts import ValidationError, RevisionConflictError, RebuildRequiredError, EmbeddingError, StorageError
 from session_auth import SessionCapabilityStore
 POST_ROUTES={'/v1/projections/upsert':'upsert','/v1/projections/remove':'remove','/v1/search':'search'}
@@ -75,7 +75,12 @@ class _Handler(BaseHTTPRequestHandler):
         method=POST_ROUTES.get(self.path)
         if method is None: return self._error(404,'not_found')
         if not self._origin_ok(): return self._error(403,'origin_forbidden')
-        if not bearer_matches(self.headers.get('Authorization'),self.token): return self._error(401,'unauthorized')
+        if not bearer_authorized(
+            self.headers.get('Authorization'),
+            self.token,
+            self.sessions,
+            self.headers.get('Origin'),
+        ): return self._error(401,'unauthorized')
         try: payload=self._read_json(); result=getattr(self.svc,method)(payload)
         except _HttpProblem as exc: return self._error(exc.status,exc.code)
         except ValidationError: return self._error(422,'invalid_request')
