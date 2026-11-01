@@ -2,9 +2,12 @@ import importlib
 import io
 import os
 import tempfile
+import threading
 import unittest
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from contextlib import redirect_stdout
+from unittest.mock import patch
 
 
 class TramaMemoryCliContractTests(unittest.TestCase):
@@ -95,6 +98,34 @@ class TramaMemoryCliContractTests(unittest.TestCase):
                 origins=('*',),
             )
         self.assertFalse(config_path.exists())
+
+    def test_wait_http_ready_ignores_environment_proxy_for_loopback(self):
+        class HealthHandler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+
+            def do_GET(self):
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(b'ok')
+
+        server = ThreadingHTTPServer(('127.0.0.1', 0), HealthHandler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            proxy_env = {
+                'HTTP_PROXY': 'http://127.0.0.1:9',
+                'http_proxy': 'http://127.0.0.1:9',
+                'NO_PROXY': '',
+                'no_proxy': '',
+            }
+            url = f'http://127.0.0.1:{server.server_port}/health'
+            with patch.dict(os.environ, proxy_env, clear=False):
+                self.assertTrue(self.module.wait_http_ready(url, timeout_seconds=0.5))
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
 
     def test_lifecycle_starts_embedding_before_memoryd_and_stops_in_reverse(self):
         installed = self.install()
