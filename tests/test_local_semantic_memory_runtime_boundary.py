@@ -10,7 +10,9 @@ class RuntimeBoundaryTests(unittest.TestCase):
     def test_production_routes_are_narrow_and_have_no_generic_power_endpoints(self):
         import server
         self.assertEqual(set(server.POST_ROUTES), {'/v1/projections/upsert','/v1/projections/remove','/v1/search'})
-        self.assertEqual(server.KNOWN_PATHS, {'/v1/health','/v1/projections/upsert','/v1/projections/remove','/v1/search'})
+        self.assertEqual(server.SESSION_PATH, '/v1/session')
+        self.assertNotIn(server.SESSION_PATH, server.POST_ROUTES)
+        self.assertEqual(server.KNOWN_PATHS, {'/v1/health','/v1/session','/v1/projections/upsert','/v1/projections/remove','/v1/search'})
         joined = ' '.join(server.KNOWN_PATHS).lower()
         for word in ('sql','shell','file','filesystem','download','exec','command'):
             self.assertNotIn(word, joined)
