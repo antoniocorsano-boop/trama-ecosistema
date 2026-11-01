@@ -74,14 +74,15 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
 
             return Result()
 
-        with patch.object(self.module, '_loopback_port_in_use', side_effect=[True, True]):
-            with self.assertRaisesRegex(RuntimeError, '(?i:non supervisionato|già in uso|occupat)'):
-                self.module._ensure_listener_is_supervised(
-                    self.installed,
-                    'trama-memoryd',
-                    8765,
-                    runner=runner,
-                )
+        with patch.object(self.module, '_loopback_port_in_use', return_value=True):
+            with patch.object(self.module.time, 'sleep', return_value=None):
+                with self.assertRaisesRegex(RuntimeError, '(?i:non supervisionato|già in uso|occupat)'):
+                    self.module._ensure_listener_is_supervised(
+                        self.installed,
+                        'trama-memoryd',
+                        8765,
+                        runner=runner,
+                    )
 
         actions = [command[1] for command in commands]
         self.assertEqual(actions[:2], ['status', 'down'])
