@@ -227,10 +227,11 @@ def load_installed(
 
 def wait_http_ready(url: str, *, timeout_seconds: float = 60.0) -> bool:
     deadline = time.monotonic() + max(0.1, timeout_seconds)
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     while time.monotonic() < deadline:
         try:
             request = urllib.request.Request(url, method='GET')
-            with urllib.request.urlopen(request, timeout=2) as response:
+            with opener.open(request, timeout=2) as response:
                 if 200 <= response.status < 300:
                     return True
         except (urllib.error.URLError, TimeoutError, OSError):
