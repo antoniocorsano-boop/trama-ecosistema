@@ -217,7 +217,7 @@ class TramaMemoryCliContractTests(unittest.TestCase):
                 returncode = 1 if 'down' in rendered and 'trama-embedding' in ' '.join(rendered) else 0
             return Result()
 
-        with self.assertRaisesRegex(RuntimeError, 'cleanup|ripristino|arresto'):
+        with self.assertRaisesRegex(RuntimeError, '(?i:cleanup|ripristino|arresto)'):
             self.module.start_stack(
                 installed,
                 runner=runner,
