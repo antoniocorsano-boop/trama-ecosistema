@@ -340,8 +340,11 @@ def _service_is_active(
     *,
     runner: Callable[..., object] = subprocess.run,
 ) -> bool:
-    result = _run_sv(installed, 'check', service_name, runner=runner)
-    return getattr(result, 'returncode', 1) == 0
+    result = _run_sv(installed, 'status', service_name, runner=runner)
+    if getattr(result, 'returncode', 1) != 0:
+        return False
+    output = str(getattr(result, 'stdout', '')).lstrip()
+    return output.startswith('run:')
 
 
 def _ensure_listener_is_supervised(
@@ -432,11 +435,9 @@ def status_stack(
     runner: Callable[..., object] = subprocess.run,
     health_check: Callable[..., bool] = wait_http_ready,
 ) -> dict[str, object]:
-    embedding_service = _run_sv(installed, 'check', 'trama-embedding', runner=runner)
-    memory_service = _run_sv(installed, 'check', 'trama-memoryd', runner=runner)
     return {
-        'embedding_service': getattr(embedding_service, 'returncode', 1) == 0,
-        'memory_service': getattr(memory_service, 'returncode', 1) == 0,
+        'embedding_service': _service_is_active(installed, 'trama-embedding', runner=runner),
+        'memory_service': _service_is_active(installed, 'trama-memoryd', runner=runner),
         'embedding_ready': health_check(
             f'http://127.0.0.1:{installed.config.embedding_port}/health', timeout_seconds=1
         ),
