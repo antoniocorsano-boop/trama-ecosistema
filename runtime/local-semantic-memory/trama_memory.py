@@ -338,6 +338,53 @@ def install_boot(
     return boot_path
 
 
+class ServiceSmokeControl:
+    def __init__(
+        self,
+        installed: InstalledStack,
+        *,
+        runner: Callable[..., object] = subprocess.run,
+    ) -> None:
+        self.installed = installed
+        self.runner = runner
+
+    def restart_memoryd(self) -> None:
+        down = _run_sv(self.installed, 'down', 'trama-memoryd', runner=self.runner)
+        _ensure_success(down, 'Arresto memoria per smoke')
+        up = _run_sv(self.installed, 'up', 'trama-memoryd', runner=self.runner)
+        _ensure_success(up, 'Riavvio memoria per smoke')
+
+
+def _resolve_smoke_origin(installed: InstalledStack, requested: str | None) -> str:
+    allowed = installed.config.allowed_origins
+    if requested:
+        exact = validate_origin(requested)
+        if exact not in allowed:
+            raise ValueError('Origine smoke non presente nella configurazione autorizzata.')
+        return exact
+    if len(allowed) == 1:
+        return allowed[0]
+    raise ValueError('Più origini configurate: specificare `--origin` per lo smoke.')
+
+
+def _format_smoke_report(report: dict[str, object]) -> str:
+    timings = report.get('timingsMs') if isinstance(report.get('timingsMs'), dict) else {}
+    return '\n'.join([
+        'Smoke LSM-01E: PASS',
+        f'Modello: {report.get("modelId")}',
+        f'Dimensioni: {report.get("dimensions")}',
+        f'Revisione indice: {report.get("indexRevision")}',
+        f'Invalidazione sessione al restart: {report.get("sessionInvalidation")}',
+        f'Persistenza indice al restart: {report.get("persistenceAfterRestart")}',
+        f'Ricerca semantica: {report.get("semanticSearch")}',
+        f'Cleanup sintetico: {report.get("cleanup")}',
+        'Latenze indicative (ms): '
+        f'upsert={timings.get("upsert")}, '
+        f'ricerca-pre={timings.get("searchBeforeRestart")}, '
+        f'ricerca-post={timings.get("searchAfterRestart")}',
+    ])
+
+
 def _default_home() -> str:
     return str(Path.home())
 
@@ -374,6 +421,10 @@ def build_parser() -> argparse.ArgumentParser:
     ):
         command = subparsers.add_parser(name, help=help_text)
         _add_common_paths(command)
+
+    smoke = subparsers.add_parser('smoke', help='Esegue la qualifica hardware sintetica in un comando')
+    _add_common_paths(smoke)
+    smoke.add_argument('--origin', default=None)
 
     return parser
 
@@ -415,6 +466,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
         if args.command == 'status':
             print(format_status(status_stack(installed)))
+            return 0
+        if args.command == 'smoke':
+            from hardware_smoke import run_smoke
+
+            start_stack(installed)
+            origin = _resolve_smoke_origin(installed, args.origin)
+            report = run_smoke(
+                base_url=f'http://127.0.0.1:{installed.config.memory_port}',
+                origin=origin,
+                control=ServiceSmokeControl(installed),
+            )
+            print(_format_smoke_report(report))
             return 0
     except (ValueError, RuntimeError, OSError) as exc:
         print(f'ERRORE: {exc}', file=sys.stderr)
