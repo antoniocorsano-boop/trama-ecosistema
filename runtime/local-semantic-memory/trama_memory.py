@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import dataclass
+import json
 import os
 from pathlib import Path
 import shlex
@@ -303,6 +304,33 @@ def wait_http_ready(url: str, *, timeout_seconds: float = 60.0) -> bool:
     return False
 
 
+def wait_memory_health_status(
+    url: str,
+    *,
+    timeout_seconds: float = 60.0,
+) -> str | None:
+    deadline = time.monotonic() + max(0.1, timeout_seconds)
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    while time.monotonic() < deadline:
+        try:
+            request = urllib.request.Request(url, method='GET')
+            with opener.open(request, timeout=2) as response:
+                if 200 <= response.status < 300:
+                    try:
+                        payload = json.loads(response.read().decode('utf-8'))
+                    except (UnicodeDecodeError, json.JSONDecodeError):
+                        payload = None
+                    if isinstance(payload, dict):
+                        if payload.get('schema') == 'trama.semantic-memory-health/v1':
+                            status = payload.get('status')
+                            if isinstance(status, str) and status:
+                                return status
+        except (urllib.error.URLError, TimeoutError, OSError):
+            pass
+        time.sleep(0.25)
+    return None
+
+
 def _run_sv(
     installed: InstalledStack,
     action: str,
@@ -434,7 +462,15 @@ def start_stack(
         result = _run_sv(installed, 'up', 'trama-memoryd', runner=runner)
         _ensure_success(result, 'Avvio memoria')
         memory_health = f'http://127.0.0.1:{installed.config.memory_port}/v1/health'
-        if not health_check(memory_health, timeout_seconds=60):
+        if health_check is wait_http_ready:
+            memory_health_status = wait_memory_health_status(memory_health, timeout_seconds=60)
+        else:
+            memory_health_status = (
+                'ready' if health_check(memory_health, timeout_seconds=60) else None
+            )
+        if memory_health_status == 'rebuild-required':
+            raise RuntimeError('Memoria locale: ricostruzione dell’indice richiesta.')
+        if memory_health_status not in {'ready', 'degraded'}:
             raise RuntimeError('Memoria locale non disponibile dopo l’avvio.')
     except BaseException as exc:
         cleanup_errors = _stop_stack_best_effort(installed, runner=runner)
@@ -461,21 +497,33 @@ def status_stack(
     runner: Callable[..., object] = subprocess.run,
     health_check: Callable[..., bool] = wait_http_ready,
 ) -> dict[str, object]:
+    memory_health_url = f'http://127.0.0.1:{installed.config.memory_port}/v1/health'
+    if health_check is wait_http_ready:
+        memory_health_status = wait_memory_health_status(memory_health_url, timeout_seconds=1)
+    else:
+        memory_health_status = (
+            'ready' if health_check(memory_health_url, timeout_seconds=1) else None
+        )
     return {
         'embedding_service': _service_is_active(installed, 'trama-embedding', runner=runner),
         'memory_service': _service_is_active(installed, 'trama-memoryd', runner=runner),
         'embedding_ready': health_check(
             f'http://127.0.0.1:{installed.config.embedding_port}/health', timeout_seconds=1
         ),
-        'memory_ready': health_check(
-            f'http://127.0.0.1:{installed.config.memory_port}/v1/health', timeout_seconds=1
-        ),
+        'memory_ready': memory_health_status in {'ready', 'degraded'},
+        'memory_health_status': memory_health_status,
     }
 
 
 def format_status(status: dict[str, object]) -> str:
     embedding = 'pronto' if status.get('embedding_ready') else 'non disponibile'
-    memory = 'pronta' if status.get('memory_ready') else 'non disponibile'
+    memory_health_status = status.get('memory_health_status')
+    if memory_health_status == 'rebuild-required':
+        memory = 'ricostruzione richiesta'
+    elif memory_health_status == 'degraded' and status.get('memory_ready'):
+        memory = 'pronta (degradata)'
+    else:
+        memory = 'pronta' if status.get('memory_ready') else 'non disponibile'
     embedding_service = 'attivo' if status.get('embedding_service') else 'non attivo'
     memory_service = 'attivo' if status.get('memory_service') else 'non attivo'
     return (
