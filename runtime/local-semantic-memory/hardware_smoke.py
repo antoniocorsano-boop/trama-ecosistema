@@ -149,17 +149,25 @@ def _issue_session(
     return token, health
 
 
-def _require_ready_health(health: dict[str, Any]) -> None:
+def _require_ready_health(
+    health: dict[str, Any],
+    *,
+    require_signature: bool = True,
+) -> tuple[str | None, int | None]:
     if health.get('schema') != 'trama.semantic-memory-health/v1':
         raise SmokeFailure('Health LSM: schema inatteso.')
     if health.get('status') != 'ready':
         raise SmokeFailure(f'Health LSM non ready: {health.get("status")!r}.')
-    dimensions = health.get('dimensions')
-    if not isinstance(dimensions, int) or isinstance(dimensions, bool) or dimensions <= 0:
-        raise SmokeFailure('Health LSM: dimensionalità non valida.')
+
     model_id = health.get('modelId')
+    dimensions = health.get('dimensions')
+    if model_id is None and dimensions is None and not require_signature:
+        return None, None
     if not isinstance(model_id, str) or not model_id.strip():
         raise SmokeFailure('Health LSM: modelId non valido.')
+    if not isinstance(dimensions, int) or isinstance(dimensions, bool) or dimensions <= 0:
+        raise SmokeFailure('Health LSM: dimensionalità non valida.')
+    return model_id, dimensions
 
 
 def _wait_ready(
@@ -284,10 +292,10 @@ def run_smoke(
     try:
         status, health, _headers = client.request('GET', f'{base}/v1/health', timeout_seconds=10)
         _require_status(status, 200, 'Health iniziale')
-        _require_ready_health(health)
+        _require_ready_health(health, require_signature=False)
 
         first_token, session_health = _issue_session(client, base, exact_origin)
-        _require_ready_health(session_health)
+        _require_ready_health(session_health, require_signature=False)
 
         cleanup_required = True
         status, _receipt, _headers, upsert_ms = _timed_request(
@@ -300,6 +308,12 @@ def run_smoke(
             timeout_seconds=30,
         )
         _require_status(status, 200, 'Indicizzazione sintetica')
+
+        status, indexed_health, _headers = client.request(
+            'GET', f'{base}/v1/health', timeout_seconds=10
+        )
+        _require_status(status, 200, 'Health dopo indicizzazione')
+        indexed_model, indexed_dimensions = _require_ready_health(indexed_health)
 
         status, search_before, _headers, search_before_ms = _timed_request(
             client,
@@ -315,6 +329,9 @@ def run_smoke(
 
         control.restart_memoryd()
         restarted_health = _wait_ready(client, base)
+        restarted_model, restarted_dimensions = _require_ready_health(restarted_health)
+        if (restarted_model, restarted_dimensions) != (indexed_model, indexed_dimensions):
+            raise SmokeFailure('Restart: firma embedding diversa dopo il riavvio.')
 
         stale_status, _stale_payload, _headers = client.request(
             'POST',
@@ -327,7 +344,9 @@ def run_smoke(
         _require_status(stale_status, 401, 'Invalidazione capability dopo restart')
 
         second_token, second_health = _issue_session(client, base, exact_origin)
-        _require_ready_health(second_health)
+        second_model, second_dimensions = _require_ready_health(second_health)
+        if (second_model, second_dimensions) != (indexed_model, indexed_dimensions):
+            raise SmokeFailure('Nuova sessione: firma embedding diversa dopo il riavvio.')
         if second_token == first_token:
             raise SmokeFailure('Restart: la nuova capability coincide con quella precedente.')
 
@@ -345,8 +364,8 @@ def run_smoke(
 
         report = {
             'passed': True,
-            'modelId': restarted_health.get('modelId'),
-            'dimensions': restarted_health.get('dimensions'),
+            'modelId': restarted_model,
+            'dimensions': restarted_dimensions,
             'indexRevision': restarted_health.get('indexRevision'),
             'sessionInvalidation': 'pass',
             'persistenceAfterRestart': 'pass',
