@@ -276,12 +276,21 @@ def start_stack(
         _run_sv(installed, 'down', 'trama-embedding', runner=runner)
         raise RuntimeError('Embedding locale non disponibile; memoria non avviata.')
 
-    result = _run_sv(installed, 'up', 'trama-memoryd', runner=runner)
-    _ensure_success(result, 'Avvio memoria')
-    memory_health = f'http://127.0.0.1:{installed.config.memory_port}/v1/health'
-    if not health_check(memory_health, timeout_seconds=60):
-        _run_sv(installed, 'down', 'trama-memoryd', runner=runner)
-        raise RuntimeError('Memoria locale non disponibile dopo l’avvio.')
+    try:
+        result = _run_sv(installed, 'up', 'trama-memoryd', runner=runner)
+        _ensure_success(result, 'Avvio memoria')
+        memory_health = f'http://127.0.0.1:{installed.config.memory_port}/v1/health'
+        if not health_check(memory_health, timeout_seconds=60):
+            raise RuntimeError('Memoria locale non disponibile dopo l’avvio.')
+    except Exception:
+        # A failed stack start must not leave the embedding server consuming
+        # phone resources after memoryd has failed to become usable.
+        for service_name in ('trama-memoryd', 'trama-embedding'):
+            try:
+                _run_sv(installed, 'down', service_name, runner=runner)
+            except OSError:
+                pass
+        raise
 
 
 def stop_stack(
