@@ -111,6 +111,12 @@ class HardwareSmokeContractTests(unittest.TestCase):
     def setUp(self):
         self.module = importlib.import_module('hardware_smoke')
 
+    def test_generated_payloads_pass_canonical_runtime_validators(self):
+        contracts = importlib.import_module('contracts')
+        contracts.validate_upsert_request(self.module._upsert_payload())
+        contracts.validate_search_request(self.module._search_payload())
+        contracts.validate_remove_request(self.module._remove_payload())
+
     def test_smoke_qualifies_session_search_restart_persistence_and_cleanup_without_leaking_capability(self):
         transport = FakeTransport()
         control = FakeControl(transport)
