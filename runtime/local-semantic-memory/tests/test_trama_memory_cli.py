@@ -206,6 +206,29 @@ class TramaMemoryCliContractTests(unittest.TestCase):
         self.assertTrue(any('down' in cmd and 'trama-memoryd' in cmd for cmd in joined))
         self.assertTrue(any('down' in cmd and 'trama-embedding' in cmd for cmd in joined))
 
+    def test_keyboard_interrupt_during_start_cleans_up_and_is_re_raised(self):
+        installed = self.install()
+        commands = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+            class Result:
+                returncode = 0
+                stdout = ''
+                stderr = ''
+            return Result()
+
+        def health(url, timeout_seconds=0):
+            raise KeyboardInterrupt()
+
+        with self.assertRaises(KeyboardInterrupt):
+            self.module.start_stack(installed, runner=runner, health_check=health)
+
+        joined = [' '.join(cmd) for cmd in commands]
+        self.assertTrue(any('down' in cmd and 'trama-memoryd' in cmd for cmd in joined))
+        self.assertTrue(any('down' in cmd and 'trama-embedding' in cmd for cmd in joined))
+
     def test_failed_start_surfaces_incomplete_cleanup(self):
         installed = self.install()
 

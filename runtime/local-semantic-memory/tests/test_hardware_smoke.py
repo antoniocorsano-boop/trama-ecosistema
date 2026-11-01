@@ -11,6 +11,7 @@ class FakeTransport:
         self.requests = []
         self.fail_first_search = False
         self.fail_after_upsert_commit = False
+        self.fail_remove = False
         self.search_calls = 0
 
     def restart(self):
@@ -92,6 +93,8 @@ class FakeTransport:
             }]
             return 200, {'schema': 'trama.semantic-memory-search-response/v1', 'hits': hits}, {}
         if method == 'POST' and path == '/v1/projections/remove':
+            if self.fail_remove:
+                return 503, {'error': 'cleanup_unavailable'}, {}
             self.projection = None
             return 200, {
                 'schema': 'trama.semantic-memory-remove-receipt/v1',
@@ -177,6 +180,21 @@ class HardwareSmokeContractTests(unittest.TestCase):
             )
         self.assertIsNone(transport.projection)
         self.assertTrue(any(r['path'] == '/v1/projections/remove' for r in transport.requests))
+
+    def test_smoke_surfaces_cleanup_failure_alongside_primary_failure(self):
+        transport = FakeTransport()
+        transport.fail_first_search = True
+        transport.fail_remove = True
+        control = FakeControl(transport)
+        with self.assertRaisesRegex(self.module.SmokeFailure, '(?i:cleanup)') as raised:
+            self.module.run_smoke(
+                base_url='http://127.0.0.1:8765',
+                origin='http://127.0.0.1:4174',
+                control=control,
+                transport=transport,
+            )
+        self.assertIn('503', str(raised.exception))
+        self.assertIsNotNone(transport.projection)
 
     def test_cli_exposes_smoke_as_a_single_command(self):
         cli = importlib.import_module('trama_memory')
