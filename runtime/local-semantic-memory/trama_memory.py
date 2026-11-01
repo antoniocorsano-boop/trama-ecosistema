@@ -447,7 +447,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 embedding_model=args.embedding_model,
             )
             print(f'Configurazione pronta: {installed.config_path}')
-            print('Avvio quotidiano: trama-memory start')
+            print('Prima attivazione dei servizi: trama-memory start')
+            print('Uso quotidiano: apri Registro Docente e scegli “Attiva memoria locale”.')
             return 0
 
         if args.command == 'install-boot':

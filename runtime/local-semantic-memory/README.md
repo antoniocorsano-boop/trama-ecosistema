@@ -41,15 +41,18 @@ LSM-01E rende Termux infrastruttura supervisionata: nell'uso quotidiano il docen
 pkg install termux-services
 ```
 
-2. Con runtime LSM, `llama-server` e GGUF già presenti sul dispositivo, configurare lo stack con un solo comando. L'origine deve essere esatta e non può contenere caratteri jolly:
+2. Con runtime LSM, `llama-server` e GGUF già presenti sul dispositivo, eseguire il bootstrap. **Alla prima installazione assoluta** il comando stabile `trama-memory` non esiste ancora, perché viene creato proprio dall'installazione: entrare quindi nella directory del runtime ed eseguire direttamente il modulo Python. L'origine deve essere esatta e non può contenere caratteri jolly:
 
 ```sh
-trama-memory install \
+cd "$HOME/src/trama-ecosistema/runtime/local-semantic-memory"
+python3 trama_memory.py install \
   --runtime-dir "$HOME/src/trama-ecosistema/runtime/local-semantic-memory" \
   --llama-server "$HOME/src/llama.cpp/build/bin/llama-server" \
   --model "$HOME/models/embeddinggemma-2.gguf" \
   --origin "http://127.0.0.1:4173"
 ```
+
+Dopo questo bootstrap, il sottocomando di installazione e riconfigurazione è disponibile come `trama-memory install`; tutte le operazioni successive usano il solo comando stabile `trama-memory`.
 
 L'installazione crea `~/.config/trama-memory/config.env`, il comando stabile `trama-memory` e i servizi `trama-embedding` e `trama-memoryd`. La configurazione contiene solo parametri non segreti: **nessun token** viene copiato nel file, nell'output del comando o nel browser. Il master token resta gestito dal runtime nel proprio file locale.
 
