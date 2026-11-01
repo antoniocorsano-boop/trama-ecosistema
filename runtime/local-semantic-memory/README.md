@@ -29,7 +29,74 @@ cmake -B build
 cmake --build build --config Release -t llama-server
 ```
 
-## 2. Avviare l'endpoint embedding locale
+## 2. LSM-01E — configurazione una tantum e uso quotidiano
+
+LSM-01E rende Termux infrastruttura supervisionata: nell'uso quotidiano il docente non deve avviare processi, copiare token o gestire porte. I due servizi locali restano separati: `trama-embedding` per EmbeddingGemma/`llama-server` e `trama-memoryd` per la memoria semantica.
+
+### Configurazione una tantum
+
+1. Installare una sola volta il supervisore runit di Termux:
+
+```sh
+pkg install termux-services
+```
+
+2. Con runtime LSM, `llama-server` e GGUF già presenti sul dispositivo, configurare lo stack con un solo comando. L'origine deve essere esatta e non può contenere caratteri jolly:
+
+```sh
+trama-memory install \
+  --runtime-dir "$HOME/src/trama-ecosistema/runtime/local-semantic-memory" \
+  --llama-server "$HOME/src/llama.cpp/build/bin/llama-server" \
+  --model "$HOME/models/embeddinggemma-2.gguf" \
+  --origin "http://127.0.0.1:4173"
+```
+
+L'installazione crea `~/.config/trama-memory/config.env`, il comando stabile `trama-memory` e i servizi `trama-embedding` e `trama-memoryd`. La configurazione contiene solo parametri non segreti: **nessun token** viene copiato nel file, nell'output del comando o nel browser. Il master token resta gestito dal runtime nel proprio file locale.
+
+LSM-01E richiede che modello GGUF e binario `llama-server` esistano già: **nessun download automatico** di modelli o binari viene eseguito.
+
+3. Avviare lo stack supervisionato e verificarne lo stato:
+
+```sh
+trama-memory start
+trama-memory status
+```
+
+`trama-memory start` avvia prima `trama-embedding`, attende l'health loopback e solo dopo avvia `trama-memoryd`. Per arrestare intenzionalmente lo stack:
+
+```sh
+trama-memory stop
+```
+
+4. Facoltativamente, per riattivare i servizi dopo un riavvio Android, installare lo script di **Termux:Boot**:
+
+```sh
+trama-memory install-boot
+```
+
+Lo script viene creato in `~/.termux/boot/20-trama-memory-services` e non incorpora segreti.
+
+5. La qualifica hardware, quando serve, è un solo comando e usa esclusivamente un **corpus sintetico** con cleanup finale:
+
+```sh
+trama-memory smoke
+```
+
+### Uso quotidiano
+
+Dopo la configurazione una tantum, il percorso ordinario è browser-only:
+
+1. aprire **Registro Docente**;
+2. scegliere **Attiva memoria locale**;
+3. usare ricerca e sincronizzazione tramite i normali gesti del Registro.
+
+Nel percorso ordinario non compaiono token, porte, comandi Termux o riavvii manuali. `trama-memory start`, `trama-memory stop`, `trama-memory status` e `trama-memory smoke` restano strumenti di amministrazione e diagnosi, non passaggi della giornata del docente.
+
+### Dettaglio tecnico e diagnostica
+
+Le sezioni seguenti descrivono i processi sottostanti e restano utili per diagnosi, sviluppo e qualificazione. Non costituiscono il flusso quotidiano raccomandato.
+
+## 3. Dettaglio tecnico: endpoint embedding locale
 
 Esempio con un GGUF già disponibile:
 
@@ -47,7 +114,7 @@ MODEL="$HOME/models/embeddinggemma-2.gguf"
 
 Non usare in questo profilo opzioni che scaricano modelli da rete: il file GGUF deve essere già locale.
 
-## 3. Configurare il daemon LSM
+## 4. Dettaglio tecnico: configurare il daemon LSM
 
 Esempio per lo smoke locale del Registro servito da `127.0.0.1:4173`:
 
@@ -75,7 +142,7 @@ export TRAMA_SQLITE_VEC_PATH="/percorso/assoluto/vec0.so"
 
 Se l'estensione non supera la verifica di caricamento, il servizio continua con il backend lineare e lo stato health diventa `degraded`.
 
-## 4. Avviare il runtime
+## 5. Dettaglio tecnico: avviare il runtime
 
 ```sh
 cd /percorso/di/trama-ecosistema/runtime/local-semantic-memory
@@ -94,7 +161,7 @@ curl -s http://127.0.0.1:8765/v1/health
 
 Una risposta sana usa lo schema `trama.semantic-memory-health/v1` e non contiene token, percorsi del database o contenuti indicizzati.
 
-## 5. Collegamento da una PWA
+## 6. Collegamento da una PWA
 
 Una PWA pubblica deve essere servita da un **contesto sicuro HTTPS** e usare CORS con la propria origine esatta. Nei browser Chromium attuali l'accesso da un'origine pubblica al loopback è soggetto all'autorizzazione di rete locale `loopback-network`.
 
@@ -124,7 +191,7 @@ Non aggiungere wildcard CORS o le vecchie intestazioni Private Network Access co
 
 Dopo ricarica o nuova sessione del consumer, la capability browser non viene recuperata da storage. Il docente può riattivare la memoria con un nuovo gesto esplicito, senza digitare token.
 
-## 6. Rebuild esplicito
+## 7. Rebuild esplicito
 
 SQLite è soltanto un indice derivato. Se `health.status` diventa `rebuild-required` perché il modello o la dimensionalità non coincidono con l'indice esistente:
 
@@ -142,7 +209,7 @@ rm -f "$TRAMA_MEMORY_DB" "$TRAMA_MEMORY_DB-wal" "$TRAMA_MEMORY_DB-shm"
 
 La cancellazione del database LSM non deve comportare perdita professionale: se accade, un consumer sta usando l'indice come fonte canonica e viola il disegno LSM-01.
 
-## 7. Qualificazione automatica
+## 8. Qualificazione automatica
 
 ```sh
 python3 -m unittest discover -s runtime/local-semantic-memory/tests -v
@@ -152,7 +219,7 @@ python3 -m unittest discover -s tests -v
 
 Lo smoke automatico usa un endpoint embedding fittizio sul loopback e verifica create, ricerca, replace CAS, remove CAS, bootstrap di sessione e riavvio sullo stesso SQLite.
 
-## 8. Qualificazione manuale sul dispositivo
+## 9. Qualificazione manuale sul dispositivo
 
 La qualifica hardware richiede un dispositivo Android/Termux reale e non viene sostituita dai test automatici. Registrare senza dati personali:
 
