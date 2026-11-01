@@ -1,8 +1,10 @@
 import importlib
+import io
 import os
 import tempfile
 import unittest
 from pathlib import Path
+from contextlib import redirect_stdout
 
 
 class TramaMemoryCliContractTests(unittest.TestCase):
@@ -148,6 +150,25 @@ class TramaMemoryCliContractTests(unittest.TestCase):
         self.assertIn('start-services.sh', text)
         self.assertNotIn('token', text.lower())
         self.assertTrue(os.access(boot, os.X_OK))
+
+    def test_install_output_frames_termux_start_as_one_time_and_daily_use_as_browser_activation(self):
+        output = io.StringIO()
+        argv = [
+            'install',
+            '--model', str(self.model),
+            '--origin', 'http://127.0.0.1:4174',
+            '--runtime-dir', str(self.runtime),
+            '--llama-server', str(self.llama),
+            '--home', str(self.home),
+            '--prefix', str(self.prefix),
+        ]
+        with redirect_stdout(output):
+            result = self.module.main(argv)
+        self.assertEqual(result, 0)
+        rendered = output.getvalue().lower()
+        self.assertNotIn('avvio quotidiano: trama-memory start', rendered)
+        self.assertIn('prima attivazione', rendered)
+        self.assertIn('attiva memoria locale', rendered)
 
     def test_parser_exposes_single_command_lifecycle(self):
         parser = self.module.build_parser()

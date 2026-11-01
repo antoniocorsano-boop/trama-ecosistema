@@ -89,6 +89,8 @@ class RunbookContractTests(unittest.TestCase):
         self.assertIn('corpus sintetico', lower)
         self.assertIn('nessun token', lower)
         self.assertIn('nessun download automatico', lower)
+        self.assertIn('prima installazione assoluta', lower)
+        self.assertIn('python3 trama_memory.py install', lower)
 
     def test_end_to_end_smoke_persists_across_restart(self):
         from auth import load_or_create_local_token
