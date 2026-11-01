@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import os
 from pathlib import Path
 import shlex
+import socket
 import subprocess
 import sys
 import tempfile
@@ -312,6 +313,41 @@ def _ensure_success(result: object, label: str) -> None:
         raise RuntimeError(f'{label} non riuscito' + (f': {stderr}' if stderr else '.'))
 
 
+def _loopback_port_in_use(port: int, timeout_seconds: float = 0.2) -> bool:
+    try:
+        with socket.create_connection(('127.0.0.1', int(port)), timeout=timeout_seconds):
+            return True
+    except OSError:
+        return False
+
+
+def _service_is_active(
+    installed: InstalledStack,
+    service_name: str,
+    *,
+    runner: Callable[..., object] = subprocess.run,
+) -> bool:
+    result = _run_sv(installed, 'check', service_name, runner=runner)
+    return getattr(result, 'returncode', 1) == 0
+
+
+def _ensure_listener_is_supervised(
+    installed: InstalledStack,
+    service_name: str,
+    port: int,
+    *,
+    runner: Callable[..., object] = subprocess.run,
+) -> None:
+    if not _loopback_port_in_use(port):
+        return
+    if _service_is_active(installed, service_name, runner=runner):
+        return
+    raise RuntimeError(
+        f'Porta locale {port} già in uso da un processo non supervisionato; '
+        f'arresta il listener legacy prima di avviare {service_name}.'
+    )
+
+
 def _stop_stack_best_effort(
     installed: InstalledStack,
     *,
@@ -340,6 +376,9 @@ def start_stack(
     health_check: Callable[..., bool] = wait_http_ready,
 ) -> None:
     try:
+        _ensure_listener_is_supervised(
+            installed, 'trama-embedding', installed.config.embedding_port, runner=runner
+        )
         result = _run_sv(installed, 'up', 'trama-embedding', runner=runner)
         _ensure_success(result, 'Avvio embedding')
 
@@ -347,6 +386,9 @@ def start_stack(
         if not health_check(embedding_health, timeout_seconds=60):
             raise RuntimeError('Embedding locale non disponibile; memoria non avviata.')
 
+        _ensure_listener_is_supervised(
+            installed, 'trama-memoryd', installed.config.memory_port, runner=runner
+        )
         result = _run_sv(installed, 'up', 'trama-memoryd', runner=runner)
         _ensure_success(result, 'Avvio memoria')
         memory_health = f'http://127.0.0.1:{installed.config.memory_port}/v1/health'
@@ -377,8 +419,8 @@ def status_stack(
     runner: Callable[..., object] = subprocess.run,
     health_check: Callable[..., bool] = wait_http_ready,
 ) -> dict[str, object]:
-    embedding_service = _run_sv(installed, 'status', 'trama-embedding', runner=runner)
-    memory_service = _run_sv(installed, 'status', 'trama-memoryd', runner=runner)
+    embedding_service = _run_sv(installed, 'check', 'trama-embedding', runner=runner)
+    memory_service = _run_sv(installed, 'check', 'trama-memoryd', runner=runner)
     return {
         'embedding_service': getattr(embedding_service, 'returncode', 1) == 0,
         'memory_service': getattr(memory_service, 'returncode', 1) == 0,
