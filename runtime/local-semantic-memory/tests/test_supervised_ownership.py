@@ -60,6 +60,31 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
         self.assertTrue(any('status' in command and 'trama-embedding' in command for command in rendered))
         self.assertFalse(any('up' in command and 'trama-embedding' in command for command in rendered))
 
+    def test_running_service_on_free_expected_port_is_restarted_for_reconfiguration(self):
+        commands = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+
+            class Result:
+                stdout = 'run: service: (pid 42) 12s\n' if 'status' in rendered else ''
+                stderr = ''
+                returncode = 0
+
+            return Result()
+
+        with patch.object(self.module, '_loopback_port_in_use', return_value=False):
+            self.module._ensure_listener_is_supervised(
+                self.installed,
+                'trama-embedding',
+                18080,
+                runner=runner,
+            )
+
+        actions = [command[1] for command in commands]
+        self.assertEqual(actions, ['status', 'stop', 'up'])
+
     def test_running_service_does_not_claim_listener_that_survives_service_down(self):
         commands = []
 
