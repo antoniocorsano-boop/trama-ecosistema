@@ -128,6 +128,28 @@ class TramaMemoryCliContractTests(unittest.TestCase):
         embedding_down = next(i for i, cmd in enumerate(commands) if 'down' in cmd and 'trama-embedding' in ' '.join(cmd))
         self.assertLess(memory_down, embedding_down)
 
+    def test_start_failure_after_embedding_ready_stops_both_services(self):
+        installed = self.install()
+        commands = []
+
+        def runner(args, **kwargs):
+            commands.append(tuple(str(value) for value in args))
+            class Result:
+                returncode = 0
+                stdout = ''
+                stderr = ''
+            return Result()
+
+        def health(url, timeout_seconds=0):
+            return url.endswith(':8080/health')
+
+        with self.assertRaises(RuntimeError):
+            self.module.start_stack(installed, runner=runner, health_check=health)
+
+        joined = [' '.join(cmd) for cmd in commands]
+        self.assertTrue(any('down' in cmd and 'trama-memoryd' in cmd for cmd in joined))
+        self.assertTrue(any('down' in cmd and 'trama-embedding' in cmd for cmd in joined))
+
     def test_status_and_boot_install_are_secret_free(self):
         installed = self.install()
 
