@@ -227,6 +227,8 @@ def load_installed(
 
 def wait_http_ready(url: str, *, timeout_seconds: float = 60.0) -> bool:
     deadline = time.monotonic() + max(0.1, timeout_seconds)
+    # Local health probes must remain on loopback even when the Termux
+    # environment exports HTTP(S)_PROXY variables.
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     while time.monotonic() < deadline:
         try:
