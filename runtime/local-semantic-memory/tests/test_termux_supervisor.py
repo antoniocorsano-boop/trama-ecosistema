@@ -68,7 +68,9 @@ class TermuxSupervisorContractTests(unittest.TestCase):
 
     def test_boot_script_uses_termux_services_without_secrets(self):
         boot = self.module.render_boot_script(Path('/data/data/com.termux/files/usr'))
+        self.assertIn('termux-wake-lock', boot)
         self.assertIn('start-services.sh', boot)
+        self.assertLess(boot.index('termux-wake-lock'), boot.index('start-services.sh'))
         self.assertNotIn('TOKEN', boot.upper())
         self.assertNotIn('semantic-memory.token', boot)
         self.assertNotIn('curl', boot)
