@@ -62,7 +62,7 @@ def render_registro_run(config: RegistroSupervisorConfig) -> str:
 
 
 def render_log_run(prefix: Path) -> str:
-    svlogger = Path(prefix) / "bin" / "svlogger"
+    svlogger = Path(prefix) / "share" / "termux-services" / "svlogger"
     log_dir = Path(prefix) / "var" / "log" / "sv" / SERVICE_NAME
     return "\n".join(
         [
@@ -83,6 +83,7 @@ def render_registro_boot(prefix: Path) -> str:
         [
             "#!/data/data/com.termux/files/usr/bin/sh",
             "set -eu",
+            "termux-wake-lock",
             f". {_shell_quote(profile)}",
             f"SVDIR=\"${{SVDIR:-{default_svdir}}}\"",
             "for i in $(seq 1 30); do",
