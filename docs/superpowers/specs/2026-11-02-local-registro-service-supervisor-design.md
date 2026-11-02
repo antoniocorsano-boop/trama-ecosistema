@@ -17,7 +17,7 @@ Local Semantic Memory remains a separate optional capability. The application ma
 - Add a dedicated runit service named `trama-registro`.
 - Bind only to `127.0.0.1` on port `4173`.
 - Run an already-built production Registro Docente checkout; boot must never run Git, dependency installation, or application build commands.
-- Require the application root, `server.ts`, `package.json`, `dist/index.html`, Bun/Node runtime command, and exact configured commit marker to exist before service installation succeeds.
+- Require the application root, `server.ts`, `package.json`, `dist/index.html`, Bun/Node runtime command, exact configured commit marker, a clean tracked Git worktree, and a deterministic digest of the complete `dist/` tree before service installation succeeds.
 - Start with `NODE_ENV=production`, `PORT=4173`, `TRAMA_BIND_HOST=127.0.0.1`.
 - Supervise stdout/stderr using the same `svlogger` pattern as LSM-01E.
 - Provide one command `trama-registro` with `install`, `start`, `stop`, `status`, `smoke`, and `install-boot`.
@@ -49,6 +49,7 @@ Installed state:
 - wrapper: `$PREFIX/bin/trama-registro` mode 0755;
 - service: `$PREFIX/var/service/trama-registro`;
 - supervised log: `$PREFIX/var/log/sv/trama-registro/current` through `svlogger`;
+- frozen controller copies: `$PREFIX/libexec/trama-registro/trama_registro.py` and `$PREFIX/libexec/trama-registro/registro_supervisor.py`;
 - optional boot script: `~/.termux/boot/30-trama-registro`.
 
 ## Configuration contract
@@ -66,8 +67,10 @@ The installer validates:
 2. `server.ts`, `package.json`, `dist/index.html` exist;
 3. runtime command exists and is executable;
 4. `git -C APP rev-parse HEAD` equals `--candidate-sha`;
-5. checkout is not mutated by installation;
-6. port is valid and not equal to reserved LSM ports 8080/8765 by default configuration.
+5. `git status --porcelain --untracked-files=no` reports no staged/unstaged changes to tracked files;
+6. a deterministic SHA-256 digest freezes the complete `dist/` file tree, including relative paths and file contents;
+7. checkout is not mutated by installation;
+8. port is valid and not equal to reserved LSM ports 8080/8765 by default configuration.
 
 ## Service run contract
 
@@ -99,7 +102,8 @@ The generated `run` script must:
 `status` reports separately:
 
 - supervisor service active/down;
-- HTTP application ready/unavailable;
+- installed identity verified/not verified (exact SHA, clean tracked worktree, complete `dist/` digest);
+- HTTP application ready/unavailable, queried only when identity verification succeeds;
 - exact configured candidate SHA.
 
 `smoke`:
@@ -118,7 +122,7 @@ Boot script:
 
 - sources `start-services.sh`;
 - waits a bounded 30 seconds for `$SVDIR/trama-registro/supervise/ok`;
-- executes `sv up trama-registro`;
+- invokes the frozen `$PREFIX/bin/trama-registro start` controller, which revalidates exact SHA, clean tracked worktree, and the complete `dist/` digest before issuing `sv up`;
 - does not start or configure semantic memory itself;
 - coexists with existing `20-trama-memory-services` when both are installed.
 
@@ -130,14 +134,17 @@ Ordering is intentional: LSM services use prefix 20; Registro uses prefix 30. Th
 - No secret is introduced by this supervisor.
 - Existing `.env` handling of Registro remains unchanged; the supervisor neither reads nor writes provider secrets.
 - The configured checkout identity is frozen at install time; runtime start never updates it.
-- A missing/stale build fails installation/smoke rather than triggering a build.
+- The installed CLI executes frozen controller copies under `$PREFIX/libexec/trama-registro`, not Python files from a mutable TRAMA checkout.
+- A dirty tracked Registro worktree fails closed at install/start/status/smoke; untracked files are not treated as Git identity evidence.
+- A missing or changed `dist/` fails installation/start/status/smoke rather than triggering a build.
 
 ## Acceptance
 
 1. RED→GREEN tests prove run script loopback-only and no build/update commands.
-2. Install is atomic with rollback and rejects missing `dist/index.html` or SHA mismatch.
-3. Ownership tests cover legacy listener and supervised listener release race.
-4. Boot script is bounded, idempotent, and service-specific.
-5. Governance exact-SHA suite PASS.
-6. Android/Termux hardware qualification proves `trama-registro start/status/smoke`, then opening `http://127.0.0.1:4173` on the device.
-7. Final user journey proves the app opens from a home-screen shortcut without opening Termux.
+2. Install is atomic with rollback and rejects missing `dist/index.html`, SHA mismatch, dirty tracked worktree, or complete-`dist/` digest drift.
+3. Installed controller code is frozen under `libexec`, so ordinary execution is independent from later changes to the TRAMA source checkout.
+4. Ownership tests cover legacy listener and supervised listener release race.
+5. Boot script is bounded, idempotent, service-specific, and routes through guarded `trama-registro start`.
+6. Governance exact-SHA suite PASS.
+7. Android/Termux hardware qualification proves `trama-registro start/status/smoke`, then opening `http://127.0.0.1:4173` on the device.
+8. Final user journey proves the app opens from a home-screen shortcut without opening Termux.
