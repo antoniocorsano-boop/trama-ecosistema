@@ -249,11 +249,12 @@ class RegistroServiceTests(unittest.TestCase):
         text = first.read_text(encoding='utf-8')
         self.assertEqual(text.splitlines()[0], TERMUX_SH)
         self.assertIn('30-trama-registro', str(first))
-        up_line = next(line for line in text.splitlines() if line.endswith(' up trama-registro'))
+        start_line = next(line for line in text.splitlines() if line.endswith(' start'))
         self.assertEqual(
-            shlex.split(up_line),
-            [str(installed.prefix / 'bin' / 'sv'), 'up', 'trama-registro'],
+            shlex.split(start_line),
+            [str(installed.wrapper_path), 'start'],
         )
+        self.assertNotIn(' up trama-registro', text)
         self.assertNotIn('trama-memory', text)
         self.assertNotIn('build', text.lower())
 
