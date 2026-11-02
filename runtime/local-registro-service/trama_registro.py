@@ -409,6 +409,45 @@ def _wait_port_free(
     return not _loopback_port_in_use(port)
 
 
+def _wait_http_ready(
+    installed: InstalledRegistro,
+    *,
+    sleep: Callable[[float], None] = time.sleep,
+    attempts: int = 50,
+) -> None:
+    url = f"http://127.0.0.1:{installed.port}/"
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            status, html = _default_http_get(url)
+            if status == 200 and ('id="root"' in html or "id='root'" in html):
+                return
+            last_error = RuntimeError(f"HTTP {status} o root marker assente")
+        except Exception as exc:
+            last_error = exc
+        if attempt + 1 < attempts:
+            sleep(0.1)
+    detail = f": {last_error}" if last_error is not None else ""
+    raise RuntimeError(f"Registro locale HTTP non pronto su {url}{detail}")
+
+
+def _start_and_wait_ready(
+    installed: InstalledRegistro,
+    *,
+    runner: Runner,
+    sleep: Callable[[float], None],
+    label: str,
+) -> None:
+    started = _run_sv(installed, "up", runner=runner)
+    _ensure_success(started, label)
+    try:
+        _wait_http_ready(installed, sleep=sleep)
+    except Exception:
+        stopped = _run_sv(installed, "down", runner=runner)
+        _ensure_success(stopped, "Arresto fail-closed trama-registro non pronto")
+        raise
+
+
 def start_service(
     installed: InstalledRegistro,
     *,
@@ -423,8 +462,12 @@ def start_service(
         if active:
             stopped = _run_sv(installed, "stop", runner=runner)
             _ensure_success(stopped, "Arresto sincrono trama-registro")
-        started = _run_sv(installed, "up", runner=runner)
-        _ensure_success(started, "Avvio trama-registro")
+        _start_and_wait_ready(
+            installed,
+            runner=runner,
+            sleep=sleep,
+            label="Avvio trama-registro",
+        )
         return
 
     if not active:
@@ -442,8 +485,13 @@ def start_service(
             f"Porta locale {installed.port} resta occupata dopo l'arresto del servizio supervisionato; "
             "listener esterno/non supervisionato rilevato."
         )
-    restarted = _run_sv(installed, "up", runner=runner)
-    _ensure_success(restarted, "Ripristino trama-registro dopo prova ownership")
+    _start_and_wait_ready(
+        installed,
+        runner=runner,
+        sleep=sleep,
+        label="Ripristino trama-registro dopo prova ownership",
+    )
+
 
 
 def stop_service(
