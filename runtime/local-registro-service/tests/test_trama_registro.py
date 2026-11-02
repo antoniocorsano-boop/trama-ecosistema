@@ -47,6 +47,7 @@ class RegistroServiceTests(unittest.TestCase):
             prefix=self.prefix,
             home=self.home,
             git_head_resolver=lambda _app: self.sha,
+            git_worktree_clean_resolver=lambda _app: True,
         )
         values.update(overrides)
         return self.module.install_service(**values)
@@ -139,7 +140,11 @@ class RegistroServiceTests(unittest.TestCase):
         self.assertEqual(loaded.port, installed.port)
         self.assertEqual(loaded.dist_digest, installed.dist_digest)
 
-        loaded = replace(loaded, git_head_resolver=lambda _app: self.sha)
+        loaded = replace(
+            loaded,
+            git_head_resolver=lambda _app: self.sha,
+            git_worktree_clean_resolver=lambda _app: True,
+        )
         commands = []
 
         def runner(args, **kwargs):
