@@ -5,6 +5,7 @@ import stat
 import sys
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -85,6 +86,65 @@ class RegistroServiceTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'Build Registro cambiata|dist'):
             self.module._verify_installed_identity(installed)
 
+    def test_install_rolls_back_partial_publish_atomically(self):
+        installed = self.install()
+        targets = [
+            installed.config_path,
+            installed.wrapper_path,
+            installed.service_dir / 'down',
+            installed.service_dir / 'log' / 'run',
+            installed.service_dir / 'run',
+        ]
+        for index, path in enumerate(targets):
+            path.write_text(f'baseline-{index}\n', encoding='utf-8')
+        before = {
+            path: (path.read_bytes(), stat.S_IMODE(path.stat().st_mode))
+            for path in targets
+        }
+        original_atomic_write = self.module._atomic_write
+        calls = {'count': 0}
+
+        def flaky_atomic_write(path, content, mode):
+            calls['count'] += 1
+            if calls['count'] == 5:
+                raise OSError('simulated publish failure')
+            return original_atomic_write(path, content, mode)
+
+        with patch.object(self.module, '_atomic_write', side_effect=flaky_atomic_write):
+            with self.assertRaisesRegex(OSError, 'simulated publish failure'):
+                self.install(port=4174)
+
+        for path, (content, mode) in before.items():
+            self.assertEqual(path.read_bytes(), content)
+            self.assertEqual(stat.S_IMODE(path.stat().st_mode), mode)
+
+    def test_persisted_config_reloads_for_a_new_process_start(self):
+        installed = self.install()
+        loaded = self.module.load_installed(prefix=self.prefix, home=self.home)
+        self.assertEqual(loaded.app_dir, installed.app_dir)
+        self.assertEqual(loaded.runtime_command, installed.runtime_command)
+        self.assertEqual(loaded.candidate_sha, installed.candidate_sha)
+        self.assertEqual(loaded.port, installed.port)
+        self.assertEqual(loaded.dist_digest, installed.dist_digest)
+
+        loaded = replace(loaded, git_head_resolver=lambda _app: self.sha)
+        commands = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+            class Result:
+                returncode = 1 if 'status' in rendered else 0
+                stdout = 'down: service: 1s\n' if 'status' in rendered else ''
+                stderr = ''
+            return Result()
+
+        with patch.object(self.module, '_loopback_port_in_use', return_value=False):
+            self.module.start_service(loaded, runner=runner)
+
+        actions = [command[1] for command in commands if len(command) > 1]
+        self.assertEqual(actions, ['status', 'up'])
+
     def test_start_fails_closed_on_external_listener_and_never_kills_it(self):
         installed = self.install()
         commands = []
@@ -128,6 +188,36 @@ class RegistroServiceTests(unittest.TestCase):
         self.assertIn('down', actions)
         self.assertIn('up', actions)
         self.assertLess(actions.index('down'), actions.index('up'))
+
+    def test_running_service_waits_for_delayed_port_release_before_restart(self):
+        installed = self.install()
+        commands = []
+        port_states = iter([True, True, True, False])
+        sleeps = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+            class Result:
+                returncode = 0
+                stdout = 'run: service: (pid 42) 10s\n' if 'status' in rendered else ''
+                stderr = ''
+            return Result()
+
+        with patch.object(
+            self.module,
+            '_loopback_port_in_use',
+            side_effect=lambda _port: next(port_states, False),
+        ):
+            self.module.start_service(
+                installed,
+                runner=runner,
+                sleep=lambda seconds: sleeps.append(seconds),
+            )
+
+        actions = [command[1] for command in commands if len(command) > 1]
+        self.assertEqual(actions, ['status', 'down', 'up'])
+        self.assertEqual(sleeps, [0.1, 0.1])
 
     def test_smoke_requires_http_200_and_root_marker_without_mutation(self):
         installed = self.install()
