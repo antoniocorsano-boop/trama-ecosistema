@@ -64,6 +64,36 @@ class RunbookContractTests(unittest.TestCase):
         self.assertNotIn('curl', launcher)
         self.assertNotIn('wget', launcher)
 
+    def test_lsm01e_runbook_makes_termux_infrastructure_invisible_after_one_time_setup(self):
+        readme = (RUNTIME/'README.md').read_text(encoding='utf-8')
+        lower = readme.lower()
+        for required in (
+            'termux-services',
+            'trama-memory install',
+            'trama-memory start',
+            'trama-memory stop',
+            'trama-memory status',
+            'trama-memory smoke',
+            'trama-memory install-boot',
+            'termux:boot',
+            'attiva memoria locale',
+            'configurazione una tantum',
+            'uso quotidiano',
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, lower)
+        self.assertIn('~/.config/trama-memory/config.env', readme)
+        self.assertIn('~/.termux/boot/20-trama-memory-services', readme)
+        self.assertIn('trama-embedding', readme)
+        self.assertIn('trama-memoryd', readme)
+        self.assertIn('corpus sintetico', lower)
+        self.assertIn('nessun token', lower)
+        self.assertIn('nessun download automatico', lower)
+        self.assertIn('prima installazione assoluta', lower)
+        self.assertIn('python3 trama_memory.py install', lower)
+        self.assertIn('riavviare la shell termux', lower)
+        self.assertIn('aprire termux:boot almeno una volta', lower)
+
     def test_end_to_end_smoke_persists_across_restart(self):
         from auth import load_or_create_local_token
         from config import load_runtime_config
