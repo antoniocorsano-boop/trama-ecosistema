@@ -125,6 +125,7 @@ def render_boot_script(prefix: Path) -> str:
     return '\n'.join([
         '#!/data/data/com.termux/files/usr/bin/sh',
         'set -eu',
+        'termux-wake-lock',
         f'. {shlex.quote(str(start_services))}',
         'wait_for_supervisor() {',
         '  supervisor_ok="$1"',
