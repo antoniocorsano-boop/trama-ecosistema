@@ -63,13 +63,11 @@ def render_registro_run(config: RegistroSupervisorConfig) -> str:
 
 def render_log_run(prefix: Path) -> str:
     svlogger = Path(prefix) / "share" / "termux-services" / "svlogger"
-    log_dir = Path(prefix) / "var" / "log" / "sv" / SERVICE_NAME
     return "\n".join(
         [
             "#!/data/data/com.termux/files/usr/bin/sh",
             "set -eu",
-            f"mkdir -p {_shell_quote(log_dir)}",
-            f"exec {_shell_quote(svlogger)} -tt {_shell_quote(log_dir)}",
+            f"exec {_shell_quote(svlogger)}",
             "",
         ]
     )
