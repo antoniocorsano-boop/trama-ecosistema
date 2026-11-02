@@ -47,6 +47,19 @@ class RegistroWorktreeIntegrityTests(unittest.TestCase):
             capture_output=True,
         )
 
+    def test_install_rejects_dirty_tracked_source_before_publishing_service(self):
+        (self.app / 'server.ts').write_text('// dirty before install\n', encoding='utf-8')
+        with self.assertRaisesRegex(RuntimeError, 'worktree|modific|sporco|dirty'):
+            self.module.install_service(
+                app_dir=self.app,
+                runtime_command=self.runtime,
+                candidate_sha=self.sha,
+                prefix=self.prefix,
+                home=self.home,
+            )
+        self.assertFalse((self.prefix / 'bin' / 'trama-registro').exists())
+        self.assertFalse((self.home / '.config' / 'trama-registro' / 'config.env').exists())
+
     def test_start_rejects_dirty_tracked_source_even_when_head_and_dist_are_unchanged(self):
         installed = self.module.install_service(
             app_dir=self.app,
