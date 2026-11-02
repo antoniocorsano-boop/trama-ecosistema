@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+TERMUX_SH = '#!/data/data/com.termux/files/usr/bin/sh'
+
 
 class RegistroServiceTests(unittest.TestCase):
     def setUp(self):
@@ -66,6 +68,11 @@ class RegistroServiceTests(unittest.TestCase):
         self.assertTrue((installed.service_dir / 'down').exists())
         self.assertTrue((installed.service_dir / 'log' / 'run').exists())
         run = (installed.service_dir / 'run').read_text(encoding='utf-8')
+        log_run = (installed.service_dir / 'log' / 'run').read_text(encoding='utf-8')
+        wrapper = installed.wrapper_path.read_text(encoding='utf-8')
+        self.assertEqual(run.splitlines()[0], TERMUX_SH)
+        self.assertEqual(log_run.splitlines()[0], TERMUX_SH)
+        self.assertEqual(wrapper.splitlines()[0], TERMUX_SH)
         self.assertIn("TRAMA_BIND_HOST='127.0.0.1'", run)
         self.assertIn("PORT='4173'", run)
         self.assertNotIn('build', run.lower())
@@ -131,6 +138,7 @@ class RegistroServiceTests(unittest.TestCase):
         second = self.module.install_boot(installed)
         self.assertEqual(first, second)
         text = first.read_text(encoding='utf-8')
+        self.assertEqual(text.splitlines()[0], TERMUX_SH)
         self.assertIn('30-trama-registro', str(first))
         self.assertIn(
             f"{shlex.quote(str(installed.prefix / 'bin' / 'sv'))} up trama-registro",
