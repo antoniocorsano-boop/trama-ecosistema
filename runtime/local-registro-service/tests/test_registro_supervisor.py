@@ -1,4 +1,5 @@
 import importlib
+import shlex
 import sys
 import unittest
 from pathlib import Path
@@ -54,7 +55,8 @@ class RegistroSupervisorContractTests(unittest.TestCase):
             runtime_command=Path('/data/data/com.termux/files/usr/bin/node runtime'),
         )
         script = self.module.render_registro_run(config)
-        self.assertIn("'Registro docente'", script)
+        self.assertIn(f'cd {shlex.quote(str(config.app_dir))}', script)
+        self.assertIn(f'exec {shlex.quote(str(config.runtime_command))} server.ts', script)
         self.assertNotIn('cd /data/data/com.termux/files/home/Registro docente', script)
 
     def test_boot_script_is_bounded_service_specific_and_has_no_build_or_lsm_authority(self):
