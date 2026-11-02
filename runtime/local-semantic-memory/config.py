@@ -19,6 +19,7 @@ class RuntimeConfig:
     embedding_url: str
     embedding_model: str
     sqlite_vec_path: Path | None
+    session_ttl_seconds: int = 28800
     max_body_bytes: int = 1024 * 1024
     embedding_timeout_seconds: float = 15.0
 
@@ -57,4 +58,20 @@ def load_runtime_config(env=None) -> RuntimeConfig:
             raise ConfigError('sqlite-vec path must be absolute')
         if not vec_path.is_file():
             raise ConfigError('sqlite-vec path must reference an existing file')
-    return RuntimeConfig(host, port, db_path, token_file, origins, embedding_url.rstrip('/'), embedding_model, vec_path)
+    try:
+        session_ttl_seconds = int(env.get('TRAMA_MEMORY_SESSION_TTL_SECONDS', '28800'))
+    except ValueError as exc:
+        raise ConfigError('invalid session ttl') from exc
+    if not 60 <= session_ttl_seconds <= 86400:
+        raise ConfigError('invalid session ttl')
+    return RuntimeConfig(
+        host,
+        port,
+        db_path,
+        token_file,
+        origins,
+        embedding_url.rstrip('/'),
+        embedding_model,
+        vec_path,
+        session_ttl_seconds,
+    )

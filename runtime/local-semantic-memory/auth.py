@@ -30,3 +30,10 @@ def bearer_matches(header: str | None, token: str) -> bool:
     if not header or not header.startswith('Bearer '):
         return False
     return hmac.compare_digest(header[7:], token)
+
+def bearer_authorized(header: str | None, master_token: str, sessions, origin: str | None) -> bool:
+    if bearer_matches(header, master_token):
+        return True
+    if not header or not header.startswith('Bearer '):
+        return False
+    return sessions.matches(header[7:], origin)

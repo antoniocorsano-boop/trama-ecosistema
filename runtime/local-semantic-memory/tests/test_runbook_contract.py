@@ -53,6 +53,10 @@ class RunbookContractTests(unittest.TestCase):
         self.assertIn("targetAddressSpace: 'loopback'", readme)
         self.assertIn('gesto esplicito', readme.lower())
         self.assertIn('rebuild', readme.lower())
+        self.assertIn('TRAMA_MEMORY_ALLOWED_ORIGINS="http://127.0.0.1:4173"', readme)
+        self.assertIn('TRAMA_MEMORY_SESSION_TTL_SECONDS="28800"', readme)
+        self.assertIn('/v1/session', readme)
+        self.assertIn('non copiare il master token nel browser', readme.lower())
         self.assertNotIn('TRAMA_MEMORY_ALLOWED_ORIGINS=*', readme)
         for forbidden in ('curl | sh', 'curl|sh', 'wget | sh', 'wget|sh', '--model-url', ' -hf '):
             self.assertNotIn(forbidden, readme)

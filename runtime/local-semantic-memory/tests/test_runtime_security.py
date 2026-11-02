@@ -12,6 +12,15 @@ class RuntimeSecurityTests(unittest.TestCase):
             for bad in ("0.0.0.0", "192.168.1.10", "example.com"):
                 with self.assertRaises(ConfigError):
                     load_runtime_config({**env, "TRAMA_MEMORY_HOST": bad})
+    def test_session_ttl_defaults_and_is_bounded(self):
+        from config import load_runtime_config, ConfigError
+        with tempfile.TemporaryDirectory() as td:
+            env = {"TRAMA_MEMORY_HOME": td, "TRAMA_MEMORY_ALLOWED_ORIGINS": "https://example.test"}
+            self.assertEqual(load_runtime_config(env).session_ttl_seconds, 28800)
+            self.assertEqual(load_runtime_config({**env, "TRAMA_MEMORY_SESSION_TTL_SECONDS": "3600"}).session_ttl_seconds, 3600)
+            for bad in ("0", "59", "86401", "abc"):
+                with self.assertRaises(ConfigError):
+                    load_runtime_config({**env, "TRAMA_MEMORY_SESSION_TTL_SECONDS": bad})
     def test_embedding_url_must_be_loopback(self):
         from config import load_runtime_config, ConfigError
         with tempfile.TemporaryDirectory() as td:
