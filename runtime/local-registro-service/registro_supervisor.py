@@ -48,7 +48,7 @@ class RegistroSupervisorConfig:
 def render_registro_run(config: RegistroSupervisorConfig) -> str:
     return "\n".join(
         [
-            "#!/bin/sh",
+            "#!/data/data/com.termux/files/usr/bin/sh",
             "set -eu",
             "exec 2>&1",
             "export NODE_ENV='production'",
@@ -66,7 +66,7 @@ def render_log_run(prefix: Path) -> str:
     log_dir = Path(prefix) / "var" / "log" / "sv" / SERVICE_NAME
     return "\n".join(
         [
-            "#!/bin/sh",
+            "#!/data/data/com.termux/files/usr/bin/sh",
             "set -eu",
             f"mkdir -p {_shell_quote(log_dir)}",
             f"exec {_shell_quote(svlogger)} -tt {_shell_quote(log_dir)}",
@@ -81,7 +81,7 @@ def render_registro_boot(prefix: Path) -> str:
     default_svdir = Path(prefix) / "var" / "service"
     return "\n".join(
         [
-            "#!/bin/sh",
+            "#!/data/data/com.termux/files/usr/bin/sh",
             "set -eu",
             f". {_shell_quote(profile)}",
             f"SVDIR=\"${{SVDIR:-{default_svdir}}}\"",

@@ -145,7 +145,7 @@ def _config_text(
 def _wrapper_text(runtime_script: Path) -> str:
     return "\n".join(
         [
-            "#!/bin/sh",
+            "#!/data/data/com.termux/files/usr/bin/sh",
             "set -eu",
             f"exec python3 {shlex.quote(str(runtime_script))} \"$@\"",
             "",
