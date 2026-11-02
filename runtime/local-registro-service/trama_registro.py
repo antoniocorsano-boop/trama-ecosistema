@@ -26,6 +26,7 @@ from registro_supervisor import (
 
 Runner = Callable[..., subprocess.CompletedProcess[str]]
 GitHeadResolver = Callable[[Path], str]
+GitWorktreeCleanResolver = Callable[[Path], bool]
 HttpGet = Callable[[str], tuple[int, str]]
 
 
@@ -42,6 +43,21 @@ def _default_git_head_resolver(app_dir: Path) -> str:
             + (completed.stderr.strip() or completed.stdout.strip())
         )
     return completed.stdout.strip()
+
+
+def _default_git_worktree_clean_resolver(app_dir: Path) -> bool:
+    completed = subprocess.run(
+        ["git", "-C", str(app_dir), "status", "--porcelain", "--untracked-files=no"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(
+            "Impossibile verificare lo stato Git del checkout Registro: "
+            + (completed.stderr.strip() or completed.stdout.strip())
+        )
+    return not completed.stdout.strip()
 
 
 def _sha256(path: Path) -> str:
@@ -123,6 +139,11 @@ class InstalledRegistro:
         repr=False,
         compare=False,
     )
+    git_worktree_clean_resolver: GitWorktreeCleanResolver = field(
+        default=_default_git_worktree_clean_resolver,
+        repr=False,
+        compare=False,
+    )
 
 
 def _validate_checkout(
@@ -130,6 +151,7 @@ def _validate_checkout(
     runtime_command: Path,
     candidate_sha: str,
     git_head_resolver: GitHeadResolver,
+    git_worktree_clean_resolver: GitWorktreeCleanResolver,
 ) -> str:
     if not app_dir.is_dir():
         raise RuntimeError(f"Directory Registro non trovata: {app_dir}")
@@ -143,6 +165,8 @@ def _validate_checkout(
         raise RuntimeError(
             f"Checkout Registro su SHA diverso dal candidate: atteso {candidate_sha}, attuale {actual}"
         )
+    if not git_worktree_clean_resolver(app_dir):
+        raise RuntimeError("Worktree Registro modificato rispetto al candidate: ripristinare i file tracciati")
     return _dist_tree_sha256(app_dir / "dist")
 
 
@@ -213,6 +237,7 @@ def install_service(
     home: Path,
     port: int = DEFAULT_PORT,
     git_head_resolver: GitHeadResolver = _default_git_head_resolver,
+    git_worktree_clean_resolver: GitWorktreeCleanResolver = _default_git_worktree_clean_resolver,
 ) -> InstalledRegistro:
     config = RegistroSupervisorConfig(
         app_dir=app_dir,
@@ -227,6 +252,7 @@ def install_service(
         config.runtime_command,
         config.candidate_sha,
         git_head_resolver,
+        git_worktree_clean_resolver,
     )
 
     config_path = home / ".config" / "trama-registro" / "config.env"
@@ -276,6 +302,7 @@ def install_service(
         boot_path=boot_path,
         dist_digest=dist_digest,
         git_head_resolver=git_head_resolver,
+        git_worktree_clean_resolver=git_worktree_clean_resolver,
     )
 
 
@@ -320,6 +347,8 @@ def _verify_installed_identity(installed: InstalledRegistro) -> None:
         raise RuntimeError(
             f"Checkout Registro drift: atteso {installed.candidate_sha}, attuale {actual}"
         )
+    if not installed.git_worktree_clean_resolver(installed.app_dir):
+        raise RuntimeError("Worktree Registro modificato rispetto al candidate installato")
     index = installed.app_dir / "dist" / "index.html"
     if not index.is_file():
         raise RuntimeError("Build Registro assente: dist/index.html")
