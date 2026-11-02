@@ -52,6 +52,25 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _dist_tree_sha256(dist_dir: Path) -> str:
+    if not dist_dir.is_dir():
+        raise RuntimeError(f"Build Registro assente: {dist_dir}")
+    files = sorted(
+        (path for path in dist_dir.rglob("*") if path.is_file()),
+        key=lambda path: path.relative_to(dist_dir).as_posix(),
+    )
+    if not files:
+        raise RuntimeError(f"Build Registro vuota: {dist_dir}")
+    digest = hashlib.sha256()
+    for path in files:
+        relative = path.relative_to(dist_dir).as_posix()
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(_sha256(path).encode("ascii"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
 def _atomic_write(path: Path, content: str, mode: int) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, raw_tmp = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
@@ -124,7 +143,7 @@ def _validate_checkout(
         raise RuntimeError(
             f"Checkout Registro su SHA diverso dal candidate: atteso {candidate_sha}, attuale {actual}"
         )
-    return _sha256(app_dir / "dist" / "index.html")
+    return _dist_tree_sha256(app_dir / "dist")
 
 
 def _config_text(
@@ -137,7 +156,7 @@ def _config_text(
         "TRAMA_REGISTRO_CANDIDATE_SHA": config.candidate_sha,
         "TRAMA_REGISTRO_PORT": str(config.port),
         "TRAMA_REGISTRO_BIND_HOST": config.bind_host,
-        "TRAMA_REGISTRO_DIST_INDEX_SHA256": dist_digest,
+        "TRAMA_REGISTRO_DIST_TREE_SHA256": dist_digest,
     }
     return "".join(f"{key}={_render_env_value(value)}\n" for key, value in values.items())
 
@@ -263,7 +282,7 @@ def load_installed(*, prefix: Path, home: Path) -> InstalledRegistro:
         "TRAMA_REGISTRO_CANDIDATE_SHA",
         "TRAMA_REGISTRO_PORT",
         "TRAMA_REGISTRO_BIND_HOST",
-        "TRAMA_REGISTRO_DIST_INDEX_SHA256",
+        "TRAMA_REGISTRO_DIST_TREE_SHA256",
     }
     missing = sorted(required - values.keys())
     if missing:
@@ -281,7 +300,7 @@ def load_installed(*, prefix: Path, home: Path) -> InstalledRegistro:
         wrapper_path=prefix / "bin" / "trama-registro",
         service_dir=prefix / "var" / "service" / SERVICE_NAME,
         boot_path=home / ".termux" / "boot" / "30-trama-registro",
-        dist_digest=values["TRAMA_REGISTRO_DIST_INDEX_SHA256"],
+        dist_digest=values["TRAMA_REGISTRO_DIST_TREE_SHA256"],
     )
 
 
@@ -294,7 +313,7 @@ def _verify_installed_identity(installed: InstalledRegistro) -> None:
     index = installed.app_dir / "dist" / "index.html"
     if not index.is_file():
         raise RuntimeError("Build Registro assente: dist/index.html")
-    current_digest = _sha256(index)
+    current_digest = _dist_tree_sha256(installed.app_dir / "dist")
     if current_digest != installed.dist_digest:
         raise RuntimeError("Build Registro cambiata dopo installazione: reinstallare trama-registro")
 
