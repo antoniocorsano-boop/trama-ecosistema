@@ -77,7 +77,7 @@ def render_log_run(prefix: Path) -> str:
 
 def render_registro_boot(prefix: Path) -> str:
     profile = Path(prefix) / "etc" / "profile.d" / "start-services.sh"
-    sv = Path(prefix) / "bin" / "sv"
+    controller = Path(prefix) / "bin" / "trama-registro"
     default_svdir = Path(prefix) / "var" / "service"
     return "\n".join(
         [
@@ -90,7 +90,7 @@ def render_registro_boot(prefix: Path) -> str:
             "  sleep 1",
             "done",
             'test -e "$SVDIR/trama-registro/supervise/ok"',
-            f"{_shell_quote(sv)} up trama-registro",
+            f"{_shell_quote(controller)} start",
             "",
         ]
     )
