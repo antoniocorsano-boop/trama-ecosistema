@@ -435,8 +435,14 @@ def _default_http_get(url: str) -> tuple[int, str]:
 
 def status_service(installed: InstalledRegistro) -> dict[str, object]:
     active = _service_is_active(installed)
+    identity_verified = True
+    try:
+        _verify_installed_identity(installed)
+    except RuntimeError:
+        identity_verified = False
+
     ready = False
-    if active:
+    if active and identity_verified:
         try:
             status, html = _default_http_get(f"http://127.0.0.1:{installed.port}/")
             ready = status == 200 and ("id=\"root\"" in html or "id='root'" in html)
@@ -444,6 +450,7 @@ def status_service(installed: InstalledRegistro) -> dict[str, object]:
             ready = False
     return {
         "serviceActive": active,
+        "identityVerified": identity_verified,
         "httpReady": ready,
         "candidateSha": installed.candidate_sha,
         "port": installed.port,
@@ -534,9 +541,13 @@ def main(argv: list[str] | None = None) -> int:
             + ("pronto" if status["httpReady"] else "non disponibile")
             + (" (servizio attivo)" if status["serviceActive"] else " (servizio non attivo)")
         )
+        print(
+            "Integrità candidato: "
+            + ("verificata" if status["identityVerified"] else "NON VERIFICATA")
+        )
         print(f"Candidate: {status['candidateSha']}")
         print(f"URL: http://127.0.0.1:{status['port']}")
-        return 0 if status["httpReady"] else 1
+        return 0 if (status["serviceActive"] and status["identityVerified"] and status["httpReady"]) else 1
     if args.command == "smoke":
         smoke_service(installed)
         print("Smoke LOCAL-REG-02: PASS")
