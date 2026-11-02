@@ -80,6 +80,18 @@ class RegistroServiceTests(unittest.TestCase):
         self.assertNotIn('build', run.lower())
         self.assertNotIn('git ', run.lower())
 
+    def test_installed_wrapper_uses_a_frozen_supervisor_copy_not_the_source_checkout(self):
+        installed = self.install()
+        controller_dir = self.prefix / 'libexec' / 'trama-registro'
+        installed_runtime = controller_dir / 'trama_registro.py'
+        installed_supervisor = controller_dir / 'registro_supervisor.py'
+        self.assertTrue(installed_runtime.is_file())
+        self.assertTrue(installed_supervisor.is_file())
+
+        wrapper = installed.wrapper_path.read_text(encoding='utf-8')
+        self.assertIn(str(installed_runtime), wrapper)
+        self.assertNotIn(str(ROOT / 'trama_registro.py'), wrapper)
+
     def test_install_freezes_the_entire_dist_tree_not_only_index_html(self):
         installed = self.install()
         (self.app / 'dist' / 'assets' / 'app.js').write_text('console.log("v2")\n', encoding='utf-8')
