@@ -60,11 +60,15 @@ class RegistroSupervisorContractTests(unittest.TestCase):
         self.assertNotIn('cd /data/data/com.termux/files/home/Registro docente', script)
 
     def test_boot_script_is_bounded_service_specific_and_has_no_build_or_lsm_authority(self):
-        boot = self.module.render_registro_boot(Path('/data/data/com.termux/files/usr'))
+        prefix = Path('/data/data/com.termux/files/usr')
+        boot = self.module.render_registro_boot(prefix)
         self.assertIn('start-services.sh', boot)
         self.assertIn('$SVDIR/trama-registro/supervise/ok', boot)
         self.assertIn('seq 1 30', boot)
-        self.assertIn('sv up trama-registro', boot)
+        self.assertIn(
+            f"{shlex.quote(str(prefix / 'bin' / 'sv'))} up trama-registro",
+            boot,
+        )
         self.assertNotIn('trama-memory', boot)
         self.assertNotIn('trama-embedding', boot)
         self.assertNotIn('trama-memoryd', boot)
