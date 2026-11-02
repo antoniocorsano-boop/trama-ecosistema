@@ -41,12 +41,13 @@ python3 "$TRAMA_ROOT/runtime/local-registro-service/trama_registro.py" install \
   --candidate-sha "$REGISTRO_SHA"
 ```
 
-L'installazione verifica l'exact SHA del checkout e congela un digest dell'intero albero `dist/`. Una modifica successiva a qualunque file della build fa fallire l'avvio in modalità chiusa finché il servizio non viene reinstallato esplicitamente.
+L'installazione verifica l'exact SHA del checkout, richiede che i file Git tracciati non abbiano modifiche staged/unstaged e congela un digest dell'intero albero `dist/`. Una modifica successiva a un file tracciato o a qualunque file della build fa fallire `start`, `status` e `smoke` in modalità chiusa finché il checkout non viene ripristinato o il nuovo candidato non viene reinstallato esplicitamente. I file non tracciati non sono usati come prova Git; l'integrità di `dist/` resta coperta dal digest completo.
 
 Stato installato:
 
 - configurazione: `~/.config/trama-registro/config.env`;
 - comando: `$PREFIX/bin/trama-registro`;
+- controller congelato: `$PREFIX/libexec/trama-registro/trama_registro.py` e `$PREFIX/libexec/trama-registro/registro_supervisor.py`;
 - servizio runit: `$PREFIX/var/service/trama-registro`;
 - log supervisionato: `$PREFIX/var/log/sv/trama-registro/current`;
 - script Termux:Boot opzionale: `~/.termux/boot/30-trama-registro`.
@@ -64,6 +65,7 @@ Il risultato atteso è:
 - servizio `trama-registro` attivo;
 - risposta HTTP pronta su `http://127.0.0.1:4173/`;
 - candidate SHA uguale al checkout installato;
+- `Integrità candidato: verificata` nello stato;
 - `Smoke LOCAL-REG-02: PASS`.
 
 Se la porta `4173` è occupata da un processo non supervisionato, `trama-registro` **non lo termina**: l'avvio fallisce e richiede una risoluzione esplicita del conflitto.
@@ -76,7 +78,7 @@ Dopo avere verificato manualmente `start`, `status` e `smoke`:
 trama-registro install-boot
 ```
 
-Lo script di boot esegue soltanto l'avvio del servizio `trama-registro`. Non compila Registro, non aggiorna repository e non attiva la memoria semantica locale.
+Lo script di boot attende runit e invoca il controller installato con `trama-registro start`; in questo modo il cold-start ripete la verifica di SHA, worktree tracciato e digest completo di `dist/` prima di autorizzare `sv up`. Non compila Registro, non aggiorna repository e non attiva la memoria semantica locale.
 
 Dopo un riavvio Android, il collaudo corretto consiste nel **non aprire Termux** e aprire direttamente il collegamento di Registro Docente.
 
