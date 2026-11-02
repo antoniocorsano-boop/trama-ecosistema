@@ -35,8 +35,15 @@ class RegistroServiceTests(unittest.TestCase):
         self.runtime.write_text('#!/bin/sh\n', encoding='utf-8')
         self.runtime.chmod(0o755)
         self.sha = 'b' * 40
+        self.http_get_patcher = patch.object(
+            self.module,
+            '_default_http_get',
+            return_value=(200, '<!doctype html><div id="root"></div>'),
+        )
+        self.http_get = self.http_get_patcher.start()
 
     def tearDown(self):
+        self.http_get_patcher.stop()
         self.temp.cleanup()
 
     def install(self, **overrides):
@@ -161,6 +168,66 @@ class RegistroServiceTests(unittest.TestCase):
 
         actions = [command[1] for command in commands if len(command) > 1]
         self.assertEqual(actions, ['status', 'up'])
+
+    def test_start_waits_until_loopback_http_is_really_ready(self):
+        installed = self.install()
+        commands = []
+        sleeps = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+            class Result:
+                returncode = 1 if 'status' in rendered else 0
+                stdout = 'down: service: 1s\n' if 'status' in rendered else ''
+                stderr = ''
+            return Result()
+
+        self.http_get.side_effect = [
+            OSError('listener not ready yet'),
+            (200, '<!doctype html><div id="root"></div>'),
+        ]
+
+        with patch.object(self.module, '_loopback_port_in_use', return_value=False):
+            self.module.start_service(
+                installed,
+                runner=runner,
+                sleep=lambda seconds: sleeps.append(seconds),
+            )
+
+        self.assertEqual(self.http_get.call_count, 2)
+        self.assertEqual(sleeps, [0.1])
+        actions = [command[1] for command in commands if len(command) > 1]
+        self.assertEqual(actions, ['status', 'up'])
+
+    def test_start_fails_closed_and_stops_service_when_http_never_becomes_ready(self):
+        installed = self.install()
+        commands = []
+        sleeps = []
+
+        def runner(args, **kwargs):
+            rendered = tuple(str(value) for value in args)
+            commands.append(rendered)
+            class Result:
+                returncode = 1 if 'status' in rendered else 0
+                stdout = 'down: service: 1s\n' if 'status' in rendered else ''
+                stderr = ''
+            return Result()
+
+        self.http_get.side_effect = OSError('connection refused')
+
+        with patch.object(self.module, '_loopback_port_in_use', return_value=False):
+            with self.assertRaisesRegex(RuntimeError, 'HTTP|pronto|ready'):
+                self.module.start_service(
+                    installed,
+                    runner=runner,
+                    sleep=lambda seconds: sleeps.append(seconds),
+                )
+
+        actions = [command[1] for command in commands if len(command) > 1]
+        self.assertEqual(actions, ['status', 'up', 'down'])
+        self.assertEqual(self.http_get.call_count, 50)
+        self.assertEqual(len(sleeps), 49)
 
     def test_start_fails_closed_on_external_listener_and_never_kills_it(self):
         installed = self.install()
