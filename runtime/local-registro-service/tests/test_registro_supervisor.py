@@ -62,16 +62,21 @@ class RegistroSupervisorContractTests(unittest.TestCase):
         self.assertIn(f'exec {shlex.quote(str(config.runtime_command))} server.ts', script)
         self.assertNotIn('cd /data/data/com.termux/files/home/Registro docente', script)
 
-    def test_log_script_uses_termux_shell(self):
+    def test_log_script_uses_termux_services_svlogger(self):
         prefix = Path('/data/data/com.termux/files/usr')
         script = self.module.render_log_run(prefix)
         self.assertEqual(script.splitlines()[0], TERMUX_SH)
+        expected = prefix / 'share' / 'termux-services' / 'svlogger'
+        self.assertIn(str(expected), script)
+        self.assertNotIn(str(prefix / 'bin' / 'svlogger'), script)
 
     def test_boot_script_is_bounded_service_specific_and_has_no_build_or_lsm_authority(self):
         prefix = Path('/data/data/com.termux/files/usr')
         boot = self.module.render_registro_boot(prefix)
         self.assertEqual(boot.splitlines()[0], TERMUX_SH)
+        self.assertIn('termux-wake-lock', boot)
         self.assertIn('start-services.sh', boot)
+        self.assertLess(boot.index('termux-wake-lock'), boot.index('start-services.sh'))
         self.assertIn('$SVDIR/trama-registro/supervise/ok', boot)
         self.assertIn('seq 1 30', boot)
         start_line = next(line for line in boot.splitlines() if line.endswith(' start'))
