@@ -40,6 +40,7 @@ class RegistroStatusIntegrityTests(unittest.TestCase):
             prefix=self.prefix,
             home=self.home,
             git_head_resolver=lambda _app: self.sha,
+            git_worktree_clean_resolver=lambda _app: True,
         )
         (self.app / 'dist' / 'assets' / 'app.js').write_text('console.log("v2")\n', encoding='utf-8')
 
