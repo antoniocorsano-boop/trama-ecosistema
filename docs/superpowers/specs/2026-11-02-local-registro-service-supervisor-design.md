@@ -19,7 +19,7 @@ Local Semantic Memory remains a separate optional capability. The application ma
 - Run an already-built production Registro Docente checkout; boot must never run Git, dependency installation, or application build commands.
 - Require the application root, `server.ts`, `package.json`, `dist/index.html`, Bun/Node runtime command, exact configured commit marker, a clean tracked Git worktree, and a deterministic digest of the complete `dist/` tree before service installation succeeds.
 - Start with `NODE_ENV=production`, `PORT=4173`, `TRAMA_BIND_HOST=127.0.0.1`.
-- Supervise stdout/stderr using the same `svlogger` pattern as LSM-01E.
+- Supervise stdout/stderr using the Termux Services logger at `$PREFIX/share/termux-services/svlogger`, matching the qualified LSM service pattern.
 - Provide one command `trama-registro` with `install`, `start`, `stop`, `status`, `smoke`, and `install-boot`.
 - Detect a legacy/non-supervised listener on 4173 and fail closed rather than killing it.
 - Boot support must remain optional and idempotent.
@@ -93,7 +93,8 @@ The generated `run` script must:
 - if 4173 is free but service is reported active, synchronously restart it so current config is applied;
 - if 4173 is occupied and service is not active, report a legacy/non-supervised listener and stop;
 - if 4173 is occupied and service is active, temporarily stop the service and prove the port becomes free within a bounded interval; restore only when ownership is proven;
-- no automatic kill/pkill.
+- no automatic kill/pkill;
+- after every successful `sv up`, `start` waits a bounded interval for a proxy-disabled loopback GET `/` to return HTTP 200 with the application root marker; if readiness never arrives, it issues `sv down` and fails closed.
 
 `stop` acts only on the supervised service.
 
@@ -120,6 +121,7 @@ The generated `run` script must:
 
 Boot script:
 
+- acquires `termux-wake-lock` before starting Termux Services so Android does not suspend the cold-start service chain;
 - sources `start-services.sh`;
 - waits a bounded 30 seconds for `$SVDIR/trama-registro/supervise/ok`;
 - invokes the frozen `$PREFIX/bin/trama-registro start` controller, which revalidates exact SHA, clean tracked worktree, and the complete `dist/` digest before issuing `sv up`;
@@ -144,7 +146,9 @@ Ordering is intentional: LSM services use prefix 20; Registro uses prefix 30. Th
 2. Install is atomic with rollback and rejects missing `dist/index.html`, SHA mismatch, dirty tracked worktree, or complete-`dist/` digest drift.
 3. Installed controller code is frozen under `libexec`, so ordinary execution is independent from later changes to the TRAMA source checkout.
 4. Ownership tests cover legacy listener and supervised listener release race.
-5. Boot script is bounded, idempotent, service-specific, and routes through guarded `trama-registro start`.
-6. Governance exact-SHA suite PASS.
-7. Android/Termux hardware qualification proves `trama-registro start/status/smoke`, then opening `http://127.0.0.1:4173` on the device.
-8. Final user journey proves the app opens from a home-screen shortcut without opening Termux.
+5. Boot script acquires the Termux wake lock, is bounded, idempotent, service-specific, and routes through guarded `trama-registro start`.
+6. `start` returns success only after bounded HTTP readiness; timeout stops the service fail-closed.
+7. The Registro log subservice uses the Termux Services `svlogger` path and must produce a supervised log stream.
+8. Governance exact-SHA suite PASS.
+9. Android/Termux hardware qualification proves `trama-registro start/status/smoke`, then opening `http://127.0.0.1:4173` on the device.
+10. Final user journey proves the app opens from a home-screen shortcut without opening Termux.

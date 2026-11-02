@@ -180,6 +180,7 @@ The whole-branch review added and qualified these fail-closed guarantees without
 - Termux:Boot routed through guarded `trama-registro start`;
 - `status` identity verification before HTTP readiness;
 - rejection of staged/unstaged changes to tracked Registro files at install/start/status/smoke.
+- Android hardware RED repair: Termux:Boot acquires `termux-wake-lock` before `start-services.sh` for both Registro and LSM boot paths; Registro logging uses `$PREFIX/share/termux-services/svlogger`; `trama-registro start` waits for bounded HTTP readiness and executes `sv down` fail-closed on timeout.
 
 ### Task 6: Android/Termux hardware qualification
 
@@ -193,7 +194,7 @@ Use integrated Registro candidate with LOCAL-REG-01 and record exact SHA; no bui
 
 - [ ] **Step 3: Prove `trama-registro start`, `status`, and `smoke`**
 
-Expected: service active, HTTP ready, exact configured candidate reported, smoke PASS.
+Expected: service active, HTTP ready **before `start` returns**, exact configured candidate reported, supervised log available, smoke PASS.
 
 - [ ] **Step 4: Install optional Termux:Boot and cold-start device/session proof**
 
