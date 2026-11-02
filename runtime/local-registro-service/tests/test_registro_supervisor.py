@@ -74,9 +74,10 @@ class RegistroSupervisorContractTests(unittest.TestCase):
         self.assertIn('start-services.sh', boot)
         self.assertIn('$SVDIR/trama-registro/supervise/ok', boot)
         self.assertIn('seq 1 30', boot)
-        self.assertIn(
-            f"{shlex.quote(str(prefix / 'bin' / 'sv'))} up trama-registro",
-            boot,
+        up_line = next(line for line in boot.splitlines() if line.endswith(' up trama-registro'))
+        self.assertEqual(
+            shlex.split(up_line),
+            [str(prefix / 'bin' / 'sv'), 'up', 'trama-registro'],
         )
         self.assertNotIn('trama-memory', boot)
         self.assertNotIn('trama-embedding', boot)
