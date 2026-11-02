@@ -24,10 +24,11 @@ class RegistroServiceTests(unittest.TestCase):
         self.home = self.root / 'home'
         self.app = self.home / 'registro-docente'
         self.app.mkdir(parents=True)
-        (self.app / 'dist').mkdir()
+        (self.app / 'dist' / 'assets').mkdir(parents=True)
         (self.app / 'server.ts').write_text('// server\n', encoding='utf-8')
         (self.app / 'package.json').write_text('{}\n', encoding='utf-8')
         (self.app / 'dist' / 'index.html').write_text('<div id="root"></div>\n', encoding='utf-8')
+        (self.app / 'dist' / 'assets' / 'app.js').write_text('console.log("v1")\n', encoding='utf-8')
         self.runtime = self.prefix / 'bin' / 'node'
         self.runtime.parent.mkdir(parents=True)
         self.runtime.write_text('#!/bin/sh\n', encoding='utf-8')
@@ -77,6 +78,12 @@ class RegistroServiceTests(unittest.TestCase):
         self.assertIn("PORT='4173'", run)
         self.assertNotIn('build', run.lower())
         self.assertNotIn('git ', run.lower())
+
+    def test_install_freezes_the_entire_dist_tree_not_only_index_html(self):
+        installed = self.install()
+        (self.app / 'dist' / 'assets' / 'app.js').write_text('console.log("v2")\n', encoding='utf-8')
+        with self.assertRaisesRegex(RuntimeError, 'Build Registro cambiata|dist'):
+            self.module._verify_installed_identity(installed)
 
     def test_start_fails_closed_on_external_listener_and_never_kills_it(self):
         installed = self.install()
