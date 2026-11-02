@@ -1,5 +1,6 @@
 import importlib
 import os
+import shlex
 import stat
 import sys
 import tempfile
@@ -131,7 +132,10 @@ class RegistroServiceTests(unittest.TestCase):
         self.assertEqual(first, second)
         text = first.read_text(encoding='utf-8')
         self.assertIn('30-trama-registro', str(first))
-        self.assertIn('sv up trama-registro', text)
+        self.assertIn(
+            f"{shlex.quote(str(installed.prefix / 'bin' / 'sv'))} up trama-registro",
+            text,
+        )
         self.assertNotIn('trama-memory', text)
         self.assertNotIn('build', text.lower())
 
