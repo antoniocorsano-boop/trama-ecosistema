@@ -17,7 +17,8 @@
 - Default port: exactly `4173`.
 - No Git/build/install/download operation from `start`, boot script, or generated run script.
 - Required prebuilt artifact: `dist/index.html`.
-- Install records an exact candidate SHA and rejects checkout drift.
+- Install records an exact candidate SHA, requires a clean tracked worktree, freezes the complete `dist/` digest, and rejects identity drift.
+- Installed controller Python modules are frozen under `$PREFIX/libexec/trama-registro`; the wrapper never executes a mutable TRAMA source checkout.
 - No automatic Local Semantic Memory activation.
 - Existing LSM services/boot script remain independently managed.
 
@@ -27,7 +28,8 @@
 - A supervised process that releases 4173 slowly must not be misclassified as external.
 - Missing/stale `dist/` must fail closed rather than trigger a build.
 - Shell quoting must preserve application paths containing spaces/shell metacharacters.
-- Boot script must coexist with `20-trama-memory-services` and not infer LSM authority.
+- Boot script must coexist with `20-trama-memory-services`, route through guarded `trama-registro start`, and not infer LSM authority.
+- `status` must never report HTTP ready when candidate identity verification fails.
 
 ---
 
@@ -72,7 +74,7 @@ Commit pure rendering slice.
 
 - [ ] **Step 1: Write failing install tests**
 
-Cover missing app dir/server/package/dist, non-executable runtime, candidate SHA mismatch, atomic config/wrapper/down/log/run publication, mode bits, rollback after late write failure, and no checkout mutation.
+Cover missing app dir/server/package/dist, non-executable runtime, candidate SHA mismatch, dirty tracked worktree, complete `dist/` digest drift, frozen controller publication, atomic config/wrapper/down/log/run publication, mode bits, rollback after late write failure, and no checkout mutation.
 
 - [ ] **Step 2: Run RED**
 
@@ -101,7 +103,7 @@ Commit installer slice.
 
 - [ ] **Step 1: Write RED lifecycle tests**
 
-Cover free port + down service, free port + active old config restart, occupied external listener fail-closed, occupied supervised listener causal stop/release/restart, delayed release bounded polling, cleanup on start failure, and no `kill`/`pkill`.
+Cover free port + down service, free port + active old config restart, occupied external listener fail-closed, occupied supervised listener causal stop/release/restart, delayed release bounded polling, identity drift fail-closed in `status`, cleanup on start failure, and no `kill`/`pkill`.
 
 - [ ] **Step 2: Run RED**
 
@@ -135,7 +137,7 @@ Commit lifecycle slice.
 
 - [ ] **Step 1: Write RED CLI/boot tests**
 
-Assert wrapper command behavior, bounded supervisor wait, boot path `~/.termux/boot/30-trama-registro`, service-only `sv up`, and no build/update/LSM commands.
+Assert wrapper command behavior, frozen controller path, bounded supervisor wait, boot path `~/.termux/boot/30-trama-registro`, guarded `trama-registro start` before any `sv up`, and no build/update/LSM commands.
 
 - [ ] **Step 2: Run RED**
 
@@ -167,6 +169,17 @@ Expected: PASS with no regression in LSM-01D/01E.
 - [ ] **Step 3: Fresh whole-branch independent review**
 
 Expected: 0 Critical / 0 Important.
+
+### Post-review hardening incorporated before hardware qualification
+
+The whole-branch review added and qualified these fail-closed guarantees without widening runtime authority:
+
+- deterministic digest of the entire `dist/` tree rather than `dist/index.html` alone;
+- atomic rollback, persisted-config restart, and delayed port-release regressions;
+- frozen installed copies of both controller Python modules;
+- Termux:Boot routed through guarded `trama-registro start`;
+- `status` identity verification before HTTP readiness;
+- rejection of staged/unstaged changes to tracked Registro files at install/start/status/smoke.
 
 ### Task 6: Android/Termux hardware qualification
 
