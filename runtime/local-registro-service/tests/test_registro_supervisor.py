@@ -62,13 +62,16 @@ class RegistroSupervisorContractTests(unittest.TestCase):
         self.assertIn(f'exec {shlex.quote(str(config.runtime_command))} server.ts', script)
         self.assertNotIn('cd /data/data/com.termux/files/home/Registro docente', script)
 
-    def test_log_script_uses_termux_services_svlogger(self):
+    def test_log_script_uses_termux_services_svlogger_without_arguments(self):
         prefix = Path('/data/data/com.termux/files/usr')
         script = self.module.render_log_run(prefix)
         self.assertEqual(script.splitlines()[0], TERMUX_SH)
         expected = prefix / 'share' / 'termux-services' / 'svlogger'
-        self.assertIn(str(expected), script)
+        exec_line = next(line for line in script.splitlines() if line.startswith('exec '))
+        self.assertEqual(shlex.split(exec_line), ['exec', str(expected)])
         self.assertNotIn(str(prefix / 'bin' / 'svlogger'), script)
+        self.assertNotIn('-tt', script)
+        self.assertNotIn(str(prefix / 'var' / 'log' / 'sv' / 'trama-registro'), exec_line)
 
     def test_boot_script_is_bounded_service_specific_and_has_no_build_or_lsm_authority(self):
         prefix = Path('/data/data/com.termux/files/usr')
