@@ -8,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+TERMUX_SH = '#!/data/data/com.termux/files/usr/bin/sh'
+
 
 class RegistroSupervisorContractTests(unittest.TestCase):
     def setUp(self):
@@ -37,6 +39,7 @@ class RegistroSupervisorContractTests(unittest.TestCase):
 
     def test_run_script_is_production_loopback_only_and_never_builds_or_updates(self):
         script = self.module.render_registro_run(self.make_config())
+        self.assertEqual(script.splitlines()[0], TERMUX_SH)
         self.assertIn('exec 2>&1', script)
         self.assertIn("NODE_ENV='production'", script)
         self.assertIn("PORT='4173'", script)
@@ -59,9 +62,15 @@ class RegistroSupervisorContractTests(unittest.TestCase):
         self.assertIn(f'exec {shlex.quote(str(config.runtime_command))} server.ts', script)
         self.assertNotIn('cd /data/data/com.termux/files/home/Registro docente', script)
 
+    def test_log_script_uses_termux_shell(self):
+        prefix = Path('/data/data/com.termux/files/usr')
+        script = self.module.render_log_run(prefix)
+        self.assertEqual(script.splitlines()[0], TERMUX_SH)
+
     def test_boot_script_is_bounded_service_specific_and_has_no_build_or_lsm_authority(self):
         prefix = Path('/data/data/com.termux/files/usr')
         boot = self.module.render_registro_boot(prefix)
+        self.assertEqual(boot.splitlines()[0], TERMUX_SH)
         self.assertIn('start-services.sh', boot)
         self.assertIn('$SVDIR/trama-registro/supervise/ok', boot)
         self.assertIn('seq 1 30', boot)
