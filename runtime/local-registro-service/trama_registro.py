@@ -233,10 +233,18 @@ def install_service(
     wrapper_path = prefix / "bin" / "trama-registro"
     service_dir = prefix / "var" / "service" / SERVICE_NAME
     boot_path = home / ".termux" / "boot" / "30-trama-registro"
-    runtime_script = Path(__file__).resolve()
+    source_runtime = Path(__file__).resolve()
+    source_supervisor = source_runtime.with_name("registro_supervisor.py")
+    if not source_supervisor.is_file():
+        raise RuntimeError(f"Supervisore Registro assente: {source_supervisor}")
+    controller_dir = prefix / "libexec" / SERVICE_NAME
+    installed_runtime = controller_dir / "trama_registro.py"
+    installed_supervisor = controller_dir / "registro_supervisor.py"
     targets = [
         config_path,
         wrapper_path,
+        installed_runtime,
+        installed_supervisor,
         service_dir / "down",
         service_dir / "log" / "run",
         service_dir / "run",
@@ -248,7 +256,9 @@ def install_service(
         _atomic_write(service_dir / "log" / "run", render_log_run(prefix), 0o755)
         _atomic_write(service_dir / "run", render_registro_run(config), 0o755)
         _atomic_write(config_path, _config_text(config, dist_digest), 0o600)
-        _atomic_write(wrapper_path, _wrapper_text(runtime_script), 0o755)
+        _atomic_write(installed_runtime, source_runtime.read_text(encoding="utf-8"), 0o644)
+        _atomic_write(installed_supervisor, source_supervisor.read_text(encoding="utf-8"), 0o644)
+        _atomic_write(wrapper_path, _wrapper_text(installed_runtime), 0o755)
     except Exception:
         _restore_snapshot(before)
         raise
