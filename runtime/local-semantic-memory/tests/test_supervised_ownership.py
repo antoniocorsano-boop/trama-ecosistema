@@ -56,9 +56,13 @@ class SupervisedOwnershipContractTests(unittest.TestCase):
                     health_check=lambda *args, **kwargs: True,
                 )
 
-        rendered = [' '.join(command) for command in commands]
-        self.assertTrue(any('status' in command and 'trama-embedding' in command for command in rendered))
-        self.assertFalse(any('up' in command and 'trama-embedding' in command for command in rendered))
+        actions = [(command[1], command[2]) for command in commands]
+        self.assertTrue(
+            any(action == 'status' and 'trama-embedding' in service for action, service in actions)
+        )
+        self.assertFalse(
+            any(action == 'up' and 'trama-embedding' in service for action, service in actions)
+        )
 
     def test_running_service_on_free_expected_port_is_restarted_for_reconfiguration(self):
         commands = []
