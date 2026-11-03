@@ -3,12 +3,17 @@ import { APPLICATION_REGISTRY, type ApplicationRegistryEntry } from '../config/a
 import type { IdentityRepository } from '../ports/identity-repository.ts';
 import type { SessionStore } from '../ports/session-store.ts';
 import type { RateLimiter } from '../ports/rate-limiter.ts';
-import type { AuthProviderAdapter } from '../ports/auth-provider.ts';
+import type { AuthProviderAdapter, MagicLinkCallbackInput } from '../ports/auth-provider.ts';
 import type { VerifiedExternalIdentity } from '../domain/types.ts';
 import { InMemoryIdentityRepository } from '../testing/in-memory-identity-repository.ts';
 import { InMemorySessionStore } from '../testing/in-memory-session-store.ts';
 import { InMemoryRateLimiter } from '../testing/in-memory-rate-limiter.ts';
 import { FakeAuthProvider } from '../testing/fake-auth-provider.ts';
+import { createSupabaseServerClient } from '../infrastructure/supabase/supabase-client.ts';
+import { SupabaseAuthProvider } from '../infrastructure/supabase/supabase-auth-provider.ts';
+import { SupabaseIdentityRepository } from '../infrastructure/supabase/supabase-identity-repository.ts';
+import { SupabaseSessionStore } from '../infrastructure/supabase/supabase-session-store.ts';
+import { SupabaseRateLimiter } from '../infrastructure/supabase/supabase-rate-limiter.ts';
 
 export interface AccessRuntime {
   config: AccessConfig;
@@ -21,18 +26,77 @@ export interface AccessRuntime {
 }
 class DisabledProvider implements AuthProviderAdapter {
   async checkAvailability(_input: { signal: AbortSignal }): Promise<boolean> { return false; }
-  async requestEmailOtp(_input: { email: string; signal: AbortSignal }): Promise<void> { throw new Error('PROVIDER_UNAVAILABLE'); }
-  async verifyEmailOtp(_input: { email: string; otp: string; signal: AbortSignal }): Promise<VerifiedExternalIdentity> { throw new Error('PROVIDER_UNAVAILABLE'); }
+  async requestEmailMagicLink(_input: { email: string; redirectTo: string; codeVerifier: string; signal: AbortSignal }): Promise<void> { throw new Error('PROVIDER_UNAVAILABLE'); }
+  async verifyEmailMagicLink(_input: MagicLinkCallbackInput & { signal: AbortSignal }): Promise<VerifiedExternalIdentity> { throw new Error('PROVIDER_UNAVAILABLE'); }
 }
 
 declare global {
   var __tramaAccessPhase2Runtime: AccessRuntime | undefined;
 }
 
-function createRuntime(): AccessRuntime {
-  const config = loadAccessConfig(process.env);
-  if (config.providerKind === 'supabase' || config.storeKind === 'supabase') throw new Error('SUPABASE_ADAPTER_NOT_AUTHORIZED');
-  const e2eSeed = process.env.ACCESS_E2E_SEED === '1' && config.providerKind === 'fake' && config.storeKind === 'memory';
+function requiredSupabaseConfig(env: NodeJS.ProcessEnv): { url: string; secretKey: string; publishableKey: string; issuer: string } {
+  const rawUrl = env.ACCESS_SUPABASE_URL?.trim();
+  const secretKey = env.ACCESS_SUPABASE_SECRET_KEY?.trim();
+  const publishableKey = env.ACCESS_SUPABASE_PUBLISHABLE_KEY?.trim();
+  if (!rawUrl || !secretKey || !publishableKey) throw new Error('SUPABASE_CONFIG_MISSING');
+  if (publishableKey.startsWith('sb_secret_')) throw new Error('SUPABASE_PUBLISHABLE_KEY_INVALID');
+  let url: URL;
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {
+    throw new Error('SUPABASE_URL_INVALID');
+  }
+  const normalizedUrl = url.origin;
+  return { url: normalizedUrl, secretKey, publishableKey, issuer: `${normalizedUrl}/auth/v1` };
+}
+
+function createAvailabilityProbe(
+  url: string,
+  publishableKey: string,
+  fetchImpl: typeof fetch,
+): (signal: AbortSignal) => Promise<boolean> {
+  return async (signal) => {
+    if (signal.aborted) return false;
+    try {
+      const response = await fetchImpl(`${url}/auth/v1/health`, {
+        method: 'GET',
+        headers: {
+          apikey: publishableKey,
+          Accept: 'application/json',
+        },
+        cache: 'no-store',
+        signal,
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  };
+}
+
+export function createAccessRuntime(env: NodeJS.ProcessEnv = process.env, fetchImpl: typeof fetch = fetch): AccessRuntime {
+  const config = loadAccessConfig(env);
+  const e2eSeed = env.ACCESS_E2E_SEED === '1' && config.providerKind === 'fake' && config.storeKind === 'memory';
+
+  if (config.providerKind === 'supabase' && config.storeKind === 'supabase') {
+    const live = requiredSupabaseConfig(env);
+    const rpcClient = createSupabaseServerClient({ url: live.url, secretKey: live.secretKey });
+    const identityRepository = new SupabaseIdentityRepository(rpcClient);
+    const sessionStore = new SupabaseSessionStore(rpcClient);
+    const rateLimiter = new SupabaseRateLimiter(rpcClient);
+    const authProvider = new SupabaseAuthProvider({
+      issuer: live.issuer,
+      projectUrl: live.url,
+      publishableKey: live.publishableKey,
+      fetchImpl,
+      availabilityProbe: createAvailabilityProbe(live.url, live.publishableKey, fetchImpl),
+    });
+    return { config, identityRepository, sessionStore, rateLimiter, authProvider, applicationRegistry: APPLICATION_REGISTRY, now: () => new Date() };
+  }
+
   const identityRepository = e2eSeed ? new InMemoryIdentityRepository({
     principals: [
       { principalId: 'p-teacher', status: 'ACTIVE' },
@@ -54,7 +118,7 @@ function createRuntime(): AccessRuntime {
   const rateLimiter = new InMemoryRateLimiter();
   const authProvider: AuthProviderAdapter = config.providerKind === 'fake'
     ? new FakeAuthProvider({
-        issuer: 'test-issuer', subject: 'test-subject', email: 'pilot@example.test', otp: process.env.ACCESS_TEST_OTP ?? '123456',
+        issuer: 'test-issuer', subject: 'test-subject', email: 'pilot@example.test', otp: env.ACCESS_TEST_OTP ?? '123456',
         identities: e2eSeed ? {
           'teacher@example.test': { subject: 'subject-teacher', email: 'teacher@example.test' },
           'empty@example.test': { subject: 'subject-empty', email: 'empty@example.test' },
@@ -66,7 +130,7 @@ function createRuntime(): AccessRuntime {
 
 export function getRuntime(): AccessRuntime {
   if (globalThis.__tramaAccessPhase2Runtime) return globalThis.__tramaAccessPhase2Runtime;
-  const runtime = createRuntime();
+  const runtime = createAccessRuntime(process.env);
   if (runtime.config.nodeEnv !== 'production') globalThis.__tramaAccessPhase2Runtime = runtime;
   return runtime;
 }

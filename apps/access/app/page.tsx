@@ -10,8 +10,11 @@ import { ACCESS_SESSION_COOKIE } from '../src/server/session-cookie.ts';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Page() {
+type PageProps = { searchParams: Promise<{ auth?: string }> };
+
+export default async function Page({ searchParams }: PageProps) {
   const runtime = getRuntime();
+  const params = await searchParams;
   const cookieStore = await cookies();
   const secret = cookieStore.get(ACCESS_SESSION_COOKIE)?.value;
 
@@ -50,7 +53,10 @@ export default async function Page() {
       <section className="access-panel" aria-labelledby="access-title">
         <p className="access-kicker">TRAMA · spazio professionale</p>
         <h1 id="access-title">TRAMA Access</h1>
-        <p className="access-lede">Accedi con il codice monouso inviato alla tua email professionale autorizzata.</p>
+        <p className="access-lede">Ricevi un link personale sulla tua email professionale autorizzata e usalo per entrare.</p>
+        {params.auth === 'invalid' ? <AccessStatus tone="error">Il link di accesso non è valido o è scaduto.</AccessStatus> : null}
+        {params.auth === 'denied' ? <AccessStatus tone="error">Non è possibile completare l’accesso.</AccessStatus> : null}
+        {params.auth === 'unavailable' ? <AccessStatus tone="notice">Accesso temporaneamente non disponibile. Riprova più tardi.</AccessStatus> : null}
         {sessionExpired ? <AccessStatus tone="notice">La sessione è scaduta. Accedi di nuovo.</AccessStatus> : null}
         {runtime.config.providerKind === 'disabled' ? (
           <AccessStatus tone="notice">Accesso temporaneamente non disponibile. Riprova più tardi.</AccessStatus>

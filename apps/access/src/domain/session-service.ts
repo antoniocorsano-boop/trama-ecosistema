@@ -24,7 +24,7 @@ export async function issueAccessSession(input: {
     providerSubject: input.providerSubject,
     createdAt: input.now,
     absoluteExpiresAt: new Date(input.now.getTime() + TTL_MS),
-    authMethod: 'EMAIL_OTP',
+    authMethod: 'EMAIL_MAGIC_LINK',
     lastEntitlementCheckAt: input.now,
   };
   await input.store.create(record);
