@@ -52,7 +52,7 @@ No source-code or proposed-contract existence is sufficient to promote this data
 ## Preserved boundaries
 
 - Docente OS: product REAL and independently L5 in the maturity registry; no implied runtime integration.
-- Arena: curriculum authority and Arena → Curricolo Atlas REAL path are unchanged.
+- Arena: autorità del curricolo di istituto and Arena → Curricolo Atlas REAL path are unchanged.
 - TRAMA Access: PARTIAL, Access federation flows DESIGNED; no forced login or new identity authority.
 - Studio Atlas: PARTIAL, Docente OS → Studio Atlas DESIGNED.
 - Control Center: read-only derived projection, never graph authority.
