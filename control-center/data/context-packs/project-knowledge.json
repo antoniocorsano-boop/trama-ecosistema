@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-11-03T17:17:45Z",
+  "asOf": "2026-11-03T17:20:05Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -1180,7 +1180,7 @@
     },
     {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "71ead842ee083a15bdcc0105e0477521958f1a7ad5cb613acb8d3e7ef065133a"
+      "sha256": "49b81652a056348b0fe448240af0d23a2027e165fcbbb0a1846adee320d720f1"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
