@@ -451,3 +451,12 @@ La ricevuta resta `verificationMode=DECLARED_TARGET_ONLY`, `workspaceAcceptanceV
 **Stato corretto:** `REAL_SOURCE_OFFLINE_CROSS_CONTRACT_PASS / AUTHENTICATED_WORKSPACE_INTAKE_NOT_QUALIFIED / NON_VIGENTE`.
 
 Non confondere la validazione della struttura e del trasferimento con la validazione professionale del contenuto, la vigenza istituzionale o l'accettazione nel workspace. Nessun merge, deploy, modifica ai dati, trasferimento del master in GitHub o rilascio Beta è stato eseguito.
+
+
+### 15.5 Riemissione dello stesso master — impronte stabili, tempi tecnici variabili
+
+È stata eseguita una **seconda materializzazione della medesima esportazione reale** `CAN-CURR-MASTER-00@1.3` rev.27 con le stesse funzioni TypeScript Arena. Le impronte del **contenuto sorgente** (`99c4ccc3`), dell'**artefatto canonico** (`fc2e0f86`) e della **release completa** (`8588371c`) sono risultate identiche. Stabili anche i conteggi (113 segmenti, 566 nodi, 103 collegamenti) e tutte le tre classi Tecnologia.
+
+I byte JSON emessi nelle due esecuzioni **non sono identici**: i soli campi divergenti sono `issuedAt`, `sourceSnapshot.contentFootprint.computedAt` e `structuralFootprint.computedAt`, cioè marcature tecniche temporali che il contratto esclude dall'impronta strutturale esterna. Questa differenza attesa **non costituisce drift curricolare**; dimostra l'idempotenza del materiale strutturale ma non l'identità dei file byte per byte. SHA-256 della seconda copia locale `b529a6df06c79a2669c1cbd767292f7efb1059f8844fc06fe8b65a5eefe794ba`.
+
+**Stato invariato:** prova positiva esclusivamente *offline*, identità istituzionale del workspace ancora non attestata, nessuna acquisizione autenticata né validazione umana o deliberazione di vigenza, nessun merge/deploy.
