@@ -291,3 +291,30 @@ Gli obiettivi nella colonna centrale sono **formulazioni effettivamente presenti
 **Stato separato:** proiezione Arena per Atlas `AVAILABLE`; contratti mittente/destinatario `IMPLEMENTED`; compatibilità di codice sulla release completa `RED_CONFIRMED / GREEN_EXACT_HEAD_PRODUCT_CI_PASS`; consegna effettiva su workspace scolastico `NOT_VERIFIED`; master `PROVISIONAL_COMPLETE / NON_VIGENTE`. Le prove automatizzate precedenti usano fixture; non è stato acquisito un pacchetto verticale completo serializzato effettivamente emesso per l'istituto.
 
 **Perimetro:** nessun merge, deploy, promozione, credenziale, dato di classe o modifica al prodotto in questa PR.
+
+
+---
+
+## 12. Quinto collaudo — provenienza effettiva del master e coerenza autorità (03/11/2026)
+
+### 12.1 Master effettivamente recuperato, ma non confuso con una release trasferita
+
+Letto tramite Google Drive il documento nativo **CAN-CURR-MASTER-00 — Curricolo verticale integrale unificato 3–14, 2026/27**, identificativo `12eWTPUZBJxZixd6-p8drNAaW5_eL8qWpXZUSDyZZAv4` (documento: https://docs.google.com/document/d/12eWTPUZBJxZixd6-p8drNAaW5_eL8qWpXZUSDyZZAv4/edit). Drive ha confermato:
+- **revisione corrente 27**, precedente 26, ultima modifica 06/09/2026 ore 18:47 UTC;
+- intestazione sorgente `CAN-CURR-MASTER-00`, **versione 1.3**, anno `2026/2027` e istituto `Istituto Comprensivo Statale “Lorenzo Milani”`;
+- stato testuale **MATERIALIZZATA — DA VALIDARE PROFESSIONALMENTE — NON VIGENTE**, distinto da `APPROVED`.
+
+Il percorso di generazione effettivamente presente in Arena, `scripts/materialize-canonical-curricolo-v1.mjs`, usa questo ID Drive, la versione 1.3, l'anno 2026/27 e il parametro `--revision-id`, ma produce un `ARENA_CANONICAL_CURRICOLO_ARTIFACT_V1`: **non** un `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1` pronto per il consumer di Docente OS. Il generatore implementa uno schema canonico a 113 scope con `institutionId=ics-lorenzo-milani`; lo schema della release completa e il suo generatore sono moduli separati. L'albero GitHub di Arena main non ha mostrato una release verticale completa già serializzata e consegnabile. Il materiale Drive è **fonte effettiva**, non una *prova di esecuzione del trasferimento*.
+
+**Conseguenza per la fase B:** per dichiarare `REAL_SOURCE_TRANSFER_VERIFIED` serve una release verticale serializzata generata dal master autentico/revisione 27, verificata con il contratto Arena e consumata nelle tre classi Docente OS, senza caricare automaticamente il testo del master in repository pubblici né dedurre `institutionId` dalle fixture. L'eventuale normalizzazione dell'identità richiede una decisione esplicita basata sul target effettivo del workspace, non una sostituzione alla cieca.
+
+### 12.2 Revisione del ricevitore: secondo RED causale e GREEN
+
+La revisione del delta [Docente OS PR #778](https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/778) ha individuato un caso indipendente dal disallineamento di impronta: il primo fix verificava la consistenza dell'hash, ma non tutti gli invarianti di `sourceMaster`. Una release dichiarata `PROVISIONAL_COMPLETE` poteva contenere un `sourceMaster` che sosteneva `curricoloVigente=true` e `INSTITUTE_APPROVED_CURRICOLO` senza essere rifiutata. Il validatore completo in Arena impone, invece, coerenza con la fonte non vigente.
+
+- **Secondo RED verificato:** commit test-only `705b2a59251416c060095017db5b2f4a5b0d4073`, Product CI **#41716363906 FAIL**, 1.075 test PASS / 1 test FAIL (`Missing expected exception` sul caso `rejects complete Arena source provenance contradicting provisional authority`).
+- **Fix circoscritto:** controllo dei riferimenti non vuoti e dello stato dichiarato del `sourceMaster`, mantenendo `curricoloVigente=false` e `INSTITUTE_CANONICAL_WORKING_BASELINE` per intake provvisorio.
+- **Secondo GREEN exact-head:** `22d2b7a6d868fbf0eec52639ad301d5101461055`, Product CI **#41716663850 PASS**, **1.076 test PASS / 0 FAIL**; typecheck, lint, build PASS; gate impatto/terminologia PASS. Migrazioni Supabase **SKIPPED**, non usate come prova.
+- PR #778 sempre `Draft`, 2 soli file modificati, non integrata. Nessuna review indipendente/human receipt acquisita. Il controllo FNV-1a è un'impronta strutturale, non una firma crittografica né autenticazione del mittente.
+
+**Stato dopo il quinto collaudo:** `SOURCE_MASTER_V1_3_REV27_READ_VERIFIED / CONSUMER_CODE_RED_GREEN_PASS / REAL_VERTICAL_RELEASE_NOT_FOUND / WORKSPACE_IDENTITY_NOT_VERIFIED / PEDAGOGICAL_REVIEW_OPEN / NON_VIGENTE`. Nessun merge, deploy, promozione o scrittura di dati.
