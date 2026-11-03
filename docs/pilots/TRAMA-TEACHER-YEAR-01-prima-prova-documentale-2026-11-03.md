@@ -269,3 +269,25 @@ Gli obiettivi nella colonna centrale sono **formulazioni effettivamente presenti
 **Verdetto:** STRUCTURAL_MATCH_25_OF_25 / OBJECTIVE_MAPPING_PROPOSED_21_OF_21 / PEDAGOGICAL_REVIEW_OPEN / VERTICAL_RELEASE_RUNTIME_NOT_RUN. Arena è l'unica autorità del curricolo; la vigenza è **NON VIGENTE** fino al necessario atto istituzionale. La differenza fra «manifest completo» e «obiettivi coperti dalla programmazione» resta obbligatoria.
 
 **Prossimo gate:** acquisire la release verticale effettivamente emessa da Arena per l'I.C. Don Lorenzo Milani 2026/27; verificare istituto, anno, fascia, segmento, obiettivo, impronta e stato d'autorità nel selettore di Docente OS; quindi confermare professionalmente la matrice e introdurre soltanto l'eventuale collegamento mancante. **Nessuna nuova UDA, nessuna riscrittura del curricolo, nessun merge/deploy o modifica di dati reali.**
+
+
+---
+
+## 11. Quarto collaudo — compatibilità impronta della release verticale completa Arena → Docente OS (03/11/2026)
+
+**Codice effettivamente ispezionato:** Arena main@d8b1bf43388cb5c4cdcc940b0c558bb128976c4c; Docente OS develop@93542e06975c09f5fdafd375d72dde927fa2669d.
+
+**Tre formati da non confondere:**
+1. Esportazione Arena → Atlas già reperita: versione master 1.3, impronta `fnv1a:b355be71`, autorità `PROVISIONAL_COMPLETE`. Il contratto è diverso da quello accettato da Docente OS; non rappresenta una prova di consegna.
+2. Arena `curricoloVerticaleReleaseV1.ts`: mittente per il contratto verticale base `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1`, con nodi, segmenti, manifest e impronta.
+3. Arena `curricoloVerticaleCompleteReleaseV1.ts`: mittente per il **pacchetto completo** con `sourceMaster` e `sourceSnapshot`, che nel calcolo dell'impronta esterna esclude il metadato annidato `sourceSnapshot.contentFootprint.computedAt` pur lasciandolo nel messaggio serializzato.
+
+**Difetto circoscritto nel consumer:** Docente OS `cml-discipline-binding.ts`, funzione `assertArenaStructuralFootprintMatches`, ricostruisce l'impronta escludendo solo `structuralFootprint` e `issuedAt`, ma **non** il metadato annidato. La verifica differenziale in JavaScript, con la stessa serializzazione canonica/FNV-1a e dati sintetici rappresentativi, produce **hash mittente `2c15d25b` ≠ hash destinatario `4e4c7993`**. Il risultato è limitato al pacchetto *completo* e non prova un fallimento del pacchetto base.
+
+**Qualificazione avviata:** [PR Docente OS #778](https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/778), **Draft/test-only**, base `develop@93542e06975c09f5fdafd375d72dde927fa2669d`, exact head iniziale `8baa60e9fb89be20148f2c71a1399e454597cabf`. Aggiunta una prova di regressione che richiede l'accettazione del pacchetto completo generato secondo il calcolo dell'impronta di Arena. **Il RED del Product CI deve essere verificato prima di intervenire sul prodotto.**
+
+**Identità d'istituto da verificare:** lo script di materializzazione del master in Arena imposta `ics-lorenzo-milani`; le fixture del selettore Docente OS riportano `ic-calvario-covotta-don-milani`. Il confronto del consumer è esatto. Le due stringhe differenti sono un rischio d'interoperabilità **non ancora dimostrato su un'istanza realmente trasferita**; non effettuare migrazioni o normalizzazioni automatiche. Il riferimento istituzionale confermato è I.C. Calvario-Covotta «don Lorenzo Milani», Ariano Irpino (AVIC849003).
+
+**Stato separato:** proiezione Arena per Atlas `AVAILABLE`; contratti mittente/destinatario `IMPLEMENTED`; accettazione di release completa `RED_TEST_PENDING`; consegna effettiva su workspace scolastico `NOT_VERIFIED`; master `PROVISIONAL_COMPLETE / NON_VIGENTE`. Le prove automatizzate precedenti usano fixture; non è stato acquisito un pacchetto verticale completo serializzato effettivamente emesso per l'istituto.
+
+**Perimetro:** nessun merge, deploy, promozione, credenziale, dato di classe o modifica al prodotto in questa PR.
