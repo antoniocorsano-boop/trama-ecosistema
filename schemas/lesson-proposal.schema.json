@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/lesson-proposal.schema.json",
+  "title": "TRAMA Lesson Proposal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "lessonId",
+    "title",
+    "status",
+    "category",
+    "scope",
+    "priority",
+    "subjects",
+    "sourceRepository",
+    "sourceRefs",
+    "observedProblem",
+    "previousBehavior",
+    "learnedPrinciple",
+    "proposedRule",
+    "evidenceStrength",
+    "causalStatus",
+    "relatedLessons",
+    "supersedes",
+    "proposedBy",
+    "createdAt"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.lesson-proposal/v1"
+    },
+    "lessonId": {
+      "type": "string",
+      "pattern": "^LL-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "CANDIDATE",
+        "VALIDATED",
+        "AWAITING_HUMAN_DECISION",
+        "NEEDS_EVIDENCE",
+        "LOCAL_ONLY",
+        "REJECTED"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "priority": {
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    },
+    "subjects": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "sourceRepository": {
+      "type": "string",
+      "pattern": "^[^/\\s]+/[^/\\s]+$"
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["repository", "ref", "evidenceKind"],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "pattern": "^[^/\\s]+/[^/\\s]+$"
+          },
+          "pullRequest": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "exactHead": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "workflowRun": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceKind": {
+            "enum": [
+              "WORKFLOW_STEP_FAILURE",
+              "DIRECT_EXCEPTION",
+              "FAILED_ASSERTION",
+              "CONTROLLED_REPRODUCTION",
+              "DOCUMENT",
+              "REVIEW",
+              "OTHER"
+            ]
+          }
+        }
+      }
+    },
+    "observedProblem": {
+      "type": "string",
+      "minLength": 1
+    },
+    "previousBehavior": {
+      "type": "string",
+      "minLength": 1
+    },
+    "learnedPrinciple": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proposedRule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidenceStrength": {
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "causalStatus": {
+      "enum": ["NOT_APPLICABLE", "LOCALIZED", "CERTIFIED"]
+    },
+    "relatedLessons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^LL-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      }
+    },
+    "supersedes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^LL-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      }
+    },
+    "proposedBy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

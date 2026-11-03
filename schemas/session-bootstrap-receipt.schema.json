@@ -52,6 +52,8 @@
         "knownConflicts",
         "knownRejectedApproaches",
         "nextCandidateActions",
+        "applicableLessons",
+        "lessonRecurrence",
         "negativeKnowledgeChecked"
       ],
       "properties": {
@@ -69,6 +71,66 @@
         "knownConflicts": {"type": "array"},
         "knownRejectedApproaches": {"type": "array"},
         "nextCandidateActions": {"type": "array"},
+        "applicableLessons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lessonId",
+              "title",
+              "status",
+              "active",
+              "subjects",
+              "fingerprint",
+              "sourceRepository",
+              "sourceRefs",
+              "canonicalDocument",
+              "supersedes"
+            ],
+            "properties": {
+              "lessonId": {"type": "string", "minLength": 1},
+              "title": {"type": "string", "minLength": 1},
+              "status": {"const": "CURRENT"},
+              "active": {"const": true},
+              "category": {"type": ["string", "null"]},
+              "scope": {"type": ["string", "null"]},
+              "priority": {"type": ["string", "null"]},
+              "subjects": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "fingerprint": {"type": ["string", "null"]},
+              "causalStatus": {"type": ["string", "null"]},
+              "sourceRepository": {"type": "string", "minLength": 1},
+              "sourceRefs": {"type": "array", "minItems": 1},
+              "canonicalDocument": {"type": "string", "minLength": 1},
+              "supersedes": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "humanDecisionRef": {"type": ["string", "null"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "lessonRecurrence": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": {"enum": ["NONE", "POSSIBLE_RECURRENCE"]},
+            "lessonId": {"type": "string", "minLength": 1},
+            "reason": {"const": "FINGERPRINT_MATCH"}
+          },
+          "allOf": [
+            {
+              "if": {"properties": {"status": {"const": "POSSIBLE_RECURRENCE"}}},
+              "then": {"required": ["lessonId", "reason"]}
+            }
+          ],
+          "additionalProperties": false
+        },
         "negativeKnowledgeChecked": {"const": true}
       },
       "additionalProperties": false

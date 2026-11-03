@@ -94,4 +94,25 @@ jobs:
       - {name: Validate ERROR_RECOVERY Stage A.2 qualification, run: node scripts/validate-error-recovery-stage-a2.mjs}
       - {name: Validate LOADING_PENDING_PROGRESS Stage A.2 qualification, run: node scripts/validate-loading-pending-progress-stage-a2.mjs}
       - {name: Validate REVIEW_DECIDE_CONFIRM Stage A.2 qualification, run: node scripts/validate-review-decide-confirm-stage-a2.mjs}
+      - {name: Validate TRAMA Lessons Engine index projection, run: python3 scripts/build_lessons_index.py --check}
+      - {name: Validate TRAMA Lessons Engine contracts, run: python3 -m unittest tests.test_lessons_engine -v}
+      - name: Block lesson candidates from main-bound canonical state
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          BASE_SHA="$PR_BASE_SHA"
+          if [ -z "$BASE_SHA" ]; then
+            BASE_SHA="$PUSH_BEFORE_SHA"
+          fi
+          if [ -z "$BASE_SHA" ] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
+            BASE_SHA="HEAD^"
+          fi
+          CANDIDATES="$(git diff --name-only "$BASE_SHA"...HEAD -- 'docs/knowledge/lessons/candidates/*.json' || true)"
+          if [ -n "$CANDIDATES" ]; then
+            echo "LESSON_CANDIDATE_MAIN_BOUND_FORBIDDEN"
+            echo "$CANDIDATES"
+            exit 1
+          fi
+          echo "LESSON_CANDIDATE_MAIN_BOUND_PASS"
       - {name: Run tests, run: python3 -m unittest discover -s tests -v}
