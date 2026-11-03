@@ -123,3 +123,47 @@ Il documento individua già due limiti particolarmente pertinenti:
 **Stato del collaudo in classe:** \`NOT_RUN\`.
 
 La prima prova ha dimostrato che il lavoro annuale è **già in parte costruito**; il collo di bottiglia prioritario è la **validità e tracciabilità del riferimento curricolare all'origine**, non la mancanza di UDA o il numero di ore.
+
+
+---
+
+## 9. Secondo collaudo: autorità istituzionale e obiettivi → UDA → evidenze (03/11/2026)
+
+**Metodo:** sola lettura di fonti documentali e pagine pubbliche; nessun dato studente, nessuna prova in classe, nessuna modifica a piani o servizi. La sezione integra, ma non sostituisce, i gate delle sezioni precedenti.
+
+### 9.1 Identità dell'istituto utilizzatore e limiti della fonte
+
+Istituto di applicazione: **I.C. Statale «Pasquale Stanislao Mancini» di Ariano Irpino**, codice meccanografico **AVIC86200D**. Sito ufficiale: https://www.istitutocomprensivocardito.edu.it/ . Le pagine istituzionali dell'offerta formativa documentano **2 ore settimanali di Tecnologia** sia per il tempo normale sia per quello prolungato:
+- https://www.istitutocomprensivocardito.edu.it/indirizzo-di-studio/tempo-normale-30h-settimanali/
+- https://www.istitutocomprensivocardito.edu.it/indirizzo-di-studio/tempo-prolungato-40h-settimanali/
+
+È disponibile la scheda del **PTOF 2025–2028**, https://www.istitutocomprensivocardito.edu.it/documento/aggiornamento-ptof-2024-25/ , ma nel materiale effettivamente verificato non si è potuta stabilire la **versione analitica di curricolo Tecnologia 2026/27 formalmente adottata** per questo istituto, con atto, decorrenza e obiettivi annuali. Il PTOF pubblicato non è qui equiparato automaticamente a un curricolo analitico approvato.
+
+Distinguere quattro livelli di provenienza:
+1. **Norma:** D.M. 221/2025, articoli 1 e 5; IN2025 per le classi prime 2026/27, IN2012 transitorie per seconde e terze. https://www.normattiva.it/atto/caricaDettaglioAtto?atto.codiceRedazionale=26G00021&atto.dataPubblicazioneGazzetta=2026-01-27
+2. **Fonte istituzionale del P.S. Mancini:** conferma identità e quadro orario generale, non ancora gli obiettivi analitici del curricolo approvato.
+3. **Proposta curricolare di un altro istituto:** CAN-CURR-MASTER-00@1.3, master esplicitamente **NON VIGENTE**, sezioni 7.3.8, 15.4 e 16.2. Può orientare il confronto; non può essere trasferito come fonte adottata del P.S. Mancini.
+4. **Progettazione professionale:** CAN-PRG e CAN-PLAN; 33 × 2h = 66h annue è un modello **indicativo**, non il calendario effettivo delle singole sezioni.
+
+### 9.2 Due riscontri su UDA autentiche, non su descrizioni ipotetiche
+
+| Caso | Collegamento alla proposta (NON VIGENTE) | Attività/prestazione previste nell'UDA reale | Evidenza e criterio espliciti | Giudizio |
+| --- | --- | --- | --- | --- |
+| **Prima, CAN-UDA-1-06, 6 ore** | Master §7.3.8: organizzazione dei dati; §15.4: progressione d'Istituto Informatica | Raccogliere e classificare dati, costruire tabella e grafico, interpretare risultati; rappresentare input–elaborazione–output–memoria | Tabella, grafico, interpretazione, schema funzionale; osservazione, prova individuale, rubrica | **TRACCIABILE NELLA PROPOSTA**; corrispondenza a curricolo approvato non dimostrata |
+| **Seconda, CAN-UDA-2-01, 8 ore** | Master §7.3.8: leggere filiere e processi, distinguere risorse e conseguenze, formulare proposte | Analisi dell'agricoltura come sistema, mappa di filiera, confronto pratiche, scheda visuale con proposta di miglioramento | Sequenza corretta di filiera, lessico tecnico, relazioni riconosciute e motivazione; elaborato, osservazione, breve prova, restituzione orale | **TRACCIABILE NELLA PROPOSTA**; corrispondenza a curricolo approvato non dimostrata |
+
+Le evidenze elencate sono **prodotti e verifiche progettati**, NON risultati raccolti o livelli di competenza conseguiti. Il collegamento sopra è una ricostruzione istruttoria, non una corrispondenza già deliberata.
+
+**Rilievo di provenienza verificabile:** CAN-UDA-1-06 reca l'intestazione «Nuclei IN25 prevalenti: N4 Informatica e sistemi digitali integrati». Ma la fonte di lavoro stessa e l'audit R2 qualificano **N4 come asse integrato annualizzato d'Istituto**, distinto dai tre nuclei nazionali della Tecnologia: la dicitura va disambiguata prima di una certificazione. CAN-UDA-2-01 reca invece il riferimento generico «IN25/NOR/CUR/DID/CLS da validare»: non prova affatto che la seconda sia assoggettata alle IN2025; resta applicabile il regime IN2012 transitorio. Non editare automaticamente i documenti.
+
+**Non interpretare la singola UDA come l'intera copertura annuale:** algoritmi, reti, sicurezza e protezione dei dati nel ponte §15.4 devono essere verificati su tutte le UDA della prima; la sola CAN-UDA-1-06 non dimostra né esclude la loro copertura complessiva.
+
+### 9.3 Un divario prioritario: P01 — provenienza del legame curricolo → UDA
+
+Il passo prioritario **non è una nuova UDA** e neppure una modifica applicativa non ancora dimostrata. È qualificare la **fonte curricolare** di ciascun obiettivo con istituto, documento, versione, data, regime della coorte, rango (norma / curricolo adottato / proposta / programmazione del docente), posizione e riferimento alla delibera **solo se effettivamente verificati**. Collega poi tale obiettivo a UDA, attività, evidenza **prevista**, criterio e stato della validazione.
+
+Regola di accettazione: **senza un curricolo formalmente adottato e attribuibile all'I.C. P.S. Mancini, lo stato resta PROPOSTA_DA_VALIDARE**. Le etichette di proposta non diventano codici ministeriali; l'esistenza di una verifica non diventa un risultato di apprendimento.
+
+**Gate di chiusura:** acquisire la fonte istituzionale autentica (comprensiva di versione/atto applicabile), qualificare una matrice obiettivo → UDA → prestazione → evidenza → criterio con decisione professionale, quindi verificare il comportamento di Docente OS rispetto alla provenienza. Solo un difetto osservato sul prodotto può autorizzare una modifica funzionale separata. Calendario effettivo e prova di classe sono verifiche distinte.
+
+**Esito invariato:** DOCUMENTARY_PARTIAL / INSTITUTIONAL_QUALIFICATION_BLOCKED / HUMAN_PEDAGOGICAL_REVIEW_PENDING / CLASSROOM_NOT_RUN. Nessun merge, deploy o promozione; nessuna scrittura in Arena, Docente OS o dati professionali.
