@@ -395,3 +395,59 @@ Aperta [PR Docente OS #779](https://github.com/antoniocorsano-boop/docente-os-20
 **Stato:** `REAL_MASTER_TEXT_EXPORTED_AND_PREFLIGHTED / ARENA_EMITTER_FIXTURE_PASS / DOCENTE_OFFLINE_CONSUMER_FIXTURE_PASS / REAL_RELEASE_NOT_EMITTED / AUTHENTICATED_WORKSPACE_INTAKE_NOT_IMPLEMENTED / HUMAN_REVIEW_PENDING / NON_VIGENTE`.
 
 **Perimetro e tutela:** il testo integrale del master non è stato copiato in GitHub; nessun merge/deploy, mutazione Drive/Supabase, scrittura nelle classi, approvazione o creazione di nuova autorità.
+
+
+---
+
+## 15. Ottavo collaudo — release reale Arena consumata offline da Docente OS (03/11/2026)
+
+### 15.1 Metodo di esecuzione verificabile, senza diffusione del master
+
+Per eseguire **le funzioni originali dei due prodotti sulla fonte reale**, sono stati esportati in artefatti GitHub Actions a conservazione di un giorno soltanto i file sorgente **già versionati** nei commit:
+
+- **Arena PR #350:** `3452c69a318f1b8c93a4e9c769a2f7d1b336091f`; bundle della sorgente da ramo isolato `test/curricolo-local-source-export-only-20261103`, workflow #41725499883 PASS, artefatto `13274885430`.
+- **Docente OS PR #779:** `4aa0f81572bde9dc8dea91c338e2e3d933936f1b`; bundle del ricevitore da ramo isolato `test/arena-real-release-local-source-only-20261103`, workflow #41725826166, artefatto `13275500653`.
+
+**Nessun contenuto del master, file JSON generato, credenziale o dato di classe è stato trasferito ai workflow o ai repository.** Le funzioni TypeScript originali sono state compilate per una esecuzione Node.js locale mediante `tsc`; poiché i bundle sono sottoinsiemi del repository, il compilatore ha segnalato alcuni import di soli tipi esterni al bundle, non utilizzati dal codice JavaScript emesso. La compilazione di prodotto completa era già stata qualificata nei rispettivi Product CI. **Non è stato eseguito l'originale comando basato su Vite**, ma il percorso reale `createCurricoloVerticaleArtifactV1` → `createCompleteVerticalReleaseFromCanonicalArtifactV1` → `validateCurricoloVerticaleCompleteReleaseV1` e, sul medesimo oggetto serializzato, `verifyCanonicalArenaReleaseForThreeGrades`.
+
+Input privato: esportazione Google Drive **CAN-CURR-MASTER-00 v1.3/revisione 27**, 133.673 byte, impronta strutturale sul testo `99c4ccc3`; SHA-256 dei byte esportati `8ef11dcb5d6f0574270e28ce4d46592078923e6e5518902524c09fed3c71a815`. Il valore SHA-256 verifica l'identità dei byte di questa copia, **non** costituisce autenticazione o approvazione del master.
+
+### 15.2 Emissione reale Arena — PASS
+
+Esecuzione diretta delle funzioni originali di Arena con `institutionId=ics-lorenzo-milani` come **identificativo dichiarato nell'emettitore**, non come identità del workspace Docente OS verificata:
+
+- artefatto canonico di origine: validatore Arena **PASS**, impronta `fc2e0f86`;
+- pacchetto verticale completo: validatore Arena **PASS**, contratto `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1`;
+- `manifest.coverageStatus=SATISFIED`, **113 segmenti**, **566 nodi**, **103 collegamenti verticali**;
+- impronta della fonte `99c4ccc3`, impronta strutturale esterna della release `8588371c`;
+- pacchetto JSON locale di **725.968 byte** (incluse informazioni del master), memorizzato con permessi restrittivi **fuori dai repository**, non pubblicato;
+- SHA-256 del file release `de58f418b4d1fe0be449895736d6267f6c5a58c1b1a476b1f36558579a200809`;
+- `sourceMaster.curricoloVigente=false`, `PROVISIONAL_COMPLETE`; nessuna promozione implicita.
+
+**Tecnologia:** classe I segmento `can-curr-master-00-secondaria-tecnologia-1` / **IN2025**, 5 nodi; classe II `...-2` / **IN2012**, 5 nodi; classe III `...-3` / **IN2012**, 5 nodi.
+
+### 15.3 Ricezione tecnica reale Docente OS — PASS, dichiaratamente senza workspace
+
+La stessa release **reale, non ricostruita con fixture** è stata caricata localmente nella funzione originale `verifyCanonicalArenaReleaseForThreeGrades` del commit Docente OS #779. Esito **`OFFLINE_CONTRACT_VERIFIED`**, tre selezioni univoche I/II/III tramite il selettore di dominio originario, 113 scope e impronte/revisione coincidenti, divieto di scrittura confermato.
+
+**Quattro prove negative reali hanno correttamente rifiutato:**
+1. alias d'istituto divergente `ic-calvario-covotta-don-milani` rispetto all'identificativo **solo dichiarato** `ics-lorenzo-milani`;
+2. revisione sorgente 28 al posto della 27;
+3. impronta della sorgente `00000000` al posto di `99c4ccc3`;
+4. alterazione del contenuto dello snapshot dopo l'emissione.
+
+La ricevuta resta `verificationMode=DECLARED_TARGET_ONLY`, `workspaceAcceptanceVerified=false`, `writePerformed=false`; nessuna sessione utente reale è stata interrogata, nessuna classe aggiornata, nessun dato personale trattato.
+
+### 15.4 Distinzione tra collaudo offline riuscito e attivazione professionale
+
+**Gate ora chiusi per sola lettura:** `REAL_MASTER_SOURCE_EXPORTED`, `REAL_SOURCE_ARENA_ARTIFACT_VALID`, `REAL_SOURCE_VERTICAL_RELEASE_VALID`, `REAL_RELEASE_DOCENTE_OS_OFFLINE_CONSUMER_PASS`, `THREE_GRADES_SELECTED`, `NEGATIVE_CONTROLS_PASS`.
+
+**Gate ancora aperti:**
+- `AUTHENTICATED_WORKSPACE_INSTITUTION_IDENTITY`: non esiste prova di una corrispondenza approvata fra `institutionId=ics-lorenzo-milani`, eventuale `schoolCode` delle impostazioni e workspace autenticato. La coincidenza immessa come parametro nel collaudo offline non la dimostra.
+- `AUTHENTICATED_CLASS_INTAKE`: l'interfaccia attuale usa `CML_HANDOFF_ACCEPTANCE_V2` e il solo pilota 2C. Il file reale di 725.968 byte è inoltre **maggiore del limite di 500.000 byte** dell'attuale caricamento ECO-02 e appartiene a un contratto diverso; non può essere inviato a quella funzione e non va forzato né troncato.
+- `HUMAN_ACCEPTANCE_AND_PERSISTENCE`: nessuna conferma del docente, scrittura governata, applicazione a piano annuale o propagazione automatica alle altre classi.
+- `INDEPENDENT_REVIEW` / `HUMAN_PRODUCT_REVIEW` / `HUMAN_PROFESSIONAL_VALIDATION`: ancora aperti prima di eventuali integrazioni o promozioni.
+
+**Stato corretto:** `REAL_SOURCE_OFFLINE_CROSS_CONTRACT_PASS / AUTHENTICATED_WORKSPACE_INTAKE_NOT_QUALIFIED / NON_VIGENTE`.
+
+Non confondere la validazione della struttura e del trasferimento con la validazione professionale del contenuto, la vigenza istituzionale o l'accettazione nel workspace. Nessun merge, deploy, modifica ai dati, trasferimento del master in GitHub o rilascio Beta è stato eseguito.
