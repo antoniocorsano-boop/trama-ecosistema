@@ -1,0 +1,71 @@
+name: TEMP ECO-STATE November guarded visual refresh
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/eco-state-nov03-visual-refresh.yml"
+      - "control-center/data/ecosystem-snapshot.json"
+      - "governance/access/trama-ecosystem-state-v0.3.json"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/eco-state-v03-nov03-admission'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/control-center/package-lock.json
+
+      - name: Install and build existing Control Center
+        working-directory: apps/control-center
+        run: |
+          npm ci --ignore-scripts
+          npm run typecheck
+          npm run build
+
+      - name: Install original CI browser
+        working-directory: apps/control-center
+        run: npx playwright install --with-deps chromium
+
+      - name: Regenerate visual images with original Playwright configuration
+        working-directory: apps/control-center
+        run: npx playwright test e2e/a6-visual.spec.ts --update-snapshots --workers=1
+
+      - name: Require the exact eight Ecosystem and GAP snapshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          from pathlib import Path
+          prefix = "apps/control-center/e2e/a6-visual.spec.ts-snapshots/"
+          expected = {
+            prefix + f"ecosystem{suffix}-{project}-linux.png"
+            for suffix in ("", "-gap")
+            for project in ("desktop", "phone", "lim", "reflow-320")
+          }
+          observed = set(subprocess.check_output(["git", "diff", "--name-only"], text=True).splitlines())
+          if observed != expected:
+              raise SystemExit(f"VISUAL_REFRESH_GUARD_FAIL expected={sorted(expected)} actual={sorted(observed)}")
+          for p in expected:
+              if not Path(p).is_file():
+                  raise SystemExit("MISSING_EXPECTED_VISUAL_FILE: " + p)
+          print("TRAMA_ECO_NOV03_EXACT_EIGHT_VISUAL_REFRESH_PASS")
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- apps/control-center/e2e/a6-visual.spec.ts-snapshots/
+          git commit -m 'test(visual): update only eight ecosystem graph and gap baselines'
+          git push origin 'HEAD:refs/heads/feat/eco-state-v03-nov03-admission'
