@@ -19,8 +19,8 @@ class ContextualCopilotIntentEmbeddingTests(unittest.TestCase):
             capture_output=True,
         )
         self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
-        self.assertRegex(result.stdout, r"# tests [1-9]\d*")
-        self.assertIn("# fail 0", result.stdout)
+        self.assertRegex(result.stdout, r"(?m)^(?:#|ℹ) tests [1-9]\d*$")
+        self.assertRegex(result.stdout, r"(?m)^(?:#|ℹ) fail 0$")
 
     def test_package_surface_is_bounded_and_offline_consumable(self):
         manifest = json.loads((PACKAGE / "package.json").read_text(encoding="utf-8"))
