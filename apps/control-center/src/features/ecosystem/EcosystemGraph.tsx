@@ -23,7 +23,7 @@ export function EcosystemGraph({graph,selectedId,onSelect}:{graph:EcosystemGraph
   const edges:Edge[]=graph.flows.map((flow)=>({
     id:flow.id,source:flow.from,target:flow.to,label:relationKindLabel(flow.kind),animated:false,focusable:true,selectable:true,selected:flow.id===selectedId,
     ariaLabel:`${flow.from} verso ${flow.to}: ${relationKindLabel(flow.kind)}, stato ${flow.state}`,markerEnd:{type:MarkerType.ArrowClosed,color:stateStroke[flow.state]},
-    style:{stroke:stateStroke[flow.state],strokeWidth:flow.id===selectedId?4:2},labelStyle:{fill:"#d8e6ee",fontSize:11},
+    style:{stroke:stateStroke[flow.state],strokeWidth:flow.id===selectedId?4:2},labelStyle:{fill:"#d8e6ee",fontSize:11},labelBgStyle:{fill:"#0e2b42",stroke:"#5f91ae",strokeWidth:0.8},
   }));
   return (
     <div className="ecosystem-graph" aria-label="Mappa grafica delle relazioni governate">
