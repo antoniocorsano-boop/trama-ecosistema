@@ -111,9 +111,9 @@ test("Ecosystem edge labels retain at least 4.5:1 text/background contrast", asy
 
   const labels = await graph.evaluate((root) => {
     const rgb = (value: string): number[] => {
-      const channels = value.match(/rgba?\\(\\s*(\\d+(?:\\.\\d+)?)[,\\s]+(\\d+(?:\\.\\d+)?)[,\\s]+(\\d+(?:\\.\\d+)?)/);
+      const channels = value.match(/[0-9]+(?:[.][0-9]+)?/g);
       if (!channels) throw new Error(`Cannot parse SVG fill: ${value}`);
-      return channels.slice(1, 4).map(Number);
+      return channels.slice(0, 3).map(Number);
     };
     const luminance = (value: string): number => {
       const linear = rgb(value).map((channel) => {
