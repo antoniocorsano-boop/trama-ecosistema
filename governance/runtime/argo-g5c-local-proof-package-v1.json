@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "trama.argo-g5c-local-proof-package/v1",
+  "packageId": "P4",
+  "capabilityId": "ARGO_G5C_BIFF8_DIDUP_INTEROP",
+  "status": "ARGO_G5C_LOCAL_PROOF_PACKAGE_PREPARED",
+  "executable": false,
+  "runtimeAuthorized": false,
+  "finalGate": "LOCAL_EVIDENCE_REQUIRED",
+  "baseline": {
+    "repository": "antoniocorsano-boop/trama-ecosistema",
+    "canonicalMainSha": "c0ab9f65d42ee88a640afd57ddfac9bef9df6606",
+    "audit": "TRAMA Audit v1.2 integrated with Studio Atlas v1.3 projection preserved",
+    "statusFile": "STATUS.md"
+  },
+  "sourcePackage": {
+    "repository": "antoniocorsano-boop/docente-os-2026-27",
+    "pullRequest": 647,
+    "title": "CAP-DOS-ARGO-SYNC G5-C: BIFF8 XLS proof",
+    "exactHead": "e5dd179f074421f08b2c7952238fa0764d643ce6",
+    "pullRequestState": "DRAFT",
+    "mergeableState": "unstable",
+    "productCiRun": 36815526706,
+    "productCiConclusion": "success",
+    "qualifiedState": "PRONTA_PER_PROVA_REALE"
+  },
+  "automatedEvidence": {
+    "biff8Writer": true,
+    "sixColumnDatiSheet": true,
+    "semanticRoundTrip": true,
+    "oleCfbSignature": true,
+    "noFormulas": true,
+    "noHyperlinks": true,
+    "noVbaPayload": true,
+    "profileValidatorBlocksGeneration": true,
+    "libreOfficeOpened": false,
+    "didupImported": false
+  },
+  "activitySeparation": {
+    "completableInCloudGitHub": [
+      "reconstruct current P4 state from TRAMA and Docente OS sources",
+      "preserve Docente OS #647 automated BIFF8 evidence without overclaiming interoperability",
+      "define deterministic local proof procedure",
+      "add fail-closed validator and adversarial tests",
+      "wire permanent Governance gate"
+    ],
+    "requiresLibreOfficeLocal": [
+      "open the generated non-personal BIFF8 .xls reference workbook in LibreOffice",
+      "verify Dati sheet, six columns, dates, times and accented characters after real opening",
+      "save the opened workbook only if the local test requires a round-trip artifact"
+    ],
+    "requiresDidupManualAttestation": [
+      "enter the authorized didUP context manually",
+      "import the non-personal reference workbook without credentials in repository evidence",
+      "verify accepted import and data correspondence by human attestation"
+    ]
+  },
+  "prohibitions": {
+    "argoCredentials": false,
+    "browserAutomation": false,
+    "externalWrite": false,
+    "productionPromotion": false,
+    "dosA1Activation": false,
+    "personalStudentData": false
+  },
+  "gates": {
+    "TRAMA_STATE_RECONSTRUCTED": "PASS",
+    "DOCENTE_OS_PR647_RECONSTRUCTED": "PASS",
+    "AUTOMATED_BIFF8_PROOF_RECORDED": "PASS",
+    "LOCAL_PROCEDURE_DEFINED": "PASS",
+    "REFERENCE_XLS_GENERATED_FROM_PR647": "BLOCKED",
+    "LIBREOFFICE_OPENING_ATTESTED": "BLOCKED",
+    "DIDUP_MANUAL_IMPORT_ATTESTED": "BLOCKED",
+    "HUMAN_LOCAL_EVIDENCE_REVIEW": "BLOCKED"
+  },
+  "evidenceRefs": {
+    "TRAMA_STATE_RECONSTRUCTED": [
+      "TRAMA main@c0ab9f65d42ee88a640afd57ddfac9bef9df6606",
+      "STATUS.md",
+      "docs/audits/TRAMA-AUDIT-2026-10-03.md",
+      "status/project-knowledge-events.json"
+    ],
+    "DOCENTE_OS_PR647_RECONSTRUCTED": [
+      "Docente OS PR #647 @ e5dd179f074421f08b2c7952238fa0764d643ce6",
+      "Product CI run 36815526706 conclusion success"
+    ],
+    "AUTOMATED_BIFF8_PROOF_RECORDED": [
+      "Docente OS PR #647 body: SheetJS CE 0.20.3, bookType=biff8, six-column Dati sheet, semantic round-trip, OLE/CFB signature check, no formulas, no hyperlinks, no VBA"
+    ],
+    "LOCAL_PROCEDURE_DEFINED": [
+      "docs/runtime/ARGO-G5C-LOCAL-PROOF-PACKAGE-v1.md"
+    ]
+  },
+  "blockingGates": [
+    "REFERENCE_XLS_GENERATED_FROM_PR647",
+    "LIBREOFFICE_OPENING_ATTESTED",
+    "DIDUP_MANUAL_IMPORT_ATTESTED",
+    "HUMAN_LOCAL_EVIDENCE_REVIEW"
+  ],
+  "futureLocalProcedure": [
+    {
+      "step": 1,
+      "action": "Open Docente OS PR #647 at exact head e5dd179f074421f08b2c7952238fa0764d643ce6 and use only the non-personal reference path prepared for G5-C."
+    },
+    {
+      "step": 2,
+      "action": "Generate or download the non-personal BIFF8 .xls reference workbook from the PR #647 proof path; do not use a real class register or student data."
+    },
+    {
+      "step": 3,
+      "action": "Open the BIFF8 .xls workbook in LibreOffice and verify the Dati sheet, six columns, dates, times and characters."
+    },
+    {
+      "step": 4,
+      "action": "If LibreOffice changes or rejects the file, stop and record the incompatibility before any didUP attempt."
+    },
+    {
+      "step": 5,
+      "action": "Manually import the same non-personal workbook in didUP from the authorized user context; do not automate browser actions and do not store credentials."
+    },
+    {
+      "step": 6,
+      "action": "Compare imported didUP rows with the non-personal source rows and record an attestation with date, exact PR head, workbook identifier and result."
+    },
+    {
+      "step": 7,
+      "action": "Return the attestation to TRAMA for Human Review; only then can the local gates move from BLOCKED to PASS."
+    }
+  ],
+  "dosA1": "RUNTIME_DEFERRED",
+  "nextAction": "LOCAL_LIBREOFFICE_DIDUP_PROOF_REQUIRED"
+}
