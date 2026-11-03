@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "trama.ecosystem-state-admission/v1",
+  "recordId": "TRAMA-ECO-V03-REBASE-2026-11-03",
+  "observedAt": "2026-11-03",
+  "status": "PROPOSAL_ONLY_NOT_CANONICAL",
+  "baseline": {
+    "graph": "governance/access/trama-ecosystem-state-v0.3.json",
+    "graphAsOf": "2026-10-17",
+    "repositoryMain": "62b61d462d7e3084c31a7c535c6bdfae021616be",
+    "currentCanonicalTopology": {
+      "nodes": 15,
+      "flows": 16
+    },
+    "currentGapEntries": 25
+  },
+  "projectionRules": {
+    "graphUnchanged": true,
+    "maturityIsSeparate": true,
+    "noAutoPromotion": true,
+    "noBrowserAuthority": true,
+    "privacyFirst": true
+  },
+  "candidateNodes": [
+    {
+      "id": "registro_docente",
+      "label": "Registro Docente",
+      "plane": "PROFESSIONAL",
+      "proposedState": "REAL",
+      "proposedTargetState": "REAL",
+      "maturityRef": null,
+      "owner": "registro-docente",
+      "boundary": "Prodotto professionale indipendente con flusso Oggi → Prepara → Conduci → Registra → Rivedi; disponibilità locale certificata entro il perimetro Android/Termux provato.",
+      "evidence": [
+        "https://github.com/antoniocorsano-boop/registro-docente/pull/114",
+        "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/293"
+      ],
+      "admissionCondition": "Registrare authority prodotto e receipt governato locale; non attribuire un livello L senza definizione di maturità."
+    },
+    {
+      "id": "contextual_copilot_core",
+      "label": "Contextual Copilot Core",
+      "plane": "CROSS_CUTTING",
+      "proposedState": "REAL",
+      "proposedTargetState": "REAL",
+      "maturityRef": null,
+      "owner": "trama",
+      "boundary": "Libreria headless di intenti/capability e policy; nessun servizio centrale, provider AI obbligatorio o autorità applicativa.",
+      "evidence": [
+        "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/279",
+        "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/283"
+      ],
+      "admissionCondition": "Restare capability condivisa senza inventare server o nuova authority."
+    },
+    {
+      "id": "local_semantic_memory",
+      "label": "Memoria semantica locale",
+      "plane": "CROSS_CUTTING",
+      "proposedState": "PARTIAL",
+      "proposedTargetState": "REAL",
+      "maturityRef": null,
+      "owner": "trama",
+      "boundary": "Indice derivato offline su Android/Termux, ricerca e sessione locale con attivazione esplicita; nessun database di autorità o sincronizzazione automatica.",
+      "evidence": [
+        "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/291",
+        "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/292",
+        "https://github.com/antoniocorsano-boop/registro-docente/pull/99"
+      ],
+      "gap": [
+        "Interoperabilità e adozione oltre il perimetro dispositivo/consumer certificato non dimostrate."
+      ],
+      "admissionCondition": "Separare l'evidenza hardware circoscritta dal completamento del confine multi-prodotto."
+    }
+  ],
+  "candidateFlows": [
+    {
+      "id": "registro_docente_to_contextual_copilot_core",
+      "from": "registro_docente",
+      "to": "contextual_copilot_core",
+      "kind": "OTHER",
+      "proposedState": "PARTIAL",
+      "proposedTargetState": "REAL",
+      "boundary": "Consumer Registro usa core vendorizzato per intenti e azioni contestuali; alcuni percorsi verticali hanno qualificazione propria.",
+      "evidence": [
+        "https://github.com/antoniocorsano-boop/registro-docente/blob/main/src/library/contextualCoreAdapter.ts",
+        "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/283"
+      ],
+      "gap": [
+        "Qualifica del confine completo di consumo per tutte le superfici previste."
+      ],
+      "rule": "Nessuna esecuzione o authority aggiunta dalla presenza della dipendenza."
+    },
+    {
+      "id": "registro_docente_to_local_semantic_memory",
+      "from": "registro_docente",
+      "to": "local_semantic_memory",
+      "kind": "DATA",
+      "proposedState": "PARTIAL",
+      "proposedTargetState": "REAL",
+      "boundary": "Attivazione volontaria di ricerca/indice semantico locale tramite sessione effimera same-origin.",
+      "evidence": [
+        "https://github.com/antoniocorsano-boop/registro-docente/pull/99",
+        "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/291"
+      ],
+      "gap": [
+        "Qualifica dell'uso professionale lungo il flusso completo oltre lo smoke tecnico."
+      ],
+      "rule": "Nessuna auto-attivazione e nessuna persistenza di token browser."
+    },
+    {
+      "id": "docente_os_to_registro_docente",
+      "from": "docente_os",
+      "to": "registro_docente",
+      "kind": "DATA",
+      "proposedState": "DESIGNED",
+      "proposedTargetState": "REAL",
+      "boundary": "Proiezione didattica Docente OS → Registro governata da fingerprint e riferimenti, senza authority di scrittura implicita.",
+      "evidence": [
+        "https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/770",
+        "https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/774"
+      ],
+      "gap": [
+        "Produttore e interoperabilità non integrati/qualificati end-to-end sull'esatto perimetro."
+      ],
+      "rule": "PR aperte non autorizzano REAL; Registro non acquisisce l'autorità del curricolo o del piano docente."
+    }
+  ],
+  "explicitlyUnchanged": [
+    {
+      "id": "trama_access",
+      "state": "PARTIAL",
+      "reason": "Il runtime e l'infrastruttura non provano il viaggio professionale live end-to-end."
+    },
+    {
+      "id": "gateway_to_trama_access",
+      "state": "DESIGNED",
+      "reason": "Ingresso professionale non certificato."
+    },
+    {
+      "id": "trama_access_to_docente_os",
+      "state": "DESIGNED",
+      "reason": "Federazione non qualificata."
+    },
+    {
+      "id": "docente_os_to_studio_atlas",
+      "state": "DESIGNED",
+      "reason": "Nessun flusso end-to-end promosso."
+    },
+    {
+      "id": "arena_to_curricolo_atlas",
+      "state": "REAL",
+      "reason": "Autorità curricolare Arena conservata."
+    },
+    {
+      "id": "DOS-A1",
+      "state": "RUNTIME_DEFERRED",
+      "reason": "Nessuna attivazione runtime autorizzata."
+    }
+  ],
+  "admissionGate": "Human Review + sourceRef/authorityRef/evidenceRef verificabili + modifica del solo grafo v0.3 canonico + snapshot generato + CI exact-head + revisione visuale. Questa proposta non è consumata dal Control Center."
+}
