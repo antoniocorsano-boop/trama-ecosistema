@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.ecosystem.state/v0.3",
-  "asOf": "2026-10-17",
+  "asOf": "2026-11-03",
   "authorityPolicy": {
     "graphState": "this-document",
     "capabilityLifecycle": "status/ecosystem-status.json",
@@ -661,6 +661,134 @@
       ],
       "lastSignificantChange": null,
       "decisionRefs": []
+    },
+    {
+      "id": "registro_docente",
+      "label": "Registro Docente",
+      "plane": "PROFESSIONAL",
+      "state": "REAL",
+      "targetState": "REAL",
+      "boundary": "Applicazione professionale autonoma con lavoro Oggi → Prepara → Conduci → Registra → Rivedi qualificato; disponibilità Android/Termux provata solo nel proprio confine.",
+      "authorityOwner": "registro-docente",
+      "authorityRefs": [
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "path:docs/superpowers/specs/2026-11-02-local-registro-service-supervisor-design.md"
+      ],
+      "implementationOwners": [
+        "registro-docente"
+      ],
+      "maturityRef": null,
+      "evidenceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "blockerRefs": [],
+      "sourceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-rebaseline-2026-11-03.md",
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "lastSignificantChange": "2026-11-03",
+      "decisionRefs": [],
+      "gap": {
+        "summary": "none",
+        "missing": []
+      },
+      "target": {
+        "boundary": "Registro Docente operativo con autorità locale preservata.",
+        "value": "Continuità del lavoro del docente senza dedurre integrazioni interprodotto."
+      },
+      "nextAllowedIntervention": {
+        "action": "NONE",
+        "preconditions": [],
+        "forbiddenUntil": []
+      }
+    },
+    {
+      "id": "contextual_copilot_core",
+      "label": "TRAMA Contextual Copilot Core",
+      "plane": "CROSS_CUTTING",
+      "state": "REAL",
+      "targetState": "REAL",
+      "boundary": "Libreria condivisa headless di capability, intenti e policy fail-closed: non è un servizio centrale né un'authority di prodotto.",
+      "authorityOwner": "trama",
+      "authorityRefs": [
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "path:docs/superpowers/specs/2026-10-24-trama-contextual-copilot-core-v0-contract.md"
+      ],
+      "implementationOwners": [
+        "trama",
+        "registro-docente"
+      ],
+      "maturityRef": null,
+      "evidenceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "blockerRefs": [],
+      "sourceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-rebaseline-2026-11-03.md",
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "lastSignificantChange": "2026-11-03",
+      "decisionRefs": [],
+      "gap": {
+        "summary": "none",
+        "missing": []
+      },
+      "target": {
+        "boundary": "Core contestuale riusabile senza spostare responsabilità applicative.",
+        "value": "Azioni contestuali subordinate alle autorizzazioni di ciascun prodotto."
+      },
+      "nextAllowedIntervention": {
+        "action": "NONE",
+        "preconditions": [],
+        "forbiddenUntil": []
+      }
+    },
+    {
+      "id": "local_semantic_memory",
+      "label": "Memoria semantica locale",
+      "plane": "CROSS_CUTTING",
+      "state": "PARTIAL",
+      "targetState": "REAL",
+      "boundary": "Indice derivato e ricostruibile su dispositivo Android/Termux con accesso loopback, sessione effimera e attivazione docente esplicita.",
+      "authorityOwner": "trama",
+      "authorityRefs": [
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "path:docs/superpowers/specs/2026-10-30-contextual-copilot-local-semantic-memory-design.md"
+      ],
+      "implementationOwners": [
+        "trama",
+        "registro-docente"
+      ],
+      "maturityRef": null,
+      "evidenceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "blockerRefs": [],
+      "sourceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-rebaseline-2026-11-03.md",
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "lastSignificantChange": "2026-11-03",
+      "decisionRefs": [],
+      "gap": {
+        "summary": "Runtime locale e attivazione consumer circoscritti sono provati; la continuità d'uso ecosistemica non è ancora certificata.",
+        "missing": [
+          "Qualifica di utilizzo professionale continuativo oltre i test sintetici e sul perimetro consumatore approvato."
+        ]
+      },
+      "target": {
+        "boundary": "Memoria semantica locale disponibile per consumer autorizzati senza nuova autorità dei dati né automatismi.",
+        "value": "Recupero semantico volontario e ricostruibile nel lavoro professionale."
+      },
+      "nextAllowedIntervention": {
+        "action": "Qualificare un percorso reale del docente preservando attivazione esplicita e isolamento locale.",
+        "preconditions": [
+          "Journey consumer con autorizzazione umana e contratto privacy verificati."
+        ],
+        "forbiddenUntil": [
+          "Nessun accesso remoto o sincronizzazione automatica non autorizzata."
+        ]
+      }
     }
   ],
   "flows": [
@@ -1386,6 +1514,154 @@
       ],
       "lastSignificantChange": null,
       "decisionRefs": []
+    },
+    {
+      "id": "registro_docente_to_contextual_copilot_core",
+      "from": "registro_docente",
+      "to": "contextual_copilot_core",
+      "kind": "OTHER",
+      "state": "PARTIAL",
+      "targetState": "REAL",
+      "boundary": "Consumo del Core contestuale da Registro tramite adattatore Biblioteca e percorsi di intento già qualificati, senza autorità trasferita.",
+      "authorityOwner": null,
+      "authorityRefs": [
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "path:docs/superpowers/specs/2026-10-24-trama-contextual-copilot-core-v0-contract.md"
+      ],
+      "implementationOwners": [
+        "registro-docente",
+        "trama"
+      ],
+      "maturityRef": null,
+      "evidenceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "blockerRefs": [],
+      "sourceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-rebaseline-2026-11-03.md",
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "lastSignificantChange": "2026-11-03",
+      "decisionRefs": [],
+      "gap": {
+        "summary": "Il consumo reale esiste per percorsi delimitati; il confine completo delle azioni professionali previste non è qualificato.",
+        "missing": [
+          "Qualifica delle superfici consumatrici ulteriori che saranno effettivamente richieste."
+        ]
+      },
+      "target": {
+        "boundary": "Consumo del Core governato in tutti i percorsi Registro effettivamente autorizzati.",
+        "value": "Copilota contestuale senza bypass di policy o conferma del docente."
+      },
+      "nextAllowedIntervention": {
+        "action": "Estendere soltanto il consumer necessario, dopo prove mirate di policy/privacy.",
+        "preconditions": [
+          "Selezione del caso d'uso concreto e contratto consumer locale."
+        ],
+        "forbiddenUntil": [
+          "Nessuna nuova autorità mutativa o provider remoto implicito."
+        ]
+      }
+    },
+    {
+      "id": "registro_docente_to_local_semantic_memory",
+      "from": "registro_docente",
+      "to": "local_semantic_memory",
+      "kind": "DATA",
+      "state": "PARTIAL",
+      "targetState": "REAL",
+      "boundary": "Attivazione browser Registro della memoria locale via sessione same-origin effimera e ricerca semantica su indice ricostruibile.",
+      "authorityOwner": null,
+      "authorityRefs": [
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "path:docs/superpowers/specs/2026-11-01-lsm-01d-local-trust-bridge-design.md"
+      ],
+      "implementationOwners": [
+        "registro-docente",
+        "trama"
+      ],
+      "maturityRef": null,
+      "evidenceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "blockerRefs": [],
+      "sourceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-rebaseline-2026-11-03.md",
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "lastSignificantChange": "2026-11-03",
+      "decisionRefs": [],
+      "gap": {
+        "summary": "Attivazione e collaudo locale sono provati, non l'uso professionale continuativo dell'intero percorso.",
+        "missing": [
+          "Prova reale di continuità e riuso semantico su sessioni del docente autorizzate."
+        ]
+      },
+      "target": {
+        "boundary": "Ricerca semantica locale durante il lavoro Registro, esplicita e revocabile.",
+        "value": "Ridurre ricerca manuale con privacy e authority dei materiali preservate."
+      },
+      "nextAllowedIntervention": {
+        "action": "Qualificare il viaggio d'uso locale del docente con prove controllate.",
+        "preconditions": [
+          "Memoria attivata esplicitamente, dispositivo e consumer verificati."
+        ],
+        "forbiddenUntil": [
+          "Nessuna sincronizzazione o attivazione automatica."
+        ]
+      }
+    },
+    {
+      "id": "docente_os_to_registro_docente",
+      "from": "docente_os",
+      "to": "registro_docente",
+      "kind": "DATA",
+      "state": "DESIGNED",
+      "targetState": "REAL",
+      "boundary": "Proiezione didattica Docente OS → Registro prevista ma il produttore e il percorso completo non sono integrati e qualificati end-to-end.",
+      "authorityOwner": null,
+      "authorityRefs": [
+        "path:docs/superpowers/specs/2026-10-17-trama-ecosystem-state-v0.3-design.md",
+        "decision:TRAMA-ADR-002"
+      ],
+      "implementationOwners": [
+        "docente-os",
+        "registro-docente"
+      ],
+      "maturityRef": null,
+      "evidenceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "blockerRefs": [],
+      "sourceRefs": [
+        "path:docs/evidence/ecosystem-state-v0.3-rebaseline-2026-11-03.md",
+        "path:docs/evidence/ecosystem-state-v0.3-admission-receipt-2026-11-03.md"
+      ],
+      "lastSignificantChange": "2026-11-03",
+      "decisionRefs": [],
+      "gap": {
+        "summary": "Il contratto proposto non equivale a un trasferimento dati operativo; restano aperte le PR produttore e l'interoperabilità.",
+        "missing": [
+          "Producer Docente OS integrato con evidenza exact-head.",
+          "Compatibilità e read-back reali nel consumer Registro certificati.",
+          "Decisione esplicita di adozione senza scritture automatiche."
+        ]
+      },
+      "target": {
+        "boundary": "Proiezione read-only con fingerprint e provenienza da Docente OS a Registro, senza spostamento di authority.",
+        "value": "Continuità didattica tra prodotti senza duplicare curricolo, lezioni o valutazioni."
+      },
+      "nextAllowedIntervention": {
+        "action": "Qualificare prima producer e consumer; poi dimostrare il passaggio concreto prima di promuovere l'arco.",
+        "preconditions": [
+          "PR producer integrate e qualificate.",
+          "Contratto versione/fingerprint/provenienza vincolato."
+        ],
+        "forbiddenUntil": [
+          "Nessun trattamento come flusso REAL sulla base del solo codice di una PR aperta.",
+          "Nessuna scrittura professionale implicita."
+        ]
+      }
     }
   ],
   "views": {
