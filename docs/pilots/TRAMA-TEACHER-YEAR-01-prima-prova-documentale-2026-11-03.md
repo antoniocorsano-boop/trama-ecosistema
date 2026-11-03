@@ -13,7 +13,7 @@ La risposta principale non è «occorre costruire una programmazione da zero». 
 
 **Vincolo documentale decisivo:** il registro maestro curricolare **REG-CURR-00 v1.13** identifica **CAN-CURR-MASTER-00 v1.3, 6 settembre 2026** come «baseline curricolare canonica integrale materializzata», ma **DA VALIDARE PROFESSIONALMENTE / NON VIGENTE**. Lo stesso registro precisa: READY_FOR_COLLEGIO NOT_YET; approvazione collegiale NOT_YET; promozione a curricolo vigente NOT_AUTHORIZED. Gli esiti del pilota multipersona Tecnologia prima non equivalgono a delibera del Collegio.
 
-**Provenienza:** il fascicolo curricolare e il precedente pacchetto «Tecnologia v1.0» sono intestati all'istituto indicato nei documenti d'origine. Il loro utilizzo come curricolo **di un'altra istituzione** non è autorizzato dalla sola disponibilità nel Drive del docente. Nessun curricolo formalmente approvato della scuola effettivamente oggetto della prova è stato acquisito e verificato in questo esame. La successiva validazione istituzionale richiede la fonte autentica e il relativo stato.
+**Provenienza — rettifica dell'istituto (03/11/2026):** il contesto da qualificare è l'I.C. Calvario-Covotta «don Lorenzo Milani» di Ariano Irpino (AVIC849003), non l'I.C. «P.S. Mancini». Nel Drive sono già presenti proposte disciplinari esplicitamente intestate al Don Lorenzo Milani, dunque **non è corretta l'asserzione che tutta la documentazione provenga da un'altra istituzione**. È ancora necessario distinguere la proposta di lavoro dal curricolo formalmente adottato, verificarne gli atti di approvazione e la decorrenza. I dettagli di provenienza e le fonti istituzionali sono nella §9.1.
 
 **Regime nazionale:** D.M. 9 dicembre 2025 n. 221 art. 1, pubblicato nella G.U. 27 gennaio 2026, https://www.normattiva.it/atto/caricaDettaglioAtto?atto.codiceRedazionale=26G00021&atto.dataPubblicazioneGazzetta=2026-01-27 . Per il 2026/27 la prima della secondaria I grado avvia le IN2025; la seconda/terza conclude gradualmente il percorso precedente nell'ambito del regime transitorio. I contenuti annualizzati contenuti nel master sono **elaborazioni d'Istituto**, non trascrizioni di OSA annuali ministeriali.
 
@@ -91,7 +91,7 @@ Il documento individua già due limiti particolarmente pertinenti:
 | Regime normativa prima/seconda identificato | **VERIFIED** | D.M. 221/2025 e matrice di provenienza per annualità |
 | Esistono progressioni e obiettivi annuali **proposti** per I e II | **VERIFIED** | Master v1.3 e proposta Tecnologia v1.2 |
 | Le CAN-PRG-1/2/3 e CAN-PLAN hanno 66h e identità UDA coerenti | **VERIFIED_STRUCTURAL** | File di lavoro e modello Docente OS letto su main/develop |
-| Programmazione corrente istituzionalmente approvata, per il contesto scolastico effettivo | **BLOCKED / NON DIMOSTRATA** | Master di origine da validare/non vigente; manca fonte deliberata applicabile |
+| Programmazione corrente istituzionalmente approvata, per il contesto scolastico effettivo | **BLOCKED / NON DIMOSTRATA** | Proposte riferite al Don Lorenzo Milani, incluse le versioni disciplinari, da validare; atto di adozione, versione e decorrenza ancora non verificati |
 | Ogni UDA copre in modo pedagogicamente valido un obiettivo vigente | **PARTIAL / DA VERIFICARE** | Connessioni proposte in questa prova, non gate curricolare completato |
 | Piano adeguato al calendario/classi correnti | **NOT_RUN** | Manca calendario effettivo autorizzato e profilo della classe |
 | Studenti hanno acquisito determinate competenze | **NON VALUTATO** | Impossibile dedurlo dalla pianificazione o dalla presenza di asset |
@@ -131,19 +131,25 @@ La prima prova ha dimostrato che il lavoro annuale è **già in parte costruito*
 
 **Metodo:** sola lettura di fonti documentali e pagine pubbliche; nessun dato studente, nessuna prova in classe, nessuna modifica a piani o servizi. La sezione integra, ma non sostituisce, i gate delle sezioni precedenti.
 
-### 9.1 Identità dell'istituto utilizzatore e limiti della fonte
+### 9.1 Identità dell'istituto utilizzatore, fonti istituzionali e stato delle proposte
 
-Istituto di applicazione: **I.C. Statale «Pasquale Stanislao Mancini» di Ariano Irpino**, codice meccanografico **AVIC86200D**. Sito ufficiale: https://www.istitutocomprensivocardito.edu.it/ . Le pagine istituzionali dell'offerta formativa documentano **2 ore settimanali di Tecnologia** sia per il tempo normale sia per quello prolungato:
-- https://www.istitutocomprensivocardito.edu.it/indirizzo-di-studio/tempo-normale-30h-settimanali/
-- https://www.istitutocomprensivocardito.edu.it/indirizzo-di-studio/tempo-prolungato-40h-settimanali/
+**Rettifica fattuale (3 novembre 2026):** l'istituto di applicazione è l'**Istituto Comprensivo Calvario-Covotta «don Lorenzo Milani» di Ariano Irpino (AV)**, codice meccanografico **AVIC849003**, sede istituzionale in via Marconi 25. Sito ufficiale https://www.icdonmilaniariano.edu.it/ ; la scuola secondaria di primo grado **plesso Covotta** è identificata dal codice **AVMM849047**: https://www.icdonmilaniariano.edu.it/struttura/secondaria-di-primo-grado-ariano-plesso-covotta/ . **Il precedente riferimento al P.S. Mancini e al codice AVIC86200D era errato e viene ritirato integralmente.**
 
-È disponibile la scheda del **PTOF 2025–2028**, https://www.istitutocomprensivocardito.edu.it/documento/aggiornamento-ptof-2024-25/ , ma nel materiale effettivamente verificato non si è potuta stabilire la **versione analitica di curricolo Tecnologia 2026/27 formalmente adottata** per questo istituto, con atto, decorrenza e obiettivi annuali. Il PTOF pubblicato non è qui equiparato automaticamente a un curricolo analitico approvato.
+Il sito ufficiale pubblica **PTOF 2025–2028** (scheda con allegato AVIC849003-202528-202425-20241227, pubblicazione 14/05/2025): https://www.icdonmilaniariano.edu.it/documento/ptof-25-28/ . Questo è un riferimento dell'istituto corretto; non attesta però, senza verifica dell'allegato e dei successivi atti, che una determinata proposta curricolare di Tecnologia del 2026 sia stata recepita e deliberata per l'a.s. 2026/27.
 
-Distinguere quattro livelli di provenienza:
-1. **Norma:** D.M. 221/2025, articoli 1 e 5; IN2025 per le classi prime 2026/27, IN2012 transitorie per seconde e terze. https://www.normattiva.it/atto/caricaDettaglioAtto?atto.codiceRedazionale=26G00021&atto.dataPubblicazioneGazzetta=2026-01-27
-2. **Fonte istituzionale del P.S. Mancini:** conferma identità e quadro orario generale, non ancora gli obiettivi analitici del curricolo approvato.
-3. **Proposta curricolare di un altro istituto:** CAN-CURR-MASTER-00@1.3, master esplicitamente **NON VIGENTE**, sezioni 7.3.8, 15.4 e 16.2. Può orientare il confronto; non può essere trasferito come fonte adottata del P.S. Mancini.
-4. **Progettazione professionale:** CAN-PRG e CAN-PLAN; 33 × 2h = 66h annue è un modello **indicativo**, non il calendario effettivo delle singole sezioni.
+**Documenti di lavoro nel Drive che appartengono al contesto «don Lorenzo Milani»:**
+- \`Curricolo_verticale_Tecnologia_IC_Don_Milani_Ariano_v2-1.docx\`: intestato I.C. Calvario-Covotta «don Lorenzo Milani»; **bozza istituzionale verificata, 08/06/2026**; dichiarata destinata a Dipartimento, commissione curricolo e successivo iter deliberativo; non fonte vigente per il solo titolo.
+- \`curricolo_verticale_tecnologia_istituzionale_IC_Don_Milani_v0_2.docx\`: menziona espressamente **AVIC849003**; dichiara che la validità formale richiede delibere degli organi collegiali; **bozza per validazione interna**.
+- \`Curricolo_verticale_Dipartimento_Scientifico_Matematico_Tecnologico_2026_2027_v3_1_READY_DIPARTIMENTO.docx\`: curricolo verticale area SMT, con Informatica e STEM; stato dichiarato **proposta per esame e validazione dipartimentale/collegiale**. «QA completata» non è sinonimo di approvazione.
+- \`CAN-CURR-MASTER-00@1.3\`: intestato I.C. «Lorenzo Milani», ma **NON VIGENTE** per registro maestro; la coincidenza nominale con l'istituto corretto non dimostra da sola corrispondenza di documento/atto/approvazione. Esaminare il rapporto di provenienza con le proposte specificamente intestate AVIC849003.
+
+**Riconciliazione di autorità:**
+1. **Normativa nazionale:** D.M. 221/2025 (prima IN2025 nel 2026/27, seconde e terze nel regime transitorio IN2012); https://www.normattiva.it/atto/caricaDettaglioAtto?atto.codiceRedazionale=26G00021&atto.dataPubblicazioneGazzetta=2026-01-27 .
+2. **Fonte scolastica pubblica:** sito ufficiale Don Lorenzo Milani + PTOF 2025–2028; identità istituzionale verificata, ma collegamento di una specifica versione di curricolo disciplinare ancora da verificare negli atti.
+3. **Proposte disciplinari del medesimo contesto:** v2-1, v0.2, SMT v3.1 e master v1.3; sono **materiale pertinente e non presumibilmente esterno**, ma il loro livello di approvazione è distinto.
+4. **Programmazioni personali:** CAN-PRG e CAN-PLAN (33 × 2h = 66h annue indicative) da correlare alla versione curricolare approvata e al calendario effettivo.
+
+**Correzione del blocker P01:** non è più «provenienza da istituto diverso»; è **reperimento e verifica dell'atto/versione che renda vigente il curricolo del Don Lorenzo Milani e tracciabilità dei collegamenti con gli obiettivi delle UDA**. Non promuovere documenti in bozza sulla sola base del nome dell'istituto, della revisione tecnica o dell'esistenza nel fascicolo Drive.
 
 ### 9.2 Due riscontri su UDA autentiche, non su descrizioni ipotetiche
 
@@ -162,7 +168,7 @@ Le evidenze elencate sono **prodotti e verifiche progettati**, NON risultati rac
 
 Il passo prioritario **non è una nuova UDA** e neppure una modifica applicativa non ancora dimostrata. È qualificare la **fonte curricolare** di ciascun obiettivo con istituto, documento, versione, data, regime della coorte, rango (norma / curricolo adottato / proposta / programmazione del docente), posizione e riferimento alla delibera **solo se effettivamente verificati**. Collega poi tale obiettivo a UDA, attività, evidenza **prevista**, criterio e stato della validazione.
 
-Regola di accettazione: **senza un curricolo formalmente adottato e attribuibile all'I.C. P.S. Mancini, lo stato resta PROPOSTA_DA_VALIDARE**. Le etichette di proposta non diventano codici ministeriali; l'esistenza di una verifica non diventa un risultato di apprendimento.
+Regola di accettazione: **senza una versione del curricolo formalmente adottata e attribuibile all'I.C. Calvario-Covotta «don Lorenzo Milani» (AVIC849003), con atto e decorrenza verificati, lo stato resta PROPOSTA_DA_VALIDARE**. Le etichette di proposta non diventano codici ministeriali; l'esistenza di una verifica non diventa un risultato di apprendimento.
 
 **Gate di chiusura:** acquisire la fonte istituzionale autentica (comprensiva di versione/atto applicabile), qualificare una matrice obiettivo → UDA → prestazione → evidenza → criterio con decisione professionale, quindi verificare il comportamento di Docente OS rispetto alla provenienza. Solo un difetto osservato sul prodotto può autorizzare una modifica funzionale separata. Calendario effettivo e prova di classe sono verifiche distinte.
 
