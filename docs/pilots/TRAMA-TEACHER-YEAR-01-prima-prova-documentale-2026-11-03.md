@@ -12,20 +12,20 @@
 **Decisione del docente confermata:** l'analisi di TEACHER-YEAR-01 parte dal curricolo **già realizzato in CurManLight Arena** per l'I.C. Calvario-Covotta «don Lorenzo Milani» di Ariano Irpino (AVIC849003). Non si ricostruisce né si adotta un nuovo curricolo dai documenti Drive; le matrici documentali delle sezioni 3–4 e 9.2 hanno valore **esplorativo e di confronto**, non sostituiscono la selezione dei segmenti/obiettivi/identificatori governati in Arena.
 
 **Preesistenze software verificate in GitHub:**
-- **Arena PR #347, merged 20/10/2026**, exact head \`3b067af857af0598191e4e2b5b90f7426008acc5\`: implementati la materializzazione canonica del master 1.3, il pacchetto \`TRAMA_CURRICOLO_VERTICALE_RELEASE_V1\`, manifest di copertura, versione, provenienza, impronta strutturale e stati di autorità. Repo: https://github.com/antoniocorsano-boop/CurManLight_arena/pull/347 .
-- Il read-model \`canonicalCurricoloReadModel.ts (modulo Arena per la lettura del curricolo)\` espone in Arena la verticale per ordine, ambito, annualità, obiettivi e contenuti dal pacchetto verificato; \`src/domain/transfer/curricoloVerticaleRepositoryExportV1.ts\` produce la release dalla versione, dai segmenti, dai nodi e dai collegamenti memorizzati.
-- **Docente OS PR #722, merged 21/10/2026**, exact head \`253e6d287392cc6cdca945753818ff89857d459b\`: consumer \`selectArenaVerticalCurricoloSlice\`, vincolato a istituto, anno, ordine, classe, disciplina, versione, impronta e provenienza Arena. Repo: https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/722 .
-- **Arena REG-CURR-00@1.13** registra \`CAN-CURR-MASTER-00@1.3\` con copertura documentale completa e **validazione professionale complessiva ancora OPEN, approvazione collegiale NOT_YET, vigenza NO**. Il consumer conserva \`PROVISIONAL_BASELINE\`; una release tecnicamente valida **non** attesta l'approvazione.
+- **Arena PR #347, merged 20/10/2026**, exact head `3b067af857af0598191e4e2b5b90f7426008acc5`: implementati la materializzazione canonica del master 1.3, il pacchetto `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1`, manifest di copertura, versione, provenienza, impronta strutturale e stati di autorità. Repo: https://github.com/antoniocorsano-boop/CurManLight_arena/pull/347 .
+- Il read-model `canonicalCurricoloReadModel.ts (modulo Arena per la lettura del curricolo)` espone in Arena la verticale per ordine, ambito, annualità, obiettivi e contenuti dal pacchetto verificato; `src/domain/transfer/curricoloVerticaleRepositoryExportV1.ts` produce la release dalla versione, dai segmenti, dai nodi e dai collegamenti memorizzati.
+- **Docente OS PR #722, merged 21/10/2026**, exact head `253e6d287392cc6cdca945753818ff89857d459b`: consumer `selectArenaVerticalCurricoloSlice`, vincolato a istituto, anno, ordine, classe, disciplina, versione, impronta e provenienza Arena. Repo: https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/722 .
+- **Arena REG-CURR-00@1.13** registra `CAN-CURR-MASTER-00@1.3` con copertura documentale completa e **validazione professionale complessiva ancora OPEN, approvazione collegiale NOT_YET, vigenza NO**. Il consumer conserva `PROVISIONAL_BASELINE`; una release tecnicamente valida **non** attesta l'approvazione.
 - **Perimetro di Arena:** 113 scope canonici del master v1.3 nella materializzazione; l'intake Docente OS ne seleziona solo i contenuti pertinenti alle assegnazioni, non crea copie o autorità curricolari autonome.
 
 **Sequenza corretta del collaudo:**
 1. Identificare e leggere **l'effettiva release/istanza di Arena** del Don Lorenzo Milani 2026/27, non una fixture di test o una bozza selezionata autonomamente in Drive; controllare identità istituto, versione, impronta, manifest, stato di autorità.
 2. Estrarre i **segmenti, obiettivi, conoscenze e nodi Arena** di Tecnologia della secondaria per le classi I, II e III, distinguendo il regime delle coorti e le formulazioni di istituto dalle prescrizioni nazionali.
-3. Confrontare **questi elementi Arena** con \`CAN-PLAN-1/2/3\`, \`CAN-PRG-1/2/3\` e le UDA esistenti; qualificare per ogni collegamento: riferimento Arena (versione, segmento, nodo/obiettivo), UDA, attività, evidenza **prevista**, criterio, copertura e revisione professionale.
-4. Verificare in Docente OS il consumo della stessa release, senza scambiare il \`manifest.coverageStatus = SATISFIED\` (completezza strutturale del curricolo) per la copertura pedagogica degli obiettivi nel Piano annuale: sono due controlli distinti.
+3. Confrontare **questi elementi Arena** con `CAN-PLAN-1/2/3`, `CAN-PRG-1/2/3` e le UDA esistenti; qualificare per ogni collegamento: riferimento Arena (versione, segmento, nodo/obiettivo), UDA, attività, evidenza **prevista**, criterio, copertura e revisione professionale.
+4. Verificare in Docente OS il consumo della stessa release, senza scambiare il `manifest.coverageStatus = SATISFIED` (completezza strutturale del curricolo) per la copertura pedagogica degli obiettivi nel Piano annuale: sono due controlli distinti.
 5. Esporre il solo eventuale gap di integrazione **verificato** sul prodotto; non aprire nuove UDA, generatori, registri paralleli o uno strato alternativo a Arena. Nessuna promozione automatica di autorità e nessun dato reale di classe.
 
-**Punto da controllare sull'istanza reale, non da classificare come difetto già dimostrato:** il materiale di test e lo script di materializzazione riportano identificativi interni d'istituto diversi (\`ic-calvario-covotta-don-milani\` e \`ics-lorenzo-milani\`); verificare l'identità **effettivamente serializzata** nella release di Arena e quella selezionata dal consumer. Non inferire errore o proporre migrazioni da questi soli valori di test/script.
+**Punto da controllare sull'istanza reale, non da classificare come difetto già dimostrato:** il materiale di test e lo script di materializzazione riportano identificativi interni d'istituto diversi (`ic-calvario-covotta-don-milani` e `ics-lorenzo-milani`); verificare l'identità **effettivamente serializzata** nella release di Arena e quella selezionata dal consumer. Non inferire errore o proporre migrazioni da questi soli valori di test/script.
 
 **Stato della presente PR:** il ciclo Arena→Docente OS è **IMPLEMENTED** e le PR tecniche citate sono già integrate; la **prova end-to-end sulla release effettiva e sul binding granulare Arena→Piano→UDA non è ancora stata eseguita in questo rapporto**. La qualificazione istituzionale resta distinta e OPEN; il precedente blocker formulato come «curricolo di altro istituto da acquisire» è **ritirato**.
 
@@ -49,7 +49,7 @@ La risposta principale non è «occorre costruire una programmazione da zero». 
 
 **Diagnosi:** il precedente delta di 6 ore nelle prime e seconde deriva dal confronto fra generazioni documentali differenti. La baseline più recente è strutturalmente coerente con Docente OS sul monte ore **indicativo**. **Non** occorre aggiungere automaticamente ore o modificare database. Il monte ore effettivo va calibrato su calendario reale e cattedra.
 
-Codice osservato: \`antoniocorsano-boop/docente-os-2026-27/product/src/app/piano-annuale/model.ts\`, blocchi B01–B33, modello per la verticale Tecnologia. Il fatto che i 66h coincidano **non** prova che gli obiettivi del curricolo vigente siano coperti.
+Codice osservato: `antoniocorsano-boop/docente-os-2026-27/product/src/app/piano-annuale/model.ts`, blocchi B01–B33, modello per la verticale Tecnologia. Il fatto che i 66h coincidano **non** prova che gli obiettivi del curricolo vigente siano coperti.
 
 ## 3. TY-1 — Prima secondaria, IN2025: riconciliazione preliminare
 
@@ -74,7 +74,7 @@ Queste sigle sintetizzano la proposta e **non** attestano una deliberazione.
 | 1-07 — Progetto tecnologico sostenibile | 6 | N2 + N3, possibile uso pertinente N1/N4 | progetto, controllo, documentazione e decisione motivata |
 | **Totale** | **66** | **Tutte le aree hanno almeno una UDA candidata** | **Copertura solo preliminare, non competenze raggiunte** |
 
-**Giudizio TY-1:** \`DOCUMENTARY_PARTIAL\`. Sono presenti riferimenti annuali e UDA operative compatibili, ma manca una matrice granularmente certificata **obiettivo della fonte vigente ↔ criteri ↔ fasi UDA ↔ evidenze**, nonché il profilo professionale della classe e il calendario effettivo. L'identità «N1–N4» è della bozza annualizzata; non promuoverla come norma nazionale.
+**Giudizio TY-1:** `DOCUMENTARY_PARTIAL`. Sono presenti riferimenti annuali e UDA operative compatibili, ma manca una matrice granularmente certificata **obiettivo della fonte vigente ↔ criteri ↔ fasi UDA ↔ evidenze**, nonché il profilo professionale della classe e il calendario effettivo. L'identità «N1–N4» è della bozza annualizzata; non promuoverla come norma nazionale.
 
 ## 4. TY-2 — Seconda secondaria, IN2012 transitorio: riconciliazione preliminare
 
@@ -94,11 +94,11 @@ Queste sigle sintetizzano la proposta e **non** attestano una deliberazione.
 | 2-08 — Dati, rappresentazione digitale e modellazione introduttiva | 4 | organizzazione di dati e documentazione | tabella/grafico o modello, fonte dei dati |
 | **Totale** | **66** | **Aree della proposta rappresentate** | **Copertura e criteri ancora da verificare** |
 
-**Giudizio TY-2:** \`DOCUMENTARY_PARTIAL\`. Le UDA rappresentano il percorso operativo proposto, ma non si deve attribuire automaticamente ai benchmark IN2012 l'intera annualizzazione locale. I raccordi digitali e tecnologici aggiuntivi sono proposte del curricolo d'Istituto quando non direttamente tracciati alle IN2012.
+**Giudizio TY-2:** `DOCUMENTARY_PARTIAL`. Le UDA rappresentano il percorso operativo proposto, ma non si deve attribuire automaticamente ai benchmark IN2012 l'intera annualizzazione locale. I raccordi digitali e tecnologici aggiuntivi sono proposte del curricolo d'Istituto quando non direttamente tracciati alle IN2012.
 
 ## 5. Mappa del ciclo docente: esiste già
 
-Fonte di lavoro: \`CAN-TEACHER-CYCLE-MAP-DOS-01\`, 18 settembre 2026, preesistente al presente studio. Percorso documentato: **CURRICOLO → PROGRAMMAZIONE ANNUALE → UDA → PREPARAZIONE → LEZIONE → ATTIVITÀ STUDENTE → EVIDENZE → REGISTRAZIONE → RIFLESSIONE → RIPROGETTAZIONE → NUOVA PREPARAZIONE**.
+Fonte di lavoro: `CAN-TEACHER-CYCLE-MAP-DOS-01`, 18 settembre 2026, preesistente al presente studio. Percorso documentato: **CURRICOLO → PROGRAMMAZIONE ANNUALE → UDA → PREPARAZIONE → LEZIONE → ATTIVITÀ STUDENTE → EVIDENZE → REGISTRAZIONE → RIFLESSIONE → RIPROGETTAZIONE → NUOVA PREPARAZIONE**.
 
 Il documento individua già due limiti particolarmente pertinenti:
 1. **P01 curricolo → programmazione:** identificatori stabili e provenienza non ancora uniformi;
@@ -138,11 +138,11 @@ Il documento individua già due limiti particolarmente pertinenti:
 
 ## 8. Gate e decisione finale
 
-**Esito complessivo:** \`DOCUMENTARY_PARTIAL / READ_ONLY\`. L'analisi di compatibilità è positiva **per la struttura della programmazione Tecnologia**, non per l'approvazione istituzionale né per il raggiungimento di apprendimenti.  
+**Esito complessivo:** `DOCUMENTARY_PARTIAL / READ_ONLY`. L'analisi di compatibilità è positiva **per la struttura della programmazione Tecnologia**, non per l'approvazione istituzionale né per il raggiungimento di apprendimenti.  
 **Decisione professionale necessaria:** riconoscere il curricolo vigente del contesto scolastico di applicazione e confermare le priorità didattiche del piano.  
 **Autorizzazione runtime:** nessuna.  
 **Human Pedagogical Review:** pendente.  
-**Stato del collaudo in classe:** \`NOT_RUN\`.
+**Stato del collaudo in classe:** `NOT_RUN`.
 
 La prima prova ha dimostrato che il lavoro annuale è **già in parte costruito**; il collo di bottiglia prioritario è la **validità e tracciabilità del riferimento curricolare all'origine**, non la mancanza di UDA o il numero di ore.
 
@@ -160,10 +160,10 @@ La prima prova ha dimostrato che il lavoro annuale è **già in parte costruito*
 Il sito ufficiale pubblica **PTOF 2025–2028** (scheda con allegato AVIC849003-202528-202425-20241227, pubblicazione 14/05/2025): https://www.icdonmilaniariano.edu.it/documento/ptof-25-28/ . Questo è un riferimento dell'istituto corretto; non attesta però, senza verifica dell'allegato e dei successivi atti, che una determinata proposta curricolare di Tecnologia del 2026 sia stata recepita e deliberata per l'a.s. 2026/27.
 
 **Documenti di lavoro nel Drive che appartengono al contesto «don Lorenzo Milani»:**
-- \`Curricolo_verticale_Tecnologia_IC_Don_Milani_Ariano_v2-1.docx\`: intestato I.C. Calvario-Covotta «don Lorenzo Milani»; **bozza istituzionale verificata, 08/06/2026**; dichiarata destinata a Dipartimento, commissione curricolo e successivo iter deliberativo; non fonte vigente per il solo titolo.
-- \`curricolo_verticale_tecnologia_istituzionale_IC_Don_Milani_v0_2.docx\`: menziona espressamente **AVIC849003**; dichiara che la validità formale richiede delibere degli organi collegiali; **bozza per validazione interna**.
-- \`Curricolo_verticale_Dipartimento_Scientifico_Matematico_Tecnologico_2026_2027_v3_1_READY_DIPARTIMENTO.docx\`: curricolo verticale area SMT, con Informatica e STEM; stato dichiarato **proposta per esame e validazione dipartimentale/collegiale**. «QA completata» non è sinonimo di approvazione.
-- \`CAN-CURR-MASTER-00@1.3\`: intestato I.C. «Lorenzo Milani», ma **NON VIGENTE** per registro maestro; la coincidenza nominale con l'istituto corretto non dimostra da sola corrispondenza di documento/atto/approvazione. Esaminare il rapporto di provenienza con le proposte specificamente intestate AVIC849003.
+- `Curricolo_verticale_Tecnologia_IC_Don_Milani_Ariano_v2-1.docx`: intestato I.C. Calvario-Covotta «don Lorenzo Milani»; **bozza istituzionale verificata, 08/06/2026**; dichiarata destinata a Dipartimento, commissione curricolo e successivo iter deliberativo; non fonte vigente per il solo titolo.
+- `curricolo_verticale_tecnologia_istituzionale_IC_Don_Milani_v0_2.docx`: menziona espressamente **AVIC849003**; dichiara che la validità formale richiede delibere degli organi collegiali; **bozza per validazione interna**.
+- `Curricolo_verticale_Dipartimento_Scientifico_Matematico_Tecnologico_2026_2027_v3_1_READY_DIPARTIMENTO.docx`: curricolo verticale area SMT, con Informatica e STEM; stato dichiarato **proposta per esame e validazione dipartimentale/collegiale**. «QA completata» non è sinonimo di approvazione.
+- `CAN-CURR-MASTER-00@1.3`: intestato I.C. «Lorenzo Milani», ma **NON VIGENTE** per registro maestro; la coincidenza nominale con l'istituto corretto non dimostra da sola corrispondenza di documento/atto/approvazione. Esaminare il rapporto di provenienza con le proposte specificamente intestate AVIC849003.
 
 **Riconciliazione di autorità:**
 1. **Normativa nazionale:** D.M. 221/2025 (prima IN2025 nel 2026/27, seconde e terze nel regime transitorio IN2012); https://www.normattiva.it/atto/caricaDettaglioAtto?atto.codiceRedazionale=26G00021&atto.dataPubblicazioneGazzetta=2026-01-27 .
@@ -195,3 +195,77 @@ Regola di accettazione: **senza una versione del curricolo formalmente adottata 
 **Gate di chiusura:** acquisire la release/istanza Arena corrente del Don Lorenzo Milani e verificarne identità, versione, manifest e stato di autorità; qualificare su segmenti/obiettivi Arena una matrice obiettivo → UDA → prestazione → evidenza → criterio con decisione professionale; verificare poi il comportamento di Docente OS rispetto alla stessa release. Solo per affermare approvazione e vigenza occorre inoltre verificare e collegare l'atto istituzionale competente. Solo un difetto osservato sul prodotto può autorizzare una modifica funzionale separata. Calendario effettivo e prova di classe sono verifiche distinte.
 
 **Esito invariato:** DOCUMENTARY_PARTIAL / INSTITUTIONAL_QUALIFICATION_BLOCKED / HUMAN_PEDAGOGICAL_REVIEW_PENDING / CLASSROOM_NOT_RUN. Nessun merge, deploy o promozione; nessuna scrittura in Arena, Docente OS o dati professionali.
+
+---
+
+## 10. Terzo collaudo — verifica Arena e 25 UDA (3 novembre 2026)
+
+**Fonte primaria realmente letta:** esportazione versionata di Arena per Atlas, documento current.json su Arena main@d8b1bf43388cb5c4cdcc940b0c558bb128976c4c. Master **CAN-CURR-MASTER-00 v1.3**; impronta di sorgente dichiarata **fnv1a:b355be71**; autorità **PROVISIONAL_COMPLETE**, senza ricevuta di approvazione. Per Tecnologia della secondaria sono presenti tre fasce, con regime 2025 in I, 2012 transitorio in II e 2012 transitorio conclusivo in III. **Non confondere questo documento con il distinto pacchetto verticale di trasferimento ad uso Docente OS**, di cui non è stata acquisita un'istanza produttiva.
+
+**Fonti secondarie realmente lette:** Piano annuale di Docente OS (develop@93542e06975c09f5fdafd375d72dde927fa2669d, main@c1301f1f2910cba1ac9fc315cf5461af0fbad1db); CAN-PRG-1/2/3 e tutti i **25 documenti CAN-UDA**, classi I–III, nel fascicolo professionale. Nessun dato studente, nessuna prova di attuazione.
+
+### 10.1 Identità, ore e ambiti
+
+| Annualità | UDA Piano e documenti | Segmenti Piano | Blocchi | Ore Piano | Ore UDA | Regime Arena |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| Prima | 8/8 | 11 | 33 | 66 | 66 | 2025 |
+| Seconda | 8/8 | 9 | 33 | 66 | 66 | 2012 transitorio |
+| Terza | 9/9 | 10 | 33 | 66 | 66 | 2012 transitorio conclusivo |
+
+La coincidenza delle 25 durate previste con il Piano è **verificata**, non dedotta dalla sola somma delle ore. Le 66 ore sono indicative e non attestano ore effettivamente svolte.
+
+### 10.2 Matrice proposta: obiettivi testuali di Arena → UDA → prestazione attesa
+
+Gli obiettivi nella colonna centrale sono **formulazioni effettivamente presenti nell'esportazione Arena, sezione 7.3.8**. L'associazione alla UDA è un **giudizio istruttorio da sottoporre a validazione**, non un collegamento già registrato in Arena o Docente OS. I prodotti nella terza colonna sono **previsti**, non osservati.
+
+**Prima (8 UDA, 66 ore)**
+
+| UDA | Obiettivo Arena candidato | Prestazione/evidenza prevista |
+| --- | --- | --- |
+| 1-00 (4h) | analizzare oggetti/materiali; seguire procedure | Scheda di osservazione iniziale; riconoscimento strumenti e regole |
+| 1-01 (8h) | analizzare oggetti/materiali; organizzare dati | Schema bisogni–risorse–processo; scheda di un sistema |
+| 1-02 (12h) | osservare/misurare; analizzare oggetti/materiali | Prove sui materiali, tabella comparativa e scelta motivata |
+| 1-03 (14h) | produrre rappresentazioni; seguire procedure | Tavole geometriche e controllo degli errori |
+| 1-04 (6h) | riconoscere sicurezza e impatti | Scheda sul percorso dallo scarto alla nuova risorsa |
+| 1-05 (10h) | realizzare/verificare; produrre rappresentazioni | Dossier di progetto con requisiti, modello e verifica |
+| 1-06 (6h) | organizzare dati; seguire procedure | Tabella, grafico, interpretazione e schema di sistema digitale |
+| 1-07 (6h) | realizzare/verificare; riconoscere sicurezza e impatti | Dossier progettuale sostenibile, scelta e verifica |
+
+**Seconda (8 UDA, 66 ore)**
+
+| UDA | Obiettivo Arena candidato | Prestazione/evidenza prevista |
+| --- | --- | --- |
+| 2-01 (8h) | leggere processi produttivi | Scheda di filiera agricola, criticità e miglioramento |
+| 2-02 (8h) | leggere processi produttivi; organizzare informazioni | Infografica sulla filiera alimentare |
+| 2-03 (8h) | interpretare elementi di territorio/abitare | Mappa ragionata del territorio e delle funzioni |
+| 2-04 (10h) | analizzare proprietà/cicli dei materiali; interpretare elementi di territorio/abitare | Scheda tecnica di edificio e materiali |
+| 2-05 (8h) | interpretare elementi di territorio/abitare | Guida per abitazione sicura ed efficiente |
+| 2-06 (14h) | produrre rappresentazioni più rigorose | Tavola di rilievo, scala, viste e quote |
+| 2-07 (6h) | progettare semplici soluzioni | Progetto di spazio/oggetto con requisiti e modello |
+| 2-08 (4h) | organizzare informazioni | Rappresentazione digitale di dati, grafico e interpretazione |
+
+**Terza (9 UDA, 66 ore)**
+
+| UDA | Obiettivo Arena candidato | Prestazione/evidenza prevista |
+| --- | --- | --- |
+| 3-01 (8h) | analizzare sistemi energetici/produttivi; usare dati | Diagramma commentato di un sistema energetico |
+| 3-02 (8h) | confrontare impatti; usare dati | Matrice comparativa di fonti energetiche |
+| 3-03 (8h) | analizzare sistemi energetici/produttivi; documentare | Schema tecnico della filiera elettrica |
+| 3-04 (8h) | verificare; analizzare sistemi energetici/produttivi | Pannello/simulazione documentata di circuito |
+| 3-05 (8h) | analizzare sistemi energetici/produttivi | Modello o scheda funzionale di macchina |
+| 3-06 (12h) | rappresentare soluzioni | Tavola tridimensionale con assonometria e sezione |
+| 3-07 (6h) | progettare; usare dati | Diagramma/prototipo di sistema automatico |
+| 3-08 (4h) | confrontare impatti | Valutazione multicriterio con decisione motivata |
+| 3-09 (4h) | progettare; verificare; documentare; motivare scelte e interessi professionali | Dossier conclusivo, autovalutazione e orientamento |
+
+### 10.3 Risultati, limiti e unica priorità
+
+- Le **21 formulazioni di obiettivo** di Tecnologia presenti nelle tre fasce di Arena (7 in I, 6 in II, 8 in III) hanno **almeno una UDA candidata** nella matrice. È **copertura interpretativa proposta**, non copertura pedagogica approvata.
+- Le **25/25 UDA** prevedono un prodotto/evidenza osservabile; non sono stati acquisiti risultati di apprendimento né livelli attribuiti agli studenti.
+- **0/25 associazioni** risultano qui confermate come collegamenti persistenti e approvati con identificatore puntuale di obiettivo Arena; il documento di esportazione dispone di identificativi delle fasce, ma gli obiettivi sono riportati testualmente. Non inventare codici nazionali.
+- Il vecchio riferimento a **N4** come nucleo nazionale va mantenuto distinto dall'asse integrato d'Istituto di Informatica; le classi II e III restano nel regime 2012, anche quando una UDA utilizza il marcatore generico IN25/NOR/CUR/DID/CLS.
+- **Rischio di identità non ancora verificato sull'istanza:** l'esportazione Arena→Atlas riporta un nome d'istituto, ma non un institutionId/codice meccanografico; gli script/fixture tecnici utilizzano alias interni differenti. La coincidenza effettiva fra Arena e il selettore Docente OS deve essere provata con lo stesso pacchetto verticale, versione e impronta.
+
+**Verdetto:** STRUCTURAL_MATCH_25_OF_25 / OBJECTIVE_MAPPING_PROPOSED_21_OF_21 / PEDAGOGICAL_REVIEW_OPEN / VERTICAL_RELEASE_RUNTIME_NOT_RUN. Arena è l'unica autorità del curricolo; la vigenza è **NON VIGENTE** fino al necessario atto istituzionale. La differenza fra «manifest completo» e «obiettivi coperti dalla programmazione» resta obbligatoria.
+
+**Prossimo gate:** acquisire la release verticale effettivamente emessa da Arena per l'I.C. Don Lorenzo Milani 2026/27; verificare istituto, anno, fascia, segmento, obiettivo, impronta e stato d'autorità nel selettore di Docente OS; quindi confermare professionalmente la matrice e introdurre soltanto l'eventuale collegamento mancante. **Nessuna nuova UDA, nessuna riscrittura del curricolo, nessun merge/deploy o modifica di dati reali.**
