@@ -101,3 +101,40 @@ test("Evidence Explorer filters governed data and integrity has no overall score
 
   await page.screenshot({path:testInfo.outputPath(`evidence-${testInfo.project.name}.png`),fullPage:true});
 });
+
+
+test("Ecosystem edge labels retain at least 4.5:1 text/background contrast", async ({ page }) => {
+  await page.goto("/#/ecosystem");
+  const graph = page.getByLabel("Mappa grafica delle relazioni governate");
+  await expect(graph).toBeVisible();
+  await expect(graph.locator(".react-flow__edge-textwrapper").first()).toBeAttached();
+
+  const labels = await graph.evaluate((root) => {
+    const rgb = (value: string): number[] => {
+      const channels = value.match(/[0-9]+(?:[.][0-9]+)?/g);
+      if (!channels) throw new Error(`Cannot parse SVG fill: ${value}`);
+      return channels.slice(0, 3).map(Number);
+    };
+    const luminance = (value: string): number => {
+      const linear = rgb(value).map((channel) => {
+        const s = channel / 255;
+        return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+    };
+    return [...root.querySelectorAll<SVGGElement>(".react-flow__edge-textwrapper")].map((group) => {
+      const text = group.querySelector<SVGTextElement>(".react-flow__edge-text");
+      const background = group.querySelector<SVGRectElement>(".react-flow__edge-textbg");
+      if (!text || !background) throw new Error("Missing text or background for a canonical edge label");
+      const textFill = getComputedStyle(text).fill;
+      const backgroundFill = getComputedStyle(background).fill;
+      const light = Math.max(luminance(textFill), luminance(backgroundFill));
+      const dark = Math.min(luminance(textFill), luminance(backgroundFill));
+      return { label: text.textContent?.trim(), textFill, backgroundFill, ratio: (light + 0.05) / (dark + 0.05) };
+    });
+  });
+  expect(labels.length).toBeGreaterThan(0);
+  for (const label of labels) {
+    expect(label.ratio, `${label.label}: ${label.textFill} on ${label.backgroundFill}`).toBeGreaterThanOrEqual(4.5);
+  }
+});
