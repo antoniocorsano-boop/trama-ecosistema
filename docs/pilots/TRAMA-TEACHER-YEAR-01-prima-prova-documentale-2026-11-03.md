@@ -365,3 +365,33 @@ Il comando locale di Arena `emit-canonical-vertical-release-v1.mjs` espone adess
 **Nuovo exact head della PR Arena #350:** `3452c69a318f1b8c93a4e9c769a2f7d1b336091f`, **CurManLight Product CI #41720359324 PASS**, 81 file / 801 test PASS. I log confermano l'esecuzione sia della prova del modulo (4 test) sia di quella del comando (5 test), incluse le asserzioni sulla ricevuta della fonte. TypeScript, compilazione e altri gate attivati sullo stesso SHA, compresi identità/autorità e percorso critico, PASS.
 
 **Stato operativo invariato:** emissione dal master **reale** rev.27 non eseguita, identificativo del destinatario non qualificato su workspace effettivo, acquisizione nella classe non eseguita, nessuna validazione professionale collegiale ricevuta. Le PR #350 e Docente OS #778 restano non integrate, senza deploy, dati personali o pubblicazione del master.
+
+
+---
+
+## 14. Settimo collaudo — testo reale rev.27, ricezione di sola lettura I–III e distinzione dal pilota 2C (03/11/2026)
+
+### 14.1 Fonte Drive esportata e controllata senza modificarla
+
+Il connettore Google Drive ha esportato localmente il master `CAN-CURR-MASTER-00@1.3` dall'ID `12eWTPUZBJxZixd6-p8drNAaW5_eL8qWpXZUSDyZZAv4`, **revisione 27**. Il file reale in UTF-8, con BOM e terminazioni CRLF, contiene **133.673 byte / 132.119 unità di codice JavaScript** e produce l'impronta **`fnv1a:99c4ccc3`** secondo il metodo di serializzazione `{ content, format: 'text/plain' }` e FNV-1a utilizzati dal contratto Arena. Questo valore **coincide con l'impronta della precedente lettura diretta dal connettore**; non è stata applicata normalizzazione per forzare il confronto.
+
+Un controllo **indipendente** sui marcatori previsti dal materializzatore Arena ha attraversato i 5 campi dell'infanzia, 55 classi/discipline di primaria, 36 di secondaria, 2 ambiti Latino/LEL, 9 ambiti Educazione civica e 6 ambiti di Alfabetizzazione all'IA: **113 ambiti previsti, 113 individuati, 0 marcatori mancanti**. Sono presenti in modo univoco i tre ambiti di Tecnologia (classe I/II/III). Il controllo è stato effettuato sul **testo reale**, ma mediante uno script indipendente: **non equivale all'esecuzione dell'emettitore TypeScript Arena né alla produzione di una release verticale ufficiale**.
+
+### 14.2 Blocco operativo reale riscontrato nell'interfaccia Docente OS
+
+La funzione di dominio `selectArenaVerticalCurricoloSlice` conosce il contratto `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1` e il relativo selettore per istituto/anno/classe/disciplina. Tuttavia le superfici realmente servite dalla pagina `product/src/app/classi/[sectionId]/curricolo-arena` continuano a usare `CML_HANDOFF_ACCEPTANCE_V2` e limitano il caricamento al pilota autorizzato **Tecnologia 2C** tramite controllo workspace/anno/sezione. **Non esiste in questa pagina un'accettazione operativa della release verticale per I, II e III**. Il semplice fatto che il selettore sia qualificato non autorizza quindi a dichiarare il trasferimento completato, né a utilizzare l'importazione ECO-02 per scrivere dati di altre classi.
+
+L'identità scolastica nel modello delle impostazioni docente comprende `schoolCode` e nome istituto, mentre il selettore verticale richiede un `institutionId` contrattuale. Le fixture divergenti (`ics-lorenzo-milani` nell'emettitore e `ic-calvario-covotta-don-milani` in test Docente OS) **non dimostrano alcuna identità istituzionale verificata nel workspace**. La corrispondenza richiede un'evidenza specifica, non un alias costruito automaticamente.
+
+### 14.3 Traccia nuova della verifica locale senza persistenza
+
+Aperta [PR Docente OS #779](https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/779), **Draft**, in pila sulla PR #778. La PR #779 implementa **solo** un modulo puro per verificare in lettura la release completa nelle tre annualità e un comando locale che richiede esplicitamente `--input`, `--target-institution-id`, `--school-year`, `--expected-revision-id` e può confrontare `--expected-source-footprint`. Il file JSON deve risiedere fuori dal repository; il comando non salva, non contatta Supabase e non stampa il testo del master.
+
+- **RED causale:** primo exact head `8179af6e64eecbec8472d2dfbcbd8d22d41584c5`; Product CI **#41722822948 FAIL** nello step di controllo dei tipi, `TS2307` sul modulo di verifica allora assente.
+- **GREEN exact-head:** `4aa0f81572bde9dc8dea91c338e2e3d933936f1b`; Product CI **#41723506342 PASS**, **1.080/1.080 test PASS**; 4 nuovi test della verifica, incluso il comando su un JSON temporaneo sintetico, effettivamente eseguiti. Typecheck, lint e build PASS; migrazioni Supabase **SKIPPED** dal selettore CI; altri gate attivati (TERM-01, lint diagnostico, TRAMA Perceptible Write, hygiene) PASS.
+- La ricevuta è esplicita: `OFFLINE_CONTRACT_VERIFIED`, `DECLARED_TARGET_ONLY`, `workspaceAcceptanceVerified=false`, `writePerformed=false`; verifica 113 ambiti, master 1.3/revisione attesa, impronte, autorità provvisoria e tre segmenti Tecnologia con applicabilità IN2025 per classe I e IN2012 per II/III.
+- **Non verificati:** esecuzione sul JSON veramente emesso dal master reale mediante Arena PR #350, `institutionId` effettivo del workspace Docente OS, ricezione in una sessione autenticata, consenso del docente, persistenza/integrazione UI e approvazione professionale. Nessuna di queste operazioni è stata dedotta dal GREEN sui dati sintetici.
+
+**Stato:** `REAL_MASTER_TEXT_EXPORTED_AND_PREFLIGHTED / ARENA_EMITTER_FIXTURE_PASS / DOCENTE_OFFLINE_CONSUMER_FIXTURE_PASS / REAL_RELEASE_NOT_EMITTED / AUTHENTICATED_WORKSPACE_INTAKE_NOT_IMPLEMENTED / HUMAN_REVIEW_PENDING / NON_VIGENTE`.
+
+**Perimetro e tutela:** il testo integrale del master non è stato copiato in GitHub; nessun merge/deploy, mutazione Drive/Supabase, scrittura nelle classi, approvazione o creazione di nuova autorità.
