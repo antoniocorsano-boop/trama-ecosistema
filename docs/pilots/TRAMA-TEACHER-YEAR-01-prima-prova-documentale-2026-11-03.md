@@ -356,3 +356,12 @@ Master Drive `CAN-CURR-MASTER-00@1.3`, **revisione corrente 27**, ID `12eWTPUZBJ
 **Prossima azione qualificabile:** eseguire il nuovo comando con un'esportazione locale affidabile del master di Drive revisione 27 e con l'identità istituzionale effettiva del workspace Docente OS; confrontare revisione e impronta della sorgente, validare la release completa in Arena, quindi far passare le tre classi nel selettore Docente OS. Tale collaudo deve lasciare un receipt privo del testo del master e non deve introdurre scritture di classe o promozioni implicite. Nessuna prova di tale consegna viene dedotta dai test sintetici.
 
 **Nessun merge, deploy, mutazione Drive/Supabase o pubblicazione del documento sorgente.**
+
+
+### 13.4 Ricevuta di confronto della fonte e ricertificazione sul candidato finale
+
+Il comando locale di Arena `emit-canonical-vertical-release-v1.mjs` espone adesso anche `sourceContentFootprint` nella ricevuta **priva del testo integrale**. L'impronta di riferimento dell'estrazione Drive del master revision 27, calcolata secondo la serializzazione e FNV-1a strutturale di Arena, è `99c4ccc3`. Il valore deve essere confrontato con l'impronta restituita dal comando quando questo sarà eseguito su un'esportazione reale; **differenze di BOM o terminazioni di riga richiedono verifica, non normalizzazione implicita**.
+
+**Nuovo exact head della PR Arena #350:** `3452c69a318f1b8c93a4e9c769a2f7d1b336091f`, **CurManLight Product CI #41720359324 PASS**, 81 file / 801 test PASS. I log confermano l'esecuzione sia della prova del modulo (4 test) sia di quella del comando (5 test), incluse le asserzioni sulla ricevuta della fonte. TypeScript, compilazione e altri gate attivati sullo stesso SHA, compresi identità/autorità e percorso critico, PASS.
+
+**Stato operativo invariato:** emissione dal master **reale** rev.27 non eseguita, identificativo del destinatario non qualificato su workspace effettivo, acquisizione nella classe non eseguita, nessuna validazione professionale collegiale ricevuta. Le PR #350 e Docente OS #778 restano non integrate, senza deploy, dati personali o pubblicazione del master.
