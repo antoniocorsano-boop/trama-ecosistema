@@ -318,3 +318,41 @@ La revisione del delta [Docente OS PR #778](https://github.com/antoniocorsano-bo
 - PR #778 sempre `Draft`, 2 soli file modificati, non integrata. Nessuna review indipendente/human receipt acquisita. Il controllo FNV-1a è un'impronta strutturale, non una firma crittografica né autenticazione del mittente.
 
 **Stato dopo il quinto collaudo:** `SOURCE_MASTER_V1_3_REV27_READ_VERIFIED / CONSUMER_CODE_RED_GREEN_PASS / REAL_VERTICAL_RELEASE_NOT_FOUND / WORKSPACE_IDENTITY_NOT_VERIFIED / PEDAGOGICAL_REVIEW_OPEN / NON_VIGENTE`. Nessun merge, deploy, promozione o scrittura di dati.
+
+
+---
+
+## 13. Sesto collaudo — conversione canonica Arena in release verticale completa (03/11/2026)
+
+### 13.1 Integrazione qualificata su dati di test (Arena PR #350)
+
+[PR Arena #350](https://github.com/antoniocorsano-boop/CurManLight_arena/pull/350), **Draft, non integrata**, base `main@d8b1bf43388cb5c4cdcc940b0c558bb128976c4c`.
+
+**RED controllato:** commit iniziale di solo test `f08f40f8e74e58eda1f2b7bf0163fb646affd5f6`; CurManLight Product CI #41718191544 **FAIL nello step TypeScript**, diagnosi TS2307: assenza del modulo `curricoloVerticaleCanonicalBridgeV1` che la prova richiedeva. Le segnalazioni successive di tipi impliciti derivavano dal modulo non risolto.
+
+**GREEN exact-head:** `1fd89ce0c98ec4f429a3637b1fd9c3cd13026a3e`, CurManLight Product CI **#41719394039 PASS**: **81 file di test / 801 test PASS**, inclusi **9 test nuovi eseguiti realmente**:
+- 4 test `curricolo-verticale-canonical-bridge-v1.test.ts`: pacchetto completo `TRAMA_CURRICOLO_VERTICALE_RELEASE_V1`, 113 scope, tre segmenti distinti di Tecnologia I/II/III, IN2025/IN2012, provenienza e blocco su identità/revisione/contenuto alterati;
+- 5 test `curricolo-verticale-canonical-release-cli-v1.test.mjs`: comando locale che richiede l'identità del destinatario, blocco su alias divergente, emissione valida, tutela del testo del master dentro/fuori repo, rifiuto sovrascrittura.
+
+Gli altri controlli sullo stesso head (Beta Release Contract, Beta Identity Authority, Beta E2E Workflow, S3 Critical Journey Browser Evidence, H3/H4 Authority Boundary, Human Interaction Model, TRAMA Perceptible Write) sono **PASS**.
+
+**Artefatti aggiunti nel codice:** modulo puro `src/domain/transfer/curricoloVerticaleCanonicalBridgeV1.ts`, comando locale `scripts/emit-canonical-vertical-release-v1.mjs`, due suite di regressione e loro inclusione nella configurazione `vitest.fast.config.ts`. Il generatore recupera gli elementi da `ARENA_CANONICAL_CURRICOLO_ARTIFACT_V1`, non ricostruisce un secondo grafo; conserva sorgente, revisione, manifest e divieto di scrittura automatica, produce una release completa con validazione Arena. Il comando rifiuta **input e output interni al repository** e crea un file locale non sovrascritto senza pubblicare il testo sorgente.
+
+### 13.2 Fonte reale riletta e ricevuta limitata al documento
+
+Master Drive `CAN-CURR-MASTER-00@1.3`, **revisione corrente 27**, ID `12eWTPUZBJxZixd6-p8drNAaW5_eL8qWpXZUSDyZZAv4`. La lettura tramite connettore restituisce **132.119 caratteri** inclusi BOM e terminazioni CRLF. Dai caratteri esattamente restituiti dal connettore, applicando `computeStructuralFootprint({ format:'text/plain', content })` come in Arena, risulta **`fnv1a:99c4ccc3`**.
+
+**Limite del digest:** è un'impronta *strutturale e non crittografica* del **testo restituito dal connettore**, non una prova dell'esecuzione del generatore né l'impronta strutturale dell'intera release. Esportazioni successive o formati con terminazioni di riga diverse possono non produrre gli stessi caratteri; non è consentito correggere silenziosamente il testo per forzare una corrispondenza. Header del master, anno 2026/27, versione 1.3, dichiarazione `NON VIGENTE`, presenza di Tecnologia I/II/III e principali marcatori obbligatori sono stati osservati nel documento reale; **il parser Arena non è stato eseguito sull'intero testo reale durante questo collaudo**.
+
+### 13.3 Distinzione fra capacità del prodotto e consegna effettiva
+
+- `CANONICAL_BRIDGE_IMPLEMENTED` e `CANONICAL_BRIDGE_FIXTURE_TESTS_GREEN`: **verificati** in Arena PR #350;
+- `SOURCE_MASTER_REV27_READ`: **verificato** tramite Drive, con impronta del solo testo leggibile;
+- `REAL_MASTER_RELEASE_EMITTED`: **NON VERIFICATO**;
+- `DOCENTE_OS_TARGET_INSTITUTION_ID_CONFIRMED`: **NON VERIFICATO**; le fixture divergenti non dimostrano un errore in un workspace reale;
+- `REAL_RELEASE_ACCEPTED_BY_DOCENTE_OS`: **NON ESEGUITO**;
+- `HUMAN_PROFESSIONAL_APPROVAL`: **OPEN**; il curricolo resta **NON VIGENTE**.
+
+**Prossima azione qualificabile:** eseguire il nuovo comando con un'esportazione locale affidabile del master di Drive revisione 27 e con l'identità istituzionale effettiva del workspace Docente OS; confrontare revisione e impronta della sorgente, validare la release completa in Arena, quindi far passare le tre classi nel selettore Docente OS. Tale collaudo deve lasciare un receipt privo del testo del master e non deve introdurre scritture di classe o promozioni implicite. Nessuna prova di tale consegna viene dedotta dai test sintetici.
+
+**Nessun merge, deploy, mutazione Drive/Supabase o pubblicazione del documento sorgente.**
