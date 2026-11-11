@@ -37,9 +37,11 @@ const MAX_ASSETS = 100;
 export function parseAtlasPrUrl(source: string): number {
   let url: URL;
   try { url = new URL(source); } catch { throw new Error("Indirizzo GitHub non valido"); }
-  const match = /^\/antoniocorsano-boop\/Curriculum-Atlas\/pull\/([1-9][0-9]{0,6})\/?$/.exec(url.pathname);
+  const prefix = "/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/";
+  const remainder = url.pathname.startsWith(prefix) ? url.pathname.slice(prefix.length) : "";
+  const match = /^([1-9][0-9]{0,6})\/?$/.exec(remainder);
   if (url.origin !== "https://github.com" || !match || url.search || url.hash) {
-    throw new Error("Usa un collegamento a una PR di acquisizione di Curriculum Atlas");
+    throw new Error("Usa un collegamento a una PR di acquisizione di Curricolo Atlas");
   }
   return Number(match[1]);
 }

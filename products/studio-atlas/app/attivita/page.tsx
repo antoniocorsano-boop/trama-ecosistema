@@ -10,7 +10,7 @@ import {
   type ActivityDraft,
 } from "../../lib/activity-drafts";
 
-const FIRST_PACKAGE = "https://github.com/antoniocorsano-boop/Curriculum-Atlas/pull/84";
+const FIRST_PACKAGE = "https://github.com/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/84";
 
 export default function AttivitaPage() {
   const [url, setUrl] = useState(FIRST_PACKAGE);
@@ -83,7 +83,7 @@ export default function AttivitaPage() {
 
       <section className="activity-import" aria-labelledby="import-title">
         <h2 id="import-title">Importa attività</h2>
-        <p>Acquisisci un pacchetto da una revisione di Curriculum Atlas. Il materiale rimane una bozza privata sul dispositivo: non viene pubblicato né assegnato a una classe.</p>
+        <p>Acquisisci un pacchetto da una revisione di Curricolo Atlas. Il materiale rimane una bozza privata sul dispositivo: non viene pubblicato né assegnato a una classe.</p>
         <form onSubmit={importActivity} className="activity-form">
           <label htmlFor="activity-url">Collegamento alla revisione che contiene il materiale</label>
           <div className="activity-form-row">

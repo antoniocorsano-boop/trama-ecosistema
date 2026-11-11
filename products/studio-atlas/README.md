@@ -70,7 +70,7 @@ No authoring content is placed in the URL. Atlas does not persist the direct-pre
 ## LOI-01 — Importa attività (in revisione)
 
 - Apri la pagina **Attività** dalla pagina iniziale dello Studio.
-- Inserisci l'URL di una pull request di acquisizione pubblica del repository antoniocorsano-boop/Curriculum-Atlas (pilota: PR #84).
+- Inserisci l'URL di una pull request di acquisizione pubblica del repository Curricolo Atlas (pilota: PR #84).
 - L'importatore ricerca esattamente un manifesto di acquisizione in content/staging, blocca la revisione sul suo commit Git, valida il contratto trama.activity-intake/v0.1 e verifica SHA-256 di ogni risorsa e, dove presenti, dimensione e Git blob.
 - Immagini, esperienza HTML e guida docente sono conservate come originali nello spazio IndexedDB del dispositivo, con identità e versione.
 - La stessa versione non viene duplicata; una versione con contenuti differenti non sostituisce quella già acquisita.

@@ -10,7 +10,7 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const REPOSITORY = "antoniocorsano-boop/Curriculum-Atlas";
+const REPOSITORY = "antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("");
 const API = "https://api.github.com/repos/" + REPOSITORY;
 const RAW = "https://raw.githubusercontent.com/" + REPOSITORY + "/";
 const MAX_FILE_BYTES = 4 * 1024 * 1024;

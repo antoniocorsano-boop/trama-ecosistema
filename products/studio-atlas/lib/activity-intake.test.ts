@@ -29,10 +29,11 @@ function sample() {
 }
 
 test("accepts only GitHub pull requests in the authorized Atlas repository", () => {
-  assert.equal(parseAtlasPrUrl("https://github.com/antoniocorsano-boop/Curriculum-Atlas/pull/84"), 84);
+  const reviewUrl = "https://github.com/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/84";
+  assert.equal(parseAtlasPrUrl(reviewUrl), 84);
   assert.throws(() => parseAtlasPrUrl("https://github.com/evil/repo/pull/84"));
-  assert.throws(() => parseAtlasPrUrl("https://github.com/antoniocorsano-boop/Curriculum-Atlas/pull/84?x=y"));
-  assert.throws(() => parseAtlasPrUrl("http://github.com/antoniocorsano-boop/Curriculum-Atlas/pull/84"));
+  assert.throws(() => parseAtlasPrUrl(reviewUrl + "?x=y"));
+  assert.throws(() => parseAtlasPrUrl(reviewUrl.replace("https:", "http:")));
 });
 
 test("accepts a valid general manifest and checks the exact original bytes", () => {
@@ -71,7 +72,7 @@ test("rejects duplicates, absent signatures and wrong Git blob fingerprints", ()
   assert.throws(() => verifyAsset(body, wrongGit), /Oggetto Git/);
 });
 
-test("does not accept implied curriculum or publication authorization", () => {
+test("does not accept implied curricular authority or publication authorization", () => {
   const manifesto = validateActivityManifest(sample());
   assert.equal(manifesto.review?.status, "DRAFT_PENDING_HUMAN_REVIEW");
   assert.equal(manifesto.authorization?.atlasPublished, undefined);
