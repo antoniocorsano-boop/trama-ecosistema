@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 from qwen3_prosody import MODEL_ID, NICOLA_SHA256, STYLES, baseline_text, validate_probe
 from core import inspect_wav, qualify, sha256_file, AudioRejected
+from audio_signal import inspect_pcm16_peaks
 
 SPACE = "Qwen/Qwen3-TTS"
 API_NAME = "/generate_voice_design"
@@ -106,11 +107,14 @@ def run(output):
                 original = folder / "source-clipped.wav"
                 wav.rename(original)
                 fraction = make_quiet_listening_copy(original, wav)
+                source_peaks = inspect_pcm16_peaks(original)
                 preview_stats = inspect_wav(wav)
                 qualify(plan, preview_stats)
                 row["status"] = "LISTENING_ONLY_UNQUALIFIED"
-                row["reason"] = "SOURCE_CLIPPING_DETECTED"
+                row["reason"] = source_peaks["classification"]
                 row["asset"] = {
+                    "source_peak_diagnostics": source_peaks,
+                    "source_clipping_confirmed": False,
                     "filename": "candidate.wav", "sha256": sha256_file(wav),
                     "source_filename": "source-clipped.wav",
                     "source_sha256": sha256_file(original),
@@ -123,6 +127,7 @@ def run(output):
             else:
                 row["status"] = "CANDIDATE"
                 row["asset"] = {
+                    "peak_diagnostics": inspect_pcm16_peaks(wav),
                     "filename": "candidate.wav", "sha256": sha256_file(wav),
                     "duration_seconds": stats["duration_seconds"],
                     "sample_rate": stats["sample_rate"],

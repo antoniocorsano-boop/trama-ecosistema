@@ -79,9 +79,13 @@ def execute_probe(plan, output_dir, synthesizer):
         "review_state": "HUMAN_LISTENING_PENDING", "published": False,
     }
     try:
-        synthesizer(checked["text"], STYLES[checked["style_id"]], wav)
+        pre_pcm = synthesizer(checked["text"], STYLES[checked["style_id"]], wav)
         stats = inspect_wav(wav)
         qualify(checked, stats)
+        from audio_signal import inspect_pcm16_peaks
+        peak_diagnostics = inspect_pcm16_peaks(wav)
+        receipt["signal_preflight"] = pre_pcm if isinstance(pre_pcm, dict) else None
+        receipt["pcm_peak_diagnostics"] = peak_diagnostics
         (output_dir / "transcript.txt").write_text(
             checked["text"] + "\n", encoding="utf-8"
         )
@@ -135,7 +139,26 @@ def authorized_local_synthesizer(model_dir):
         )
         if rate != 24000 or not audio:
             raise AudioRejected("UNSUPPORTED_QWEN_AUDIO_FORMAT")
-        sf.write(str(destination), audio[0], samplerate=rate, subtype="PCM_16")
+        # Apply headroom to floating-point output BEFORE PCM16 quantization.
+        # This prevents digital overflow when the raw model peak is > 1.0;
+        # it cannot repair a waveform already clipped by the model.
+        import numpy as np
+        from audio_signal import safe_headroom_gain
+        source = np.asarray(audio[0], dtype=np.float64)
+        if source.ndim != 1 or source.size == 0 or not np.isfinite(source).all():
+            raise AudioRejected("INVALID_QWEN_FLOAT_AUDIO")
+        raw_peak = float(np.max(np.abs(source)))
+        if raw_peak <= 0:
+            raise AudioRejected("SILENT_QWEN_FLOAT_AUDIO")
+        gain = safe_headroom_gain(raw_peak)
+        sf.write(str(destination), (source * gain).astype(np.float32),
+                 samplerate=rate, subtype="PCM_16")
+        return {
+            "pre_pcm_peak": round(raw_peak, 6),
+            "pre_pcm_gain": round(gain, 6),
+            "headroom_ceiling": 0.85,
+            "remedies_previous_clipping": False,
+        }
     return synth
 
 def main(argv=None):
