@@ -30,17 +30,24 @@ Use a supported **Python 3.10–3.12** environment on a computer you control.
 Never install Kokoro into Atlas public, Studio Atlas web runtime, or the image service.
 Example Linux commands:
 
-    sudo apt-get install espeak-ng ffmpeg
     python -m venv .venv
     . .venv/bin/activate
     pip install -r services/audio-factory/requirements-kokoro.txt
-    python services/audio-factory/cli.py --plan services/audio-factory/tests/fixtures/missione118_provino.json --output /tmp/trama-audio-provino-001 --allow-model-download --mp3
+    python services/audio-factory/cli.py --plan services/audio-factory/tests/fixtures/missione118_provino.json --output /tmp/trama-audio-provino-001 --allow-model-download
 
 The final command may fetch hundreds of megabytes of official model and voice files to the local model cache. Execution uses CPU and does not invoke a paid API. The output directory **must not exist**.
 
-Optional --mp3 requires FFmpeg. Without it, omit the flag and inspect the WAV.
+No Ubuntu packages need to be installed for the Italian phonemizer: `misaki[en]` supplies `espeakng-loader` and the bundled native library. Optional `--mp3` requires FFmpeg if already installed; otherwise inspect the WAV.
 
 If the technical quality gate rejects a clip, there is no usable WAV/MP3 and the directory contains only a rejected receipt. If it accepts, this remains a candidate requiring a human pronunciation and pedagogy review.
+
+## AF-02 execution history / infrastructure hardening
+
+- First authorized run #43048603760: cancelled; `apt-get update` stalled on `security.ubuntu.com` DNS; no audio.
+- Second authorized run #43052938541: failed quickly at DNS preflight on `security.ubuntu.com`, while `pypi.org` and `huggingface.co` were resolvable; no audio.
+- The third-generation workflow revision no longer invokes `apt-get` and checks only the Python package index and the model registry. It installs the Python-distributed eSpeak NG library, verifies Italian phonemes, and emits WAV even if FFmpeg is not present.
+- This revision is **not a third authorized inference attempt**. The `af02-provino-autorizzato` label has been removed and no run is triggered by a normal PR commit.
+- New synthesis remains prohibited until new explicit authorization, following offline CI and human review.
 
 ## Contract boundaries
 

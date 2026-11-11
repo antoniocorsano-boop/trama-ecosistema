@@ -20,7 +20,7 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.head.ref == 'feat/audio-factory-af01-kokoro-pilot'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     steps:
       - name: Read candidate PR head only
         uses: actions/checkout@v4
@@ -31,37 +31,46 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Network preflight (no long DNS retries)
+      - name: Network preflight (Python and model registry only)
         shell: bash
         timeout-minutes: 1
         run: |
           python - <<'PY'
           import socket
           import sys
-          hosts = ("security.ubuntu.com", "pypi.org", "huggingface.co")
-          failures = []
+          hosts = ("pypi.org", "huggingface.co")
+          errors = []
           for host in hosts:
               try:
                   socket.getaddrinfo(host, 443)
                   print(f"DNS_OK: {host}")
               except OSError:
-                  failures.append(host)
+                  errors.append(host)
                   print(f"NETWORK_DNS_UNAVAILABLE: {host}", file=sys.stderr)
-          if failures:
+          if errors:
               sys.exit(1)
           PY
-      - name: Local voice dependencies (bounded)
-        timeout-minutes: 7
+      - name: Install Python-only voice dependencies (bounded, no apt)
         shell: bash
+        timeout-minutes: 7
         run: |
           set -euo pipefail
-          if ! command -v espeak-ng >/dev/null || ! command -v ffmpeg >/dev/null; then
-            sudo timeout 90s apt-get -o Acquire::Retries=0 -o Acquire::http::Timeout=12 update -qq
-            sudo timeout 90s apt-get -o Acquire::Retries=0 -o Acquire::http::Timeout=12 install -y -qq espeak-ng ffmpeg
-          fi
-          python -m pip install --retries 1 --timeout 20 -r services/audio-factory/requirements-kokoro.txt
+          python -m pip install --disable-pip-version-check --retries 1 --timeout 20 --only-binary=:all: -r services/audio-factory/requirements-kokoro.txt
+          python - <<'PY'
+          import espeakng_loader
+          from phonemizer.backend.espeak.wrapper import EspeakWrapper
+          from misaki import espeak
+          from pathlib import Path
+          assert Path(espeakng_loader.get_library_path()).is_file()
+          assert Path(espeakng_loader.get_data_path()).is_dir()
+          phonemes, _ = espeak.EspeakG2P(language="it")("La città è intelligente.")
+          if not phonemes.strip():
+              raise RuntimeError("ITALIAN_PHONEMIZER_EMPTY")
+          print("ITALIAN_PHONEMIZER_READY")
+          PY
       - name: Generate exactly two governed Italian candidates
         shell: bash
+        timeout-minutes: 6
         run: |
           set -uo pipefail
           mkdir -p af02-artifacts
@@ -77,12 +86,19 @@ jobs:
               )
           PY
           failures=0
+          extra_audio_option=()
+          if command -v ffmpeg >/dev/null; then
+            extra_audio_option=(--mp3)
+            echo "FFMPEG_AVAILABLE: WAV and MP3 candidates" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "FFMPEG_UNAVAILABLE: WAV-only candidates; no Ubuntu packages installed" >> "$GITHUB_STEP_SUMMARY"
+          fi
           for voice in im_nicola if_sara; do
             echo "### $voice" >> "$GITHUB_STEP_SUMMARY"
             python services/audio-factory/cli.py \
               --plan "af02-artifacts/$voice.json" \
               --output "af02-artifacts/$voice" \
-              --allow-model-download --mp3
+              --allow-model-download "${extra_audio_option[@]}"
             result=$?
             echo "AF-02 executor exit code: $result" >> "$GITHUB_STEP_SUMMARY"
             if [ "$result" -ne 0 ]; then failures=$((failures + 1)); fi
@@ -91,7 +107,7 @@ jobs:
             echo "At least one Italian voice is not technically qualified. No automatic approval." >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
-          echo "Both candidates need an independent human pronunciation review; not authorized for publication." >> "$GITHUB_STEP_SUMMARY"
+          echo "Both candidates require independent human listening review; publication not authorized." >> "$GITHUB_STEP_SUMMARY"
       - name: Preserve bounded trial evidence, even when rejected
         if: always()
         uses: actions/upload-artifact@v4
