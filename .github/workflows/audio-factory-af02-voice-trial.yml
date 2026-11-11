@@ -31,11 +31,35 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Local voice dependencies
+      - name: Network preflight (no long DNS retries)
+        shell: bash
+        timeout-minutes: 1
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq espeak-ng ffmpeg
-          python -m pip install -r services/audio-factory/requirements-kokoro.txt
+          python - <<'PY'
+          import socket
+          import sys
+          hosts = ("security.ubuntu.com", "pypi.org", "huggingface.co")
+          failures = []
+          for host in hosts:
+              try:
+                  socket.getaddrinfo(host, 443)
+                  print(f"DNS_OK: {host}")
+              except OSError:
+                  failures.append(host)
+                  print(f"NETWORK_DNS_UNAVAILABLE: {host}", file=sys.stderr)
+          if failures:
+              sys.exit(1)
+          PY
+      - name: Local voice dependencies (bounded)
+        timeout-minutes: 7
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v espeak-ng >/dev/null || ! command -v ffmpeg >/dev/null; then
+            sudo timeout 90s apt-get -o Acquire::Retries=0 -o Acquire::http::Timeout=12 update -qq
+            sudo timeout 90s apt-get -o Acquire::Retries=0 -o Acquire::http::Timeout=12 install -y -qq espeak-ng ffmpeg
+          fi
+          python -m pip install --retries 1 --timeout 20 -r services/audio-factory/requirements-kokoro.txt
       - name: Generate exactly two governed Italian candidates
         shell: bash
         run: |
