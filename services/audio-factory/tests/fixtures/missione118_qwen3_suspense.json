@@ -1,0 +1,13 @@
+{
+  "contract": "trama.audio-expressive-probe/v0.1",
+  "request_id": "missione118-restrained-suspense",
+  "language": "it-IT",
+  "model_id": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
+  "baseline_id": "AF02_NICOLA_2026_11_11",
+  "text": "Anno duemilaquarantacinque. Tutto sembra funzionare. Ma una sera, nella città intelligente, le persone scoprono che gli algoritmi stanno scegliendo al posto loro.",
+  "style_id": "restrained_suspense",
+  "max_seconds": 40,
+  "compute_mode": "FREE_ONLY",
+  "no_personal_data": true,
+  "voice_cloning": false
+}
