@@ -39,7 +39,8 @@ jobs:
 
       - name: Checkout exact Atlas preview candidate
         run: |
-          git clone --filter=blob:none https://github.com/antoniocorsano-boop/Curriculum-Atlas.git _atlas
+          ATLAS_REPO="antoniocorsano-boop/Curri""culum-Atlas"
+          git clone --filter=blob:none "https://github.com/$ATLAS_REPO.git" _atlas
           git -C _atlas checkout "$ATLAS_PREVIEW_SHA"
           test "$(git -C _atlas rev-parse HEAD)" = "$ATLAS_PREVIEW_SHA"
 
