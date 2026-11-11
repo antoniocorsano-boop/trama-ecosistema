@@ -72,7 +72,7 @@ test("rejects duplicates, absent signatures and wrong Git blob fingerprints", ()
   assert.throws(() => verifyAsset(body, wrongGit), /Oggetto Git/);
 });
 
-test("does not accept implied curricular authority or publication authorization", () => {
+test("does not accept implied authority or publication authorization", () => {
   const manifesto = validateActivityManifest(sample());
   assert.equal(manifesto.review?.status, "DRAFT_PENDING_HUMAN_REVIEW");
   assert.equal(manifesto.authorization?.atlasPublished, undefined);
