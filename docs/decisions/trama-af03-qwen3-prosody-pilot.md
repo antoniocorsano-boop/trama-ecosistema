@@ -1,6 +1,6 @@
 # AF-03 — Prova di prosodia italiana con Qwen3 VoiceDesign
 
-Stato: CANDIDATE_IMPLEMENTED / OFFLINE_TESTS_ONLY / GPU_NOT_QUALIFIED / NO_REAL_QWEN_AUDIO / NO_PUBLICATION.
+Stato aggiornato (11/11/2026): REAL_PUBLIC_QWEN_TRIAL_COMPLETED / NATURAL_NARRATION_HUMAN_PREFERRED / AUDIO_PEAK_DIAGNOSTICS_QUALIFIED_OFFLINE / MULTISCENE_CONTINUITY_NOT_TESTED / NO_PUBLICATION.
 
 ## Motivo
 Il collaudo AF-02 della PR #303 ha prodotto due WAV tecnicamente validi. All'ascolto, Nicola è preferito per la pronuncia italiana ma non per il ritmo, la cadenza e l'andamento melodico della frase. La revisione umana è REWORK.
@@ -27,8 +27,8 @@ Licenza del modello Apache-2.0. Supporta italiano e controllo tramite istruzioni
 - La validazione e le prove a sintetizzatore fittizio sono eseguibili esclusivamente con la libreria standard Python.
 - Ogni risultato resta CANDIDATE e richiede ascolto umano prima di qualsiasi pubblicazione.
 
-## Decisione da prendere prima della sintesi reale
-Qualificare una GPU effettivamente gratuita, con memoria e durata sufficienti e senza addebiti. Non assumere che l'esecutore standard GitHub o ZeroGPU soddisfino già tali requisiti. Non attivare prove reali o distribuire modelli finché questa condizione non è documentata.
+## Esecuzione reale e percorso di integrazione
+La prova reale via dimostratore ufficiale ZeroGPU è stata eseguita una volta con successo nella produzione di entrambe le voci (GitHub #43063968782). La narrazione naturale è stata preferita dall'utente. L'adattatore **locale** con GPU, diverso dalla prova pubblica, non è ancora qualificato: richiede una GPU gratuita documentata e un successivo collaudo esplicitamente autorizzato. Non confondere la preferenza per uno stile con la qualificazione di un servizio di produzione.
 
 ## Accettazione del prodotto
 Pronuncia e accento italiani, cadenza delle frasi, pause coerenti, profilo tonale, espressività controllata, fedeltà testuale, continuità del timbro. PASS soltanto con valutazione umana documentata.
@@ -36,7 +36,7 @@ Pronuncia e accento italiani, cadenza delle frasi, pause coerenti, profilo tonal
 
 # AF-03 — Fissazione della narrazione naturale e controllo del segnale
 
-**Esito umano acquisito:** Qwen3 VoiceDesign, variante \`natural_narration\`, è preferita a \`restrained_suspense\` per *Missione 118*. Questo seleziona lo stile di prosodia, **non** certifica identità stabile, interpretazione completa o idoneità alla pubblicazione.
+**Esito umano acquisito:** Qwen3 VoiceDesign, variante `natural_narration`, è preferita a `restrained_suspense` per *Missione 118*. Questo seleziona lo stile di prosodia, **non** certifica identità stabile, interpretazione completa o idoneità alla pubblicazione.
 
 ## Diagnosi della saturazione nell'artefatto #13875750466
 
@@ -47,17 +47,17 @@ Ispezione dei due WAV **originali**, non delle copie attenuate, registrati nell'
 | Naturale | 10,377 s | 1 su 249045 | 1 |
 | Suspense | 12,377 s | 1 su 297045 | 1 |
 
-Il precedente controllo \`CLIPPING_DETECTED\` si attivava su ogni picco al limite anche isolato. Un solo campione a fondo scala non dimostra una deformazione udibile; la precedente indicazione di clipping deve essere interpretata come **allarme conservativo**, non prova conclusiva di distorsione.
+Il precedente controllo `CLIPPING_DETECTED` si attivava su ogni picco al limite anche isolato. Un solo campione a fondo scala non dimostra una deformazione udibile; la precedente indicazione di clipping deve essere interpretata come **allarme conservativo**, non prova conclusiva di distorsione.
 
 **Interventi sul codice:**
-- \`audio_signal.py\` produce numero di campioni a fondo scala, frazione e massima sequenza consecutiva; lascia esplicitamente il giudizio di distorsione all'ascolto e a misure ulteriori.
-- \`qwen3_prosody.py\`: prima di convertire in PCM16, il percorso locale (se e quando autorizzato) attenua il segnale in virgola mobile per ottenere un margine di picco ≤0,85 e ne conserva la misura nel resoconto. Non elimina deformazioni già prodotte dal modello o dal dimostratore.
-- \`af03_public_demo.py\`: in caso di allarme conserva WAV originale e copia per ascolto come **non qualificata**, registrando anche la diagnostica del picco. Nessun nuovo invio al servizio è autorizzato da queste modifiche.
+- `audio_signal.py` produce numero di campioni a fondo scala, frazione e massima sequenza consecutiva; lascia esplicitamente il giudizio di distorsione all'ascolto e a misure ulteriori.
+- `qwen3_prosody.py`: prima di convertire in PCM16, il percorso locale (se e quando autorizzato) attenua il segnale in virgola mobile per ottenere un margine di picco ≤0,85 e ne conserva la misura nel resoconto. Non elimina deformazioni già prodotte dal modello o dal dimostratore.
+- `af03_public_demo.py`: in caso di allarme conserva WAV originale e copia per ascolto come **non qualificata**, registrando anche la diagnostica del picco. Nessun nuovo invio al servizio è autorizzato da queste modifiche.
 
 ## Continuità narrativa oltre il breve provino
 
-Il profilo \`TRAMA_AF03_QWEN3_NATURAL_V1\` definisce modello, lingua, versione e impronta dell'istruzione espressiva. Il manifesto delle scene richiede il medesimo profilo per ogni unità narrativa, mantiene il testo integro e vieta clonazione o invii automatici. **Usare lo stesso testo descrittivo non garantisce una voce identica tra generazioni**: la continuità di timbro e ritmo va collaudata all'ascolto su più scene, idealmente evitando frammentazioni eccessive.
+Il profilo `TRAMA_AF03_QWEN3_NATURAL_V1` definisce modello, lingua, versione e impronta dell'istruzione espressiva. Il manifesto delle scene richiede il medesimo profilo per ogni unità narrativa, mantiene il testo integro e vieta clonazione o invii automatici. **Usare lo stesso testo descrittivo non garantisce una voce identica tra generazioni**: la continuità di timbro e ritmo va collaudata all'ascolto su più scene, idealmente evitando frammentazioni eccessive.
 
 ## Vincoli di rilascio
 
-\`ENGINEERING_TESTS_PASS\` non equivale a \`VOICE_PRODUCT_APPROVED\`. La PR rimane bozza; nessun merge, deploy, servizio a pagamento, dato personale o nuova inferenza è incluso. Per una futura approvazione occorrono prova di voce naturale senza artefatti udibili, accuratezza testuale e verifica della continuità narrativa su più scene.
+`ENGINEERING_TESTS_PASS` non equivale a `VOICE_PRODUCT_APPROVED`. La PR rimane bozza; nessun merge, deploy, servizio a pagamento, dato personale o nuova inferenza è incluso. Per una futura approvazione occorrono prova di voce naturale senza artefatti udibili, accuratezza testuale e verifica della continuità narrativa su più scene.
