@@ -47,6 +47,7 @@ If the technical quality gate rejects a clip, there is no usable WAV/MP3 and the
 - Second authorized run #43052938541: failed quickly at DNS preflight on `security.ubuntu.com`, while `pypi.org` and `huggingface.co` were resolvable; no audio.
 - The third-generation workflow revision no longer invokes `apt-get` and checks only the Python package index and the model registry. It installs the Python-distributed eSpeak NG library, verifies Italian phonemes, and emits WAV even if FFmpeg is not present.
 - This revision is **not a third authorized inference attempt**. The `af02-provino-autorizzato` label has been removed and no run is triggered by a normal PR commit.
+- The offline tests assert that AF-02 cannot invoke the Ubuntu package manager, that eSpeak NG is supplied through Python, and that the workflow can run only after a new explicit authorization label.
 - New synthesis remains prohibited until new explicit authorization, following offline CI and human review.
 
 ## Contract boundaries
