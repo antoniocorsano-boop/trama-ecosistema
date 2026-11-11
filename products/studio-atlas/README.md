@@ -66,3 +66,21 @@ The Studio does not render a fake student mode.
 6. completes only after Atlas validates it and returns ACK.
 
 No authoring content is placed in the URL. Atlas does not persist the direct-preview snapshot.
+
+## LOI-01 — Importa attività (in revisione)
+
+- Apri la pagina **Attività** dalla pagina iniziale dello Studio.
+- Inserisci l'URL di una pull request di acquisizione pubblica del repository antoniocorsano-boop/Curriculum-Atlas (pilota: PR #84).
+- L'importatore ricerca esattamente un manifesto di acquisizione in content/staging, blocca la revisione sul suo commit Git, valida il contratto trama.activity-intake/v0.1 e verifica SHA-256 di ogni risorsa e, dove presenti, dimensione e Git blob.
+- Immagini, esperienza HTML e guida docente sono conservate come originali nello spazio IndexedDB del dispositivo, con identità e versione.
+- La stessa versione non viene duplicata; una versione con contenuti differenti non sostituisce quella già acquisita.
+- Il docente vede le immagini e può avviare una prova **isolata** dell'HTML. Iframe a origine opaca, senza permessi di origine condivisa, con protezioni che negano connessioni e risorse remote.
+- Non è un server per la distribuzione di contenuti né un archivio condiviso: la bozza è locale e la disponibilità dipende dal browser/dispositivo.
+- La fase **importazione verificata** non approva diritti, accessibilità, riferimenti curricolari, contenuti per studenti, UDA, lezioni o pubblicazione. Nessuna scrittura verso Arena, Atlas pubblico o Docente OS.
+
+### Prove
+
+npm test, npm run typecheck, npm run build.
+
+Un collaudo umano su Android deve confermare apertura di Missione 118, presenza delle otto illustrazioni e della guida, continuità delle interazioni, assenza di navigazioni esterne e riapertura della bozza dopo il riavvio.
+Il superamento dei test automatici non equivale a questo collaudo.
