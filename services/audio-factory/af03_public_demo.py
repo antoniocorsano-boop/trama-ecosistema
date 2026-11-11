@@ -32,6 +32,32 @@ def get_audio_path(value):
     return None
 
 
+def make_quiet_listening_copy(source: Path, output: Path) -> float:
+    """Attenuate 16-bit PCM for human listening without hiding source clipping.
+
+    Keep original unchanged. The generated copy is explicitly NOT qualified.
+    """
+    import wave
+    from array import array
+    with wave.open(str(source), "rb") as reader:
+        params = reader.getparams()
+        raw = reader.readframes(reader.getnframes())
+    if params.nchannels != 1 or params.sampwidth != 2 or params.framerate != 24000:
+        raise AudioRejected("INVALID_LISTENING_SOURCE")
+    samples = array("h")
+    samples.frombytes(raw)
+    if sys.byteorder == "big":
+        samples.byteswap()
+    saturation = sum(abs(value) >= 32760 for value in samples)
+    preview = array("h", (int(value * 0.72) for value in samples))
+    if sys.byteorder == "big":
+        preview.byteswap()
+    with wave.open(str(output), "wb") as writer:
+        writer.setparams(params)
+        writer.writeframes(preview.tobytes())
+    return round(saturation / max(len(samples), 1), 6)
+
+
 def run(output):
     if os.environ.get("TRAMA_AF03_PUBLIC_DEMO_AUTHORIZED") != "yes":
         raise RuntimeError("EXPLICIT_PUBLIC_DEMO_AUTHORIZATION_REQUIRED")
@@ -70,13 +96,37 @@ def run(output):
             wav = folder / "candidate.wav"
             shutil.copyfile(filename, wav)
             stats = inspect_wav(wav)
-            qualify(plan, stats)
-            row["status"] = "CANDIDATE"
-            row["asset"] = {
-                "filename": "candidate.wav", "sha256": sha256_file(wav),
-                "duration_seconds": stats["duration_seconds"],
-                "sample_rate": stats["sample_rate"],
-            }
+            try:
+                qualify(plan, stats)
+            except AudioRejected as quality_error:
+                if quality_error.reason != "CLIPPING_DETECTED":
+                    raise
+                # Quarantine the unchanged source. A quieter listening copy
+                # NEVER upgrades the clipped source to a qualified candidate.
+                original = folder / "source-clipped.wav"
+                wav.rename(original)
+                fraction = make_quiet_listening_copy(original, wav)
+                preview_stats = inspect_wav(wav)
+                qualify(plan, preview_stats)
+                row["status"] = "LISTENING_ONLY_UNQUALIFIED"
+                row["reason"] = "SOURCE_CLIPPING_DETECTED"
+                row["asset"] = {
+                    "filename": "candidate.wav", "sha256": sha256_file(wav),
+                    "source_filename": "source-clipped.wav",
+                    "source_sha256": sha256_file(original),
+                    "source_peak": stats["peak"],
+                    "saturated_fraction": fraction,
+                    "listening_gain": 0.72,
+                    "duration_seconds": preview_stats["duration_seconds"],
+                    "sample_rate": preview_stats["sample_rate"],
+                }
+            else:
+                row["status"] = "CANDIDATE"
+                row["asset"] = {
+                    "filename": "candidate.wav", "sha256": sha256_file(wav),
+                    "duration_seconds": stats["duration_seconds"],
+                    "sample_rate": stats["sample_rate"],
+                }
         except AudioRejected as exc:
             row["reason"] = exc.reason
             (folder / "candidate.wav").unlink(missing_ok=True)

@@ -27,6 +27,30 @@ class TrialTests(unittest.TestCase):
     def test_audio_path_construction(self):
         self.assertIsNone(get_audio_path(None))
         self.assertEqual(get_audio_path({"path":"/tmp/clip.wav"}),Path("/tmp/clip.wav"))
+
+    def test_clipped_source_is_preserved_with_quieter_preview(self):
+        import math
+        import wave
+        from array import array
+        from af03_public_demo import make_quiet_listening_copy
+        with tempfile.TemporaryDirectory() as d:
+            original=Path(d)/"original.wav"
+            preview=Path(d)/"preview.wav"
+            with wave.open(str(original),"wb") as writer:
+                writer.setnchannels(1)
+                writer.setsampwidth(2)
+                writer.setframerate(24000)
+                pcm=array("h",[32767,10000,-32768,0]*50)
+                writer.writeframes(pcm.tobytes())
+            saturation=make_quiet_listening_copy(original,preview)
+            self.assertGreater(saturation,0)
+            self.assertTrue(original.is_file())
+            self.assertTrue(preview.is_file())
+            with wave.open(str(preview),"rb") as reader:
+                data=array("h")
+                data.frombytes(reader.readframes(reader.getnframes()))
+                self.assertLess(max(abs(v) for v in data), 32700)
+
     def test_workflow_is_label_only_and_no_secrets(self):
         path=Path(__file__).resolve().parents[3]/".github/workflows/audio-factory-af03-zerogpu.yml"
         content=path.read_text(encoding="utf-8")
