@@ -65,9 +65,9 @@ test("Missione 118: live intake, eight original illustrations, three environment
   await page.getByRole("button", { name: "Chiudi guida" }).click();
 
   await page.getByRole("button", { name: "Prova l'attività in ambiente isolato" }).click();
-  const iframe = page.locator("iframe[title='Prova riservata dell\\'attività']");
+  const iframe = page.locator(".activity-preview iframe");
   await expect(iframe).toHaveAttribute("sandbox", "allow-scripts");
-  const experience = page.frameLocator("iframe[title='Prova riservata dell\\'attività']");
+  const experience = page.frameLocator(".activity-preview iframe");
   await expect(experience.getByText("Scena 1 di 5")).toBeVisible({ timeout: 20_000 });
 
   for (let scene = 2; scene <= 5; scene++) {
