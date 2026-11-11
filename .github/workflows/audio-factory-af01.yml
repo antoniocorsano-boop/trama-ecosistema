@@ -1,0 +1,31 @@
+name: Audio Factory AF-01 — deterministici
+
+on:
+  pull_request:
+    paths:
+      - "services/audio-factory/**"
+      - "schemas/audio-generation-plan.v0.1.schema.json"
+      - "schemas/audio-execution-receipt.v0.1.schema.json"
+      - ".github/workflows/audio-factory-af01.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Prepare Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile Python (no model dependencies)
+        run: python -m compileall -q services/audio-factory
+      - name: Run deterministic tests (no network inference)
+        run: python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -v
+      - name: Validate Missione 118 example (no downloads)
+        run: python services/audio-factory/cli.py --plan services/audio-factory/tests/fixtures/missione118_provino.json --validate-only
