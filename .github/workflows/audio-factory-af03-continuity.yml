@@ -1,0 +1,55 @@
+name: AF-03 - Missione 118 Qwen3 natural voice continuity
+
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/audio-factory-af01-kokoro-pilot]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: continuity-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  two-new-scenes:
+    if: >-
+      github.event.pull_request.number == 304 &&
+      github.event.label.name == 'af03-continuita-autorizzata' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/audio-factory-af03-qwen3-prosody'
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    env:
+      TRAMA_AF03_CONTINUITY_AUTHORIZED: "yes"
+    steps:
+      - name: Checkout selected PR commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Safe offline tests
+        run: |
+          python services/audio-factory/af03_continuity_trial.py --validate-only
+          python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -q
+      - name: Lightweight anonymous client
+        timeout-minutes: 2
+        run: |
+          python -m pip install --disable-pip-version-check --retries 0 --timeout 20 "gradio_client>=1.13,<3"
+      - name: Generate only second and third scenes
+        timeout-minutes: 6
+        run: |
+          python services/audio-factory/af03_continuity_trial.py --output af03-continuity
+      - name: Preserve evidence and WAVs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: af03-missione118-continuity
+          path: af03-continuity/
+          if-no-files-found: warn
+          retention-days: 7
