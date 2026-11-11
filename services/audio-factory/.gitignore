@@ -1,0 +1,10 @@
+# Generated audio and local model/runtime state are never canonical repository contents.
+*.wav
+*.mp3
+*.flac
+*.ogg
+__pycache__/
+*.pyc
+.cache/
+outputs/
+.venv/

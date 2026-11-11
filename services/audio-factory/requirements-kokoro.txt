@@ -1,0 +1,4 @@
+# Install only on an explicitly authorized local CPU machine.
+# Actual Kokoro model weights/voices are fetched by the upstream package.
+kokoro==0.9.4
+soundfile==0.13.1
