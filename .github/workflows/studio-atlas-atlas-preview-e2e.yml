@@ -5,6 +5,7 @@ on:
     paths:
       - "products/studio-atlas/**"
       - "tests/studio-atlas-atlas-preview.spec.ts"
+      - "tests/studio-atlas-activity-import.spec.ts"
       - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
 
 permissions:
@@ -107,6 +108,13 @@ jobs:
           cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --reporter=line
+
+      - name: Exercise exact Missione 118 acquisition in Chromium
+        shell: bash
+        run: |
+          cp tests/studio-atlas-activity-import.spec.ts _atlas/tests/studio-atlas-activity-import.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-activity-import.spec.ts --project=chromium --reporter=line
 
       - name: Upload server logs on failure
         if: failure()
