@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   decodeUtf8,
   isolatedHtml,
@@ -43,7 +43,7 @@ export default function AttivitaPage() {
     previewHtml = "";
   }
 
-  async function importActivity(event: React.FormEvent<HTMLFormElement>) {
+  async function importActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setProblem("");
     setNotice("");
