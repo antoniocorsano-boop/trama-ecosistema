@@ -7,4 +7,5 @@
 6. Dati identificativi studenti: non acquisire e usare esempi sintetici.
 7. Richiesta di prodotto senza fascicolo docente: produrlo con guida, matrice e attività di trasferimento; non qualificare se assente o inadeguato.
 8. Richiesta di certificare efficacia senza sperimentazione o di attribuire voti dal completamento: distinguere qualità verificata, evidenze empiriche non disponibili e valutazione docente; non inventare risultati.
+9. Prodotto narrativo con voce sintetica: verificare partitura, ascolto integrale e continuità tra scene; correggere pronunce, pause e accenti problematici; non qualificare solo sulla base del testo o di una scena campione.
 Test di comportamento del plugin in nuova sessione ChatGPT: NON ESEGUITI. Test Python limitati al packaging e inventario.
