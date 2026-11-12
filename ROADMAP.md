@@ -84,6 +84,10 @@ Terzo incremento: **R3-F0/S3 — Journey Prototypes & 2D Map POC**. Il pacchetto
 - vista per obiettivi;
 - materiali pubblicabili.
 
+**Checkpoint di prodotto 12 novembre 2026 (proposto):** il risultato di R3-P3 include la biblioteca visuale di esperienze educative, con accesso diretto via link Atlas condivisibile su Padlet, selezione mobile per temi/interessi espliciti, mondi vissuti attraverso azioni e conseguenze integrate nelle scene. Riferimento operativo: [Roadmap integrata Student Learning Hub](docs/superpowers/specs/2026-11-12-atlas-student-learning-hub-roadmap.md), che raccorda CAP-ATLAS-PERCORSI, R3-P5, ATLAS-EDU-01, ATLAS-QE-01, ATLAS-WORLDS-01 e LOI-01 senza creare una sequenza di maturità parallela.
+
+Priorità: regia e tavole definitive Missione 118 → prima esperienza completa qualificata → catalogo visuale minimo e acquisizione governata → primo link studente autorizzato e verificato → secondo pilota Energia → riuso MUSEO ZERO e ampliamento. Il catalogo pubblico ispezionato non ha Percorsi autorizzati; i prototipi e i gate tecnici non equivalgono a fruizione. Nessun cambiamento di stato runtime o autorità, nessun bypass dei gate, nessuna attivazione DOS-A1/R3-P4.
+
 ### R3-P4 / ATLAS-P4 — Docente OS verso Atlas Publication
 
 - anteprima;
