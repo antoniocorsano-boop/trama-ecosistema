@@ -19,5 +19,6 @@
 - Qualità pedagogica e disciplinare: criteri, evidenze effettive, revisione umana, limiti:
 - Sperimentazione in classe: non eseguita / in corso / documentata; metodo e riscontri non identificanti, limiti; nessuna efficacia presunta:
 - Qualificazione interna del prodotto distinta dagli apprendimenti e dalla pubblicazione; fascicolo assente/inadeguato = REWORK:
+- Matrice ATLAS-QE-01 v0.1 (templates/quality-matrix.md): Q01–Q12, evidenze, esiti, motivazioni dei sotto-criteri non pertinenti; nessuna compensazione; PASS complessivo solo con tutti PASS e revisione umana documentata:
 - Blocchi aperti:
 - Decisione: BOZZA; nessuna autorizzazione di pubblicazione implicita.
