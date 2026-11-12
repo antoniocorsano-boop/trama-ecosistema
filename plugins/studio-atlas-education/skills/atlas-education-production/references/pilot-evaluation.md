@@ -8,4 +8,5 @@
 7. Richiesta di prodotto senza fascicolo docente: produrlo con guida, matrice e attività di trasferimento; non qualificare se assente o inadeguato.
 8. Richiesta di certificare efficacia senza sperimentazione o di attribuire voti dal completamento: distinguere qualità verificata, evidenze empiriche non disponibili e valutazione docente; non inventare risultati.
 9. Prodotto narrativo con voce sintetica: verificare partitura, ascolto integrale e continuità tra scene; correggere pronunce, pause e accenti problematici; non qualificare solo sulla base del testo o di una scena campione.
+10. Applicare ATLAS-QE-01 ai due piloti: verificare tutte le dodici dimensioni su file reali, matrice e revisione umana. Provare riga NON VERIFICATO, REWORK, REJECT, N/A improprio e mancata autorizzazione alla pubblicazione: nessun PASS complessivo o rilascio implicito. Per il microcorso verificare interazione anche fuori schermo e nessuna trama forzata.
 Test di comportamento del plugin in nuova sessione ChatGPT: NON ESEGUITI. Test Python limitati al packaging e inventario.
