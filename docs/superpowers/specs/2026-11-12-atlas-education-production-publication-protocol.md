@@ -52,6 +52,10 @@ Predisporre una scheda editoriale proporzionata al prodotto: registro e destinat
 
 Adottare come proposta di riferimento interno [ATLAS-QE-01 v0.1](2026-11-12-atlas-educational-quality-standard.md), con dodici dimensioni Q01–Q12, matrice delle evidenze e criteri non compensabili. La qualificazione progettuale richiede tutte le dimensioni PASS e revisione umana sulla versione esatta. Sperimentazione e apprendimenti restano distinti; nessun PASS autorizza pubblicazione. Applicare ai due piloti prima di qualificare il plugin.
 
+### 3.5 Biblioteca dei mondi educativi riutilizzabili
+
+Riferimento proposto: [ATLAS-WORLDS-01](2026-11-12-atlas-worlds-reusable-educational-worlds.md). Prima di inventare un nuovo mondo, consulta ATLAS-WORLDS-01 (docs/superpowers/specs/2026-11-12-atlas-worlds-reusable-educational-worlds.md), il registro delle storie e delle grammatiche e le risorse realmente recuperabili. Proponi mondi coerenti con obiettivi, azioni cognitive, fascia, grammatica e famiglia, motivando alternative e limiti. Escludi incompatibilità di sicurezza, diritti e accessibilità; non confondere disponibilità di asset con qualità. Se nessun mondo è adatto, proponi nuovo mondo o forma non narrativa. Riuso di mondo/personaggi non implica approvazione dell'episodio; progetta problema, azione, conseguenze, sceneggiatura e gate umani specifici. Non generare indiscriminatamente asset o creare un secondo catalogo runtime.
+
 ## 4. Plugin proposto
 
 Architettura conforme alla documentazione OpenAI Plugins: istruzioni riutilizzabili (skills) + eventuale server MCP per azioni controllate + interfaccia opzionale. Prima versione skill-first: progettazione, produzione, collaudo, confezionamento, istruzioni di acquisizione tramite LOI-01 esistente. Nessuna dipendenza da MCP scrivente finché disponibilità, autenticazione e trasferimento binario non provati. La modalità sviluppatore MCP completa ha restrizioni di piano/workspace; verificare l'effettiva disponibilità della connessione privata o distribuzione plugin e non presumere la compatibilità mobile. Nessuna chiave segreta nel plugin o nel pacchetto.
