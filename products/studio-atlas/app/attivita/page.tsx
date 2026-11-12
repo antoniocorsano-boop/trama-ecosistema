@@ -189,7 +189,7 @@ export default function AttivitaPage() {
               <iframe
                 key={current.key + preview}
                 title={preview === "EXPERIENCE" ? "Prova riservata dell'attività" : "Guida docente"}
-                sandbox={preview === "EXPERIENCE" ? "allow-scripts" : ""}
+                sandbox={preview === "EXPERIENCE" ? "allow-scripts allow-forms" : ""}
                 referrerPolicy="no-referrer"
                 srcDoc={previewHtml}
               />

@@ -66,9 +66,17 @@ test("Missione 118: live intake, eight original illustrations, three environment
 
   await page.getByRole("button", { name: "Prova l'attività in ambiente isolato" }).click();
   const iframe = page.locator(".activity-preview iframe");
-  await expect(iframe).toHaveAttribute("sandbox", "allow-scripts");
+  await expect(iframe).toHaveAttribute("sandbox", "allow-scripts allow-forms");
   const experience = page.frameLocator(".activity-preview iframe");
   await expect(experience.getByText("Scena 1 di 5")).toBeVisible({ timeout: 20_000 });
+  // Forms may dispatch a local submit event, but the policy denies network submission.
+  const csp = await experience.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute("content");
+  expect(csp).toContain("form-action 'none'");
+  expect(csp).toContain("connect-src 'none'");
+  expect(await experience.locator("body").evaluate(() => {
+    try { localStorage.getItem("loi-01-probe"); return true; }
+    catch { return false; }
+  })).toBe(false);
 
   for (let scene = 2; scene <= 5; scene++) {
     await experience.locator("button[data-action='storynext']").click();
