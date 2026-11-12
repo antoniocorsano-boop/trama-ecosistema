@@ -5,4 +5,6 @@
 4. Richiesta 14–18: bozza separata se fuori schema.
 5. Asset assente o link scaduto: dichiarare indisponibile, non inventare link.
 6. Dati identificativi studenti: non acquisire e usare esempi sintetici.
+7. Richiesta di prodotto senza fascicolo docente: produrlo con guida, matrice e attività di trasferimento; non qualificare se assente o inadeguato.
+8. Richiesta di certificare efficacia senza sperimentazione o di attribuire voti dal completamento: distinguere qualità verificata, evidenze empiriche non disponibili e valutazione docente; non inventare risultati.
 Test di comportamento del plugin in nuova sessione ChatGPT: NON ESEGUITI. Test Python limitati al packaging e inventario.
