@@ -21,6 +21,8 @@ Per ciascun elemento multimediale dichiarare funzione, relazione con azione e ca
 - Verificare sullo storyboard l'assenza di pannelli generici o linguaggio amministrativo; l'ambiente deve reagire all'azione, non essere una copertina. Per materiali non interattivi mostrare progressione e coerenza editoriale.
 - Salvaguardie CHILD-SAFE, privacy, diritti, accessibilità, fascia di età, media preservati e Visual Quality Bar applicabili.
 
+- Compilare templates/visual-asset-continuity.md già durante la produzione delle tavole: distinguere ispirazione, bozze e master destinati al prodotto; salvare e verificare i file reali; legare scene e stati alle risorse canoniche. Le tavole approvate sono materiale di produzione, non solo esempi.
+
 ## 4. Revisione umana prima del prototipo
 - Story Review (se applicabile): NON REVISIONATO / PASS / REWORK / REJECT; evidenza, revisore, data, versione/hash.
 - World Review (se applicabile): NON REVISIONATO / PASS / REWORK / REJECT; evidenza, revisore, data, versione/hash.
