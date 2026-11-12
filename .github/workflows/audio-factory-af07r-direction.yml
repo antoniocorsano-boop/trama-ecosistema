@@ -1,4 +1,4 @@
-name: AF-07R - Selected Azzurra direction units
+name: AF-07R2 - Corrected pronunciation and WAV review
 on:
   pull_request:
     types: [labeled]
@@ -13,7 +13,7 @@ jobs:
     if: >-
       github.event.repository.private == false &&
       github.event.pull_request.number == 304 &&
-      github.event.label.name == 'af07r-regia-autorizzata' &&
+      github.event.label.name == 'af07r2-regia-autorizzata' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.head.ref == 'feat/audio-factory-af03-qwen3-prosody' &&
       github.run_attempt == 1
@@ -68,7 +68,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: af07r-direction-candidates
+          name: af07r2-direction-candidates
           path: af07r-direction/
           if-no-files-found: warn
           retention-days: 7

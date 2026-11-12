@@ -46,8 +46,13 @@
     },
     {
       "word": "AX-118",
-      "guide": "a ics centodiciotto (lettura editoriale proposta, da approvare)",
-      "guideIsInstructionOnly": true
+      "guide": "a iks centodiciotto",
+      "guideIsInstructionOnly": true,
+      "synthesisInput": "a iks centodiciotto",
+      "reviewStatus": "TARGET_CONFIRMED_RENDER_PENDING",
+      "rejectedSynthesisInputs": [
+        "a ics centodiciotto"
+      ]
     },
     {
       "word": "sistemi",

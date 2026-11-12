@@ -1,10 +1,10 @@
 """AF-07R: three selected synthetic narration units, not automatic replacement."""
-import argparse, json, os, subprocess, time
+import argparse, json, os, re, subprocess, time
 from pathlib import Path
 from af07_narrative_score import load, validate
 from af07_lexical_review import words
 from af06_azzurra_completion import EXPECTED, UPSTREAM, TEMPERATURE, TOP_K
-from core import inspect_wav, qualify, sha256_file, encode_mp3
+from core import inspect_wav, qualify, sha256_file
 from af03_public_demo import make_quiet_listening_copy
 
 IDS=("S4U1","S4U2","S5U2")
@@ -15,8 +15,11 @@ def plan():
     score,fixture=load()
     validate(score,fixture)
     units={u["id"]:u for s in score["scenes"] for u in s["units"]}
+    lexicon={x["word"]:x for x in score["lexicon"]}
+    sigla=lexicon["AX-118"]["synthesisInput"]
+    if sigla!="a iks centodiciotto": raise ValueError("UNAPPROVED_SYNTHESIS_SPELLING")
     return [{"id":k,"canonical":units[k]["canonicalText"],
-             "spoken":units[k]["canonicalText"].replace("AX-118","a ics centodiciotto"),
+             "spoken":units[k]["canonicalText"].replace("AX-118",sigla),
              "direction":units[k]["direction"],"pauseAfterMs":units[k]["pauseAfterMs"],
              "prosody_applied":False,"speaker_id":0} for k in IDS]
 
@@ -24,7 +27,7 @@ def authorized():
     if os.environ.get("GITHUB_RUN_ATTEMPT")!="1" or os.environ.get("GITHUB_EVENT_NAME")!="pull_request":
         raise RuntimeError("ONE_SHOT_AUTHORIZATION_REQUIRED")
     event=json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
-    if event["repository"]["private"] or event["number"]!=304 or event["action"]!="labeled" or event["label"]["name"]!="af07r-regia-autorizzata" or event["pull_request"]["head"]["ref"]!="feat/audio-factory-af03-qwen3-prosody":
+    if event["repository"]["private"] or event["number"]!=304 or event["action"]!="labeled" or event["label"]["name"]!="af07r2-regia-autorizzata" or event["pull_request"]["head"]["ref"]!="feat/audio-factory-af03-qwen3-prosody":
         raise RuntimeError("AUTHORIZATION_REQUIRED")
     if any(os.environ.get(k) for k in ("HF_TOKEN","HUGGING_FACE_HUB_TOKEN","HF_API_TOKEN")):
         raise RuntimeError("ANONYMOUS_ONLY")
@@ -32,8 +35,10 @@ def authorized():
 def lexical(text):
     # Accept only explicit orthographic alternatives for the intended acronym/number.
     text=text.casefold()
-    for form in ("a ics centodiciotto","a ics 118","ax-118","ax 118","ax118"):
-        text=text.replace(form," ax118 ")
+    # ASR can render the intended sound as ordinary spelling. Never accept
+    # the explicitly rejected sequence "ai ci si"; human listening is mandatory.
+    for form in ("a iks centodiciotto","a iks 118","a ics centodiciotto","a ics 118","ax-118","ax 118","ax118"):
+        text=re.sub(r"(?<!\w)"+re.escape(form)+r"(?!\w)"," ax118 ",text)
     return words(text)
 
 def generate(args):
@@ -44,7 +49,7 @@ def generate(args):
     report={"contract":"trama.af07r-selective-direction/v0.1","engine_commit":UPSTREAM,
             "weights_sha256":EXPECTED,"speaker":0,"temperature":TEMPERATURE,"top_k":TOP_K,
             "reference_audio":False,"cloning":False,"published":False,"audio_approved":False,
-            "identity_guaranteed":False,"prosody_applied":False,"results":[]}
+            "identity_guaranteed":False,"prosody_applied":False,"packaging":"WAV_ONLY","previous_rejected_run":43249465488,"results":[]}
     def save(): (out/"generation.json").write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n")
     save()
     for unit in plan():
@@ -65,7 +70,7 @@ def generate(args):
             make_quiet_listening_copy(source,listening)
             qualify({"text":unit["spoken"],"max_seconds":18},inspect_wav(listening))
             row["listening_sha256"]=sha256_file(listening)
-            encode_mp3(listening,out/(k+".mp3"))
+            # WAV is the canonical review artifact. Packaging is independent.
             row["status"]="SIGNAL_PASS_REVIEW_PENDING"
         except Exception as exc:
             row["reason"]=getattr(exc,"reason",type(exc).__name__)
