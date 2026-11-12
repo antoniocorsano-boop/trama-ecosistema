@@ -1,0 +1,64 @@
+# ATLAS-EDU-01 — Protocollo di produzione e pubblicazione educativa da ChatGPT
+
+**Data:** 12 novembre 2026  
+**Stato:** PROPOSTA / NON AUTORIZZA RUNTIME O PUBBLICAZIONE  
+**Nome di lavoro del plugin:** Studio Atlas Education.
+
+## 1. Decisione e perimetro
+
+ChatGPT è l'ambiente obbligatorio di progettazione e produzione, incluse le elaborazioni deterministiche avviate nel suo ambiente di lavoro. Il plugin non introduce un generatore IA autonomo né chiamate a pagamento. Studio Atlas acquisisce, conserva e verifica i prodotti; Atlas espone il catalogo e distribuisce le versioni autorizzate. Arena resta l'autorità sugli obiettivi curricolari; Docente OS collega esplicitamente prodotti a UDA e lezioni. Per “Astra” si assume Atlas, da confermare nella revisione del documento. Nessuna piattaforma parallela.
+
+Riuso: docs/contracts/activity-package-v1.md e relativo schema sperimentale; LOI-01 TRAMA #305/#306 (intake v0.1, ancora draft); Atlas #84 e #85 (Missione 118); governance ATLAS-MAT-PUB-01 già richiamata dal contratto. Non duplicare ActivityPackage, intake o meccanismi di pubblicazione. Verificare la loro compatibilità prima di qualsiasi estensione. Separare acquisizione della bozza, associazione curricolare, qualificazione, pubblicazione e autorizzazione alla fruizione.
+
+## 2. Famiglie di prodotto
+
+Avventura interattiva, microcorso, laboratorio/simulazione, videolezione narrativa, racconto/fumetto, sfida progettuale. Per ogni famiglia: modello didattico distinto e stesso involucro di consegna. Supportare attività offline/fuori schermo, lavoro individuale, di gruppo e classe. Non trasformare tutto in quiz o obbligare a un attestato. Pubblico giovane: adeguatezza all'età, inclusione, rispetto e sicurezza, niente meccanismi manipolativi o graduatorie.
+
+## 3. Protocollo comune
+
+P0 — Brief: destinatari/fascia d'età, durata, contesto, prerequisiti, problema formativo, modalità di fruizione, accessibilità, vincolo FREE_ONLY; minimizzare dati.  
+P1 — Progetto pedagogico: obiettivi osservabili (2–4 per microcorso come valore proposto), contenuti, azioni dello studente, evidenze attese e riflessione/trasferimento. Ricerca riferimenti Arena; se non reperiti, dichiarare proposta e binding PENDING, mai inventare identificativi o approvazioni.  
+P2 — Progetto narrativo/didattico: sequenza, storyboard quando pertinente, esercizi con feedback e spiegazioni, ruolo del docente; fonti e diritti.  
+P3 — Produzione in ChatGPT: produrre file reali, non descrizioni; testo, immagini, sottotitoli, audio/video, HTML autonomo o materiali statici a seconda del tipo. Per ogni asset conservare origine, strumento/versione quando disponibile, input editoriale, licenza e hash. Nessuna voce personale/clonazione, dati alunni o risorse a pagamento. Se un asset non è ottenibile, dichiarare mancante; non simulare generazione.  
+P4 — Confezionamento: ActivityPackage v1 se rappresentabile, manifesto di acquisizione e asset verificabili; sorgenti editabili, guida docente, materiale studente, alternative accessibili, ricevuta di verifica. Non inserire file di chat temporanei come URL di distribuzione.  
+P5 — Acquisizione: trasferimento esplicito della bozza a Studio Atlas tramite canale autorizzato; verifica formato/hash, duplicati e conflitti, sicurezza file, storage e quote. Versione immutabile; correzioni creano nuova versione. Ricevuta di acquisizione. Nessuna assegnazione automatica.  
+P6 — Qualificazione: verifica disciplinare/pedagogica, diritti, sicurezza/privacy, accessibilità WCAG 2.2 AA come target, runtime offline quando dichiarato, browser/mobile reali ove richiesti; prova end-to-end e anteprima docente. Per audio/video: fedeltà, pronuncia, sottotitoli e sincronizzazione; ascolto umano.  
+P7 — Revisione umana: PASS/REWORK/REJECT sul pacchetto e hash esatti, con ambito ed evidenze. PASS è necessario ma non sostituisce il gate pubblicazione esistente.  
+P8 — Pubblicazione: comando distinto, esplicito e autorizzato, verifica server-side dei prerequisiti (incluso binding ove richiesto dalla policy, diritti e review non scaduta), versione esatta, visibilità e ricevuta. Se gate non soddisfatto resta bozza. Ritirare/sostituire solo per azione autorizzata, con storico.  
+P9 — Fruizione: solo asset approvati, nessun account studente obbligatorio, nessuna telemetria/profilazione, nessuna IA remota in runtime; offline verificato per prodotti dichiarati offline. Progressi minimi sul dispositivo, reset e portabilità espliciti. Attestato facoltativo di completamento locale, non voto o certificazione ufficiale, non identità verificata. Nessuna trasmissione automatica delle risposte a Docente OS.
+
+## 4. Plugin proposto
+
+Architettura conforme alla documentazione OpenAI Plugins: istruzioni riutilizzabili (skills) + eventuale server MCP per azioni controllate + interfaccia opzionale. Prima versione skill-first: progettazione, produzione, collaudo, confezionamento, istruzioni di acquisizione tramite LOI-01 esistente. Nessuna dipendenza da MCP scrivente finché disponibilità, autenticazione e trasferimento binario non provati. La modalità sviluppatore MCP completa ha restrizioni di piano/workspace; verificare l'effettiva disponibilità della connessione privata o distribuzione plugin e non presumere la compatibilità mobile. Nessuna chiave segreta nel plugin o nel pacchetto.
+
+Proposta di strumenti MCP futuri (nomi indicativi, non implementati):
+- cerca_obiettivi: sola lettura Arena, riferimento esatto e stato approvazione;
+- valida_pacchetto: controlli non mutativi, report strutturato;
+- acquisisci_bozza: scrittura autorizzata e idempotente con hash dei file; mai URL temporanei o accesso arbitrario;
+- stato_revisione: sola lettura di bozza/versione/evidenze;
+- prepara_pubblicazione: verifica eligibility e restituisce anteprima del comando, nessuna pubblicazione;
+- pubblica_versione: azione distinta con conferma umana, autorizzazione server-side e ricevuta;
+- collega_attivita: azione distinta per Docente OS con contesto esplicito e conferma, senza dati alunni.
+
+Il server non si fida di asserzioni di approvazione generate dal modello. Separare permessi lettura/scrittura/pubblicazione; autenticazione professionale e audit minimo non personale, limiti dimensione/tempo, convalida contenuti e path, protezione da SSRF e archive traversal, niente esecuzione server-side di HTML ricevuto. Conservare bytes reali in archivio governato; download verificabile dopo scadenza link di chat. L'anteprima editoriale è isolata, distinta dal runtime locale. Il passaggio di asset binari dal contesto ChatGPT non è ancora qualificato; MVP usa consegna pacchetto esplicita e intake controllato.
+
+## 5. Consegna e livelli qualitativi
+
+Usare ActivityPackage v1 per i campi già previsti: ID, versione, titolo, età/livello, modalità, cognitive moves, archetipi, riferimenti Arena, fasi, offline, accessibilità, diritti e provenienza. Integrare con il manifesto intake già esistente per elenco asset e impronte, senza ridefinire lo schema in questa fase. Materiali: prodotto fruibile, guida docente, sorgenti, asset e report; eventuale attestato locale e transcript/sottotitoli. Verifica fattuale e test reali, non autocertificazione del modello. La revisione di diritti include contenuti generati, fonti e licenze dei modelli e delle registrazioni; non presumere che free compute = libera redistribuzione.
+
+Stati concettuali da mappare sugli stati esistenti, non nuovo contratto: IDEA → PROGETTO → PRODUZIONE → PACCHETTO → BOZZA ACQUISITA → REVISIONE → CANDIDATO → PUBBLICATO / RITIRATO. Non saltare gate. Un esito strutturale positivo non abilita pubblicazione.
+
+## 6. Piano e criteri di accettazione
+
+A — Specifica e ricognizione contratti/gate esistenti (questa proposta).  
+B — Skill di produzione v0.1 e modelli di brief/progetto/guida/controlli; test di conformità, senza servizio nuovo.  
+C — Missione 118: chiudere R2/R3/R4 (ripresa, attestato, Android/privacy/accessibilità) e audio/video con review; acquisizione end-to-end come bozza, nessuna approvazione implicita.  
+D — Microcorso pilota su argomento STEM, ad es. energia e trasformazioni: produzione reale in ChatGPT, obiettivi osservabili, attività, feedback, guida e prova di trasferimento. Verificare portabilità indipendente dalla tipologia avventura.  
+E — Qualificare archivio condiviso e trasferimento reale dei file grandi (video) con autenticazione e quote, poi MCP di sola lettura/validazione; solo dopo aggiungere scritture e pubblicazione, sempre con gate.  
+F — Primo candidato di pubblicazione dopo decisione umana distinta e policy esistente. Installazione/distribuzione plugin solo dopo collaudo e verifica requisiti OpenAI.
+
+Accettazione: due tipologie prodotte in ChatGPT con file reali, validazione ripetibile, import idempotente, rifiuto asset manomessi e contenuti non approvati, anteprima reale, fruizione offline senza richieste esterne quando dichiarata, conservazione dopo scadenza link temporanei, prova di mancata pubblicazione in assenza di autorizzazione. Nessun costo aggiuntivo autorizzato.
+
+## 7. Riferimenti e limiti
+
+OpenAI: https://developers.openai.com/plugins/concepts/plugins ; https://developers.openai.com/plugins/build/plugins ; https://developers.openai.com/plugins/plan/tools ; https://help.openai.com/en/articles/12584461-developer-mode-and-full-mcp-connectors-in-chatgpt . Distinguere distribuzione del plugin da pubblicazione dei materiali Atlas. La disponibilità delle superfici e delle azioni scriventi va verificata al momento del collaudo. Studio Atlas PR #306 è bozza con persistenza locale; non è ancora archivio remoto condiviso. Questa specifica non modifica runtime, autorizzazioni, main, deploy, né pubblica alcun contenuto didattico.
