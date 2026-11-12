@@ -5,6 +5,9 @@ Norma editoriale e di qualificazione per ATLAS-EDU-01; non modifica ActivityPack
 ## 1. Principio
 Un prodotto educativo di qualità integra rigore disciplinare, intenzionalità pedagogica, ricchezza espressiva, cura artistica e partecipazione attiva, offrendo al docente strumenti concreti per accompagnare, osservare e sviluppare gli apprendimenti. ChatGPT produce; Studio Atlas acquisisce e qualifica; Arena è autorità curricolare; Atlas pubblica solo con autorizzazione distinta; Docente OS collega il prodotto alla lezione senza trasmissione automatica di dati degli studenti.
 
+## 1.1 Fondamenti recuperati di CAP-ATLAS-PERCORSI
+Prima della progettazione e della revisione consultare il [raccordo operativo con gli studi storici](../../../plugins/studio-atlas-education/skills/atlas-education-production/references/historical-foundations.md) e l'[indice canonico Percorsi](../../capabilities/atlas-percorsi/workflow/CANONICAL-INDEX-v1.md). Il raccordo collega le dodici dimensioni alla ricerca pregressa, alle grammatiche esperienziali, alla Costituzione CHILD-SAFE, al contratto della biblioteca, alla specifica primo ciclo, a Storytelling-First, ai mondi compatti e a Visual Factory/Visual Quality Bar. Conservare stati, limiti, hard stops e gate umani; non promuovere ipotesi o confondere la maturità visiva Q0–Q4 con le dimensioni Q01–Q12. Una matrice PASS non sostituisce i gate storici applicabili. Verificare la prima schermata, l'intero percorso e le rappresentazioni con prove reali; non qualificare una sequenza di quiz/pannelli come mondo educativo soltanto perché funziona. Il motore non è il prodotto.
+
 ## 2. Dimensioni e criteri osservabili
 Ciascuna riga ha un ID stabile. Verificare l'intero prodotto e il fascicolo docente, non solo una schermata. Il criterio di base è sempre applicabile; le modalità specialistiche sono condizionate alla famiglia e ai media effettivamente previsti.
 
