@@ -15,3 +15,6 @@
 - Coerenza di materiali finali ed eventuale attestato:
 - Prodotti da consegnare:
 - Decisioni già approvate / assunzioni:
+
+- Mediazione docente prima/durante/dopo, matrice obiettivi-azioni-evidenze-criteri, attività di trasferimento:
+- Fascicolo docente e piano di qualificazione: criteri, prove previste, revisione umana, eventuale sperimentazione distinta; nessuna efficacia presunta.
