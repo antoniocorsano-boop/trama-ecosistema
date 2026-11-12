@@ -1,0 +1,38 @@
+{
+  "contract": "trama.af03-continuous-narration/v0.1",
+  "source_sha": "f0c29655632a7edc6d78c78d48d006aa8da020a2",
+  "source_path": "content/staging/missione-118/experience.html",
+  "source_pr": 84,
+  "entrypoint_sha256": "22971583a2a7dc2d45947b4ce19a843a057b05864b9a2b896762728c9519175e",
+  "compute_mode": "FREE_ONLY",
+  "voice_cloning": false,
+  "no_personal_data": true,
+  "style": "natural_narration",
+  "scenes": [
+    {
+      "scene": 1,
+      "title": "La città perfetta",
+      "text": "Le città sono diventate intelligenti. Gli assistenti artificiali rispondono a ogni domanda. Gli algoritmi decidono quali informazioni mostrarci. Tutto appare ordinato, veloce, efficiente."
+    },
+    {
+      "scene": 2,
+      "title": "Le prime anomalie",
+      "text": "Le persone non distinguono più ciò che scelgono da ciò che viene suggerito. Gli schermi interrompono ogni attenzione. Gli studenti ricevono risposte immediate, ma smettono di fare domande."
+    },
+    {
+      "scene": 3,
+      "title": "Il messaggio di Nora",
+      "text": "Nora ha scoperto un archivio nascosto e un modo per inviare un messaggio nel passato. Ci prova da tempo. Ha già tentato centodiciassette volte di cambiare gli eventi, ma ogni tentativo è fallito."
+    },
+    {
+      "scene": 4,
+      "title": "La squadra del tentativo 118",
+      "text": "Con Nora ci sono Teo, un giovane apprendista, e AX-118, un assistente artificiale ancora imperfetto. Il loro compito è capire gli errori, correggere i sistemi e mantenere il controllo umano."
+    },
+    {
+      "scene": 5,
+      "title": "L'ultima possibilità",
+      "text": "La tecnologia non deve decidere al posto delle persone. Deve aiutarle. Se riuscirete a riprogettare i sistemi, il futuro potrà cambiare. Il tentativo numero centodiciotto inizia adesso."
+    }
+  ]
+}
