@@ -19,6 +19,7 @@ Modello editoriale obbligatorio; non è un nuovo contratto ActivityPackage, né 
 - Il completamento digitale non determina voti o livelli; nessun dato degli studenti trasmesso ad Atlas.
 
 ## C. Rapporto di qualificazione della versione
+Allegare la matrice ATLAS-QE-01 v0.1 (templates/quality-matrix.md) con tutte le dodici dimensioni, evidenze e revisione umana.
 - Versione e hash esatti, data, ruolo del revisore, ambito, fonti:
 - Correttezza disciplinare, allineamento obiettivi-attività-evidenze, adeguatezza, inclusione, usabilità, qualità artistica, qualità espressiva e comunicativa (inclusa regia vocale se pertinente), integrità media, accessibilità, privacy, diritti, prove tecniche: per ciascuno criterio | metodo | evidenza | esito (PASS/REWORK/REJECT/non verificato) | limite.
 - Sperimentazione: non eseguita / in corso / documentata; contesto non identificante, modalità, criteri, evidenze osservate, ostacoli, modifiche; solo riscontri qualitativi o aggregati non identificanti dopo controllo privacy, nessuna telemetria o risposta individuale.
