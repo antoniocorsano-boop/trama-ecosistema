@@ -20,7 +20,7 @@ Modello editoriale obbligatorio; non è un nuovo contratto ActivityPackage, né 
 
 ## C. Rapporto di qualificazione della versione
 - Versione e hash esatti, data, ruolo del revisore, ambito, fonti:
-- Correttezza disciplinare, allineamento obiettivi-attività-evidenze, adeguatezza, inclusione, usabilità, qualità artistica, integrità media, accessibilità, privacy, diritti, prove tecniche: per ciascuno criterio | metodo | evidenza | esito (PASS/REWORK/REJECT/non verificato) | limite.
+- Correttezza disciplinare, allineamento obiettivi-attività-evidenze, adeguatezza, inclusione, usabilità, qualità artistica, qualità espressiva e comunicativa (inclusa regia vocale se pertinente), integrità media, accessibilità, privacy, diritti, prove tecniche: per ciascuno criterio | metodo | evidenza | esito (PASS/REWORK/REJECT/non verificato) | limite.
 - Sperimentazione: non eseguita / in corso / documentata; contesto non identificante, modalità, criteri, evidenze osservate, ostacoli, modifiche; solo riscontri qualitativi o aggregati non identificanti dopo controllo privacy, nessuna telemetria o risposta individuale.
 - Esiti separati: qualità progettuale e tecnica; revisione umana; riscontri empirici (se disponibili). Non dedurre efficacia causale o livelli individuali.
 - Decisione di qualificazione interna, vincoli aperti, azioni correttive e storico versioni:
