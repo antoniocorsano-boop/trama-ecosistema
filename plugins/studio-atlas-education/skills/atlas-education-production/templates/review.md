@@ -5,6 +5,10 @@
 - Fruizione completa: ambiente, prove, risultato:
 - Offline (se dichiarato): richieste di rete misurate:
 - Accessibilità: verifiche eseguite e limiti:
+- Direzione artistica: scheda e coerenza tra introduzione, interfaccia, media, materiali finali e attestato (se previsto); evidenze reali mobile e stampa quando applicabili:
+- Contrasto, leggibilità, composizione, impaginazione: verificati / non verificati; rilievi:
+- Media approvati preservati e modalità principale effettivamente presente; alternative accessibili distinte; eventuali blocchi:
+- Esito revisione visiva: PASS / REWORK / REJECT / non eseguita (non qualificare se mancanti media approvati o coerenza):
 - Audio/video: ascolto, fedeltà, sincronizzazione:
 - Diritti di ogni asset: chiariti / non chiariti:
 - Privacy: controlli effettivi, nessun dato reale:
