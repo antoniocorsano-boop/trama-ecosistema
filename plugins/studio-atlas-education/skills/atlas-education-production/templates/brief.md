@@ -19,3 +19,5 @@
 
 - Mediazione docente prima/durante/dopo, matrice obiettivi-azioni-evidenze-criteri, attività di trasferimento:
 - Fascicolo docente e piano di qualificazione: criteri, prove previste, revisione umana, eventuale sperimentazione distinta; nessuna efficacia presunta.
+
+- ATLAS-QE-01: piano di verifica Q01–Q12, criteri applicabili, modalità specialistiche non pertinenti motivate, prove ed evidenze previste; non attribuire esiti anticipati.
