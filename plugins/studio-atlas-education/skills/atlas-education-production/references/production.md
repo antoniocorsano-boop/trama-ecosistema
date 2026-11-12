@@ -36,3 +36,6 @@ Predisporre una scheda editoriale proporzionata al prodotto: registro e destinat
 
 ## ATLAS-QE-01
 Lo standard canonico è docs/superpowers/specs/2026-11-12-atlas-educational-quality-standard.md. Applicare i dodici criteri Q01–Q12 dalla progettazione, documentare metodi ed evidenze con templates/quality-matrix.md e sottoporre a revisione umana. Nessuna compensazione tra dimensioni; le modalità non pertinenti richiedono motivazione. La qualificazione progettuale, la sperimentazione e la pubblicazione sono distinte.
+
+## Riuso della ricerca e della progettazione Atlas
+Prima di avviare o revisionare una risorsa, leggere references/historical-foundations.md e consultare l'indice canonico CAP-ATLAS-PERCORSI e le fonti pertinenti. Applicare le grammatiche motivate, i gate umani storia/mondo ove pertinenti, la regola di orientamento iniziale, la rappresentazione prima della spiegazione, la Costituzione CHILD-SAFE e il Visual Quality Bar con i suoi hard stops; nessun nuovo motore o corpus duplicato. Distinguere precedenti progettuali da evidenza, ipotesi da decisione, qualità tecnica da qualità educativa. Se una fonte applicabile non è reperibile, documentare il gap, non dichiarare PASS del relativo criterio.
