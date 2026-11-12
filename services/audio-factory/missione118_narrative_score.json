@@ -1,0 +1,403 @@
+{
+  "contract": "trama.narrative-score/v0.1",
+  "activityId": "trama-missione-118-2026",
+  "sourceSha": "f0c29655632a7edc6d78c78d48d006aa8da020a2",
+  "sourceEntrypointSha256": "22971583a2a7dc2d45947b4ce19a843a057b05864b9a2b896762728c9519175e",
+  "referenceVideo": "Missione118_Video_Prologo.mp4",
+  "status": "DIRECTOR_SCORE_PREPARED_AUDIO_REWORK",
+  "computeMode": "FREE_ONLY",
+  "voice": {
+    "reference": "Azzurra existing synthetic narration",
+    "identityRequired": true,
+    "personalSamples": false,
+    "cloning": false,
+    "globalRegeneration": false
+  },
+  "timing": {
+    "unit": "ms",
+    "pauseTargetsAreProposals": true,
+    "exactAudioAlignmentPending": true
+  },
+  "lexicon": [
+    {
+      "word": "veloce",
+      "guide": "ve-LO-ce",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "scelgono",
+      "guide": "SCEL-go-no",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "immediate",
+      "guide": "im-me-DIA-te",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "Nora",
+      "guide": "NO-ra",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "giovane",
+      "guide": "GIO-va-ne",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "AX-118",
+      "guide": "a ics centodiciotto (lettura editoriale proposta, da approvare)",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "sistemi",
+      "guide": "si-STE-mi",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "centodiciassette",
+      "guide": "cen-to-di-cia-SET-te",
+      "guideIsInstructionOnly": true
+    },
+    {
+      "word": "centodiciotto",
+      "guide": "cen-to-di-CIOT-to",
+      "guideIsInstructionOnly": true
+    }
+  ],
+  "scenes": [
+    {
+      "scene": 1,
+      "title": "La città perfetta",
+      "titleSpoken": true,
+      "review": "REVIEW_WITH_EXISTING_APPROVAL_PRESERVED",
+      "intent": "Fiducia apparente",
+      "units": [
+        {
+          "id": "S1U1",
+          "canonicalText": "La città perfetta.",
+          "direction": "Apertura calma, quasi documentaristica.",
+          "emphasis": [
+            "città perfetta"
+          ],
+          "pauseAfterMs": 650,
+          "pronunciationWatch": [],
+          "connectedGroups": [],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S1U2",
+          "canonicalText": "Le città sono diventate intelligenti.",
+          "direction": "Meraviglia contenuta, non pubblicitaria.",
+          "emphasis": [
+            "intelligenti"
+          ],
+          "pauseAfterMs": 400,
+          "pronunciationWatch": [],
+          "connectedGroups": [],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S1U3",
+          "canonicalText": "Gli assistenti artificiali rispondono a ogni domanda.",
+          "direction": "Fluidità, un solo arco melodico.",
+          "emphasis": [
+            "ogni domanda"
+          ],
+          "pauseAfterMs": 420,
+          "pronunciationWatch": [],
+          "connectedGroups": [],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S1U4",
+          "canonicalText": "Gli algoritmi decidono quali informazioni mostrarci.",
+          "direction": "Lieve incrinatura del tono, senza teatralità.",
+          "emphasis": [
+            "decidono"
+          ],
+          "pauseAfterMs": 500,
+          "pronunciationWatch": [],
+          "connectedGroups": [],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S1U5",
+          "canonicalText": "Tutto appare ordinato, veloce, efficiente.",
+          "direction": "Tre elementi in progressione, conclusione sospesa.",
+          "emphasis": [
+            "ordinato",
+            "veloce",
+            "efficiente"
+          ],
+          "pauseAfterMs": 700,
+          "pronunciationWatch": [
+            "veloce"
+          ],
+          "connectedGroups": [
+            "ordinato, veloce, efficiente"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "title": "Le prime anomalie",
+      "titleSpoken": false,
+      "review": "REVIEW_WITH_EXISTING_APPROVAL_PRESERVED",
+      "intent": "Inquietudine crescente",
+      "units": [
+        {
+          "id": "S2U1",
+          "canonicalText": "Le persone non distinguono più ciò che scelgono da ciò che viene suggerito.",
+          "direction": "Contrasto fra autonomia e suggerimento, frase unitaria.",
+          "emphasis": [
+            "scelgono",
+            "suggerito"
+          ],
+          "pauseAfterMs": 500,
+          "pronunciationWatch": [
+            "scelgono"
+          ],
+          "connectedGroups": [
+            "ciò che scelgono",
+            "ciò che viene suggerito"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S2U2",
+          "canonicalText": "Gli schermi interrompono ogni attenzione.",
+          "direction": "Più serio, senza accelerare.",
+          "emphasis": [
+            "interrompono"
+          ],
+          "pauseAfterMs": 480,
+          "pronunciationWatch": [],
+          "connectedGroups": [],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S2U3",
+          "canonicalText": "Gli studenti ricevono risposte immediate, ma smettono di fare domande.",
+          "direction": "Prima parte fluida; breve sospensione sulla virgola; enfasi sul contrasto finale.",
+          "emphasis": [
+            "immediate",
+            "domande"
+          ],
+          "pauseAfterMs": 700,
+          "pronunciationWatch": [
+            "immediate"
+          ],
+          "connectedGroups": [
+            "risposte immediate",
+            "fare domande"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        }
+      ]
+    },
+    {
+      "scene": 3,
+      "title": "Il messaggio di Nora",
+      "titleSpoken": false,
+      "review": "PRESERVE_UNLESS_NEW_EVIDENCE",
+      "intent": "Scoperta e urgenza",
+      "units": [
+        {
+          "id": "S3U1",
+          "canonicalText": "Nora ha scoperto un archivio nascosto e un modo per inviare un messaggio nel passato.",
+          "direction": "Tono di scoperta, un arco narrativo, senza esitazioni.",
+          "emphasis": [
+            "archivio nascosto",
+            "passato"
+          ],
+          "pauseAfterMs": 500,
+          "pronunciationWatch": [],
+          "connectedGroups": [
+            "archivio nascosto"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S3U2",
+          "canonicalText": "Ci prova da tempo.",
+          "direction": "Rallentamento lieve, tono intimo ma non sussurrato.",
+          "emphasis": [
+            "da tempo"
+          ],
+          "pauseAfterMs": 450,
+          "pronunciationWatch": [],
+          "connectedGroups": [],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S3U3",
+          "canonicalText": "Ha già tentato centodiciassette volte di cambiare gli eventi, ma ogni tentativo è fallito.",
+          "direction": "Peso sul numero e caduta misurata alla fine.",
+          "emphasis": [
+            "centodiciassette",
+            "fallito"
+          ],
+          "pauseAfterMs": 750,
+          "pronunciationWatch": [
+            "centodiciassette"
+          ],
+          "connectedGroups": [
+            "centodiciassette volte"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        }
+      ]
+    },
+    {
+      "scene": 4,
+      "title": "La squadra del tentativo 118",
+      "titleSpoken": false,
+      "review": "REVIEW_REQUIRED",
+      "intent": "Presentazione e responsabilità",
+      "units": [
+        {
+          "id": "S4U1",
+          "canonicalText": "Con Nora ci sono Teo, un giovane apprendista, e AX-118, un assistente artificiale ancora imperfetto.",
+          "direction": "Presentazione dei personaggi con cadenza naturale; sigla scandita senza interrompere la frase.",
+          "emphasis": [
+            "Nora",
+            "Teo",
+            "AX-118",
+            "imperfetto"
+          ],
+          "pauseAfterMs": 500,
+          "pronunciationWatch": [
+            "Nora",
+            "giovane",
+            "AX-118"
+          ],
+          "connectedGroups": [
+            "un giovane apprendista",
+            "un assistente artificiale"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S4U2",
+          "canonicalText": "Il loro compito è capire gli errori, correggere i sistemi e mantenere il controllo umano.",
+          "direction": "Progressione in tre azioni; conclusione ferma, senza separare aggettivo e sostantivo.",
+          "emphasis": [
+            "capire gli errori",
+            "correggere i sistemi",
+            "controllo umano"
+          ],
+          "pauseAfterMs": 750,
+          "pronunciationWatch": [
+            "sistemi"
+          ],
+          "connectedGroups": [
+            "controllo umano",
+            "correggere i sistemi"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        }
+      ]
+    },
+    {
+      "scene": 5,
+      "title": "L'ultima possibilità",
+      "titleSpoken": false,
+      "review": "REVIEW_REQUIRED",
+      "intent": "Scelta e speranza",
+      "units": [
+        {
+          "id": "S5U1",
+          "canonicalText": "La tecnologia non deve decidere al posto delle persone. Deve aiutarle.",
+          "direction": "Unica unità retorica: negazione chiara e risposta più calda; pausa interna dopo persone.",
+          "emphasis": [
+            "non deve decidere",
+            "aiutarle"
+          ],
+          "pauseAfterMs": 550,
+          "pronunciationWatch": [],
+          "connectedGroups": [
+            "al posto delle persone",
+            "Deve aiutarle"
+          ],
+          "internalPauses": [
+            {
+              "after": "persone.",
+              "targetMs": 750
+            }
+          ],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S5U2",
+          "canonicalText": "Se riuscirete a riprogettare i sistemi, il futuro potrà cambiare.",
+          "direction": "Tono di speranza crescente, pausa breve sulla virgola.",
+          "emphasis": [
+            "riprogettare i sistemi",
+            "potrà cambiare"
+          ],
+          "pauseAfterMs": 900,
+          "pronunciationWatch": [
+            "sistemi"
+          ],
+          "connectedGroups": [
+            "potrà cambiare"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        },
+        {
+          "id": "S5U3",
+          "canonicalText": "Il tentativo numero centodiciotto inizia adesso.",
+          "direction": "Chiusura determinata, senza gridare; accento conclusivo su adesso.",
+          "emphasis": [
+            "centodiciotto",
+            "adesso"
+          ],
+          "pauseAfterMs": 800,
+          "pronunciationWatch": [
+            "centodiciotto"
+          ],
+          "connectedGroups": [
+            "inizia adesso"
+          ],
+          "internalPauses": [],
+          "renderStatus": "NOT_REQUESTED",
+          "approval": "PENDING"
+        }
+      ]
+    }
+  ],
+  "published": false,
+  "audioApproved": false
+}
