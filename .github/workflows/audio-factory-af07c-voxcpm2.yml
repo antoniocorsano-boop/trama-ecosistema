@@ -1,0 +1,78 @@
+name: AF-07C - VoxCPM2 CPU voice design A-B
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/audio-factory-af01-kokoro-pilot]
+permissions:
+  contents: read
+concurrency:
+  group: af07c-voxcpm2-ab-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  probe:
+    if: >-
+      github.event.repository.private == false &&
+      github.event.pull_request.number == 304 &&
+      github.event.label.name == 'af07c-voxcpm2-autorizzato' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/audio-factory-af03-qwen3-prosody' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      TRAMA_AF07C_AUTHORIZED: "yes"
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: "1"
+      OMP_NUM_THREADS: "4"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify plan and resource envelope
+        run: |
+          python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -q
+          python services/audio-factory/af07_voxcpm2_ab.py --mode plan
+          free -h
+          df -h "$RUNNER_TEMP"
+          test "$(awk '/MemTotal/{print $2}' /proc/meminfo)" -ge 10000000
+          test "$(df -Pk "$RUNNER_TEMP" | tail -1 | awk '{print $4}')" -ge 8500000
+      - name: Build pinned CPU engine
+        timeout-minutes: 18
+        run: |
+          git init "$RUNNER_TEMP/omni"
+          git -C "$RUNNER_TEMP/omni" remote add origin https://github.com/tc-mb/llama.cpp-omni.git
+          git -C "$RUNNER_TEMP/omni" fetch --depth=1 origin d30f00feadb7ebce95bacd55b0d104e3ef501481
+          git -C "$RUNNER_TEMP/omni" checkout --detach FETCH_HEAD
+          test "$(git -C "$RUNNER_TEMP/omni" rev-parse HEAD)" = d30f00feadb7ebce95bacd55b0d104e3ef501481
+          cmake -S "$RUNNER_TEMP/omni" -B "$RUNNER_TEMP/omni/build" -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF -DGGML_VULKAN=OFF -DGGML_METAL=OFF -DLLAMA_BUILD_UI=OFF -DLLAMA_BUILD_SERVER=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_APP=OFF -DLLAMA_BUILD_TOOLS=ON
+          cmake --build "$RUNNER_TEMP/omni/build" --target voxcpm2-cli -j4
+          test -x "$RUNNER_TEMP/omni/build/bin/voxcpm2-cli"
+      - name: Acquire pinned public weights and verify SHA256
+        timeout-minutes: 5
+        run: |
+          root=https://huggingface.co/DennisHuang648/VoxCPM2-GGUF/resolve/169f64d8b98bbaab1761e4ca3a83e6af653456cc
+          curl --fail --location --silent --show-error --max-time 140 "$root/VoxCPM2-BaseLM-Q8_0.gguf" -o "$RUNNER_TEMP/base.gguf"
+          curl --fail --location --silent --show-error --max-time 140 "$root/VoxCPM2-Acoustic-F16.gguf" -o "$RUNNER_TEMP/acoustic.gguf"
+          echo "0113177abd11303503bf0b705e1613ec5f0a8508cc74a7dfd0f99312b962a962  $RUNNER_TEMP/base.gguf" | sha256sum -c -
+          echo "5bde898488ad635ff55d24da53543768fa33d5e5cdc538ce190e5ef831038e85  $RUNNER_TEMP/acoustic.gguf" | sha256sum -c -
+      - name: Prepare qualified blind ASR
+        timeout-minutes: 4
+        run: python -m pip install --disable-pip-version-check --retries 0 "faster-whisper==1.2.1" "ctranslate2==4.9.0"
+      - name: Two bounded synthetic interpretations
+        timeout-minutes: 11
+        run: |
+          python services/audio-factory/af07_voxcpm2_ab.py --mode generate --engine "$RUNNER_TEMP/omni/build/bin/voxcpm2-cli" --base "$RUNNER_TEMP/base.gguf" --acoustic "$RUNNER_TEMP/acoustic.gguf" --output af07c-voxcpm
+      - name: Blind lexical review
+        timeout-minutes: 4
+        run: python services/audio-factory/af07_voxcpm2_ab.py --mode asr --output af07c-voxcpm
+      - name: Preserve WAV and review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: af07c-voxcpm2-ab
+          path: af07c-voxcpm/
+          if-no-files-found: warn
+          retention-days: 7
