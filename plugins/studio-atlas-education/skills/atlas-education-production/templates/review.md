@@ -13,5 +13,9 @@
 - Diritti di ogni asset: chiariti / non chiariti:
 - Privacy: controlli effettivi, nessun dato reale:
 - Revisione umana: non effettuata / PASS / REWORK / REJECT con evidenza:
+- Fascicolo docente completo e utilizzabile: matrice obiettivi-azioni-evidenze-criteri, guida prima/durante/dopo, materiali, inclusione, trasferimento e strumenti facoltativi:
+- Qualità pedagogica e disciplinare: criteri, evidenze effettive, revisione umana, limiti:
+- Sperimentazione in classe: non eseguita / in corso / documentata; metodo e riscontri non identificanti, limiti; nessuna efficacia presunta:
+- Qualificazione interna del prodotto distinta dagli apprendimenti e dalla pubblicazione; fascicolo assente/inadeguato = REWORK:
 - Blocchi aperti:
 - Decisione: BOZZA; nessuna autorizzazione di pubblicazione implicita.
