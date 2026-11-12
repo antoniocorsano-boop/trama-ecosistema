@@ -1,0 +1,2 @@
+# Studio Atlas Education v0.1
+Prototipo skills-only in revisione. Manifesto portabile e istruzioni, riferimenti, modelli, preflight locale. Nessun MCP, autenticazione o pubblicazione. Non installato né qualificato in ChatGPT. Test comportamentali nei riferimenti. Formato: https://developers.openai.com/plugins/build/plugins . Licenza di distribuzione del plugin e accesso al marketplace da definire; non pubblicare nel catalogo OpenAI.

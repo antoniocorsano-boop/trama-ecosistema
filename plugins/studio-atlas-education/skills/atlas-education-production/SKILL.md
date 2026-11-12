@@ -1,0 +1,19 @@
+---
+name: atlas-education-production
+description: Progetta, crea, verifica o prepara per Studio Atlas prodotti educativi destinati a bambini e ragazzi, inclusi microcorsi, avventure, laboratori, racconti, video e sfide progettuali. Usa quando viene richiesta produzione educativa da ChatGPT, revisione di un prodotto o consegna ad Atlas.
+---
+
+# Studio Atlas Education — produzione
+ChatGPT è l'ambiente di produzione. Usa capacità disponibili e strumenti deterministici senza costi aggiuntivi autorizzati. Non invocare servizi di generazione a pagamento, non simulare file mancanti. Studio Atlas acquisisce e qualifica; Atlas pubblica tramite gate distinti; Arena è autorità curricolare; Docente OS collega lezioni. Non inventare connessioni, tool, permessi o ricevute.
+
+## Procedura
+1. Leggi references/production.md e templates/brief.md; recupera vincoli e decisioni già disponibili. Chiedi solo ciò che impedisce un risultato utile; esplicita le assunzioni. Se richiesta una fase specifica, non ricominciare dall'idea.
+2. Definisci 2–4 obiettivi osservabili per microcorso, evidenze, prerequisiti, ostacoli prevedibili e attività di trasferimento. Usa references/families.md per la tipologia. Obiettivi proposti non equivalgono a riferimenti Arena approvati. Il contratto ActivityPackage sperimentale accetta 3–14 anni e riferimenti obbligatori: non creare manifesti fittizi, non usare PENDING come ID. In assenza di riferimenti autentici o per età fuori schema, consegna bozza editoriale separata e indica il blocco.
+3. Costruisci sequenza, riscontri esplicativi, eventuale storyboard, guida docente e alternativa accessibile. Mantieni proporzione con durata ed età. Non rendere tutte le attività quiz; includi quando utile azioni fuori schermo, confronto, progettazione o riflessione.
+4. Produci i file effettivi in ChatGPT con gli strumenti appropriati. Per audio/video separa testo canonico, partitura, media e sottotitoli; preserva asset approvati. Nessuna clonazione vocale o dato personale di studenti. Se il motore non è disponibile o i diritti sono incerti, consegna alternativa e segnala limite. Non spacciare mockup per applicativo.
+5. Usa templates/delivery.md: prepara una cartella di consegna, elenca asset reali, impronte SHA-256, fonte/licenze e verifiche. Controlla con scripts/preflight.py quando disponibile, senza dichiarare conformità allo schema Atlas. Evita link temporanei come unica conservazione. Non duplicare ActivityPackage o intake; usa le versioni canoniche reperite nel progetto e dichiarane lo stato.
+6. Esegui controlli effettivi: correttezza disciplinare, esperienza completa, accessibilità, privacy, assenza di rete se offline dichiarato, sincronizzazione audiovisiva e pronuncia se pertinente. Test automatici non sostituiscono revisione umana. Distingui test eseguiti da richiesti; preserva evidenze. Usa templates/review.md.
+7. Consegna i file verificati e un rapporto sintetico: obiettivi, prodotto, controlli, limiti, prossima decisione. Solo quando esiste un canale autorizzato, acquisisci la bozza con consenso esplicito, versione esatta e ricevuta reale. Non pubblicare, integrare rami principali, distribuire agli studenti o assegnare automaticamente. Pubblicazione richiede gate server-side esistenti, diritti e revisione umana separata.
+
+## Invarianti
+Privacy fin dalla progettazione: niente nomi, identificatori, email, dati sanitari, telemetria, profili o classifiche di studenti. Progressi minimi locali e volontari, cancellabili; attestato facoltativo di completamento non ufficiale, non voto né certificazione. Nessuna raccolta di dati di minori. Contenuti adeguati all'età; evitare attività rischiose, manipolative o inappropriate. Non promettere disponibilità futura di file. Non usare dati reali come fixture. Se un prodotto non può essere qualificato, resta bozza.

@@ -1,0 +1,13 @@
+# Revisione della versione
+- ID/versione e hash esatti del prodotto:
+- Obiettivi e evidenze osservabili:
+- Verifica disciplinare: eseguita / non eseguita, fonti:
+- Fruizione completa: ambiente, prove, risultato:
+- Offline (se dichiarato): richieste di rete misurate:
+- Accessibilità: verifiche eseguite e limiti:
+- Audio/video: ascolto, fedeltà, sincronizzazione:
+- Diritti di ogni asset: chiariti / non chiariti:
+- Privacy: controlli effettivi, nessun dato reale:
+- Revisione umana: non effettuata / PASS / REWORK / REJECT con evidenza:
+- Blocchi aperti:
+- Decisione: BOZZA; nessuna autorizzazione di pubblicazione implicita.

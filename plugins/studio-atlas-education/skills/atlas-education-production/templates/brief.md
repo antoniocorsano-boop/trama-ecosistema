@@ -1,0 +1,13 @@
+# Brief educativo
+- Titolo provvisorio:
+- Famiglia:
+- Destinatari (fascia, prerequisiti; nessun dato personale):
+- Durata e modalità:
+- Problema formativo:
+- Obiettivi osservabili ed evidenza per ciascuno:
+- Riferimenti Arena: verificati oppure non ancora disponibili (non inventare ID).
+- Sequenza e attività fuori schermo:
+- Accessibilità e alternativa testuale:
+- Risorse, fonti, diritti e vincolo di costo:
+- Prodotti da consegnare:
+- Decisioni già approvate / assunzioni:
