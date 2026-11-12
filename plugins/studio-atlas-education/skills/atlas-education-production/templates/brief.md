@@ -9,5 +9,9 @@
 - Sequenza e attività fuori schermo:
 - Accessibilità e alternativa testuale:
 - Risorse, fonti, diritti e vincolo di costo:
+- Direzione artistica: tema, atmosfera, stile, palette, contrasti, tipografia, simboli, composizione e adattamento mobile/stampa:
+- Identità di personaggi e ambienti, se pertinente:
+- Regia audiovisiva, modalità principale, media già approvati e alternative accessibili:
+- Coerenza di materiali finali ed eventuale attestato:
 - Prodotti da consegnare:
 - Decisioni già approvate / assunzioni:
