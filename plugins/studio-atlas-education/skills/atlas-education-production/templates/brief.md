@@ -23,3 +23,5 @@
 - ATLAS-QE-01: piano di verifica Q01–Q12, criteri applicabili, modalità specialistiche non pertinenti motivate, prove ed evidenze previste; non attribuire esiti anticipati.
 
 - Fondamenti storici consultati (references/historical-foundations.md): riferimenti/versioni, stato, evidenze e limiti; grammatica scelta e motivazione; storia/mondo e gate applicabili oppure eccezione motivata; orientamento e azione concreta nella prima schermata; rappresentazione/conseguenze e piano di verifica mobile.
+
+- Selezione mondo/grammatica (ATLAS-WORLDS-01): alternative, compatibilità con azione cognitiva, fascia e tema, asset recuperabili, limiti; motivare riuso, nuovo mondo o forma non narrativa; nessuna approvazione implicita.
