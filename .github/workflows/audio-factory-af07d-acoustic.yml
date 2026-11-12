@@ -1,0 +1,58 @@
+name: AF-07D - Frozen corpus acoustic review
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/audio-factory-af01-kokoro-pilot]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review:
+    if: >-
+      github.event.repository.private == false &&
+      github.event.pull_request.number == 304 &&
+      github.event.label.name == 'af07d-acustica-autorizzata' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/audio-factory-af03-qwen3-prosody' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline tests
+        run: python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -q
+      - name: Retrieve frozen audio and lexical evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/af07d"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13935664916/zip" > "$RUNNER_TEMP/af07d/af06b.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13938625924/zip" > "$RUNNER_TEMP/af07d/af06c.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13944779394/zip" > "$RUNNER_TEMP/af07d/af06e.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13947539934/zip" > "$RUNNER_TEMP/af07d/af07-asr.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13950406394/zip" > "$RUNNER_TEMP/af07d/af07c.zip"
+          python services/audio-factory/af07_acoustic_review.py --archives "$RUNNER_TEMP/af07d" --output af07d-review --prepare-only
+      - name: Install CPU-only acoustic dependencies
+        timeout-minutes: 6
+        run: |
+          python -m pip install --disable-pip-version-check --retries 0 torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check --retries 0 "silero-vad[onnx-cpu] @ https://github.com/snakers4/silero-vad/archive/066409f3d9db45a30d21dfcbf9147826ffdd7052.tar.gz" "praat-parselmouth==0.4.7" "scipy==1.15.3" "onnxruntime==1.22.1"
+      - name: Acoustic analysis, no synthesis
+        timeout-minutes: 3
+        run: python services/audio-factory/af07_acoustic_review.py --archives "$RUNNER_TEMP/af07d" --output af07d-review
+      - name: Preserve report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: af07d-acoustic-review
+          path: af07d-review/*.json
+          if-no-files-found: warn
+          retention-days: 7
