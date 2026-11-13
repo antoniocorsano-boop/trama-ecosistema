@@ -150,7 +150,7 @@ function storedZip(entries: [string, Buffer][]) {
   return Buffer.concat([...locals,dir,end]);
 }
 
-test("EduTwin ZIP: upload, isolated interaction, original master, persistence and rejection", async ({ browser }) => {
+test("EduTwin ZIP: upload, blocked unverified HTML, original master, persistence and rejection", async ({ browser }) => {
   const context=await browser.newContext({viewport:{width:393,height:873}});
   const page=await context.newPage();
   const html=Buffer.from('<!doctype html><html lang="it"><head><title>Prova</title></head><body><h1>Laboratorio ZIP</h1><button id="change">Regola</button><output id="out">0</output><script>document.querySelector("#change").onclick=()=>document.querySelector("#out").textContent="1"</script></body></html>');
@@ -174,11 +174,9 @@ test("EduTwin ZIP: upload, isolated interaction, original master, persistence an
   await page.getByRole("button",{name:"Carica pacchetto"}).click();
   await expect(page.getByRole("status")).toContainText("2 risorse verificate e conservate");
   await expect(page.getByRole("heading",{name:"EduTwin ZIP di verifica"})).toBeVisible();
-  await page.getByRole("button",{name:"Prova l'attività in ambiente isolato"}).click();
-  const frame=page.frameLocator(".activity-preview iframe");
-  await expect(frame.getByRole("heading",{name:"Laboratorio ZIP"})).toBeVisible();
-  await frame.getByRole("button",{name:"Regola"}).click();
-  await expect(frame.locator("#out")).toHaveText("1");
+  await expect(page.getByText("Anteprima in attesa di verifica del codice.",{exact:false})).toBeVisible();
+  await expect(page.getByRole("button",{name:"Prova l'attività in ambiente isolato"})).toHaveCount(0);
+  await expect(page.locator(".activity-preview iframe")).toHaveCount(0);
   await page.reload();
   await expect(page.getByRole("heading",{name:"EduTwin ZIP di verifica"})).toBeVisible();
   const master=await page.evaluate(async ()=>{

@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
-  decodeUtf8,
-  isolatedHtml,
   listActivityDrafts,
   saveActivityDraft,
   type ActivityDraft,
 } from "../../lib/activity-drafts";
+import { previewFile, verifiedPreviewHtml } from "../../lib/activity-preview";
 
 const FIRST_PACKAGE = "https://github.com/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/84";
 
@@ -34,15 +33,21 @@ export default function AttivitaPage() {
   );
   const imageAssets = current?.manifest.assets.filter((item) => item.type === "IMAGE") ?? [];
   const findFile = (path: string) => current?.files.find((item) => item.path === path);
-  const html = current?.files.find((item) => item.type === "INTERACTIVE_HTML");
-  const guide = current?.files.find((item) => item.type === "TEACHER_GUIDE");
-  let previewHtml = "";
-  try {
-    if (preview === "EXPERIENCE" && html) previewHtml = isolatedHtml(decodeUtf8(html.base64), true);
-    if (preview === "GUIDE" && guide) previewHtml = isolatedHtml(decodeUtf8(guide.base64), false);
-  } catch {
-    previewHtml = "";
-  }
+  const html = current && previewFile(current,"EXPERIENCE");
+  const guide = current && previewFile(current,"GUIDE");
+  const [verifiedPreview,setVerifiedPreview]=useState<{draft:ActivityDraft;kind:"EXPERIENCE"|"GUIDE";html:string}|null>(null);
+  useEffect(()=>{
+    setVerifiedPreview(null);
+    if(!current || preview==="CLOSED") return;
+    let cancelled=false;
+    verifiedPreviewHtml(current,preview).then(html=>{
+      if(!cancelled) setVerifiedPreview({draft:current,kind:preview,html});
+    }).catch(error=>{
+      if(!cancelled) {setProblem(error instanceof Error?error.message:"Anteprima non disponibile");setPreview("CLOSED");}
+    });
+    return ()=>{cancelled=true;};
+  },[current,preview]);
+  const previewHtml=verifiedPreview?.draft===current && verifiedPreview?.kind===preview?verifiedPreview.html:"";
 
   async function importActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -203,6 +208,7 @@ export default function AttivitaPage() {
             <p>Diritti, accessibilità, correttezza dei contenuti e obiettivi del curricolo approvato in Arena. Nessuna autorizzazione di pubblicazione è stata concessa.</p>
           </div>
 
+          {!html && <p>Anteprima in attesa di verifica del codice. Le risorse restano conservate; nessun HTML non verificato viene eseguito.</p>}
           <div className="activity-controls">
             {html && <button type="button" className="secondary-action"
               onClick={() => setPreview(preview === "EXPERIENCE" ? "CLOSED" : "EXPERIENCE")}>

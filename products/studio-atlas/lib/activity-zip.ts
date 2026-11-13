@@ -103,6 +103,7 @@ export function prepareZipDraft(input: Uint8Array) {
     if(format==="text/html") requireOk(/^\s*<!doctype html>\s*<html(?:\s+lang="it")?>\s*<head>/i.test(text(data)),"HTML non conforme per anteprima");
     return {path:asset.path,type:asset.type,format,sha256:asset.sha256,base64:data.toString("base64")};
   });
+  requireOk(assets.filter(a=>a.type==="INTERACTIVE_HTML").length===1 && assets.filter(a=>a.type==="TEACHER_GUIDE").length<=1,"File HTML multipli non ammessi");
   const entry=assets.find(a=>a.path===manifest.experience?.entrypoint);
   requireOk(entry?.type==="INTERACTIVE_HTML","Esperienza interattiva mancante");
   const html=text(Buffer.from(entry.base64,"base64"));
