@@ -36,3 +36,6 @@ Una schermata alla volta: scegli contenuto → chiarisci il pubblico e lo scopo 
 
 ## Esito C1
 Inventario iniziale di sette candidati verificati, non inventario esaustivo né elenco di pubblicazioni. Priorità C2 su Missione 118. Nessun cambiamento di codice, diritti, curricolo o runtime. Prossima consegna: scheda di revisione editoriale del prodotto esatto e decisione motivata PASS/REWORK, prima della conversione a contratto pubblicabile.
+
+## CQP-01 — raccordo operativo
+Il flusso di qualità trasversale raccorda C2/C3/C5, senza cambiare l'ordine di consegna. Vedi `../production/CONTENT-QUALITY-FLOW-v0.1.md`. Il riepilogo eseguibile in Studio Atlas non attribuisce approvazioni. La V7 deve attraversare tutti i controlli, incluso audio se previsto, prima di richiedere pubblicazione.
