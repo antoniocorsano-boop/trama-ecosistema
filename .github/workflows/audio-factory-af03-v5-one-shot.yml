@@ -1,0 +1,48 @@
+name: AF-03 - Missione 118 V5 continuous one shot
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/audio-factory-af01-kokoro-pilot]
+permissions:
+  contents: read
+concurrency:
+  group: af03-v5-one-shot-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  continuous:
+    if: >-
+      github.event.pull_request.number == 304 &&
+      github.event.label.name == 'af03-v5-one-shot-autorizzato' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/audio-factory-af03-qwen3-prosody' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    env:
+      TRAMA_AF03_V5_ONE_SHOT_AUTHORIZED: "yes"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate exact five scenes without inference
+        run: |
+          python services/audio-factory/af03_v5_one_shot.py --validate-only
+          python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -q
+      - name: Install anonymous client
+        timeout-minutes: 2
+        run: python -m pip install --disable-pip-version-check --retries 0 --timeout 20 "gradio_client>=1.13,<3"
+      - name: Single continuous inference, never retry
+        timeout-minutes: 5
+        run: python services/audio-factory/af03_v5_one_shot.py --output af03-v5-one-shot
+      - name: Preserve original and listening evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: missione118-v5-continuous-listening
+          path: af03-v5-one-shot/
+          if-no-files-found: warn
+          retention-days: 7

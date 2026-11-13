@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TRAMA Audio Expressive Probe v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "request_id",
+    "language",
+    "model_id",
+    "baseline_id",
+    "text",
+    "style_id",
+    "max_seconds",
+    "compute_mode",
+    "no_personal_data",
+    "voice_cloning"
+  ],
+  "properties": {
+    "contract": {
+      "const": "trama.audio-expressive-probe/v0.1"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+    },
+    "language": {
+      "const": "it-IT"
+    },
+    "model_id": {
+      "const": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign"
+    },
+    "baseline_id": {
+      "const": "AF02_NICOLA_2026_11_11"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 15,
+      "maxLength": 400
+    },
+    "style_id": {
+      "enum": [
+        "natural_narration",
+        "restrained_suspense"
+      ]
+    },
+    "max_seconds": {
+      "type": "integer",
+      "minimum": 10,
+      "maximum": 40
+    },
+    "compute_mode": {
+      "const": "FREE_ONLY"
+    },
+    "no_personal_data": {
+      "const": true
+    },
+    "voice_cloning": {
+      "const": false
+    }
+  }
+}

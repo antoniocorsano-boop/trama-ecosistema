@@ -1,0 +1,59 @@
+name: AF-07B - Independent Italian ASR
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/audio-factory-af01-kokoro-pilot]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: af07-asr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  review:
+    if: >-
+      github.event.repository.private == false &&
+      github.event.pull_request.number == 304 &&
+      github.event.label.name == 'af07-asr-autorizzato' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/audio-factory-af03-qwen3-prosody' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      TRAMA_AF07_ASR_AUTHORIZED: "yes"
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: "1"
+      OMP_NUM_THREADS: "4"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline tests
+        run: python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -q
+      - name: Retrieve exact prior artifacts from this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/af07"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13935664916/zip" > "$RUNNER_TEMP/af07/af06b.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13938625924/zip" > "$RUNNER_TEMP/af07/af06c.zip"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/13944779394/zip" > "$RUNNER_TEMP/af07/af06e.zip"
+          python services/audio-factory/af07_asr_probe.py --archives "$RUNNER_TEMP/af07" --output af07-review --prepare-only
+      - name: Install CPU ASR
+        timeout-minutes: 4
+        run: python -m pip install --disable-pip-version-check --retries 0 "faster-whisper==1.2.1"
+      - name: Blind transcription and lexical review
+        timeout-minutes: 8
+        run: python services/audio-factory/af07_asr_probe.py --archives "$RUNNER_TEMP/af07" --output af07-review
+      - name: Preserve transcript and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: af07-italian-asr-review
+          path: af07-review/*.json
+          if-no-files-found: warn
+          retention-days: 7

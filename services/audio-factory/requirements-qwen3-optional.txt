@@ -1,0 +1,3 @@
+# Solo ambiente GPU gratuito, qualificato e autorizzato; escluso da GitHub Actions
+qwen-tts==0.1.1
+soundfile==0.13.1

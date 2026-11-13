@@ -1,0 +1,17 @@
+{
+  "profile_id": "TRAMA_AF03_QWEN3_NATURAL_V1",
+  "language": "it-IT",
+  "compute_mode": "FREE_ONLY",
+  "no_personal_data": true,
+  "voice_cloning": false,
+  "scenes": [
+    {
+      "scene_id": "missione118-scena-02",
+      "text": "All'inizio nessuno se ne accorge. Le strade scorrono, i semafori cambiano e ogni messaggio arriva puntuale. Eppure, qualcosa non torna."
+    },
+    {
+      "scene_id": "missione118-scena-03",
+      "text": "Poi una scelta apparentemente semplice rivela il problema: il sistema aveva già deciso. Ma chi aveva stabilito le regole? E chi poteva cambiarle?"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+name: AF-06 - Azzurra Q8 free CPU candidate pair
+on:
+  pull_request:
+    types: [labeled]
+    branches: [feat/audio-factory-af01-kokoro-pilot]
+permissions:
+  contents: read
+concurrency:
+  group: af06-azzurra-cpu-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  cpu-probe:
+    if: >-
+      github.event.repository.private == false &&
+      github.event.pull_request.number == 304 &&
+      github.event.label.name == 'af06-azzurra-cpu-autorizzato' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'feat/audio-factory-af03-qwen3-prosody' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: "1"
+      CARGO_BUILD_JOBS: "4"
+      OMP_NUM_THREADS: "4"
+      MKL_NUM_THREADS: "4"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Validate offline constraints and fixture
+        run: |
+          python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -q
+          python - <<'PY'
+          import json, pathlib, hashlib
+          text=json.loads(pathlib.Path('services/audio-factory/tests/fixtures/missione118_provino.json').read_text())['text']
+          assert hashlib.sha256(text.encode()).hexdigest()=='514d2a6a32cf7f8b0350e8d67a2c755f2a0f037ae10b7afcccef9b39e3ecfad7'
+          assert len(text)<250
+          for name in ('HF_TOKEN','HUGGING_FACE_HUB_TOKEN','HF_API_TOKEN'):
+              import os
+              assert not os.environ.get(name), 'ANONYMOUS_ONLY'
+          pathlib.Path('af06-azzurra').mkdir()
+          pathlib.Path('af06-azzurra/transcript.txt').write_text(text+'\n')
+          PY
+          free -h
+          df -h .
+      - name: Build pinned upstream CPU engine
+        timeout-minutes: 12
+        run: |
+          git clone --filter=blob:none https://github.com/cartesia-one/csm.rs.git "$RUNNER_TEMP/csm"
+          git -C "$RUNNER_TEMP/csm" checkout --detach facfd066bfbd632c815508e998bfd8b7665b8122
+          cd "$RUNNER_TEMP/csm"
+          RUSTFLAGS="-C target-cpu=native" cargo build --locked --release -p csm-cli --bin main
+      - name: Download and verify official Q8 weights
+        timeout-minutes: 4
+        run: |
+          curl --fail --location --silent --show-error --max-time 210 https://huggingface.co/cartesia/azzurra-voice/resolve/main/q8.gguf -o "$RUNNER_TEMP/azzurra-q8.gguf"
+          echo "b0f0c5f9178e9b6c6f5034220023e40c3904eb035a679b0362ca6831e4360f9b  $RUNNER_TEMP/azzurra-q8.gguf" | sha256sum -c -
+      - name: Generate exactly two synthetic speaker candidates
+        timeout-minutes: 8
+        run: |
+          python services/audio-factory/af06_azzurra_cpu.py --engine "$RUNNER_TEMP/csm/target/release/main" --weights "$RUNNER_TEMP/azzurra-q8.gguf" --output af06-azzurra
+      - name: Preserve evidence and audio
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: af06-azzurra-cpu-candidates
+          path: af06-azzurra/
+          if-no-files-found: warn
+          retention-days: 7
