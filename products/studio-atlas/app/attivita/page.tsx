@@ -47,7 +47,7 @@ export default function AttivitaPage() {
     });
     return ()=>{cancelled=true;};
   },[current,preview]);
-  const previewHtml=verifiedPreview?.draft===current && verifiedPreview?.kind===preview?verifiedPreview.html:"";
+  const previewHtml=verifiedPreview && verifiedPreview.draft===current && verifiedPreview.kind===preview?verifiedPreview.html:"";
 
   async function importActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
