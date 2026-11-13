@@ -1,0 +1,14 @@
+# Missione 118 V7 — prologo e continuità narrativa
+Stato: LOCAL_CANDIDATE / HUMAN_REVIEW_PENDING / NO_PUBLICATION.
+Feedback umano V6: valutazione interlocutoria favorevole delle interazioni, trama poco leggibile, tema e motivazione insufficienti, richiesta di introduzione audiovisiva e pronuncia italiana senza errori. Non costituisce PASS complessivo.
+## Intervento
+Tema esplicito: chi controlla la tecnologia? Tecnologia ed educazione civica. Cinque scene originali in prologo illustrato (63 s nominali): città 2045, progetto di Teo, risposta di AX-118, informazioni incomplete, missione di Nora. Avvio volontario, pausa, precedente/successiva, ripetizione, salto facoltativo, testo a schermo; rispetto della preferenza riduzione movimento all'avvio. Trama richiamata lungo le azioni e nel finale. Meccaniche V6 mantenute, otto WebP identiche. Nessuna traccia audio sintetica inserita. Copione separato, con verifica umana per singola scena e ascolto finale; Azzurra resta candidata, non approvata. Non promettere pronuncia perfetta senza ascolto.
+## Artefatti conversazionali
+- Missione_118_V7_anteprima.html 826355 byte SHA256 6f6b8d3d525373fd5b91b58d3eec31af2d76778e9a3c006d20b80021983e3030.
+- Missione_118_V7_guida.html 5002 byte SHA256 9f1b1c4e8f204dd75942ba96b59335825d21e5309e57be1f3570196b02177578.
+- Missione_118_V7_copione_voce.md 2007 byte SHA256 5d66b16b503d4d1c85b153dd32fc4ad3f8abd209d9515c7f5d61f9b9d357aeed.
+- Missione_118_V7_Studio_Atlas.zip 1220689 byte SHA256 b93b17206425ecb961c02942feb781f9162006d3bc096a7d6e47e3b4415cc787. Versione 0.3.0-draft; manifesto e dieci risorse; ZIP e digest verificati. Stesso activityId. Originali V5 e V6 invariati.
+## Verifiche
+Chromium locale con rete intercettata: prologo manuale, pausa, ingresso, intero percorso, alternative, correzioni, focus/tastiera, immagini, assenza di overflow orizzontale nei punti controllati, reset, nessuna richiesta esterna ed errore JS ai viewport 360x640, 393x873, 1280x720, 1920x1080. Timer virtuale: cinque durate previste, stop finale e cancellazione timer all'ingresso nella missione PASS. Screenshot mobile del prologo ispezionato. Il prologo è HTML, non un MP4. Nessun audio prodotto, nessun audit WCAG o test su Android/LIM fisici, nessun test reale importatore V7 o autorizzazione allowlist. Artefatti in conversazione, non acquisiti nel repository Atlas. Nessun merge, deploy, pubblicazione, cambiamento di autorizzazioni.
+## Regola trasversale
+L'apertura di un EduTwin esplicita tema, situazione, ruolo, obiettivo, azione, motivo. Prologo e continuità narrativa sostengono la comprensione, non devono ritardare o sostituire l'apprendimento. Audio opzionale per l'accessibilità del testo ma, se promesso, blocco editoriale fino ad approvazione umana di ogni traccia e montaggio; ascolto integrale rispetto al copione, pronuncia, accenti, pause, continuità, diritti, livello sonoro. Se non approvato, mantenere testo leggibile e non distribuire una voce difettosa.
