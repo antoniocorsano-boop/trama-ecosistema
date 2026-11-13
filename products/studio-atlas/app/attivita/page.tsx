@@ -17,6 +17,7 @@ export default function AttivitaPage() {
   const [activities, setActivities] = useState<ActivityDraft[]>([]);
   const [selectedKey, setSelectedKey] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [zipFile, setZipFile] = useState<File | null>(null);
   const [notice, setNotice] = useState("");
   const [problem, setProblem] = useState("");
   const [preview, setPreview] = useState<"CLOSED" | "EXPERIENCE" | "GUIDE">("CLOSED");
@@ -71,6 +72,26 @@ export default function AttivitaPage() {
     }
   }
 
+  async function importZip(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!zipFile || loading) return;
+    setProblem(""); setNotice(""); setLoading(true); setPreview("CLOSED");
+    try {
+      if(zipFile.size>17*1024*1024) throw new Error("Pacchetto troppo grande");
+      const response=await fetch("/api/attivita/importa/zip",{
+        method:"POST",headers:{"Content-Type":"application/zip"},body:zipFile,
+      });
+      const result=await response.json() as {draft?:ActivityDraft;verified?:number;error?:string};
+      if(!response.ok || !result.draft) throw new Error(result.error??"Importazione non riuscita");
+      const outcome=await saveActivityDraft(result.draft);
+      setActivities(await listActivityDrafts());
+      setSelectedKey(result.draft.key);
+      setNotice(outcome==="EXISTS"?"Attività già presente: nessuna modifica agli originali.":"Attività importata come bozza: "+result.verified+" risorse verificate e conservate.");
+    } catch(error) {
+      setProblem(error instanceof Error?error.message:"Importazione non riuscita");
+    } finally { setLoading(false); }
+  }
+
   return (
     <main className="studio-shell activity-shell">
       <nav className="back-nav"><Link href="/">← Studio Atlas</Link></nav>
@@ -83,7 +104,18 @@ export default function AttivitaPage() {
 
       <section className="activity-import" aria-labelledby="import-title">
         <h2 id="import-title">Importa attività</h2>
-        <p>Acquisisci un pacchetto da una revisione di Curricolo Atlas. Il materiale rimane una bozza privata sul dispositivo: non viene pubblicato né assegnato a una classe.</p>
+        <p>Carica un pacchetto ZIP creato con EduTwin Studio. Le risorse vengono verificate dal servizio Studio Atlas e conservate come bozza locale, senza pubblicazione o assegnazione a una classe. Non includere dati degli studenti.</p>
+        <form onSubmit={importZip} className="activity-form">
+          <label htmlFor="activity-zip">Pacchetto di attività (.zip)</label>
+          <div className="activity-form-row">
+            <input id="activity-zip" type="file" accept=".zip,application/zip" disabled={loading}
+              onChange={event=>setZipFile(event.target.files?.[0]??null)} />
+            <button type="submit" className="primary-action" disabled={loading||!zipFile}>
+              {loading?"Verifica in corso…":"Carica pacchetto"}
+            </button>
+          </div>
+        </form>
+        <p>Oppure acquisisci da una revisione di Curricolo Atlas.</p>
         <form onSubmit={importActivity} className="activity-form">
           <label htmlFor="activity-url">Collegamento alla revisione che contiene il materiale</label>
           <div className="activity-form-row">
@@ -203,8 +235,10 @@ export default function AttivitaPage() {
             )}</ul>
           </details>
           <p className="activity-source">
-            Fonte: <a href={"https://github.com/" + current.source.repository + "/pull/" + current.source.pullRequest}
-              target="_blank" rel="noopener noreferrer">revisione GitHub #{current.source.pullRequest}</a>.
+            {current.source.kind==="LOCAL_ZIP"
+              ? <>Fonte: pacchetto ZIP importato · SHA-256 {current.source.archiveDigest.slice(0,12)}….</>
+              : <>Fonte: <a href={"https://github.com/" + current.source.repository + "/pull/" + current.source.pullRequest}
+                target="_blank" rel="noopener noreferrer">revisione GitHub #{current.source.pullRequest}</a>.</>}
             Archivio locale del dispositivo; nessuna sincronizzazione o collegamento automatico alle UDA.
           </p>
         </section>

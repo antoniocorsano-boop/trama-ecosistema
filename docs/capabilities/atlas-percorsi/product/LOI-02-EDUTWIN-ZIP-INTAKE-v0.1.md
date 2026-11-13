@@ -1,0 +1,7 @@
+# LOI-02 — EduTwin ZIP intake (candidate)
+
+Depends on LOI-01 PR #306 at 6cf4828fd1921136fd514e2a1eecc759d3f28637. This stacked draft adds direct import of a local ZIP produced by EduTwin, without a GitHub staging PR for each teacher. The server validates the upload; IndexedDB preserves the verified assets on the device. No deployment, curriculum binding or publication is authorized.
+
+Accepted: one manifest at root or content/staging/<id>/intake.json, exact declared assets only, standard ZIP stored/deflate entries without encryption, descriptors, ZIP64 or comments; 17 MiB archive, 4 MiB per member, 16 MiB decompressed total. All authority flags remain false. Media master and variants remain separate. Only supported formats are accepted. No learner personal data or telemetry. Upload is processed by Studio Atlas server, not a browser-only import.
+
+Before promotion: real MEDIA-01 archive import, full browser end-to-end, independent security review (including sandbox navigation and CSP), Android and physical LIM review, curriculum/rights/teacher review. Local ZIP is a draft source, not proof of content trust. No merge or publish.

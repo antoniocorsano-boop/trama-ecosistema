@@ -26,11 +26,12 @@ export type ActivityDraft = {
     review?: Record<string, string>;
   };
   source: {
+    kind?: "GITHUB_PR";
     repository: string;
     pullRequest: number;
     commitSha: string;
     manifestPath: string;
-  };
+  } | { kind: "LOCAL_ZIP"; archiveDigest: string; manifestPath: string };
   files: ActivityFile[];
   status: "DRAFT_PENDING_HUMAN_REVIEW";
   importedAt: string;
@@ -121,10 +122,10 @@ export function isolatedHtml(html: string, interactive: boolean): string {
     "worker-src 'none'; frame-src 'none'; form-action 'none'; " +
     "base-uri 'none'; object-src 'none'; " +
     (interactive ? "script-src 'unsafe-inline';" : "script-src 'none';");
-  if (!/<head(?:\s[^>]*)?>/i.test(html)) {
+  if (!/^\s*<!doctype html>\s*<html(?:\s[^<>]*)?>\s*<head(?:\s[^<>]*)?>/i.test(html)) {
     throw new Error("Anteprima non disponibile: intestazione HTML mancante");
   }
-  return html.replace(/<head(?:\s[^>]*)?>/i, (head) =>
+  return html.replace(/^\s*<!doctype html>\s*<html(?:\s[^<>]*)?>\s*<head(?:\s[^<>]*)?>/i, (head) =>
     head + '<meta http-equiv="Content-Security-Policy" content="' + policy + '">'
   );
 }
