@@ -77,3 +77,14 @@ test("does not accept implied authority or publication authorization", () => {
   assert.equal(manifesto.review?.status, "DRAFT_PENDING_HUMAN_REVIEW");
   assert.equal(manifesto.authorization?.atlasPublished, undefined);
 });
+
+test("reject malformed render metadata before persistence",()=>{
+  for(const objectives of ["testo",[{}],[42],null]){
+    assert.throws(()=>validateActivityManifest({...sample(),learning:{objectives}}),/Metadati/);
+  }
+  for(const format of [123,"image/svg+xml",null]){
+    const m=sample();assert.throws(()=>validateActivityManifest({...m,assets:[{...m.assets[0],type:"IMAGE",format}]}),/Formato/);
+  }
+  assert.throws(()=>validateActivityManifest({...sample(),learning:{suggestedDurationMinutes:"25"}}),/Durata/);
+  assert.throws(()=>validateActivityManifest({...sample(),authorization:{atlasPublished:true}}),/Autorizzazione/);
+});

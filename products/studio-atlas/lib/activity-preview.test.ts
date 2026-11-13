@@ -23,3 +23,10 @@ test("unknown ZIP and unknown GitHub revision do not get an HTML preview",()=>{
   assert.equal(previewFile({...d,activityId:"different"},"EXPERIENCE"),undefined);
   assert.equal(previewFile({...d,source:{repository:"other/repo",pullRequest:84,commitSha:"x",manifestPath:"intake.json"}},"EXPERIENCE"),undefined);
 });
+
+test("strict header rejects fake head and pre-head script",async()=>{
+  const {isolatedHtml}=await import("./activity-drafts");
+  for(const html of ["<!-- <head> --><html><head></head></html>","<!doctype html><html><script></script><head></head></html>"]){
+    assert.throws(()=>isolatedHtml(html,true));
+  }
+});

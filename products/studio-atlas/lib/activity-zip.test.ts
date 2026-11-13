@@ -1,4 +1,5 @@
 import { test } from "node:test";
+import sharp from "sharp";
 import assert from "node:assert/strict";
 import { crc32, deflateRawSync } from "node:zlib";
 import { prepareZipDraft, readActivityZip } from "./activity-zip";
@@ -32,41 +33,74 @@ function fixture(m=manifest(), extra:[string,Buffer][]=[]):[string,Buffer][] {
   const root="content/staging/prova/";
   return [[root+"intake.json",Buffer.from(JSON.stringify(m))],[root+"experience.html",html],...extra];
 }
-test("ZIP draft preserves verified content and never publishes",()=>{
-  const result=prepareZipDraft(zip(fixture()));
+test("ZIP draft preserves verified content and never publishes",async()=>{
+  const result=await prepareZipDraft(zip(fixture()));
   assert.equal(result.verified,1);assert.equal(result.draft.status,"DRAFT_PENDING_HUMAN_REVIEW");
   assert.equal(result.draft.source.kind,"LOCAL_ZIP");assert.equal(result.draft.files[0].base64,html.toString("base64"));
 });
-test("stored ZIP entries work",()=>assert.equal(prepareZipDraft(zip(fixture(),0)).verified,1));
-test("traversal, duplicates, unknown assets rejected",()=>{
+test("stored ZIP entries work",async()=>assert.equal((await prepareZipDraft(zip(fixture(),0))).verified,1));
+test("traversal, duplicates, unknown assets rejected",async()=>{
   for(const path of ["../escape","content/staging/prova/experience.html","extra.txt"])
-    assert.throws(()=>prepareZipDraft(zip(fixture(manifest(),[[path,Buffer.from("x")]]))));
+    await assert.rejects(()=>prepareZipDraft(zip(fixture(manifest(),[[path,Buffer.from("x")]]))));
 });
-test("authority tampering rejected",()=>{
+test("authority tampering rejected",async()=>{
   const m=manifest();m.authorization.atlasPublished=true;
-  assert.throws(()=>prepareZipDraft(zip(fixture(m))));
+  await assert.rejects(()=>prepareZipDraft(zip(fixture(m))));
 });
-test("asset tampering rejected",()=>{
+test("asset tampering rejected",async()=>{
   const entries=fixture();entries[1][1]=Buffer.from("changed");
-  assert.throws(()=>prepareZipDraft(zip(entries)));
+  await assert.rejects(()=>prepareZipDraft(zip(entries)));
 });
-test("missing and multiple manifests rejected",()=>{
-  assert.throws(()=>prepareZipDraft(zip([["experience.html",html]])));
-  assert.throws(()=>prepareZipDraft(zip(fixture(manifest(),[["intake.json",Buffer.from("{}")]]))));
+test("missing and multiple manifests rejected",async()=>{
+  await assert.rejects(()=>prepareZipDraft(zip([["experience.html",html]])));
+  await assert.rejects(()=>prepareZipDraft(zip(fixture(manifest(),[["intake.json",Buffer.from("{}")]]))));
 });
-test("invalid or trailing archive rejected",()=>{
+test("invalid or trailing archive rejected",async()=>{
   assert.throws(()=>readActivityZip(Buffer.from("not a ZIP")));
   assert.throws(()=>readActivityZip(Buffer.concat([zip(fixture()),Buffer.from("x")])));
 });
-test("oversize uncompressed member rejected",()=>{
+test("oversize uncompressed member rejected",async()=>{
   assert.throws(()=>readActivityZip(zip([["huge.bin",Buffer.alloc(4*1024*1024+1)]])));
 });
-test("invalid review and learner data declarations rejected",()=>{
-  const m=manifest();m.review.rights="APPROVED";assert.throws(()=>prepareZipDraft(zip(fixture(m))));
-  const n=manifest();n.experience.learnerPersonalData=true;assert.throws(()=>prepareZipDraft(zip(fixture(n))));
+test("invalid review and learner data declarations rejected",async()=>{
+  const m=manifest();m.review.rights="APPROVED";await assert.rejects(()=>prepareZipDraft(zip(fixture(m))));
+  const n=manifest();n.experience.learnerPersonalData=true;await assert.rejects(()=>prepareZipDraft(zip(fixture(n))));
 });
 
-test("missing embedded profile and non-draft version rejected",()=>{
-  const m=manifest();m.experience.embeddedImagesCount=1;assert.throws(()=>prepareZipDraft(zip(fixture(m))));
-  const n=manifest();n.version="0.1.1";assert.throws(()=>prepareZipDraft(zip(fixture(n))));
+test("missing embedded profile and non-draft version rejected",async()=>{
+  const m=manifest();m.experience.embeddedImagesCount=1;await assert.rejects(()=>prepareZipDraft(zip(fixture(m))));
+  const n=manifest();n.version="0.1.1";await assert.rejects(()=>prepareZipDraft(zip(fixture(n))));
+});
+
+test("malformed objectives are rejected before ZIP persistence",async()=>{
+  for(const objectives of ["testo",[{}],[42]]){
+    const m=manifest();
+    Object.assign(m.learning,{objectives});
+    await assert.rejects(()=>prepareZipDraft(zip(fixture(m))),/Metadati/);
+  }
+});
+async function mediaFixture(width:number,height:number,count:number){
+  const m=manifest(),root="content/staging/prova/";
+  const images: [string,Buffer][]=[];
+  const parts:string[]=[];
+  for(let i=0;i<count;i++){
+    const data=await sharp({create:{width,height,channels:3,background:{r:10+i,g:20,b:30}}}).webp({lossless:true}).toBuffer();
+    const path="media/illustration-"+i+".webp";
+    m.assets.push({id:"image-"+i,path,type:"IMAGE",format:"image/webp",sha256:sha256(data),bytes:data.length});
+    images.push([root+path,data]);parts.push("data:image/webp;base64,"+data.toString("base64"));
+  }
+  const content=Buffer.from('<!doctype html><html lang="it"><head></head><body>'+parts.join(" ")+'</body></html>');
+  m.assets[0].sha256=sha256(content);m.assets[0].bytes=content.length;
+  m.experience.entrypointSha256=sha256(content);m.experience.embeddedImagesCount=count;
+  return zip([[root+"intake.json",Buffer.from(JSON.stringify(m))],[root+"experience.html",content],...images]);
+}
+test("tiny compressed archive with an oversized derivative is rejected",async()=>{
+  const b=await mediaFixture(4096,4096,1);assert.ok(b.length<100_000);
+  await assert.rejects(()=>prepareZipDraft(b),/Dimensione/);
+});
+test("aggregate image pixel budget is enforced and valid 4K remains admissible",async()=>{
+  const valid=await prepareZipDraft(await mediaFixture(3840,2160,1));
+  assert.equal(valid.draft.files[1].pixelWidth,3840);
+  const large=await mediaFixture(3840,2160,3);assert.ok(large.length<100_000);
+  await assert.rejects(()=>prepareZipDraft(large),/budget pixel/);
 });

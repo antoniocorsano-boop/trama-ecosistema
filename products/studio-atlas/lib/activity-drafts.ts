@@ -6,6 +6,8 @@ export type ActivityFile = {
   format: string;
   sha256: string;
   base64: string;
+  pixelWidth?:number;
+  pixelHeight?:number;
 };
 
 export type ActivityDraft = {
@@ -110,7 +112,7 @@ export function decodeUtf8(base64: string): string {
   return new TextDecoder().decode(bytes);
 }
 
-// The frame has an opaque origin, no same-origin permission and no network capabilities.
+// Defense in depth for pinned content; sandbox/CSP alone do not block every navigation.
 // CSP must precede every script, style or other resource in the untrusted HTML.
 export function isolatedHtml(html: string, interactive: boolean): string {
   const policy =

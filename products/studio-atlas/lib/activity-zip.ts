@@ -1,4 +1,6 @@
 import { inflateRawSync, crc32 } from "node:zlib";
+import { MediaBudget, assetFormat } from "./activity-media";
+import type { ActivityFile } from "./activity-drafts";
 import { safeIntakePath, sha256, validateActivityManifest, verifyAsset } from "./activity-intake";
 
 export const MAX_ZIP_BYTES = 17 * 1024 * 1024;
@@ -68,7 +70,7 @@ export function readActivityZip(input: Uint8Array): Map<string, Buffer> {
   return files;
 }
 
-export function prepareZipDraft(input: Uint8Array) {
+export async function prepareZipDraft(input: Uint8Array) {
   const files=readActivityZip(input);
   const manifests=[...files.keys()].filter(p=>p==="intake.json" || /^content\/staging\/[a-z0-9][a-z0-9._-]*\/intake\.json$/.test(p));
   requireOk(manifests.length===1,"Il pacchetto deve contenere un unico manifesto di acquisizione");
@@ -87,22 +89,17 @@ export function prepareZipDraft(input: Uint8Array) {
     Array.isArray(raw.learning?.udaRefs) && raw.learning.udaRefs.length===0 && raw.learning.arenaCurricoloVersionRef===null,
     "Il pacchetto locale non può attribuire riferimenti curricolari o UDA");
   requireOk(files.size===manifest.assets.length+1,"Il pacchetto contiene risorse non dichiarate o mancanti");
-  const allowedFormats: Record<string,string[]> = {
-    IMAGE:["image/webp"], SOURCE_MASTER:["image/png","image/jpeg","image/webp"],
-    INTERACTIVE_HTML:["text/html"], TEACHER_GUIDE:["text/html"]
-  };
-  const assets=manifest.assets.map(asset=>{
+  const budget=new MediaBudget();
+  const assets:ActivityFile[]=[];
+  for(const asset of manifest.assets){
     const data=files.get(root+asset.path);
     requireOk(data,"Risorsa dichiarata assente: "+asset.path);
     verifyAsset(data,asset);
-    const format=asset.format??(asset.type==="IMAGE"?"image/webp":"text/html");
-    requireOk(allowedFormats[asset.type]?.includes(format),"Tipo di risorsa non supportato");
-    if(format==="image/webp") requireOk(data.toString("ascii",0,4)==="RIFF" && data.toString("ascii",8,12)==="WEBP","WebP non valido");
-    if(format==="image/png") requireOk(data.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])),"PNG non valido");
-    if(format==="image/jpeg") requireOk(data[0]===255 && data[1]===216 && data[2]===255,"JPEG non valido");
+    const format=assetFormat(asset);
     if(format==="text/html") requireOk(/^\s*<!doctype html>\s*<html(?:\s+lang="it")?>\s*<head>/i.test(text(data)),"HTML non conforme per anteprima");
-    return {path:asset.path,type:asset.type,format,sha256:asset.sha256,base64:data.toString("base64")};
-  });
+    const dimensions=await budget.inspect(data,asset);
+    assets.push({path:asset.path,type:asset.type,format,sha256:asset.sha256,base64:data.toString("base64"),...dimensions});
+  }
   requireOk(assets.filter(a=>a.type==="INTERACTIVE_HTML").length===1 && assets.filter(a=>a.type==="TEACHER_GUIDE").length<=1,"File HTML multipli non ammessi");
   const entry=assets.find(a=>a.path===manifest.experience?.entrypoint);
   requireOk(entry?.type==="INTERACTIVE_HTML","Esperienza interattiva mancante");

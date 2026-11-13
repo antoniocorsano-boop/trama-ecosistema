@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         chunks.push(value);
       }
     } finally { reader.releaseLock(); }
-    const result=prepareZipDraft(Buffer.concat(chunks,total));
+    const result=await prepareZipDraft(Buffer.concat(chunks,total));
     return NextResponse.json(result,{headers:{"Cache-Control":"no-store"}});
   } catch(error) {
     const message=error instanceof Error?error.message:"Pacchetto non valido";

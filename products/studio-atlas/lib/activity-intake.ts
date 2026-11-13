@@ -33,6 +33,17 @@ const SHA256 = /^[0-9a-f]{64}$/;
 const SAFE_ID = /^[a-z0-9][a-z0-9._-]{2,127}$/;
 const SAFE_PATH_SEGMENT = /^[A-Za-z0-9._-]+$/;
 const MAX_ASSETS = 100;
+const FORMATS:Record<string,readonly string[]>={
+  IMAGE:["image/webp"], SOURCE_MASTER:["image/png","image/jpeg","image/webp"],
+  INTERACTIVE_HTML:["text/html"], TEACHER_GUIDE:["text/html"]
+};
+function record(value:unknown):value is Record<string,unknown>{
+  return !!value && typeof value==="object" && !Array.isArray(value);
+}
+function strings(value:unknown,field:string,maxItems=100,maxLength=1200) {
+  if(value!==undefined && (!Array.isArray(value)||value.length>maxItems||
+    value.some(v=>typeof v!=="string"||v.length>maxLength))) throw new Error("Metadati non validi: "+field);
+}
 
 export function parseAtlasPrUrl(source: string): number {
   let url: URL;
@@ -77,6 +88,10 @@ export function validateActivityManifest(value: unknown): ActivityIntakeManifest
         typeof a.sha256 !== "string" || !SHA256.test(a.sha256)) {
       throw new Error("Identità o impronta della risorsa non valida");
     }
+    const formats=typeof a.type==="string"&&Object.hasOwn(FORMATS,a.type)?FORMATS[a.type]:undefined;
+    const format=a.format??(a.type==="IMAGE"?"image/webp":"text/html");
+    if(!formats||typeof format!=="string"||!formats.includes(format)||
+      (a.format!==undefined&&typeof a.format!=="string")) throw new Error("Formato risorsa non valido");
     if (a.bytes !== undefined && (!Number.isInteger(a.bytes) || (a.bytes as number) < 0)) {
       throw new Error("Dimensione della risorsa non valida");
     }
@@ -87,10 +102,25 @@ export function validateActivityManifest(value: unknown): ActivityIntakeManifest
     seen.add(a.path);
     ids.add(a.id);
   }
+  if(m.learning!==undefined){
+    if(!record(m.learning)) throw new Error("Metadati didattici non validi");
+    const l=m.learning;
+    strings(l.objectives,"obiettivi");strings(l.evidenceTypes,"evidenze");
+    strings(l.arenaObjectiveRefs,"riferimenti Arena",100,160);strings(l.udaRefs,"riferimenti UDA",100,160);
+    if(l.suggestedDurationMinutes!==undefined &&
+      (typeof l.suggestedDurationMinutes!=="number"||!Number.isInteger(l.suggestedDurationMinutes)||l.suggestedDurationMinutes<1||l.suggestedDurationMinutes>240)) throw new Error("Durata non valida");
+    if(l.arenaCurricoloVersionRef!==undefined&&l.arenaCurricoloVersionRef!==null&&
+      (typeof l.arenaCurricoloVersionRef!=="string"||l.arenaCurricoloVersionRef.length>160)) throw new Error("Riferimento non valido");
+  }
+  if(m.review!==undefined&&(!record(m.review)||Object.values(m.review).some(v=>typeof v!=="string"||v.length>160))) throw new Error("Revisione non valida");
+  if(m.authorization!==undefined&&(!record(m.authorization)||Object.values(m.authorization).some(v=>v!==false))) throw new Error("Autorizzazione non valida");
+  if(m.experience!==undefined&&!record(m.experience)) throw new Error("Esperienza non valida");
   const experience = m.experience as Record<string, unknown> | undefined;
+  if(experience?.embeddedImagesCount!==undefined && (typeof experience.embeddedImagesCount!=="number"||
+    !Number.isInteger(experience.embeddedImagesCount)||experience.embeddedImagesCount<0||experience.embeddedImagesCount>MAX_ASSETS)) throw new Error("Numero immagini non valido");
   if (experience?.entrypoint !== undefined) {
     safeIntakePath(experience.entrypoint);
-    if (!seen.has(experience.entrypoint)) throw new Error("File principale mancante");
+    if (!seen.has(experience.entrypoint) || !m.assets.some((a:IntakeAsset)=>a.path===experience.entrypoint&&a.type==="INTERACTIVE_HTML")) throw new Error("File principale mancante");
     if (typeof experience.entrypointSha256 !== "string" ||
         !SHA256.test(experience.entrypointSha256) ||
         m.assets.every((a: IntakeAsset) =>

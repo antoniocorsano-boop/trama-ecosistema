@@ -32,6 +32,9 @@ export default function AttivitaPage() {
     [activities, selectedKey]
   );
   const imageAssets = current?.manifest.assets.filter((item) => item.type === "IMAGE") ?? [];
+  const [galleryLimit,setGalleryLimit]=useState(8);
+  useEffect(()=>setGalleryLimit(8),[current?.key]);
+  const visibleImages=imageAssets.slice(0,galleryLimit);
   const findFile = (path: string) => current?.files.find((item) => item.path === path);
   const html = current && previewFile(current,"EXPERIENCE");
   const guide = current && previewFile(current,"GUIDE");
@@ -180,24 +183,25 @@ export default function AttivitaPage() {
 
           {imageAssets.length > 0 && (
             <div className="activity-gallery" aria-label="Illustrazioni conservate">
-              {imageAssets.map((asset) => {
+              {visibleImages.map((asset) => {
                 const file = findFile(asset.path);
-                return file && file.format.startsWith("image/") ? (
+                return file && file.format==="image/webp" && typeof file.pixelWidth==="number" && typeof file.pixelHeight==="number" && file.pixelWidth>0 && file.pixelHeight>0 && file.pixelWidth*file.pixelHeight<=12_000_000 ? (
                   <figure key={asset.id}>
                     {/* The image is an integrity-checked, locally stored data URI. */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={"data:" + file.format + ";base64," + file.base64} alt={"Illustrazione " + asset.id + "; descrizione da verificare"} />
+                    <img loading="lazy" decoding="async" src={"data:" + file.format + ";base64," + file.base64} alt={"Illustrazione " + asset.id + "; descrizione da verificare"} />
                     <figcaption>{asset.id}</figcaption>
                   </figure>
                 ) : null;
               })}
+              {galleryLimit<imageAssets.length && <button type="button" onClick={()=>setGalleryLimit(n=>n+8)}>Mostra altre illustrazioni</button>}
             </div>
           )}
 
-          {current.manifest.learning?.objectives && (
+          {Array.isArray(current.manifest.learning?.objectives) && (
             <div className="activity-teaching">
               <h3>Proposta didattica</h3>
-              <ul>{current.manifest.learning.objectives.map((objective) =>
+              <ul>{current.manifest.learning.objectives.filter((objective)=>typeof objective==="string").map((objective) =>
                 <li key={objective}>{objective}</li>)}
               </ul>
             </div>
