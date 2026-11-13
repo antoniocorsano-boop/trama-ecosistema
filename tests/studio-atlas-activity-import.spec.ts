@@ -21,6 +21,7 @@ test("Missione 118: live intake, eight original illustrations, three environment
   await expect(page.getByRole("heading", { name: "Missione 118 — Il futuro è da riprogettare" })).toBeVisible();
   await expect(page.locator(".activity-gallery figure")).toHaveCount(8);
   for (const image of await page.locator(".activity-gallery img").all()) {
+    await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).naturalWidth), {
       timeout: 15_000,
     }).toBeGreaterThan(0);
@@ -126,5 +127,38 @@ test("Missione 118: live intake, eight original illustrations, three environment
   await page.getByRole("button", { name: "Importa", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("già presente: nessuna modifica agli originali", { timeout: 90_000 });
   await expect(page.locator(".activity-list-item")).toHaveCount(1);
+  await context.close();
+});
+
+
+test("unknown HTML cannot create a preview or issue external requests; concurrent version conflict is atomic", async ({browser})=>{
+  const context=await browser.newContext({viewport:{width:393,height:873}});
+  const a=await context.newPage(),b=await context.newPage();
+  const outside:string[]=[];
+  await context.route("https://example.invalid/**",async r=>{outside.push(r.request().url());await r.abort();});
+  const make=(digest:string,body:string)=>{
+    const html=Buffer.from(body).toString("base64");
+    return {draft:{key:"unsafe-test@0.1.0-draft#"+digest,activityId:"unsafe-test",version:"0.1.0-draft",manifestDigest:digest,
+      manifest:{title:"Bozza isolata",kind:"INTERACTIVE_HTML",assets:[{id:"experience",path:"experience.html",type:"INTERACTIVE_HTML",sha256:digest}],experience:{entrypoint:"experience.html"}},
+      source:{repository:ATLAS_REPO,pullRequest:999,commitSha:"a".repeat(40),manifestPath:"intake.json"},
+      files:[{path:"experience.html",type:"INTERACTIVE_HTML",format:"text/html",sha256:digest,base64:html}],
+      status:"DRAFT_PENDING_HUMAN_REVIEW",importedAt:"2026-11-13T00:00:00Z"},verified:1};
+  };
+  const bad1=make("1".repeat(64),'<!-- <head> --><script>location.href="https://example.invalid/probe"</script><html><head></head></html>');
+  const bad2=make("2".repeat(64),'<!doctype html><html><head><meta http-equiv="refresh" content="0;url=https://example.invalid/probe"></head><body><a href="https://example.invalid/probe">Link</a></body></html>');
+  await a.route("**/api/attivita/importa",r=>r.fulfill({json:bad1}));
+  await b.route("**/api/attivita/importa",r=>r.fulfill({json:bad2}));
+  await Promise.all([a.goto(STUDIO+"/attivita"),b.goto(STUDIO+"/attivita")]);
+  await Promise.all([a.getByRole("button",{name:"Importa",exact:true}).click(),b.getByRole("button",{name:"Importa",exact:true}).click()]);
+  await Promise.all([a.locator(".activity-message").first().waitFor(),b.locator(".activity-message").first().waitFor()]);
+  const outcomes=await Promise.all([a.locator(".activity-message").first().innerText(),b.locator(".activity-message").first().innerText()]);
+  expect(outcomes.filter(t=>t.includes("risorse verificate"))).toHaveLength(1);
+  expect(outcomes.filter(t=>t.includes("contenuti diversi"))).toHaveLength(1);
+  await a.reload();
+  await expect(a.locator(".activity-list-item")).toHaveCount(1);
+  await expect(a.getByText("Anteprima in attesa di verifica del codice.",{exact:false})).toBeVisible();
+  await expect(a.getByRole("button",{name:"Prova l'attività in ambiente isolato"})).toHaveCount(0);
+  await expect(a.locator(".activity-preview iframe")).toHaveCount(0);
+  expect(outside).toEqual([]);
   await context.close();
 });

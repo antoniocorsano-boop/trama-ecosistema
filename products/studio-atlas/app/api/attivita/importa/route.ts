@@ -7,6 +7,8 @@ import {
   verifyAsset,
 } from "../../../../lib/activity-intake";
 
+import { MediaBudget, assetFormat } from "../../../../lib/activity-media";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -22,7 +24,7 @@ const HEADERS = {
 
 type ChangedFile = { filename: string };
 type Pull = { state: string; head: { sha: string; repo: { full_name: string } } };
-type StoredFile = { path: string; type: string; format: string; sha256: string; base64: string };
+type StoredFile = { path: string; type: string; format: string; sha256: string; base64: string; pixelWidth?:number; pixelHeight?:number };
 
 async function readJson<T>(url: string): Promise<T> {
   const response = await fetch(url, {
@@ -84,15 +86,18 @@ export async function POST(request: Request) {
 
     let totalBytes = manifestBytes.byteLength;
     const assets: StoredFile[] = [];
+    const budget=new MediaBudget();
     for (const asset of manifest.assets) {
       const data = await readBytes(rawUrl(pr.head.sha, root + asset.path));
       verifyAsset(data, asset);
       totalBytes += data.byteLength;
       if (totalBytes > MAX_TOTAL_BYTES) throw new Error("Pacchetto troppo grande");
+      const dimensions=await budget.inspect(data,asset);
       assets.push({
+        ...dimensions,
         path: asset.path,
         type: asset.type,
-        format: asset.format ?? (asset.type === "IMAGE" ? "image/webp" : "text/html"),
+        format: assetFormat(asset),
         sha256: asset.sha256,
         base64: Buffer.from(data).toString("base64"),
       });

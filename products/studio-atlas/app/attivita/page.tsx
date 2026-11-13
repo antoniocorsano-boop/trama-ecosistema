@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
-  decodeUtf8,
-  isolatedHtml,
   listActivityDrafts,
   saveActivityDraft,
   type ActivityDraft,
 } from "../../lib/activity-drafts";
+import { previewFile, verifiedPreviewHtml } from "../../lib/activity-preview";
 
 const FIRST_PACKAGE = "https://github.com/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/84";
 
@@ -32,16 +31,25 @@ export default function AttivitaPage() {
     [activities, selectedKey]
   );
   const imageAssets = current?.manifest.assets.filter((item) => item.type === "IMAGE") ?? [];
+  const [galleryLimit,setGalleryLimit]=useState(8);
+  useEffect(()=>setGalleryLimit(8),[current?.key]);
+  const visibleImages=imageAssets.slice(0,galleryLimit);
   const findFile = (path: string) => current?.files.find((item) => item.path === path);
-  const html = current?.files.find((item) => item.type === "INTERACTIVE_HTML");
-  const guide = current?.files.find((item) => item.type === "TEACHER_GUIDE");
-  let previewHtml = "";
-  try {
-    if (preview === "EXPERIENCE" && html) previewHtml = isolatedHtml(decodeUtf8(html.base64), true);
-    if (preview === "GUIDE" && guide) previewHtml = isolatedHtml(decodeUtf8(guide.base64), false);
-  } catch {
-    previewHtml = "";
-  }
+  const html = current && previewFile(current,"EXPERIENCE");
+  const guide = current && previewFile(current,"GUIDE");
+  const [verifiedPreview,setVerifiedPreview]=useState<{draft:ActivityDraft;kind:"EXPERIENCE"|"GUIDE";html:string}|null>(null);
+  useEffect(()=>{
+    setVerifiedPreview(null);
+    if(!current || preview==="CLOSED") return;
+    let cancelled=false;
+    verifiedPreviewHtml(current,preview).then(html=>{
+      if(!cancelled) setVerifiedPreview({draft:current,kind:preview,html});
+    }).catch(error=>{
+      if(!cancelled) {setProblem(error instanceof Error?error.message:"Anteprima non disponibile");setPreview("CLOSED");}
+    });
+    return ()=>{cancelled=true;};
+  },[current,preview]);
+  const previewHtml=verifiedPreview && verifiedPreview.draft===current && verifiedPreview.kind===preview?verifiedPreview.html:"";
 
   async function importActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -143,24 +151,25 @@ export default function AttivitaPage() {
 
           {imageAssets.length > 0 && (
             <div className="activity-gallery" aria-label="Illustrazioni conservate">
-              {imageAssets.map((asset) => {
+              {visibleImages.map((asset) => {
                 const file = findFile(asset.path);
-                return file && file.format.startsWith("image/") ? (
+                return file && file.format==="image/webp" && typeof file.pixelWidth==="number" && typeof file.pixelHeight==="number" && file.pixelWidth>0 && file.pixelHeight>0 && file.pixelWidth*file.pixelHeight<=12_000_000 ? (
                   <figure key={asset.id}>
                     {/* The image is an integrity-checked, locally stored data URI. */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={"data:" + file.format + ";base64," + file.base64} alt={"Illustrazione " + asset.id + "; descrizione da verificare"} />
+                    <img loading="lazy" decoding="async" src={"data:" + file.format + ";base64," + file.base64} alt={"Illustrazione " + asset.id + "; descrizione da verificare"} />
                     <figcaption>{asset.id}</figcaption>
                   </figure>
                 ) : null;
               })}
+              {galleryLimit<imageAssets.length && <button type="button" onClick={()=>setGalleryLimit(n=>n+8)}>Mostra altre illustrazioni</button>}
             </div>
           )}
 
-          {current.manifest.learning?.objectives && (
+          {Array.isArray(current.manifest.learning?.objectives) && (
             <div className="activity-teaching">
               <h3>Proposta didattica</h3>
-              <ul>{current.manifest.learning.objectives.map((objective) =>
+              <ul>{current.manifest.learning.objectives.filter((objective)=>typeof objective==="string").map((objective) =>
                 <li key={objective}>{objective}</li>)}
               </ul>
             </div>
@@ -171,6 +180,7 @@ export default function AttivitaPage() {
             <p>Diritti, accessibilità, correttezza dei contenuti e obiettivi del curricolo approvato in Arena. Nessuna autorizzazione di pubblicazione è stata concessa.</p>
           </div>
 
+          {!html && <p>Anteprima in attesa di verifica del codice. Le risorse restano conservate; nessun HTML non verificato viene eseguito.</p>}
           <div className="activity-controls">
             {html && <button type="button" className="secondary-action"
               onClick={() => setPreview(preview === "EXPERIENCE" ? "CLOSED" : "EXPERIENCE")}>

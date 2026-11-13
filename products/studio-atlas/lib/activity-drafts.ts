@@ -6,6 +6,8 @@ export type ActivityFile = {
   format: string;
   sha256: string;
   base64: string;
+  pixelWidth?:number;
+  pixelHeight?:number;
 };
 
 export type ActivityDraft = {
@@ -26,11 +28,12 @@ export type ActivityDraft = {
     review?: Record<string, string>;
   };
   source: {
+    kind?: "GITHUB_PR";
     repository: string;
     pullRequest: number;
     commitSha: string;
     manifestPath: string;
-  };
+  } | { kind: "LOCAL_ZIP"; archiveDigest: string; manifestPath: string };
   files: ActivityFile[];
   status: "DRAFT_PENDING_HUMAN_REVIEW";
   importedAt: string;
@@ -79,29 +82,26 @@ export async function saveActivityDraft(draft: ActivityDraft): Promise<"SAVED" |
   }
   const db = await openDatabase();
   try {
-    const entries = await new Promise<ActivityDraft[]>((resolve, reject) => {
-      const tx = db.transaction(OBJECTS, "readonly");
-      const request = tx.objectStore(OBJECTS).getAll();
-      request.onsuccess = () => resolve(request.result as ActivityDraft[]);
-      request.onerror = () => reject(request.error);
-    });
-    const existing = entries.find((item) =>
-      item.activityId === draft.activityId && item.version === draft.version
-    );
-    if (existing) {
-      if (existing.manifestDigest !== draft.manifestDigest) {
-        throw new Error("Questa versione ha contenuti diversi: serve una nuova versione, senza sostituire lo storico");
-      }
-      return "EXISTS";
-    }
-    await new Promise<void>((resolve, reject) => {
+    return await new Promise<"SAVED" | "EXISTS">((resolve, reject) => {
       const tx = db.transaction(OBJECTS, "readwrite");
-      tx.objectStore(OBJECTS).add(draft);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-      tx.onabort = () => reject(tx.error ?? new Error("Salvataggio annullato"));
+      const store = tx.objectStore(OBJECTS);
+      let outcome: "SAVED" | "EXISTS" = "SAVED";
+      let failure: Error | undefined;
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const existing = (request.result as ActivityDraft[]).find(item =>
+          item.activityId === draft.activityId && item.version === draft.version);
+        if (existing) {
+          if (existing.manifestDigest !== draft.manifestDigest) {
+            failure = new Error("Questa versione ha contenuti diversi: serve una nuova versione, senza sostituire lo storico");
+            tx.abort();
+          } else outcome = "EXISTS";
+        } else store.add(draft);
+      };
+      tx.oncomplete = () => resolve(outcome);
+      tx.onerror = () => reject(failure ?? tx.error ?? new Error("Salvataggio non riuscito"));
+      tx.onabort = () => reject(failure ?? tx.error ?? new Error("Salvataggio annullato"));
     });
-    return "SAVED";
   } finally {
     db.close();
   }
@@ -112,7 +112,7 @@ export function decodeUtf8(base64: string): string {
   return new TextDecoder().decode(bytes);
 }
 
-// The frame has an opaque origin, no same-origin permission and no network capabilities.
+// Defense in depth for pinned content; sandbox/CSP alone do not block every navigation.
 // CSP must precede every script, style or other resource in the untrusted HTML.
 export function isolatedHtml(html: string, interactive: boolean): string {
   const policy =
@@ -121,10 +121,10 @@ export function isolatedHtml(html: string, interactive: boolean): string {
     "worker-src 'none'; frame-src 'none'; form-action 'none'; " +
     "base-uri 'none'; object-src 'none'; " +
     (interactive ? "script-src 'unsafe-inline';" : "script-src 'none';");
-  if (!/<head(?:\s[^>]*)?>/i.test(html)) {
+  if (!/^\s*<!doctype html>\s*<html(?:\s[^<>]*)?>\s*<head(?:\s[^<>]*)?>/i.test(html)) {
     throw new Error("Anteprima non disponibile: intestazione HTML mancante");
   }
-  return html.replace(/<head(?:\s[^>]*)?>/i, (head) =>
+  return html.replace(/^\s*<!doctype html>\s*<html(?:\s[^<>]*)?>\s*<head(?:\s[^<>]*)?>/i, (head) =>
     head + '<meta http-equiv="Content-Security-Policy" content="' + policy + '">'
   );
 }

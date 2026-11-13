@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import sharp from "sharp";
 import { POST } from "../app/api/attivita/importa/route";
 import { sha256 } from "./activity-intake";
 
@@ -9,14 +10,14 @@ const COMMIT = "a".repeat(40);
 const ROOT = "content/staging/attivita-test/";
 const SOURCE_URL = "https://github.com/" + REPO + "/pull/84";
 
-function fixture() {
+async function fixture() {
   const rawPrefix = "https://raw.githubusercontent.com/" + REPO + "/" + COMMIT + "/";
-  const responses = new Map<string, string>();
+  const responses = new Map<string, string | Uint8Array>();
   const assets: Array<{ id: string; path: string; type: string; format?: string; sha256: string; bytes: number }> = [];
   for (let i = 1; i <= 8; i++) {
     const path = "media/illustrazione-" + i + ".webp";
-    const body = "illustration-original-" + i;
-    assets.push({ id: "illustrazione-" + i, path, type: "IMAGE", format: "image/webp", sha256: sha256(new TextEncoder().encode(body)), bytes: body.length });
+    const body = Uint8Array.from(await sharp({create:{width:16,height:16,channels:3,background:{r:i,g:20,b:30}}}).webp().toBuffer());
+    assets.push({ id: "illustrazione-" + i, path, type: "IMAGE", format: "image/webp", sha256: sha256(body), bytes: body.length });
     responses.set(rawPrefix + ROOT + path, body);
   }
   const experience = "<!doctype html><html lang='it'><head><title>Prova</title></head><body>Esperienza originale</body></html>";
@@ -41,11 +42,11 @@ function fixture() {
   return { responses, rawPrefix };
 }
 
-async function runFixture(responses: Map<string, string>) {
+async function runFixture(responses: Map<string, string | Uint8Array>) {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (input) => {
     const value = responses.get(input.toString());
-    return new Response(value ?? "not found", { status: value === undefined ? 404 : 200 });
+    return new Response(typeof value==="string"?value:value?Uint8Array.from(value):"not found", { status: value === undefined ? 404 : 200 });
   };
   try {
     return await POST(new Request("http://localhost/api/attivita/importa", {
@@ -59,7 +60,7 @@ async function runFixture(responses: Map<string, string>) {
 }
 
 test("generic PR intake imports exactly eight images, experience and guide without loss", async () => {
-  const { responses } = fixture();
+  const { responses } = await fixture();
   const response = await runFixture(responses);
   assert.equal(response.status, 200);
   const result = await response.json() as { verified: number; draft: { files: Array<{ path: string; base64: string }>; status: string; source: { commitSha: string } } };
@@ -71,11 +72,21 @@ test("generic PR intake imports exactly eight images, experience and guide witho
 });
 
 test("tampered media fails closed and never returns an incomplete draft", async () => {
-  const { responses, rawPrefix } = fixture();
+  const { responses, rawPrefix } = await fixture();
   responses.set(rawPrefix + ROOT + "media/illustrazione-5.webp", "changed");
   const response = await runFixture(responses);
   assert.equal(response.status, 422);
   const result = await response.json() as { draft?: unknown; error?: string };
   assert.equal(result.draft, undefined);
   assert.match(result.error ?? "", /impronta/i);
+});
+
+test("invalid manifest metadata rejected before any draft is returned", async()=>{
+  const {responses,rawPrefix}=await fixture();
+  const path=rawPrefix+ROOT+"intake.json";
+  const manifest=JSON.parse(String(responses.get(path)));
+  manifest.learning={objectives:[{}]};
+  responses.set(path,JSON.stringify(manifest));
+  const response=await runFixture(responses);
+  assert.equal(response.status,422);assert.equal((await response.json()).draft,undefined);
 });
