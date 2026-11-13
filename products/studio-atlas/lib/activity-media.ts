@@ -1,10 +1,8 @@
 import sharp from "sharp";
 import type { IntakeAsset } from "./activity-intake";
 
-export const DISPLAY_MAX_PIXELS=12_000_000; // includes a 4K 3840x2160 image
-export const DISPLAY_TOTAL_PIXELS=24_000_000;
-export const MASTER_MAX_PIXELS=48_000_000;
-export const MASTER_TOTAL_PIXELS=96_000_000;
+import { DISPLAY_MAX_PIXELS, DISPLAY_TOTAL_PIXELS, MASTER_MAX_PIXELS, MASTER_TOTAL_PIXELS, MEDIA_MAX_EDGE } from "./activity-media-limits";
+export { DISPLAY_MAX_PIXELS, DISPLAY_TOTAL_PIXELS, MASTER_MAX_PIXELS, MASTER_TOTAL_PIXELS } from "./activity-media-limits";
 
 type Dimensions={pixelWidth:number;pixelHeight:number};
 export function assetFormat(asset:IntakeAsset):string {
@@ -25,7 +23,7 @@ export class MediaBudget {
     catch { throw new Error("Dimensione o formato immagine non valido: "+asset.path); }
     const w=meta.width,h=meta.height;
     if(meta.format!==expected || typeof w!=="number"||typeof h!=="number"||!Number.isSafeInteger(w)||!Number.isSafeInteger(h)||w<=0||h<=0||
-      w>16384||h>16384||w*h>max||(meta.pages??1)!==1) throw new Error("Dimensione o formato immagine non valido: "+asset.path);
+      w>MEDIA_MAX_EDGE||h>MEDIA_MAX_EDGE||w*h>max||(meta.pages??1)!==1) throw new Error("Dimensione o formato immagine non valido: "+asset.path);
     if(original) {
       this.master+=w*h;
       if(this.master>MASTER_TOTAL_PIXELS) throw new Error("Pacchetto troppo grande: budget pixel originali");

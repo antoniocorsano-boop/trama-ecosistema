@@ -7,6 +7,8 @@ import {
   saveActivityDraft,
   type ActivityDraft,
 } from "../../lib/activity-drafts";
+import { GALLERY_VERIFIED } from "../../lib/activity-gallery";
+import { DISPLAY_MAX_PIXELS } from "../../lib/activity-media-limits";
 import { previewFile, verifiedPreviewHtml } from "../../lib/activity-preview";
 
 const FIRST_PACKAGE = "https://github.com/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/84";
@@ -34,7 +36,8 @@ export default function AttivitaPage() {
   const imageAssets = current?.manifest.assets.filter((item) => item.type === "IMAGE") ?? [];
   const [galleryLimit,setGalleryLimit]=useState(8);
   useEffect(()=>setGalleryLimit(8),[current?.key]);
-  const visibleImages=imageAssets.slice(0,galleryLimit);
+  const galleryReady=current?.galleryValidation===GALLERY_VERIFIED;
+  const visibleImages=galleryReady?imageAssets.slice(0,galleryLimit):[];
   const findFile = (path: string) => current?.files.find((item) => item.path === path);
   const html = current && previewFile(current,"EXPERIENCE");
   const guide = current && previewFile(current,"GUIDE");
@@ -181,11 +184,12 @@ export default function AttivitaPage() {
             {current.files.length} file originali verificati · versione {current.version}
           </p>
 
-          {imageAssets.length > 0 && (
+          {imageAssets.length>0 && !galleryReady && <p>Illustrazioni conservate. La verifica delle dimensioni non è riuscita: la galleria resta disattivata per proteggere il dispositivo.</p>}
+          {imageAssets.length > 0 && galleryReady && (
             <div className="activity-gallery" aria-label="Illustrazioni conservate">
               {visibleImages.map((asset) => {
                 const file = findFile(asset.path);
-                return file && file.format==="image/webp" && typeof file.pixelWidth==="number" && typeof file.pixelHeight==="number" && file.pixelWidth>0 && file.pixelHeight>0 && file.pixelWidth*file.pixelHeight<=12_000_000 ? (
+                return file && file.format==="image/webp" && typeof file.pixelWidth==="number" && typeof file.pixelHeight==="number" && file.pixelWidth>0 && file.pixelHeight>0 && file.pixelWidth*file.pixelHeight<=DISPLAY_MAX_PIXELS ? (
                   <figure key={asset.id}>
                     {/* The image is an integrity-checked, locally stored data URI. */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
