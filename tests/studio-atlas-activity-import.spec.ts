@@ -127,6 +127,41 @@ test("Missione 118: live intake, eight original illustrations, three environment
   await page.getByRole("button", { name: "Importa", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("già presente: nessuna modifica agli originali", { timeout: 90_000 });
   await expect(page.locator(".activity-list-item")).toHaveCount(1);
+
+  // Simulate a real v1 archive created before the media budget existed.
+  const legacy=await page.evaluate(async ()=>{
+    const db=await new Promise<IDBDatabase>((resolve,reject)=>{const r=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
+    try {
+      return await new Promise<any>((resolve,reject)=>{
+        const tx=db.transaction("activities","readwrite"),s=tx.objectStore("activities");
+        let original:any;
+        const r=s.getAll();
+        r.onsuccess=()=>{
+          original=r.result[0];
+          delete original.galleryValidation;
+          original.files=original.files.map(({pixelWidth,pixelHeight,...f}:any)=>f);
+          s.put(original);
+        };
+        tx.oncomplete=()=>resolve(original);tx.onabort=()=>reject(tx.error);tx.onerror=()=>reject(tx.error);
+      });
+    }finally{db.close();}
+  });
+  let networkImports=0;
+  await page.route("**/api/attivita/importa",async r=>{networkImports++;await r.abort();});
+  await page.reload();
+  await expect(page.locator(".activity-gallery figure")).toHaveCount(8);
+  const migrated=await page.evaluate(async ()=>{
+    const db=await new Promise<IDBDatabase>((resolve,reject)=>{const r=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
+    try{return await new Promise<any>((resolve,reject)=>{const r=db.transaction("activities").objectStore("activities").getAll();r.onsuccess=()=>resolve(r.result[0]);r.onerror=()=>reject(r.error);});}
+    finally{db.close();}
+  });
+  expect(migrated.galleryValidation).toBe("WEBP_HEADER_V1");
+  expect(migrated.files.filter((f:any)=>f.type==="IMAGE").every((f:any)=>f.pixelWidth>0&&f.pixelHeight>0)).toBe(true);
+  const {galleryValidation,...rest}=migrated;
+  expect({...rest,files:rest.files.map(({pixelWidth,pixelHeight,...f}:any)=>f)}).toEqual(legacy);
+  expect(networkImports).toBe(0);
+  await page.unroute("**/api/attivita/importa");
+
   await context.close();
 });
 
@@ -160,5 +195,32 @@ test("unknown HTML cannot create a preview or issue external requests; concurren
   await expect(a.getByRole("button",{name:"Prova l'attività in ambiente isolato"})).toHaveCount(0);
   await expect(a.locator(".activity-preview iframe")).toHaveCount(0);
   expect(outside).toEqual([]);
+  await context.close();
+});
+
+test("legacy invalid gallery stays archived and is not decoded",async({browser})=>{
+  const context=await browser.newContext({viewport:{width:393,height:873}});
+  const page=await context.newPage();
+  await page.goto(STUDIO+"/attivita");
+  await expect(page.getByRole("heading",{name:"Attività da utilizzare e sviluppare."})).toBeVisible();
+  const stored=await page.evaluate(async()=>{
+    const db=await new Promise<IDBDatabase>((resolve,reject)=>{const r=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
+    const raw={key:"old-invalid",activityId:"old-invalid",version:"0.1.0-draft",manifestDigest:"old",
+      manifest:{title:"Archivio precedente",kind:"TEST",assets:[{id:"image",path:"bad.webp",type:"IMAGE",sha256:"a".repeat(64)}]},
+      source:{repository:"test/repo",pullRequest:1,commitSha:"old",manifestPath:"intake.json"},
+      files:[{path:"bad.webp",type:"IMAGE",format:"image/webp",sha256:"a".repeat(64),base64:btoa("not a webp")}],
+      status:"DRAFT_PENDING_HUMAN_REVIEW",importedAt:"2026-01-01T00:00:00Z"};
+    try{await new Promise<void>((resolve,reject)=>{const tx=db.transaction("activities","readwrite");tx.objectStore("activities").add(raw);tx.oncomplete=()=>resolve();tx.onabort=()=>reject(tx.error);});return raw;}
+    finally{db.close();}
+  });
+  await page.reload();
+  await expect(page.getByText("La verifica delle dimensioni non è riuscita",{exact:false})).toBeVisible();
+  await expect(page.locator(".activity-gallery img")).toHaveCount(0);
+  const after=await page.evaluate(async()=>{
+    const db=await new Promise<IDBDatabase>((resolve,reject)=>{const r=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
+    try{return await new Promise<any>((resolve,reject)=>{const r=db.transaction("activities").objectStore("activities").get("old-invalid");r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
+    finally{db.close();}
+  });
+  expect(after).toEqual(stored);
   await context.close();
 });
