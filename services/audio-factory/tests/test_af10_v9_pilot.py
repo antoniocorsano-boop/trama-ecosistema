@@ -8,11 +8,10 @@ class AF10Tests(unittest.TestCase):
                 "label":{"name":"af10-"+h},
                 "pull_request":{"head":{"sha":h,"ref":BRANCH,"repo":{"full_name":REPO}},
                                 "base":{"ref":BASE}}}
-    def test_exactly_two_units(self):
+    def test_exactly_one_revised_unit(self):
         units=plan()
-        self.assertEqual([u["id"] for u in units],["S3U3","S5U3"])
-        self.assertEqual(units[0]["text"],"Anche una macchina può sbagliare. Come può Teo accorgersene?")
-        self.assertEqual(units[1]["text"],"Per cambiare il futuro servono tre cose: attenzione, verifica e responsabilità.")
+        self.assertEqual([u["id"] for u in units],["S3U3"])
+        self.assertEqual(units[0]["text"],"Anche una macchina può sbagliare. Come ce ne accorgiamo?")
     def test_authorized(self):
         self.assertEqual(authorization(self.event(),"1","pull_request"),"a"*40)
     def test_reject_invalid_events(self):

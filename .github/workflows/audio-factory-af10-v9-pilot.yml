@@ -1,4 +1,4 @@
-name: AF-10 - Missione 118 V9 two-unit expressive pilot
+name: AF-10 - Missione 118 V9 single-unit revision R1
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
@@ -52,7 +52,7 @@ jobs:
         timeout-minutes: 8
         run: |
           python -m pip install --disable-pip-version-check --retries 1 --timeout 20 --only-binary=:all: -r services/audio-factory/requirements-kokoro.txt
-      - name: Generate only S3U3 and S5U3
+      - name: Generate only revised S3U3
         timeout-minutes: 8
         run: python services/audio-factory/af10_v9_pilot.py --output af10-pilot
       - name: Install independent ASR
@@ -61,11 +61,11 @@ jobs:
       - name: Blind lexical review
         timeout-minutes: 5
         run: python services/audio-factory/af10_v9_pilot.py --output af10-pilot --asr
-      - name: Preserve both probes and receipts
+      - name: Preserve revised probe and receipts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: af10-missione118-v9-pilot
+          name: af10-missione118-v9-pilot-r1
           path: af10-pilot/
           if-no-files-found: warn
           retention-days: 7

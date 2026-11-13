@@ -1,4 +1,4 @@
-"""AF-10: exactly two editorial probes; no production or publication."""
+"""AF-10: exactly one revised editorial probe; no production or publication."""
 from __future__ import annotations
 import argparse, json, os, re
 from pathlib import Path
@@ -10,8 +10,7 @@ BASE = "feat/audio-factory-af03-qwen3-prosody"
 REPO = "antoniocorsano-boop/trama-ecosistema"
 REGIA = Path(__file__).with_name("AF10_MISSIONE118_V9_REGIA.md")
 UNITS = (
-    ("S3U3", "Anche una macchina può sbagliare. Come può Teo accorgersene?"),
-    ("S5U3", "Per cambiare il futuro servono tre cose: attenzione, verifica e responsabilità."),
+    ("S3U3", "Anche una macchina può sbagliare. Come ce ne accorgiamo?"),
 )
 MODEL = "hexgrad/Kokoro-82M"
 VOICE = "im_nicola"
@@ -73,9 +72,10 @@ def generate(out):
     torch.manual_seed(118)
     pipeline = KPipeline(lang_code="i", repo_id=MODEL, device="cpu")
     out.mkdir(parents=True, exist_ok=False)
-    report = {"contract":"trama.af10-pilot/v0.1","commit":head,
+    report = {"contract":"trama.af10-pilot-r1/v0.1","commit":head,
               "run_id":os.environ["GITHUB_RUN_ID"],"regia_sha256":sha256_file(REGIA),
               "plan_sha256":canonical_digest(units),"baseline_run":"43477588581",
+              "previous_pilot_run":"43482300979", "retained_s5u3_sha256":"a96d5ae4d84fc4b1ff0466e319e9f11b04c2d2a27ece96b3c3b826de33f8e530",
               "voice":VOICE,"model":MODEL,"model_snapshot":SNAPSHOT,"model_files":PINS,
               "kokoro_version":version("kokoro"),"compute_mode":"FREE_ONLY",
               "audio_approved":False,"published":False,"results":[]}

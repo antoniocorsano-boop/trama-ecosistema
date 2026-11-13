@@ -34,7 +34,7 @@ Le durate e pause sono ipotesi di montaggio; l'allineamento effettivo deriva dal
 
 - S3U1: Teo chiede aiuto al suo piccolo robot. La risposta sembra giusta.
 - S3U2: Ma non torna con ciò che vede.
-- S3U3: Anche una macchina può sbagliare. Come può Teo accorgersene?
+- S3U3: Anche una macchina può sbagliare. Come ce ne accorgiamo?
 - Regia: fiducia iniziale, svolta breve e credibile, chiusura interrogativa. Non scandire artificialmente i nomi.
 - Pause aggiuntive proposte: 350 ms, 300 ms.
 - Visuale: illustrazione originale di Teo e del robot; identificatore “AX-118” solo a schermo; risposta del robot e dato osservato, se già presenti nell'asset.
@@ -76,9 +76,12 @@ Transizione fra scene: 500 ms aggiuntivi come prima proposta, da verificare sul 
 ## Piano di prova, non autorizzazione di esecuzione
 
 1. Revisione editoriale del copione e mappatura verificata sulle cinque illustrazioni esistenti.
-2. Candidato pilota con sole S3U3 e S5U3, stessa voce e configurazione AF-09: interrogazione e chiusura retorica. L'ASR controlla corrispondenza testuale ma non certifica la qualità espressiva.
+2. Pilota iniziale S3U3/S5U3 concluso. Revisione R1: soltanto S3U3 con domanda riformulata; conservare S5U3 originale (ASR PASS, ascolto umano pendente). Stessa voce e configurazione AF-09. L'ASR controlla corrispondenza testuale ma non certifica la qualità espressiva.
 3. Ascolto umano su pronuncia, naturalezza, gruppi di senso, pause e timbro. Se necessario, una riscrittura mirata prima di una nuova autorizzazione; niente retry automatici.
 4. Solo dopo approvazione del pilota: produzione V9 una tantum su CPU pubblica gratuita, previo controllo licenze e autorizzazione vincolata al commit. Conservazione WAV di ogni unità, scene, montaggio, ricevute, hash e confronto ASR.
 5. Montaggio con asset originali, sottotitoli allineati, verifica accessibilità e confronto con V8; pubblicazione separatamente autorizzata.
 
 Nessun avvio di sintesi, modifica di main, merge, deploy o pubblicazione autorizzati da questo documento.
+
+## Revisione selettiva R1
+Autorizzata dalla conversazione dopo la proposta di correzione. Origine: run 43482300979, commit c602cc0e56d3319db686dc4b2c1692de0a2b7bed, artifact 14064739209, ZIP SHA-256 9c381dba44b934d255dc2f03b9ead0ca8df8916a4c3274382e6c6a04c214592c. S3U3 originale ASR: fusione “può Teo”; non equivale a una diagnosi fonetica. Sostituire la domanda con “Come ce ne accorgiamo?” per coinvolgere direttamente gli studenti. S5U3 WAV SHA-256 a96d5ae4d84fc4b1ff0466e319e9f11b04c2d2a27ece96b3c3b826de33f8e530: preservare byte per byte, nessuna rigenerazione. Una sola prova R1, nessuna produzione integrale, nessuna pubblicazione; ascolto umano obbligatorio per entrambi.
