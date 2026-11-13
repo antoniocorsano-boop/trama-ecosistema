@@ -213,8 +213,10 @@ export default function AttivitaPage() {
             )}</ul>
           </details>
           <p className="activity-source">
-            Fonte: <a href={"https://github.com/" + current.source.repository + "/pull/" + current.source.pullRequest}
-              target="_blank" rel="noopener noreferrer">revisione GitHub #{current.source.pullRequest}</a>.
+            {current.source.kind==="LOCAL_ZIP"
+              ? <>Fonte: pacchetto ZIP importato · SHA-256 {current.source.archiveDigest.slice(0,12)}….</>
+              : <>Fonte: <a href={"https://github.com/" + current.source.repository + "/pull/" + current.source.pullRequest}
+                target="_blank" rel="noopener noreferrer">revisione GitHub #{current.source.pullRequest}</a>.</>}
             Archivio locale del dispositivo; nessuna sincronizzazione o collegamento automatico alle UDA.
           </p>
         </section>

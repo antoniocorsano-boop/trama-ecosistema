@@ -24,7 +24,7 @@ export class MediaBudget {
     try { meta=await sharp(Buffer.from(data),{limitInputPixels:max,failOn:"error",animated:false}).metadata(); }
     catch { throw new Error("Dimensione o formato immagine non valido: "+asset.path); }
     const w=meta.width,h=meta.height;
-    if(meta.format!==expected || !Number.isSafeInteger(w)||!Number.isSafeInteger(h)||w<=0||h<=0||
+    if(meta.format!==expected || typeof w!=="number"||typeof h!=="number"||!Number.isSafeInteger(w)||!Number.isSafeInteger(h)||w<=0||h<=0||
       w>16384||h>16384||w*h>max||(meta.pages??1)!==1) throw new Error("Dimensione o formato immagine non valido: "+asset.path);
     if(original) {
       this.master+=w*h;

@@ -123,7 +123,7 @@ export async function POST(request: Request) {
     }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Importazione non riuscita";
-    const invalid = /non valido|non sicuro|Percorso|contratto|duplicat|mancante|impronta|corrispondente|incoerente|troppo|revisione deve|Origine|assente/i.test(message);
+    const invalid = /non valid[oi]|non sicuro|Percorso|contratto|duplicat|mancante|impronta|corrispondente|incoerente|troppo|revisione deve|Origine|assente/i.test(message);
     return NextResponse.json({ error: message }, { status: invalid ? 422 : 502 });
   }
 }
