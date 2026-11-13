@@ -228,11 +228,11 @@ test("EduTwin ZIP: upload, blocked unverified HTML, original master, persistence
   const badManifest=storedZip([[root+"intake.json",Buffer.from(JSON.stringify(malformed))],[root+"experience.html",html],[root+"media/master.png",png]]);
   await input.setInputFiles({name:"metadata.zip",mimeType:"application/zip",buffer:badManifest});
   await page.getByRole("button",{name:"Carica pacchetto"}).click();
-  await expect(page.getByRole("alert")).toContainText("Metadati");
+  await expect(page.locator(".activity-message.error[role=alert]")).toContainText("Metadati");
   await expect(page.locator(".activity-list-item")).toHaveCount(1);
   await input.setInputFiles({name:"corrotto.zip",mimeType:"application/zip",buffer:Buffer.from("not zip")});
   await page.getByRole("button",{name:"Carica pacchetto"}).click();
-  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.locator(".activity-message.error[role=alert]")).toBeVisible();
   await expect(page.locator(".activity-list-item")).toHaveCount(1);
   await context.close();
 });
