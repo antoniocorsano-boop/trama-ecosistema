@@ -1,0 +1,13 @@
+# LOI-02 — EduTwin ZIP intake (candidate)
+
+Depends on LOI-01 PR #306 at 6cf4828fd1921136fd514e2a1eecc759d3f28637. This stacked draft adds direct import of a local ZIP produced by EduTwin, without a GitHub staging PR for each teacher. The server validates the upload; IndexedDB preserves the verified assets on the device. No deployment, curricolo binding or publication is authorized.
+
+Accepted: one manifest at root or content/staging/<id>/intake.json, exact declared assets only, standard ZIP stored/deflate entries without encryption, descriptors, ZIP64 or comments; 17 MiB archive, 4 MiB per member, 16 MiB decompressed total. All authority flags remain false. Media master and variants remain separate. Only supported formats are accepted. No learner personal data or telemetry. Upload is processed by Studio Atlas server, not a browser-only import.
+
+Before promotion: real MEDIA-01 archive import, full browser end-to-end, independent security review (including sandbox navigation and CSP), Android and physical LIM review, curricolo/rights/teacher review. Local ZIP is a draft source, not proof of content trust. No merge or publish.
+
+## Confine di anteprima (revisione 13 novembre)
+L'importazione ZIP non conferisce fiducia al codice HTML. La prova riservata è ammessa soltanto per le due risorse pilota fissate in activity-preview.ts; l'impronta dei byte viene ricontrollata prima di costruire srcDoc. Gli altri pacchetti conservano metadati e risorse ma non eseguono né mostrano HTML prima della verifica. La lista fissata nel codice è una misura temporanea, non un sistema di approvazione professionale. Il sandbox e la CSP non costituiscono da soli una garanzia di assenza di ogni navigazione esterna. Prima della distribuzione sono necessari autenticazione, limiti per utente e un processo di revisione del codice scalabile. Nessuna autorità di pubblicazione deriva da questo controllo.
+
+## Revisione Codex — consolidamento LOI-01/02
+Validazione condivisa dei metadati prima della persistenza; controllo delle dimensioni reali tramite Sharp, non dei soli byte compressi. Derivati visualizzabili: 12 MP per immagine, 24 MP complessivi. Originali conservati senza trasformazione: 48 MP per file, 96 MP complessivi, senza decodifica in galleria. Limiti di acquisizione in byte invariati. Galleria a caricamento progressivo, prima 8 immagini. Anteprima HTML limitata ai piloti verificati; blocco degli altri pacchetti. Transazione unica per conflitti di versione. Soglie iniziali conservative da qualificare su Android e LIM. Non è un sistema di verifica generalizzato né un'autorizzazione alla pubblicazione.
