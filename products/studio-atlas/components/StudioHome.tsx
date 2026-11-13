@@ -32,7 +32,7 @@ export function StudioHome() {
           <p className="eyebrow">Studio Atlas</p>
           <h1>Crea Percorsi da vivere in Atlas.</h1>
         </div>
-        <Link className="primary-action" href="/nuovo">Nuovo Percorso</Link>
+        <div className="studio-home-actions"><Link className="secondary-action" href="/attivita">Importa attività</Link><Link className="primary-action" href="/nuovo">Nuovo percorso</Link></div>
       </header>
 
       <section className="home-intro">
