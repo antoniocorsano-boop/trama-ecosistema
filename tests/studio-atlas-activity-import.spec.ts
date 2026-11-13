@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { createHash } from "node:crypto";
+import { crc32 } from "node:zlib";
 
 const STUDIO = "http://127.0.0.1:3100";
 const ATLAS_REPO = "antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("");
@@ -125,6 +127,73 @@ test("Missione 118: live intake, eight original illustrations, three environment
   await expect(page.locator(".activity-gallery figure")).toHaveCount(8);
   await page.getByRole("button", { name: "Importa", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("già presente: nessuna modifica agli originali", { timeout: 90_000 });
+  await expect(page.locator(".activity-list-item")).toHaveCount(1);
+  await context.close();
+});
+
+
+function storedZip(entries: [string, Buffer][]) {
+  const locals: Buffer[] = [], central: Buffer[] = [];
+  let offset = 0;
+  for (const [name, data] of entries) {
+    const n = Buffer.from(name), crc = crc32(data);
+    const l = Buffer.alloc(30), c = Buffer.alloc(46);
+    l.writeUInt32LE(0x04034b50); l.writeUInt16LE(20,4);
+    l.writeUInt32LE(crc,14); l.writeUInt32LE(data.length,18); l.writeUInt32LE(data.length,22); l.writeUInt16LE(n.length,26);
+    c.writeUInt32LE(0x02014b50); c.writeUInt16LE(20,4); c.writeUInt16LE(20,6);
+    c.writeUInt32LE(crc,16); c.writeUInt32LE(data.length,20); c.writeUInt32LE(data.length,24); c.writeUInt16LE(n.length,28); c.writeUInt32LE(offset,42);
+    locals.push(l,n,data); central.push(c,n); offset += l.length+n.length+data.length;
+  }
+  const dir=Buffer.concat(central), end=Buffer.alloc(22);
+  end.writeUInt32LE(0x06054b50); end.writeUInt16LE(entries.length,8); end.writeUInt16LE(entries.length,10);
+  end.writeUInt32LE(dir.length,12); end.writeUInt32LE(offset,16);
+  return Buffer.concat([...locals,dir,end]);
+}
+
+test("EduTwin ZIP: upload, isolated interaction, original master, persistence and rejection", async ({ browser }) => {
+  const context=await browser.newContext({viewport:{width:393,height:873}});
+  const page=await context.newPage();
+  const html=Buffer.from('<!doctype html><html lang="it"><head><title>Prova</title></head><body><h1>Laboratorio ZIP</h1><button id="change">Regola</button><output id="out">0</output><script>document.querySelector("#change").onclick=()=>document.querySelector("#out").textContent="1"</script></body></html>');
+  const png=Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aHn0AAAAASUVORK5CYII=","base64");
+  const sha=(b:Buffer)=>createHash("sha256").update(b).digest("hex");
+  const m={contract:"trama.activity-intake/v0.1",activityId:"edutwin-zip-browser",version:"0.1.1-draft",
+    title:"EduTwin ZIP di verifica",kind:"INTERACTIVE_SIMULATION",
+    assets:[
+      {id:"experience",path:"experience.html",type:"INTERACTIVE_HTML",format:"text/html",sha256:sha(html),bytes:html.length},
+      {id:"master",path:"media/master.png",type:"SOURCE_MASTER",format:"image/png",sha256:sha(png),bytes:png.length}
+    ],
+    experience:{entrypoint:"experience.html",entrypointSha256:sha(html),embeddedImagesCount:0,learnerPersonalData:false,telemetry:false,trustPolicy:"ISOLATED_HTML_SANDBOX_REQUIRED"},
+    learning:{arenaObjectiveRefs:[],udaRefs:[],arenaCurricoloVersionRef:null},
+    review:{status:"DRAFT_PENDING_HUMAN_REVIEW",rights:"PENDING"},
+    authorization:{atlasPublished:false,studentRuntimeAllowed:false,docenteOsWriteAllowed:false,autoMergeAllowed:false}};
+  const root="content/staging/edutwin-zip-browser/";
+  const archive=storedZip([[root+"intake.json",Buffer.from(JSON.stringify(m))],[root+"experience.html",html],[root+"media/master.png",png]]);
+  await page.goto(STUDIO+"/attivita");
+  const input=page.getByLabel("Pacchetto di attività (.zip)");
+  await input.setInputFiles({name:"edutwin.zip",mimeType:"application/zip",buffer:archive});
+  await page.getByRole("button",{name:"Carica pacchetto"}).click();
+  await expect(page.getByRole("status")).toContainText("2 risorse verificate e conservate");
+  await expect(page.getByRole("heading",{name:"EduTwin ZIP di verifica"})).toBeVisible();
+  await page.getByRole("button",{name:"Prova l'attività in ambiente isolato"}).click();
+  const frame=page.frameLocator(".activity-preview iframe");
+  await expect(frame.getByRole("heading",{name:"Laboratorio ZIP"})).toBeVisible();
+  await frame.getByRole("button",{name:"Regola"}).click();
+  await expect(frame.locator("#out")).toHaveText("1");
+  await page.reload();
+  await expect(page.getByRole("heading",{name:"EduTwin ZIP di verifica"})).toBeVisible();
+  const master=await page.evaluate(async ()=>{
+    const db=await new Promise<IDBDatabase>((res,rej)=>{const q=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});
+    try{return await new Promise<any>((res,rej)=>{const q=db.transaction("activities").objectStore("activities").getAll();q.onsuccess=()=>res(q.result[0]);q.onerror=()=>rej(q.error);});}
+    finally{db.close();}
+  });
+  expect(master.source.kind).toBe("LOCAL_ZIP");
+  expect(master.files.find((f:any)=>f.type==="SOURCE_MASTER").base64).toBe(png.toString("base64"));
+  await input.setInputFiles({name:"edutwin.zip",mimeType:"application/zip",buffer:archive});
+  await page.getByRole("button",{name:"Carica pacchetto"}).click();
+  await expect(page.getByRole("status")).toContainText("già presente");
+  await input.setInputFiles({name:"corrotto.zip",mimeType:"application/zip",buffer:Buffer.from("not zip")});
+  await page.getByRole("button",{name:"Carica pacchetto"}).click();
+  await expect(page.getByRole("alert")).toBeVisible();
   await expect(page.locator(".activity-list-item")).toHaveCount(1);
   await context.close();
 });
