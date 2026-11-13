@@ -23,6 +23,11 @@ Per ciascun elemento multimediale dichiarare funzione, relazione con azione e ca
 
 - Compilare templates/visual-asset-continuity.md già durante la produzione delle tavole: distinguere ispirazione, bozze e master destinati al prodotto; salvare e verificare i file reali; legare scene e stati alle risorse canoniche. Le tavole approvate sono materiale di produzione, non solo esempi.
 
+## 3a. Regia artistica e mappa delle interazioni (avventure)
+- Identificare la singola scena artistica effettiva, inquadratura, evento e riferimenti preservati; master composto ammesso. Separare didascalie di regia e interfaccia dal file artistico. Nessuna obbligatorietà di livelli separati.
+- Per ogni oggetto significativo: ID master/hash, oggetto o zona relativa all'immagine, azione, effetto osservabile, risorsa/stato successivo, alternativa semantica/tastiera. Mapping editoriale, non prova di comportamento implementato. Verificare allineamento delle zone nelle proporzioni previste quando il runtime sarà autorizzato.
+- Prima scena campione: valutare espressività, assenza di UI incorporata, continuità, mistero comprensibile e potenzialità delle azioni; non estendere se REWORK. Vedere mandato visuale nel protocollo.
+
 ## 4. Revisione umana prima del prototipo
 - Story Review (se applicabile): NON REVISIONATO / PASS / REWORK / REJECT; evidenza, revisore, data, versione/hash.
 - World Review (se applicabile): NON REVISIONATO / PASS / REWORK / REJECT; evidenza, revisore, data, versione/hash.
