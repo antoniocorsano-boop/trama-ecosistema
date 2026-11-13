@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "studio-atlas-education",
+  "version": "0.1.0",
+  "description": "Progettazione e produzione in ChatGPT di esperienze educative, microcorsi e materiali verificabili per Studio Atlas; nessuna pubblicazione automatica.",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Studio Atlas Education",
+        "shortDescription": "Produci esperienze educative da ChatGPT",
+        "longDescription": "Progetta, produci e verifica prodotti educativi con file reali e consegna controllata a Studio Atlas."
+      }
+    }
+  }
+}

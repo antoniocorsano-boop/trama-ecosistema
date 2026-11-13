@@ -1,0 +1,18 @@
+name: ATLAS-EDU-02 - Plugin preflight
+on:
+  pull_request:
+    paths:
+      - 'plugins/studio-atlas-education/**'
+      - '.github/workflows/atlas-education-plugin.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test package and local inventory without model inference
+        run: python3 -m unittest discover -s plugins/studio-atlas-education/tests -v
