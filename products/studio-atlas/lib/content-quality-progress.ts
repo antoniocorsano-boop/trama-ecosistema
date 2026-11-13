@@ -1,7 +1,7 @@
 // Read-only coordination of existing authoring/production/publication gates.
 // This module does not authenticate reviewers or grant publication or execution.
 export type QualityCandidate = Readonly<{activityId:string;version:string;manifestDigest:string}>;
-export type CheckId = "PURPOSE"|"STORY"|"SCIENCE"|"WRITING"|"VISUAL"|"VOICE_TECH"|"VOICE_LISTEN"|"INTEGRITY"|"ACCESSIBILITY"|"SECURITY_PRIVACY"|"RIGHTS"|"USE"|"CURRICULUM"|"PUBLICATION";
+export type CheckId = "PURPOSE"|"STORY"|"SCIENCE"|"WRITING"|"VISUAL"|"VOICE_TECH"|"VOICE_LISTEN"|"INTEGRITY"|"ACCESSIBILITY"|"SECURITY_PRIVACY"|"RIGHTS"|"USE"|"CURRICOLO"|"PUBLICATION";
 type ReviewMode = "HUMAN"|"TECHNICAL"|"AUTHORITY";
 type Decision = "PASS"|"REWORK"|"PENDING";
 export type QualityEvidence = Readonly<QualityCandidate & {check:CheckId;mode:ReviewMode;decision:Decision;reference:string}>;
@@ -20,7 +20,7 @@ const checks:Record<CheckId,QualityCheck>={
  SECURITY_PRIVACY:{id:"SECURITY_PRIVACY",label:"Sicurezza e riservatezza",mode:"AUTHORITY",action:"Ottieni la verifica del runtime, dei flussi di dati e dell'assenza di identità studente."},
  RIGHTS:{id:"RIGHTS",label:"Diritti e licenze",mode:"AUTHORITY",action:"Verifica diritti di testi, immagini, audio e altri materiali."},
  USE:{id:"USE",label:"Prova finale dell'esperienza",mode:"HUMAN",action:"Prova l'intero prodotto con la guida, nelle modalità previste."},
- CURRICULUM:{id:"CURRICULUM",label:"Riferimenti curricolari Arena",mode:"AUTHORITY",action:"Collega gli obiettivi approvati senza inventare riferimenti."},
+ CURRICOLO:{id:"CURRICOLO",label:"Riferimenti curricolari Arena",mode:"AUTHORITY",action:"Collega gli obiettivi approvati senza inventare riferimenti."},
  PUBLICATION:{id:"PUBLICATION",label:"Decisione di pubblicazione Atlas",mode:"AUTHORITY",action:"Richiedi la decisione esplicita attraverso il processo di pubblicazione esistente."}
 };
 const same=(a:QualityCandidate,b:QualityCandidate)=>a.activityId===b.activityId&&a.version===b.version&&a.manifestDigest===b.manifestDigest;
@@ -33,7 +33,7 @@ export function evaluateContentQuality(candidate:QualityCandidate,plan:QualityPl
   {title:"Progetta",ids:["PURPOSE",...(!bound||plan!.narrative?["STORY" as const]:[]),"SCIENCE","WRITING"]},
   {title:"Produci",ids:[...(!bound||plan!.visual?["VISUAL" as const]:[]),...(!bound||plan!.voice==="REQUIRED"?["VOICE_TECH" as const,"VOICE_LISTEN" as const]:[])]},
   {title:"Verifica",ids:["INTEGRITY","ACCESSIBILITY","SECURITY_PRIVACY","RIGHTS","USE"]},
-  {title:"Prepara la pubblicazione",ids:["CURRICULUM","PUBLICATION"]}
+  {title:"Prepara la pubblicazione",ids:["CURRICOLO","PUBLICATION"]}
  ];
  const steps=groups.filter(g=>g.ids.length).map(g=>{
   const items=g.ids.map(id=>{
