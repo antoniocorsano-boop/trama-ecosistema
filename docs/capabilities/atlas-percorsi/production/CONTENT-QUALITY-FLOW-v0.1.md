@@ -25,3 +25,6 @@ CQP-01 non certifica oggi alcun prodotto, non modifica i contratti autorevoli e 
 
 ## CQP-02 — prime evidenze esatte
 Le verifiche di corrispondenza delle risorse e di navigazione locale sono ora distinte dalla qualificazione finale. Il riferimento `CQP-02-MISSIONE-118-V7-TECHNICAL-EVIDENCE.md` documenta i due esiti tecnici circoscritti; Studio Atlas li proietta soltanto se tutti i byte della copia V7 coincidono con i digest curati. Nessuna approvazione umana o pubblicazione automatica. Le ricevute di produzione e i ruoli autentici restano da raccordare.
+
+## CQP-03 — preparazione vocale e precedenti di produzione
+Il documento [CQP-03](CQP-03-MISSIONE-118-VOICE-PREPARATION.md) conserva il copione V7, la regia proposta e i riferimenti AF-02, distinguendo generazione storica e revisione umana REWORK dalla voce del prodotto. Studio Atlas mostra il prossimo passo preparatorio quando le due evidenze tecniche V7 sono presenti; non emette PASS per la voce. L'adattatore autentico per le ricevute, il montaggio e la revisione restano da qualificare.

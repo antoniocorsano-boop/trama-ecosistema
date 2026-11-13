@@ -31,3 +31,19 @@ test("imported flags are not approval; current pilot still awaits human review",
  const v7={activityId:"trama-missione-118-2026",version:"0.3.0-draft",manifestDigest:"407299aa62ac3a190ff6755ac35bf4874d786cab0255e1f8dee426415315f395",review:{status:"PASS"},authorization:{atlasPublished:true}};
  const r=activityQualityProgress(v7);assert.equal(r.planBound,true);assert.equal(r.next?.id,"PURPOSE");assert.equal(r.publicationAuthorized,false);
 });
+
+test("voice preparation is context only and requires the exact V7 technical checks",()=>{
+ const v7={activityId:"trama-missione-118-2026",version:"0.3.0-draft",manifestDigest:"407299aa62ac3a190ff6755ac35bf4874d786cab0255e1f8dee426415315f395"};
+ const asset:QualityEvidence={...v7,check:"ASSET_INTEGRITY",mode:"TECHNICAL",decision:"PASS",reference:"test-only"};
+ const browser:QualityEvidence={...asset,check:"BROWSER_SMOKE"};
+ const voice:QualityEvidence={...asset,check:"VOICE_TECH"};
+ assert.equal(activityQualityProgress(v7,[asset]).voicePreparation,undefined);
+ assert.equal(activityQualityProgress(v7,[asset,browser,browser]).voicePreparation,undefined);
+ assert.equal(activityQualityProgress({...v7,version:"0.4.0-draft"},[asset,browser]).voicePreparation,undefined);
+ const result=activityQualityProgress(v7,[asset,browser,voice]);
+ assert.equal(result.voicePreparation?.sceneCount,5);
+ for(const id of ["VOICE_TECH","VOICE_LISTEN"]){
+  assert.equal(result.steps.flatMap(s=>s.items).find(i=>i.id===id)?.decision,"PENDING");
+ }
+ assert.equal(result.publicationAuthorized,false);
+});

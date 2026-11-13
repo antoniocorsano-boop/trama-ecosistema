@@ -233,6 +233,7 @@ export default function AttivitaPage() {
               <details>
                 <summary>{step.title} · {step.decision==="PASS"?"Verificato":step.decision==="REWORK"?"Da correggere":"Da verificare"}</summary>
                 <ul>{step.items.map(item=><li key={item.id}>{item.label} — {item.decision==="PASS"?"Verificato":item.decision==="REWORK"?"Da correggere":"Da verificare"}</li>)}</ul>
+                {step.title==="Produci" && quality.voicePreparation && <p>{quality.voicePreparation.status} {quality.voicePreparation.next}</p>}
               </details>
             </li>)}</ol>
             <p>Riepilogo in sola consultazione. Nessuna autorizzazione di pubblicazione è stata concessa.</p>
