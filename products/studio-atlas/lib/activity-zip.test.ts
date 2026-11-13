@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { crc32, deflateRawSync } from "node:zlib";
 import { prepareZipDraft, readActivityZip } from "./activity-zip";
 import { sha256 } from "./activity-intake";
+import { POST as zipPost } from "../app/api/attivita/importa/zip/route";
 
 function zip(entries: [string,Buffer][],method=8) {
   const locals:Buffer[]=[], central:Buffer[]=[];
@@ -103,4 +104,27 @@ test("aggregate image pixel budget is enforced and valid 4K remains admissible",
   assert.equal(valid.draft.files[1].pixelWidth,3840);
   const large=await mediaFixture(3840,2160,3);assert.ok(large.length<100_000);
   await assert.rejects(()=>prepareZipDraft(large),/budget pixel/);
+});
+
+test("full ZIP route streams a verified JSON response above 4.5 MB without truncating originals",async()=>{
+  const content=Buffer.from('<!doctype html><html lang="it"><head></head><body>'+ "a".repeat(3_600_000) +'</body></html>');
+  const m=manifest();
+  m.assets[0].sha256=sha256(content);m.assets[0].bytes=content.length;
+  m.experience.entrypointSha256=sha256(content);
+  const archive=zip([["intake.json",Buffer.from(JSON.stringify(m))],["experience.html",content]]);
+  const response=await zipPost(new Request("http://localhost/api/attivita/importa/zip",{method:"POST",headers:{"content-type":"application/zip"},body:Uint8Array.from(archive)}));
+  assert.equal(response.status,200);assert.equal(response.headers.get("cache-control"),"no-store");
+  assert.equal(response.headers.get("content-length"),null);
+  const reader=response.body!.getReader();let bytes=0,count=0;const chunks:Buffer[]=[];
+  for(;;){const {done,value}=await reader.read();if(done)break;count++;bytes+=value.byteLength;chunks.push(Buffer.from(value));}
+  assert.ok(bytes>4_500_000);assert.ok(count>1);
+  const result=JSON.parse(Buffer.concat(chunks).toString("utf8"));
+  assert.equal(result.verified,1);assert.deepEqual(Buffer.from(result.draft.files[0].base64,"base64"),content);
+  assert.equal(result.draft.status,"DRAFT_PENDING_HUMAN_REVIEW");
+  assert.equal(result.draft.manifest.authorization.atlasPublished,false);
+});
+test("ZIP route rejects a tampered asset before sending successful response bytes",async()=>{
+  const entries=fixture();entries[1][1]=Buffer.from("altered");
+  const response=await zipPost(new Request("http://localhost/api/attivita/importa/zip",{method:"POST",headers:{"content-type":"application/zip"},body:Uint8Array.from(zip(entries))}));
+  assert.equal(response.status,422);assert.equal((await response.json()).draft,undefined);
 });
