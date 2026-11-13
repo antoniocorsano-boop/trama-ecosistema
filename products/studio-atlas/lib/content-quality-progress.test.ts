@@ -47,3 +47,17 @@ test("voice preparation is context only and requires the exact V7 technical chec
  }
  assert.equal(result.publicationAuthorized,false);
 });
+
+test("V9 exact plan requires review; technical evidence does not authorize publication",()=>{
+ const v9={activityId:"trama-missione-118-2026",version:"0.4.1-draft",manifestDigest:"1b00cf15c4dc7a54e805489f631b4d7135a3f50e3fd8ec5ee2267d6fd849d990"};
+ const evidence:QualityEvidence[]=[
+  {...v9,check:"ASSET_INTEGRITY",mode:"TECHNICAL",decision:"PASS",reference:"test-only"},
+  {...v9,check:"BROWSER_SMOKE",mode:"TECHNICAL",decision:"PASS",reference:"test-only"},
+  {...v9,check:"VOICE_LISTEN",mode:"HUMAN",decision:"PASS",reference:"not-authenticated"}
+ ];
+ const r=activityQualityProgress(v9,evidence);assert.equal(r.planBound,true);assert.equal(r.next?.id,"PURPOSE");
+ assert.equal(r.voicePreparation,undefined);assert.equal(r.publicationAuthorized,false);
+ assert.equal(r.steps.flatMap(s=>s.items).find(i=>i.id==="VOICE_LISTEN")?.decision,"PENDING");
+ assert.equal(r.steps.flatMap(s=>s.items).find(i=>i.id==="ASSET_INTEGRITY")?.decision,"PASS");
+ assert.equal(activityQualityProgress({...v9,manifestDigest:"0".repeat(64)},evidence).planBound,false);
+});

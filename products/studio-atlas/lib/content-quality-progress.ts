@@ -49,16 +49,17 @@ export function evaluateContentQuality(candidate:QualityCandidate,plan:QualityPl
  const next=steps.flatMap(s=>s.items).find(i=>i.decision!=="PASS");
  return {planBound:bound,steps,next,complete:bound&&!next,publicationAuthorized:false as const};
 }
-// The only current curated plan is the exact V7 draft; no reviewer receipts yet.
+// Curated exact V7 and V9 plans; no authenticated human reviewer receipts yet.
 // Imported JSON, localStorage and gallery markers cannot grant PASS.
 const V7:QualityPlan={activityId:"trama-missione-118-2026",version:"0.3.0-draft",manifestDigest:"407299aa62ac3a190ff6755ac35bf4874d786cab0255e1f8dee426415315f395",narrative:true,visual:true,voice:"REQUIRED"};
+const V9:QualityPlan={activityId:V7.activityId,version:"0.4.1-draft",manifestDigest:"1b00cf15c4dc7a54e805489f631b4d7135a3f50e3fd8ec5ee2267d6fd849d990",narrative:true,visual:true,voice:"REQUIRED"};
 export function activityQualityProgress(candidate:QualityCandidate,technicalEvidence:readonly QualityEvidence[]=[]){
- const quality=evaluateContentQuality(candidate,same(candidate,V7)?V7:undefined,technicalEvidence.filter(e=>e.mode==="TECHNICAL"&&(e.check==="ASSET_INTEGRITY"||e.check==="BROWSER_SMOKE")));
+ const quality=evaluateContentQuality(candidate,same(candidate,V7)?V7:same(candidate,V9)?V9:undefined,technicalEvidence.filter(e=>e.mode==="TECHNICAL"&&(e.check==="ASSET_INTEGRITY"||e.check==="BROWSER_SMOKE")));
  // Informational context only; never emits VOICE_TECH or VOICE_LISTEN evidence.
  // Caller resolves the two technical checks from actual pinned V7 bytes.
  const verified=quality.planBound&&["ASSET_INTEGRITY","BROWSER_SMOKE"].every(id=>
   quality.steps.flatMap(s=>s.items).some(i=>i.id===id&&i.decision==="PASS"));
- const voicePreparation=verified?{
+ const voicePreparation=verified&&same(candidate,V7)?{
   sceneCount:5,
   status:"Copione conservato; audio da qualificare.",
   next:"Rivedi il copione e la regia vocale prima di produrre le cinque tracce."

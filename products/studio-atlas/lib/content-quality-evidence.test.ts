@@ -33,3 +33,9 @@ test("technical evidence does not replace final product test or human review",()
  assert.equal(all.find(i=>i.id==="VOICE_LISTEN")?.decision,"PENDING");
  assert.equal(r.next?.id,"PURPOSE");assert.equal(r.publicationAuthorized,false);
 });
+
+test("V9 identity alone cannot inherit technical evidence",async()=>{
+ const d=fixture();d.version="0.4.1-draft";d.manifestDigest="1b00cf15c4dc7a54e805489f631b4d7135a3f50e3fd8ec5ee2267d6fd849d990";
+ d.source={kind:"LOCAL_ZIP",archiveDigest:"ab2c5a6b48ccb2aa2196c1a91e9aa7452ea36390e98463f7f495c4d709af684e",manifestPath:"intake.json"};
+ assert.deepEqual(await resolveActivityTechnicalEvidence(d),[]);
+});

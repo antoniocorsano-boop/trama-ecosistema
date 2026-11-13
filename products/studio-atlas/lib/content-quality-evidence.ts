@@ -1,4 +1,4 @@
-// Repository-curated evidence of two narrow technical checks on the exact V7.
+// Repository-curated evidence of two narrow technical checks on exact candidates.
 import type {ActivityDraft} from "./activity-drafts";
 import type {QualityCandidate,QualityEvidence} from "./content-quality-progress";
 
@@ -18,6 +18,14 @@ const PINS:readonly AssetPin[]=[
  ["teacher/guida_docente.html","TEACHER_GUIDE","text/html",5002,"9f1b1c4e8f204dd75942ba96b59335825d21e5309e57be1f3570196b02177578"]
 ].map(([path,type,format,bytes,sha256])=>({path:String(path),type:String(type),format:String(format),bytes:Number(bytes),sha256:String(sha256)}));
 const RECEIPT="docs/capabilities/atlas-percorsi/production/CQP-02-MISSIONE-118-V7-TECHNICAL-EVIDENCE.md";
+const V9_ID:QualityCandidate={activityId:ID.activityId,version:"0.4.1-draft",manifestDigest:"1b00cf15c4dc7a54e805489f631b4d7135a3f50e3fd8ec5ee2267d6fd849d990"};
+const V9_ARCHIVE="ab2c5a6b48ccb2aa2196c1a91e9aa7452ea36390e98463f7f495c4d709af684e";
+const V9_PINS:readonly AssetPin[]=[
+ ...PINS.filter(p=>p.type==="IMAGE").map(p=>({...p,path:p.path.replace(/^media\//,"art/")})),
+ {path:"experience.html",type:"INTERACTIVE_HTML",format:"text/html",bytes:1751538,sha256:"9ae45c2c54e39306f4b0a138d14ec98257205bd65ce50326175292548a60e4ba"},
+ {path:"teacher/guida_docente.html",type:"TEACHER_GUIDE",format:"text/html",bytes:2454,sha256:"a6d8f907d44dcd4061cb3c1cd2ee8147de8bc510b0db5563c9a8fd878c7d2fb3"}
+];
+const V9_RECEIPT="docs/capabilities/atlas-percorsi/production/CQP-06-MISSIONE-118-V9-TEACHER-PREVIEW.md";
 // Never use a manifest-provided receipt or trust local gallery markers for evidence.
 export async function verifyPinnedQualityAssets(draft:ActivityDraft,pins:readonly AssetPin[]):Promise<boolean>{
  try{
@@ -38,6 +46,15 @@ export async function verifyPinnedQualityAssets(draft:ActivityDraft,pins:readonl
  }catch{return false;}
 }
 export async function resolveActivityTechnicalEvidence(draft:ActivityDraft):Promise<QualityEvidence[]>{
+ if(draft.activityId===V9_ID.activityId&&draft.version===V9_ID.version&&draft.manifestDigest===V9_ID.manifestDigest&&
+ draft.status==="DRAFT_PENDING_HUMAN_REVIEW"&&draft.source.kind==="LOCAL_ZIP"&&draft.source.archiveDigest===V9_ARCHIVE&&
+ draft.source.manifestPath==="intake.json"&&draft.manifest.experience?.entrypoint==="experience.html"){
+  if(!await verifyPinnedQualityAssets(draft,V9_PINS))return [];
+  return [
+   {...V9_ID,check:"ASSET_INTEGRITY",mode:"TECHNICAL",decision:"PASS",reference:V9_RECEIPT+"#integrita-risorse"},
+   {...V9_ID,check:"BROWSER_SMOKE",mode:"TECHNICAL",decision:"PASS",reference:V9_RECEIPT+"#prove-browser-locali"}
+  ];
+ }
  if(draft.activityId!==ID.activityId||draft.version!==ID.version||draft.manifestDigest!==ID.manifestDigest||
  draft.status!=="DRAFT_PENDING_HUMAN_REVIEW"||draft.source.kind!=="LOCAL_ZIP"||draft.source.archiveDigest!==ARCHIVE||
  draft.source.manifestPath!=="content/staging/missione-118/intake.json"||draft.manifest.experience?.entrypoint!=="experience.html")return [];
