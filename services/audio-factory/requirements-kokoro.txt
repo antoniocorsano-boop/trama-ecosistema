@@ -1,0 +1,7 @@
+# AF-02: CPU inference via PyPI only; no apt-get or external paid TTS.
+# Kokoro's Italian G2P needs Misaki [en], which includes phonemizer-fork
+# and the Python-distributed espeak-ng library/data (espeakng-loader).
+# Download of Kokoro model/voice weights happens only on explicit trial.
+kokoro==0.9.4
+misaki[en]==0.9.4
+soundfile==0.13.1

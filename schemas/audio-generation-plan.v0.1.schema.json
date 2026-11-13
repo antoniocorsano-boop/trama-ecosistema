@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.example/schemas/audio-generation-plan.v0.1.schema.json",
+  "title": "TRAMA AudioGenerationPlan v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "request_id",
+    "language",
+    "voice",
+    "text",
+    "purpose",
+    "compute_mode",
+    "no_personal_data",
+    "voice_cloning",
+    "max_seconds"
+  ],
+  "properties": {
+    "contract": {
+      "const": "trama.audio-generation-plan/v0.1"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+    },
+    "language": {
+      "const": "it-IT"
+    },
+    "voice": {
+      "enum": [
+        "im_nicola",
+        "if_sara"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "minLength": 15,
+      "maxLength": 400
+    },
+    "purpose": {
+      "enum": [
+        "narration",
+        "accessible_reading"
+      ]
+    },
+    "compute_mode": {
+      "const": "FREE_ONLY"
+    },
+    "no_personal_data": {
+      "const": true
+    },
+    "voice_cloning": {
+      "const": false
+    },
+    "max_seconds": {
+      "type": "integer",
+      "minimum": 3,
+      "maximum": 60
+    }
+  }
+}
