@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { intakeJsonResponse } from "../../../../lib/activity-intake-response";
 import {
   parseAtlasPrUrl,
   safeIntakePath,
@@ -102,7 +103,7 @@ export async function POST(request: Request) {
         base64: Buffer.from(data).toString("base64"),
       });
     }
-    return NextResponse.json({
+    return intakeJsonResponse({
       draft: {
         key: manifest.activityId + "@" + manifest.version + "#" + sha256(manifestBytes),
         activityId: manifest.activityId,
@@ -120,7 +121,7 @@ export async function POST(request: Request) {
         importedAt: new Date().toISOString(),
       },
       verified: assets.length,
-    }, { headers: { "Cache-Control": "no-store" } });
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Importazione non riuscita";
     const invalid = /non valid[oi]|non sicuro|Percorso|contratto|duplicat|mancante|impronta|corrispondente|incoerente|troppo|revisione deve|Origine|assente/i.test(message);
