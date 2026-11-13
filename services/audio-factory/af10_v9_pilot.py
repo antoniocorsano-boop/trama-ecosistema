@@ -41,7 +41,7 @@ def authorization(event, attempt, event_name, credentials=False):
         or event["repository"]["full_name"] != REPO
         or p["head"]["repo"]["full_name"] != REPO
         or p["head"]["ref"] != BRANCH or p["base"]["ref"] != BASE
-        or event["label"]["name"] != f"af10-pilot-{head}"):
+        or event["label"]["name"] != f"af10-{head}"):
         raise ValueError("AUTHORIZATION_REQUIRED")
     return head
 

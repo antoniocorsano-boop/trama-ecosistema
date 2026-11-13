@@ -5,7 +5,7 @@ class AF10Tests(unittest.TestCase):
     def event(self):
         h="a"*40
         return {"action":"labeled","repository":{"private":False,"full_name":REPO},
-                "label":{"name":"af10-pilot-"+h},
+                "label":{"name":"af10-"+h},
                 "pull_request":{"head":{"sha":h,"ref":BRANCH,"repo":{"full_name":REPO}},
                                 "base":{"ref":BASE}}}
     def test_exactly_two_units(self):

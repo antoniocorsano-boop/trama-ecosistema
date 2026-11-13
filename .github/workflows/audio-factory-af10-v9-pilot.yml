@@ -30,7 +30,7 @@ jobs:
     if: >-
       github.event.action == 'labeled' &&
       github.event.repository.private == false &&
-      github.event.label.name == format('af10-pilot-{0}', github.event.pull_request.head.sha) &&
+      github.event.label.name == format('af10-{0}', github.event.pull_request.head.sha) &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.head.ref == 'docs/af10-missione118-v9' &&
       github.run_attempt == 1
