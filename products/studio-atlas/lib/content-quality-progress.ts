@@ -1,7 +1,7 @@
 // Read-only coordination of existing authoring/production/publication gates.
 // This module does not authenticate reviewers or grant publication or execution.
 export type QualityCandidate = Readonly<{activityId:string;version:string;manifestDigest:string}>;
-export type CheckId = "PURPOSE"|"STORY"|"SCIENCE"|"WRITING"|"VISUAL"|"VOICE_TECH"|"VOICE_LISTEN"|"INTEGRITY"|"ACCESSIBILITY"|"SECURITY_PRIVACY"|"RIGHTS"|"USE"|"CURRICOLO"|"PUBLICATION";
+export type CheckId = "PURPOSE"|"STORY"|"SCIENCE"|"WRITING"|"VISUAL"|"VOICE_TECH"|"VOICE_LISTEN"|"ASSET_INTEGRITY"|"BROWSER_SMOKE"|"INTEGRITY"|"ACCESSIBILITY"|"SECURITY_PRIVACY"|"RIGHTS"|"USE"|"CURRICOLO"|"PUBLICATION";
 type ReviewMode = "HUMAN"|"TECHNICAL"|"AUTHORITY";
 type Decision = "PASS"|"REWORK"|"PENDING";
 export type QualityEvidence = Readonly<QualityCandidate & {check:CheckId;mode:ReviewMode;decision:Decision;reference:string}>;
@@ -15,6 +15,8 @@ const checks:Record<CheckId,QualityCheck>={
  VISUAL:{id:"VISUAL",label:"Qualità e coerenza delle immagini",mode:"HUMAN",action:"Controlla identità, continuità, leggibilità e pertinenza delle immagini."},
  VOICE_TECH:{id:"VOICE_TECH",label:"Tracce audio e controlli tecnici",mode:"TECHNICAL",action:"Verifica le registrazioni, il copione, la durata, i livelli, i tagli e le impronte."},
  VOICE_LISTEN:{id:"VOICE_LISTEN",label:"Ascolto e pronuncia",mode:"HUMAN",action:"Ascolta ogni traccia e il montaggio finale; verifica pronuncia, accenti, pause e fedeltà al copione."},
+ ASSET_INTEGRITY:{id:"ASSET_INTEGRITY",label:"Corrispondenza delle risorse",mode:"TECHNICAL",action:"Verifica le impronte delle risorse della versione esatta."},
+ BROWSER_SMOKE:{id:"BROWSER_SMOKE",label:"Prove locali di navigazione",mode:"TECHNICAL",action:"Verifica il percorso e le alternative nei browser di prova."},
  INTEGRITY:{id:"INTEGRITY",label:"Integrità e prove del prodotto",mode:"TECHNICAL",action:"Verifica il pacchetto esatto, le interazioni e i controlli automatici sul prodotto finale."},
  ACCESSIBILITY:{id:"ACCESSIBILITY",label:"Accessibilità e leggibilità",mode:"HUMAN",action:"Verifica equivalenti testuali, tastiera, contrasto e dispositivi previsti, con evidenze tecniche."},
  SECURITY_PRIVACY:{id:"SECURITY_PRIVACY",label:"Sicurezza e riservatezza",mode:"AUTHORITY",action:"Ottieni la verifica del runtime, dei flussi di dati e dell'assenza di identità studente."},
@@ -32,7 +34,7 @@ export function evaluateContentQuality(candidate:QualityCandidate,plan:QualityPl
  const groups:Array<{title:string;ids:CheckId[]}>= [
   {title:"Progetta",ids:["PURPOSE",...(!bound||plan!.narrative?["STORY" as const]:[]),"SCIENCE","WRITING"]},
   {title:"Produci",ids:[...(!bound||plan!.visual?["VISUAL" as const]:[]),...(!bound||plan!.voice==="REQUIRED"?["VOICE_TECH" as const,"VOICE_LISTEN" as const]:[])]},
-  {title:"Verifica",ids:["INTEGRITY","ACCESSIBILITY","SECURITY_PRIVACY","RIGHTS","USE"]},
+  {title:"Verifica",ids:["ASSET_INTEGRITY","BROWSER_SMOKE","INTEGRITY","ACCESSIBILITY","SECURITY_PRIVACY","RIGHTS","USE"]},
   {title:"Prepara la pubblicazione",ids:["CURRICOLO","PUBLICATION"]}
  ];
  const steps=groups.filter(g=>g.ids.length).map(g=>{
@@ -50,6 +52,6 @@ export function evaluateContentQuality(candidate:QualityCandidate,plan:QualityPl
 // The only current curated plan is the exact V7 draft; no reviewer receipts yet.
 // Imported JSON, localStorage and gallery markers cannot grant PASS.
 const V7:QualityPlan={activityId:"trama-missione-118-2026",version:"0.3.0-draft",manifestDigest:"407299aa62ac3a190ff6755ac35bf4874d786cab0255e1f8dee426415315f395",narrative:true,visual:true,voice:"REQUIRED"};
-export function activityQualityProgress(candidate:QualityCandidate){
- return evaluateContentQuality(candidate,same(candidate,V7)?V7:undefined,[]);
+export function activityQualityProgress(candidate:QualityCandidate,technicalEvidence:readonly QualityEvidence[]=[]){
+ return evaluateContentQuality(candidate,same(candidate,V7)?V7:undefined,technicalEvidence.filter(e=>e.mode==="TECHNICAL"&&(e.check==="ASSET_INTEGRITY"||e.check==="BROWSER_SMOKE")));
 }

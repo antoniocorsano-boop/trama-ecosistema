@@ -10,7 +10,8 @@ import {
 import { GALLERY_VERIFIED } from "../../lib/activity-gallery";
 import { DISPLAY_MAX_PIXELS } from "../../lib/activity-media-limits";
 import { previewFile, verifiedPreviewHtml } from "../../lib/activity-preview";
-import { activityQualityProgress } from "../../lib/content-quality-progress";
+import { activityQualityProgress, type QualityEvidence } from "../../lib/content-quality-progress";
+import { resolveActivityTechnicalEvidence } from "../../lib/content-quality-evidence";
 
 const FIRST_PACKAGE = "https://github.com/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/84";
 
@@ -34,7 +35,17 @@ export default function AttivitaPage() {
     activities.find((item) => item.key === selectedKey) ?? activities[0] ?? null,
     [activities, selectedKey]
   );
-  const quality = current ? activityQualityProgress(current) : null;
+  const [technicalEvidence,setTechnicalEvidence]=useState<{draft:ActivityDraft;items:QualityEvidence[]}|null>(null);
+  useEffect(()=>{
+    setTechnicalEvidence(null);
+    if(!current)return;
+    let cancelled=false;
+    resolveActivityTechnicalEvidence(current).then(items=>{
+      if(!cancelled)setTechnicalEvidence({draft:current,items});
+    }).catch(()=>{});
+    return ()=>{cancelled=true;};
+  },[current]);
+  const quality = current ? activityQualityProgress(current,technicalEvidence?.draft===current?technicalEvidence.items:[]) : null;
   const imageAssets = current?.manifest.assets.filter((item) => item.type === "IMAGE") ?? [];
   const [galleryLimit,setGalleryLimit]=useState(8);
   useEffect(()=>setGalleryLimit(8),[current?.key]);

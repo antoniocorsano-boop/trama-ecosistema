@@ -22,3 +22,6 @@ content-quality-progress.ts calcola la prossima verifica dalle evidenze governat
 2. Collegare revisione testuale/scientifica e Audio Factory #303; qualificare esecuzione e licenze, nessuna spesa, non scegliere automaticamente un modello non approvato.
 3. Prova completa su Missione 118 V7, con registrazioni effettive e ricevute; nuova versione dopo qualsiasi modifica; poi gate Atlas già esistenti. Solo dopo estendere ai materiali e agli altri prodotti.
 CQP-01 non certifica oggi alcun prodotto, non modifica i contratti autorevoli e non sostituisce i gate di pubblicazione.
+
+## CQP-02 — prime evidenze esatte
+Le verifiche di corrispondenza delle risorse e di navigazione locale sono ora distinte dalla qualificazione finale. Il riferimento `CQP-02-MISSIONE-118-V7-TECHNICAL-EVIDENCE.md` documenta i due esiti tecnici circoscritti; Studio Atlas li proietta soltanto se tutti i byte della copia V7 coincidono con i digest curati. Nessuna approvazione umana o pubblicazione automatica. Le ricevute di produzione e i ruoli autentici restano da raccordare.
