@@ -1,0 +1,71 @@
+name: AF-10 - Missione 118 V9 two-unit expressive pilot
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    branches: [feat/audio-factory-af03-qwen3-prosody]
+permissions:
+  contents: read
+concurrency:
+  group: af10-pilot-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  qualify:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'docs/af10-missione118-v9'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline tests
+        run: python -m unittest discover -s services/audio-factory/tests -p 'test_*.py' -q
+  candidate:
+    needs: qualify
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.repository.private == false &&
+      github.event.label.name == format('af10-pilot-{0}', github.event.pull_request.head.sha) &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'docs/af10-missione118-v9' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 26
+    env:
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: "1"
+      OMP_NUM_THREADS: "4"
+      MKL_NUM_THREADS: "4"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install AF09 CPU dependencies
+        timeout-minutes: 8
+        run: |
+          python -m pip install --disable-pip-version-check --retries 1 --timeout 20 --only-binary=:all: -r services/audio-factory/requirements-kokoro.txt
+      - name: Generate only S3U3 and S5U3
+        timeout-minutes: 8
+        run: python services/audio-factory/af10_v9_pilot.py --output af10-pilot
+      - name: Install independent ASR
+        timeout-minutes: 4
+        run: python -m pip install --disable-pip-version-check --retries 0 "faster-whisper==1.2.1" "ctranslate2==4.9.0"
+      - name: Blind lexical review
+        timeout-minutes: 5
+        run: python services/audio-factory/af10_v9_pilot.py --output af10-pilot --asr
+      - name: Preserve both probes and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: af10-missione118-v9-pilot
+          path: af10-pilot/
+          if-no-files-found: warn
+          retention-days: 7
