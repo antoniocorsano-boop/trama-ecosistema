@@ -1,0 +1,33 @@
+# Missione 118 — Valutazione comparativa della maturità narrativa ed espressiva
+13 novembre 2026. Audit editoriale e progettuale, NON revisione umana, NON qualificazione runtime. Baseline PR #307 1154fa60e546d6f18cf835c4cb8fc365f8ef455f; racconto v0.5, sceneggiatura interattiva v0.1; Missione118_revisione_integrale.html SHA-256 c12e442767f7f1e0524a1cf46fd9ddc2f8d706d254c1082c9e750c2455e816ad. Riesaminati testo completo, struttura HTML (46 img, zero button/script) e anteprime mobile delle sei tavole. Nessuna prova di gioco o con studenti. Benchmark qualitativo basato su descrizioni ufficiali, non collaudo diretto dei giochi né confronto di budget. 
+
+## Riferimenti funzionali, non modelli da copiare
+- Pixar, WALL-E: ambiente e azione raccontano senza spiegazione; la pagina ufficiale documenta una sequenza visuale di un minuto. https://www.pixar.com/wall-e
+- Rundisc, Chants of Sennaar: osservazione, deduzione, lingue e taccuino come strumenti necessari a comprendere e progredire; identità visuale dei luoghi. https://www.rundisc.io/chants-of-sennaar/ e https://www.focus-entmt.com/en/news/chants-of-sennaar-shows-its-details-in-a-gameplay-overview-and-offers-a-free-demo-to-all-players
+- Amanita Design, Machinarium: oggetti, logica e problemi ambientali intrecciati all'esplorazione. https://amanita-design.net/games/machinarium.html
+- ustwo games, Alba: A Wildlife Adventure: motivazione personale, luogo riconoscibile, azioni significative senza fretta. https://www.albawildlife.com/
+- Learning Games Network, Quandary: prospettive, fatti, opinioni, conseguenze e trasferimento didattico senza imporre un'unica risposta etica. https://quandarygame.org/resources e https://quandarygame.org/faq?language_content_entity=en
+
+## Esito: REWORK espressivo ed esperienziale, non abbandono del soggetto
+Punti solidi: mistero 117/118; motivo ricorrente della casella verde; Nora fallibile e responsabilità; Teo e progetto; finale che distingue riscontro da efficacia. Contenuto disciplinare qualitativo verificato in L2, fonti/binding e dossier ancora da completare. La qualità scientifica non sostituisce quella narrativa.
+| Dimensione | Giudizio qualitativo sul candidato | Evidenza e distanza |
+|---|---|---|
+| Idea e tema | promettente | contraddizione tra completamento tecnico e risultato; evitare slogan ripetuto |
+| Drammaturgia | parziale | ogni luogo tende a ripetere la stessa struttura; conseguenze ancora locali, rischio di prevedibilità |
+| Personaggi | parziale | firma di Nora e dilemma Teo sono validi, ma per lo più dialoghi esplicativi; manca una scelta con conseguenze personali osservabili |
+| Narrazione visuale | insufficiente | A1/C1 hanno illustrazioni; C3 in poi prevalgono documenti, ritratti e diagrammi; annotazioni e titoli da tavola editoriale |
+| Direzione artistica | insufficiente | asset discontinui, master C1 non coincide col foglio della lampada; master A1/banco/plastico/mostra/reazioni mancanti |
+| Agency | non dimostrata | zero comandi/script; il testo descrive scoperte, invece di farle compiere; rischio quiz/riproduzione passiva |
+| Enigmi ed evidenze | parziale | R1/R2/R4/R6/R7 validi; la soluzione è spesso già accostata e verbalizzata; collegare richiede confronto reale non clic su sigla identica |
+| Ritmo e suono | non dimostrati | prologo conservato; scene successive non hanno regia audiovisiva eseguita |
+| Educazione | promettente, da qualificare | contenuti pertinenti, ma devono essere indispensabili per l'azione; nessuna prova di apprendimento o efficacia |
+| Mobile/accessibilità | parziale | composizione statica verificata; nessuna prova dei flussi, focus, alternative o Android reale |
+
+## Proposta di revisione mirata
+Conservare storia, prologo e master. Non scrivere una terza trama completa. Rendere il conflitto concreto: Teo vuole presentare alla mostra il proprio progetto, non una versione prodotta automaticamente. L'asse emotivo è il riconoscimento della sua scelta e del suo lavoro. Introdurre un evento visivo innocuo: il progetto compare già esposto nella mostra virtuale mentre sul tavolo è ancora incompiuto; Teo tenta di riconoscere il suo elaborato. La squadra deve ricostruire cosa è accaduto, non semplicemente correggere un errore scolastico. Un elemento comico ricorrente è la casella verde che insiste mentre la realtà non corrisponde. La mostra finale deve mostrare una persona che può scegliere come orientare la luce del modello illustrato, e Teo che può spiegare il progetto; nessun dispositivo reale da maneggiare. Proposta da approvare, non fatto canonico già prodotto.
+Trasformare l'archivio in luogo con oggetti, luci e gesti; registro 117 aperto volontariamente, campo esito assente osservabile. Nel laboratorio dare due fonti concrete da confrontare, mantenere originale e derivato, far costruire una rappresentazione e osservare il nuovo disegno. Nel plastico astratto rendere la differenza di informazione percepibile e reversibile, non ripetere due cartelli. Non collegare C-01 al filtro notifiche senza evidenza. La firma di Nora emerge dall'apertura del documento storico dopo il confronto, non da un riassunto anticipato. Ridurre AX-118 come spiegatore: può formulare una conclusione limitata e correggerla dopo un'evidenza; non simulare apprendimento reale del modello. Teo e Nora devono compiere azioni, non solo commentare.
+Taccuino come tavolo di confronto: reperti appoggiabili e relazione visibile, consultazione accessibile alternativa, non griglia di medaglie. Nessun punteggio/urgenza/feedback manipolativo. Nessun account o raccolta dati.
+
+## Prossima unità: prototipo di regia visuale A1→C1→C2, non runtime
+Un solo segmento ben rappresentato, circa 6–8 minuti come ipotesi di durata del futuro segmento giocabile, non stima di lavoro. Cinque battute narrative: archivio (contraddizione visiva); registro 117 (scoperta); messaggio Teo; progetto dichiarato completo ma non finito; nota ritrovata. Un asset di ambiente A1 definitivo candidato, riuso esatto C1, oggetti separati e almeno due stati osservabili. Prima Story/World Review esplicita; poi storyboard con montaggio e dialoghi, senza UI tecnica, verificare continuità dei master. Criteri futuri: mistero riconoscibile senza spiegazione didattica; protagonista sa perché intervenire; azione necessaria per reperto; cambiamento nello stesso mondo; coerenza visiva, leggibilità e alternativa accessibile. Verifica con revisione umana prima del runtime; eventuale prova futura con studenti solo con autorizzazioni e tutela previste, senza raccolta non necessaria. 
+Decisione proposta: H1 REWORK mirato sul linguaggio espressivo, non ulteriore ampliamento della storia o nuovo motore. H2/H4 non autorizzati. Nessun merge, deploy, pubblicazione. Non sostituire materiali approvati.
