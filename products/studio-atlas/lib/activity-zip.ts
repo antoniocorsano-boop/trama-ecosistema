@@ -77,6 +77,7 @@ export function prepareZipDraft(input: Uint8Array) {
   requireOk(manifestBytes.length<=MANIFEST_LIMIT,"Manifesto troppo grande");
   const raw=JSON.parse(text(manifestBytes));
   const manifest=validateActivityManifest(raw);
+  requireOk(manifest.version.endsWith("-draft"),"Solo versioni di bozza sono ammesse");
   requireOk(raw.authorization && ["atlasPublished","studentRuntimeAllowed","docenteOsWriteAllowed","autoMergeAllowed"].every(k=>raw.authorization[k]===false),"Nessuna autorizzazione di pubblicazione ammessa");
   requireOk(raw.review?.status==="DRAFT_PENDING_HUMAN_REVIEW" &&
     Object.entries(raw.review).every(([k,v])=>k==="status" || v==="PENDING"), "Revisione umana non verificata");
@@ -104,6 +105,11 @@ export function prepareZipDraft(input: Uint8Array) {
   });
   const entry=assets.find(a=>a.path===manifest.experience?.entrypoint);
   requireOk(entry?.type==="INTERACTIVE_HTML","Esperienza interattiva mancante");
+  const html=text(Buffer.from(entry.base64,"base64"));
+  const embedded=[...html.matchAll(/data:image\/webp;base64,([A-Za-z0-9+/=]+)/g)].map(m=>sha256(Buffer.from(m[1],"base64"))).sort();
+  const images=manifest.assets.filter(a=>a.type==="IMAGE").map(a=>a.sha256).sort();
+  requireOk(raw.experience.embeddedImagesCount===embedded.length && JSON.stringify(embedded)===JSON.stringify(images),
+    "Illustrazioni incorporate e risorse dichiarate non corrispondono");
   const digest=sha256(manifestBytes);
   return {draft:{key:manifest.activityId+"@"+manifest.version+"#"+digest,activityId:manifest.activityId,
     version:manifest.version,manifestDigest:digest,manifest,source:{kind:"LOCAL_ZIP" as const,archiveDigest:sha256(input),manifestPath},

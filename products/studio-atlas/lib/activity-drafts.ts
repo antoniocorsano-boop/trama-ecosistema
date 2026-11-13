@@ -80,29 +80,26 @@ export async function saveActivityDraft(draft: ActivityDraft): Promise<"SAVED" |
   }
   const db = await openDatabase();
   try {
-    const entries = await new Promise<ActivityDraft[]>((resolve, reject) => {
-      const tx = db.transaction(OBJECTS, "readonly");
-      const request = tx.objectStore(OBJECTS).getAll();
-      request.onsuccess = () => resolve(request.result as ActivityDraft[]);
-      request.onerror = () => reject(request.error);
-    });
-    const existing = entries.find((item) =>
-      item.activityId === draft.activityId && item.version === draft.version
-    );
-    if (existing) {
-      if (existing.manifestDigest !== draft.manifestDigest) {
-        throw new Error("Questa versione ha contenuti diversi: serve una nuova versione, senza sostituire lo storico");
-      }
-      return "EXISTS";
-    }
-    await new Promise<void>((resolve, reject) => {
+    return await new Promise<"SAVED" | "EXISTS">((resolve, reject) => {
       const tx = db.transaction(OBJECTS, "readwrite");
-      tx.objectStore(OBJECTS).add(draft);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-      tx.onabort = () => reject(tx.error ?? new Error("Salvataggio annullato"));
+      const store = tx.objectStore(OBJECTS);
+      let outcome: "SAVED" | "EXISTS" = "SAVED";
+      let failure: Error | undefined;
+      const request = store.getAll();
+      request.onsuccess = () => {
+        const existing = (request.result as ActivityDraft[]).find(item =>
+          item.activityId === draft.activityId && item.version === draft.version);
+        if (existing) {
+          if (existing.manifestDigest !== draft.manifestDigest) {
+            failure = new Error("Questa versione ha contenuti diversi: serve una nuova versione, senza sostituire lo storico");
+            tx.abort();
+          } else outcome = "EXISTS";
+        } else store.add(draft);
+      };
+      tx.oncomplete = () => resolve(outcome);
+      tx.onerror = () => reject(failure ?? tx.error ?? new Error("Salvataggio non riuscito"));
+      tx.onabort = () => reject(failure ?? tx.error ?? new Error("Salvataggio annullato"));
     });
-    return "SAVED";
   } finally {
     db.close();
   }

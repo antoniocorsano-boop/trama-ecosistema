@@ -24,7 +24,7 @@ function zip(entries: [string,Buffer][],method=8) {
 const html=Buffer.from('<!doctype html><html lang="it"><head></head><body>Prova</body></html>');
 const manifest=()=>({contract:"trama.activity-intake/v0.1",activityId:"edutwin-prova",version:"0.1.1-draft",title:"Prova",kind:"INTERACTIVE_SIMULATION",
   assets:[{id:"experience",path:"experience.html",type:"INTERACTIVE_HTML",format:"text/html",sha256:sha256(html),bytes:html.length}],
-  experience:{entrypoint:"experience.html",entrypointSha256:sha256(html),learnerPersonalData:false,telemetry:false,trustPolicy:"ISOLATED_HTML_SANDBOX_REQUIRED"},
+  experience:{entrypoint:"experience.html",entrypointSha256:sha256(html),embeddedImagesCount:0,learnerPersonalData:false,telemetry:false,trustPolicy:"ISOLATED_HTML_SANDBOX_REQUIRED"},
   learning:{arenaObjectiveRefs:[],udaRefs:[],arenaCurricoloVersionRef:null},
   review:{status:"DRAFT_PENDING_HUMAN_REVIEW",rights:"PENDING"},
   authorization:{atlasPublished:false,studentRuntimeAllowed:false,docenteOsWriteAllowed:false,autoMergeAllowed:false}});
@@ -64,4 +64,9 @@ test("oversize uncompressed member rejected",()=>{
 test("invalid review and learner data declarations rejected",()=>{
   const m=manifest();m.review.rights="APPROVED";assert.throws(()=>prepareZipDraft(zip(fixture(m))));
   const n=manifest();n.experience.learnerPersonalData=true;assert.throws(()=>prepareZipDraft(zip(fixture(n))));
+});
+
+test("missing embedded profile and non-draft version rejected",()=>{
+  const m=manifest();m.experience.embeddedImagesCount=1;assert.throws(()=>prepareZipDraft(zip(fixture(m))));
+  const n=manifest();n.version="0.1.1";assert.throws(()=>prepareZipDraft(zip(fixture(n))));
 });
