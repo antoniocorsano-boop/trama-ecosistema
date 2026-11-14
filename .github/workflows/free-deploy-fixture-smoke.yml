@@ -1,0 +1,22 @@
+name: FREE-DEPLOY — Synthetic fixture contract
+on:
+  pull_request:
+    paths:
+      - scripts/free_deploy_fixture.py
+      - tests/test_free_deploy_fixture.py
+      - .github/workflows/free-deploy-fixture-smoke.yml
+      - .github/workflows/free-deploy-live-verification.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Test fail-closed fixture contract
+        run: python3 -m unittest discover -s tests -p test_free_deploy_fixture.py -v
+# Contract tests only. No remote availability, provider or publication claim.
