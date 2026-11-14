@@ -162,6 +162,13 @@ export type VisualProductionRequest = {
   requestedAt: string;
 };
 
+export type PreviewIllustratedMedia = {
+ revisionDigest:string;
+ mediaDigest:string;
+ bindings:Array<{sceneId:string;assetId:string;alt:string;role:"SETTING"|"CHARACTER"|"SCENE"}>;
+ images:Array<{assetId:string;sha256:string;pixelWidth:number;pixelHeight:number;base64:string}>;
+};
+
 export type StudioAtlasPreviewSnapshot = {
   schemaVersion: "studio-atlas.preview-snapshot/v0.1";
   snapshotId: string;
@@ -173,6 +180,7 @@ export type StudioAtlasPreviewSnapshot = {
   runtimeAuthorized: false;
   studentAuthorized: false;
   scenes: PathwayScene[];
+  edutwinMedia?: PreviewIllustratedMedia;
 };
 
 export type VisualProductionReceipt = {
