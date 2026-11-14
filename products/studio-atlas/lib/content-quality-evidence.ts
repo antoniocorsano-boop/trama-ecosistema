@@ -1,6 +1,7 @@
 // Repository-curated evidence of two narrow technical checks on exact candidates.
 import type {ActivityDraft} from "./activity-drafts";
 import type {QualityCandidate,QualityEvidence} from "./content-quality-progress";
+import {matchesV91Draft,V91_ID,V91_HTML,V91_GUIDE,V91_RECEIPT} from "./missione118-v91";
 
 export type AssetPin={path:string;type:string;format:string;bytes:number;sha256:string};
 const ID:QualityCandidate={activityId:"trama-missione-118-2026",version:"0.3.0-draft",manifestDigest:"407299aa62ac3a190ff6755ac35bf4874d786cab0255e1f8dee426415315f395"};
@@ -26,6 +27,7 @@ const V9_PINS:readonly AssetPin[]=[
  {path:"teacher/guida_docente.html",type:"TEACHER_GUIDE",format:"text/html",bytes:2454,sha256:"a6d8f907d44dcd4061cb3c1cd2ee8147de8bc510b0db5563c9a8fd878c7d2fb3"}
 ];
 const V9_RECEIPT="docs/capabilities/atlas-percorsi/production/CQP-06-MISSIONE-118-V9-TEACHER-PREVIEW.md";
+const V91_PINS:readonly AssetPin[]=[...V9_PINS.filter(p=>p.type==="IMAGE"),V91_HTML,V91_GUIDE];
 // Never use a manifest-provided receipt or trust local gallery markers for evidence.
 export async function verifyPinnedQualityAssets(draft:ActivityDraft,pins:readonly AssetPin[]):Promise<boolean>{
  try{
@@ -46,6 +48,13 @@ export async function verifyPinnedQualityAssets(draft:ActivityDraft,pins:readonl
  }catch{return false;}
 }
 export async function resolveActivityTechnicalEvidence(draft:ActivityDraft):Promise<QualityEvidence[]>{
+ if(matchesV91Draft(draft)){
+  if(!await verifyPinnedQualityAssets(draft,V91_PINS))return [];
+  return [
+   {...V91_ID,check:"ASSET_INTEGRITY",mode:"TECHNICAL",decision:"PASS",reference:V91_RECEIPT+"#integrita-risorse"},
+   {...V91_ID,check:"BROWSER_SMOKE",mode:"TECHNICAL",decision:"PASS",reference:V91_RECEIPT+"#prove-browser-locali"}
+  ];
+ }
  if(draft.activityId===V9_ID.activityId&&draft.version===V9_ID.version&&draft.manifestDigest===V9_ID.manifestDigest&&
  draft.status==="DRAFT_PENDING_HUMAN_REVIEW"&&draft.source.kind==="LOCAL_ZIP"&&draft.source.archiveDigest===V9_ARCHIVE&&
  draft.source.manifestPath==="intake.json"&&draft.manifest.experience?.entrypoint==="experience.html"){

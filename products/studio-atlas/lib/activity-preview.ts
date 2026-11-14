@@ -1,4 +1,5 @@
 import { decodeUtf8, isolatedHtml, type ActivityDraft, type ActivityFile } from "./activity-drafts";
+import {matchesV91Draft,V91_HTML,V91_GUIDE} from "./missione118-v91";
 
 type PreviewKind = "EXPERIENCE" | "GUIDE";
 type Pin = { path: string; sha256: string };
@@ -21,6 +22,7 @@ const LEGACY: Pins = {
 
 function pins(draft: ActivityDraft): Pins | undefined {
   if (draft.status !== "DRAFT_PENDING_HUMAN_REVIEW") return;
+  if(matchesV91Draft(draft)) return {EXPERIENCE:V91_HTML,GUIDE:V91_GUIDE};
   const s=draft.source;
   if(s.kind==="LOCAL_ZIP" && draft.activityId==="trama-missione-118-2026" &&
     draft.version==="0.4.1-draft" && draft.manifestDigest==="1b00cf15c4dc7a54e805489f631b4d7135a3f50e3fd8ec5ee2267d6fd849d990" &&
