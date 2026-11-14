@@ -6,6 +6,8 @@ import {importEduTwin,listEduTwins,loadEduTwinHistory,MAX_HANDOFF_BYTES} from ".
 import type {ConversationRevision} from "../lib/edutwin-conversation";
 import {listActivityDrafts} from "../lib/activity-drafts";
 import {resolveOriginalImages,type OriginalImageMatch} from "../lib/edutwin-original-images";
+import {atlasPreviewOrigin,openEduTwinIllustratedReviewPreview} from "../lib/preview-bridge";
+import type {LocalStoryReview} from "../lib/edutwin-illustrated-preview";
 
 export function EduTwinHandoff(){
  const file=useRef<HTMLInputElement>(null);
@@ -16,6 +18,7 @@ export function EduTwinHandoff(){
  const [ready,setReady]=useState(false);
  const [notice,setNotice]=useState("");
  const [failed,setFailed]=useState(false);
+ const [storyReview,setStoryReview]=useState<LocalStoryReview>();
  const [originals,setOriginals]=useState<{digest:string;matches:OriginalImageMatch[]}|undefined>();
  const [resourceFailure,setResourceFailure]=useState<string|undefined>();
  useEffect(()=>{
@@ -49,6 +52,22 @@ export function EduTwinHandoff(){
     "Non è stato possibile confermare l’importazione. Controlla l’archivio prima di riprovare.");
   }finally{setBusy(false);if(file.current)file.current.value="";}
  }
+ const isLatest=Boolean(selected&&selected.digest===history.at(-1)?.digest);
+ const bindings=selected?.sceneIllustrations??[];
+ const imagesReady=Boolean(bindings.length&&selected&&resourceFailure!==selected.digest&&originals?.digest===selected.digest&&
+  bindings.every(b=>originals.matches.some(m=>m.id===b.assetId&&m.state==="VERIFIED_LOCAL")));
+ const transferReady=Boolean(selected?.project.scenes.some(s=>s.kind==="TRANSFER"));
+ const canReview=Boolean(isLatest&&imagesReady&&transferReady&&atlasPreviewOrigin());
+ async function openIllustrated(){
+  if(!selected||!storyReview||storyReview.revisionDigest!==selected.digest||!canReview)return;
+  setBusy(true);setNotice("");setFailed(false);
+  try{
+   const result=await openEduTwinIllustratedReviewPreview(selected.project.projectId,storyReview);
+   if(result.status==="OPENED")setNotice("Anteprima illustrata di revisione aperta. Nessuna pubblicazione.");
+   else{setFailed(true);setNotice(result.status==="POPUP_BLOCKED"?"Consenti l’apertura della finestra di anteprima.":"Il collegamento all’anteprima Atlas non è disponibile.");}
+  }catch{setFailed(true);setNotice("Anteprima bloccata: verifica l’ultima revisione, le risorse originali e i requisiti della storia.");}
+  finally{setBusy(false);setStoryReview(undefined);}
+ }
  function exportContext(){
   if(!selected||selected.digest!==history.at(-1)?.digest)return;
   // The user explicitly requests a local file; no automatic network transfer.
@@ -63,7 +82,7 @@ export function EduTwinHandoff(){
   <nav className="back-nav"><Link href="/">← Studio Atlas</Link></nav>
   <header className="form-heading"><p className="eyebrow">EduTwin</p><h1>Continua da ChatGPT</h1>
    <p>Importa una bozza preparata nella conversazione. Puoi rileggerla e conservare le successive correzioni.</p></header>
-  <p>Usa soltanto contenuti didattici senza dati personali. Le bozze restano in questo browser; non sono pubblicate né ancora riproducibili come avventura.</p>
+  <p>Usa soltanto contenuti didattici senza dati personali. Le bozze restano in questo browser. Una versione illustrata può essere provata in anteprima privata dopo la revisione della storia.</p>
   <input ref={file} type="file" accept=".json,application/json" hidden disabled={busy||!ready} onChange={e=>void receive(e.target.files?.[0])}/>
   <button className="primary-action" disabled={busy||!ready} onClick={()=>file.current?.click()}>Importa bozza EduTwin</button>
   <p role={failed?"alert":"status"}>{busy?"Verifica della bozza…":notice}</p>
@@ -97,7 +116,7 @@ export function EduTwinHandoff(){
       {scene.choices.length>0&&<ul>{scene.choices.map(choice=><li key={choice.choiceId}>{choice.label} — {choice.feedback}</li>)}</ul>}
      </details>;
     })}
-    <p>Questa è una tavola narrativa per la revisione: non è ancora l’anteprima interattiva Atlas.</p>
+    <p>Questa è una tavola narrativa per la revisione. L’anteprima usa il motore interattivo Atlas, non questa tavola.</p>
    </section>}
    <details><summary>Decisioni conservate ({selected.decisions.length})</summary><ul>{selected.decisions.map(d=><li key={d.id}>{d.requirement}</li>)}</ul></details>
    <details><summary>Correzioni da verificare ({selected.feedback.length})</summary><ul>{selected.feedback.map(f=><li key={f.id}>{f.observation} — {f.requestedChange}</li>)}</ul></details>
@@ -111,7 +130,19 @@ export function EduTwinHandoff(){
      </>}
     <p>Il controllo riguarda le illustrazioni WebP già acquisite. Non attribuisce diritti, approvazioni o autorizzazioni.</p>
    </section>}
-   {selected.digest===history.at(-1)?.digest&&<button className="secondary-action" onClick={exportContext}>Prepara prossima revisione</button>}
+   {isLatest&&bindings.length>0&&<section aria-label="Anteprima illustrata docente" style={{margin:"1rem 0"}}>
+    <h3>Prova la versione illustrata</h3>
+    <p>{bindings.length} di {selected.project.scenes.length} scene con illustrazione associata. Le altre restano senza immagine.</p>
+    {!imagesReady?<p>Prima occorrono tutte le illustrazioni associate.</p>:!transferReady?<p>Manca una scena di trasferimento dell’apprendimento.</p>:!atlasPreviewOrigin()?<p>Il collegamento con Atlas non è configurato in questa versione.</p>:null}
+    <label style={{display:"flex",alignItems:"flex-start",gap:".5rem"}}>
+     <input type="checkbox" checked={storyReview?.revisionDigest===selected.digest} disabled={!canReview||busy}
+      onChange={e=>setStoryReview(e.target.checked?{revisionDigest:selected.digest,decision:"PASS",reviewedAt:new Date().toISOString()}:undefined)}/>
+     <span>Ho esaminato questa storia e la approvo soltanto per la prova docente. Non approvo ancora il prodotto né l’uso da parte degli studenti.</span>
+    </label>
+    <button className="primary-action" disabled={!canReview||busy||storyReview?.revisionDigest!==selected.digest} onClick={()=>void openIllustrated()}>Apri anteprima illustrata</button>
+    <p>La decisione vale per questa apertura e questa versione esatta; la bozza archiviata rimane da rivedere.</p>
+   </section>}
+   {isLatest&&<button className="secondary-action" onClick={exportContext}>Prepara prossima revisione</button>}
    <p>La revisione è ancora necessaria. Nessuna approvazione automatica.</p>
   </section>}
  </main>;

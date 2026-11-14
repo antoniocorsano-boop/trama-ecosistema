@@ -6,6 +6,9 @@ import {
   buildStudioAtlasReviewPreviewSnapshot,
 } from "./preview";
 import type { PathwayProject } from "./model";
+import {loadEduTwin} from "./edutwin-archive";
+import {listActivityDrafts} from "./activity-drafts";
+import {buildEduTwinIllustratedReviewSnapshot,type LocalStoryReview} from "./edutwin-illustrated-preview";
 
 const SNAPSHOT_TYPE = "STUDIO_ATLAS_PREVIEW_SNAPSHOT";
 const ACK_TYPE = "STUDIO_ATLAS_PREVIEW_ACK";
@@ -39,10 +42,23 @@ export async function openAtlasReviewPreview(
   return openAtlasPreview(project, "HUMAN_PRODUCT_REVIEW");
 }
 
+export async function openEduTwinIllustratedReviewPreview(projectId:string,review:LocalStoryReview):Promise<PreviewBridgeResult>{
+  return openSnapshotPreview(async()=>{
+    const revision=await loadEduTwin(projectId);
+    if(!revision||revision.digest!==review.revisionDigest)throw new Error("STALE_REVIEW");
+    const snapshot=await buildEduTwinIllustratedReviewSnapshot(revision,review,await listActivityDrafts());
+    const current=await loadEduTwin(projectId);
+    if(current?.digest!==review.revisionDigest)throw new Error("STALE_REVIEW");
+    return snapshot;
+  });
+}
 async function openAtlasPreview(
   project: PathwayProject,
   purpose: "LEARNER" | "HUMAN_PRODUCT_REVIEW",
 ): Promise<PreviewBridgeResult> {
+  return openSnapshotPreview(()=>purpose==="HUMAN_PRODUCT_REVIEW"?buildStudioAtlasReviewPreviewSnapshot(project):buildStudioAtlasPreviewSnapshot(project));
+}
+async function openSnapshotPreview(build:()=>Promise<StudioAtlasPreviewSnapshot>):Promise<PreviewBridgeResult>{
   const atlasOrigin = atlasPreviewOrigin();
   if (!atlasOrigin) return { status: "NOT_CONFIGURED" };
 
@@ -55,9 +71,7 @@ async function openAtlasPreview(
   const channel = randomChannel();
   let snapshot: StudioAtlasPreviewSnapshot;
   try {
-    snapshot = purpose === "HUMAN_PRODUCT_REVIEW"
-      ? await buildStudioAtlasReviewPreviewSnapshot(project)
-      : await buildStudioAtlasPreviewSnapshot(project);
+    snapshot = await build();
   } catch (error) {
     previewWindow.close();
     throw error;
