@@ -25,12 +25,16 @@ test("matches exact verified local WebP, independent of asset naming and without
  const result=await resolveOriginalImages(refs,[draft]);
  assert.equal(result[0].state,"VERIFIED_LOCAL");
  assert.deepEqual(result[0].source,{activityId:draft.activityId,version:draft.version,manifestDigest:draft.manifestDigest,path});
+ assert.equal(result[0].image?.base64,draft.files[0].base64);
+ assert.equal(result[0].image?.pixelWidth,32);
+ assert.equal(result[0].image?.pixelHeight,32);
  assert.deepEqual(draft,before);
 });
 test("stored verification marker never authorizes altered bytes or declarations",async()=>{
  const {draft,refs}=await source();
  draft.files[0].base64=Buffer.from("not webp").toString("base64");
- assert.equal((await resolveOriginalImages(refs,[draft]))[0].state,"MISSING");
+ const corrupt=(await resolveOriginalImages(refs,[draft]))[0];
+ assert.equal(corrupt.state,"MISSING");assert.equal(corrupt.image,undefined);
  const fresh=await source();
  fresh.draft.manifest.assets[0].sha256="a".repeat(64);
  assert.equal((await resolveOriginalImages(fresh.refs,[fresh.draft]))[0].state,"MISSING");
