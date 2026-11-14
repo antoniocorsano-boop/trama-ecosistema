@@ -41,7 +41,7 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   await expect(page.getByText(first.input.authoring.opening.firstAction,{exact:false})).toBeVisible();
   await expect(page.getByRole("button",{name:"Prepara prossima revisione"})).toHaveCount(0);
   await receive(next);
-  await expect(page.getByRole("alert")).toContainText("già presente o è stato aggiornato");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("già presente o è stato aggiornato");
   await expect(page.getByText("Versione 2 · Da rivedere")).toBeVisible();
   expect(errors).toEqual([]);
  }finally{await context.close();}
