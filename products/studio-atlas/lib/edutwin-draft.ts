@@ -59,6 +59,9 @@ export function compileEduTwinDraft(input:EduTwinDraftInput,identity:Identity):P
   }
   hasChoice=true;
   if(scene.choices.length<2)throw new Error("MISSING_CHOICES");
+  validateWorld(scene.world,"MISSING_WORLD_BEFORE");
+  const before=scene.world!;
+  const beforeIds=new Set(before.signals.map(s=>s.id));
   const targets=new Set<string>(),choiceIds=new Set<string>(),states=new Set<string>(),labels=new Set<string>();
   for(const c of scene.choices){
    requireText([c.choiceId,c.label,c.feedback,c.targetSceneId],"INCOMPLETE_CHOICE");
@@ -66,7 +69,9 @@ export function compileEduTwinDraft(input:EduTwinDraftInput,identity:Identity):P
    if(choiceIds.has(c.choiceId)||labels.has(c.label.trim()))throw new Error("DUPLICATE_CHOICE");
    choiceIds.add(c.choiceId);labels.add(c.label.trim());targets.add(c.targetSceneId);
    validateWorld(c.worldAfter,"MISSING_WORLD_CONSEQUENCE");
-   states.add(signature(c.worldAfter!));
+   const after=c.worldAfter!;
+   if(after.signals.length!==beforeIds.size||after.signals.some(s=>!beforeIds.has(s.id)))throw new Error("INCONSISTENT_WORLD_SIGNALS");
+   states.add(signature(after));
   }
   if(targets.size!==scene.choices.length)throw new Error("INDISTINGUISHABLE_BRANCHES");
   if(states.size!==scene.choices.length)throw new Error("INDISTINGUISHABLE_CONSEQUENCES");
