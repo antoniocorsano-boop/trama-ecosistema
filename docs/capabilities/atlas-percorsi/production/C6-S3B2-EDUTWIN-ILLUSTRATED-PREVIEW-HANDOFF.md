@@ -1,6 +1,6 @@
 # C6/S3b.2 — Collegamento dell'anteprima illustrata
 2026-11-14 — IMPLEMENTATION_CANDIDATE / PRIVATE_REVIEW / FREE_ONLY / NO_PUBLICATION.
-S3b.1 #327 integrated 9a833a5e. Atlas #88 candidate caca12f96b40aa5e7cf90433940a72ea9d7b40b8 depends on #87 and #81, neither integrated. This PR pins that exact receiver for CI only; no deployment.
+S3b.1 #327 integrated 9a833a5e. Atlas #88 candidate e23df154ea5e817ccb9f6606cb61a52525cf2bc1 depends on #87 and #81, neither integrated. This PR pins that exact receiver for CI only; no deployment.
 
 ## Flow
 Studio Atlas / Continua da ChatGPT / latest archived revision / Storia illustrata. The author can explicitly approve the exact story for this one teacher-only preview, then open it. No imported approvals; the archive remains DRAFT. The ephemeral local story decision is bound to revision digest and time, consumed on each opening. The archive is replayed and the latest digest checked before and after media assembly; the existing review-preview builder still enforces story review, structural and transfer requirements. No product/learner/publication authorization. Missing declared original image blocks; scenes not assigned an image remain unillustrated. No substitution, provider, remote asset fetch or data in URLs.
