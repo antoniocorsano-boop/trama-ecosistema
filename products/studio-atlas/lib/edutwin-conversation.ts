@@ -108,11 +108,11 @@ async function hash(x:unknown){
  const bytes=new TextEncoder().encode(canonical(x));
  return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(b=>b.toString(16).padStart(2,"0")).join("");
 }
-function packageDraft(project:PathwayProject){
+function packageDraft(project:PathwayProject,sourceDigest:string){
  return {
   schemaVersion:"atlas.pathway-authoring-package/v0.1",
   packageId:"pkg-"+project.projectId,packageVersion:project.revision,pathwayId:project.projectId,
-  title:project.title,authoringState:"AUTHORING",sourceSeed:{kind:"PLAIN_IDEA",minimised:true},
+  title:project.title,authoringState:"AUTHORING",sourceSeed:{kind:"PLAIN_IDEA",minimised:true},sourceDigest,
   createdAt:project.createdAt,updatedAt:project.updatedAt,
   scenes:project.scenes.map((s,i)=>({
    sceneId:s.sceneId,order:i+1,purpose:s.title,learnerVisibleSituation:s.visibleSituation,
@@ -129,6 +129,7 @@ function packageDraft(project:PathwayProject){
 export async function compileConversationRevision(raw:unknown,identity:Identity,previous?:ConversationRevision,expectedParentDigest?:string):Promise<ConversationRevision>{
  const input=parseInput(raw);
  const projectId=id(identity.projectId);
+ if(projectId.length<3)return fail("INVALID_ID");
  const now=str(identity.now,40);
  if(!Number.isFinite(Date.parse(now))||new Date(now).toISOString()!==now)return fail("INVALID_TIME");
  if(input.brief.ageBand!==input.authoring.ageBand)return fail("AUDIENCE_MISMATCH");
@@ -150,7 +151,7 @@ export async function compileConversationRevision(raw:unknown,identity:Identity,
  const body:Body={
   project,brief:input.brief,decisions:structuredClone(decisions),feedback:structuredClone(feedback),
   assets:structuredClone(assets),responses:structuredClone(responses),parentDigest:previous?.digest??null,
-  authoringPackage:packageDraft(project),
+  authoringPackage:packageDraft(project,await hash({project,brief:input.brief,decisions,feedback,assets,responses})),
   reviewRequired:true,assetBytesVerified:false,runtimeAuthorized:false,studentAuthorized:false,publicationAuthorized:false
  };
  return {...body,digest:await hash(body)};
