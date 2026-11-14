@@ -35,6 +35,7 @@ export function compileEduTwinDraft(input:EduTwinDraftInput,identity:Identity):P
  requireText([o.theme,o.setting,o.characters,o.disruption,o.role,o.mission,o.firstAction],"OPENING_INCOMPLETE");
  if(/^(continua|avanti|inizia|procedi|prosegui|esplora|scopri)[.! ]*$/i.test(o.firstAction.trim()))throw new Error("GENERIC_FIRST_ACTION");
  const {story,world,experience}=input;
+ if(!["INQUIRY_EVIDENCE","BRANCHING_CONSEQUENCE","WORKSHOP_CONSTRUCTION","SIMULATION_MICROWORLD","VISUAL_NARRATIVE","ENVIRONMENTAL_STORYTELLING"].includes(experience.grammar))throw new Error("UNSUPPORTED_GRAMMAR");
  requireText([story.hook,story.setting,story.characters,story.characterGoal,story.disruption,story.unknown,story.learnerRole,story.turningPoint,story.ending],"STORY_INCOMPLETE");
  requireText([world.learnerRole,world.canObserve,world.canChange,world.unknown,world.consequence,world.motivation,experience.grammar,experience.rationale],"WORLD_INCOMPLETE");
  if(!Array.isArray(input.scenes)||input.scenes.length<3||input.scenes.length>100)throw new Error("SCENE_COUNT");
