@@ -6,6 +6,8 @@ on:
       - tests/test_free_deploy_fixture.py
       - scripts/free_deploy_readiness.py
       - tests/test_free_deploy_readiness.py
+      - scripts/free_deploy_access.py
+      - tests/test_free_deploy_access.py
       - .github/workflows/free-deploy-fixture-smoke.yml
       - .github/workflows/free-deploy-live-verification.yml
   workflow_dispatch:
@@ -23,4 +25,6 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_free_deploy_fixture.py -v
       - name: Test readiness report (no deployment authority)
         run: python3 -m unittest discover -s tests -p test_free_deploy_readiness.py -v
+      - name: Test restricted access contract (offline only)
+        run: python3 -m unittest discover -s tests -p test_free_deploy_access.py -v
 # Contract tests only. No remote availability, provider or publication claim.
