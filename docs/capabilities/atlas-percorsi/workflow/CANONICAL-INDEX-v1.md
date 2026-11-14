@@ -11,6 +11,7 @@ Single entry point for understanding current authority, experiments and open con
 
 | Area | Canonical reference | State |
 |---|---|---|
+| Free deployment / content delivery | [TRAMA FREE-DEPLOY](../../../strategy/trama-free-deploy-v1.md) | HUMAN_DIRECTION_APPROVED / DOCUMENTATION_CANDIDATE / NO_RUNTIME — FD-00–FD-06 in roadmap; public approved static content separated from private lab; no student publication |
 | child-safe learning & experience constitution | `governance/CHILD-SAFE-LEARNING-EXPERIENCE-CONSTITUTION-v1.md` | CANONICAL G1 CONSTITUTION — PROPOSED FOR REVIEW; runtime not authorised |
 | pathway constitution review contract | `governance/PATHWAY-CONSTITUTION-REVIEW-CONTRACT-v1.yaml` | CANONICAL G1 REVIEW CONTRACT — PROPOSED FOR REVIEW; C11 authoring controls operationalised; human judgement mandatory |
 | normalised evidence/provenance | `research/evidence-records-v1.yaml` | ACTIVE NORMALISATION; constitution mapping established, gaps explicit |

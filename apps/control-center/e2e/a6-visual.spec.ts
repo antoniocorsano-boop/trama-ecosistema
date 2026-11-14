@@ -101,6 +101,21 @@ for (const [name, route] of routes) {
       });
     }
 
+    if (name === "ecosystem") {
+      // Freeze only the volatile display timestamp to the reviewed screenshot's
+      // value. All graph, capability and evidence data still come from the
+      // candidate snapshot; real timestamps are exercised separately below.
+      await page.route("**/data/ecosystem-snapshot.json", async (route) => {
+        const response = await route.fetch();
+        expect(response.ok()).toBeTruthy();
+        const snapshot = await response.json();
+        await route.fulfill({
+          response,
+          json: { ...snapshot, generatedAt: "2026-11-03T17:19:10.569795+00:00" },
+        });
+      });
+    }
+
     await page.goto(route);
     await expect(page.locator("#main-content")).toBeVisible();
     if (name === "operations") {
@@ -131,6 +146,30 @@ for (const [name, route] of routes) {
     }
   });
 }
+
+test("ecosystem displays the real snapshot timestamp without horizontal clipping", async ({ page }) => {
+  const snapshotResponse = page.waitForResponse((response) =>
+    new URL(response.url()).pathname.endsWith("/data/ecosystem-snapshot.json") && response.ok(),
+  );
+  await page.goto("/#/ecosystem");
+  const { generatedAt } = await (await snapshotResponse).json();
+  const formatted = await page.evaluate((value: string) =>
+    new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)),
+    generatedAt,
+  );
+  const footer = page.locator("footer.feature-footer");
+  await expect(footer).toContainText(`Snapshot ${formatted}`);
+  await footer.scrollIntoViewIfNeeded();
+  await expect(footer).toBeInViewport();
+  const widths = await footer.evaluate((element) => ({
+    content: element.scrollWidth,
+    visible: element.clientWidth,
+    page: document.documentElement.scrollWidth,
+    viewport: window.innerWidth,
+  }));
+  expect(widths.content).toBeLessThanOrEqual(widths.visible + 1);
+  expect(widths.page).toBeLessThanOrEqual(widths.viewport + 1);
+});
 
 test("reflow 320 keeps compact navigation outside main content in map and GAP views", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "reflow-320", "Human-review regression is specific to the 320 px reflow breakpoint");
