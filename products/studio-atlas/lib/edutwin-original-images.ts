@@ -15,9 +15,10 @@ export async function resolveOriginalImages(
  const wanted=new Set(refs.filter(r=>r.kind==="IMAGE").map(r=>r.sha256));
  const matches=new Map<string,NonNullable<OriginalImageMatch["source"]>>();
  for(const draft of drafts){
-  if(draft.status!=="DRAFT_PENDING_HUMAN_REVIEW"||!Array.isArray(draft.manifest?.assets)||
-   !draft.manifest.assets.some(a=>a.type==="IMAGE"&&wanted.has(a.sha256)&&!matches.has(a.sha256)))continue;
   try{
+   if(draft?.status!=="DRAFT_PENDING_HUMAN_REVIEW"||!Array.isArray(draft.manifest?.assets)||
+    !draft.manifest.assets.every(a=>a&&typeof a==="object")||
+    !draft.manifest.assets.some(a=>a.type==="IMAGE"&&wanted.has(a.sha256)&&!matches.has(a.sha256)))continue;
    const verified=await verifyArchivedGallery(draft);
    for(const {file} of verified.images){
     if(wanted.has(file.sha256)&&!matches.has(file.sha256)){
