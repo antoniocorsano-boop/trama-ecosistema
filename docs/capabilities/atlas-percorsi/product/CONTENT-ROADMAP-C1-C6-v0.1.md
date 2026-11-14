@@ -39,3 +39,7 @@ Inventario iniziale di sette candidati verificati, non inventario esaustivo né 
 
 ## CQP-01 — raccordo operativo
 Il flusso di qualità trasversale raccorda C2/C3/C5, senza cambiare l'ordine di consegna. Vedi `../production/CONTENT-QUALITY-FLOW-v0.1.md`. Il riepilogo eseguibile in Studio Atlas non attribuisce approvazioni. La V7 deve attraversare tutti i controlli, incluso audio se previsto, prima di richiedere pubblicazione.
+
+## Aggiornamento di indirizzo — 14 novembre 2026: HOLD narrativo C2/C6
+
+La prova reale di Missione 118 non giustifica altri interventi incrementali sul motore. Conservare i prodotti, gli asset e le evidenze tecniche. La prossima priorità operativa sostituisce temporaneamente le azioni di produzione C2/C6 sopra indicate: applicare il [Protocollo di progettazione narrativa educativa v0.1](PROTOCOLLO-PROGETTAZIONE-NARRATIVA-EDUCATIVA-v0.1.md) a una storia autonoma, con origine educativa confermata e revisione editoriale umana. Solo dopo valutare la ripresa della trasformazione in EduTwin. Nessun nuovo sviluppo, installazione, produzione multimediale o pubblicazione in questa fase. Le attività e autorizzazioni precedenti non vengono cancellate né promosse; PR di implementazione non integrate rimangono in sospeso. Il metodo combinato è ancora da verificare, non un risultato didattico acquisito.
