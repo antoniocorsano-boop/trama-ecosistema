@@ -1,0 +1,19 @@
+name: FREE-DEPLOY — Live verification (read-only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Test fail-closed fixture contract
+        run: python3 -m unittest discover -s tests -p test_free_deploy_fixture.py -v
+      - name: Read-only verification of existing synthetic public site
+        run: python3 scripts/free_deploy_fixture.py verify-live
+# Explicit diagnostic invocation only; no secret, deployment or provider mutation.
+# Any failed or absent live verification blocks future publication qualification.
