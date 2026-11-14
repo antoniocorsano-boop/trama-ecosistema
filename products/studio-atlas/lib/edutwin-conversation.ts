@@ -9,13 +9,15 @@ type Decision={id:string;category:Category;requirement:string};
 type Feedback={id:string;category:Category;observation:string;requestedChange:string};
 type AssetRef={id:string;kind:"IMAGE"|"AUDIO"|"VIDEO"|"DOCUMENT";sha256:string};
 type Response={feedbackId:string;proposedChange:string};
+export type SceneIllustration={sceneId:string;assetId:string;alt:string;role:"SETTING"|"CHARACTER"|"SCENE"};
 type Brief={theme:string;ageBand:EduTwinDraftInput["ageBand"];objective:string;durationMinutes:number;constraints:string[]};
-type Input={brief:Brief;authoring:EduTwinDraftInput;decisions:Decision[];feedback:Feedback[];assets:AssetRef[];responses:Response[]};
+type Input={brief:Brief;authoring:EduTwinDraftInput;decisions:Decision[];feedback:Feedback[];assets:AssetRef[];responses:Response[];sceneIllustrations?:SceneIllustration[]};
 type Identity={projectId:string;now:string};
 type Body={
  project:PathwayProject;brief:Brief;decisions:Decision[];
  feedback:Array<Feedback&{targetRevision:number;targetDigest:string}>;
  assets:AssetRef[];
+ sceneIllustrations?:SceneIllustration[];
  responses:Array<Response&{revision:number}>;
  parentDigest:string|null;
  authoringPackage:object;
@@ -80,7 +82,7 @@ function parseAuthoring(x:unknown):EduTwinDraftInput{
  };
 }
 function parseInput(x:unknown):Input{
- const o=obj(x,["brief","authoring","decisions","feedback","assets","responses"]);
+ const o=obj(x,["brief","authoring","decisions","feedback","assets","responses"],["sceneIllustrations"]);
  const b=obj(o.brief,["theme","ageBand","objective","durationMinutes","constraints"]);
  if(typeof b.durationMinutes!=="number"||!Number.isInteger(b.durationMinutes)||b.durationMinutes<1||b.durationMinutes>240)return fail("INVALID_DURATION");
  return {
@@ -89,7 +91,8 @@ function parseInput(x:unknown):Input{
   decisions:arr(o.decisions,100).map(x=>{const d=obj(x,["id","category","requirement"]);return {id:id(d.id),category:oneOf(d.category,categories),requirement:str(d.requirement)};}),
   feedback:arr(o.feedback,100).map(x=>{const f=obj(x,["id","category","observation","requestedChange"]);return {id:id(f.id),category:oneOf(f.category,categories),observation:str(f.observation),requestedChange:str(f.requestedChange)};}),
   assets:arr(o.assets,100).map(x=>{const a=obj(x,["id","kind","sha256"]);return {id:id(a.id),kind:oneOf(a.kind,["IMAGE","AUDIO","VIDEO","DOCUMENT"] as const),sha256:digestText(a.sha256)};}),
-  responses:arr(o.responses,100).map(x=>{const a=obj(x,["feedbackId","proposedChange"]);return {feedbackId:id(a.feedbackId),proposedChange:str(a.proposedChange)};})
+  responses:arr(o.responses,100).map(x=>{const a=obj(x,["feedbackId","proposedChange"]);return {feedbackId:id(a.feedbackId),proposedChange:str(a.proposedChange)};}),
+  ...(o.sceneIllustrations===undefined?{}:{sceneIllustrations:arr(o.sceneIllustrations,100).map(x=>{const a=obj(x,["sceneId","assetId","alt","role"]);return {sceneId:id(a.sceneId),assetId:id(a.assetId),alt:str(a.alt,300),role:oneOf(a.role,["SETTING","CHARACTER","SCENE"] as const)};})})
  };
 }
 function appendUnique<T extends {id:string}>(previous:T[],next:T[],error:string):T[]{
@@ -143,6 +146,19 @@ export async function compileConversationRevision(raw:unknown,identity:Identity,
  if(previous)project.createdAt=previous.project.createdAt;
  const decisions=appendUnique(previous?.decisions??[],input.decisions,"DUPLICATE_DECISION");
  const assets=appendUnique(previous?.assets??[],input.assets,"ASSET_ID_ALREADY_RECORDED");
+ // Preserve the proposed visual direction unless a new revision explicitly replaces it.
+ // Omitting the optional field on legacy records preserves their existing digest.
+ const sceneIllustrations=input.sceneIllustrations??previous?.sceneIllustrations;
+ if(sceneIllustrations!==undefined){
+  const seen=new Set<string>();
+  for(const mapping of sceneIllustrations){
+   if(seen.has(mapping.sceneId))return fail("DUPLICATE_SCENE_ILLUSTRATION");
+   seen.add(mapping.sceneId);
+   if(!project.scenes.some(s=>s.sceneId===mapping.sceneId))return fail("ILLUSTRATION_SCENE_UNKNOWN");
+   if(!assets.some(a=>a.id===mapping.assetId&&a.kind==="IMAGE"))return fail("ILLUSTRATION_ASSET_UNKNOWN");
+  }
+ }
+ const visual=sceneIllustrations===undefined?{}:{sceneIllustrations:structuredClone(sceneIllustrations)};
  const feedback=appendUnique(previous?.feedback??[],input.feedback.map(f=>({...f,targetRevision:previous!.project.revision,targetDigest:previous!.digest})),"DUPLICATE_FEEDBACK");
  if(new Set(input.responses.map(x=>x.feedbackId)).size!==input.responses.length||
     input.responses.some(x=>!feedback.some(f=>f.id===x.feedbackId)))return fail("INVALID_RESPONSE_REFERENCE");
@@ -150,8 +166,8 @@ export async function compileConversationRevision(raw:unknown,identity:Identity,
  if(responses.length>1000)return fail("REVISION_LIMIT");
  const body:Body={
   project,brief:input.brief,decisions:structuredClone(decisions),feedback:structuredClone(feedback),
-  assets:structuredClone(assets),responses:structuredClone(responses),parentDigest:previous?.digest??null,
-  authoringPackage:packageDraft(project,await hash({project,brief:input.brief,decisions,feedback,assets,responses})),
+  assets:structuredClone(assets),responses:structuredClone(responses),parentDigest:previous?.digest??null,...visual,
+  authoringPackage:packageDraft(project,await hash({project,brief:input.brief,decisions,feedback,assets,responses,...visual})),
   reviewRequired:true,assetBytesVerified:false,runtimeAuthorized:false,studentAuthorized:false,publicationAuthorized:false
  };
  return {...body,digest:await hash(body)};
