@@ -4,6 +4,8 @@ import Link from "next/link";
 import {useEffect,useRef,useState} from "react";
 import {importEduTwin,listEduTwins,loadEduTwinHistory,MAX_HANDOFF_BYTES} from "../lib/edutwin-archive";
 import type {ConversationRevision} from "../lib/edutwin-conversation";
+import {listActivityDrafts} from "../lib/activity-drafts";
+import {resolveOriginalImages,type OriginalImageMatch} from "../lib/edutwin-original-images";
 
 export function EduTwinHandoff(){
  const file=useRef<HTMLInputElement>(null);
@@ -14,6 +16,17 @@ export function EduTwinHandoff(){
  const [ready,setReady]=useState(false);
  const [notice,setNotice]=useState("");
  const [failed,setFailed]=useState(false);
+ const [originals,setOriginals]=useState<{digest:string;matches:OriginalImageMatch[]}|undefined>();
+ const [resourceFailure,setResourceFailure]=useState<string|undefined>();
+ useEffect(()=>{
+  if(!selected)return;
+  let active=true;
+  const candidate=selected;
+  listActivityDrafts().then(drafts=>resolveOriginalImages(candidate.assets,drafts)).then(matches=>{
+   if(active){setOriginals({digest:candidate.digest,matches});setResourceFailure(undefined);}
+  }).catch(()=>{if(active)setResourceFailure(candidate.digest);});
+  return()=>{active=false;};
+ },[selected]);
  useEffect(()=>{let active=true;listEduTwins().then(rows=>{if(active){setProjects(rows);setReady(true);}}).catch(()=>{if(active){setFailed(true);setNotice("Non è stato possibile verificare l’archivio locale.");}});return()=>{active=false;};},[]);
  async function open(projectId:string){
   setBusy(true);setFailed(false);setNotice("");
@@ -65,7 +78,16 @@ export function EduTwinHandoff(){
    <p><strong>Prima azione:</strong> {selected.project.scenes[0].learnerAction}</p>
    <details><summary>Decisioni conservate ({selected.decisions.length})</summary><ul>{selected.decisions.map(d=><li key={d.id}>{d.requirement}</li>)}</ul></details>
    <details><summary>Correzioni da verificare ({selected.feedback.length})</summary><ul>{selected.feedback.map(f=><li key={f.id}>{f.observation} — {f.requestedChange}</li>)}</ul></details>
-   <p>{selected.assets.length} riferimenti a risorse. I file multimediali non sono ancora acquisiti.</p>
+   {selected.assets.length>0&&<section aria-label="Risorse originali">
+    <h3>Risorse originali</h3>
+    {resourceFailure===selected.digest?<p>Verifica delle risorse non disponibile.</p>:
+     originals?.digest!==selected.digest?<p>Verifica delle risorse locali…</p>:<>
+      <p>{originals.matches.filter(m=>m.state==="VERIFIED_LOCAL").length} di {selected.assets.length} risorse verificate nell’archivio locale.</p>
+      <details><summary>Dettaglio risorse</summary><ul>{originals.matches.map(m=><li key={m.id}>{m.id} — {m.state==="VERIFIED_LOCAL"?"Originale verificato":m.state==="MISSING"?"Originale non trovato o non integro":"Formato non ancora supportato"}{m.source&&<> ({m.source.activityId}, {m.source.version})</>}</li>)}</ul></details>
+      {originals.matches.some(m=>m.state==="MISSING")&&<p><Link href="/attivita">Apri l’archivio delle attività</Link> per acquisire il pacchetto originale, poi riapri questa bozza.</p>}
+     </>}
+    <p>Il controllo riguarda le illustrazioni WebP già acquisite. Non attribuisce diritti, approvazioni o autorizzazioni.</p>
+   </section>}
    {selected.digest===history.at(-1)?.digest&&<button className="secondary-action" onClick={exportContext}>Prepara prossima revisione</button>}
    <p>La revisione è ancora necessaria. Nessuna approvazione automatica.</p>
   </section>}
