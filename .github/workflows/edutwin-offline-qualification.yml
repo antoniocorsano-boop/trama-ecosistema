@@ -1,0 +1,58 @@
+name: EduTwin offline exact-runtime qualification
+
+on:
+  pull_request:
+    paths:
+      - "tests/qualification/edutwin-offline-entry.ts"
+      - ".github/workflows/edutwin-offline-qualification.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      STUDIO_EXACT: 4d9b7b487f3f920dad54593683b19a742d639b84
+      ATLAS_EXACT: d2938378c9384c5122adb8379396dbad5b4385fe
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Verify exact integrated Studio source
+        run: git diff --exit-code "$STUDIO_EXACT" HEAD -- products/studio-atlas
+      - name: Retrieve exact integrated Atlas runtime
+        run: |
+          git clone --filter=blob:none https://github.com/antoniocorsano-boop/Curriculum-Atlas.git _atlas
+          git -C _atlas checkout "$ATLAS_EXACT"
+          test "$(git -C _atlas rev-parse HEAD)" = "$ATLAS_EXACT"
+      - name: Install existing Studio dependencies
+        working-directory: products/studio-atlas
+        run: npm install --no-audit --no-fund
+      - name: Build isolated test bundle (no content, no deployment)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/edutwin-qualification
+          products/studio-atlas/node_modules/.bin/esbuild tests/qualification/edutwin-offline-entry.ts \
+            --bundle --platform=browser --jsx=automatic \
+            --alias:react="$PWD/products/studio-atlas/node_modules/react" \
+            --alias:react-dom="$PWD/products/studio-atlas/node_modules/react-dom" \
+            --alias:@="$PWD/_atlas/src" \
+            --define:process.env.NODE_ENV='"production"' \
+            --outfile=/tmp/edutwin-qualification/runner.js
+          printf '%s\n' '<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Collaudo locale EduTwin</title><link rel="stylesheet" href="runner.css"></head><body><p>COLLAUDO TECNICO LOCALE — NON PUBBLICABILE</p><main id="runtime"></main><script src="runner.js"></script></body></html>' > /tmp/edutwin-qualification/index.html
+          printf '{"studio":"%s","atlas":"%s","purpose":"TEST_ONLY","studentAuthorized":false}\n' "$STUDIO_EXACT" "$ATLAS_EXACT" > /tmp/edutwin-qualification/identity.json
+          (cd /tmp/edutwin-qualification && sha256sum runner.js runner.css index.html identity.json > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: edutwin-offline-exact-runtime
+          path: /tmp/edutwin-qualification/
+          if-no-files-found: error
+          retention-days: 3
