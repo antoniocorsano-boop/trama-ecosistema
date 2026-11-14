@@ -14,9 +14,27 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
    await page.locator("input[type=file]").setInputFiles({name:"edutwin.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(value))});
   }
   await expect(page.getByRole("button",{name:"Importa bozza EduTwin"})).toBeEnabled();
+  const imageDigest="f4a7d9385caf217305218bf2215f88b78a4b43f42c30c0373ea50523b8549794";
+  first.input.assets=[{id:"original-city",kind:"IMAGE",sha256:imageDigest}];
+  await page.evaluate(async digest=>{
+   const db=await new Promise<IDBDatabase>((resolve,reject)=>{
+    const req=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);
+    req.onupgradeneeded=()=>req.result.createObjectStore("activities",{keyPath:"key"});
+    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+   });
+   try{await new Promise<void>((resolve,reject)=>{
+    const path="art/city.webp",tx=db.transaction("activities","readwrite");
+    tx.objectStore("activities").put({key:"synthetic@0.1.0-draft#"+digest,activityId:"synthetic",version:"0.1.0-draft",manifestDigest:digest,
+     manifest:{title:"Originale sintetico",kind:"EDUTWIN",assets:[{id:"city",path,type:"IMAGE",sha256:digest}]},
+     files:[{path,type:"IMAGE",format:"image/webp",sha256:digest,base64:"UklGRh4AAABXRUJQVlA4TBEAAAAvH8AHAAdQoMIUqv+BiOh/AAA="}],
+     source:{kind:"LOCAL_ZIP",archiveDigest:digest,manifestPath:"intake.json"},status:"DRAFT_PENDING_HUMAN_REVIEW",importedAt:"2026-11-14T17:00:00.000Z"});
+    tx.oncomplete=()=>resolve();tx.onerror=tx.onabort=()=>reject(tx.error);
+   });}finally{db.close();}
+  },imageDigest);
   await receive(first);
   await expect(page.getByRole("status")).toContainText("Bozza salvata e riletta");
   await expect(page.getByRole("heading",{name:first.input.authoring.title,exact:true})).toBeVisible();
+  await expect(page.getByText("1 di 1 risorse verificate nell’archivio locale.")).toBeVisible();
   const downloadPromise=page.waitForEvent("download");
   await page.getByRole("button",{name:"Prepara prossima revisione"}).click();
   const download=await downloadPromise;
@@ -37,6 +55,7 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   await expect(page.getByText("Versione 2 · Da rivedere")).toBeVisible();
   await page.getByRole("button",{name:"Apri",exact:true}).click();
   await expect(page.getByText(next.input.authoring.opening.firstAction,{exact:false})).toBeVisible();
+  await expect(page.getByText("1 di 1 risorse verificate nell’archivio locale.")).toBeVisible();
   await page.getByLabel("Versione da consultare").selectOption({label:"Versione 1"});
   await expect(page.getByText(first.input.authoring.opening.firstAction,{exact:false})).toBeVisible();
   await expect(page.getByRole("button",{name:"Prepara prossima revisione"})).toHaveCount(0);
