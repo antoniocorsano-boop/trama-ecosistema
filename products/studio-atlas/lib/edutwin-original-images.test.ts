@@ -46,3 +46,10 @@ test("falls through corrupt versions to the same original bytes in another archi
  bad.files[0].base64="AA==";bad.version="0.2.0-draft";
  assert.equal((await resolveOriginalImages(refs,[bad,draft]))[0].source?.version,"0.1.0-draft");
 });
+
+test("malformed declarations cannot hide an intact original in a later archive",async()=>{
+ const {draft,refs}=await source();const bad=structuredClone(draft);
+ bad.manifest.assets=[null] as unknown as ActivityDraft["manifest"]["assets"];
+ assert.equal((await resolveOriginalImages(refs,[bad,draft]))[0].state,"VERIFIED_LOCAL");
+ assert.equal((await resolveOriginalImages(refs,[bad]))[0].state,"MISSING");
+});
