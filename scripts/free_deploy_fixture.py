@@ -72,7 +72,12 @@ class NoRedirect(HTTPRedirectHandler):
 def fetch(name):
     size, _, types = FILES[name]
     route = "/" if name == "index.html" else "/" + name
-    req = Request(ORIGIN + route, headers={"Accept-Encoding": "identity", "Cache-Control": "no-cache"})
+    # Cloudflare Pages documents a descriptive application identity for automation.
+    # Do not impersonate a browser; keep all refusals and redirects fail-closed.
+    req = Request(ORIGIN + route, headers={
+        "User-Agent": "TRAMA-FD02-Verifier/1.0 (+https://github.com/antoniocorsano-boop/trama-ecosistema)",
+        "Accept-Encoding": "identity", "Cache-Control": "no-cache",
+    })
     with build_opener(NoRedirect()).open(req, timeout=10) as response:
         if response.status != 200 or response.headers.get_content_type() not in types:
             raise ValueError(f"STOP_HTTP_OR_MIME: {name}")
