@@ -11,9 +11,10 @@ export function EduTwinHandoff(){
  const [history,setHistory]=useState<ConversationRevision[]>([]);
  const [selected,setSelected]=useState<ConversationRevision>();
  const [busy,setBusy]=useState(false);
+ const [ready,setReady]=useState(false);
  const [notice,setNotice]=useState("");
  const [failed,setFailed]=useState(false);
- useEffect(()=>{let active=true;listEduTwins().then(rows=>{if(active)setProjects(rows);}).catch(()=>{if(active){setFailed(true);setNotice("Non è stato possibile verificare l’archivio locale.");}});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;listEduTwins().then(rows=>{if(active){setProjects(rows);setReady(true);}}).catch(()=>{if(active){setFailed(true);setNotice("Non è stato possibile verificare l’archivio locale.");}});return()=>{active=false;};},[]);
  async function open(projectId:string){
   setBusy(true);setFailed(false);setNotice("");
   try{const versions=await loadEduTwinHistory(projectId);setHistory(versions);setSelected(versions.at(-1));}
@@ -50,8 +51,8 @@ export function EduTwinHandoff(){
   <header className="form-heading"><p className="eyebrow">EduTwin</p><h1>Continua da ChatGPT</h1>
    <p>Importa una bozza preparata nella conversazione. Puoi rileggerla e conservare le successive correzioni.</p></header>
   <p>Usa soltanto contenuti didattici senza dati personali. Le bozze restano in questo browser; non sono pubblicate né ancora riproducibili come avventura.</p>
-  <input ref={file} type="file" accept=".json,application/json" hidden disabled={busy} onChange={e=>void receive(e.target.files?.[0])}/>
-  <button className="primary-action" disabled={busy} onClick={()=>file.current?.click()}>Importa bozza EduTwin</button>
+  <input ref={file} type="file" accept=".json,application/json" hidden disabled={busy||!ready} onChange={e=>void receive(e.target.files?.[0])}/>
+  <button className="primary-action" disabled={busy||!ready} onClick={()=>file.current?.click()}>Importa bozza EduTwin</button>
   <p role={failed?"alert":"status"}>{busy?"Verifica della bozza…":notice}</p>
   <section className="project-list" aria-labelledby="edutwin-projects"><div className="section-heading"><h2 id="edutwin-projects">Progetti conservati</h2><span>{projects.length}</span></div>
    {projects.length===0?<p>Non ci sono ancora bozze EduTwin.</p>:projects.map(p=><article className="project-row" key={p.project.projectId}><div><strong>{p.project.title}</strong><p>Versione {p.project.revision} · Da rivedere</p></div><button className="secondary-action" disabled={busy} onClick={()=>void open(p.project.projectId)}>Apri</button></article>)}
