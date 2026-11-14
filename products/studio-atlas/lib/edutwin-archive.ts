@@ -23,17 +23,22 @@ export function parseHandoff(raw:string):Handoff{
 // Recompile the full bounded history from original inputs: persisted results
 // and approval flags are never trusted. Hashes detect accidental changes, not
 // malicious same-origin rewriting of an entire chain.
-export async function replayArchive(archive:Archive):Promise<ConversationRevision>{
+export async function replayHistory(archive:Archive):Promise<ConversationRevision[]>{
  if(!archive||!Array.isArray(archive.entries)||!archive.entries.length||archive.entries.length>MAX_REVISIONS)
   return error("INVALID_ARCHIVE");
+ const history:ConversationRevision[]=[];
  let revision:ConversationRevision|undefined;
  for(const entry of archive.entries){
   const h=parseHandoff(JSON.stringify(entry.handoff));
   if(h.projectId!==archive.projectId||h.expectedParentDigest!==(revision?.digest??null))return error("INVALID_CHAIN");
   revision=await compileConversationRevision(h.input,{projectId:h.projectId,now:entry.now},revision,revision?.digest);
   if(revision.digest!==entry.digest)return error("INVALID_CHAIN");
+  history.push(revision);
  }
- return revision!;
+ return history;
+}
+export async function replayArchive(archive:Archive):Promise<ConversationRevision>{
+ return (await replayHistory(archive)).at(-1)!;
 }
 export async function prepareHandoff(handoff:Handoff,now:string,previous?:Archive){
  const h=parseHandoff(JSON.stringify(handoff));
@@ -67,6 +72,9 @@ async function read(db:IDBDatabase,id:string):Promise<Archive|undefined>{
 export async function loadEduTwin(projectId:string){
  const db=await openDb();try{const archive=await read(db,projectId);return archive?await replayArchive(archive):undefined;}finally{db.close();}
 }
+export async function loadEduTwinHistory(projectId:string):Promise<ConversationRevision[]>{
+ const db=await openDb();try{const archive=await read(db,projectId);return archive?await replayHistory(archive):[];}finally{db.close();}
+}
 export async function listEduTwins():Promise<ConversationRevision[]>{
  const db=await openDb();
  try{
@@ -97,8 +105,8 @@ export async function importEduTwin(raw:string,now:string):Promise<ConversationR
   });
   const saved=await read(db,h.projectId);
   if(!saved)return error("ARCHIVE_READBACK_FAILED");
-  const verified=await replayArchive(saved);
-  if(verified.digest!==prepared.revision.digest)return error("ARCHIVE_READBACK_FAILED");
+  const verified=(await replayHistory(saved)).find(v=>v.digest===prepared.revision.digest);
+  if(!verified)return error("ARCHIVE_READBACK_FAILED");
   return verified;
  }finally{db.close();}
 }
