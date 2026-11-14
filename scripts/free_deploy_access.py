@@ -5,7 +5,7 @@ import json
 import re
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
-from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 BASE = "trama-fd03-review.pages.dev"  # proposed, not provisioned
 LABEL = r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?"
@@ -46,13 +46,13 @@ class NoFollow(HTTPRedirectHandler):
 
 
 def request_probe(host, route, team, ranged=False):
-    # No authentication, cookies, proxy environment, redirects, or retries.
+    # No authentication, cookies, redirects, or retries.
     headers = {"User-Agent": "TRAMA-FD03-Anonymous-Verifier/1.0",
                "Accept-Encoding": "identity", "Cache-Control": "no-cache"}
     if ranged:
         headers["Range"] = "bytes=0-31"
     req = Request("https://" + host + route, headers=headers, method="GET")
-    opener = build_opener(ProxyHandler({}), NoFollow())
+    opener = build_opener(NoFollow())
     try:
         with opener.open(req, timeout=5) as response:
             return classify(response.status, "", team, host)
