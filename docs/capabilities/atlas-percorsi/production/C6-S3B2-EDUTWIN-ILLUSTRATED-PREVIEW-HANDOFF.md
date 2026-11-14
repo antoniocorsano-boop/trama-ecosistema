@@ -1,6 +1,6 @@
 # C6/S3b.2 — Collegamento dell'anteprima illustrata
 2026-11-14 — IMPLEMENTATION_CANDIDATE / PRIVATE_REVIEW / FREE_ONLY / NO_PUBLICATION.
-S3b.1 #327 integrated 9a833a5e. Atlas #88 candidate e23df154ea5e817ccb9f6606cb61a52525cf2bc1 depends on #87 and #81, neither integrated. This PR pins that exact receiver for CI only; no deployment.
+S3b.1 #327 integrated 9a833a5e. Atlas #89 consolidated candidate 9bda13063ecbbcd27c408e35c8586e5e64ac15ca extracts #81/#87/#88 preview infrastructure onto current main without their product content. This PR pins that exact receiver for CI only; no deployment.
 
 ## Flow
 Studio Atlas / Continua da ChatGPT / latest archived revision / Storia illustrata. The author can explicitly approve the exact story for this one teacher-only preview, then open it. No imported approvals; the archive remains DRAFT. The ephemeral local story decision is bound to revision digest and time, consumed on each opening. The archive is replayed and the latest digest checked before and after media assembly; the existing review-preview builder still enforces story review, structural and transfer requirements. No product/learner/publication authorization. Missing declared original image blocks; scenes not assigned an image remain unillustrated. No substitution, provider, remote asset fetch or data in URLs.
@@ -9,4 +9,4 @@ The sender assembles edutwinMedia in the existing snapshot: version-bound bindin
 
 ## Qualification
 Three new unit tests verify exact review identity, existing transfer gate, missing/corrupt assets, nonmutation and hash. Extend real Chromium flow: import synthetic draft and original image, explicit story decision, open existing Atlas preview popup, render image, execute authored action and consequence, navigate to unillustrated scene, confirm review-only status and preserve the local history. Receiver is pinned for tests, not deployed. No private media uploaded, no user story approval asserted. 
-Next: reconcile preview infrastructure onto current Atlas main independently of rejected Museo Zero product; qualify exact paired heads and proceed with actual Missione 118 story/interaction review (not a synthetic test interpreted as a human PASS). No paid services, student release or bypass.
+Next: qualify exact consolidated paired heads and proceed with actual Missione 118 story/interaction review (not a synthetic test interpreted as a human PASS). No paid services, student release or bypass.
