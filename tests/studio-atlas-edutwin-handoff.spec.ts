@@ -17,6 +17,7 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   const imageDigest="f4a7d9385caf217305218bf2215f88b78a4b43f42c30c0373ea50523b8549794";
   first.input.assets=[{id:"original-city",kind:"IMAGE",sha256:imageDigest}];
   first.input.sceneIllustrations=[{sceneId:"edutwin-opening",assetId:"original-city",alt:"Illustrazione sintetica della città",role:"SETTING"}];
+  first.input.authoring.scenes.push({sceneId:"transfer",kind:"TRANSFER",interaction:"SUMMARY",title:"Un nuovo avviso",visibleSituation:"In biblioteca un avviso parziale indica soltanto l’orario di chiusura.",learnerAction:"Confronta l’avviso con il documento completo.",consequence:"Puoi distinguere le fasce di apertura.",reveal:"La strategia vale anche per altre fonti.",choices:[]});
   await page.evaluate(async digest=>{
    const db=await new Promise<IDBDatabase>((resolve,reject)=>{
     const req=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);
@@ -40,6 +41,23 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   await expect(image).toBeVisible();
   await expect.poll(()=>image.evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBeGreaterThan(0);
   await expect(page.getByText("Ambientazione di riferimento · Originale verificato")).toBeVisible();
+  const openPreview=page.getByRole("button",{name:"Apri anteprima illustrata"});
+  await expect(openPreview).toBeDisabled();
+  await page.getByRole("checkbox",{name:/Ho esaminato questa storia/}).check();
+  await expect(openPreview).toBeEnabled();
+  const [preview]=await Promise.all([page.waitForEvent("popup"),openPreview.click()]);
+  const runtime=preview.locator(".experience-runtime");
+  await expect(runtime).toBeVisible({timeout:20000});
+  await expect(preview.getByText(/NON AUTORIZZATA AGLI STUDENTI/)).toBeVisible();
+  await expect(runtime.getByRole("img",{name:"Illustrazione sintetica della città"})).toBeVisible();
+  await expect.poll(()=>runtime.getByRole("img").evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBe(32);
+  await runtime.getByRole("button",{name:first.input.authoring.opening.firstAction,exact:true}).click();
+  await expect(runtime.locator(".experience-feedback")).not.toBeEmpty();
+  await runtime.getByRole("button",{name:"Prosegui",exact:true}).click();
+  await expect(runtime.getByRole("img")).toHaveCount(0);
+  await expect(page.getByRole("status")).toContainText("Anteprima illustrata di revisione aperta");
+  await preview.close();
+  await expect(openPreview).toBeDisabled();
   const downloadPromise=page.waitForEvent("download");
   await page.getByRole("button",{name:"Prepara prossima revisione"}).click();
   const download=await downloadPromise;
