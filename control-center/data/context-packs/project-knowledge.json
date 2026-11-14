@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "subject": "project-knowledge",
-  "asOf": "2026-11-03T17:20:05Z",
+  "asOf": "2026-11-14T06:11:19Z",
   "status": "CURRENT",
   "facts": [
     {
@@ -1180,7 +1180,7 @@
     },
     {
       "snapshotSource": "control-center/data/ecosystem-snapshot.json",
-      "sha256": "49b81652a056348b0fe448240af0d23a2027e165fcbbb0a1846adee320d720f1"
+      "sha256": "2498bb7671f0d8e81cf7565442a04d32567c4f5cc98fc65e84c7d6ca5d8d19ee"
     },
     {
       "snapshotSource": "docs/knowledge/source-registry.json",
@@ -1188,7 +1188,7 @@
     },
     {
       "snapshotSource": "docs/decisions/decision-register.json",
-      "sha256": "80404140472844b9acefaa6fd2a30c6ae6dc5d5090b83e92bbc149ede63d9a9d"
+      "sha256": "1236ace490e9ecd23b1592adb9f4784f3df595a9fcedb77d9a61a1f02d3f25c1"
     },
     {
       "snapshotSource": "status/ecosystem-status.json",
