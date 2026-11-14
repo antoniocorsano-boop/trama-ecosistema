@@ -13,6 +13,7 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   async function receive(value:unknown){
    await page.locator("input[type=file]").setInputFiles({name:"edutwin.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(value))});
   }
+  await expect(page.getByRole("button",{name:"Importa bozza EduTwin"})).toBeEnabled();
   await receive(first);
   await expect(page.getByRole("status")).toContainText("Bozza salvata e riletta");
   await expect(page.getByRole("heading",{name:first.input.authoring.title,exact:true})).toBeVisible();
