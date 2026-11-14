@@ -39,6 +39,10 @@ Lo stato sintetico è in [STATUS.md](STATUS.md). Le decisioni vincolanti sono re
 8. [Piano operativo atomico](docs/strategy/atomic-operating-plan-2026-09-22.md)
 9. [Riferimento scientifico IA generativa e competenza professionale docente](docs/research/trama-rsr-01-genai-language-teaching.md)
 
+## Distribuzione sostenibile
+
+[TRAMA FREE-DEPLOY](docs/strategy/trama-free-deploy-v1.md) — indirizzo approvato, documentazione candidata. Prima di qualsiasi nuovo ambiente consultare [ADR-022](docs/decisions/trama-adr-022-free-deploy.md) e la [lista di controllo](docs/strategy/trama-free-deploy-checklist-v1.md). Nessuna pubblicazione o spesa autorizzata.
+
 ## Verifica locale
 
 ```bash

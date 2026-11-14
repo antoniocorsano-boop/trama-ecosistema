@@ -1,7 +1,7 @@
 {
   "$schema": "../../schemas/decision-register.schema.json",
   "registerVersion": "1.19.0",
-  "updatedAt": "2026-10-04",
+  "updatedAt": "2026-11-14",
   "decisions": [
     {
       "id": "TRAMA-ADR-001",
@@ -303,6 +303,22 @@
         "Visual Factory"
       ],
       "decision": "La Visual Factory separa policy e provisioning: TRAMA Compute Policy filtra provider realmente autorizzati e FREE_ONLY; SkyPilot orchestra provisioning/failover soltanto tra candidati ammessi. Nessun paid fallback, retry illimitato o quality downgrade automatico.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-022",
+      "title": "Distribuzione governata a costo zero — TRAMA FREE-DEPLOY",
+      "status": "PROPOSED",
+      "date": "2026-11-14",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Studio Atlas"
+      ],
+      "decision": "Separare distribuzione pubblica statica approvata, collaudo riservato e applicazioni professionali; ammettere soltanto provider FREE_ONLY con termini, quote, costo zero e protezioni verificati; preservare portabilità, originali, autorizzazioni e stop senza fallback a pagamento o pubblico.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
