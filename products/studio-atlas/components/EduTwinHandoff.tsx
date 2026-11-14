@@ -54,7 +54,7 @@ export function EduTwinHandoff(){
   // The user explicitly requests a local file; no automatic network transfer.
   // Contains the minimised authoring context, not authenticated approval evidence.
   const context={projectId:selected.project.projectId,expectedParentDigest:selected.digest,brief:selected.brief,
-   project:selected.project,decisions:selected.decisions,feedback:selected.feedback,assets:selected.assets,responses:selected.responses};
+   project:selected.project,decisions:selected.decisions,feedback:selected.feedback,assets:selected.assets,responses:selected.responses,...(selected.sceneIllustrations===undefined?{}:{sceneIllustrations:selected.sceneIllustrations})};
   const url=URL.createObjectURL(new Blob([JSON.stringify(context,null,2)],{type:"application/json"}));
   const a=document.createElement("a");a.href=url;a.download="EduTwin-"+selected.project.projectId+"-revisione.json";a.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -76,6 +76,29 @@ export function EduTwinHandoff(){
    <label>Versione da consultare <select value={selected.digest} disabled={busy} onChange={e=>setSelected(history.find(v=>v.digest===e.target.value))}>{history.map(v=><option key={v.digest} value={v.digest}>Versione {v.project.revision}</option>)}</select></label>
    <h3>Apertura della storia</h3><div style={{whiteSpace:"pre-wrap",lineHeight:1.6}}>{selected.project.scenes[0].visibleSituation}</div>
    <p><strong>Prima azione:</strong> {selected.project.scenes[0].learnerAction}</p>
+   {selected.sceneIllustrations!==undefined&&<section aria-labelledby="edutwin-visual-story">
+    <h3 id="edutwin-visual-story">Storia illustrata — proposta da rivedere</h3>
+    <p>Le immagini sono associate alle scene dal progetto, non selezionate automaticamente per somiglianza. La dicitura distingue l’ambientazione o il personaggio di riferimento dall’illustrazione di un evento.</p>
+    {selected.project.scenes.map((scene,index)=>{
+     const binding=selected.sceneIllustrations?.find(item=>item.sceneId===scene.sceneId);
+     const match=resourceFailure!==selected.digest&&originals?.digest===selected.digest&&binding
+      ?originals.matches.find(item=>item.id===binding.assetId&&item.state==="VERIFIED_LOCAL"):undefined;
+     return <details key={scene.sceneId} open={index===0||undefined} style={{margin:"1rem 0"}}>
+      <summary>{index+1}. {scene.title}</summary>
+      {binding&&match?.image?<figure style={{margin:"1rem 0"}}>
+       {/* eslint-disable-next-line @next/next/no-img-element */}
+       <img src={"data:image/webp;base64,"+match.image.base64} alt={binding.alt} width={match.image.pixelWidth} height={match.image.pixelHeight}
+        loading={index===0?"eager":"lazy"} style={{display:"block",maxWidth:"100%",height:"auto",borderRadius:"12px"}}/>
+       <figcaption>{binding.role==="SETTING"?"Ambientazione di riferimento":binding.role==="CHARACTER"?"Personaggio di riferimento":"Illustrazione della scena"} · Originale verificato</figcaption>
+      </figure>:binding?<p>{originals?.digest===selected.digest||resourceFailure===selected.digest?"Illustrazione originale non disponibile o non verificata.":"Verifica dell’illustrazione in corso…"}</p>:<p>Illustrazione da progettare.</p>}
+      {index!==0&&<p style={{whiteSpace:"pre-wrap",lineHeight:1.6}}>{scene.visibleSituation}</p>}
+      {index!==0&&<p><strong>Azione:</strong> {scene.learnerAction}</p>}
+      <p><strong>Conseguenza prevista:</strong> {scene.consequence}</p>
+      {scene.choices.length>0&&<ul>{scene.choices.map(choice=><li key={choice.choiceId}>{choice.label} — {choice.feedback}</li>)}</ul>}
+     </details>;
+    })}
+    <p>Questa è una tavola narrativa per la revisione: non è ancora l’anteprima interattiva Atlas.</p>
+   </section>}
    <details><summary>Decisioni conservate ({selected.decisions.length})</summary><ul>{selected.decisions.map(d=><li key={d.id}>{d.requirement}</li>)}</ul></details>
    <details><summary>Correzioni da verificare ({selected.feedback.length})</summary><ul>{selected.feedback.map(f=><li key={f.id}>{f.observation} — {f.requestedChange}</li>)}</ul></details>
    {selected.assets.length>0&&<section aria-label="Risorse originali">
