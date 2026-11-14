@@ -6,6 +6,7 @@ on:
       - "products/studio-atlas/**"
       - "tests/studio-atlas-atlas-preview.spec.ts"
       - "tests/studio-atlas-activity-import.spec.ts"
+      - "tests/studio-atlas-edutwin-handoff.spec.ts"
       - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
 
 permissions:
@@ -116,6 +117,17 @@ jobs:
           cp tests/studio-atlas-activity-import.spec.ts _atlas/tests/studio-atlas-activity-import.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-activity-import.spec.ts --project=chromium --reporter=line
+
+      - name: Verify local EduTwin handoff and revision archive in Chromium
+        shell: bash
+        run: |
+          (
+            cd products/studio-atlas
+            npx --no-install tsx -e 'import {missione118DraftInput} from "./lib/canonical/missione118-generator-pilot"; console.log(JSON.stringify({projectId:"missione118-e2e",expectedParentDigest:null,input:{brief:{theme:"Informazione e IA",ageBand:"lower-secondary",objective:"Confrontare fonti",durationMinutes:15,constraints:["FREE_ONLY"]},authoring:missione118DraftInput,decisions:[{id:"context",category:"CONTEXT",requirement:"Presentare la missione prima delle scelte."}],feedback:[],assets:[],responses:[]}}))' > /tmp/edutwin-handoff-fixture.json
+          )
+          cp tests/studio-atlas-edutwin-handoff.spec.ts _atlas/tests/studio-atlas-edutwin-handoff.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-edutwin-handoff.spec.ts --project=chromium --reporter=line
 
       - name: Upload server logs on failure
         if: failure()
