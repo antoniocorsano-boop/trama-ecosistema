@@ -103,3 +103,31 @@ test("rejects inconsistent brief, invalid digests and incomplete opening",async(
  const opening=fresh();opening.authoring.opening.mission="";
  await assert.rejects(compileConversationRevision(opening,identity),/INVALID_INPUT_TEXT/);
 });
+
+const illustration={sceneId:"edutwin-opening",assetId:"original-city",alt:"Una città futuristica",role:"SETTING"};
+test("illustration bindings are version-bound, retained by default and optional for old archives",async()=>{
+ const legacy=await compileConversationRevision(fresh(),identity);
+ assert.equal("sceneIllustrations" in legacy,false);
+ const initial=await compileConversationRevision({...fresh(),sceneIllustrations:[illustration]},identity);
+ assert.deepEqual(initial.sceneIllustrations,[illustration]);
+ assert.notEqual(initial.digest,legacy.digest);
+ const revised=await compileConversationRevision(revise(),later,initial,initial.digest);
+ assert.deepEqual(revised.sceneIllustrations,[illustration]);
+ assert.equal(revised.reviewRequired,true);
+ assert.equal(revised.assetBytesVerified,false);
+ const cleared=await compileConversationRevision({...revise(),sceneIllustrations:[]},later,initial,initial.digest);
+ assert.deepEqual(cleared.sceneIllustrations,[]);
+ assert.notEqual(cleared.digest,revised.digest);
+});
+test("rejects unknown scene, unknown image, duplicate assignment and arbitrary external URLs",async()=>{
+ for(const [mapping,code] of [
+  [{...illustration,sceneId:"unknown"},"ILLUSTRATION_SCENE_UNKNOWN"],
+  [{...illustration,assetId:"unknown"},"ILLUSTRATION_ASSET_UNKNOWN"],
+  [{...illustration,url:"https://example.invalid/art.webp"},"INVALID_INPUT_FIELDS"]
+ ] as const){
+  await assert.rejects(compileConversationRevision({...fresh(),sceneIllustrations:[mapping]},identity),new RegExp(code));
+ }
+ await assert.rejects(compileConversationRevision({...fresh(),sceneIllustrations:[illustration,illustration]},identity),/DUPLICATE_SCENE_ILLUSTRATION/);
+ const nonImage=fresh();nonImage.assets[0].kind="AUDIO";
+ await assert.rejects(compileConversationRevision({...nonImage,sceneIllustrations:[illustration]},identity),/ILLUSTRATION_ASSET_UNKNOWN/);
+});

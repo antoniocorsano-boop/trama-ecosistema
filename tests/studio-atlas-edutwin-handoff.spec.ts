@@ -16,6 +16,7 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   await expect(page.getByRole("button",{name:"Importa bozza EduTwin"})).toBeEnabled();
   const imageDigest="f4a7d9385caf217305218bf2215f88b78a4b43f42c30c0373ea50523b8549794";
   first.input.assets=[{id:"original-city",kind:"IMAGE",sha256:imageDigest}];
+  first.input.sceneIllustrations=[{sceneId:"edutwin-opening",assetId:"original-city",alt:"Illustrazione sintetica della città",role:"SETTING"}];
   await page.evaluate(async digest=>{
    const db=await new Promise<IDBDatabase>((resolve,reject)=>{
     const req=indexedDB.open("studio-atlas.activity-drafts.v0.1",1);
@@ -35,6 +36,10 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   await expect(page.getByRole("status")).toContainText("Bozza salvata e riletta");
   await expect(page.getByRole("heading",{name:first.input.authoring.title,exact:true})).toBeVisible();
   await expect(page.getByText("1 di 1 risorse verificate nell’archivio locale.")).toBeVisible();
+  const image=page.getByRole("img",{name:"Illustrazione sintetica della città"});
+  await expect(image).toBeVisible();
+  await expect.poll(()=>image.evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBeGreaterThan(0);
+  await expect(page.getByText("Ambientazione di riferimento · Originale verificato")).toBeVisible();
   const downloadPromise=page.waitForEvent("download");
   await page.getByRole("button",{name:"Prepara prossima revisione"}).click();
   const download=await downloadPromise;
@@ -42,9 +47,10 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   const saved=JSON.parse(await readFile(path!,"utf8"));
   expect(saved.expectedParentDigest).toMatch(/^[a-f0-9]{64}$/);
   expect(saved.project.storyReview.decision).toBe("DRAFT");
+  expect(saved.sceneIllustrations).toEqual(first.input.sceneIllustrations);
   const next=structuredClone(first);
   next.expectedParentDigest=saved.expectedParentDigest;
-  next.input.decisions=[];next.input.assets=[];
+  next.input.decisions=[];next.input.assets=[];delete next.input.sceneIllustrations;
   next.input.authoring.opening.firstAction="Osserva il primo display per confrontare gli avvisi.";
   next.input.feedback=[{id:"clarity",category:"ACTION",observation:"Serve una prima azione più concreta.",requestedChange:"Indicare il display."}];
   next.input.responses=[{feedbackId:"clarity",proposedChange:"Esplicitato il display."}];
@@ -55,6 +61,7 @@ test("EduTwin local handoff preserves revision history, rejects stale imports an
   await expect(page.getByText("Versione 2 · Da rivedere")).toBeVisible();
   await page.getByRole("button",{name:"Apri",exact:true}).click();
   await expect(page.getByText(next.input.authoring.opening.firstAction,{exact:false})).toBeVisible();
+  await expect(image).toBeVisible();
   await expect(page.getByText("1 di 1 risorse verificate nell’archivio locale.")).toBeVisible();
   await page.getByLabel("Versione da consultare").selectOption({label:"Versione 1"});
   await expect(page.getByText(first.input.authoring.opening.firstAction,{exact:false})).toBeVisible();
