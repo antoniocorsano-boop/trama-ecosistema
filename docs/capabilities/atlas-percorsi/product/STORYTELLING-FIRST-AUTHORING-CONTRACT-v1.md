@@ -141,3 +141,7 @@ Story approval:
 - does not imply Q9.
 
 It authorizes progression to world design only.
+
+## 11. Operational companion — narrative-first consolidation (2026-11-14)
+
+[Protocollo di progettazione narrativa educativa v0.1](PROTOCOLLO-PROGETTAZIONE-NARRATIVA-EDUCATIVA-v0.1.md) specifies the proposed practical process from educational intent through premise selection, causal planning, complete prose and human editorial review, before World Brief. It records the production HOLD following Missione 118's real-device feedback. It is a methodological proposal, not a new state machine, automatic gate or runtime authorization. The existing story-first anatomy, human authority and non-narrative exception remain unchanged.
