@@ -83,6 +83,14 @@ class FixtureTests(unittest.TestCase):
             self.assertEqual(fd.fetch("index.html"), self.payload["index.html"])
             req = opener.return_value.open.call_args.args[0]
             self.assertEqual(req.full_url, fd.ORIGIN + "/")
+            self.assertEqual(req.get_header("User-agent"),
+                             "TRAMA-FD02-Verifier/1.0 (+https://github.com/antoniocorsano-boop/trama-ecosistema)")
+            from urllib.error import HTTPError
+            opener.return_value.open.side_effect = HTTPError(req.full_url, 403, "Forbidden", {}, None)
+            with self.assertRaises(HTTPError):
+                fd.fetch("index.html")
+            self.assertEqual(opener.return_value.open.call_count, 2)
+            opener.return_value.open.side_effect = None
             response.headers.get_content_type.return_value = "text/plain"
             with self.assertRaisesRegex(ValueError, "STOP_HTTP_OR_MIME"):
                 fd.fetch("index.html")
