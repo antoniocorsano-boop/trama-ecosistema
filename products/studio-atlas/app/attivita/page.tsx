@@ -10,6 +10,8 @@ import {
 import { GALLERY_VERIFIED } from "../../lib/activity-gallery";
 import { DISPLAY_MAX_PIXELS } from "../../lib/activity-media-limits";
 import { previewFile, verifiedPreviewHtml } from "../../lib/activity-preview";
+import { activityQualityProgress, type QualityEvidence } from "../../lib/content-quality-progress";
+import { resolveActivityTechnicalEvidence } from "../../lib/content-quality-evidence";
 
 const FIRST_PACKAGE = "https://github.com/antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("") + "/pull/84";
 
@@ -33,6 +35,17 @@ export default function AttivitaPage() {
     activities.find((item) => item.key === selectedKey) ?? activities[0] ?? null,
     [activities, selectedKey]
   );
+  const [technicalEvidence,setTechnicalEvidence]=useState<{draft:ActivityDraft;items:QualityEvidence[]}|null>(null);
+  useEffect(()=>{
+    setTechnicalEvidence(null);
+    if(!current)return;
+    let cancelled=false;
+    resolveActivityTechnicalEvidence(current).then(items=>{
+      if(!cancelled)setTechnicalEvidence({draft:current,items});
+    }).catch(()=>{});
+    return ()=>{cancelled=true;};
+  },[current]);
+  const quality = current ? activityQualityProgress(current,technicalEvidence?.draft===current?technicalEvidence.items:[]) : null;
   const imageAssets = current?.manifest.assets.filter((item) => item.type === "IMAGE") ?? [];
   const [galleryLimit,setGalleryLimit]=useState(8);
   useEffect(()=>setGalleryLimit(8),[current?.key]);
@@ -211,10 +224,20 @@ export default function AttivitaPage() {
             </div>
           )}
 
-          <div className="activity-review-line">
-            <strong>Da verificare prima dell'uso con gli studenti</strong>
-            <p>Diritti, accessibilità, correttezza dei contenuti e obiettivi del curricolo approvato in Arena. Nessuna autorizzazione di pubblicazione è stata concessa.</p>
-          </div>
+          {quality && <section className="activity-review-line" aria-labelledby="quality-title">
+            <h3 id="quality-title">Percorso di qualità</h3>
+            <p><strong>{quality.next ? "Prossima verifica: "+quality.next.label : "Verifiche documentate"}</strong></p>
+            {quality.next && <p>{quality.next.action}</p>}
+            {!quality.planBound && <p>Il piano editoriale non è ancora associato a questa versione. Le verifiche restano aperte.</p>}
+            <ol>{quality.steps.map(step=><li key={step.title}>
+              <details>
+                <summary>{step.title} · {step.decision==="PASS"?"Verificato":step.decision==="REWORK"?"Da correggere":"Da verificare"}</summary>
+                <ul>{step.items.map(item=><li key={item.id}>{item.label} — {item.decision==="PASS"?"Verificato":item.decision==="REWORK"?"Da correggere":"Da verificare"}</li>)}</ul>
+                {step.title==="Produci" && quality.voicePreparation && <p>{quality.voicePreparation.status} {quality.voicePreparation.next}</p>}
+              </details>
+            </li>)}</ol>
+            <p>Riepilogo in sola consultazione. Nessuna autorizzazione di pubblicazione è stata concessa.</p>
+          </section>}
 
           {!html && <p>Anteprima in attesa di verifica del codice. Le risorse restano conservate; nessun HTML non verificato viene eseguito.</p>}
           <div className="activity-controls">

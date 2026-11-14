@@ -4,11 +4,15 @@ type PreviewKind = "EXPERIENCE" | "GUIDE";
 type Pin = { path: string; sha256: string };
 type Pins = Record<PreviewKind, Pin>;
 
-// Only these two exact pilot artifacts may execute in the reserved teacher preview.
+// Only the exact pinned pilot artifacts may execute in the reserved teacher preview.
 // A manifest or ZIP supplied by an author cannot grant itself this permission.
 const MEDIA: Pins = {
   EXPERIENCE: {path:"experience.html",sha256:"18468a82b020ff106c2281d24304570b9e7efb17f25e5eebd6af766764be173b"},
   GUIDE: {path:"teacher/guida_docente.html",sha256:"b7f924e0ac63d0e314f9ece0af672958a83fd0fa8a8a3e81be325af93ddb51f8"},
+};
+const V9: Pins = {
+  EXPERIENCE: {path:"experience.html",sha256:"9ae45c2c54e39306f4b0a138d14ec98257205bd65ce50326175292548a60e4ba"},
+  GUIDE: {path:"teacher/guida_docente.html",sha256:"a6d8f907d44dcd4061cb3c1cd2ee8147de8bc510b0db5563c9a8fd878c7d2fb3"},
 };
 const LEGACY: Pins = {
   EXPERIENCE: {path:"experience.html",sha256:"22971583a2a7dc2d45947b4ce19a843a057b05864b9a2b896762728c9519175e"},
@@ -18,6 +22,9 @@ const LEGACY: Pins = {
 function pins(draft: ActivityDraft): Pins | undefined {
   if (draft.status !== "DRAFT_PENDING_HUMAN_REVIEW") return;
   const s=draft.source;
+  if(s.kind==="LOCAL_ZIP" && draft.activityId==="trama-missione-118-2026" &&
+    draft.version==="0.4.1-draft" && draft.manifestDigest==="1b00cf15c4dc7a54e805489f631b4d7135a3f50e3fd8ec5ee2267d6fd849d990" &&
+    s.archiveDigest==="ab2c5a6b48ccb2aa2196c1a91e9aa7452ea36390e98463f7f495c4d709af684e" && s.manifestPath==="intake.json") return V9;
   if(s.kind==="LOCAL_ZIP" && draft.activityId==="trama-missione-118-luce-giusta" &&
     draft.version==="0.1.1-draft" &&
     draft.manifestDigest==="765d7885dd457a90afdb0aadd6b31ae95b286160b140a41f7d9d007a786cd977" &&
