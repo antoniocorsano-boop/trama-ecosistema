@@ -37,12 +37,7 @@
       "minLength": 1
     },
     "authoringState": {
-      "type": "string",
-      "enum": [
-        "AUTHORING",
-        "REVIEWABLE",
-        "REVISION_REQUIRED"
-      ]
+      "const": "AUTHORING"
     },
     "creatorSubjectRef": {
       "type": "string"
@@ -239,12 +234,6 @@
             "type": "string",
             "minLength": 1
           },
-          "availableInformation": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "learnerActions": {
             "type": "array",
             "minItems": 1,
@@ -259,18 +248,6 @@
             "items": {
               "type": "string",
               "minLength": 1
-            }
-          },
-          "informationRevealed": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "continuityAnchors": {
-            "type": "array",
-            "items": {
-              "type": "string"
             }
           },
           "nextSceneRefs": {
