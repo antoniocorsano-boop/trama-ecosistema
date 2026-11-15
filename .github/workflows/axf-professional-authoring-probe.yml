@@ -99,3 +99,181 @@ jobs:
           sudo unzip -p export.zip index.html | python3 -c 'import sys; data=sys.stdin.read(); assert "<html" in data.lower() and "</html>" in data.lower(); print("EXE_HTML_DOCUMENT_PASS")'
           sudo sha256sum fixture.elpx export.zip
           echo 'EXE_CONVERT_EXPORT_PASS; upstream fixture only; privacy, accessibility and integration remain open'
+
+  authoring-roundtrip:
+    if: github.head_ref == 'lab/axf-professional-authoring'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Generate original synthetic intent and native sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/axf-roundtrip
+          cd /tmp/axf-roundtrip
+          python3 <<'PY'
+          import json, zipfile, xml.etree.ElementTree as E, html
+          from pathlib import Path
+          intent = {"id":"AXF-AUTH-RT01","purpose":"Synthetic authoring pipeline test, not student content","language":"it","studentAuthorized":False,"runtimeAuthorized":False,"title":"Prova redazionale Atlas","pages":[{"title":"Osservazione","text":"Il campione blu ha il simbolo del cerchio."},{"title":"Confronto","text":"Il campione verde ha il simbolo del quadrato."}],"branches":[{"label":"Osserva il blu","result":"Il cerchio identifica il campione blu."},{"label":"Osserva il verde","result":"Il quadrato identifica il campione verde."}],"revision":"Il campione verde ha il simbolo del triangolo."}
+          Path("intent.json").write_text(json.dumps(intent,ensure_ascii=False,indent=2))
+          def child(parent,tag,value=None):
+              e=E.SubElement(parent,tag)
+              if value is not None: e.text=str(value)
+              return e
+          def kv(parent,tag,key,value):
+              e=child(parent,tag); child(e,"key",key); child(e,"value",value)
+          root=E.Element("ode",{"xmlns":"http://www.intef.es/xsd/ode","version":"2.0"})
+          u=child(root,"userPreferences"); kv(u,"userPreference","theme","base")
+          res=child(root,"odeResources")
+          for k,v in {"odeId":"axf-roundtrip-test","odeVersionId":"axf-roundtrip-v1","exe_version":"4.0.6"}.items(): kv(res,"odeResource",k,v)
+          meta=child(root,"odeProperties")
+          for k,v in {"pp_title":intent["title"],"pp_lang":"it","pp_author":"Atlas synthetic fixture","pp_theme":"base","pp_addExeLink":"true","pp_addPagination":"true","pp_addSearchBox":"false","pp_addMathJax":"false","exportSource":"false"}.items(): kv(meta,"odeProperty",k,v)
+          nav=child(root,"odeNavStructures")
+          for i,p in enumerate(intent["pages"],1):
+              n=child(nav,"odeNavStructure"); pid=f"axf-page-{i}"; bid=f"axf-block-{i}"
+              for k,v in {"odePageId":pid,"odeParentPageId":"","pageName":p["title"],"odeNavStructureOrder":i-1}.items(): child(n,k,v)
+              kv(child(n,"odeNavStructureProperties"),"odeNavStructureProperty","titlePage",p["title"])
+              b=child(child(n,"odePagStructures"),"odePagStructure")
+              for k,v in {"odePageId":pid,"odeBlockId":bid,"blockName":p["title"],"iconName":"","odePagStructureOrder":0}.items(): child(b,k,v)
+              kv(child(b,"odePagStructureProperties"),"odePagStructureProperty","visibility","true")
+              c=child(child(b,"odeComponents"),"odeComponent")
+              body="<p>"+html.escape(p["text"])+"</p>"
+              for k,v in {"odePageId":pid,"odeBlockId":bid,"odeIdeviceId":f"axf-text-{i}","odeIdeviceTypeName":"text","htmlView":body,"jsonProperties":json.dumps({"textTextarea":body},ensure_ascii=False),"odeComponentsOrder":0}.items(): child(c,k,v)
+              kv(child(c,"odeComponentsProperties"),"odeComponentsProperty","visibility","true")
+          with zipfile.ZipFile("source.elpx","w",zipfile.ZIP_DEFLATED) as z: z.writestr("content.xml",E.tostring(root,encoding="utf-8",xml_declaration=True))
+          ink=["Prova redazionale: scegli un campione."]+[f"* [{b['label']}] -> branch{i}" for i,b in enumerate(intent["branches"])]
+          for i,b in enumerate(intent["branches"]): ink += [f"=== branch{i} ===",b["result"],"-> END"]
+          Path("story.ink").write_text("\n".join(ink)+"\n")
+          print("SYNTHETIC_INTENT_AND_NATIVE_SOURCES_CREATED")
+          PY
+      - name: Produce editable and HTML5 eXeLearning exports and reimport a revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/axf-roundtrip
+          image=ghcr.io/exelearning/exelearning@sha256:9fcf5a83953968daf5f32ef0d95665a580ae24414e73aec1d28c2aad0f9bd5c7
+          docker pull "$image"
+          mkdir exchange
+          cp source.elpx exchange/
+          identity="$(docker run --rm --network none --entrypoint /bin/sh "$image" -c 'printf "%s:%s" "$(id -u)" "$(id -g)"')"
+          [[ "$identity" =~ ^[0-9]+:[0-9]+$ ]]
+          chmod 0644 exchange/source.elpx
+          sudo chown "$identity" exchange
+          mount="type=bind,source=$PWD/exchange,target=/mnt/data"
+          app_secret="$(openssl rand -hex 32)"
+          jwt_secret="$(openssl rand -hex 32)"
+          cli() { docker run --rm --network none --mount "$mount" -e APP_SECRET="$app_secret" -e API_JWT_SECRET="$jwt_secret" "$image" bun cli "$@"; }
+          cli elp:export /mnt/data/source.elpx /mnt/data/editable.elpx --format=elpx
+          cli elp:export /mnt/data/editable.elpx /mnt/data/first.zip --format=html5
+          sudo python3 <<'PY'
+          import json, zipfile
+          from pathlib import Path
+          i=json.loads(Path("intent.json").read_text())
+          old=i["pages"][1]["text"]; new=i["revision"]
+          with zipfile.ZipFile("exchange/editable.elpx") as src, zipfile.ZipFile("exchange/revised.elpx","w",zipfile.ZIP_DEFLATED) as dst:
+              xml=src.read("content.xml").decode()
+              assert old in xml and i["pages"][0]["text"] in xml, "Native export lost content"
+              for name in src.namelist(): dst.writestr(name, xml.replace(old,new).encode() if name=="content.xml" else src.read(name))
+          print("NATIVE_EDITABLE_SOURCE_REVISION_PASS")
+          PY
+          sudo chmod 0644 exchange/revised.elpx
+          cli elp:export /mnt/data/revised.elpx /mnt/data/revised.zip --format=html5
+          mkdir -p preview/exe-v1 preview/exe-v2 evidence
+          sudo python3 <<'PY'
+          import zipfile,json,pathlib,hashlib
+          i=json.loads(pathlib.Path("intent.json").read_text())
+          for label,archive,expected in [("exe-v1","first.zip",i["pages"][1]["text"]),("exe-v2","revised.zip",i["revision"])]:
+              p=pathlib.Path("exchange")/archive
+              with zipfile.ZipFile(p) as z:
+                  assert z.testzip() is None
+                  assert "index.html" in z.namelist()
+                  for name in z.namelist():
+                      q=pathlib.PurePosixPath(name)
+                      assert not q.is_absolute() and ".." not in q.parts
+                  assert sum(x.file_size for x in z.infolist())<100_000_000
+                  allhtml=" ".join(z.read(n).decode("utf-8") for n in z.namelist() if n.endswith(".html"))
+                  assert i["pages"][0]["text"] in allhtml and expected in allhtml
+                  if label=="exe-v2": assert i["pages"][1]["text"] not in allhtml
+                  z.extractall("preview/"+label)
+              print(label,hashlib.sha256(p.read_bytes()).hexdigest())
+          PY
+          sudo chown -R "$(id -u):$(id -g)" preview exchange
+          echo 'EXE_ORIGINAL_NATIVE_ROUNDTRIP_PASS'
+      - name: Compile Ink, build a minimal isolated preview and verify branches
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/axf-roundtrip
+          npm install --ignore-scripts --no-audit --no-fund --save-exact inkjs@2.2.5 esbuild@0.25.5 @playwright/test@1.58.2 axe-core@4.10.3
+          mkdir -p preview/ink
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict');
+          const {Compiler,Story}=require('inkjs/full');
+          const i=JSON.parse(fs.readFileSync('intent.json','utf8'));
+          const compiled=new Compiler(fs.readFileSync('story.ink','utf8')).Compile().ToJson();
+          for(const [n,b] of i.branches.entries()){
+            const s=new Story(compiled);s.ContinueMaximally();assert.equal(s.currentChoices.length,2);s.ChooseChoiceIndex(n);assert.ok(s.ContinueMaximally().includes(b.result));assert.equal(s.currentChoices.length,0);
+          }
+          fs.writeFileSync('preview/ink/story.json',compiled);
+          fs.writeFileSync('ink-entry.js', "const {Story}=require('inkjs');const source="+JSON.stringify(compiled)+";const out=document.querySelector('#text'), choices=document.querySelector('#choices');let s;function render(){out.textContent=s.ContinueMaximally();choices.replaceChildren();for(const [n,c] of s.currentChoices.entries()){const b=document.createElement('button');b.textContent=c.text;b.onclick=()=>{s.ChooseChoiceIndex(n);render();out.focus()};choices.append(b)}}function restart(){s=new Story(source);render()}document.querySelector('#restart').onclick=restart;restart();");
+          require('esbuild').buildSync({entryPoints:['ink-entry.js'],bundle:true,platform:'browser',outfile:'preview/ink/app.js'});
+          fs.writeFileSync('preview/ink/index.html','<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prova narrativa Atlas</title><style>body{font:1rem system-ui;max-width:42rem;margin:auto;padding:1rem}button{font:inherit;display:block;margin:1rem 0;padding:.7rem}button:focus-visible{outline:3px solid #176147}</style><main><h1>Prova narrativa Atlas</h1><p id="text" tabindex="-1" aria-live="polite"></p><div id="choices"></div><button id="restart">Ricomincia</button></main><script src="app.js"></script></html>');
+          console.log('INK_ORIGINAL_COMPILE_REPLAY_PASS');
+          NODE
+      - name: Render isolated previews and collect scoped accessibility and storage evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/axf-roundtrip
+          npx playwright install --with-deps chromium
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory preview >/tmp/axf-roundtrip-server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" || true' EXIT
+          node <<'NODE'
+          const {chromium}=require('@playwright/test'),fs=require('node:fs'),assert=require('node:assert/strict');
+          const i=JSON.parse(fs.readFileSync('intent.json','utf8')),base='http://127.0.0.1:8765',receipt=[];
+          (async()=>{const browser=await chromium.launch({headless:true});try{
+            for(const width of [390,1280]){
+              for(const name of ['exe-v1','exe-v2','ink']){
+                const context=await browser.newContext({viewport:{width,height:844}});
+                const external=[],errors=[],httpErrors=[];
+                await context.route('**/*',r=>{const u=new URL(r.request().url());if(u.origin===base||['data:','blob:'].includes(u.protocol))return r.continue();external.push(u.origin);return r.abort()});
+                const page=await context.newPage();page.on('pageerror',e=>errors.push(String(e)));page.on('response',r=>{if(r.status()>=400)httpErrors.push(r.status()+': '+r.url())});
+                await page.goto(base+'/'+name+'/index.html');await page.waitForLoadState('networkidle');
+                if(name==='ink'){
+                  for(const b of i.branches){await page.getByRole('button',{name:b.label,exact:true}).click();assert.ok((await page.locator('#text').innerText()).includes(b.result));await page.getByRole('button',{name:'Ricomincia'}).click();}
+                }else{
+                  assert.ok((await page.locator('body').innerText()).includes(i.pages[0].text));
+                  const link=page.getByRole('link',{name:i.pages[1].title,exact:true}).first();await link.click();await page.waitForLoadState('networkidle');
+                  assert.ok((await page.locator('body').innerText()).includes(name==='exe-v1'?i.pages[1].text:i.revision));
+                }
+                await page.screenshot({path:'evidence/'+name+'-'+width+'.png',fullPage:true});
+                await page.addScriptTag({path:require.resolve('axe-core/axe.min.js')});
+                const axe=await page.evaluate(async()=>{const r=await window.axe.run();return r.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.length}))});
+                const storage=await page.evaluate(async()=>({localKeys:Object.keys(localStorage),sessionKeys:Object.keys(sessionStorage),databases:typeof indexedDB.databases==='function'?(await indexedDB.databases()).map(x=>x.name):null,overflow:document.documentElement.scrollWidth>innerWidth+1}));
+                receipt.push({name,width,externalAttempts:external,errors,httpErrors,axe,storage,cookies:(await context.cookies()).map(c=>c.name)});
+                fs.writeFileSync('evidence/browser-receipt.json',JSON.stringify(receipt,null,2));
+                await context.close();
+              }
+            }
+            assert.ok(receipt.every(x=>x.errors.length===0&&x.httpErrors.length===0&&x.externalAttempts.length===0),"Review browser receipt: errors or external attempts");
+            console.log('ISOLATED_BROWSER_PREVIEW_PASS; automated accessibility and storage observations are not full qualification');
+          }finally{await browser.close()}})().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
+      - name: Preserve synthetic receipts and previews
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: axf-professional-authoring-roundtrip
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            /tmp/axf-roundtrip/intent.json
+            /tmp/axf-roundtrip/story.ink
+            /tmp/axf-roundtrip/source.elpx
+            /tmp/axf-roundtrip/exchange/editable.elpx
+            /tmp/axf-roundtrip/exchange/revised.elpx
+            /tmp/axf-roundtrip/exchange/first.zip
+            /tmp/axf-roundtrip/exchange/revised.zip
+            /tmp/axf-roundtrip/preview/ink
+            /tmp/axf-roundtrip/evidence
