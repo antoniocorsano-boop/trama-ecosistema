@@ -136,7 +136,8 @@
       "W6A/W5A and transfer scientific review open",
       "binary import pending",
       "actual Tiled/GDevelop exports and E02 Phaser handoff untested",
-      "full accessibility, real devices, production host and licenses open"
+      "full accessibility, real devices, production host and licenses open",
+      "remaining exact-head CI incomplete/cancelled at observation"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -147,8 +148,8 @@
     "review": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md",
     "artBrief": "../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md",
     "humanDirection": {
-      "source": "Okay, procedi (15/11/2026)",
-      "scope": "regia and first visual candidate only",
+      "source": "Okay, bene (15/11/2026)",
+      "scope": "E02 v2 art direction for candidate continuation only",
       "fullW6A": "PENDING",
       "rights": "OPEN"
     },
@@ -180,9 +181,19 @@
       "gitImport": "PENDING",
       "candidateRepo": "Atlas",
       "candidatePr": 97,
-      "candidateHead": "fb7603ba92a011da6d9682c0b04a4ca1d063c9dc",
+      "candidateHead": "62904899251995ac6c0a83113f7ec2e178584853",
       "packageLibraryFileId": "libfile_dab7861963dc81919800998c25caf58b",
-      "qualification": "LOCAL_STATIC_AND_MOCK_DISPATCH_PASS_ONLY"
+      "qualification": "LOCAL_STATIC_AND_MOCK_DISPATCH_PASS_ONLY",
+      "preview": {
+        "htmlLibraryFileId": "libfile_b82f5077ca1881918ac1552f140d7bce",
+        "zipLibraryFileId": "libfile_be7ee6c9773c81919ec25cdc860671be",
+        "status": "CHROMIUM_IN_MEMORY_PASS_ONLY"
+      },
+      "pw01": {
+        "run": 43711905548,
+        "status": "PASS",
+        "note": "one-shot hash; no policy exemption"
+      }
     }
   },
   "queued": [
