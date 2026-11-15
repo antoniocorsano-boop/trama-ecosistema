@@ -29,13 +29,13 @@ jobs:
           unzip -q .tv01c-model/model.zip -d .tv01c-model
       - name: Local inference in isolated network namespace
         run: |
-          mkdir -p .tv01c-evidence
-          sudo unshare --net --mount --propagation private -- sh -c 'mount -t sysfs sysfs /sys && exec setpriv --reuid="$1" --regid="$2" --clear-groups "$3" "$4" --model "$5" --model-archive "$6" --output "$7"' sh "$(id -u)" "$(id -g)" "$PWD/.tv01c-venv/bin/python" "$PWD/experiments/tv-01c/benchmark.py" "$PWD/.tv01c-model/vosk-model-small-it-0.22" "$PWD/.tv01c-model/model.zip" "$PWD/.tv01c-evidence/report.json"
+          mkdir -p tv01c-evidence
+          sudo unshare --net --mount --propagation private -- sh -c 'mount -t sysfs sysfs /sys && exec setpriv --reuid="$1" --regid="$2" --clear-groups "$3" "$4" --model "$5" --model-archive "$6" --output "$7"' sh "$(id -u)" "$(id -g)" "$PWD/.tv01c-venv/bin/python" "$PWD/experiments/tv-01c/benchmark.py" "$PWD/.tv01c-model/vosk-model-small-it-0.22" "$PWD/.tv01c-model/model.zip" "$PWD/tv01c-evidence/report.json"
       - name: Preserve synthetic report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: tv01c-synthetic-asr-report
-          path: .tv01c-evidence/report.json
+          path: tv01c-evidence/report.json
           if-no-files-found: error
           retention-days: 7
