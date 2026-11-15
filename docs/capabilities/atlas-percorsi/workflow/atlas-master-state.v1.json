@@ -40,6 +40,15 @@
       "state": "OPEN_NOT_MERGED",
       "passed": 6,
       "failed": 0
+    },
+    {
+      "repo": "Atlas",
+      "githubRepositoryId": 1376266693,
+      "pr": 96,
+      "head": "a02341910803bfb8c0944d4e5237260be5ed6059",
+      "state": "DRAFT",
+      "passed": 6,
+      "failed": 0
     }
   ],
   "phases": [
@@ -103,47 +112,50 @@
     }
   ],
   "next": {
-    "id": "M2-D",
-    "phase": "F3-B2",
-    "state": "EVIDENCE_REVIEWED_AUTHORING_CHANGE_TEST_PENDING",
-    "action": "Verify single-source coordinate change across both native exports, then assess bounded M3 composition",
-    "evidence": "../production/AXF-M2D-MULTIENGINE-DECISION-v1.md",
+    "id": "M3-A",
+    "phase": "F3-B3",
+    "state": "ISOLATED_HANDOFF_PENDING",
+    "action": "Verify pinned originals, exclusive GDevelop/Phaser lifecycle, verified evidence and exit on Atlas #97",
+    "evidence": "../production/AXF-M2D-AUTHORING-CHANGE-EVIDENCE-v1.md",
+    "artifacts": [
+      {
+        "githubRepositoryId": 1376266693,
+        "pr": 97,
+        "head": "8ff6ece6dc487dc5341881066db6bace5a49d27e",
+        "baseHead": "a02341910803bfb8c0944d4e5237260be5ed6059"
+      }
+    ],
     "requires": [
-      "M2-C technical PASS",
-      "M1 direction accepted"
+      "M2-D technical authoring change PASS",
+      "bounded experimental direction"
     ],
     "acceptance": [
-      "compare actual screenshots and production change effort",
-      "record candidate role and alternatives, exact evidence and open gates",
-      "human decision on bounded M3 composition"
+      "reference lock exact",
+      "single active renderer",
+      "verified trace retained on return and reset on explicit new attempt or exit",
+      "no external network/persistence"
     ],
     "blockers": [
-      "F3-B remains REVISE",
-      "physical devices, full accessibility, license and dependency lock, host production integration and human review open",
-      "single-source modification test not yet qualified",
-      "bounded M3 composition decision and GDevelop benefit not yet demonstrated"
+      "F3-B REVISE",
+      "illustrated interactive map not created",
+      "W6A and scientific transfer review open",
+      "production host, licenses, full accessibility and physical devices open"
     ],
     "notAllowed": [
-      "new production engine adoption",
+      "production engine adoption",
       "student publication",
       "paid service",
       "automatic approval"
-    ],
-    "review": "../production/AXF-M2D-PROFILE-REVIEW-v1.md",
-    "authoringTest": {
-      "githubRepositoryId": 1376266693,
-      "pr": 96,
-      "head": "a02341910803bfb8c0944d4e5237260be5ed6059",
-      "state": "PENDING"
-    }
+    ]
   },
   "queued": [
     {
-      "id": "M3",
+      "id": "M3-B",
       "requires": [
-        "M2-D bounded composition decision"
+        "M3-A technical result",
+        "visual target and W6A review"
       ],
-      "action": "produce immersive episode"
+      "action": "produce immersive episode candidate with original assets and approved scene plan"
     },
     {
       "id": "M4",
@@ -265,6 +277,22 @@
         "sha256": "18354f42cbab6c640866007427afa6c62179f8431911f4ec8790caa3db1cd8f2",
         "evidence": "../production/AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md"
       }
+    },
+    {
+      "id": "M2-D",
+      "state": "AUTHORING_CHANGE_EXACT_HEAD_PASS_BOUNDED_PREFLIGHT",
+      "evidence": "../production/AXF-M2D-AUTHORING-CHANGE-EVIDENCE-v1.md",
+      "head": "a02341910803bfb8c0944d4e5237260be5ed6059",
+      "runId": 43708682098,
+      "artifactId": 14159488531,
+      "sha256": "b64104a1a44340fa7257d847b1aebbf97a48c4c7ecb6afbcf35f2d38844ccf3f",
+      "passed": 6,
+      "failed": 0,
+      "limits": [
+        "single source coordinate change only",
+        "human authoring effort and narrative advantage unproven",
+        "no W6A or production approval"
+      ]
     }
   ]
 }
