@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Check PR #100 exact head CI and perform private original-art rendering on the same host; compare G2 desktop/mobile; distinct review and physical evidence; P2 HOLD.",
+    "action": "Render exact PR #100 host privately with verified original G2 artwork, compare desktop/mobile, obtain distinct review and physical evidence; P2 HOLD; no merge/deployment/student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_R2_PR98_PR99_PASS_G2_PR100_VISUAL_CANDIDATE_CI_PENDING_P2_HOLD",
+        "status": "P1_R2_PR98_PR99_PR100_SCOPED_PASS_G2_PRIVATE_RENDER_PENDING_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -1290,7 +1290,7 @@
                     "head": "742e72ce7b56f258ae68598bfb51167ad667a9b6",
                     "basePr": 99,
                     "ciRunId": 43760502110,
-                    "ciStatus": "IN_PROGRESS",
+                    "ciStatus": "PASS_COMPLETE",
                     "originalG2Sha256": "b7c95e87241c59448963ebe0b8c6883df3b224205e09fc1f6ffd761d9aeca5e3",
                     "privateAssetPack": {
                       "libraryFileId": "libfile_c43305a484c4819181dacc42d9a3a4dd",
@@ -1303,7 +1303,12 @@
                     "physical": "PENDING",
                     "p2": "HOLD",
                     "studentAuthorized": false,
-                    "runtimeAuthorized": false
+                    "runtimeAuthorized": false,
+                    "completedWorkflowCount": 9,
+                    "ciJobId": 132954003578,
+                    "qualificationCommit": "57a406bb1d1798595c791d94e150046f251df3d9",
+                    "browserRegressionTests": "20/20 PASS",
+                    "visualHostTests": "3/3 PASS"
                   }
                 }
               }
