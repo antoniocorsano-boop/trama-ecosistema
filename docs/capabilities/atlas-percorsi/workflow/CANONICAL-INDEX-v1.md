@@ -200,3 +200,6 @@ Any new meaningful artefact must be linked or classified here in the same work c
 
 ### Revisione qualitativa M3-B
 [Walkthrough e dossier W6A consultivo](../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md): REVISE mirato, decisione umana W6A/W5A necessaria prima di handoff W9 e produzione finale.
+
+### Primo candidato E02
+[Decisione circoscritta e brief visuale](../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md): regia accolta, primo candidato visuale; review completa e diritti aperti. Non autorizza runtime.

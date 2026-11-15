@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "W6A_ADVISORY_REVIEW_RECORDED_HUMAN_DECISION_REQUIRED",
-    "action": "Review the revised learner walkthrough and scene composition; record human W6A/W5A decision and reference lock before final production",
+    "state": "HUMAN_DIRECTION_ACCEPTED_E02_ART_CANDIDATE",
+    "action": "Produce first visual candidate E02-BG, inspect and preserve original, review before integration",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -143,7 +143,14 @@
       "paid service",
       "automatic approval"
     ],
-    "review": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md"
+    "review": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md",
+    "artBrief": "../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md",
+    "humanDirection": {
+      "source": "Okay, procedi (15/11/2026)",
+      "scope": "regia and first visual candidate only",
+      "fullW6A": "PENDING",
+      "rights": "OPEN"
+    }
   },
   "queued": [
     {

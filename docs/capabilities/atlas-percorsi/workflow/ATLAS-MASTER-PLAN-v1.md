@@ -84,3 +84,6 @@ Checkpoint: prima di qualsiasi implementazione leggere questa pagina, il dossier
 
 ## Revisione W6A M3-B
 [Dossier consultivo e lingua studente](../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md): cinque interventi mirati R1–R5; nessun nuovo benchmark. Decisione umana W6A/W5A prima della produzione finale, F3-B REVISE.
+
+## M3-B/E02
+[Brief del primo originale candidato](../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md). Assenso circoscritto alla regia e produzione visuale candidata, non PASS W6A complessivo. Originali recuperati e osservati, conservazione e review del nuovo binario prima di integrazione.
