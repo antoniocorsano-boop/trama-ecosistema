@@ -139,7 +139,7 @@
       "id": "exelearning",
       "version": "4.0.6",
       "role": "general-educational-authoring-and-export",
-      "state": "ISOLATED_QUALIFICATION_REQUESTED",
+      "state": "STATIC_INTEGRITY_PASS_CLI_REQUALIFICATION_PENDING",
       "source": "https://github.com/exelearning/exelearning/releases/tag/v4.0.6",
       "license": "AGPL-3.0 (software); content and export obligations to review",
       "limits": [
@@ -147,18 +147,32 @@
         "xAPI/tracking and external dependencies must be audited",
         "not an immersive world engine",
         "no adoption"
-      ]
+      ],
+      "evidence": {
+        "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+        "run": 43737834084,
+        "job": 132884253583,
+        "staticIntegrity": "PASS",
+        "conversion": "FAIL_INPUT_NOT_FOUND",
+        "diagnosis": "Upstream Dockerfile USER bun; host mktemp directory may deny traversal; source CLI writes HTML5 ZIP, not a directory; mount hypothesis to verify in corrected run"
+      }
     },
     {
       "id": "ink",
       "version": "inkjs 2.2.5",
       "role": "professional-interactive-narrative-authoring",
-      "state": "ISOLATED_QUALIFICATION_REQUESTED",
+      "state": "SYNTHETIC_COMPILE_REPLAY_PASS_CANDIDATE",
       "source": "https://github.com/inkle/ink",
       "limits": [
         "compile and replay smoke probe only; integration, license and accessibility pending",
         "not a simulation engine or replacement for common graph"
-      ]
+      ],
+      "evidence": {
+        "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+        "run": 43737834084,
+        "job": 132884253882,
+        "scope": "two synthetic branches; no production adoption"
+      }
     },
     {
       "id": "h5p-lumi",
@@ -233,13 +247,28 @@
     "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md"
   },
   "professionalAuthoringQualification": {
-    "status": "DRAFT_PR_CREATED_EXECUTION_UNCONFIRMED",
+    "status": "INK_SMOKE_PASS_EXE_REQUALIFICATION_QUEUED",
     "pr": 333,
-    "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+    "head": "b44e45f98b03323802406980ec2242a591dacc9b",
     "scope": "isolated eXeLearning upstream conversion/export and Ink synthetic compilation/replay; no learner data, no deployment, no runtime adoption",
     "cost": "standard GitHub public runner; no paid fallback",
     "localPreflight": "Docker unavailable; npm registry DNS failure",
-    "next": "verify exact-head actual run, then assess export/roundtrip, repeatability, security, licensing and quality per format; keep W3A/W5A/W6A gates",
-    "studentAuthorized": false
+    "next": "verify corrected exact-head run; keep licensing, accessibility, security, export quality and production integration open; no deployment",
+    "studentAuthorized": false,
+    "firstRun": {
+      "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+      "run": 43737834084,
+      "ink": "PASS",
+      "exe": "FAIL_INPUT_NOT_FOUND_AFTER_STATIC_INTEGRITY_PASS"
+    },
+    "retest": {
+      "run": 43738148274,
+      "status": "QUEUED",
+      "changes": [
+        "explicit nonroot mount access check and dedicated directory ownership",
+        "HTML5 ZIP output and archive/index verification"
+      ],
+      "rootCause": "HYPOTHESIS_PENDING_ORIGINAL_MOUNT_PROBE"
+    }
   }
 }
