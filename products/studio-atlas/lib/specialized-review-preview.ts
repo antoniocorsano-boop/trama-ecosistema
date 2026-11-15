@@ -7,11 +7,11 @@ const fail=():never=>{throw Error("AXF_SPECIALIZED_PACKAGE_INVALID")};
 const texts=(x:unknown):x is string[]=>Array.isArray(x)&&x.length>0&&x.length<=32&&x.every(text);
 const sceneKeys=new Set(["sceneId","order","kind","purpose","learnerVisibleSituation","learnerActions","consequences","nextSceneRefs","interaction","specialized"]);
 export async function compileSpecializedReviewSnapshot(value:unknown) {
-  if(!record(value)||value.schemaVersion!=="atlas.pathway-authoring-package/v0.2"||value.runtimeAuthorized!==false||
+  if(!record(value)||Object.keys(value).some(k=>!["schemaVersion","packageId","packageVersion","pathwayId","title","authoringState","sourceSeed","publicationCandidate","runtimeAuthorized","scenes"].includes(k))||value.schemaVersion!=="atlas.pathway-authoring-package/v0.2"||value.runtimeAuthorized!==false||
      value.authoringState!=="AUTHORING"||
      !record(value.publicationCandidate)||value.publicationCandidate.decision!=="DRAFT"||Object.keys(value.publicationCandidate).length!==1||
      !id(value.pathwayId)||!id(value.packageId)||!Number.isInteger(value.packageVersion)||Number(value.packageVersion)<1||!text(value.title)||
-     !record(value.sourceSeed)||!["CURRICOLO_TARGET","PLAIN_IDEA","DOCENTE_OS_ACTIVITY","EXISTING_PATHWAY","EXISTING_STORY_WORLD","OTHER_GOVERNED_SOURCE"].includes(String(value.sourceSeed.kind))||
+     !record(value.sourceSeed)||Object.keys(value.sourceSeed).length!==2||value.sourceSeed.minimised!==true||!["CURRICOLO_TARGET","PLAIN_IDEA","DOCENTE_OS_ACTIVITY","EXISTING_PATHWAY","EXISTING_STORY_WORLD","OTHER_GOVERNED_SOURCE"].includes(String(value.sourceSeed.kind))||
      !Array.isArray(value.scenes)||value.scenes.length<2||value.scenes.length>32) return fail();
   const scenes=value.scenes;
   const seen=new Set<string>();let specializedCount=0;
