@@ -1,0 +1,75 @@
+name: TV-01C Review Guard
+on:
+  pull_request:
+    paths:
+      - 'experiments/tv-01c/review-demo/**'
+      - '.github/workflows/tv-01c-review-guard.yml'
+permissions:
+  contents: read
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: node --test experiments/tv-01c/review-demo/review-guard.test.mjs
+      - run: node --check experiments/tv-01c/review-demo/demo.mjs
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install isolated browser test tools
+        run: |
+          npm install --prefix /tmp/tv01c-browser --no-audit --no-fund playwright@1.56.1
+          /tmp/tv01c-browser/node_modules/.bin/playwright install --with-deps chromium
+          ln -s /tmp/tv01c-browser/node_modules experiments/tv-01c/review-demo/node_modules
+      - name: Check mobile interaction and capture screens
+        run: |
+          mkdir -p tv01c-ui-evidence
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/tv01c-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server"' EXIT
+          for i in 1 2 3 4 5; do curl -fsS http://127.0.0.1:8765/ >/dev/null && break; sleep 1; done
+          node experiments/tv-01c/review-demo/browser-check.mjs
+      - name: Preserve interface evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tv01c-ui-screens
+          path: tv01c-ui-evidence/
+          if-no-files-found: error
+          retention-days: 7
+  portable:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build standalone preview
+        run: python3 experiments/tv-01c/review-demo/build-portable.py tv01c-portable/Assistente-TRAMA.html
+      - name: Verify embedded script and restrictive policy
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,base64,re
+          html=Path("tv01c-portable/Assistente-TRAMA.html").read_text()
+          script=re.search(r"<script>(.*?)</script>",html,re.S).group(1)
+          digest=base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()
+          assert "script-src 'sha256-"+digest+"';" in html
+          assert "connect-src 'none'" in html
+          assert 'src="./demo.mjs"' not in html
+          Path("/tmp/tv01c-portable.js").write_text(script)
+          PY
+          node --check /tmp/tv01c-portable.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Assistente-TRAMA-portatile
+          path: tv01c-portable/Assistente-TRAMA.html
+          if-no-files-found: error
+          retention-days: 7

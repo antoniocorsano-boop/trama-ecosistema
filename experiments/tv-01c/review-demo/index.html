@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Assistente TRAMA</title>
+<style>
+:root{color-scheme:light;--ink:#1b302c;--muted:#536861;--line:#dce6e1;--accent:#245e54;--paper:#fff;--bg:#f4f7f5}
+*{box-sizing:border-box}body{font:16px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--ink);margin:0}main{max-width:35rem;margin:auto;padding:20px 18px 32px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}header strong{letter-spacing:.12em;font-size:13px}header span{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:24px;padding:4px 10px}h1{font-size:clamp(26px,6vw,34px);line-height:1.2;margin:0 0 8px;font-weight:650;letter-spacing:-.035em}p{margin:0 0 12px}.muted{color:var(--muted);font-size:14px}.intro{text-align:center;margin-bottom:22px}.voice{display:grid;justify-items:center;gap:8px;margin:24px 0 20px}.mic{display:grid;place-items:center;gap:4px;border:0;background:var(--accent);color:white;width:104px;height:104px;border-radius:50%;font-weight:650;box-shadow:0 5px 16px #245e5420}.mic svg{width:30px;height:30px}.mic.listening{background:#8b4036}.status{text-align:center;min-height:24px;margin:0;font-size:14px;color:var(--muted)}button,textarea{font:inherit}button{cursor:pointer;min-height:48px}button:disabled{opacity:.55;cursor:default}button:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #387e6c;outline-offset:3px}.sheet{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px;margin:14px 0}.sheet label,.eyebrow{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:8px}textarea{width:100%;min-height:84px;border:1px solid #9aafa7;border-radius:12px;padding:12px;resize:vertical;color:var(--ink);background:#fff}textarea::placeholder{color:#697b74}.examples{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 16px}.chip{border:1px solid var(--line);background:#f7faf8;color:var(--accent);border-radius:22px;padding:6px 12px;font-size:13px;min-height:44px}.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button{flex:1;min-width:110px}.primary,.secondary{border-radius:12px;padding:10px 14px;font-weight:600}.primary{background:var(--accent);color:white;border:1px solid var(--accent)}.secondary{background:white;color:var(--accent);border:1px solid var(--line)}.target{font-size:21px;font-weight:650;margin-bottom:6px}.receipt{background:#edf5ef;border:1px solid #cbded0;padding:12px;border-radius:12px;margin-top:12px}.receipt:empty{display:none}details{font-size:14px;color:var(--muted);margin-top:22px}summary{cursor:pointer;min-height:44px;padding:10px 0}.privacy{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}[hidden]{display:none!important}
+@media(max-width:360px){main{padding:16px 12px}.sheet{padding:14px}.actions button{min-width:95px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style></head>
+<body><main>
+<header><strong>TRAMA</strong><span>Ambiente di prova</span></header>
+<div class="intro"><h1>Come posso aiutarti?</h1><p class="muted">Parla oppure scrivi una richiesta.</p></div>
+<div class="voice">
+<button id="start" class="mic" aria-label="Parla con TRAMA" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4M9 22h6"/></svg><span id="mic-label">Parla</span></button>
+<p id="status" class="status" role="status" aria-live="polite">Tocca per iniziare.</p>
+</div>
+<section class="sheet" aria-label="La tua richiesta">
+<label for="transcript">La tua richiesta</label><textarea id="transcript" maxlength="180" placeholder="Ad esempio, apri il calendario"></textarea>
+<div class="examples" aria-label="Esempi di richieste"><button class="chip" data-example="mostra l'orario">Orario</button><button class="chip" data-example="apri il calendario">Calendario</button><button class="chip" data-example="apri la lezione">Lezione</button><button class="chip" data-example="cerca un laboratorio">Laboratori</button></div>
+<div class="actions"><button id="review" class="primary" disabled>Continua</button><button id="cancel" class="secondary">Annulla</button></div>
+<p id="feedback" class="muted" role="status" style="margin:10px 0 0" hidden></p>
+</section>
+<section id="review-panel" class="sheet" aria-label="Conferma la richiesta" hidden>
+<span class="eyebrow">Vuoi aprire</span><p id="proposal" class="target"></p><p class="muted">Controlla che sia ciò che intendevi.</p>
+<div class="actions"><button id="confirm" class="primary" disabled>Conferma</button><button id="back" class="secondary">Modifica</button></div>
+<p id="receipt" class="receipt" role="status"></p>
+</section>
+<details><summary>Voce e riservatezza</summary><p id="availability" role="status">La voce viene verificata quando tocchi Parla.</p><p>Usa solo richieste di esempio, senza informazioni personali. Nessuna azione modifica le applicazioni TRAMA.</p><div class="actions"><button id="speak" class="secondary">Ascolta una risposta</button><button id="mute" class="secondary">Interrompi</button></div><p id="tts" role="status" class="muted"></p></details>
+<p class="privacy">Le richieste non vengono salvate. Le azioni sono simulate.</p>
+</main><script type="module" src="./demo.mjs"></script></body></html>

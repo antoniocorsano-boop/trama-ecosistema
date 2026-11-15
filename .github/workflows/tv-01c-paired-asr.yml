@@ -1,0 +1,45 @@
+name: TV-01C Paired Local ASR
+on:
+  pull_request:
+    paths:
+      - 'experiments/tv-01c/**'
+      - '.github/workflows/tv-01c-paired-asr.yml'
+permissions:
+  contents: read
+jobs:
+  comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare public tools and models
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq espeak-ng ffmpeg unzip cmake
+          python3 -m venv .tv01c-venv
+          .tv01c-venv/bin/pip install --disable-pip-version-check vosk==0.3.45
+          mkdir -p .tv01c-model
+          curl --fail --location --retry 2 --max-time 90 https://alphacephei.com/vosk/models/vosk-model-small-it-0.22.zip -o .tv01c-model/model.zip
+          echo '9ec65e75861d1c6c2e457cccd932705340dcdf233f5b239f00733b4de0bf3267  .tv01c-model/model.zip' | sha256sum -c -
+          unzip -q .tv01c-model/model.zip -d .tv01c-model
+          git clone --depth 1 --branch v1.7.6 https://github.com/ggml-org/whisper.cpp.git .tv01c-whisper
+          git -C .tv01c-whisper rev-parse HEAD
+          cmake -S .tv01c-whisper -B .tv01c-whisper/build -DCMAKE_BUILD_TYPE=Release -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=ON
+          cmake --build .tv01c-whisper/build --config Release --target whisper-cli -j 2
+          curl --fail --location --retry 2 --max-time 180 https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin -o .tv01c-model/ggml-base.bin
+          echo '465707469ff3a37a2b9b8d8f89f2f99de7299dac  .tv01c-model/ggml-base.bin' | sha1sum -c -
+          sha256sum .tv01c-model/ggml-base.bin
+      - name: Compare identical synthetic samples without network
+        run: |
+          mkdir -p tv01c-paired-evidence
+          sudo unshare --net --mount --propagation private -- sh -c 'mount -t sysfs sysfs /sys && exec setpriv --reuid="$1" --regid="$2" --clear-groups "$3" "$4" --vosk-model "$5" --vosk-archive "$6" --whisper-cli "$7" --whisper-model "$8" --output "$9"' sh "$(id -u)" "$(id -g)" "$PWD/.tv01c-venv/bin/python" "$PWD/experiments/tv-01c/compare.py" "$PWD/.tv01c-model/vosk-model-small-it-0.22" "$PWD/.tv01c-model/model.zip" "$PWD/.tv01c-whisper/build/bin/whisper-cli" "$PWD/.tv01c-model/ggml-base.bin" "$PWD/tv01c-paired-evidence/report.json"
+      - name: Preserve paired report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tv01c-paired-asr-report
+          path: tv01c-paired-evidence/report.json
+          if-no-files-found: error
+          retention-days: 7
