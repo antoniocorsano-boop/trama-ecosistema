@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "atlas.interactive-factory-tool-catalog/candidate-v1",
+  "status": "PROPOSED",
+  "runtimeAuthorized": false,
+  "studentAuthorized": false,
+  "paidFallbackAllowed": false,
+  "authority": "existing TRAMA/Arena/Atlas governance",
+  "baseline": {
+    "repository": "antoniocorsano-boop/Curriculum-Atlas",
+    "pr": 95,
+    "head": "4fe38a8ca3a43754fe0c78495a35881a9ee6865f",
+    "run": 43698089963
+  },
+  "tools": [
+    {
+      "id": "experience-engine",
+      "role": "composition-and-navigation",
+      "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/pull/95",
+      "limits": [
+        "specialized binding in draft",
+        "no end-to-end authoring handoff"
+      ]
+    },
+    {
+      "id": "phaser",
+      "version": "4.2.1",
+      "role": "specialized-2d-renderer",
+      "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43698089963",
+      "limits": [
+        "human device/accessibility review",
+        "licensing and frozen dependency lock",
+        "no generality claim"
+      ],
+      "selection": "trusted registry only"
+    },
+    {
+      "id": "visual-factory",
+      "role": "asset-production-and-reference-lock",
+      "state": "PARTIAL",
+      "evidence": "VISUAL-FACTORY-v0.1.md",
+      "limits": [
+        "provider entitlement and execution qualification open",
+        "human review mandatory"
+      ]
+    },
+    {
+      "id": "audio-factory",
+      "role": "optional-voice-and-audio",
+      "state": "PARTIAL",
+      "evidence": "CONTENT-QUALITY-FLOW-v0.1.md",
+      "limits": [
+        "exact output, pronunciation and human listening review open"
+      ]
+    },
+    {
+      "id": "free-deploy",
+      "role": "governed-distribution",
+      "state": "DIRECTION_ONLY",
+      "evidence": "../../../strategy/trama-free-deploy-v1.md",
+      "limits": [
+        "no runtime/student authorization",
+        "verify free entitlement and access"
+      ]
+    },
+    {
+      "id": "scenerystack",
+      "role": "simulation-renderer",
+      "state": "SUSPENDED",
+      "limits": [
+        "security and interaction findings"
+      ]
+    },
+    {
+      "id": "gdevelop",
+      "role": "alternative-renderer",
+      "state": "DEFERRED",
+      "limits": [
+        "no present blocking need",
+        "qualification missing"
+      ]
+    }
+  ],
+  "families": [
+    {
+      "id": "inquiry",
+      "state": "PARTIAL_NATIVE"
+    },
+    {
+      "id": "experiment",
+      "state": "ONE_TECHNICAL_CASE_PASS",
+      "case": "energy-lamp"
+    },
+    {
+      "id": "construction",
+      "state": "UNPROVEN"
+    },
+    {
+      "id": "systems",
+      "state": "UNPROVEN",
+      "nextCase": "agriculture"
+    },
+    {
+      "id": "decision",
+      "state": "PARTIAL_NATIVE"
+    }
+  ],
+  "next": {
+    "id": "F1",
+    "action": "versioned authoring package and preview adapter binding",
+    "blockedPromotionUntil": [
+      "actual Studio Atlas handoff",
+      "human review",
+      "device and accessibility",
+      "rights and dependency lock",
+      "second distinct vertical",
+      "exact-head adoption"
+    ]
+  }
+}
