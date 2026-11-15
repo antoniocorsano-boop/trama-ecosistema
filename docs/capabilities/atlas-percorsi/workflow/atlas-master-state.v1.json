@@ -606,6 +606,16 @@
             "proposal": "Integrate a character-guided first experiment and progressive visual feedback: represent energy entering the virtual lamp and splitting into light and heat, explain the quantities in plain language before introducing joules and efficiency, show why equal light permits comparison, and link observations to a meaningful subsequent action. Preserve exact model values, comparable scales, accessible alternatives and scientific uncertainty; avoid decorative animation, forced quizzes or adding information density.",
             "acceptance": "A first-time learner can explain what changes when a lamp is tested, what input/light/heat mean and why the result matters to the mission; visual feedback conveys the experiment even before reading formal numbers. Human walkthrough required. No implementation until editorial findings collection is complete.",
             "status": "OPEN"
+          },
+          {
+            "id": "ER-06",
+            "scene": "E04 quaderno / confronto",
+            "source": "Two user screenshots M7-D2, 2026-11-15; one measurement and three measurements with C and input-only criterion selected",
+            "severity": "HIGH_PEDAGOGICAL_AND_NARRATIVE_USABILITY",
+            "observation": "Partial notebook with A only shows numeric table, reset and disabled presentation without contextual next-step guidance. Completed notebook becomes a multiple-choice form detached from narrative. With C selected and input-only criterion selected, feedback compares C and A but does not explicitly explain why input alone is insufficient as a general efficiency criterion; equal useful light is the controlling condition. User has not explicitly commented on these screenshots; findings are advisory interpretation.",
+            "proposal": "Make notebook an incremental character-linked inquiry tool: contextual guidance to collect a second measurement; visual side-by-side comparison emphasizing same useful light, different input and heat; support learner explanation using observations and optional oral discussion, not a forced multiple-choice quiz. Explain that lower input is meaningful when useful output is held constant, and distinguish correct choice from incomplete reasoning. Retain accessible numeric table, exact model values, reset safeguards and voluntary revision.",
+            "acceptance": "With one measurement learner understands why another is needed; with multiple measurements learner can identify the invariant, compare quantities and justify the recommendation. Feedback distinguishes choice and reasoning and links conclusion to narrative task. Human review required; no implementation until findings collection concludes.",
+            "status": "OPEN"
           }
         ],
         "note": "Collect further user screenshots and feedback before consolidating a single editorial revision; physical drag test continues separately."
