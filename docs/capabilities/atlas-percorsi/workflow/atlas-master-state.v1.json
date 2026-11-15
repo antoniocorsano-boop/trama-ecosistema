@@ -1055,6 +1055,30 @@
           "studentAuthorized": false,
           "runtimeAuthorized": false
         }
+      },
+      "sharedVision": {
+        "id": "AXF-VISION-01",
+        "status": "STRATEGIC_DIRECTION_EXPLICITLY_SHARED_BY_USER_IMPLEMENTATION_PENDING",
+        "planCommit": "e840bc9336b10cd1b4e86b9ce2c0917d86970c52",
+        "ref": "ATLAS-MASTER-PLAN-v1.md",
+        "principles": [
+          "wonder without manipulation",
+          "free exploration and immediate access",
+          "disciplinary depth",
+          "meaningful interdisciplinary connections",
+          "personal reflection"
+        ],
+        "accessDimensions": [
+          "knowledge",
+          "experience",
+          "connections"
+        ],
+        "relationshipToSections": "Cross-cutting metadata perspectives, not replacement for Storie/Laboratori/Scoperte/Percorsi",
+        "reflectionSpace": "Future optional hypothesis only; no new workstream, centralized data, profiling or automatic evaluation",
+        "decisionRule": "Learner value + editorial purpose + shared capability reuse; human qualification remains required",
+        "next": "Preserve G2 review and existing P0–P5/R1 sequence; consider metadata-driven access dimensions when authorised; no new product or deployment.",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
       }
     }
   },
