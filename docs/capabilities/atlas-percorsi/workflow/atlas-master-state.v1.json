@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Refine the two-format preproduction for optional depth (AXF-ED-DEPTH-01), verify novice and knowledgeable entry routes and disciplinary model extension, resolve Arena references and B contract, then obtain applicable W3/W5A/W6A human reviews. Preserve prototypes and M7-D2; no release, final art or spending.",
+    "action": "Review the completed standalone Scoperte R1 candidate as a bounded deliverable; resolve Arena reference, applicable contract and disciplinary/human/accessibility/rights gates. Preserve existing Atelier and prototypes; no publication, adoption or expansion. Resume Atelier only after decision on this candidate.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -845,6 +845,62 @@
             "direct access and return",
             "no learner profiling or forced test",
             "format-specific enrichment"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
+        },
+        "firstStandaloneResource": {
+          "id": "AXF-SCOPERTA-LUCE-R1",
+          "status": "COMPLETE_PRIVATE_EDITORIAL_REVIEW_CANDIDATE",
+          "date": "2026-11-15",
+          "section": "Scoperte",
+          "title": "Dove va l’energia di una lampada?",
+          "htmlLibraryFileId": "libfile_8dc42365cdc88191b5c6591c022372a7",
+          "htmlSha256": "48186c80a6900595a085aedf2de14a419639b39d39aad9323f9e15d4041321f1",
+          "packageLibraryFileId": "libfile_d12f12fc935081918374d7d0cae5d618",
+          "packageSha256": "0709257ef63b11573ac65fc942b31c52068f17d0504b2caf3891ba65ae96b4e5",
+          "scope": "One complete standalone review candidate, original inline SVG, base explanation and optional efficiency/model-D comparison; directly accessible without compulsory exercise; no external dependencies; handwritten HTML not professional authoring integration",
+          "test": {
+            "mode": "Chromium in-memory set_content",
+            "viewports": [
+              [
+                320,
+                740
+              ],
+              [
+                390,
+                844
+              ],
+              [
+                844,
+                390
+              ],
+              [
+                1280,
+                800
+              ]
+            ],
+            "functional": "4/4 PASS",
+            "optionalTargets": [
+              20,
+              40,
+              60
+            ],
+            "keyboardDetails": "PASS",
+            "rootFont200Reflow": "PASS",
+            "externalHttp": 0,
+            "pageErrors": 0,
+            "fileOpen": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+            "storage": "INCONCLUSIVE_OPAQUE_ORIGIN; no persistence requested in source",
+            "physical": "PENDING"
+          },
+          "pending": [
+            "exact Arena references",
+            "applicable standalone contract classification",
+            "disciplinary model D review",
+            "human/independent review",
+            "complete accessibility",
+            "rights and distribution decision"
           ],
           "studentAuthorized": false,
           "runtimeAuthorized": false
