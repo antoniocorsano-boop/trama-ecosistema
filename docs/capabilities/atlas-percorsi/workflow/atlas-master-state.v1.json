@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Review exact integrated private #102 with R3 on physical devices, including nested scroll/system back, visual framing and distinct review; qualify standalone public format under existing authority. Preserve Atelier F3 REVISE and P2 HOLD; no deployment/student authorization.",
+    "action": "Review integrated private #103 exact HTML on physical Android/LIM and obtain distinct review; qualify standalone format under existing governance. No further cosmetic iteration absent findings; Atelier F3 REVISE, P2 HOLD, no deployment/student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -1032,6 +1032,41 @@
                 "physical and distinct review",
                 "mobile technical header and nested scroll/back history",
                 "public format contract, rights, curriculum authority"
+              ],
+              "studentAuthorized": false,
+              "runtimeAuthorized": false,
+              "publication": "BLOCKED"
+            },
+            "continuity": {
+              "id": "P4-R3-C",
+              "status": "TECHNICAL_PASS_SCOPED_PRIVATE_CONTINUITY",
+              "pr": 103,
+              "head": "b41a596f6de5858c0b5aaadc084932326dd76313",
+              "basePr": 102,
+              "planCommit": "49c6c08dc994d0aa41a432321aded14d517f4254",
+              "ciClosureCommit": "04b95238b39c3799ab20551476bcfeb0038e40a0",
+              "ci": {
+                "workflows": "9/9 PASS",
+                "engineRun": 43768636874,
+                "job": 132979351127,
+                "regression": "20/20 PASS",
+                "host": "5/5 PASS"
+              },
+              "recipe": {
+                "head": "7301eaa97c0df07d05288f01265807c580f83b33",
+                "run": 43768647772,
+                "artifact": 14182814491,
+                "sha256": "dcab2479956fed079adf5880af42572c05764d7df1e9709b947341256dcbcbbf"
+              },
+              "htmlLibraryFileId": "libfile_2b00dae265dc8191b10f194266b38e46",
+              "htmlSha256": "12a0e7de6fe1eb04270a25bbb8c5e01b428f6ef7d96f1730eae51a092d972112",
+              "evidenceLibraryFileId": "libfile_6711c282ee2c819190680edcb5fcbce5",
+              "evidenceSha256": "6f0db8ee36f47991fb7597b5aca3a83cd03ff2e18dab35010a75d798dd93ec2d",
+              "browser": "4/4 in-memory Chromium, 49px header, no outer scroll, history.back() three views then library, focus restoration, no errors/HTTP",
+              "remaining": [
+                "physical Android and LIM",
+                "distinct editorial and disciplinary review",
+                "rights, standalone public format, Arena authority"
               ],
               "studentAuthorized": false,
               "runtimeAuthorized": false,
