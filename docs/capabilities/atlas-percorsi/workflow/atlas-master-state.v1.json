@@ -642,6 +642,27 @@
         "humanReview": "PENDING",
         "studentAuthorized": false,
         "runtimeAuthorized": false
+      },
+      "professionalAuthoringQualification": {
+        "status": "ISOLATED_PROBE_PR_OPEN",
+        "pr": 333,
+        "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+        "catalogCommit": "3b569d93307e546195bad52819c93175dae738ac",
+        "runs": [
+          {
+            "id": 43737834072,
+            "status": "in_progress",
+            "conclusion": null
+          },
+          {
+            "id": 43737834084,
+            "status": "in_progress",
+            "conclusion": null
+          }
+        ],
+        "scope": "Authoring tooling qualification, not production or replacement of W3A/W5A/W6A; eXeLearning and Ink first, H5P/Lumi and PhET research candidates",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
       }
     }
   },
