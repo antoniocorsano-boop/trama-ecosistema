@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Verify applicable autonomous Scoperte format contract and prepare R2 qualification; distinct disciplinary/editorial review, rights and authority pending. Preserve compact G2, Atelier F3 REVISE, P2 HOLD.",
+    "action": "Compare R2/R3 learner-facing view orchestration in adult walkthrough; qualify standalone Scoperte format and distinct disciplinary/editorial review; retain G2 and Atelier F3 REVISE, P2 HOLD.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -974,6 +974,29 @@
             "r1Preserved": true,
             "svgAndComparisonScriptUnchanged": true,
             "browser": "8/8 scoped in-memory Chromium, 0 HTTP/JS errors/overflow",
+            "publication": "BLOCKED",
+            "studentAuthorized": false,
+            "runtimeAuthorized": false
+          },
+          "revisionR3": {
+            "id": "AXF-SCOPERTA-LUCE-R3",
+            "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_VIEW_CANDIDATE",
+            "protocolRef": "AXF-ED-VIEW-01",
+            "protocolCommit": "52e9a926e2d77b5d172b4dfdf4dbd4d0fed2c22b",
+            "docCommit": "201a19a735a95b9b6f29ab4d89a2e35ad32328d0",
+            "htmlLibraryFileId": "libfile_704bbbefb47481919ef841696b279cbb",
+            "htmlSha256": "19627994f0f92b1a73d4f73701873e7e78ad529706918b063482c4bf187d544c",
+            "evidenceLibraryFileId": "libfile_581209b1c22c8191a69f73d7c2406e03",
+            "evidenceSha256": "6a75369da7b429c9a2b480e849a844be574dd77c61a785108ba4220de30cb68d",
+            "r2Preserved": true,
+            "views": [
+              "osserva",
+              "confronto",
+              "oltre",
+              "lettura"
+            ],
+            "browser": "8/8 Chromium in-memory, no overflow/HTTP/JS errors; direct navigation, focus, history, comparison, read-all, no-JS reading",
+            "humanReview": "PENDING",
             "publication": "BLOCKED",
             "studentAuthorized": false,
             "runtimeAuthorized": false
