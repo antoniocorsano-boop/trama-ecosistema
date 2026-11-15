@@ -23,7 +23,7 @@
       "failed": 0
     },
     {
-      "repo": "antoniocorsano-boop/Curriculum-Atlas",
+      "repo": "Atlas (GitHub repository ID 1376266693)",
       "pr": 95,
       "head": "a7a8539f20336201f3a2c55f801ac2d7df5c16f4",
       "state": "DRAFT",
@@ -52,8 +52,8 @@
     {
       "id": "F3-A",
       "state": "TECHNICAL_PASS_CANDIDATE",
-      "evidence": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43700272516",
-      "artifact": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43700272516/artifacts/14155464015",
+      "evidence": "Atlas repository ID 1376266693; actions/runs/43700272516",
+      "artifact": "Atlas repository ID 1376266693; actions/runs/43700272516/artifacts/14155464015",
       "artifactExpires": "2026-11-22",
       "sha256": "2fd722328f233d4c48d3fdf19013fb9f4337842cf0f8d7a1ddcdb659ddf1886b"
     },
