@@ -1,0 +1,18 @@
+name: TV-01C Review Guard
+on:
+  pull_request:
+    paths:
+      - 'experiments/tv-01c/review-demo/**'
+      - '.github/workflows/tv-01c-review-guard.yml'
+permissions:
+  contents: read
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: node --test experiments/tv-01c/review-demo/review-guard.test.mjs
+      - run: node --check experiments/tv-01c/review-demo/demo.mjs
