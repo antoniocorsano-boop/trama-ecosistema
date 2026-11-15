@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M5_ADVISORY_REVISE_TARGETED_M6_SCENE_FIRST_PENDING",
-    "action": "M6-A: scene-first bench, contextual prediction, callable notebook, evidence-grounded neutral feedback and quantitative presentation; preserve model, original art, alternatives, volatile state; requalify privately; human W6A/W5A and rights remain pending",
+    "state": "M6_A_PRIVATE_FUNCTIONAL_PASS_EXTENDED_QUALIFICATION_PENDING",
+    "action": "Complete M6-A extended accessibility, touch/keyboard, storage and real-device review; human W6A/W5A and rights remain pending",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -290,10 +290,28 @@
       }
     },
     "m6": {
-      "status": "PLANNED_NOT_IMPLEMENTED",
+      "status": "PRIVATE_IN_MEMORY_FUNCTIONAL_PASS_EXTENDED_PENDING",
       "scope": "M6-A scene-first interaction and notebook, contextual prediction, neutral comparison feedback and evidence presentation",
       "acceptanceRef": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md",
-      "studentAuthorized": false
+      "studentAuthorized": false,
+      "htmlLibraryFileId": "libfile_4a6061c113cc81919884994a9d375e65",
+      "htmlSha256": "94945098a3d9fe87f7841db7e88ca92a2880fdf01e7b8e4432c74685fe88913a",
+      "packageLibraryFileId": "libfile_ac722d277af48191b9b497956feb12f4",
+      "packageSha256": "f561e513e6ab8e4faff6ade7aa9480d35981cf33c11017ea1703d4abac02bfd0",
+      "viewports": [
+        320,
+        390,
+        1280
+      ],
+      "functional": "PASS",
+      "primaryVisible": "PASS",
+      "notebookRetention": "PASS",
+      "neutralFeedback": "PASS",
+      "quantitativePresentation": "PASS",
+      "resetConfirmation": "PASS",
+      "httpRequests": 0,
+      "pageErrors": 0,
+      "extendedQualification": "PENDING"
     }
   },
   "queued": [
