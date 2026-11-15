@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Check exact PR #99 host mount CI, retain #98 qualified draft, distinct review and physical test, plan governed G2 visual integration; P2 HOLD; no merge, deploy or student authorization.",
+    "action": "Plan governed G2 visual integration on qualified host; obtain distinct review and physical evidence; P2 HOLD; no merge, deployment or student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_R2_PR98_PASS_PR99_MOUNT_CANDIDATE_CI_PENDING_P2_HOLD",
+        "status": "P1_R2_PR98_PR99_SCOPED_PASS_DISTINCT_REVIEW_PENDING_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -1271,13 +1271,17 @@
                     "head": "5df0a0169ad861dadb5654173d7d1390d43077be",
                     "basePr": 98,
                     "ciRunId": 43759786641,
-                    "ciStatus": "IN_PROGRESS",
+                    "ciStatus": "PASS_COMPLETE",
                     "scope": "Preview-only host mounts real ExperienceRuntime through Studio adapter; existing synthetic fixtures; temporary CI-only route; no production integration or visual fidelity claim",
                     "independentReview": "PENDING",
                     "physical": "PENDING",
                     "p2": "HOLD",
                     "studentAuthorized": false,
-                    "runtimeAuthorized": false
+                    "runtimeAuthorized": false,
+                    "completedWorkflowCount": 9,
+                    "ciJobId": 132951790674,
+                    "qualificationCommit": "07161bf7c6ea467bc33e52b7f13e4c87c237ad86",
+                    "mountBrowserTests": "2/2 PASS"
                   }
                 }
               }
