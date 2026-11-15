@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M6_B_REVISE_TARGETED",
-    "action": "M6-B1: isolate and resolve unhandled rejections (no suppression), label confirmation dialog, improve landscape scene/controls and 200% reflow; rerun keyboard/touch and network/error regression; storage in authorized context and physical Android/LIM remain open",
+    "state": "M6_B1_TARGETED_IN_MEMORY_PASS_PHYSICAL_HUMAN_PENDING",
+    "action": "Private teacher walkthrough and actual Android/LIM, direct file opening, complete accessibility, authorized persistent storage audit and rights/independent qualification; no release or expansion",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -137,7 +137,7 @@
       "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
       "physical device and file-opening verification pending",
       "complete accessibility and storage audit pending",
-      "M6-B REVISE: two undefined async rejections, unnamed confirmation dialog, landscape layout and 200% reflow need targeted repair; persistent storage audit remains inconclusive"
+      "M6-B1 targeted in-memory regression PASS; physical device, authorized storage context, complete accessibility and human/rights qualification still open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -312,7 +312,7 @@
       "resetConfirmation": "PASS",
       "httpRequests": 0,
       "pageErrors": 0,
-      "extendedQualification": "REVISE_TARGETED",
+      "extendedQualification": "TARGETED_IN_MEMORY_PASS_PHYSICAL_AND_HUMAN_PENDING",
       "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
       "changedSourceFiles": [
         "handoff.mjs",
@@ -361,6 +361,64 @@
         "cookies": 0,
         "storage": "INCONCLUSIVE_ACCESS_DENIED",
         "physicalDevices": "PENDING",
+        "studentAuthorized": false
+      },
+      "m6b1": {
+        "status": "IN_MEMORY_TARGETED_REGRESSION_PASS_PHYSICAL_AND_HUMAN_PENDING",
+        "htmlLibraryFileId": "libfile_328bafdd7108819185620ad40ef082c6",
+        "htmlSha256": "c0fc72ebfbb6b6260cc483e1aab505cf75547a77acf90b98333a0e8d2b6d6d35",
+        "packageLibraryFileId": "libfile_0fefb7157ae08191af1ff1f63261ccfd",
+        "packageSha256": "3ed3a3450a34b350de451d3171ab93c3370b613e21ede419d3cd32a712a3d075",
+        "baselineHtmlSha256": "94945098a3d9fe87f7841db7e88ca92a2880fdf01e7b8e4432c74685fe88913a",
+        "changedSources": [
+          "handoff.mjs",
+          "index.html"
+        ],
+        "unchangedSourceCount": 85,
+        "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
+        "functionalViewports": [
+          [
+            320,
+            740
+          ],
+          [
+            390,
+            844
+          ],
+          [
+            844,
+            390
+          ],
+          [
+            1280,
+            800
+          ]
+        ],
+        "keyboard200Viewports": [
+          [
+            320,
+            740
+          ],
+          [
+            390,
+            844
+          ],
+          [
+            844,
+            390
+          ]
+        ],
+        "errors": 0,
+        "httpRequests": 0,
+        "cookies": 0,
+        "rootCause": "CDP shows both undefined rejections at indexedDB.databases() invocation in diagnostic store() expression, denied in opaque context; not app errors; no suppression; separate storage audit remains inconclusive",
+        "dialog": "PASS_LABEL_DESCRIPTION_FOCUS",
+        "landscape": "PASS_SCENE_AND_PRIMARY_CONTROLS_VISIBLE_844x390",
+        "reflow": "PASS_NO_HORIZONTAL_OVERFLOW_ROOT_FONT_200_PERCENT",
+        "storage": "NOT_QUALIFIED_OPAQUE_ORIGIN",
+        "fileNavigation": "NOT_TESTED",
+        "physicalDevices": "PENDING",
+        "humanReview": "PENDING",
         "studentAuthorized": false
       }
     }
