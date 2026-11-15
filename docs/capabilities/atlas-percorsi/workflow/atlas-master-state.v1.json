@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Preserve qualified compact G2; physical teacher check and distinct review remain open. Advance exact R1 editorial review and applicable standalone format qualification without publishing; Atelier F3 REVISE, P2 HOLD.",
+    "action": "Validate R1 proposed learner-centered editorial corrections (Q01–Q04), applicable format and disciplinary authority; preserve compact G2; physical/distinct review open; Atelier F3 REVISE; P2 HOLD.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -942,7 +942,26 @@
             "independentReview": "PENDING",
             "formatQualification": "BLOCKED",
             "runtimeAuthorized": false,
-            "studentAuthorized": false
+            "studentAuthorized": false,
+            "learnerCenteredReview": {
+              "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_REVISE_PROPOSED",
+              "docCommit": "a430027bbd4375b6e297a318bf3042ae1349b49e",
+              "artifactUnchanged": true,
+              "evidence": {
+                "libraryFileId": "libfile_4f152e0171388191b841e08bd935e345",
+                "sha256": "d5d950b5ccd22823a460ebf53b094128ebe04ad0a27147c8a5a3efe130a31e2a"
+              },
+              "browser": "8/8 viewport × root-font combinations; C/D comparisons, direct depth, details, no horizontal overflow, network or JS errors",
+              "findings": [
+                "Q01 model no accumulation",
+                "Q02 shorten opening and improve mobile diagram proximity",
+                "Q03 informative optional depth access",
+                "Q04 autonomous closure and model limits"
+              ],
+              "humanReview": "PENDING",
+              "studentAuthorized": false,
+              "runtimeAuthorized": false
+            }
           }
         }
       },
