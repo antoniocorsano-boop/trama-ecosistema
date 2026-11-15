@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M5_E03_ART_CONTINUITY_IN_MEMORY_BROWSER_PASS_HUMAN_REVIEW_PENDING",
-    "action": "Private teacher review of M5 on physical Android and LIM; verify direct file opening, touch drag, full accessibility and storage, W6A/W5A and rights before any further production adoption",
+    "state": "M5_ADVISORY_REVISE_TARGETED_M6_SCENE_FIRST_PENDING",
+    "action": "M6-A: scene-first bench, contextual prediction, callable notebook, evidence-grounded neutral feedback and quantitative presentation; preserve model, original art, alternatives, volatile state; requalify privately; human W6A/W5A and rights remain pending",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -134,7 +134,7 @@
     "blockers": [
       "F3-B REVISE",
       "human W6A/W5A and rights/licensing open",
-      "M5 bench and compact host implemented; human visual/educational acceptance pending",
+      "M5 advisory REVISE: page-like flow, feedback and presentation gaps; M6-A targeted revision; human visual/educational acceptance pending",
       "physical device and file-opening verification pending",
       "complete accessibility and storage audit pending"
     ],
@@ -272,6 +272,27 @@
       "jsErrors": 0,
       "fileNavigation": "NOT_TESTED",
       "cleanup": "wrapper timed out after per-viewport PASS receipts",
+      "studentAuthorized": false,
+      "advisoryReview": {
+        "status": "REVISE_TARGETED_NOT_INDEPENDENT_HUMAN_PENDING",
+        "docCommit": "21a6e6a596bb2dc24885c43a6f93c97c1f0ab6e3",
+        "evidenceLibraryFileId": "libfile_5d47cf33f310819184748645845c3154",
+        "evidenceSha256": "31adf677e3d7293910bb1764ece018752491fc60fc24e220815fed7ed23ae7f7",
+        "emulatedTouchDrag": "PASS",
+        "physicalTouchDrag": "OPEN",
+        "keyboardActivation": "PASS_PARTIAL_NOT_FULL_TAB",
+        "fileNavigation": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+        "storage": "INCONCLUSIVE_ACCESS_DENIED",
+        "additionalPageError": "undefined (isolate)",
+        "wrongChoiceFeedback": "REVISE",
+        "layout": "REVISE",
+        "studentAuthorized": false
+      }
+    },
+    "m6": {
+      "status": "PLANNED_NOT_IMPLEMENTED",
+      "scope": "M6-A scene-first interaction and notebook, contextual prediction, neutral comparison feedback and evidence presentation",
+      "acceptanceRef": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md",
       "studentAuthorized": false
     }
   },
