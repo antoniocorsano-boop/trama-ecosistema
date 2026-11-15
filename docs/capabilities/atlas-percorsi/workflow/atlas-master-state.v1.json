@@ -553,6 +553,16 @@
             "proposal": "Brief character-led contextual mission reminder, explicit reason to investigate objects, visible contextual interaction cues, optional guidance and freedom of exploration; no long instruction wall.",
             "acceptance": "A first-time learner can explain goal and choose a meaningful next action without external guidance; validate with teacher walkthrough before promotion.",
             "status": "OPEN"
+          },
+          {
+            "id": "ER-02",
+            "scene": "E02 piazza/lampione",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_USABILITY",
+            "observation": "After selecting Piazza by trial, message 'Il lampione appare affievolito. L’immagine non è una misura: la causa rimane ignota.' is almost incomprehensible to user; abstract epistemic caveat replaces meaningful clue and offers no next action.",
+            "proposal": "Use short contextual character-led clue in age-appropriate language, explaining observation, mission and meaningful next step toward notebook/bench; retain scientific uncertainty in plain language, do not imply lamp replacement diagnoses or repairs fault.",
+            "acceptance": "First-time learner understands what was observed, what remains unknown and why the next action matters; teacher validates wording and scientific distinction. No implementation until findings collection ends.",
+            "status": "OPEN"
           }
         ],
         "note": "Collect further user screenshots and feedback before consolidating a single editorial revision; physical drag test continues separately."
