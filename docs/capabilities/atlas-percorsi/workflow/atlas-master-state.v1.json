@@ -1188,13 +1188,71 @@
                     "atlasPr": 98,
                     "head": "9dad4946eab619cefd32ecf775614095f20c8054",
                     "ciRunId": 43758603713,
-                    "ciStatus": "IN_PROGRESS_NOT_QUALIFIED",
+                    "ciStatus": "CONTRACTS_AND_R05_PASS_BUILD_PENDING",
                     "scope": "Explicit availability catalog/export, canonical engine/Studio preview contract probe; no P1 shell mount",
                     "physicalFile": "BLOCKED_BY_ADMINISTRATOR; exact standalone HTML supplied for authorized real-device review",
                     "independentReview": "PENDING_DISTINCT_REVIEWER",
                     "p2": "HOLD",
                     "studentAuthorized": false,
-                    "runtimeAuthorized": false
+                    "runtimeAuthorized": false,
+                    "ciEvidence": [
+                      {
+                        "name": "Experience contracts",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Experience grammar registry",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Generic experience factory",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi portfolio factory",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi student product contract",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi publication filter contract",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "AXF shared engine boundary",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Smart material contracts",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Smart conformance cases",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi G2 contracts",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Four-case generality proof",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Smart publication reconciliation",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Typecheck",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Lint",
+                        "conclusion": "success"
+                      }
+                    ]
                   }
                 }
               }
