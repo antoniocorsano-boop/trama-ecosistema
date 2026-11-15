@@ -8,8 +8,8 @@
   "baseline": {
     "repository": "antoniocorsano-boop/Curriculum-Atlas",
     "pr": 95,
-    "head": "4fe38a8ca3a43754fe0c78495a35881a9ee6865f",
-    "run": 43698089963
+    "head": "a7a8539f20336201f3a2c55f801ac2d7df5c16f4",
+    "run": 43700272516
   },
   "tools": [
     {
@@ -19,7 +19,8 @@
       "evidence": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/pull/95",
       "limits": [
         "specialized binding in draft",
-        "no end-to-end authoring handoff"
+        "F2 loopback handoff passes for one predefined package; not generic authoring",
+        "F3-B human quality REVISE"
       ]
     },
     {
@@ -75,10 +76,52 @@
     {
       "id": "gdevelop",
       "role": "alternative-renderer",
+      "state": "CANDIDATE_COMPARATIVE_TEST",
+      "limits": [
+        "local template and export automation, licenses, network and host interoperability unqualified",
+        "compare only after M1 reviewed"
+      ]
+    },
+    {
+      "id": "tiled",
+      "role": "spatial-authoring-2d-2.5d",
+      "state": "CANDIDATE_PRIORITY_A",
+      "evidence": "AXF-F3B-IMMERSIVE-WORLD-TOOLS-v1.md",
+      "limits": [
+        "GPL editor/output boundary and exact Phaser import unqualified"
+      ]
+    },
+    {
+      "id": "babylon-editor",
+      "role": "3d-spatial-authoring",
+      "state": "CONDITIONAL_CANDIDATE",
+      "limits": [
+        "only if proven 2.5D gap",
+        "mobile, accessibility and integration unqualified"
+      ]
+    },
+    {
+      "id": "godot",
+      "role": "2d-3d-runtime",
+      "state": "RESERVE",
+      "limits": [
+        "web mobile and host qualification open"
+      ]
+    },
+    {
+      "id": "playcanvas",
+      "role": "3d-runtime-and-editor",
       "state": "DEFERRED",
       "limits": [
-        "no present blocking need",
-        "qualification missing"
+        "service independence unverified"
+      ]
+    },
+    {
+      "id": "arrow",
+      "role": "narrative-authoring",
+      "state": "DEFERRED",
+      "limits": [
+        "overlap existing graph"
       ]
     }
   ],
@@ -107,15 +150,22 @@
     }
   ],
   "next": {
-    "id": "F1",
-    "action": "versioned authoring package and preview adapter binding",
+    "id": "M1",
+    "action": "immersive Energy storyboard and visual target, human W6A review",
+    "masterStateRef": "../workflow/atlas-master-state.v1.json",
     "blockedPromotionUntil": [
-      "actual Studio Atlas handoff",
-      "human review",
+      "human experience quality review",
       "device and accessibility",
       "rights and dependency lock",
       "second distinct vertical",
       "exact-head adoption"
     ]
+  },
+  "observedAsOf": "2026-11-15",
+  "previousBaseline": {
+    "repository": "antoniocorsano-boop/Curriculum-Atlas",
+    "pr": 95,
+    "head": "4fe38a8ca3a43754fe0c78495a35881a9ee6865f",
+    "run": 43698089963
   }
 }
