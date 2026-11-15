@@ -67,7 +67,7 @@
     },
     {
       "id": "F3-B",
-      "state": "REVISE",
+      "state": "REVISE_M1_DIRECTION_ACCEPTED",
       "evidence": "../production/AXF-F3B-IMMERSIVE-EXPERIENCE-REVIEW-v1.md"
     },
     {
@@ -94,58 +94,40 @@
     }
   ],
   "next": {
-    "id": "M1",
-    "phase": "F3-B1",
-    "state": "STORYBOARD_CANDIDATE_READY_FOR_HUMAN_REVIEW",
-    "action": "Review exact M1 storyboard and schematic visual target; record explicit human Story/World/Experience decision before M2",
+    "id": "M2",
+    "phase": "F3-B2",
+    "state": "BASELINE_COMPARATIVE_RUN_REQUESTED",
+    "action": "Verify both isolated tool baseline jobs, then adapt the same reviewed Energy micro-world for comparison; no tool adoption based on unequal baselines",
+    "artifacts": [
+      {
+        "githubRepositoryId": 1376266693,
+        "pr": 96,
+        "head": "5a555650974572dacde1ba0bd81924adaf29729e"
+      }
+    ],
     "requires": [
-      "read master plan and exact receipts",
-      "reuse original assets and grammar registry",
-      "World Brief and consequence model",
-      "W6A human review"
+      "M1 direction accepted",
+      "Tiled real export and Phaser object interactions",
+      "GDevelop official local export and browser baseline"
     ],
     "acceptance": [
-      "explicit role and agency",
-      "meaningful distinct scenes",
-      "calculated consequences and actual transfer",
-      "visual continuity",
-      "accessible alternatives",
-      "human decision on exact candidate",
-      "candidate is not an implementation or final artwork"
+      "record exact versions and source hashes",
+      "same episode comparison still required",
+      "evidence and user review before tool selection"
+    ],
+    "blockers": [
+      "CI result pending",
+      "GDevelop equivalent Energy scene not yet implemented",
+      "final artwork, accessibility, licensing and human review open"
     ],
     "notAllowed": [
-      "new engine adoption",
-      "serial production",
+      "new production engine adoption",
       "student publication",
       "paid service",
       "automatic approval"
-    ],
-    "artifacts": [
-      {
-        "path": "../production/AXF-M1-ENERGIA-STORYBOARD-v1.md",
-        "commit": "8b9344fdf4e29a1cc89ced2359429af62b949d98"
-      },
-      {
-        "path": "../production/AXF-M1-ENERGIA-VISUAL-TARGET-v1.svg",
-        "commit": "658408f86234e2b64cba3a498317372301679b48"
-      }
-    ],
-    "blockers": [
-      "human story/world/experience review",
-      "Arena receipt missing",
-      "new visual assets not generated",
-      "transfer model scientific review",
-      "M2 tool decision not made"
     ]
   },
   "queued": [
-    {
-      "id": "M2",
-      "requires": [
-        "M1 human review PASS"
-      ],
-      "action": "isolated Tiled+Phaser versus GDevelop same episode"
-    },
     {
       "id": "M3",
       "requires": [
@@ -193,5 +175,22 @@
     "oneActivePriority": true,
     "noRepeatWithoutReason": true,
     "authority": "existing governance only"
-  }
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "state": "DIRECTION_ACCEPTED_FOR_TOOL_EXPERIMENT",
+      "source": "Human response 2026-11-15: Ok controlla e procedi",
+      "governance": {
+        "head": "ed288b02131f3e5e2386bb1ea38358f88c184b60",
+        "runId": 43702772162,
+        "result": "PASS"
+      },
+      "limits": [
+        "not final W6A quality PASS",
+        "no implementation or publication approval",
+        "Arena receipt and transfer review open"
+      ]
+    }
+  ]
 }
