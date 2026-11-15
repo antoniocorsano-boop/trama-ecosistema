@@ -206,7 +206,7 @@
     },
     "scenes": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 2,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -216,12 +216,16 @@
           "purpose",
           "learnerVisibleSituation",
           "learnerActions",
-          "consequences"
+          "consequences",
+          "kind",
+          "interaction",
+          "nextSceneRefs"
         ],
         "properties": {
           "sceneId": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
           },
           "order": {
             "type": "integer",
@@ -273,53 +277,16 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "maxItems": 1,
+            "uniqueItems": true
           },
           "interaction": {
             "type": "string",
             "enum": [
               "SUMMARY",
-              "CHOICE",
               "SPECIALIZED"
             ]
-          },
-          "choices": {
-            "type": "array",
-            "minItems": 2,
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "choiceId",
-                "label",
-                "feedback",
-                "targetSceneId"
-              ],
-              "properties": {
-                "choiceId": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "label": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "feedback": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "targetSceneId": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "worldAfter": {
-                  "$ref": "#/$defs/worldState"
-                }
-              }
-            }
-          },
-          "world": {
-            "$ref": "#/$defs/worldState"
           },
           "specialized": {
             "type": "object",
@@ -336,26 +303,15 @@
                 "const": 1
               }
             }
+          },
+          "kind": {
+            "enum": [
+              "SCENE",
+              "TRANSFER"
+            ]
           }
         },
         "allOf": [
-          {
-            "if": {
-              "required": [
-                "interaction"
-              ],
-              "properties": {
-                "interaction": {
-                  "const": "CHOICE"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "choices"
-              ]
-            }
-          },
           {
             "if": {
               "required": [
@@ -376,6 +332,9 @@
                 "nextSceneRefs": {
                   "minItems": 1,
                   "maxItems": 1
+                },
+                "kind": {
+                  "const": "SCENE"
                 }
               },
               "not": {
@@ -414,7 +373,8 @@
         }
       },
       "minContains": 1,
-      "maxContains": 1
+      "maxContains": 1,
+      "maxItems": 32
     },
     "visualProduction": {
       "type": "object",
