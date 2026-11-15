@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M7_D2_PHYSICAL_DRAG_REVISE_EDITORIAL_FINDINGS_OPEN",
-    "action": "Collect remaining editorial walkthrough findings before one coherent revision. Preserve D2 as private baseline; diagnose first-entry drag failure separately with first-gesture regression and physical Android retest. Do not publish or expand; remaining qualification gates unchanged.",
+    "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
+    "action": "Reopen W3/W4–W6A for Atelier Energia using the editorial production protocol: produce learning map, exact learner script, low-fidelity storyboard and cold walkthrough; human W3A/W5A/W6A decisions before final assets or W9. Preserve M7-D2 baseline; first-entry drag diagnosis remains separate and unconfirmed; no serial patches, new worlds, engine adoption or publication.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -140,7 +140,8 @@
       "M7 Android core path screenshot PASS; residual physical interactions, authorized storage, full accessibility and human/rights qualification open",
       "M6-B1 physical bulb drag FAIL; M7-D1 correction in-memory 4/4 PASS, real Android retest pending",
       "M7-D1 intermittent physical drag failure; M7-D2 repeat tests PASS in simulated Chromium, physical cause/retest open",
-      "M7-D2 first-entry physical drag FAIL/intermittent (user reported); root cause unconfirmed; ER-01–ER-05 editorial usability findings open"
+      "M7-D2 first-entry physical drag FAIL/intermittent (user reported); root cause unconfirmed; ER-01–ER-05 editorial usability findings open",
+      "Editorial production protocol candidate documented; W3A/W5A/W6A review reopened; ER-01–06 unresolved and no new production until gate passage."
     ],
     "notAllowed": [
       "production engine adoption",
@@ -555,7 +556,7 @@
         }
       },
       "editorialReview": {
-        "status": "COLLECTING_USER_FINDINGS_NO_IMPLEMENTATION_YET",
+        "status": "FINDINGS_CONSOLIDATED_PROTOCOL_CANDIDATE_HUMAN_GATES_REOPEN",
         "findings": [
           {
             "id": "ER-01",
@@ -618,7 +619,29 @@
             "status": "OPEN"
           }
         ],
-        "note": "Collect further user screenshots and feedback before consolidating a single editorial revision; physical drag test continues separately."
+        "note": "ER-01–05 user findings; ER-06 advisory screenshot interpretation. All remain OPEN. Protocol prepared, not validated. No implementation until appropriate human gates. Physical drag failure open."
+      },
+      "editorialProtocol": {
+        "status": "CANDIDATE_NOT_HUMAN_APPROVED",
+        "ref": "../production/AXF-EDITORIAL-PRODUCTION-PROTOCOL-v1.md",
+        "commit": "ff7634fcd2f3637ccd8be2cad220621bb2895a95",
+        "masterPlanCommit": "f7affea9e182fcff9525ee3c4c823d86047f1e38",
+        "controls": [
+          "C01 orientation",
+          "C02 language",
+          "C03 prerequisites",
+          "C04 narrative direction",
+          "C05 perceptible consequence",
+          "C06 reasoning",
+          "C07 accessibility",
+          "C08 science",
+          "C09 reliability",
+          "C10 governance"
+        ],
+        "nextDeliverable": "Learning map + learner-language script + complete low-fidelity storyboard; representative interaction after applicable gates",
+        "humanReview": "PENDING",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
       }
     }
   },
