@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "M7_ANDROID_PHYSICAL_WALKTHROUGH_PARTIAL_PASS",
-    "action": "Complete private Android walkthrough: direct scene touch/drag, choice C and evidence presentation, wrong-choice feedback, cancel/confirm reset, exit/reopen, landscape; LIM and accessibility/storage/rights and human review remain pending. Review visible immersion and GDevelop attribution before any release; no engine change without evidence.",
+    "action": "Complete Android direct lamp drag and both preserve/delete actions, then exit/reopen if needed; LIM, complete accessibility, authorized storage/network, rights and independent/human approval remain open. No student release or expansion.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -135,7 +135,7 @@
       "F3-B REVISE",
       "human W6A/W5A and rights/licensing open",
       "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
-      "Android local content URI opens and core path observed; remaining Android interactions, landscape and LIM pending",
+      "Android local opening and core flow observed; presentation, wrong-choice feedback and landscape PASS user-reported; direct drag, preserve/delete, exit/reopen and LIM pending",
       "complete accessibility and storage audit pending",
       "M6-B1 in-memory regression PASS; M7 Android screenshot partial PASS; authorized storage, full accessibility and human/rights qualification open"
     ],
@@ -423,7 +423,7 @@
       }
     },
     "m7": {
-      "status": "ANDROID_SCREENSHOT_EVIDENCE_PARTIAL_PASS",
+      "status": "ANDROID_SCREENSHOT_AND_USER_REPORTED_PARTIAL_PASS",
       "evidenceDate": "2026-11-15",
       "candidate": "M6-B1 banner visible; exact device file hash not verified",
       "evidenceLibraryFileId": "libfile_c28ab15b87808191ad21a0ea08c6f9fd",
@@ -442,22 +442,33 @@
       ],
       "pending": [
         "actual touch/drag method",
-        "choice and presentation",
-        "wrong-choice feedback",
         "cancel/confirm reset effects",
         "exit/reopen",
         "offline/network and storage",
-        "landscape and LIM",
         "complete accessibility",
         "human W6A/W5A",
-        "rights/licensing and independent review"
+        "rights/licensing and independent review",
+        "LIM physical device"
       ],
       "visualAdvisory": [
         "GDevelop branding visible in map; verify applicable attribution and export terms, do not remove by circumvention",
         "scene still framed as a page; large unused lower area in portrait; distinguish functional acceptance from immersive/editorial acceptance",
         "station and illuminated lamp are visually separate; verify direct-action clarity"
       ],
-      "studentAuthorized": false
+      "studentAuthorized": false,
+      "userReported": {
+        "source": "User follow-up checklist, 2026-11-15",
+        "passed": [
+          "choice C and presentation",
+          "feedback after less efficient choice",
+          "landscape orientation"
+        ],
+        "pending": [
+          "direct lamp drag onto station",
+          "both preserve and delete actions"
+        ],
+        "qualification": "User-reported results; no additional screenshots or independent measurements supplied"
+      }
     }
   },
   "queued": [
