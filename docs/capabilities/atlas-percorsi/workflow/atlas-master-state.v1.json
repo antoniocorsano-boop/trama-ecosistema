@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Apply AXF-ED-ID-01 within existing W3/W4–W6A: complete Energia learning map, learner-first continuous script, whole-experience storyboard with meaningful closure/transfer and cold walkthrough; compare preproduction-only standalone visual explanation to test format diversity. Preserve M7-D2 and alternate demo as evidence, first-entry drag separate. Human decisions before final assets/W9. Tool qualification remains isolated; no new production, publication, spending or adoption.",
+    "action": "Review the AXF-ED-ID-01 preproduction diptych at cold walkthrough; resolve exact Arena references and B applicable contract; obtain appropriate human story/learner-language/experience reviews and disciplinary review of transfer case before final assets or W9. Low-fidelity visual storyboard only within existing gates. M7-D2 drag remains open. No publication, spending or adoption.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -638,7 +638,7 @@
           "C09 reliability",
           "C10 governance"
         ],
-        "nextDeliverable": "One-page creative-pedagogical direction + learning map + continuous learner-first script + complete low-fidelity storyboard with authentic closure and proportionate transfer + whole-experience cold walkthrough; compare a non-narrative form in preproduction",
+        "nextDeliverable": "Preproduction diptych drafted; resolve W0 references and applicable gates, perform cold adult walkthrough, then low-fidelity visual storyboard and representative prototype only when permitted",
         "humanReview": "PENDING",
         "studentAuthorized": false,
         "runtimeAuthorized": false,
@@ -736,7 +736,37 @@
         "alternateDemo": "Private HTML demonstration, user questioned ending; advisory limitations; not approved or substituted for M7-D2",
         "humanReview": "PENDING",
         "studentAuthorized": false,
-        "runtimeAuthorized": false
+        "runtimeAuthorized": false,
+        "preproduction": {
+          "id": "AXF-ED-ID-01-DIPTYCH",
+          "status": "SCRIPT_AND_TEXTUAL_STORYBOARD_CANDIDATE_HUMAN_REVIEW_PENDING",
+          "ref": "../production/AXF-ED-ID-01-PREPRODUCTION-DIPTYCH-v1.md",
+          "commit": "9e737897d3b3e821875a9f8ad3f911083ccb5201",
+          "forms": [
+            "A: narrative laboratory, Energia",
+            "B: standalone visual explanation, same topic"
+          ],
+          "illustrationPolicy": "Instructional asset briefs A-V01–04 and B-V01–02; art and editable semantic overlays separate; reference images not acquired or rights-cleared",
+          "deliverables": [
+            "creative-pedagogical direction",
+            "learning map",
+            "literal learner script",
+            "textual low-fidelity storyboard",
+            "meaningful closure and transfer hypothesis",
+            "comparative cold-review plan"
+          ],
+          "pending": [
+            "exact Arena reference not located",
+            "B applicable contract classification",
+            "A human story review",
+            "W5A/W6A",
+            "disciplinary verification of transfer case",
+            "rights",
+            "actual cold review"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
+        }
       }
     }
   },
