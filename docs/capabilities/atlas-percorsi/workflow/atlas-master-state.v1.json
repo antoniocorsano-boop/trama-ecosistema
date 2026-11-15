@@ -31,6 +31,15 @@
       "skipped": 1,
       "failed": 0,
       "githubRepositoryId": 1376266693
+    },
+    {
+      "repo": "Atlas",
+      "githubRepositoryId": 1376266693,
+      "pr": 96,
+      "head": "3589c363e24fc66be588d336849997545bcd1b7f",
+      "state": "OPEN_NOT_MERGED",
+      "passed": 6,
+      "failed": 0
     }
   ],
   "phases": [
@@ -94,62 +103,36 @@
     }
   ],
   "next": {
-    "id": "M2",
+    "id": "M2-D",
     "phase": "F3-B2",
-    "state": "BOTH_BASELINE_TECHNICAL_PASS",
-    "action": "M2-C: compare same Energy micro-world using common assets, actions and pure model; select only after equivalent comparison",
-    "artifacts": [
-      {
-        "githubRepositoryId": 1376266693,
-        "pr": 96,
-        "head": "5a555650974572dacde1ba0bd81924adaf29729e"
-      }
-    ],
+    "state": "HUMAN_MULTIENGINE_DIRECTION_RECORDED",
+    "action": "Assess actual scene evidence, authoring automation and conditional engine profiles; no universal winner",
+    "evidence": "../production/AXF-M2D-MULTIENGINE-DECISION-v1.md",
     "requires": [
-      "M1 direction accepted",
-      "Tiled real export and Phaser object interactions",
-      "GDevelop official local export and browser baseline"
+      "M2-C technical PASS",
+      "M1 direction accepted"
     ],
     "acceptance": [
-      "record exact versions and source hashes",
-      "same episode comparison still required",
-      "evidence and user review before tool selection"
+      "compare actual screenshots and production change effort",
+      "record candidate role and alternatives, exact evidence and open gates",
+      "human decision on bounded M3 composition"
     ],
     "blockers": [
-      "equivalent Energy scene not yet compared",
-      "physical devices, full accessibility, licensing and human review open"
+      "F3-B remains REVISE",
+      "physical devices, full accessibility, license and dependency lock, host production integration and human review open"
     ],
     "notAllowed": [
       "new production engine adoption",
       "student publication",
       "paid service",
       "automatic approval"
-    ],
-    "evidence": "../production/AXF-M2-SPATIAL-BASELINE-EVIDENCE-v1.md",
-    "baselineResults": {
-      "runId": 43704132244,
-      "tiled": "PASS",
-      "gdevelop": "FAIL_PRIVACY",
-      "head": "5a555650974572dacde1ba0bd81924adaf29729e"
-    },
-    "retest": {
-      "githubRepositoryId": 1376266693,
-      "pr": 96,
-      "head": "1a659859c53d7f3d67092c56a45187f5083d162e",
-      "attempt": 1,
-      "maxAttempts": 1,
-      "change": "Official EnableMetrics no at first SceneJustBegins; assert generated false, three viewports, input, visibility/exit, storage and network checks",
-      "guardrailUnchanged": true,
-      "result": "PASS",
-      "runId": 43705042820,
-      "evidence": "../production/AXF-M2-PRIVACY-RETEST-EVIDENCE-v1.md"
-    }
+    ]
   },
   "queued": [
     {
       "id": "M3",
       "requires": [
-        "M2 tool decision"
+        "M2-D bounded composition decision"
       ],
       "action": "produce immersive episode"
     },
@@ -209,6 +192,70 @@
         "no implementation or publication approval",
         "Arena receipt and transfer review open"
       ]
+    },
+    {
+      "id": "M2",
+      "phase": "F3-B2",
+      "state": "M2_C_EQUIVALENT_TECHNICAL_PASS",
+      "action": "M2-C: compare same Energy micro-world using common assets, actions and pure model; select only after equivalent comparison",
+      "artifacts": [
+        {
+          "githubRepositoryId": 1376266693,
+          "pr": 96,
+          "head": "5a555650974572dacde1ba0bd81924adaf29729e"
+        }
+      ],
+      "requires": [
+        "M1 direction accepted",
+        "Tiled real export and Phaser object interactions",
+        "GDevelop official local export and browser baseline"
+      ],
+      "acceptance": [
+        "record exact versions and source hashes",
+        "same episode comparison still required",
+        "evidence and user review before tool selection"
+      ],
+      "blockers": [
+        "equivalent Energy scene not yet compared",
+        "physical devices, full accessibility, licensing and human review open"
+      ],
+      "notAllowed": [
+        "new production engine adoption",
+        "student publication",
+        "paid service",
+        "automatic approval"
+      ],
+      "evidence": "../production/AXF-M2-SPATIAL-BASELINE-EVIDENCE-v1.md",
+      "baselineResults": {
+        "runId": 43704132244,
+        "tiled": "PASS",
+        "gdevelop": "FAIL_PRIVACY",
+        "head": "5a555650974572dacde1ba0bd81924adaf29729e"
+      },
+      "retest": {
+        "githubRepositoryId": 1376266693,
+        "pr": 96,
+        "head": "1a659859c53d7f3d67092c56a45187f5083d162e",
+        "attempt": 1,
+        "maxAttempts": 1,
+        "change": "Official EnableMetrics no at first SceneJustBegins; assert generated false, three viewports, input, visibility/exit, storage and network checks",
+        "guardrailUnchanged": true,
+        "result": "PASS",
+        "runId": 43705042820,
+        "evidence": "../production/AXF-M2-PRIVACY-RETEST-EVIDENCE-v1.md"
+      },
+      "comparison": {
+        "githubRepositoryId": 1376266693,
+        "pr": 96,
+        "head": "3589c363e24fc66be588d336849997545bcd1b7f",
+        "passed": 6,
+        "failed": 0,
+        "runId": 43705917257,
+        "artifactId": 14158363789,
+        "artifactExpires": "2026-11-22",
+        "sha256": "18354f42cbab6c640866007427afa6c62179f8431911f4ec8790caa3db1cd8f2",
+        "evidence": "../production/AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md"
+      }
     }
   ]
 }

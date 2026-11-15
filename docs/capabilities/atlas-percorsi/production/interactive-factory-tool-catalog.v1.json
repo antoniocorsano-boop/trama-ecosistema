@@ -27,12 +27,14 @@
       "id": "phaser",
       "version": "4.2.1",
       "role": "specialized-2d-renderer",
-      "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
-      "evidence": "Atlas repository ID 1376266693; actions/runs/43698089963",
+      "state": "EQUIVALENT_WORLD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md",
       "limits": [
-        "human device/accessibility review",
-        "licensing and frozen dependency lock",
-        "no generality claim"
+        "schematic world, common HTML scientific bench only",
+        "human visual/device/full accessibility review",
+        "licenses and dependency lock",
+        "production host integration",
+        "no adoption or generality claim"
       ],
       "selection": "trusted registry only"
     },
@@ -75,20 +77,29 @@
     },
     {
       "id": "gdevelop",
-      "role": "alternative-renderer",
-      "state": "CANDIDATE_COMPARATIVE_TEST",
+      "role": "candidate-specialized-adventure-and-exploration-renderer",
+      "state": "EQUIVALENT_WORLD_TECHNICAL_PASS_CANDIDATE",
       "limits": [
-        "local template and export automation, licenses, network and host interoperability unqualified",
-        "compare only after M1 reviewed"
-      ]
+        "schematic world, common HTML scientific bench only",
+        "human visual/device/full accessibility review",
+        "licenses and dependency lock",
+        "production host integration",
+        "no adoption or generality claim"
+      ],
+      "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md",
+      "version": "5.6.285"
     },
     {
       "id": "tiled",
-      "role": "spatial-authoring-2d-2.5d",
-      "state": "CANDIDATE_PRIORITY_A",
-      "evidence": "AXF-F3B-IMMERSIVE-WORLD-TOOLS-v1.md",
+      "role": "candidate-spatial-authoring-2d-2.5d",
+      "state": "EQUIVALENT_WORLD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md",
       "limits": [
-        "GPL editor/output boundary and exact Phaser import unqualified"
+        "schematic world, common HTML scientific bench only",
+        "human visual/device/full accessibility review",
+        "licenses and dependency lock",
+        "production host integration",
+        "no adoption or generality claim"
       ]
     },
     {
@@ -150,8 +161,8 @@
     }
   ],
   "next": {
-    "id": "M1",
-    "action": "immersive Energy storyboard and visual target, human W6A review",
+    "id": "M2-D",
+    "action": "evaluate complementary profiles and bounded composition, no universal winner",
     "masterStateRef": "../workflow/atlas-master-state.v1.json",
     "blockedPromotionUntil": [
       "human experience quality review",
@@ -159,7 +170,8 @@
       "rights and dependency lock",
       "second distinct vertical",
       "exact-head adoption"
-    ]
+    ],
+    "decisionRef": "AXF-M2D-MULTIENGINE-DECISION-v1.md"
   },
   "observedAsOf": "2026-11-15",
   "previousBaseline": {
@@ -167,5 +179,12 @@
     "pr": 95,
     "head": "4fe38a8ca3a43754fe0c78495a35881a9ee6865f",
     "run": 43698089963
+  },
+  "comparison": {
+    "githubRepositoryId": 1376266693,
+    "pr": 96,
+    "head": "3589c363e24fc66be588d336849997545bcd1b7f",
+    "runId": 43705917257,
+    "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md"
   }
 }
