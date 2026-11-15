@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Review G2 private gateway direct access on physical device; preserve G1 and existing content. Verify real deep-link routing only in authorised integration; P0 and R1 qualification remain pending, F3/F4/F5 unchanged. No production deployment or student publication.",
+    "action": "Resolve P1 isolated synthetic test admissibility under existing authority; use G2 as visual reference and actual authorised catalog projection as boundary. P0 reuse map complete; R1 publication qualification explicitly BLOCKED, retain candidate; physical G2 review pending; F3/F4/F5 unchanged. No student content, live integration, deployment or spending.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -905,7 +905,28 @@
             "rights and distribution decision"
           ],
           "studentAuthorized": false,
-          "runtimeAuthorized": false
+          "runtimeAuthorized": false,
+          "curriculumBindingReview": {
+            "status": "CANDIDATE_MATCH_AUTHORITY_PENDING",
+            "source": "Arena v1.3 §7.3.8, Tecnologia Classe III",
+            "projectedIds": [
+              "tecnologia-classe-iii-o2",
+              "tecnologia-classe-iii-o4"
+            ],
+            "authority": "PROVISIONAL_COMPLETE",
+            "receipt": null,
+            "sourceState": "MATERIALIZED_HUMAN_VALIDATION_OPEN_NOT_IN_FORCE",
+            "matchingAtlasExport": true
+          },
+          "publicationQualification": {
+            "status": "BLOCKED",
+            "reasons": [
+              "Standalone interactive HTML applicable contract not qualified; lesson-material validator does not accept HTML",
+              "Current matching Arena export provisional and not in force",
+              "Existing human, disciplinary, accessibility, rights and distribution checks pending"
+            ],
+            "candidatePreserved": true
+          }
         }
       },
       "systemHorizon": {
@@ -932,14 +953,14 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "ROADMAP_CANDIDATE_P0_AUDIT_PENDING",
+        "status": "P0_REUSE_MAP_VERIFIED_P1_ADMISSIBILITY_PENDING",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
         "milestones": [
           {
             "id": "P0",
-            "state": "NEXT_PROPOSED",
+            "state": "REUSE_MAP_COMPLETE_ADMISSIBILITY_PENDING",
             "exit": "exact-head code/contract reuse map and isolated-test admissibility"
           },
           {
@@ -970,7 +991,22 @@
         ],
         "safety": "No persistent learner progress, inferred knowledge, engagement optimization or hidden-only essential controls; semantic accessibility and session-only selection; no student data or runtime AI",
         "studentAuthorized": false,
-        "runtimeAuthorized": false
+        "runtimeAuthorized": false,
+        "p0": {
+          "status": "REUSE_MAP_COMPLETE_ADMISSIBILITY_PENDING",
+          "planCommit": "2865196daf55e79c5362c98bc2da13e45bfe086c",
+          "atlasHead": "d2938378c9384c5122adb8379396dbad5b4385fe",
+          "arenaHead": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+          "arenaAtlasExportBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+          "currentPublicPathwaysFromPortfolio": 0,
+          "currentResourceFixtures": {
+            "count": 5,
+            "cataloguedOnly": true
+          },
+          "gatewayArtifactIntegrity": "G2 and R1 verified exact SHA256; R1 and Atelier draft embedded, nine worlds",
+          "minimalGap": "Authorisation-filtered learner library projection, resource-first index and stable routes; retain existing curriculum and professional surfaces",
+          "p1": "Synthetic isolated composition test only, pending applicable authority; no runtime or public deployment"
+        }
       },
       "gatewayReview": {
         "id": "AXF-GATEWAY-G1",
