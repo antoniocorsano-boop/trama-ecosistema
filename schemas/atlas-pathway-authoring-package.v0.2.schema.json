@@ -67,7 +67,7 @@
         "kind": {
           "type": "string",
           "enum": [
-            "CURRICULUM_TARGET",
+            "CURRICOLO_TARGET",
             "PLAIN_IDEA",
             "DOCENTE_OS_ACTIVITY",
             "EXISTING_PATHWAY",
@@ -83,20 +83,20 @@
         }
       }
     },
-    "curriculumBinding": {
+    "curricoloBinding": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "authority",
-        "curriculumVersionRef",
+        "curricoloVersionRef",
         "authorityState",
-        "curriculumObjectiveRefs"
+        "curricoloObjectiveRefs"
       ],
       "properties": {
         "authority": {
           "const": "Arena"
         },
-        "curriculumVersionRef": {
+        "curricoloVersionRef": {
           "type": "string",
           "minLength": 1
         },
@@ -107,7 +107,7 @@
         "authorityReceiptRef": {
           "type": "string"
         },
-        "curriculumObjectiveRefs": {
+        "curricoloObjectiveRefs": {
           "type": "array",
           "items": {
             "type": "string",
@@ -503,7 +503,7 @@
       },
       "then": {
         "required": [
-          "curriculumBinding",
+          "curricoloBinding",
           "story",
           "worldExperience",
           "scenes",
