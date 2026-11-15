@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_R_REPLAY_PASS_NEW_GENERICITY_ROUTE_FINDINGS_P2_HOLD",
+        "status": "P1_R2_SCOPED_PASS_DISTINCT_REVIEW_PENDING_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -1153,7 +1153,35 @@
                     "severity": "MEDIUM_HIGH"
                   }
                 ],
-                "next": "Separate generic compiler from fixture tests, stage/commit artifacts after validation; synchronize navigation and route, then exact-version distinct review."
+                "next": "Separate generic compiler from fixture tests, stage/commit artifacts after validation; synchronize navigation and route, then exact-version distinct review.",
+                "followup": {
+                  "id": "P1-R2",
+                  "status": "SCOPED_PASS_DISTINCT_REVIEW_PENDING",
+                  "planCommit": "52a5363c4c174d07550c836994e60efa2a4f5f88",
+                  "libraryFileId": "libfile_a44fc4a90bf081919aae2d3fe1ba23ea",
+                  "packageSha256": "a257d54b4b63ee45d556f4d71da725a7c1823d774a1ddf6978955c40eeed8d26",
+                  "htmlSha256": "d57116e979e678f142d477f7f7eaa8c11a5e6ee7b314455d436b839ee1a3913c",
+                  "shellSha256": "abcaf8601b37a5b308fd5368f2cf142110836e4616ac794ada39009c86fd13da",
+                  "findings": {
+                    "R09": "CORRECTED_SYNTHETIC_SCOPE",
+                    "R10": "CORRECTED_SYNTHETIC_SCOPE_REAL_FILE_PENDING"
+                  },
+                  "tests": {
+                    "compiler": "25/25 PASS including historical negatives",
+                    "route": "6/6 PASS in memory",
+                    "regression": "4/4 viewport, 8/8 geometry, 3/3 adversarial groups, CDP swipe/tap PASS",
+                    "deterministicRebuild": "identical HTML SHA256",
+                    "externalHttp": 0,
+                    "pageErrors": 0,
+                    "localFileAndHttp": "BLOCKED_BY_ADMINISTRATOR",
+                    "physical": "PENDING"
+                  },
+                  "independentReview": "PENDING",
+                  "runtimeAuthorized": false,
+                  "studentAuthorized": false,
+                  "originalPreserved": true,
+                  "next": "Exact-candidate distinct review of R09/R10, R05 boundary and P2 test plan; P2 remains HOLD, no production or publication."
+                }
               }
             }
           }
