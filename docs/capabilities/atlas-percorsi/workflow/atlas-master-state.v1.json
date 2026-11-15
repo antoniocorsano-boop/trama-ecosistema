@@ -563,6 +563,16 @@
             "proposal": "Use short contextual character-led clue in age-appropriate language, explaining observation, mission and meaningful next step toward notebook/bench; retain scientific uncertainty in plain language, do not imply lamp replacement diagnoses or repairs fault.",
             "acceptance": "First-time learner understands what was observed, what remains unknown and why the next action matters; teacher validates wording and scientific distinction. No implementation until findings collection ends.",
             "status": "OPEN"
+          },
+          {
+            "id": "ER-03",
+            "scene": "E02 quaderno/indizio",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_USABILITY",
+            "observation": "Message 'Nel modello virtuale, A trasferisce più energia termica di B.' introduces undefined A/B references and energy terminology before learner has met the models or understood the comparison. Information lacks a referent and purpose.",
+            "proposal": "Reorder conceptual progression: contextual observation about light and heat, question about energy use, introduce labelled virtual lamps at bench, compare under equal useful-light conditions, then name and explain efficiency. Notebook clue should be a comprehensible character observation/question, not an unexplained conclusion; preserve scientific uncertainty and model scope.",
+            "acceptance": "First-time learner can identify what each term and object refers to, explain why the clue matters, and connect it to the experiment without external explanation. Review all clues for prerequisite vocabulary, sequencing and cognitive load; no implementation until findings collection ends.",
+            "status": "OPEN"
           }
         ],
         "note": "Collect further user screenshots and feedback before consolidating a single editorial revision; physical drag test continues separately."
