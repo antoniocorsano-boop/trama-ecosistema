@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "AXF-PARAM-01 P0: document exact-head reuse/extension map and determine admissibility of isolated synthetic parameterisation test; preserve AXF-HORIZON-01 R1 classification/qualification as active editorial priority. Do not implement P1–P3 until applicable governance permits; F3 REVISE, F4/F5 blocked unchanged. No new student content, runtime, adoption, publication or spending.",
+    "action": "Review AXF-GATEWAY-G1 private access scene as whole-product visual reference; verify on physical device and decide visual/navigation direction. Preserve AXF-PARAM-01 P0 and R1 editorial qualification, F3/F4/F5 gates unchanged; no generic engine implementation or new content before this review and applicable authority. No publication or spending.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -969,6 +969,54 @@
           }
         ],
         "safety": "No persistent learner progress, inferred knowledge, engagement optimization or hidden-only essential controls; semantic accessibility and session-only selection; no student data or runtime AI",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
+      },
+      "gatewayReview": {
+        "id": "AXF-GATEWAY-G1",
+        "status": "PRIVATE_FUNCTIONAL_GATEWAY_DESIGN_CANDIDATE_HUMAN_REVIEW_PENDING",
+        "date": "2026-11-15",
+        "userDirection": "Realise the initial Atlas access environment before proceeding with generic motor or further world production; globe and orbital library as whole-product visual identity.",
+        "htmlLibraryFileId": "libfile_0777b1ea2c848191883b31efe818168d",
+        "htmlSha256": "4220b21fa6e655364701513079cd1b51e1a80a1b8176467539b5480925931994",
+        "packageLibraryFileId": "libfile_502f89de3a3c81918f1acf9e8ae5b217",
+        "packageSha256": "9b5b4f87d6f65752d03ad61fc10c5861bb8e1ee21f6d000d297bbf52b2c702ea",
+        "scope": "Standalone private HTML; original generated ambient background and portrait compositional derivative; nine thematic orbs data-driven, rotation of nodes not the Earth/artwork itself, contextual controls, search/index, two unchanged private Energy resources embedded, other domains explicitly in preparation. No live Atlas integration, no persistent learner state, no publication.",
+        "test": {
+          "mode": "Chromium in-memory",
+          "viewports": [
+            [
+              320,
+              740
+            ],
+            [
+              390,
+              844
+            ],
+            [
+              844,
+              390
+            ],
+            [
+              1280,
+              800
+            ]
+          ],
+          "functional": "4/4 PASS",
+          "supplemental": "CDP touch swipe then immediate tap, second resource return, keyboard reveal PASS after fix",
+          "externalHttp": 0,
+          "pageErrors": 0,
+          "localFileNavigation": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+          "physical": "PENDING"
+        },
+        "limits": [
+          "Portal only; not P1/P2 generic engine qualification",
+          "Background fixed; orbit nodes rotate",
+          "Prior content embedded unchanged, still private and not qualified",
+          "Portrait derivative not separate generated master",
+          "Accessibility, actual Android/LIM, image rights and formal reviews pending",
+          "No changes to Atlas production or deployment"
+        ],
         "studentAuthorized": false,
         "runtimeAuthorized": false
       }
