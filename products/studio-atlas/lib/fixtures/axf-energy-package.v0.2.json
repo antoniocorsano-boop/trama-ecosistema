@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "atlas.pathway-authoring-package/v0.2",
+  "packageId": "axf-energy-package",
+  "packageVersion": 1,
+  "pathwayId": "axf-energy",
+  "title": "La luce che serve",
+  "authoringState": "AUTHORING",
+  "sourceSeed": {
+    "kind": "PLAIN_IDEA",
+    "minimised": true
+  },
+  "publicationCandidate": {
+    "decision": "DRAFT"
+  },
+  "runtimeAuthorized": false,
+  "scenes": [
+    {
+      "sceneId": "lab",
+      "order": 1,
+      "kind": "SCENE",
+      "purpose": "Laboratorio dell’energia",
+      "learnerVisibleSituation": "Tre lampade virtuali forniscono la stessa energia luminosa utile.",
+      "learnerActions": [
+        "Confronta le tre lampade."
+      ],
+      "consequences": [
+        "Rivedi la scelta sulla base delle misure."
+      ],
+      "interaction": "SPECIALIZED",
+      "specialized": {
+        "rendererId": "energy-lamp",
+        "version": 1
+      },
+      "nextSceneRefs": [
+        "transfer"
+      ]
+    },
+    {
+      "sceneId": "transfer",
+      "order": 2,
+      "kind": "TRANSFER",
+      "purpose": "Trasferisci il ragionamento",
+      "learnerVisibleSituation": "Due sistemi forniscono lo stesso servizio.",
+      "learnerActions": [
+        "Indica quali condizioni devono essere equivalenti."
+      ],
+      "consequences": [
+        "Motiva il confronto."
+      ],
+      "interaction": "SUMMARY",
+      "nextSceneRefs": []
+    }
+  ]
+}
