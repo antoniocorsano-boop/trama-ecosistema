@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M6_B1_TARGETED_IN_MEMORY_PASS_PHYSICAL_HUMAN_PENDING",
-    "action": "Private teacher walkthrough and actual Android/LIM, direct file opening, complete accessibility, authorized persistent storage audit and rights/independent qualification; no release or expansion",
+    "state": "M7_ANDROID_PHYSICAL_WALKTHROUGH_PARTIAL_PASS",
+    "action": "Complete private Android walkthrough: direct scene touch/drag, choice C and evidence presentation, wrong-choice feedback, cancel/confirm reset, exit/reopen, landscape; LIM and accessibility/storage/rights and human review remain pending. Review visible immersion and GDevelop attribution before any release; no engine change without evidence.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -135,9 +135,9 @@
       "F3-B REVISE",
       "human W6A/W5A and rights/licensing open",
       "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
-      "physical device and file-opening verification pending",
+      "Android local content URI opens and core path observed; remaining Android interactions, landscape and LIM pending",
       "complete accessibility and storage audit pending",
-      "M6-B1 targeted in-memory regression PASS; physical device, authorized storage context, complete accessibility and human/rights qualification still open"
+      "M6-B1 in-memory regression PASS; M7 Android screenshot partial PASS; authorized storage, full accessibility and human/rights qualification open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -421,6 +421,43 @@
         "humanReview": "PENDING",
         "studentAuthorized": false
       }
+    },
+    "m7": {
+      "status": "ANDROID_SCREENSHOT_EVIDENCE_PARTIAL_PASS",
+      "evidenceDate": "2026-11-15",
+      "candidate": "M6-B1 banner visible; exact device file hash not verified",
+      "evidenceLibraryFileId": "libfile_c28ab15b87808191ad21a0ea08c6f9fd",
+      "evidenceSha256": "99ac93ac7ba90b6881ada5085d1c94712fb6cce4e3caf0ff25755e158ae699c6",
+      "screenshots": 10,
+      "device": "Android real, portrait",
+      "opening": "PASS_OBSERVED_CONTENT_DOWNLOADS_URI",
+      "observed": [
+        "prologue",
+        "map rendered",
+        "piazza and notebook clues",
+        "bench prediction prompt",
+        "A/B/C experiment states and quantitative measures",
+        "notebook with three consistent measures",
+        "reset confirmation visible"
+      ],
+      "pending": [
+        "actual touch/drag method",
+        "choice and presentation",
+        "wrong-choice feedback",
+        "cancel/confirm reset effects",
+        "exit/reopen",
+        "offline/network and storage",
+        "landscape and LIM",
+        "complete accessibility",
+        "human W6A/W5A",
+        "rights/licensing and independent review"
+      ],
+      "visualAdvisory": [
+        "GDevelop branding visible in map; verify applicable attribution and export terms, do not remove by circumvention",
+        "scene still framed as a page; large unused lower area in portrait; distinguish functional acceptance from immersive/editorial acceptance",
+        "station and illuminated lamp are visually separate; verify direct-action clarity"
+      ],
+      "studentAuthorized": false
     }
   },
   "queued": [
