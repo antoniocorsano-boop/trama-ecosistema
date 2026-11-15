@@ -96,8 +96,8 @@
   "next": {
     "id": "M2",
     "phase": "F3-B2",
-    "state": "BOUNDED_PRIVACY_RETEST_REQUESTED",
-    "action": "Verify exact GDevelop opt-out candidate run; if PASS compare same episode; if FAIL defer GDevelop and proceed with primary tool",
+    "state": "BOTH_BASELINE_TECHNICAL_PASS",
+    "action": "M2-C: compare same Energy micro-world using common assets, actions and pure model; select only after equivalent comparison",
     "artifacts": [
       {
         "githubRepositoryId": 1376266693,
@@ -116,9 +116,8 @@
       "evidence and user review before tool selection"
     ],
     "blockers": [
-      "GDevelop observed external analytics attempt",
       "equivalent Energy scene not yet compared",
-      "visual, accessibility, licensing and human review open"
+      "physical devices, full accessibility, licensing and human review open"
     ],
     "notAllowed": [
       "new production engine adoption",
@@ -140,7 +139,10 @@
       "attempt": 1,
       "maxAttempts": 1,
       "change": "Official EnableMetrics no at first SceneJustBegins; assert generated false, three viewports, input, visibility/exit, storage and network checks",
-      "guardrailUnchanged": true
+      "guardrailUnchanged": true,
+      "result": "PASS",
+      "runId": 43705042820,
+      "evidence": "../production/AXF-M2-PRIVACY-RETEST-EVIDENCE-v1.md"
     }
   },
   "queued": [
