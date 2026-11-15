@@ -17,7 +17,7 @@ jobs:
       - run: node --test experiments/tv-01c/review-demo/review-guard.test.mjs
       - run: node --check experiments/tv-01c/review-demo/demo.mjs
   browser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
