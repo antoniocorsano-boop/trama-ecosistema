@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Render exact PR #100 host privately with verified original G2 artwork, compare desktop/mobile, obtain distinct review and physical evidence; P2 HOLD; no merge/deployment/student authorization.",
+    "action": "Revise G2 visual composition on same qualified host: compact direct search, contextual filters/results, central globe and orbit in first viewport; rerun private originals review, distinct and physical gates; P2 HOLD; no deploy or publication.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_R2_PR98_PR99_PR100_SCOPED_PASS_G2_PRIVATE_RENDER_PENDING_P2_HOLD",
+        "status": "P1_R2_PR98_PR99_PR100_SCOPED_PASS_G2_PRIVATE_RENDER_PASS_VISUAL_REVISE_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -1298,7 +1298,7 @@
                       "assetCount": 11
                     },
                     "scope": "G2 nine worlds, editorial sections, direct search, explicit preview placement, private artwork prop; no original bytes in repo",
-                    "originalArtRender": "PENDING_PRIVATE_RUNTIME",
+                    "originalArtRender": "PASS_SCOPED_PRIVATE_CHROMIUM",
                     "independentReview": "PENDING",
                     "physical": "PENDING",
                     "p2": "HOLD",
@@ -1309,6 +1309,32 @@
                     "qualificationCommit": "57a406bb1d1798595c791d94e150046f251df3d9",
                     "browserRegressionTests": "20/20 PASS",
                     "visualHostTests": "3/3 PASS"
+                  },
+                  "privateRender": {
+                    "id": "P1-R2-I",
+                    "planCommit": "e864204554ab1695c1ef85278dca45479f448bb4",
+                    "sourcePr": 100,
+                    "sourceHead": "742e72ce7b56f258ae68598bfb51167ad667a9b6",
+                    "recipeHead": "a6dd67111909369ae41d3858ff1a2f2ce1ff576b",
+                    "workflowRunId": 43761214746,
+                    "artifactId": 14180890319,
+                    "artifactSha256": "90b00ed616fb0e4781ec315154890e957d2bf3a734cee73aadcd30521759035e",
+                    "privateHtml": {
+                      "libraryFileId": "libfile_ae791f993f408191af113435f2034ca1",
+                      "sha256": "49444ad074edbc7b7470c6553ff56eb574ebc7ae3765399002dbfff972a2616c"
+                    },
+                    "evidencePack": {
+                      "libraryFileId": "libfile_2adab217ed808191b6ed2229534e865d",
+                      "sha256": "d0bcb20ad8aaa05a4dc4f62cc2ec3a70981d9bf3e7e05e003bffe592ece1c641"
+                    },
+                    "originals": "11/11 verified",
+                    "browser": "4/4 PASS after review-wrapper correction; exact compiled app CSS and JS",
+                    "visualReview": "REVISE_MOBILE_COMPOSITION",
+                    "physical": "PENDING",
+                    "independentReview": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false
                   }
                 }
               }
