@@ -540,6 +540,22 @@
           "modelUnchanged": true,
           "studentAuthorized": false
         }
+      },
+      "editorialReview": {
+        "status": "COLLECTING_USER_FINDINGS_NO_IMPLEMENTATION_YET",
+        "findings": [
+          {
+            "id": "ER-01",
+            "scene": "E02 plastico",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_USABILITY",
+            "observation": "Entry to map: Piazza/Quaderno/Banco and generic exploration instruction do not explain purpose of each destination or next meaningful action; learner proceeds by trial and error.",
+            "proposal": "Brief character-led contextual mission reminder, explicit reason to investigate objects, visible contextual interaction cues, optional guidance and freedom of exploration; no long instruction wall.",
+            "acceptance": "A first-time learner can explain goal and choose a meaningful next action without external guidance; validate with teacher walkthrough before promotion.",
+            "status": "OPEN"
+          }
+        ],
+        "note": "Collect further user screenshots and feedback before consolidating a single editorial revision; physical drag test continues separately."
       }
     }
   },
