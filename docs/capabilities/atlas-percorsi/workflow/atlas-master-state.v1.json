@@ -96,8 +96,8 @@
   "next": {
     "id": "M2",
     "phase": "F3-B2",
-    "state": "BASELINE_PARTIAL_PASS_PRIVACY_BLOCKER",
-    "action": "One bounded GDevelop opt-out qualification using documented EnableMetrics at startup; retain Tiled+Phaser as primary; compare equivalent episode only if privacy gate passes",
+    "state": "BOUNDED_PRIVACY_RETEST_REQUESTED",
+    "action": "Verify exact GDevelop opt-out candidate run; if PASS compare same episode; if FAIL defer GDevelop and proceed with primary tool",
     "artifacts": [
       {
         "githubRepositoryId": 1376266693,
@@ -132,6 +132,15 @@
       "tiled": "PASS",
       "gdevelop": "FAIL_PRIVACY",
       "head": "5a555650974572dacde1ba0bd81924adaf29729e"
+    },
+    "retest": {
+      "githubRepositoryId": 1376266693,
+      "pr": 96,
+      "head": "1a659859c53d7f3d67092c56a45187f5083d162e",
+      "attempt": 1,
+      "maxAttempts": 1,
+      "change": "Official EnableMetrics no at first SceneJustBegins; assert generated false, three viewports, input, visibility/exit, storage and network checks",
+      "guardrailUnchanged": true
     }
   },
   "queued": [
