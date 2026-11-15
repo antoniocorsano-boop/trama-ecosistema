@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "atlas.axf-master-state/candidate-v1",
+  "planId": "AXF-MASTER-01",
+  "asOf": "2026-11-15",
+  "status": "CONSOLIDATION_CANDIDATE",
+  "runtimeAuthorized": false,
+  "studentAuthorized": false,
+  "paidFallbackAllowed": false,
+  "planRef": "ATLAS-MASTER-PLAN-v1.md",
+  "authorityRefs": [
+    "../../../governance/TRAMA-GOVERNATORE-INTELLIGENTE-v1.md",
+    "../architecture/productive-pathway-workflow-v1.md",
+    "../grammars/registry.yaml",
+    "../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md"
+  ],
+  "baselines": [
+    {
+      "repo": "antoniocorsano-boop/trama-ecosistema",
+      "pr": 332,
+      "head": "1f47247fd96e3cb819a24d22bf98773b7759c065",
+      "state": "DRAFT",
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "repo": "antoniocorsano-boop/Curriculum-Atlas",
+      "pr": 95,
+      "head": "a7a8539f20336201f3a2c55f801ac2d7df5c16f4",
+      "state": "DRAFT",
+      "passed": 14,
+      "skipped": 1,
+      "failed": 0
+    }
+  ],
+  "phases": [
+    {
+      "id": "F0",
+      "state": "BASELINE_DOCUMENTED",
+      "evidence": "../production/STUDIO-ATLAS-INTERACTIVE-FACTORY-HANDOFF-v1.md"
+    },
+    {
+      "id": "F1",
+      "state": "TECHNICAL_PASS_CANDIDATE",
+      "evidence": "../production/AXF-F1-SPECIALIZED-HANDOFF-EVIDENCE-v1.md"
+    },
+    {
+      "id": "F2",
+      "state": "TECHNICAL_PASS_CANDIDATE",
+      "evidence": "../production/AXF-F2-SPECIALIZED-PREVIEW-EVIDENCE-v1.md",
+      "closeout": "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/331#issuecomment-6892411392"
+    },
+    {
+      "id": "F3-A",
+      "state": "TECHNICAL_PASS_CANDIDATE",
+      "evidence": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43700272516",
+      "artifact": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43700272516/artifacts/14155464015",
+      "artifactExpires": "2026-11-22",
+      "sha256": "2fd722328f233d4c48d3fdf19013fb9f4337842cf0f8d7a1ddcdb659ddf1886b"
+    },
+    {
+      "id": "F3-B",
+      "state": "REVISE",
+      "evidence": "../production/AXF-F3B-IMMERSIVE-EXPERIENCE-REVIEW-v1.md"
+    },
+    {
+      "id": "F3-C",
+      "state": "PARTIAL",
+      "limits": [
+        "Android rendering and completed state observed",
+        "physical LIM untested",
+        "full accessibility and gesture/reset checks open"
+      ]
+    },
+    {
+      "id": "F3-D",
+      "state": "OPEN"
+    },
+    {
+      "id": "F4",
+      "state": "BLOCKED_BY_F3",
+      "case": "agriculture"
+    },
+    {
+      "id": "F5",
+      "state": "BLOCKED_BY_F4"
+    }
+  ],
+  "next": {
+    "id": "M1",
+    "phase": "F3-B1",
+    "state": "PROPOSED",
+    "action": "Storyboard and visual target for immersive Energy episode; mix expressive formats deliberately; human review before new implementation",
+    "requires": [
+      "read master plan and exact receipts",
+      "reuse original assets and grammar registry",
+      "World Brief and consequence model",
+      "W6A human review"
+    ],
+    "acceptance": [
+      "explicit role and agency",
+      "meaningful distinct scenes",
+      "calculated consequences and actual transfer",
+      "visual continuity",
+      "accessible alternatives",
+      "human decision on exact candidate"
+    ],
+    "notAllowed": [
+      "new engine adoption",
+      "serial production",
+      "student publication",
+      "paid service",
+      "automatic approval"
+    ]
+  },
+  "queued": [
+    {
+      "id": "M2",
+      "requires": [
+        "M1 human review"
+      ],
+      "action": "isolated Tiled+Phaser versus GDevelop same episode"
+    },
+    {
+      "id": "M3",
+      "requires": [
+        "M2 tool decision"
+      ],
+      "action": "produce immersive episode"
+    },
+    {
+      "id": "M4",
+      "requires": [
+        "M3"
+      ],
+      "action": "human and technical quality closure"
+    },
+    {
+      "id": "M5",
+      "requires": [
+        "M4 PASS"
+      ],
+      "action": "Agriculture vertical"
+    },
+    {
+      "id": "M6",
+      "requires": [
+        "M5"
+      ],
+      "action": "generalize authoring factory"
+    },
+    {
+      "id": "M7",
+      "requires": [
+        "applicable quality and authority gates"
+      ],
+      "action": "library and governed delivery"
+    }
+  ],
+  "continuity": {
+    "readFirst": [
+      "CANONICAL-INDEX-v1.md",
+      "ATLAS-MASTER-PLAN-v1.md",
+      "atlas-master-state.v1.json"
+    ],
+    "appendEvidence": true,
+    "verifyExactHead": true,
+    "oneActivePriority": true,
+    "noRepeatWithoutReason": true,
+    "authority": "existing governance only"
+  }
+}
