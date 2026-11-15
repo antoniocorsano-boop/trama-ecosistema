@@ -644,25 +644,35 @@
         "runtimeAuthorized": false
       },
       "professionalAuthoringQualification": {
-        "status": "ISOLATED_PROBE_PR_OPEN",
+        "status": "INK_SMOKE_PASS_EXE_REQUALIFICATION_QUEUED",
         "pr": 333,
-        "head": "82382c30ddbc21e46481667a493751e5c08cda61",
-        "catalogCommit": "3b569d93307e546195bad52819c93175dae738ac",
+        "head": "b44e45f98b03323802406980ec2242a591dacc9b",
+        "catalogCommit": "12fa2d850702da91794d2051270eece14ea8f604",
         "runs": [
           {
-            "id": 43737834072,
-            "status": "in_progress",
+            "id": 43738148274,
+            "status": "queued",
             "conclusion": null
           },
           {
-            "id": 43737834084,
-            "status": "in_progress",
+            "id": 43738148237,
+            "status": "queued",
             "conclusion": null
           }
         ],
         "scope": "Authoring tooling qualification, not production or replacement of W3A/W5A/W6A; eXeLearning and Ink first, H5P/Lumi and PhET research candidates",
         "studentAuthorized": false,
-        "runtimeAuthorized": false
+        "runtimeAuthorized": false,
+        "firstRun": {
+          "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+          "run": 43737834084,
+          "inkJob": 132884253882,
+          "ink": "PASS",
+          "exeJob": 132884253583,
+          "exe": "FAIL_INPUT_NOT_FOUND",
+          "staticIntegrity": "PASS"
+        },
+        "repair": "Test original mount permissions, assign dedicated directory to actual nonroot bun identity, check read/write, verify output ZIP and index.html; root cause to confirm"
       }
     }
   },
