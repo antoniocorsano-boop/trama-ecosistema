@@ -53,7 +53,7 @@ mic.addEventListener("click",async()=>{
   if(!window.isSecureContext||!SR||typeof SR.available!=="function"||!("processLocally" in SR.prototype)){
     unavailable("Il riconoscimento locale non è disponibile in questo ambiente. Non viene usato un servizio remoto.");return;
   }
-  const current=++epoch;checking=true;status("Controllo la disponibilità della voce…");render();
+  clearProposal();feedback();const current=++epoch;checking=true;status("Controllo la disponibilità della voce…");render();
   try{
     const result=await SR.available({langs:["it-IT"],processLocally:true});
     if(current!==epoch||document.hidden)return;
@@ -80,7 +80,7 @@ confirm.addEventListener("click",()=>{
   if(!candidate||recognition||checking)return;
   const receipt=guard.confirm({revision:candidate.revision,text:input.value,target:candidate.target,explicit:true});
   confirm.disabled=true;candidate=null;
-  el("receipt").textContent=receipt?"Richiesta confermata. In questa prova non viene aperta alcuna applicazione.":"La richiesta è cambiata. Verificala di nuovo.";
+  el("receipt").textContent=receipt?"Richiesta confermata. In questa prova non viene aperta alcuna applicazione.":"La richiesta è cambiata. Verificala di nuovo.";el("receipt").setAttribute("tabindex","-1");el("receipt").focus();
 });
 el("speak").addEventListener("click",()=>{
   const synth=window.speechSynthesis;
