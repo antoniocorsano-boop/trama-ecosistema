@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Physical teacher check of exact compact G2 HTML and distinct review of #101; preserve original artwork and direct search, assess mobile keyboard and accessibility; P2 HOLD, no merge/deploy/student authorization.",
+    "action": "Preserve qualified compact G2; physical teacher check and distinct review remain open. Advance exact R1 editorial review and applicable standalone format qualification without publishing; Atelier F3 REVISE, P2 HOLD.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -926,6 +926,23 @@
               "Existing human, disciplinary, accessibility, rights and distribution checks pending"
             ],
             "candidatePreserved": true
+          },
+          "editorialReviewDossier": {
+            "status": "ADVISORY_REVIEW_CONTENT_CHECKED_HUMAN_PENDING",
+            "ref": "../production/AXF-FIRST-LIBRARY-EDITORIAL-REVIEW-v1.md",
+            "commit": "c841e562ba7bd1c6857406c6c9d6129f240832ba",
+            "masterPlanCommit": "218a3ee999e3742197e6f94bebbb4dea81a5ea35",
+            "sha256Verified": "48186c80a6900595a085aedf2de14a419639b39d39aad9323f9e15d4041321f1",
+            "findings": [
+              "A-D energy balances and comparative model arithmetic consistent",
+              "Optional depth and direct entry present",
+              "R1-Q01 clarify no accumulation during illustrative interval"
+            ],
+            "humanReview": "PENDING",
+            "independentReview": "PENDING",
+            "formatQualification": "BLOCKED",
+            "runtimeAuthorized": false,
+            "studentAuthorized": false
           }
         }
       },
