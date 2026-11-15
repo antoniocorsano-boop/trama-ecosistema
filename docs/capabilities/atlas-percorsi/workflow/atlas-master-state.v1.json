@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Revise G2 visual composition on same qualified host: compact direct search, contextual filters/results, central globe and orbit in first viewport; rerun private originals review, distinct and physical gates; P2 HOLD; no deploy or publication.",
+    "action": "Physical teacher check of exact compact G2 HTML and distinct review of #101; preserve original artwork and direct search, assess mobile keyboard and accessibility; P2 HOLD, no merge/deploy/student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_R2_PR98_PR99_PR100_SCOPED_PASS_G2_PRIVATE_RENDER_PASS_VISUAL_REVISE_P2_HOLD",
+        "status": "P1_R2_PR98_PR99_PR100_PR101_SCOPED_PASS_G2_COMPACT_PRIVATE_RENDER_PASS_DISTINCT_PHYSICAL_PENDING_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -1329,7 +1329,36 @@
                     },
                     "originals": "11/11 verified",
                     "browser": "4/4 PASS after review-wrapper correction; exact compiled app CSS and JS",
-                    "visualReview": "REVISE_MOBILE_COMPOSITION",
+                    "visualReview": "REVISE_MOBILE_COMPOSITION_ADDRESSED_IN_P1_R2_J_SCOPED",
+                    "physical": "PENDING",
+                    "independentReview": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false
+                  },
+                  "compactGateway": {
+                    "id": "P1-R2-J",
+                    "planCommit": "77282384cfde910c6f6d0226e28c4fcda18b83c7",
+                    "atlasPr": 101,
+                    "sourceHead": "b52c8368669bfaf0b20d32282d8a13d38d836c31",
+                    "basePr": 100,
+                    "ciRunId": 43762463100,
+                    "ciJobId": 132960089099,
+                    "ciStatus": "9/9 PASS; 20/20 regression and 3/3 host tests",
+                    "recipeHead": "17c46a7e091c6866e5eb52477c81bfbfc51f1e2e",
+                    "recipeRunId": 43762483883,
+                    "artifactId": 14180278198,
+                    "artifactSha256": "947564e29a032c1923ba10b257f0d5f3c1661068e4ed89344863c78e58f1519a",
+                    "privateHtml": {
+                      "libraryFileId": "libfile_58e62fe110fc8191829c671fcbcd99a2",
+                      "sha256": "1cd2a0b09d2a92c3ce9a3e46e57dc2201209575894a9865754b04e5f6a33a57a"
+                    },
+                    "evidencePack": {
+                      "libraryFileId": "libfile_1bc16f9028908191a8f46d7775b72069",
+                      "sha256": "ab009eaf9b43b9b71065535d6bb07e36699e6dbcbfa5050f8023329104e7d98b"
+                    },
+                    "privateBrowser": "5/5 functional, 4/4 first viewport, short landscape scroll fallback, 11 originals, zero overlap/overflow/network/errors",
+                    "visualReview": "CONSULTATIVE_SCOPED_PASS_MOBILE_REVISE_ADDRESSED",
                     "physical": "PENDING",
                     "independentReview": "PENDING",
                     "p2": "HOLD",
