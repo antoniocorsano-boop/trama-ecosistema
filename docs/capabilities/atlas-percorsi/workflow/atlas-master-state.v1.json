@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "AXF-HORIZON-01 priority 1: classify standalone Scoperte R1 under applicable Atlas contracts and resolve exact Arena references; perform bounded discipline/accessibility/rights/human qualification on exact version if admissible, otherwise explicitly BLOCKED and return to F3 gate. No new content/engine/runtime/spending/publication. Preserve Atelier F3 REVISE, F4/F5 blocked; synthetic roundtrip PASS only.",
+    "action": "AXF-PARAM-01 P0: document exact-head reuse/extension map and determine admissibility of isolated synthetic parameterisation test; preserve AXF-HORIZON-01 R1 classification/qualification as active editorial priority. Do not implement P1–P3 until applicable governance permits; F3 REVISE, F4/F5 blocked unchanged. No new student content, runtime, adoption, publication or spending.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -927,6 +927,48 @@
           "AUTHORIZED_PUBLISHED"
         ],
         "preserveDependencies": "F3→F4→F5 unchanged; no exemption for Percorsi or assumption existing bridge supports Scoperte; if standalone contract unavailable return BLOCKED to applicable gate",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
+      },
+      "parametricProduction": {
+        "id": "AXF-PARAM-01",
+        "status": "ROADMAP_CANDIDATE_P0_AUDIT_PENDING",
+        "ref": "ATLAS-MASTER-PLAN-v1.md",
+        "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
+        "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
+        "milestones": [
+          {
+            "id": "P0",
+            "state": "NEXT_PROPOSED",
+            "exit": "exact-head code/contract reuse map and isolated-test admissibility"
+          },
+          {
+            "id": "P1",
+            "state": "PENDING_P0_AND_AUTHORITY",
+            "exit": "one shell/bundle, three distinct synthetic fixtures, four viewports, touch/key/accessibility equivalents"
+          },
+          {
+            "id": "P2",
+            "state": "PENDING_P1",
+            "exit": "100 synthetic fixtures one command; no per-fixture code edits; common change and targeted rebuild, negative tests, measured timings"
+          },
+          {
+            "id": "P3",
+            "state": "PENDING_P2",
+            "exit": "one bounded professional intent→preview→revision flow, contract and license checks"
+          },
+          {
+            "id": "P4",
+            "state": "EXISTING_EDITORIAL_GATES",
+            "exit": "R1 qualification or BLOCKED, Atelier F3-B/C/D closure"
+          },
+          {
+            "id": "P5",
+            "state": "BLOCKED_BY_F3_F4",
+            "exit": "Agriculture F4 then F5 generalisation and applicable authority"
+          }
+        ],
+        "safety": "No persistent learner progress, inferred knowledge, engagement optimization or hidden-only essential controls; semantic accessibility and session-only selection; no student data or runtime AI",
         "studentAuthorized": false,
         "runtimeAuthorized": false
       }
