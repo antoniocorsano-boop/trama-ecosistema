@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Review integrated private #103 exact HTML on physical Android/LIM and obtain distinct review; qualify standalone format under existing governance. No further cosmetic iteration absent findings; Atelier F3 REVISE, P2 HOLD, no deployment/student authorization.",
+    "action": "Separate technical fixtures from private editorial library composition; preserve technical regression tests. Review actual R3 on Android/LIM and obtain distinct review; then revise Atelier by existing editorial protocol. P2 HOLD, no deployment/student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -1070,7 +1070,33 @@
               ],
               "studentAuthorized": false,
               "runtimeAuthorized": false,
-              "publication": "BLOCKED"
+              "publication": "BLOCKED",
+              "physicalFeedback": {
+                "status": "PHYSICAL_ENGINE_OPEN_AND_ADVANCE_OBSERVED_EDITORIAL_REVISE",
+                "date": "2026-11-15",
+                "source": "User feedback and two Android screenshots in conversation",
+                "observed": [
+                  "content:// browser",
+                  "synthetic pathway Qualcosa non torna",
+                  "advanced to Prova una modifica"
+                ],
+                "screenshotSha256": [
+                  "738e43567061a6e8c479b2fb1a0cf9ba44b9e42e9f2645c88f6dd9dee3e40654",
+                  "309f65fa12e69a1f75a7b1178394c28246739d1a535b61a2329817de11b6f474"
+                ],
+                "limits": [
+                  "exact device file hash unverified",
+                  "not R3 standalone",
+                  "return/physical gestures/accessibility/LIM not observed"
+                ],
+                "findings": [
+                  "abstract technical text",
+                  "English internal status labels",
+                  "stacked cards",
+                  "no visual world"
+                ],
+                "decision": "Keep technical fixtures separate from authentic editorial review; not learner content. No editorial promotion."
+              }
             }
           }
         }
