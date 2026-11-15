@@ -9,7 +9,7 @@ Single entry point for understanding current authority, experiments and open con
 
 ## AXF — checkpoint di ripresa (proposta di consolidamento, 15/11/2026)
 
-Per riprendere il programma Atlas/Studio Atlas senza ricostruirlo dalla chat, aprire [Piano generale AXF-MASTER-01](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Sono una proiezione candidata del piano, non nuove autorità. F1/F2/F3-A tecnicamente superati su head esatti; F3-B REVISE; prossima priorità M1, storyboard e target visuale prima di nuovo codice. Conservare i documenti canonici sottostanti e le ricevute storiche; non promuovere runtime o studenti.
+Per riprendere il programma Atlas/Studio Atlas senza ricostruirlo dalla chat, aprire [Piano generale AXF-MASTER-01](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Sono una proiezione candidata del piano, non nuove autorità. F1/F2/F3-A tecnicamente superati su head esatti; F3-B REVISE; M1: [storyboard Energia](../production/AXF-M1-ENERGIA-STORYBOARD-v1.md) e [tavola di regia](../production/AXF-M1-ENERGIA-VISUAL-TARGET-v1.svg) candidati salvati; prossima priorità revisione umana esatta prima di M2 o nuovo codice. Conservare i documenti canonici sottostanti e le ricevute storiche; non promuovere runtime o studenti.
 
 ## Current canonical direction
 
