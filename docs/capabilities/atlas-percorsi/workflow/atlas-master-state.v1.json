@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Validate R1 proposed learner-centered editorial corrections (Q01–Q04), applicable format and disciplinary authority; preserve compact G2; physical/distinct review open; Atelier F3 REVISE; P2 HOLD.",
+    "action": "Verify applicable autonomous Scoperte format contract and prepare R2 qualification; distinct disciplinary/editorial review, rights and authority pending. Preserve compact G2, Atelier F3 REVISE, P2 HOLD.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -962,6 +962,21 @@
               "studentAuthorized": false,
               "runtimeAuthorized": false
             }
+          },
+          "revisionR2": {
+            "id": "AXF-SCOPERTA-LUCE-R2",
+            "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_CANDIDATE_HUMAN_REVIEW_PENDING",
+            "docCommit": "d51e9219e35dd6091136753a949f2f5bb70e1306",
+            "htmlLibraryFileId": "libfile_55319b5131d48191a32134c51e02a3f5",
+            "htmlSha256": "f79eb9095cc6a09d70c40f19dbd6dda0ce72049e1ee4f77358da1f6fab0776d1",
+            "evidenceLibraryFileId": "libfile_5dff253eb6948191b5e98254297956ed",
+            "evidenceSha256": "b2352bb2ca77787a43724ac0b1603560b2826b69b0de5cffa03c544905c6cb32",
+            "r1Preserved": true,
+            "svgAndComparisonScriptUnchanged": true,
+            "browser": "8/8 scoped in-memory Chromium, 0 HTTP/JS errors/overflow",
+            "publication": "BLOCKED",
+            "studentAuthorized": false,
+            "runtimeAuthorized": false
           }
         }
       },
