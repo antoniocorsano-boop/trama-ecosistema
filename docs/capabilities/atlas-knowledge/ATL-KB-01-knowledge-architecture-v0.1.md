@@ -10,8 +10,8 @@ Scopo: rendere la conoscenza reperibile, comprensibile, riutilizzabile e collega
 - [TRAMA-DOS-PP-01](../../product/r4-p2-professional-practice.md): KnowledgeResource != TeachingMaterial; conoscenza professionale nel dominio docente; nessuna scrittura silenziosa.
 - [Architettura TRAMA](../../architecture/ecosystem-overview.md): Arena autorità curricolare; Atlas conoscenza navigabile; Docente OS progettazione professionale.
 - [Studio Atlas, indice canonico](../atlas-percorsi/workflow/CANONICAL-INDEX-v1.md): produzione, qualificazione e pubblicazione governate.
-- Atlas esistente: src/features/curriculum/model.ts, AtlasResource, objectiveIds; src/features/materials/fixtures.ts (repository Curriculum-Atlas). Non sostituire gli ID, i contratti o i percorsi esistenti.
-- CurriculumSnapshot v1 e contratti Arena→Atlas rimangono invariati. Usare gli identificativi e le versioni emessi da Arena; nessun secondo curricolo.
+- Atlas esistente: modello dati del curricolo (AtlasResource, objectiveIds) e fixture dei materiali nel repository Atlas. Non sostituire gli ID, i contratti o i percorsi esistenti.
+- Il contratto v1 di scambio del curricolo e i contratti Arena→Atlas rimangono invariati. Usare gli identificativi e le versioni emessi da Arena; nessun secondo curricolo.
 - Nessun nuovo runtime, pubblicazione studenti, servizio a pagamento o dipendenza da un modello IA implicita in questa specifica.
 
 ## 1. Modello logico
