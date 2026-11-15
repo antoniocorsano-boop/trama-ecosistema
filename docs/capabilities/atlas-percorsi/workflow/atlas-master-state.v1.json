@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M6_A_PRIVATE_REGRESSION_PASS_HUMAN_AND_DEVICE_REVIEW_PENDING",
-    "action": "M6-B: private teacher walkthrough and actual Android/LIM, direct file opening, complete accessibility, persistent storage and rights/independent qualification; no release or expansion",
+    "state": "M6_B_REVISE_TARGETED",
+    "action": "M6-B1: isolate and resolve unhandled rejections (no suppression), label confirmation dialog, improve landscape scene/controls and 200% reflow; rerun keyboard/touch and network/error regression; storage in authorized context and physical Android/LIM remain open",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -136,7 +136,8 @@
       "human W6A/W5A and rights/licensing open",
       "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
       "physical device and file-opening verification pending",
-      "complete accessibility and storage audit pending"
+      "complete accessibility and storage audit pending",
+      "M6-B REVISE: two undefined async rejections, unnamed confirmation dialog, landscape layout and 200% reflow need targeted repair; persistent storage audit remains inconclusive"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -311,7 +312,7 @@
       "resetConfirmation": "PASS",
       "httpRequests": 0,
       "pageErrors": 0,
-      "extendedQualification": "PASS_IN_MEMORY_ONLY",
+      "extendedQualification": "REVISE_TARGETED",
       "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
       "changedSourceFiles": [
         "handoff.mjs",
@@ -326,7 +327,42 @@
       "persistentStorage": "OPEN",
       "fileNavigation": "NOT_TESTED",
       "physicalDevices": "OPEN",
-      "humanReview": "PENDING"
+      "humanReview": "PENDING",
+      "m6b": {
+        "status": "REVISE_TARGETED",
+        "htmlUnchanged": true,
+        "testedHtmlSha256": "94945098a3d9fe87f7841db7e88ca92a2880fdf01e7b8e4432c74685fe88913a",
+        "localPackageSha256": "f561e513e6ab8e4faff6ade7aa9480d35981cf33c11017ea1703d4abac02bfd0",
+        "packageNote": "local package matches earlier recorded commit 5325b84, not current revised package digest; exact tested HTML matches both",
+        "evidenceLibraryFileId": "libfile_5c1b90b349808191a13217a8a491ed74",
+        "evidenceSha256": "8cf0e201afb330c5cbbdea87b3037e226ffffe845b18e3a0bf52cb935af802bd",
+        "keyboardComplete": "PASS_TAB_ENTER_ESCAPE",
+        "viewports": [
+          [
+            320,
+            740
+          ],
+          [
+            844,
+            390
+          ]
+        ],
+        "diagnosticViewport": [
+          390,
+          844
+        ],
+        "rootFont200": "PARTIAL_PASS_320_EXPANDS_321",
+        "landscape": "REVISE_VERTICAL_SCROLL",
+        "dialogAccessibleName": "FAIL",
+        "focusRestoration": "PASS",
+        "pageErrorsPerRun": 2,
+        "diagnostic": "unhandledrejection undefined at prologue and bench; cause not established",
+        "httpRequests": 0,
+        "cookies": 0,
+        "storage": "INCONCLUSIVE_ACCESS_DENIED",
+        "physicalDevices": "PENDING",
+        "studentAuthorized": false
+      }
     }
   },
   "queued": [
