@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "E02_ART_CANDIDATE_PRESERVED_REVIEW_REQUIRED",
-    "action": "Review E02 candidate and resolve visual/scientific continuity; import exact master into GitHub before integration",
+    "state": "E02_ZONE_CANDIDATE_REVIEW_REQUIRED",
+    "action": "Resolve visual/scientific continuity and W6A/W5A/rights; import exact asset before generating both motor candidates and qualifying handoff",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -133,9 +133,9 @@
     ],
     "blockers": [
       "F3-B REVISE",
-      "W6A and transfer scientific review open",
-      "new illustrated assets not generated",
-      "production host, licenses, full accessibility and real devices open"
+      "W6A/W5A and transfer scientific review open",
+      "E02 visual corrections not qualified; binary import pending",
+      "Tiled/GDevelop/Phaser E02 integration, production host, licenses, full accessibility and real devices open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -159,6 +159,16 @@
       "width": 1536,
       "height": 1024,
       "gitImport": "PENDING"
+    },
+    "zoneCandidate": {
+      "repo": "Atlas",
+      "pr": 97,
+      "head": "c6d32bfe04f9c505b29fc61a3c70830e28121993",
+      "path": "labs/axf-m2/m3-handoff/e02-zone-candidate.json",
+      "localReview": "CHROMIUM_IN_MEMORY_PASS_ONLY",
+      "htmlLibraryFileId": "libfile_1050fcb3c7a88191a90236ed0a2e90b5",
+      "zipLibraryFileId": "libfile_ef798bd3ce808191a9293503d017e533",
+      "runtimeIntegration": "PENDING"
     }
   },
   "queued": [
