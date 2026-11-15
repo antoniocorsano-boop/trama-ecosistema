@@ -90,3 +90,6 @@ Checkpoint: prima di qualsiasi implementazione leggere questa pagina, il dossier
 
 ## E02 originale visuale candidato
 [Ricevuta](../production/AXF-M3B-E02-ART-CANDIDATE-RECEIPT-v1.md): master conservato in Library con hash, import GitHub da completare, review E02 prima della composizione. F3-B REVISE e nessun runtime autorizzato.
+
+## Checkpoint M7 — Revisione del metodo produttivo (15/11/2026)
+[Protocollo operativo di produzione educativa v1](../production/AXF-EDITORIAL-PRODUCTION-PROTOCOL-v1.md): attuazione candidata dei gate W0–W10, non sostituzione delle fonti canoniche. ER-01–ER-06 e difetto drag al primo ingresso dimostrano che la qualificazione tecnica non compensa il REVISE didattico. Congelare M7-D2 come baseline privata; riaprire W3/W4–W6A con mappa cognitiva, lingua studente, sceneggiatura completa, storyboard a bassa fedeltà e prove a freddo. Prima un'interazione rappresentativa soltanto dopo i gate pertinenti, poi produzione. Nessun ampliamento, nuovo motore, asset finale o W9/W10 senza i PASS umani applicabili. F3-B REVISE; F4/F5 bloccate. Diagnosi drag separata, causa ancora non accertata. Consultare lo stato macchina per la priorità corrente; conservare tutte le ricevute. Nessuna adozione, pubblicazione, spesa o coinvolgimento studenti autorizzati.
