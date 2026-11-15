@@ -44,3 +44,32 @@ jobs:
           path: tv01c-ui-evidence/
           if-no-files-found: error
           retention-days: 7
+  portable:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build standalone preview
+        run: python3 experiments/tv-01c/review-demo/build-portable.py tv01c-portable/Assistente-TRAMA.html
+      - name: Verify embedded script and restrictive policy
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,base64,re
+          html=Path("tv01c-portable/Assistente-TRAMA.html").read_text()
+          script=re.search(r"<script>(.*?)</script>",html,re.S).group(1)
+          digest=base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()
+          assert "script-src 'sha256-"+digest+"';" in html
+          assert "connect-src 'none'" in html
+          assert 'src="./demo.mjs"' not in html
+          Path("/tmp/tv01c-portable.js").write_text(script)
+          PY
+          node --check /tmp/tv01c-portable.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Assistente-TRAMA-portatile
+          path: tv01c-portable/Assistente-TRAMA.html
+          if-no-files-found: error
+          retention-days: 7
