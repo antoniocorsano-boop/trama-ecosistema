@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M7_D2_REPEAT_GESTURE_EMULATED_PASS_PHYSICAL_RETEST_PENDING",
-    "action": "Retest M7-D2 on physical Android: three or more successive drags, return from notebook, repeat after reset; physical LIM, storage/network, complete accessibility, rights and human review remain open; no student publication.",
+    "state": "M7_D2_PHYSICAL_DRAG_REVISE_EDITORIAL_FINDINGS_OPEN",
+    "action": "Collect remaining editorial walkthrough findings before one coherent revision. Preserve D2 as private baseline; diagnose first-entry drag failure separately with first-gesture regression and physical Android retest. Do not publish or expand; remaining qualification gates unchanged.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -139,7 +139,8 @@
       "complete accessibility and storage audit pending",
       "M7 Android core path screenshot PASS; residual physical interactions, authorized storage, full accessibility and human/rights qualification open",
       "M6-B1 physical bulb drag FAIL; M7-D1 correction in-memory 4/4 PASS, real Android retest pending",
-      "M7-D1 intermittent physical drag failure; M7-D2 repeat tests PASS in simulated Chromium, physical cause/retest open"
+      "M7-D1 intermittent physical drag failure; M7-D2 repeat tests PASS in simulated Chromium, physical cause/retest open",
+      "M7-D2 first-entry physical drag FAIL/intermittent (user reported); root cause unconfirmed; ER-01–ER-05 editorial usability findings open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -538,7 +539,19 @@
           "errors": 0,
           "httpRequests": 0,
           "modelUnchanged": true,
-          "studentAuthorized": false
+          "studentAuthorized": false,
+          "physicalRetest": {
+            "status": "FAIL_INTERMITTENT_FIRST_ENTRY_USER_REPORTED",
+            "source": "User report and screenshot M7-D2, 2026-11-15",
+            "description": "Drag fails on first access to bench; after tapping and retrying, sometimes works. Screenshot documents A measurement, not the gesture sequence itself.",
+            "rootCause": "UNCONFIRMED; examine initial scene readiness, first pointer event, bounds and transition from prediction to experiment; do not infer a single cause.",
+            "requiredRetest": [
+              "fresh open and first bench entry",
+              "first drag immediately after prediction, without prior lamp tap",
+              "repeat drag and revisit bench",
+              "real Android; explicit result for each attempt"
+            ]
+          }
         }
       },
       "editorialReview": {
@@ -582,6 +595,16 @@
             "observation": "User describes bench as hermetic, incomprehensible, without story or involvement, emotionally cold despite warm colors. Identical-looking lamps, undefined 20 J and energy indicators, prediction buttons and station do not communicate meaningful action or reason for it; characters absent from the interaction.",
             "proposal": "Rebuild scene around character-led shared inquiry, contextual action cues, an optional guided initial demonstration or prediction based on comprehensible evidence, progressive introduction of model terms and controls, and visible consequences of actions. Preserve open exploration, scientific model, accessible alternatives, and avoid revealing the entire comparison before learner inquiry.",
             "acceptance": "First-time learner understands why the bench matters, identifies the first action and can explain the meaning of each displayed measurement as it appears. Teacher reviews narrative continuity, cognitive scaffolding and emotional engagement, not just palette or technical completion. Do not implement until findings collection concludes.",
+            "status": "OPEN"
+          },
+          {
+            "id": "ER-05",
+            "scene": "E03 banco / sperimenta",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_AND_EXPERIENTIAL_USABILITY",
+            "observation": "User finds the active experiment schematic, incomprehensible and unengaging. A lights up and displays input 100 J, useful light 20 J, heat 80 J and efficiency 20%, but the interface provides no contextual interpretation of the bars or quantities. The station remains a textual target, not a perceptibly functioning measurement instrument.",
+            "proposal": "Integrate a character-guided first experiment and progressive visual feedback: represent energy entering the virtual lamp and splitting into light and heat, explain the quantities in plain language before introducing joules and efficiency, show why equal light permits comparison, and link observations to a meaningful subsequent action. Preserve exact model values, comparable scales, accessible alternatives and scientific uncertainty; avoid decorative animation, forced quizzes or adding information density.",
+            "acceptance": "A first-time learner can explain what changes when a lamp is tested, what input/light/heat mean and why the result matters to the mission; visual feedback conveys the experiment even before reading formal numbers. Human walkthrough required. No implementation until editorial findings collection is complete.",
             "status": "OPEN"
           }
         ],
