@@ -647,7 +647,7 @@
         "status": "BOTH_ISOLATED_SMOKE_PASS_INTEGRATION_PENDING",
         "pr": 333,
         "head": "b44e45f98b03323802406980ec2242a591dacc9b",
-        "catalogCommit": "36afea6abd9c7b76896a84d9eb0b3d7003ff69e9",
+        "catalogCommit": "486c1e38a391ff20a5ab6deb29b738108773f058",
         "runs": [
           {
             "id": 43738148274,
@@ -682,7 +682,31 @@
           "html5Zip": "PASS",
           "scope": "synthetic narrative and upstream public fixture only"
         },
-        "next": "Qualify a synthetic original authoring-to-export roundtrip, rendered output, privacy, accessibility, licensing, then bounded integration design; no new student content or adoption before existing gates"
+        "next": "Qualify a synthetic original authoring-to-export roundtrip, rendered output, privacy, accessibility, licensing, then bounded integration design; no new student content or adoption before existing gates",
+        "roundtrip": {
+          "id": "AXF-AUTH-RT01",
+          "head": "7736a86f55da14d1a9ff67a7282186a69c9097e6",
+          "pr": 333,
+          "status": "RUNS_OBSERVED_RESULTS_PENDING",
+          "runs": [
+            {
+              "id": 43738675650,
+              "name": "Governance",
+              "status": "in_progress",
+              "conclusion": null
+            },
+            {
+              "id": 43738675643,
+              "name": "AXF professional authoring probe",
+              "status": "in_progress",
+              "conclusion": null
+            }
+          ],
+          "scope": "synthetic original generation, editable ELPX revision, HTML5 export, Ink compile/replay, isolated browser previews and scoped checks",
+          "integration": "NOT_IMPLEMENTED",
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
+        }
       }
     }
   },
