@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M7_ANDROID_PHYSICAL_WALKTHROUGH_PARTIAL_PASS",
-    "action": "Complete Android direct lamp drag and both preserve/delete actions, then exit/reopen if needed; LIM, complete accessibility, authorized storage/network, rights and independent/human approval remain open. No student release or expansion.",
+    "state": "M7_ANDROID_CORE_PATH_VISUAL_PASS_RESIDUAL_QUALIFICATION_OPEN",
+    "action": "Complete remaining private Android checks (direct touch/drag, reset and exit effects, reopening), physical LIM, authorized storage/network, full accessibility, W6A/W5A and rights; prepare final immersive editorial review without expanding content or releasing",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -137,7 +137,7 @@
       "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
       "Android local opening and core flow observed; presentation, wrong-choice feedback and landscape PASS user-reported; direct drag, preserve/delete, exit/reopen and LIM pending",
       "complete accessibility and storage audit pending",
-      "M6-B1 in-memory regression PASS; M7 Android screenshot partial PASS; authorized storage, full accessibility and human/rights qualification open"
+      "M7 Android core path screenshot PASS; residual physical interactions, authorized storage, full accessibility and human/rights qualification open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -423,13 +423,13 @@
       }
     },
     "m7": {
-      "status": "ANDROID_SCREENSHOT_AND_USER_REPORTED_PARTIAL_PASS",
+      "status": "ANDROID_CORE_PATH_SCREENSHOT_PASS_RESIDUAL_OPEN",
       "evidenceDate": "2026-11-15",
       "candidate": "M6-B1 banner visible; exact device file hash not verified",
       "evidenceLibraryFileId": "libfile_c28ab15b87808191ad21a0ea08c6f9fd",
       "evidenceSha256": "99ac93ac7ba90b6881ada5085d1c94712fb6cce4e3caf0ff25755e158ae699c6",
       "screenshots": 10,
-      "device": "Android real, portrait",
+      "device": "Android real, portrait and landscape",
       "opening": "PASS_OBSERVED_CONTENT_DOWNLOADS_URI",
       "observed": [
         "prologue",
@@ -438,17 +438,21 @@
         "bench prediction prompt",
         "A/B/C experiment states and quantitative measures",
         "notebook with three consistent measures",
-        "reset confirmation visible"
+        "reset confirmation visible",
+        "C presentation with C/A comparison and 60 J difference",
+        "B presentation with B/C comparison and neutral revision prompt",
+        "exit confirmation visible",
+        "landscape bench and controls visible with A measurement and notebook 1/3 matching preceding portrait state"
       ],
       "pending": [
         "actual touch/drag method",
         "cancel/confirm reset effects",
-        "exit/reopen",
+        "exit effect and reopen",
         "offline/network and storage",
+        "LIM",
         "complete accessibility",
         "human W6A/W5A",
-        "rights/licensing and independent review",
-        "LIM physical device"
+        "rights/licensing and independent review"
       ],
       "visualAdvisory": [
         "GDevelop branding visible in map; verify applicable attribution and export terms, do not remove by circumvention",
@@ -468,6 +472,17 @@
           "both preserve and delete actions"
         ],
         "qualification": "User-reported results; no additional screenshots or independent measurements supplied"
+      },
+      "secondEvidence": {
+        "libraryFileId": "libfile_eb64328ebc988191ba2de37cbee547e4",
+        "sha256": "c3d072e8c4591fc49790bc709f8d77a8cd25a9b1c991679394266d14f52f0986",
+        "receivedScreenshots": 9,
+        "includesPreviousViews": true,
+        "choiceC": "PASS_VISUAL",
+        "choiceBFeedback": "PASS_VISUAL",
+        "exitDialog": "PASS_VISIBLE_NOT_EFFECT",
+        "landscape": "PASS_VISUAL",
+        "rotationState": "CONSISTENT_SNAPSHOTS_NOT_CONTINUOUS_OBSERVATION"
       }
     }
   },
