@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "HUMAN_DIRECTION_ACCEPTED_E02_ART_CANDIDATE",
-    "action": "Produce first visual candidate E02-BG, inspect and preserve original, review before integration",
+    "state": "E02_ART_CANDIDATE_PRESERVED_REVIEW_REQUIRED",
+    "action": "Review E02 candidate and resolve visual/scientific continuity; import exact master into GitHub before integration",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -150,6 +150,15 @@
       "scope": "regia and first visual candidate only",
       "fullW6A": "PENDING",
       "rights": "OPEN"
+    },
+    "artReceipt": "../production/AXF-M3B-E02-ART-CANDIDATE-RECEIPT-v1.md",
+    "artMaster": {
+      "libraryFileId": "libfile_637f0946af58819192b0e2bd1e02a87a",
+      "fileId": "file_00000000c5a88210bacfe12ffcabc417",
+      "sha256": "009a83c3dfbb1a81b4ee5b8d2fb68c6c34a73ce4f91f948bee28226d5285d5c7",
+      "width": 1536,
+      "height": 1024,
+      "gitImport": "PENDING"
     }
   },
   "queued": [

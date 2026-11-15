@@ -87,3 +87,6 @@ Checkpoint: prima di qualsiasi implementazione leggere questa pagina, il dossier
 
 ## M3-B/E02
 [Brief del primo originale candidato](../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md). Assenso circoscritto alla regia e produzione visuale candidata, non PASS W6A complessivo. Originali recuperati e osservati, conservazione e review del nuovo binario prima di integrazione.
+
+## E02 originale visuale candidato
+[Ricevuta](../production/AXF-M3B-E02-ART-CANDIDATE-RECEIPT-v1.md): master conservato in Library con hash, import GitHub da completare, review E02 prima della composizione. F3-B REVISE e nessun runtime autorizzato.

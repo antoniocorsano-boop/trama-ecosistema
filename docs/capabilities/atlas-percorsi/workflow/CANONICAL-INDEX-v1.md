@@ -203,3 +203,6 @@ Any new meaningful artefact must be linked or classified here in the same work c
 
 ### Primo candidato E02
 [Decisione circoscritta e brief visuale](../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md): regia accolta, primo candidato visuale; review completa e diritti aperti. Non autorizza runtime.
+
+### E02 originale candidato conservato
+[Receipt master e revisione](../production/AXF-M3B-E02-ART-CANDIDATE-RECEIPT-v1.md): Library persistente, import GitHub e review aperti; nessuna rigenerazione necessaria.
