@@ -70,11 +70,32 @@ jobs:
           curl --fail --location --silent --show-error --max-time 120 -o fixture.elp https://raw.githubusercontent.com/exelearning/exelearning/v4.0.6/test/fixtures/todos-los-idevices.elp
           sha256sum fixture.elp
           test -s fixture.elp
-          # Isolated, ephemeral CLI; no checkout, repository token, learner data, or network during execution.
+          # Dedicated public-fixture directory, no checkout or learner data.
+          # The upstream image runs as USER bun, not the GitHub runner user.
+          mount="type=bind,source=$PWD,target=/mnt/data"
+          identity="$(docker run --rm --network none --entrypoint /bin/sh "$digest" -c 'printf "%s:%s" "$(id -u)" "$(id -g)"')"
+          [[ "$identity" =~ ^[0-9]+:[0-9]+$ ]]
+          if docker run --rm --network none --entrypoint /bin/sh --mount "$mount" "$digest" -c 'id; ls -ld /mnt/data; test -r /mnt/data/fixture.elp && test -w /mnt/data'; then
+            echo 'ORIGINAL_MOUNT_ACCESSIBLE; cause requires further investigation'
+          else
+            echo 'ORIGINAL_MOUNT_ACCESS_DENIED; correcting dedicated directory ownership'
+          fi
+          chmod 0644 fixture.elp
+          sudo chown "$identity" "$PWD"
+          sudo chmod 0750 "$PWD"
+          docker run --rm --network none --entrypoint /bin/sh --mount "$mount" "$digest" -c 'id; test -r /mnt/data/fixture.elp && test -w /mnt/data && touch /mnt/data/.write-probe && rm /mnt/data/.write-probe'
+          echo 'EXE_MOUNT_READ_WRITE_PASS'
+          # Isolated CLI with official entrypoint; no network, token, or paid service.
           app_secret="$(openssl rand -hex 32)"
           jwt_secret="$(openssl rand -hex 32)"
-          docker run --rm --network none -e APP_SECRET="$app_secret" -e API_JWT_SECRET="$jwt_secret" -v "$PWD:/data" "$digest" bun cli elp:convert /data/fixture.elp /data/fixture.elpx
-          test -s fixture.elpx
-          docker run --rm --network none -e APP_SECRET="$app_secret" -e API_JWT_SECRET="$jwt_secret" -v "$PWD:/data" "$digest" bun cli elp:export /data/fixture.elpx /data/export --format=html5
-          test -s export/index.html
+          docker run --rm --network none -e APP_SECRET="$app_secret" -e API_JWT_SECRET="$jwt_secret" --mount "$mount" "$digest" bun cli elp:convert /mnt/data/fixture.elp /mnt/data/fixture.elpx
+          sudo test -s fixture.elpx
+          sudo unzip -tq fixture.elpx
+          echo 'EXE_CONVERT_ELPX_PASS'
+          docker run --rm --network none -e APP_SECRET="$app_secret" -e API_JWT_SECRET="$jwt_secret" --mount "$mount" "$digest" bun cli elp:export /mnt/data/fixture.elpx /mnt/data/export.zip --format=html5
+          sudo test -s export.zip
+          sudo unzip -tq export.zip
+          sudo unzip -Z1 export.zip | grep -x 'index.html'
+          sudo unzip -p export.zip index.html | python3 -c 'import sys; data=sys.stdin.read(); assert "<html" in data.lower() and "</html>" in data.lower(); print("EXE_HTML_DOCUMENT_PASS")'
+          sudo sha256sum fixture.elpx export.zip
           echo 'EXE_CONVERT_EXPORT_PASS; upstream fixture only; privacy, accessibility and integration remain open'
