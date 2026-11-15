@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Resolve P1 isolated synthetic test admissibility under existing authority; use G2 as visual reference and actual authorised catalog projection as boundary. P0 reuse map complete; R1 publication qualification explicitly BLOCKED, retain candidate; physical G2 review pending; F3/F4/F5 unchanged. No student content, live integration, deployment or spending.",
+    "action": "Execute private offline P1 synthetic lab only; no runtime changes or publication. P1 result not a gate promotion; preserve R1 BLOCKED and F3/F4/F5.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,19 +953,19 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P0_REUSE_MAP_VERIFIED_P1_ADMISSIBILITY_PENDING",
+        "status": "P1_BOUNDED_OFFLINE_PROBE_ONLY",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
         "milestones": [
           {
             "id": "P0",
-            "state": "REUSE_MAP_COMPLETE_ADMISSIBILITY_PENDING",
+            "state": "REUSE_MAP_COMPLETE_BOUNDED_PROBE_SCOPE_RECORDED",
             "exit": "exact-head code/contract reuse map and isolated-test admissibility"
           },
           {
             "id": "P1",
-            "state": "PENDING_P0_AND_AUTHORITY",
+            "state": "BOUNDED_OFFLINE_RESEARCH_PROBE_IN_PROGRESS",
             "exit": "one shell/bundle, three distinct synthetic fixtures, four viewports, touch/key/accessibility equivalents"
           },
           {
@@ -993,7 +993,7 @@
         "studentAuthorized": false,
         "runtimeAuthorized": false,
         "p0": {
-          "status": "REUSE_MAP_COMPLETE_ADMISSIBILITY_PENDING",
+          "status": "REUSE_MAP_COMPLETE_BOUNDED_PROBE_SCOPE_RECORDED",
           "planCommit": "2865196daf55e79c5362c98bc2da13e45bfe086c",
           "atlasHead": "d2938378c9384c5122adb8379396dbad5b4385fe",
           "arenaHead": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
@@ -1005,7 +1005,13 @@
           },
           "gatewayArtifactIntegrity": "G2 and R1 verified exact SHA256; R1 and Atelier draft embedded, nine worlds",
           "minimalGap": "Authorisation-filtered learner library projection, resource-first index and stable routes; retain existing curriculum and professional surfaces",
-          "p1": "Synthetic isolated composition test only, pending applicable authority; no runtime or public deployment"
+          "p1": "Synthetic isolated composition test only, pending applicable authority; no runtime or public deployment",
+          "admissibility": {
+            "status": "USER_DIRECTION_RECORDED_BOUNDED_OFFLINE_RESEARCH_PROBE_ONLY",
+            "basis": "User explicitly proceeded after P0/P1 explanation; AXF-PARAM-01 permits minimum isolated synthetic experiment with governance, AXF-M2D permits explicitly governed isolated experiment. Not approval of canonical schema, product implementation, runtime, or any higher gate.",
+            "scope": "Private offline test artifact only; synthetic geometry/data; no learner content, no G2 artwork distribution, no repository runtime or site changes. Reuse G2 interaction patterns and current public-pathway filter semantics; no executable payload from data.",
+            "stop": "Any production integration or change to contracts requires separate authority."
+          }
         }
       },
       "gatewayReview": {
