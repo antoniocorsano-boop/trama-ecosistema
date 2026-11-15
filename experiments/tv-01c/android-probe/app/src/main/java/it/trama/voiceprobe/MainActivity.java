@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
   if(!marker.createNewFile()&&!marker.isFile())throw new IOException("marker");
   return new File(root,"vosk-model-small-it-0.22");
  }
- @Override public void onRequestPermissionsResult(int code,String[] permissions,int[] grants){super.onRequestPermissionsResult(code,permissions,grants);if(code==1&&grants.length>0&&grants[0]==PackageManager.PERMISSION_GRANTED&&!closed&&hasWindowFocus())startVoice();else if(code==1)status.setText("Microfono non autorizzato. Puoi scrivere.");}
+ @Override public void onRequestPermissionsResult(int code,String[] permissions,int[] grants){super.onRequestPermissionsResult(code,permissions,grants);if(code==1&&grants.length>0&&grants[0]==PackageManager.PERMISSION_GRANTED&&!closed)status.setText("Microfono autorizzato. Tocca Parla per iniziare.");else if(code==1)status.setText("Microfono non autorizzato. Puoi scrivere.");}
  private void startVoice(){
   if(model==null||active||closed||preparing)return;
   invalidateReview();request.setText("");active=true;cancelled=false;recording=true;int session=++revision;Model m=model;
