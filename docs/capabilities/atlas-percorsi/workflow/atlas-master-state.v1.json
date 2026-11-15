@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Hold P2. Review P1-R findings, then bounded corrective P1 tranche and exact-version distinct independent review before any batch; no product/runtime changes. Preserve G2, R1 BLOCKED and F3/F4/F5 unchanged; no publication or spending.",
+    "action": "Obtain distinct independent review on exact P1-R candidate (hash recorded), R05 boundary and P2 heterogeneous test plan; P2 HOLD. No production integration, publication or spending. Preserve R1 BLOCKED, G2, F3/F4/F5; existing catalog availability semantics must be resolved before integration.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_REVIEW_REVISE_P2_HOLD",
+        "status": "P1_R_CORRECTED_SCOPED_PASS_DISTINCT_REVIEW_PENDING_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -970,7 +970,7 @@
           },
           {
             "id": "P2",
-            "state": "HOLD_PENDING_P1_REVIEW_CORRECTIONS_AND_INDEPENDENT_REVIEW",
+            "state": "HOLD_PENDING_DISTINCT_REVIEW_AND_SCOPE_DECISION",
             "exit": "100 synthetic fixtures one command; no per-fixture code edits; common change and targeted rebuild, negative tests, measured timings"
           },
           {
@@ -1099,7 +1099,40 @@
             "next": "One bounded corrective tranche P1-R01–R04 and boundary/test plan R05, then independent review before P2; R06–R08 retained for relevant gates.",
             "originalPassPreserved": true,
             "runtimeAuthorized": false,
-            "studentAuthorized": false
+            "studentAuthorized": false,
+            "correctedCandidate": {
+              "id": "P1-R",
+              "status": "SCOPED_CORRECTIONS_PASS_DISTINCT_REVIEW_PENDING",
+              "planCommit": "06a3092b35cfe3b69a31c90ee378a2d5b47336f9",
+              "libraryFileId": "libfile_2574482ce5688191b1c6d9e369258df0",
+              "packageSha256": "f8b4bd9763bc2119daf40e86d8cbacbc4cbe33529af901506c86e188fffc33fd",
+              "htmlSha256": "cfebe0d6828ae40614a236c5fd46fd21938a2f59f0bbccb47add15f732b6896a",
+              "shellSha256": "a7fc4d56579015d0dee24eb462ab276eaca7cfdb314948016bcf2db6748e7c56",
+              "tests": {
+                "negative": "11/11 PASS",
+                "projection": "2/2 PASS",
+                "regression": "4/4 viewport PASS",
+                "geometry": "8/8 groups 3 scenes and controls open/closed, root font 100/200%",
+                "adversarialBrowser": "3/3 groups PASS",
+                "touch": "CDP swipe then tap PASS",
+                "deterministicRebuild": "same hash",
+                "localFile": "BLOCKED_BY_ADMINISTRATOR",
+                "physical": "PENDING"
+              },
+              "findings": {
+                "R01": "CORRECTED_SYNTHETIC_SCOPE",
+                "R02": "CORRECTED_SYNTHETIC_SCOPE",
+                "R03": "CORRECTED_SCOPED_REFLOW_NOT_FULL_ACCESSIBILITY",
+                "R04": "CORRECTED_SCOPED_NAVIGATION",
+                "R05": "BOUNDARY_AND_P2_PLAN_DOCUMENTED_INTEGRATION_UNVERIFIED",
+                "R06_R08": "OPEN_RELEVANT_GATES"
+              },
+              "additionalRisk": "Existing Atlas load-public-pathways.ts treats missing/non-WITHDRAWN availability as ACTIVE; requires governed verification/correction before integration. Not changed.",
+              "independentReview": "PENDING",
+              "originalPreserved": true,
+              "studentAuthorized": false,
+              "runtimeAuthorized": false
+            }
           }
         }
       },
