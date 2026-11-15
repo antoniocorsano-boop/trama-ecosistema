@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Execute private offline P1 synthetic lab only; no runtime changes or publication. P1 result not a gate promotion; preserve R1 BLOCKED and F3/F4/F5.",
+    "action": "P2 next proposed: agree bounded isolated synthetic batch scope, then demonstrate 100 configurations from same composition sources, repeatability, incremental rebuild and negative tests; do not implement production or promote P1 into runtime. Preserve G2, R1 BLOCKED, F3/F4/F5 unchanged. No publication or spending.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_BOUNDED_OFFLINE_PROBE_ONLY",
+        "status": "P1_OFFLINE_SYNTHETIC_PASS_P2_SCOPE_PENDING",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -965,12 +965,12 @@
           },
           {
             "id": "P1",
-            "state": "BOUNDED_OFFLINE_RESEARCH_PROBE_IN_PROGRESS",
+            "state": "OFFLINE_SYNTHETIC_PASS_NO_PRODUCT_PROMOTION",
             "exit": "one shell/bundle, three distinct synthetic fixtures, four viewports, touch/key/accessibility equivalents"
           },
           {
             "id": "P2",
-            "state": "PENDING_P1",
+            "state": "NEXT_PROPOSED_BOUNDED_SCOPE_REQUIRED",
             "exit": "100 synthetic fixtures one command; no per-fixture code edits; common change and targeted rebuild, negative tests, measured timings"
           },
           {
@@ -1012,6 +1012,58 @@
             "scope": "Private offline test artifact only; synthetic geometry/data; no learner content, no G2 artwork distribution, no repository runtime or site changes. Reuse G2 interaction patterns and current public-pathway filter semantics; no executable payload from data.",
             "stop": "Any production integration or change to contracts requires separate authority."
           }
+        },
+        "p1": {
+          "status": "PASS_SCOPED_OFFLINE_SYNTHETIC_PROBE",
+          "date": "2026-11-15",
+          "libraryFileId": "libfile_301c367719788191b0fe03abe6775e0f",
+          "packageSha256": "fb25b3f9808081486c3dd32762014bfd48b70a16aca28aec4848f025b281fdeb",
+          "htmlSha256": "d57572cd3a0368dd991c80a50b5825cc54925c265e00c2514598be87567c9820",
+          "sharedShellSha256": "332623417d9a5c0882c366575b4970cacb0faa8b550e9f5b16912cedb6d866f4",
+          "source": "One standalone shell using G2 CSS and normalization, no G2 artwork. Internal synthetic data only; one generated HTML with 3 scenes, 6 SVG variants, orbit and anchor composition, direct search, inspect/select actions and alternative index; synthetic eligibility filter analogue, not actual catalogue authority.",
+          "build": {
+            "scenes": 3,
+            "assetVariants": 6,
+            "deterministicRebuild": "same HTML SHA256",
+            "negativeTests": "5/5 PASS: runtime true, missing target, arbitrary action, missing variant, arbitrary code field"
+          },
+          "browser": {
+            "mode": "Chromium set_content",
+            "viewports": [
+              [
+                320,
+                740
+              ],
+              [
+                390,
+                844
+              ],
+              [
+                844,
+                390
+              ],
+              [
+                1280,
+                800
+              ]
+            ],
+            "functional": "4/4 PASS",
+            "rawTouchSwipeThenTap": "PASS after pointerup correction; click suppressed by Chromium after swipe observed before fix",
+            "keyboard": "PASS scoped",
+            "reducedMotion": "computed transition 0s",
+            "externalHttp": 0,
+            "pageErrors": 0,
+            "localFile": "BLOCKED_BY_ADMINISTRATOR",
+            "physical": "PENDING"
+          },
+          "limits": [
+            "No integration of Experience Engine, Studio or live Atlas catalogue",
+            "No canonical schema or authorization changes",
+            "No learner content or real artwork; not Q3 visual evidence",
+            "No full accessibility, physical-device or actual file-opening validation"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
         }
       },
       "gatewayReview": {
