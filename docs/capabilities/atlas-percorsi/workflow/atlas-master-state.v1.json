@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Review the completed standalone Scoperte R1 candidate as a bounded deliverable; resolve Arena reference, applicable contract and disciplinary/human/accessibility/rights gates. Preserve existing Atelier and prototypes; no publication, adoption or expansion. Resume Atelier only after decision on this candidate.",
+    "action": "AXF-HORIZON-01 priority 1: classify standalone Scoperte R1 under applicable Atlas contracts and resolve exact Arena references; perform bounded discipline/accessibility/rights/human qualification on exact version if admissible, otherwise explicitly BLOCKED and return to F3 gate. No new content/engine/runtime/spending/publication. Preserve Atelier F3 REVISE, F4/F5 blocked; synthetic roundtrip PASS only.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -648,7 +648,7 @@
         "status": "BOTH_ISOLATED_SMOKE_PASS_INTEGRATION_PENDING",
         "pr": 333,
         "head": "b44e45f98b03323802406980ec2242a591dacc9b",
-        "catalogCommit": "486c1e38a391ff20a5ab6deb29b738108773f058",
+        "catalogCommit": "8f782f50cfc255fc7953995f04a3b69679beee17",
         "runs": [
           {
             "id": 43738148274,
@@ -688,25 +688,27 @@
           "id": "AXF-AUTH-RT01",
           "head": "7736a86f55da14d1a9ff67a7282186a69c9097e6",
           "pr": 333,
-          "status": "RUNS_OBSERVED_RESULTS_PENDING",
+          "status": "ISOLATED_SYNTHETIC_ROUNDTRIP_PASS_INTEGRATION_PENDING",
           "runs": [
             {
               "id": 43738675650,
               "name": "Governance",
-              "status": "in_progress",
-              "conclusion": null
+              "status": "completed",
+              "conclusion": "success"
             },
             {
               "id": 43738675643,
               "name": "AXF professional authoring probe",
-              "status": "in_progress",
-              "conclusion": null
+              "status": "completed",
+              "conclusion": "success"
             }
           ],
           "scope": "synthetic original generation, editable ELPX revision, HTML5 export, Ink compile/replay, isolated browser previews and scoped checks",
           "integration": "NOT_IMPLEMENTED",
           "studentAuthorized": false,
-          "runtimeAuthorized": false
+          "runtimeAuthorized": false,
+          "jobs": "3/3 PASS",
+          "limits": "Synthetic material only; receipt details/visual/axe/storage and licenses still to inspect; no actual Studio/Atlas adapter or deployment"
         }
       },
       "editorialIdentity": {
@@ -905,6 +907,28 @@
           "studentAuthorized": false,
           "runtimeAuthorized": false
         }
+      },
+      "systemHorizon": {
+        "id": "AXF-HORIZON-01",
+        "status": "STRATEGIC_CONSOLIDATION_CANDIDATE_HUMAN_REVIEW_PENDING",
+        "ref": "ATLAS-MASTER-PLAN-v1.md",
+        "commit": "4db4f4d71a54109836bf23296dd0711ced3ff486",
+        "scope": "Multidisciplinary editorial library + professional Studio Atlas; Arena authoritative, Docente OS lesson continuity, TRAMA governance; Esplora curriculum distinct from library",
+        "order": [
+          "Qualify or explicitly block standalone Scoperte R1 under applicable contract",
+          "Complete Atelier F3-B/C/D",
+          "Verify Energy collection and bounded professional cycle under applicable gates",
+          "Agriculture F4 then F5 industrialisation"
+        ],
+        "active": "AXF-SCOPERTA-LUCE-R1 classification and qualification only",
+        "completionStates": [
+          "COMPLETE_PRIVATE_CANDIDATE",
+          "QUALIFIED_EXACT_VERSION_HUMAN_DECISION",
+          "AUTHORIZED_PUBLISHED"
+        ],
+        "preserveDependencies": "F3→F4→F5 unchanged; no exemption for Percorsi or assumption existing bridge supports Scoperte; if standalone contract unavailable return BLOCKED to applicable gate",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
       }
     }
   },
