@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Compare R2/R3 learner-facing view orchestration in adult walkthrough; qualify standalone Scoperte format and distinct disciplinary/editorial review; retain G2 and Atelier F3 REVISE, P2 HOLD.",
+    "action": "Review exact integrated private #102 with R3 on physical devices, including nested scroll/system back, visual framing and distinct review; qualify standalone public format under existing authority. Preserve Atelier F3 REVISE and P2 HOLD; no deployment/student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -999,7 +999,44 @@
             "humanReview": "PENDING",
             "publication": "BLOCKED",
             "studentAuthorized": false,
-            "runtimeAuthorized": false
+            "runtimeAuthorized": false,
+            "privateGatewayLink": {
+              "id": "P4-R3-L",
+              "status": "TECHNICAL_PASS_SCOPED_PRIVATE_LINK",
+              "planCommit": "51360960a7578802cf2fb6a672c290193dae31db",
+              "pr": 102,
+              "head": "cd51b45659ef89201d7c9034e5ce74ce0e86f216",
+              "basePr": 101,
+              "ci": {
+                "workflows": "9/9 PASS",
+                "engineRun": 43767841756,
+                "job": 132976844992,
+                "regression": "20/20 PASS",
+                "host": "4/4 PASS"
+              },
+              "recipe": {
+                "head": "f5827085e3223d9f6b7a1ebc1f92d6ea940cff52",
+                "run": 43767973283,
+                "artifact": 14182753403,
+                "sha256": "73833066b71915a727144632e64678ceb0af6b50eb12758013d25c30714eea0b"
+              },
+              "htmlLibraryFileId": "libfile_2058d821864c819185aab6adeeeb0377",
+              "htmlSha256": "593134faebfb740427ca5f9719bca15bd37c553ad2767d15f9ccd7f768258167",
+              "evidenceLibraryFileId": "libfile_64a7277587608191b4ea3fd42583046b",
+              "evidenceSha256": "8659d3f7a51b131e6c30d40d4b7822e822e748a633c662da66c6def977232f26",
+              "originalsVerified": 11,
+              "r3OriginalPreserved": true,
+              "iframe": "sandbox allow-scripts, fixed local fragment adapter",
+              "browser": "4/4 in-memory Chromium, explicit return and query/section preserved; 0 HTTP/JS/console errors and horizontal overflow",
+              "remaining": [
+                "physical and distinct review",
+                "mobile technical header and nested scroll/back history",
+                "public format contract, rights, curriculum authority"
+              ],
+              "studentAuthorized": false,
+              "runtimeAuthorized": false,
+              "publication": "BLOCKED"
+            }
           }
         }
       },
