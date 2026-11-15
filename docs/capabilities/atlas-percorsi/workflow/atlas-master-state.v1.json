@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M7_ANDROID_CORE_PATH_VISUAL_PASS_RESIDUAL_QUALIFICATION_OPEN",
-    "action": "Complete remaining private Android checks (direct touch/drag, reset and exit effects, reopening), physical LIM, authorized storage/network, full accessibility, W6A/W5A and rights; prepare final immersive editorial review without expanding content or releasing",
+    "state": "M7_D1_BULB_DRAG_EMULATED_PASS_PHYSICAL_RETEST_PENDING",
+    "action": "Retest M7-D1 on real Android: drag from actual bulb to station, drag outside station, tap, preserve/delete and exit/reopen; LIM, authorized storage/network, complete accessibility, W6A/W5A and rights remain open; no publication.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -137,7 +137,8 @@
       "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
       "Android local opening and core flow observed; presentation, wrong-choice feedback and landscape PASS user-reported; direct drag, preserve/delete, exit/reopen and LIM pending",
       "complete accessibility and storage audit pending",
-      "M7 Android core path screenshot PASS; residual physical interactions, authorized storage, full accessibility and human/rights qualification open"
+      "M7 Android core path screenshot PASS; residual physical interactions, authorized storage, full accessibility and human/rights qualification open",
+      "M6-B1 physical bulb drag FAIL; M7-D1 correction in-memory 4/4 PASS, real Android retest pending"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -445,7 +446,7 @@
         "landscape bench and controls visible with A measurement and notebook 1/3 matching preceding portrait state"
       ],
       "pending": [
-        "actual touch/drag method",
+        "M7-D1 real Android drag from bulb (M6-B1 FAIL user-reported)",
         "cancel/confirm reset effects",
         "exit effect and reopen",
         "offline/network and storage",
@@ -483,6 +484,37 @@
         "exitDialog": "PASS_VISIBLE_NOT_EFFECT",
         "landscape": "PASS_VISUAL",
         "rotationState": "CONSISTENT_SNAPSHOTS_NOT_CONTINUOUS_OBSERVATION"
+      },
+      "dragReport": {
+        "source": "User report on real Android M6-B1",
+        "tap": "PASS",
+        "bulbDrag": "FAIL",
+        "diagnosis": "Source scene.mjs configured bulb as pointerup-only zone, only label rectangle draggable; prior regression dragged label.",
+        "repair": {
+          "status": "EMULATED_PASS_PHYSICAL_PENDING",
+          "htmlLibraryFileId": "libfile_d142ad0c28048191b40b3b321b2ce5dc",
+          "htmlSha256": "9bddfa42bb67e6dc0f85e1f82ed2b2e7ecf7a0d1826b0948b04f2c4d1e9d65b9",
+          "packageLibraryFileId": "libfile_215f33e8310c81918cb104a7f8cccc58",
+          "packageSha256": "3b0a1c3a7ea747eeba9b0a46b6b6ec49ef215490626bec48d86796b81614894d",
+          "changedSources": [
+            "energy/scene.mjs",
+            "index.html"
+          ],
+          "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
+          "viewports": [
+            320,
+            390,
+            844,
+            1280
+          ],
+          "functional": "4/4 PASS",
+          "dragFromBulb": "PASS_EMULATED",
+          "outsideDrop": "PASS_NO_NEW_MEASUREMENT",
+          "visualPreview": "pointer-following ghost",
+          "errors": 0,
+          "httpRequests": 0,
+          "studentAuthorized": false
+        }
       }
     }
   },
