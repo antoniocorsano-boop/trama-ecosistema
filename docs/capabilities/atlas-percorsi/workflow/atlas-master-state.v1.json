@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Plan governed G2 visual integration on qualified host; obtain distinct review and physical evidence; P2 HOLD; no merge, deployment or student authorization.",
+    "action": "Check PR #100 exact head CI and perform private original-art rendering on the same host; compare G2 desktop/mobile; distinct review and physical evidence; P2 HOLD.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_R2_PR98_PR99_SCOPED_PASS_DISTINCT_REVIEW_PENDING_P2_HOLD",
+        "status": "P1_R2_PR98_PR99_PASS_G2_PR100_VISUAL_CANDIDATE_CI_PENDING_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -1282,6 +1282,28 @@
                     "ciJobId": 132951790674,
                     "qualificationCommit": "07161bf7c6ea467bc33e52b7f13e4c87c237ad86",
                     "mountBrowserTests": "2/2 PASS"
+                  },
+                  "visualCandidate": {
+                    "id": "P1-R2-H",
+                    "planCommit": "a2358ee35607ca0292e10c5061881abba92ff53e",
+                    "atlasPr": 100,
+                    "head": "742e72ce7b56f258ae68598bfb51167ad667a9b6",
+                    "basePr": 99,
+                    "ciRunId": 43760502110,
+                    "ciStatus": "IN_PROGRESS",
+                    "originalG2Sha256": "b7c95e87241c59448963ebe0b8c6883df3b224205e09fc1f6ffd761d9aeca5e3",
+                    "privateAssetPack": {
+                      "libraryFileId": "libfile_c43305a484c4819181dacc42d9a3a4dd",
+                      "sha256": "6e0f43396c00317666bfbc09f8ea35dac7783521bfb53dd92c041437b74531fb",
+                      "assetCount": 11
+                    },
+                    "scope": "G2 nine worlds, editorial sections, direct search, explicit preview placement, private artwork prop; no original bytes in repo",
+                    "originalArtRender": "PENDING_PRIVATE_RUNTIME",
+                    "independentReview": "PENDING",
+                    "physical": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false
                   }
                 }
               }
