@@ -155,7 +155,8 @@
         "M3-A technical result",
         "visual target and W6A review"
       ],
-      "action": "produce immersive episode candidate with original assets and approved scene plan"
+      "action": "produce immersive episode candidate with original assets and approved scene plan",
+      "preparation": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md"
     },
     {
       "id": "M4",

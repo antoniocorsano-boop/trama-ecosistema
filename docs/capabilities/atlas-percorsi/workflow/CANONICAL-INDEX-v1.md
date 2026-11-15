@@ -195,3 +195,5 @@ Nothing in this index, constitution, review contract or evidence normalisation a
 
 ## Backlog-zero rule
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
+### Preparazione M3-B
+[Brief artistico e asset](../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md): preparazione subordinata a M3-A e W6A, senza generazione o promozione.
