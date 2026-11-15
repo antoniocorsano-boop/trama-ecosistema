@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M3_D_EXACT_MASTER_ASSEMBLED_BROWSER_BLOCKED",
-    "action": "Qualify assembled private exact-master runtime in authorized browser environment and review W6A/W5A, rights and real devices",
+    "state": "M4_ACTUAL_ART_STANDALONE_BROWSER_PASS_HUMAN_REVIEW_PENDING",
+    "action": "Private teacher review on real device; revise E03 bench visual continuity and mobile host before final W6A/W5A and rights qualification",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -133,9 +133,10 @@
     ],
     "blockers": [
       "F3-B REVISE",
-      "private runtime with original browser qualification blocked in local environment",
-      "W6A/W5A and rights open",
-      "full accessibility and physical devices open"
+      "human W6A/W5A and rights/licensing open",
+      "visual discontinuity E03 bench and page-like mobile host",
+      "physical device and file-opening verification pending",
+      "complete accessibility and storage audit pending"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -229,6 +230,21 @@
       "privatePackageSha256": "a71024f0b88bcf04558a3e4518be7bc364d75a5f8b11ca0a81dec68911743aed",
       "unchangedFiles": 83,
       "browser": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD"
+    },
+    "m4": {
+      "status": "IN_MEMORY_BROWSER_PASS_HUMAN_REVIEW_PENDING",
+      "viewports": [
+        320,
+        390,
+        1280
+      ],
+      "htmlLibraryFileId": "libfile_2e82bc13f3048191b02992ce4d06005c",
+      "htmlSha256": "c984fd737fede39f170db43e8f8e3ca6f92b9ec86d81bde9a0a4ad2b8380a7f8",
+      "evidenceLibraryFileId": "libfile_7da73742c9108191ad9a261acf44ddb3",
+      "evidenceSha256": "ebc215ab8291cdae596e9c89907e13d161974296d74ebe6f6cf978e660064516",
+      "fileNavigation": "NOT_TESTED",
+      "visualQuality": "REVISE_BENCH_HOST",
+      "studentAuthorized": false
     }
   },
   "queued": [
