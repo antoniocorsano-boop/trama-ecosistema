@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M7_D1_BULB_DRAG_EMULATED_PASS_PHYSICAL_RETEST_PENDING",
-    "action": "Retest M7-D1 on real Android: drag from actual bulb to station, drag outside station, tap, preserve/delete and exit/reopen; LIM, authorized storage/network, complete accessibility, W6A/W5A and rights remain open; no publication.",
+    "state": "M7_D2_REPEAT_GESTURE_EMULATED_PASS_PHYSICAL_RETEST_PENDING",
+    "action": "Retest M7-D2 on physical Android: three or more successive drags, return from notebook, repeat after reset; physical LIM, storage/network, complete accessibility, rights and human review remain open; no student publication.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -138,7 +138,8 @@
       "Android local opening and core flow observed; presentation, wrong-choice feedback and landscape PASS user-reported; direct drag, preserve/delete, exit/reopen and LIM pending",
       "complete accessibility and storage audit pending",
       "M7 Android core path screenshot PASS; residual physical interactions, authorized storage, full accessibility and human/rights qualification open",
-      "M6-B1 physical bulb drag FAIL; M7-D1 correction in-memory 4/4 PASS, real Android retest pending"
+      "M6-B1 physical bulb drag FAIL; M7-D1 correction in-memory 4/4 PASS, real Android retest pending",
+      "M7-D1 intermittent physical drag failure; M7-D2 repeat tests PASS in simulated Chromium, physical cause/retest open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -446,7 +447,7 @@
         "landscape bench and controls visible with A measurement and notebook 1/3 matching preceding portrait state"
       ],
       "pending": [
-        "M7-D1 real Android drag from bulb (M6-B1 FAIL user-reported)",
+        "M7-D2 physical repeat drag (D1 intermittent FAIL user-reported)",
         "cancel/confirm reset effects",
         "exit effect and reopen",
         "offline/network and storage",
@@ -513,6 +514,30 @@
           "visualPreview": "pointer-following ghost",
           "errors": 0,
           "httpRequests": 0,
+          "studentAuthorized": false,
+          "physicalRetest": {
+            "status": "FAIL_INTERMITTENT_USER_REPORTED",
+            "description": "Initial drag succeeded, later stopped working; physical root cause unconfirmed"
+          }
+        },
+        "d2": {
+          "status": "EMULATED_REPEAT_PASS_PHYSICAL_PENDING",
+          "htmlLibraryFileId": "libfile_6e64710a1fec8191b67cfee73812727c",
+          "htmlSha256": "54f4763d7e2d5d4634e57914f1e91635bfade76225cb6c75364b773c09f4c338",
+          "packageLibraryFileId": "libfile_a9fc78db30788191802c266736945656",
+          "packageSha256": "1c7523b9be4d2f28086547980bc83866d9baff12f6d4481268daae08fbf240ec",
+          "change": "Native pointer events/capture, fresh canvas bounds, one gesture session, cancellation on pointercancel/lost capture/blur/resize/hidden/reset/disposal; Phaser rendering retained",
+          "functional390": "PASS",
+          "repeatViewports": [
+            320,
+            390,
+            844,
+            1280
+          ],
+          "repeatResults": "4/4 PASS; six successive drags, notebook return, outside drop, touch cancel on mobile, map return and reset",
+          "errors": 0,
+          "httpRequests": 0,
+          "modelUnchanged": true,
           "studentAuthorized": false
         }
       }
