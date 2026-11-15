@@ -15,6 +15,10 @@ Per riprendere il programma Atlas/Studio Atlas senza ricostruirlo dalla chat, ap
 
 Il checkpoint precedente è storico. Per la priorità corrente leggere [AXF-HORIZON-01 nel piano generale](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Identità editoriale multidisciplinare e profondità, biblioteca distinta da Studio Atlas; prima qualificazione/classificazione della risorsa autonoma Scoperte R1, oppure BLOCKED secondo contratto, poi chiusura Atelier F3; F4/F5 restano bloccate. Roundtrip sintetico Ink/eXeLearning PASS, integrazione non realizzata. Nessuna autorizzazione runtime/studenti, adozione o spesa.
 
+## AXF — Produzione parametrica, priorità di riuso (15/11/2026)
+
+Leggere [AXF-PARAM-01 nel piano generale](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json) prima di nuovi interventi: un solo sistema di composizione parametrica, shell ambientale, componenti e ricette condivise; P0 audit del riuso e ammissibilità, poi P1 tre fixture sintetiche e P2 produzione di 100 fixture senza codice per tema, P3 ciclo professionale, P4 chiusura prodotti, P5 generalità. È roadmap candidata; P1–P3 non autorizzate automaticamente. R1 resta priorità editoriale, F3 REVISE e F4/F5 bloccate; nessun nuovo contratto, deploy, dati studenti o spesa. Non creare un'altra verticale per dimostrare il riuso.
+
 ## Current canonical direction
 
 | Area | Canonical reference | State |
