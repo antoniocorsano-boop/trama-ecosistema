@@ -273,7 +273,7 @@
     "scope": "isolated eXeLearning upstream conversion/export and Ink synthetic compilation/replay; no learner data, no deployment, no runtime adoption",
     "cost": "standard GitHub public runner; no paid fallback",
     "localPreflight": "Docker unavailable; npm registry DNS failure",
-    "next": "Qualify authoring-to-export roundtrip on a synthetic original resource, inspect rendered output, privacy, accessibility and licensing, then bounded adapter design; W3A/W5A/W6A remain required. No production adoption or student publication.",
+    "next": "Preserve smoke and synthetic roundtrip PASS; actual Studio Atlas integration, license/accessibility review and product validation remain open.",
     "studentAuthorized": false,
     "firstRun": {
       "head": "82382c30ddbc21e46481667a493751e5c08cda61",
@@ -296,7 +296,7 @@
     },
     "roundtrip": {
       "id": "AXF-AUTH-RT01",
-      "status": "WORKFLOW_COMMITTED_RUN_NOT_YET_VERIFIED",
+      "status": "ISOLATED_SYNTHETIC_ROUNDTRIP_PASS_INTEGRATION_PENDING",
       "pr": 333,
       "head": "7736a86f55da14d1a9ff67a7282186a69c9097e6",
       "baselineSmokeHead": "b44e45f98b03323802406980ec2242a591dacc9b",
@@ -309,7 +309,25 @@
         "No adoption or publication"
       ],
       "studentAuthorized": false,
-      "runtimeAuthorized": false
+      "runtimeAuthorized": false,
+      "runs": [
+        {
+          "id": 43738675650,
+          "conclusion": "success"
+        },
+        {
+          "id": 43738675643,
+          "conclusion": "success"
+        }
+      ],
+      "verifiedSteps": [
+        "original synthetic intent and native sources",
+        "eXeLearning editable export and modified reimport",
+        "HTML5 export",
+        "Ink compile/replay and isolated browser preview",
+        "browser checks and evidence upload"
+      ],
+      "next": "Inspect artifact receipts and visual/axe/storage observations; no claim of full accessibility or privacy; select bounded adapter after actual product classification and review. Do not expand tools."
     }
   }
 }
