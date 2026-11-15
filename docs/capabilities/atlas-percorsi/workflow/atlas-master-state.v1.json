@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Cold adult review the two private low-fidelity design materials, resolve exact Arena references and B applicable contract, obtain required human and disciplinary reviews; no production or final artwork before gates. M7-D2 drag remains open.",
+    "action": "Refine the two-format preproduction for optional depth (AXF-ED-DEPTH-01), verify novice and knowledgeable entry routes and disciplinary model extension, resolve Arena references and B contract, then obtain applicable W3/W5A/W6A human reviews. Preserve prototypes and M7-D2; no release, final art or spending.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -818,7 +818,36 @@
             ],
             "studentAuthorized": false,
             "runtimeAuthorized": false
+          },
+          "adultReview": {
+            "status": "PARTIAL_CLARITY_POSITIVE_DEPTH_REVISE",
+            "source": "User direct feedback on both low-fidelity prototypes",
+            "observation": "Both fairly clear but very elementary; enrichment needed for those already familiar with basics",
+            "notEstablished": [
+              "naturalness",
+              "engagement",
+              "disciplinary adequacy",
+              "learning outcomes",
+              "W5A/W6A approval"
+            ],
+            "next": "Revise depth in design with alternate entry and new model-variable case; disciplinary review before implementation.",
+            "bozzettiUnchanged": true
           }
+        },
+        "depthPolicy": {
+          "id": "AXF-ED-DEPTH-01",
+          "status": "USER_FEEDBACK_RECORDED_DESIGN_CANDIDATE",
+          "protocolCommit": "2107e7c55e03f5d6fd547a1e456df25159ee65fb",
+          "diptychCommit": "f6f873354357a47b11491d9487b839b0a5b55327",
+          "principles": [
+            "accessible entry",
+            "optional meaningful depth",
+            "direct access and return",
+            "no learner profiling or forced test",
+            "format-specific enrichment"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
         }
       }
     }
