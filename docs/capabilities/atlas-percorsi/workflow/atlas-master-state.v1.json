@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M3_C_FIXTURE_QUALIFICATION_PENDING",
-    "action": "Check exact-head M3-C native export and handoff fixture CI; resolve any failures, then qualify exact E02 master after rights and authorized transfer",
+    "state": "M3_C_FIXTURE_TECHNICAL_PASS_MASTER_PENDING",
+    "action": "Resolve rights and authorized exact E02 v2 transfer; qualify actual artwork integrated across native exports, then review W6A/W5A and physical devices",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -133,9 +133,8 @@
     ],
     "blockers": [
       "F3-B REVISE",
-      "M3-C fixture CI pending",
       "W6A/W5A and rights open; exact binary transfer pending",
-      "real E02 native export and renderer handoff unqualified",
+      "real E02 artwork native export and integrated visual verification pending",
       "full accessibility and real devices open"
     ],
     "notAllowed": [
@@ -200,9 +199,16 @@
       "head": "dd84370c3e0f78ceb212c8a4b881754c0c908002",
       "baselinePassed": 5,
       "asset": "SYNTHETIC_FIXTURE_NOT_E02_ART",
-      "status": "CI_PENDING",
+      "status": "FIXTURE_TECHNICAL_PASS",
       "exactMasterLock": "UNCHANGED",
-      "studentAuthorized": false
+      "studentAuthorized": false,
+      "passed": 5,
+      "failed": 0,
+      "runId": 43715351717,
+      "jobId": 132815576787,
+      "artifactId": 14162462066,
+      "artifactDigest": "sha256:ed7c5ecb93c77679979f9e9685ff406e8e9316d7f6efa341f96d95b8d817608e",
+      "artifactExpires": "2026-11-22T12:48:44Z"
     }
   },
   "queued": [
