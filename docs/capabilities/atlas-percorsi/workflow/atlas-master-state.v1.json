@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "E02_ZONE_CANDIDATE_REVIEW_REQUIRED",
-    "action": "Resolve visual/scientific continuity and W6A/W5A/rights; import exact asset before generating both motor candidates and qualifying handoff",
+    "state": "E02_V2_NATIVE_CANDIDATE_STATIC_PASS_REVIEW_REQUIRED",
+    "action": "Resolve W6A/W5A visual continuity and rights; import exact v2 asset; execute native exports and qualify GDevelop-to-Phaser handoff",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -134,8 +134,9 @@
     "blockers": [
       "F3-B REVISE",
       "W6A/W5A and transfer scientific review open",
-      "E02 visual corrections not qualified; binary import pending",
-      "Tiled/GDevelop/Phaser E02 integration, production host, licenses, full accessibility and real devices open"
+      "binary import pending",
+      "actual Tiled/GDevelop exports and E02 Phaser handoff untested",
+      "full accessibility, real devices, production host and licenses open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -169,6 +170,19 @@
       "htmlLibraryFileId": "libfile_1050fcb3c7a88191a90236ed0a2e90b5",
       "zipLibraryFileId": "libfile_ef798bd3ce808191a9293503d017e533",
       "runtimeIntegration": "PENDING"
+    },
+    "artVariant": {
+      "version": "v2",
+      "libraryFileId": "libfile_48d9ed45f0688191b3060806613d17aa",
+      "sha256": "509000e27fe51e7c3c3d336029039cf8c6bf52e79fdd0be3d7f722d5a1509eaa",
+      "width": 1536,
+      "height": 1024,
+      "gitImport": "PENDING",
+      "candidateRepo": "Atlas",
+      "candidatePr": 97,
+      "candidateHead": "fb7603ba92a011da6d9682c0b04a4ca1d063c9dc",
+      "packageLibraryFileId": "libfile_dab7861963dc81919800998c25caf58b",
+      "qualification": "LOCAL_STATIC_AND_MOCK_DISPATCH_PASS_ONLY"
     }
   },
   "queued": [
