@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Review AXF-GATEWAY-G1 private access scene as whole-product visual reference; verify on physical device and decide visual/navigation direction. Preserve AXF-PARAM-01 P0 and R1 editorial qualification, F3/F4/F5 gates unchanged; no generic engine implementation or new content before this review and applicable authority. No publication or spending.",
+    "action": "Review G2 private gateway direct access on physical device; preserve G1 and existing content. Verify real deep-link routing only in authorised integration; P0 and R1 qualification remain pending, F3/F4/F5 unchanged. No production deployment or student publication.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -1018,7 +1018,43 @@
           "No changes to Atlas production or deployment"
         ],
         "studentAuthorized": false,
-        "runtimeAuthorized": false
+        "runtimeAuthorized": false,
+        "g2": {
+          "id": "AXF-GATEWAY-G2",
+          "status": "PRIVATE_DIRECT_ACCESS_REVIEW_CANDIDATE",
+          "scope": "Preserve G1 scene and embedded resources byte-identical; visible ambient search affordance; resource-first indexed search from local titles/kinds/descriptions/curated keywords; unavailable worlds separate; search restored on return; stable candidate world/resource hash resolver. No semantic AI search, actual platform links or production integration.",
+          "htmlLibraryFileId": "libfile_34c88a7c188881919c640e17f45bb851",
+          "htmlSha256": "b7c95e87241c59448963ebe0b8c6883df3b224205e09fc1f6ffd761d9aeca5e3",
+          "packageLibraryFileId": "libfile_af0346f5aa7c8191808de0cebf938bb5",
+          "packageSha256": "0e33370a39789708bb4fa62942c1008b8523e1f6184119ff15b25d1f15a3c12b",
+          "tests": {
+            "mode": "Chromium in-memory set_content",
+            "viewports": [
+              [
+                320,
+                740
+              ],
+              [
+                390,
+                844
+              ],
+              [
+                844,
+                390
+              ],
+              [
+                1280,
+                800
+              ]
+            ],
+            "result": "4/4 PASS direct results, return query/focus, unavailable theme, valid/invalid resolver; 0 HTTP requests, 0 JS errors",
+            "actualURLNavigation": "BLOCKED_BY_ADMINISTRATOR for file and intercepted HTTPS before load; resolver invoked explicitly, real URL navigation unverified",
+            "physical": "PENDING"
+          },
+          "next": "Review immediate access on physical device; stable published resource IDs and authorised routes must be integrated with existing Atlas catalog and publication authority when permitted. Preserve exploration; no mandatory browsing or personalized progress.",
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
+        }
       }
     }
   },
