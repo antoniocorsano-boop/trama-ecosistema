@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "TECHNICAL_PREFLIGHT_PASS_W6A_REVIEW_REQUIRED",
-    "action": "Review storyboard and artistic composition, reference lock and rights; then produce illustrated E02/E03 candidate",
+    "state": "W6A_ADVISORY_REVIEW_RECORDED_HUMAN_DECISION_REQUIRED",
+    "action": "Review the revised learner walkthrough and scene composition; record human W6A/W5A decision and reference lock before final production",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -142,7 +142,8 @@
       "student publication",
       "paid service",
       "automatic approval"
-    ]
+    ],
+    "review": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md"
   },
   "queued": [
     {

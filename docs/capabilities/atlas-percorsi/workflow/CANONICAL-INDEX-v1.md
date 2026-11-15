@@ -197,3 +197,6 @@ Nothing in this index, constitution, review contract or evidence normalisation a
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
 ### Preparazione M3-B
 [Brief artistico e asset](../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md): M3-A superata tecnicamente; produzione subordinata a W6A, senza generazione o promozione.
+
+### Revisione qualitativa M3-B
+[Walkthrough e dossier W6A consultivo](../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md): REVISE mirato, decisione umana W6A/W5A necessaria prima di handoff W9 e produzione finale.

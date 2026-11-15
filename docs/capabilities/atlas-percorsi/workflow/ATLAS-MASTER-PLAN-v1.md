@@ -81,3 +81,6 @@ Checkpoint: prima di qualsiasi implementazione leggere questa pagina, il dossier
 
 ## Checkpoint M3-B
 [Ricevuta M3-A](../production/AXF-M3A-MIXED-HANDOFF-EVIDENCE-v1.md); [brief artistico](../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md). Priorità unica: W6A e preparazione Reference Lock, poi produzione candidata. Nessuna approvazione implicita.
+
+## Revisione W6A M3-B
+[Dossier consultivo e lingua studente](../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md): cinque interventi mirati R1–R5; nessun nuovo benchmark. Decisione umana W6A/W5A prima della produzione finale, F3-B REVISE.
