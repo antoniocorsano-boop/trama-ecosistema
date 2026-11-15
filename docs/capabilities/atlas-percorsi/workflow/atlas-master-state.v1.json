@@ -644,20 +644,20 @@
         "runtimeAuthorized": false
       },
       "professionalAuthoringQualification": {
-        "status": "INK_SMOKE_PASS_EXE_REQUALIFICATION_QUEUED",
+        "status": "BOTH_ISOLATED_SMOKE_PASS_INTEGRATION_PENDING",
         "pr": 333,
         "head": "b44e45f98b03323802406980ec2242a591dacc9b",
-        "catalogCommit": "12fa2d850702da91794d2051270eece14ea8f604",
+        "catalogCommit": "36afea6abd9c7b76896a84d9eb0b3d7003ff69e9",
         "runs": [
           {
             "id": 43738148274,
-            "status": "queued",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "success"
           },
           {
             "id": 43738148237,
-            "status": "queued",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "success"
           }
         ],
         "scope": "Authoring tooling qualification, not production or replacement of W3A/W5A/W6A; eXeLearning and Ink first, H5P/Lumi and PhET research candidates",
@@ -672,7 +672,17 @@
           "exe": "FAIL_INPUT_NOT_FOUND",
           "staticIntegrity": "PASS"
         },
-        "repair": "Test original mount permissions, assign dedicated directory to actual nonroot bun identity, check read/write, verify output ZIP and index.html; root cause to confirm"
+        "repair": "Test original mount permissions, assign dedicated directory to actual nonroot bun identity, check read/write, verify output ZIP and index.html; root cause to confirm",
+        "retest": {
+          "ink": "PASS",
+          "inkJob": 132885213650,
+          "exe": "PASS",
+          "exeJob": 132885213462,
+          "rootCause": "CONFIRMED_ORIGINAL_MOUNT_ACCESS_DENIED",
+          "html5Zip": "PASS",
+          "scope": "synthetic narrative and upstream public fixture only"
+        },
+        "next": "Qualify a synthetic original authoring-to-export roundtrip, rendered output, privacy, accessibility, licensing, then bounded integration design; no new student content or adoption before existing gates"
       }
     }
   },
