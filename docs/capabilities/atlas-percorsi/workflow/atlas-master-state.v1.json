@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Separate technical fixtures from private editorial library composition; preserve technical regression tests. Review actual R3 on Android/LIM and obtain distinct review; then revise Atelier by existing editorial protocol. P2 HOLD, no deployment/student authorization.",
+    "action": "Review authentic R3 in exact editorial-only private composition; physical Android/LIM and distinct editorial/disciplinary review remain open; then revise Atelier under existing protocol and qualify public format/authority. Preserve G2 and technical tests, P2 HOLD; no deployment/student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -1097,6 +1097,32 @@
                 ],
                 "decision": "Keep technical fixtures separate from authentic editorial review; not learner content. No editorial promotion."
               }
+            },
+            "editorialOnly": {
+              "id": "P4-R3-E",
+              "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_ONLY",
+              "planCommit": "05c785f368817320fa576a221fd9b748069568b8",
+              "sourcePr": 103,
+              "sourceHead": "b41a596f6de5858c0b5aaadc084932326dd76313",
+              "recipe": {
+                "head": "f62850bc53e198e3a5417894ff0a49011a8e2e33",
+                "run": 43770061797,
+                "artifact": 14183378167,
+                "sha256": "b0dcca75ddfd366291aacdd6e84851ef42ec4bfc1f3f8b5506abf3ebbadfbad7"
+              },
+              "htmlLibraryFileId": "libfile_1f44de5a72a08191913653ef0473cdd4",
+              "htmlSha256": "a1aeacad432f4acc3278e5a9234f250d622f6838b47535bcd1f48e311e31b381",
+              "evidenceLibraryFileId": "libfile_cb1676341a4c8191870902738db1a738",
+              "evidenceSha256": "43c255e1a80455089efbf84c467e2c1bef9f137efd9f43ea5368d3d3b59b27a0",
+              "syntheticFixtureCount": 0,
+              "editorialCandidateCount": 1,
+              "originalsVerified": 11,
+              "browser": "4/4 in-memory Chromium; old synthetic routes rejected; 8 worlds empty; R3 three views, comparison, history and return focus PASS; 0 HTTP/JS/console errors or overflow",
+              "physical": "PENDING",
+              "independentReview": "PENDING",
+              "studentAuthorized": false,
+              "runtimeAuthorized": false,
+              "publication": "BLOCKED"
             }
           }
         }
