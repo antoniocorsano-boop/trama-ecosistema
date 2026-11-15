@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M6_A_PRIVATE_FUNCTIONAL_PASS_EXTENDED_QUALIFICATION_PENDING",
-    "action": "Complete M6-A extended accessibility, touch/keyboard, storage and real-device review; human W6A/W5A and rights remain pending",
+    "state": "M6_A_PRIVATE_REGRESSION_PASS_HUMAN_AND_DEVICE_REVIEW_PENDING",
+    "action": "M6-B: private teacher walkthrough and actual Android/LIM, direct file opening, complete accessibility, persistent storage and rights/independent qualification; no release or expansion",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -134,7 +134,7 @@
     "blockers": [
       "F3-B REVISE",
       "human W6A/W5A and rights/licensing open",
-      "M5 advisory REVISE: page-like flow, feedback and presentation gaps; M6-A targeted revision; human visual/educational acceptance pending",
+      "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
       "physical device and file-opening verification pending",
       "complete accessibility and storage audit pending"
     ],
@@ -290,14 +290,14 @@
       }
     },
     "m6": {
-      "status": "PRIVATE_IN_MEMORY_FUNCTIONAL_PASS_EXTENDED_PENDING",
+      "status": "PRIVATE_IN_MEMORY_REGRESSION_PASS_HUMAN_REVIEW_PENDING",
       "scope": "M6-A scene-first interaction and notebook, contextual prediction, neutral comparison feedback and evidence presentation",
       "acceptanceRef": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md",
       "studentAuthorized": false,
-      "htmlLibraryFileId": "libfile_4a6061c113cc81919884994a9d375e65",
+      "htmlLibraryFileId": "libfile_384ad1c73ef881919f6e1378dfd16026",
       "htmlSha256": "94945098a3d9fe87f7841db7e88ca92a2880fdf01e7b8e4432c74685fe88913a",
-      "packageLibraryFileId": "libfile_ac722d277af48191b9b497956feb12f4",
-      "packageSha256": "f561e513e6ab8e4faff6ade7aa9480d35981cf33c11017ea1703d4abac02bfd0",
+      "packageLibraryFileId": "libfile_201e1aace80081918ff717f4587f1f48",
+      "packageSha256": "2b0f6dc9a89d3a94f0ee9503c26dd5fb7bb4afb3e623ac5885b4ec92d7fc89a4",
       "viewports": [
         320,
         390,
@@ -311,7 +311,22 @@
       "resetConfirmation": "PASS",
       "httpRequests": 0,
       "pageErrors": 0,
-      "extendedQualification": "PENDING"
+      "extendedQualification": "PASS_IN_MEMORY_ONLY",
+      "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
+      "changedSourceFiles": [
+        "handoff.mjs",
+        "index.html",
+        "energy/scene.mjs"
+      ],
+      "unchangedSourceFiles": 84,
+      "emulatedTouchDrag": "PASS_320_390_AFTER_REFRESHED_CANVAS_BOUNDS_AND_PACED_EVENTS",
+      "desktopDrag": "PASS",
+      "keyboardTabSequence": "PASS_PARTIAL",
+      "rootFont200": "PASS_NO_HORIZONTAL_OVERFLOW_NOTEBOOK",
+      "persistentStorage": "OPEN",
+      "fileNavigation": "NOT_TESTED",
+      "physicalDevices": "OPEN",
+      "humanReview": "PENDING"
     }
   },
   "queued": [
