@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Reopen W3/W4–W6A for Atelier Energia using the editorial production protocol: produce learning map, exact learner script, low-fidelity storyboard and cold walkthrough; human W3A/W5A/W6A decisions before final assets or W9. Preserve M7-D2 baseline; first-entry drag diagnosis remains separate and unconfirmed; no serial patches, new worlds, engine adoption or publication.",
+    "action": "Apply AXF-ED-ID-01 within existing W3/W4–W6A: complete Energia learning map, learner-first continuous script, whole-experience storyboard with meaningful closure/transfer and cold walkthrough; compare preproduction-only standalone visual explanation to test format diversity. Preserve M7-D2 and alternate demo as evidence, first-entry drag separate. Human decisions before final assets/W9. Tool qualification remains isolated; no new production, publication, spending or adoption.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -638,10 +638,11 @@
           "C09 reliability",
           "C10 governance"
         ],
-        "nextDeliverable": "Learning map + learner-language script + complete low-fidelity storyboard; representative interaction after applicable gates",
+        "nextDeliverable": "One-page creative-pedagogical direction + learning map + continuous learner-first script + complete low-fidelity storyboard with authentic closure and proportionate transfer + whole-experience cold walkthrough; compare a non-narrative form in preproduction",
         "humanReview": "PENDING",
         "studentAuthorized": false,
-        "runtimeAuthorized": false
+        "runtimeAuthorized": false,
+        "identityRef": "AXF-ED-ID-01"
       },
       "professionalAuthoringQualification": {
         "status": "BOTH_ISOLATED_SMOKE_PASS_INTEGRATION_PENDING",
@@ -707,6 +708,35 @@
           "studentAuthorized": false,
           "runtimeAuthorized": false
         }
+      },
+      "editorialIdentity": {
+        "id": "AXF-ED-ID-01",
+        "status": "USER_DIRECTION_RECORDED_OPERATIONAL_CANDIDATE_HUMAN_REVIEW_PENDING",
+        "scope": [
+          "Storie",
+          "Laboratori",
+          "Scoperte",
+          "Percorsi"
+        ],
+        "protocolRef": "../production/AXF-EDITORIAL-PRODUCTION-PROTOCOL-v1.md#9-identità-editoriale-atlas--esperienza-dal-punto-di-vista-dello-studente-axf-ed-id-01",
+        "protocolCommit": "636fb13340556027577094e73eefaed8179403d2",
+        "masterPlanCommit": "a98c2156adfd203dbde28daa578fbc3fdcd2f372",
+        "principles": [
+          "orientation",
+          "meaningful curiosity",
+          "appropriate agency",
+          "self-paced calm",
+          "understanding",
+          "nonjudgmental revision",
+          "meaningful closure/application"
+        ],
+        "wholeExperienceReview": "Required proposed implementation of existing C01–C10/W6A; cold adult walkthrough plus disciplinary/product review on exact version; no automatic engagement approval",
+        "formatPolicy": "Different expressive forms; no mandatory screen sequence, story, quiz or engine; classify under applicable contracts",
+        "studentVoice": "Design hypotheses, not learner testimony",
+        "alternateDemo": "Private HTML demonstration, user questioned ending; advisory limitations; not approved or substituted for M7-D2",
+        "humanReview": "PENDING",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
       }
     }
   },
