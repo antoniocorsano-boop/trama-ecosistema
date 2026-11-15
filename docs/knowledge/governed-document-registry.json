@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.governed-document-registry/v1",
-  "updatedAt": "2026-10-03",
+  "updatedAt": "2026-11-15",
   "policy": {
     "purpose": "Durable index of foundational and normative TRAMA documents used by Project Knowledge and development continuity.",
     "chatIsAuthority": false,
@@ -1763,6 +1763,30 @@
         "PATHWAY_AUTHORING_WORKFLOW_CHANGE",
         "LOCAL_GROWTH_MODEL_CHANGE",
         "TERRITORY_GOVERNANCE_CHANGE"
+      ]
+    },
+    {
+      "id": "DOC-TV-01-VOICE-INTERACTION-RECOVERY",
+      "path": "docs/capabilities/voice-interaction/TV-01-RECOVERY-AND-INTEGRATION-v1.md",
+      "kind": "GUIDE",
+      "status": "PROPOSED",
+      "priority": "SUPPORTING",
+      "subjects": [
+        "voice-interaction",
+        "contextual-copilot",
+        "provider-portability",
+        "privacy",
+        "development-continuity"
+      ],
+      "dependsOn": [
+        "DOC-OR-07-SHARED-CAPABILITY-LAYER",
+        "DOC-OR-08-RUNTIME-PORTABILITY"
+      ],
+      "updateTriggers": [
+        "VOICE_ADAPTER_QUALIFICATION_CHANGE",
+        "COPILOT_CONTRACT_CHANGE",
+        "PRIVACY_BOUNDARY_CHANGE",
+        "PRODUCT_INTEGRATION_CHANGE"
       ]
     }
   ]
