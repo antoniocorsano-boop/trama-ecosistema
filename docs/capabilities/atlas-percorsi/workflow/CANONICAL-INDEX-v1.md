@@ -7,6 +7,10 @@
 ## Purpose
 Single entry point for understanding current authority, experiments and open consolidation work without chat history.
 
+## AXF — checkpoint di ripresa (proposta di consolidamento, 15/11/2026)
+
+Per riprendere il programma Atlas/Studio Atlas senza ricostruirlo dalla chat, aprire [Piano generale AXF-MASTER-01](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Sono una proiezione candidata del piano, non nuove autorità. F1/F2/F3-A tecnicamente superati su head esatti; F3-B REVISE; prossima priorità M1, storyboard e target visuale prima di nuovo codice. Conservare i documenti canonici sottostanti e le ricevute storiche; non promuovere runtime o studenti.
+
 ## Current canonical direction
 
 | Area | Canonical reference | State |
