@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "P2 next proposed: agree bounded isolated synthetic batch scope, then demonstrate 100 configurations from same composition sources, repeatability, incremental rebuild and negative tests; do not implement production or promote P1 into runtime. Preserve G2, R1 BLOCKED, F3/F4/F5 unchanged. No publication or spending.",
+    "action": "Hold P2. Review P1-R findings, then bounded corrective P1 tranche and exact-version distinct independent review before any batch; no product/runtime changes. Preserve G2, R1 BLOCKED and F3/F4/F5 unchanged; no publication or spending.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_OFFLINE_SYNTHETIC_PASS_P2_SCOPE_PENDING",
+        "status": "P1_REVIEW_REVISE_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -970,7 +970,7 @@
           },
           {
             "id": "P2",
-            "state": "NEXT_PROPOSED_BOUNDED_SCOPE_REQUIRED",
+            "state": "HOLD_PENDING_P1_REVIEW_CORRECTIONS_AND_INDEPENDENT_REVIEW",
             "exit": "100 synthetic fixtures one command; no per-fixture code edits; common change and targeted rebuild, negative tests, measured timings"
           },
           {
@@ -1063,7 +1063,44 @@
             "No full accessibility, physical-device or actual file-opening validation"
           ],
           "studentAuthorized": false,
-          "runtimeAuthorized": false
+          "runtimeAuthorized": false,
+          "criticalReview": {
+            "id": "P1-R",
+            "status": "REVISE_PROPOSED",
+            "independent": false,
+            "reviewer": "Separate consultative source and adversarial test review; no independent reviewer attested",
+            "planCommit": "b206dbc30a25f6106ea0116c8f92b53a4b734b42",
+            "verified": [
+              "ZIP SHA256 exact",
+              "deterministic rebuild exact HTML SHA256",
+              "five original negatives PASS",
+              "revoked synthetic scene excluded in search but reachable via orb",
+              "320px root font 200% header intersects orb",
+              "search query lost after opening"
+            ],
+            "additionalValidatorCasesAccepted": [
+              "overlap",
+              "long title",
+              "non-string inspect target",
+              "alias",
+              "orphan",
+              "self-loop"
+            ],
+            "findings": [
+              "P1-R01 eligibility bypass",
+              "P1-R02 validation/geometry",
+              "P1-R03 accessibility/reflow",
+              "P1-R04 navigation regression",
+              "P1-R05 shared shell/kernel boundary and real batch diversity",
+              "P1-R06 product/authority",
+              "P1-R07 operational and distribution limits",
+              "P1-R08 editorial quality"
+            ],
+            "next": "One bounded corrective tranche P1-R01–R04 and boundary/test plan R05, then independent review before P2; R06–R08 retained for relevant gates.",
+            "originalPassPreserved": true,
+            "runtimeAuthorized": false,
+            "studentAuthorized": false
+          }
         }
       },
       "gatewayReview": {
