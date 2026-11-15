@@ -6,7 +6,7 @@
   "paidFallbackAllowed": false,
   "authority": "existing TRAMA/Arena/Atlas governance",
   "baseline": {
-    "repository": "antoniocorsano-boop/Curriculum-Atlas",
+    "repository": "Atlas (GitHub repository ID 1376266693)",
     "pr": 95,
     "head": "a7a8539f20336201f3a2c55f801ac2d7df5c16f4",
     "run": 43700272516
@@ -16,7 +16,7 @@
       "id": "experience-engine",
       "role": "composition-and-navigation",
       "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
-      "evidence": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/pull/95",
+      "evidence": "Atlas repository ID 1376266693; pull/95",
       "limits": [
         "specialized binding in draft",
         "F2 loopback handoff passes for one predefined package; not generic authoring",
@@ -28,7 +28,7 @@
       "version": "4.2.1",
       "role": "specialized-2d-renderer",
       "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
-      "evidence": "https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43698089963",
+      "evidence": "Atlas repository ID 1376266693; actions/runs/43698089963",
       "limits": [
         "human device/accessibility review",
         "licensing and frozen dependency lock",
@@ -163,7 +163,7 @@
   },
   "observedAsOf": "2026-11-15",
   "previousBaseline": {
-    "repository": "antoniocorsano-boop/Curriculum-Atlas",
+    "repository": "Atlas (GitHub repository ID 1376266693)",
     "pr": 95,
     "head": "4fe38a8ca3a43754fe0c78495a35881a9ee6865f",
     "run": 43698089963
