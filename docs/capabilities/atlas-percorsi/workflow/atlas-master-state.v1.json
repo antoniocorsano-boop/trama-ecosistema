@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M3_C_FIXTURE_TECHNICAL_PASS_MASTER_PENDING",
-    "action": "Resolve rights and authorized exact E02 v2 transfer; qualify actual artwork integrated across native exports, then review W6A/W5A and physical devices",
+    "state": "M3_D_PRIVATE_ASSEMBLY_PREPARED_CI_PENDING",
+    "action": "Check M3-D fixture runtime packaging CI; retrieve diagnostic archive privately, substitute exact locked E02 master, verify real-art browser runtime and human review",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -133,9 +133,10 @@
     ],
     "blockers": [
       "F3-B REVISE",
-      "W6A/W5A and rights open; exact binary transfer pending",
-      "real E02 artwork native export and integrated visual verification pending",
-      "full accessibility and real devices open"
+      "M3-D runtime packaging CI pending",
+      "private exact-master assembly and browser test pending",
+      "W6A/W5A and rights open",
+      "full accessibility and physical devices open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -208,7 +209,19 @@
       "jobId": 132815576787,
       "artifactId": 14162462066,
       "artifactDigest": "sha256:ed7c5ecb93c77679979f9e9685ff406e8e9316d7f6efa341f96d95b8d817608e",
-      "artifactExpires": "2026-11-22T12:48:44Z"
+      "artifactExpires": "2026-11-22T12:48:44Z",
+      "evidenceLibraryFileId": "libfile_80067438ce54819197c925638acafae2"
+    },
+    "m3d": {
+      "repo": "Atlas",
+      "pr": 97,
+      "head": "2df78d9d68071d2da4480c554fe613a9bf95ead5",
+      "status": "PACKAGING_CI_PENDING",
+      "masterInPublicRepo": false,
+      "assembly": "PRIVATE_POST_EXPORT_EXACT_PNG_SUBSTITUTION",
+      "nativeExportWithMaster": "NOT_TESTED",
+      "rights": "OPEN",
+      "studentAuthorized": false
     }
   },
   "queued": [
