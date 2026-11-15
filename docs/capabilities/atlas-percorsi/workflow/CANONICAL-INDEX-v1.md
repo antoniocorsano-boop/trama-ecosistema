@@ -11,6 +11,10 @@ Single entry point for understanding current authority, experiments and open con
 
 Per riprendere il programma Atlas/Studio Atlas senza ricostruirlo dalla chat, aprire [Piano generale AXF-MASTER-01](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Sono una proiezione candidata del piano, non nuove autorità. F1/F2/F3-A tecnicamente superati su head esatti; F3-B REVISE; M1: [storyboard Energia](../production/AXF-M1-ENERGIA-STORYBOARD-v1.md) e [tavola di regia](../production/AXF-M1-ENERGIA-VISUAL-TARGET-v1.svg) candidati salvati; direzione accolta per la prova circoscritta M2, non PASS qualitativo finale. M2-C: [confronto equivalente](../production/AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md) PASS tecnico su head 3589c363e24fc66be588d336849997545bcd1b7f, PR Atlas #96. Direzione umana: [architettura multimotore e specializzazione](../production/AXF-M2D-MULTIENGINE-DECISION-v1.md). [M2-D automazione PASS](../production/AXF-M2D-AUTHORING-CHANGE-EVIDENCE-v1.md); [M3-A PASS tecnico](../production/AXF-M3A-MIXED-HANDOFF-EVIDENCE-v1.md), prossima priorità unica M3-B: review W6A della composizione e brief artistico. Conservare i documenti canonici sottostanti e le ricevute storiche; non promuovere runtime o studenti.
 
+## AXF — Orizzonte e priorità corrente (15/11/2026)
+
+Il checkpoint precedente è storico. Per la priorità corrente leggere [AXF-HORIZON-01 nel piano generale](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Identità editoriale multidisciplinare e profondità, biblioteca distinta da Studio Atlas; prima qualificazione/classificazione della risorsa autonoma Scoperte R1, oppure BLOCKED secondo contratto, poi chiusura Atelier F3; F4/F5 restano bloccate. Roundtrip sintetico Ink/eXeLearning PASS, integrazione non realizzata. Nessuna autorizzazione runtime/studenti, adozione o spesa.
+
 ## Current canonical direction
 
 | Area | Canonical reference | State |
