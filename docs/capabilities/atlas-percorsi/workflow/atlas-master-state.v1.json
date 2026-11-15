@@ -96,8 +96,8 @@
   "next": {
     "id": "M2",
     "phase": "F3-B2",
-    "state": "BASELINE_COMPARATIVE_RUN_REQUESTED",
-    "action": "Verify both isolated tool baseline jobs, then adapt the same reviewed Energy micro-world for comparison; no tool adoption based on unequal baselines",
+    "state": "BASELINE_PARTIAL_PASS_PRIVACY_BLOCKER",
+    "action": "One bounded GDevelop opt-out qualification using documented EnableMetrics at startup; retain Tiled+Phaser as primary; compare equivalent episode only if privacy gate passes",
     "artifacts": [
       {
         "githubRepositoryId": 1376266693,
@@ -116,16 +116,23 @@
       "evidence and user review before tool selection"
     ],
     "blockers": [
-      "CI result pending",
-      "GDevelop equivalent Energy scene not yet implemented",
-      "final artwork, accessibility, licensing and human review open"
+      "GDevelop observed external analytics attempt",
+      "equivalent Energy scene not yet compared",
+      "visual, accessibility, licensing and human review open"
     ],
     "notAllowed": [
       "new production engine adoption",
       "student publication",
       "paid service",
       "automatic approval"
-    ]
+    ],
+    "evidence": "../production/AXF-M2-SPATIAL-BASELINE-EVIDENCE-v1.md",
+    "baselineResults": {
+      "runId": 43704132244,
+      "tiled": "PASS",
+      "gdevelop": "FAIL_PRIVACY",
+      "head": "5a555650974572dacde1ba0bd81924adaf29729e"
+    }
   },
   "queued": [
     {
