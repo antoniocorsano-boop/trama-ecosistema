@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "E02_V2_NATIVE_CANDIDATE_STATIC_PASS_REVIEW_REQUIRED",
-    "action": "Resolve W6A/W5A visual continuity and rights; import exact v2 asset; execute native exports and qualify GDevelop-to-Phaser handoff",
+    "state": "M3_C_FIXTURE_QUALIFICATION_PENDING",
+    "action": "Check exact-head M3-C native export and handoff fixture CI; resolve any failures, then qualify exact E02 master after rights and authorized transfer",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -133,11 +133,10 @@
     ],
     "blockers": [
       "F3-B REVISE",
-      "W6A/W5A and transfer scientific review open",
-      "binary import pending",
-      "actual Tiled/GDevelop exports and E02 Phaser handoff untested",
-      "full accessibility, real devices, production host and licenses open",
-      "remaining exact-head CI incomplete/cancelled at observation"
+      "M3-C fixture CI pending",
+      "W6A/W5A and rights open; exact binary transfer pending",
+      "real E02 native export and renderer handoff unqualified",
+      "full accessibility and real devices open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -181,7 +180,7 @@
       "gitImport": "PENDING",
       "candidateRepo": "Atlas",
       "candidatePr": 97,
-      "candidateHead": "62904899251995ac6c0a83113f7ec2e178584853",
+      "candidateHead": "fb7603ba92a011da6d9682c0b04a4ca1d063c9dc",
       "packageLibraryFileId": "libfile_dab7861963dc81919800998c25caf58b",
       "qualification": "LOCAL_STATIC_AND_MOCK_DISPATCH_PASS_ONLY",
       "preview": {
@@ -194,6 +193,16 @@
         "status": "PASS",
         "note": "one-shot hash; no policy exemption"
       }
+    },
+    "m3c": {
+      "repo": "Atlas",
+      "pr": 97,
+      "head": "dd84370c3e0f78ceb212c8a4b881754c0c908002",
+      "baselinePassed": 5,
+      "asset": "SYNTHETIC_FIXTURE_NOT_E02_ART",
+      "status": "CI_PENDING",
+      "exactMasterLock": "UNCHANGED",
+      "studentAuthorized": false
     }
   },
   "queued": [
