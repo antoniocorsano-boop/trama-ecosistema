@@ -7,6 +7,18 @@
 ## Purpose
 Single entry point for understanding current authority, experiments and open consolidation work without chat history.
 
+## AXF — checkpoint di ripresa (proposta di consolidamento, 15/11/2026)
+
+Per riprendere il programma Atlas/Studio Atlas senza ricostruirlo dalla chat, aprire [Piano generale AXF-MASTER-01](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Sono una proiezione candidata del piano, non nuove autorità. F1/F2/F3-A tecnicamente superati su head esatti; F3-B REVISE; M1: [storyboard Energia](../production/AXF-M1-ENERGIA-STORYBOARD-v1.md) e [tavola di regia](../production/AXF-M1-ENERGIA-VISUAL-TARGET-v1.svg) candidati salvati; direzione accolta per la prova circoscritta M2, non PASS qualitativo finale. M2-C: [confronto equivalente](../production/AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md) PASS tecnico su head 3589c363e24fc66be588d336849997545bcd1b7f, PR Atlas #96. Direzione umana: [architettura multimotore e specializzazione](../production/AXF-M2D-MULTIENGINE-DECISION-v1.md). [M2-D automazione PASS](../production/AXF-M2D-AUTHORING-CHANGE-EVIDENCE-v1.md); [M3-A PASS tecnico](../production/AXF-M3A-MIXED-HANDOFF-EVIDENCE-v1.md), prossima priorità unica M3-B: review W6A della composizione e brief artistico. Conservare i documenti canonici sottostanti e le ricevute storiche; non promuovere runtime o studenti.
+
+## AXF — Orizzonte e priorità corrente (15/11/2026)
+
+Il checkpoint precedente è storico. Per la priorità corrente leggere [AXF-HORIZON-01 nel piano generale](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json). Identità editoriale multidisciplinare e profondità, biblioteca distinta da Studio Atlas; prima qualificazione/classificazione della risorsa autonoma Scoperte R1, oppure BLOCKED secondo contratto, poi chiusura Atelier F3; F4/F5 restano bloccate. Roundtrip sintetico Ink/eXeLearning PASS, integrazione non realizzata. Nessuna autorizzazione runtime/studenti, adozione o spesa.
+
+## AXF — Produzione parametrica, priorità di riuso (15/11/2026)
+
+Leggere [AXF-PARAM-01 nel piano generale](ATLAS-MASTER-PLAN-v1.md) e [stato strutturato](atlas-master-state.v1.json) prima di nuovi interventi: un solo sistema di composizione parametrica, shell ambientale, componenti e ricette condivise; P0 audit del riuso e ammissibilità, poi P1 tre fixture sintetiche e P2 produzione di 100 fixture senza codice per tema, P3 ciclo professionale, P4 chiusura prodotti, P5 generalità. È roadmap candidata; P1–P3 non autorizzate automaticamente. R1 resta priorità editoriale, F3 REVISE e F4/F5 bloccate; nessun nuovo contratto, deploy, dati studenti o spesa. Non creare un'altra verticale per dimostrare il riuso.
+
 ## Current canonical direction
 
 | Area | Canonical reference | State |
@@ -191,3 +203,14 @@ Nothing in this index, constitution, review contract or evidence normalisation a
 
 ## Backlog-zero rule
 Any new meaningful artefact must be linked or classified here in the same work cycle. Superseded documents name their replacement; unresolved research remains visible.
+### Preparazione M3-B
+[Brief artistico e asset](../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md): M3-A superata tecnicamente; produzione subordinata a W6A, senza generazione o promozione.
+
+### Revisione qualitativa M3-B
+[Walkthrough e dossier W6A consultivo](../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md): REVISE mirato, decisione umana W6A/W5A necessaria prima di handoff W9 e produzione finale.
+
+### Primo candidato E02
+[Decisione circoscritta e brief visuale](../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md): regia accolta, primo candidato visuale; review completa e diritti aperti. Non autorizza runtime.
+
+### E02 originale candidato conservato
+[Receipt master e revisione](../production/AXF-M3B-E02-ART-CANDIDATE-RECEIPT-v1.md): Library persistente, import GitHub e review aperti; nessuna rigenerazione necessaria.

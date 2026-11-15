@@ -1,0 +1,333 @@
+{
+  "schemaVersion": "atlas.interactive-factory-tool-catalog/candidate-v1",
+  "status": "PROPOSED",
+  "runtimeAuthorized": false,
+  "studentAuthorized": false,
+  "paidFallbackAllowed": false,
+  "authority": "existing TRAMA/Arena/Atlas governance",
+  "baseline": {
+    "repository": "Atlas (GitHub repository ID 1376266693)",
+    "pr": 95,
+    "head": "a7a8539f20336201f3a2c55f801ac2d7df5c16f4",
+    "run": 43700272516
+  },
+  "tools": [
+    {
+      "id": "experience-engine",
+      "role": "composition-and-navigation",
+      "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "Atlas repository ID 1376266693; pull/95",
+      "limits": [
+        "specialized binding in draft",
+        "F2 loopback handoff passes for one predefined package; not generic authoring",
+        "F3-B human quality REVISE"
+      ]
+    },
+    {
+      "id": "phaser",
+      "version": "4.2.1",
+      "role": "specialized-2d-renderer",
+      "state": "EQUIVALENT_WORLD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md",
+      "limits": [
+        "schematic world, common HTML scientific bench only",
+        "human visual/device/full accessibility review",
+        "licenses and dependency lock",
+        "production host integration",
+        "no adoption or generality claim"
+      ],
+      "selection": "trusted registry only"
+    },
+    {
+      "id": "visual-factory",
+      "role": "asset-production-and-reference-lock",
+      "state": "PARTIAL",
+      "evidence": "VISUAL-FACTORY-v0.1.md",
+      "limits": [
+        "provider entitlement and execution qualification open",
+        "human review mandatory"
+      ]
+    },
+    {
+      "id": "audio-factory",
+      "role": "optional-voice-and-audio",
+      "state": "PARTIAL",
+      "evidence": "CONTENT-QUALITY-FLOW-v0.1.md",
+      "limits": [
+        "exact output, pronunciation and human listening review open"
+      ]
+    },
+    {
+      "id": "free-deploy",
+      "role": "governed-distribution",
+      "state": "DIRECTION_ONLY",
+      "evidence": "../../../strategy/trama-free-deploy-v1.md",
+      "limits": [
+        "no runtime/student authorization",
+        "verify free entitlement and access"
+      ]
+    },
+    {
+      "id": "scenerystack",
+      "role": "simulation-renderer",
+      "state": "SUSPENDED",
+      "limits": [
+        "security and interaction findings"
+      ]
+    },
+    {
+      "id": "gdevelop",
+      "role": "candidate-specialized-adventure-and-exploration-renderer",
+      "state": "EQUIVALENT_WORLD_TECHNICAL_PASS_CANDIDATE",
+      "limits": [
+        "schematic world, common HTML scientific bench only",
+        "human visual/device/full accessibility review",
+        "licenses and dependency lock",
+        "production host integration",
+        "no adoption or generality claim"
+      ],
+      "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md",
+      "version": "5.6.285"
+    },
+    {
+      "id": "tiled",
+      "role": "candidate-spatial-authoring-2d-2.5d",
+      "state": "EQUIVALENT_WORLD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md",
+      "limits": [
+        "schematic world, common HTML scientific bench only",
+        "human visual/device/full accessibility review",
+        "licenses and dependency lock",
+        "production host integration",
+        "no adoption or generality claim"
+      ]
+    },
+    {
+      "id": "babylon-editor",
+      "role": "3d-spatial-authoring",
+      "state": "CONDITIONAL_CANDIDATE",
+      "limits": [
+        "only if proven 2.5D gap",
+        "mobile, accessibility and integration unqualified"
+      ]
+    },
+    {
+      "id": "godot",
+      "role": "2d-3d-runtime",
+      "state": "RESERVE",
+      "limits": [
+        "web mobile and host qualification open"
+      ]
+    },
+    {
+      "id": "playcanvas",
+      "role": "3d-runtime-and-editor",
+      "state": "DEFERRED",
+      "limits": [
+        "service independence unverified"
+      ]
+    },
+    {
+      "id": "arrow",
+      "role": "narrative-authoring",
+      "state": "DEFERRED",
+      "limits": [
+        "overlap existing graph"
+      ]
+    },
+    {
+      "id": "exelearning",
+      "version": "4.0.6",
+      "role": "general-educational-authoring-and-export",
+      "state": "ISOLATED_CONVERT_EXPORT_PASS_CANDIDATE",
+      "source": "https://github.com/exelearning/exelearning/releases/tag/v4.0.6",
+      "license": "AGPL-3.0 (software); content and export obligations to review",
+      "limits": [
+        "CLI conversion/export not yet verified in Atlas",
+        "xAPI/tracking and external dependencies must be audited",
+        "not an immersive world engine",
+        "no adoption"
+      ],
+      "evidence": {
+        "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+        "run": 43737834084,
+        "job": 132884253583,
+        "staticIntegrity": "PASS",
+        "conversion": "FAIL_INPUT_NOT_FOUND",
+        "diagnosis": "Upstream Dockerfile USER bun; host mktemp directory may deny traversal; source CLI writes HTML5 ZIP, not a directory; mount hypothesis to verify in corrected run",
+        "retest": {
+          "head": "b44e45f98b03323802406980ec2242a591dacc9b",
+          "run": 43738148274,
+          "job": 132885213462,
+          "rootCause": "CONFIRMED_ORIGINAL_MOUNT_ACCESS_DENIED",
+          "mountReadWrite": "PASS",
+          "conversion": "PASS",
+          "html5Zip": "PASS",
+          "htmlDocument": "PASS",
+          "imageDigest": "sha256:9fcf5a83953968daf5f32ef0d95665a580ae24414e73aec1d28c2aad0f9bd5c7",
+          "elpxSha256": "d0de3c994fe84a21e11a05ffc55ff49323ac2b05224c5c76f3b566a855d00f0e",
+          "exportSha256": "1ccd6fdd69449664b746a9cd5e8dfb6257e8d21c6736cfb88ee877bd80f6eb51",
+          "scope": "upstream fixture only; archive and HTML structure checked, no rendered export review"
+        }
+      }
+    },
+    {
+      "id": "ink",
+      "version": "inkjs 2.2.5",
+      "role": "professional-interactive-narrative-authoring",
+      "state": "SYNTHETIC_COMPILE_REPLAY_PASS_CANDIDATE",
+      "source": "https://github.com/inkle/ink",
+      "limits": [
+        "compile and replay smoke probe only; integration, license and accessibility pending",
+        "not a simulation engine or replacement for common graph"
+      ],
+      "evidence": {
+        "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+        "run": 43737834084,
+        "job": 132884253882,
+        "scope": "two synthetic branches; no production adoption",
+        "retest": {
+          "head": "b44e45f98b03323802406980ec2242a591dacc9b",
+          "run": 43738148274,
+          "job": 132885213650,
+          "status": "PASS"
+        }
+      }
+    },
+    {
+      "id": "h5p-lumi",
+      "role": "reusable-interactive-media-and-activities",
+      "state": "RESEARCH_CANDIDATE",
+      "source": "https://github.com/Lumieducation/H5P-Nodejs-library",
+      "limits": [
+        "test export, library licensing, accessibility, tracking, no hosted subscription",
+        "avoid default quiz flow"
+      ]
+    },
+    {
+      "id": "phet-reuse",
+      "role": "existing-scientific-simulation-resource",
+      "state": "RESEARCH_CANDIDATE",
+      "source": "https://phet.colorado.edu/en/offline-access",
+      "limits": [
+        "verify individual simulation terms, scientific fit, attribution, local execution and no tracking",
+        "no redistribution assumed"
+      ]
+    }
+  ],
+  "families": [
+    {
+      "id": "inquiry",
+      "state": "PARTIAL_NATIVE"
+    },
+    {
+      "id": "experiment",
+      "state": "ONE_TECHNICAL_CASE_PASS",
+      "case": "energy-lamp"
+    },
+    {
+      "id": "construction",
+      "state": "UNPROVEN"
+    },
+    {
+      "id": "systems",
+      "state": "UNPROVEN",
+      "nextCase": "agriculture"
+    },
+    {
+      "id": "decision",
+      "state": "PARTIAL_NATIVE"
+    }
+  ],
+  "next": {
+    "id": "M2-D",
+    "action": "evaluate complementary profiles and bounded composition, no universal winner",
+    "masterStateRef": "../workflow/atlas-master-state.v1.json",
+    "blockedPromotionUntil": [
+      "human experience quality review",
+      "device and accessibility",
+      "rights and dependency lock",
+      "second distinct vertical",
+      "exact-head adoption"
+    ],
+    "decisionRef": "AXF-M2D-MULTIENGINE-DECISION-v1.md"
+  },
+  "observedAsOf": "2026-11-15",
+  "previousBaseline": {
+    "repository": "Atlas (GitHub repository ID 1376266693)",
+    "pr": 95,
+    "head": "4fe38a8ca3a43754fe0c78495a35881a9ee6865f",
+    "run": 43698089963
+  },
+  "comparison": {
+    "githubRepositoryId": 1376266693,
+    "pr": 96,
+    "head": "3589c363e24fc66be588d336849997545bcd1b7f",
+    "runId": 43705917257,
+    "evidence": "AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md"
+  },
+  "professionalAuthoringQualification": {
+    "status": "BOTH_ISOLATED_SMOKE_PASS_INTEGRATION_PENDING",
+    "pr": 333,
+    "head": "b44e45f98b03323802406980ec2242a591dacc9b",
+    "scope": "isolated eXeLearning upstream conversion/export and Ink synthetic compilation/replay; no learner data, no deployment, no runtime adoption",
+    "cost": "standard GitHub public runner; no paid fallback",
+    "localPreflight": "Docker unavailable; npm registry DNS failure",
+    "next": "Preserve smoke and synthetic roundtrip PASS; actual Studio Atlas integration, license/accessibility review and product validation remain open.",
+    "studentAuthorized": false,
+    "firstRun": {
+      "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+      "run": 43737834084,
+      "ink": "PASS",
+      "exe": "FAIL_INPUT_NOT_FOUND_AFTER_STATIC_INTEGRITY_PASS"
+    },
+    "retest": {
+      "run": 43738148274,
+      "status": "PASS",
+      "changes": [
+        "explicit nonroot mount access check and dedicated directory ownership",
+        "HTML5 ZIP output and archive/index verification"
+      ],
+      "rootCause": "CONFIRMED_ORIGINAL_MOUNT_ACCESS_DENIED",
+      "governanceRun": 43738148237,
+      "governance": "PASS",
+      "ink": "PASS",
+      "exe": "PASS"
+    },
+    "roundtrip": {
+      "id": "AXF-AUTH-RT01",
+      "status": "ISOLATED_SYNTHETIC_ROUNDTRIP_PASS_INTEGRATION_PENDING",
+      "pr": 333,
+      "head": "7736a86f55da14d1a9ff67a7282186a69c9097e6",
+      "baselineSmokeHead": "b44e45f98b03323802406980ec2242a591dacc9b",
+      "scope": "Original synthetic intent, native ODE content.xml/ELPX, professional CLI re-export and revised text roundtrip, Ink source/compiled JSON and browser bundle, loopback isolated preview at 390/1280 with network interception, page/HTTP errors, axe and scoped storage observations",
+      "limits": [
+        "Not the actual Studio Atlas authoring or Atlas Preview Bridge integration",
+        "No learner content or data",
+        "Native project generated programmatically; editor UI roundtrip not tested",
+        "Automated accessibility is advisory, license and dependency review open",
+        "No adoption or publication"
+      ],
+      "studentAuthorized": false,
+      "runtimeAuthorized": false,
+      "runs": [
+        {
+          "id": 43738675650,
+          "conclusion": "success"
+        },
+        {
+          "id": 43738675643,
+          "conclusion": "success"
+        }
+      ],
+      "verifiedSteps": [
+        "original synthetic intent and native sources",
+        "eXeLearning editable export and modified reimport",
+        "HTML5 export",
+        "Ink compile/replay and isolated browser preview",
+        "browser checks and evidence upload"
+      ],
+      "next": "Inspect artifact receipts and visual/axe/storage observations; no claim of full accessibility or privacy; select bounded adapter after actual product classification and review. Do not expand tools."
+    }
+  }
+}

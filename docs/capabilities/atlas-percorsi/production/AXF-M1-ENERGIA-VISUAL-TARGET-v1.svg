@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 990" role="img" aria-labelledby="title desc">
+<title id="title">La luce che serve — tavola di regia candidata</title><desc id="desc">Quattro composizioni schematiche: ingresso narrativo, atelier esplorabile, banco con misure, mostra e trasferimento. Non illustrazione finale.</desc>
+<defs><style>text{font-family:system-ui,Arial,sans-serif;fill:#203c41}.heading{font-size:26px;font-weight:700}.sub{font-size:15px}.label{font-size:13px;font-weight:600}.small{font-size:12px}.caption{font-size:14px}.scene{fill:#fffaf0;stroke:#c1b49b;stroke-width:1.5}.tag{fill:#205e55}.white{fill:#fff}.outline{fill:none;stroke:#315b5b;stroke-width:2}.paper{fill:#efe2c6}.muted{fill:#b1c6bb}</style></defs>
+<rect width="1120" height="990" fill="#f4f0e7"/>
+<text x="32" y="43" class="heading">La luce che serve</text><text x="32" y="69" class="sub">ATLAS / M1 · composizione schematica · revisione umana necessaria · nessuna nuova illustrazione</text>
+<g transform="translate(32 92)">
+<rect width="516" height="384" rx="14" class="scene"/><text x="20" y="31" class="heading">01 — Entra nella storia</text>
+<rect x="20" y="49" width="476" height="200" rx="8" class="paper"/><path d="M48 222 L48 97 L235 97 L235 222 Z M256 222 L256 97 L468 97 L468 222 Z" fill="#d2b795" stroke="#9c7049" stroke-width="2"/>
+<text x="141" y="143" class="label" text-anchor="middle">PE-01 originale</text><text x="141" y="163" class="small" text-anchor="middle">Problema osservato</text>
+<rect x="270" y="112" width="184" height="72" rx="10" fill="#fffaf0"/><text x="282" y="134" class="small">La luce si è affievolita.</text><text x="282" y="153" class="small">Non sappiamo ancora</text><text x="282" y="172" class="small">perché.</text>
+<text x="20" y="276" class="caption">Due vignette, una missione, nessuna lezione iniziale.</text>
+<rect x="20" y="296" width="476" height="44" rx="8" class="tag"/><text x="258" y="323" class="label white" text-anchor="middle">Entra nell'atelier</text>
+<text x="20" y="363" class="small">Controllo volontario del ritmo · testo alternativo</text>
+</g>
+<g transform="translate(572 92)">
+<rect width="516" height="384" rx="14" class="scene"/><text x="20" y="31" class="heading">02 — Esplora l'atelier</text>
+<rect x="20" y="49" width="476" height="249" rx="8" fill="#d9c4a1"/>
+<path d="M48 196 L244 77 L472 149 L280 268 Z" fill="#efdfbc" stroke="#a47750" stroke-width="3"/>
+<path d="M100 184 L295 111 L414 151 L222 225 Z" fill="#99b7a2"/><path d="M155 175 L269 133 L345 155 L234 197 Z" fill="#6c9db0"/>
+<path d="M203 160 L244 146 L268 155 L228 170 Z" fill="#b98d65" stroke="#764c36"/>
+<rect x="302" y="170" width="21" height="40" fill="#b68e6b"/><path d="M299 170 L312 151 L326 170 Z" fill="#884f38"/>
+<path d="M182 186 V161" stroke="#465654" stroke-width="3"/><circle cx="182" cy="158" r="6" fill="#e4c27b"/>
+<rect x="51" y="104" width="115" height="49" rx="8" fill="#fffaf0" stroke="#205e55"/><text x="109" y="125" class="label" text-anchor="middle">Quaderno</text><text x="109" y="141" class="small" text-anchor="middle">PE-02 / indizi</text>
+<rect x="347" y="212" width="131" height="48" rx="8" fill="#fffaf0" stroke="#205e55"/><text x="412" y="232" class="label" text-anchor="middle">Banco virtuale</text><text x="412" y="248" class="small" text-anchor="middle">Prova le lampade</text>
+<text x="20" y="323" class="caption">La piazza, il quaderno e il banco sono luoghi agibili.</text><text x="20" y="345" class="small">Oggetti riconoscibili · indizi prima dell'ipotesi</text><text x="20" y="365" class="small">Mappa alternativa testuale · libera uscita</text>
+</g>
+<g transform="translate(32 500)">
+<rect width="516" height="454" rx="14" class="scene"/><text x="20" y="31" class="heading">03 — Prova e confronta</text>
+<rect x="20" y="49" width="476" height="250" rx="8" fill="#213e4c"/>
+<text x="38" y="75" class="label white">Banco del plastico · tutto virtuale</text>
+<g fill="#f0dcb1" stroke="#cba16b" stroke-width="2">
+<circle cx="82" cy="119" r="19"/><rect x="74" y="135" width="16" height="10" rx="3"/><circle cx="153" cy="119" r="19"/><rect x="145" y="135" width="16" height="10" rx="3"/><circle cx="224" cy="119" r="19"/><rect x="216" y="135" width="16" height="10" rx="3"/>
+</g><text x="82" y="165" class="label white" text-anchor="middle">A</text><text x="153" y="165" class="label white" text-anchor="middle">B</text><text x="224" y="165" class="label white" text-anchor="middle">C</text>
+<path d="M245 120 H281" stroke="#8bc5c1" stroke-width="3"/><path d="M274 113 L285 120 L274 127" fill="none" stroke="#8bc5c1" stroke-width="3"/>
+<rect x="290" y="90" width="185" height="91" rx="9" fill="#31565e" stroke="#9ac8be" stroke-width="2"/><circle cx="382" cy="126" r="19" fill="#ffdf8b"/><text x="382" y="163" class="label white" text-anchor="middle">20 J luce utile</text>
+<text x="38" y="207" class="small white">Ingresso</text><rect x="124" y="195" width="300" height="12" rx="3" fill="#49616c"/><rect x="124" y="195" width="120" height="12" rx="3" fill="#8ab3d2"/><text x="434" y="207" class="small white">40 J</text>
+<text x="38" y="234" class="small white">Luce</text><rect x="124" y="222" width="300" height="12" rx="3" fill="#49616c"/><rect x="124" y="222" width="60" height="12" rx="3" fill="#e1b95d"/><text x="434" y="234" class="small white">20 J</text>
+<text x="38" y="261" class="small white">Calore</text><rect x="124" y="249" width="300" height="12" rx="3" fill="#49616c"/><rect x="124" y="249" width="60" height="12" rx="3" fill="#bb7443"/><text x="434" y="261" class="small white">20 J</text>
+<rect x="20" y="309" width="476" height="66" rx="8" class="paper"/><text x="36" y="332" class="label">Quaderno delle prove — sempre consultabile</text><text x="36" y="353" class="small">A 100/20/80 J · B 50/20/30 J · C 40/20/20 J</text>
+<text x="20" y="399" class="caption">Il mondo risponde alle azioni con dati calcolati.</text><text x="20" y="422" class="small">Trascinamento o selezione · valori testuali · scala comune</text>
+</g>
+<g transform="translate(572 500)">
+<rect width="516" height="454" rx="14" class="scene"/><text x="20" y="31" class="heading">04 — Presenta e trasferisci</text>
+<rect x="20" y="49" width="476" height="172" rx="8" class="paper"/>
+<rect x="35" y="65" width="221" height="138" rx="6" fill="#d2b795"/><text x="145" y="123" class="label" text-anchor="middle">PE-03 originale</text><text x="145" y="143" class="small" text-anchor="middle">La mostra</text>
+<rect x="270" y="65" width="211" height="138" rx="7" fill="#fffaf0"/><text x="285" y="90" class="label">La nostra proposta</text><text x="285" y="114" class="small">Stessa luce utile: 20 J.</text><text x="285" y="134" class="small">Ingresso scelto: 40 J.</text><text x="285" y="154" class="small">Causa del problema:</text><text x="285" y="174" class="small">non ancora nota.</text>
+<rect x="20" y="234" width="476" height="105" rx="8" fill="#d9e5dc"/><text x="36" y="257" class="label">Nuova sfida: il sollevamento virtuale dell'acqua</text><text x="36" y="280" class="small">P: 30 J utili / 75 J ingresso</text><text x="36" y="300" class="small">Q: 30 J utili / 60 J ingresso</text><text x="36" y="320" class="small">R: 20 J utili / 40 J ingresso · servizio differente</text>
+<rect x="20" y="350" width="476" height="36" rx="8" class="tag"/><text x="258" y="373" class="label white" text-anchor="middle">Quali due soluzioni puoi confrontare?</text>
+<text x="20" y="412" class="caption">PE-04 e poesia: chiusura facoltativa.</text><text x="20" y="434" class="small">Nessuna riparazione dimostrata · nuovo contesto · nessun voto</text>
+</g></svg>
