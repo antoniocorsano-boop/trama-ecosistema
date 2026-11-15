@@ -49,6 +49,15 @@
       "state": "DRAFT",
       "passed": 6,
       "failed": 0
+    },
+    {
+      "repo": "Atlas",
+      "githubRepositoryId": 1376266693,
+      "pr": 97,
+      "head": "8ff6ece6dc487dc5341881066db6bace5a49d27e",
+      "state": "DRAFT",
+      "passed": 6,
+      "failed": 0
     }
   ],
   "phases": [
@@ -112,34 +121,21 @@
     }
   ],
   "next": {
-    "id": "M3-A",
+    "id": "M3-B",
     "phase": "F3-B3",
-    "state": "ISOLATED_HANDOFF_PENDING",
-    "action": "Verify pinned originals, exclusive GDevelop/Phaser lifecycle, verified evidence and exit on Atlas #97",
-    "evidence": "../production/AXF-M2D-AUTHORING-CHANGE-EVIDENCE-v1.md",
-    "artifacts": [
-      {
-        "githubRepositoryId": 1376266693,
-        "pr": 97,
-        "head": "8ff6ece6dc487dc5341881066db6bace5a49d27e",
-        "baseHead": "a02341910803bfb8c0944d4e5237260be5ed6059"
-      }
-    ],
+    "state": "TECHNICAL_PREFLIGHT_PASS_W6A_REVIEW_REQUIRED",
+    "action": "Review storyboard and artistic composition, reference lock and rights; then produce illustrated E02/E03 candidate",
+    "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
-      "M2-D technical authoring change PASS",
-      "bounded experimental direction"
-    ],
-    "acceptance": [
-      "reference lock exact",
-      "single active renderer",
-      "verified trace retained on return and reset on explicit new attempt or exit",
-      "no external network/persistence"
+      "M3-A technical PASS",
+      "human W6A review",
+      "reference lock and rights"
     ],
     "blockers": [
       "F3-B REVISE",
-      "illustrated interactive map not created",
-      "W6A and scientific transfer review open",
-      "production host, licenses, full accessibility and physical devices open"
+      "W6A and transfer scientific review open",
+      "new illustrated assets not generated",
+      "production host, licenses, full accessibility and real devices open"
     ],
     "notAllowed": [
       "production engine adoption",
@@ -150,18 +146,10 @@
   },
   "queued": [
     {
-      "id": "M3-B",
-      "requires": [
-        "M3-A technical result",
-        "visual target and W6A review"
-      ],
-      "action": "produce immersive episode candidate with original assets and approved scene plan",
-      "preparation": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md"
-    },
-    {
       "id": "M4",
       "requires": [
-        "M3"
+        "M3-B candidate",
+        "applicable quality gates"
       ],
       "action": "human and technical quality closure"
     },
@@ -292,6 +280,23 @@
       "limits": [
         "single source coordinate change only",
         "human authoring effort and narrative advantage unproven",
+        "no W6A or production approval"
+      ]
+    },
+    {
+      "id": "M3-A",
+      "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "../production/AXF-M3A-MIXED-HANDOFF-EVIDENCE-v1.md",
+      "githubRepositoryId": 1376266693,
+      "pr": 97,
+      "head": "8ff6ece6dc487dc5341881066db6bace5a49d27e",
+      "runId": 43709590550,
+      "artifactId": 14159807460,
+      "sha256": "bc84633c4c659de33021bb9b5271907b742bcdf5d27962201ab1247a7b924f53",
+      "passed": 6,
+      "failed": 0,
+      "limits": [
+        "isolated schematic scene",
         "no W6A or production approval"
       ]
     }
