@@ -293,6 +293,23 @@
       "governance": "PASS",
       "ink": "PASS",
       "exe": "PASS"
+    },
+    "roundtrip": {
+      "id": "AXF-AUTH-RT01",
+      "status": "WORKFLOW_COMMITTED_RUN_NOT_YET_VERIFIED",
+      "pr": 333,
+      "head": "7736a86f55da14d1a9ff67a7282186a69c9097e6",
+      "baselineSmokeHead": "b44e45f98b03323802406980ec2242a591dacc9b",
+      "scope": "Original synthetic intent, native ODE content.xml/ELPX, professional CLI re-export and revised text roundtrip, Ink source/compiled JSON and browser bundle, loopback isolated preview at 390/1280 with network interception, page/HTTP errors, axe and scoped storage observations",
+      "limits": [
+        "Not the actual Studio Atlas authoring or Atlas Preview Bridge integration",
+        "No learner content or data",
+        "Native project generated programmatically; editor UI roundtrip not tested",
+        "Automated accessibility is advisory, license and dependency review open",
+        "No adoption or publication"
+      ],
+      "studentAuthorized": false,
+      "runtimeAuthorized": false
     }
   }
 }
