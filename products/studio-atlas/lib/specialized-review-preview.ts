@@ -5,10 +5,10 @@ const text=(x:unknown):x is string=>typeof x==="string"&&x.trim().length>0&&x.le
 const id=(x:unknown):x is string=>typeof x==="string"&&/^[a-z][a-z0-9-]{0,63}$/.test(x);
 const fail=():never=>{throw Error("AXF_SPECIALIZED_PACKAGE_INVALID")};
 const texts=(x:unknown):x is string[]=>Array.isArray(x)&&x.length>0&&x.length<=32&&x.every(text);
-const sceneKeys=new Set(["sceneId","order","kind","purpose","learnerVisibleSituation","availableInformation","learnerActions","consequences","informationRevealed","continuityAnchors","nextSceneRefs","interaction","specialized"]);
+const sceneKeys=new Set(["sceneId","order","kind","purpose","learnerVisibleSituation","learnerActions","consequences","nextSceneRefs","interaction","specialized"]);
 export async function compileSpecializedReviewSnapshot(value:unknown) {
   if(!record(value)||value.schemaVersion!=="atlas.pathway-authoring-package/v0.2"||value.runtimeAuthorized!==false||
-     !["AUTHORING","REVIEWABLE","REVISION_REQUIRED"].includes(String(value.authoringState))||
+     value.authoringState!=="AUTHORING"||
      !record(value.publicationCandidate)||value.publicationCandidate.decision!=="DRAFT"||Object.keys(value.publicationCandidate).length!==1||
      !id(value.pathwayId)||!id(value.packageId)||!Number.isInteger(value.packageVersion)||Number(value.packageVersion)<1||!text(value.title)||
      !record(value.sourceSeed)||!["CURRICULUM_TARGET","PLAIN_IDEA","DOCENTE_OS_ACTIVITY","EXISTING_PATHWAY","EXISTING_STORY_WORLD","OTHER_GOVERNED_SOURCE"].includes(String(value.sourceSeed.kind))||
