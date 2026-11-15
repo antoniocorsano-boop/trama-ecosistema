@@ -17,7 +17,7 @@ CASES = [
     ("mostrami l'orario di domani", "OPEN_TIMETABLE"),
     ("apri la preparazione della lezione", "OPEN_LESSON"),
     ("cerca un laboratorio sull'energia", "SEARCH_LAB"),
-    ("mostrami gli obiettivi curricolari", "OPEN_CURRICULUM"),
+    ("mostrami gli obiettivi curricolari", "OPEN_CURRICOLO"),
     ("apri il calendario", "OPEN_CALENDAR"),
     ("cerca una storia sul ciclo dell'acqua", "SEARCH_STORY"),
 ]
@@ -44,7 +44,7 @@ def classify(text):
         ("OPEN_TIMETABLE", {"mostrami", "apri", "vedi", "mostra"}, {"orario"}),
         ("OPEN_LESSON", {"apri", "mostrami", "mostra"}, {"lezione"}),
         ("SEARCH_LAB", {"cerca", "trova"}, {"laboratorio"}),
-        ("OPEN_CURRICULUM", {"mostrami", "apri", "mostra"}, {"obiettivi"}),
+        ("OPEN_CURRICOLO", {"mostrami", "apri", "mostra"}, {"obiettivi"}),
         ("OPEN_CALENDAR", {"apri", "mostrami", "mostra"}, {"calendario"}),
         ("SEARCH_STORY", {"cerca", "trova"}, {"storia"}),
     ]
