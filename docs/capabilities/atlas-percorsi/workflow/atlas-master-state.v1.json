@@ -573,6 +573,16 @@
             "proposal": "Reorder conceptual progression: contextual observation about light and heat, question about energy use, introduce labelled virtual lamps at bench, compare under equal useful-light conditions, then name and explain efficiency. Notebook clue should be a comprehensible character observation/question, not an unexplained conclusion; preserve scientific uncertainty and model scope.",
             "acceptance": "First-time learner can identify what each term and object refers to, explain why the clue matters, and connect it to the experiment without external explanation. Review all clues for prerequisite vocabulary, sequencing and cognitive load; no implementation until findings collection ends.",
             "status": "OPEN"
+          },
+          {
+            "id": "ER-04",
+            "scene": "E03 banco delle lampade / osserva",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_NARRATIVE_AND_PEDAGOGICAL_USABILITY",
+            "observation": "User describes bench as hermetic, incomprehensible, without story or involvement, emotionally cold despite warm colors. Identical-looking lamps, undefined 20 J and energy indicators, prediction buttons and station do not communicate meaningful action or reason for it; characters absent from the interaction.",
+            "proposal": "Rebuild scene around character-led shared inquiry, contextual action cues, an optional guided initial demonstration or prediction based on comprehensible evidence, progressive introduction of model terms and controls, and visible consequences of actions. Preserve open exploration, scientific model, accessible alternatives, and avoid revealing the entire comparison before learner inquiry.",
+            "acceptance": "First-time learner understands why the bench matters, identifies the first action and can explain the meaning of each displayed measurement as it appears. Teacher reviews narrative continuity, cognitive scaffolding and emotional engagement, not just palette or technical completion. Do not implement until findings collection concludes.",
+            "status": "OPEN"
           }
         ],
         "note": "Collect further user screenshots and feedback before consolidating a single editorial revision; physical drag test continues separately."
