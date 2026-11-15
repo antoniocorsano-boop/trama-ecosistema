@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Review the AXF-ED-ID-01 preproduction diptych at cold walkthrough; resolve exact Arena references and B applicable contract; obtain appropriate human story/learner-language/experience reviews and disciplinary review of transfer case before final assets or W9. Low-fidelity visual storyboard only within existing gates. M7-D2 drag remains open. No publication, spending or adoption.",
+    "action": "Cold adult review the two private low-fidelity design materials, resolve exact Arena references and B applicable contract, obtain required human and disciplinary reviews; no production or final artwork before gates. M7-D2 drag remains open.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -765,7 +765,60 @@
             "actual cold review"
           ],
           "studentAuthorized": false,
-          "runtimeAuthorized": false
+          "runtimeAuthorized": false,
+          "lowFidelityReviewArtifacts": {
+            "status": "PRIVATE_DESIGN_REVIEW_MATERIALS_IN_MEMORY_FUNCTIONAL_PASS_HUMAN_PENDING",
+            "libraryFileId": "libfile_8d9b653581548191ba645c5217b0162f",
+            "packageSha256": "a7da6480df144b8df8e6512fe9689d5bb721b4c3c3b735c0a7d043c82adbc1c2",
+            "artifacts": [
+              {
+                "name": "atlas-atelier-bozzetto.html",
+                "sha256": "edf72a26e0786d03df9a3e04f86e57c87438f1f139120e9a4cadf088b354d973",
+                "scope": "Review-only existing art, scrollable lab and reversible two-point project schematic; not final immersive product"
+              },
+              {
+                "name": "atlas-scoperta-bozzetto.html",
+                "sha256": "a25a863ca01c0847940328a9ad1243f8a4ec8c4841c9f31caf39cea6779ff9e8",
+                "scope": "Static original SVG and optional details; no required interactions"
+              }
+            ],
+            "test": {
+              "mode": "Chromium set_content in memory",
+              "viewports": [
+                [
+                  320,
+                  740
+                ],
+                [
+                  390,
+                  844
+                ],
+                [
+                  844,
+                  390
+                ],
+                [
+                  1280,
+                  800
+                ]
+              ],
+              "functional": "8/8 PASS",
+              "httpRequests": 0,
+              "jsErrors": 0,
+              "horizontalOverflow": false,
+              "directFile": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+              "physical": "PENDING"
+            },
+            "limits": [
+              "A uses prior internal art with rights pending and schematic controls, not final immersive composition",
+              "No final asset generation or W9 handoff",
+              "No full accessibility, disciplinary, cold-review or human gate closure",
+              "Arena references and B classification open",
+              "No student publication"
+            ],
+            "studentAuthorized": false,
+            "runtimeAuthorized": false
+          }
         }
       }
     }
