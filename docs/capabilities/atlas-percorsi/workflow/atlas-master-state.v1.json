@@ -124,7 +124,7 @@
     "id": "M3-B",
     "phase": "F3-B3",
     "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
-    "action": "Review exact Atlas PR #98 CI and distinct reviewer on P1-R2 and R05 boundary; physical test of exact HTML; P2 HOLD; no merge, runtime or student publication.",
+    "action": "Check exact PR #99 host mount CI, retain #98 qualified draft, distinct review and physical test, plan governed G2 visual integration; P2 HOLD; no merge, deploy or student authorization.",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -953,7 +953,7 @@
       },
       "parametricProduction": {
         "id": "AXF-PARAM-01",
-        "status": "P1_R2_SCOPED_PASS_REAL_ENGINE_PR98_CI_PENDING_P2_HOLD",
+        "status": "P1_R2_PR98_PASS_PR99_MOUNT_CANDIDATE_CI_PENDING_P2_HOLD",
         "ref": "ATLAS-MASTER-PLAN-v1.md",
         "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
         "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
@@ -1188,7 +1188,7 @@
                     "atlasPr": 98,
                     "head": "9dad4946eab619cefd32ecf775614095f20c8054",
                     "ciRunId": 43758603713,
-                    "ciStatus": "CONTRACTS_AND_R05_PASS_BUILD_PENDING",
+                    "ciStatus": "PASS_COMPLETE",
                     "scope": "Explicit availability catalog/export, canonical engine/Studio preview contract probe; no P1 shell mount",
                     "physicalFile": "BLOCKED_BY_ADMINISTRATOR; exact standalone HTML supplied for authorized real-device review",
                     "independentReview": "PENDING_DISTINCT_REVIEWER",
@@ -1251,8 +1251,33 @@
                       {
                         "name": "Lint",
                         "conclusion": "success"
+                      },
+                      {
+                        "name": "Production build",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Browser conformance",
+                        "conclusion": "success"
                       }
-                    ]
+                    ],
+                    "completedWorkflowCount": 11,
+                    "skippedWorkflowCount": 1
+                  },
+                  "mountCandidate": {
+                    "id": "P1-R2-G",
+                    "planCommit": "526de97ac79c677f2f0e07c49d8cf73938d44c23",
+                    "atlasPr": 99,
+                    "head": "5df0a0169ad861dadb5654173d7d1390d43077be",
+                    "basePr": 98,
+                    "ciRunId": 43759786641,
+                    "ciStatus": "IN_PROGRESS",
+                    "scope": "Preview-only host mounts real ExperienceRuntime through Studio adapter; existing synthetic fixtures; temporary CI-only route; no production integration or visual fidelity claim",
+                    "independentReview": "PENDING",
+                    "physical": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false
                   }
                 }
               }
