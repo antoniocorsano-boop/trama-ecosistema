@@ -123,8 +123,8 @@
   "next": {
     "id": "M3-B",
     "phase": "F3-B3",
-    "state": "M3_D_PRIVATE_ASSEMBLY_PREPARED_CI_PENDING",
-    "action": "Check M3-D fixture runtime packaging CI; retrieve diagnostic archive privately, substitute exact locked E02 master, verify real-art browser runtime and human review",
+    "state": "M3_D_EXACT_MASTER_ASSEMBLED_BROWSER_BLOCKED",
+    "action": "Qualify assembled private exact-master runtime in authorized browser environment and review W6A/W5A, rights and real devices",
     "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
     "requires": [
       "M3-A technical PASS",
@@ -133,8 +133,7 @@
     ],
     "blockers": [
       "F3-B REVISE",
-      "M3-D runtime packaging CI pending",
-      "private exact-master assembly and browser test pending",
+      "private runtime with original browser qualification blocked in local environment",
       "W6A/W5A and rights open",
       "full accessibility and physical devices open"
     ],
@@ -216,12 +215,20 @@
       "repo": "Atlas",
       "pr": 97,
       "head": "2df78d9d68071d2da4480c554fe613a9bf95ead5",
-      "status": "PACKAGING_CI_PENDING",
+      "status": "ASSEMBLED_NOT_QUALIFIED",
       "masterInPublicRepo": false,
       "assembly": "PRIVATE_POST_EXPORT_EXACT_PNG_SUBSTITUTION",
       "nativeExportWithMaster": "NOT_TESTED",
       "rights": "OPEN",
-      "studentAuthorized": false
+      "studentAuthorized": false,
+      "ciPassed": 5,
+      "runId": 43717801997,
+      "artifactId": 14163121835,
+      "artifactDigest": "sha256:e0494694a00c146a943f9ee8e6cdde7af205125c64bae9baa4a1804b2326beba",
+      "privatePackageLibraryId": "libfile_383f8c5913948191978202fda30b7732",
+      "privatePackageSha256": "a71024f0b88bcf04558a3e4518be7bc364d75a5f8b11ca0a81dec68911743aed",
+      "unchangedFiles": 83,
+      "browser": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD"
     }
   },
   "queued": [
