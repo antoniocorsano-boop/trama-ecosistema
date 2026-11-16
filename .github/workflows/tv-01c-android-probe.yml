@@ -36,16 +36,20 @@ jobs:
       - name: Verify permissions and embedded model
         run: |
           apk=experiments/tv-01c/android-probe/app/build/outputs/apk/debug/app-debug.apk
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$apk" | tee /tmp/badging.txt
+          grep -Fx "targetSdkVersion:'36'" /tmp/badging.txt
+          grep -F "package: name='it.trama.voiceprobe' versionCode='2' versionName='0.2'" /tmp/badging.txt
           "$ANDROID_HOME/build-tools/36.0.0/aapt" dump permissions "$apk" | tee /tmp/permissions.txt
           grep -q android.permission.RECORD_AUDIO /tmp/permissions.txt
           if grep -q android.permission.INTERNET /tmp/permissions.txt; then exit 1; fi
           unzip -l "$apk" | grep assets/model-it.zip
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$apk"
           mkdir -p tv01c-android-evidence
-          cp "$apk" tv01c-android-evidence/Assistente-TRAMA-Prova.apk
+          cp "$apk" tv01c-android-evidence/Assistente-TRAMA-Prova-v0.2.apk
+          (cd tv01c-android-evidence && sha256sum Assistente-TRAMA-Prova-v0.2.apk > SHA256SUMS.txt)
       - uses: actions/upload-artifact@v4
         with:
           name: Assistente-TRAMA-Prova-Android
-          path: tv01c-android-evidence/Assistente-TRAMA-Prova.apk
+          path: tv01c-android-evidence/
           if-no-files-found: error
           retention-days: 7
