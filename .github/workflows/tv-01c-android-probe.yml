@@ -1,0 +1,55 @@
+name: TV-01C Android Offline Probe
+on:
+  pull_request:
+    paths:
+      - 'experiments/tv-01c/android-probe/**'
+      - '.github/workflows/tv-01c-android-probe.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Set up Android SDK 36
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
+      - name: Prepare pinned Italian model
+        run: |
+          mkdir -p experiments/tv-01c/android-probe/app/src/main/assets
+          curl --fail --location --retry 2 --max-time 120 https://alphacephei.com/vosk/models/vosk-model-small-it-0.22.zip -o experiments/tv-01c/android-probe/app/src/main/assets/model-it.zip
+          echo '9ec65e75861d1c6c2e457cccd932705340dcdf233f5b239f00733b4de0bf3267  experiments/tv-01c/android-probe/app/src/main/assets/model-it.zip' | sha256sum -c -
+      - name: Build isolated debug application
+        working-directory: experiments/tv-01c/android-probe
+        run: gradle --no-daemon :app:assembleDebug
+      - name: Verify permissions and embedded model
+        run: |
+          apk=experiments/tv-01c/android-probe/app/build/outputs/apk/debug/app-debug.apk
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$apk" | tee /tmp/badging.txt
+          grep -Fx "targetSdkVersion:'36'" /tmp/badging.txt
+          grep -F "package: name='it.trama.voiceprobe' versionCode='2' versionName='0.2'" /tmp/badging.txt
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump permissions "$apk" | tee /tmp/permissions.txt
+          grep -q android.permission.RECORD_AUDIO /tmp/permissions.txt
+          if grep -q android.permission.INTERNET /tmp/permissions.txt; then exit 1; fi
+          unzip -l "$apk" | grep assets/model-it.zip
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$apk"
+          mkdir -p tv01c-android-evidence
+          cp "$apk" tv01c-android-evidence/Assistente-TRAMA-Prova-v0.2.apk
+          (cd tv01c-android-evidence && sha256sum Assistente-TRAMA-Prova-v0.2.apk > SHA256SUMS.txt)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Assistente-TRAMA-Prova-Android
+          path: tv01c-android-evidence/
+          if-no-files-found: error
+          retention-days: 7
