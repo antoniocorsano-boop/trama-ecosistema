@@ -43,6 +43,19 @@ public class MainActivity extends Activity {
   super.onCreate(state);
   getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE,android.view.WindowManager.LayoutParams.FLAG_SECURE);
   ScrollView sc=new ScrollView(this);LinearLayout l=new LinearLayout(this);l.setOrientation(1);l.setPadding(dp(22),dp(28),dp(22),dp(24));l.setBackgroundColor(0xfff4f7f5);sc.addView(l);setContentView(sc);
+  if(android.os.Build.VERSION.SDK_INT>=35){
+   sc.setBackgroundColor(0xfff4f7f5);
+   getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+   sc.setOnApplyWindowInsetsListener((view,insets)->{
+    android.graphics.Insets bars=insets.getInsets(android.view.WindowInsets.Type.systemBars()|android.view.WindowInsets.Type.displayCutout());
+    android.graphics.Insets ime=insets.getInsets(android.view.WindowInsets.Type.ime());
+    view.setPadding(bars.left,bars.top,bars.right,Math.max(bars.bottom,ime.bottom));
+    return insets;
+   });
+   android.view.WindowInsetsController controller=getWindow().getInsetsController();
+   if(controller!=null)controller.setSystemBarsAppearance(android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS|android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS|android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
+   sc.requestApplyInsets();
+  }
   l.addView(text("TRAMA · Ambiente di prova",14));l.addView(text("Come posso aiutarti?",28));
   l.addView(text("Parla oppure scrivi una richiesta.",16));
   mic=button("Parla");mic.setTextColor(Color.WHITE);mic.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xff245e54));l.addView(mic);
