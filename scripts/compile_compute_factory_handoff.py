@@ -24,8 +24,9 @@ def handoff(request, plan):
     version = plan.get("schemaVersion")
     if version == "trama.visual-3d-plan/v0.1":
         require(request.get("costClass") == "FREE_ONLY" and plan.get("costClass") == "FREE_ONLY", "cost class")
-        for key in ("executionAuthorized", "paidComputeAuthorized", "publicationAuthorityGranted",
-                    "studentAuthorized"):
+        require(plan.get("executionAuthorized") is False, "execution authority")
+        for key in ("runtimeAuthorized", "paidComputeAuthorized", "allowQualityDowngrade",
+                    "publicationAuthorityGranted", "studentAuthorized"):
             require(plan.get(key) is False and request.get(key) is False, "authority: " + key)
         require(plan.get("humanReviewRequired") is True, "review required")
         require(plan.get("requestId") == rid and plan.get("requestDigest") == digest(request), "request binding")
