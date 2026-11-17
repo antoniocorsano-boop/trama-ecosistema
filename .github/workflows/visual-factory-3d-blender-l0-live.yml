@@ -12,7 +12,7 @@ jobs:
   live-prerequisite:
     if: github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - name: Check display and isolated temporary workspace
         run: |
@@ -145,6 +145,118 @@ jobs:
           assert not any(e[k] for k in ("mcpClientQualified", "isolationQualified", "artisticApproval", "publicationAuthorized"))
           print("PASS: real GUI session and two distinct CPU renders; not an MCP or artistic qualification.")
           PY
+      - name: Verify isolated vendor bridge on a synthetic scene
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/vf3d-l0"
+          mkdir -p bridge/home bridge/runtime
+          chmod 700 bridge/runtime
+          # Only the audited vendor file, not the full Qwen package or autolaunch.
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' --connect-timeout 15 --max-time 60 --output bridge/addon.py 'https://raw.githubusercontent.com/QwenLM/Qwen-MM-Plugins/qwen-mm-plugins-blender-v1.2.0/src/capabilities/blender/qwen_mm_plugins_blender/vendor/addon.py'
+          test "$(git hash-object bridge/addon.py)" = 77ec1f85083b39030c12e94e188a7c5a70229744
+          sha256sum bridge/addon.py
+          if ! command -v bwrap >/dev/null; then
+            sudo apt-get update -q
+            sudo apt-get install -y --no-install-recommends bubblewrap
+          fi
+          cat > bridge/start.py <<'PY'
+          import bpy, runpy
+          runpy.run_path("/work/addon.py", run_name="__main__")
+          scene = bpy.context.scene
+          for suffix in ("polyhaven", "hyper3d", "sketchfab", "hunyuan3d"):
+              setattr(scene, "blendermcp_use_" + suffix, False)
+          assert bpy.types.blendermcp_server.running
+          assert not bpy.app.background
+          PY
+          cat > bridge/client.py <<'PY'
+          import json, os, pathlib, socket, time
+          from math import isclose
+          root = pathlib.Path("/work")
+          assert os.getuid() != 0
+          assert {name for _, name in socket.if_nameindex()} == {"lo"}
+          assert not pathlib.Path("/home/runner").exists()
+          assert not pathlib.Path("/root").exists()
+          assert not any("TOKEN" in k or "KEY" in k or "SECRET" in k for k in os.environ)
+          # No external address is reachable in this namespace.
+          s = socket.socket()
+          s.settimeout(1)
+          try:
+              s.connect(("192.0.2.1", 443))
+          except OSError:
+              pass
+          else:
+              raise AssertionError("unexpected external route")
+          finally:
+              s.close()
+          deadline = time.monotonic() + 60
+          while True:
+              try:
+                  conn = socket.create_connection(("127.0.0.1", 9876), timeout=2)
+                  break
+              except OSError:
+                  if time.monotonic() >= deadline:
+                      raise
+                  time.sleep(1)
+          conn.settimeout(30)
+          def call(kind, params=None, ok=True):
+              conn.sendall(json.dumps({"type": kind, "params": params or {}}).encode())
+              buf = b""
+              while len(buf) < 1024 * 1024:
+                  piece = conn.recv(8192)
+                  if not piece:
+                      raise RuntimeError("bridge closed connection")
+                  buf += piece
+                  try:
+                      reply = json.loads(buf)
+                  except (ValueError, UnicodeDecodeError):
+                      continue
+                  assert reply["status"] == ("success" if ok else "error"), reply
+                  result = reply.get("result", {})
+                  assert "error" not in result, result
+                  return result
+              raise RuntimeError("oversize response")
+          scene = call("get_scene_info")
+          assert any(o["name"] == "Cube" for o in scene["objects"])
+          before = call("get_object_info", {"name": "Cube"})
+          assert before["mesh"]["vertices"] == 8
+          # This is fixed, synthetic scene code, not a model-generated command.
+          changed = call("execute_code", {"code": "bpy.data.objects['Cube'].rotation_euler.z = 0.65"})
+          assert changed["executed"]
+          after = call("get_object_info", {"name": "Cube"})
+          assert isclose(after["rotation"][2], 0.65, abs_tol=1e-5)
+          assert after["mesh"] == before["mesh"]
+          assert after["rotation"] != before["rotation"]
+          for service in ("polyhaven", "hyper3d", "sketchfab", "hunyuan3d"):
+              status = call("get_" + service + "_status")
+              assert status["enabled"] is False, status
+          call("download_polyhaven_asset", ok=False)
+          call("create_rodin_job", ok=False)
+          call("create_hunyuan_job", ok=False)
+          call("download_sketchfab_model", ok=False)
+          conn.close()
+          result = {"status": "VENDOR_TCP_BRIDGE_PASS", "isolationSmokePassed": True,
+                    "sourceBlob": "77ec1f85083b39030c12e94e188a7c5a70229744",
+                    "scene": scene, "before": before, "after": after,
+                    "fullMcpClientQualified": False, "agentControlQualified": False,
+                    "artisticApproval": False, "publicationAuthorized": False}
+          (root / "transport-evidence.json").write_text(json.dumps(result, indent=2))
+          print(json.dumps(result, indent=2))
+          PY
+          cat > bridge/run.sh <<'SH'
+          set -euo pipefail
+          /opt/blender/blender --factory-startup --disable-autoexec --threads 4 --python-exit-code 1 --python /work/start.py > /work/bridge.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true; wait "$pid" 2>/dev/null || true' EXIT
+          /usr/bin/python3 /work/client.py
+          SH
+          # Fail closed: no fallback to an unrestricted process if namespaces are unavailable.
+          timeout 150s bwrap --unshare-user --unshare-net --unshare-pid --unshare-ipc --unshare-uts --disable-userns --cap-drop ALL --die-with-parent --new-session \
+            --ro-bind /usr /usr --symlink usr/bin /bin --symlink usr/lib /lib --symlink usr/lib64 /lib64 \
+            --ro-bind-try /etc/fonts /etc/fonts --ro-bind-try /etc/glvnd /etc/glvnd --ro-bind-try /etc/ld.so.cache /etc/ld.so.cache \
+            --proc /proc --dev /dev --tmpfs /tmp \
+            --ro-bind "$PWD/blender-4.2.23-linux-x64" /opt/blender --bind "$PWD/bridge" /work \
+            --chdir /work --clearenv --setenv PATH /usr/bin:/bin --setenv HOME /work/home --setenv XDG_RUNTIME_DIR /work/runtime --setenv LIBGL_ALWAYS_SOFTWARE 1 \
+            /usr/bin/xvfb-run -a -s "-screen 0 1280x720x24" /bin/bash /work/run.sh || { test ! -f bridge/bridge.log || tail -80 bridge/bridge.log; exit 1; }
       - name: Preserve synthetic diagnostic evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -155,5 +267,7 @@ jobs:
             ${{ runner.temp }}/vf3d-l0/first.png
             ${{ runner.temp }}/vf3d-l0/second.png
             ${{ runner.temp }}/vf3d-l0/blender.log
+            ${{ runner.temp }}/vf3d-l0/bridge/transport-evidence.json
+            ${{ runner.temp }}/vf3d-l0/bridge/bridge.log
           if-no-files-found: ignore
           retention-days: 7
