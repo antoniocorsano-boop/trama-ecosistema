@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import email, hashlib, json, os, re, tempfile, urllib.parse, urllib.request, zipfile
+          import email, hashlib, io, json, os, re, tempfile, urllib.parse, urllib.request, zipfile
           from pathlib import Path
           lock = json.loads(Path("fixtures/visual-factory-3d/p3-cpu-wheel-lock.candidate.json").read_text())
           rows = lock["packages"]
@@ -41,6 +41,37 @@ jobs:
           opener=urllib.request.build_opener(Guard())
           def norm(s):
               return re.sub(r"[-_.]+","-",s).lower()
+          def metadata(z, name, version):
+              # A wheel's own dist-info is top-level; vendored distributions are not.
+              all_meta=[n for n in z.namelist() if n.endswith(".dist-info/METADATA")]
+              primary=[n for n in all_meta if n.count("/")==1]
+              assert len(primary)==1, f"{name}: primary METADATA count={len(primary)}"
+              assert z.getinfo(primary[0]).file_size<=2*1024**2, f"{name}: primary METADATA too large"
+              m=email.message_from_bytes(z.read(primary[0]))
+              assert norm(m["Name"])==name and m["Version"]==version, f"{name}: metadata identity mismatch"
+              nested=[n for n in all_meta if n.count("/")>1]
+              return m, primary[0].rsplit("/",1)[0]+"/", nested
+          # Regression cases: vendored metadata accepted and recorded, ambiguous
+          # or missing top-level metadata and mismatched identity rejected.
+          def synthetic(entries):
+              b=io.BytesIO()
+              with zipfile.ZipFile(b,"w") as z:
+                  for p,v in entries: z.writestr(p,v)
+              b.seek(0)
+              return zipfile.ZipFile(b)
+          root=("demo-1.dist-info/METADATA","Name: demo\nVersion: 1\n")
+          vend=("demo/_vendor/other-2.dist-info/METADATA","Name: other\nVersion: 2\n")
+          with synthetic([root,vend]) as z:
+              m,p,nested=metadata(z,"demo","1")
+              assert p=="demo-1.dist-info/" and nested==[vend[0]]
+          for bad in ([vend],[root,("other-2.dist-info/METADATA",vend[1])],
+                      [(root[0],"Name: wrong\nVersion: 1\n")],
+                      [(root[0],"Name: demo\nVersion: 2\n")]):
+              with synthetic(bad) as z:
+                  try: metadata(z,"demo","1")
+                  except AssertionError: pass
+                  else: raise AssertionError("invalid primary metadata accepted")
+          print("METADATA_REGRESSION_PASS 5/5",flush=True)
           results=[]
           total=0
           for r in rows:
@@ -60,11 +91,26 @@ jobs:
                           dest.write(chunk)
                   assert h.hexdigest()==r["sha256"], "SHA256 mismatch: "+r["name"]
                   with zipfile.ZipFile(p) as z:
-                      meta=[n for n in z.namelist() if n.endswith(".dist-info/METADATA")]
-                      assert len(meta)==1 and z.getinfo(meta[0]).file_size<=2*1024**2
-                      m=email.message_from_bytes(z.read(meta[0]))
-                      assert norm(m["Name"])==r["name"] and m["Version"]==r["version"], "metadata mismatch"
-                      prefix=meta[0].rsplit("/",1)[0]+"/"
+                      m,prefix,nested=metadata(z,r["name"],r["version"])
+                      vendored=[]
+                      for n in nested:
+                          assert z.getinfo(n).file_size<=2*1024**2, "nested metadata too large"
+                          data=z.read(n)
+                          vm=email.message_from_bytes(data)
+                          assert vm["Name"] and vm["Version"], "nested metadata identity missing"
+                          vp=n.rsplit("/",1)[0]+"/"
+                          vf=[]
+                          for lic in z.namelist():
+                              if lic.startswith(vp) and not lic.endswith("/") and re.search(r"(^|/)(licenses?/|licen[cs]e[^/]*$|copying[^/]*$|notice[^/]*$|copyright[^/]*$)",lic[len(vp):],re.I):
+                                  assert z.getinfo(lic).file_size<=8*1024**2
+                                  payload=z.read(lic)
+                                  vf.append({"path":lic,"sha256":hashlib.sha256(payload).hexdigest(),"bytes":len(payload)})
+                          vendored.append({"path":n,"name":vm["Name"],"version":vm["Version"],
+                                           "metadataSha256":hashlib.sha256(data).hexdigest(),
+                                           "licenseExpression":vm.get("License-Expression"),
+                                           "licenseField":(vm.get("License") or "")[:500],
+                                           "licenseClassifiers":[c for c in vm.get_all("Classifier",[]) if c.startswith("License ::")],
+                                           "licenseFiles":vf})
                       names=[n for n in z.namelist() if n.startswith(prefix) and not n.endswith("/") and re.search(r"(^|/)(licenses?/|licen[cs]e[^/]*$|copying[^/]*$|notice[^/]*$|copyright[^/]*$)",n[len(prefix):],re.I)]
                       evidence=[]
                       for n in names:
@@ -77,14 +123,14 @@ jobs:
                       classifiers=[c for c in m.get_all("Classifier",[]) if c.startswith("License ::")]
                       result={"name":r["name"],"version":r["version"],"sha256Verified":True,
                               "licenseExpression":declared,"licenseField":license_text[:500] if license_text else None,
-                              "licenseClassifiers":classifiers,"licenseFiles":evidence,
+                              "licenseClassifiers":classifiers,"licenseFiles":evidence,"vendoredDistributions":vendored,
                               "licenseEvidencePresent":bool(declared or license_text or classifiers or evidence)}
                       results.append(result)
                       print(json.dumps(result,ensure_ascii=True),flush=True)
           missing=[r["name"] for r in results if not r["licenseEvidencePresent"]]
           print(json.dumps({"status":"BYTE_AUDIT_COMPLETE_NOT_ADMITTED","packages":len(results),
                             "verified":sum(r["sha256Verified"] for r in results),"downloadBytes":total,
-                            "missingLicenseEvidence":missing,"licenseLegalReviewPending":True,
+                            "missingLicenseEvidence":missing,"vendoredDistributions":sum(len(r["vendoredDistributions"]) for r in results),"licenseLegalReviewPending":True,
                             "dependenciesInstalled":False,"weightsDownloaded":False,
                             "inferenceExecuted":False,"executionAuthorized":False,
                             "paidComputeAuthorized":False,"publicationAuthorized":False},indent=2))
