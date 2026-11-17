@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "trama.visual-3d-recipe-catalog/v0.1",
+  "upstreamRepository": "https://github.com/MrForExample/ComfyUI-3D-Pack",
+  "inspectedRevision": "9e8096e50c5bcf35e1f3e34c6ae06216101f8a11",
+  "sourceKind": "UPSTREAM_UI_GRAPH_INVENTORY_ONLY",
+  "executionAuthorized": false,
+  "allNodeDependenciesQualified": false,
+  "fullPackInstallAuthorized": false,
+  "paidComputeAuthorized": false,
+  "publicationAuthorityGranted": false,
+  "studentAuthorized": false,
+  "recipes": [
+    {
+      "id": "triposr-mesh",
+      "engineIds": [
+        "triposr"
+      ],
+      "path": "example_workflows/TripoSR_to_Mesh.json",
+      "gitBlob": "a0ada0836fae66858d1c6e28b9045714c2c4864b",
+      "nodeTypes": [
+        "[Comfy3D] Preview 3DMesh",
+        "[Comfy3D] Switch Mesh Axis",
+        "InvertMask",
+        "[Comfy3D] Load TripoSR Model",
+        "[Comfy3D] TripoSR",
+        "[Comfy3D] Save 3D Mesh",
+        "LoadImage"
+      ],
+      "status": "SOURCE_INSPECTED_CANDIDATE"
+    },
+    {
+      "id": "partcrafter-parts",
+      "engineIds": [
+        "partcrafter"
+      ],
+      "path": "example_workflows/PartCrafter/PartCrafter.json",
+      "gitBlob": "fccdf30d591fe31059d98178fbe585eb4598c1c9",
+      "nodeTypes": [
+        "LoadImage",
+        "[Comfy3D] Load PartCrafter Pipeline",
+        "[Comfy3D] Preview 3DMesh",
+        "PreviewAny",
+        "[Comfy3D] PartCrafter Generate"
+      ],
+      "status": "HOLD_LICENSE_LINEAGE"
+    },
+    {
+      "id": "mv-adapter-texturing",
+      "engineIds": [
+        "mv-adapter"
+      ],
+      "path": "example_workflows/MV-Adapter/MV-Adapter-Texturing.json",
+      "gitBlob": "9c658e3ca2609c5769fce604bc8e94b93c6ffe6b",
+      "nodeTypes": [
+        "[Comfy3D] Preview 3DMesh",
+        "[Comfy3D] Load MVAdapter Texture Pipeline",
+        "[Comfy3D] MVAdapter Texture Projection",
+        "LoadImage",
+        "PrimitiveString"
+      ],
+      "status": "SOURCE_INSPECTED_CANDIDATE"
+    },
+    {
+      "id": "zero123plus-instantmesh",
+      "engineIds": [
+        "instantmesh"
+      ],
+      "auxiliaryModels": [
+        "Zero123++ (exact variant pending)"
+      ],
+      "path": "example_workflows/Zero123Plus_to_InstantMesh.json",
+      "gitBlob": "d6b4794ae9aa5214bef0f1491496362f66fea04a",
+      "nodeTypes": [
+        "[Comfy3D] Set Diffusers Pipeline State Dict",
+        "LoadImage",
+        "InvertMask",
+        "[Comfy3D] Set Diffusers Pipeline Scheduler",
+        "[Comfy3D] Load Diffusers Pipeline",
+        "[Comfy3D] Load InstantMesh Reconstruction Model",
+        "[Comfy3D] Zero123Plus Diffusion Model",
+        "[Comfy3D] InstantMesh Reconstruction Model",
+        "[Comfy3D] Preview 3DMesh",
+        "[Comfy3D] Switch Mesh Axis",
+        "PreviewImage",
+        "[Comfy3D] Save 3D Mesh"
+      ],
+      "status": "HOLD_AUXILIARY_MODEL_REVIEW"
+    },
+    {
+      "id": "trellis-v1-mesh",
+      "engineIds": [],
+      "auxiliaryModels": [
+        "TRELLIS v1 (not TRELLIS.2)"
+      ],
+      "path": "example_workflows/Trellis_Image_to_Mesh.json",
+      "gitBlob": "792076611603b74ff18ef5235b478970b042850e",
+      "nodeTypes": [
+        "[Comfy3D] Preview 3DMesh",
+        "InvertMask",
+        "[Comfy3D] Save 3D Mesh",
+        "[Comfy3D] Trellis Structured 3D Latents Models",
+        "LoadImage",
+        "[Comfy3D] Load Trellis Structured 3D Latents Models"
+      ],
+      "status": "HOLD_UNREGISTERED_EXACT_MODEL"
+    }
+  ],
+  "notDemonstrated": [
+    "TRELLIS.2",
+    "SPAR3D",
+    "Stable Fast 3D",
+    "Direct3D-S2",
+    "Step1X-3D"
+  ],
+  "notes": "Source inventory only; UI workflows are not API payloads. Node classes were read from upstream JSON, deduplicated. No workflow downloaded for execution, no models installed, no compatibility or license certification."
+}
