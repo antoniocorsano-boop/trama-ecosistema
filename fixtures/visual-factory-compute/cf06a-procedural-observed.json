@@ -1,0 +1,23 @@
+{
+  "scope": "LOCAL_CF06A_OBSERVED_NOT_ADMISSION",
+  "sourceSha256": "d96ea39a7addbb7c59961d7a848a7fa3e478f037c517a166b11fd82b9ee6a7b2",
+  "artifacts": [
+    {
+      "variant": "standard",
+      "sha256": "d52d4117d42914a0312e3e3a6d8190a882c5505fb50eca5f66954c8e5bf43e35",
+      "bytes": 147192,
+      "meshCount": 33,
+      "reportedTriangles": 11456
+    },
+    {
+      "variant": "light",
+      "sha256": "d3d1853f4af19e3a13a8a54817e39e23a65c34611d00bd270c0a4c7c81920cec",
+      "bytes": 95896,
+      "meshCount": 33,
+      "reportedTriangles": 6560
+    }
+  ],
+  "engineAdmitted": false,
+  "executionAuthorized": false,
+  "publicationAuthorityGranted": false
+}

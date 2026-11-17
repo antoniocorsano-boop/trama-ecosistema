@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "trama.procedural-profile-review/v0.1",
+  "subjectRef": "storie",
+  "scope": "ATLAS_GATEWAY_PROCEDURAL_GEOMETRY_ONLY",
+  "atlasEnrollmentId": "enrollment:atlas",
+  "atlasRevision": "be1b70b46a768c772bf6db58a9548b55d1ec9e17",
+  "vf3dRevision": "05935f5ef73b532e0b3dd2aaa83ca82e21381d84",
+  "sourceRunId": 44103958943,
+  "sourceJobId": 134111159477,
+  "sourceFiles": {
+    "starSculpture": "6ef646177216bea929cb0a5b936a2ee7ef618133",
+    "adaptiveIdentity": "a482faf2cd42f88b901e52f873d10523b7f11fe0",
+    "knowledgeComposition": "ec99edd096dc2f8a141e0bd11dbb0673881f5ecf"
+  },
+  "selectedAttempt": 4,
+  "selectedScale": 0.94,
+  "geometry": {
+    "vertices": 165,
+    "triangles": 310,
+    "closedOrientedComponents": 5,
+    "depthM": 0.430205,
+    "radiusM": 0.620902,
+    "meshSha256": "7617e41bafc305afc9c841d057c7972af178be2bce0d03386916688b6e36532d"
+  },
+  "blenderProfile": {
+    "engineId": "blender-procedural",
+    "version": "4.2.23",
+    "archiveSha256": "bea0eb3146be13eae6225409a117b215184f41b7f79e799f97cb3abb8f6dc404",
+    "licenseGate": "PENDING_EXACT_TOOLCHAIN_AND_INPUT_REVIEW",
+    "executionGate": "EXISTING_ATLAS_PIPELINE_REFERENCE_ONLY"
+  },
+  "referenceLockVerified": false,
+  "engineAdmitted": false,
+  "geometryReplayRequired": true,
+  "blenderExecutedByComputeFactory": false,
+  "visualAcceptance": false,
+  "candidateQualified": false,
+  "publicationAuthorityGranted": false,
+  "executionAuthorized": false,
+  "studentAuthorized": false,
+  "paidComputeAuthorized": false
+}

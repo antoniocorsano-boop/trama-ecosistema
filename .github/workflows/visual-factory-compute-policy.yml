@@ -8,6 +8,18 @@ on:
       - "docs/capabilities/atlas-percorsi/production/TRAMA-COMPUTE-POLICY-v0.1.md"
       - "docs/capabilities/atlas-percorsi/production/SKYPILOT-ORCHESTRATOR-v0.1.md"
       - "scripts/compile_visual_factory_compute_plan.py"
+      - "scripts/compile_compute_factory_handoff.py"
+      - "tests/test_compute_factory_handoff.py"
+      - "tests/test_compute_factory_convergence.py"
+      - "scripts/compute_factory_quota_ledger.py"
+      - "tests/test_compute_factory_quota_ledger.py"
+      - "scripts/compute_factory_procedural_evidence.py"
+      - "scripts/verify_compute_factory_test_gate.py"
+      - "tests/test_compute_factory_test_gate.py"
+      - "tests/test_compute_factory_procedural_evidence.py"
+      - "tests/test_compute_factory_storie_profile.py"
+      - "config/repository-enrollment.json"
+      - "docs/decisions/trama-compute-factory-alignment-v1.md"
       - "scripts/probe_azure_credit_entitlement.py"
       - "scripts/probe_owned_k8s_entitlement.py"
       - "tests/test_visual_factory_compute_plan.py"
@@ -25,6 +37,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -44,6 +58,60 @@ jobs:
         run: |
           python -m unittest tests/test_visual_factory_compute_plan.py -v
           python -m unittest tests/test_visual_factory_provider_adapters.py -v
+          python -m unittest tests/test_compute_factory_handoff.py -v
+          python -m unittest tests/test_compute_factory_quota_ledger.py -v
+          python -m unittest tests/test_compute_factory_procedural_evidence.py -v
+          python -m unittest tests/test_compute_factory_test_gate.py -v
+
+      - name: Checkout pinned VF-3D planner for offline convergence
+        uses: actions/checkout@v4
+        with:
+          ref: 05935f5ef73b532e0b3dd2aaa83ca82e21381d84
+          path: .cf-vf3d-upstream
+          persist-credentials: false
+
+      - name: Verify convergence against exact upstream planner and observed cache receipt
+        env:
+          TRAMA_VF3D_SOURCE: ${{ github.workspace }}/.cf-vf3d-upstream
+        run: |
+          test "$(git -C "$TRAMA_VF3D_SOURCE" rev-parse HEAD)" = 05935f5ef73b532e0b3dd2aaa83ca82e21381d84
+          python -m scripts.verify_compute_factory_test_gate tests.test_compute_factory_convergence 9
+
+      - name: Resolve enrolled Atlas repository
+        id: atlas-source
+        run: |
+          python - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          config = json.loads(Path("config/repository-enrollment.json").read_text())
+          entries = [x for x in config["repositories"] if x["id"] == "enrollment:atlas"]
+          assert len(entries) == 1 and entries[0]["state"] == "ENROLLED"
+          repo = entries[0]["repository"]
+          assert re.fullmatch(r"antoniocorsano-boop/[A-Za-z0-9_.-]+", repo)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("repository=" + repo + "\n")
+          PY
+
+      - name: Checkout pinned Atlas procedural source
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.atlas-source.outputs.repository }}
+          ref: be1b70b46a768c772bf6db58a9548b55d1ec9e17
+          path: .cf-atlas-upstream
+          sparse-checkout: scripts/atlas-gateway-c3
+          persist-credentials: false
+
+      - name: Replay exact Atlas-owned geometry and compare VF-3D profile
+        env:
+          TRAMA_ATLAS_SOURCE: ${{ github.workspace }}/.cf-atlas-upstream
+          TRAMA_VF3D_SOURCE: ${{ github.workspace }}/.cf-vf3d-upstream
+        run: |
+          test "$(git -C "$TRAMA_ATLAS_SOURCE" rev-parse HEAD)" = be1b70b46a768c772bf6db58a9548b55d1ec9e17
+          test "$(git -C "$TRAMA_VF3D_SOURCE" rev-parse HEAD)" = 05935f5ef73b532e0b3dd2aaa83ca82e21381d84
+          test "$(git -C "$TRAMA_ATLAS_SOURCE" hash-object scripts/atlas-gateway-c3/star_sculpture.py)" = 6ef646177216bea929cb0a5b936a2ee7ef618133
+          test "$(git -C "$TRAMA_ATLAS_SOURCE" hash-object scripts/atlas-gateway-c3/adaptive_identity.py)" = a482faf2cd42f88b901e52f873d10523b7f11fe0
+          test "$(git -C "$TRAMA_ATLAS_SOURCE" hash-object scripts/atlas-gateway-c3/knowledge_composition.py)" = ec99edd096dc2f8a141e0bd11dbb0673881f5ecf
+          python -m scripts.verify_compute_factory_test_gate tests.test_compute_factory_storie_profile 8
 
       - name: Compile fixture plan
         run: |
