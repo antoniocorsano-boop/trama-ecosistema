@@ -3,16 +3,16 @@
 Date: 2026-11-17. Status: proposed for review; offline implementation slice. Runtime, cost and publication authority: NONE.
 
 ## Architectural decision
-One production system, not three factories. This decision extends ADR-021 and does not supersede its FREE_ONLY gates or select a new provisioner. References: ADR-021; TRAMA-COMPUTE-POLICY-v0.1; VISUAL-PRODUCTION-CONTRACT-v0.1; TRAMA PR #338 (open at baseline); Curriculum-Atlas PR #105 (parallel work).
+One production system, not three factories. This decision extends ADR-021 and does not supersede its FREE_ONLY gates or select a new provisioner. References: ADR-021; TRAMA-COMPUTE-POLICY-v0.1; VISUAL-PRODUCTION-CONTRACT-v0.1; TRAMA PR #338 (open at baseline); Atlas PR #105 (parallel work).
 
-- Arena: curricular authority; unchanged.
+- Arena: authority over the curricolo; unchanged.
 - Studio Atlas: educational intent, art direction, references, required quality and human acceptance.
 - Atlas Smart Production: candidate lineage, dependency planning, cache/reuse and incremental production; its existing cache is the source of truth, not copied to Compute Factory.
 - Visual Factory / Audio Factory and specialized engines: method, model, pipeline, quality requirements, licenses and engine qualification. The existing VF-3D registry and compiler retain selection authority. No silent substitution of model or quality.
 - Compute Factory: shared capability for resource policy, bounded execution, admission, quota accounting, recovery and evidence. Extend the existing compiler and entitlement contract, do not introduce a competing registry or provider router.
 - SkyPilot: existing selected provisioner for compatible, admitted infrastructure only; no automatic provisioning. Other execution adapters remain separate. Prefect is an unqualified optional workflow engine, not a second authority.
 - Control Center: observe and review evidence; no implicit permission to execute.
-- Curriculum Atlas: consumes separately approved assets; no production receipt grants publication.
+- Atlas: consumes separately approved assets; no production receipt grants publication.
 
 ## Interface
 Existing VisualProductionRequest / 3D child request -> existing specialized plan -> existing compute policy -> bounded execution (future, separately authorized) -> existing receipt -> quality review -> candidate -> separate publication gate.
