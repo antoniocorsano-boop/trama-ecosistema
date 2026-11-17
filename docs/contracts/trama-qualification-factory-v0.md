@@ -14,7 +14,7 @@ Separare il giudizio sulla qualità di un candidato dalla capacità di calcolo e
 - Revisione indipendente: verifica separata dal produttore dell'intervento. L'autorità umana decide separatamente l'accettazione e l'eventuale rilascio.
 
 ## 3. Modello di qualificazione
-Ogni obiettivo di stabilizzazione ha un candidato identificato da repository e SHA completo; il nome del ramo o la PR sono contesto, non prova di versione. Il prodotto conserva la propria suite e le ricevute. La decisione di consolidare un candidato non autorizza il collaudo. L'esecuzione richiede i prerequisiti, le politiche del servizio e le autorizzazioni applicabili; in presenza di un rifiuto non si tenta il trasferimento o la ripetizione dell'operazione per eludere il controllo.
+Ogni obiettivo di stabilizzazione ha un candidato identificato almeno da repository e SHA completo, oltre a tutti gli attributi obbligatori dell'identità prevista dal contratto locale (contenuto, pubblicazione, ambiente, schema, autorità o altre dimensioni pertinenti). Il nome del ramo o la PR sono contesto, non prova di versione. Il prodotto conserva la propria suite e le ricevute. La decisione di consolidare un candidato non autorizza il collaudo. L'esecuzione richiede i prerequisiti, le politiche del servizio e le autorizzazioni applicabili; in presenza di un rifiuto non si tenta il trasferimento o la ripetizione dell'operazione per eludere il controllo.
 
 Livelli logici, non nuovi livelli maturity:
 1. Verifica statica, deterministica e contratti.
@@ -22,10 +22,10 @@ Livelli logici, non nuovi livelli maturity:
 3. Verifica ambiente reale, ove pertinente.
 4. Regressioni, sicurezza, recupero, revisione indipendente.
 5. Decisione umana su integrazione e rilascio.
-I prodotti possono avere prove differenti e ulteriori gate; nessun livello sostituisce quelli precedenti o riduce i requisiti locali.
+I livelli sono categorie logiche, non una sequenza rigida di distribuzione: i prodotti conservano l'ordine dei propri gate, comprese eventuali distribuzioni di verifica espressamente autorizzate prima dell'accettazione finale. Nessuna distribuzione di verifica implica rilascio operativo o pubblicazione agli studenti. I prodotti possono avere prove differenti e ulteriori gate; nessun livello sostituisce quelli precedenti o riduce i requisiti locali.
 
 ## 4. Evidenze e interpretazione
-Un riepilogo di qualificazione indica: prodotto, repository, SHA, riferimento alla suite/prova, esito osservato, ambiente/versione, fonte verificabile e data; per artefatti disponibili anche identificativo e digest secondo i contratti esistenti. Non creare un nuovo registro. Distinguere PASS effettivo sul candidato, evidenza storica, prova equivalente parziale, mancata esecuzione, FAIL e BLOCKED. Non sommare conteggi eterogenei né trasformare assenza di esecuzione in PASS. Un'evidenza precedente resta valida per il suo oggetto; l'analisi di impatto può motivarne la pertinenza, ma non dichiarare una nuova esecuzione. Stato conflittuale o incerto resta aperto. La promozione di stato richiede il processo governato.
+Un riepilogo di qualificazione indica: prodotto, repository, SHA, riferimento alla suite/prova, esito osservato, ambiente/versione, identità locale completa, fonte verificabile, data dell'evento e dell'osservazione; per artefatti disponibili anche identificativo e digest secondo i contratti esistenti. Non creare un nuovo registro. Distinguere PASS effettivo sul candidato, evidenza storica, prova equivalente parziale, mancata esecuzione, FAIL e BLOCKED. Non sommare conteggi eterogenei né trasformare assenza di esecuzione in PASS. Un'evidenza precedente resta valida per il suo oggetto; l'analisi di impatto può motivarne la pertinenza, ma non dichiarare una nuova esecuzione. Stato conflittuale o incerto resta aperto. La promozione di stato richiede il processo governato.
 
 ## 5. Pilota di metodo: Registro Docente STAB-06
 Riferimento (solo link, nessuna duplicazione di ricevute): https://github.com/antoniocorsano-boop/registro-docente/pull/310
