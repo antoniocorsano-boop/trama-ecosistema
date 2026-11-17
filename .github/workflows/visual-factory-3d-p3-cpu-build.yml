@@ -1,0 +1,134 @@
+name: Visual Factory — P3b CPU build diagnostic
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-p3-cpu-build.yml"
+permissions: {}
+concurrency:
+  group: vf3d-p3-cpu-build-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  cpu-build:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'work/vf3d-p3-cpu-preflight'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Acquire frozen wheel set and exact source, without executing either
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=$(mktemp -d /tmp/vf3d-build.XXXXXXXX)
+          echo "BUILD_ROOT=$root" >> "$GITHUB_ENV"
+          mkdir "$root/wheels" "$root/source"
+          export BUILD_ROOT="$root"
+          python3 - <<'PY'
+          import hashlib,json,os,re,urllib.parse,urllib.request
+          from pathlib import Path
+          root=Path(os.environ["BUILD_ROOT"])
+          url="https://raw.githubusercontent.com/antoniocorsano-boop/trama-ecosistema/b8305a945b87b8e8d52fcce1cbe822365bc68318/fixtures/visual-factory-3d/p3-cpu-wheel-lock.candidate.json"
+          with urllib.request.urlopen(url,timeout=30) as r: lock=json.load(r)
+          assert lock["status"]=="CANDIDATE_NOT_ADMITTED" and lock["executionAuthorized"] is False
+          rows=lock["packages"]
+          assert len(rows)==len({r["name"] for r in rows})==48
+          allowed={"files.pythonhosted.org","download-r2.pytorch.org","download.pytorch.org"}
+          def valid(u):
+              p=urllib.parse.urlsplit(u)
+              assert p.scheme=="https" and p.hostname in allowed and not p.username and not p.password
+          class Guard(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self,req,fp,code,msg,headers,newurl):
+                  valid(newurl)
+                  return super().redirect_request(req,fp,code,msg,headers,newurl)
+          opener=urllib.request.build_opener(Guard())
+          total=0; requirements=[]
+          for row in rows:
+              valid(row["url"])
+              name=urllib.parse.unquote(urllib.parse.urlsplit(row["url"]).path.rsplit("/",1)[-1])
+              assert re.fullmatch(r"[A-Za-z0-9_.+\-]+\.whl",name)
+              assert re.fullmatch("[0-9a-f]{64}",row["sha256"])
+              path=root/"wheels"/name
+              h=hashlib.sha256()
+              with opener.open(row["url"],timeout=60) as r,path.open("xb") as out:
+                  valid(r.geturl())
+                  while chunk:=r.read(1024*1024):
+                      total+=len(chunk)
+                      assert total<=2*1024**3
+                      h.update(chunk);out.write(chunk)
+              assert h.hexdigest()==row["sha256"],row["name"]
+              requirements.append(f'{row["name"]} @ {path.as_uri()} --hash=sha256:{row["sha256"]}')
+          (root/"requirements.txt").write_text("\n".join(requirements)+"\n")
+          print("VERIFIED_WHEELS",len(rows),"BYTES",total)
+          PY
+          git -c core.hooksPath=/dev/null init -q "$root/source"
+          git -C "$root/source" -c core.hooksPath=/dev/null -c protocol.file.allow=never fetch --depth=1 https://github.com/tatsy/torchmcubes.git a9ac95aa329957ba646e7bb057f825f5dfa77f38
+          git -C "$root/source" -c core.hooksPath=/dev/null checkout --detach FETCH_HEAD
+          test "$(git -C "$root/source" rev-parse HEAD)" = a9ac95aa329957ba646e7bb057f825f5dfa77f38
+          test "$(git -C "$root/source" rev-parse HEAD:LICENSE)" = 2f8ed188e8baccf3ba1e11e52a79f851d6a13468
+          test -z "$(git -C "$root/source" ls-tree -r HEAD | grep '^160000 ' || true)"
+          git -C "$root/source" status --porcelain
+          git -C "$root/source" rev-parse HEAD^{tree}
+          rm -rf "$root/source/.git"
+      - name: Prepare isolated diagnostic and validate native CPU geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$BUILD_ROOT"
+          cat > "$root/offline.sh" <<'SH'
+          set -euo pipefail
+          root="$1"
+          cd "$root"
+          test "$(id -u)" = 65534
+          python3 - <<'PY'
+          import socket
+          try:
+              socket.create_connection(("1.1.1.1",443),timeout=2)
+          except OSError:
+              print("NETWORK_ISOLATION_PASS")
+          else:
+              raise SystemExit("Network reachable: refusing build")
+          PY
+          python3 -m venv "$root/venv"
+          export PATH="$root/venv/bin:/usr/bin:/bin"
+          export PIP_NO_INDEX=1 PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_NO_CACHE_DIR=1
+          export CMAKE_BUILD_PARALLEL_LEVEL=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2
+          python -m pip --isolated install --no-index --no-deps --require-hashes -r "$root/requirements.txt"
+          python -m pip check
+          python -c 'import torch; assert torch.__version__=="2.14.1+cpu" and torch.version.cuda is None; print("TORCH_CPU",torch.__version__)'
+          export CMAKE_PREFIX_PATH="$(python -c 'import torch; print(torch.utils.cmake_prefix_path)')"
+          mkdir "$root/built"
+          /usr/bin/time -v python -m pip --isolated wheel --no-index --no-deps --no-build-isolation --no-cache-dir --wheel-dir "$root/built" --config-settings=cmake.define.CMAKE_CUDA_COMPILER=NOTFOUND "$root/source"
+          shopt -s nullglob
+          wheels=("$root"/built/*.whl)
+          test "${#wheels[@]}" = 1
+          sha256sum "${wheels[0]}"
+          python -m pip --isolated install --no-index --no-deps "${wheels[0]}"
+          python -m pip check
+          python - <<'PY'
+          import json, time, torch, torchmcubes, trimesh
+          from importlib.metadata import version
+          assert torch.version.cuda is None and not torchmcubes.HAS_CUDA
+          torch.set_num_threads(2)
+          t=time.monotonic()
+          axis=torch.linspace(-1,1,32)
+          x,y,z=torch.meshgrid(axis,axis,axis,indexing="ij")
+          field=(x*x+y*y+z*z-0.6**2).contiguous()
+          vertices,faces=torchmcubes.marching_cubes(field,0.0)
+          assert vertices.device.type==faces.device.type=="cpu"
+          assert vertices.ndim==faces.ndim==2 and vertices.shape[1]==faces.shape[1]==3
+          assert len(vertices)>100 and len(faces)>100 and torch.isfinite(vertices).all()
+          assert faces.min()>=0 and faces.max()<len(vertices)
+          mesh=trimesh.Trimesh(vertices=vertices.numpy(),faces=faces.numpy(),process=False)
+          assert mesh.is_watertight and mesh.area>0
+          glb=mesh.export(file_type="glb")
+          assert glb[:4]==b"glTF"
+          print(json.dumps({"status":"CPU_NATIVE_DIAGNOSTIC_PASS","torch":torch.__version__,"torchmcubes":version("torchmcubes"),"vertices":len(vertices),"triangles":len(faces),"watertight":bool(mesh.is_watertight),"glbBytes":len(glb),"seconds":time.monotonic()-t,"synthetic":True,"weightsDownloaded":False,"inferenceExecuted":False,"executionAuthorized":False,"publicationAuthorized":False,"paidComputeAuthorized":False}))
+          PY
+          SH
+          chmod 700 "$root/offline.sh"
+          sudo chown -R 65534:65534 "$root"
+          sudo unshare --net --fork -- /usr/bin/setpriv --reuid=65534 --regid=65534 --clear-groups --no-new-privs --bounding-set=-all /usr/bin/env -i HOME="$root" PATH=/usr/bin:/bin LANG=C.UTF-8 /bin/bash "$root/offline.sh" "$root"
+      - name: Remove ephemeral build files
+        if: always()
+        shell: bash
+        run: |
+          if [[ "${BUILD_ROOT:-}" == /tmp/vf3d-build.* ]]; then sudo rm -rf -- "$BUILD_ROOT"; fi
