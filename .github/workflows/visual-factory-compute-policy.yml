@@ -10,6 +10,7 @@ on:
       - "scripts/compile_visual_factory_compute_plan.py"
       - "scripts/compile_compute_factory_handoff.py"
       - "tests/test_compute_factory_handoff.py"
+      - "tests/test_compute_factory_convergence.py"
       - "docs/decisions/trama-compute-factory-alignment-v1.md"
       - "scripts/probe_azure_credit_entitlement.py"
       - "scripts/probe_owned_k8s_entitlement.py"
@@ -48,6 +49,20 @@ jobs:
           python -m unittest tests/test_visual_factory_compute_plan.py -v
           python -m unittest tests/test_visual_factory_provider_adapters.py -v
           python -m unittest tests/test_compute_factory_handoff.py -v
+
+      - name: Checkout pinned VF-3D planner for offline convergence
+        uses: actions/checkout@v4
+        with:
+          ref: 05935f5ef73b532e0b3dd2aaa83ca82e21381d84
+          path: .cf-vf3d-upstream
+          persist-credentials: false
+
+      - name: Verify convergence against exact upstream planner and observed cache receipt
+        env:
+          TRAMA_VF3D_SOURCE: ${{ github.workspace }}/.cf-vf3d-upstream
+        run: |
+          test "$(git -C "$TRAMA_VF3D_SOURCE" rev-parse HEAD)" = 05935f5ef73b532e0b3dd2aaa83ca82e21381d84
+          python -m unittest tests/test_compute_factory_convergence.py -v
 
       - name: Compile fixture plan
         run: |
