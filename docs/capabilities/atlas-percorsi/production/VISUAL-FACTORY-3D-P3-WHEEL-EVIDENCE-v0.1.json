@@ -1,0 +1,1623 @@
+{
+  "schema": "trama.vf3d.wheel-evidence/v1",
+  "status": "BYTE_VERIFIED_LICENSE_REVIEW_PENDING",
+  "commit": "d61e9484e2e5dca37159a10276e4cf92fece9278",
+  "run": 44156431923,
+  "job": 134298302067,
+  "downloadBytes": 291569214,
+  "packages": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.6",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1086,
+          "sha256": "fff170779a6acbf65abdb405c087f1cee1786691e4a96a4034517e4a504a0cdf"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1083,
+          "sha256": "fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "anyio",
+      "version": "4.16.0",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1081,
+          "sha256": "5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "certifi",
+      "version": "2026.10.23",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "MPL-2.0",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 989,
+          "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "click",
+      "version": "8.5.1",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "bytes": 1475,
+          "sha256": "9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "cmake",
+      "version": "4.4.5",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "Apache 2.0",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: BSD License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/AUTHORS.rst",
+          "bytes": 142,
+          "sha256": "9cbfc78a28479dd1ef553021f5841c295d89669f3be2e60d1824bdddd997a1b1"
+        },
+        {
+          "path": "licenses/LICENSE_Apache_20",
+          "bytes": 10273,
+          "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68"
+        },
+        {
+          "path": "licenses/LICENSE_BSD_3",
+          "bytes": 1668,
+          "sha256": "a39f63ec8a8e9d63ee8fd85eac9eda615995216eff43c500f68c08d4c922bf3f"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "einops",
+      "version": "0.8.2",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "MIT",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1073,
+          "sha256": "30d984364296f51ffaecad4b01ee127e95250c5068918d4b66fc96206723e434"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "filelock",
+      "version": "4.2.11",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1088,
+          "sha256": "608c89d5060ae9921adccf3236695bc654a9946e12323ef6c021dfa04e294d48"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.9.0",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1513,
+          "sha256": "2dc35496ce53a7307915c008a844aad53e772b49b34cdd00445067691407ec94"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "MIT",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "bytes": 1124,
+          "sha256": "37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "hf-xet",
+      "version": "1.8.0",
+      "sha256Verified": true,
+      "licenseExpression": "Apache-2.0",
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.md",
+          "bytes": 1518,
+          "sha256": "fdcb59154c74cbaba16a11242f7740bea9f23d6feb5547917d8c5f94a80392a5"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "BSD-3-Clause",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.md",
+          "bytes": 1508,
+          "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.33.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "Apache-2.0",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "idna",
+      "version": "3.20",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.md",
+          "bytes": 1541,
+          "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "imageio",
+      "version": "2.38.2",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-2-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1307,
+          "sha256": "c453cf1368bb9e009e4d7e5334fc78511e665316a612ef54ee4fe1245678fe2c"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "jinja2",
+      "version": "3.1.6",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "bytes": 1475,
+          "sha256": "3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "markdown-it-py",
+      "version": "4.3.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1078,
+          "sha256": "4a2260d6e2cd0f5a151a1e86dbfe7d3ed552b1e2beabf9941c1ba5c49cbce484"
+        },
+        {
+          "path": "licenses/LICENSE.markdown-it",
+          "bytes": 1073,
+          "sha256": "792c48c5a849a15fdf9e37e8bcf9e6d1dd13b32b46c642a748a0a46a9919d473"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "markupsafe",
+      "version": "3.0.4",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "bytes": 1475,
+          "sha256": "489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "mdurl",
+      "version": "0.1.2",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "bytes": 2338,
+          "sha256": "7c605df6e28667a9603118e98274f64a49ce3eed0d26fccce9534a345e0ef955"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "BSD",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "bytes": 1537,
+          "sha256": "c26cae81da4508e5e249985777a33821f183223ebb74d7f8cfbf90fe7eef2fb7"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "networkx",
+      "version": "3.7",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "bytes": 1763,
+          "sha256": "6025f323ea29dc2f0ee0abd9523bf910186f55b0e148e6ebf646c55566278e2e"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "ninja",
+      "version": "1.13.2",
+      "sha256Verified": true,
+      "licenseExpression": "Apache-2.0",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE_Apache_20",
+          "bytes": 10273,
+          "sha256": "73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.5",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "bytes": 45809,
+          "sha256": "8c3433f4b8b93e30a2b54a376ef8d0576a3e1e8d14b14eb288da0a75e0c99627"
+        },
+        {
+          "path": "licenses/numpy/_core/include/numpy/libdivide/LICENSE.txt",
+          "bytes": 1018,
+          "sha256": "fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec"
+        },
+        {
+          "path": "licenses/numpy/_core/src/common/pythoncapi-compat/COPYING",
+          "bytes": 690,
+          "sha256": "3f2c1ffa76383a55ae0aac01c9737cd70050dff63e1f026694fbe9d662573c98"
+        },
+        {
+          "path": "licenses/numpy/_core/src/highway/LICENSE",
+          "bytes": 20785,
+          "sha256": "e340270d4f64384569a91d546acb5b094d69ce47f0c015db77abb74dc6f815af"
+        },
+        {
+          "path": "licenses/numpy/_core/src/multiarray/dragon4_LICENSE.txt",
+          "bytes": 1414,
+          "sha256": "f7b14309e5f54e5022b26448eefd419988ada2aec01d3c1162d84a0ea8f21f2c"
+        },
+        {
+          "path": "licenses/numpy/_core/src/npysort/x86-simd-sort/LICENSE.md",
+          "bytes": 1514,
+          "sha256": "211e7d737d6179a08f791ebb0a99897ce7cd2457410c542876d125576edfe910"
+        },
+        {
+          "path": "licenses/numpy/_core/src/umath/svml/LICENSE",
+          "bytes": 1543,
+          "sha256": "c17011467b4fe6e20fbfbeda4df09e58c2bca5480a063e55735a4000a379aad9"
+        },
+        {
+          "path": "licenses/numpy/fft/pocketfft/LICENSE.md",
+          "bytes": 1498,
+          "sha256": "a85ca13fdf90160b64a0698215868c13b74d835ad0a4e2ba44713b8c5058a056"
+        },
+        {
+          "path": "licenses/numpy/linalg/lapack_lite/LICENSE.txt",
+          "bytes": 2266,
+          "sha256": "a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55"
+        },
+        {
+          "path": "licenses/numpy/ma/LICENSE",
+          "bytes": 1593,
+          "sha256": "05f3b88351988ecfad10abe92c0c50e5875c6452d5009a0084cc291551ffcca6"
+        },
+        {
+          "path": "licenses/numpy/random/LICENSE.md",
+          "bytes": 3511,
+          "sha256": "103166b62b80443afb9eb3488e052ea06be0cff566b908f199e561fde49af19f"
+        },
+        {
+          "path": "licenses/numpy/random/src/distributions/LICENSE.md",
+          "bytes": 2745,
+          "sha256": "469778be8f33d54e1bcaab28c281cc472916d2d273f835e55bc487d30503face"
+        },
+        {
+          "path": "licenses/numpy/random/src/mt19937/LICENSE.md",
+          "bytes": 2926,
+          "sha256": "0e111337b25494a773106695f0e799f642b8567aaacca4f116a74a8177179156"
+        },
+        {
+          "path": "licenses/numpy/random/src/pcg64/LICENSE.md",
+          "bytes": 1154,
+          "sha256": "e7d4f4fb20358f314210a892ae17351e04993813646f697ec387385ca2a36918"
+        },
+        {
+          "path": "licenses/numpy/random/src/philox/LICENSE.md",
+          "bytes": 1509,
+          "sha256": "6f5828a57223d4cc7f8ea505a2623e7b978b242752c1515e355f46ba2cec1800"
+        },
+        {
+          "path": "licenses/numpy/random/src/sfc64/LICENSE.md",
+          "bytes": 1226,
+          "sha256": "9d4098846018319cd68e228ee6220361787f73bccbf00237a85e4fc9621b998f"
+        },
+        {
+          "path": "licenses/numpy/random/src/splitmix64/LICENSE.md",
+          "bytes": 332,
+          "sha256": "268b0ca06759d31ea3ca68dd35f20e877916e927b1c2a835e4592a3c4354b1f9"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "omegaconf",
+      "version": "2.4.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1518,
+          "sha256": "b31375ed5d5cbe7ec2d0c4c14df8afa7a8e5501bbe25f70b6cbc461685f4b91a"
+        },
+        {
+          "path": "licenses/ATTRIBUTION/LICENSE-antlr4",
+          "bytes": 1480,
+          "sha256": "3db1fb3ee79a4b4f9918fc4d0f6133bf18a3cf787f126cd22f8aa9b862281c0c"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "sha256Verified": true,
+      "licenseExpression": "Apache-2.0 OR BSD-2-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 197,
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "path": "licenses/LICENSE.APACHE",
+          "bytes": 10174,
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "path": "licenses/LICENSE.BSD",
+          "bytes": 1344,
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "pathspec",
+      "version": "1.1.1",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 16726,
+          "sha256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "pillow",
+      "version": "13.0.0",
+      "sha256Verified": true,
+      "licenseExpression": "MIT-CMU",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 70307,
+          "sha256": "dda12a98c1979cf3d94df1cff45d27a4cb3f04a60c76f76902ac54cac03ec0ce"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "pybind11",
+      "version": "3.1.0",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-3-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1684,
+          "sha256": "83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "pydantic",
+      "version": "2.14.3",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1129,
+          "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "pydantic-core",
+      "version": "2.50.4",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1080,
+          "sha256": "2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "pygments",
+      "version": "2.21.0",
+      "sha256Verified": true,
+      "licenseExpression": "BSD-2-Clause",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/AUTHORS",
+          "bytes": 11048,
+          "sha256": "71a83872ad82f57be692cf827e048e2cd51d45169cfa1ea3f28706d97a872c0f"
+        },
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1331,
+          "sha256": "a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "pyyaml",
+      "version": "6.0.3",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "MIT",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1101,
+          "sha256": "8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "regex",
+      "version": "2026.11.15",
+      "sha256Verified": true,
+      "licenseExpression": "Apache-2.0 AND CNRI-Python",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.txt",
+          "bytes": 11584,
+          "sha256": "bff55ef4cdcc8c14ce259f8e8ab60e264418440d6335f4dc138273fbd506144d"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "rich",
+      "version": "15.0.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "MIT",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1056,
+          "sha256": "deed7c17a4318158190a3ea239cc879a5a50271cebb98ae7025f48fbe58dca15"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "safetensors",
+      "version": "0.8.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "scikit-build-core",
+      "version": "1.1.2",
+      "sha256Verified": true,
+      "licenseExpression": "Apache-2.0",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 11346,
+          "sha256": "203fb4d261f202242333928424e101de19abf5bf166620124418fb6dd6b279b5"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "setuptools",
+      "version": "84.2.1",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1023,
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741"
+        }
+      ],
+      "vendoredDistributions": [
+        {
+          "path": "setuptools/_vendor/autocommand-2.2.2.dist-info/METADATA",
+          "name": "autocommand",
+          "version": "2.2.2",
+          "metadataSha256": "3800d9b91dceea2065a6ed6279383362e97ac38b8e56b9343f404ee531860099",
+          "licenseExpression": null,
+          "licenseField": "LGPLv3",
+          "licenseClassifiers": [
+            "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)"
+          ],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/autocommand-2.2.2.dist-info/LICENSE",
+              "sha256": "ade78d04982d69972d444a8e14a94f87a2334dd3855cc80348ea8e240aa0df2d",
+              "bytes": 7634
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/backports.tarfile-1.2.0.dist-info/METADATA",
+          "name": "backports.tarfile",
+          "version": "1.2.0",
+          "metadataSha256": "8215c54ead77d9dc5a108a25c6bdc72b5999aa6f62c9499a440359412afa5a51",
+          "licenseExpression": null,
+          "licenseField": "",
+          "licenseClassifiers": [
+            "License :: OSI Approved :: MIT License"
+          ],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/backports.tarfile-1.2.0.dist-info/LICENSE",
+              "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+              "bytes": 1023
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/importlib_metadata-8.7.1.dist-info/METADATA",
+          "name": "importlib_metadata",
+          "version": "8.7.1",
+          "metadataSha256": "a3e38b9ee4326289d4864704f30e299ee769e2309ce9f4a75f0de1a50ad0a356",
+          "licenseExpression": "Apache-2.0",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+              "sha256": "458502e12d97bbf64438606a20044aa85eb05fb0a8a807bb35dbec253fd1fc04",
+              "bytes": 10278
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/jaraco.text-4.0.0.dist-info/METADATA",
+          "name": "jaraco.text",
+          "version": "4.0.0",
+          "metadataSha256": "5c2fd09012c954f139b10624978d5335a654c34014cd06f6f466ca683dbc9c56",
+          "licenseExpression": null,
+          "licenseField": "",
+          "licenseClassifiers": [
+            "License :: OSI Approved :: MIT License"
+          ],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/jaraco.text-4.0.0.dist-info/LICENSE",
+              "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+              "bytes": 1023
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/jaraco_context-6.1.0.dist-info/METADATA",
+          "name": "jaraco.context",
+          "version": "6.1.0",
+          "metadataSha256": "0435ebfc52055c5a9974ed20c171b6454383eaf9dbb1508814ba7ad97c59d712",
+          "licenseExpression": "MIT",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+              "sha256": "9755a18519666e5f0f4cae3daad3d7012bcae48a600b31237d75e9fe134e6683",
+              "bytes": 1076
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/jaraco_functools-4.4.0.dist-info/METADATA",
+          "name": "jaraco.functools",
+          "version": "4.4.0",
+          "metadataSha256": "2e79da8dc3469924abe3ac8b22a3feb5692a79bf9f47bbc86b6535d618641849",
+          "licenseExpression": "MIT",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+              "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+              "bytes": 1076
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/more_itertools-10.8.0.dist-info/METADATA",
+          "name": "more-itertools",
+          "version": "10.8.0",
+          "metadataSha256": "6ab3515145abe58b067f087c867631cf4cf5d653fed81b9642ee12086c3904b8",
+          "licenseExpression": "MIT",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+              "sha256": "09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46",
+              "bytes": 1053
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/packaging-26.3.dist-info/METADATA",
+          "name": "packaging",
+          "version": "26.3",
+          "metadataSha256": "70fdb89fc4d4a9a043bf7372b8972bcc883fddff34ab55e9cf80d73875384763",
+          "licenseExpression": "Apache-2.0 OR BSD-2-Clause",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/packaging-26.3.dist-info/licenses/LICENSE",
+              "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+              "bytes": 197
+            },
+            {
+              "path": "setuptools/_vendor/packaging-26.3.dist-info/licenses/LICENSE.APACHE",
+              "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+              "bytes": 10174
+            },
+            {
+              "path": "setuptools/_vendor/packaging-26.3.dist-info/licenses/LICENSE.BSD",
+              "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+              "bytes": 1344
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/platformdirs-4.4.0.dist-info/METADATA",
+          "name": "platformdirs",
+          "version": "4.4.0",
+          "metadataSha256": "bbc5216d5f4c77bfbc57227264d52e66bccde71ccf79e75e1a6046d029d30223",
+          "licenseExpression": "MIT",
+          "licenseField": "",
+          "licenseClassifiers": [
+            "License :: OSI Approved :: MIT License"
+          ],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+              "sha256": "29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6",
+              "bytes": 1089
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/tomli-2.4.0.dist-info/METADATA",
+          "name": "tomli",
+          "version": "2.4.0",
+          "metadataSha256": "f5ac0a1f8fba908b4646cd655309e91aad969b6787616ac571ca462a3832ffce",
+          "licenseExpression": "MIT",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/tomli-2.4.0.dist-info/licenses/LICENSE",
+              "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe",
+              "bytes": 1072
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/wheel-0.46.3.dist-info/METADATA",
+          "name": "wheel",
+          "version": "0.46.3",
+          "metadataSha256": "22910aa97ca89cbcc20a019e27fe31360b7929a4bd66ca0d310f99a44f6ccd35",
+          "licenseExpression": "MIT",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+              "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+              "bytes": 1107
+            }
+          ]
+        },
+        {
+          "path": "setuptools/_vendor/zipp-3.23.0.dist-info/METADATA",
+          "name": "zipp",
+          "version": "3.23.0",
+          "metadataSha256": "bdd67d4d16cf0bf3b893e7d18cd3d2d774adb82f37ed985bc7770c607226b35b",
+          "licenseExpression": "MIT",
+          "licenseField": "",
+          "licenseClassifiers": [],
+          "licenseFiles": [
+            {
+              "path": "setuptools/_vendor/zipp-3.23.0.dist-info/licenses/LICENSE",
+              "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+              "bytes": 1076
+            }
+          ]
+        }
+      ],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "shellingham",
+      "version": "1.5.4",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "ISC License",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: ISC License (ISCL)"
+      ],
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "bytes": 751,
+          "sha256": "f388fd38cad13112c1dc0f669bbe80e7f84541edbafb72f3030d2ca7642c3c9d"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "BSD",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/AUTHORS",
+          "bytes": 55779,
+          "sha256": "82b1038521b0696c63c90b31ed4a0a2c9c4c16871c648b157b07ca44b6f18f8d"
+        },
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 7885,
+          "sha256": "07a5e9819f727b4986ad2829c7a29a6320d42575f720eb24d71b7fef573a0286"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.23.3",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": null,
+      "licenseClassifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "licenseFiles": [],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "torch",
+      "version": "2.14.1+cpu",
+      "sha256Verified": true,
+      "licenseExpression": "Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 3464,
+          "sha256": "bd018feef8825e88181c84eb7e3aa4eafb8f08a20d9fd6ef948569610c4a3e43"
+        },
+        {
+          "path": "licenses/third_party/FP16/LICENSE",
+          "bytes": 1157,
+          "sha256": "17e4f539024be2749ee729d1e2f01d24cef12ece8c9bf18e91a4349be29c80bf"
+        },
+        {
+          "path": "licenses/third_party/FXdiv/LICENSE",
+          "bytes": 1117,
+          "sha256": "7cac00006125b1486a27e4801ed66357236e984c540bd323945ab7b66b078ec3"
+        },
+        {
+          "path": "licenses/third_party/NNPACK/LICENSE",
+          "bytes": 1352,
+          "sha256": "ab09e33621f513ebdd1ef685b324f39c1f6bee9221d15600bafd958322df1231"
+        },
+        {
+          "path": "licenses/third_party/NVTX/LICENSE.txt",
+          "bytes": 12483,
+          "sha256": "abdfd8a6738b27cd1504e091f77b682dbae928339f040b8a6f59a548245991a0"
+        },
+        {
+          "path": "licenses/third_party/NVTX/docs/LICENSE.txt",
+          "bytes": 12483,
+          "sha256": "abdfd8a6738b27cd1504e091f77b682dbae928339f040b8a6f59a548245991a0"
+        },
+        {
+          "path": "licenses/third_party/NVTX/python/LICENSE.txt",
+          "bytes": 12483,
+          "sha256": "abdfd8a6738b27cd1504e091f77b682dbae928339f040b8a6f59a548245991a0"
+        },
+        {
+          "path": "licenses/third_party/NVTX/rust/LICENSE",
+          "bytes": 12449,
+          "sha256": "e165ed77854f47fb208850d23d935a9f0ab8bb4527381466beeb16025e2f6e9e"
+        },
+        {
+          "path": "licenses/third_party/VulkanMemoryAllocator/LICENSE.txt",
+          "bytes": 1099,
+          "sha256": "8d70e4cf2a9941f6454da71cd60e38484dd3e34810c824760d550e982af6d97a"
+        },
+        {
+          "path": "licenses/third_party/XNNPACK/LICENSE",
+          "bytes": 1560,
+          "sha256": "63f519e15726f4c4f830bd958f694c84fecb4e0a4cacc527d2696bb71ef95ada"
+        },
+        {
+          "path": "licenses/third_party/aiter/LICENSE",
+          "bytes": 1100,
+          "sha256": "0baca809927cad448401b252ce3bae12687c2987597ad7088cf3423f872d5bcd"
+        },
+        {
+          "path": "licenses/third_party/aiter/3rdparty/composable_kernel/LICENSE",
+          "bytes": 1726,
+          "sha256": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf"
+        },
+        {
+          "path": "licenses/third_party/benchmark/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "licenses/third_party/composable_kernel/LICENSE",
+          "bytes": 1726,
+          "sha256": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf"
+        },
+        {
+          "path": "licenses/third_party/cpp-httplib/LICENSE",
+          "bytes": 1075,
+          "sha256": "4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b"
+        },
+        {
+          "path": "licenses/third_party/cpuinfo/LICENSE",
+          "bytes": 1424,
+          "sha256": "8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70"
+        },
+        {
+          "path": "licenses/third_party/cpuinfo/deps/clog/LICENSE",
+          "bytes": 1384,
+          "sha256": "68a14c3e79add023eecd83d611e73f05b8bf1d16852efeb7eb4033a96736da9e"
+        },
+        {
+          "path": "licenses/third_party/cudnn_frontend/LICENSE.txt",
+          "bytes": 1148,
+          "sha256": "3fc4b473a2c08768a8066bf7e4a58a1185060f3ad674f2ca9e2011bca4adf2ce"
+        },
+        {
+          "path": "licenses/third_party/cutlass/LICENSE.txt",
+          "bytes": 1861,
+          "sha256": "ad1513ca983da737a6843364ad19e8424a56d860736c2da773b8c5be527e1475"
+        },
+        {
+          "path": "licenses/third_party/cutlass/python/LICENSE.txt",
+          "bytes": 1547,
+          "sha256": "00bf1806f664ac1afe4221f5f04b384fb6f1ca6eb33efcb6dccf599eb06d08b9"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/LICENSE",
+          "bytes": 1535,
+          "sha256": "12c2370ec32e78115dcd71ba22cdcb1297320fdc4ade81f798136d42357c58b8"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/external/composable_kernel/LICENSE",
+          "bytes": 1726,
+          "sha256": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/external/cpuinfo/LICENSE",
+          "bytes": 1424,
+          "sha256": "8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/external/cpuinfo/deps/clog/LICENSE",
+          "bytes": 1384,
+          "sha256": "68a14c3e79add023eecd83d611e73f05b8bf1d16852efeb7eb4033a96736da9e"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/external/cutlass/LICENSE.txt",
+          "bytes": 1854,
+          "sha256": "80a7a18b73d41f64dd9ca881af35938f8de88b18c728703251f4c94d1299884d"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/external/cutlass/python/LICENSE.txt",
+          "bytes": 1547,
+          "sha256": "42fec630f410aa308f70a51a89fadcd19586fa620f9831a32bee528a9a10000e"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/external/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/external/hipify_torch/LICENSE.txt",
+          "bytes": 1112,
+          "sha256": "ecf819d55b17c2f091b3ba0934d044368aa0680d8a81374860306aa2b91aa1eb"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/fbgemm_gpu/experimental/hstu/LICENSE",
+          "bytes": 1558,
+          "sha256": "8c9ccb96c065e706135b6cbad279b721da6156e51f3a5f27c6b3329af9416d73"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/fbgemm_gpu/src/quantize_ops/mx/LICENSE",
+          "bytes": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        },
+        {
+          "path": "licenses/third_party/fbgemm/fbgemm_gpu/test/quantize/mx/LICENSE",
+          "bytes": 1141,
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        },
+        {
+          "path": "licenses/third_party/flash-attention/LICENSE",
+          "bytes": 1558,
+          "sha256": "8c9ccb96c065e706135b6cbad279b721da6156e51f3a5f27c6b3329af9416d73"
+        },
+        {
+          "path": "licenses/third_party/flash-attention/csrc/composable_kernel/LICENSE",
+          "bytes": 1726,
+          "sha256": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf"
+        },
+        {
+          "path": "licenses/third_party/flash-attention/csrc/cutlass/LICENSE.txt",
+          "bytes": 1854,
+          "sha256": "80a7a18b73d41f64dd9ca881af35938f8de88b18c728703251f4c94d1299884d"
+        },
+        {
+          "path": "licenses/third_party/flash-attention/csrc/cutlass/python/LICENSE.txt",
+          "bytes": 1547,
+          "sha256": "42fec630f410aa308f70a51a89fadcd19586fa620f9831a32bee528a9a10000e"
+        },
+        {
+          "path": "licenses/third_party/flash-attention/flash_attn/cute/LICENSE",
+          "bytes": 1558,
+          "sha256": "8c9ccb96c065e706135b6cbad279b721da6156e51f3a5f27c6b3329af9416d73"
+        },
+        {
+          "path": "licenses/third_party/flash-attention/third_party/aiter/LICENSE",
+          "bytes": 1100,
+          "sha256": "0baca809927cad448401b252ce3bae12687c2987597ad7088cf3423f872d5bcd"
+        },
+        {
+          "path": "licenses/third_party/flash-attention/third_party/aiter/3rdparty/composable_kernel/LICENSE",
+          "bytes": 1726,
+          "sha256": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf"
+        },
+        {
+          "path": "licenses/third_party/flatbuffers/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "licenses/third_party/flatbuffers/dart/LICENSE",
+          "bytes": 11341,
+          "sha256": "edd9b3459bee4c79b549a5ef66d06d12bd144ddb8d08e0b448fb421267f43dd5"
+        },
+        {
+          "path": "licenses/third_party/flatbuffers/swift/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "licenses/third_party/fmt/LICENSE",
+          "bytes": 1094,
+          "sha256": "a65fcc5a1095fc33cc37e4fff69366e49d7e92f613558a2b95ed1b70e33758b4"
+        },
+        {
+          "path": "licenses/third_party/gemmlowp/gemmlowp/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "licenses/third_party/gloo/LICENSE",
+          "bytes": 1525,
+          "sha256": "2afbc572cf7f60888159bc2ca48ba58f8adec06682ae5de820d61449d1eeea81"
+        },
+        {
+          "path": "licenses/third_party/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/ideep/LICENSE",
+          "bytes": 1062,
+          "sha256": "a26add03107a53a605a89711b9b7dbd4f5dd668ae193a912e01a879366a23b0e"
+        },
+        {
+          "path": "licenses/third_party/ideep/mkl-dnn/LICENSE",
+          "bytes": 11607,
+          "sha256": "e9fc874fc09801b9acf3411ba72394098473704d832d713404b6c4861a086318"
+        },
+        {
+          "path": "licenses/third_party/ideep/mkl-dnn/third_party/gtest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/ideep/mkl-dnn/third_party/opencl/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "licenses/third_party/kineto/LICENSE",
+          "bytes": 1609,
+          "sha256": "6f3d59b9103e72e5c977eecf61b261c2e1546a9be2995847e3ee2d31021fd39b"
+        },
+        {
+          "path": "licenses/third_party/kineto/libkineto/third_party/dynolog_headers/LICENSE",
+          "bytes": 1086,
+          "sha256": "52412d7bc7ce4157ea628bbaacb8829e0a9cb3c58f57f99176126bc8cf2bfc85"
+        },
+        {
+          "path": "licenses/third_party/kineto/libkineto/third_party/fmt/LICENSE",
+          "bytes": 1431,
+          "sha256": "07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8"
+        },
+        {
+          "path": "licenses/third_party/kineto/libkineto/third_party/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/llvm-openmp/LICENSE.txt",
+          "bytes": 17003,
+          "sha256": "68395143f21a9aa29b8232168c71892af5ec4f1ae2529571cd250a71c9e37a03"
+        },
+        {
+          "path": "licenses/third_party/mimalloc/LICENSE",
+          "bytes": 1096,
+          "sha256": "82ade5d7d9b029044b5fbbc326207fc47c2d44ee4dd71e8a559c36d728217de9"
+        },
+        {
+          "path": "licenses/third_party/miniz-3.0.2/LICENSE",
+          "bytes": 1184,
+          "sha256": "0115478d567121238cf6cc1c0c361926cf07a49d9e4c9e66da97fac6a01646b3"
+        },
+        {
+          "path": "licenses/third_party/mslk/LICENSE",
+          "bytes": 1533,
+          "sha256": "44519cbe722d7bf092cd7e0fa26558b9e3905b88fca4c0c278e2733a9f6b4cf9"
+        },
+        {
+          "path": "licenses/third_party/mslk/external/composable_kernel/LICENSE",
+          "bytes": 1726,
+          "sha256": "20f3b83dfda01bd18d285e0edbb9d044be6dde04cdf76a1ec18d9fc7127936bf"
+        },
+        {
+          "path": "licenses/third_party/mslk/external/cutlass/LICENSE.txt",
+          "bytes": 1854,
+          "sha256": "80a7a18b73d41f64dd9ca881af35938f8de88b18c728703251f4c94d1299884d"
+        },
+        {
+          "path": "licenses/third_party/mslk/external/cutlass/python/LICENSE.txt",
+          "bytes": 1547,
+          "sha256": "42fec630f410aa308f70a51a89fadcd19586fa620f9831a32bee528a9a10000e"
+        },
+        {
+          "path": "licenses/third_party/mslk/external/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/mslk/external/hipify_torch/LICENSE.txt",
+          "bytes": 1112,
+          "sha256": "ecf819d55b17c2f091b3ba0934d044368aa0680d8a81374860306aa2b91aa1eb"
+        },
+        {
+          "path": "licenses/third_party/mslk/mslk/attention/flash_attn/LICENSE",
+          "bytes": 1558,
+          "sha256": "8c9ccb96c065e706135b6cbad279b721da6156e51f3a5f27c6b3329af9416d73"
+        },
+        {
+          "path": "licenses/third_party/onnx/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "licenses/third_party/onnx/third_party/pybind11/LICENSE",
+          "bytes": 1684,
+          "sha256": "83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb"
+        },
+        {
+          "path": "licenses/third_party/perfetto/LICENSE",
+          "bytes": 14990,
+          "sha256": "9a682a56cffc9524dfa9b0b1c0dca9cb81a19e96d5bd0793aaf02c08a95ee7ca"
+        },
+        {
+          "path": "licenses/third_party/protobuf/LICENSE",
+          "bytes": 1732,
+          "sha256": "6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d"
+        },
+        {
+          "path": "licenses/third_party/protobuf/third_party/benchmark/LICENSE",
+          "bytes": 11358,
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "path": "licenses/third_party/protobuf/third_party/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/protobuf/third_party/googletest/googlemock/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/protobuf/third_party/googletest/googlemock/scripts/generator/LICENSE",
+          "bytes": 11386,
+          "sha256": "5e0df8c845c742e76f2f64d2d9ce1b7e74a2422fddbc577ae6a56319083de0bf"
+        },
+        {
+          "path": "licenses/third_party/protobuf/third_party/googletest/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/protobuf/third_party/utf8_range/LICENSE",
+          "bytes": 1065,
+          "sha256": "5a629d2b868081d8af08bbce5d038116f3a0e2e0d4ce9adf4d53f14e76b6b2e0"
+        },
+        {
+          "path": "licenses/third_party/psimd/LICENSE",
+          "bytes": 1162,
+          "sha256": "984ce1e0b8ee89d234e28b960381f240e03a07a8031f35012f9c3256f56964e2"
+        },
+        {
+          "path": "licenses/third_party/pthreadpool/LICENSE",
+          "bytes": 1378,
+          "sha256": "57814a606b4d0fb087d9a534919084b6c11b58a4174cb5a4aef200187780dc3a"
+        },
+        {
+          "path": "licenses/third_party/pybind11/LICENSE",
+          "bytes": 1684,
+          "sha256": "83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb"
+        },
+        {
+          "path": "licenses/third_party/python-peachpy/LICENSE.rst",
+          "bytes": 1443,
+          "sha256": "e6d6fdbfc09c9cc1bfc55946ca9690dd9276deeaed2b72ac7fc5c79bde80ff32"
+        },
+        {
+          "path": "licenses/third_party/sleef/LICENSE.txt",
+          "bytes": 1338,
+          "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/LICENSE.txt",
+          "bytes": 1535,
+          "sha256": "f4dcef0d1f0520b414d5bfaeed8df02f188e4ec05c0a17bf1c18f25f6cc66245"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/third_party/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/third_party/googletest/googlemock/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/third_party/googletest/googlemock/scripts/generator/LICENSE",
+          "bytes": 11386,
+          "sha256": "5e0df8c845c742e76f2f64d2d9ce1b7e74a2422fddbc577ae6a56319083de0bf"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/third_party/googletest/googletest/LICENSE",
+          "bytes": 1475,
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/third_party/libnop/LICENSE",
+          "bytes": 577,
+          "sha256": "876e8f7432440974ee5543a2aa1344370ef1f2f7949ad98a1f3899cf722d5631"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/third_party/libuv/LICENSE",
+          "bytes": 1079,
+          "sha256": "16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c"
+        },
+        {
+          "path": "licenses/third_party/tensorpipe/third_party/pybind11/LICENSE",
+          "bytes": 1676,
+          "sha256": "9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.1",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "MPL-2.0 AND MIT",
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENCE",
+          "bytes": 1985,
+          "sha256": "fcff87c3a47ce8028a8512aa182d4fcf0ad1c90544ee75cf9b343684cac194de"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "transformers",
+      "version": "5.23.0",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "Apache 2.0 License",
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 11418,
+          "sha256": "77fd4710def9ec3c0f6225800e0235f15a425abd4a8b03559127fcd782612049"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "trimesh",
+      "version": "4.12.2",
+      "sha256Verified": true,
+      "licenseExpression": null,
+      "licenseField": "The MIT License (MIT)\n        \n        Copyright (c) 2023 Michael Dawson-Haggerty\n        \n        Permission is hereby granted, free of charge, to any person obtaining a copy\n        of this software and associated documentation files (the \"Software\"), to deal\n        in the Software without restriction, including without limitation the rights\n        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n        copies of the Software, and to permit persons to whom the Softw",
+      "licenseClassifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE.md",
+          "bytes": 1090,
+          "sha256": "fe27b5ef8710676cc85255da28a32f394e2ef3f4ce47075a1c732a9ea1d7bd03"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "typer",
+      "version": "0.29.1",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1086,
+          "sha256": "58992cebcf8dfb6e40c4e2112ed12126c243666dca3912a3d78b7ecac4859d49"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "sha256Verified": true,
+      "licenseExpression": "PSF-2.0",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 13936,
+          "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.5",
+      "sha256Verified": true,
+      "licenseExpression": "MIT",
+      "licenseField": null,
+      "licenseClassifiers": [],
+      "licenseFiles": [
+        {
+          "path": "licenses/LICENSE",
+          "bytes": 1090,
+          "sha256": "804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3"
+        }
+      ],
+      "vendoredDistributions": [],
+      "licenseEvidencePresent": true
+    }
+  ],
+  "executionAuthorized": false,
+  "publicationAuthorized": false
+}
