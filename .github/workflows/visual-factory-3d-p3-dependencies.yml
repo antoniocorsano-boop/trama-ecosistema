@@ -21,8 +21,8 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/p3b"
           py="$RUNNER_TEMP/p3b/bin/python"
           "$py" -m pip --isolated install --dry-run --ignore-installed --only-binary=:all: --no-cache-dir --disable-pip-version-check --index-url https://pypi.org/simple --report "$RUNNER_TEMP/p3b-report.json" \
-            'torch @ https://download-r2.pytorch.org/whl/cpu/torch-2.10.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl' \
-            'numpy>=2,<3' 'Pillow>=11,<13' 'omegaconf==2.4.0' 'einops>=0.7,<1' \
+            'torch @ https://download-r2.pytorch.org/whl/cpu/torch-2.14.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl' \
+            'numpy>=2,<3' 'Pillow==13.0.0' 'omegaconf==2.4.0' 'einops>=0.7,<1' \
             'transformers==5.23.0' 'trimesh>=4,<5' 'imageio>=2,<3' 'huggingface-hub>=1,<2' \
             'scikit-build-core==1.1.2' 'pybind11>=2.10,<4' 'ninja' 'cmake>=3.24' 
       - name: Inventory exact resolution and query public advisory database
@@ -52,7 +52,7 @@ jobs:
                             "licenseClassifiers":[c for c in m.get("classifier",[]) if c.startswith("License ::")]})
           found.sort(key=lambda x:x["name"])
           torch = next(x for x in found if x["name"]=="torch")
-          assert torch["version"]=="2.10.0+cpu"
+          assert torch["version"]=="2.14.1+cpu"
           print("P3B_CANDIDATE_INVENTORY_BEGIN")
           print(json.dumps(found, indent=2))
           print("P3B_CANDIDATE_INVENTORY_END")
