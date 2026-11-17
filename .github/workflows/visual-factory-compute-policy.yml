@@ -8,6 +8,9 @@ on:
       - "docs/capabilities/atlas-percorsi/production/TRAMA-COMPUTE-POLICY-v0.1.md"
       - "docs/capabilities/atlas-percorsi/production/SKYPILOT-ORCHESTRATOR-v0.1.md"
       - "scripts/compile_visual_factory_compute_plan.py"
+      - "scripts/compile_compute_factory_handoff.py"
+      - "tests/test_compute_factory_handoff.py"
+      - "docs/decisions/trama-compute-factory-alignment-v1.md"
       - "scripts/probe_azure_credit_entitlement.py"
       - "scripts/probe_owned_k8s_entitlement.py"
       - "tests/test_visual_factory_compute_plan.py"
@@ -44,6 +47,7 @@ jobs:
         run: |
           python -m unittest tests/test_visual_factory_compute_plan.py -v
           python -m unittest tests/test_visual_factory_provider_adapters.py -v
+          python -m unittest tests/test_compute_factory_handoff.py -v
 
       - name: Compile fixture plan
         run: |
