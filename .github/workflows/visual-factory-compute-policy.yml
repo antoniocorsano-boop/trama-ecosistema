@@ -8,6 +8,10 @@ on:
       - "docs/capabilities/atlas-percorsi/production/TRAMA-COMPUTE-POLICY-v0.1.md"
       - "docs/capabilities/atlas-percorsi/production/SKYPILOT-ORCHESTRATOR-v0.1.md"
       - "scripts/compile_visual_factory_compute_plan.py"
+      - "scripts/compile_visual_factory_3d_plan.py"
+      - "schemas/trama-visual-3d-planning-input.v0.1.schema.json"
+      - "fixtures/visual-factory-3d/**"
+      - "tests/test_visual_factory_3d_plan.py"
       - "scripts/compile_compute_factory_handoff.py"
       - "tests/test_compute_factory_handoff.py"
       - "tests/test_compute_factory_convergence.py"
@@ -75,6 +79,13 @@ jobs:
           TRAMA_VF3D_SOURCE: ${{ github.workspace }}/.cf-vf3d-upstream
         run: |
           test "$(git -C "$TRAMA_VF3D_SOURCE" rev-parse HEAD)" = 05935f5ef73b532e0b3dd2aaa83ca82e21381d84
+          python -m scripts.verify_compute_factory_test_gate tests.test_compute_factory_convergence 9
+
+      - name: Verify current VF-3D planner against the shared handoff
+        env:
+          TRAMA_VF3D_SOURCE: ${{ github.workspace }}
+        run: |
+          test -f scripts/compile_visual_factory_3d_plan.py
           python -m scripts.verify_compute_factory_test_gate tests.test_compute_factory_convergence 9
 
       - name: Resolve enrolled Atlas repository
