@@ -6,11 +6,11 @@ export type EvidenceItem = {
   area?: string;
   subject?: string;
   status?: string;
-  source?: { path?: string; ref?: string; sha256?: string };
+  source?: { path?: string; ref?: string; sha256?: string; repository?: string; runId?: string | number; decisionRef?: string };
   observedAt?: string;
   freshness?: { policy?: string; expiresAt?: string | null };
   confidence?: string;
-  binding?: { capabilityRef?: string; exactHead?: string };
+  binding?: { capabilityRef?: string | null; exactHead?: string | null; areaRef?: string | null; releaseRef?: string | null; eventRef?: string | null } | null;
 };
 
 export type IntegrityCheck = {
@@ -58,4 +58,32 @@ export function linkedCapabilities(model: EvidenceModel, evidenceId: string) {
   const refs=model.capabilities.filter((cap)=>cap.evidenceRefs?.includes(evidenceId)).map((cap)=>cap.id);
   if (direct) refs.push(direct);
   return [...new Set(refs)].sort();
+}
+
+/** Presentation of the recorded outcome only. No current-candidate or release judgement. */
+export function recordedEvidenceLabel(status?: string): string {
+  switch (status) {
+    case "PASS": return "Verifica registrata con esito positivo";
+    case "FAIL": return "Verifica non superata";
+    case "PARTIAL": return "Riscontro parziale";
+    case "IN_PROGRESS": return "Verifica in corso";
+    case "NOT_APPLICABLE": return "Controllo non pertinente";
+    default: return "Esito non verificabile";
+  }
+}
+
+/** Display only provenance already carried by the governed snapshot. */
+export function evidenceProvenance(item: EvidenceItem): Array<{label: string; value: string}> {
+  const fields: Array<[string, unknown]> = [
+    ["Repository", item.source?.repository],
+    ["Esecuzione", item.source?.runId],
+    ["Versione di rilascio", item.binding?.releaseRef],
+    ["Riferimento evento", item.binding?.eventRef],
+    ["Riferimento decisione", item.source?.decisionRef],
+    ["Ambito associato", item.binding?.areaRef],
+  ];
+  return fields.flatMap(([label, value]) =>
+    typeof value === "string" && value.trim() !== "" ? [{label, value}] :
+    label === "Esecuzione" && typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? [{label, value: String(value)}] : []
+  );
 }

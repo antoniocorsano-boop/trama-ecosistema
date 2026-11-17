@@ -86,6 +86,13 @@ test("Evidence Explorer filters governed data and integrity has no overall score
 
   await page.getByLabel("Evidence type").selectOption("DOCUMENT_CANONICAL");
   await expect(page.getByText("EV-SOURCE-TRAMA-STATUS",{exact:true})).toBeVisible();
+  const recorded=page.locator("article.evidence-item").filter({has:page.getByText("EV-SOURCE-TRAMA-STATUS",{exact:true})});
+  await expect(recorded.getByText("Esito registrato",{exact:true})).toBeVisible();
+  await expect(recorded.getByText("Validità allo snapshot",{exact:true})).toBeVisible();
+  await expect(recorded.getByText("Osservazione registrata",{exact:true})).toBeVisible();
+  await expect(page.getByText("non certifica la versione corrente",{exact:false})).toBeVisible();
+  expect(await page.evaluate(()=>document.body.scrollWidth)).toBeLessThanOrEqual(await page.evaluate(()=>window.innerWidth)+1);
+
 
   await page.getByRole("tab",{name:"Integrità"}).click();
   await expect(page.getByText("Nessuno score complessivo.",{exact:false})).toBeVisible();

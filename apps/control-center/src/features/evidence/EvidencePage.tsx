@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadEcosystemSnapshot, type SnapshotLoadState } from "../../data/client";
-import { freshnessState, linkedCapabilities, toEvidenceModel } from "../../domain/evidence/model";
+import { evidenceProvenance, freshnessState, linkedCapabilities, recordedEvidenceLabel, toEvidenceModel } from "../../domain/evidence/model";
 import "./evidence.css";
 
 const initial:SnapshotLoadState={status:"LOADING"};
@@ -43,7 +43,7 @@ export function EvidencePage(){
       <header className="feature-header">
         <p className="section-kicker">A4 · EVIDENZE</p>
         <h2 id="evidence-title">Evidenze e integrità</h2>
-        <p>Drill-down sullo snapshot governato. PASS descrive una regola specifica; non viene convertito in score complessivo.</p>
+        <p>Evidenze dello snapshot governato. Un esito positivo riguarda la prova registrata, non certifica la versione corrente né autorizza un rilascio.</p>
       </header>
 
       <section className="evidence-summary" aria-label="Sintesi evidenze">
@@ -78,10 +78,13 @@ export function EvidencePage(){
                   <dl>
                     <div><dt>Tipo</dt><dd>{item.type || "—"}</dd></div>
                     <div><dt>Ambito</dt><dd>{item.area || "—"}</dd></div>
-                    <div><dt>Freshness</dt><dd>{fresh}</dd></div>
+                    <div><dt>Validità allo snapshot</dt><dd>{fresh}</dd></div>
+                    <div><dt>Esito registrato</dt><dd>{recordedEvidenceLabel(item.status)}</dd></div>
+                    <div><dt>Osservazione registrata</dt><dd>{item.observedAt ? formatDate(item.observedAt) : "Non dichiarata"}</dd></div>
                     <div><dt>Capability</dt><dd>{linked.join(", ") || "Non associata"}</dd></div>
                     <div><dt>Exact head</dt><dd className="mono">{item.binding?.exactHead || "Non bound"}</dd></div>
                     <div><dt>Confidenza</dt><dd>{item.confidence || "—"}</dd></div>
+                    {evidenceProvenance(item).map(({label,value})=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
                   </dl>
                   <p className="evidence-source">Fonte: {item.source?.ref || item.source?.path || "fonte governata"}</p>
                 </article>
