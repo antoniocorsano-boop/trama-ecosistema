@@ -150,6 +150,27 @@ class PlanTest(unittest.TestCase):
         a["parametersDigest"] = "6"*64
         self.assertIn("QUALIFIED_PROFILE_BINDING_MISMATCH", self.reasons())
 
+    def test_reservation_tamper(self):
+        self.pool()
+        a = self.admit()
+        a["reservedSeconds"] = 1
+        self.assertIn("QUALIFIED_PROFILE_BINDING_MISMATCH", self.reasons())
+
+    def test_schema_shape_matches_compiler_fixture(self):
+        schema = json.loads((ROOT / "schemas" / "trama-visual-3d-planning-input.v0.1.schema.json").read_text())
+        self.pool()
+        self.admit()
+        def check_shape(value, spec):
+            if spec.get("type") == "object":
+                self.assertEqual(set(value), set(spec["required"]))
+                self.assertFalse(spec["additionalProperties"])
+                for key, member in value.items():
+                    check_shape(member, spec["properties"][key])
+            elif spec.get("type") == "array":
+                for item in value:
+                    check_shape(item, spec["items"])
+        check_shape(self.bundle, schema)
+
     def test_wrong_admission_role(self):
         self.pool()
         self.admit(role="UV_TEXTURE")
