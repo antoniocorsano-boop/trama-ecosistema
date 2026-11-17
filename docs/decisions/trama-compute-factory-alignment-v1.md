@@ -41,3 +41,14 @@ The CF-02–06A laboratory reports local tests only; those counts do not establi
 - The same Atlas run has a deliberate failure in job 134116899314: SP-05 preview only, visual acceptance pending. It is not a failed cache restore. No candidate approval is inferred from the successful preview or cache.
 - New tests cover actual planner output, deterministic replay, request and plan tampering, and cache receipt boundaries. The existing compute CI performs the checks; no separate orchestration service.
 - This is an offline convergence slice, not live execution or final CF-06B.2 qualification. Remaining: candidate-bound acceptance, actual cache handoff with authenticated source/byte evidence, unified resource quota accounting, concurrency and independent review. No modification to parallel branches.
+
+
+## CF-06B.2b — synthetic quota ledger
+
+Port the local CF-03 transaction and lease principles and CF-05 explicit unit boundary into the existing compute capability. The new ledger is an offline SQLite reference implementation, not a new scheduler, provider registry or executor. It accepts review-only handoffs with ready source decisions, but the plan is NOT evidence of entitlement. All buckets must use synthetic identifiers and typed simulated units; the fixed capacity and expiry cannot be changed by reseeding. No conversion between neurons, weighted GPU seconds and CPU seconds is assumed. All amounts are explicitly synthetic.
+
+Reserve atomically in one database transaction (BEGIN IMMEDIATE); one reservation per request digest. Repeated identical reservation returns the existing state; changed parameters or reference fail. A reserved job expiring before simulated start releases its reservation; a simulated running job expiring becomes UNCERTAIN and retains the whole reservation. A completed simulation retains the reservation. No automatic retry or reset, no real resource activation. Time is caller-supplied for deterministic tests. The identity is not authentication.
+
+The existing CI adds 16 tests for quota bounds, concurrent distinct and duplicate requests, unit mismatch, rollback, restart persistence, blocked/tampered plans and recovery. The earlier convergence tests remain in place.
+
+Open gates: actual provider entitlement authentication and hard cost caps, accounting windows and units verified per service, stable cross-plan identity and reconciliation authorization, trusted clock, audit receipts and independent review. The synthetic ledger has no remote interface, no process execution, no credentials and no authority to publish. Do not attach it to external execution. Future multi-host accounting requires separately qualified transactional storage. No claim of production readiness.
