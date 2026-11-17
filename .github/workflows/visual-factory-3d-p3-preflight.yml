@@ -1,0 +1,66 @@
+name: Visual Factory — P3 CPU host preflight
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-p3-preflight.yml"
+permissions: {}
+concurrency:
+  group: vf3d-p3-preflight-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  host-preflight:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'work/vf3d-p3-cpu-preflight'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - name: Measure actual standard CPU host without installs or downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import importlib.metadata as md
+          import json, os, platform, shutil, sys
+          from pathlib import Path
+          def read(p):
+              try:
+                  return Path(p).read_text().strip()
+              except OSError:
+                  return ""
+          mem = int(next(l.split()[1] for l in read("/proc/meminfo").splitlines() if l.startswith("MemTotal:"))) * 1024
+          available = int(next(l.split()[1] for l in read("/proc/meminfo").splitlines() if l.startswith("MemAvailable:"))) * 1024
+          limit = read("/sys/fs/cgroup/memory.max")
+          used = read("/sys/fs/cgroup/memory.current")
+          if limit.isdigit():
+              mem = min(mem, int(limit))
+              if used.isdigit():
+                  available = min(available, max(0, int(limit) - int(used)))
+          cpus = len(os.sched_getaffinity(0))
+          quota = read("/sys/fs/cgroup/cpu.max").split()
+          if len(quota) == 2 and quota[0].isdigit():
+              cpus = min(cpus, int(quota[0]) / int(quota[1]))
+          disk = shutil.disk_usage(os.environ["RUNNER_TEMP"]).free
+          packages = {}
+          for name in ("torch","numpy","Pillow","omegaconf","einops","transformers","trimesh","torchmcubes","huggingface-hub"):
+              try:
+                  packages[name] = md.version(name)
+              except md.PackageNotFoundError:
+                  packages[name] = None
+          # Screening floors, NOT a measured TripoSR workload requirement.
+          checks = {"cpuFloor": cpus >= 4,
+                    "memoryFloor": available >= 12 * 1024**3,
+                    "diskFloor": disk >= 8 * 1024**3,
+                    "linuxX64": platform.system() == "Linux" and platform.machine() == "x86_64",
+                    "publicStandard": os.environ.get("RUNNER_ENVIRONMENT") == "github-hosted"}
+          evidence = {"status": "HOST_SCREEN_PASS" if all(checks.values()) else "HOST_SCREEN_BLOCKED",
+                      "cpuEffective": cpus, "ramLimitBytes": mem,
+                      "ramAvailableBytes": available, "diskFreeBytes": disk,
+                      "python": sys.version.split()[0], "packages": packages,
+                      "checks": checks, "weightsDownloaded": False,
+                      "dependenciesInstalled": False, "inferenceExecuted": False,
+                      "executionAuthorized": False, "runtimeQualified": False,
+                      "paidComputeAuthorized": False, "publicationAuthorized": False}
+          print(json.dumps(evidence, indent=2, sort_keys=True))
+          if not all(checks.values()):
+              sys.exit("Host screening failed; stop, no fallback.")
+          PY
