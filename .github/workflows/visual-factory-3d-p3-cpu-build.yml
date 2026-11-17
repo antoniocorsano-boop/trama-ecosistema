@@ -117,11 +117,58 @@ jobs:
           assert vertices.ndim==faces.ndim==2 and vertices.shape[1]==faces.shape[1]==3
           assert len(vertices)>100 and len(faces)>100 and torch.isfinite(vertices).all()
           assert faces.min()>=0 and faces.max()<len(vertices)
-          mesh=trimesh.Trimesh(vertices=vertices.numpy(),faces=faces.numpy(),process=False)
-          assert mesh.is_watertight and mesh.area>0
+          import io, itertools, numpy as np
+          # Normalize to grid coordinates [0,1], as upstream TripoSR does.
+          v=vertices.numpy().astype(np.float64)/31.0
+          f=faces.numpy().astype(np.int64)
+          def inspect(m):
+              counts=np.bincount(m.edges_unique_inverse)
+              return {"vertices":len(m.vertices),"triangles":len(m.faces),
+                      "area":float(m.area),"watertight":bool(m.is_watertight),
+                      "boundaryEdges":int(np.count_nonzero(counts==1)),
+                      "nonmanifoldEdges":int(np.count_nonzero(counts>2)),
+                      "degenerateFaces":int(np.count_nonzero(m.area_faces<=1e-14)),
+                      "duplicateFaces":len(m.faces)-len(np.unique(np.sort(m.faces,axis=1),axis=0))}
+          raw=trimesh.Trimesh(vertices=v,faces=f,process=False)
+          before=inspect(raw)
+          print("RAW_GEOMETRY",json.dumps(before),flush=True)
+          # One fixed, bounded weld. No hole filling, smoothing, face removal
+          # or iterative tolerance search. Only coincident float32 vertices.
+          tol=1e-6
+          order=np.lexsort((v[:,2],v[:,1],v[:,0]))
+          bins={}; representatives=[]; mapping=np.empty(len(v),dtype=np.int64)
+          shifts=list(itertools.product((-1,0,1),repeat=3))
+          max_move=0.0
+          for i in order:
+              point=v[i]; cell=np.floor(point/tol).astype(np.int64)
+              candidates=[]
+              for shift in shifts:
+                  candidates.extend(bins.get(tuple(cell+shift),[]))
+              near=[(float(np.linalg.norm(point-representatives[j])),j) for j in candidates]
+              near=[(d,j) for d,j in near if d<=tol]
+              if near:
+                  distance,j=min(near); max_move=max(max_move,distance)
+              else:
+                  j=len(representatives); representatives.append(point.copy())
+                  bins.setdefault(tuple(cell),[]).append(j)
+              mapping[i]=j
+          mesh=trimesh.Trimesh(vertices=np.asarray(representatives),faces=mapping[f],process=False)
+          after=inspect(mesh)
+          print("WELDED_GEOMETRY",json.dumps(after), "MAX_DISPLACEMENT",max_move,flush=True)
+          assert max_move<=tol and len(mesh.faces)==len(raw.faces), "weld exceeded bounds"
+          assert np.isfinite(mesh.vertices).all() and mesh.faces.min()>=0 and mesh.faces.max()<len(mesh.vertices)
+          assert before["area"]>0 and after["area"]>0, "nonpositive area"
+          assert abs(after["area"]-before["area"])/before["area"]<=1e-5, "area drift"
+          assert after["watertight"] and after["boundaryEdges"]==after["nonmanifoldEdges"]==0, "topology remains open"
+          assert after["degenerateFaces"]==after["duplicateFaces"]==0, "invalid faces after weld"
+          assert mesh.euler_number==2, "sphere topology mismatch"
           glb=mesh.export(file_type="glb")
           assert glb[:4]==b"glTF"
-          print(json.dumps({"status":"CPU_NATIVE_DIAGNOSTIC_PASS","torch":torch.__version__,"torchmcubes":version("torchmcubes"),"vertices":len(vertices),"triangles":len(faces),"watertight":bool(mesh.is_watertight),"glbBytes":len(glb),"seconds":time.monotonic()-t,"synthetic":True,"weightsDownloaded":False,"inferenceExecuted":False,"executionAuthorized":False,"publicationAuthorized":False,"paidComputeAuthorized":False}))
+          scene=trimesh.load(io.BytesIO(glb),file_type="glb",force="scene",process=False)
+          assert len(scene.geometry)==1
+          reread=next(iter(scene.geometry.values()))
+          assert reread.is_watertight and len(reread.faces)==len(mesh.faces) and reread.area>0
+          print(json.dumps({"status":"CPU_NATIVE_DIAGNOSTIC_PASS","torch":torch.__version__,"torchmcubes":version("torchmcubes"),"raw":before,"welded":after,"maxDisplacement":max_move,"weldTolerance":tol,"glbBytes":len(glb),"glbRoundTrip":True,"seconds":time.monotonic()-t,"synthetic":True,"correctionBudgetExhausted":True,"weightsDownloaded":False,"inferenceExecuted":False,"executionAuthorized":False,"publicationAuthorized":False,"paidComputeAuthorized":False}))
           PY
           SH
           chmod 700 "$root/offline.sh"
