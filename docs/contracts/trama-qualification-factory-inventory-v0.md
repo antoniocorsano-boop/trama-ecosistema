@@ -18,7 +18,7 @@ Le impronte sotto sono identificatori Git dei contenuti letti, non commit qualif
 | Docente OS, develop | .github/workflows/product-ci.yml (sola osservazione requisiti) | fc9f4592aa63e91f02cc4ea593155a1a2ecc8ed1 |
 | Registro Docente, main | docs/qualification/OPERATING_PROTOCOL.md | 8dc83508c6a940b85a1ee75c93eab7862ec7a53c |
 
-Repository: antoniocorsano-boop/CurManLight_arena, Curriculum-Atlas, docente-os-2026-27, registro-docente. Per Registro Docente, il riferimento STAB-06 resta esclusivamente il piano collegato in QF-01. Il blocco #307 resta vincolante.
+Repository: Arena, Curricolo Atlas e Docente OS secondo gli identificativi `enrollment:arena`, `enrollment:atlas`, `enrollment:docente-os` di `config/repository-enrollment.json`; Registro Docente: `antoniocorsano-boop/registro-docente` (riferimento documentale, non ammissione all'osservazione). Per Registro Docente, il riferimento STAB-06 resta esclusivamente il piano collegato in QF-01. Il blocco #307 resta vincolante.
 
 ## 2. Matrice delle responsabilità
 | Dimensione | Arena | Atlas | Docente OS | Registro Docente |
@@ -52,4 +52,4 @@ Non si afferma che manchino strumenti ulteriori nei repository non esaminati.
 Limitare l'eventuale raccordo a un modello di lettura documentale che conservi gli stati e le identità originali, collegando i riferimenti verificabili già prodotti alle autorità del registro evidenze esistente. Una sintesi non è una nuova ricevuta né un'autorizzazione; conservare contesto e granularità del prodotto, non trasformare risultati storici/parziali in PASS, non equiparare NOT_APPLICABLE e NOT_RUN. Verificare la compatibilità con Component Evidence Lane e Maturity Evidence Binding prima di ogni modifica. Non progettare esecuzione alternativa per il blocco STAB-06; nessuna modifica di workflow o adattatori esecutivi.
 
 ## 5. Esito
-QF-02: ricognizione documentale iniziale completata, da riesaminare insieme a QF-01. Nessun nuovo stato di maturità, modifica dei quattro prodotti, test o attivazione. QF-03 non avviata. QF-04 resta non autorizzata.
+QF-02: ricognizione documentale iniziale completata, da riesaminare insieme a QF-01. Nessun nuovo stato di maturità, modifica dei quattro prodotti, test o attivazione. Il raccordo successivo è trattato nella proposta QF-03A, senza implementazione. QF-04 resta non autorizzata.
