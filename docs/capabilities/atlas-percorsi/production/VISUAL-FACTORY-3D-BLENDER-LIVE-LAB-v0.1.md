@@ -1,7 +1,7 @@
 # VF-3D — Laboratorio Blender interattivo: qualificazione circoscritta
 
 **Stato:** DESIGN / UPSTREAM DOCUMENTATION REVIEWED / LIVE TEST NOT RUN.
-**Raccordo:** VF-3D-01, ADR-021, TRAMA #338, #340, #344; Curriculum-Atlas #106 (P2/B03). RIF-06 è il riferimento approvato per il confronto; i byte e il digest vanno verificati prima dell'esecuzione. Non sostituisce SP-08.1c (TripoSR), né modifica il planner, la Compute Policy o l'autorità editoriale.
+**Raccordo:** VF-3D-01, ADR-021, TRAMA #338, #340, #344; Atlas #106 (P2/B03). RIF-06 è il riferimento approvato per il confronto; i byte e il digest vanno verificati prima dell'esecuzione. Non sostituisce SP-08.1c (TripoSR), né modifica il planner, la Compute Policy o l'autorità editoriale.
 
 ## Decisione
 
