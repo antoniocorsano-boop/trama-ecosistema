@@ -70,3 +70,18 @@ Pin Atlas PR #105 at be1b70b46a768c772bf6db58a9548b55d1ec9e17 and VF-3D PR #338 
 The existing Compute Policy CI resolves the Atlas repository from the existing enrollment registry, checks out the two pinned sources without persisting upstream credentials, verifies exact source revisions and three geometry-source Git blobs, and replays the Atlas-owned deterministic CPU geometry and the VF-3D catalog checks. Eight new tests cover exact observed geometry, original generator replay, broken geometry, bounded determinism, registry and missing reference-lock gates, and zero authority escalation. No Blender invocation, rendering, generation model installation, provider API or provisioning. No modification to either parallel branch.
 
 The historical Atlas Blender profile (4.2.23, archive SHA-256 bea0eb3146be13eae6225409a117b215184f41b7f79e799f97cb3abb8f6dc404) is a candidate toolchain reference only. VF-3D still marks blender-procedural EXISTING_ATLAS_PIPELINE_REFERENCE_ONLY and PENDING_EXACT_TOOLCHAIN_AND_INPUT_REVIEW. The synthetic VF-3D Storie fixture has no actual reference lock, admissions or pools. Do not claim engine admission or reference-lock approval. A candidate profile must be approved in the existing registry, including exact toolchain, rights, environment, input/output and evidence binding, before a new bounded production run. Preserve Atlas artistic hold; continue toward shared review and qualification rather than another independent engine.
+
+
+## CF-07a — assurance review and qualification hardening
+
+Reviewed baseline 3fd8eb075abeeef42f38480cde253553645f0fa6: four jobs PASS, compute workflow 44126271266 reports 65/65 specific tests including eight exact Storie geometry tests. ECC security evidence, changed configuration and harness comments report success for that revision; ECC cannot publish checks with its current permissions. These are automated external checks, not an independent human approval. PR reviews list empty at review time.
+
+Findings:
+- CF-R01: mandatory cross-source suites used unittest skipUnless; a missing prerequisite could return success with skipped tests. Current baseline did execute all tests, but future false-green risk is real. Fix: require exact expected test counts, no skips, no failures or expected failures, and no unexpected successes; use a dedicated test gate with six adversarial tests.
+- CF-R02: main checkout retained default credentials while importing pinned upstream code. Fix: persist-credentials false on main checkout as already set on upstream checkouts; read-only permissions unchanged.
+- CF-R03: synthetic SQLite accounting has no trusted clock, authenticated entitlement or multi-host authority. Intentional limitation, production remains blocked.
+- CF-R04: GLB reference only checks framing and reported metadata; it is not full geometry validation or authenticated provenance. No admission implied.
+- CF-R05: exact source replays use immutable revisions and observed receipt claims; no full candidate byte validation, reference-lock approval, artistic acceptance or Blender runtime qualification. Keep the visual hold. Before integration, reviewers must confirm durable availability of pinned upstream commits, or update pins with an exact evidence replay. Do not weaken the pins or request broader credentials to fix access.
+- CF-R06: no independent reviewer approval recorded. Require a review of the final exact head, distinct from author-side checks, before integration. No automatic merge.
+
+This increment is a hardening slice, not final CF-07 approval. Re-run all controls on the new head; six new tests expected (71 total if all prior tests execute). No live execution, account activation, publication, provider authorization or changes to parallel branches.
