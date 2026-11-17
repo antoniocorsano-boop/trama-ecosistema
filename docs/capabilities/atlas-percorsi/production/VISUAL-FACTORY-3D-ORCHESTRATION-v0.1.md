@@ -1,7 +1,7 @@
 # VF-3D-01 / SP-08.1a — Orchestrazione image-to-3D e finitura Blender
 
 **Stato:** PROPOSED DESIGN / NOT EXECUTION AUTHORIZED  
-**Perimetro:** TRAMA Visual Factory · Studio Atlas · Curriculum Atlas  
+**Perimetro:** TRAMA Visual Factory · Studio Atlas · Atlas  
 **Baseline:** TRAMA main 4d9b7b487f3f920dad54593683b19a742d639b84; Atlas SP-07.5 be1b70b46a768c772bf6db58a9548b55d1ec9e17; studio SP-08 b0106d05fef61a25a8534297831279e940c8e0aa.  
 **Pilota:** Storie — Il libro vivente (SP-08).
 
