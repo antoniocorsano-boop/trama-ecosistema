@@ -32,3 +32,12 @@ FREE_ONLY; paid fallback forbidden; unknown eligibility fails closed; no quality
 5. CF-08: integration after explicit review; no automatic publication.
 
 The CF-02–06A laboratory reports local tests only; those counts do not establish repository integration. No claim of external GPU capacity, actual admission or zero cost entitlement is made by this change.
+
+
+## CF-06B.2a — pinned convergence, 2026-11-17
+
+- VF-3D source: TRAMA PR #338 head `05935f5ef73b532e0b3dd2aaa83ca82e21381d84`; successful run 44117809444, artifact 14343342807. CI checks out this exact revision separately and runs its actual pure planner with its synthetic Storie bundle, registry and recipe catalog. Expected WAITING_FOR_REFERENCE, zero planned jobs. No model download or inference. The SHA is pinned; future upstream changes require a new review.
+- Atlas PR #105 head `be1b70b46a768c772bf6db58a9548b55d1ec9e17`, run 44103958943, job 134111802184: actual logged SP-02 restore receipt, dependency key `007ea6703701dd30187fe538a733fd26ab58d0d43ac00769c2539b6ca4aec231`, ten verified dependency files, candidateReused false. The observed receipt is copied as a small review fixture, not the cached assets. Atlas remains the cache authority. The adapter checks receipt shape and exact key; it does not independently verify the artifact bytes or trusted origin, grant reuse, or qualify a candidate.
+- The same Atlas run has a deliberate failure in job 134116899314: SP-05 preview only, visual acceptance pending. It is not a failed cache restore. No candidate approval is inferred from the successful preview or cache.
+- New tests cover actual planner output, deterministic replay, request and plan tampering, and cache receipt boundaries. The existing compute CI performs the checks; no separate orchestration service.
+- This is an offline convergence slice, not live execution or final CF-06B.2 qualification. Remaining: candidate-bound acceptance, actual cache handoff with authenticated source/byte evidence, unified resource quota accounting, concurrency and independent review. No modification to parallel branches.
