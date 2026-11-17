@@ -26,8 +26,8 @@ class QuotaTests(unittest.TestCase):
     def tearDown(self):
         self.q.close()
         self.tmp.cleanup()
-    def reserve(self,i=1,amount=3,expiry=30):
-        return self.q.reserve(reference(i),"synthetic:gpu","GPU_WEIGHTED_SECOND_SIM",amount,expiry,10)
+    def reserve(self,i=1,amount=3,expiry=30,now=10):
+        return self.q.reserve(reference(i),"synthetic:gpu","GPU_WEIGHTED_SECOND_SIM",amount,expiry,now)
     def test_concurrent_distinct(self):
         def attempt(i):
             q=QuotaLedger(self.path)
@@ -101,6 +101,36 @@ class QuotaTests(unittest.TestCase):
         self.assertTrue(self.q.transition(key,"finish_simulation",12))
         self.assertEqual(self.q.recover(30),0)
         self.assertEqual(self.q.balance("synthetic:gpu")[2],3)
+    def test_replay_cancelled_after_expiry(self):
+        key,_=self.reserve()
+        self.assertEqual(self.q.recover(30),1)
+        for now in (30,31,101):
+            self.assertEqual(self.reserve(now=now),(key,"CANCELLED"))
+        self.assertEqual(self.q.balance("synthetic:gpu")[2],0)
+        self.assertFalse(self.q.transition(key,"start_simulation",31))
+    def test_replay_uncertain_after_expiry(self):
+        key,_=self.reserve()
+        self.assertTrue(self.q.transition(key,"start_simulation",11))
+        self.assertEqual(self.q.recover(30),1)
+        for now in (30,31,101):
+            self.assertEqual(self.reserve(now=now),(key,"UNCERTAIN"))
+        self.assertEqual(self.q.balance("synthetic:gpu")[2],3)
+        self.assertFalse(self.q.transition(key,"finish_simulation",31))
+    def test_replay_completed_after_expiry(self):
+        key,_=self.reserve()
+        self.assertTrue(self.q.transition(key,"start_simulation",11))
+        self.assertTrue(self.q.transition(key,"finish_simulation",12))
+        for now in (30,31,101):
+            self.assertEqual(self.reserve(now=now),(key,"SIMULATED_DONE"))
+        self.assertEqual(self.q.balance("synthetic:gpu")[2],3)
+    def test_new_expired_request_and_changed_replay_rejected(self):
+        self.reserve()
+        self.q.recover(30)
+        for kwargs in ({"i":2,"now":30},{"i":2,"now":31},{"amount":4,"now":31},
+                       {"expiry":40,"now":31},{"now":True},{"now":-1}):
+            with self.subTest(kwargs=kwargs),self.assertRaises(ValueError):
+                self.reserve(**kwargs)
+        self.assertEqual(self.q.balance("synthetic:gpu")[2],0)
     def test_persistence(self):
         self.reserve()
         q=QuotaLedger(self.path)
