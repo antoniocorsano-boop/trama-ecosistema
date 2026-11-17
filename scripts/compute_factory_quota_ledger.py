@@ -75,6 +75,9 @@ class QuotaLedger:
             check(handoff.get(key) is False, "offline authority")
         check(handoff.get("decision") == "REVIEW_REFERENCE_ONLY" and
               handoff.get("humanReviewRequired") is True, "review reference")
+        check(handoff.get("sourceDecision") in ("PLAN_READY", "PLAN_READY_FOR_REVIEW"),
+              "plan not ready for synthetic reservation")
+        check(sha(handoff.get("requestDigest")), "request digest")
         ref = handoff.get("handoffDigest")
         check(sha(ref) and digest({k:v for k,v in handoff.items() if k != "handoffDigest"}) == ref,
               "reference digest")
@@ -82,13 +85,14 @@ class QuotaLedger:
         check(number(amount, 1) and number(now) and number(expiry, 1) and now < expiry,
               "amount or time")
         check(isinstance(bucket, str) and unit in UNITS, "bucket or unit")
-        # One reservation per reference, irrespective of changing requested amount or bucket.
-        key = digest({"simulationReference": ref})
+        # One reservation per request digest, even if its plan reference changes.
+        key = digest({"simulationRequest": handoff["requestDigest"]})
         with self.transaction():
-            old = self.db.execute("SELECT bucket,amount,expiry,state FROM cf_reservation WHERE id=?",
+            old = self.db.execute("SELECT bucket,amount,expiry,state,reference FROM cf_reservation WHERE id=?",
                                   (key,)).fetchone()
             if old:
-                check(old[:3] == (bucket, amount, expiry), "duplicate parameters differ")
+                check(old[:3] == (bucket, amount, expiry) and old[4] == ref and
+                      self.balance(bucket)[0] == unit, "duplicate parameters differ")
                 return key, old[3]
             row = self.balance(bucket)
             check(row is not None and row[0] == unit and now < expiry <= row[3], "bucket mismatch")
