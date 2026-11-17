@@ -1,6 +1,9 @@
-import copy
+import datetime as dt
+import json
+from pathlib import Path
 import unittest
 from scripts.compile_compute_factory_handoff import digest, handoff
+from scripts.compile_visual_factory_compute_plan import compile_plan
 
 class HandoffTests(unittest.TestCase):
     def setUp(self):
@@ -12,10 +15,11 @@ class HandoffTests(unittest.TestCase):
                      "costMode": "FREE_ONLY", "runtimeAuthorized": False, "decision": "PLAN_READY",
                      "noPaidFallback": True, "noQualityDowngrade": True}
     def three_d(self):
-        req = dict(self.request, costClass="FREE_ONLY", executionAuthorized=False,
+        req = dict(self.request, costClass="FREE_ONLY", runtimeAuthorized=False,
                    publicationAuthorityGranted=False, studentAuthorized=False)
         plan = {"schemaVersion": "trama.visual-3d-plan/v0.1", "qualityProfile": "Q4",
                 "costClass": "FREE_ONLY", "executionAuthorized": False, "paidComputeAuthorized": False,
+                "runtimeAuthorized": False, "allowQualityDowngrade": False,
                 "publicationAuthorityGranted": False, "studentAuthorized": False,
                 "humanReviewRequired": True, "requestId": req["requestId"],
                 "requestDigest": digest(req), "decision": "WAITING_FOR_REFERENCE"}
@@ -60,6 +64,13 @@ class HandoffTests(unittest.TestCase):
         with self.assertRaises(ValueError): handoff(r,p)
     def test_unknown_version(self):
         with self.assertRaises(ValueError): handoff(self.request,dict(self.plan,schemaVersion="unknown"))
+    def test_existing_compiler_fixture(self):
+        root = Path(__file__).resolve().parents[1] / "fixtures/visual-factory-compute"
+        policy = json.loads((root / "policy-free-q4.json").read_text())
+        snapshot = json.loads((root / "snapshot-eligible.json").read_text())
+        plan = compile_plan(policy, snapshot, dt.datetime(2026,10,4,13,30,tzinfo=dt.timezone.utc))
+        self.assertEqual(plan["decision"], "PLAN_READY")
+        self.assertEqual(handoff(self.request, plan)["binding"], "POLICY_ONLY_UNBOUND")
     def test_digest(self):
         h = handoff(self.request,self.plan)
         self.assertEqual(h.pop("handoffDigest"),digest(h))
