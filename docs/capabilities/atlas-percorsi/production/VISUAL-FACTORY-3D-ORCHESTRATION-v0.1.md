@@ -46,6 +46,53 @@ Fonti ufficiali (ricognizione 2026-11-17):
 
 Prima di ammettere un adattatore: fissare revisione sorgente e modello/pesi, impronte, dipendenze runtime e licenze (inclusi preprocessing, segmentazione, rasterizzatore, texture), condizioni del servizio, uso consentito nell'UE, data della verifica, destinazione e diritti sull'input/output. Distinguere EVALUATION_ONLY da PRODUCTION_ELIGIBLE. Non considerare il registro una allowlist esecutiva. Non scaricare codice o pesi a runtime senza piano approvato.
 
+## 2bis. Ricognizione estesa e decisione ComfyUI (SP-08.1a+)
+
+Il registro comprende ora 16 strumenti, non tutti generatori: forma rapida, alta fedeltà, parti modificabili, viste multiple, ricostruzione, texture, fotogrammetria, finitura, ottimizzazione. I due componenti di esecuzione ComfyUI e ComfyUI-3D-Pack sono separati dai modelli. Il catalogo è una ricognizione, non una classifica misurata né una allowlist.
+
+| Nuovo strumento | Lavorazione da qualificare | Requisiti e cautela |
+|---|---|---|
+| SPAR3D | Mesh e nuvola di punti modificabile | 10,5 GB default, circa 7 GB low-VRAM; licenza Community e accesso pesi |
+| Stable Fast 3D | Mesh con UV e separazione illuminazione | circa 6 GB default; licenza Community e accesso pesi |
+| PartCrafter | Parti indipendenti, utile per Storie/Laboratori | MIT dichiarata; VAE TripoSG mantenuto fisso in addestramento e presente nel checkpoint, RMBG-1.4; HOLD catena derivativa |
+| Direct3D-S2 | Master geometrico ad alta risoluzione, OBJ | 1024: circa 24 GB; 512: almeno 10 GB, qualità inferiore sconsigliata dagli autori |
+| InstantMesh | Ricostruzione da viste multiple sintetiche | verificare modello Zero123++ e dipendenze |
+| Unique3D | Ricostruzione mesh da viste sintetiche | verificare modello e dipendenze |
+| CraftsMan3D | Generazione e affinamento geometrico | verificare variante e pesi |
+| MV-Adapter | Viste multiple condizionate e texture su mesh | verificare modello base, UV e proiezione |
+| Wonder3D | Viste RGB, normali, fusione in mesh | verificare modello, ricostruzione e dipendenze |
+| Meshroom | Fotogrammetria da fotografie reali | alternativa per oggetti didattici acquisiti, non ricostruzione fedele da un'immagine generata |
+| Meshoptimizer / gltfpack | Ottimizzazione mesh e glTF/GLB | verificare build, licenze e compatibilità glTF con Three.js r128; nessuna estensione di compressione senza prova decoder |
+
+Fonti primarie nel registro. Per PartCrafter, il checkpoint MIT riporta TripoSGVAEModel e pretrained_weights/TripoSG: ciò impone verifica, non dimostra automaticamente un divieto complessivo. SPAR3D/SF3D: non confondere licenza Community con MIT; non acquisire pesi gated in modo automatico. Risoluzione di Direct3D-S2 non è numero di vertici.
+
+### Esecutore a grafo: scelta condizionata
+
+ComfyUI è un candidato **esecutore locale** per i processi a nodi, subordinato alla regia Visual Factory e alla Compute Policy esistenti. Non sostituisce il selettore, la politica di ammissione, la revisione umana o Blender. L'adapter diretto CLI/Python resta disponibile come alternativa, in particolare quando un nodo o l'intero pacchetto non è ammesso. Non introdurre nuova infrastruttura cloud. Verificare obblighi GPL-3.0 per eventuali distribuzioni o modifiche a ComfyUI.
+
+Ricognizione effettiva del 17 novembre 2026: MrForExample/ComfyUI-3D-Pack @ 9e8096e50c5bcf35e1f3e34c6ae06216101f8a11. Cinque grafi JSON upstream ispezionati, con blob Git e classi nodo conservati in `fixtures/visual-factory-3d/comfyui-recipe-catalog.v0.1.json`: TripoSR, PartCrafter, MV-Adapter texturing, Zero123++/InstantMesh, TRELLIS v1. Sono grafi UI di esempio, non payload API già eseguibili. Nessuna evidenza in questa ricognizione per TRELLIS.2, SPAR3D, SF3D, Direct3D-S2 o Step1X-3D nel pack. Il README documenta inoltre Unique3D, Wonder3D, Era3D, Stable3DGen, CRM, altri modelli: inventario successivo solo per i percorsi pertinenti e ammissibili.
+
+Rilievi:
+- Il pack contiene implementazioni Hunyuan3D e TripoSG non ammesse. Il suo __init__.py importa l'intero modulo nodes e registra tutte le classi; la scelta di un grafo non garantisce isolamento delle dipendenze. requirements.txt contiene dipendenze non fissate, incluse due URL Git senza revisione; install.py può scaricare e compilare componenti. **Non installare il pack completo**, né usare Install Missing Nodes, installazione automatica o download dinamico di modelli.
+- Per la prima prova usare l'adapter diretto TripoSR, se qualificato; in parallelo progettuale isolare il percorso nodo minimo TripoSR o MV-Adapter senza importare codice escluso. Solo dopo audit statico, revisione dipendenze/diritti, build isolata e smoke test si può abilitare l'adapter a grafo. Se l'isolamento non è praticabile, mantenere CLI diretta, senza dipendenza obbligatoria da ComfyUI.
+- Fissare commit ComfyUI, revisione nodi, modello/pesi, dipendenze e ambiente prima della build; verificare compatibilità reale e assenza di codice vietato. Non usare la sola dichiarazione MIT del pack. Eseguire solo in ambiente isolato senza privilegi, senza credenziali, con limiti CPU/GPU/RAM/disco/tempo e uscita di rete negata durante inferenza; il flag offline da solo non è un confine di sicurezza per custom nodes. Disabilitare nodi partner/API a pagamento secondo la versione fissata. Non aprire porte pubbliche. Non accettare grafi da client né classi arbitrarie.
+- L'adapter futuro opera su istanza dedicata loopback: GET /system_stats, /object_info e /queue per preflight; POST /prompt solo per un grafo API bloccato dal digest, validato contro schema e allowlist esatti; GET /history/{prompt_id} per esito e output associati; timeout e cancellazione del proprio lavoro su istanza esclusiva (non interrompere job altrui); raccolta locale controllata delle mesh e hash; nessun URL di output arbitrario. Le API sono documentate upstream ma **non sono state chiamate** contro un'istanza operativa. Il formato UI deve essere tradotto e confrontato con il grafo API reale prima dell'ammissione.
+- La ricetta lega engineId, role, backend, graphRevision/graphDigest, classi nodo ammesse, parametri, checkpoint e pesi bloccati, entitlement, limiti e contratto output. Nodi di preview non sostituiscono il salvataggio effettivo. Per materiali: stessa mesh o corrispondenza dimostrata.
+- Meshoptimizer opera solo sul derivato; non sostituisce master Blender, né è automaticamente compatibile con decoder/versione del runtime. Verifica visiva e tecnica prima/dopo.
+
+Fonti ComfyUI: https://docs.comfy.org/development/comfyui-server/comms_routes ; https://github.com/Comfy-Org/ComfyUI ; https://github.com/MrForExample/ComfyUI-3D-Pack/tree/9e8096e50c5bcf35e1f3e34c6ae06216101f8a11 . Evidenza PartCrafter: https://github.com/wgsxm/PartCrafter#training ; https://huggingface.co/wgsxm/PartCrafter/blob/69a0ffc1dad5e48e7e5ed91c0609f2b1276eb31f/model_index.json .
+
+### Priorità aggiornate
+
+1. Qualificare ammissione TripoSR e adattatore CLI semplice; non bloccare il primo risultato su un'installazione generale.
+2. Valutare isolamento ComfyUI come backend riutilizzabile (nessuna dipendenza imposta al controller).
+3. Qualificare un secondo motore di alta fedeltà: Direct3D-S2/TRELLIS.2 o SPAR3D/SF3D se licenze, quota e hardware lo permettono; non presumere una graduatoria prima delle prove.
+4. PartCrafter rimane candidato strategico per le parti, ma sospeso. MV-Adapter può diventare lavorazione separata per materiali dopo audit.
+5. Meshoptimizer come utensile finale, dopo verifica della resa.
+6. Per ciascun ruolo conservare alternative ammissibili, non lanciare tutti i modelli.
+
+SP-08.1b deve partire dalla matrice estesa di capacità e dal contratto dei backend, senza cambiare gli invarianti già definiti. Questa ricognizione non qualifica alcuna esecuzione.
+
 ## 3. Ordine dei job e regole di selezione
 
 | Job | Input | Output | Condizione |
