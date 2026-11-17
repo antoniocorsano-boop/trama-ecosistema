@@ -17,6 +17,10 @@ AUTH = ("paidComputeAuthorized", "allowQualityDowngrade", "runtimeAuthorized",
         "publicationAuthorityGranted", "studentAuthorized")
 READY_LICENSE = {"PRODUCTION_ELIGIBLE", "EVALUATION_ONLY"}
 READY_ENGINE = "QUALIFIED_FOR_PLANNING"
+PROFILE_FIELDS = ("role", "backendId", "recipeId", "graphDigest", "backendRevision",
+                  "sourceRevision", "modelArtifactDigest", "environmentDigest", "parametersDigest",
+                  "licenseEvidenceRef", "qualificationEvidenceRef", "qualityProfile",
+                  "minVramMiB", "minRamMiB", "minDiskMiB")
 ROLES = {
     "QUICK_SHAPE": {"IMAGE"}, "HIGH_FIDELITY_SHAPE": {"IMAGE"},
     "PART_AWARE_SHAPE": {"IMAGE"}, "EDITABLE_POINT_CLOUD": {"IMAGE"},
@@ -101,6 +105,8 @@ def validate_catalog(registry, recipes):
 
 
 def compile_plan(bundle, registry, recipes, now):
+    require(isinstance(now, dt.datetime) and now.tzinfo is not None, "timezone required")
+    now = now.astimezone(dt.timezone.utc)
     engines, backends, catalog = validate_catalog(registry, recipes)
     fields(bundle, ("schemaVersion", "request", "admissions", "pools"), "bundle")
     require(bundle["schemaVersion"] == SCHEMA, "bundle version")
@@ -150,12 +156,12 @@ def compile_plan(bundle, registry, recipes, now):
     admissions = unique_rows(bundle["admissions"], "id", "admissions")
     seen = set()
     for a in admissions.values():
-        fields(a, ("id", "engineId", "backendId", "recipeId", "graphDigest", "backendRevision",
+        fields(a, ("id", "engineId", "role", "backendId", "recipeId", "graphDigest", "backendRevision",
                    "sourceRevision", "modelArtifactDigest", "environmentDigest", "parametersDigest",
                    "licenseEvidenceRef", "qualificationEvidenceRef", "qualityProfile", "poolId",
                    "computePlanDigest", "expiresAt", "minVramMiB", "minRamMiB", "minDiskMiB", "reservedSeconds"), "admission")
         require(a["engineId"] in engines and a["poolId"] in pools
-                and a["backendId"] in ("direct-cli", "comfyui-local"), "admission engine/backend/pool")
+                and a["backendId"] in ("direct-cli", "comfyui-local") and a["role"] in ROLES, "admission engine/backend/pool")
         require(all(digest(a[k]) for k in ("modelArtifactDigest", "environmentDigest", "parametersDigest", "computePlanDigest"))
                 and digest(a["sourceRevision"], 40) and digest(a["backendRevision"], 40)
                 and text_ref(a["licenseEvidenceRef"]) and text_ref(a["qualificationEvidenceRef"])
@@ -167,7 +173,7 @@ def compile_plan(bundle, registry, recipes, now):
             require(a["recipeId"] is None and a["graphDigest"] is None, "direct adapter graph mismatch")
         else:
             require(a["recipeId"] in catalog and digest(a["graphDigest"]), "graph binding")
-        key = (a["engineId"], a["backendId"], a["recipeId"], a["poolId"], a["qualityProfile"])
+        key = (a["engineId"], a["role"], a["backendId"], a["recipeId"], a["poolId"], a["qualityProfile"])
         require(key not in seen, "duplicate admission")
         seen.add(key)
 
@@ -202,6 +208,11 @@ def compile_plan(bundle, registry, recipes, now):
                     why = []
                     if a["qualityProfile"] != req["qualityProfile"]:
                         why.append("QUALITY_PROFILE_MISMATCH")
+                    if a["role"] != job["role"]:
+                        why.append("ADMISSION_ROLE_MISMATCH")
+                    # Exact immutable profile must have been separately recorded in the trusted registry.
+                    if {k: a[k] for k in PROFILE_FIELDS} not in e.get("qualifiedProfiles", []):
+                        why.append("QUALIFIED_PROFILE_BINDING_MISMATCH")
                     if a["computePlanDigest"] != p["computePlanDigest"]:
                         why.append("COMPUTE_BINDING_MISMATCH")
                     if timestamp(a["expiresAt"]) <= now:
@@ -214,7 +225,7 @@ def compile_plan(bundle, registry, recipes, now):
                     if a["backendId"] == "comfyui-local":
                         b = backends.get("comfyui-local", {})
                         recipe = catalog[a["recipeId"]]
-                        if b.get("executionGate") != READY_ENGINE:
+                        if b.get("executionGate") != READY_ENGINE or b.get("qualifiedRevision") != a["backendRevision"]:
                             why.append("BACKEND_NOT_QUALIFIED")
                         if (recipe.get("status") != "QUALIFIED_FOR_PLANNING" or eid not in recipe["engineIds"]
                                 or recipe.get("apiGraphDigest") != a["graphDigest"]
@@ -235,6 +246,8 @@ def compile_plan(bundle, registry, recipes, now):
                               "sourceRevision": a["sourceRevision"], "backendRevision": a["backendRevision"],
                               "modelArtifactDigest": a["modelArtifactDigest"], "environmentDigest": a["environmentDigest"],
                               "parametersDigest": a["parametersDigest"], "computePlanDigest": a["computePlanDigest"],
+                              "licenseEvidenceRef": a["licenseEvidenceRef"], "qualificationEvidenceRef": a["qualificationEvidenceRef"],
+                              "computeEvidenceRef": p["evidenceRef"], "entitlementExpiresAt": p["expiresAt"],
                               "recipeId": a["recipeId"], "graphDigest": a["graphDigest"]}
                     remaining[p["id"]] -= a["reservedSeconds"]
                     break
