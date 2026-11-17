@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "trama.visual-3d-engine-registry/v0.1",
+  "status": "PROPOSED_NOT_EXECUTION_AUTHORIZED",
+  "costClass": "FREE_ONLY",
+  "paidComputeAuthorized": false,
+  "allowQualityDowngrade": false,
+  "runtimeAuthorized": false,
+  "publicationAuthorityGranted": false,
+  "studentAuthorized": false,
+  "engines": [
+    {
+      "id": "triposr",
+      "repository": "https://github.com/VAST-AI-Research/TripoSR",
+      "roles": [
+        "QUICK_SHAPE"
+      ],
+      "declaredRootLicense": "MIT",
+      "documentedVramGiB": 6,
+      "vramMeaning": "default single-image options, not measured minimum",
+      "output": [
+        "MESH",
+        "VERTEX_COLOR",
+        "OPTIONAL_TEXTURE"
+      ],
+      "licenseGate": "PENDING_DEPENDENCY_AND_WEIGHT_REVIEW",
+      "executionGate": "NOT_QUALIFIED",
+      "sourceRefs": [
+        "https://github.com/VAST-AI-Research/TripoSR#manual-inference"
+      ]
+    },
+    {
+      "id": "trellis2",
+      "repository": "https://github.com/microsoft/TRELLIS.2",
+      "roles": [
+        "PBR_ASSET",
+        "HIGH_FIDELITY_SHAPE"
+      ],
+      "declaredRootLicense": "MIT",
+      "documentedVramGiB": 24,
+      "vramMeaning": "official local hardware minimum",
+      "output": [
+        "GLB",
+        "PBR"
+      ],
+      "licenseGate": "RESEARCH_EVALUATION_ONLY_DEPENDENCIES_REVIEW_REQUIRED",
+      "executionGate": "NOT_QUALIFIED",
+      "sourceRefs": [
+        "https://github.com/microsoft/TRELLIS.2#license",
+        "https://github.com/NVlabs/nvdiffrast/blob/main/LICENSE.txt",
+        "https://github.com/NVlabs/nvdiffrec/blob/main/LICENSE.txt",
+        "https://huggingface.co/spaces/microsoft/TRELLIS.2"
+      ]
+    },
+    {
+      "id": "triposg",
+      "repository": "https://github.com/VAST-AI-Research/TripoSG",
+      "roles": [
+        "HIGH_FIDELITY_SHAPE"
+      ],
+      "declaredRootLicense": "MIT",
+      "documentedVramGiB": 8,
+      "vramMeaning": "official CUDA minimum",
+      "output": [
+        "GLB",
+        "MESH"
+      ],
+      "licenseGate": "BLOCKED_EU_TRANSITIVE_LICENSE",
+      "executionGate": "BLOCKED",
+      "sourceRefs": [
+        "https://github.com/VAST-AI-Research/TripoSG/blob/main/NOTICE",
+        "https://github.com/VAST-AI-Research/TripoSG/blob/main/triposg/LICENSE",
+        "https://huggingface.co/briaai/RMBG-1.4"
+      ]
+    },
+    {
+      "id": "step1x3d",
+      "repository": "https://github.com/stepfun-ai/Step1X-3D",
+      "roles": [
+        "HIGH_FIDELITY_SHAPE",
+        "TEXTURE_ON_MESH"
+      ],
+      "declaredRootLicense": "Apache-2.0",
+      "documentedVramGiB": 27,
+      "vramMeaning": "reported geometry 1300m + texture pipeline usage; labeled variant 29 GiB reported, not a minimum",
+      "output": [
+        "GLB",
+        "TEXTURED_GLB"
+      ],
+      "licenseGate": "HOLD_TRANSITIVE_HUNYUAN_CODE_REVIEW",
+      "executionGate": "BLOCKED_PENDING_REVIEW",
+      "sourceRefs": [
+        "https://github.com/stepfun-ai/Step1X-3D#5-inference-script",
+        "https://github.com/stepfun-ai/Step1X-3D#8-license"
+      ]
+    },
+    {
+      "id": "blender-procedural",
+      "repository": "https://github.com/blender/blender",
+      "roles": [
+        "CONTROLLED_SHAPE",
+        "REPAIR",
+        "RELIGHT",
+        "RENDER",
+        "OPTIMIZE",
+        "EXPORT"
+      ],
+      "declaredRootLicense": "GPL-2.0-or-later",
+      "documentedVramGiB": null,
+      "vramMeaning": "CPU rendering supported; workload profile measured separately",
+      "output": [
+        "BLEND",
+        "GLB",
+        "PNG"
+      ],
+      "licenseGate": "PENDING_EXACT_TOOLCHAIN_AND_INPUT_REVIEW",
+      "executionGate": "EXISTING_ATLAS_PIPELINE_REFERENCE_ONLY",
+      "sourceRefs": [
+        "https://github.com/blender/blender",
+        "https://docs.blender.org/manual/en/latest/render/cycles/gpu_rendering.html"
+      ]
+    }
+  ]
+}
