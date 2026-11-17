@@ -84,6 +84,6 @@ export function evidenceProvenance(item: EvidenceItem): Array<{label: string; va
   ];
   return fields.flatMap(([label, value]) =>
     typeof value === "string" && value.trim() !== "" ? [{label, value}] :
-    typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? [{label, value: String(value)}] : []
+    label === "Esecuzione" && typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? [{label, value: String(value)}] : []
   );
 }
