@@ -13,6 +13,8 @@ on:
       - "tests/test_compute_factory_convergence.py"
       - "scripts/compute_factory_quota_ledger.py"
       - "tests/test_compute_factory_quota_ledger.py"
+      - "scripts/compute_factory_procedural_evidence.py"
+      - "tests/test_compute_factory_procedural_evidence.py"
       - "docs/decisions/trama-compute-factory-alignment-v1.md"
       - "scripts/probe_azure_credit_entitlement.py"
       - "scripts/probe_owned_k8s_entitlement.py"
@@ -52,6 +54,7 @@ jobs:
           python -m unittest tests/test_visual_factory_provider_adapters.py -v
           python -m unittest tests/test_compute_factory_handoff.py -v
           python -m unittest tests/test_compute_factory_quota_ledger.py -v
+          python -m unittest tests/test_compute_factory_procedural_evidence.py -v
 
       - name: Checkout pinned VF-3D planner for offline convergence
         uses: actions/checkout@v4
