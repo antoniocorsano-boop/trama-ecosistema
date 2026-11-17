@@ -1,0 +1,114 @@
+name: Visual Factory — L0 live Blender prerequisite
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-blender-l0-live.yml"
+permissions: {}
+concurrency:
+  group: vf-3d-l0-blender-live
+  cancel-in-progress: true
+jobs:
+  live-prerequisite:
+    if: github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Check display and isolated temporary workspace
+        run: |
+          set -euo pipefail
+          command -v Xvfb
+          command -v xvfb-run
+          command -v xauth
+          mkdir -p "$RUNNER_TEMP/vf3d-l0/home"
+          printf 'DISPLAY_PREREQUISITES_PRESENT\n'
+      - name: Acquire and verify previously qualified Blender distribution
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/vf3d-l0"
+          file=blender-4.2.23-linux-x64.tar.xz
+          digest=bea0eb3146be13eae6225409a117b215184f41b7f79e799f97cb3abb8f6dc404
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' --connect-timeout 20 --max-time 240 --output "$file" "https://download.blender.org/release/Blender4.2/$file"
+          test "$(stat -c %s "$file")" = 350707672
+          printf '%s  %s\n' "$digest" "$file" | sha256sum --strict --check
+          tar -xJf "$file"
+          ./blender-4.2.23-linux-x64/blender --version
+      - name: Prove a real interactive Blender process survives two scene changes and renders
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/vf3d-l0"
+          cat > probe.py <<'PY'
+          import bpy, hashlib, importlib.util, json, os, pathlib, traceback
+          root = pathlib.Path.cwd()
+          evidence = {"status": "NOT_RUN", "pid": os.getpid(),
+                      "blender": bpy.app.version_string, "background": bpy.app.background,
+                      "bundledRequestsPresent": importlib.util.find_spec("requests") is not None,
+                      "mcpClientQualified": False, "isolationQualified": False,
+                      "artisticApproval": False, "publicationAuthorized": False,
+                      "stages": []}
+          def write():
+              (root / "evidence.json").write_text(json.dumps(evidence, indent=2))
+          def finish():
+              bpy.ops.wm.quit_blender()
+              return None
+          def render(name):
+              scene = bpy.context.scene
+              scene.render.filepath = str(root / (name + ".png"))
+              bpy.ops.render.render(write_still=True)
+              p = root / (name + ".png")
+              raw = p.read_bytes()
+              assert raw[:8] == bytes.fromhex("89504e470d0a1a0a")
+              return {"name": name, "pid": os.getpid(), "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
+          def stage():
+              try:
+                  assert not bpy.app.background and bpy.app.version[:3] == (4, 2, 23)
+                  assert os.getpid() == evidence["pid"]
+                  scene = bpy.context.scene
+                  cube = bpy.data.objects["Cube"]
+                  if not evidence["stages"]:
+                      scene.render.engine = "CYCLES"
+                      scene.cycles.device = "CPU"
+                      scene.cycles.samples = 4
+                      scene.render.resolution_x = 128
+                      scene.render.resolution_y = 128
+                      scene.render.resolution_percentage = 100
+                      scene.render.image_settings.file_format = "PNG"
+                      mat = bpy.data.materials.new("L0_control_material")
+                      mat.use_nodes = True
+                      mat.node_tree.nodes.get("Principled BSDF").inputs["Base Color"].default_value = (0.7, 0.1, 0.05, 1)
+                      cube.data.materials.clear()
+                      cube.data.materials.append(mat)
+                      evidence["stages"].append(render("first"))
+                      write()
+                      return 1.0
+                  mat = bpy.data.materials["L0_control_material"]
+                  assert cube.data.materials[0] == mat
+                  cube.rotation_euler.z = 0.65
+                  mat.node_tree.nodes.get("Principled BSDF").inputs["Base Color"].default_value = (0.05, 0.3, 0.7, 1)
+                  evidence["stages"].append(render("second"))
+                  assert evidence["stages"][0]["sha256"] != evidence["stages"][1]["sha256"]
+                  evidence["status"] = "LIVE_GUI_PREREQUISITE_PASS"
+              except Exception:
+                  evidence["status"] = "LIVE_GUI_PREREQUISITE_FAIL"
+                  evidence["error"] = traceback.format_exc()
+              write()
+              bpy.app.timers.register(finish, first_interval=0.5)
+              return None
+          bpy.app.timers.register(stage, first_interval=1.0)
+          PY
+          timeout 180s env -i PATH=/usr/bin:/bin HOME="$PWD/home" LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1280x720x24" "$PWD/blender-4.2.23-linux-x64/blender" --factory-startup --disable-autoexec --threads 4 --python-exit-code 1 --python "$PWD/probe.py" > blender.log 2>&1 || { tail -80 blender.log; exit 1; }
+          cat evidence.json
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          e = json.loads(pathlib.Path("evidence.json").read_text())
+          assert e["status"] == "LIVE_GUI_PREREQUISITE_PASS"
+          assert not e["background"]
+          assert len(e["stages"]) == 2
+          assert all(s["pid"] == e["pid"] for s in e["stages"])
+          for s in e["stages"]:
+              raw = pathlib.Path(s["name"] + ".png").read_bytes()
+              assert len(raw) == s["bytes"] and hashlib.sha256(raw).hexdigest() == s["sha256"]
+          assert len({s["sha256"] for s in e["stages"]}) == 2
+          assert not any(e[k] for k in ("mcpClientQualified", "isolationQualified", "artisticApproval", "publicationAuthorized"))
+          print("PASS: real GUI session and two distinct CPU renders; not an MCP or artistic qualification.")
+          PY
