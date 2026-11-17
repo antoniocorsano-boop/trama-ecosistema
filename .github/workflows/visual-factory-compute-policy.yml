@@ -75,7 +75,7 @@ jobs:
           TRAMA_VF3D_SOURCE: ${{ github.workspace }}/.cf-vf3d-upstream
         run: |
           test "$(git -C "$TRAMA_VF3D_SOURCE" rev-parse HEAD)" = 05935f5ef73b532e0b3dd2aaa83ca82e21381d84
-          python scripts/verify_compute_factory_test_gate.py tests.test_compute_factory_convergence 9
+          python -m scripts.verify_compute_factory_test_gate tests.test_compute_factory_convergence 9
 
       - name: Resolve enrolled Atlas repository
         id: atlas-source
@@ -111,7 +111,7 @@ jobs:
           test "$(git -C "$TRAMA_ATLAS_SOURCE" hash-object scripts/atlas-gateway-c3/star_sculpture.py)" = 6ef646177216bea929cb0a5b936a2ee7ef618133
           test "$(git -C "$TRAMA_ATLAS_SOURCE" hash-object scripts/atlas-gateway-c3/adaptive_identity.py)" = a482faf2cd42f88b901e52f873d10523b7f11fe0
           test "$(git -C "$TRAMA_ATLAS_SOURCE" hash-object scripts/atlas-gateway-c3/knowledge_composition.py)" = ec99edd096dc2f8a141e0bd11dbb0673881f5ecf
-          python scripts/verify_compute_factory_test_gate.py tests.test_compute_factory_storie_profile 8
+          python -m scripts.verify_compute_factory_test_gate tests.test_compute_factory_storie_profile 8
 
       - name: Compile fixture plan
         run: |
