@@ -158,33 +158,48 @@ jobs:
           # Docker daemon already supplied by the standard runner; no new provider.
           command -v docker
           docker info --format '{{.ServerVersion}}'
-          docker pull ubuntu:24.04
-          base="$(docker image inspect ubuntu:24.04 --format '{{index .RepoDigests 0}}')"
-          [[ "$base" =~ ^ubuntu@sha256:[a-f0-9]{64}$ ]] || { echo "Cannot establish base image digest"; exit 1; }
+          # Pin the base digest observed in run 44173983086.
+          base=ubuntu@sha256:73b999393d07f2bf65a40373778a44dc9a6d54ad7718d29247d8ff9413c4d6a8
+          docker pull "$base"
           printf '%s\n' "$base" > bridge/base-image.txt
           mkdir -p container-build
           cat > container-build/Dockerfile <<'DOCKER'
-          ARG BASE
-          FROM $BASE
+          FROM ubuntu@sha256:73b999393d07f2bf65a40373778a44dc9a6d54ad7718d29247d8ff9413c4d6a8
+          ARG LAB_UID
+          ARG LAB_GID
           RUN apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-              python3 xvfb xauth ca-certificates fontconfig fonts-dejavu-core \
+              python3 xvfb xauth x11-utils ca-certificates fontconfig fonts-dejavu-core \
               libegl1 libegl-mesa0 libgl1 libgl1-mesa-dri libglx-mesa0 libvulkan1 \
               libx11-6 libxext6 libxi6 libxfixes3 libxrender1 libxxf86vm1 libxrandr2 \
               libxcursor1 libxinerama1 libxkbcommon0 libxkbcommon-x11-0 libxcomposite1 libxdamage1 \
               libsm6 libice6 libglib2.0-0t64 libdbus-1-3 libfontconfig1 libfreetype6 \
               libpulse0 libasound2t64 libgomp1 libstdc++6 libwayland-client0 \
               && rm -rf /var/lib/apt/lists/*
+          RUN (getent group "$LAB_GID" >/dev/null || groupadd -g "$LAB_GID" vf3d) \
+              && (getent passwd "$LAB_UID" >/dev/null || useradd -M -u "$LAB_UID" -g "$LAB_GID" -d /work/home vf3d)
           DOCKER
-          docker build --build-arg "BASE=$base" --tag vf3d-local-probe:single --file container-build/Dockerfile container-build
+          docker build --build-arg "LAB_UID=$(id -u)" --build-arg "LAB_GID=$(id -g)" --tag vf3d-local-probe:single --file container-build/Dockerfile container-build
           docker image inspect vf3d-local-probe:single --format '{{.Id}}' > bridge/probe-image.txt
           cat > bridge/start.py <<'PY'
-          import bpy, runpy
-          runpy.run_path("/work/addon.py", run_name="__main__")
-          scene = bpy.context.scene
-          for suffix in ("polyhaven", "hyper3d", "sketchfab", "hunyuan3d"):
-              setattr(scene, "blendermcp_use_" + suffix, False)
-          assert bpy.types.blendermcp_server.running
-          assert not bpy.app.background
+          import bpy, pathlib, runpy, traceback
+          root = pathlib.Path("/work")
+          def startup():
+              try:
+                  assert not bpy.app.background and bpy.app.version[:3] == (4, 2, 23)
+                  (root / "blender-ready.txt").write_text(bpy.app.version_string)
+                  print("BLENDER_GUI_READY", flush=True)
+                  runpy.run_path("/work/addon.py", run_name="__main__")
+                  scene = bpy.context.scene
+                  for suffix in ("polyhaven", "hyper3d", "sketchfab", "hunyuan3d"):
+                      setattr(scene, "blendermcp_use_" + suffix, False)
+                  assert bpy.types.blendermcp_server.running
+                  (root / "bridge-ready.txt").write_text("READY")
+                  print("VENDOR_ADDON_READY", flush=True)
+              except Exception:
+                  (root / "startup-error.txt").write_text(traceback.format_exc())
+                  traceback.print_exc()
+              return None
+          bpy.app.timers.register(startup, first_interval=1.0)
           PY
           cat > bridge/client.py <<'PY'
           import json, os, pathlib, socket, time
@@ -266,10 +281,61 @@ jobs:
           PY
           cat > bridge/run.sh <<'SH'
           set -euo pipefail
+          stage() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*" | tee -a /work/stages.log; }
+          xpid=
+          bpid=
+          cleanup() {
+            if [[ -n "$bpid" ]]; then kill "$bpid" 2>/dev/null || true; fi
+            if [[ -n "$xpid" ]]; then kill "$xpid" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+          stage D1_CONTAINER_STARTED
+          id
+          test -w /work
+          test -w /tmp
+          test -w "$HOME"
+          getent passwd "$(id -u)"
+          stage D1_CONTAINER_PASS
+          stage D2_DISPLAY_START
+          export DISPLAY=:99
+          export XAUTHORITY=/tmp/vf3d.Xauthority
+          touch "$XAUTHORITY"
+          chmod 600 "$XAUTHORITY"
+          cookie="$(python3 -c 'import secrets; print(secrets.token_hex(16))')"
+          timeout 5s xauth -f "$XAUTHORITY" add "$DISPLAY" . "$cookie"
+          Xvfb "$DISPLAY" -screen 0 1280x720x24 -nolisten tcp -auth "$XAUTHORITY" > /work/xvfb.log 2>&1 &
+          xpid=$!
+          ready=0
+          for i in $(seq 1 15); do
+            kill -0 "$xpid" || { stage D2_XVFB_EXITED; cat /work/xvfb.log; exit 21; }
+            if timeout 2s xdpyinfo > /work/xdpyinfo.log 2>&1; then ready=1; break; fi
+            sleep 1
+          done
+          [[ "$ready" = 1 ]] || { stage D2_DISPLAY_TIMEOUT; cat /work/xvfb.log; exit 22; }
+          stage D2_DISPLAY_PASS
+          stage D3_BLENDER_START
           /opt/blender/blender --factory-startup --disable-autoexec --threads 4 --python-exit-code 1 --python /work/start.py > /work/bridge.log 2>&1 &
-          pid=$!
-          trap 'kill "$pid" 2>/dev/null || true; wait "$pid" 2>/dev/null || true' EXIT
-          /usr/bin/python3 /work/client.py
+          bpid=$!
+          for i in $(seq 1 35); do
+            kill -0 "$bpid" || { stage D3_BLENDER_EXITED; tail -80 /work/bridge.log; exit 31; }
+            [[ ! -f /work/startup-error.txt ]] || { stage D3_STARTUP_ERROR; cat /work/startup-error.txt; exit 32; }
+            [[ ! -f /work/blender-ready.txt ]] || break
+            sleep 1
+          done
+          [[ -f /work/blender-ready.txt ]] || { stage D3_BLENDER_TIMEOUT; tail -80 /work/bridge.log; exit 33; }
+          stage D3_BLENDER_PASS
+          stage D4_VENDOR_START
+          for i in $(seq 1 25); do
+            kill -0 "$bpid" || { stage D4_BLENDER_EXITED; exit 41; }
+            [[ ! -f /work/startup-error.txt ]] || { stage D4_ADDON_ERROR; cat /work/startup-error.txt; exit 42; }
+            [[ ! -f /work/bridge-ready.txt ]] || break
+            sleep 1
+          done
+          [[ -f /work/bridge-ready.txt ]] || { stage D4_ADDON_TIMEOUT; exit 43; }
+          stage D4_VENDOR_READY
+          timeout 75s /usr/bin/python3 -u /work/client.py > /work/client.log 2>&1 || { stage D4_CLIENT_FAILED; cat /work/client.log; exit 44; }
+          cat /work/client.log
+          stage D4_TRANSPORT_PASS
           SH
           # No host network, ports, credentials, GPU devices, socket or privileged container.
           # Fail closed rather than running outside the boundary.
@@ -282,7 +348,7 @@ jobs:
             --mount "type=bind,src=$PWD/bridge,dst=/work" \
             --workdir /work vf3d-local-probe:single \
             /usr/bin/env -i PATH=/usr/bin:/bin HOME=/work/home XDG_RUNTIME_DIR=/work/runtime LIBGL_ALWAYS_SOFTWARE=1 \
-            /usr/bin/xvfb-run -a -s "-screen 0 1280x720x24" /bin/bash /work/run.sh
+            /bin/bash /work/run.sh
           docker inspect "$name" --format '{{json .HostConfig}}' > container-build/host-config.json
           python3 - <<'PY'
           import json, pathlib
@@ -297,7 +363,27 @@ jobs:
               "securityOpt":h["SecurityOpt"],"memory":h["Memory"],"nanoCpus":h["NanoCpus"]
           },indent=2))
           PY
-          timeout 180s docker start -a "$name" || { test ! -f bridge/bridge.log || tail -80 bridge/bridge.log; exit 1; }
+          # Detached start and bounded state polling: distinguish Docker launch from child startup.
+          if ! timeout 25s docker start "$name" > bridge/docker-start.log 2>&1; then
+            cat bridge/docker-start.log
+            docker inspect "$name" --format '{{json .State}}' > bridge/docker-state.json || true
+            exit 11
+          fi
+          echo "DOCKER_START_ACCEPTED"
+          running=true
+          for i in $(seq 1 100); do
+            running="$(docker inspect "$name" --format '{{.State.Running}}')"
+            [[ "$running" = true ]] || break
+            sleep 2
+          done
+          docker inspect "$name" --format '{{json .State}}' > bridge/docker-state.json
+          docker logs "$name" > bridge/docker.log 2>&1 || true
+          cat bridge/docker-state.json
+          tail -100 bridge/docker.log
+          if [[ "$running" = true ]]; then
+            echo "STOP_CONTAINER_TIMEOUT"
+            exit 12
+          fi
           test "$(docker inspect "$name" --format '{{.State.ExitCode}}')" = 0
           python3 - <<'PY'
           import json, pathlib
@@ -320,5 +406,15 @@ jobs:
             ${{ runner.temp }}/vf3d-l0/bridge/base-image.txt
             ${{ runner.temp }}/vf3d-l0/bridge/probe-image.txt
             ${{ runner.temp }}/vf3d-l0/bridge/isolation-config.json
+            ${{ runner.temp }}/vf3d-l0/bridge/stages.log
+            ${{ runner.temp }}/vf3d-l0/bridge/docker-start.log
+            ${{ runner.temp }}/vf3d-l0/bridge/docker-state.json
+            ${{ runner.temp }}/vf3d-l0/bridge/docker.log
+            ${{ runner.temp }}/vf3d-l0/bridge/xvfb.log
+            ${{ runner.temp }}/vf3d-l0/bridge/xdpyinfo.log
+            ${{ runner.temp }}/vf3d-l0/bridge/blender-ready.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/bridge-ready.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/startup-error.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/client.log
           if-no-files-found: ignore
           retention-days: 7
