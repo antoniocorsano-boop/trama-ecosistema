@@ -52,3 +52,10 @@ Reserve atomically in one database transaction (BEGIN IMMEDIATE); one reservatio
 The existing CI adds 16 tests for quota bounds, concurrent distinct and duplicate requests, unit mismatch, rollback, restart persistence, blocked/tampered plans and recovery. The earlier convergence tests remain in place.
 
 Open gates: actual provider entitlement authentication and hard cost caps, accounting windows and units verified per service, stable cross-plan identity and reconciliation authorization, trusted clock, audit receipts and independent review. The synthetic ledger has no remote interface, no process execution, no credentials and no authority to publish. Do not attach it to external execution. Future multi-host accounting requires separately qualified transactional storage. No claim of production readiness.
+
+
+## CF-06B.3a — procedural evidence, not engine admission
+
+CF-06A generated original armillary GLBs with Python/Trimesh, not Blender. The pinned VF-3D registry has blender-procedural with EXISTING_ATLAS_PIPELINE_REFERENCE_ONLY and a pending toolchain/license gate; do not relabel Trimesh results as Blender qualification or create a second registry. The new read-only adapter checks GLB header, chunk framing, JSON identity, no external buffer/image URI, exact reported byte length, SHA-256 and mesh count. It records reported triangles/GPU time separately; neither is independently measured by the adapter. Source hash identifies supplied bytes, not authorship or trusted provenance. No geometry, artistic, license or runtime admission is granted. The two original GLBs were inspected locally; their observed hashes and sizes are preserved as a small fixture, not a copy of their binary assets. CI adds nine synthetic boundary tests.
+
+Next: coordinate exact procedural engine profile with VF-3D owner after #338 stabilizes, audit dependencies and rights, provide pinned toolchain and reference lock; run an isolated candidate for Storie only after this gate. Existing Atlas Smart Production remains responsible for cache and candidate review. No external execution, no publication, no new account or resource.
