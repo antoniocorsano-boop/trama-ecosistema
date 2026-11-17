@@ -82,7 +82,7 @@ class QuotaLedger:
         check(sha(ref) and digest({k:v for k,v in handoff.items() if k != "handoffDigest"}) == ref,
               "reference digest")
         # A real plan is not a resource entitlement. All amounts are explicit mock inputs.
-        check(number(amount, 1) and number(now) and number(expiry, 1) and now < expiry,
+        check(number(amount, 1) and number(now) and number(expiry, 1),
               "amount or time")
         check(isinstance(bucket, str) and unit in UNITS, "bucket or unit")
         # One reservation per request digest, even if its plan reference changes.
@@ -90,6 +90,7 @@ class QuotaLedger:
         with self.transaction():
             old = self.db.execute("SELECT bucket,amount,expiry,state,reference FROM cf_reservation WHERE id=?",
                                   (key,)).fetchone()
+            # Existing identity is queryable even after expiry; never reserve again.
             if old:
                 check(old[:3] == (bucket, amount, expiry) and old[4] == ref and
                       self.balance(bucket)[0] == unit, "duplicate parameters differ")
