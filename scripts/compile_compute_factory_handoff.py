@@ -61,3 +61,25 @@ def handoff(request, plan):
               "paidComputeAuthorized": False, "publicationAuthorityGranted": False,
               "studentAuthorized": False}
     return {**result, "handoffDigest": digest(result)}
+
+
+def atlas_cache_review_reference(receipt, expected_key):
+    """Record a dependency-cache restore claim; never authorize reuse or a candidate."""
+    require(isinstance(receipt, dict) and set(receipt) == {
+        "status", "mode", "dependencyKey", "verifiedFiles", "candidateReused"
+    }, "unexpected cache receipt shape")
+    require(isinstance(expected_key, str) and re.fullmatch(r"[0-9a-f]{64}", expected_key),
+            "expected dependency key")
+    require(receipt["status"] == "PASS" and receipt["mode"] == "restore", "restore not verified")
+    require(receipt["dependencyKey"] == expected_key, "dependency key mismatch")
+    require(type(receipt["verifiedFiles"]) is int and receipt["verifiedFiles"] == 10,
+            "unexpected SP-02 dependency file count")
+    require(receipt["candidateReused"] is False, "candidate reuse not supported")
+    result = {"schemaVersion": "trama.compute-factory-cache-reference/v0.1",
+              "dependencyKey": expected_key, "receiptDigest": digest(receipt),
+              "scope": "BASE_DEPENDENCIES_ONLY", "decision": "REVIEW_REFERENCE_ONLY",
+              "trustedOriginVerified": False, "artifactBytesVerified": False,
+              "reuseAuthorized": False, "candidateQualified": False,
+              "executionAuthorized": False, "publicationAuthorityGranted": False,
+              "paidComputeAuthorized": False, "studentAuthorized": False}
+    return {**result, "referenceDigest": digest(result)}
