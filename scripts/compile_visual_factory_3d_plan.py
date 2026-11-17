@@ -20,7 +20,7 @@ READY_ENGINE = "QUALIFIED_FOR_PLANNING"
 PROFILE_FIELDS = ("role", "backendId", "recipeId", "graphDigest", "backendRevision",
                   "sourceRevision", "modelArtifactDigest", "environmentDigest", "parametersDigest",
                   "licenseEvidenceRef", "qualificationEvidenceRef", "qualityProfile",
-                  "minVramMiB", "minRamMiB", "minDiskMiB")
+                  "minVramMiB", "minRamMiB", "minDiskMiB", "reservedSeconds")
 ROLES = {
     "QUICK_SHAPE": {"IMAGE"}, "HIGH_FIDELITY_SHAPE": {"IMAGE"},
     "PART_AWARE_SHAPE": {"IMAGE"}, "EDITABLE_POINT_CLOUD": {"IMAGE"},
@@ -281,7 +281,14 @@ def main():
     parser.add_argument("--now", help="timezone-aware fixed time for deterministic tests")
     args = parser.parse_args()
     def load(path):
-        return json.loads(Path(path).read_text(encoding="utf-8"))
+        def reject_duplicate(pairs):
+            obj = dict(pairs)
+            require(len(obj) == len(pairs), "duplicate JSON key")
+            return obj
+        with Path(path).open("rb") as f:
+            raw = f.read(2 * 1024 * 1024 + 1)
+        require(len(raw) <= 2 * 1024 * 1024, "planning input too large")
+        return json.loads(raw.decode("utf-8"), object_pairs_hook=reject_duplicate)
     now = timestamp(args.now) if args.now else dt.datetime.now(dt.timezone.utc)
     result = compile_plan(load(args.request_bundle), load(args.registry), load(args.recipes), now)
     Path(args.out).write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
