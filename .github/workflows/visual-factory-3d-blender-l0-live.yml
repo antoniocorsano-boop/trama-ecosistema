@@ -53,6 +53,19 @@ jobs:
           echo "Verified distribution source: $source"
           tar -xJf "$file"
           ./blender-4.2.23-linux-x64/blender --version
+      - name: Verify software graphics runtime
+        run: |
+          set -euo pipefail
+          # Ubuntu distribution packages only; no driver or GPU provider change.
+          if ! ldconfig -p | grep -F 'libEGL.so.1' >/dev/null; then
+            sudo apt-get update -q
+            sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libglx-mesa0
+          fi
+          ldconfig -p | grep -E 'libEGL.so.1|libGLX_mesa.so.0|libGL.so.1'
+          ldconfig -p | grep -F 'libEGL.so.1' >/dev/null
+          mkdir -p "$RUNNER_TEMP/vf3d-l0/xdg-runtime"
+          chmod 700 "$RUNNER_TEMP/vf3d-l0/xdg-runtime"
+          dpkg-query -W libegl1 libegl-mesa0 libgl1-mesa-dri libglx-mesa0
       - name: Prove a real interactive Blender process survives two scene changes and renders
         run: |
           set -euo pipefail
@@ -116,7 +129,7 @@ jobs:
               return None
           bpy.app.timers.register(stage, first_interval=1.0)
           PY
-          timeout 180s env -i PATH=/usr/bin:/bin HOME="$PWD/home" LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1280x720x24" "$PWD/blender-4.2.23-linux-x64/blender" --factory-startup --disable-autoexec --threads 4 --python-exit-code 1 --python "$PWD/probe.py" > blender.log 2>&1 || { tail -80 blender.log; exit 1; }
+          timeout 180s env -i PATH=/usr/bin:/bin HOME="$PWD/home" XDG_RUNTIME_DIR="$PWD/xdg-runtime" LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1280x720x24" "$PWD/blender-4.2.23-linux-x64/blender" --factory-startup --disable-autoexec --threads 4 --python-exit-code 1 --python "$PWD/probe.py" > blender.log 2>&1 || { tail -80 blender.log; exit 1; }
           cat evidence.json
           python3 - <<'PY'
           import hashlib, json, pathlib
@@ -132,3 +145,15 @@ jobs:
           assert not any(e[k] for k in ("mcpClientQualified", "isolationQualified", "artisticApproval", "publicationAuthorized"))
           print("PASS: real GUI session and two distinct CPU renders; not an MCP or artistic qualification.")
           PY
+      - name: Preserve synthetic diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-l0-gui-probe
+          path: |
+            ${{ runner.temp }}/vf3d-l0/evidence.json
+            ${{ runner.temp }}/vf3d-l0/first.png
+            ${{ runner.temp }}/vf3d-l0/second.png
+            ${{ runner.temp }}/vf3d-l0/blender.log
+          if-no-files-found: ignore
+          retention-days: 7
