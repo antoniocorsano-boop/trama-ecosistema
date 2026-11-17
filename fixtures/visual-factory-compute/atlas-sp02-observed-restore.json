@@ -1,0 +1,15 @@
+{
+  "sourceRevision": "be1b70b46a768c772bf6db58a9548b55d1ec9e17",
+  "workflowRunId": 44103958943,
+  "jobId": 134111802184,
+  "receipt": {
+    "status": "PASS",
+    "mode": "restore",
+    "dependencyKey": "007ea6703701dd30187fe538a733fd26ab58d0d43ac00769c2539b6ca4aec231",
+    "verifiedFiles": 10,
+    "candidateReused": false
+  },
+  "visualAcceptanceJobId": 134116899314,
+  "visualAcceptance": "PENDING",
+  "qualification": "BLOCKED"
+}
