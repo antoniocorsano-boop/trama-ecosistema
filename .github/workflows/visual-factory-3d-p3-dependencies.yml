@@ -1,0 +1,75 @@
+name: Visual Factory — P3b CPU dependency resolution
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-p3-dependencies.yml"
+permissions: {}
+concurrency:
+  group: vf3d-p3b-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  resolve-candidate:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'work/vf3d-p3-cpu-preflight'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Resolve wheel candidates, no install or model acquisition
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/p3b"
+          py="$RUNNER_TEMP/p3b/bin/python"
+          "$py" -m pip --isolated install --dry-run --ignore-installed --only-binary=:all: --no-cache-dir --disable-pip-version-check --index-url https://pypi.org/simple --report "$RUNNER_TEMP/p3b-report.json" \
+            'torch @ https://download-r2.pytorch.org/whl/cpu/torch-2.14.1%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl' \
+            'numpy>=2,<3' 'Pillow==13.0.0' 'omegaconf==2.4.0' 'einops>=0.7,<1' \
+            'transformers==5.23.0' 'trimesh>=4,<5' 'imageio>=2,<3' 'huggingface-hub>=1,<2' \
+            'scikit-build-core==1.1.2' 'pybind11>=2.10,<4' 'ninja' 'cmake>=3.24' 
+      - name: Inventory exact resolution and query public advisory database
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, re, urllib.parse, urllib.request
+          from pathlib import Path
+          p = Path(os.environ["RUNNER_TEMP"])/"p3b-report.json"
+          rows = json.loads(p.read_text())["install"]
+          found = []
+          for row in rows:
+              m = row["metadata"]
+              d = row["download_info"]
+              name = re.sub(r"[-_.]+", "-", m["name"]).lower()
+              url = d["url"]
+              host = urllib.parse.urlsplit(url).hostname
+              digest = d.get("archive_info", {}).get("hashes", {}).get("sha256")
+              assert host in {"files.pythonhosted.org","download-r2.pytorch.org","download.pytorch.org"}, host
+              assert urllib.parse.urlsplit(url).path.endswith(".whl"), url
+              assert digest and re.fullmatch("[0-9a-f]{64}", digest), name
+              assert not name.startswith(("nvidia-","cuda-","triton","pytorch-triton")), name
+              assert not row.get("is_yanked",False), name
+              found.append({"name":name,"version":m["version"],"sha256":digest,"url":url,
+                            "licenseExpression":m.get("license_expression"),"license":m.get("license"),
+                            "licenseClassifiers":[c for c in m.get("classifier",[]) if c.startswith("License ::")]})
+          found.sort(key=lambda x:x["name"])
+          torch = next(x for x in found if x["name"]=="torch")
+          assert torch["version"]=="2.14.1+cpu"
+          print("P3B_CANDIDATE_INVENTORY_BEGIN")
+          print(json.dumps(found, indent=2))
+          print("P3B_CANDIDATE_INVENTORY_END")
+          queries = [{"package":{"ecosystem":"PyPI","name":x["name"]},"version":x["version"].split("+")[0]} for x in found]
+          req = urllib.request.Request("https://api.osv.dev/v1/querybatch",data=json.dumps({"queries":queries}).encode(),headers={"Content-Type":"application/json"})
+          with urllib.request.urlopen(req,timeout=35) as res:
+              result = json.load(res)["results"]
+          assert len(result)==len(found)
+          issues = [{"name":x["name"],"version":x["version"],"advisories":[v["id"] for v in y["vulns"]]} for x,y in zip(found,result) if y.get("vulns")]
+          print(json.dumps({"status":"RESOLVED_CANDIDATE_NOT_ADMITTED","packages":len(found),"advisoryMatches":issues,
+                            "advisoryScope":"OSV PyPI; no assertion of absence of risk",
+                            "sourceBuildPending":"torchmcubes pinned a9ac95aa; not included in wheel resolution",
+                            "adapterChangePending":"rembg lazy import; no CLI texture/video paths",
+                            "hashesAreIndexDeclared":True,"dependenciesInstalled":False,
+                            "weightsDownloaded":False,"inferenceExecuted":False,
+                            "runtimeQualified":False,"executionAuthorized":False,
+                            "paidComputeAuthorized":False,"publicationAuthorized":False},indent=2))
+          if issues:
+              raise SystemExit("Known advisory matches: review/remediate before admission.")
+          PY

@@ -1,0 +1,139 @@
+name: Visual Factory — P3b locked wheel audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-p3-wheel-audit.yml"
+      - "fixtures/visual-factory-3d/p3-cpu-wheel-lock.candidate.json"
+permissions:
+  contents: read
+concurrency:
+  group: vf3d-p3b-wheel-audit-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  audit-wheel-bytes:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'work/vf3d-p3-cpu-preflight'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify locked bytes and inspect license evidence without installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import email, hashlib, io, json, os, re, tempfile, urllib.parse, urllib.request, zipfile
+          from pathlib import Path
+          lock = json.loads(Path("fixtures/visual-factory-3d/p3-cpu-wheel-lock.candidate.json").read_text())
+          rows = lock["packages"]
+          assert lock["status"]=="CANDIDATE_NOT_ADMITTED" and lock["executionAuthorized"] is False
+          assert len(rows)==len({r["name"] for r in rows})==48
+          allowed = {"files.pythonhosted.org","download-r2.pytorch.org","download.pytorch.org"}
+          def valid(url):
+              p=urllib.parse.urlsplit(url)
+              assert p.scheme=="https" and p.hostname in allowed and not p.username and not p.password
+          class Guard(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  valid(newurl)
+                  return super().redirect_request(req, fp, code, msg, headers, newurl)
+          opener=urllib.request.build_opener(Guard())
+          def norm(s):
+              return re.sub(r"[-_.]+","-",s).lower()
+          def metadata(z, name, version):
+              # A wheel's own dist-info is top-level; vendored distributions are not.
+              all_meta=[n for n in z.namelist() if n.endswith(".dist-info/METADATA")]
+              primary=[n for n in all_meta if n.count("/")==1]
+              assert len(primary)==1, f"{name}: primary METADATA count={len(primary)}"
+              assert z.getinfo(primary[0]).file_size<=2*1024**2, f"{name}: primary METADATA too large"
+              m=email.message_from_bytes(z.read(primary[0]))
+              assert norm(m["Name"])==name and m["Version"]==version, f"{name}: metadata identity mismatch"
+              nested=[n for n in all_meta if n.count("/")>1]
+              return m, primary[0].rsplit("/",1)[0]+"/", nested
+          # Regression cases: vendored metadata accepted and recorded, ambiguous
+          # or missing top-level metadata and mismatched identity rejected.
+          def synthetic(entries):
+              b=io.BytesIO()
+              with zipfile.ZipFile(b,"w") as z:
+                  for p,v in entries: z.writestr(p,v)
+              b.seek(0)
+              return zipfile.ZipFile(b)
+          root=("demo-1.dist-info/METADATA","Name: demo\nVersion: 1\n")
+          vend=("demo/_vendor/other-2.dist-info/METADATA","Name: other\nVersion: 2\n")
+          with synthetic([root,vend]) as z:
+              m,p,nested=metadata(z,"demo","1")
+              assert p=="demo-1.dist-info/" and nested==[vend[0]]
+          for bad in ([vend],[root,("other-2.dist-info/METADATA",vend[1])],
+                      [(root[0],"Name: wrong\nVersion: 1\n")],
+                      [(root[0],"Name: demo\nVersion: 2\n")]):
+              with synthetic(bad) as z:
+                  try: metadata(z,"demo","1")
+                  except AssertionError: pass
+                  else: raise AssertionError("invalid primary metadata accepted")
+          print("METADATA_REGRESSION_PASS 5/5",flush=True)
+          results=[]
+          total=0
+          for r in rows:
+              assert re.fullmatch("[0-9a-f]{64}",r["sha256"])
+              valid(r["url"])
+              with tempfile.TemporaryDirectory(dir=os.environ["RUNNER_TEMP"]) as tmp:
+                  p=Path(tmp)/"wheel.whl"
+                  h=hashlib.sha256()
+                  with opener.open(r["url"],timeout=60) as src, p.open("wb") as dest:
+                      valid(src.geturl())
+                      while True:
+                          chunk=src.read(1024*1024)
+                          if not chunk: break
+                          total+=len(chunk)
+                          assert total<=2*1024**3, "total acquisition bound exceeded"
+                          h.update(chunk)
+                          dest.write(chunk)
+                  assert h.hexdigest()==r["sha256"], "SHA256 mismatch: "+r["name"]
+                  with zipfile.ZipFile(p) as z:
+                      m,prefix,nested=metadata(z,r["name"],r["version"])
+                      vendored=[]
+                      for n in nested:
+                          assert z.getinfo(n).file_size<=2*1024**2, "nested metadata too large"
+                          data=z.read(n)
+                          vm=email.message_from_bytes(data)
+                          assert vm["Name"] and vm["Version"], "nested metadata identity missing"
+                          vp=n.rsplit("/",1)[0]+"/"
+                          vf=[]
+                          for lic in z.namelist():
+                              if lic.startswith(vp) and not lic.endswith("/") and re.search(r"(^|/)(licenses?/|licen[cs]e[^/]*$|copying[^/]*$|notice[^/]*$|copyright[^/]*$)",lic[len(vp):],re.I):
+                                  assert z.getinfo(lic).file_size<=8*1024**2
+                                  payload=z.read(lic)
+                                  vf.append({"path":lic,"sha256":hashlib.sha256(payload).hexdigest(),"bytes":len(payload)})
+                          vendored.append({"path":n,"name":vm["Name"],"version":vm["Version"],
+                                           "metadataSha256":hashlib.sha256(data).hexdigest(),
+                                           "licenseExpression":vm.get("License-Expression"),
+                                           "licenseField":(vm.get("License") or "")[:500],
+                                           "licenseClassifiers":[c for c in vm.get_all("Classifier",[]) if c.startswith("License ::")],
+                                           "licenseFiles":vf})
+                      names=[n for n in z.namelist() if n.startswith(prefix) and not n.endswith("/") and re.search(r"(^|/)(licenses?/|licen[cs]e[^/]*$|copying[^/]*$|notice[^/]*$|copyright[^/]*$)",n[len(prefix):],re.I)]
+                      evidence=[]
+                      for n in names:
+                          info=z.getinfo(n)
+                          assert info.file_size<=8*1024**2
+                          data=z.read(n)
+                          evidence.append({"path":n[len(prefix):],"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest()})
+                      declared=m.get("License-Expression")
+                      license_text=m.get("License")
+                      classifiers=[c for c in m.get_all("Classifier",[]) if c.startswith("License ::")]
+                      result={"name":r["name"],"version":r["version"],"sha256Verified":True,
+                              "licenseExpression":declared,"licenseField":license_text[:500] if license_text else None,
+                              "licenseClassifiers":classifiers,"licenseFiles":evidence,"vendoredDistributions":vendored,
+                              "licenseEvidencePresent":bool(declared or license_text or classifiers or evidence)}
+                      results.append(result)
+                      print(json.dumps(result,ensure_ascii=True),flush=True)
+          missing=[r["name"] for r in results if not r["licenseEvidencePresent"]]
+          print(json.dumps({"status":"BYTE_AUDIT_COMPLETE_NOT_ADMITTED","packages":len(results),
+                            "verified":sum(r["sha256Verified"] for r in results),"downloadBytes":total,
+                            "missingLicenseEvidence":missing,"vendoredDistributions":sum(len(r["vendoredDistributions"]) for r in results),"licenseLegalReviewPending":True,
+                            "dependenciesInstalled":False,"weightsDownloaded":False,
+                            "inferenceExecuted":False,"executionAuthorized":False,
+                            "paidComputeAuthorized":False,"publicationAuthorized":False},indent=2))
+          if missing:
+              raise SystemExit("Missing license evidence; review required.")
+          PY

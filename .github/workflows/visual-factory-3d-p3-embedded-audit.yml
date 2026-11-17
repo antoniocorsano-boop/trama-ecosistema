@@ -1,0 +1,42 @@
+name: Visual Factory — P3b embedded dependency advisory audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-p3-embedded-audit.yml"
+      - "docs/capabilities/atlas-percorsi/production/VISUAL-FACTORY-3D-P3-WHEEL-EVIDENCE-v0.1.json"
+permissions:
+  contents: read
+concurrency:
+  group: vf3d-p3-embedded-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  embedded-audit:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'work/vf3d-p3-cpu-preflight'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Screen recorded embedded Python packages
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re,urllib.request
+          from pathlib import Path
+          e=json.loads(Path("docs/capabilities/atlas-percorsi/production/VISUAL-FACTORY-3D-P3-WHEEL-EVIDENCE-v0.1.json").read_text())
+          assert e["status"]=="BYTE_VERIFIED_LICENSE_REVIEW_PENDING" and e["executionAuthorized"] is False
+          assert len(e["packages"])==48 and all(p["sha256Verified"] for p in e["packages"])
+          embedded=[{"parent":p["name"],**v} for p in e["packages"] for v in p["vendoredDistributions"]]
+          assert len(embedded)==12
+          assert all(v["licenseFiles"] for v in embedded)
+          queries=[{"package":{"ecosystem":"PyPI","name":re.sub(r"[-_.]+","-",v["name"]).lower()},"version":v["version"]} for v in embedded]
+          req=urllib.request.Request("https://api.osv.dev/v1/querybatch",data=json.dumps({"queries":queries}).encode(),headers={"Content-Type":"application/json"})
+          with urllib.request.urlopen(req,timeout=35) as response:
+              results=json.load(response)["results"]
+          assert len(results)==len(embedded)
+          matches=[{"parent":v["parent"],"name":v["name"],"version":v["version"],"advisories":[a["id"] for a in r["vulns"]]} for v,r in zip(embedded,results) if r.get("vulns")]
+          print(json.dumps({"status":"EMBEDDED_SCREEN_COMPLETE_NOT_ADMITTED","count":len(embedded),"matches":matches,"licenseReviewPending":True,"nativeEmbeddedComponentsNotCovered":True,"executionAuthorized":False,"weightsDownloaded":False,"paidComputeAuthorized":False},indent=2))
+          if matches: raise SystemExit("Embedded package advisory match: review before admission.")
+          PY
