@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import unittest
 
-from scripts.compile_compute_factory_handoff import handoff, digest
+from scripts.compile_compute_factory_handoff import handoff, digest, atlas_cache_review_reference
 
 ROOT = Path(__file__).resolve().parents[1]
 UPSTREAM = os.environ.get("TRAMA_VF3D_SOURCE")
@@ -63,6 +63,37 @@ class ConvergenceTests(unittest.TestCase):
         plan["plannedJobs"] = 1
         with self.assertRaises(ValueError):
             handoff(self.bundle["request"], plan)
+
+
+class CacheReferenceTests(unittest.TestCase):
+    def setUp(self):
+        fixture = ROOT / "fixtures/visual-factory-compute/atlas-sp02-observed-restore.json"
+        self.evidence = json.loads(fixture.read_text(encoding="utf-8"))
+        self.receipt = self.evidence["receipt"]
+        self.key = self.receipt["dependencyKey"]
+
+    def test_observed_restore_reference(self):
+        ref = atlas_cache_review_reference(self.receipt, self.key)
+        self.assertEqual(ref["scope"], "BASE_DEPENDENCIES_ONLY")
+        self.assertEqual(ref["receiptDigest"], digest(self.receipt))
+        self.assertEqual(self.evidence["qualification"], "BLOCKED")
+        for field in ("candidateQualified", "reuseAuthorized", "artifactBytesVerified",
+                      "trustedOriginVerified", "executionAuthorized", "publicationAuthorityGranted"):
+            self.assertIs(ref[field], False, field)
+
+    def test_wrong_key(self):
+        with self.assertRaises(ValueError):
+            atlas_cache_review_reference(self.receipt, "f" * 64)
+
+    def test_candidate_reuse_rejected(self):
+        with self.assertRaises(ValueError):
+            atlas_cache_review_reference(dict(self.receipt, candidateReused=True), self.key)
+
+    def test_wrong_files_or_status(self):
+        for patch in ({"verifiedFiles": 9}, {"status": "FAIL"}, {"mode": "save"},
+                      {"publicationAuthorityGranted": True}):
+            with self.subTest(patch=patch), self.assertRaises(ValueError):
+                atlas_cache_review_reference(dict(self.receipt, **patch), self.key)
 
 
 if __name__ == "__main__":
