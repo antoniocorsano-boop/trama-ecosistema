@@ -179,3 +179,36 @@ jobs:
             ${{ runner.temp }}/vf3d-l0/bridge/mcp-j07-after.png
           if-no-files-found: ignore
           retention-days: 7
+
+  oci01-native-arm:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/visual-factory/mcp-blender
+      - name: Native ARM64 two-CPU Blender synthetic feasibility
+        run: bash scripts/visual-factory/mcp-blender/arm-diagnostic.sh
+      - name: Preserve diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-oci01-native-arm-diagnostic
+          path: |
+            ${{ runner.temp }}/oci01-arm/work/base-image.txt
+            ${{ runner.temp }}/oci01-arm/work/image.txt
+            ${{ runner.temp }}/oci01-arm/work/packages.tsv
+            ${{ runner.temp }}/oci01-arm/work/blender-version.txt
+            ${{ runner.temp }}/oci01-arm/work/isolation.json
+            ${{ runner.temp }}/oci01-arm/work/container.log
+            ${{ runner.temp }}/oci01-arm/work/render.log
+            ${{ runner.temp }}/oci01-arm/work/reopen.log
+            ${{ runner.temp }}/oci01-arm/work/arm-evidence.json
+            ${{ runner.temp }}/oci01-arm/work/arm-before.png
+            ${{ runner.temp }}/oci01-arm/work/arm-after.png
+            ${{ runner.temp }}/oci01-arm/work/arm-candidate.blend
+            ${{ runner.temp }}/oci01-arm/work/reopen.json
+          if-no-files-found: ignore
+          retention-days: 7
