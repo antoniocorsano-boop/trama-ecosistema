@@ -1,0 +1,41 @@
+name: Visual Factory — OCI-01 security review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "scripts/review_oci01_arm_security.py"
+      - ".github/workflows/visual-factory-oci01-security-review.yml"
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: vf3d-oci01-security-review
+  cancel-in-progress: true
+jobs:
+  review:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/review_oci01_arm_security.py
+          sparse-checkout-cone-mode: false
+      - name: Retrieve exact successful diagnostic inventory
+        uses: actions/download-artifact@v4
+        with:
+          name: vf3d-oci01-arm-mcp-diagnostic
+          run-id: 44257945001
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/oci-baseline
+      - name: Classify archived source advisories without rendering or building
+        run: python3 scripts/review_oci01_arm_security.py "$RUNNER_TEMP/oci-baseline" "$RUNNER_TEMP/oci-review"
+      - name: Preserve review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-oci01-security-review
+          path: ${{ runner.temp }}/oci-review
+          retention-days: 7
+          if-no-files-found: warn
