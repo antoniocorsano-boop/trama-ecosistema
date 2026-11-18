@@ -9,7 +9,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,15 +44,28 @@ jobs:
           apk=experiments/tv-01c/android-probe/app/build/outputs/apk/debug/app-debug.apk
           "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$apk" | tee /tmp/badging.txt
           grep -Fx "targetSdkVersion:'36'" /tmp/badging.txt
-          grep -F "package: name='it.trama.voiceprobe' versionCode='3' versionName='0.3'" /tmp/badging.txt
+          grep -F "package: name='it.trama.voiceprobe' versionCode='4' versionName='0.4'" /tmp/badging.txt
           "$ANDROID_HOME/build-tools/36.0.0/aapt" dump permissions "$apk" | tee /tmp/permissions.txt
           grep -q android.permission.RECORD_AUDIO /tmp/permissions.txt
           if grep -q android.permission.INTERNET /tmp/permissions.txt; then exit 1; fi
           unzip -l "$apk" | grep assets/model-it.zip
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$apk"
           mkdir -p tv01c-android-evidence
-          cp "$apk" tv01c-android-evidence/Assistente-TRAMA-Prova-v0.3.apk
-          (cd tv01c-android-evidence && sha256sum Assistente-TRAMA-Prova-v0.3.apk > SHA256SUMS.txt)
+          cp "$apk" tv01c-android-evidence/Assistente-TRAMA-Prova-v0.4.apk
+          (cd tv01c-android-evidence && sha256sum Assistente-TRAMA-Prova-v0.4.apk > SHA256SUMS.txt)
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Verify Android interface and dispatch
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          script: cd experiments/tv-01c/android-probe && gradle --no-daemon :app:connectedDebugAndroidTest
       - uses: actions/upload-artifact@v4
         with:
           name: Assistente-TRAMA-Prova-Android
