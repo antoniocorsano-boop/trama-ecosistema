@@ -234,6 +234,8 @@ jobs:
             ${{ runner.temp }}/oci01-arm-mcp/work/stages.log
             ${{ runner.temp }}/oci01-arm-mcp/work/bridge.log
             ${{ runner.temp }}/oci01-arm-mcp/work/startup-error.txt
+            ${{ runner.temp }}/oci01-arm-mcp/work/blender-python-evidence.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/blender-python-preflight.log
             ${{ runner.temp }}/oci01-arm-mcp/work/client.log
             ${{ runner.temp }}/oci01-arm-mcp/work/mcp-client.log
             ${{ runner.temp }}/oci01-arm-mcp/work/transport-evidence.json
