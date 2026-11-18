@@ -1,0 +1,257 @@
+name: Visual Factory — L0 live Blender prerequisite
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-blender-l0-live.yml"
+      - "scripts/visual-factory/mcp-blender/**"
+      - "scripts/visual-factory/j07_session_contract.py"
+permissions:
+  contents: read
+concurrency:
+  group: vf-3d-l0-blender-live
+  cancel-in-progress: true
+jobs:
+  live-prerequisite:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/visual-factory
+      - name: Check display and isolated temporary workspace
+        run: |
+          set -euo pipefail
+          command -v Xvfb
+          command -v xvfb-run
+          command -v xauth
+          mkdir -p "$RUNNER_TEMP/vf3d-l0/home"
+          printf 'DISPLAY_PREREQUISITES_PRESENT\n'
+      - name: Acquire and verify previously qualified Blender distribution
+        run: bash scripts/visual-factory/mcp-blender/prepare-distribution.sh
+      - name: Verify software graphics runtime
+        run: |
+          set -euo pipefail
+          # Ubuntu distribution packages only; no driver or GPU provider change.
+          if ! ldconfig -p | grep -F 'libEGL.so.1' >/dev/null; then
+            sudo apt-get update -q
+            sudo apt-get install -y --no-install-recommends libegl1 libegl-mesa0 libgl1-mesa-dri libglx-mesa0
+          fi
+          ldconfig -p | grep -E 'libEGL.so.1|libGLX_mesa.so.0|libGL.so.1'
+          ldconfig -p | grep -F 'libEGL.so.1' >/dev/null
+          mkdir -p "$RUNNER_TEMP/vf3d-l0/xdg-runtime"
+          chmod 700 "$RUNNER_TEMP/vf3d-l0/xdg-runtime"
+          dpkg-query -W libegl1 libegl-mesa0 libgl1-mesa-dri libglx-mesa0
+      - name: Prove a real interactive Blender process survives two scene changes and renders
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/vf3d-l0"
+          cat > probe.py <<'PY'
+          import bpy, hashlib, importlib.util, json, os, pathlib, traceback
+          root = pathlib.Path.cwd()
+          evidence = {"status": "NOT_RUN", "pid": os.getpid(),
+                      "blender": bpy.app.version_string, "background": bpy.app.background,
+                      "bundledRequestsPresent": importlib.util.find_spec("requests") is not None,
+                      "mcpClientQualified": False, "isolationQualified": False,
+                      "artisticApproval": False, "publicationAuthorized": False,
+                      "stages": []}
+          def write():
+              (root / "evidence.json").write_text(json.dumps(evidence, indent=2))
+          def finish():
+              bpy.ops.wm.quit_blender()
+              return None
+          def render(name):
+              scene = bpy.context.scene
+              scene.render.filepath = str(root / (name + ".png"))
+              bpy.ops.render.render(write_still=True)
+              p = root / (name + ".png")
+              raw = p.read_bytes()
+              assert raw[:8] == bytes.fromhex("89504e470d0a1a0a")
+              return {"name": name, "pid": os.getpid(), "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
+          def stage():
+              try:
+                  assert not bpy.app.background and bpy.app.version[:3] == (4, 2, 23)
+                  assert os.getpid() == evidence["pid"]
+                  scene = bpy.context.scene
+                  cube = bpy.data.objects["Cube"]
+                  if not evidence["stages"]:
+                      scene.render.engine = "CYCLES"
+                      scene.cycles.device = "CPU"
+                      scene.cycles.samples = 4
+                      scene.render.resolution_x = 128
+                      scene.render.resolution_y = 128
+                      scene.render.resolution_percentage = 100
+                      scene.render.image_settings.file_format = "PNG"
+                      mat = bpy.data.materials.new("L0_control_material")
+                      mat.use_nodes = True
+                      mat.node_tree.nodes.get("Principled BSDF").inputs["Base Color"].default_value = (0.7, 0.1, 0.05, 1)
+                      cube.data.materials.clear()
+                      cube.data.materials.append(mat)
+                      evidence["stages"].append(render("first"))
+                      write()
+                      return 1.0
+                  mat = bpy.data.materials["L0_control_material"]
+                  assert cube.data.materials[0] == mat
+                  cube.rotation_euler.z = 0.65
+                  mat.node_tree.nodes.get("Principled BSDF").inputs["Base Color"].default_value = (0.05, 0.3, 0.7, 1)
+                  evidence["stages"].append(render("second"))
+                  assert evidence["stages"][0]["sha256"] != evidence["stages"][1]["sha256"]
+                  evidence["status"] = "LIVE_GUI_PREREQUISITE_PASS"
+              except Exception:
+                  evidence["status"] = "LIVE_GUI_PREREQUISITE_FAIL"
+                  evidence["error"] = traceback.format_exc()
+              write()
+              bpy.app.timers.register(finish, first_interval=0.5)
+              return None
+          bpy.app.timers.register(stage, first_interval=1.0)
+          PY
+          timeout 180s env -i PATH=/usr/bin:/bin HOME="$PWD/home" XDG_RUNTIME_DIR="$PWD/xdg-runtime" LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1280x720x24" "$PWD/blender-4.2.23-linux-x64/blender" --factory-startup --disable-autoexec --threads 4 --python-exit-code 1 --python "$PWD/probe.py" > blender.log 2>&1 || { tail -80 blender.log; exit 1; }
+          cat evidence.json
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          e = json.loads(pathlib.Path("evidence.json").read_text())
+          assert e["status"] == "LIVE_GUI_PREREQUISITE_PASS"
+          assert not e["background"]
+          assert len(e["stages"]) == 2
+          assert all(s["pid"] == e["pid"] for s in e["stages"])
+          for s in e["stages"]:
+              raw = pathlib.Path(s["name"] + ".png").read_bytes()
+              assert len(raw) == s["bytes"] and hashlib.sha256(raw).hexdigest() == s["sha256"]
+          assert len({s["sha256"] for s in e["stages"]}) == 2
+          assert not any(e[k] for k in ("mcpClientQualified", "isolationQualified", "artisticApproval", "publicationAuthorized"))
+          print("PASS: real GUI session and two distinct CPU renders; not an MCP or artistic qualification.")
+          PY
+      - name: Audit frozen MCP dependencies before any installation
+        run: bash scripts/visual-factory/mcp-blender/audit-dependencies.sh
+      - name: Verify isolated vendor bridge on a synthetic scene
+        run: bash scripts/visual-factory/mcp-blender/run-isolated.sh
+      - name: Preserve synthetic diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-l0-gui-probe
+          path: |
+            ${{ runner.temp }}/vf3d-l0/evidence.json
+            ${{ runner.temp }}/vf3d-l0/first.png
+            ${{ runner.temp }}/vf3d-l0/second.png
+            ${{ runner.temp }}/vf3d-l0/blender.log
+            ${{ runner.temp }}/vf3d-l0/bridge/transport-evidence.json
+            ${{ runner.temp }}/vf3d-l0/bridge/bridge.log
+            ${{ runner.temp }}/vf3d-l0/bridge/base-image.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/probe-image.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/isolation-config.json
+            ${{ runner.temp }}/vf3d-l0/bridge/stages.log
+            ${{ runner.temp }}/vf3d-l0/bridge/docker-start.log
+            ${{ runner.temp }}/vf3d-l0/bridge/docker-state.json
+            ${{ runner.temp }}/vf3d-l0/bridge/docker.log
+            ${{ runner.temp }}/vf3d-l0/bridge/xvfb.log
+            ${{ runner.temp }}/vf3d-l0/bridge/xdpyinfo.log
+            ${{ runner.temp }}/vf3d-l0/bridge/blender-ready.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/bridge-ready.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/startup-error.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/client.log
+            ${{ runner.temp }}/vf3d-l0/mcp-input/audit.json
+            ${{ runner.temp }}/vf3d-l0/mcp-input/profile-evidence.json
+            ${{ runner.temp }}/vf3d-l0/mcp-input/requirements.lock
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-evidence.json
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-before.png
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-after.png
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-client.log
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-lifecycle.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-inventory.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-ubuntu-osv.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-system-triage.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-remaining-upgrades.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-autoremove-review.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-manual-packages.txt
+            ${{ runner.temp }}/vf3d-l0/bridge/upstream-*
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-contract-fixture.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-lifecycle.log
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-reopen.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-reopen.log
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-base.blend
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-candidate.blend
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-before.png
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-after.png
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-j07-before.png
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-j07-after.png
+          if-no-files-found: ignore
+          retention-days: 7
+
+  oci01-native-arm:
+    if: github.event.repository.visibility == 'public' && github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/visual-factory
+      - name: Native ARM64 two-CPU Blender synthetic feasibility
+        run: bash scripts/visual-factory/mcp-blender/arm-diagnostic.sh
+      - name: Native ARM64 MCP and J07 synthetic qualification
+        run: bash scripts/visual-factory/mcp-blender/arm-mcp-diagnostic.sh
+      - name: Preserve diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-oci01-native-arm-diagnostic
+          path: |
+            ${{ runner.temp }}/oci01-arm/work/base-image.txt
+            ${{ runner.temp }}/oci01-arm/work/image.txt
+            ${{ runner.temp }}/oci01-arm/work/packages.tsv
+            ${{ runner.temp }}/oci01-arm/work/blender-version.txt
+            ${{ runner.temp }}/oci01-arm/work/isolation.json
+            ${{ runner.temp }}/oci01-arm/work/container.log
+            ${{ runner.temp }}/oci01-arm/work/render.log
+            ${{ runner.temp }}/oci01-arm/work/reopen.log
+            ${{ runner.temp }}/oci01-arm/work/arm-evidence.json
+            ${{ runner.temp }}/oci01-arm/work/arm-before.png
+            ${{ runner.temp }}/oci01-arm/work/arm-after.png
+            ${{ runner.temp }}/oci01-arm/work/arm-candidate.blend
+            ${{ runner.temp }}/oci01-arm/work/reopen.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Preserve ARM64 MCP and J07 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-oci01-arm-mcp-diagnostic
+          path: |
+            ${{ runner.temp }}/oci01-arm-mcp/work/image.txt
+            ${{ runner.temp }}/oci01-arm-mcp/work/parent-image.txt
+            ${{ runner.temp }}/oci01-arm-mcp/work/packages.tsv
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-wheel-acquisition.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-requirements-observed.lock
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-python-osv.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-wheel-inventory.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-ubuntu-osv.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/isolation.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/container.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/stages.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/bridge.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/startup-error.txt
+            ${{ runner.temp }}/oci01-arm-mcp/work/blender-python-evidence.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/blender-python-preflight.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/client.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-client.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/transport-evidence.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-evidence.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-before.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-after.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-lifecycle.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-lifecycle.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-reopen.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-reopen.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-base.blend
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-candidate.blend
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-before.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-after.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-j07-before.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-j07-after.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-contract-fixture.json
+          if-no-files-found: ignore
+          retention-days: 7

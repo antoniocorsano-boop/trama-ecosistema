@@ -1,0 +1,83 @@
+name: Visual Factory — MCP dependency preflight
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/visual-factory-3d-mcp-dependencies.yml"
+permissions: {}
+concurrency:
+  group: vf3d-mcp-dependencies
+  cancel-in-progress: true
+jobs:
+  resolve:
+    if: github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Verify exact upstream source and resolve binary dependencies without importing them
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/vf3d-mcp-preflight/wheels"
+          cd "$RUNNER_TEMP/vf3d-mcp-preflight"
+          git init -q source
+          git -C source -c credential.helper= fetch --depth=1 https://github.com/QwenLM/Qwen-MM-Plugins.git refs/tags/qwen-mm-plugins-blender-v1.2.0
+          test "$(git -C source rev-parse 'FETCH_HEAD^{commit}')" = 33a54695774020e5da2d6b1ed13119d4014f848f
+          git -C source checkout --detach -q FETCH_HEAD
+          test "$(git -C source rev-parse HEAD)" = 33a54695774020e5da2d6b1ed13119d4014f848f
+          test "$(git hash-object source/src/capabilities/blender/qwen_mm_plugins_blender/vendor/addon.py)" = 77ec1f85083b39030c12e94e188a7c5a70229744
+          test "$(git hash-object source/src/mcp_framework.py)" = 071fa7b3617fc57bd2a47c3ea7d66971a4e7bf81
+          test "$(git hash-object source/src/capabilities/blender/qwen_mm_plugins_blender/tools/get_viewport_screenshot.py)" = 8b04c9bbfe835c0ca0f384c0c5b3f0462d6e3992
+          python3 - <<'PY'
+          import json, pathlib, sys, tomllib
+          assert sys.version_info[:2] == (3, 12)
+          p=tomllib.loads(pathlib.Path("source/pyproject.toml").read_text())
+          deps=p["project"]["dependencies"]
+          expected=["mcp>=1.0.0,<2","anyio>=4.0,<5","docstring-parser>=0.18,<0.19","pydantic>=2.11,<3","pillow<12","openai>=1,<2"]
+          assert deps==expected and p["project"]["optional-dependencies"]["blender"]==[]
+          pathlib.Path("requirements.in").write_text("\n".join(deps)+"\n")
+          PY
+          # Only obtain binary distributions; no package import, source build or installation.
+          env -i PATH=/usr/bin:/bin HOME="$PWD" PIP_CONFIG_FILE=/dev/null \
+            /usr/bin/python3 -m pip --isolated --disable-pip-version-check download --no-cache-dir \
+            --index-url https://pypi.org/simple --only-binary=:all: \
+            --dest wheels -r requirements.in
+          python3 - <<'PY'
+          import email, hashlib, json, pathlib, platform, re, sys, zipfile
+          from pathlib import Path
+          rows=[]
+          names=set()
+          for p in sorted(Path("wheels").glob("*.whl")):
+              data=p.read_bytes()
+              with zipfile.ZipFile(p) as z:
+                  metadata=[n for n in z.namelist() if n.endswith(".dist-info/METADATA")]
+                  assert len(metadata)==1
+                  m=email.message_from_bytes(z.read(metadata[0]))
+                  name=re.sub(r"[-_.]+","-",m["Name"]).lower()
+                  assert name not in names
+                  names.add(name)
+                  rows.append({"name":name,"version":m["Version"],"filename":p.name,
+                    "sha256":hashlib.sha256(data).hexdigest(),"bytes":len(data),
+                    "license":m.get("License-Expression") or m.get("License"),
+                    "licenseFiles":m.get_all("License-File",[]),
+                    "requiresDist":m.get_all("Requires-Dist",[])})
+          assert {"mcp","anyio","docstring-parser","pydantic","pillow","openai"} <= names
+          assert len(rows) == len(list(Path("wheels").iterdir()))
+          Path("requirements.lock").write_text("".join(f'{r["name"]}=={r["version"]} --hash=sha256:{r["sha256"]}\n' for r in rows))
+          evidence={"status":"RESOLUTION_ONLY_REVIEW_REQUIRED","sourceCommit":"33a54695774020e5da2d6b1ed13119d4014f848f",
+              "python":platform.python_version(),"platform":sys.platform,"machine":platform.machine(),
+              "wheelCount":len(rows),"wheels":rows,"dependenciesImported":False,
+              "mcpClientQualified":False,"agentControlQualified":False,"publicationAuthorized":False}
+          Path("dependency-evidence.json").write_text(json.dumps(evidence,indent=2))
+          print(json.dumps({"status":evidence["status"],"wheelCount":len(rows),"sourceCommit":evidence["sourceCommit"]},indent=2))
+          PY
+      - name: Preserve candidate lock and dependency evidence for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-mcp-dependency-review
+          path: |
+            ${{ runner.temp }}/vf3d-mcp-preflight/requirements.in
+            ${{ runner.temp }}/vf3d-mcp-preflight/requirements.lock
+            ${{ runner.temp }}/vf3d-mcp-preflight/dependency-evidence.json
+          if-no-files-found: ignore
+          retention-days: 7

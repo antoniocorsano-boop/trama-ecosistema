@@ -1,0 +1,41 @@
+{
+  "schema": "trama.j07-diagnostic-review/v0.1",
+  "scope": "DIAGNOSTIC_ONLY",
+  "runId": 44246922857,
+  "artifactId": 14402068388,
+  "archiveSha256": "32fa49c299e8af2e8b21de221ef297ccea112dce508679218fb38dbe06f972c3",
+  "sourceRevision": "e8f4afcf8f8b4161ddc9963d641787fbe4133f86",
+  "baseScene": {
+    "sha256": "99b6fb08652b79db071597b83537f01ad1e411b94d01f17cc164a8cce30972d1",
+    "bytes": 930460
+  },
+  "inventorySha256": "9f6540ccb156f7f779352667ca2408ce0c9d48f9540570aad3461ef2054661af",
+  "triageSha256": "412cf39825a7b59c9ddba6fbb9f153cce1250b44fb4c602776a0f7b02a6f3a78",
+  "isolationSha256": "5629707b8fd0dbb6a5fa703bcf9f3f2e4191dc02c01f7cb9bda038e68faa0762",
+  "lifecycleSha256": "78a56f987468ddf008f85f6fbbc57574cfd486340b6ada1c12e5f45421c1e94f",
+  "receiptFixtureSha256": "b92d46e2f47b3d67779b13b363deb4a353deee5fe88201fa8b4826fe4029834f",
+  "security": {
+    "observedAt": "2026-11-18T05:51:31.624020+00:00",
+    "medium": 147,
+    "low": 12,
+    "negligible": 3,
+    "standardFixNotListed": 159,
+    "withdrawnReview": 3,
+    "remainingUpgrades": 0,
+    "autoremoveCandidates": 0,
+    "acceptance": "NOT_REVIEWED_FOR_PRODUCTION"
+  },
+  "resources": {
+    "githubStandard": "DIAGNOSTIC_ONLY",
+    "ownedCpu": "CANDIDATE_NO_CURRENT_HOST_ATTESTATION",
+    "oracle": "NO_AUTHORIZED_ENTITLEMENT",
+    "cloudflareHf": "NO_J07_RUNTIME_EVIDENCE",
+    "productionPoolCount": 0
+  },
+  "costStatus": "UNKNOWN",
+  "runtimeAuthorized": false,
+  "executionAuthorized": false,
+  "publicationAuthorityGranted": false,
+  "studentAuthorized": false,
+  "paidComputeAuthorized": false
+}

@@ -1,0 +1,24 @@
+name: Visual Factory — J07 session contract
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "scripts/visual-factory/j07_session_contract.py"
+      - "tests/test_j07_session_contract.py"
+      - ".github/workflows/visual-factory-j07-contract.yml"
+permissions:
+  contents: read
+concurrency:
+  group: vf3d-j07-contract
+  cancel-in-progress: true
+jobs:
+  contract:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'vf-3d/blender-live-lab-qualification'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate J07 offline with synthetic contracts
+        run: python3 tests/test_j07_session_contract.py -v
