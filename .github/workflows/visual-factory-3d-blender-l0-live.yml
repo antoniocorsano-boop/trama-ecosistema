@@ -156,7 +156,11 @@ jobs:
           set -euo pipefail
           cd "$RUNNER_TEMP/vf3d-l0"
           mkdir -p mcp-input/wheels mcp-input/source
-          cp "$GITHUB_WORKSPACE/scripts/visual-factory/mcp-blender/requirements.lock" mcp-input/requirements.lock
+          cp "$GITHUB_WORKSPACE/scripts/visual-factory/mcp-blender/requirements.lock" mcp-input/upstream-requirements.lock
+          # Native Blender image transport returns PNG bytes; Pillow is not installed in this source-only profile.
+          grep -v '^pillow==' mcp-input/upstream-requirements.lock > mcp-input/requirements.lock
+          test "$(wc -l < mcp-input/upstream-requirements.lock)" = 36
+          test "$(wc -l < mcp-input/requirements.lock)" = 35
           python3 - <<'PY'
           import datetime, json, pathlib, re, urllib.request
           root=pathlib.Path("mcp-input")
@@ -166,7 +170,8 @@ jobs:
               assert m, line
               name, version, digest=m.groups()
               entries.append({"name":name,"version":version,"sha256":digest})
-          assert len(entries)==36 and len({x["name"] for x in entries})==36
+          assert len(entries)==35 and len({x["name"] for x in entries})==35
+          assert all(x["name"]!="pillow" for x in entries)
           queries=[{"package":{"name":x["name"],"ecosystem":"PyPI"},"version":x["version"]} for x in entries]
           req=urllib.request.Request("https://api.osv.dev/v1/querybatch",
               data=json.dumps({"queries":queries}).encode(),
@@ -182,6 +187,7 @@ jobs:
           evidence={"status":"PASS_NO_OSV_FINDINGS" if not findings else "STOP_KNOWN_ADVISORIES",
                     "checkedAt":datetime.datetime.now(datetime.timezone.utc).isoformat(),
                     "source":"https://api.osv.dev/v1/querybatch","packages":entries,"findings":findings,
+                    "excludedFromNativeBlenderProfile":["pillow"],
                     "scope":"PyPI package advisories only; not a full security certification"}
           (root/"audit.json").write_text(json.dumps(evidence,indent=2))
           print(json.dumps({"status":evidence["status"],"checked":len(entries),"findings":findings},indent=2))
@@ -198,6 +204,23 @@ jobs:
           test "$(git hash-object mcp-input/source/src/mcp_framework.py)" = 071fa7b3617fc57bd2a47c3ea7d66971a4e7bf81
           test "$(git hash-object mcp-input/source/src/capabilities/blender/qwen_mm_plugins_blender/vendor/addon.py)" = 77ec1f85083b39030c12e94e188a7c5a70229744
           test "$(git hash-object mcp-input/source/src/capabilities/blender/qwen_mm_plugins_blender/tools/get_viewport_screenshot.py)" = 8b04c9bbfe835c0ca0f384c0c5b3f0462d6e3992
+          python3 - <<'PY'
+          import ast, json, pathlib
+          src=pathlib.Path("mcp-input/source/src")
+          files=list((src/"capabilities/blender/qwen_mm_plugins_blender").rglob("*.py"))
+          files += [src/"mcp_framework.py",*(src/"shared"/n for n in ("__init__.py","env.py","content.py","native_mode.py","applaunch.py","syscmd.py"))]
+          hits=[]
+          for p in files:
+              for n in ast.walk(ast.parse(p.read_text())):
+                  names=[a.name for a in n.names] if isinstance(n,ast.Import) else [n.module or ""] if isinstance(n,ast.ImportFrom) else []
+                  if any(x.split(".")[0] in ("PIL","pillow") for x in names):
+                      hits.append(str(p))
+          evidence={"profile":"native Blender source-only","sourceFilesChecked":len(files),"directPillowImports":hits,
+                    "scope":"static import check; runtime proof required"}
+          pathlib.Path("mcp-input/profile-evidence.json").write_text(json.dumps(evidence,indent=2))
+          print(json.dumps(evidence,indent=2))
+          assert not hits, hits
+          PY
       - name: Verify isolated vendor bridge on a synthetic scene
         run: |
           set -euo pipefail
@@ -333,17 +356,73 @@ jobs:
           print(json.dumps(result, indent=2))
           PY
           cat > bridge/mcp-client.py <<'PY'
-          import asyncio, base64, hashlib, io, json, os, pathlib, sys
+          import asyncio, base64, hashlib, importlib.util, json, os, pathlib, struct, sys, zlib
           from math import isclose
-          from PIL import Image, ImageChops
+          assert importlib.util.find_spec("PIL") is None, "Pillow must not be installed in native profile"
           from mcp import ClientSession, StdioServerParameters
           from mcp.client.stdio import stdio_client
           root=pathlib.Path("/work")
           source="/deps/source/src"
           env={"PATH":"/usr/bin:/bin","HOME":"/work/home","BLENDER_HOST":"127.0.0.1",
-               "BLENDER_PORT":"9876","QWEN_MM_NO_AUTO_INSTALL":"1","QWEN_MM_AUTOLAUNCH":"0",
+               "BLENDER_PORT":"9876","QWEN_MM_NO_AUTO_INSTALL":"1","QWEN_MM_AUTOLAUNCH":"0","QWEN_MM_NATIVE_MODE":"1",
                "PYTHONPATH":source+":"+source+"/capabilities/blender",
                "PYTHONDONTWRITEBYTECODE":"1","TMPDIR":"/tmp"}
+          def png_pixels(raw):
+              # Bounded, standard-library validation of the synthetic Blender PNG output.
+              assert raw[:8]==b"\x89PNG\r\n\x1a\n" and len(raw)<=8*1024*1024
+              offset=8
+              payload=[]
+              size=None
+              ended=False
+              while offset<len(raw):
+                  assert offset+12<=len(raw)
+                  n,kind=struct.unpack_from(">I4s",raw,offset)
+                  assert offset+12+n<=len(raw)
+                  data=raw[offset+8:offset+8+n]
+                  crc=struct.unpack_from(">I",raw,offset+8+n)[0]
+                  assert zlib.crc32(kind+data)&0xffffffff==crc
+                  offset+=12+n
+                  if kind==b"IHDR":
+                      assert size is None and n==13
+                      w,h,depth,color,comp,filt,interlace=struct.unpack(">IIBBBBB",data)
+                      assert 1<=w<=512 and 1<=h<=512 and depth==8 and color in (2,6)
+                      assert (comp,filt,interlace)==(0,0,0)
+                      size=(w,h)
+                      channels=3 if color==2 else 4
+                  elif kind==b"IDAT":
+                      assert size is not None
+                      payload.append(data)
+                  elif kind==b"IEND":
+                      assert n==0 and offset==len(raw)
+                      ended=True
+                      break
+              assert size and payload and ended
+              stride=w*channels
+              expected=h*(stride+1)
+              dec=zlib.decompressobj()
+              filtered=dec.decompress(b"".join(payload),expected+1)
+              assert len(filtered)==expected and dec.eof and not dec.unused_data and not dec.unconsumed_tail
+              prev=bytearray(stride)
+              pixels=bytearray()
+              def paeth(a,b,c):
+                  p=a+b-c
+                  da,db,dc=abs(p-a),abs(p-b),abs(p-c)
+                  return a if da<=db and da<=dc else b if db<=dc else c
+              for y in range(h):
+                  start=y*(stride+1)
+                  mode=filtered[start]
+                  assert mode<=4
+                  row=bytearray(filtered[start+1:start+1+stride])
+                  for x in range(stride):
+                      a=row[x-channels] if x>=channels else 0
+                      b=prev[x]
+                      c=prev[x-channels] if x>=channels else 0
+                      predict=(0,a,b,(a+b)//2,paeth(a,b,c))[mode]
+                      row[x]=(row[x]+predict)&255
+                  pixels.extend(row)
+                  prev=row
+              assert any(pixels)
+              return size,hashlib.sha256(pixels).hexdigest()
           async def run():
               params=StdioServerParameters(command=sys.executable,args=["-m","qwen_mm_plugins_blender"],env=env)
               async with stdio_client(params) as (read,write):
@@ -367,28 +446,28 @@ jobs:
                           assert b.mimeType=="image/png"
                           raw=base64.b64decode(b.data,validate=True)
                           assert raw[:8]==b"\x89PNG\r\n\x1a\n"
-                          im=Image.open(io.BytesIO(raw)).convert("RGB")
-                          assert 1<=max(im.size)<=512 and im.getextrema()!=((0,0),(0,0),(0,0))
+                          size,pixels=png_pixels(raw)
                           (root/name).write_bytes(raw)
-                          return im,{"name":name,"bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),"size":list(im.size)}
+                          return {"name":name,"bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),"size":list(size),"pixelSha256":pixels}
                       scene=json.loads(await text("get_scene_info",{}))
                       assert any(o["name"]=="Cube" for o in scene["objects"])
                       before=json.loads(await text("get_object_info",{"object_name":"Cube"}))
                       pid1=await text("execute_blender_code",{"code":"import os; print(os.getpid())"})
                       assert pid1.startswith("Code executed successfully:")
-                      im1,a=await capture("mcp-before.png")
+                      a=await capture("mcp-before.png")
                       reply=await text("execute_blender_code",{"code":"bpy.data.objects['Cube'].rotation_euler.z = 1.1; bpy.data.objects['Cube'].scale = (1.6, 0.7, 1.0)"})
                       assert reply.startswith("Code executed successfully:"),reply
                       after=json.loads(await text("get_object_info",{"object_name":"Cube"}))
                       assert isclose(after["rotation"][2],1.1,abs_tol=1e-5)
                       assert isclose(after["scale"][0],1.6,abs_tol=1e-5) and before["mesh"]==after["mesh"]
-                      im2,b=await capture("mcp-after.png")
+                      b=await capture("mcp-after.png")
                       pid2=await text("execute_blender_code",{"code":"import os; print(os.getpid())"})
                       assert pid1==pid2
-                      assert im1.size==im2.size and ImageChops.difference(im1,im2).getbbox() is not None and a["sha256"]!=b["sha256"]
+                      assert a["size"]==b["size"] and a["pixelSha256"]!=b["pixelSha256"] and a["sha256"]!=b["sha256"]
                       evidence={"status":"MCP_IMAGE_LOOP_PASS","protocolVersion":init.protocolVersion,
                                 "toolCount":len(names),"tools":sorted(names),"images":[a,b],
                                 "before":before,"after":after,"sameBlenderProcess":True,
+                                "profile":"native Blender source-only","pillowInstalled":False,"nativeImageMode":True,
                                 "fullMcpClientQualified":True,"agentControlQualified":False,
                                 "artisticApproval":False,"publicationAuthorized":False}
                       (root/"mcp-evidence.json").write_text(json.dumps(evidence,indent=2))
@@ -543,6 +622,8 @@ jobs:
             ${{ runner.temp }}/vf3d-l0/bridge/startup-error.txt
             ${{ runner.temp }}/vf3d-l0/bridge/client.log
             ${{ runner.temp }}/vf3d-l0/mcp-input/audit.json
+            ${{ runner.temp }}/vf3d-l0/mcp-input/profile-evidence.json
+            ${{ runner.temp }}/vf3d-l0/mcp-input/requirements.lock
             ${{ runner.temp }}/vf3d-l0/bridge/mcp-evidence.json
             ${{ runner.temp }}/vf3d-l0/bridge/mcp-before.png
             ${{ runner.temp }}/vf3d-l0/bridge/mcp-after.png
