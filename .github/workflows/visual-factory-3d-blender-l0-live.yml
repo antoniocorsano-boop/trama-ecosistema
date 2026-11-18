@@ -160,6 +160,9 @@ jobs:
             ${{ runner.temp }}/vf3d-l0/bridge/mcp-after.png
             ${{ runner.temp }}/vf3d-l0/bridge/mcp-client.log
             ${{ runner.temp }}/vf3d-l0/bridge/j07-lifecycle.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-inventory.json
+            ${{ runner.temp }}/vf3d-l0/bridge/j07-ubuntu-osv.json
+            ${{ runner.temp }}/vf3d-l0/bridge/upstream-*
             ${{ runner.temp }}/vf3d-l0/bridge/j07-contract-fixture.json
             ${{ runner.temp }}/vf3d-l0/bridge/j07-lifecycle.log
             ${{ runner.temp }}/vf3d-l0/bridge/j07-reopen.json
