@@ -5,6 +5,7 @@ import unittest
 ALLOWED = {
     "tests.test_compute_factory_convergence": 9,
     "tests.test_compute_factory_storie_profile": 8,
+    "tests.test_j07_compute_review": 5,
 }
 
 def complete(result, expected):
