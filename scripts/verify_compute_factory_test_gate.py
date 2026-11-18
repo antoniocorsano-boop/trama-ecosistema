@@ -6,6 +6,7 @@ ALLOWED = {
     "tests.test_compute_factory_convergence": 9,
     "tests.test_compute_factory_storie_profile": 8,
     "tests.test_j07_compute_review": 5,
+    "tests.test_owned_cpu_j07": 8,
 }
 
 def complete(result, expected):
