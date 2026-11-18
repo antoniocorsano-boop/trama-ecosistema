@@ -30,6 +30,12 @@ jobs:
           mkdir -p experiments/tv-01c/android-probe/app/src/main/assets
           curl --fail --location --retry 2 --max-time 120 https://alphacephei.com/vosk/models/vosk-model-small-it-0.22.zip -o experiments/tv-01c/android-probe/app/src/main/assets/model-it.zip
           echo '9ec65e75861d1c6c2e457cccd932705340dcdf233f5b239f00733b4de0bf3267  experiments/tv-01c/android-probe/app/src/main/assets/model-it.zip' | sha256sum -c -
+      - name: Check fixed consultation destinations
+        working-directory: experiments/tv-01c/android-probe
+        run: |
+          mkdir -p /tmp/tv01d-check
+          javac -d /tmp/tv01d-check app/src/main/java/it/trama/voiceprobe/Consultation.java checks/ConsultationCheck.java
+          java -cp /tmp/tv01d-check it.trama.voiceprobe.ConsultationCheck
       - name: Build isolated debug application
         working-directory: experiments/tv-01c/android-probe
         run: gradle --no-daemon :app:assembleDebug
@@ -38,15 +44,15 @@ jobs:
           apk=experiments/tv-01c/android-probe/app/build/outputs/apk/debug/app-debug.apk
           "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$apk" | tee /tmp/badging.txt
           grep -Fx "targetSdkVersion:'36'" /tmp/badging.txt
-          grep -F "package: name='it.trama.voiceprobe' versionCode='2' versionName='0.2'" /tmp/badging.txt
+          grep -F "package: name='it.trama.voiceprobe' versionCode='3' versionName='0.3'" /tmp/badging.txt
           "$ANDROID_HOME/build-tools/36.0.0/aapt" dump permissions "$apk" | tee /tmp/permissions.txt
           grep -q android.permission.RECORD_AUDIO /tmp/permissions.txt
           if grep -q android.permission.INTERNET /tmp/permissions.txt; then exit 1; fi
           unzip -l "$apk" | grep assets/model-it.zip
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify "$apk"
           mkdir -p tv01c-android-evidence
-          cp "$apk" tv01c-android-evidence/Assistente-TRAMA-Prova-v0.2.apk
-          (cd tv01c-android-evidence && sha256sum Assistente-TRAMA-Prova-v0.2.apk > SHA256SUMS.txt)
+          cp "$apk" tv01c-android-evidence/Assistente-TRAMA-Prova-v0.3.apk
+          (cd tv01c-android-evidence && sha256sum Assistente-TRAMA-Prova-v0.3.apk > SHA256SUMS.txt)
       - uses: actions/upload-artifact@v4
         with:
           name: Assistente-TRAMA-Prova-Android
