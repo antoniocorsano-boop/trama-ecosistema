@@ -16,7 +16,7 @@ docker tag "$base" vf3d-oci01-arm:parent
 cat > build/Dockerfile <<'EOF'
 FROM vf3d-oci01-arm:parent
 RUN apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    python3 python3-venv ca-certificates && rm -rf /var/lib/apt/lists/*
+    python3 python3-venv python3-requests ca-certificates && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /opt/blender && ln -s /usr/bin/blender /opt/blender/blender
 EOF
 docker build --platform linux/arm64 --tag vf3d-oci01-arm:mcp build
@@ -64,6 +64,16 @@ def adapt(source,target,old,new,count):
     target.write_text(s.replace(old,new))
 adapt(src/"blender-start.py",pathlib.Path("work/start.py"),"(4, 2, 23)","(5, 0, 1)",1)
 adapt(src/"container-session.sh",pathlib.Path("work/run.sh"),"--threads 4","--threads 2",2)
+# Check the actual Blender Python, not only the separate MCP venv.
+p=pathlib.Path("work/run.sh")
+s=p.read_text()
+marker="stage D3_BLENDER_START\n"
+assert s.count(marker)==1
+probe="""stage D3_BLENDER_PYTHON_PREFLIGHT
+timeout 30s /opt/blender/blender --background --factory-startup --disable-autoexec --threads 2 --python-exit-code 1 --python-expr 'import bpy, sys, requests, json, pathlib; assert bpy.app.version[:3]==(5,0,1) and sys.version_info[:2]==(3,14); pathlib.Path("/work/blender-python-evidence.json").write_text(json.dumps({"python":sys.version.split()[0],"requests":requests.__version__,"status":"PASS","source":"Ubuntu system package"}))' > /work/blender-python-preflight.log 2>&1 || { cat /work/blender-python-preflight.log; exit 30; }
+stage D3_BLENDER_PYTHON_PREFLIGHT_PASS
+"""
+p.write_text(s.replace(marker,probe+marker))
 p=pathlib.Path("adapter/j07-synthetic.py")
 adapt(p,p,'"cpu":4','"cpu":2',1)
 PY
