@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "trama.visual-3d-planning-input/v0.1",
+  "request": {
+    "requestId": "j07-diagnostic-admission-review-20261118",
+    "subjectRef": "synthetic-j07-cube",
+    "packageDigest": "99b6fb08652b79db071597b83537f01ad1e411b94d01f17cc164a8cce30972d1",
+    "artDirectionRef": "SYNTHETIC_DIAGNOSTIC_ONLY",
+    "sourceRevision": "e8f4afcf8f8b4161ddc9963d641787fbe4133f86",
+    "purpose": "EVALUATION",
+    "qualityProfile": "Q4",
+    "costClass": "FREE_ONLY",
+    "maxAttempts": 1,
+    "maxConcurrentGpuJobs": 1,
+    "assets": [
+      {
+        "id": "synthetic-base",
+        "kind": "MESH",
+        "sha256": "99b6fb08652b79db071597b83537f01ad1e411b94d01f17cc164a8cce30972d1",
+        "bytes": 930460,
+        "rightsRef": "SYNTHETIC_FIXTURE_ONLY",
+        "reviewRef": "DIAGNOSTIC_NOT_ARTISTIC_APPROVAL",
+        "dataClass": "NONPERSONAL"
+      }
+    ],
+    "jobs": [
+      {
+        "id": "j07-render-review",
+        "role": "RENDER",
+        "inputIds": [
+          "synthetic-base"
+        ],
+        "engineOrder": [
+          "blender-procedural"
+        ]
+      }
+    ],
+    "paidComputeAuthorized": false,
+    "allowQualityDowngrade": false,
+    "runtimeAuthorized": false,
+    "publicationAuthorityGranted": false,
+    "studentAuthorized": false
+  },
+  "admissions": [],
+  "pools": []
+}
