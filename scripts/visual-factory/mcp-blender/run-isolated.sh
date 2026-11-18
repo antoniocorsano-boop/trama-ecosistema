@@ -21,6 +21,7 @@ docker build --build-arg "LAB_UID=$(id -u)" --build-arg "LAB_GID=$(id -g)" --tag
 docker image inspect vf3d-local-probe:single --format '{{.Id}}' > bridge/probe-image.txt
 # Read-only evidence collection on the built image; no production entitlement.
 python3 "$adapter_dir/inventory-evidence.py"
+python3 "$adapter_dir/triage-system.py"
 cp "$adapter_dir/blender-start.py" "bridge/start.py"
 cp "$adapter_dir/vendor-smoke.py" "bridge/client.py"
 cp "$adapter_dir/mcp-client.py" "bridge/mcp-client.py"
