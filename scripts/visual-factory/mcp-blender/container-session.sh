@@ -62,3 +62,15 @@ stage D5_MCP_START
 timeout 95s /work/mcp-venv/bin/python -u /work/mcp-client.py > /work/mcp-client.log 2>&1 || { stage D5_MCP_FAILED; cat /work/mcp-client.log; exit 51; }
 cat /work/mcp-client.log
 stage D5_MCP_IMAGE_LOOP_PASS
+
+stage D6_J07_LIFECYCLE_START
+test "$(stat -c %a /adapter)" != ""
+/usr/bin/python3 -c 'import os; assert os.statvfs("/adapter").f_flag & os.ST_RDONLY'
+timeout 135s env PYTHONDONTWRITEBYTECODE=1 /work/mcp-venv/bin/python -u /adapter/j07-synthetic.py > /work/j07-lifecycle.log 2>&1 || { stage D6_J07_FAILED; cat /work/j07-lifecycle.log; tail -80 /work/bridge.log; exit 61; }
+cat /work/j07-lifecycle.log
+stage D6_J07_LIFECYCLE_PASS
+kill "$bpid" 2>/dev/null || true
+wait "$bpid" 2>/dev/null || true
+bpid=
+timeout 45s /opt/blender/blender --background --factory-startup --disable-autoexec --threads 4 --python-exit-code 1 /work/j07-candidate.blend --python-expr 'import bpy,json,pathlib,math; o=bpy.data.objects["Cube"]; assert len(o.data.vertices)==8 and len(o.data.polygons)==6 and math.isclose(o.rotation_euler.z,.8,abs_tol=1e-5) and math.isclose(o.scale.x,1.4,abs_tol=1e-5); assert math.isclose(o.data.materials[0].node_tree.nodes.get("Principled BSDF").inputs["Base Color"].default_value[2],.75,abs_tol=1e-5); pathlib.Path("/work/j07-reopen.json").write_text(json.dumps({"status":"PASS","vertices":8,"faces":6}))' > /work/j07-reopen.log 2>&1
+stage D7_J07_REOPEN_PASS
