@@ -55,3 +55,7 @@ Non sono ammessi in questo repository:
 - segreti, credenziali o configurazioni di produzione;
 - ricevute tecniche che appartengono a un solo prodotto.
 
+
+## Documentazione obbligatoria di ogni fase produttiva
+
+Il requisito [TRAMA-DE-01](docs/decisions/trama-adr-023-decision-evidence.md) disciplina la chiusura di ogni fase: dossier decisionale, prove positive e negative, criteri verificati e stato esplicito. Nessuna fase è conclusa senza evidenze documentate. L'adozione tecnica avviene tramite PR separate nei prodotti, senza autorizzazioni implicite.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-11-14T06:11:19Z",
+  "generatedAt": "2026-11-18T15:57:59Z",
   "project": "TRAMA",
   "status": "CURRENT",
   "currentPhase": {
@@ -383,6 +383,23 @@
         "Studio Atlas"
       ],
       "decision": "Separare distribuzione pubblica statica approvata, collaudo riservato e applicazioni professionali; ammettere soltanto provider FREE_ONLY con termini, quote, costo zero e protezioni verificati; preservare portabilità, originali, autorizzazioni e stop senza fallback a pagamento o pubblico.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-023",
+      "title": "Documentazione decisionale ed evidenze obbligatorie per ogni fase produttiva",
+      "status": "APPROVED",
+      "date": "2026-11-18",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Studio Atlas",
+        "Control Center"
+      ],
+      "decision": "L'indirizzo approvato dall'utente rende TRAMA-DE-01 requisito irrinunciabile per ogni fase produttiva: documentare contesto, alternative, motivazione della scelta, vincoli, risultati, evidenze positive e negative, verifiche mancanti e stato. Nessuna fase può essere dichiarata completata senza dossier verificabile; registrazioni storiche immutabili, rettifiche per supersessione. Ogni prodotto conserva le proprie fonti, TRAMA governa il contratto comune e il Control Center può solo indicizzare. ASP-01 è pilota Atlas. L'adozione dei controlli nei singoli repository richiede PR distinte; nessuna attivazione runtime, pubblicazione o modifica di autorità è autorizzata.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
     }
@@ -1752,7 +1769,7 @@
       "id": "ecosystem-snapshot",
       "path": "control-center/data/ecosystem-snapshot.json",
       "role": "LIVE_DERIVED_STATE",
-      "sha256": "2498bb7671f0d8e81cf7565442a04d32567c4f5cc98fc65e84c7d6ca5d8d19ee"
+      "sha256": "05b6f311d81f19f0c67952b2145d2e91b829557271160ae8c7bfd60a49d5c113"
     },
     {
       "id": "source-registry",
@@ -1764,7 +1781,7 @@
       "id": "decision-register",
       "path": "docs/decisions/decision-register.json",
       "role": "DECISIONS",
-      "sha256": "1236ace490e9ecd23b1592adb9f4784f3df595a9fcedb77d9a61a1f02d3f25c1"
+      "sha256": "5ecd7d334a27bdd6e4710dbe927eee97fc18e59bb935677e403060d73fd139a1"
     },
     {
       "id": "ecosystem-status",
