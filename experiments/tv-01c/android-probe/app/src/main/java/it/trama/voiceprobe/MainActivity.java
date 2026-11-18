@@ -57,17 +57,20 @@ public class MainActivity extends Activity {
    if(controller!=null)controller.setSystemBarsAppearance(android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS|android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS|android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
    sc.requestApplyInsets();
   }
-  l.addView(text("TRAMA · Consultazione",14));l.addView(text("Come posso aiutarti?",28));
+  l.addView(text("TRAMA · Consultazione 0.4",14));l.addView(text("Come posso aiutarti?",28));
   l.addView(text("Parla oppure scrivi una richiesta.",16));
   mic=button("Parla");mic.setTextColor(Color.WHITE);mic.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xff245e54));l.addView(mic);
   status=text("Preparazione della voce italiana…",15);l.addView(status);
   request=new EditText(this);request.setHint("Ad esempio, apri il calendario");request.setInputType(android.text.InputType.TYPE_CLASS_TEXT|android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE);request.setSaveEnabled(false);request.setFreezesText(false);request.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(180)});l.addView(request);
+  next=button("Controlla richiesta");l.addView(next);
+  proposal=text("",18);l.addView(proposal);
+  confirm=button("Apri in Docente OS");confirm.setTextColor(Color.WHITE);confirm.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xff245e54));l.addView(confirm);confirm.setVisibility(View.GONE);
+  Button cancel=button("Annulla");l.addView(cancel);
+  l.addView(text("Oppure scegli una sezione",15));
   for(String example:new String[]{"mostra l'orario","apri il calendario","mostrami gli impegni","mostrami le classi","mostra i materiali","apri la progettazione"}){
-   Button b=button(example);l.addView(b);b.setOnClickListener(v->{if(!active){request.setText(example);request.setSelection(request.length());}});
+   Button b=button(example);l.addView(b);b.setOnClickListener(v->{if(!active){request.setText(example);request.setSelection(request.length());reviewRequest();sc.smoothScrollTo(0,0);}});
   }
-  next=button("Continua");l.addView(next);
-  proposal=text("",18);l.addView(proposal);confirm=button("Apri in Docente OS");l.addView(confirm);confirm.setVisibility(View.GONE);
-  Button cancel=button("Annulla");l.addView(cancel);l.addView(text("La voce è elaborata sul telefono. Si aprono soltanto le sezioni di Docente OS; nessun dato viene modificato dall’assistente.",13));
+  l.addView(text("Versione 0.4 · La voce rimane sul telefono. L’apertura di Docente OS richiede la connessione.",13));
   request.addTextChangedListener(new TextWatcher(){public void beforeTextChanged(CharSequence s,int start,int count,int after){} public void onTextChanged(CharSequence s,int start,int before,int count){invalidateReview();} public void afterTextChanged(Editable e){}});
   mic.setOnClickListener(v->{if(active){recording=false;mic.setEnabled(false);status.setText("Sto elaborando…");}else if(checkSelfPermission(Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},1);}else startVoice();});
   next.setOnClickListener(v->{if(active)return;reviewRequest();});
@@ -123,8 +126,9 @@ public class MainActivity extends Activity {
  private static void append(StringBuilder b,String json)throws Exception{String s=new JSONObject(json).optString("text","").trim();if(!s.isEmpty()){if(b.length()>0)b.append(' ');b.append(s);}}
  private void reviewRequest(){
   reviewed=Consultation.normalize(request.getText().toString());target=Consultation.resolve(reviewed);
-  proposal.setText(target==null?"Non ho individuato una sezione. Prova con uno degli esempi.":"Vuoi aprire "+target.label+" in Docente OS?");
+  proposal.setText(target==null?"Non ho individuato una sezione. Scegli un esempio qui sotto.":"Vuoi aprire "+target.label+" in Docente OS?");
   confirm.setVisibility(target==null?View.GONE:View.VISIBLE);
+  if(target!=null)confirm.post(()->confirm.requestRectangleOnScreen(new android.graphics.Rect(0,0,confirm.getWidth(),confirm.getHeight()),true));
  }
  private void invalidateReview(){target=null;reviewed=null;proposal.setText("");confirm.setVisibility(View.GONE);}
  private void cancelVoice(){revision++;cancelled=true;recording=false;invalidateReview();}
