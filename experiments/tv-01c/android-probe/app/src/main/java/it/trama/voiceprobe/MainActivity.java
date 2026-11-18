@@ -34,7 +34,8 @@ public class MainActivity extends Activity {
  private Button mic, next, confirm;
  private EditText request;
  private TextView status, proposal;
- private String reviewed, target;
+ private String reviewed;
+ private Consultation target;
  private static final int RATE=16000;
  private int dp(int x){return Math.round(x*getResources().getDisplayMetrics().density);}
  private TextView text(String s,int size){TextView t=new TextView(this);t.setText(s);t.setTextSize(size);t.setTextColor(0xff203b34);return t;}
@@ -56,21 +57,32 @@ public class MainActivity extends Activity {
    if(controller!=null)controller.setSystemBarsAppearance(android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS|android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS|android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
    sc.requestApplyInsets();
   }
-  l.addView(text("TRAMA · Ambiente di prova",14));l.addView(text("Come posso aiutarti?",28));
+  l.addView(text("TRAMA · Consultazione",14));l.addView(text("Come posso aiutarti?",28));
   l.addView(text("Parla oppure scrivi una richiesta.",16));
   mic=button("Parla");mic.setTextColor(Color.WHITE);mic.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xff245e54));l.addView(mic);
   status=text("Preparazione della voce italiana…",15);l.addView(status);
   request=new EditText(this);request.setHint("Ad esempio, apri il calendario");request.setInputType(android.text.InputType.TYPE_CLASS_TEXT|android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE);request.setSaveEnabled(false);request.setFreezesText(false);request.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(180)});l.addView(request);
-  for(String example:new String[]{"mostra l'orario","apri il calendario","apri la lezione","cerca un laboratorio"}){
+  for(String example:new String[]{"mostra l'orario","apri il calendario","mostrami gli impegni","mostrami le classi","mostra i materiali","apri la progettazione"}){
    Button b=button(example);l.addView(b);b.setOnClickListener(v->{if(!active){request.setText(example);request.setSelection(request.length());}});
   }
   next=button("Continua");l.addView(next);
-  proposal=text("",18);l.addView(proposal);confirm=button("Conferma");l.addView(confirm);confirm.setVisibility(View.GONE);
-  Button cancel=button("Annulla");l.addView(cancel);l.addView(text("Solo richieste di esempio. Nessuna azione modifica TRAMA. La voce è elaborata sul telefono.",13));
+  proposal=text("",18);l.addView(proposal);confirm=button("Apri in Docente OS");l.addView(confirm);confirm.setVisibility(View.GONE);
+  Button cancel=button("Annulla");l.addView(cancel);l.addView(text("La voce è elaborata sul telefono. Si aprono soltanto le sezioni di Docente OS; nessun dato viene modificato dall’assistente.",13));
   request.addTextChangedListener(new TextWatcher(){public void beforeTextChanged(CharSequence s,int start,int count,int after){} public void onTextChanged(CharSequence s,int start,int before,int count){invalidateReview();} public void afterTextChanged(Editable e){}});
   mic.setOnClickListener(v->{if(active){recording=false;mic.setEnabled(false);status.setText("Sto elaborando…");}else if(checkSelfPermission(Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},1);}else startVoice();});
-  next.setOnClickListener(v->{if(active)return;reviewed=normalize(request.getText().toString());target=resolve(reviewed);proposal.setText(target==null?"Prova con uno degli esempi.": "Vuoi aprire: "+target+"?");confirm.setVisibility(target==null?View.GONE:View.VISIBLE);});
-  confirm.setOnClickListener(v->{if(!active&&target!=null&&reviewed.equals(normalize(request.getText().toString()))){invalidateReview();proposal.setText("Richiesta confermata. È soltanto una prova.");}});
+  next.setOnClickListener(v->{if(active)return;reviewRequest();});
+  confirm.setOnClickListener(v->{
+   if(active||closed||target==null||reviewed==null||!reviewed.equals(Consultation.normalize(request.getText().toString())))return;
+   Consultation chosen=target;
+   invalidateReview();
+   request.setText("");
+   try{
+    android.content.Intent intent=new android.content.Intent(android.content.Intent.ACTION_VIEW,android.net.Uri.parse(chosen.url()));
+    intent.addCategory(android.content.Intent.CATEGORY_BROWSABLE);
+    startActivity(intent);
+    status.setText("Apertura richiesta a Docente OS. Se necessario, accedi normalmente.");
+   }catch(android.content.ActivityNotFoundException|SecurityException e){status.setText("Non è stato possibile aprire Docente OS. Usa la navigazione normale.");}
+  });
   cancel.setOnClickListener(v->{cancelVoice();request.setText("");invalidateReview();status.setText("Richiesta annullata.");});
   preparing=true;mic.setEnabled(false);worker.execute(()->{Model loaded=null;try{loaded=new Model(prepareModel().getAbsolutePath());Model ready=loaded;ui.post(()->{if(closed){ready.close();return;}model=ready;preparing=false;mic.setEnabled(!active);status.setText("Tocca Parla per iniziare.");});}catch(Exception e){if(loaded!=null)loaded.close();ui.post(()->{if(!closed){preparing=false;status.setText("La voce non è disponibile. Puoi scrivere.");}});}});
  }
@@ -104,13 +116,16 @@ public class MainActivity extends Activity {
    }catch(Exception e){failed=true;}finally{
     recording=false;
     if(recorder!=null){try{recorder.stop();}catch(Exception ignored){}recorder.release();}
-    String finalText=result;boolean error=failed;ui.post(()->{if(closed)return;active=false;mic.setText("Parla");mic.setEnabled(model!=null);request.setEnabled(true);next.setEnabled(true);if(session!=revision||cancelled)return;if(error){status.setText("Non sono riuscito ad ascoltarti. Puoi scrivere.");return;}if(finalText.length()>180){status.setText("Prova una richiesta più breve.");return;}request.setText(finalText);status.setText(finalText.isEmpty()?"Non ho sentito una richiesta. Riprova.":"Rileggi la richiesta e continua.");});
+    String finalText=result;boolean error=failed;ui.post(()->{if(closed)return;active=false;mic.setText("Parla");mic.setEnabled(model!=null);request.setEnabled(true);next.setEnabled(true);if(session!=revision||cancelled)return;if(error){status.setText("Non sono riuscito ad ascoltarti. Puoi scrivere.");return;}if(finalText.length()>180){status.setText("Prova una richiesta più breve.");return;}request.setText(finalText);status.setText(finalText.isEmpty()?"Non ho sentito una richiesta. Riprova.":"Controlla la richiesta riconosciuta.");if(!finalText.isEmpty())reviewRequest();});
    }
   });
  }
  private static void append(StringBuilder b,String json)throws Exception{String s=new JSONObject(json).optString("text","").trim();if(!s.isEmpty()){if(b.length()>0)b.append(' ');b.append(s);}}
- private static String normalize(String s){return s.trim().toLowerCase(Locale.ITALIAN).replace('’','\'').replaceAll("\\s+"," ").replaceAll("[.!?]+$","");}
- private static String resolve(String s){switch(s){case "mostra l'orario":case "mostra orario":return "Orario";case "apri il calendario":case "apri calendario":return "Calendario";case "apri la lezione":case "apri lezione":return "Preparazione della lezione";case "cerca un laboratorio":case "cerca laboratorio":return "Ricerca laboratori";default:return null;}}
+ private void reviewRequest(){
+  reviewed=Consultation.normalize(request.getText().toString());target=Consultation.resolve(reviewed);
+  proposal.setText(target==null?"Non ho individuato una sezione. Prova con uno degli esempi.":"Vuoi aprire "+target.label+" in Docente OS?");
+  confirm.setVisibility(target==null?View.GONE:View.VISIBLE);
+ }
  private void invalidateReview(){target=null;reviewed=null;proposal.setText("");confirm.setVisibility(View.GONE);}
  private void cancelVoice(){revision++;cancelled=true;recording=false;invalidateReview();}
  @Override protected void onPause(){cancelVoice();request.setText("");super.onPause();}
