@@ -1,6 +1,6 @@
 # J07 BLENDER_FINISH — Contratto di sessione condiviso v0.1
 
-Stato: CONTRACT_IMPLEMENTED / CI_PENDING / LIVE_ADAPTER_NOT_CONSOLIDATED. Raccordo a VF-3D-01, ADR-021, TRAMA #345 e Atlas #107. Il compilatore Visual Factory rimane l'unico punto di pianificazione; J07 è un adattatore figlio, non un secondo orchestratore.
+Stato: CONTRACT_OFFLINE_PASS / SHARED_ADAPTER_EXTRACTED / SYNTHETIC_LIVE_REQUALIFICATION_PENDING / NOT_PRODUCTION_ADMITTED. Raccordo a VF-3D-01, ADR-021, TRAMA #345 e Atlas #107. Il compilatore Visual Factory rimane l'unico punto di pianificazione; J07 è un adattatore figlio, non un secondo orchestratore.
 
 ## Conservazione e provenienza
 
@@ -28,3 +28,11 @@ Operazioni ammesse: inspect, apply_reviewed_patch, render, snapshot, reopen. La 
 4. Completare verifica licenze, dipendenze di sistema e ammissione; revisione terza separata. Solo allora considerare il raccordo produttivo con il planner e un nuovo benchmark artistico. Autonomia agente, GLB/runtime e pubblicazione rimangono gate distinti.
 
 Non autorizza merge, pubblicazione, spese, nuovo servizio o inferenza. La validazione del contratto non equivale al consolidamento dell'esecutore.
+
+## Incremento P1 — adattatore operativo estratto
+
+La procedura live TRAMA è stata ridotta a richiami ai file sotto scripts/visual-factory/mcp-blender: prepare-distribution.sh, audit-dependencies.sh, Dockerfile, blender-start.py, vendor-smoke.py, mcp-client.py, container-session.sh e run-isolated.sh. Il bootstrap, i controlli del profilo nativo e l'isolamento provengono dal collaudo precedente. Il workflow storico Atlas #107 non è stato riscritto, i suoi artefatti restano immutabili.
+
+j07_adapter.py espone inspect, apply_reviewed_patch, snapshot e render in un profilo sintetico. La patch di prova è una ricetta interna identificata da ID e digest; non si accettano codice, URL o percorsi dal chiamante. j07-synthetic.py esercita realmente MCP, una scena di fabbrica, snapshot iniziale, due rendering Cycles CPU, ritorno dei byte attraverso MCP, modifica consentita, rifiuto di patch non registrata, hash errato, percorso arbitrario e secondo tentativo. La riapertura avviene in un processo Blender separato nello stesso contenitore. Il codice dell'adattatore viene montato in sola lettura. L'API interna di trasporto non è un confine di sicurezza per codice ostile.
+
+La ricevuta contrattuale della prova resta esplicitamente un fixture sintetico STOPPED / UNKNOWN / STOP_NO_COST_EVIDENCE; il risultato tecnico ha un'evidenza distinta, non è una ricevuta di produzione. Non si dichiara ammissione compute reale, approvazione artistica, autonomia o integrazione nel planner. L'estrazione non sostituisce ancora i client storici Atlas e non implementa un caricatore di master di produzione. Dopo il collaudo: verificare costi/diritti, unificare l'interfaccia con il planner e migrare soltanto le future ricette Atlas, senza rieseguire C1/C2. Nessun nuovo provider, nessun C3.
