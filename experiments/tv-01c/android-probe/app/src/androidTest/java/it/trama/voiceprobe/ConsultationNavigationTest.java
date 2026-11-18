@@ -15,6 +15,7 @@ import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.*;
+import static androidx.test.espresso.intent.VerificationModes.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.*;
 import static org.hamcrest.Matchers.*;
 
@@ -26,7 +27,7 @@ public class ConsultationNavigationTest {
   try {
    intending(hasAction(Intent.ACTION_VIEW)).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK,null));
    onView(withText("mostra l'orario")).perform(scrollTo(),click());
-   onView(withText("Vuoi aprire Orario in Docente OS?")).check(matches(isDisplayed()));
+   onView(withText("Vuoi aprire Orario in Docente OS?")).perform(scrollTo()).check(matches(isDisplayed()));
    intended(hasAction(Intent.ACTION_VIEW),times(0));
    onView(withText("Apri in Docente OS")).perform(scrollTo(),click());
    intended(allOf(hasAction(Intent.ACTION_VIEW),hasData(Uri.parse("https://docente-os-2026-27-beta.onrender.com/orario"))),times(1));
@@ -38,7 +39,7 @@ public class ConsultationNavigationTest {
    intending(hasAction(Intent.ACTION_VIEW)).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK,null));
    onView(withHint("Ad esempio, apri il calendario")).perform(replaceText("mostra l orario"),closeSoftKeyboard());
    onView(withText("Controlla richiesta")).perform(scrollTo(),click());
-   onView(withText("Vuoi aprire Orario in Docente OS?")).check(matches(isDisplayed()));
+   onView(withText("Vuoi aprire Orario in Docente OS?")).perform(scrollTo()).check(matches(isDisplayed()));
    onView(withHint("Ad esempio, apri il calendario")).perform(replaceText("apri il calendario"),closeSoftKeyboard());
    onView(withText("Controlla richiesta")).perform(scrollTo(),click());
    onView(withText("Apri in Docente OS")).perform(scrollTo(),click());
