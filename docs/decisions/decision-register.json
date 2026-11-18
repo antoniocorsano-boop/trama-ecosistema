@@ -321,6 +321,23 @@
       "decision": "Separare distribuzione pubblica statica approvata, collaudo riservato e applicazioni professionali; ammettere soltanto provider FREE_ONLY con termini, quote, costo zero e protezioni verificati; preservare portabilità, originali, autorizzazioni e stop senza fallback a pagamento o pubblico.",
       "humanControlImpact": "STRENGTHENED",
       "supersedes": []
+    },
+    {
+      "id": "TRAMA-ADR-023",
+      "title": "Documentazione decisionale ed evidenze obbligatorie per ogni fase produttiva",
+      "status": "APPROVED",
+      "date": "2026-11-18",
+      "scope": [
+        "TRAMA",
+        "Arena",
+        "Atlas",
+        "Docente OS",
+        "Studio Atlas",
+        "Control Center"
+      ],
+      "decision": "L'indirizzo approvato dall'utente rende TRAMA-DE-01 requisito irrinunciabile per ogni fase produttiva: documentare contesto, alternative, motivazione della scelta, vincoli, risultati, evidenze positive e negative, verifiche mancanti e stato. Nessuna fase può essere dichiarata completata senza dossier verificabile; registrazioni storiche immutabili, rettifiche per supersessione. Ogni prodotto conserva le proprie fonti, TRAMA governa il contratto comune e il Control Center può solo indicizzare. ASP-01 è pilota Atlas. L'adozione dei controlli nei singoli repository richiede PR distinte; nessuna attivazione runtime, pubblicazione o modifica di autorità è autorizzata.",
+      "humanControlImpact": "STRENGTHENED",
+      "supersedes": []
     }
   ]
 }
