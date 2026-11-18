@@ -23,9 +23,11 @@ cp "$adapter_dir/blender-start.py" "bridge/start.py"
 cp "$adapter_dir/vendor-smoke.py" "bridge/client.py"
 cp "$adapter_dir/mcp-client.py" "bridge/mcp-client.py"
 cp "$adapter_dir/container-session.sh" "bridge/run.sh"
+mkdir -p adapter
+cp "$adapter_dir/j07_adapter.py" "$adapter_dir/j07-synthetic.py" "$adapter_dir/../j07_session_contract.py" adapter/
 # No host network, ports, credentials, GPU devices, socket or privileged container.
 # Fail closed rather than running outside the boundary.
-name="vf3d-isolated-probe"
+name="vf3d-isolated-${GITHUB_RUN_ID:?}-${GITHUB_RUN_ATTEMPT:?}"
 trap 'docker rm -f "$name" >/dev/null 2>&1 || true' EXIT
 docker create --name "$name" --network none --read-only --user "$(id -u):$(id -g)" \
   --cap-drop ALL --security-opt no-new-privileges:true --cpus 4 --memory 6g --pids-limit 256 \
@@ -33,6 +35,7 @@ docker create --name "$name" --network none --read-only --user "$(id -u):$(id -g
   --mount "type=bind,src=$PWD/blender-4.2.23-linux-x64,dst=/opt/blender,readonly" \
   --mount "type=bind,src=$PWD/bridge,dst=/work" \
   --mount "type=bind,src=$PWD/mcp-input,dst=/deps,readonly" \
+  --mount "type=bind,src=$PWD/adapter,dst=/adapter,readonly" \
   --workdir /work vf3d-local-probe:single \
   /usr/bin/env -i PATH=/usr/bin:/bin HOME=/work/home XDG_RUNTIME_DIR=/work/runtime LIBGL_ALWAYS_SOFTWARE=1 \
   /bin/bash /work/run.sh
@@ -58,7 +61,7 @@ if ! timeout 25s docker start "$name" > bridge/docker-start.log 2>&1; then
 fi
 echo "DOCKER_START_ACCEPTED"
 running=true
-for i in $(seq 1 140); do
+for i in $(seq 1 215); do
   running="$(docker inspect "$name" --format '{{.State.Running}}')"
   [[ "$running" = true ]] || break
   sleep 2
@@ -79,4 +82,15 @@ assert e["status"]=="VENDOR_TCP_BRIDGE_PASS" and e["isolationSmokePassed"]
 assert not e["fullMcpClientQualified"] and not e["agentControlQualified"]
 m=json.loads(pathlib.Path("bridge/mcp-evidence.json").read_text())
 assert m["status"]=="MCP_IMAGE_LOOP_PASS" and m["fullMcpClientQualified"] and not m["agentControlQualified"]
+import hashlib
+root=pathlib.Path("bridge")
+j=json.loads((root/"j07-lifecycle.json").read_text())
+assert j["status"]=="SYNTHETIC_LIFECYCLE_PASS" and j["rejectedRequests"]==4
+assert j["actualRenderTransportVerified"] and not j["productionAdmission"]
+assert j["costStatus"]=="UNKNOWN" and not any(j["authority"].values())
+assert json.loads((root/"j07-reopen.json").read_text())["status"]=="PASS"
+for name,meta in [("j07-base.blend",j["base"]),("j07-candidate.blend",j["candidate"]),("j07-before.png",j["renders"]["before"]),("j07-after.png",j["renders"]["after"]),("mcp-j07-before.png",j["renders"]["before"]),("mcp-j07-after.png",j["renders"]["after"])]:
+    data=(root/name).read_bytes()
+    assert len(data)==meta["bytes"] and hashlib.sha256(data).hexdigest()==meta["sha256"]
+assert json.loads((root/"j07-contract-fixture.json").read_text())["receipt"]["status"]=="STOPPED"
 PY
