@@ -23,8 +23,8 @@ public enum Consultation {
  }
  public static Consultation resolve(String text){
   switch(normalize(text)){
-   case "mostra l'orario":case "mostra orario":case "mostrami l'orario":case "apri l'orario":case "apri orario":return TIMETABLE;
-   case "apri il calendario":case "apri calendario":case "mostra il calendario":case "mostrami il calendario":return CALENDAR;
+   case "mostra l'orario":case "mostra l orario":case "mostra l' orario":case "mostra orario":case "mostrami l'orario":case "mostrami l orario":case "apri l'orario":case "apri l orario":case "apri orario":return TIMETABLE;
+   case "apri il calendario":case "apri calendario":case "mostra il calendario":case "mostra calendario":case "mostrami il calendario":return CALENDAR;
    case "mostrami gli impegni":case "mostra gli impegni":case "apri oggi":case "mostra gli impegni di oggi":return TODAY;
    case "mostrami le classi":case "mostra le classi":case "apri le classi":case "apri classi":return CLASSES;
    case "mostra i materiali":case "apri i materiali":case "cerca un documento":case "mostrami i materiali":return KNOWLEDGE;
