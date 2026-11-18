@@ -4,7 +4,9 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - ".github/workflows/visual-factory-3d-blender-l0-live.yml"
-permissions: {}
+      - "scripts/visual-factory/mcp-blender/requirements.lock"
+permissions:
+  contents: read
 concurrency:
   group: vf-3d-l0-blender-live
   cancel-in-progress: true
@@ -14,6 +16,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/visual-factory/mcp-blender
       - name: Check display and isolated temporary workspace
         run: |
           set -euo pipefail
@@ -145,6 +151,53 @@ jobs:
           assert not any(e[k] for k in ("mcpClientQualified", "isolationQualified", "artisticApproval", "publicationAuthorized"))
           print("PASS: real GUI session and two distinct CPU renders; not an MCP or artistic qualification.")
           PY
+      - name: Audit frozen MCP dependencies before any installation
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/vf3d-l0"
+          mkdir -p mcp-input/wheels mcp-input/source
+          cp "$GITHUB_WORKSPACE/scripts/visual-factory/mcp-blender/requirements.lock" mcp-input/requirements.lock
+          python3 - <<'PY'
+          import datetime, json, pathlib, re, urllib.request
+          root=pathlib.Path("mcp-input")
+          entries=[]
+          for line in (root/"requirements.lock").read_text().splitlines():
+              m=re.fullmatch(r"([a-z0-9-]+)==([^ ]+) --hash=sha256:([0-9a-f]{64})",line)
+              assert m, line
+              name, version, digest=m.groups()
+              entries.append({"name":name,"version":version,"sha256":digest})
+          assert len(entries)==36 and len({x["name"] for x in entries})==36
+          queries=[{"package":{"name":x["name"],"ecosystem":"PyPI"},"version":x["version"]} for x in entries]
+          req=urllib.request.Request("https://api.osv.dev/v1/querybatch",
+              data=json.dumps({"queries":queries}).encode(),
+              headers={"Content-Type":"application/json"},method="POST")
+          with urllib.request.urlopen(req,timeout=45) as response:
+              results=json.load(response)["results"]
+          assert len(results)==len(entries) and all(isinstance(x,dict) for x in results)
+          findings=[]
+          for item,result in zip(entries,results):
+              assert set(result)<= {"vulns"}
+              for v in result.get("vulns",[]):
+                  findings.append({"package":item["name"],"version":item["version"],"id":v["id"]})
+          evidence={"status":"PASS_NO_OSV_FINDINGS" if not findings else "STOP_KNOWN_ADVISORIES",
+                    "checkedAt":datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                    "source":"https://api.osv.dev/v1/querybatch","packages":entries,"findings":findings,
+                    "scope":"PyPI package advisories only; not a full security certification"}
+          (root/"audit.json").write_text(json.dumps(evidence,indent=2))
+          print(json.dumps({"status":evidence["status"],"checked":len(entries),"findings":findings},indent=2))
+          if findings: raise SystemExit("STOP: advisory review required before execution")
+          PY
+          env -i PATH=/usr/bin:/bin HOME="$PWD" PIP_CONFIG_FILE=/dev/null \
+            /usr/bin/python3 -m pip --isolated --disable-pip-version-check download --no-cache-dir \
+            --index-url https://pypi.org/simple --only-binary=:all: --require-hashes \
+            --dest mcp-input/wheels -r mcp-input/requirements.lock
+          git init -q mcp-upstream
+          git -C mcp-upstream -c credential.helper= fetch --depth=1 https://github.com/QwenLM/Qwen-MM-Plugins.git refs/tags/qwen-mm-plugins-blender-v1.2.0
+          test "$(git -C mcp-upstream rev-parse 'FETCH_HEAD^{commit}')" = 33a54695774020e5da2d6b1ed13119d4014f848f
+          git -C mcp-upstream archive FETCH_HEAD src | tar -x -C mcp-input/source
+          test "$(git hash-object mcp-input/source/src/mcp_framework.py)" = 071fa7b3617fc57bd2a47c3ea7d66971a4e7bf81
+          test "$(git hash-object mcp-input/source/src/capabilities/blender/qwen_mm_plugins_blender/vendor/addon.py)" = 77ec1f85083b39030c12e94e188a7c5a70229744
+          test "$(git hash-object mcp-input/source/src/capabilities/blender/qwen_mm_plugins_blender/tools/get_viewport_screenshot.py)" = 8b04c9bbfe835c0ca0f384c0c5b3f0462d6e3992
       - name: Verify isolated vendor bridge on a synthetic scene
         run: |
           set -euo pipefail
@@ -168,7 +221,7 @@ jobs:
           ARG LAB_UID
           ARG LAB_GID
           RUN apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-              python3 xvfb xauth x11-utils ca-certificates fontconfig fonts-dejavu-core \
+              python3 python3-venv xvfb xauth x11-utils ca-certificates fontconfig fonts-dejavu-core \
               libegl1 libegl-mesa0 libgl1 libgl1-mesa-dri libglx-mesa0 libvulkan1 \
               libx11-6 libxext6 libxi6 libxfixes3 libxrender1 libxxf86vm1 libxrandr2 \
               libxcursor1 libxinerama1 libxkbcommon0 libxkbcommon-x11-0 libxcomposite1 libxdamage1 \
@@ -279,6 +332,69 @@ jobs:
           (root / "transport-evidence.json").write_text(json.dumps(result, indent=2))
           print(json.dumps(result, indent=2))
           PY
+          cat > bridge/mcp-client.py <<'PY'
+          import asyncio, base64, hashlib, io, json, os, pathlib, sys
+          from math import isclose
+          from PIL import Image, ImageChops
+          from mcp import ClientSession, StdioServerParameters
+          from mcp.client.stdio import stdio_client
+          root=pathlib.Path("/work")
+          source="/deps/source/src"
+          env={"PATH":"/usr/bin:/bin","HOME":"/work/home","BLENDER_HOST":"127.0.0.1",
+               "BLENDER_PORT":"9876","QWEN_MM_NO_AUTO_INSTALL":"1","QWEN_MM_AUTOLAUNCH":"0",
+               "PYTHONPATH":source+":"+source+"/capabilities/blender",
+               "PYTHONDONTWRITEBYTECODE":"1","TMPDIR":"/tmp"}
+          async def run():
+              params=StdioServerParameters(command=sys.executable,args=["-m","qwen_mm_plugins_blender"],env=env)
+              async with stdio_client(params) as (read,write):
+                  async with ClientSession(read,write) as session:
+                      init=await session.initialize()
+                      listed=await session.list_tools()
+                      names={t.name for t in listed.tools}
+                      assert len(names)==22 and {"get_scene_info","get_object_info","execute_blender_code","get_viewport_screenshot"} <= names
+                      async def call(name,args):
+                          r=await session.call_tool(name,args)
+                          assert not r.isError, r
+                          return r.content
+                      async def text(name,args):
+                          blocks=await call(name,args)
+                          assert len(blocks)==1 and blocks[0].type=="text"
+                          return blocks[0].text
+                      async def capture(name):
+                          blocks=await call("get_viewport_screenshot",{"max_size":512})
+                          assert len(blocks)==1 and blocks[0].type=="image", blocks
+                          b=blocks[0]
+                          assert b.mimeType=="image/png"
+                          raw=base64.b64decode(b.data,validate=True)
+                          assert raw[:8]==b"\x89PNG\r\n\x1a\n"
+                          im=Image.open(io.BytesIO(raw)).convert("RGB")
+                          assert 1<=max(im.size)<=512 and im.getextrema()!=((0,0),(0,0),(0,0))
+                          (root/name).write_bytes(raw)
+                          return im,{"name":name,"bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),"size":list(im.size)}
+                      scene=json.loads(await text("get_scene_info",{}))
+                      assert any(o["name"]=="Cube" for o in scene["objects"])
+                      before=json.loads(await text("get_object_info",{"object_name":"Cube"}))
+                      pid1=await text("execute_blender_code",{"code":"import os; print(os.getpid())"})
+                      assert pid1.startswith("Code executed successfully:")
+                      im1,a=await capture("mcp-before.png")
+                      reply=await text("execute_blender_code",{"code":"bpy.data.objects['Cube'].rotation_euler.z = 1.1; bpy.data.objects['Cube'].scale = (1.6, 0.7, 1.0)"})
+                      assert reply.startswith("Code executed successfully:"),reply
+                      after=json.loads(await text("get_object_info",{"object_name":"Cube"}))
+                      assert isclose(after["rotation"][2],1.1,abs_tol=1e-5)
+                      assert isclose(after["scale"][0],1.6,abs_tol=1e-5) and before["mesh"]==after["mesh"]
+                      im2,b=await capture("mcp-after.png")
+                      pid2=await text("execute_blender_code",{"code":"import os; print(os.getpid())"})
+                      assert pid1==pid2
+                      assert im1.size==im2.size and ImageChops.difference(im1,im2).getbbox() is not None and a["sha256"]!=b["sha256"]
+                      evidence={"status":"MCP_IMAGE_LOOP_PASS","protocolVersion":init.protocolVersion,
+                                "toolCount":len(names),"tools":sorted(names),"images":[a,b],
+                                "before":before,"after":after,"sameBlenderProcess":True,
+                                "fullMcpClientQualified":True,"agentControlQualified":False,
+                                "artisticApproval":False,"publicationAuthorized":False}
+                      (root/"mcp-evidence.json").write_text(json.dumps(evidence,indent=2))
+                      print(json.dumps(evidence,indent=2))
+          asyncio.run(asyncio.wait_for(run(),timeout=80))
+          PY
           cat > bridge/run.sh <<'SH'
           set -euo pipefail
           stage() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*" | tee -a /work/stages.log; }
@@ -336,6 +452,13 @@ jobs:
           timeout 75s /usr/bin/python3 -u /work/client.py > /work/client.log 2>&1 || { stage D4_CLIENT_FAILED; cat /work/client.log; exit 44; }
           cat /work/client.log
           stage D4_TRANSPORT_PASS
+          stage D5_MCP_START
+          /usr/bin/python3 -m venv /work/mcp-venv
+          /work/mcp-venv/bin/python -m pip --isolated --disable-pip-version-check install --no-index --find-links /deps/wheels --only-binary=:all: --require-hashes -r /deps/requirements.lock
+          /work/mcp-venv/bin/python -m pip check
+          timeout 95s /work/mcp-venv/bin/python -u /work/mcp-client.py > /work/mcp-client.log 2>&1 || { stage D5_MCP_FAILED; cat /work/mcp-client.log; exit 51; }
+          cat /work/mcp-client.log
+          stage D5_MCP_IMAGE_LOOP_PASS
           SH
           # No host network, ports, credentials, GPU devices, socket or privileged container.
           # Fail closed rather than running outside the boundary.
@@ -346,6 +469,7 @@ jobs:
             --tmpfs /tmp:rw,nosuid,nodev,size=512m,mode=1777 --shm-size 256m \
             --mount "type=bind,src=$PWD/blender-4.2.23-linux-x64,dst=/opt/blender,readonly" \
             --mount "type=bind,src=$PWD/bridge,dst=/work" \
+            --mount "type=bind,src=$PWD/mcp-input,dst=/deps,readonly" \
             --workdir /work vf3d-local-probe:single \
             /usr/bin/env -i PATH=/usr/bin:/bin HOME=/work/home XDG_RUNTIME_DIR=/work/runtime LIBGL_ALWAYS_SOFTWARE=1 \
             /bin/bash /work/run.sh
@@ -371,7 +495,7 @@ jobs:
           fi
           echo "DOCKER_START_ACCEPTED"
           running=true
-          for i in $(seq 1 100); do
+          for i in $(seq 1 140); do
             running="$(docker inspect "$name" --format '{{.State.Running}}')"
             [[ "$running" = true ]] || break
             sleep 2
@@ -390,6 +514,8 @@ jobs:
           e=json.loads(pathlib.Path("bridge/transport-evidence.json").read_text())
           assert e["status"]=="VENDOR_TCP_BRIDGE_PASS" and e["isolationSmokePassed"]
           assert not e["fullMcpClientQualified"] and not e["agentControlQualified"]
+          m=json.loads(pathlib.Path("bridge/mcp-evidence.json").read_text())
+          assert m["status"]=="MCP_IMAGE_LOOP_PASS" and m["fullMcpClientQualified"] and not m["agentControlQualified"]
           PY
       - name: Preserve synthetic diagnostic evidence
         if: always()
@@ -416,5 +542,10 @@ jobs:
             ${{ runner.temp }}/vf3d-l0/bridge/bridge-ready.txt
             ${{ runner.temp }}/vf3d-l0/bridge/startup-error.txt
             ${{ runner.temp }}/vf3d-l0/bridge/client.log
+            ${{ runner.temp }}/vf3d-l0/mcp-input/audit.json
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-evidence.json
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-before.png
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-after.png
+            ${{ runner.temp }}/vf3d-l0/bridge/mcp-client.log
           if-no-files-found: ignore
           retention-days: 7
