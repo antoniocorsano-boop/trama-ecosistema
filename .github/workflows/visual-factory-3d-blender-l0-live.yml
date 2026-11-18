@@ -188,9 +188,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          sparse-checkout: scripts/visual-factory/mcp-blender
+          sparse-checkout: scripts/visual-factory
       - name: Native ARM64 two-CPU Blender synthetic feasibility
         run: bash scripts/visual-factory/mcp-blender/arm-diagnostic.sh
+      - name: Native ARM64 MCP and J07 synthetic qualification
+        run: bash scripts/visual-factory/mcp-blender/arm-mcp-diagnostic.sh
       - name: Preserve diagnostic evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -210,5 +212,44 @@ jobs:
             ${{ runner.temp }}/oci01-arm/work/arm-after.png
             ${{ runner.temp }}/oci01-arm/work/arm-candidate.blend
             ${{ runner.temp }}/oci01-arm/work/reopen.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Preserve ARM64 MCP and J07 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-oci01-arm-mcp-diagnostic
+          path: |
+            ${{ runner.temp }}/oci01-arm-mcp/work/image.txt
+            ${{ runner.temp }}/oci01-arm-mcp/work/parent-image.txt
+            ${{ runner.temp }}/oci01-arm-mcp/work/packages.tsv
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-wheel-acquisition.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-requirements-observed.lock
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-python-osv.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-wheel-inventory.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/arm-ubuntu-osv.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/isolation.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/container.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/stages.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/bridge.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/startup-error.txt
+            ${{ runner.temp }}/oci01-arm-mcp/work/client.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-client.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/transport-evidence.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-evidence.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-before.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-after.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-lifecycle.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-lifecycle.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-reopen.json
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-reopen.log
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-base.blend
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-candidate.blend
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-before.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-after.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-j07-before.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/mcp-j07-after.png
+            ${{ runner.temp }}/oci01-arm-mcp/work/j07-contract-fixture.json
           if-no-files-found: ignore
           retention-days: 7
