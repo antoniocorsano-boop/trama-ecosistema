@@ -43,6 +43,6 @@ F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce
 
 ## Ricevuta E-R4 — avvio del riesame professionale
 - [Fascicolo di raccordo con Arena](curr-ref-01-e-r4-professional-review.md) e [ricevuta di qualificazione](curr-ref-01-e-r4-professional-review.json): cinque schede R2 realmente esistenti nel pilota di Tecnologia, sei ulteriori questioni da registrare tramite processo Arena, tre questioni tecniche/documentali separate. Tutte le decisioni umane restano OPEN; nessun caso o trigger aperto automaticamente.
-- Contratto esistente Arena CURRICULUM_LIFECYCLE@1.2.0 e percorso H1→H6; preservare ESAMINA/CONDIVIDI/CONFRONTA/REGISTRA ESITO. TeamProfessionalOutcome non equivale a decisione istituzionale; validazione verticale e iter dell'istituto successivi, mai inferiti.
+- Contratto esistente Arena ciclo professionale Arena, versione 1.2.0 e percorso H1→H6; preservare ESAMINA/CONDIVIDI/CONFRONTA/REGISTRA ESITO. TeamProfessionalOutcome non equivale a decisione istituzionale; validazione verticale e iter dell'istituto successivi, mai inferiti.
 - E-R3 Governance PASS. Nuove prove E-R4 inserite; qualificazione da verificare. Nessun master parallelo o sostituzione del sistema esistente.
 - Prossimo intervento operativo, previa effettiva autorizzazione/identità: sottoporre le cinque schede esistenti al Dipartimento e preparare registrazione delle altre questioni. La conclusione E-R4 resta subordinata a esiti professionali verificabili.
