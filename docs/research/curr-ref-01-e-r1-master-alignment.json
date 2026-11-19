@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "trama.curr-ref-er1-evidence/v0.1",
+  "id": "CURR-REF-01/E-R1",
+  "status": "READ_ONLY_SOURCE_COMPARISON",
+  "master": {
+    "version": "1.3",
+    "date": "2026-09-06",
+    "state": "MATERIALIZED_HUMAN_VALIDATION_OPEN_NOT_IN_FORCE",
+    "source": "CAN-CURR-MASTER-00",
+    "sections": [
+      "6.3.7",
+      "7.3.8",
+      "15.5",
+      "16.1",
+      "16.2",
+      "16.3"
+    ],
+    "paragraphCount": 512,
+    "nativeTables": 0,
+    "sourceRead": true,
+    "privateRevisionNotRepublished": true
+  },
+  "arena": {
+    "head": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+    "exportBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+    "masterVersion": "1.3",
+    "fingerprint": "b355be71",
+    "authorityState": "PROVISIONAL_COMPLETE",
+    "pilotBlob": "a13ad797a7d65d68b509ba8e9ca08f6baa586cf9",
+    "materializerBlob": "df11b263f5ec61506098daf8485e48bdd0cd514f"
+  },
+  "normative": {
+    "source": "DM 221/2025",
+    "officialUrl": "https://www.gazzettaufficiale.it/eli/id/2026/01/27/26G00021/sg",
+    "scope": "TRANSITION_ONLY_NOT_ELEMENT_VALIDATION",
+    "year": "2026/2027",
+    "infanzia": "2025",
+    "primary": [
+      "2025",
+      "2012",
+      "2012",
+      "2012",
+      "2012"
+    ],
+    "secondary": [
+      "2025",
+      "2012",
+      "2012"
+    ],
+    "annualization": "LOCAL_REVIEW_REQUIRED"
+  },
+  "bands": [
+    {
+      "id": "primaria-tecnologia-classe-i",
+      "section": "6.3.7",
+      "sourceTextMatch": true,
+      "progressionField": false,
+      "formativeIdentityInSource": false,
+      "regime": "2025",
+      "counts": {
+        "competences": 6,
+        "objectives": 6,
+        "knowledge": 1,
+        "evidence": 4,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    },
+    {
+      "id": "primaria-tecnologia-classe-ii",
+      "section": "6.3.7",
+      "sourceTextMatch": true,
+      "progressionField": true,
+      "formativeIdentityInSource": false,
+      "regime": "2012_TRANSITION",
+      "counts": {
+        "competences": 1,
+        "objectives": 5,
+        "knowledge": 1,
+        "evidence": 4,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    },
+    {
+      "id": "primaria-tecnologia-classe-iii",
+      "section": "6.3.7",
+      "sourceTextMatch": true,
+      "progressionField": true,
+      "formativeIdentityInSource": false,
+      "regime": "2012_TRANSITION",
+      "counts": {
+        "competences": 3,
+        "objectives": 5,
+        "knowledge": 6,
+        "evidence": 4,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    },
+    {
+      "id": "primaria-tecnologia-classe-iv",
+      "section": "6.3.7",
+      "sourceTextMatch": true,
+      "progressionField": true,
+      "formativeIdentityInSource": false,
+      "regime": "2012_TRANSITION",
+      "counts": {
+        "competences": 1,
+        "objectives": 6,
+        "knowledge": 6,
+        "evidence": 4,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    },
+    {
+      "id": "primaria-tecnologia-classe-v",
+      "section": "6.3.7",
+      "sourceTextMatch": true,
+      "progressionField": true,
+      "formativeIdentityInSource": false,
+      "regime": "2012_TRANSITION",
+      "counts": {
+        "competences": 5,
+        "objectives": 6,
+        "knowledge": 7,
+        "evidence": 4,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    },
+    {
+      "id": "secondaria-di-primo-grado-tecnologia-classe-i",
+      "section": "7.3.8",
+      "sourceTextMatch": true,
+      "progressionField": false,
+      "formativeIdentityInSource": true,
+      "regime": "2025",
+      "counts": {
+        "competences": 6,
+        "objectives": 7,
+        "knowledge": 8,
+        "evidence": 6,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    },
+    {
+      "id": "secondaria-di-primo-grado-tecnologia-classe-ii",
+      "section": "7.3.8",
+      "sourceTextMatch": true,
+      "progressionField": false,
+      "formativeIdentityInSource": true,
+      "regime": "2012_TRANSITION",
+      "counts": {
+        "competences": 5,
+        "objectives": 6,
+        "knowledge": 6,
+        "evidence": 4,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    },
+    {
+      "id": "secondaria-di-primo-grado-tecnologia-classe-iii",
+      "section": "7.3.8",
+      "sourceTextMatch": true,
+      "progressionField": false,
+      "formativeIdentityInSource": true,
+      "regime": "2012_TRANSITION",
+      "counts": {
+        "competences": 6,
+        "objectives": 8,
+        "knowledge": 7,
+        "evidence": 6,
+        "connections": 1
+      },
+      "chain": "NOT_FULLY_DEMONSTRATED"
+    }
+  ],
+  "findings": [
+    {
+      "id": "ER1-01",
+      "state": "NOT_FOUND_IN_MASTER_REVIEW",
+      "subject": "Profilo generale e obiettivi generali del processo formativo come elementi distinti e collegati",
+      "action": "Verificare fonti nazionali e costruire raccordo proposto senza confondere profilo disciplinare e profilo generale"
+    },
+    {
+      "id": "ER1-02",
+      "state": "PRESENT_LOCAL_DRAFT",
+      "subject": "Finalità e profilo disciplinare",
+      "countFinalities": 5,
+      "countProfileAreas": 6,
+      "action": "Riusare il pilota non adottato; distinguere scopo locale, profilo nazionale e collegamenti"
+    },
+    {
+      "id": "ER1-03",
+      "state": "SOURCE_TEXT_PRESERVED_STRUCTURED_FIELD_MISSING",
+      "subject": "Identità formativa della secondaria",
+      "count": 3,
+      "action": "E-R2: mantenere il significato distinto e verificare origine esportazione; non inventare progressione"
+    },
+    {
+      "id": "ER1-04",
+      "state": "NO_EXPLICIT_PROGRESSION_TAG_IN_SOURCE",
+      "subject": "Primaria I",
+      "count": 1,
+      "action": "Valutare esplicitazione professionale; nessun riempimento automatico"
+    },
+    {
+      "id": "ER1-05",
+      "state": "PRESENT_NOT_LINKED_PER_BAND",
+      "subject": "Nove nuclei verticali del master",
+      "count": 9,
+      "action": "E-R2: mappa per fascia e nucleo, relazioni motivate"
+    },
+    {
+      "id": "ER1-06",
+      "state": "PRESENT_ADDITIONAL_SECTIONS_NOT_DEMONSTRATED_IN_BAND_PROJECTION",
+      "subject": "Benchmark e raccordi informatica 2025",
+      "action": "Confronto puntuale sezioni 15-16 e matrice normativa; non annualizzare retroattivamente"
+    },
+    {
+      "id": "ER1-07",
+      "state": "DOCUMENTED_NOT_APPROVED",
+      "subject": "Competenze, obiettivi annualizzati, conoscenze, evidenze e raccordi",
+      "action": "Riesame umano e distinzione benchmark/annualizzazioni"
+    }
+  ],
+  "next": {
+    "priority": "E-R1b",
+    "scope": "Mappa proposta di una catena per regime, dopo verifica puntuale delle fonti primarie; poi E-R2 nuclei e progressione",
+    "blocked": [
+      "MASTER_EDIT",
+      "AUTHORITY_PROMOTION",
+      "PUBLICATION"
+    ]
+  },
+  "boundaries": {
+    "masterEdited": false,
+    "arenaEdited": false,
+    "atlasEdited": false,
+    "officialElementValidation": false,
+    "professionalApproval": false,
+    "publication": false,
+    "studentData": false
+  }
+}
