@@ -7,8 +7,8 @@ Decisione del 19 novembre 2026. Priorità alla fonte Arena, separata dalla produ
 | E | Audit Arena | Matrice modello/fonte/raccordi/lacune | Consegnato |
 | E-R1a | Riscontro diretto master/export Tecnologia | Otto fasce confrontate, separazione contenuti/proiezione | Governance PASS |
 | E-R1b | Allineamento nei due regimi | Due catene motivate con riferimenti primari, annualizzazioni locali e stati distinti; nessun elemento inventato | Due esempi candidati; Governance PASS |
-| E-R2 | Nuclei e progressione | Nove nuclei riconciliati, continuità e approfondimento motivati; diagnosi del campo progressione e integrazioni 15–16 | E-R2a documentata; E-R2b successiva |
-| E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Successiva |
+| E-R2 | Nuclei e progressione | Nove nuclei riconciliati, continuità e approfondimento motivati; diagnosi del campo progressione e integrazioni 15–16 | E-R2a Governance PASS; E-R2b documentata |
+| E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Prossima priorità |
 | E-R4 | Validazione professionale | Proposte tracciate nel processo esistente, fonti verificate, decisioni dei gruppi e revisione verticale separate | Richiede riesame umano |
 | G | Docente OS e Registro Docente | Audit dei contratti e un caso UdA/evidenze/giudizio docente; no dati individuali nell'infrastruttura comune | Pianificata |
 | H | Recepimento | Integrazione deliberata per prodotto, compatibilità, prove e autorizzazioni distinte | Non autorizzata |
@@ -31,3 +31,8 @@ F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce
 ## Ricevuta E-R2a
 - [Nuclei fondanti e progressione](curr-ref-01-e-r2-nuclei-progression.md) — [evidenze strutturate](curr-ref-01-e-r2-nuclei-progression.json): nove nuclei, 27 traiettorie locali, 18 raccordi parziali e nove non espliciti, senza promozione automatica. Qualificazione da verificare.
 - E-R2b: approfondire i casi non espliciti e la continuità primaria–secondaria; identificare il produttore effettivo del bundle prima di proporre modifiche. Conservare distinta l'identità formativa e la progressione, e non confondere i regimi.
+
+## Ricevuta E-R2b
+- [Continuità e riesame](curr-ref-01-e-r2b-continuity.md) — [evidenze strutturate](curr-ref-01-e-r2b-continuity.json). Riletta la bozza disciplinare: tre riscontri parziali aggiuntivi, sei ancora non specificamente dimostrati, distinzione nove nuclei/tre ambiti/asse locale, raccordo V primaria–I secondaria proposto.
+- E-R2a Governance PASS. E-R2b in qualificazione. Il produttore ripetibile del bundle non è ancora localizzato: non modificare il bundle senza ricostruzione della provenienza. La difformità di versione sul frontespizio della bozza resta aperta.
+- E-R3 è la prossima priorità documentale; E-R4 conserva le questioni aperte senza presumere approvazione professionale.
