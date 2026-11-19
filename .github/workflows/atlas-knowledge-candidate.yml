@@ -4,6 +4,7 @@ on:
     paths:
       - 'docs/capabilities/atlas-knowledge/**'
       - 'schemas/atlas-knowledge-candidate.v0.1.schema.json'
+      - 'schemas/atlas-knowledge-candidate.v0.2.schema.json'
       - 'scripts/qualify_atlas_knowledge_candidate.py'
       - '.github/workflows/atlas-knowledge-candidate.yml'
   push:
@@ -11,6 +12,7 @@ on:
     paths:
       - 'docs/capabilities/atlas-knowledge/**'
       - 'schemas/atlas-knowledge-candidate.v0.1.schema.json'
+      - 'schemas/atlas-knowledge-candidate.v0.2.schema.json'
       - 'scripts/qualify_atlas_knowledge_candidate.py'
       - '.github/workflows/atlas-knowledge-candidate.yml'
 permissions:
