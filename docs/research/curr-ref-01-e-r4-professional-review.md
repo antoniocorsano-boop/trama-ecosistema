@@ -4,7 +4,7 @@ Data: 2026-11-19. Stato: HANDOFF_PREPARED_NO_HUMAN_VALIDATION.
 Questa consegna non istituisce una nuova commissione né un nuovo circuito software. È l'elenco motivato delle questioni emerse da E-R1/E-R2/E-R3, da portare **nel ciclo curricolare già presente in Arena**. Non costituisce una decisione dei docenti o degli organi scolastici.
 
 ## Autorità e fonti
-Master unico CAN-CURR-MASTER-00@1.3, copertura documentale completa, **non vigente**. Validazione professionale OPEN, revisione verticale OPEN, readiness Collegio NOT_YET. Registro esistente REG-CURR-00@1.13.0. Contratto Arena CURRICULUM_LIFECYCLE@1.2.0, con ciclo H1 quadro applicabile → H2 validazione → H3 riesame verticale → H4 iter istituzionale → H5 uso didattico → H6 ritorno dalla pratica. Le versioni e i blob tecnici sono fissati nella ricevuta. Il materiale istruttorio non cambia il master, il registro o i dati di Arena.
+Master unico CAN-CURR-MASTER-00@1.3, copertura documentale completa, **non vigente**. Validazione professionale OPEN, revisione verticale OPEN, readiness Collegio NOT_YET. Registro esistente REG-CURR-00@1.13.0. Contratto Arena ciclo professionale Arena, versione 1.2.0, con ciclo H1 quadro applicabile → H2 validazione → H3 riesame verticale → H4 iter istituzionale → H5 uso didattico → H6 ritorno dalla pratica. Le versioni e i blob tecnici sono fissati nella ricevuta. Il materiale istruttorio non cambia il master, il registro o i dati di Arena.
 
 ## Riuso concreto del pilota
 Il pilota **TEC-SEC1-2026-01, revisione R2** dispone già di cinque proposte da sottoporre al dipartimento, con esito umano OPEN:
