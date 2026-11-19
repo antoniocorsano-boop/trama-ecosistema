@@ -92,3 +92,6 @@ Piste editoriali generiche da censire in sede privata: energia e trasformazioni;
 ## Decisioni aperte
 
 Inventario completo delle fonti non ancora eseguito; schema eseguibile, titolarità di ogni campo, vocabolario definitivo e prove di mappatura effettiva da qualificare nel lotto B. Non è autorizzata una nuova base dati centrale o un nuovo servizio. La specifica non costituisce approvazione editoriale né rilascio pubblico.
+
+## Aggiornamento F-R3b — revisione candidata v0.2
+Il lotto v0.1 resta storico immutato. La revisione v0.2 è la sola candidata per l'evoluzione: stesso schema logico e stessi identificativi, termini correlati distinti dai sinonimi, relazione concettuale esplicitamente proposta, associazioni storiche irrisolte separate da quella curricolare proposta con impronta, versione, fascia, ordinale, testo e motivo. Le cinque risorse non sono pubblicabili. Il validatore e la ricerca editoriale restano gli stessi punti di ingresso, con qualificazione di entrambe le versioni. Il filtro per obiettivo nella v0.2 richiede versione e impronta; la ricerca storica è separata. Il raccordo F-R3a (TRAMA #348) impone il riuso dei tre portali AG-02/AG-03, senza nuovo archivio o resolver. Nessuna integrazione runtime o promozione editoriale.
