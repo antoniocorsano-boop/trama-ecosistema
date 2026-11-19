@@ -1,0 +1,270 @@
+{
+  "schemaVersion": "trama.pedagogical-dossier-candidate/v0.1",
+  "id": "CURR-REF-01/F-R2/M118",
+  "status": "DOCUMENTARY_CANDIDATE",
+  "activity": {
+    "id": "trama-missione-118-2026",
+    "version": "0.4.2-draft",
+    "manifestDigest": "c9dc1c6b909d8496dfaf1bc9f7cc43e9ab7e5b2511c0f68e64050e51ed4b5aa4",
+    "guideDigestRecorded": "2408113322162908c1eda5a491681c2211868317626e2f63d70a9ebc1c5d4029"
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "locator": "Missione_118_V91_guida_docente.html, sezioni Obiettivi, Conduzione, Criteri osservabili, Consegna, Accessibilità",
+      "type": "GUIDE_INSPECTED_DIGEST_NOT_RECOMPUTED"
+    },
+    {
+      "id": "S2",
+      "locator": "docs/capabilities/atlas-percorsi/production/CQP-07-MISSIONE-118-V91-TEACHER-PREVIEW.md",
+      "type": "PRIOR_TECHNICAL_RECEIPT"
+    },
+    {
+      "id": "S3",
+      "locator": "CURR-REF-01/S01 pp. 26–29; S02 pp. 21–24",
+      "type": "PEDAGOGICAL_REFERENCE"
+    },
+    {
+      "id": "S4",
+      "locator": "Arena export blob d1ab3fd860db9c043452e62359e404e4c9b94bfd, master 1.3, impronta b355be71, sezione 7.3.8",
+      "type": "PROVISIONAL_SOURCE"
+    }
+  ],
+  "audience": {
+    "declared": "Secondaria di primo grado",
+    "disciplines": [
+      "Tecnologia",
+      "Educazione civica"
+    ],
+    "pilotProposal": "Classe III secondaria, da verificare e adattare; la guida non prescrive la classe",
+    "duration": "40–50 minuti indicativi; verificare la somma delle fasi (45–50 minuti)",
+    "mediation": "Coppie con alternanza dei ruoli; docente guida e osserva"
+  },
+  "question": "Come progettare tecnologie utili mantenendo il controllo umano?",
+  "alignment": {
+    "state": "PROPOSED_NOT_VERIFIED",
+    "authority": "Arena",
+    "authorityState": "PROVISIONAL_COMPLETE",
+    "masterVersion": "1.3",
+    "fingerprint": "b355be71",
+    "sourceBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+    "sourceSection": "7.3.8",
+    "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+    "regime": "Regime 2012 transitorio conclusivo",
+    "objectiveCandidates": [
+      {
+        "ordinal": 2,
+        "text": "analizzare sistemi energetici/produttivi",
+        "projectionId": "secondaria-di-primo-grado-tecnologia-classe-iii-o2",
+        "projectionState": "F-R0_CANDIDATE_NOT_MERGED",
+        "status": "PROPOSED",
+        "reason": "Confronto qualitativo produzione/accumulo"
+      },
+      {
+        "ordinal": 4,
+        "text": "usare dati",
+        "projectionId": "secondaria-di-primo-grado-tecnologia-classe-iii-o4",
+        "projectionState": "F-R0_CANDIDATE_NOT_MERGED",
+        "status": "PROPOSED",
+        "reason": "Dati mancanti o discordanti"
+      },
+      {
+        "ordinal": 5,
+        "text": "progettare",
+        "projectionId": "secondaria-di-primo-grado-tecnologia-classe-iii-o5",
+        "projectionState": "F-R0_CANDIDATE_NOT_MERGED",
+        "status": "PROPOSED",
+        "reason": "Proposta di servizio"
+      },
+      {
+        "ordinal": 6,
+        "text": "verificare",
+        "projectionId": "secondaria-di-primo-grado-tecnologia-classe-iii-o6",
+        "projectionState": "F-R0_CANDIDATE_NOT_MERGED",
+        "status": "PROPOSED",
+        "reason": "Controllo motivato"
+      },
+      {
+        "ordinal": 8,
+        "text": "motivare scelte e interessi professionali",
+        "projectionId": "secondaria-di-primo-grado-tecnologia-classe-iii-o8",
+        "projectionState": "F-R0_CANDIDATE_NOT_MERGED",
+        "status": "PROPOSED",
+        "reason": "Motivazione delle scelte"
+      }
+    ],
+    "crossCuttingCandidates": [
+      {
+        "axis": "educazione-civica",
+        "sourceSection": "9",
+        "theme": "Cittadinanza digitale",
+        "state": "PROPOSED"
+      },
+      {
+        "axis": "ai-literacy",
+        "sourceSection": "10",
+        "theme": "Dati, modelli, verifica e responsabilità umana",
+        "state": "PROPOSED"
+      }
+    ],
+    "unresolved": [
+      "Profilo dello studente",
+      "Obiettivi generali del processo formativo",
+      "Nuclei fondanti disciplinari con riferimenti puntuali",
+      "Competenze attese e OSA formalmente applicabili",
+      "Validazione professionale e collegiale",
+      "Inquadramento annuale di Educazione civica, responsabilità e ore"
+    ]
+  },
+  "outcomes": [
+    {
+      "id": "O1",
+      "intent": "Selezionare un'informazione rilevante in funzione della situazione",
+      "knowledge": [
+        "priorità e contesto"
+      ],
+      "evidence": "Motivazione del filtro e sua revisione",
+      "criterion": "Riconosce quando e perché cambiare priorità"
+    },
+    {
+      "id": "O2",
+      "intent": "Prevedere e interpretare il comportamento del modello energetico",
+      "knowledge": [
+        "produzione fotovoltaica",
+        "accumulo",
+        "limiti del modello qualitativo"
+      ],
+      "evidence": "Previsione e confronto di due condizioni",
+      "criterion": "Distingue produzione e accumulo; non confonde simulazione e misura"
+    },
+    {
+      "id": "O3",
+      "intent": "Riconoscere due tipi di incertezza e proporre una verifica",
+      "knowledge": [
+        "dato assente",
+        "dato discordante",
+        "controllo umano"
+      ],
+      "evidence": "Spiegazione della differenza e controllo proposto",
+      "criterion": "Verifica pertinente all'incertezza"
+    },
+    {
+      "id": "O4",
+      "intent": "Progettare un servizio digitale utile e controllabile",
+      "knowledge": [
+        "bisogno",
+        "soluzione",
+        "errore",
+        "verifica",
+        "principio tutelato"
+      ],
+      "evidence": "Schema o spiegazione orale del servizio",
+      "criterion": "Coerenza bisogno-soluzione-rischio-verifica; trasferimento motivato"
+    }
+  ],
+  "phases": [
+    {
+      "id": "A",
+      "label": "Avvio",
+      "action": "Contestualizzare il problema",
+      "product": "Prima ipotesi espressa",
+      "outcomes": [
+        "O1",
+        "O4"
+      ],
+      "productStatus": "PROPOSED_TRACE"
+    },
+    {
+      "id": "B",
+      "label": "Esplorazione",
+      "action": "Alternare azione e motivazione; formulare e confrontare previsioni",
+      "product": "Confronto qualitativo e motivazioni",
+      "outcomes": [
+        "O1",
+        "O2",
+        "O3"
+      ],
+      "productStatus": "GUIDE_DESCRIBED"
+    },
+    {
+      "id": "C",
+      "label": "Revisione",
+      "action": "Riconsiderare una decisione alla luce delle conseguenze",
+      "product": "Spiegazione della revisione",
+      "outcomes": [
+        "O1",
+        "O2",
+        "O3"
+      ],
+      "productStatus": "GUIDE_DESCRIBED"
+    },
+    {
+      "id": "D",
+      "label": "Compito autentico",
+      "action": "Ideare su carta o oralmente un servizio scolastico",
+      "product": "Progetto con controllo umano",
+      "outcomes": [
+        "O4"
+      ],
+      "productStatus": "GUIDE_DESCRIBED"
+    }
+  ],
+  "evaluation": {
+    "process": [
+      "Motivazione delle scelte",
+      "Uso delle informazioni e revisione"
+    ],
+    "product": [
+      "Coerenza funzionale del servizio",
+      "Pertinenza del controllo proposto"
+    ],
+    "knowledge": [
+      "Distinzione produzione/accumulo",
+      "Distinzione dato assente/discordante"
+    ],
+    "rubricState": "DESCRIPTIVE_CRITERIA_PROPOSED_NOT_SCALED",
+    "selfAssessment": "Riflessione su cosa mantenere o cambiare",
+    "completionIsCompetence": false
+  },
+  "representation": {
+    "current": "Sequenza illustrata interattiva e modello qualitativo; nessun requisito 3D",
+    "alternatives": [
+      "testo senza audio",
+      "tastiera",
+      "tempi distesi",
+      "risposta orale o schema"
+    ],
+    "necessity3D": "NOT_ESTABLISHED",
+    "accessibility": "HUMAN_REVIEW_PENDING"
+  },
+  "principles": [
+    "CURR-REF-01/P01",
+    "CURR-REF-01/P02",
+    "CURR-REF-01/P03",
+    "CURR-REF-01/P04",
+    "CURR-REF-01/P05",
+    "CURR-REF-01/P06",
+    "CURR-REF-01/P07",
+    "CURR-REF-01/P08",
+    "CURR-REF-01/P09",
+    "CURR-REF-01/P10",
+    "CURR-REF-01/P11",
+    "CURR-REF-01/P12"
+  ],
+  "review": {
+    "human": "PENDING",
+    "science": "PENDING",
+    "binding": "PENDING",
+    "accessibility": "PENDING",
+    "use": "PENDING",
+    "publication": "NOT_AUTHORIZED"
+  },
+  "boundaries": {
+    "studentData": false,
+    "assessmentAutomation": false,
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "changesArena": false,
+    "changesPackage": false
+  }
+}
