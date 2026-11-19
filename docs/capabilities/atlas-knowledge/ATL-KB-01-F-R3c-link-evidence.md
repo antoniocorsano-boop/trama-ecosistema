@@ -1,0 +1,19 @@
+# ATL-KB-01/F-R3c — Collegamenti motivati e limiti delle inferenze
+Data: 2026-11-19. Stato: EDITORIAL_REVIEW_CANDIDATE / NO RUNTIME.
+[Ricevuta esatta](fixtures/f-r3c-link-evidence-v0.1.json). Estende l'esame del lotto v0.2, non lo sostituisce. Non introduce un secondo catalogo, uno schema per i percorsi o un risolutore di portali. Riferimenti e motivazioni sono evidenze di riesame, non autorizzazioni.
+
+## Riscontri
+- r-tec-003: nel materiale dimostrativo associato al record è presente un SVG effettivo (blob nella ricevuta). Il contenuto rappresenta ingressi, processi, risultati e impatti del sistema agricolo. La corrispondenza tematica con l'obiettivo di classe II «leggere processi produttivi» è sostenuta dal contenuto, non più soltanto dal titolo del record. Il riferimento resta PROPOSED; il file contiene un riferimento di contesto alla classe e non viene copiato o promosso. Serve una derivata editoriale non identificante, verifica dei diritti, accessibilità e riesame professionale. Lo stato RECORD_ONLY del catalogo non viene cambiato automaticamente.
+- Missione 118 V9.1: il dossier F-R2 indica cinque obiettivi candidati di Tecnologia III e due assi trasversali. Verificati presenza, testo, ordinale e unicità di ciascun ID proiettato nella fonte esatta e corrispondenza degli assi/sezioni. Tutti i riferimenti sono proposte su base provvisoria. La relazione tra il concetto k-system e l'esito O4 (progettazione di un servizio con controllo umano) è una possibile applicazione correlata, non un'equivalenza né una nuova prescrizione. Non c'è prova che il percorso utilizzi r-tec-003 o un'altra risorsa del lotto: nessun collegamento di uso.
+- Prima di decidere, cosa manca? v1.1.0: il dossier riguarda la primaria avanzata e la verifica di informazioni rilevanti per decidere. Non confondere questo con la comprensione testuale; non assegnare un concetto o obiettivo per analogia lessicale.
+- Una soluzione, molti vincoli v1.1.0: progettazione sotto vincoli e revisione. Il riesame umano documentato autorizza la registrazione del candidato, non l'esecuzione pubblica. Non attribuire il concetto sistema agricolo, la relativa risorsa o un obiettivo di Tecnologia solo per analogia. I due percorsi trasversali mantengono i loro dossier e il registro già esistente.
+
+## Regole di composizione
+1. Concetto–risorsa, risorsa–obiettivo, esperienza–concetto, esperienza–obiettivo sono relazioni indipendenti. Il collegamento A→B e B→C non dimostra A→C; il percorso inverso di consultazione è una vista, non una nuova associazione.
+2. La versione, impronta e autorità della fonte accompagnano ogni associazione curricolare; se la versione cambia, il riesame deve riaprire. La presenza strutturale è diversa dalla pertinenza, dalla valutazione scientifica e dall'approvazione.
+3. Un risultato di ricerca editoriale può mostrare la motivazione e i limiti delle proposte. Non può suggerire al pubblico una risorsa priva di autorizzazione. Il riferimento storico irrisolto non entra nella navigazione degli obiettivi correnti.
+4. I due percorsi presenti nel registro Atlas non sono autorizzati; Missione 118 è candidata per anteprima docente e non appartiene al registro pubblico. Zero esperienze autorizzate e zero risorse pubblicabili in questo lotto.
+5. Nessun dato studente, punteggio o inferenza di apprendimento. Nessuna variazione del master, del compositore dei mondi o del sistema AG-02/AG-03.
+
+## Verifica e prossima fase
+Il validatore ATL-KB esistente esegue le prove sulla ricevuta, verifica i riferimenti al lotto locale e rifiuta aggiunte non motivate, promozioni e deriva della fonte. Gli altri blob sono pin osservati nel riscontro in sola lettura, non scaricati nuovamente dal CI. Per la convergenza ripetere la ricognizione sul commit esatto dei rami integrati. F-R3d prepara la ricerca editoriale spiegabile in sola lettura, senza nuove rotte né pubblicazione; applicare i filtri e i gate del portale esistente solo dopo il raccordo.

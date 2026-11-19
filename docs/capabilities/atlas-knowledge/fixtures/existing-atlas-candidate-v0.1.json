@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "atlas.knowledge-candidate/v0.1",
+  "runtimeAuthorized": false,
+  "publicationAuthorized": false,
+  "source": {
+    "kind": "ATLAS_EXISTING_FIXTURE",
+    "revision": "d2938378c9384c5122adb8379396dbad5b4385fe",
+    "blob": "4344613798011c9c9fccad433bc22d9fc241d934",
+    "evidence": "RECORD_ONLY"
+  },
+  "concepts": [
+    {
+      "id": "k-system",
+      "title": "Sistema tecnologico",
+      "aliases": [
+        "tecnica e tecnologia",
+        "sistemi tecnologici"
+      ],
+      "questions": [
+        "Come funziona un sistema tecnologico?"
+      ],
+      "definition": "Insieme di elementi e processi organizzati per soddisfare un bisogno."
+    },
+    {
+      "id": "k-agriculture",
+      "title": "Agricoltura come sistema tecnologico",
+      "aliases": [
+        "sistema agricolo",
+        "filiera agricola"
+      ],
+      "questions": [
+        "Come funziona un'azienda agricola?"
+      ],
+      "definition": "Organizzazione di risorse, persone, strumenti e processi per la produzione agricola."
+    },
+    {
+      "id": "k-text",
+      "title": "Comprensione del testo informativo",
+      "aliases": [
+        "lettura informativa",
+        "testo espositivo"
+      ],
+      "questions": [
+        "Come riconosco le informazioni principali?"
+      ],
+      "definition": "Individuazione di scopo, struttura e informazioni principali di un testo."
+    },
+    {
+      "id": "k-matter",
+      "title": "Passaggi di stato della materia",
+      "aliases": [
+        "cambiamenti di stato",
+        "trasformazioni fisiche"
+      ],
+      "questions": [
+        "Come cambia stato la materia?"
+      ],
+      "definition": "Trasformazioni tra stati fisici della materia."
+    }
+  ],
+  "relations": [
+    {
+      "from": "k-system",
+      "to": "k-agriculture",
+      "kind": "prerequisite_of"
+    }
+  ],
+  "resources": [
+    {
+      "id": "r-tec-001",
+      "title": "Tecnica, tecnologia e sistema tecnologico",
+      "kind": "Infografica",
+      "conceptIds": [
+        "k-system"
+      ],
+      "disciplineIds": [
+        "tecnologia"
+      ],
+      "schoolStages": [
+        "Secondaria di primo grado"
+      ],
+      "mappings": [
+        {
+          "objectiveId": "tech-s2-1",
+          "status": "PROPOSED",
+          "sourceVersion": null
+        }
+      ],
+      "sourceStatus": "RECORD_ONLY",
+      "rights": "UNRESOLVED",
+      "accessibility": "UNVERIFIED"
+    },
+    {
+      "id": "r-tec-002",
+      "title": "Scheda studente: tecnica e tecnologia",
+      "kind": "Scheda",
+      "conceptIds": [
+        "k-system"
+      ],
+      "disciplineIds": [
+        "tecnologia"
+      ],
+      "schoolStages": [
+        "Secondaria di primo grado"
+      ],
+      "mappings": [
+        {
+          "objectiveId": "tech-s2-1",
+          "status": "PROPOSED",
+          "sourceVersion": null
+        }
+      ],
+      "sourceStatus": "RECORD_ONLY",
+      "rights": "UNRESOLVED",
+      "accessibility": "UNVERIFIED"
+    },
+    {
+      "id": "r-tec-003",
+      "title": "Agricoltura come sistema tecnologico",
+      "kind": "Infografica",
+      "conceptIds": [
+        "k-system",
+        "k-agriculture"
+      ],
+      "disciplineIds": [
+        "tecnologia"
+      ],
+      "schoolStages": [
+        "Secondaria di primo grado"
+      ],
+      "mappings": [
+        {
+          "objectiveId": "tech-s2-1",
+          "status": "PROPOSED",
+          "sourceVersion": null
+        }
+      ],
+      "sourceStatus": "RECORD_ONLY",
+      "rights": "UNRESOLVED",
+      "accessibility": "UNVERIFIED"
+    },
+    {
+      "id": "r-ita-001",
+      "title": "Guida alla lettura di un testo informativo",
+      "kind": "Scheda",
+      "conceptIds": [
+        "k-text"
+      ],
+      "disciplineIds": [
+        "italiano"
+      ],
+      "schoolStages": [
+        "Primaria",
+        "Secondaria di primo grado"
+      ],
+      "mappings": [],
+      "sourceStatus": "RECORD_ONLY",
+      "rights": "UNRESOLVED",
+      "accessibility": "UNVERIFIED"
+    },
+    {
+      "id": "r-sci-001",
+      "title": "Passaggi di stato della materia",
+      "kind": "Presentazione",
+      "conceptIds": [
+        "k-matter"
+      ],
+      "disciplineIds": [
+        "scienze"
+      ],
+      "schoolStages": [
+        "Secondaria di primo grado"
+      ],
+      "mappings": [],
+      "sourceStatus": "RECORD_ONLY",
+      "rights": "UNRESOLVED",
+      "accessibility": "UNVERIFIED"
+    }
+  ]
+}

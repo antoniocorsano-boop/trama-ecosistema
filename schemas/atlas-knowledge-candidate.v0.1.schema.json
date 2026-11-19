@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-knowledge-candidate.v0.1.schema.json",
+  "title": "Atlas knowledge candidate — record-only pilot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "runtimeAuthorized",
+    "publicationAuthorized",
+    "source",
+    "concepts",
+    "relations",
+    "resources"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "atlas.knowledge-candidate/v0.1"
+    },
+    "runtimeAuthorized": {
+      "const": false
+    },
+    "publicationAuthorized": {
+      "const": false
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "revision",
+        "blob",
+        "evidence"
+      ],
+      "properties": {
+        "kind": {
+          "const": "ATLAS_EXISTING_FIXTURE"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "blob": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "evidence": {
+          "const": "RECORD_ONLY"
+        }
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "aliases",
+          "questions",
+          "definition"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]+$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "definition": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from",
+          "to",
+          "kind"
+        ],
+        "properties": {
+          "from": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]+$"
+          },
+          "to": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]+$"
+          },
+          "kind": {
+            "enum": [
+              "prerequisite_of",
+              "related_to",
+              "broader_than"
+            ]
+          }
+        }
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "conceptIds",
+          "disciplineIds",
+          "schoolStages",
+          "mappings",
+          "sourceStatus",
+          "rights",
+          "accessibility"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]+$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "Scheda",
+              "Presentazione",
+              "Infografica",
+              "Video",
+              "Link",
+              "Documento"
+            ]
+          },
+          "conceptIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]+$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "disciplineIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]+$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "schoolStages": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "Primaria",
+                "Secondaria di primo grado"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "objectiveId",
+                "status",
+                "sourceVersion"
+              ],
+              "properties": {
+                "objectiveId": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]+$"
+                },
+                "status": {
+                  "const": "PROPOSED"
+                },
+                "sourceVersion": {
+                  "type": "null"
+                }
+              }
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "sourceStatus": {
+            "const": "RECORD_ONLY"
+          },
+          "rights": {
+            "const": "UNRESOLVED"
+          },
+          "accessibility": {
+            "const": "UNVERIFIED"
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}
