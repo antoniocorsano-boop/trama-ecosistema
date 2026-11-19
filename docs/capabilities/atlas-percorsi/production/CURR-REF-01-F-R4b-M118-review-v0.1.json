@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "trama.m118-pedagogical-product-review/v0.1",
+  "id": "CURR-REF-01/F-R4b/M118",
+  "status": "REVIEW_FINDINGS_REWORK_PROPOSED",
+  "source": {
+    "activityId": "trama-missione-118-2026",
+    "version": "0.4.2-draft",
+    "archiveSha256": "ecf9c51f03070bc5d70e2e2a0906026371fb0ea39f9d01c8f397377d1a16e95b",
+    "manifestSha256": "c9dc1c6b909d8496dfaf1bc9f7cc43e9ab7e5b2511c0f68e64050e51ed4b5aa4",
+    "htmlSha256": "03c3a6e5136d73ef1595c785c1a37455a83785fa08e53f2cf67bee3856fc33f9",
+    "guideSha256": "2408113322162908c1eda5a491681c2211868317626e2f63d70a9ebc1c5d4029",
+    "archiveBytes": 1897576,
+    "assetsVerified": 10,
+    "archiveEntries": 11,
+    "zipIntegrity": true,
+    "manifestArenaRefs": 0,
+    "manifestDurationMinutes": 45,
+    "guideDurationRange": [
+      40,
+      50
+    ],
+    "phaseSumRange": [
+      45,
+      50
+    ],
+    "evidence": "PRIVATE_ARCHIVE_BYTES_RECOMPUTED_NO_COPY"
+  },
+  "method": {
+    "mode": "LOCAL_CHROMIUM_PLAYWRIGHT",
+    "sandbox": "allow-scripts allow-forms",
+    "network": "REQUESTS_BLOCKED_AND_OBSERVED",
+    "csp": "NOT_REPRODUCED_EXACT_STUDIO_CSP",
+    "reducedMotion": true,
+    "review": "STATIC_SOURCE_AND_LOCAL_INTERACTION_NO_LEARNER",
+    "viewports": [
+      {
+        "width": 320,
+        "height": 640
+      },
+      {
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "observations": [
+      {
+        "viewport": "320x640",
+        "filterInconsistency": true,
+        "predictionRequiresBothAndResets": true,
+        "twoCasesRequired": true,
+        "nonidealCanFinish": true,
+        "pendingDiaryRows": 2,
+        "transferSteps": 4,
+        "textPrologue": true,
+        "transferHorizontalOverflow": false,
+        "externalRequests": 0,
+        "pageErrors": 0
+      },
+      {
+        "viewport": "1280x720",
+        "filterInconsistency": true,
+        "predictionRequiresBothAndResets": true,
+        "twoCasesRequired": true,
+        "nonidealCanFinish": true,
+        "pendingDiaryRows": 2,
+        "transferSteps": 4,
+        "textPrologue": true,
+        "transferHorizontalOverflow": false,
+        "externalRequests": 0,
+        "pageErrors": 0
+      }
+    ]
+  },
+  "outcomes": [
+    {
+      "id": "O1",
+      "state": "PARTIAL",
+      "observed": "Filtro effettivo e conseguenze di interruzione; cambio di contesto con messaggio incoerente nel caso iniziale verificato.",
+      "evidenceLimit": "La selezione non dimostra la motivazione autonoma.",
+      "findingRefs": [
+        "M118-R1"
+      ]
+    },
+    {
+      "id": "O2",
+      "state": "DOCUMENTED_AND_INTERACTION_CHECKED",
+      "observed": "Previsione, due condizioni necessarie, azzeramento del confronto al cambio della previsione, spiegazione qualitativa separa produzione e accumulo.",
+      "evidenceLimit": "Confronto programmato, non esperimento o prova empirica; spiegazione autonoma da osservare.",
+      "findingRefs": [
+        "M118-R2"
+      ]
+    },
+    {
+      "id": "O3",
+      "state": "PARTIAL",
+      "observed": "Due casi obbligatori, risposta di cautela distinta dalla certezza non giustificata; la distinzione è anticipata dal testo.",
+      "evidenceLimit": "Lo stesso comando corretto nei due casi non dimostra la capacità di distinguere le incertezze.",
+      "findingRefs": [
+        "M118-R3"
+      ]
+    },
+    {
+      "id": "O4",
+      "state": "DOCUMENTED_AND_INTERACTION_CHECKED",
+      "observed": "Consegna finale esterna articolata in quattro passaggi, principio scelto e confronto con una decisione; nessun invio richiesto.",
+      "evidenceLimit": "Modello di progetto guidato, prodotto effettivo e trasferimento da osservare dal docente.",
+      "findingRefs": [
+        "M118-R4"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "M118-R1",
+      "severity": "CORRECTION_REQUIRED",
+      "kind": "REPRODUCED_DEFECT",
+      "location": "city/result/context; state.filter[2], state.changedChoice",
+      "detail": "Con filtro iniziale che avvisa già per il promemoria, scegliere di rinviare nel nuovo contesto viene descritto come mantenere il filtro precedente; è invece una modifica. La scelta contestuale non aggiorna il vettore del filtro originale, che deve restare il caso iniziale.",
+      "action": "Distinguere esplicitamente impostazione iniziale e scelta contestuale; conseguenza e diario devono derivare dal caso effettivo, senza sovrascrivere la baseline.",
+      "acceptance": "Quattro combinazioni iniziale/nuova scelta coerenti, ritorno e revisione verificati in due viewport."
+    },
+    {
+      "id": "M118-R2",
+      "severity": "REVIEW_REQUIRED",
+      "kind": "EVIDENCE_LIMIT",
+      "location": "laboratory; tutor; reviewSummary",
+      "detail": "Le due condizioni sono imposte correttamente; la risposta pronta del tutor viene descritta come potenzialmente utile ma genera una revisione nel diario. La scelta di indizi non equivale a comprensione.",
+      "action": "Rendere il diario un invito a controllare la spiegazione indipendentemente dalla modalità di aiuto; mantenere modello qualitativo e chiedere motivazione orale o su carta.",
+      "acceptance": "Entrambe le modalità del tutor permettono di motivare e rivedere; nessuna inferenza di competenza da scelta o completamento."
+    },
+    {
+      "id": "M118-R3",
+      "severity": "CORRECTION_REQUIRED",
+      "kind": "VERIFIED_DESIGN_LIMIT",
+      "location": "crossing",
+      "detail": "Il testo esplicita assenza/discordanza prima della scelta e offre la stessa risposta di cautela per entrambe. Valida l'orientamento verso il controllo, non discrimina le due condizioni.",
+      "action": "Prevedere una breve classificazione o spiegazione prima del feedback, con alternativa orale guidata; non trasformare in punteggio.",
+      "acceptance": "Caso mancante e caso discordante richiedono evidenze differenti; feedback resta esplicito e recuperabile, nessun voto o salvataggio remoto."
+    },
+    {
+      "id": "M118-R4",
+      "severity": "REVIEW_REQUIRED",
+      "kind": "EVIDENCE_LIMIT",
+      "location": "transfer; guida",
+      "detail": "Esempio di progetto dipendente dal principio scelto; consegna esterna e confronto finale disponibili. Nessuna prestazione reale osservata.",
+      "action": "Rendere facoltativo l'esempio e offrire un contesto alternativo equivalente; esplicitare criteri del prodotto e osservazione docente.",
+      "acceptance": "Consegna comprensibile anche senza esempio; prodotto, motivazione e conoscenze restano distinguibili."
+    },
+    {
+      "id": "M118-R5",
+      "severity": "CORRECTION_REQUIRED",
+      "kind": "VERIFIED_DOCUMENTARY_MISMATCH",
+      "location": "guida Conduzione; intake.learning.suggestedDurationMinutes",
+      "detail": "Durata indicata 40–50 minuti, somma fasi 45–50, manifesto 45.",
+      "action": "Allineare la guida a 45–50 oppure indicare esplicitamente quali fasi sono comprimibili.",
+      "acceptance": "Somma dei tempi e durata dichiarata coerenti, eventuale variante breve motivata."
+    }
+  ],
+  "pending": [
+    "Riesame scientifico umano del contenuto completo",
+    "Raccordo Arena approvato e Profilo non disponibili",
+    "Verifica della lettura e dell'ascolto effettivi",
+    "Equivalenza accessibile con ausili e dispositivi reali",
+    "Diritti e licenze",
+    "Prova d'uso professionale",
+    "Decisione separata di pubblicazione"
+  ],
+  "boundaries": {
+    "humanApproval": false,
+    "scienceApproval": false,
+    "accessibilityApproval": false,
+    "learningClaim": false,
+    "studentData": false,
+    "assessmentAutomation": false,
+    "packageModified": false,
+    "publicArtifact": false,
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "changesArena": false,
+    "changesMaster": false
+  }
+}
