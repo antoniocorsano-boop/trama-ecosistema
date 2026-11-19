@@ -117,6 +117,66 @@
       "path": "docs/research/curr-ref-01-e-audit-arena.md",
       "pattern": "^- A16: \\[docs/architecture/ARENA_ATLAS_CURRICULUM_SYNC_V1\\.md\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/docs/architecture/ARENA_ATLAS_CURRICULUM_SYNC_V1\\.md\\) — Distinzione fra pubblicabilità e vigenza\\.$",
       "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- \\[Atlas PR #136 AWC\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/pull/136\\), head fc2deefe44ed45a53e77086532268e919549c777: infrastruttura unificata dei mondi, Biblioteca prioritaria; innestare motivazione pedagogica senza nuovo orchestratore\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- \\[Atlas PR #142 ASC\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/pull/142\\), head aeeab27f48fc69b75d6fae2be68fa4ae215378db: qualificazione materica candidata, non prova educativa\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F01: \\[F01\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/curriculum/arena-projected\\.ts\\) — Proiezione, identità, ricerca\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F02: \\[F02\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/curriculum/arena-curriculum-export\\.json\\) — Pacchetto effettivo\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F03: \\[F03\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/curriculum/model\\.ts\\) — Modello obiettivo\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F04: \\[F04\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/explore/graph\\.ts\\) — Grafo e progressione\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F05: \\[F05\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/app/obiettivi/\\[id\\]/page\\.tsx\\) — Rotte statiche e risoluzione\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F06: \\[F06\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/S3-V2-F2-ESPLORA\\.md\\) — Equivalenza mappa/elenco\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F07: \\[F07\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/percorsi/PATHWAY-DOSSIER-TEMPLATE\\.md\\) — Dossier ed evidenze\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F08: \\[F08\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/percorsi/PERCORSI-G2-CONTRACT\\.md\\) — Grafo semantico e parità\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F09: \\[F09\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/percorsi/PERCORSI-G2-H1-PEDAGOGICAL-REVIEW\\.md\\) — Riesame precedente circoscritto\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F10: \\[F10\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/STUDIO-ATLAS-PREVIEW-ADAPTER-v0\\.1\\.md\\) — Anteprima e trasferimento\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
     }
   ],
   "excludedPaths": [
