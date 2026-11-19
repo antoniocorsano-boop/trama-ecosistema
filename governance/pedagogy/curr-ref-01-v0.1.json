@@ -1,0 +1,916 @@
+{
+  "schemaVersion": "trama.riferimento-pedagogico/v1",
+  "id": "CURR-REF-01",
+  "version": "0.1.0",
+  "status": "PROPOSED",
+  "normativeAuthority": false,
+  "runtimeAuthorization": false,
+  "sourceOfInstitutionalCurricolo": "Arena",
+  "existingVocabulary": "governance/terminology/trama-curricolo-vocabulary-v1.json",
+  "evidenceStandard": "docs/assurance/trama-evidence-01.md",
+  "sources": [
+    {
+      "id": "S01",
+      "type": "TRAINING_REFERENCE",
+      "author": "Loredana Perla",
+      "title": "Curricolo verticale come architettura didattica della continuità e valutazione",
+      "format": "dispensa",
+      "year": "2025/26",
+      "pages": 31,
+      "rights": "BIBLIOGRAPHIC_REFERENCE_ONLY"
+    },
+    {
+      "id": "S02",
+      "type": "TRAINING_REFERENCE",
+      "author": "Loredana Perla",
+      "title": "Curricolo verticale come architettura didattica della continuità e valutazione",
+      "format": "presentazione",
+      "year": "2025/26",
+      "pages": 25,
+      "rights": "BIBLIOGRAPHIC_REFERENCE_ONLY"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E01",
+      "source": "S01",
+      "pages": "2–3",
+      "topic": "Evoluzione istituzionale dal programma al curricolo",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E02",
+      "source": "S01",
+      "pages": "3–5",
+      "topic": "Fondamenti pedagogici e continuità",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E03",
+      "source": "S01",
+      "pages": "5–7",
+      "topic": "Competenze europee e forme del curricolo",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E04",
+      "source": "S01",
+      "pages": "9–10",
+      "topic": "Profilo, nuclei fondanti e allineamento",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E05",
+      "source": "S02",
+      "pages": "15–17",
+      "topic": "Sintesi grafica dei criteri e delle cinque componenti",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E06",
+      "source": "S01",
+      "pages": "11–13",
+      "topic": "Esempi disciplinari e interdisciplinari",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E07",
+      "source": "S01",
+      "pages": "17–19",
+      "topic": "Valutazione e funzione formativa",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E08",
+      "source": "S01",
+      "pages": "20–25",
+      "topic": "Esempio di curricolo e tavola di raccordo",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E09",
+      "source": "S01",
+      "pages": "26–29",
+      "topic": "Struttura di una UdA ed esempi di valutazione",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E10",
+      "source": "S02",
+      "pages": "21–24",
+      "topic": "Progettazione a ritroso e sintesi conclusiva",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E11",
+      "source": "S01",
+      "pages": "25",
+      "topic": "Riferimento alle Indicazioni del 2012 nell'allegato",
+      "classification": "SOURCE_LOCATOR"
+    },
+    {
+      "id": "E12",
+      "source": "S01",
+      "pages": "28–29",
+      "topic": "Scale valutative esemplificative non omogenee",
+      "classification": "SOURCE_LOCATOR"
+    }
+  ],
+  "terms": [
+    {
+      "id": "profilo",
+      "label": "Profilo dello studente",
+      "definition": "Esito formativo complessivo di riferimento",
+      "evidence": "E04",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "competenze-chiave",
+      "label": "Competenze chiave europee",
+      "definition": "Quadro comune per l'apprendimento permanente; collegato al Profilo, non coincidente con ogni sua formulazione",
+      "evidence": "E03",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "ogpf",
+      "label": "Obiettivi generali del processo formativo",
+      "definition": "Orientamento formativo articolato per grado",
+      "evidence": "E04",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "competenza-attesa",
+      "label": "Competenze disciplinari attese",
+      "definition": "Risultati di competenza riferiti allo snodo pertinente",
+      "evidence": "E05",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "nucleo",
+      "label": "Nuclei fondanti",
+      "definition": "Strutture concettuali e operative essenziali che organizzano la progressione",
+      "evidence": "E04",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "osa",
+      "label": "Obiettivi specifici di apprendimento",
+      "definition": "Apprendimenti specifici riferiti alla disciplina e al segmento pertinente",
+      "evidence": "E04",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "conoscenza",
+      "label": "Conoscenze",
+      "definition": "Saperi selezionati per profondità e rilevanza formativa",
+      "evidence": "E04",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "snodo",
+      "label": "Snodo formativo",
+      "definition": "Riferimento temporale della progressione; applicabilità da accertare per ordine e disciplina",
+      "evidence": "E08",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "uda",
+      "label": "Unità di apprendimento (UdA)",
+      "definition": "Progettazione contestualizzata che realizza il raccordo curricolare",
+      "evidence": "E09",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "domanda",
+      "label": "Domanda stimolo",
+      "definition": "Quesito che orienta l'esperienza e le scelte didattiche",
+      "evidence": "E09",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "fase",
+      "label": "Fase didattica",
+      "definition": "Parte di un percorso organizzato con intenzionalità formativa",
+      "evidence": "E09",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "micro-prodotto",
+      "label": "Micro-prodotto",
+      "definition": "Esito intermedio osservabile di una fase",
+      "evidence": "E09",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "compito",
+      "label": "Compito di realtà",
+      "definition": "Situazione significativa che richiede la mobilitazione dei saperi",
+      "evidence": "E09",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "rubrica",
+      "label": "Rubrica di prestazione",
+      "definition": "Strumento di osservazione e valutazione delle modalità di lavoro",
+      "evidence": "E07",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "griglia",
+      "label": "Griglia di valutazione del prodotto",
+      "definition": "Strumento per analizzare qualità e coerenza dell'esito",
+      "evidence": "E07",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "evidenza",
+      "label": "Evidenza di apprendimento",
+      "definition": "Riscontro documentabile di un apprendimento; definizione operativa TRAMA",
+      "evidence": "E07",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "certificazione",
+      "label": "Certificazione delle competenze",
+      "definition": "Sintesi istituzionale raccordata al Profilo; distinta da voto e rubrica",
+      "evidence": "E04",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "formale",
+      "label": "Curricolo formale",
+      "definition": "Quadro esplicito della progettazione educativa",
+      "evidence": "E03",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "reale",
+      "label": "Curricolo reale",
+      "definition": "Esperienze effettivamente realizzate",
+      "evidence": "E03",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "informale",
+      "label": "Curricolo informale",
+      "definition": "Esperienze che ampliano il percorso formale",
+      "evidence": "E03",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "nascosto",
+      "label": "Curricolo nascosto",
+      "definition": "Messaggi educativi impliciti nelle pratiche scolastiche",
+      "evidence": "E03",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "autonomia",
+      "label": "Curricolo dell'autonomia",
+      "definition": "Dimensione delle scelte attribuite alla scuola nel quadro applicabile",
+      "evidence": "E01",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "istituto",
+      "label": "Curricolo di istituto",
+      "definition": "Contestualizzazione collegiale inserita nel PTOF",
+      "evidence": "E03",
+      "classification": "TRAMA_PARAPHRASE"
+    },
+    {
+      "id": "verticale",
+      "label": "Curricolo verticale di istituto",
+      "definition": "Articolazione coerente degli apprendimenti lungo il percorso",
+      "evidence": "E03",
+      "classification": "TRAMA_PARAPHRASE"
+    }
+  ],
+  "relationships": [
+    {
+      "from": "competenze-chiave",
+      "relation": "riferimento-per",
+      "to": "profilo",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "profilo",
+      "relation": "orienta",
+      "to": "ogpf",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "ogpf",
+      "relation": "concorre-a-orientare",
+      "to": "competenza-attesa",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "competenza-attesa",
+      "relation": "orienta",
+      "to": "osa",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "nucleo",
+      "relation": "organizza",
+      "to": "osa",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "nucleo",
+      "relation": "organizza",
+      "to": "conoscenza",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "osa",
+      "relation": "si-raccorda-a",
+      "to": "conoscenza",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "osa",
+      "relation": "orienta",
+      "to": "uda",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "competenza-attesa",
+      "relation": "orienta",
+      "to": "uda",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "profilo",
+      "relation": "orienta",
+      "to": "uda",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "conoscenza",
+      "relation": "alimenta",
+      "to": "uda",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "uda",
+      "relation": "articola",
+      "to": "fase",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "domanda",
+      "relation": "orienta",
+      "to": "uda",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "fase",
+      "relation": "produce",
+      "to": "micro-prodotto",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "uda",
+      "relation": "prevede",
+      "to": "compito",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "compito",
+      "relation": "osservato-con",
+      "to": "rubrica",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "compito",
+      "relation": "documentato-con",
+      "to": "griglia",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "rubrica",
+      "relation": "raccoglie",
+      "to": "evidenza",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "griglia",
+      "relation": "raccoglie",
+      "to": "evidenza",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "evidenza",
+      "relation": "informa",
+      "to": "certificazione",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "certificazione",
+      "relation": "si-raccorda-a",
+      "to": "profilo",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "istituto",
+      "relation": "raccorda",
+      "to": "formale",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "istituto",
+      "relation": "raccorda",
+      "to": "reale",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "verticale",
+      "relation": "articola",
+      "to": "istituto",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "informale",
+      "relation": "arricchisce",
+      "to": "reale",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    },
+    {
+      "from": "nascosto",
+      "relation": "interagisce-con",
+      "to": "reale",
+      "classification": "DESIGN_RULE",
+      "cardinality": "MANY_TO_MANY_NOT_ENFORCED",
+      "evidence": [
+        "E03",
+        "E04",
+        "E05",
+        "E09"
+      ]
+    }
+  ],
+  "foundations": [
+    {
+      "id": "F01",
+      "authors": "Giovanni Amos Comenio",
+      "dates": "1592–1670",
+      "concept": "Gradualità e continuità",
+      "application": "Dal fare e osservare a rappresentazioni più complesse",
+      "applicationClass": "DESIGN_RULE",
+      "evidence": "E02"
+    },
+    {
+      "id": "F02",
+      "authors": "John Dewey",
+      "dates": "1859–1952",
+      "concept": "Esperienza e sapere disciplinare",
+      "application": "Attività motivate e connessione tra esperienza e concettualizzazione",
+      "applicationClass": "DESIGN_RULE",
+      "evidence": "E02"
+    },
+    {
+      "id": "F03",
+      "authors": "Jean Piaget",
+      "dates": "1896–1980",
+      "concept": "Costruzione attiva della conoscenza",
+      "application": "Proporre complessità adeguata senza classificare rigidamente gli alunni",
+      "applicationClass": "DESIGN_RULE",
+      "evidence": "E02"
+    },
+    {
+      "id": "F04",
+      "authors": "Lev Vygotskij",
+      "dates": "1896–1934",
+      "concept": "Mediazione sociale e zona di sviluppo prossimale",
+      "application": "Sostegni graduabili e collaborazione",
+      "applicationClass": "DESIGN_RULE",
+      "evidence": "E02"
+    },
+    {
+      "id": "F05",
+      "authors": "Jerome Bruner",
+      "dates": "1915–2016",
+      "concept": "Curricolo a spirale",
+      "application": "Ritornare sui concetti con nuove relazioni e profondità",
+      "applicationClass": "DESIGN_RULE",
+      "evidence": "E02"
+    },
+    {
+      "id": "F06",
+      "authors": "Francisco Varela; George Lakoff; Mark Johnson; Lawrence Barsalou",
+      "dates": null,
+      "concept": "Cognizione incarnata",
+      "application": "Esplorazione, manipolazione e relazione con l'ambiente; nessuna superiorità automatica del 3D",
+      "applicationClass": "DESIGN_RULE",
+      "evidence": "E02"
+    },
+    {
+      "id": "F07",
+      "authors": "Connelly; Clandinin; Craig",
+      "dates": null,
+      "concept": "Docente e curricolo vissuto",
+      "application": "Documentare e sostenere le scelte professionali senza sostituirle",
+      "applicationClass": "DESIGN_RULE",
+      "evidence": "E03"
+    }
+  ],
+  "history": [
+    {
+      "period": "1945–1990",
+      "theme": "Stagione dei programmi ministeriali",
+      "evidence": "E01",
+      "classification": "SOURCE_CONTEXT_NOT_LEGAL_VERIFICATION"
+    },
+    {
+      "period": "1985–1992",
+      "theme": "Innovazioni nei programmi elementari e Brocca",
+      "evidence": "E01",
+      "classification": "SOURCE_CONTEXT_NOT_LEGAL_VERIFICATION"
+    },
+    {
+      "period": "1999",
+      "theme": "Autonomia scolastica; D.P.R. 275/1999",
+      "evidence": "E01",
+      "classification": "SOURCE_CONTEXT_NOT_LEGAL_VERIFICATION"
+    },
+    {
+      "period": "2000–2018",
+      "theme": "Sviluppo del quadro europeo delle competenze",
+      "evidence": "E03",
+      "classification": "SOURCE_CONTEXT_NOT_LEGAL_VERIFICATION"
+    },
+    {
+      "period": "2007–2012",
+      "theme": "Indicazioni nazionali e continuità verticale",
+      "evidence": "E01",
+      "classification": "SOURCE_CONTEXT_NOT_LEGAL_VERIFICATION"
+    },
+    {
+      "period": "2024",
+      "theme": "Modelli di certificazione richiamati nei materiali",
+      "evidence": "E04",
+      "classification": "SOURCE_CONTEXT_NOT_LEGAL_VERIFICATION"
+    },
+    {
+      "period": "2025",
+      "theme": "Nuove Indicazioni nazionali richiamate nei materiali",
+      "evidence": "E04",
+      "classification": "SOURCE_CONTEXT_NOT_LEGAL_VERIFICATION"
+    }
+  ],
+  "principles": [
+    {
+      "id": "CURR-REF-01/P01",
+      "label": "Centralità del Profilo",
+      "check": "Il raccordo con il Profilo è esplicitato e verificabile",
+      "evidence": "E04",
+      "owner": "Arena",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P02",
+      "label": "Continuità verticale",
+      "check": "Gli snodi e le progressioni sono esplicitati senza appiattire gli ordini",
+      "evidence": "E04",
+      "owner": "Arena",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P03",
+      "label": "Progressione a spirale",
+      "check": "Il riuso dei nuclei mostra un aumento di complessità",
+      "evidence": "E02",
+      "owner": "Arena, Atlas",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P04",
+      "label": "Essenzializzazione",
+      "check": "La selezione dei contenuti è motivata dalla rilevanza e profondità",
+      "evidence": "E04",
+      "owner": "Arena, Studio Atlas",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P05",
+      "label": "Allineamento",
+      "check": "I riferimenti delle UdA sono risolvibili nella versione approvata pertinente",
+      "evidence": "E05",
+      "owner": "Arena, Docente OS",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P06",
+      "label": "Progettazione a ritroso",
+      "check": "Le evidenze e i criteri attesi sono previsti prima delle attività",
+      "evidence": "E10",
+      "owner": "Docente OS",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P07",
+      "label": "Esperienza intenzionale",
+      "check": "L'esperienza contribuisce a un apprendimento dichiarato; disponibilità di alternative",
+      "evidence": "E02",
+      "owner": "Atlas, Studio Atlas",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P08",
+      "label": "Valutazione multidimensionale",
+      "check": "Processo, prodotto e conoscenze rimangono distinti",
+      "evidence": "E07",
+      "owner": "Registro Docente",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P09",
+      "label": "Responsabilità professionale",
+      "check": "Proposte e decisioni umane sono distinguibili",
+      "evidence": "E03",
+      "owner": "Docente OS, Arena, Registro Docente",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P10",
+      "label": "Inclusione",
+      "check": "Adattamenti accessibili e personalizzabili senza dati personali nel riferimento comune",
+      "evidence": "E09",
+      "owner": "Atlas, Docente OS",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P11",
+      "label": "Regolazione",
+      "check": "Il riesame considera evidenze e modifiche motivate",
+      "evidence": "E10",
+      "owner": "Docente OS, Registro Docente",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    },
+    {
+      "id": "CURR-REF-01/P12",
+      "label": "Integrazione saperi e competenze",
+      "check": "Le competenze sono collegate a conoscenze disciplinari pertinenti",
+      "evidence": "E03",
+      "owner": "Arena, Atlas",
+      "classification": "DESIGN_RULE",
+      "verification": "PENDING"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G01",
+      "evidence": "E11",
+      "issue": "Riferimento 2012 nell'allegato rispetto al quadro 2025 dichiarato",
+      "resolution": "Verifica su fonti normative primarie e disciplina prima di recepire",
+      "blocking": "NORMATIVE_ADOPTION"
+    },
+    {
+      "id": "G02",
+      "evidence": "E12",
+      "issue": "Scale differenti nelle rubriche esemplificative",
+      "resolution": "Non derivare conversioni automatiche né assumere scala istituzionale",
+      "blocking": "ASSESSMENT_AUTOMATION"
+    },
+    {
+      "id": "G03",
+      "evidence": "E04",
+      "issue": "Schema per primaria e secondaria non esaurisce la struttura della scuola dell'infanzia",
+      "resolution": "Verificare campi di esperienza e raccordo specifico",
+      "blocking": "UNIVERSAL_SCHEMA"
+    },
+    {
+      "id": "G04",
+      "evidence": "E06",
+      "issue": "Gli esempi non stabiliscono cardinalità o scadenze universali per ogni disciplina",
+      "resolution": "Verificare caso per caso nel quadro di Arena",
+      "blocking": "PRODUCT_CONTRACT_CHANGE"
+    },
+    {
+      "id": "G05",
+      "evidence": "E02",
+      "issue": "Fondamenti storici qui ricavati da materiale formativo secondario",
+      "resolution": "Approfondire opere originali e letteratura scientifica prima di qualificare affermazioni empiriche",
+      "blocking": "SCIENTIFIC_QUALIFICATION"
+    }
+  ],
+  "productAudit": [
+    {
+      "product": "Arena",
+      "check": "Confronto in sola lettura con il modello e la versione approvata; mappa corrispondenze, assenze, divergenze",
+      "state": "PLANNED"
+    },
+    {
+      "product": "Atlas / Studio Atlas",
+      "check": "Verifica dei percorsi, degli oggetti, delle alternative accessibili e della progressione; nessuna pubblicazione",
+      "state": "PLANNED"
+    },
+    {
+      "product": "Docente OS",
+      "check": "Confronto con struttura UdA, domanda, fasi, micro-prodotti, valutazione e controllo umano",
+      "state": "PLANNED"
+    },
+    {
+      "product": "Registro Docente",
+      "check": "Verifica distinzione tra evidenze, valutazione, giudizio professionale e certificazione; nessun trasferimento individuale",
+      "state": "PLANNED"
+    }
+  ],
+  "boundaries": {
+    "changesExistingContracts": false,
+    "createsCurricoloAuthority": false,
+    "studentData": false,
+    "publishesLearningContent": false,
+    "authorizesAssessmentAutomation": false,
+    "authorizesDeployment": false,
+    "sourcePdfRedistribution": false
+  }
+}
