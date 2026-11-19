@@ -1,5 +1,6 @@
 """Read-only qualification of the Atlas record-only candidate. No publication or writes."""
 import copy
+import hashlib
 import json
 import re
 import unicodedata
@@ -109,8 +110,10 @@ def validate_alignment(data):
             if {"ordinal": m["ordinal"], "text": m["text"]} not in b["objectives"]:
                 raise ValueError("mapping text or ordinal mismatch")
     # Verify non-destructive migration against the original, retained record.
-    old = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    if data["migration"]["fromBlob"] != "951a3e304f92a3e86efca26adf9b17bac9b2005e" or data["source"] != old["source"]:
+    prior_bytes = FIXTURE.read_bytes()
+    prior_blob = hashlib.sha1(f"blob {len(prior_bytes)}\0".encode() + prior_bytes).hexdigest()
+    old = json.loads(prior_bytes)
+    if prior_blob != "951a3e304f92a3e86efca26adf9b17bac9b2005e" or data["migration"]["fromBlob"] != prior_blob or data["source"] != old["source"]:
         raise ValueError("migration provenance mismatch")
     old_resources = {r["id"]: r for r in old["resources"]}
     if set(old_resources) != {r["id"] for r in data["resources"]}:
@@ -135,6 +138,14 @@ def validate_alignment(data):
         aliases, related = set(c["aliases"]), set(c["relatedTerms"])
         if aliases & related or aliases | related != set(prior["aliases"]):
             raise ValueError("term migration loss or overlap")
+        expected_related = {
+            "k-system": {"tecnica e tecnologia"},
+            "k-agriculture": {"filiera agricola"},
+            "k-text": {"lettura informativa", "testo espositivo"},
+            "k-matter": {"trasformazioni fisiche"},
+        }
+        if related != expected_related[c["id"]]:
+            raise ValueError("unreviewed term equivalence")
     if [{k: v for k, v in r.items() if k != "status"} for r in data["relations"]] != old["relations"]:
         raise ValueError("relation drift")
 
@@ -326,6 +337,13 @@ class VersionedCandidateTests(unittest.TestCase):
             validate(data)
         data = copy.deepcopy(self.data)
         data["resources"][0]["mappings"].append(copy.deepcopy(data["resources"][2]["mappings"][1]))
+        with self.assertRaises(ValueError):
+            validate(data)
+
+    def test_reject_unreviewed_equivalence(self):
+        data = copy.deepcopy(self.data)
+        concept = data["concepts"][0]
+        concept["aliases"].append(concept["relatedTerms"].pop())
         with self.assertRaises(ValueError):
             validate(data)
 
