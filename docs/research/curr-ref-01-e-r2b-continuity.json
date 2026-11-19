@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "trama.curr-ref-er2b/v0.1",
+  "id": "CURR-REF-01/E-R2b",
+  "status": "DOCUMENTARY_RECONCILIATION_CANDIDATE",
+  "sources": {
+    "master": {
+      "code": "CAN-CURR-MASTER-00",
+      "version": "1.3",
+      "sections": [
+        "6.3.7",
+        "7.3.8",
+        "16.2"
+      ],
+      "state": "NOT_IN_FORCE"
+    },
+    "draft": {
+      "code": "BOZZA-CURR-TEC-01",
+      "controlVersion": "1.2",
+      "coverVersion": "1.0",
+      "revisionDate": "2026-09-06",
+      "sections": [
+        "3",
+        "4.8",
+        "4.9",
+        "4.10",
+        "4.11",
+        "5"
+      ],
+      "paragraphCount": 408,
+      "state": "NOT_IN_FORCE",
+      "versionDiscrepancy": "COVER_STALE_OR_UNRECONCILED",
+      "privateTextNotRepublished": true
+    },
+    "arena": {
+      "revision": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+      "exportBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+      "pilotBlob": "a13ad797a7d65d68b509ba8e9ca08f6baa586cf9",
+      "bootstrapPr": 329,
+      "bootstrapMerge": "13e711ee25ea96509c67c7dd79d4bd34b20a2a99",
+      "exportRevisionMatchesCurrentDrive": false,
+      "comparisonScope": "Eight Technology annual paragraphs matched by normalized text in E-R1a; not full revision equivalence"
+    }
+  },
+  "taxonomy": {
+    "verticalNuclei": 9,
+    "annualOperationalGroups": 3,
+    "integratedLocalAxis": 1,
+    "localAxisIsNationalNucleus": false,
+    "namespaceCollision": "N1–N3 labels in annual grouping differ from N1–N9 vertical dimensions",
+    "decision": "Separate identifiers and relationships; no automatic equivalence"
+  },
+  "gapReview": [
+    {
+      "nucleus": "MATERIALI_CICLO_VITA",
+      "grade": "III",
+      "state": "REMAINS_NOT_SPECIFIC",
+      "locators": [
+        "4.11"
+      ],
+      "reason": "Risorse e impatti sono trattati, ma la specifica traiettoria sul ciclo di vita dei materiali non è esplicita."
+    },
+    {
+      "nucleus": "ENERGIA_SOSTENIBILITA",
+      "grade": "I",
+      "state": "ADDITIONAL_PARTIAL_EVIDENCE",
+      "locators": [
+        "4.9"
+      ],
+      "reason": "La competenza collega energia, trasformazioni e ambiente; non specifica forme e usi quotidiani."
+    },
+    {
+      "nucleus": "ENERGIA_SOSTENIBILITA",
+      "grade": "II",
+      "state": "REMAINS_NOT_SPECIFIC",
+      "locators": [
+        "4.10"
+      ],
+      "reason": "Efficienza e impianti sono presenti, ma consumi energetici e relativa sicurezza non sono esplicitati come traiettoria."
+    },
+    {
+      "nucleus": "ABITARE_TERRITORIO",
+      "grade": "I",
+      "state": "ADDITIONAL_PARTIAL_EVIDENCE",
+      "locators": [
+        "master 16.2"
+      ],
+      "reason": "Rilievo di oggetti e spazi scolastici; non dimostra l'intero nucleo abitare o sicurezza degli spazi."
+    },
+    {
+      "nucleus": "ABITARE_TERRITORIO",
+      "grade": "III",
+      "state": "REMAINS_NOT_SPECIFIC",
+      "locators": [
+        "4.11"
+      ],
+      "reason": "Impatti sociali e ambientali generali non dimostrano mobilità, rischio o accessibilità urbana."
+    },
+    {
+      "nucleus": "ALIMENTAZIONE_FILIERE",
+      "grade": "I",
+      "state": "REMAINS_NOT_SPECIFIC",
+      "locators": [
+        "4.9"
+      ],
+      "reason": "Trasformazioni e produzione generiche non identificano il dominio alimentare."
+    },
+    {
+      "nucleus": "ALIMENTAZIONE_FILIERE",
+      "grade": "III",
+      "state": "REMAINS_NOT_SPECIFIC",
+      "locators": [
+        "4.11"
+      ],
+      "reason": "Sistemi produttivi e impatti generici non identificano sicurezza e consumo alimentare."
+    },
+    {
+      "nucleus": "ORIENTAMENTO_PROFESSIONI",
+      "grade": "I",
+      "state": "ADDITIONAL_PARTIAL_EVIDENCE",
+      "locators": [
+        "4.9"
+      ],
+      "reason": "La proposta disciplinare indica esplicitamente mestieri e contesti tecnico-scientifici; non è un raccordo annuale approvato nel master."
+    },
+    {
+      "nucleus": "ORIENTAMENTO_PROFESSIONI",
+      "grade": "II",
+      "state": "REMAINS_NOT_SPECIFIC",
+      "locators": [
+        "4.10"
+      ],
+      "reason": "Filiere e servizi non equivalgono da soli a orientamento professionale."
+    }
+  ],
+  "transition": {
+    "id": "METODO_PROGETTUALE",
+    "from": {
+      "grade": "V primaria",
+      "regime": "2012_TRANSITION",
+      "source": "4.8",
+      "bandId": "primaria-tecnologia-classe-v",
+      "objectiveOrdinals": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "summary": "Problema, vincoli semplici, confronto, rappresentazione, realizzazione e verifica."
+    },
+    "to": {
+      "grade": "I secondaria",
+      "regime": "2025",
+      "source": "4.9",
+      "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+      "objectiveOrdinals": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "summary": "Metodo tecnico esplicito con misure, rappresentazioni, materiali, procedura e controllo."
+    },
+    "status": "PROPOSED",
+    "cohortRule": "Passaggio della coorte, non concatenazione delle classi contemporanee; per ingresso 2026/27 verificare prerequisiti effettivi senza presumere conoscenza IN2025",
+    "delta": "Maggiore precisione, esplicitazione dei criteri e uso intenzionale della rappresentazione.",
+    "evidenceProposal": "Confronto tra due soluzioni, rappresentazione con misure e motivazione della verifica; adattare supporti."
+  },
+  "exportDiagnosis": {
+    "bootstrapFiles": 4,
+    "validatorPresent": true,
+    "generatorInBootstrap": false,
+    "generatorLocatedInRepositorySearch": false,
+    "sourceTextPreserved": true,
+    "formativeIdentityNotStructured": 3,
+    "decision": "Qualify repeatable generation and provenance before modifying export; distinguish source revision change from nominal version; do not infer data from text automatically."
+  },
+  "boundaries": {
+    "masterEdited": false,
+    "arenaEdited": false,
+    "atlasEdited": false,
+    "professionalApproval": false,
+    "automaticMapping": false,
+    "publication": false,
+    "studentData": false
+  },
+  "next": "E-R3: native infanzia and transition to primary; E-R4: professional review of pending proposals and export remediation"
+}
