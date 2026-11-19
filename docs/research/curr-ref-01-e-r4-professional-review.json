@@ -1,0 +1,446 @@
+{
+  "schemaVersion": "trama.curr-ref-er4/v0.1",
+  "id": "CURR-REF-01/E-R4",
+  "status": "HANDOFF_PREPARED_NO_HUMAN_VALIDATION",
+  "preparedDate": "2026-11-19",
+  "scope": "TECNOLOGIA_PILOT_AND_INFANZIA_WITH_VERTICALITY",
+  "master": {
+    "id": "CAN-CURR-MASTER-00",
+    "version": "1.3",
+    "sourceOfTruth": "ARENA",
+    "authorityState": "MATERIALIZED_NOT_IN_FORCE",
+    "professionalValidation": "OPEN",
+    "verticalReview": "OPEN",
+    "readyForCollegio": "NOT_YET",
+    "approved": false
+  },
+  "arena": {
+    "revision": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+    "lifecycleContract": {
+      "path": ".human/curriculum-lifecycle.contract.json",
+      "version": "1.2.0",
+      "blob": "ff593eb8acd214ffbb0d98ecfc8d5e2d9d2d098f"
+    },
+    "registry": {
+      "path": "docs/curriculum/REG-CURR-00.registry.json",
+      "version": "1.13.0",
+      "blob": "eb27b314204f83634f332bbfa1caf24681169893"
+    },
+    "reviewPilot": {
+      "path": "src/domain/curriculum/validation/technologyClass1Review.ts",
+      "id": "TEC-SEC1-2026-01",
+      "revision": 2,
+      "status": "READY_FOR_HUMAN_DISCIPLINE_REVIEW",
+      "humanOutcome": "OPEN",
+      "blob": "787adbeaf77c3e94372e355438c78720990054c1"
+    },
+    "caseContract": {
+      "path": "src/domain/curriculum/reviewCase.ts",
+      "blob": "230e7b5809ab911a3760c80ec41f336c0ba1b4c4"
+    },
+    "sessionContract": {
+      "path": "src/domain/curriculum/caseWorkSession.ts",
+      "blob": "84c45aab0fa04d38e0018112b1b34e00fd1ab5fb"
+    }
+  },
+  "sources": {
+    "ER1A": "docs/research/curr-ref-01-e-r1-master-alignment.json",
+    "ER1B": "docs/research/curr-ref-01-e-r1b-technology-chains.json",
+    "ER2A": "docs/research/curr-ref-01-e-r2-nuclei-progression.json",
+    "ER2B": "docs/research/curr-ref-01-e-r2b-continuity.json",
+    "ER3": "docs/research/curr-ref-01-e-r3-infanzia.json",
+    "ARENA_PILOT": "src/domain/curriculum/validation/technologyClass1Review.ts"
+  },
+  "registeredProposals": [
+    {
+      "id": "ER4-R2-N1",
+      "type": "REGISTERED_PROPOSAL_REVIEW",
+      "proposalRef": "tec-sec1-2026-r2-n1",
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "secondaria",
+        "grade": "I",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "DIPARTIMENTO_TECNOLOGIA",
+      "sources": [
+        "ER1B",
+        "ER2A",
+        "ARENA_PILOT"
+      ],
+      "question": "Misure, prove comparative e rappresentazioni risultano pertinenti, sostenibili e coerenti con gli obiettivi nazionali effettivamente applicabili?",
+      "focus": "Disegno, metodo tecnico e criteri osservabili",
+      "checks": [
+        "NATIONAL_VS_LOCAL",
+        "FEASIBILITY",
+        "EVIDENCE_QUALITY"
+      ],
+      "registration": "EXISTS_IN_ARENA_PILOT_R2",
+      "opening": "NOT_OPENED_BY_THIS_HANDOFF",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-R2-N2",
+      "type": "REGISTERED_PROPOSAL_REVIEW",
+      "proposalRef": "tec-sec1-2026-r2-n2",
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "secondaria",
+        "grade": "I",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "DIPARTIMENTO_TECNOLOGIA",
+      "sources": [
+        "ER2A",
+        "ER2B",
+        "ARENA_PILOT"
+      ],
+      "question": "Il metodo progettuale guidato chiarisce problemi, vincoli, ipotesi e verifica senza anticipare autonomia o carico non sostenibili?",
+      "focus": "Metodo progettuale",
+      "checks": [
+        "FEASIBILITY",
+        "COHORT_CONTINUITY",
+        "EVIDENCE_QUALITY"
+      ],
+      "registration": "EXISTS_IN_ARENA_PILOT_R2",
+      "opening": "NOT_OPENED_BY_THIS_HANDOFF",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-R2-N3",
+      "type": "REGISTERED_PROPOSAL_REVIEW",
+      "proposalRef": "tec-sec1-2026-r2-n3",
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "secondaria",
+        "grade": "I",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "DIPARTIMENTO_TECNOLOGIA",
+      "sources": [
+        "ER2A",
+        "ER2B",
+        "ARENA_PILOT"
+      ],
+      "question": "Realizzazione, riuso, riciclo e verifica sono distinti tra competenza attesa, annualizzazione e contenuto trasversale?",
+      "focus": "Materiali e ciclo di vita",
+      "checks": [
+        "NATIONAL_VS_LOCAL",
+        "FEASIBILITY"
+      ],
+      "registration": "EXISTS_IN_ARENA_PILOT_R2",
+      "opening": "NOT_OPENED_BY_THIS_HANDOFF",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-R2-N4",
+      "type": "REGISTERED_PROPOSAL_REVIEW",
+      "proposalRef": "tec-sec1-2026-r2-n4",
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "secondaria",
+        "grade": "I",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "DIPARTIMENTI_MATEMATICA_TECNOLOGIA",
+      "sources": [
+        "ER1A",
+        "ER2B",
+        "ARENA_PILOT"
+      ],
+      "question": "L'informatica integrata ha una progressione realisticamente sostenibile e un raccordo esplicito fra Matematica e Tecnologia, senza diventare un quarto nucleo nazionale?",
+      "focus": "Informatica e dati",
+      "checks": [
+        "NATIONAL_VS_LOCAL",
+        "CROSS_DISCIPLINARY",
+        "COHORT_CONTINUITY"
+      ],
+      "registration": "EXISTS_IN_ARENA_PILOT_R2",
+      "opening": "NOT_OPENED_BY_THIS_HANDOFF",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-R2-VERTICALITA",
+      "type": "REGISTERED_PROPOSAL_REVIEW",
+      "proposalRef": "tec-sec1-2026-r2-verticalita",
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "secondaria",
+        "grade": "I–III",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "DIPARTIMENTO_TECNOLOGIA",
+      "sources": [
+        "ER1B",
+        "ER2A",
+        "ER2B",
+        "ARENA_PILOT"
+      ],
+      "question": "La progressione I–III della secondaria distingue le coorti e aumenta autonomia e complessità senza applicare retroattivamente il regime 2025 alle altre classi?",
+      "focus": "Verticalità secondaria; distinto dal ponte primaria V–secondaria I",
+      "checks": [
+        "COHORT_CONTINUITY",
+        "VERTICAL_PROGRESSION",
+        "EVIDENCE_QUALITY"
+      ],
+      "registration": "EXISTS_IN_ARENA_PILOT_R2",
+      "opening": "NOT_OPENED_BY_THIS_HANDOFF",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    }
+  ],
+  "pendingRegistrations": [
+    {
+      "id": "ER4-PROFILE",
+      "type": "REQUIRES_REGISTERED_PROPOSAL",
+      "proposalRef": null,
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "secondaria",
+        "grade": "I",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "DIPARTIMENTO_TECNOLOGIA",
+      "sources": [
+        "ER1A",
+        "ER1B"
+      ],
+      "question": "Quali collegamenti fra Profilo, obiettivi generali del processo formativo, competenze, OSA e conoscenze sono pertinenti e verificati in ciascun regime?",
+      "focus": "Catena di allineamento: non confondere i riferimenti nazionali e locali",
+      "checks": [
+        "SOURCE_QUALIFICATION",
+        "NATIONAL_VS_LOCAL",
+        "COHORT_CONTINUITY"
+      ],
+      "registration": "NOT_IN_PILOT_R2",
+      "opening": "BLOCKED_UNTIL_QUALIFIED_TRIGGER_AND_REGISTRATION",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-SIX-GAPS",
+      "type": "REQUIRES_REGISTERED_PROPOSAL",
+      "proposalRef": null,
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "secondaria",
+        "grade": "I–III",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "DIPARTIMENTO_TECNOLOGIA",
+      "sources": [
+        "ER2A",
+        "ER2B"
+      ],
+      "question": "Le sei traiettorie non specificamente dimostrate richiedono un raccordo curricolare esplicito o sono scelte progettuali opzionali? Con quali evidenze e carichi?",
+      "focus": "Raccordi mancanti e nuclei verticali; nove nuclei non equivalgono a nove moduli annuali",
+      "checks": [
+        "FEASIBILITY",
+        "VERTICAL_PROGRESSION",
+        "NON_DUPLICATION"
+      ],
+      "registration": "NOT_IN_PILOT_R2",
+      "opening": "BLOCKED_UNTIL_QUALIFIED_TRIGGER_AND_REGISTRATION",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-PRIMARY-BRIDGE",
+      "type": "REQUIRES_REGISTERED_PROPOSAL",
+      "proposalRef": null,
+      "phase": "H3_VERTICAL_REVIEW",
+      "scope": {
+        "order": "primaria-to-secondaria",
+        "grade": "V→I",
+        "discipline": "tecnologia"
+      },
+      "ownerRole": "GRUPPO_VERTICALITA_PRIMARIA_SECONDARIA",
+      "sources": [
+        "ER2B",
+        "ER1B"
+      ],
+      "question": "Il passaggio da progettazione guidata alla procedura tecnica esplicita rispetta prerequisiti reali, inclusione e differenza tra coorti?",
+      "focus": "Ponte primaria V→secondaria I; NON compreso nella scheda R2 della sola secondaria",
+      "checks": [
+        "COHORT_CONTINUITY",
+        "VERTICAL_PROGRESSION",
+        "EVIDENCE_QUALITY"
+      ],
+      "registration": "NOT_IN_PILOT_R2",
+      "opening": "BLOCKED_UNTIL_QUALIFIED_TRIGGER_AND_REGISTRATION",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-INF-FIELDS",
+      "type": "REQUIRES_REGISTERED_PROPOSAL",
+      "proposalRef": null,
+      "phase": "H2_PROFESSIONAL_VALIDATION",
+      "scope": {
+        "order": "infanzia",
+        "grade": "3–5 anni",
+        "discipline": "cinque-campi-di-esperienza"
+      },
+      "ownerRole": "TEAM_INFANZIA",
+      "sources": [
+        "ER3"
+      ],
+      "question": "Finalità, competenze di campo e annualizzazioni sono coerenti, osservabili e rispettose dei ritmi individuali?",
+      "focus": "Cinque campi nativi, non discipline; nessuna soglia di certificazione per età",
+      "checks": [
+        "SOURCE_QUALIFICATION",
+        "FEASIBILITY",
+        "DEVELOPMENTAL_APPROPRIATENESS"
+      ],
+      "registration": "NOT_IN_PILOT_R2",
+      "opening": "BLOCKED_UNTIL_QUALIFIED_TRIGGER_AND_REGISTRATION",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-INF-BRIDGE",
+      "type": "REQUIRES_REGISTERED_PROPOSAL",
+      "proposalRef": null,
+      "phase": "H3_VERTICAL_REVIEW",
+      "scope": {
+        "order": "infanzia-to-primaria",
+        "grade": "5 anni→I",
+        "discipline": "campo-la-conoscenza-del-mondo"
+      },
+      "ownerRole": "GRUPPO_VERTICALITA_INFANZIA_PRIMARIA",
+      "sources": [
+        "ER3"
+      ],
+      "question": "I dieci raccordi di campo sono motivati e come si rende osservabile la continuità con Matematica, Scienze e Tecnologia senza introdurre prerequisiti selettivi?",
+      "focus": "La conoscenza del mondo e raccordi multipli",
+      "checks": [
+        "VERTICAL_PROGRESSION",
+        "DEVELOPMENTAL_APPROPRIATENESS",
+        "NO_SELECTIVE_ENTRY"
+      ],
+      "registration": "NOT_IN_PILOT_R2",
+      "opening": "BLOCKED_UNTIL_QUALIFIED_TRIGGER_AND_REGISTRATION",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    },
+    {
+      "id": "ER4-OVERALL-VERTICAL",
+      "type": "REQUIRES_REGISTERED_PROPOSAL",
+      "proposalRef": null,
+      "phase": "H3_VERTICAL_REVIEW",
+      "scope": {
+        "order": "curricolo-3-14",
+        "grade": "3–14",
+        "discipline": "trasversale"
+      },
+      "ownerRole": "COMMISSIONE_CURRICOLO",
+      "sources": [
+        "ER1A",
+        "ER2A",
+        "ER2B",
+        "ER3"
+      ],
+      "question": "Dopo gli esiti dei gruppi, quali salti, ridondanze e collegamenti non dimostrati richiedono un intervento nel master unico?",
+      "focus": "Revisione verticale conclusiva solo dopo gli esiti professionali",
+      "checks": [
+        "TEAM_OUTCOMES_REQUIRED",
+        "NON_DUPLICATION",
+        "VERTICAL_PROGRESSION"
+      ],
+      "registration": "NOT_IN_PILOT_R2",
+      "opening": "BLOCKED_UNTIL_QUALIFIED_TRIGGER_AND_REGISTRATION",
+      "decision": "PENDING_HUMAN_REVIEW",
+      "outcome": null
+    }
+  ],
+  "technicalChecks": [
+    {
+      "id": "ER4-T1",
+      "sourceRefs": [
+        "ER1A",
+        "ER3"
+      ],
+      "ownerRole": "REFERENTE_TECNICO_ARENA",
+      "issue": "Il produttore ripetibile del bundle non è localizzato; i raccordi di campo e l'identità formativa non compaiono come strutture distinte nell'export.",
+      "state": "OPEN_TECHNICAL_REVIEW",
+      "neverPromoteAuthority": true
+    },
+    {
+      "id": "ER4-T2",
+      "sourceRefs": [
+        "ER2B"
+      ],
+      "ownerRole": "REFERENTE_DOCUMENTALE",
+      "issue": "Bozza Tecnologia: frontespizio v1.0 e scheda di controllo v1.2; risolvere senza modificare le fonti o propagare versioni inferite.",
+      "state": "OPEN_EDITORIAL_REVIEW",
+      "neverPromoteAuthority": true
+    },
+    {
+      "id": "ER4-T3",
+      "sourceRefs": [
+        "ER1A",
+        "ER1B",
+        "ER3"
+      ],
+      "ownerRole": "REFERENTE_FONTI_NORMATIVE",
+      "issue": "Verificare i testi e i localizzatori dei singoli elementi delle fonti 2012/2025 e l'applicabilità per coorte prima di qualificarli come nazionali.",
+      "state": "OPEN_SOURCE_VERIFICATION",
+      "neverPromoteAuthority": true
+    }
+  ],
+  "workflow": {
+    "existingCycle": [
+      "H1_APPLICABLE_CURRICULUM",
+      "H2_PROFESSIONAL_VALIDATION",
+      "H3_VERTICAL_REVIEW",
+      "H4_INSTITUTIONAL_PROCESS",
+      "H5_DIDACTIC_USE",
+      "H6_PRACTICE_REVIEW"
+    ],
+    "workSession": [
+      "EXAMINE",
+      "SHARE",
+      "COMPARE",
+      "RECORD_TEAM_OUTCOME"
+    ],
+    "entry": "EXISTING_ARENA_CURRICULUM_WORK_SESSION",
+    "trigger": "EXPLICIT_QUALIFIED_AND_HUMAN_OPENED",
+    "preconditions": [
+      "QUALIFIED_TRIGGER_WITH_CURRENT_MASTER",
+      "CURRENT_UNIT_SCOPE_AND_REGISTERED_PROPOSAL",
+      "ACTOR_AUTHENTICATED_AND_AUTHORIZED",
+      "CURRENT_PERSISTED_SHARE_FOR_COMPARE",
+      "TEAM_OUTCOME_BEFORE_VERTICAL_REVIEW",
+      "VERTICAL_REVIEW_BEFORE_INSTITUTIONAL_PROPOSAL"
+    ],
+    "decisions": [
+      "CONFERMA",
+      "PROPONI_MODIFICA",
+      "MANTIENI_PRECEDENTE",
+      "RINVIA_AL_CONFRONTO"
+    ],
+    "reopenRule": "NEW_CASE_AFTER_EXPLICIT_TRIGGER_AND_SCOPE_CHECK",
+    "handoffMethod": "MAP_AND_REGISTER_THROUGH_EXISTING_ARENA_WORKFLOW_NO_DIRECT_WRITE",
+    "progressState": "NO_CASE_OPENED_NO_CONTRIBUTION_SHARED_NO_OUTCOME_RECORDED"
+  },
+  "boundaries": {
+    "masterEdited": false,
+    "arenaEdited": false,
+    "reviewCaseCreated": false,
+    "reviewTriggerCreated": false,
+    "contributionPersisted": false,
+    "teamOutcomeRecorded": false,
+    "verticalOutcomeRecorded": false,
+    "institutionalDecisionRecorded": false,
+    "adoptionReceiptCreated": false,
+    "professionalApproval": false,
+    "automaticPromotion": false,
+    "studentData": false,
+    "publication": false
+  },
+  "next": "Submit candidate questions to designated human group using existing Arena work session; verify source, proposal registration and actor authority; review actual outcomes; only then reconcile same master."
+}
