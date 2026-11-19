@@ -479,5 +479,296 @@ class LinkEvidenceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_link_evidence(record, self.data)
 
+SEARCH_EVIDENCE = ROOT / "docs/capabilities/atlas-knowledge/fixtures/f-r3d-search-evidence-v0.1.json"
+SEARCH_STOP = frozenset("a al alla alle ai ad anche che chi come con cosa da dal dalla dei del della delle di e ed gli il in l la le lo mi nel nella o per quale quali se si su sul sulla tra un una uno".split())
+SEARCH_KINDS = {"CONCEPT", "RESOURCE", "EXPERIENCE", "OBJECTIVE"}
+SEARCH_STAGES = {"Primaria", "Secondaria di primo grado"}
+
+
+def _blob(path):
+    raw = path.read_bytes()
+    return hashlib.sha1(f"blob {len(raw)}\0".encode() + raw).hexdigest()
+
+
+def validate_search_evidence(meta, links, data):
+    validate_link_evidence(links, data)
+    if links != json.loads(LINK_EVIDENCE.read_text(encoding="utf-8")):
+        raise ValueError("link receipt drift")
+    expected_labels = [
+        {"id":"trama-missione-118-2026", "title":"Missione 118 V9.1", "schoolStage":"Secondaria di primo grado", "sourceRefs":["CQP07","M118"]},
+        {"id":"pw-missing-information-01", "title":"Prima di decidere, cosa manca?", "schoolStage":"Primaria", "sourceRefs":["PORTFOLIO","PW_INFO"]},
+        {"id":"pw-constraints-tradeoffs-01", "title":"Una soluzione, molti vincoli", "schoolStage":"Secondaria di primo grado", "sourceRefs":["PORTFOLIO","PW_CONSTRAINTS"]},
+    ]
+    expected_objectives = [
+        {"ordinal":2,"text":"analizzare sistemi energetici/produttivi"},
+        {"ordinal":4,"text":"usare dati"},
+        {"ordinal":5,"text":"progettare"},
+        {"ordinal":6,"text":"verificare"},
+        {"ordinal":8,"text":"motivare scelte e interessi professionali"},
+    ]
+    if meta["schemaVersion"] != "atlas.knowledge-search-evidence/v0.1" or meta["status"] != "EDITORIAL_ONLY":
+        raise ValueError("not editorial evidence")
+    if meta["linkEvidenceBlob"] != _blob(LINK_EVIDENCE) or meta["linkEvidenceBlob"] != "c5c1aab7359ddd972dd978bbe46566dff7dcd194":
+        raise ValueError("link evidence digest drift")
+    if meta["catalogBlob"] != _blob(FIXTURE_V2) or meta["catalogBlob"] != "016cb9e9bb66a976fb4bb6652cb0dce2001930de":
+        raise ValueError("catalog digest drift")
+    if meta["experienceLabels"] != expected_labels or meta["missionObjectiveLabels"] != expected_objectives:
+        raise ValueError("unreviewed search labels")
+    if meta["boundaries"] != dict.fromkeys(("runtimeAuthorized", "publicationAuthorized", "publicResultsAllowed", "studentData"), False):
+        raise ValueError("search promotion")
+    return meta
+
+
+def _content_words(text):
+    return {word for word in normalize(text).split() if word not in SEARCH_STOP}
+
+
+def _direct_match(query, labels):
+    """All content words must match one label; no partial-overlap guesses."""
+    words = _content_words(query)
+    if not words:
+        return None
+    matches = []
+    for label, kind in labels:
+        if not words <= _content_words(label):
+            continue
+        exact = normalize(query) == normalize(label)
+        score = (100 if exact else 60) if kind != "RELATED_TERM" else (30 if exact else 20)
+        matches.append((score, label, kind))
+    return max(matches, default=None)
+
+
+def search_transversal(data, links, meta, query="", *, surface, kind=None, stage=None,
+                       objective_id=None, source_version=None, fingerprint=None):
+    """Offline editorial retrieval; public mode deliberately exposes nothing."""
+    if surface == "PUBLIC":
+        return []
+    if surface != "EDITORIAL":
+        raise ValueError("explicit editorial surface required")
+    validate_search_evidence(meta, links, data)
+    if not isinstance(query, str) or len(query) > 256:
+        raise ValueError("invalid query")
+    if kind is not None and kind not in SEARCH_KINDS:
+        raise ValueError("invalid result kind")
+    if stage is not None and stage not in SEARCH_STAGES:
+        raise ValueError("invalid school stage")
+    if objective_id is not None:
+        if not isinstance(objective_id, str) or not source_version or not fingerprint:
+            raise ValueError("exact objective lookup requires version and fingerprint")
+        if (source_version, fingerprint) != (data["alignmentEvidence"]["masterVersion"], data["alignmentEvidence"]["fingerprint"]):
+            return []
+    elif source_version is not None or fingerprint is not None:
+        raise ValueError("version filter requires objective id")
+    if not _content_words(query) and not objective_id:
+        return []
+    if query.strip() and not _content_words(query):
+        return []
+    concepts = {c["id"]: c for c in data["concepts"]}
+    resources = {r["id"]: r for r in data["resources"]}
+    reviews = {e["id"]: e for e in links["experienceReviews"]}
+    labels = {e["id"]: e for e in meta["experienceLabels"]}
+    source = data["alignmentEvidence"]
+    objectives = {}
+    for r in resources.values():
+        for m in r["mappings"]:
+            if m["status"] == "PROPOSED":
+                objectives[m["objectiveId"]] = (m["text"], r["schoolStages"], "KB")
+    mission = reviews["trama-missione-118-2026"]
+    for ident, evidence in zip(mission["objectiveRefs"], meta["missionObjectiveLabels"], strict=True):
+        if not ident.endswith(f'-o{evidence["ordinal"]}'):
+            raise ValueError("objective label identity drift")
+        objectives[ident] = (evidence["text"], [labels[mission["id"]]["schoolStage"]], "M118")
+    if objective_id and objective_id not in objectives:
+        return []
+
+    concept_matches = {}
+    for c in concepts.values():
+        match = _direct_match(query, [(c["title"], "TITLE")] +
+                              [(a, "ALIAS") for a in c["aliases"]] +
+                              [(q, "QUESTION") for q in c["questions"]] +
+                              [(t, "RELATED_TERM") for t in c["relatedTerms"]])
+        if match:
+            concept_matches[c["id"]] = match
+    result = []
+    def add(ident, title, category, stages, match, refs, status, **details):
+        if kind and kind != category:
+            return
+        if stage and stage not in stages:
+            return
+        if not match:
+            if query.strip():
+                return
+            match = (100, objectives[objective_id][0], "EXACT_OBJECTIVE_ID")
+        score, label, reason_kind = match
+        result.append({
+            "id": ident, "title": title, "kind": category,
+            "schoolStages": stages, "score": score, "matchedLabel": label,
+            "matchKind": reason_kind, "sourceRefs": refs, "status": status,
+            "publicationAuthorized": False, "runtimeAuthorized": False,
+            **details,
+        })
+    def best_link(ids, link_kind):
+        # One directly matched concept only. No traversal of concept relations.
+        candidates = [(min(concept_matches[c][0], 45), c, concept_matches[c][1])
+                      for c in ids if c in concept_matches]
+        if not candidates:
+            return None, None
+        score, cid, label = max(candidates)
+        return (score, label, link_kind), cid
+    for c in concepts.values():
+        if objective_id or c["id"] not in concept_matches:
+            continue
+        stages = sorted({stage_name for r in resources.values() if c["id"] in r["conceptIds"]
+                         for stage_name in r["schoolStages"]} |
+                        {labels[e["id"]]["schoolStage"] for e in reviews.values()
+                         if any(l["conceptId"] == c["id"] for l in e["conceptLinks"])})
+        add(c["id"], c["title"], "CONCEPT", stages, concept_matches[c["id"]], ["KB"], "CANDIDATE",
+            scopeMeaning="LINKED_CANDIDATE_SCOPE_NOT_CONCEPT_ASSIGNMENT")
+    # Reuse the existing exact, versioned resource lookup for objective mode.
+    eligible_resources = None
+    if objective_id:
+        eligible_resources = {r["id"] for r in search(data, objective_id=objective_id,
+                              source_version=source_version, fingerprint=fingerprint)}
+    for r in resources.values():
+        if eligible_resources is not None and r["id"] not in eligible_resources:
+            continue
+        direct = _direct_match(query, [(r["title"], "TITLE")])
+        linked, cid = best_link(r["conceptIds"], "DIRECT_CONCEPT_RESOURCE")
+        match = max([m for m in (direct, linked) if m], default=None)
+        own = [m for m in r["mappings"] if m["status"] == "PROPOSED"]
+        add(r["id"], r["title"], "RESOURCE", r["schoolStages"], match, ["KB"],
+            "RECORD_ONLY", conceptRef=cid if match and match == linked else None,
+            objectiveRefs=[m["objectiveId"] for m in own],
+            objectiveState="PROPOSED" if own else "NOT_PROPOSED",
+            authorityState=source["authorityState"] if own else None,
+            sourceVersion=source["masterVersion"] if own else None,
+            fingerprint=source["fingerprint"] if own else None,
+            rights=r["rights"], accessibility=r["accessibility"],
+            historicalReferenceCount=sum(m["status"] == "HISTORICAL_UNRESOLVED" for m in r["mappings"]))
+    for e in reviews.values():
+        if objective_id and objective_id not in e["objectiveRefs"]:
+            continue
+        label = labels[e["id"]]
+        direct = _direct_match(query, [(label["title"], "TITLE")])
+        linked, cid = best_link([l["conceptId"] for l in e["conceptLinks"]], "PROPOSED_CONCEPT_APPLICATION")
+        match = max([m for m in (direct, linked) if m], default=None)
+        chosen = next((l for l in e["conceptLinks"] if l["conceptId"] == cid), None) if match and match == linked else None
+        add(e["id"], label["title"], "EXPERIENCE", [label["schoolStage"]], match,
+            e["sourceRefs"], e["registryState"], version=e["version"],
+            conceptRef=chosen["conceptId"] if chosen else None,
+            linkState=chosen["status"] if chosen else None,
+            linkReason=chosen["reason"] if chosen else None,
+            objectiveRefs=e["objectiveRefs"], objectiveState=e["objectiveState"],
+            authorityState=source["authorityState"] if e["objectiveRefs"] else None,
+            sourceVersion=source["masterVersion"] if e["objectiveRefs"] else None,
+            fingerprint=source["fingerprint"] if e["objectiveRefs"] else None)
+    for ident, (title, stages, ref) in objectives.items():
+        if objective_id and objective_id != ident:
+            continue
+        add(ident, title, "OBJECTIVE", stages, _direct_match(query, [(title, "OBJECTIVE_TEXT")]),
+            [ref], "PROPOSED", sourceVersion=source["masterVersion"],
+            fingerprint=source["fingerprint"], authorityState=source["authorityState"])
+    return sorted(result, key=lambda x: (-x["score"], x["kind"], x["id"]))
+
+
+class TransversalSearchTests(unittest.TestCase):
+    def setUp(self):
+        self.data = json.loads(FIXTURE_V2.read_text(encoding="utf-8"))
+        self.links = json.loads(LINK_EVIDENCE.read_text(encoding="utf-8"))
+        self.meta = json.loads(SEARCH_EVIDENCE.read_text(encoding="utf-8"))
+
+    def lookup(self, query="", **kwargs):
+        return search_transversal(self.data, self.links, self.meta, query, surface="EDITORIAL", **kwargs)
+
+    def test_question_and_no_transitive_experience(self):
+        result = self.lookup("Come funziona un’azienda agricola?")
+        self.assertEqual({x["id"] for x in result}, {"k-agriculture", "r-tec-003"})
+        self.assertTrue(all(not x["publicationAuthorized"] for x in result))
+
+    def test_explicit_concept_application(self):
+        result = self.lookup("sistema tecnologico", kind="EXPERIENCE")
+        self.assertEqual([r["id"] for r in result], ["trama-missione-118-2026"])
+        self.assertEqual(result[0]["matchKind"], "PROPOSED_CONCEPT_APPLICATION")
+        self.assertEqual(result[0]["linkState"], "PROPOSED")
+        self.assertTrue(result[0]["linkReason"])
+
+    def test_alias_related_and_stage(self):
+        self.assertEqual(self.lookup("cambiamenti di stato", kind="CONCEPT")[0]["matchKind"], "ALIAS")
+        self.assertEqual(self.lookup("trasformazioni fisiche", kind="CONCEPT")[0]["matchKind"], "RELATED_TERM")
+        self.assertEqual(self.lookup("sistema tecnologico", stage="Primaria"), [])
+        self.assertEqual(self.lookup("testo informativo", stage="Primaria", kind="RESOURCE")[0]["id"], "r-ita-001")
+
+    def test_direct_experience_is_not_curricular_binding(self):
+        r = self.lookup("Prima di decidere, cosa manca?", kind="EXPERIENCE")[0]
+        self.assertEqual(r["id"], "pw-missing-information-01")
+        self.assertEqual(r["objectiveRefs"], [])
+        self.assertEqual(r["objectiveState"], "NOT_PROPOSED")
+        self.assertEqual(self.lookup("informazioni principali", kind="EXPERIENCE"), [])
+
+    def test_exact_objective_separates_year_and_never_inherits(self):
+        opts = {"source_version":"1.3", "fingerprint":"b355be71"}
+        ii = self.lookup(objective_id="secondaria-di-primo-grado-tecnologia-classe-ii-o3", **opts)
+        self.assertEqual({r["kind"] for r in ii}, {"RESOURCE","OBJECTIVE"})
+        self.assertEqual({r["id"] for r in ii}, {"r-tec-003","secondaria-di-primo-grado-tecnologia-classe-ii-o3"})
+        iii = self.lookup(objective_id="secondaria-di-primo-grado-tecnologia-classe-iii-o5", **opts)
+        self.assertEqual({r["kind"] for r in iii}, {"EXPERIENCE","OBJECTIVE"})
+        self.assertEqual(self.lookup(objective_id="tech-s2-1", **opts), [])
+        self.assertEqual(self.lookup(objective_id="secondaria-di-primo-grado-tecnologia-classe-ii-o3", source_version="1.4", fingerprint="b355be71"), [])
+        with self.assertRaises(ValueError):
+            self.lookup(objective_id="tech-s2-1")
+
+    def test_objective_text_and_empty(self):
+        self.assertEqual(self.lookup("leggere processi produttivi", kind="OBJECTIVE")[0]["id"], "secondaria-di-primo-grado-tecnologia-classe-ii-o3")
+        self.assertEqual(self.lookup("come si fa"), [])
+        self.assertEqual(self.lookup("astronomia quantistica"), [])
+        self.assertEqual(self.lookup(""), [])
+
+    def test_public_deny_and_unknown_surface(self):
+        self.assertEqual(search_transversal(self.data, self.links, self.meta, "Missione 118", surface="PUBLIC"), [])
+        with self.assertRaises(ValueError):
+            search_transversal(self.data, self.links, self.meta, "Missione 118", surface="UNKNOWN")
+
+    def test_pinned_evidence_and_filter_validation(self):
+        bad = copy.deepcopy(self.meta)
+        bad["experienceLabels"][0]["title"] = "other"
+        with self.assertRaises(ValueError):
+            search_transversal(self.data, self.links, bad, "Missione", surface="EDITORIAL")
+        for kw in ({"kind":"OTHER"}, {"stage":"OTHER"}, {"source_version":"1.3"}):
+            with self.assertRaises(ValueError):
+                self.lookup("sistema", **kw)
+
+    def test_deterministic_no_mutation(self):
+        prior = copy.deepcopy((self.data, self.links, self.meta))
+        self.assertEqual(self.lookup("sistema tecnologico"), self.lookup("SISTEMA TECNOLOGICO"))
+        self.assertEqual(prior, (self.data, self.links, self.meta))
+
+
+def run_cli():
+    import argparse
+    import sys
+    parser = argparse.ArgumentParser(description="ATL-KB: ricerca editoriale candidata, nessuna pubblicazione")
+    parser.add_argument("--search", default="")
+    parser.add_argument("--surface", required=True, choices=["EDITORIAL", "PUBLIC"])
+    parser.add_argument("--kind", choices=sorted(SEARCH_KINDS))
+    parser.add_argument("--stage", choices=sorted(SEARCH_STAGES))
+    parser.add_argument("--objective-id")
+    parser.add_argument("--source-version")
+    parser.add_argument("--fingerprint")
+    args = parser.parse_args()
+    try:
+        result = search_transversal(
+            json.loads(FIXTURE_V2.read_text(encoding="utf-8")),
+            json.loads(LINK_EVIDENCE.read_text(encoding="utf-8")),
+            json.loads(SEARCH_EVIDENCE.read_text(encoding="utf-8")),
+            args.search, surface=args.surface, kind=args.kind, stage=args.stage,
+            objective_id=args.objective_id, source_version=args.source_version, fingerprint=args.fingerprint)
+    except ValueError as exc:
+        parser.error(str(exc))
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    import sys
+    if "--surface" in sys.argv or "--search" in sys.argv or "--objective-id" in sys.argv:
+        run_cli()
+    else:
+        unittest.main(verbosity=2)
