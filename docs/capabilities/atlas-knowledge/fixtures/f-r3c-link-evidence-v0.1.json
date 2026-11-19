@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "atlas.knowledge-link-evidence/v0.1",
+  "id": "CURR-REF-01/F-R3c",
+  "status": "EDITORIAL_REVIEW_CANDIDATE",
+  "purpose": "Ricevuta di riscontro; non catalogo, grafo persistente o contratto runtime",
+  "sources": [
+    {
+      "id": "KB",
+      "role": "TRAMA",
+      "revision": "62302690bf862c56c901424b99d73a791b3df304",
+      "blob": "016cb9e9bb66a976fb4bb6652cb0dce2001930de",
+      "path": "docs/capabilities/atlas-knowledge/fixtures/existing-atlas-candidate-v0.2.json"
+    },
+    {
+      "id": "M118",
+      "role": "TRAMA",
+      "revision": "c7b3e33462f33b12acf3b9eaf8c98bfb97e9066f",
+      "blob": "1b8c64fffdb0ca5aa0532c24796a720d08e43143",
+      "path": "docs/capabilities/atlas-percorsi/production/CURR-REF-01-F-R2-M118-v0.1.json"
+    },
+    {
+      "id": "CQP07",
+      "role": "TRAMA",
+      "revision": "99879f3e7edc4097f71a7e66060280a4be7b8e88",
+      "blob": "d95d2140775d9a04b6399f5ff425adc8bc999d6a",
+      "path": "docs/capabilities/atlas-percorsi/production/CQP-07-MISSIONE-118-V91-TEACHER-PREVIEW.md"
+    },
+    {
+      "id": "PORTFOLIO",
+      "role": "ATLAS",
+      "revision": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "blob": "17a3a883724531a99b2e4424dec172cc2e3b1d41",
+      "path": "governance/percorsi-portfolio.json"
+    },
+    {
+      "id": "PW_INFO",
+      "role": "TRAMA",
+      "revision": "99879f3e7edc4097f71a7e66060280a4be7b8e88",
+      "blob": "046b7740f7ce6c96c9aca11e846b49e2ee714a9e",
+      "path": "docs/capabilities/atlas-percorsi/pathways/PW-MISSING-INFORMATION-01/dossier-v1.md"
+    },
+    {
+      "id": "PW_CONSTRAINTS",
+      "role": "TRAMA",
+      "revision": "99879f3e7edc4097f71a7e66060280a4be7b8e88",
+      "blob": "33c36879766b56e1835f92628c0bb05f0575349a",
+      "path": "docs/capabilities/atlas-percorsi/pathways/PW-CONSTRAINTS-TRADEOFFS-01/dossier-v1.md"
+    },
+    {
+      "id": "SVG",
+      "role": "ATLAS",
+      "revision": "d2938378c9384c5122adb8379396dbad5b4385fe",
+      "blob": "ec1468d237a36d6802c1d870771609c3bbc299a1",
+      "locator": "Blob SVG collegato dal record r-tec-003 nel materiale della lezione dimostrativa; nessuna copia o URL pubblico aggiunto"
+    }
+  ],
+  "arena": {
+    "sourceBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+    "masterVersion": "1.3",
+    "fingerprint": "b355be71",
+    "authorityState": "PROVISIONAL_COMPLETE",
+    "atlasRevision": "2a681bcd4a611badcfa984b3b60b868eede21e55",
+    "sourceMatch": "CHECKED_ON_PINNED_REVISIONS_NOT_APPROVED"
+  },
+  "resourceReview": {
+    "resourceId": "r-tec-003",
+    "source": "SVG",
+    "status": "CONTENT_INSPECTED_NOT_QUALIFIED",
+    "observed": "Il diagramma distingue risorse, processi, risultati e impatti del sistema agricolo. Il file contiene anche un riferimento di contesto alla classe; serve una derivata editoriale non identificante prima di qualunque proposta pubblica.",
+    "mappingRef": "secondaria-di-primo-grado-tecnologia-classe-ii-o3",
+    "mappingState": "PROPOSED",
+    "rights": "UNRESOLVED",
+    "accessibility": "UNVERIFIED",
+    "publicationAuthorized": false
+  },
+  "experienceReviews": [
+    {
+      "id": "trama-missione-118-2026",
+      "version": "0.4.2-draft",
+      "manifestDigest": "c9dc1c6b909d8496dfaf1bc9f7cc43e9ab7e5b2511c0f68e64050e51ed4b5aa4",
+      "sourceRefs": [
+        "M118",
+        "CQP07"
+      ],
+      "registryState": "PRIVATE_PREVIEW_NOT_IN_PUBLIC_PORTFOLIO",
+      "runtimeAuthorized": false,
+      "publicationAuthorized": false,
+      "scope": "Proposta classe III secondaria; revisione umana aperta",
+      "objectiveRefs": [
+        "secondaria-di-primo-grado-tecnologia-classe-iii-o2",
+        "secondaria-di-primo-grado-tecnologia-classe-iii-o4",
+        "secondaria-di-primo-grado-tecnologia-classe-iii-o5",
+        "secondaria-di-primo-grado-tecnologia-classe-iii-o6",
+        "secondaria-di-primo-grado-tecnologia-classe-iii-o8"
+      ],
+      "axisRefs": [
+        "educazione-civica",
+        "ai-literacy"
+      ],
+      "objectiveState": "PROPOSED",
+      "conceptLinks": [
+        {
+          "conceptId": "k-system",
+          "outcomeRef": "O4",
+          "role": "RELATED_APPLICATION",
+          "status": "PROPOSED",
+          "reason": "Il compito propone un servizio digitale con bisogno, soluzione, possibile errore e verifica umana. Affinità con il concetto di sistema, non prova che il concetto sia insegnato o acquisito."
+        }
+      ],
+      "resourceLinks": [],
+      "review": "PENDING"
+    },
+    {
+      "id": "pw-missing-information-01",
+      "version": "1.1.0",
+      "sourceRefs": [
+        "PORTFOLIO",
+        "PW_INFO"
+      ],
+      "registryState": "REGISTERED_CANDIDATE",
+      "runtimeAuthorized": false,
+      "publicationAuthorized": false,
+      "scope": "Fascia primaria avanzata; percorso trasversale",
+      "objectiveRefs": [],
+      "axisRefs": [],
+      "objectiveState": "NOT_PROPOSED",
+      "conceptLinks": [],
+      "resourceLinks": [],
+      "review": "PENDING",
+      "withheldReason": "La verifica delle informazioni prima della decisione non coincide con la comprensione di un testo informativo; non forzare una mappatura disciplinare."
+    },
+    {
+      "id": "pw-constraints-tradeoffs-01",
+      "version": "1.1.0",
+      "sourceRefs": [
+        "PORTFOLIO",
+        "PW_CONSTRAINTS"
+      ],
+      "registryState": "REGISTERED_CANDIDATE",
+      "runtimeAuthorized": false,
+      "publicationAuthorized": false,
+      "scope": "Secondaria di primo grado candidata; percorso trasversale",
+      "objectiveRefs": [],
+      "axisRefs": [],
+      "objectiveState": "NOT_PROPOSED",
+      "conceptLinks": [],
+      "resourceLinks": [],
+      "review": "PENDING",
+      "withheldReason": "La progettazione sotto vincoli è un'analogia possibile, ma il dossier non basta a dimostrare un legame specifico con il sistema agricolo o la relativa risorsa."
+    }
+  ],
+  "invariants": {
+    "noTransitiveAuthority": true,
+    "noAutomaticMapping": true,
+    "noPublicProjection": true,
+    "noNewPortal": true,
+    "noRuntimeChange": true,
+    "noStudentData": true,
+    "noLearningClaim": true
+  }
+}
