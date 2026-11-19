@@ -7,8 +7,8 @@ Decisione del 19 novembre 2026. Priorità alla fonte Arena, separata dalla produ
 | E | Audit Arena | Matrice modello/fonte/raccordi/lacune | Consegnato |
 | E-R1a | Riscontro diretto master/export Tecnologia | Otto fasce confrontate, separazione contenuti/proiezione | Governance PASS |
 | E-R1b | Allineamento nei due regimi | Due catene motivate con riferimenti primari, annualizzazioni locali e stati distinti; nessun elemento inventato | Due esempi candidati; Governance PASS |
-| E-R2 | Nuclei e progressione | Nove nuclei riconciliati, continuità e approfondimento motivati; diagnosi del campo progressione e integrazioni 15–16 | E-R2a Governance PASS; E-R2b documentata |
-| E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Prossima priorità |
+| E-R2 | Nuclei e progressione | Nove nuclei riconciliati, continuità e approfondimento motivati; diagnosi del campo progressione e integrazioni 15–16 | E-R2a e E-R2b Governance PASS |
+| E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Documentata; qualificazione da verificare |
 | E-R4 | Validazione professionale | Proposte tracciate nel processo esistente, fonti verificate, decisioni dei gruppi e revisione verticale separate | Richiede riesame umano |
 | G | Docente OS e Registro Docente | Audit dei contratti e un caso UdA/evidenze/giudizio docente; no dati individuali nell'infrastruttura comune | Pianificata |
 | H | Recepimento | Integrazione deliberata per prodotto, compatibilità, prove e autorizzazioni distinte | Non autorizzata |
@@ -36,3 +36,7 @@ F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce
 - [Continuità e riesame](curr-ref-01-e-r2b-continuity.md) — [evidenze strutturate](curr-ref-01-e-r2b-continuity.json). Riletta la bozza disciplinare: tre riscontri parziali aggiuntivi, sei ancora non specificamente dimostrati, distinzione nove nuclei/tre ambiti/asse locale, raccordo V primaria–I secondaria proposto.
 - E-R2a Governance PASS. E-R2b in qualificazione. Il produttore ripetibile del bundle non è ancora localizzato: non modificare il bundle senza ricostruzione della provenienza. La difformità di versione sul frontespizio della bozza resta aperta.
 - E-R3 è la prossima priorità documentale; E-R4 conserva le questioni aperte senza presumere approvazione professionale.
+
+## Ricevuta E-R3
+- [Specificità dell'infanzia](curr-ref-01-e-r3-infanzia.md) — [evidenze strutturate](curr-ref-01-e-r3-infanzia.json): cinque campi, 15/15 fasce coincidenti con il master, dieci raccordi di campo documentati ma non strutturati nel bundle; competenze di campo non soglie annuali. Proposta di raccordo osservativo dalla fascia cinque anni alla primaria, senza anticipazione disciplinare.
+- E-R2b Governance PASS. E-R3 documentata, quattro nuove prove, qualificazione da verificare. Prossima priorità E-R4: predisporre riesame professionale, senza dichiarare validazione umana o intervenire sulla fonte.
