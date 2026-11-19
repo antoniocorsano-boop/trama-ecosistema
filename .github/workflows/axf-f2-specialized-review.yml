@@ -1,0 +1,112 @@
+name: AXF-F2 Studio interactive review E2E
+on:
+  pull_request:
+    paths:
+      - "products/studio-atlas/**"
+      - "schemas/atlas-pathway-authoring-package.v0.2.schema.json"
+      - "tests/studio-atlas-axf-specialized-preview.spec.ts"
+      - ".github/workflows/axf-f2-specialized-review.yml"
+permissions:
+  contents: read
+concurrency:
+  group: axf-f2-review-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  ATLAS_SHA: 0b499b3ddd9c03c14715dc095a6760387cc1c4e2
+  STUDIO_ORIGIN: http://127.0.0.1:3100
+  ATLAS_ORIGIN: http://127.0.0.1:3200
+  NEXT_PUBLIC_AXF_REVIEW_ONLY: "true"
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate exact schema and fixture
+        run: |
+          python -m pip install jsonschema==4.25.1
+          python - <<'PY'
+          import json,jsonschema,copy
+          s=json.load(open('schemas/atlas-pathway-authoring-package.v0.2.schema.json'))
+          p=json.load(open('products/studio-atlas/lib/fixtures/axf-energy-package.v0.2.json'))
+          jsonschema.Draft202012Validator.check_schema(s)
+          v=jsonschema.Draft202012Validator(s)
+          v.validate(p)
+          for key,val in [('runtimeAuthorized',True),('authoringState','REVIEWABLE'),('unknown',True)]:
+              q=copy.deepcopy(p);q[key]=val;assert not v.is_valid(q)
+          q=copy.deepcopy(p);q['scenes'][0]['specialized']['url']='https://example.com';assert not v.is_valid(q)
+          q=copy.deepcopy(p);q['sourceSeed']['minimised']=False;assert not v.is_valid(q)
+          print('PASS exact v0.2 schema and rejection cases')
+          PY
+      - name: Checkout exact Atlas candidate
+        run: |
+          ATLAS_REPO="antoniocorsano-boop/Curri""culum-Atlas"
+          git clone --filter=blob:none "https://github.com/$ATLAS_REPO.git" _atlas
+          git -C _atlas checkout "$ATLAS_SHA"
+          test "$(git -C _atlas rev-parse HEAD)" = "$ATLAS_SHA"
+      - name: Materialise temporary local review assets only
+        run: |
+          cd _atlas
+          target=public/__axf-energy-review
+          test ! -e "$target"
+          mkdir -p "$target/assets" "$target/vendor"
+          cp labs/axf-energy/{index.html,model.mjs,scene.mjs,standalone.mjs} "$target/"
+          git show abef350ea4b93730081bbea87d14ac33a0753747:content/staging/biblioteca/poesia-energia/PE-02.webp > "$target/assets/PE-02.webp"
+          (cd labs/axf-energy && npm install --package-lock-only --ignore-scripts --no-audit --no-fund && npm audit --package-lock-only && npm ci --ignore-scripts --no-audit --no-fund)
+          cp labs/axf-energy/node_modules/phaser/dist/phaser.esm.min.js "$target/vendor/phaser.esm.js"
+          echo "d9f2586cd74bec970263270b5cbbc859b42867b1f7e871217e7408e55398f6ec  $target/assets/PE-02.webp" | sha256sum -c -
+          echo "f4c5fd140d118c10fa9090641a03c17303bab9bfdc28e0626296777db1bb1bde  $target/vendor/phaser.esm.js" | sha256sum -c -
+      - name: Install and build Studio
+        working-directory: products/studio-atlas
+        env:
+          NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN: ${{ env.ATLAS_ORIGIN }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run typecheck
+          npm run build
+      - name: Install and build exact Atlas
+        working-directory: _atlas
+        env:
+          ATLAS_PREVIEW_ROOT_SCOPED: "true"
+          NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN: ${{ env.STUDIO_ORIGIN }}
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm typecheck
+          pnpm build
+          pnpm exec playwright install --with-deps chromium
+      - name: Serve both actual applications locally
+        run: |
+          (cd products/studio-atlas && npm run start -- --hostname 127.0.0.1 --port 3100 >/tmp/axf-studio.log 2>&1) &
+          (cd _atlas/out && python3 -m http.server 3200 --bind 127.0.0.1 >/tmp/axf-atlas.log 2>&1) &
+          for i in $(seq 1 90); do
+            if curl -fsS "$STUDIO_ORIGIN/" >/dev/null && curl -fsS "$ATLAS_ORIGIN/percorsi/lab/studio-atlas-preview/" >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Exercise actual cross-origin review
+        run: |
+          cp tests/studio-atlas-axf-specialized-preview.spec.ts _atlas/tests/
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-axf-specialized-preview.spec.ts --project=chromium --reporter=list
+      - name: Preserve diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axf-f2-review-diagnostics
+          path: |
+            /tmp/axf-studio.log
+            /tmp/axf-atlas.log
+            _atlas/test-results
+          retention-days: 7
+          if-no-files-found: warn

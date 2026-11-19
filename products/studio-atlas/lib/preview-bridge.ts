@@ -6,6 +6,7 @@ import {
   buildStudioAtlasReviewPreviewSnapshot,
 } from "./preview";
 import type { PathwayProject } from "./model";
+import {compileSpecializedReviewSnapshot} from "./specialized-review-preview";
 import {loadEduTwin} from "./edutwin-archive";
 import {listActivityDrafts} from "./activity-drafts";
 import {buildEduTwinIllustratedReviewSnapshot,type LocalStoryReview} from "./edutwin-illustrated-preview";
@@ -14,8 +15,8 @@ const SNAPSHOT_TYPE = "STUDIO_ATLAS_PREVIEW_SNAPSHOT";
 const ACK_TYPE = "STUDIO_ATLAS_PREVIEW_ACK";
 const SNAPSHOT_RETRY_LIMIT = 30;
 
-export type PreviewBridgeResult =
-  | { status: "OPENED"; snapshot: StudioAtlasPreviewSnapshot }
+export type PreviewBridgeResult<T = StudioAtlasPreviewSnapshot> =
+  | { status: "OPENED"; snapshot: T }
   | { status: "NOT_CONFIGURED" }
   | { status: "POPUP_BLOCKED" }
   | { status: "TIMEOUT" };
@@ -58,7 +59,11 @@ async function openAtlasPreview(
 ): Promise<PreviewBridgeResult> {
   return openSnapshotPreview(()=>purpose==="HUMAN_PRODUCT_REVIEW"?buildStudioAtlasReviewPreviewSnapshot(project):buildStudioAtlasPreviewSnapshot(project));
 }
-async function openSnapshotPreview(build:()=>Promise<StudioAtlasPreviewSnapshot>):Promise<PreviewBridgeResult>{
+export async function openSpecializedReviewPreview(pkg:unknown):Promise<PreviewBridgeResult<Awaited<ReturnType<typeof compileSpecializedReviewSnapshot>>>> {
+  if(process.env.NEXT_PUBLIC_AXF_REVIEW_ONLY!=="true")return {status:"NOT_CONFIGURED"};
+  return openSnapshotPreview(()=>compileSpecializedReviewSnapshot(pkg));
+}
+async function openSnapshotPreview<T extends {snapshotId:string}>(build:()=>Promise<T>):Promise<PreviewBridgeResult<T>>{
   const atlasOrigin = atlasPreviewOrigin();
   if (!atlasOrigin) return { status: "NOT_CONFIGURED" };
 
@@ -69,7 +74,7 @@ async function openSnapshotPreview(build:()=>Promise<StudioAtlasPreviewSnapshot>
   const previewWindow: Window = openedWindow;
 
   const channel = randomChannel();
-  let snapshot: StudioAtlasPreviewSnapshot;
+  let snapshot: T;
   try {
     snapshot = await build();
   } catch (error) {
@@ -81,7 +86,7 @@ async function openSnapshotPreview(build:()=>Promise<StudioAtlasPreviewSnapshot>
   previewUrl.searchParams.set("channel", channel);
 
   // Register the ACK listener before navigating the popup.
-  return await new Promise<PreviewBridgeResult>((resolve) => {
+  return await new Promise<PreviewBridgeResult<T>>((resolve) => {
     let settled = false;
     let retry: number | null = null;
     let attempts = 0;
@@ -101,7 +106,7 @@ async function openSnapshotPreview(build:()=>Promise<StudioAtlasPreviewSnapshot>
 
     const timeout = window.setTimeout(() => finish({ status: "TIMEOUT" }), 12000);
 
-    function finish(result: PreviewBridgeResult) {
+    function finish(result: PreviewBridgeResult<T>) {
       if (settled) return;
       settled = true;
       window.clearTimeout(timeout);

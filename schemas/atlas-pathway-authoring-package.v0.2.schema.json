@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/atlas-pathway-authoring-package.v0.2.schema.json",
+  "title": "Atlas Pathway Authoring Package v0.2 — specialized review candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "packageId",
+    "packageVersion",
+    "pathwayId",
+    "title",
+    "authoringState",
+    "sourceSeed",
+    "publicationCandidate",
+    "runtimeAuthorized",
+    "scenes"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "atlas.pathway-authoring-package/v0.2"
+    },
+    "packageId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "packageVersion": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "pathwayId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000,
+      "pattern": "\\S"
+    },
+    "authoringState": {
+      "const": "AUTHORING"
+    },
+    "sourceSeed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "minimised"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "CURRICOLO_TARGET",
+            "PLAIN_IDEA",
+            "DOCENTE_OS_ACTIVITY",
+            "EXISTING_PATHWAY",
+            "EXISTING_STORY_WORLD",
+            "OTHER_GOVERNED_SOURCE"
+          ]
+        },
+        "minimised": {
+          "const": true
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sceneId",
+          "order",
+          "purpose",
+          "learnerVisibleSituation",
+          "learnerActions",
+          "consequences",
+          "kind",
+          "interaction",
+          "nextSceneRefs"
+        ],
+        "properties": {
+          "sceneId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 32
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000,
+            "pattern": "\\S"
+          },
+          "learnerVisibleSituation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000,
+            "pattern": "\\S"
+          },
+          "learnerActions": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000,
+              "pattern": "\\S"
+            }
+          },
+          "consequences": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000,
+              "pattern": "\\S"
+            }
+          },
+          "nextSceneRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,63}$"
+            },
+            "maxItems": 1,
+            "uniqueItems": true
+          },
+          "interaction": {
+            "type": "string",
+            "enum": [
+              "SUMMARY",
+              "SPECIALIZED"
+            ]
+          },
+          "specialized": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "rendererId",
+              "version"
+            ],
+            "properties": {
+              "rendererId": {
+                "const": "energy-lamp"
+              },
+              "version": {
+                "const": 1
+              }
+            }
+          },
+          "kind": {
+            "enum": [
+              "SCENE",
+              "TRANSFER"
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "interaction"
+              ],
+              "properties": {
+                "interaction": {
+                  "const": "SPECIALIZED"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "specialized",
+                "nextSceneRefs"
+              ],
+              "properties": {
+                "nextSceneRefs": {
+                  "minItems": 1,
+                  "maxItems": 1
+                },
+                "kind": {
+                  "const": "SCENE"
+                }
+              },
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "choices"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "world"
+                    ]
+                  }
+                ]
+              }
+            },
+            "else": {
+              "not": {
+                "required": [
+                  "specialized"
+                ]
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "TRANSFER"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "interaction": {
+                  "const": "SUMMARY"
+                },
+                "nextSceneRefs": {
+                  "maxItems": 0
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "nextSceneRefs": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        ]
+      },
+      "contains": {
+        "properties": {
+          "interaction": {
+            "const": "SPECIALIZED"
+          }
+        },
+        "required": [
+          "interaction"
+        ]
+      },
+      "minContains": 1,
+      "maxContains": 1,
+      "maxItems": 32,
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "kind": {
+                "const": "TRANSFER"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "publicationCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision"
+      ],
+      "properties": {
+        "decision": {
+          "const": "DRAFT"
+        }
+      }
+    },
+    "runtimeAuthorized": {
+      "const": false
+    }
+  }
+}
