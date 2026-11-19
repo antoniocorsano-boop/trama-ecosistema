@@ -44,6 +44,12 @@ Per una risorsa di orientamento (es. Biblioteca), distinguere la capacità di tr
 
 La scheda non contiene nominativi, valutazioni individuali o dati di sessione. Le evidenze sono progettate come descrizioni generiche; la documentazione professionale individuale resta nei domini autorizzati. Nessun esito tecnico può assegnare un giudizio umano o concedere pubblicazione.
 
+### Riesame dei dodici principi (F-R4, requisito candidato)
+
+Usare il [riscontro F-R4](../production/CURR-REF-01-F-R4-review-v0.1.json) come esempio di riesame, non come fonte di approvazione. Per ogni principio registrare riferimento al dossier e versione, riscontro, limite e azione successiva. Stati documentali: DOCUMENTED (elemento descritto), PARTIAL (incompleto), GAP (lacuna esplicita), NOT_APPLICABLE_SCOPE (motivazione circoscritta all'ambito). Nessuno equivale a PASS umano, efficacia o autorizzazione. Non sommare gli stati in un punteggio pedagogico.
+
+Raccordare le evidenze alle fasi W1/W2/W5/W6/W6A/W8/W9 e ai controlli già presenti PURPOSE, SCIENCE, ACCESSIBILITY, USE e CURRICOLO. I controlli STORY, WRITING, VISUAL, voce, integrità, sicurezza, diritti e PUBLICATION rimangono indipendenti e invariati. La mappa dei principi sostiene il riesame, non emette ricevute per questi controlli. Per i percorsi trasversali non inventare riferimenti disciplinari; un eventuale innesto in una UdA richiede una decisione distinta. Le lacune di autorità Arena non possono essere colmate con l'esito del controllo automatico.
+
 ## 2. Evidence register
 
 For each material source record:
