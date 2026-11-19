@@ -698,7 +698,7 @@ class TransversalSearchTests(unittest.TestCase):
         self.assertEqual(self.lookup("sistema tecnologico", stage="Primaria"), [])
         self.assertEqual(self.lookup("testo informativo", stage="Primaria", kind="RESOURCE")[0]["id"], "r-ita-001")
 
-    def test_direct_experience_is_not_curricular_binding(self):
+    def test_direct_experience_is_not_curricolo_binding(self):
         r = self.lookup("Prima di decidere, cosa manca?", kind="EXPERIENCE")[0]
         self.assertEqual(r["id"], "pw-missing-information-01")
         self.assertEqual(r["objectiveRefs"], [])
