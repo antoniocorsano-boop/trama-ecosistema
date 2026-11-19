@@ -28,7 +28,7 @@ def keys(value: object, expected: set[str], label: str) -> None:
 
 
 def git_blob_sha(data: bytes) -> str:
-    content = b"blob " + str(len(data)).encode("ascii") + b"\\x00" + data
+    content = b"blob " + str(len(data)).encode("ascii") + bytes([0]) + data
     return hashlib.sha1(content).hexdigest()
 
 
