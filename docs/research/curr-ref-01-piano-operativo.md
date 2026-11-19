@@ -8,8 +8,8 @@ Decisione del 19 novembre 2026. Priorità alla fonte Arena, separata dalla produ
 | E-R1a | Riscontro diretto master/export Tecnologia | Otto fasce confrontate, separazione contenuti/proiezione | Governance PASS |
 | E-R1b | Allineamento nei due regimi | Due catene motivate con riferimenti primari, annualizzazioni locali e stati distinti; nessun elemento inventato | Due esempi candidati; Governance PASS |
 | E-R2 | Nuclei e progressione | Nove nuclei riconciliati, continuità e approfondimento motivati; diagnosi del campo progressione e integrazioni 15–16 | E-R2a e E-R2b Governance PASS |
-| E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Documentata; qualificazione da verificare |
-| E-R4 | Validazione professionale | Proposte tracciate nel processo esistente, fonti verificate, decisioni dei gruppi e revisione verticale separate | Richiede riesame umano |
+| E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Governance PASS |
+| E-R4 | Validazione professionale | Proposte tracciate nel processo esistente, fonti verificate, decisioni dei gruppi e revisione verticale separate | Fascicolo di raccordo predisposto; validazione umana ancora aperta |
 | G | Docente OS e Registro Docente | Audit dei contratti e un caso UdA/evidenze/giudizio docente; no dati individuali nell'infrastruttura comune | Pianificata |
 | H | Recepimento | Integrazione deliberata per prodotto, compatibilità, prove e autorizzazioni distinte | Non autorizzata |
  
@@ -40,3 +40,9 @@ F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce
 ## Ricevuta E-R3
 - [Specificità dell'infanzia](curr-ref-01-e-r3-infanzia.md) — [evidenze strutturate](curr-ref-01-e-r3-infanzia.json): cinque campi, 15/15 fasce coincidenti con il master, dieci raccordi di campo documentati ma non strutturati nel bundle; competenze di campo non soglie annuali. Proposta di raccordo osservativo dalla fascia cinque anni alla primaria, senza anticipazione disciplinare.
 - E-R2b Governance PASS. E-R3 documentata, quattro nuove prove, qualificazione da verificare. Prossima priorità E-R4: predisporre riesame professionale, senza dichiarare validazione umana o intervenire sulla fonte.
+
+## Ricevuta E-R4 — avvio del riesame professionale
+- [Fascicolo di raccordo con Arena](curr-ref-01-e-r4-professional-review.md) e [ricevuta di qualificazione](curr-ref-01-e-r4-professional-review.json): cinque schede R2 realmente esistenti nel pilota di Tecnologia, sei ulteriori questioni da registrare tramite processo Arena, tre questioni tecniche/documentali separate. Tutte le decisioni umane restano OPEN; nessun caso o trigger aperto automaticamente.
+- Contratto esistente Arena CURRICULUM_LIFECYCLE@1.2.0 e percorso H1→H6; preservare ESAMINA/CONDIVIDI/CONFRONTA/REGISTRA ESITO. TeamProfessionalOutcome non equivale a decisione istituzionale; validazione verticale e iter dell'istituto successivi, mai inferiti.
+- E-R3 Governance PASS. Nuove prove E-R4 inserite; qualificazione da verificare. Nessun master parallelo o sostituzione del sistema esistente.
+- Prossimo intervento operativo, previa effettiva autorizzazione/identità: sottoporre le cinque schede esistenti al Dipartimento e preparare registrazione delle altre questioni. La conclusione E-R4 resta subordinata a esiti professionali verificabili.
