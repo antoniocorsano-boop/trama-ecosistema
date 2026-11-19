@@ -1,0 +1,222 @@
+{
+  "schemaVersion": "trama.raccordo-atlas-gateway-evidence/v0.1",
+  "id": "CURR-REF-01/F-R3a",
+  "status": "DESIGN_CANDIDATE_READ_ONLY",
+  "purpose": "Raccordo documentale con i portali esistenti; non configurazione di navigazione",
+  "sources": [
+    {
+      "id": "AG02",
+      "repositoryRole": "ATLAS",
+      "pr": 104,
+      "observedHead": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "path": "docs/atlas-gateway/destinations.v1.json",
+      "blob": "beb9f78438e0037f99088ec8939991522bd38265"
+    },
+    {
+      "id": "AG03",
+      "repositoryRole": "ATLAS",
+      "pr": 145,
+      "observedHead": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "path": "src/features/atlas-gateway/gateway-policy.ts",
+      "blob": "fe1d43c5622b1b7889ad9bb7c188373fddd9bebf"
+    },
+    {
+      "id": "GATEWAY",
+      "repositoryRole": "ATLAS",
+      "pr": 145,
+      "observedHead": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "path": "src/features/atlas-gateway/gateway-candidate.tsx",
+      "blob": "0e7d3db1c974128fe5540fb7fb16117832abd468"
+    },
+    {
+      "id": "HUB",
+      "repositoryRole": "ATLAS",
+      "pr": 145,
+      "observedHead": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "path": "src/features/atlas-gateway/experience-library.tsx",
+      "blob": "2290012681b299a28dee57496e5bb42a5d1e323d"
+    },
+    {
+      "id": "HUB_ROUTE",
+      "repositoryRole": "ATLAS",
+      "pr": 145,
+      "observedHead": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "path": "src/app/esperienze/page.tsx",
+      "blob": "8e83140aa5d55c3f04df6244aa21c6909c3ec9bb"
+    },
+    {
+      "id": "LOADER",
+      "repositoryRole": "ATLAS",
+      "pr": 145,
+      "observedHead": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "path": "src/features/pathways/load-public-pathways.ts",
+      "blob": "4818bbf9d16923b2e992bf83731e00ba922d4311"
+    },
+    {
+      "id": "PORTFOLIO",
+      "repositoryRole": "ATLAS",
+      "pr": 145,
+      "observedHead": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "path": "governance/percorsi-portfolio.json",
+      "blob": "17a3a883724531a99b2e4424dec172cc2e3b1d41"
+    },
+    {
+      "id": "KB",
+      "repositoryRole": "TRAMA",
+      "pr": 336,
+      "observedHead": "3cd7f034b2cbdd8da38af56c1c362f9a8dc3a103",
+      "path": "docs/capabilities/atlas-knowledge/fixtures/existing-atlas-candidate-v0.1.json",
+      "blob": "951a3e304f92a3e86efca26adf9b17bac9b2005e"
+    },
+    {
+      "id": "KB_SCHEMA",
+      "repositoryRole": "TRAMA",
+      "pr": 336,
+      "observedHead": "3cd7f034b2cbdd8da38af56c1c362f9a8dc3a103",
+      "path": "schemas/atlas-knowledge-candidate.v0.1.schema.json",
+      "blob": "fc15f3b03632d356cfb966b8f3b6aa218f3d4078"
+    },
+    {
+      "id": "AWC",
+      "repositoryRole": "ATLAS",
+      "pr": 136,
+      "observedHead": "fc2deefe44ed45a53e77086532268e919549c777",
+      "path": "ops/atlas-scene-package/awc-catalog.json",
+      "blob": "9bedbc740c9072464c033807d4d39067b71088c0"
+    }
+  ],
+  "observations": {
+    "portalIds": [
+      "curricolo",
+      "esperienze",
+      "studio"
+    ],
+    "portalResolver": "AG03",
+    "sceneAndAccessibleEntry": "GATEWAY",
+    "hubPreviewOnly": true,
+    "studioDestinationBlocked": true,
+    "authorizedPathwayCount": 0,
+    "registeredPathwayCount": 2,
+    "knowledgeCandidateConcepts": 4,
+    "knowledgeCandidateResources": 5,
+    "knowledgeCandidateRelations": 1,
+    "recordOnlyResources": 5,
+    "rightsUnresolvedResources": 5,
+    "accessibilityUnverifiedResources": 5,
+    "unresolvedHistoricalObjectiveResourceIds": [
+      "r-tec-001",
+      "r-tec-002",
+      "r-tec-003"
+    ],
+    "knowledgePublicEligibleCount": 0,
+    "worldCatalogMode": "PLAN_ONLY",
+    "worldReferenceId": "library.reference"
+  },
+  "dependencies": [
+    {
+      "repositoryRole": "ATLAS",
+      "pr": 143,
+      "head": "0287fb3f0d1a65fa3241e53b2f615fb904785307",
+      "state": "OPEN_NOT_MERGED",
+      "role": "Identità di proiezione"
+    },
+    {
+      "repositoryRole": "ATLAS",
+      "pr": 144,
+      "head": "2a681bcd4a611badcfa984b3b60b868eede21e55",
+      "state": "OPEN_NOT_MERGED",
+      "role": "Fedeltà semantica"
+    },
+    {
+      "repositoryRole": "TRAMA",
+      "pr": 336,
+      "head": "3cd7f034b2cbdd8da38af56c1c362f9a8dc3a103",
+      "state": "OPEN_NOT_MERGED",
+      "role": "Patrimonio conoscitivo"
+    },
+    {
+      "repositoryRole": "ATLAS",
+      "pr": 136,
+      "head": "fc2deefe44ed45a53e77086532268e919549c777",
+      "state": "OPEN_NOT_MERGED",
+      "role": "Composizione mondi"
+    },
+    {
+      "repositoryRole": "ATLAS",
+      "pr": 145,
+      "head": "bfbbd3082a00573eab67744d76575034abc7de16",
+      "state": "OPEN_NOT_MERGED",
+      "role": "Produzione artistica"
+    }
+  ],
+  "responsibilities": [
+    {
+      "id": "Arena",
+      "owns": "Curricolo e autorità dei riferimenti"
+    },
+    {
+      "id": "ATL-KB",
+      "owns": "Concetti, relazioni e associazioni editoriali versionate"
+    },
+    {
+      "id": "Studio Atlas",
+      "owns": "Progettazione, produzione e qualificazione delle esperienze"
+    },
+    {
+      "id": "AG-02/AG-03",
+      "owns": "Identità dei tre portali, risoluzione e navigazione"
+    },
+    {
+      "id": "ASC/AWC",
+      "owns": "Composizione parametrica e produzione dei mondi"
+    }
+  ],
+  "next": [
+    {
+      "id": "F-R3b",
+      "scope": "Riallineamento dei cinque record ATL-KB esistenti; nessuna pubblicazione",
+      "requires": [
+        "KB",
+        "KB_SCHEMA"
+      ]
+    },
+    {
+      "id": "F-R3c",
+      "scope": "Raccordi motivati a riferimenti Arena e risorse autorizzabili; versione e provenienza",
+      "requires": [
+        "KB",
+        "AG03"
+      ]
+    },
+    {
+      "id": "F-R3d",
+      "scope": "Ricerca di sola lettura nel portale esistente, dopo qualificazione della proiezione",
+      "requires": [
+        "HUB",
+        "LOADER",
+        "PORTFOLIO"
+      ]
+    },
+    {
+      "id": "F-R3e",
+      "scope": "Convergenza della candidata 3D e delle destinazioni; prova browser e alternativa accessibile",
+      "requires": [
+        "GATEWAY",
+        "AG03",
+        "AWC"
+      ]
+    }
+  ],
+  "boundaries": {
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "newPortal": false,
+    "newResolver": false,
+    "newCatalog": false,
+    "changesMaster": false,
+    "changesRuntime": false,
+    "changesArena": false,
+    "studentData": false,
+    "automaticApproval": false
+  }
+}
