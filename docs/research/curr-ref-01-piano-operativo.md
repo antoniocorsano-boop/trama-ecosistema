@@ -10,7 +10,7 @@ Decisione del 19 novembre 2026. Priorità alla fonte Arena, separata dalla produ
 | E-R2 | Nuclei e progressione | Nove nuclei riconciliati, continuità e approfondimento motivati; diagnosi del campo progressione e integrazioni 15–16 | E-R2a e E-R2b Governance PASS |
 | E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Governance PASS |
 | E-R4 | Validazione professionale | Proposte tracciate nel processo esistente, fonti verificate, decisioni dei gruppi e revisione verticale separate | Fascicolo di raccordo predisposto; validazione umana ancora aperta |
-| G | Docente OS e Registro Docente | Audit dei contratti e un caso UdA/evidenze/giudizio docente; no dati individuali nell'infrastruttura comune | Pianificata |
+| G | Docente OS e Registro Docente | Audit dei contratti e un caso UdA/evidenze/giudizio docente; no dati individuali nell'infrastruttura comune | G01 documentato; G02 successiva |
 | H | Recepimento | Integrazione deliberata per prodotto, compatibilità, prove e autorizzazioni distinte | Non autorizzata |
  
 F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce in LBC-03 dopo LBC-01/02; F-R4 prosegue separatamente nel riesame delle esperienze. Non riaprire la linea artistica da questo piano.
@@ -50,3 +50,8 @@ F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce
 ## E-R4b — Verifica dell'accesso alle schede in Arena
 - [Arena PR #353](https://github.com/antoniocorsano-boop/CurManLight_arena/pull/353) — verifica della sezione Riesame e correzione circoscritta del caso in cui la classe non sia stata selezionata, senza scelta predefinita. Esistono già cinque schede R2 di Tecnologia classe I, una scheda pilota classe II e nessuna scheda di riesame classe III; mantenere distinte le tre annualità. La navigazione resta nello stesso prodotto e nei medesimi ruoli professionali.
 - `E-R4b` è una candidata tecnica: non equivale a validazione professionale, non apre casi né muta il master. La qualificazione della PR Arena e un'eventuale prova con account autorizzato devono restare distinte dall'audit statico. Gli esiti reali del dipartimento continuano a essere richiesti per completare E-R4.
+
+## Ricevuta G01 — Raccordo didattica e valutazione
+- [Audit dei contratti e caso reale di progettazione B25](curr-ref-01-g01-uda-valutazione.md) — [evidenza strutturata](curr-ref-01-g01-uda-valutazione.json). Esaminati gli effettivi produttori di Docente OS (piano CAN-PLAN-1, CAN-UDA-1-05, proiezione B25 approvata) e i consumatori / contratti locali di Registro Docente. Il caso illustra esclusivamente *evidenze attese* e *criteri proposti*, senza dati individuali, voti, importazione o trasferimenti.
+- Il master Arena 1.3 è provvisorio: l'anteprima in Registro non equivale a un riferimento autorevole nella programmazione. Il risolutore richiede APPROVED e VIGENTE; non forzare il collegamento ad Arena e non usare un handoff destinato a Docente OS come contratto di Registro.
+- G02: qualificare un raccordo editoriale e di provenienza, con soli dati sintetici e revisioni esatte; qualsiasi interfacciamento esecutivo richiederà progetto e decisione separati. Il riesame E-R4 permane umano.
