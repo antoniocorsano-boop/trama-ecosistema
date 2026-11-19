@@ -1,0 +1,443 @@
+{
+  "schemaVersion": "trama.pedagogical-review-evidence/v0.1",
+  "id": "CURR-REF-01/F-R4",
+  "status": "DOCUMENTARY_REVIEW_CANDIDATE",
+  "purpose": "Riesame dei dossier, non decisione di qualifica",
+  "sources": [
+    {
+      "id": "REF",
+      "path": "governance/pedagogy/curr-ref-01-v0.1.json",
+      "blob": "228673c5f569d022722ff532ddd533ce7982f2b2",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    },
+    {
+      "id": "TEMPLATE",
+      "path": "docs/capabilities/atlas-percorsi/templates/PATHWAY-DOSSIER-TEMPLATE.md",
+      "blob": "674c31b2129430cfaa38a7fb4af29211444694b7",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    },
+    {
+      "id": "WORKFLOW",
+      "path": "docs/capabilities/atlas-percorsi/architecture/productive-pathway-workflow-v1.md",
+      "blob": "6cb78da772585fc96a83d23b5670ce914af18ac9",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    },
+    {
+      "id": "QUALITY",
+      "path": "products/studio-atlas/lib/content-quality-progress.ts",
+      "blob": "b927c4143b04804d6b4d3bb271b653e24fae032c",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    },
+    {
+      "id": "M118",
+      "path": "docs/capabilities/atlas-percorsi/production/CURR-REF-01-F-R2-M118-v0.1.json",
+      "blob": "1b8c64fffdb0ca5aa0532c24796a720d08e43143",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    },
+    {
+      "id": "CQP07",
+      "path": "docs/capabilities/atlas-percorsi/production/CQP-07-MISSIONE-118-V91-TEACHER-PREVIEW.md",
+      "blob": "d95d2140775d9a04b6399f5ff425adc8bc999d6a",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    },
+    {
+      "id": "INFO",
+      "path": "docs/capabilities/atlas-percorsi/pathways/PW-MISSING-INFORMATION-01/dossier-v1.md",
+      "blob": "046b7740f7ce6c96c9aca11e846b49e2ee714a9e",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    },
+    {
+      "id": "VINCOLI",
+      "path": "docs/capabilities/atlas-percorsi/pathways/PW-CONSTRAINTS-TRADEOFFS-01/dossier-v1.md",
+      "blob": "33c36879766b56e1835f92628c0bb05f0575349a",
+      "revision": "1b77ab60760ced8ffdbd9d9ae7af18c46675c55c"
+    }
+  ],
+  "principleCrosswalk": [
+    {
+      "principle": "CURR-REF-01/P01",
+      "phase": "W1",
+      "check": "CURRICOLO",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P02",
+      "phase": "W1",
+      "check": "PURPOSE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P03",
+      "phase": "W6",
+      "check": "PURPOSE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P04",
+      "phase": "W2",
+      "check": "SCIENCE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P05",
+      "phase": "W9",
+      "check": "CURRICOLO",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P06",
+      "phase": "W8",
+      "check": "PURPOSE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P07",
+      "phase": "W6A",
+      "check": "USE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P08",
+      "phase": "W8",
+      "check": "USE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P09",
+      "phase": "W9",
+      "check": "PURPOSE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P10",
+      "phase": "W5",
+      "check": "ACCESSIBILITY",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P11",
+      "phase": "W8",
+      "check": "USE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    },
+    {
+      "principle": "CURR-REF-01/P12",
+      "phase": "W2",
+      "check": "SCIENCE",
+      "scope": "Supporto al riesame; non emissione di esito"
+    }
+  ],
+  "states": [
+    "DOCUMENTED",
+    "PARTIAL",
+    "GAP",
+    "NOT_APPLICABLE_SCOPE"
+  ],
+  "cases": [
+    {
+      "id": "trama-missione-118-2026",
+      "version": "0.4.2-draft",
+      "manifestDigest": "c9dc1c6b909d8496dfaf1bc9f7cc43e9ab7e5b2511c0f68e64050e51ed4b5aa4",
+      "kind": "DISCIPLINARY_CANDIDATE",
+      "evidenceScope": "F-R2 dossier e ricevuta tecnica precedente, non nuova prova del pacchetto",
+      "rows": [
+        {
+          "principle": "CURR-REF-01/P01",
+          "status": "GAP",
+          "locator": "M118/alignment.unresolved",
+          "finding": "Profilo non raccordato.",
+          "next": "Verifica E-R1 in Arena; non inventare il collegamento."
+        },
+        {
+          "principle": "CURR-REF-01/P02",
+          "status": "PARTIAL",
+          "locator": "M118/audience, phases",
+          "finding": "Classe III candidata; nessuna progressione verticale documentata.",
+          "next": "Raccordare prerequisiti e progressione di fascia."
+        },
+        {
+          "principle": "CURR-REF-01/P03",
+          "status": "PARTIAL",
+          "locator": "M118/phases B–D",
+          "finding": "Ritorno sulle scelte e applicazione nuova; non prova di spirale verticale.",
+          "next": "Indicare aumento di complessità e prerequisiti."
+        },
+        {
+          "principle": "CURR-REF-01/P04",
+          "status": "PARTIAL",
+          "locator": "M118/outcomes O1–O4",
+          "finding": "Quattro apprendimenti e saperi selezionati; motivazione della selezione incompleta.",
+          "next": "Riesaminare essenzialità e correttezza scientifica."
+        },
+        {
+          "principle": "CURR-REF-01/P05",
+          "status": "GAP",
+          "locator": "M118/alignment",
+          "finding": "Cinque obiettivi e due assi proposti; base provvisoria, non vigente.",
+          "next": "Mappatura professionale Arena; nessuna promozione."
+        },
+        {
+          "principle": "CURR-REF-01/P06",
+          "status": "DOCUMENTED",
+          "locator": "M118/outcomes, phases, evaluation",
+          "finding": "Esiti, evidenze, criteri e prodotto sono descritti; non prova della cronologia di progettazione.",
+          "next": "Verificare coerenza sul prodotto esatto."
+        },
+        {
+          "principle": "CURR-REF-01/P07",
+          "status": "DOCUMENTED",
+          "locator": "M118/phases B–D; CQP07",
+          "finding": "Previsione, confronto, revisione e compito di trasferimento descritti.",
+          "next": "Prova umana integrale; non inferire apprendimento."
+        },
+        {
+          "principle": "CURR-REF-01/P08",
+          "status": "DOCUMENTED",
+          "locator": "M118/evaluation",
+          "finding": "Processo, prodotto e conoscenze separati, criteri descrittivi senza scala.",
+          "next": "Calibrare con docente, senza voto automatico."
+        },
+        {
+          "principle": "CURR-REF-01/P09",
+          "status": "DOCUMENTED",
+          "locator": "M118/review, boundaries",
+          "finding": "Decisioni umane pendenti; nessuna autorizzazione.",
+          "next": "Riesame esatto del pacchetto, distinto dai test tecnici."
+        },
+        {
+          "principle": "CURR-REF-01/P10",
+          "status": "PARTIAL",
+          "locator": "M118/representation; CQP07",
+          "finding": "Alternative descritte e smoke test locale; equivalenza non qualificata.",
+          "next": "Riesame dell'accessibilità e dispositivo fisico."
+        },
+        {
+          "principle": "CURR-REF-01/P11",
+          "status": "DOCUMENTED",
+          "locator": "M118/phases C,D; evaluation.selfAssessment",
+          "finding": "Revisione motivata e riflessione previste.",
+          "next": "Controllare evidenze e modifiche nella prova."
+        },
+        {
+          "principle": "CURR-REF-01/P12",
+          "status": "DOCUMENTED",
+          "locator": "M118/outcomes O2,O3,O4",
+          "finding": "Saperi disciplinari collegati a prestazioni osservabili.",
+          "next": "Riesame SCIENCE di contenuti e limiti del modello."
+        }
+      ],
+      "priority": "Riesame SCIENCE/PURPOSE, allineamento Arena e prova umana USE",
+      "humanReview": "PENDING",
+      "runtimeAuthorized": false,
+      "publicationAuthorized": false
+    },
+    {
+      "id": "pw-missing-information-01",
+      "version": "1.1.0",
+      "kind": "TRANSVERSAL_CANDIDATE",
+      "evidenceScope": "Dossier G1, non revisione del prodotto distribuito",
+      "rows": [
+        {
+          "principle": "CURR-REF-01/P01",
+          "status": "PARTIAL",
+          "locator": "INFO/§1, §2",
+          "finding": "Obiettivo trasversale dichiarato; Profilo formale non raccordato.",
+          "next": "Motivare raccordo al Profilo soltanto se richiesto e disponibile."
+        },
+        {
+          "principle": "CURR-REF-01/P02",
+          "status": "PARTIAL",
+          "locator": "INFO/§6, §8",
+          "finding": "Fascia primaria avanzata e aiuti espliciti; nessun confronto verticale.",
+          "next": "Riesame evolutivo umano, senza assumere progressione."
+        },
+        {
+          "principle": "CURR-REF-01/P03",
+          "status": "PARTIAL",
+          "locator": "INFO/§8, §11",
+          "finding": "Ripresa della strategia in contesto diverso; non spirale documentata.",
+          "next": "Esplicitare complessità e differenza dei contesti."
+        },
+        {
+          "principle": "CURR-REF-01/P04",
+          "status": "DOCUMENTED",
+          "locator": "INFO/§1, §6, §10",
+          "finding": "Strategia circoscritta e carico controllato nella specifica.",
+          "next": "Verificare pertinenza e comprensibilità nella versione effettiva."
+        },
+        {
+          "principle": "CURR-REF-01/P05",
+          "status": "NOT_APPLICABLE_SCOPE",
+          "locator": "INFO/§1, §2",
+          "finding": "Nessun obiettivo disciplinare Arena proposto per questo percorso trasversale.",
+          "next": "Se una futura UdA lo adotta, raccordo separato, senza inventare ID."
+        },
+        {
+          "principle": "CURR-REF-01/P06",
+          "status": "PARTIAL",
+          "locator": "INFO/§1, §6, §11",
+          "finding": "Prestazioni e prove previste; manca una matrice completa esito–criterio–evidenza.",
+          "next": "Rendere espliciti criteri locali per compito e trasferimento."
+        },
+        {
+          "principle": "CURR-REF-01/P07",
+          "status": "DOCUMENTED",
+          "locator": "INFO/§2, §8, §11",
+          "finding": "Scelta, conseguenza, revisione e trasferimento sono specificati.",
+          "next": "Controllo W6A sulla versione effettiva, non solo sequenza."
+        },
+        {
+          "principle": "CURR-REF-01/P08",
+          "status": "PARTIAL",
+          "locator": "INFO/§1, §11, §12",
+          "finding": "Prestazioni locali e limiti dichiarati, senza punteggio; manca distinzione sistematica delle evidenze.",
+          "next": "Distinguere strategia, eventuale traccia e comprensione, senza rubrica di personalità."
+        },
+        {
+          "principle": "CURR-REF-01/P09",
+          "status": "DOCUMENTED",
+          "locator": "INFO/§16–17",
+          "finding": "Riesami umani pendenti esplicitati.",
+          "next": "Conservare lo stato; nessuna equiparazione a rilascio."
+        },
+        {
+          "principle": "CURR-REF-01/P10",
+          "status": "PARTIAL",
+          "locator": "INFO/§9",
+          "finding": "Matrice accessibilità e alternativa letterale specificate; prove pendenti.",
+          "next": "Test equivalenza, tastiera, leggibilità e linguaggio."
+        },
+        {
+          "principle": "CURR-REF-01/P11",
+          "status": "DOCUMENTED",
+          "locator": "INFO/§8, §11, §13",
+          "finding": "Conseguenze e revisione della scelta specificate.",
+          "next": "Verificare che la strategia non sia appresa per indizi di percorso."
+        },
+        {
+          "principle": "CURR-REF-01/P12",
+          "status": "PARTIAL",
+          "locator": "INFO/§6, §11",
+          "finding": "Conoscenze funzionali a informazioni e decisione; nessun sapere disciplinare imposto.",
+          "next": "Esplicitare prerequisiti minimi, senza forzare una disciplina."
+        }
+      ],
+      "priority": "Criteri locali di evidenza, revisione del linguaggio e accessibilità",
+      "humanReview": "PENDING",
+      "runtimeAuthorized": false,
+      "publicationAuthorized": false
+    },
+    {
+      "id": "pw-constraints-tradeoffs-01",
+      "version": "1.1.0",
+      "kind": "TRANSVERSAL_CANDIDATE",
+      "evidenceScope": "Dossier G1; precedente approvazione di registrazione soltanto",
+      "rows": [
+        {
+          "principle": "CURR-REF-01/P01",
+          "status": "PARTIAL",
+          "locator": "VINCOLI/§1, §2",
+          "finding": "Obiettivo trasversale di progettazione; Profilo formale non raccordato.",
+          "next": "Motivare eventuale raccordo al Profilo."
+        },
+        {
+          "principle": "CURR-REF-01/P02",
+          "status": "PARTIAL",
+          "locator": "VINCOLI/§1, §5, §11",
+          "finding": "Secondaria candidata; fasce e prerequisiti da validare.",
+          "next": "Riesame evolutivo della complessità dei vincoli."
+        },
+        {
+          "principle": "CURR-REF-01/P03",
+          "status": "PARTIAL",
+          "locator": "VINCOLI/§4–5",
+          "finding": "Revisione con requisito mutato e trasferimento; non progressione verticale.",
+          "next": "Esplicitare passaggio di complessità e contesto."
+        },
+        {
+          "principle": "CURR-REF-01/P04",
+          "status": "DOCUMENTED",
+          "locator": "VINCOLI/§1–5",
+          "finding": "Vincoli, compromessi e revisione sono il nucleo del percorso.",
+          "next": "Verificare che gli elementi narrativi servano al nucleo."
+        },
+        {
+          "principle": "CURR-REF-01/P05",
+          "status": "NOT_APPLICABLE_SCOPE",
+          "locator": "VINCOLI/§9",
+          "finding": "Arena resta autorità; nessuna mappatura disciplinare proposta.",
+          "next": "Eventuale innesto in UdA con raccordo esplicito separato."
+        },
+        {
+          "principle": "CURR-REF-01/P06",
+          "status": "PARTIAL",
+          "locator": "VINCOLI/§2, §4",
+          "finding": "Prestazioni e sequenza definite; criteri ed evidenze non allineati in matrice completa.",
+          "next": "Associare ogni esito a evidenza e criterio locale."
+        },
+        {
+          "principle": "CURR-REF-01/P07",
+          "status": "DOCUMENTED",
+          "locator": "VINCOLI/§4–5",
+          "finding": "Costruzione, conseguenze, variazione dei requisiti, trasferimento.",
+          "next": "Verificare effetti sostanziali, non solo scelta cosmetica."
+        },
+        {
+          "principle": "CURR-REF-01/P08",
+          "status": "PARTIAL",
+          "locator": "VINCOLI/§2–3",
+          "finding": "Prestazioni distinguibili, nessun punteggio; criteri di prodotto e conoscenze da esplicitare.",
+          "next": "Definire qualità della soluzione e ragionamento senza profili individuali."
+        },
+        {
+          "principle": "CURR-REF-01/P09",
+          "status": "DOCUMENTED",
+          "locator": "VINCOLI/§9, §11",
+          "finding": "Riesame umano limitato alla registrazione candidata.",
+          "next": "Non promuovere a qualifica pedagogica o pubblicazione."
+        },
+        {
+          "principle": "CURR-REF-01/P10",
+          "status": "PARTIAL",
+          "locator": "VINCOLI/§8",
+          "finding": "Requisiti accessibilità specificati; nessuna conformità dichiarata.",
+          "next": "Verificare equivalente funzionale e linguaggio sul prodotto."
+        },
+        {
+          "principle": "CURR-REF-01/P11",
+          "status": "DOCUMENTED",
+          "locator": "VINCOLI/§2, §4",
+          "finding": "Revisione a requisito cambiato prevista.",
+          "next": "Verificare motivazione e coerenza delle conseguenze."
+        },
+        {
+          "principle": "CURR-REF-01/P12",
+          "status": "PARTIAL",
+          "locator": "VINCOLI/§1–5",
+          "finding": "Concetti di vincolo e compromesso funzionali; nessun raccordo disciplinare dimostrato.",
+          "next": "Esplicitare conoscenze necessarie nel contesto effettivo."
+        }
+      ],
+      "priority": "Matrice esiti-evidenze-criteri e verifica delle conseguenze effettive",
+      "humanReview": "PENDING",
+      "runtimeAuthorized": false,
+      "publicationAuthorized": false
+    }
+  ],
+  "boundaries": {
+    "humanApproval": false,
+    "automaticQualityPass": false,
+    "learningClaim": false,
+    "studentData": false,
+    "assessmentAutomation": false,
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "changesArena": false,
+    "changesPackage": false,
+    "changesMaster": false
+  },
+  "next": {
+    "id": "F-R4b",
+    "scope": "Riesame operativo di Missione 118 sul pacchetto esatto e piano di correzioni circoscritte; gate umani e di autorità distinti"
+  }
+}
