@@ -1,0 +1,449 @@
+{
+  "schemaVersion": "trama.curr-ref-er2/v0.1",
+  "id": "CURR-REF-01/E-R2",
+  "status": "CANDIDATE_VERTICAL_RECONCILIATION",
+  "source": {
+    "arenaRevision": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+    "pilotBlob": "a13ad797a7d65d68b509ba8e9ca08f6baa586cf9",
+    "exportBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+    "masterVersion": "1.3",
+    "fingerprint": "b355be71",
+    "authority": "PROVISIONAL_COMPLETE",
+    "masterSection": "6.3.7; 7.3.8; 15–16",
+    "pilotAuthority": "WORKING_DRAFT_NOT_ADOPTED"
+  },
+  "nuclei": [
+    {
+      "id": "CULTURA_TECNICA_SISTEMI",
+      "masterLabel": "cultura tecnica/bisogni/oggetti",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Da oggetti e funzioni a processi e sistemi, poi a impatti; automazione non esplicitata nella fascia III.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:CULTURA_TECNICA_SISTEMI:prima",
+          "pilotText": "Oggetti, bisogni, funzioni, sicurezza d’uso.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 3,
+            "text": "analizzare oggetti/materiali"
+          }
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:CULTURA_TECNICA_SISTEMI:seconda",
+          "pilotText": "Sistemi semplici, servizi, filiere, territorio.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 3,
+            "text": "leggere processi produttivi"
+          }
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:CULTURA_TECNICA_SISTEMI:terza",
+          "pilotText": "Sistemi complessi, automazione, impatti sociali.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 2,
+            "text": "analizzare sistemi energetici/produttivi"
+          }
+        }
+      ]
+    },
+    {
+      "id": "METODO_PROGETTUALE",
+      "masterLabel": "metodo progettuale",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Da realizzazione guidata a progetto motivato, poi verifica e documentazione; non inferire padronanza dal prodotto.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:METODO_PROGETTUALE:prima",
+          "pilotText": "Osservare e descrivere un problema semplice.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 5,
+            "text": "realizzare/verificare"
+          }
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:METODO_PROGETTUALE:seconda",
+          "pilotText": "Confrontare soluzioni e rispettare vincoli.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 6,
+            "text": "progettare semplici soluzioni"
+          }
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:METODO_PROGETTUALE:terza",
+          "pilotText": "Progettare, documentare, verificare e migliorare.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 5,
+            "text": "progettare"
+          }
+        }
+      ]
+    },
+    {
+      "id": "MATERIALI_CICLO_VITA",
+      "masterLabel": "materiali/risorse",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Proprietà e cicli sono espliciti nelle prime due fasce; il ciclo di vita dei materiali in III resta da raccordare.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:MATERIALI_CICLO_VITA:prima",
+          "pilotText": "Materiali comuni, proprietà, raccolta differenziata.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 3,
+            "text": "analizzare oggetti/materiali"
+          }
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:MATERIALI_CICLO_VITA:seconda",
+          "pilotText": "Lavorazioni, filiere, imballaggi, sprechi.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 2,
+            "text": "analizzare proprietà/cicli dei materiali"
+          }
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:MATERIALI_CICLO_VITA:terza",
+          "pilotText": "Ciclo di vita, impatti, scelte responsabili.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        }
+      ]
+    },
+    {
+      "id": "DISEGNO_MODELLAZIONE",
+      "masterLabel": "rappresentazione",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Da rappresentazione di base a rigore e scala, poi rappresentazione di soluzioni; assonometria, prospettiva e CAD non sono esplicitati nella fascia III.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:DISEGNO_MODELLAZIONE:prima",
+          "pilotText": "Strumenti, costruzioni geometriche, precisione.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 2,
+            "text": "produrre rappresentazioni"
+          }
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:DISEGNO_MODELLAZIONE:seconda",
+          "pilotText": "Scale, viste, quotature, schemi funzionali.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 1,
+            "text": "produrre rappresentazioni più rigorose"
+          }
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:DISEGNO_MODELLAZIONE:terza",
+          "pilotText": "Assonometrie, prospettiva/CAD, modellazione.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 1,
+            "text": "rappresentare soluzioni"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ENERGIA_SOSTENIBILITA",
+      "masterLabel": "energia",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Il nucleo è nominato nel master; energia quotidiana e consumi non sono espliciti nelle prime due annualizzazioni.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:ENERGIA_SOSTENIBILITA:prima",
+          "pilotText": "Forme e usi quotidiani dell’energia.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ENERGIA_SOSTENIBILITA:seconda",
+          "pilotText": "Consumi, efficienza, sicurezza domestica.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ENERGIA_SOSTENIBILITA:terza",
+          "pilotText": "Fonti, centrali, elettricità, transizione ecologica.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 2,
+            "text": "analizzare sistemi energetici/produttivi"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ABITARE_TERRITORIO",
+      "masterLabel": "abitare/territorio",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Territorio e abitare sono espliciti in II; non dedurre automaticamente spazi, mobilità e rischio in I/III.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:ABITARE_TERRITORIO:prima",
+          "pilotText": "Aula, casa, scuola, sicurezza degli spazi.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ABITARE_TERRITORIO:seconda",
+          "pilotText": "Abitazione, città, reti, servizi.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 4,
+            "text": "interpretare elementi di territorio/abitare"
+          }
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ABITARE_TERRITORIO:terza",
+          "pilotText": "Mobilità, rischio, accessibilità, qualità urbana.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        }
+      ]
+    },
+    {
+      "id": "ALIMENTAZIONE_FILIERE",
+      "masterLabel": "alimentazione/filiere",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Il processo produttivo è pertinente in II ma non specificamente alimentare; nessuna equivalenza automatica.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:ALIMENTAZIONE_FILIERE:prima",
+          "pilotText": "Origine e trasformazione semplice degli alimenti.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ALIMENTAZIONE_FILIERE:seconda",
+          "pilotText": "Filiere, etichette, conservazione, sprechi.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 3,
+            "text": "leggere processi produttivi"
+          }
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ALIMENTAZIONE_FILIERE:terza",
+          "pilotText": "Impatti globali, sicurezza, consumo sostenibile.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        }
+      ]
+    },
+    {
+      "id": "DIGITALE_DATI_IA",
+      "masterLabel": "digitale/dati/informatica/intelligenza artificiale",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Da dati e uso responsabile a organizzazione e uso critico; IA e informatica richiedono raccordo con sezioni 15–16 e asse trasversale.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:DIGITALE_DATI_IA:prima",
+          "pilotText": "Uso guidato, sicurezza, prime procedure.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 6,
+            "text": "organizzare dati"
+          }
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:DIGITALE_DATI_IA:seconda",
+          "pilotText": "Tabelle, grafici, coding, dati.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 5,
+            "text": "organizzare informazioni"
+          }
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:DIGITALE_DATI_IA:terza",
+          "pilotText": "IA, automazione, privacy, bias, attendibilità.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 4,
+            "text": "usare dati"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ORIENTAMENTO_PROFESSIONI",
+      "masterLabel": "lavoro/orientamento",
+      "correspondence": "CANDIDATE_SEMANTIC_MATCH",
+      "review": "PENDING",
+      "reason": "Orientamento esplicito in III; mestieri e settori produttivi come traiettorie del pilota, non annualizzazioni già recepite.",
+      "grades": [
+        {
+          "grade": "I",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+          "regime": "2025",
+          "pilotRef": "technology-progression:ORIENTAMENTO_PROFESSIONI:prima",
+          "pilotText": "Mestieri e strumenti del quotidiano.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        },
+        {
+          "grade": "II",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ORIENTAMENTO_PROFESSIONI:seconda",
+          "pilotText": "Tecnologie nei settori produttivi e nei servizi.",
+          "match": "NOT_EXPLICIT",
+          "masterRef": null
+        },
+        {
+          "grade": "III",
+          "bandId": "secondaria-di-primo-grado-tecnologia-classe-iii",
+          "regime": "2012_TRANSITION",
+          "pilotRef": "technology-progression:ORIENTAMENTO_PROFESSIONI:terza",
+          "pilotText": "Professioni STEM, scelte future, competenze tecniche.",
+          "match": "PARTIAL",
+          "masterRef": {
+            "field": "objectives",
+            "ordinal": 8,
+            "text": "motivare scelte e interessi professionali"
+          }
+        }
+      ]
+    }
+  ],
+  "projection": {
+    "primaryProgressionPresent": 4,
+    "primaryWithoutExplicitTag": 1,
+    "secondaryIdentityInSource": 3,
+    "secondaryProgressionFieldPresent": 0,
+    "materializerRecognizesBothTags": true,
+    "exportProducerVerified": false,
+    "decision": "Keep identity, progression and adjacency distinct; do not populate missing fields by inference."
+  },
+  "supplements": [
+    {
+      "section": "16.1",
+      "scope": "2025_PRIMARY_COHORT_BENCHMARK",
+      "state": "NOT_ANNUALIZED"
+    },
+    {
+      "section": "16.2",
+      "scope": "2025_SECONDARY_GRADE_I_AND_FINAL_BENCHMARK",
+      "state": "DISTINCT_SCOPE_REVIEW_REQUIRED"
+    },
+    {
+      "section": "15–16.3",
+      "scope": "INFORMATICS_BRIDGE_AND_FUTURE_COHORT",
+      "state": "JOINT_MATHEMATICS_TECHNOLOGY_REVIEW_REQUIRED"
+    }
+  ],
+  "boundaries": {
+    "masterEdited": false,
+    "arenaEdited": false,
+    "atlasEdited": false,
+    "professionalApproval": false,
+    "automaticMapping": false,
+    "publication": false,
+    "studentData": false
+  },
+  "next": "E-R2b: review specific gaps, primary-secondary continuity and export producer; then E-R3"
+}
