@@ -362,5 +362,122 @@ class VersionedCandidateTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             validate(data)
 
+LINK_EVIDENCE = ROOT / "docs/capabilities/atlas-knowledge/fixtures/f-r3c-link-evidence-v0.1.json"
+
+
+def validate_link_evidence(record, data):
+    """Pinned editorial review, not a runtime graph or approval receipt."""
+    validate(data)
+    if record["schemaVersion"] != "atlas.knowledge-link-evidence/v0.1" or record["status"] != "EDITORIAL_REVIEW_CANDIDATE":
+        raise ValueError("invalid review receipt")
+    expected_flags = {"noTransitiveAuthority", "noAutomaticMapping", "noPublicProjection",
+                      "noNewPortal", "noRuntimeChange", "noStudentData", "noLearningClaim"}
+    if set(record["invariants"]) != expected_flags or any(v is not True for v in record["invariants"].values()):
+        raise ValueError("review boundaries changed")
+    sources = {item["id"]: item for item in record["sources"]}
+    expected_sources = {
+        "KB": "016cb9e9bb66a976fb4bb6652cb0dce2001930de",
+        "M118": "1b8c64fffdb0ca5aa0532c24796a720d08e43143",
+        "CQP07": "d95d2140775d9a04b6399f5ff425adc8bc999d6a",
+        "PORTFOLIO": "17a3a883724531a99b2e4424dec172cc2e3b1d41",
+        "PW_INFO": "046b7740f7ce6c96c9aca11e846b49e2ee714a9e",
+        "PW_CONSTRAINTS": "33c36879766b56e1835f92628c0bb05f0575349a",
+        "SVG": "ec1468d237a36d6802c1d870771609c3bbc299a1",
+    }
+    if len(sources) != len(record["sources"]) or {k:v["blob"] for k,v in sources.items()} != expected_sources:
+        raise ValueError("missing or changed evidence")
+    for source in sources.values():
+        if not re.fullmatch("[0-9a-f]{40}", source["revision"]):
+            raise ValueError("invalid revision")
+    kb_bytes = FIXTURE_V2.read_bytes()
+    if hashlib.sha1(f"blob {len(kb_bytes)}\0".encode() + kb_bytes).hexdigest() != expected_sources["KB"]:
+        raise ValueError("local catalog drift")
+    if data != json.loads(kb_bytes):
+        raise ValueError("catalog candidate changed")
+    ev = data["alignmentEvidence"]
+    for key in ("sourceBlob", "masterVersion", "fingerprint", "authorityState", "atlasRevision"):
+        if record["arena"][key] != ev[key]:
+            raise ValueError("source alignment drift")
+    if record["arena"]["sourceMatch"] != "CHECKED_ON_PINNED_REVISIONS_NOT_APPROVED":
+        raise ValueError("unsupported authority promotion")
+    resources = {r["id"]: r for r in data["resources"]}
+    rr = record["resourceReview"]
+    if rr["resourceId"] != "r-tec-003" or rr["source"] != "SVG" or rr["status"] != "CONTENT_INSPECTED_NOT_QUALIFIED":
+        raise ValueError("unsupported resource review")
+    resource = resources[rr["resourceId"]]
+    if rr["rights"] != resource["rights"] or rr["accessibility"] != resource["accessibility"] or rr["publicationAuthorized"] is not False:
+        raise ValueError("resource promotion")
+    if not any(m["objectiveId"] == rr["mappingRef"] and m["status"] == rr["mappingState"] == "PROPOSED" for m in resource["mappings"]):
+        raise ValueError("resource link mismatch")
+    reviews = {r["id"]: r for r in record["experienceReviews"]}
+    if len(reviews) != len(record["experienceReviews"]) or set(reviews) != {"trama-missione-118-2026", "pw-missing-information-01", "pw-constraints-tradeoffs-01"}:
+        raise ValueError("experience identity drift")
+    for item in reviews.values():
+        if item["runtimeAuthorized"] is not False or item["publicationAuthorized"] is not False or item["review"] != "PENDING":
+            raise ValueError("experience promotion")
+        if item["resourceLinks"]:
+            raise ValueError("unproven resource use")
+        if not item["sourceRefs"] or not set(item["sourceRefs"]) <= sources.keys():
+            raise ValueError("unresolved evidence")
+        if any(link["conceptId"] not in {c["id"] for c in data["concepts"]} for link in item["conceptLinks"]):
+            raise ValueError("unknown concept")
+    m = reviews["trama-missione-118-2026"]
+    if m["version"] != "0.4.2-draft" or m["manifestDigest"] != "c9dc1c6b909d8496dfaf1bc9f7cc43e9ab7e5b2511c0f68e64050e51ed4b5aa4":
+        raise ValueError("wrong activity version")
+    if m["registryState"] != "PRIVATE_PREVIEW_NOT_IN_PUBLIC_PORTFOLIO" or set(m["sourceRefs"]) != {"M118", "CQP07"}:
+        raise ValueError("wrong activity registry or source")
+    if m["objectiveState"] != "PROPOSED" or m["objectiveRefs"] != [f"secondaria-di-primo-grado-tecnologia-classe-iii-o{n}" for n in (2,4,5,6,8)] or m["axisRefs"] != ["educazione-civica","ai-literacy"]:
+        raise ValueError("unreviewed mapping")
+    links = m["conceptLinks"]
+    if len(links) != 1 or any(links[0][k] != v for k,v in {"conceptId":"k-system","outcomeRef":"O4","role":"RELATED_APPLICATION","status":"PROPOSED"}.items()) or not links[0]["reason"]:
+        raise ValueError("unreviewed concept association")
+    for ident, source in (("pw-missing-information-01","PW_INFO"), ("pw-constraints-tradeoffs-01","PW_CONSTRAINTS")):
+        item = reviews[ident]
+        if item["version"] != "1.1.0" or item["registryState"] != "REGISTERED_CANDIDATE" or set(item["sourceRefs"]) != {"PORTFOLIO", source}:
+            raise ValueError("wrong portfolio candidate")
+        if item["objectiveState"] != "NOT_PROPOSED" or item["objectiveRefs"] or item["axisRefs"] or item["conceptLinks"] or not item["withheldReason"]:
+            raise ValueError("forced transversal mapping")
+    return record
+
+
+class LinkEvidenceTests(unittest.TestCase):
+    def setUp(self):
+        self.data = json.loads(FIXTURE_V2.read_text(encoding="utf-8"))
+        self.record = json.loads(LINK_EVIDENCE.read_text(encoding="utf-8"))
+
+    def test_pinned_editorial_receipt(self):
+        validate_link_evidence(self.record, self.data)
+
+    def test_no_inferred_resource_use_or_learning(self):
+        for field, value in (("resourceLinks", ["r-tec-003"]), ("publicationAuthorized", True),
+                             ("runtimeAuthorized", True), ("review", "PASS")):
+            record = copy.deepcopy(self.record)
+            record["experienceReviews"][0][field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                validate_link_evidence(record, self.data)
+
+    def test_no_forced_transversal_binding(self):
+        record = copy.deepcopy(self.record)
+        record["experienceReviews"][1]["objectiveRefs"] = ["secondaria-di-primo-grado-tecnologia-classe-ii-o3"]
+        with self.assertRaises(ValueError):
+            validate_link_evidence(record, self.data)
+
+    def test_no_transitive_authority(self):
+        record = copy.deepcopy(self.record)
+        record["invariants"]["noTransitiveAuthority"] = False
+        with self.assertRaises(ValueError):
+            validate_link_evidence(record, self.data)
+
+    def test_source_and_mapping_drift(self):
+        for field, value in (("fingerprint","changed"), ("sourceBlob","0"*40)):
+            record = copy.deepcopy(self.record)
+            record["arena"][field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                validate_link_evidence(record, self.data)
+        record = copy.deepcopy(self.record)
+        record["experienceReviews"][0]["conceptLinks"][0]["outcomeRef"] = "O2"
+        with self.assertRaises(ValueError):
+            validate_link_evidence(record, self.data)
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
