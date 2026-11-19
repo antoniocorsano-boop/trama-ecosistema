@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "atlas.knowledge-search-evidence/v0.1",
+  "status": "EDITORIAL_ONLY",
+  "purpose": "Proiezione minima di metadati per il collaudo di ricerca; nessun catalogo autonomo",
+  "linkEvidenceBlob": "c5c1aab7359ddd972dd978bbe46566dff7dcd194",
+  "catalogBlob": "016cb9e9bb66a976fb4bb6652cb0dce2001930de",
+  "experienceLabels": [
+    {
+      "id": "trama-missione-118-2026",
+      "title": "Missione 118 V9.1",
+      "schoolStage": "Secondaria di primo grado",
+      "sourceRefs": [
+        "CQP07",
+        "M118"
+      ]
+    },
+    {
+      "id": "pw-missing-information-01",
+      "title": "Prima di decidere, cosa manca?",
+      "schoolStage": "Primaria",
+      "sourceRefs": [
+        "PORTFOLIO",
+        "PW_INFO"
+      ]
+    },
+    {
+      "id": "pw-constraints-tradeoffs-01",
+      "title": "Una soluzione, molti vincoli",
+      "schoolStage": "Secondaria di primo grado",
+      "sourceRefs": [
+        "PORTFOLIO",
+        "PW_CONSTRAINTS"
+      ]
+    }
+  ],
+  "missionObjectiveLabels": [
+    {
+      "ordinal": 2,
+      "text": "analizzare sistemi energetici/produttivi"
+    },
+    {
+      "ordinal": 4,
+      "text": "usare dati"
+    },
+    {
+      "ordinal": 5,
+      "text": "progettare"
+    },
+    {
+      "ordinal": 6,
+      "text": "verificare"
+    },
+    {
+      "ordinal": 8,
+      "text": "motivare scelte e interessi professionali"
+    }
+  ],
+  "boundaries": {
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "publicResultsAllowed": false,
+    "studentData": false
+  }
+}
