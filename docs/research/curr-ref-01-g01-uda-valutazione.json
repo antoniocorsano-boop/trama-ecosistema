@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "trama.curr-ref-g01-cross-product-audit/v0.1",
+  "id": "CURR-REF-01/G01",
+  "status": "READ_ONLY_DESIGN_REVIEW_NO_PRODUCT_INTEGRATION",
+  "date": "2026-11-19",
+  "authority": {
+    "sourceOfTruth": "ARENA",
+    "master": "CAN-CURR-MASTER-00",
+    "version": "1.3",
+    "fingerprint": "b355be71",
+    "state": "PROVISIONAL_COMPLETE_NOT_IN_FORCE",
+    "professionalReview": "OPEN"
+  },
+  "productEvidence": [
+    {
+      "product": "DOCENTE_OS",
+      "repository": "antoniocorsano-boop/docente-os-2026-27",
+      "revision": "27e20e72454eafb0cf8212f61422f02dc6a60d6e",
+      "sources": [
+        {
+          "path": "docs/architecture/UDA_CANONICAL_COVERAGE.md",
+          "blob": "f4811dd06e2ee58f42d51536eafb43e6aca16ad5",
+          "state": "DOCUMENTED_CANONICAL_UDA"
+        },
+        {
+          "path": "docs/architecture/HUMAN_TASK_CONTENT_PIPELINE.md",
+          "blob": "8e70652ac3cf939ec05d3f18fc4247968c4bb07d",
+          "state": "HUMAN_REVIEW_REQUIRED"
+        },
+        {
+          "path": "docs/architecture/HUMAN_TASK_PROJECT_PROCESS_B23_B27.md",
+          "blob": "361d11014d9ba02ff5edee43eba6655591c318d7",
+          "state": "APPROVED_RUNTIME_SLICE"
+        },
+        {
+          "path": "product/src/core/presentation/human-task-approved-projections-b23-b27.ts",
+          "blob": "4e0493bc161d5c0b7cd50d89f5105604eaf8ee0f",
+          "state": "APPROVED_LESSON_PROJECTION"
+        },
+        {
+          "path": "product/src/core/application/human-task-projection-recipes-b23-b27.ts",
+          "blob": "85c9c7a6484352158f33a435df9e1562a615433e",
+          "state": "RECIPE_SOURCE_BINDING"
+        }
+      ]
+    },
+    {
+      "product": "REGISTRO_DOCENTE",
+      "repository": "antoniocorsano-boop/registro-docente",
+      "revision": "5ed2eb11d1b740dc79acbee1ffe18da3f3d2a7e8",
+      "sources": [
+        {
+          "path": "src/planning/arenaPlanningContext.ts",
+          "blob": "99ee0160f5d6afb5813c1147c14fa1936cbb1e0b",
+          "state": "ARENA_PREVIEW_STRICT_CONTRACT"
+        },
+        {
+          "path": "src/planning/planningFrameResolver.ts",
+          "blob": "0c5dfcd837c8917646cc3bbc782b6915566df79e",
+          "state": "REQUIRE_APPROVED_AND_VIGENTE_TO_BIND"
+        },
+        {
+          "path": "src/assessment/assessmentEvidence.ts",
+          "blob": "29ae8d1d6b5c712192b41eadbce2fb1bf9e78de1",
+          "state": "ISOLATED_LOCAL_EVIDENCE_CONTRACT"
+        },
+        {
+          "path": "src/assessment/assessmentEvidenceProjection.ts",
+          "blob": "59fab229418fe8d55d8ab81a93a34e927118beb8",
+          "state": "LOCAL_INDIVIDUAL_PROJECTION_NOT_COMPETENCE_ASSESSMENT"
+        },
+        {
+          "path": "src/assessment/assessmentRevisionBindings.ts",
+          "blob": "1d6f490a712ba29c2778535b9979d5335865ed9b",
+          "state": "FROZEN_REVISION_LINK_PROPOSAL"
+        }
+      ]
+    }
+  ],
+  "crossProductRules": {
+    "sourceAuthority": "Arena owns normative applicability and approval; never infer institutional vigency from a lesson approved for runtime",
+    "lessonAuthority": "Docente OS owns approved instructional projection and intended learning/evidence, not individual student judgement",
+    "evidenceAuthority": "Registro Docente keeps teacher-confirmed individual observations locally, without upstream student flow",
+    "exportRule": "NO_GENERAL_INTEROP_TRANSFORMATION_CONFIRMED",
+    "provisionalRule": "Registro preview may accept PROVISIONAL_COMPLETE/NON_VIGENTE, but planning resolver never treats it as authoritative Arena context",
+    "sourceBindingRule": "DO_NOT_TRANSLATE_DOCENTE_OS_CML_LOCAL_HANDOFF_V2_INTO_REGISTRO_PLANNING_CONTEXT_V1",
+    "assessmentRule": "NO_AUTOMATIC_GRADE_NO_AUTOMATIC_COMPETENCE_NO_AUTO_CERTIFICATION",
+    "studentPrivacy": "NO_INDIVIDUAL_RECORDS_EXPORTED_OR_IN_CORPUS"
+  },
+  "example": {
+    "id": "CURR-REF-01/G01-B25",
+    "status": "SYNTHETIC_PLANNING_EXAMPLE_NOT_RECORDED_AS_OBSERVATION",
+    "domain": "Tecnologia",
+    "schoolYear": "2026/2027",
+    "grade": "I",
+    "normativeRegime": "2025_TRANSITION_START",
+    "masterReference": {
+      "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+      "sourceSection": "7.3.8",
+      "masterVersion": "1.3",
+      "referenceText": "confrontare soluzioni",
+      "referenceKind": "LOCAL_COMPETENCE_CANDIDATE",
+      "state": "NOT_APPROVED_OR_BINDABLE"
+    },
+    "docenteOs": {
+      "plan": "CAN-PLAN-1",
+      "uda": "CAN-UDA-1-05",
+      "block": "B25",
+      "projectionId": "HTC-PRIMA-B25-PLAN-v1",
+      "sourceType": "APPROVED_HUMAN_TASK_LESSON_NOT_CURRICULUM_AUTHORITY",
+      "title": "Confrontare e scegliere",
+      "durationMinutes": 120,
+      "objective": "Confrontare le alternative con criteri espliciti di funzionalità, fattibilità, materiali, sicurezza, costo indicativo e riduzione degli sprechi e motivare la scelta finale.",
+      "expectedProduct": "Matrice di scelta motivata.",
+      "sourceAlignment": "COMPOSED",
+      "actualStudentEvidence": []
+    },
+    "candidateCriteria": [
+      {
+        "id": "CR-G01-01",
+        "focus": "process",
+        "description": "Confronta almeno due alternative con criteri dichiarati e pertinenti.",
+        "expectedEvidence": "Matrice di confronto con criteri comprensibili e riferiti al problema.",
+        "teacherDecision": "PENDING"
+      },
+      {
+        "id": "CR-G01-02",
+        "focus": "argumentation",
+        "description": "Motiva la scelta in relazione a requisiti e vincoli, distinguendo preferenze da ragioni verificabili.",
+        "expectedEvidence": "Spiegazione della scelta collegata a dati e vincoli.",
+        "teacherDecision": "PENDING"
+      }
+    ],
+    "observationProtocol": {
+      "purpose": "FORMATIVE_ONLY",
+      "studentEvidenceStorage": "REGISTRO_DOCENTE_LOCAL_ONLY",
+      "factAndInterpretationSeparate": true,
+      "individualIdentityRequiredOnlyInsideRegistro": true,
+      "absenceOfObservationIsNotNegativeJudgement": true,
+      "accessibilitySupportNotPenalty": true,
+      "groupProductIsNotIndividualEvidence": true,
+      "assessmentGrade": "NOT_CREATED",
+      "competenceJudgement": "NOT_CREATED",
+      "teacherConfirmation": "REQUIRED_FOR_REAL_RECORD"
+    },
+    "pedagogicalValue": "Caso per il riesame di scopo/criteri/evidenze; nessuna relazione nazionale o rubrica ufficiale inferita."
+  },
+  "findings": [
+    {
+      "id": "G01-01",
+      "status": "PRESENT_SEPARATE",
+      "topic": "Planning and expected evidence",
+      "next": "Reuse Docente OS approved B25 slice and keep teacher review context"
+    },
+    {
+      "id": "G01-02",
+      "status": "PRESENT_SEPARATE",
+      "topic": "Individual observation and revision chain",
+      "next": "Keep exclusively within Registro; do not copy student data into shared records"
+    },
+    {
+      "id": "G01-03",
+      "status": "MISSING_VERIFIED_INTEROP",
+      "topic": "UDA/lesson-to-Registro cross-product binding",
+      "next": "No runtime integration until mapping scope and consent/approval contracts are separately verified"
+    },
+    {
+      "id": "G01-04",
+      "status": "AUTHORITATIVE_BINDING_BLOCKED",
+      "topic": "Arena master provisional versus Registro resolver approval",
+      "next": "Retain optional local planning without claiming approved Arena references"
+    },
+    {
+      "id": "G01-05",
+      "status": "PEDAGOGICAL_REVIEW_PENDING",
+      "topic": "Criteria/learning progression",
+      "next": "Teacher and departmental validation before official criteria or institutional reception"
+    }
+  ],
+  "next": {
+    "id": "CURR-REF-01/G02",
+    "task": "Audit an existing approved didactic unit against the local assessment contract using only synthetic data; define versioned editorial crosswalk without altering product contracts",
+    "dependencies": [
+      "HUMAN_APPROVAL_SEPARATE",
+      "CURRICOLO_AUTHORITY_VERIFIED_BEFORE_OFFICIAL_MAPPING"
+    ],
+    "parallel": "E-R4 professional review continues independently"
+  },
+  "boundaries": {
+    "masterEdited": false,
+    "docenteOsEdited": false,
+    "registroDocenteEdited": false,
+    "studentDataIncluded": false,
+    "liveLinkCreated": false,
+    "personalDataTransfer": false,
+    "gradeCreated": false,
+    "publication": false,
+    "professionalApproval": false
+  }
+}
