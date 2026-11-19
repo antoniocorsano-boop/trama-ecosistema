@@ -177,6 +177,66 @@
       "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
       "pattern": "^- F10: \\[F10\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/STUDIO-ATLAS-PREVIEW-ADAPTER-v0\\.1\\.md\\) — Anteprima e trasferimento\\.$",
       "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"\\.human/curriculum-lifecycle\\.contract\\.json\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"docs/curriculum/REG-CURR-00\\.registry\\.json\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"src/domain/curriculum/validation/technologyClass1Review\\.ts\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"src/domain/curriculum/reviewCase\\.ts\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"src/domain/curriculum/caseWorkSession\\.ts\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^    \"ARENA_PILOT\": \"src/domain/curriculum/validation/technologyClass1Review\\.ts\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"H1_APPLICABLE_CURRICULUM\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^    \"entry\": \"EXISTING_ARENA_CURRICULUM_WORK_SESSION\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^    assert arena\\[\"caseContract\"\\]\\[\"path\"\\] == \"src/domain/curriculum/reviewCase\\.ts\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^    assert arena\\[\"sessionContract\"\\]\\[\"path\"\\] == \"src/domain/curriculum/caseWorkSession\\.ts\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^        \"H1_APPLICABLE_CURRICULUM\", \"H2_PROFESSIONAL_VALIDATION\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^    assert w\\[\"entry\"\\] == \"EXISTING_ARENA_CURRICULUM_WORK_SESSION\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
     }
   ],
   "excludedPaths": [
