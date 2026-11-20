@@ -76,7 +76,8 @@ test("AWC S2: visualizza, modifica e riapre la conseguenza senza alterare la sce
   expect(after.revision).toBe(before.revision + 1);
   expect(after.original).toEqual(before.original);
   expect(after.variation).toBe(VARIATION);
-  expect(after.review).toBe("REVISE");
+  // Studio Atlas invalida il PASS attraverso il proprio stato DRAFT.
+  expect(after.review).toBe("DRAFT");
   expect(after.storyboardReady).toBe(false);
 
   await panel.getByRole("button", { name: "Ripristina la vista originale" }).click();
