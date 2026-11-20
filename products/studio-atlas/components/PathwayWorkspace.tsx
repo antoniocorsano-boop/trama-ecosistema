@@ -39,7 +39,11 @@ export function PathwayWorkspace({ id }: { id: string }) {
   const stageIndex = useMemo(() => STAGES.indexOf(stage), [stage]);
 
   function saveIdea() {
-    if (!project || draftIdea === project.idea) return;
+    if (!project) return;
+    if (draftIdea === project.idea) {
+      setSaveState("saved");
+      return;
+    }
     setSaveState("saving");
     try {
       const updated = updateProject(project.projectId, { idea: draftIdea }, project.revision);
