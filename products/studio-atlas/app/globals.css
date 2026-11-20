@@ -443,3 +443,12 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .world-composer-buttons { display: grid; }
   .world-composer-buttons .secondary-action { justify-content: start; }
 }
+
+/* Stato del salvataggio leggibile anche su schermi stretti e con testo ingrandito. */
+.workspace-actions { flex-wrap: wrap; }
+.save-state { min-width: 0; max-width: 230px; line-height: 1.4; text-align: left; }
+@media (max-width: 390px) {
+  .workspace-shell { padding: 14px; }
+  .world-composer-panel { padding: 14px; }
+  .world-composer-choice { min-width: 0; }
+}
