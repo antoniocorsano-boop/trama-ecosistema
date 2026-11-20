@@ -113,13 +113,16 @@
   "description": "The projects share referenced educational purposes and provenance, not a functioning end-to-end data interchange. The executable offline trial reuses the actual Docente OS React panel and does not mutate any application.",
   "deviceReview": {
     "status": "ANDROID_VISUAL_PARTIAL",
-    "evidenceType": "TWO_USER_SUPPLIED_SCREENSHOTS",
+    "evidenceType": "FIVE_USER_SUPPLIED_SCREENSHOTS_IN_TWO_BATCHES",
     "visualConfirmed": [
       "OFFLINE_HTML_OPENED_VIA_ANDROID_CONTENT_URI",
       "B25_CRITERIA_PANEL_VISIBLE",
       "TWO_CRITERIA_CHECKED",
       "CONFIRMED_STATE_2_OF_2_VISIBLE",
-      "NO_OBVIOUS_TEXT_CLIPPING_IN_CAPTURED_PORTIONS"
+      "NO_OBVIOUS_TEXT_CLIPPING_IN_CAPTURED_PORTIONS",
+      "ONE_OF_TWO_CRITERIA_CHECKED_AND_CONFIRMED",
+      "ZERO_OF_TWO_CRITERIA_CHECKED_CONFIRM_BUTTON_VISIBLE",
+      "TWO_OF_TWO_CRITERIA_CHECKED_AND_CONFIRMED"
     ],
     "notYetVerified": [
       "DESELECT_REVOKES_CONFIRMATION",
@@ -137,6 +140,7 @@
     ],
     "screenImagesCopiedToRepo": false,
     "studentDataUsed": false,
-    "releaseApproved": false
+    "releaseApproved": false,
+    "notes": "The zero-selection state is consistent with a page reload, but reload itself and immediate confirmation revocation are not visible in a still screenshot."
   }
 }
