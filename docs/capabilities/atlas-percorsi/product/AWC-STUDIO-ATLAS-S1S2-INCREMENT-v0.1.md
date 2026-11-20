@@ -12,6 +12,8 @@
 5. Il pulsante di ripristino **ripristina la visualizzazione del confronto**, non modifica né annulla revisioni canoniche. I campi di modifica già esistenti continuano a salvare il progetto e a invalidare le revisioni di prodotto quando previsto.
 6. Presentare correttamente il salvataggio come **locale**, non sincronizzato; una revisione superata non può essere sovrascritta attraverso `updateProject` con revisione attesa. Non costituisce ancora un archivio professionale autenticato e con recupero.
 
+7. La conseguenza osservabile di una scelta può essere modificata in anteprima e conservata **esplicitamente** nel campo `worldAfter.status` già previsto dal modello. L'azione conserva il testo sul dispositivo, incrementa la revisione, invalida la revisione di prodotto secondo il percorso esistente e non modifica `scene.world`. Il testo provvisorio non viene scartato quando un salvataggio fallisce.
+
 ## Invarianti mantenute
 - Curricolo e approvazioni rimangono di Arena, senza duplicazione.
 - MUSEO ZERO mantiene identità, storia, sequenza delle scene, scelte, riferimenti delle prove e origine 2-D.
@@ -19,7 +21,7 @@
 - Nessun caricamento o pubblicazione di risorse, nessuna anagrafica studente, nessun calcolo a pagamento, nessuna esecuzione di un piano AWC.
 
 ## Prove aggiunte
-- `world-composer.test.ts`: recupero dei luoghi del mondo; presenza di una variazione realmente definita; assenza di stati inventati; immutabilità della sorgente.
+- `world-composer.test.ts`: recupero dei luoghi del mondo; presenza di una variazione realmente definita; assenza di stati inventati; aggiornamento semantico validato, reversibile e immutabilità della sorgente.
 - `world-composer-store.test.ts`: aggiornamento con revisione attesa, rifiuto di revisione superata e di progetto assente.
 - Verifiche CI da acquisire su PR: `npm test`, `npm run typecheck`, `npm run build`, controllo dei confini Studio Atlas e prova di integrazione Atlas.
 
