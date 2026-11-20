@@ -452,3 +452,26 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .world-composer-panel { padding: 14px; }
   .world-composer-choice { min-width: 0; }
 }
+
+.world-composer-variation-editor {
+  margin: 12px 0 22px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+.world-composer-variation-editor label { display: grid; gap: 8px; }
+.world-composer-variation-editor textarea {
+  width: 100%;
+  min-height: 88px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.world-composer-variation-editor textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.world-composer-variation-editor .primary-action:disabled { cursor: default; }
