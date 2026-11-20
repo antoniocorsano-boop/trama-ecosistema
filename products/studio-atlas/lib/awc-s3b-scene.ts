@@ -94,11 +94,13 @@ export function cameraEye(orbit: number): [number, number, number] {
 /**
  * Reference reproduces the original qualified AWC-F WebGL illumination values.
  * Balanced is a reversible, NON approved artistic hypothesis after mobile feedback:
- * it reduces the reported pale/flat image without modifying camera, geometry,
- * semantic states, source material colors or the reference profile.
+ * S3c refines mobile feedback: a less extreme exposure midpoint, softer fill,
+ * and shadows restricted to small props (not walls/screen/trim). Dynamic shadows
+ * are regenerated only on profile change; camera movement reuses the shadow map.
+ * No changes to camera, geometry, semantic state or reference profile.
  */
 export function lightingValues(profile: AwcLightProfile) {
   return profile === "reference"
     ? { hemisphere: 1.1, directional: 2.0, fill: 1.7, exposure: 1.15, shadows: false }
-    : { hemisphere: 0.64, directional: 1.2, fill: 0.5, exposure: 0.74, shadows: true };
+    : { hemisphere: 0.82, directional: 1.03, fill: 0.72, exposure: 0.86, shadows: true };
 }
