@@ -348,3 +348,98 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .activity-form-row button { align-self: start; }
   .activity-preview iframe { min-height: 520px; height: 73vh; }
 }
+
+
+/* AWC S1-S2: il mondo e il confronto delle scene riusano gli editor esistenti. */
+.world-composer-panel {
+  margin: 26px 0 30px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: clamp(16px, 3vw, 28px);
+  min-width: 0;
+}
+.world-composer-heading h2 { font-size: clamp(21px, 2.5vw, 28px); }
+.world-composer-heading p, .world-composer-note {
+  color: var(--muted);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.world-composer-places {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: 10px;
+}
+.world-composer-places li {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+}
+.world-composer-places span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.world-composer-fieldset { border: 0; padding: 0; margin: 24px 0 0; min-width: 0; }
+.world-composer-fieldset legend { font-weight: 700; margin-bottom: 12px; }
+.world-composer-modes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.world-composer-choice {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  text-align: left;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.world-composer-choice span { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.world-composer-choice.selected, .world-composer-buttons .is-current {
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+  background: var(--accent-soft);
+}
+.world-composer-selector { display: grid; gap: 9px; margin: 22px 0; }
+.world-composer-selector select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.world-composer-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.world-composer-buttons .secondary-action { border-radius: 9px; text-align: left; }
+.world-composer-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+.world-composer-comparison > section {
+  min-width: 0;
+  border-top: 2px solid var(--line);
+  padding: 16px 0;
+}
+.world-composer-comparison h3 { margin: 0 0 12px; font-size: 18px; }
+.world-composer-state > strong { display: block; }
+.world-composer-state p { line-height: 1.5; }
+.world-composer-state ul { padding: 0; list-style: none; }
+.world-composer-state li { border-top: 1px solid var(--line); padding: 10px 0; display: grid; gap: 3px; overflow-wrap: anywhere; }
+.world-composer-state li span { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.world-composer-footer { border-top: 1px solid var(--line); padding-top: 15px; }
+.world-composer-footer .quiet-action:disabled { opacity: .5; cursor: default; }
+.world-composer-panel button:focus-visible,
+.world-composer-panel select:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 700px) {
+  .world-composer-modes, .world-composer-comparison { grid-template-columns: 1fr; }
+  .world-composer-buttons { display: grid; }
+  .world-composer-buttons .secondary-action { justify-content: start; }
+}
