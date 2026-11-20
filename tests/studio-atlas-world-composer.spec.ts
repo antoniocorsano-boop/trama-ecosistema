@@ -165,3 +165,27 @@ test("AWC S2: testo ingrandito al 200%, controlli accessibili e nessuno scorrime
   await expect(choice).toBeFocused();
   await context.close();
 });
+
+
+test("AWC S3a: archive gate rejects non-qualified files and never changes the learner path", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 320, height: 790 } });
+  const page = await context.newPage();
+  await openMuseo(page);
+  await openSceneComparison(page);
+  const heading = page.getByRole("heading", { name: "Sala Zero · Confronto della prova 3-D" });
+  await expect(heading).toBeVisible();
+  await expect(page.getByText("Nessun archivio selezionato. La scena narrativa rimane disponibile.")).toBeVisible();
+  await page.getByLabel("Archivio tecnico AWC-F Sala Zero").setInputFiles({
+    name: "prova-non-autorizzata.zip",
+    mimeType: "application/zip",
+    buffer: Buffer.from("Archivio non qualificato"),
+  });
+  await expect(page.getByRole("alert")).toContainText("Dimensione archivio non valida");
+  await expect(page.getByText("Archivio non accettato.")).toBeVisible();
+  await expect(page.locator(".awc-evidence-views img")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Vedi come studente" })).toHaveCount(0);
+
+  await page.locator(".world-composer-selector select").selectOption("MZ1_FAILED_REHEARSAL");
+  await expect(heading).toHaveCount(0);
+  await context.close();
+});
