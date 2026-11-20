@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { PathwayProject, SceneWorldState } from "../lib/model";
 import { compareSceneWorld, worldPlaces } from "../lib/world-composer";
+import { AwcTechnicalEvidencePanel } from "./AwcTechnicalEvidencePanel";
 
 type Representation = "2D" | "3D" | "COMBINATA";
 const REPRESENTATIONS: Array<{ value: Representation; title: string; description: string }> = [
@@ -208,6 +209,10 @@ export function SceneDesignComparison({
             </button>
           </div>
         </div>
+      )}
+      {project.projectId === "pw-strategy-selection-01-museo-zero" &&
+       scene.sceneId === "MZ4_TEST_MAPPING" && (
+        <AwcTechnicalEvidencePanel />
       )}
       <div className="world-composer-footer">
         <button className="quiet-action" type="button" onClick={() => { setSelectedChoiceId(null); setProposal(null); }} disabled={!changed}>
