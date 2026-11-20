@@ -117,24 +117,28 @@ export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ag
 export function updateProject(
   projectId: string,
   patch: Partial<Omit<PathwayProject, "projectId" | "createdAt">>,
-) {
-  let updated: PathwayProject | null = null;
-  const projects = readAll().map((project) => {
-    if (project.projectId !== projectId) return project;
-    updated = normalizeProject({
-      ...project,
-      ...patch,
-      projectId,
-      createdAt: project.createdAt,
-      updatedAt: new Date().toISOString(),
-      revision: project.revision + 1,
-    });
-    return updated;
+  expectedRevision?: number,
+): PathwayProject {
+  const projects = readAll();
+  const current = projects.find((project) => project.projectId === projectId);
+  if (!current) throw new Error("PROJECT_NOT_FOUND");
+  if (expectedRevision !== undefined && current.revision !== expectedRevision) {
+    throw new Error("PROJECT_REVISION_CONFLICT");
+  }
+
+  const updated = normalizeProject({
+    ...current,
+    ...patch,
+    projectId,
+    createdAt: current.createdAt,
+    updatedAt: new Date().toISOString(),
+    revision: current.revision + 1,
   });
-  writeAll(projects);
+  writeAll(projects.map((project) => (
+    project.projectId === projectId ? updated : project
+  )));
   return updated;
 }
-
 
 export function ensureMuseoZeroPilotProject(): PathwayProject {
   const existing = getProject(MUSEO_ZERO_PROJECT_ID);

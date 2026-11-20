@@ -5,6 +5,7 @@ on:
     paths:
       - "products/studio-atlas/**"
       - "tests/studio-atlas-atlas-preview.spec.ts"
+      - "tests/studio-atlas-world-composer.spec.ts"
       - "tests/studio-atlas-activity-import.spec.ts"
       - "tests/studio-atlas-edutwin-handoff.spec.ts"
       - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
@@ -14,7 +15,8 @@ permissions:
 
 concurrency:
   group: studio-atlas-preview-e2e-${{ github.ref }}
-  cancel-in-progress: false
+# New commits supersede obsolete checks only within the same PR ref.
+  cancel-in-progress: true
 
 env:
   ATLAS_PREVIEW_SHA: 98805c2e3575af40f60e8e5933ca0b863daed7b3
@@ -110,6 +112,13 @@ jobs:
           cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --reporter=line
+
+      - name: Qualify World Composer at mobile sizes and across local draft revisions
+        shell: bash
+        run: |
+          cp tests/studio-atlas-world-composer.spec.ts _atlas/tests/studio-atlas-world-composer.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-world-composer.spec.ts --project=chromium --reporter=line
 
       - name: Exercise exact Missione 118 acquisition in Chromium
         shell: bash
