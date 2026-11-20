@@ -159,6 +159,7 @@ jobs:
             products/studio-atlas/.artifacts/awc-sala-zero-live-webgl-offline.html
             products/studio-atlas/.artifacts/awc-s3b-*.png
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 7
 
       - name: Upload server logs on failure
