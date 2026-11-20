@@ -53,7 +53,7 @@ test("AWC S2: visualizza, modifica e riapre la conseguenza senza alterare la sce
   }, { projectId: MUSEO, sceneId: SCENE });
 
   await panel.locator(".world-composer-variation-editor textarea").fill(VARIATION);
-  await expect(panel.getByText(VARIATION, { exact: true })).toBeVisible();
+  await expect(panel.locator(".world-composer-comparison .world-composer-state > p").filter({ hasText: VARIATION })).toBeVisible();
   await panel.getByRole("button", { name: "Scarta la modifica" }).click();
   await expect(panel.locator(".world-composer-variation-editor textarea")).not.toHaveValue(VARIATION);
   await panel.locator(".world-composer-variation-editor textarea").fill(VARIATION);
