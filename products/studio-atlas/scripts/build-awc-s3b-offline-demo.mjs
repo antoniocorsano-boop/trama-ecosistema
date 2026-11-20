@@ -35,7 +35,7 @@ const html = template
   .replace("__CSS_HASH__", cspHash(css));
 
 if (/__(?:SCENE_SPEC|THREE_RUNTIME|ENGINE_HASH|APP_HASH|CSS_HASH)__/.test(html) ||
-    /https?:\/\/|<script\s+src=/i.test(html))
+    /<script\s+src=/i.test(html) || /https?:\/\//i.test(template))
   throw Error("Offline trial contains an unresolved resource or network link");
 const destDir = resolve(process.argv[2] || join(base, ".artifacts"));
 mkdirSync(destDir, { recursive: true });
