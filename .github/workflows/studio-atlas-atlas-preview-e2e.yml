@@ -15,7 +15,8 @@ permissions:
 
 concurrency:
   group: studio-atlas-preview-e2e-${{ github.ref }}
-  cancel-in-progress: false
+# New commits supersede obsolete checks only within the same PR ref.
+  cancel-in-progress: true
 
 env:
   ATLAS_PREVIEW_SHA: 98805c2e3575af40f60e8e5933ca0b863daed7b3
