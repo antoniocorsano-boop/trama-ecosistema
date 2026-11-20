@@ -7,6 +7,7 @@ import type {
   StoryDraft,
   WorldDraft,
 } from "../lib/model";
+import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 
 type Props = {
   project: PathwayProject;
@@ -152,6 +153,8 @@ export function WorldEditor({ project, onPatch }: Props) {
       <p className="lead">
         Il mondo deve dare allo studente qualcosa da osservare, cambiare e capire.
       </p>
+
+      <WorldDesignOverview project={project} />
 
       <div className="world-grid">
         {worldFields.map(([key, label, hint]) => (
@@ -335,6 +338,8 @@ export function SceneEditor({ project, onPatch }: Props) {
         </div>
         <button className="primary-action" onClick={addScene}>Aggiungi scena</button>
       </div>
+
+      <SceneDesignComparison project={project} />
 
       {project.scenes.length === 0 ? (
         <div className="empty-stage">
