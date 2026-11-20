@@ -260,7 +260,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
             <div><dt>Revisione</dt><dd>{project.revision}</dd></div>
           </dl>
           <p className="context-note">
-            Nessun dato personale dello studente è richiesto. Il salvataggio resta locale a questo dispositivo: non costituisce una copia di sicurezza né sincronizza il Percorso.
+            Nessuna classe, studente o provider di calcolo è legato a questo draft. Il salvataggio resta locale a questo dispositivo: non costituisce una copia di sicurezza né sincronizza il Percorso.
           </p>
         </aside>
       </div>
