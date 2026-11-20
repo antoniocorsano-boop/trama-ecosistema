@@ -1,7 +1,7 @@
 # AWC / Studio Atlas — Incremento S1–S2 (20 novembre 2026)
 
 **Stato:** PROPOSTA APPLICATIVA / PR IN BOZZA / NESSUNA PUBBLICAZIONE.
-**Provenienza decisionale:** Curriculum-Atlas PR #136, `AWC-STUDIO-ATLAS-WORLD-DESIGN-v1.md`.
+**Provenienza decisionale:** Curricolo Atlas PR #136, `AWC-STUDIO-ATLAS-WORLD-DESIGN-v1.md`.
 **Ambito:** `products/studio-atlas` in TRAMA; la biblioteca Atlas 3-D mantiene un percorso separato.
 
 ## Decisione e motivazione
