@@ -475,3 +475,31 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   outline-offset: 2px;
 }
 .world-composer-variation-editor .primary-action:disabled { cursor: default; }
+
+
+/* AWC S2: impedisce ai campi delle scelte di allargare l'intera pagina mobile. */
+.scene-timeline, .scene-row, .scene-body, .scene-heading-row,
+.scene-choice-editor, .scene-choice-row, .choice-target {
+  min-width: 0;
+  max-width: 100%;
+}
+.scene-body textarea, .scene-title, .scene-kind,
+.scene-choice-row input, .scene-choice-row textarea,
+.scene-choice-row select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.scene-choice-row label, .scene-choice-row .choice-target {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .scene-choice-row .choice-target {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .scene-choice-row .choice-target select {
+    width: 100%;
+    min-width: 0;
+  }
+}
