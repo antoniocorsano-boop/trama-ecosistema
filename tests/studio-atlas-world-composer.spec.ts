@@ -137,3 +137,29 @@ for (const width of [320, 390]) {
     await context.close();
   });
 }
+
+
+test("AWC S2: testo ingrandito al 200%, controlli accessibili e nessuno scorrimento orizzontale di pagina", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await openMuseo(page);
+  await page.evaluate(() => { document.body.style.fontSize = "200%"; });
+  for (const stage of ["Mondo", "Scene"]) {
+    await page.getByRole("navigation", { name: "Fasi del Percorso" })
+      .getByRole("button", { name: stage }).click();
+    const heading = page.getByRole("heading", {
+      name: stage === "Mondo" ? "Il mondo, a partire dalle scene" : "Tavola della scena",
+    });
+    await expect(heading).toBeVisible();
+    const measures = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }));
+    expect(measures.scrollWidth, `overflow with enlarged text in ${stage}`)
+      .toBeLessThanOrEqual(measures.viewport + 1);
+  }
+  const choice = page.getByRole("button", { name: "Originale", exact: true });
+  await choice.focus();
+  await expect(choice).toBeFocused();
+  await context.close();
+});
