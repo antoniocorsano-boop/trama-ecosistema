@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createMuseoZeroPilotProject } from "./canonical/museo-zero";
-import { compareSceneWorld, worldPlaces } from "./world-composer";
+import { compareSceneWorld, updateWorldChoiceStatus, worldPlaces } from "./world-composer";
 
 test("AWC S2: riusa luoghi e identità dal progetto canonico", () => {
   const project = createMuseoZeroPilotProject();
@@ -33,4 +33,33 @@ test("AWC S2: scelta non documentata non inventa uno stato visivo", () => {
   const result = compareSceneWorld(scene, "invented");
   assert.equal(result.variation, null);
   assert.equal(result.feedback, null);
+});
+
+
+test("AWC S2: una conseguenza modificata resta separata dallo stato originale", () => {
+  const project = createMuseoZeroPilotProject();
+  const originalJson = JSON.stringify(project.scenes);
+  const changed = updateWorldChoiceStatus(
+    project.scenes,
+    "MZ4_TEST_MAPPING",
+    "switch-b",
+    "  La scena si sincronizza e il nuovo ingresso resta accessibile.  ",
+  );
+  const source = project.scenes.find((s) => s.sceneId === "MZ4_TEST_MAPPING");
+  const result = changed.find((s) => s.sceneId === "MZ4_TEST_MAPPING");
+  assert.ok(source?.world && result?.world);
+  assert.deepEqual(result.world, source.world);
+  assert.equal(
+    result.choices.find((c) => c.choiceId === "switch-b")?.worldAfter?.status,
+    "La scena si sincronizza e il nuovo ingresso resta accessibile.",
+  );
+  assert.equal(JSON.stringify(project.scenes), originalJson);
+  assert.throws(
+    () => updateWorldChoiceStatus(project.scenes, "MZ4_TEST_MAPPING", "other", "Proposta"),
+    /SCENE_VARIATION_NOT_FOUND/,
+  );
+  assert.throws(
+    () => updateWorldChoiceStatus(project.scenes, "MZ4_TEST_MAPPING", "switch-b", " "),
+    /EMPTY_SCENE_VARIATION/,
+  );
 });
