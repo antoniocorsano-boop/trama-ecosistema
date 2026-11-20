@@ -38,5 +38,12 @@ test("AWC S3b: original and balanced lighting profiles are separate and reversib
   assert.equal(balanced.exposure < reference.exposure, true);
   assert.equal(balanced.hemisphere < reference.hemisphere, true);
   assert.equal(balanced.shadows, true);
+  // Mobile A/B screenshots: preserve original reference but move the alternate
+  // out of overly dark exposure with walls/trim no longer casting harsh shadows.
+  assert.equal(balanced.exposure, 0.86);
+  assert.equal(balanced.hemisphere, 0.82);
+  assert.equal(balanced.directional, 1.03);
+  assert.equal(balanced.fill, 0.72);
+  assert.ok(balanced.exposure > 0.74 && balanced.exposure < reference.exposure);
   assert.deepEqual(lightingValues("reference"), reference);
 });

@@ -66,15 +66,15 @@ if(!gl)throw Error("WebGL non disponibile su questo dispositivo.");
 var renderer=new T.WebGLRenderer({canvas:canvas,context:gl,antialias:true,alpha:false,powerPreference:"low-power"});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
 renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;
-renderer.shadowMap.type=T.PCFSoftShadowMap;
+renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;
 var scene=new T.Scene();scene.background=new T.Color(cfg.world.background);
 var hemi=new T.HemisphereLight(0xd8f0ff,0x243b55,1.1);scene.add(hemi);
 var key=new T.DirectionalLight(0xffefd1,2);key.position.set(cfg.world.lightPosition[0],cfg.world.lightPosition[1],cfg.world.lightPosition[2]);scene.add(key);
-key.shadow.mapSize.set(512,512);key.shadow.camera.near=.5;key.shadow.camera.far=30;key.shadow.camera.left=-8;key.shadow.camera.right=8;key.shadow.camera.top=8;key.shadow.camera.bottom=-8;key.shadow.bias=-.0004;
+key.shadow.mapSize.set(1024,1024);key.shadow.camera.near=.5;key.shadow.camera.far=30;key.shadow.camera.left=-5.8;key.shadow.camera.right=5.8;key.shadow.camera.top=5.8;key.shadow.camera.bottom=-5.8;key.shadow.bias=-.0005;key.shadow.normalBias=.035;
 var fill=new T.PointLight(0x70c7ed,1.7,15);fill.position.set(2,0,3.8);scene.add(fill);
 var materials={};
 for(var name in cfg.materials){if(Object.prototype.hasOwnProperty.call(cfg.materials,name)){var mat=cfg.materials[name];materials[name]=new T.MeshStandardMaterial({color:new T.Color(mat.color),roughness:mat.roughness,metalness:mat.metalness||0});}}
-cfg.objects.forEach(function(obj){var mesh=new T.Mesh(new T.BoxGeometry(obj.size[0],obj.size[1],obj.size[2]),materials[obj.material]);mesh.name=obj.id;mesh.position.set(obj.position[0],obj.position[1],obj.position[2]);mesh.castShadow=obj.id!=="floor"&&obj.id!=="back-wall";mesh.receiveShadow=true;scene.add(mesh);});
+cfg.objects.forEach(function(obj){var mesh=new T.Mesh(new T.BoxGeometry(obj.size[0],obj.size[1],obj.size[2]),materials[obj.material]);mesh.name=obj.id;mesh.position.set(obj.position[0],obj.position[1],obj.position[2]);mesh.castShadow=["console-plinth","console-panel","sensor-A","sensor-B"].includes(obj.id);mesh.receiveShadow=true;scene.add(mesh);});
 var camera=new T.PerspectiveCamera(cfg.camera.fov,4/3,cfg.camera.near,cfg.camera.far);camera.up.set(0,0,1);
 var orbit=0,signal="A",profile="balanced",pointer=null,paintRequest=0;
 function paint(){
@@ -91,9 +91,9 @@ status.textContent="WebGL attivo · rotazione "+orbit.toFixed(2)+" rad · segnal
 function redraw(){if(!paintRequest)paintRequest=requestAnimationFrame(paint);}
 function lighting(name){
 profile=name;var balanced=name==="balanced";
-hemi.intensity=balanced?.64:1.1;key.intensity=balanced?1.2:2;fill.intensity=balanced?.5:1.7;
-renderer.toneMappingExposure=balanced?.74:1.15;
-key.castShadow=balanced;renderer.shadowMap.enabled=balanced;renderer.shadowMap.needsUpdate=true;
+hemi.intensity=balanced?.82:1.1;key.intensity=balanced?1.03:2;fill.intensity=balanced?.72:1.7;
+renderer.toneMappingExposure=balanced?.86:1.15;
+key.castShadow=balanced;renderer.shadowMap.enabled=balanced;renderer.shadowMap.needsUpdate=balanced;
 document.getElementById("balance").setAttribute("aria-pressed",String(balanced));
 document.getElementById("reference").setAttribute("aria-pressed",String(!balanced));
 redraw();
