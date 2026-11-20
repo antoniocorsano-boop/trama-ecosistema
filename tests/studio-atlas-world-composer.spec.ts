@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { chromium, expect, test } from "@playwright/test";
 
 const STUDIO = "http://127.0.0.1:3100";
 const MUSEO = "pw-strategy-selection-01-museo-zero";
@@ -187,5 +187,78 @@ test("AWC S3a: archive gate rejects non-qualified files and never changes the le
 
   await page.locator(".world-composer-selector select").selectOption({ index: 0 });
   await expect(heading).toHaveCount(0);
+  await context.close();
+});
+
+
+test("AWC S3b: native WebGL touch orbit, exact camera reset and isolated signal change", async () => {
+  test.setTimeout(90_000);
+  const glBrowser = await chromium.launch({
+    headless: true,
+    args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
+  });
+  try {
+    const context = await glBrowser.newContext({ viewport: { width: 390, height: 844 } });
+    const page = await context.newPage();
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    await openMuseo(page);
+    await openSceneComparison(page);
+    await page.getByRole("button", { name: "Apri la Sala Zero navigabile" }).click();
+    const canvas = page.locator("canvas.awc-live-canvas");
+    await expect(canvas).toBeVisible({ timeout: 30_000 });
+    const live = page.locator(".awc-live-panel");
+    const status = live.getByRole("status");
+    await expect(status).toContainText("3-D attivo", { timeout: 30_000 });
+    await expect(status).toContainText("rotazione 0.00 radianti");
+    const gl = await canvas.evaluate(el => {
+      const context = (el as HTMLCanvasElement).getContext("webgl");
+      return { available: Boolean(context), error: context?.getError() };
+    });
+    expect(gl.available).toBe(true);
+    expect(gl.error).toBe(0);
+
+    const bounds = await canvas.boundingBox();
+    if (!bounds) throw new Error("Area WebGL non disponibile");
+    await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(bounds.x + bounds.width / 2 + 30, bounds.y + bounds.height / 2, { steps: 4 });
+    await page.mouse.up();
+    await expect(status).toContainText("rotazione 0.12 radianti");
+    await live.getByRole("button", { name: "Simula segnale B" }).click();
+    await expect(status).toContainText("segnale B");
+    await live.getByRole("button", { name: "Luce originale AWC-F" }).click();
+    await expect(status).toContainText("luce originale");
+
+    await live.getByRole("button", { name: "Ripristina inquadratura" }).click();
+    await expect(status).toContainText("rotazione 0.00 radianti");
+    await expect(status).toContainText("segnale A");
+    await live.getByRole("button", { name: "Luce equilibrata · prova" }).click();
+    await expect(status).toContainText("luce equilibrata");
+    await live.getByRole("button", { name: "Chiudi ambiente 3-D" }).click();
+    await expect(canvas).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Vedi come studente" })).toHaveCount(0);
+    expect(errors).toEqual([]);
+    await context.close();
+  } finally { await glBrowser.close(); }
+});
+
+test("AWC S3b: gracefully reports WebGL absence without changing student authorization", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 320, height: 720 } });
+  const page = await context.newPage();
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function(type, ...rest) {
+      if (type === "webgl" || type === "webgl2" || type === "experimental-webgl") return null;
+      return original.call(this, type, ...rest);
+    } as typeof original;
+  });
+  await openMuseo(page);
+  await openSceneComparison(page);
+  await page.getByRole("button", { name: "Apri la Sala Zero navigabile" }).click();
+  await expect(page.locator(".awc-live-panel [role=alert]")).toContainText("WebGL non disponibile");
+  await expect(page.locator(".awc-live-panel [role=status]")).toContainText("Prova sospesa");
+  await page.getByRole("button", { name: "Chiudi ambiente 3-D" }).click();
+  await expect(page.locator("canvas.awc-live-canvas")).toHaveCount(0);
   await context.close();
 });

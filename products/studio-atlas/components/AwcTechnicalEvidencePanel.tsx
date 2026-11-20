@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AwcSalaZeroLivePreview } from "./AwcSalaZeroLivePreview";
 import {
   AWC_F_PLAN_SHA256,
   AWC_FRAMES,
@@ -68,9 +69,10 @@ export function AwcTechnicalEvidencePanel() {
     <section className="awc-evidence-panel" aria-labelledby="awc-evidence-title">
       <h3 id="awc-evidence-title">Sala Zero · Confronto della prova 3-D</h3>
       <p className="world-composer-note">
-        Fotogrammi originali della derivazione Blender e WebGL. Non è una scena navigabile
-        e non sostituisce l’esperienza illustrata dello studente.
+        Confronta i fotogrammi originali delle due derivazioni oppure apri, qui sotto,
+        una prova WebGL tridimensionale separata. Nessuna delle due sostituisce l’esperienza dello studente.
       </p>
+      <AwcSalaZeroLivePreview />
       <label className="awc-evidence-input">
         <strong>Apri la prova tecnica conservata</strong>
         <span>Seleziona l’archivio ZIP AWC-F, senza caricarlo su alcun servizio.</span>

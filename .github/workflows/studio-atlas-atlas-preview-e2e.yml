@@ -6,6 +6,7 @@ on:
       - "products/studio-atlas/**"
       - "tests/studio-atlas-atlas-preview.spec.ts"
       - "tests/studio-atlas-world-composer.spec.ts"
+      - "tests/studio-atlas-awc-s3b-offline.spec.ts"
       - "tests/studio-atlas-activity-import.spec.ts"
       - "tests/studio-atlas-edutwin-handoff.spec.ts"
       - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
@@ -50,6 +51,10 @@ jobs:
       - name: Install Studio Atlas
         working-directory: products/studio-atlas
         run: npm install --no-audit --no-fund
+
+      - name: Build source-locked, network-free S3b Android trial
+        working-directory: products/studio-atlas
+        run: node scripts/build-awc-s3b-offline-demo.mjs
 
       - name: Install Atlas exact candidate
         working-directory: _atlas
@@ -120,6 +125,13 @@ jobs:
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-world-composer.spec.ts --project=chromium --reporter=line
 
+      - name: Exercise the offline S3b real WebGL trial in Chromium
+        shell: bash
+        run: |
+          cp tests/studio-atlas-awc-s3b-offline.spec.ts _atlas/tests/studio-atlas-awc-s3b-offline.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-awc-s3b-offline.spec.ts --project=chromium --reporter=line
+
       - name: Exercise exact Missione 118 acquisition in Chromium
         shell: bash
         run: |
@@ -137,6 +149,18 @@ jobs:
           cp tests/studio-atlas-edutwin-handoff.spec.ts _atlas/tests/studio-atlas-edutwin-handoff.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-edutwin-handoff.spec.ts --project=chromium --reporter=line
+
+      - name: Preserve source-locked offline Android trial and rendered frames
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: awc-s3b-live-webgl-offline
+          path: |
+            products/studio-atlas/.artifacts/awc-sala-zero-live-webgl-offline.html
+            products/studio-atlas/.artifacts/awc-s3b-*.png
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 7
 
       - name: Upload server logs on failure
         if: failure()
