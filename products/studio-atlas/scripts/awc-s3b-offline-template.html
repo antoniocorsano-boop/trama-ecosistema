@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-__ENGINE_HASH__' 'sha256-__APP_HASH__'; style-src 'sha256-__CSS_HASH__'; connect-src 'none'; img-src data:; object-src 'none'; form-action 'none'; base-uri 'none'">
+<title>Studio Atlas · Sala Zero · 3-D locale</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}
+body{margin:0;background:#0e1724;color:#e8eef3;font:16px/1.55 system-ui,-apple-system,sans-serif}
+main{max-width:920px;margin:auto;padding:22px 16px 44px}
+.eyebrow{font-size:12px;color:#7dd3c6;font-weight:700;letter-spacing:2px}
+h1{font-size:clamp(26px,6vw,39px);line-height:1.16;margin:10px 0 12px}
+p{color:#c1ced9}.bar{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+button{border:1px solid #49647a;border-radius:10px;background:#192a3a;color:#f3f8fa;padding:12px 15px;min-height:48px;font:inherit;cursor:pointer}
+button[aria-pressed="true"]{background:#d4ece7;color:#112b2b;border-color:#d4ece7;font-weight:650}
+button:focus-visible,canvas:focus-visible{outline:3px solid #7de1d5;outline-offset:3px}
+.viewport{width:100%;max-width:800px;aspect-ratio:4/3;margin:20px auto;overflow:hidden;background:#111c29;border:1px solid #355166;border-radius:14px}
+canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+canvas:active{cursor:grabbing}.status{padding:11px 14px;margin:14px 0;background:#172b3c;border-radius:9px;color:#def0ed}
+.note{font-size:13px;line-height:1.5;border-top:1px solid #2d4256;margin-top:28px;padding-top:18px}
+[role="alert"]{color:#ffd8c7}
+@media(max-width:460px){.bar{display:grid;grid-template-columns:1fr 1fr}.bar button{font-size:14px;padding:10px 7px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">STUDIO ATLAS · PROVA LOCALE NON PUBBLICA</div>
+<h1>MUSEO ZERO · Sala Zero navigabile</h1>
+<p>Trascina sulla scena per ruotare l'inquadratura. Prova il segnale B e confronta la luce originale con la correzione sperimentale.</p>
+<div class="bar">
+<button id="reset">Ripristina inquadratura</button>
+<button id="signal">Cambia segnale A/B</button>
+<button id="left">Ruota a sinistra</button>
+<button id="right">Ruota a destra</button>
+</div>
+<div id="viewport" class="viewport" aria-label="Rendering WebGL Sala Zero"></div>
+<p class="status" id="status" role="status" aria-live="polite">Preparazione del motore 3-D…</p>
+<p id="error" role="alert" hidden></p>
+<div class="bar"><button id="balance" aria-pressed="true">Luce equilibrata · prova</button>
+<button id="reference" aria-pressed="false">Luce originale AWC-F</button></div>
+<p class="note">Prova tecnica isolata, non la Biblioteca Atlas né un ambiente per studenti. 
+16 oggetti, 192 triangoli, Three.js r128. La geometria resta invariata; l'illuminazione è una proposta da valutare.
+Nessuna richiesta di rete, raccolta di dati o controllo di apparecchiature.
+Origine AWC-F: 6285c47c · Fonte immutabile f8e91ca7.</p>
+</main>
+<script type="application/json" id="awc-scene">__SCENE_SPEC__</script>
+<script>__THREE_RUNTIME__</script>
+<script>
+(function(){
+"use strict";
+var T=window.THREE;
+var cfg=JSON.parse(document.getElementById("awc-scene").textContent);
+var host=document.getElementById("viewport");
+var status=document.getElementById("status");
+function fail(message){var note=document.getElementById("error");note.textContent=message;note.hidden=false;status.textContent="Prova 3-D non disponibile";}
+function clamp(n){return Math.min(.3,Math.max(-.3,n));}
+try {
+var canvas=document.createElement("canvas");
+canvas.setAttribute("role","img");
+canvas.setAttribute("tabindex","0");
+canvas.setAttribute("aria-label","Sala Zero 3-D: trascina o usa le frecce; premi Home per ripristinare");
+host.appendChild(canvas);
+var gl=canvas.getContext("webgl",{antialias:true,alpha:false,depth:true,stencil:false,preserveDrawingBuffer:false,powerPreference:"low-power"});
+if(!gl)throw Error("WebGL non disponibile su questo dispositivo.");
+var renderer=new T.WebGLRenderer({canvas:canvas,context:gl,antialias:true,alpha:false,powerPreference:"low-power"});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;
+renderer.shadowMap.type=T.PCFSoftShadowMap;
+var scene=new T.Scene();scene.background=new T.Color(cfg.world.background);
+var hemi=new T.HemisphereLight(0xd8f0ff,0x243b55,1.1);scene.add(hemi);
+var key=new T.DirectionalLight(0xffefd1,2);key.position.set(cfg.world.lightPosition[0],cfg.world.lightPosition[1],cfg.world.lightPosition[2]);scene.add(key);
+key.shadow.mapSize.set(512,512);key.shadow.camera.near=.5;key.shadow.camera.far=30;key.shadow.camera.left=-8;key.shadow.camera.right=8;key.shadow.camera.top=8;key.shadow.camera.bottom=-8;key.shadow.bias=-.0004;
+var fill=new T.PointLight(0x70c7ed,1.7,15);fill.position.set(2,0,3.8);scene.add(fill);
+var materials={};
+for(var name in cfg.materials){if(Object.prototype.hasOwnProperty.call(cfg.materials,name)){var mat=cfg.materials[name];materials[name]=new T.MeshStandardMaterial({color:new T.Color(mat.color),roughness:mat.roughness,metalness:mat.metalness||0});}}
+cfg.objects.forEach(function(obj){var mesh=new T.Mesh(new T.BoxGeometry(obj.size[0],obj.size[1],obj.size[2]),materials[obj.material]);mesh.name=obj.id;mesh.position.set(obj.position[0],obj.position[1],obj.position[2]);mesh.castShadow=obj.id!=="floor"&&obj.id!=="back-wall";mesh.receiveShadow=true;scene.add(mesh);});
+var camera=new T.PerspectiveCamera(cfg.camera.fov,4/3,cfg.camera.near,cfg.camera.far);camera.up.set(0,0,1);
+var orbit=0,signal="A",profile="balanced",pointer=null,paintRequest=0;
+function paint(){
+paintRequest=0;
+var c=cfg.camera,t=c.azimuth+orbit,d=c.distance,h=c.elevation;
+camera.position.set(c.center[0]+d*Math.cos(h)*Math.sin(t),c.center[1]-d*Math.cos(h)*Math.cos(t),c.center[2]+d*Math.sin(h));
+camera.lookAt(new T.Vector3(c.center[0],c.center[1],c.center[2]));camera.updateMatrixWorld(true);
+materials.screen.color.set(signal==="B"?"#224b57":"#23384c");
+materials.screen.emissive.set(signal==="B"?"#67d9ca":"#1d3448");
+materials.screen.emissiveIntensity=signal==="B"?3:.08;
+renderer.render(scene,camera);
+status.textContent="WebGL attivo · rotazione "+orbit.toFixed(2)+" rad · segnale "+signal+" · luce "+(profile==="balanced"?"equilibrata":"originale");
+}
+function redraw(){if(!paintRequest)paintRequest=requestAnimationFrame(paint);}
+function lighting(name){
+profile=name;var balanced=name==="balanced";
+hemi.intensity=balanced?.64:1.1;key.intensity=balanced?1.2:2;fill.intensity=balanced?.5:1.7;
+renderer.toneMappingExposure=balanced?.74:1.15;
+key.castShadow=balanced;renderer.shadowMap.enabled=balanced;renderer.shadowMap.needsUpdate=true;
+document.getElementById("balance").setAttribute("aria-pressed",String(balanced));
+document.getElementById("reference").setAttribute("aria-pressed",String(!balanced));
+redraw();
+}
+function rotate(px){orbit=clamp(orbit+px*.004);redraw();}
+function reset(){orbit=0;signal="A";redraw();}
+function resize(){
+var width=Math.max(180,Math.min(800,Math.round(host.clientWidth||320))),height=Math.round(width*.75);
+renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();redraw();
+}
+document.getElementById("balance").onclick=function(){lighting("balanced");};
+document.getElementById("reference").onclick=function(){lighting("reference");};
+document.getElementById("reset").onclick=reset;
+document.getElementById("signal").onclick=function(){signal=signal==="A"?"B":"A";redraw();};
+document.getElementById("left").onclick=function(){rotate(-10);};
+document.getElementById("right").onclick=function(){rotate(10);};
+canvas.addEventListener("pointerdown",function(e){pointer=e.clientX;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener("pointermove",function(e){if(pointer===null)return;var dx=e.clientX-pointer;pointer=e.clientX;rotate(dx);});
+["pointerup","pointercancel","lostpointercapture"].forEach(function(name){canvas.addEventListener(name,function(){pointer=null;});});
+canvas.addEventListener("keydown",function(e){if(e.key==="ArrowLeft"){e.preventDefault();rotate(-10);}if(e.key==="ArrowRight"){e.preventDefault();rotate(10);}if(e.key==="Home"){e.preventDefault();reset();}});
+canvas.addEventListener("webglcontextlost",function(e){e.preventDefault();fail("WebGL interrotto. Riapri il documento per riprovare.");});
+if(typeof ResizeObserver!=="undefined"){new ResizeObserver(resize).observe(host);}else{window.addEventListener("resize",resize);}
+lighting("balanced");resize();paint();
+window.__awcTrial={ready:true,engine:"three-r128",getState:function(){return {orbit:orbit,signal:signal,profile:profile,objects:cfg.objects.length,studentAuthorized:false,publishable:false};}};
+}catch(e){fail(String(e));window.__awcTrial={ready:false,error:String(e),studentAuthorized:false,publishable:false};}
+})();
+</script>
+</body></html>
