@@ -79,19 +79,22 @@ export function AwcSalaZeroLivePreview() {
         const mainLight = new T.DirectionalLight(0xffefd1, 2);
         const sourceLight = AWC_S3B_SCENE.world.lightPosition;
         mainLight.position.set(sourceLight[0], sourceLight[1], sourceLight[2]);
-        mainLight.shadow.mapSize.set(512, 512);
+        mainLight.shadow.mapSize.set(1024, 1024);
         mainLight.shadow.camera.near = 0.5;
         mainLight.shadow.camera.far = 30;
-        mainLight.shadow.camera.left = -8;
-        mainLight.shadow.camera.right = 8;
-        mainLight.shadow.camera.top = 8;
-        mainLight.shadow.camera.bottom = -8;
-        mainLight.shadow.bias = -0.0004;
+        mainLight.shadow.camera.left = -5.8;
+        mainLight.shadow.camera.right = 5.8;
+        mainLight.shadow.camera.top = 5.8;
+        mainLight.shadow.camera.bottom = -5.8;
+        mainLight.shadow.bias = -0.0005;
+        mainLight.shadow.normalBias = 0.035;
         scene.add(mainLight);
         const fill = new T.PointLight(0x70c7ed, 1.7, 15);
         fill.position.set(2, 0, 3.8);
         scene.add(fill);
         renderer.shadowMap.type = T.PCFSoftShadowMap;
+        // The lights/objects never move; camera orbit reuses the cached depth map.
+        renderer.shadowMap.autoUpdate = false;
 
         const matMap = new Map<string, import("three").MeshStandardMaterial>();
         for (const [key, spec] of Object.entries(AWC_S3B_SCENE.materials)) {
@@ -114,7 +117,7 @@ export function AwcSalaZeroLivePreview() {
           const mesh = new T.Mesh(shape, material);
           mesh.name = object.id;
           mesh.position.set(object.position[0], object.position[1], object.position[2]);
-          mesh.castShadow = object.id !== "floor" && object.id !== "back-wall";
+          mesh.castShadow = ["console-plinth", "console-panel", "sensor-A", "sensor-B"].includes(object.id);
           mesh.receiveShadow = true;
           scene.add(mesh);
         }
@@ -162,7 +165,7 @@ export function AwcSalaZeroLivePreview() {
           if (renderer) {
             renderer.toneMappingExposure = lighting.exposure;
             renderer.shadowMap.enabled = lighting.shadows;
-            renderer.shadowMap.needsUpdate = true;
+            renderer.shadowMap.needsUpdate = lighting.shadows;
           }
           setProfile(localProfile);
           schedulePaint();
