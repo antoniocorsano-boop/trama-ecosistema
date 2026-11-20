@@ -180,12 +180,12 @@ test("AWC S3a: archive gate rejects non-qualified files and never changes the le
     mimeType: "application/zip",
     buffer: Buffer.from("Archivio non qualificato"),
   });
-  await expect(page.getByRole("alert")).toContainText("Dimensione archivio non valida");
+  await expect(page.locator(".awc-evidence-error")).toContainText("L\u0027archivio non coincide con la prova AWC-F qualificata");
   await expect(page.getByText("Archivio non accettato.")).toBeVisible();
   await expect(page.locator(".awc-evidence-views img")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Vedi come studente" })).toHaveCount(0);
 
-  await page.locator(".world-composer-selector select").selectOption("MZ1_FAILED_REHEARSAL");
+  await page.locator(".world-composer-selector select").selectOption({ index: 0 });
   await expect(heading).toHaveCount(0);
   await context.close();
 });
