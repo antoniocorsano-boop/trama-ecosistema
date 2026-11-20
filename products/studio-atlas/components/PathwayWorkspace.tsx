@@ -39,10 +39,10 @@ export function PathwayWorkspace({ id }: { id: string }) {
   const stageIndex = useMemo(() => STAGES.indexOf(stage), [stage]);
 
   function saveIdea() {
-    if (!project) return;
+    if (!project || draftIdea === project.idea) return;
     setSaveState("saving");
     try {
-      const updated = updateProject(project.projectId, { idea: draftIdea });
+      const updated = updateProject(project.projectId, { idea: draftIdea }, project.revision);
       setProject(updated);
       setSaveState("saved");
     } catch {
@@ -54,7 +54,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
     if (!project) return;
     setSaveState("saving");
     try {
-      const updated = updateProject(project.projectId, patch);
+      const updated = updateProject(project.projectId, patch, project.revision);
       setProject(updated);
       setSaveState("saved");
     } catch {
@@ -71,7 +71,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
         const updated = updateProject(project.projectId, {
           humanState: "PREVIEW",
           lastPreviewSnapshot: result.snapshot,
-        });
+        }, project.revision);
         setProject(updated);
         setSaveState("saved");
         return;
@@ -90,7 +90,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
       if (result.status === "OPENED") {
         const updated = updateProject(project.projectId, {
           lastPreviewSnapshot: result.snapshot,
-        });
+        }, project.revision);
         setProject(updated);
         setSaveState("saved");
         return;
@@ -111,7 +111,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
       const updated = updateProject(project.projectId, {
         humanState: "PREVIEW",
         lastPreviewSnapshot: snapshot,
-      });
+      }, project.revision);
       setProject(updated);
       setSaveState("saved");
     } catch {
@@ -138,15 +138,30 @@ export function PathwayWorkspace({ id }: { id: string }) {
             value={project.title}
             aria-label="Titolo del Percorso"
             onChange={(e) => {
-              const updated = updateProject(project.projectId, { title: e.target.value });
-              setProject(updated);
+              setSaveState("saving");
+              try {
+                const updated = updateProject(project.projectId, { title: e.target.value }, project.revision);
+                setProject(updated);
+                setSaveState("saved");
+              } catch {
+                setSaveState("error");
+              }
             }}
           />
         </div>
         <div className="workspace-actions">
-          <span className={`save-state ${saveState}`}>
-            {saveState === "saving" ? "Salvataggio…" : saveState === "error" ? "Non salvato" : "Salvato"}
+          <span className={`save-state ${saveState}`} role="status" aria-live="polite">
+            {saveState === "saving" ? "Salvataggio…" : saveState === "error" ? "Non salvato" : "Salvato su questo dispositivo"}
           </span>
+          {saveState === "error" && (
+            <button className="quiet-action" type="button" onClick={() => {
+              if (!window.confirm("Ricaricare la copia locale? Le modifiche non salvate andranno perse.")) return;
+              const latest = getProject(id);
+              setProject(latest);
+              setDraftIdea(latest?.idea ?? "");
+              setSaveState("saved");
+            }}>Ricarica copia salvata</button>
+          )}
           <button
             className="secondary-action"
             disabled={
@@ -192,7 +207,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
               <textarea
                 className="idea-editor"
                 value={draftIdea}
-                onChange={(e) => setDraftIdea(e.target.value)}
+                onChange={(e) => { setDraftIdea(e.target.value); setSaveState("saving"); }}
                 onBlur={saveIdea}
                 aria-label="Idea del Percorso"
               />
@@ -245,7 +260,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
             <div><dt>Revisione</dt><dd>{project.revision}</dd></div>
           </dl>
           <p className="context-note">
-            Nessuna classe, studente o provider di calcolo è legato a questo draft.
+            Nessun dato personale dello studente è richiesto. Il salvataggio resta locale a questo dispositivo: non costituisce una copia di sicurezza né sincronizza il Percorso.
           </p>
         </aside>
       </div>
