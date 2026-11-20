@@ -17,13 +17,19 @@ test("AWC S3b offline: actual local 3-D, touch, light A/B and reset, with no net
   try {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await context.newPage();
-    const network: string[] = [], errors: string[] = [];
+    const network: string[] = [], errors: string[] = [], consoleErrors: string[] = [];
+    page.on("console", message => { if (message.type() === "error") consoleErrors.push(message.text()); });
     page.on("request", request => {
       if (/^https?:/i.test(request.url())) network.push(request.url());
     });
     page.on("pageerror", error => errors.push(error.message));
     expect(readFileSync(html).length).toBeGreaterThan(400_000);
     await page.goto(pathToFileURL(html).href);
+    try {
+      await page.waitForFunction(() => (window as any).__awcTrial !== undefined, null, { timeout: 12_000 });
+    } catch {
+      throw new Error("Offline 3-D script did not start: " + consoleErrors.join(" | "));
+    }
     const status = page.getByRole("status");
     await expect(status).toContainText("WebGL attivo", { timeout: 30_000 });
     const canvas = page.locator("#viewport canvas");
