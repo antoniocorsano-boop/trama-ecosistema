@@ -8,6 +8,7 @@ import type {
   WorldDraft,
 } from "../lib/model";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
+import { updateWorldChoiceStatus } from "../lib/world-composer";
 
 type Props = {
   project: PathwayProject;
@@ -327,6 +328,15 @@ export function SceneEditor({ project, onPatch }: Props) {
     });
   }
 
+  function updateChoiceState(sceneId: string, choiceId: string, status: string) {
+    onPatch({
+      scenes: updateWorldChoiceStatus(project.scenes, sceneId, choiceId, status),
+      storyboardReady: false,
+      ...invalidateProductReview(project),
+      humanState: "SCENES",
+    });
+  }
+
   return (
     <div className="authoring-editor">
       <div className="section-action-heading">
@@ -339,7 +349,7 @@ export function SceneEditor({ project, onPatch }: Props) {
         <button className="primary-action" onClick={addScene}>Aggiungi scena</button>
       </div>
 
-      <SceneDesignComparison project={project} />
+      <SceneDesignComparison project={project} onUpdateChoiceState={updateChoiceState} />
 
       {project.scenes.length === 0 ? (
         <div className="empty-stage">
