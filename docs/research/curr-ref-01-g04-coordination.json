@@ -97,7 +97,7 @@
     }
   ],
   "outstanding": [
-    "PHYSICAL_ANDROID_SMARTPHONE_TEST",
+    "ANDROID_PHYSICAL_REMAINING_INTERACTIONS_AND_ACCESSIBILITY",
     "COMPLETE_AUTHENTICATED_DEMO_WITH_ISOLATED_FAKE_DATA",
     "E_R4_PROFESSIONAL_CURRICOLO_REVIEW",
     "DESIGN_AND_APPROVE_OPTIONAL_REGISTRO_PREVIEW",
@@ -110,5 +110,33 @@
     "officialCurricoloPromotion": false,
     "publicDeployment": false
   },
-  "description": "The projects share referenced educational purposes and provenance, not a functioning end-to-end data interchange. The executable offline trial reuses the actual Docente OS React panel and does not mutate any application."
+  "description": "The projects share referenced educational purposes and provenance, not a functioning end-to-end data interchange. The executable offline trial reuses the actual Docente OS React panel and does not mutate any application.",
+  "deviceReview": {
+    "status": "ANDROID_VISUAL_PARTIAL",
+    "evidenceType": "TWO_USER_SUPPLIED_SCREENSHOTS",
+    "visualConfirmed": [
+      "OFFLINE_HTML_OPENED_VIA_ANDROID_CONTENT_URI",
+      "B25_CRITERIA_PANEL_VISIBLE",
+      "TWO_CRITERIA_CHECKED",
+      "CONFIRMED_STATE_2_OF_2_VISIBLE",
+      "NO_OBVIOUS_TEXT_CLIPPING_IN_CAPTURED_PORTIONS"
+    ],
+    "notYetVerified": [
+      "DESELECT_REVOKES_CONFIRMATION",
+      "PAGE_RELOAD_CLEARS_SELECTION",
+      "FUNCTIONS_WITH_NETWORK_DISABLED",
+      "ANDROID_SYSTEM_TEXT_200_PERCENT",
+      "LANDSCAPE_LAYOUT",
+      "ASSISTIVE_TECHNOLOGIES",
+      "AUTHENTICATED_APP_JOURNEY"
+    ],
+    "uxFollowup": [
+      "LONG_VERTICAL_SCROLL_BEFORE_CONFIRMATION",
+      "DUPLICATED_PROVISIONAL_AND_NO_STORAGE_DISCLAIMERS",
+      "TERM_NUCLEO_USED_FOR_LOCAL_COMPETENCE_CANDIDATE"
+    ],
+    "screenImagesCopiedToRepo": false,
+    "studentDataUsed": false,
+    "releaseApproved": false
+  }
 }
