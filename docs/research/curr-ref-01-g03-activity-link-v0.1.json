@@ -40,9 +40,9 @@
         "CR-G01-02"
       ],
       "relation": "PROPOSED_DIDACTIC_ALIGNMENT",
-      "rationale": "Il confronto motivato di alternative nella UdA B25 è pertinente alla competenza locale candidata; ciò non dimostra una competenza acquisita.",
       "teacherReview": "PENDING",
-      "usableForAssessment": false
+      "usableForAssessment": false,
+      "rationaleCode": "ACTIVITY_RELEVANT_TO_LOCAL_COMPETENCE_CANDIDATE"
     }
   ],
   "safety": {
