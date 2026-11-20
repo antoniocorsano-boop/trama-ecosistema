@@ -22,7 +22,7 @@ if (gitBlob(engine) !== "b14f47c0908bab15e890b468d53bb07db0be3a18")
 if (engine.toString("utf8").toLowerCase().includes("</script"))
   throw Error("Unexpected script delimiter in the verified library");
 const template = readFileSync(join(base, "scripts/awc-s3b-offline-template.html"), "utf8");
-const app = template.match(/<script>\n([\s\S]*?)<\/script>\s*<\/body>/)?.[1];
+const app = template.match(/<script>(\n[\s\S]*?)<\/script>\s*<\/body>/)?.[1];
 const css = template.match(/<style>([\s\S]*?)<\/style>/)?.[1];
 if (!app || !css || !template.includes("__ENGINE_HASH__")) throw Error("Invalid offline template");
 const cspHash = value => createHash("sha256").update(value).digest("base64");
