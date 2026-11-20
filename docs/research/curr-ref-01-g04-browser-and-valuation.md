@@ -21,7 +21,17 @@ Un'identità tecnica di lezione (`projectionId`, UdA e blocco) **non coincide au
 
 Il percorso praticabile resta circoscritto: **anteprima non personale dell'attività → scelta consapevole del docente → verifica del contesto locale nel Registro → eventuale acquisizione conforme e confermata di obiettivi e criteri → osservazioni individuali solo nel Registro**. Non è stato attivato alcuno di questi passaggi di acquisizione. Non serve un secondo sistema di valutazione né un archivio di osservazioni in TRAMA.
 
-## 3. Decisione successiva
+## 3. Pacchetto autonomo G04 e tracciamento della produzione
+**Confezionato e verificato** [nella PR #801 di Docente OS](https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/801), revisione `5c883687f02dc2eeda9cc368ef3048a345c81a13` ([Product CI PASS](https://github.com/antoniocorsano-boop/docente-os-2026-27/actions/runs/44680662326)).
+Il pacchetto `G04-prova-offline-DocenteOS` è l'artefatto numero `14604146864` del controllo GitHub e contiene un solo file HTML eseguibile offline generato **dal componente React G04 reale** (non una seconda implementazione), il manifesto di provenienza e le istruzioni per Android. La procedura verifica la firma SHA-256, il montaggio effettivo in Chromium e l'interazione di selezione/conferma; 160 prove di prodotto e quattro configurazioni Chromium risultano positive.
+
+- SHA-256 ZIP: `967a084236c28748cb8f970071f9f4193e28bb1cb62c6c1f90384b8cc97c6ce0`;
+- SHA-256 HTML: `69a33b1adc379f7994247b2aad77a0f360bbfad08642047c3d3b0c6b7b373622`;
+- [Registro strutturato di coordinamento](curr-ref-01-g04-coordination.json), che distingue fonte, riferimento editoriale, componente dimostrativo e contratto locale di valutazione.
+
+**Stato di coordinamento:** i riferimenti sono tracciati e il componente di Docente OS è stato effettivamente riusato; non esiste un trasferimento runtime di criteri confermati verso Registro. La conferma nella pagina non è una conferma valutativa, il master Arena 1.3 non è vigente, l'uso su smartphone fisico deve ancora essere verificato. Il pacchetto non è una distribuzione dell'app e non richiede accesso ai dati scolastici.
+
+## 4. Decisione successiva
 La prossima lavorazione non è un'altra matrice teorica: è il **collaudo autenticato su un ambiente dimostrativo isolato**, con schermate 320/390 px e verifica manuale su smartphone, seguito dalla decisione su un'eventuale funzione di anteprima nel Registro. Non eseguire prove collegate alla base Supabase reale, non modificare rami paralleli DOC-01/VAL-01 e non far passare dati individuali dall'applicazione.
 
 Stato di integrazione: **candidato tecnico; distribuzione e ricezione nel Registro non autorizzate**. Il riesame professionale E-R4 rimane aperto.
