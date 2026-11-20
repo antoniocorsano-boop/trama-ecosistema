@@ -23,7 +23,7 @@
       "product": "DOCENTE_OS",
       "role": "didactic_projection_and_temp_criteria",
       "pr": 801,
-      "sourceHead": "5c883687f02dc2eeda9cc368ef3048a345c81a13",
+      "sourceHead": "8e4f4bd23179ffd61aed77cce1b055539ff12047",
       "lessonProjection": "HTC-PRIMA-B25-PLAN-v1",
       "linkStatus": "REACT_COMPONENT_IN_DRAFT_PR_ONLY"
     },
@@ -36,11 +36,11 @@
   ],
   "distribution": {
     "kind": "PRIVATE_GITHUB_ACTIONS_ARTIFACT",
-    "runId": 44680662326,
-    "artifactId": 14604146864,
+    "runId": 44687998879,
+    "artifactId": 14606948888,
     "artifactName": "G04-prova-offline-DocenteOS",
-    "artifactZipSha256": "967a084236c28748cb8f970071f9f4193e28bb1cb62c6c1f90384b8cc97c6ce0",
-    "standaloneHtmlSha256": "69a33b1adc379f7994247b2aad77a0f360bbfad08642047c3d3b0c6b7b373622",
+    "artifactZipSha256": "3e0ac38537d326c414207b36e8a37e0a150add4bcbc6522f6cf4213985afbbf4",
+    "standaloneHtmlSha256": "24049d21cc84dcaa22828d1ef7a9161213820af6aff4b9f3e9296352c22aee5b",
     "files": [
       "G04-prova-offline.html",
       "manifest.json",
@@ -64,7 +64,12 @@
       "sourceIntegrity": "PASS"
     },
     "offline": true,
-    "authorizedForStudentData": false
+    "authorizedForStudentData": false,
+    "version": "1.1_COMPACT",
+    "sourceMergeCommit": "4335c271d8d92a2ec5c350664d3449627a61389c",
+    "productCiStatus": "PASS",
+    "verifiedCompactLayout": true,
+    "intactPedagogicalContent": true
   },
   "exchanges": [
     {
@@ -97,6 +102,7 @@
     }
   ],
   "outstanding": [
+    "ANDROID_V1_1_COMPACT_PHYSICAL_RETEST",
     "ANDROID_PHYSICAL_REMAINING_INTERACTIONS_AND_ACCESSIBILITY",
     "COMPLETE_AUTHENTICATED_DEMO_WITH_ISOLATED_FAKE_DATA",
     "E_R4_PROFESSIONAL_CURRICOLO_REVIEW",
@@ -141,6 +147,70 @@
     "screenImagesCopiedToRepo": false,
     "studentDataUsed": false,
     "releaseApproved": false,
-    "notes": "The zero-selection state is consistent with a page reload, but reload itself and immediate confirmation revocation are not visible in a still screenshot."
+    "notes": "The zero-selection state is consistent with a page reload, but reload itself and immediate confirmation revocation are not visible in a still screenshot.",
+    "version": "1.0_BASELINE_ONLY"
+  },
+  "previousDistribution": {
+    "kind": "PRIVATE_GITHUB_ACTIONS_ARTIFACT",
+    "runId": 44680662326,
+    "artifactId": 14604146864,
+    "artifactName": "G04-prova-offline-DocenteOS",
+    "artifactZipSha256": "967a084236c28748cb8f970071f9f4193e28bb1cb62c6c1f90384b8cc97c6ce0",
+    "standaloneHtmlSha256": "69a33b1adc379f7994247b2aad77a0f360bbfad08642047c3d3b0c6b7b373622",
+    "files": [
+      "G04-prova-offline.html",
+      "manifest.json",
+      "LEGGIMI.txt"
+    ],
+    "validated": {
+      "productTests": {
+        "passed": 160,
+        "failed": 0
+      },
+      "browserViewportChecks": {
+        "passed": 4,
+        "configurations": [
+          "320x100%",
+          "320x200%-simulated",
+          "390x100%",
+          "390x200%-simulated"
+        ]
+      },
+      "standaloneHtmlRuntime": "PASS",
+      "sourceIntegrity": "PASS"
+    },
+    "offline": true,
+    "authorizedForStudentData": false
+  },
+  "compactReview": {
+    "status": "AUTOMATED_BROWSER_PASS_PHYSICAL_ANDROID_RETEST_PENDING",
+    "sourceProduct": "DOCENTE_OS",
+    "productPR": 801,
+    "sourceBranch": "curr-ref-01/g04-observation-criteria-ui",
+    "productHeadAtDocumentUpdate": "8e4f4bd23179ffd61aed77cce1b055539ff12047",
+    "changes": [
+      "REDUCED_VERTICAL_SCROLL",
+      "COLLAPSED_FULL_CRITERION_DESCRIPTIONS_AND_EVIDENCE_ON_DEMAND",
+      "ONE_BRIEF_NON_PERSISTENCE_NOTE",
+      "NO_REPEATED_STANDALONE_DISCLAIMER",
+      "RENAMED_COMPETENCE_REFERENCE_ACCURATELY"
+    ],
+    "unchanged": [
+      "CR_G01_01",
+      "CR_G01_02",
+      "B25_PROJECTION",
+      "TEMPORARY_CONFIRMATION",
+      "AUTO_REVOKE_ON_SELECTION_CHANGE",
+      "NO_PERSONAL_DATA",
+      "NO_REGISTRO_IMPORT"
+    ],
+    "qa": [
+      "160_OUT_OF_160_PRODUCT_TESTS",
+      "4_OUT_OF_4_CHROMIUM_VIEWPORTS",
+      "OFFLINE_HTML_RUNTIME_PASS",
+      "CONTENT_SHA256_PASS"
+    ],
+    "deviceBaselineEvidence": "ANDROID_V1_0_SCREENSHOTS_DO_NOT_QUALIFY_V1_1_UI",
+    "next": "RETEST_COMPACT_HTML_ON_ANDROID"
   }
 }
