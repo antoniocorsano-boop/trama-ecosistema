@@ -40,3 +40,29 @@ export function compareSceneWorld(scene: PathwayScene, choiceId: string | null) 
     feedback: choice?.feedback ?? null,
   };
 }
+
+
+/** Conserva una conseguenza semantica nella scena, senza cambiare l'originale. */
+export function updateWorldChoiceStatus(
+  scenes: PathwayScene[],
+  sceneId: string,
+  choiceId: string,
+  proposedStatus: string,
+): PathwayScene[] {
+  const status = proposedStatus.trim();
+  if (!status) throw new Error("EMPTY_SCENE_VARIATION");
+  let found = false;
+  const result = scenes.map((scene) => {
+    if (scene.sceneId !== sceneId) return scene;
+    return {
+      ...scene,
+      choices: scene.choices.map((choice) => {
+        if (choice.choiceId !== choiceId || !choice.worldAfter) return choice;
+        found = true;
+        return { ...choice, worldAfter: { ...choice.worldAfter, status } };
+      }),
+    };
+  });
+  if (!found) throw new Error("SCENE_VARIATION_NOT_FOUND");
+  return result;
+}
