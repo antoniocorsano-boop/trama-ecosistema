@@ -158,6 +158,7 @@ test("AWC S2: testo ingrandito al 200%, controlli accessibili e nessuno scorrime
     expect(measures.scrollWidth, `overflow with enlarged text in ${stage}`)
       .toBeLessThanOrEqual(measures.viewport + 1);
   }
+  await page.locator(".world-composer-selector select").selectOption(SCENE);
   const choice = page.getByRole("button", { name: "Originale", exact: true });
   await choice.focus();
   await expect(choice).toBeFocused();
