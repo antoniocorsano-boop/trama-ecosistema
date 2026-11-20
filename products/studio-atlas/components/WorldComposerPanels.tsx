@@ -87,9 +87,16 @@ function ObservableState({ state, fallback }: { state: SceneWorldState | null; f
   );
 }
 
-export function SceneDesignComparison({ project }: { project: PathwayProject }) {
+export function SceneDesignComparison({
+  project,
+  onUpdateChoiceState,
+}: {
+  project: PathwayProject;
+  onUpdateChoiceState: (sceneId: string, choiceId: string, status: string) => void;
+}) {
   const [selectedSceneId, setSelectedSceneId] = useState(project.scenes[0]?.sceneId ?? "");
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
+  const [proposal, setProposal] = useState<{ sceneId: string; choiceId: string; status: string } | null>(null);
   const scene = project.scenes.find((candidate) => candidate.sceneId === selectedSceneId)
     ?? project.scenes[0];
 
@@ -98,6 +105,12 @@ export function SceneDesignComparison({ project }: { project: PathwayProject }) 
   const comparison = compareSceneWorld(scene, selectedChoiceId);
   const observableChoices = scene.choices.filter((choice) => choice.worldAfter);
   const changed = Boolean(comparison.variation);
+  const proposalStatus = changed
+    ? proposal?.sceneId === scene.sceneId && proposal?.choiceId === selectedChoiceId
+      ? proposal.status
+      : comparison.variation?.status ?? ""
+    : "";
+  const hasUnsavedChange = changed && proposalStatus !== comparison.variation?.status;
 
   return (
     <section className="world-composer-panel" aria-labelledby="scene-comparison-heading">
@@ -112,6 +125,7 @@ export function SceneDesignComparison({ project }: { project: PathwayProject }) 
           onChange={(event) => {
             setSelectedSceneId(event.target.value);
             setSelectedChoiceId(null);
+            setProposal(null);
           }}
         >
           {project.scenes.map((item, index) => (
@@ -124,7 +138,7 @@ export function SceneDesignComparison({ project }: { project: PathwayProject }) 
         <fieldset className="world-composer-fieldset">
           <legend>Confronta una conseguenza osservabile</legend>
           <div className="world-composer-buttons">
-            <button type="button" className={!changed ? "secondary-action is-current" : "secondary-action"} aria-pressed={!changed} onClick={() => setSelectedChoiceId(null)}>
+            <button type="button" className={!changed ? "secondary-action is-current" : "secondary-action"} aria-pressed={!changed} onClick={() => { setSelectedChoiceId(null); setProposal(null); }}>
               Originale
             </button>
             {observableChoices.map((choice) => (
@@ -133,7 +147,7 @@ export function SceneDesignComparison({ project }: { project: PathwayProject }) 
                 key={choice.choiceId}
                 className={selectedChoiceId === choice.choiceId ? "secondary-action is-current" : "secondary-action"}
                 aria-pressed={selectedChoiceId === choice.choiceId}
-                onClick={() => setSelectedChoiceId(choice.choiceId)}
+                onClick={() => { setSelectedChoiceId(choice.choiceId); setProposal(null); }}
               >
                 {choice.label}
               </button>
@@ -150,15 +164,56 @@ export function SceneDesignComparison({ project }: { project: PathwayProject }) 
         </section>
         <section>
           <h3>{changed ? "Dopo la scelta" : "Conseguenza prevista"}</h3>
-          <ObservableState state={comparison.variation} fallback={scene.consequence} />
+          <ObservableState state={comparison.variation ? { ...comparison.variation, status: proposalStatus } : null} fallback={scene.consequence} />
           {changed && comparison.feedback && <p className="world-composer-note">{comparison.feedback}</p>}
         </section>
       </div>
+      {changed && selectedChoiceId && (
+        <div className="world-composer-variation-editor">
+          <label>
+            <strong>Conseguenza osservabile dopo la scelta</strong>
+            <textarea
+              rows={3}
+              value={proposalStatus}
+              onChange={(event) => setProposal({
+                sceneId: scene.sceneId,
+                choiceId: selectedChoiceId,
+                status: event.target.value,
+              })}
+            />
+          </label>
+          <p className="world-composer-note">
+            La variazione compare nel confronto prima di essere conservata. Il salvataggio
+            modifica il contenuto della scena e richiede una nuova revisione del Percorso.
+          </p>
+          <div className="world-composer-buttons">
+            <button
+              className="primary-action"
+              type="button"
+              disabled={!hasUnsavedChange || !proposalStatus.trim()}
+              onClick={() => {
+                onUpdateChoiceState(scene.sceneId, selectedChoiceId, proposalStatus);
+                setProposal(null);
+              }}
+            >
+              Conserva variazione nella scena
+            </button>
+            <button
+              className="secondary-action"
+              type="button"
+              disabled={!hasUnsavedChange}
+              onClick={() => setProposal(null)}
+            >
+              Scarta la modifica
+            </button>
+          </div>
+        </div>
+      )}
       <div className="world-composer-footer">
-        <button className="quiet-action" type="button" onClick={() => setSelectedChoiceId(null)} disabled={!changed}>
+        <button className="quiet-action" type="button" onClick={() => { setSelectedChoiceId(null); setProposal(null); }} disabled={!changed}>
           Ripristina la vista originale
         </button>
-        <p className="world-composer-note">Il ripristino riguarda solo il confronto. Per modificare e salvare una scena usa i campi sottostanti: nessuna variazione sovrascrive lo stato originale.</p>
+        <p className="world-composer-note">Ripristinare la vista non elimina modifiche già salvate. Lo stato originale rimane distinto dalla conseguenza scelta.</p>
       </div>
     </section>
   );
