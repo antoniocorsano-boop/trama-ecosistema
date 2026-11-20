@@ -192,8 +192,8 @@ export function SceneDesignComparison({
               type="button"
               disabled={!hasUnsavedChange || !proposalStatus.trim()}
               onClick={() => {
+                // Il testo resta disponibile anche se il salvataggio locale fallisce.
                 onUpdateChoiceState(scene.sceneId, selectedChoiceId, proposalStatus);
-                setProposal(null);
               }}
             >
               Conserva variazione nella scena
