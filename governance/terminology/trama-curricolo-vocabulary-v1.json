@@ -67,6 +67,176 @@
       "path": "docs/architecture/ecosystem-overview.md",
       "pattern": "CurriculumSnapshot",
       "reason": "Il diagramma può citare il nome letterale del contratto ECO-01 v1 finché CurricoloSnapshot v2 non è autorizzato."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A01: \\[docs/curriculum/REG-CURR-00_MASTER_ALIGNMENT\\.md\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/docs/curriculum/REG-CURR-00_MASTER_ALIGNMENT\\.md\\) — Master 1\\.3, copertura OSA documentale, annualizzazioni e vigenza\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A02: \\[src/domain/curriculum/types\\.ts\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/src/domain/curriculum/types\\.ts\\) — Tipi nodo, ambiti, stati e relazioni\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A03: \\[src/domain/curriculum/segment\\.ts\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/src/domain/curriculum/segment\\.ts\\) — Collezioni del segmento e riferimenti di applicabilità\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A04: \\[src/domain/curriculum/verticalLink\\.ts\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/src/domain/curriculum/verticalLink\\.ts\\) — Relazioni motivate con stato e riferimenti ai nodi\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A06: \\[src/features/curriculum/data/canonicalCurricoloReadModel\\.ts\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/src/features/curriculum/data/canonicalCurricoloReadModel\\.ts\\) — Proiezione della baseline non vigente\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A07: \\[src/domain/transfer/interopCurriculumContextV2\\.ts\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/src/domain/transfer/interopCurriculumContextV2\\.ts\\) — Distinzione dei requisiti nel passaggio a Docente OS\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A08: \\[src/domain/curriculum/national/elementBindings\\.ts\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/src/domain/curriculum/national/elementBindings\\.ts\\) — Provenienza, tipo di elemento e verifica del testo\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A09: \\[src/domain/curriculum/technology/technologyOperationalPilot\\.ts\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/src/domain/curriculum/technology/technologyOperationalPilot\\.ts\\) — Pilota Tecnologia, nuclei e progressione, finalità e profilo di uscita locale\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A14: \\[exports/atlas-curriculum/current\\.json\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/exports/atlas-curriculum/current\\.json\\) — Export effettivo, stato provvisorio e otto fasce Tecnologia\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-audit-arena.md",
+      "pattern": "^- A16: \\[docs/architecture/ARENA_ATLAS_CURRICULUM_SYNC_V1\\.md\\]\\(https://github\\.com/antoniocorsano-boop/CurManLight_arena/blob/d8b1bf43388cb5c4cdcc940b0c558bb128976c4c/docs/architecture/ARENA_ATLAS_CURRICULUM_SYNC_V1\\.md\\) — Distinzione fra pubblicabilità e vigenza\\.$",
+      "reason": "Citazione bibliografica tecnica immutabile di un percorso storico Arena, non termine di dominio TRAMA; eccezione limitata all'intera riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- \\[Atlas PR #136 AWC\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/pull/136\\), head fc2deefe44ed45a53e77086532268e919549c777: infrastruttura unificata dei mondi, Biblioteca prioritaria; innestare motivazione pedagogica senza nuovo orchestratore\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- \\[Atlas PR #142 ASC\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/pull/142\\), head aeeab27f48fc69b75d6fae2be68fa4ae215378db: qualificazione materica candidata, non prova educativa\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F01: \\[F01\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/curriculum/arena-projected\\.ts\\) — Proiezione, identità, ricerca\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F02: \\[F02\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/curriculum/arena-curriculum-export\\.json\\) — Pacchetto effettivo\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F03: \\[F03\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/curriculum/model\\.ts\\) — Modello obiettivo\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F04: \\[F04\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/features/explore/graph\\.ts\\) — Grafo e progressione\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F05: \\[F05\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/src/app/obiettivi/\\[id\\]/page\\.tsx\\) — Rotte statiche e risoluzione\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F06: \\[F06\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/S3-V2-F2-ESPLORA\\.md\\) — Equivalenza mappa/elenco\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F07: \\[F07\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/percorsi/PATHWAY-DOSSIER-TEMPLATE\\.md\\) — Dossier ed evidenze\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F08: \\[F08\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/percorsi/PERCORSI-G2-CONTRACT\\.md\\) — Grafo semantico e parità\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F09: \\[F09\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/percorsi/PERCORSI-G2-H1-PEDAGOGICAL-REVIEW\\.md\\) — Riesame precedente circoscritto\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-f-audit-atlas-studio.md",
+      "pattern": "^- F10: \\[F10\\]\\(https://github\\.com/antoniocorsano-boop/Curriculum-Atlas/blob/d2938378c9384c5122adb8379396dbad5b4385fe/docs/STUDIO-ATLAS-PREVIEW-ADAPTER-v0\\.1\\.md\\) — Anteprima e trasferimento\\.$",
+      "reason": "Citazione puntuale di repository e percorsi storici Atlas, non lessico di dominio; eccezione limitata alla riga verificata."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"\\.human/curriculum-lifecycle\\.contract\\.json\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"docs/curriculum/REG-CURR-00\\.registry\\.json\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"src/domain/curriculum/validation/technologyClass1Review\\.ts\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"src/domain/curriculum/reviewCase\\.ts\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"path\": \"src/domain/curriculum/caseWorkSession\\.ts\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^    \"ARENA_PILOT\": \"src/domain/curriculum/validation/technologyClass1Review\\.ts\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^      \"H1_APPLICABLE_CURRICULUM\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "docs/research/curr-ref-01-e-r4-professional-review.json",
+      "pattern": "^    \"entry\": \"EXISTING_ARENA_CURRICULUM_WORK_SESSION\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^    assert arena\\[\"caseContract\"\\]\\[\"path\"\\] == \"src/domain/curriculum/reviewCase\\.ts\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^    assert arena\\[\"sessionContract\"\\]\\[\"path\"\\] == \"src/domain/curriculum/caseWorkSession\\.ts\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^        \"H1_APPLICABLE_CURRICULUM\", \"H2_PROFESSIONAL_VALIDATION\",$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
+    },
+    {
+      "path": "tests/test_curr_ref_01_professional_handoff.py",
+      "pattern": "^    assert w\\[\"entry\"\\] == \"EXISTING_ARENA_CURRICULUM_WORK_SESSION\"$",
+      "reason": "Riferimento tecnico letterale al contratto o al percorso Arena già esistente, limitato all'intera riga verificata per E-R4; non autorizza lessico di dominio alternativo."
     }
   ],
   "excludedPaths": [

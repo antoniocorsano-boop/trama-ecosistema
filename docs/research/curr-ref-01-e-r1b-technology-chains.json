@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "trama.curr-ref-er1b/v0.1",
+  "id": "CURR-REF-01/E-R1b",
+  "state": "PROPOSED_RELATIONSHIPS_REVIEW_REQUIRED",
+  "scope": "Due esempi di allineamento sullo stesso nucleo di rappresentazione, non una matrice completa",
+  "source": {
+    "arenaRevision": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+    "exportBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+    "masterVersion": "1.3",
+    "fingerprint": "b355be71",
+    "authorityState": "PROVISIONAL_COMPLETE"
+  },
+  "normativeSources": [
+    {
+      "id": "IN2025",
+      "act": "DM 221/2025",
+      "url": "https://www.gazzettaufficiale.it/eli/id/2026/01/27/26G00021/sg",
+      "applicability": "Classe I secondaria 2026/27; riferimenti nazionali al termine della classe III",
+      "sourceReview": "LOCATED_IN_OFFICIAL_PUBLICATION_NOT_HUMAN_VERIFIED"
+    },
+    {
+      "id": "IN2012",
+      "act": "DM 254/2012",
+      "url": "https://www.gazzettaufficiale.it/eli/id/2013/02/05/13G00034/sg",
+      "applicability": "Classe II secondaria 2026/27, transitorio",
+      "sourceReview": "LOCATED_IN_OFFICIAL_PUBLICATION_NOT_HUMAN_VERIFIED"
+    }
+  ],
+  "chains": [
+    {
+      "id": "ER1B-2025-DRAWING",
+      "regime": "IN2025",
+      "year": "2026/2027",
+      "grade": "I",
+      "profile": {
+        "locator": "Allegato parte 1, Profilo dello studente, area matematica-scienze-tecnologie-ingegneria",
+        "summary": "Analisi della realtà e dei dati attraverso saperi scientifici e tecnici"
+      },
+      "generalObjective": {
+        "locator": "Allegato, tabella OGPF STEM secondaria, n. 5, GU 27/1/2026 p.45",
+        "summary": "Elaborare concetti e relazioni mediante osservazione e analisi",
+        "scope": "END_OF_LOWER_SECONDARY",
+        "selection": "TEAM_PENDING"
+      },
+      "nationalCompetence": {
+        "locator": "Allegato parte 3, Tecnologia, secondaria, competenze attese, voce 6",
+        "summary": "Rappresentare graficamente strutture e funzionamento dei sistemi",
+        "scope": "END_OF_LOWER_SECONDARY"
+      },
+      "nationalObjective": {
+        "locator": "Allegato parte 3, Tecnologia, secondaria, OSA, Vedere, osservare e sperimentare, voce 4",
+        "summary": "Applicare strumenti e regole del disegno alla rappresentazione tecnica",
+        "scope": "END_OF_LOWER_SECONDARY"
+      },
+      "nationalKnowledge": {
+        "locator": "Allegato parte 3, Tecnologia, secondaria, Conoscenze, voce 1",
+        "summary": "Fondamenti della rappresentazione tecnica e delle costruzioni grafiche"
+      },
+      "local": {
+        "bandId": "secondaria-di-primo-grado-tecnologia-classe-i",
+        "section": "7.3.8",
+        "entries": [
+          {
+            "field": "competences",
+            "ordinal": 2,
+            "text": "misurare e rappresentare"
+          },
+          {
+            "field": "objectives",
+            "ordinal": 2,
+            "text": "produrre rappresentazioni"
+          },
+          {
+            "field": "knowledge",
+            "ordinal": 3,
+            "text": "disegno tecnico di base"
+          },
+          {
+            "field": "evidence",
+            "ordinal": 2,
+            "text": "elaborato grafico"
+          }
+        ]
+      },
+      "supplement": "Master 16.2: contributo classe I e traiettoria benchmark finale, da validare",
+      "nucleusRef": "DISEGNO_MODELLAZIONE",
+      "relationReason": "La rappresentazione di un oggetto a partire da osservazioni e misure contribuisce al benchmark. Il solo elaborato non dimostra l'intero OGPF: occorre spiegare relazioni e interpretare dati.",
+      "evidenceProposal": "Elaborato grafico motivato, misure e spiegazione della relazione fra rappresentazione e oggetto.",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "ER1B-2012-DRAWING",
+      "regime": "IN2012",
+      "year": "2026/2027",
+      "grade": "II",
+      "profile": {
+        "locator": "Allegato parte 1, Profilo delle competenze al termine del primo ciclo, paragrafo saperi matematici e scientifico-tecnologici",
+        "summary": "Interpretare fatti e dati e affrontare problemi sulla base di evidenze"
+      },
+      "generalObjective": null,
+      "generalObjectiveReason": "Nessuna tabella OGPF distinta omologa al 2025 nell'allegato 2012; finalità generali restano quadro di riferimento, non importare OGPF 2025.",
+      "nationalCompetence": {
+        "locator": "Allegato parte 2, Tecnologia, traguardi al termine della secondaria, ultimo traguardo",
+        "summary": "Progettare e produrre rappresentazioni grafiche di sistemi",
+        "scope": "END_OF_LOWER_SECONDARY"
+      },
+      "nationalObjective": {
+        "locator": "Allegato parte 2, Tecnologia, obiettivi di apprendimento al termine della terza, Vedere, osservare e sperimentare, voce 3",
+        "summary": "Utilizzare le regole e gli strumenti del disegno tecnico",
+        "scope": "END_OF_LOWER_SECONDARY"
+      },
+      "nationalKnowledge": null,
+      "nationalKnowledgeReason": "Nel 2012 le conoscenze sono implicate dagli obiettivi e declinate localmente; non importare l'elenco autonomo del 2025.",
+      "local": {
+        "bandId": "secondaria-di-primo-grado-tecnologia-classe-ii",
+        "section": "7.3.8",
+        "entries": [
+          {
+            "field": "competences",
+            "ordinal": 1,
+            "text": "consolidare misura/disegno/scala"
+          },
+          {
+            "field": "objectives",
+            "ordinal": 1,
+            "text": "produrre rappresentazioni più rigorose"
+          },
+          {
+            "field": "knowledge",
+            "ordinal": 1,
+            "text": "disegno/scala"
+          },
+          {
+            "field": "evidence",
+            "ordinal": 1,
+            "text": "elaborato tecnico"
+          }
+        ]
+      },
+      "nucleusRef": "DISEGNO_MODELLAZIONE",
+      "relationReason": "Consolidare precisione e scala contribuisce alla rappresentazione tecnica prevista al termine del triennio, senza trasformare l'annualizzazione in obiettivo nazionale.",
+      "evidenceProposal": "Elaborato tecnico in scala accompagnato da controllo delle misure e motivazione delle scelte.",
+      "status": "PROPOSED"
+    }
+  ],
+  "boundaries": {
+    "masterEdited": false,
+    "arenaEdited": false,
+    "professionalApproval": false,
+    "sourceVerifiedByHuman": false,
+    "nationalPrescriptivePromotion": false,
+    "publication": false,
+    "studentData": false
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "trama.curr-ref-g04-coordination/v0.1",
+  "id": "CURR-REF-01/G04-C",
+  "status": "COORDINATED_REFERENCES_PARTIAL_RUNTIME_INTEGRATION",
+  "referenceDate": "2026-11-20",
+  "components": [
+    {
+      "product": "ARENA",
+      "role": "curricolo_source",
+      "masterVersion": "1.3",
+      "authority": "PROVISIONAL_COMPLETE_NOT_IN_FORCE",
+      "revisionState": "SOURCE_NOT_INSTITUTIONALLY_APPROVED",
+      "linkStatus": "SOURCE_REFERENCE_ONLY"
+    },
+    {
+      "product": "TRAMA",
+      "role": "semantic_reference",
+      "study": "CURR-REF-01/G03",
+      "pr": 348,
+      "linkStatus": "PROPOSAL_VERIFIED_NO_LIVE_CONSUMER"
+    },
+    {
+      "product": "DOCENTE_OS",
+      "role": "didactic_projection_and_temp_criteria",
+      "pr": 801,
+      "sourceHead": "8e4f4bd23179ffd61aed77cce1b055539ff12047",
+      "lessonProjection": "HTC-PRIMA-B25-PLAN-v1",
+      "linkStatus": "REACT_COMPONENT_IN_DRAFT_PR_ONLY"
+    },
+    {
+      "product": "REGISTRO_DOCENTE",
+      "role": "individual_assessment_in_local_context",
+      "localContract": "AssessmentEvidenceV1",
+      "linkStatus": "NO_INTERPRODUCT_IMPORT"
+    }
+  ],
+  "distribution": {
+    "kind": "PRIVATE_GITHUB_ACTIONS_ARTIFACT",
+    "runId": 44687998879,
+    "artifactId": 14606948888,
+    "artifactName": "G04-prova-offline-DocenteOS",
+    "artifactZipSha256": "3e0ac38537d326c414207b36e8a37e0a150add4bcbc6522f6cf4213985afbbf4",
+    "standaloneHtmlSha256": "24049d21cc84dcaa22828d1ef7a9161213820af6aff4b9f3e9296352c22aee5b",
+    "files": [
+      "G04-prova-offline.html",
+      "manifest.json",
+      "LEGGIMI.txt"
+    ],
+    "validated": {
+      "productTests": {
+        "passed": 160,
+        "failed": 0
+      },
+      "browserViewportChecks": {
+        "passed": 4,
+        "configurations": [
+          "320x100%",
+          "320x200%-simulated",
+          "390x100%",
+          "390x200%-simulated"
+        ]
+      },
+      "standaloneHtmlRuntime": "PASS",
+      "sourceIntegrity": "PASS"
+    },
+    "offline": true,
+    "authorizedForStudentData": false,
+    "version": "1.1_COMPACT",
+    "sourceMergeCommit": "4335c271d8d92a2ec5c350664d3449627a61389c",
+    "productCiStatus": "PASS",
+    "verifiedCompactLayout": true,
+    "intactPedagogicalContent": true
+  },
+  "exchanges": [
+    {
+      "from": "ARENA",
+      "to": "TRAMA",
+      "type": "documented_source_reference",
+      "automatic": false,
+      "authorityPromoted": false
+    },
+    {
+      "from": "TRAMA",
+      "to": "DOCENTE_OS",
+      "type": "static_reviewed_editorial_alignment",
+      "automatic": false,
+      "authorityPromoted": false
+    },
+    {
+      "from": "DOCENTE_OS",
+      "to": "REGISTRO_DOCENTE",
+      "type": "not_implemented",
+      "automatic": false,
+      "personalDataTransferred": false
+    },
+    {
+      "from": "REGISTRO_DOCENTE",
+      "to": "TRAMA",
+      "type": "not_authorized",
+      "automatic": false,
+      "personalDataTransferred": false
+    }
+  ],
+  "outstanding": [
+    "ANDROID_V1_1_ACCESSIBILITY_AND_AUTHENTICATED_FLOW_GAPS",
+    "ANDROID_PHYSICAL_REMAINING_INTERACTIONS_AND_ACCESSIBILITY",
+    "COMPLETE_AUTHENTICATED_DEMO_WITH_ISOLATED_FAKE_DATA",
+    "E_R4_PROFESSIONAL_CURRICOLO_REVIEW",
+    "DESIGN_AND_APPROVE_OPTIONAL_REGISTRO_PREVIEW",
+    "SEPARATE_RELEASE_DECISION"
+  ],
+  "prohibitions": {
+    "studentRecords": false,
+    "automaticGrades": false,
+    "automaticTeacherApproval": false,
+    "officialCurricoloPromotion": false,
+    "publicDeployment": false
+  },
+  "description": "The projects share referenced educational purposes and provenance, not a functioning end-to-end data interchange. The executable offline trial reuses the actual Docente OS React panel and does not mutate any application.",
+  "deviceReview": {
+    "status": "ANDROID_VISUAL_PARTIAL",
+    "evidenceType": "FIVE_USER_SUPPLIED_SCREENSHOTS_IN_TWO_BATCHES",
+    "visualConfirmed": [
+      "OFFLINE_HTML_OPENED_VIA_ANDROID_CONTENT_URI",
+      "B25_CRITERIA_PANEL_VISIBLE",
+      "TWO_CRITERIA_CHECKED",
+      "CONFIRMED_STATE_2_OF_2_VISIBLE",
+      "NO_OBVIOUS_TEXT_CLIPPING_IN_CAPTURED_PORTIONS",
+      "ONE_OF_TWO_CRITERIA_CHECKED_AND_CONFIRMED",
+      "ZERO_OF_TWO_CRITERIA_CHECKED_CONFIRM_BUTTON_VISIBLE",
+      "TWO_OF_TWO_CRITERIA_CHECKED_AND_CONFIRMED"
+    ],
+    "notYetVerified": [
+      "DESELECT_REVOKES_CONFIRMATION",
+      "PAGE_RELOAD_CLEARS_SELECTION",
+      "FUNCTIONS_WITH_NETWORK_DISABLED",
+      "ANDROID_SYSTEM_TEXT_200_PERCENT",
+      "LANDSCAPE_LAYOUT",
+      "ASSISTIVE_TECHNOLOGIES",
+      "AUTHENTICATED_APP_JOURNEY"
+    ],
+    "uxFollowup": [
+      "LONG_VERTICAL_SCROLL_BEFORE_CONFIRMATION",
+      "DUPLICATED_PROVISIONAL_AND_NO_STORAGE_DISCLAIMERS",
+      "TERM_NUCLEO_USED_FOR_LOCAL_COMPETENCE_CANDIDATE"
+    ],
+    "screenImagesCopiedToRepo": false,
+    "studentDataUsed": false,
+    "releaseApproved": false,
+    "notes": "The zero-selection state is consistent with a page reload, but reload itself and immediate confirmation revocation are not visible in a still screenshot.",
+    "version": "1.0_BASELINE_ONLY"
+  },
+  "previousDistribution": {
+    "kind": "PRIVATE_GITHUB_ACTIONS_ARTIFACT",
+    "runId": 44680662326,
+    "artifactId": 14604146864,
+    "artifactName": "G04-prova-offline-DocenteOS",
+    "artifactZipSha256": "967a084236c28748cb8f970071f9f4193e28bb1cb62c6c1f90384b8cc97c6ce0",
+    "standaloneHtmlSha256": "69a33b1adc379f7994247b2aad77a0f360bbfad08642047c3d3b0c6b7b373622",
+    "files": [
+      "G04-prova-offline.html",
+      "manifest.json",
+      "LEGGIMI.txt"
+    ],
+    "validated": {
+      "productTests": {
+        "passed": 160,
+        "failed": 0
+      },
+      "browserViewportChecks": {
+        "passed": 4,
+        "configurations": [
+          "320x100%",
+          "320x200%-simulated",
+          "390x100%",
+          "390x200%-simulated"
+        ]
+      },
+      "standaloneHtmlRuntime": "PASS",
+      "sourceIntegrity": "PASS"
+    },
+    "offline": true,
+    "authorizedForStudentData": false
+  },
+  "compactReview": {
+    "status": "ANDROID_V1_1_VISUAL_FUNCTIONAL_PASS_WITH_OPEN_GAPS",
+    "sourceProduct": "DOCENTE_OS",
+    "productPR": 801,
+    "sourceBranch": "curr-ref-01/g04-observation-criteria-ui",
+    "productHeadAtDocumentUpdate": "8e4f4bd23179ffd61aed77cce1b055539ff12047",
+    "changes": [
+      "REDUCED_VERTICAL_SCROLL",
+      "COLLAPSED_FULL_CRITERION_DESCRIPTIONS_AND_EVIDENCE_ON_DEMAND",
+      "ONE_BRIEF_NON_PERSISTENCE_NOTE",
+      "NO_REPEATED_STANDALONE_DISCLAIMER",
+      "RENAMED_COMPETENCE_REFERENCE_ACCURATELY"
+    ],
+    "unchanged": [
+      "CR_G01_01",
+      "CR_G01_02",
+      "B25_PROJECTION",
+      "TEMPORARY_CONFIRMATION",
+      "AUTO_REVOKE_ON_SELECTION_CHANGE",
+      "NO_PERSONAL_DATA",
+      "NO_REGISTRO_IMPORT"
+    ],
+    "qa": [
+      "160_OUT_OF_160_PRODUCT_TESTS",
+      "4_OUT_OF_4_CHROMIUM_VIEWPORTS",
+      "OFFLINE_HTML_RUNTIME_PASS",
+      "CONTENT_SHA256_PASS"
+    ],
+    "deviceBaselineEvidence": "ANDROID_V1_0_SCREENSHOTS_DO_NOT_QUALIFY_V1_1_UI",
+    "next": "PRODUCT_ENTRY_POINT_AND_AUTHORIZATION_CONTRACT_REVIEW_BEFORE_INTEROP; NO_MORE_COSMETIC_ITERATION_WITHOUT_REPRODUCIBLE_DEFECT",
+    "deviceEvidence": {
+      "date": "2026-11-20",
+      "type": "FOUR_USER_SUPPLIED_ANDROID_SCREENSHOTS",
+      "observed": [
+        "LOCAL_ANDROID_HTML_OPENED",
+        "COMPACT_B25_LAYOUT_NO_OBVIOUS_HORIZONTAL_CLIPPING",
+        "FIRST_CRITERION_DESCRIPTION_AND_EVIDENCE_EXPANDED",
+        "ONE_SELECTED_AND_CONFIRMED",
+        "TWO_SELECTED_AND_AWAITING_RECONFIRMATION",
+        "ZERO_SELECTED_AND_DISCLAIMER_COLLAPSED",
+        "PRECISE_LOCAL_CURRICOLO_REFERENCE_DISCLOSURE"
+      ],
+      "consistentWith": [
+        "CONFIRMATION_REVOKED_ON_SECOND_SELECTION",
+        "SELECTION_RESET_AFTER_RELOAD"
+      ],
+      "notDirectlyObserved": [
+        "ACTUAL_RELOAD_GESTURE",
+        "OFFLINE_WITH_RADIO_DISABLED",
+        "ANDROID_FONT_SCALE_200_PERCENT",
+        "LANDSCAPE",
+        "ASSISTIVE_TECHNOLOGY",
+        "AUTHENTICATED_WORKFLOW"
+      ],
+      "screenshotsStoredInRepo": false,
+      "studentDataPresent": false
+    }
+  }
+}

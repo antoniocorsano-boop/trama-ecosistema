@@ -23,6 +23,33 @@
 - What is explicitly outside scope?
 - What must never be inferred about the learner?
 
+## 1A. Scheda pedagogica CURR-REF-01 (estensione candidata F-R2)
+
+Riferimento: [catalogo pedagogico v0.1](../../../../governance/pedagogy/curr-ref-01-v0.1.json). Usare questa sezione come struttura unica nel dossier, non come documento concorrente. La sua adozione resta soggetta al riesame F-R2; non modifica i gate di autorità esistenti. Compilarla a W0–W2, completarla a W6, rivederla a W6A e W9; ogni revisione va riferita alla versione esatta dell'esperienza.
+
+| Campo | Contenuto da progettare / verificare |
+| --- | --- |
+| Tipologia e destinatari | Esperienza curricolare, trasversale, autonoma o di orientamento; fascia, mediazione, durata motivata. |
+| Allineamento | Per i riferimenti curricolari: fonte Arena, versione, impronta, fascia, ordinale e testo verificabile, autorità e stato della mappatura. Profilo, obiettivi generali, competenze, nuclei, OSA e conoscenze soltanto quando disponibili nella fonte pertinente. Dichiarare le lacune; non inventare ID né chiamare OSA ogni obiettivo locale. |
+| Domanda generativa | Problema comprensibile che orienta l'esperienza e la scelta delle attività. |
+| Apprendimenti attesi e saperi | Risultati osservabili, concetti indispensabili; distinguere intenzione dell'autore e riferimenti Arena. |
+| Progettazione a ritroso | Definire compito, evidenze e criteri prima di scegliere le attività; separare prestazione, prodotto e verifica delle conoscenze, se pertinente. |
+| Fasi e micro-prodotti | Per ogni fase: azione, mediazione, risultato intermedio, evidenza e criterio; una scena narrativa può non avere un obiettivo autonomo. |
+| Continuità e trasferimento | Indicare il ritorno sui concetti con complessità crescente, le condizioni di aiuto e una nuova situazione. Non inferire efficacia dalla sola sequenza. |
+| Accessibilità | Alternativa equivalente, istruzioni concrete, supporti e modalità di espressione; prove reali ancora da svolgere. |
+| Scelta della rappresentazione | Motivare 3D, 2D, testo o altra modalità per funzione didattica; rifiutare il 3D decorativo se aumenta il carico senza utilità. |
+| Riesame | Fonti, decisioni, esiti di verifica e limiti; revisione umana esplicita, niente automatismi di valutazione/certificazione. |
+
+Per una risorsa di orientamento (es. Biblioteca), distinguere la capacità di trovare una risorsa dall'apprendimento disciplinare: compito autentico, rubrica e trasferimento si applicano solo se c'è un effettivo scopo formativo; motivare gli elementi non applicabili. Una proposta trasversale non necessita di un collegamento fittizio ad Arena.
+
+La scheda non contiene nominativi, valutazioni individuali o dati di sessione. Le evidenze sono progettate come descrizioni generiche; la documentazione professionale individuale resta nei domini autorizzati. Nessun esito tecnico può assegnare un giudizio umano o concedere pubblicazione.
+
+### Riesame dei dodici principi (F-R4, requisito candidato)
+
+Usare il [riscontro F-R4](../production/CURR-REF-01-F-R4-review-v0.1.json) come esempio di riesame, non come fonte di approvazione. Per ogni principio registrare riferimento al dossier e versione, riscontro, limite e azione successiva. Stati documentali: DOCUMENTED (elemento descritto), PARTIAL (incompleto), GAP (lacuna esplicita), NOT_APPLICABLE_SCOPE (motivazione circoscritta all'ambito). Nessuno equivale a PASS umano, efficacia o autorizzazione. Non sommare gli stati in un punteggio pedagogico.
+
+Raccordare le evidenze alle fasi W1/W2/W5/W6/W6A/W8/W9 e ai controlli già presenti PURPOSE, SCIENCE, ACCESSIBILITY, USE e CURRICOLO. I controlli STORY, WRITING, VISUAL, voce, integrità, sicurezza, diritti e PUBLICATION rimangono indipendenti e invariati. La mappa dei principi sostiene il riesame, non emette ricevute per questi controlli. Per i percorsi trasversali non inventare riferimenti disciplinari; un eventuale innesto in una UdA richiede una decisione distinta. Le lacune di autorità Arena non possono essere colmate con l'esito del controllo automatico.
+
 ## 2. Evidence register
 
 For each material source record:
@@ -316,6 +343,7 @@ No covert psychological profiling or persistent individual behavioural scoring.
 Before implementation, verify:
 
 - [ ] evidence and reasoning are traceable;
+- [ ] CURR-REF-01 section 1A completed or applicability explicitly justified; pedagogical review remains human (candidate requirement);
 - [ ] narrative identity is competence-derived;
 - [ ] metaphor is not carrying essential literal meaning;
 - [ ] child-safety review passed;

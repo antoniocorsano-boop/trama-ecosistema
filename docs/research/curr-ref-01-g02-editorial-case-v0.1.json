@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "trama.curr-ref-g02-editorial-case/v0.1",
+  "id": "CURR-REF-01/G02-B25",
+  "status": "EDITORIAL_SIMULATION_NOT_OBSERVATION",
+  "source": {
+    "g01Path": "docs/research/curr-ref-01-g01-uda-valutazione.json",
+    "g01GitBlob": "9ca31126356280807f04a4f2553d16bf2b14af72",
+    "g01CaseId": "CURR-REF-01/G01-B25",
+    "arenaMasterVersion": "1.3",
+    "arenaFingerprint": "b355be71",
+    "docenteOsProjectionBlob": "4e0493bc161d5c0b7cd50d89f5105604eaf8ee0f",
+    "registroEvidenceContractBlob": "29ae8d1d6b5c712192b41eadbce2fb1bf9e78de1"
+  },
+  "criteriaRefs": [
+    "CR-G01-01",
+    "CR-G01-02"
+  ],
+  "illustrations": [
+    {
+      "id": "ILL-G02-PROCESS",
+      "criterionRef": "CR-G01-01",
+      "kind": "process",
+      "state": "SYNTHETIC_NOT_OBSERVED",
+      "title": "Esempio di matrice comparativa",
+      "example": "Due soluzioni ipotetiche, A e B, sono confrontate secondo funzionalità, fattibilità, sicurezza e materiali; non vengono assegnati punteggi."
+    },
+    {
+      "id": "ILL-G02-ARGUMENTATION",
+      "criterionRef": "CR-G01-02",
+      "kind": "argumentation",
+      "state": "SYNTHETIC_NOT_OBSERVED",
+      "title": "Esempio di motivazione",
+      "example": "La scelta ipotetica della soluzione A è motivata richiamando un vincolo esplicito e il criterio di sicurezza; la pertinenza andrebbe verificata dal docente nel contesto reale."
+    }
+  ],
+  "review": {
+    "teacherDecision": "PENDING",
+    "professionalOutcome": "OPEN",
+    "registrableInRegistro": false,
+    "canCreateGrade": false,
+    "canAssessCompetence": false
+  },
+  "boundaries": {
+    "editorialOnly": true,
+    "sourceOfTruth": "ARENA",
+    "publicExposure": false,
+    "runtimeIntegration": false,
+    "liveObservations": false,
+    "individualRecords": false,
+    "automaticTransfer": false,
+    "automaticScore": false,
+    "authorizationToPublish": false
+  }
+}

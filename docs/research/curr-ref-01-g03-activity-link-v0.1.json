@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "trama.curr-ref-g03-activity-link/v0.1",
+  "id": "CURR-REF-01/G03",
+  "status": "EDITORIAL_CANDIDATE_ONLY",
+  "origin": {
+    "g02Path": "docs/research/curr-ref-01-g02-editorial-case-v0.1.json",
+    "g02GitBlob": "39503599adfce38fd34e1a4ef0eaf4680f128a0a",
+    "g02CaseId": "CURR-REF-01/G02-B25",
+    "matchingPolicy": "EXACT_SOURCE_PINS_REQUIRED"
+  },
+  "links": [
+    {
+      "linkId": "G03-LINK-TEC-I-B25-2026",
+      "scope": {
+        "schoolYear": "2026/2027",
+        "schoolOrder": "secondaria-di-primo-grado",
+        "grade": "I",
+        "discipline": "Tecnologia",
+        "regime": "2025_TRANSITION_START"
+      },
+      "activity": {
+        "product": "DOCENTE_OS",
+        "planCode": "CAN-PLAN-1",
+        "udaCode": "CAN-UDA-1-05",
+        "blockId": "B25",
+        "projectionId": "HTC-PRIMA-B25-PLAN-v1"
+      },
+      "curricolo": {
+        "product": "ARENA",
+        "masterVersion": "1.3",
+        "masterFingerprint": "b355be71",
+        "bandRef": "secondaria-di-primo-grado-tecnologia-classe-i",
+        "sourceSection": "7.3.8",
+        "referenceKind": "LOCAL_COMPETENCE_CANDIDATE",
+        "referenceText": "confrontare soluzioni",
+        "authority": "PROVISIONAL_COMPLETE_NOT_IN_FORCE"
+      },
+      "criteriaRefs": [
+        "CR-G01-01",
+        "CR-G01-02"
+      ],
+      "relation": "PROPOSED_DIDACTIC_ALIGNMENT",
+      "teacherReview": "PENDING",
+      "usableForAssessment": false,
+      "rationaleCode": "ACTIVITY_RELEVANT_TO_LOCAL_COMPETENCE_CANDIDATE"
+    }
+  ],
+  "safety": {
+    "readOnly": true,
+    "publicFacing": false,
+    "runtimeEnabled": false,
+    "registerImportEnabled": false,
+    "automaticConfirmation": false,
+    "personalDataIncluded": false,
+    "studentsObserved": false,
+    "gradesGenerated": false,
+    "competenceCertifications": false,
+    "retainsSourceProvenance": true
+  },
+  "next": {
+    "name": "G03 verification",
+    "needs": "review teacher criteria and authorized consumer integration separately"
+  }
+}

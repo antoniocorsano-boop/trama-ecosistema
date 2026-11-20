@@ -1,0 +1,13 @@
+# CURR-REF-01/F-R4b — Missione 118 V9.2
+Data: 2026-11-19. Stato: LOCAL FUNCTIONAL PASS / HUMAN REVIEW PENDING / NO PUBLICATION.
+[Ricevuta con impronte e risultati](CURR-REF-01-F-R4b-M118-V92-evidence.json). Il pacchetto privato è consegnato al titolare come Missione_118_V92_Studio_Atlas_043.zip; non è incluso nel repository. V9.1 immutata e verificata per impronta; nuova bozza 0.4.3-draft. Dieci risorse verificate, otto WebP identiche e nove risorse multimediali incorporate identiche (otto immagini e una traccia MP3).
+## Correzioni e verifica
+R1: distinzione tra scelta iniziale e contestuale. Quattro combinazioni controllate in ciascuna delle tre viste; modifica del promemoria iniziale invalida il contesto, anche nel riesame dal diario.
+R2: richiesta di spiegazione comune a entrambi i modi di aiuto. Riga del diario neutra e rivedibile, senza inferenze dalla modalità scelta.
+R3: due situazioni con etichette neutre; classificazione prima del comando e del riscontro. Modifica della classificazione azzera la risposta; percorso non ideale può arrivare al diario e rivedere.
+R4: scuola o biblioteca civica; esempio facoltativo chiuso per impostazione iniziale, quattro passaggi e criteri comuni, prodotto su carta, orale o schema. Nessuna raccolta di risposte.
+R5: guida 45–50 minuti, somma fasi 45–50, manifesto durata suggerita 45. Distinzione processo, prodotto, conoscenze.
+## Regressione
+Chromium locale con Playwright, iframe isolato allow-scripts allow-forms, blocco e osservazione delle richieste, movimento ridotto. Viste 320x640, 393x873 e 1280x720: prove positive per tutti i casi; le due viste mobili sono state rieseguite separatamente per conservare i riscontri. Zero errori di pagina e richieste esterne; nessun overflow orizzontale nella consegna finale. Verificati prologo testuale, avvio/pausa audio, confronto luce/buio e azzeramento al cambio previsione, ritorno dal diario, annullamento e conferma reset da tastiera. Non è stata riprodotta la CSP esatta di Studio Atlas. Controllo statico dei vincoli di importazione, non esecuzione dell'importatore. Il CI verifica la ricevuta, non ripete il browser sul pacchetto privato.
+## Decisione
+Nessuna modifica al runtime, pin Studio, catalogo, Arena o master 3D. Nessuna autorizzazione alla pubblicazione o uso studenti. Restano separati giudizio scientifico e pedagogico, ascolto, accessibilità reale, diritti, raccordo Arena e prova d'uso. I nuovi passaggi creano occasioni di motivazione ma non dimostrano competenza: le prestazioni restano da osservare professionalmente. Prossimo passo: importazione privata e collaudo effettivo nel candidato Studio Atlas, senza promozione automatica; eventuale pin della nuova versione soltanto dopo verifica di compatibilità e decisione esplicita.

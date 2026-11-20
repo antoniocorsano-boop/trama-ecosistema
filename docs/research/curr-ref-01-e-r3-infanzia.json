@@ -1,0 +1,324 @@
+{
+  "schemaVersion": "trama.curr-ref-er3/v0.1",
+  "id": "CURR-REF-01/E-R3",
+  "status": "NATIVE_FIELD_ALIGNMENT_CANDIDATE",
+  "source": {
+    "master": "CAN-CURR-MASTER-00",
+    "masterVersion": "1.3",
+    "infancySource": "CAN-CURR-INF-00",
+    "sourceSections": [
+      "1–3",
+      "6",
+      "9–10"
+    ],
+    "technologySource": "BOZZA-CURR-TEC-01@1.2",
+    "technologySections": [
+      "4.1",
+      "4.2",
+      "4.3",
+      "4.4"
+    ],
+    "arenaRevision": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+    "exportBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+    "fingerprint": "b355be71",
+    "authorityState": "PROVISIONAL_COMPLETE",
+    "materializerBlob": "df11b263f5ec61506098daf8485e48bdd0cd514f",
+    "officialAct": "DM 221/2025",
+    "officialLocator": "Allegato parte 1, I campi di esperienza; La conoscenza del mondo; Dalla scuola dell’infanzia alla scuola primaria",
+    "officialUrl": "https://www.gazzettaufficiale.it/atto/serie_generale/caricaArticolo?art.codiceRedazionale=26G00021&art.dataPubblicazioneGazzetta=2026-01-27&art.flagTipoArticolo=1&art.idArticolo=1&art.idGruppo=0&art.idSottoArticolo=1&art.idSottoArticolo1=10&art.progressivo=1&art.versione=1",
+    "review": "LOCATED_NOT_HUMAN_VERIFIED"
+  },
+  "fields": [
+    {
+      "id": "campo-i-discorsi-e-le-parole",
+      "section": "5.4.1",
+      "scope": "FIELD_OF_EXPERIENCE",
+      "targets": [
+        "italiano",
+        "lingua-inglese"
+      ],
+      "competencesAreFieldLevel": true,
+      "bands": [
+        {
+          "id": "infanzia-i-discorsi-e-le-parole-3-anni",
+          "age": 3,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-i-discorsi-e-le-parole-4-anni",
+          "age": 4,
+          "sourceTextMatch": true,
+          "objectiveCount": 4,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-i-discorsi-e-le-parole-5-anni",
+          "age": 5,
+          "sourceTextMatch": true,
+          "objectiveCount": 4,
+          "knowledgeCount": 4,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "campo-il-se-e-laltro",
+      "section": "5.4.2",
+      "scope": "FIELD_OF_EXPERIENCE",
+      "targets": [
+        "storia",
+        "geografia"
+      ],
+      "competencesAreFieldLevel": true,
+      "bands": [
+        {
+          "id": "infanzia-il-se-e-laltro-3-anni",
+          "age": 3,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-il-se-e-laltro-4-anni",
+          "age": 4,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-il-se-e-laltro-5-anni",
+          "age": 5,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "campo-la-conoscenza-del-mondo",
+      "section": "5.4.3",
+      "scope": "FIELD_OF_EXPERIENCE",
+      "targets": [
+        "matematica",
+        "scienze",
+        "tecnologia"
+      ],
+      "competencesAreFieldLevel": true,
+      "bands": [
+        {
+          "id": "infanzia-la-conoscenza-del-mondo-3-anni",
+          "age": 3,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-la-conoscenza-del-mondo-4-anni",
+          "age": 4,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-la-conoscenza-del-mondo-5-anni",
+          "age": 5,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "campo-immagini-suoni-colori",
+      "section": "5.4.4",
+      "scope": "FIELD_OF_EXPERIENCE",
+      "targets": [
+        "musica",
+        "arte-e-immagine"
+      ],
+      "competencesAreFieldLevel": true,
+      "bands": [
+        {
+          "id": "infanzia-immagini-suoni-colori-3-anni",
+          "age": 3,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-immagini-suoni-colori-4-anni",
+          "age": 4,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-immagini-suoni-colori-5-anni",
+          "age": 5,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        }
+      ]
+    },
+    {
+      "id": "campo-il-corpo-e-il-movimento",
+      "section": "5.4.5",
+      "scope": "FIELD_OF_EXPERIENCE",
+      "targets": [
+        "educazione-motoria-fisica"
+      ],
+      "competencesAreFieldLevel": true,
+      "bands": [
+        {
+          "id": "infanzia-il-corpo-e-il-movimento-3-anni",
+          "age": 3,
+          "sourceTextMatch": true,
+          "objectiveCount": 3,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-il-corpo-e-il-movimento-4-anni",
+          "age": 4,
+          "sourceTextMatch": true,
+          "objectiveCount": 4,
+          "knowledgeCount": 3,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        },
+        {
+          "id": "infanzia-il-corpo-e-il-movimento-5-anni",
+          "age": 5,
+          "sourceTextMatch": true,
+          "objectiveCount": 4,
+          "knowledgeCount": 5,
+          "evidenceCount": 0,
+          "connectionCount": 0
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "ER3-01",
+      "state": "PRESENT_IN_SOURCE_NOT_STRUCTURED_IN_EXPORT",
+      "subject": "Dieci raccordi di campo documentati; non attribuirli a ogni annualità o a singolo obiettivo."
+    },
+    {
+      "id": "ER3-02",
+      "state": "FIELD_COMPETENCE_REPEATED_PER_AGE",
+      "subject": "Le competenze di campo sono ripetute nelle tre fasce, non aspettative nazionali distinte a ciascuna età."
+    },
+    {
+      "id": "ER3-03",
+      "state": "LOCAL_DRAFT_DETAIL_NOT_IN_MASTER",
+      "subject": "Finalità più estese in quattro campi; manca una finalità autonoma per I discorsi e le parole nella fonte locale, mentre la fonte nazionale la contiene. Riesame, non completamento automatico."
+    },
+    {
+      "id": "ER3-04",
+      "state": "LOCAL_ANNUALIZATION_REVIEW_REQUIRED",
+      "subject": "Il limite numerico di conteggio a 5 anni è locale, non soglia nazionale di accesso alla primaria; osservazione rispettosa dei ritmi."
+    },
+    {
+      "id": "ER3-05",
+      "state": "NATIVE_NAME_RECONCILIATION",
+      "subject": "Il corpo in movimento nella fonte locale storica, Il corpo e il movimento nel master e nel decreto; mantenere provenienza."
+    },
+    {
+      "id": "ER3-06",
+      "state": "EVIDENCE_NOT_STRUCTURED",
+      "subject": "Le quindici fasce non contengono evidenze esportate; la bozza Tecnologia contiene proposte osservative che non vanno promosse a prescrizioni."
+    }
+  ],
+  "worldField": {
+    "id": "campo-la-conoscenza-del-mondo",
+    "nationalCompetenceCount": 5,
+    "nationalObjectiveCount": 5,
+    "nationalScope": "END_OF_INFANCY_FIELD_NOT_AGE_THRESHOLD",
+    "localAgeRefs": [
+      {
+        "bandId": "infanzia-la-conoscenza-del-mondo-3-anni",
+        "age": 3,
+        "objectiveOrdinal": 3,
+        "text": "discriminare attributi evidenti",
+        "draftLocator": "4.1",
+        "interpretation": "Esplorazione e distinzione di attributi",
+        "status": "PROPOSED"
+      },
+      {
+        "bandId": "infanzia-la-conoscenza-del-mondo-4-anni",
+        "age": 4,
+        "objectiveOrdinal": 1,
+        "text": "confrontare quantità e classificare",
+        "draftLocator": "4.2",
+        "interpretation": "Confronto e classificazione",
+        "status": "PROPOSED"
+      },
+      {
+        "bandId": "infanzia-la-conoscenza-del-mondo-5-anni",
+        "age": 5,
+        "objectiveOrdinal": 3,
+        "text": "risolvere sequenze e percorsi logici",
+        "draftLocator": "4.3",
+        "interpretation": "Sequenze e percorsi",
+        "status": "PROPOSED"
+      }
+    ],
+    "transition": {
+      "from": "infanzia-la-conoscenza-del-mondo-5-anni",
+      "to": "primaria-tecnologia-classe-i",
+      "targetObjectiveOrdinal": 4,
+      "targetText": "seguire procedure",
+      "kind": "PROPOSED_VERTICAL_CONTINUITY",
+      "regime": "2025",
+      "cohortNote": "Le fasce contemporanee non ricostruiscono la coorte di ingresso; osservare i bisogni e le esperienze effettive.",
+      "reason": "Una sequenza vissuta e rappresentata può sostenere le procedure operative in primaria senza anticipare la disciplina.",
+      "observation": "Gioco di costruzione con materiali adatti, descrizione con gesti o disegni, confronto e riordino delle azioni; osservazione narrativa, non prova di accesso.",
+      "otherTargets": [
+        "matematica",
+        "scienze"
+      ],
+      "noPrerequisiteGate": true
+    }
+  },
+  "boundaries": {
+    "masterEdited": false,
+    "arenaEdited": false,
+    "atlasEdited": false,
+    "professionalApproval": false,
+    "sourceVerifiedByHuman": false,
+    "disciplineCreatedInInfancy": false,
+    "ageCertification": false,
+    "automaticMapping": false,
+    "publication": false,
+    "studentData": false
+  },
+  "next": "E-R4: dossier di riesame professionale e revisione verticale nel processo REG-CURR-00"
+}

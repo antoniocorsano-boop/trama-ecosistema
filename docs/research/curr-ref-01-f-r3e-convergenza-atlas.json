@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "trama.atlas-convergence-evidence/v0.1",
+  "id": "CURR-REF-01/F-R3e",
+  "status": "STATIC_COMPATIBILITY_CHECKED_INTEGRATION_BLOCKED",
+  "scope": "Riscontro in sola lettura dei rami esatti; nessuna fusione, build congiunta o promozione",
+  "atlas": {
+    "commonBase": "d2938378c9384c5122adb8379396dbad5b4385fe",
+    "semantic": {
+      "pr": 144,
+      "head": "2a681bcd4a611badcfa984b3b60b868eede21e55",
+      "filesChanged": 12,
+      "checksPassed": 10,
+      "state": "OPEN_NOT_MERGED"
+    },
+    "library": {
+      "pr": 147,
+      "head": "572ee0ca62b4a4faf70d899f262d5e8981cc4d82",
+      "filesChanged": 232,
+      "state": "OPEN_NOT_MERGED",
+      "passed": 4,
+      "failed": 1,
+      "skipped": 1,
+      "failureRun": 44576299297,
+      "failureJob": 135744587096,
+      "failureStep": "Bake nine original visible surfaces",
+      "failureReason": "RuntimeError: object material override Library bay 04-0-Bay Book 0"
+    },
+    "qualifiedBay": {
+      "pr": 146,
+      "head": "abfb83b9c9cf17d5c3e46c79eaa7ac9dab96e3cc",
+      "checksPassed": 5,
+      "scope": "Campata 04-0; non intera biblioteca"
+    },
+    "worldComposer": {
+      "pr": 136,
+      "head": "7cc8d54e15f582579f93d2f987af5f85c0f72283",
+      "catalogRun": 44577173650,
+      "evidenceRun": 44577171815,
+      "state": "SEPARATE_LINE_NOT_MERGED",
+      "scope": "Catalogo e prove di produzione circoscritte; non dipendenza di rilascio della biblioteca"
+    },
+    "overlap": [
+      "docs/governance/TRAMA_TERM_01_CURRICOLO_VOCABULARY.json"
+    ],
+    "termReconciliation": {
+      "baseBlob": "96d6975a111a6c66b8ebb4447b632a4294f56d7d",
+      "libraryBlob": "55718e416867189a6313f32205e2a2d1430789cb",
+      "semanticBlob": "8a7f985beac0e0ddadfd0aef4c59428f6642416b",
+      "baseCount": 15,
+      "libraryCount": 18,
+      "semanticCount": 16,
+      "unionCount": 19,
+      "basePreserved": true,
+      "otherFieldsEqual": true,
+      "overlappingAdditions": 0,
+      "rule": "Unione esatta per percorso e frammento, preservare motivazione; rifiutare collisioni, rimozioni o allargamenti, rieseguire entrambi i controlli terminologici",
+      "applied": false
+    }
+  },
+  "trama": {
+    "commonBase": "4d9b7b487f3f920dad54593683b19a742d639b84",
+    "knowledge": {
+      "pr": 336,
+      "head": "fb2fb620e67e3f9da029b6368ef13b6b1eb6c3fa",
+      "filesChanged": 12,
+      "checksPassed": 2
+    },
+    "reference": {
+      "pr": 348,
+      "head": "c7b3e33462f33b12acf3b9eaf8c98bfb97e9066f",
+      "filesChanged": 39
+    },
+    "overlap": []
+  },
+  "gateway": {
+    "sources": [
+      {
+        "path": "src/features/atlas-gateway/gateway-policy.ts",
+        "blob": "fe1d43c5622b1b7889ad9bb7c188373fddd9bebf"
+      },
+      {
+        "path": "src/features/atlas-gateway/gateway-candidate.tsx",
+        "blob": "0e7d3db1c974128fe5540fb7fb16117832abd468"
+      },
+      {
+        "path": "src/app/esperienze/page.tsx",
+        "blob": "8e83140aa5d55c3f04df6244aa21c6909c3ec9bb"
+      },
+      {
+        "path": "src/features/atlas-gateway/experience-library.tsx",
+        "blob": "2290012681b299a28dee57496e5bb42a5d1e323d"
+      },
+      {
+        "path": "src/app/gateway/page.tsx",
+        "blob": "a3e6d4a53c5afaba9b8badf48376054e3ca45dcb"
+      },
+      {
+        "path": "src/features/pathways/load-public-pathways.ts",
+        "blob": "4818bbf9d16923b2e992bf83731e00ba922d4311"
+      },
+      {
+        "path": "governance/percorsi-portfolio.json",
+        "blob": "17a3a883724531a99b2e4424dec172cc2e3b1d41"
+      },
+      {
+        "path": "scripts/test-atlas-gateway-navigation-differential.mjs",
+        "blob": "eb7034cddf8debbfda8c7c28a4872bb3ef2dd9fd"
+      },
+      {
+        "path": "docs/atlas-gateway/ATLAS-LIBRARY-COMPLETION.md",
+        "blob": "4de17e239a35194d6dc2c73c98e9cf893924ee5f"
+      }
+    ],
+    "portalIds": [
+      "curricolo",
+      "esperienze",
+      "studio"
+    ],
+    "portalDestinations": [
+      "/curricolo",
+      "/esperienze",
+      null
+    ],
+    "previewGate": true,
+    "registeredPathways": 2,
+    "authorizedPathways": 0,
+    "editorialSearchPublicResults": 0,
+    "webglRun": 44576299068,
+    "webglScope": "Controllo locale del ramo artistico, non dei due rami congiunti"
+  },
+  "nextGate": {
+    "id": "LBC-03/F-R3e-joint",
+    "state": "BLOCKED_BEFORE_INTEGRATION",
+    "requires": [
+      "LBC-01 material completion PASS",
+      "LBC-02 whole-library extension qualified",
+      "Pin exact integrated semantic and artistic heads",
+      "Reconcile TERM-01 narrow exceptions",
+      "Run Arena authority and terminology gates",
+      "Run existing WebGL and accessible navigation matrix",
+      "Verify preview gating and public catalog absence",
+      "Human artistic and professional review"
+    ],
+    "parallelAllowed": [
+      "F-R4",
+      "ATL-KB editorial review",
+      "Arena E-R1/E-R2/E-R3 read-only"
+    ]
+  },
+  "boundaries": {
+    "merge": false,
+    "publication": false,
+    "studentAccess": false,
+    "masterChange": false,
+    "newPortal": false,
+    "newResolver": false,
+    "newCatalog": false,
+    "jointBrowserPass": false,
+    "artisticApproval": false
+  }
+}

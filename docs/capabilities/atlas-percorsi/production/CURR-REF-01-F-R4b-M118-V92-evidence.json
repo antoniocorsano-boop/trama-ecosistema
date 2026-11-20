@@ -1,0 +1,197 @@
+{
+  "schemaVersion": "trama.m118-correction-evidence/v0.1",
+  "id": "CURR-REF-01/F-R4b/M118/V92",
+  "status": "LOCAL_FUNCTIONAL_PASS_HUMAN_REVIEW_PENDING",
+  "source": {
+    "version": "0.4.2-draft",
+    "archiveSha256": "ecf9c51f03070bc5d70e2e2a0906026371fb0ea39f9d01c8f397377d1a16e95b",
+    "reviewPath": "docs/capabilities/atlas-percorsi/production/CURR-REF-01-F-R4b-M118-review-v0.1.json",
+    "preserved": true
+  },
+  "candidate": {
+    "activityId": "trama-missione-118-2026",
+    "version": "0.4.3-draft",
+    "archiveName": "Missione_118_V92_Studio_Atlas_043.zip",
+    "archiveBytes": 1898508,
+    "archiveSha256": "c259d5810b88a1255d7ff3a1079e66195c75c983d066b72155b3093c5003812c",
+    "manifestSha256": "516f1c696c520d614fdcc3564230d77c1958570e4d9addb5f0e47281cbb103f5",
+    "htmlSha256": "4274a7de3aff3b04d2da3645753106116dc16694dd9cb848b1969391f1afaa27",
+    "guideSha256": "76a762a1adf288dbbb4da439735a2c41ff7b47a7e670713f15bd52753ab9c5c0",
+    "assetsVerified": 10,
+    "unchangedArtFiles": 8,
+    "unchangedEmbeddedMedia": 9,
+    "zipIntegrity": true,
+    "arenaRefs": 0,
+    "guideDuration": [
+      45,
+      50
+    ],
+    "phaseSum": [
+      45,
+      50
+    ],
+    "manifestSuggestedDuration": 45,
+    "privateArchive": true
+  },
+  "corrections": [
+    {
+      "id": "M118-R1",
+      "status": "LOCAL_FUNCTIONAL_CHECK_PASS",
+      "evidence": "Quattro combinazioni filtro iniziale/nuovo contesto; il filtro iniziale non muta. Il riesame del promemoria iniziale invalida la scelta contestuale e richiede nuova scelta prima del ritorno al diario."
+    },
+    {
+      "id": "M118-R2",
+      "status": "LOCAL_FUNCTIONAL_CHECK_PASS",
+      "evidence": "Entrambe le modalità del tutor includono la stessa richiesta di spiegazione orale o schematica; il diario non segnala una modalità come errore."
+    },
+    {
+      "id": "M118-R3",
+      "status": "LOCAL_FUNCTIONAL_CHECK_PASS",
+      "evidence": "Due casi con etichette neutre, classificazione prima della risposta del sistema e del riscontro; cambio classificazione invalida la risposta; percorso non ideale può terminare e rivedere."
+    },
+    {
+      "id": "M118-R4",
+      "status": "LOCAL_FUNCTIONAL_CHECK_PASS",
+      "evidence": "Scelta scuola/biblioteca civica; esempio chiuso e facoltativo; quattro passaggi, criteri e prodotto fuori dal pacchetto."
+    },
+    {
+      "id": "M118-R5",
+      "status": "DOCUMENT_CHECK_PASS",
+      "evidence": "Guida 45–50 minuti coerente con somma delle fasi e durata suggerita 45; processo, prodotto, conoscenze distinti."
+    }
+  ],
+  "method": {
+    "browser": "Chromium locale con Playwright",
+    "sandbox": "allow-scripts allow-forms",
+    "csp": "NOT_REPRODUCED_EXACT_STUDIO_CSP",
+    "network": "BLOCKED_AND_OBSERVED",
+    "reducedMotion": true,
+    "localImport": "NOT_EXECUTED",
+    "importContractStaticReview": {
+      "revision": "08aa4cd62d66ba109adfc0d2d75952095ab031d4",
+      "intakeBlob": "6932f2881c9129c2eeab60823d6c04b3b3ce70d5",
+      "zipBlob": "8c937d1b1498f56ace366433fe45637d364f5478",
+      "scope": "Versione bozza e limiti dichiarati; nessuna esecuzione dell'importatore Studio"
+    }
+  },
+  "observations": [
+    {
+      "viewport": "320x640",
+      "fourContextCombinations": [
+        [
+          "now",
+          "now"
+        ],
+        [
+          "now",
+          "later"
+        ],
+        [
+          "later",
+          "now"
+        ],
+        [
+          "later",
+          "later"
+        ]
+      ],
+      "contextResetAndDiary": true,
+      "predictionRegression": true,
+      "tutorBothModesNeutral": true,
+      "classificationBeforeFeedback": true,
+      "reclassificationResetsResponse": true,
+      "nonidealCanFinish": true,
+      "optionalExamplesTwoContexts": true,
+      "keyboardReset": true,
+      "audioPlayPause": true,
+      "textPrologue": true,
+      "transferOverflow": false,
+      "externalRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "viewport": "393x873",
+      "fourContextCombinations": [
+        [
+          "now",
+          "now"
+        ],
+        [
+          "now",
+          "later"
+        ],
+        [
+          "later",
+          "now"
+        ],
+        [
+          "later",
+          "later"
+        ]
+      ],
+      "contextResetAndDiary": true,
+      "predictionRegression": true,
+      "tutorBothModesNeutral": true,
+      "classificationBeforeFeedback": true,
+      "reclassificationResetsResponse": true,
+      "nonidealCanFinish": true,
+      "optionalExamplesTwoContexts": true,
+      "keyboardReset": true,
+      "audioPlayPause": true,
+      "textPrologue": true,
+      "transferOverflow": false,
+      "externalRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "viewport": "1280x720",
+      "fourContextCombinations": [
+        [
+          "now",
+          "now"
+        ],
+        [
+          "now",
+          "later"
+        ],
+        [
+          "later",
+          "now"
+        ],
+        [
+          "later",
+          "later"
+        ]
+      ],
+      "contextResetAndDiary": true,
+      "predictionRegression": true,
+      "tutorBothModesNeutral": true,
+      "classificationBeforeFeedback": true,
+      "reclassificationResetsResponse": true,
+      "nonidealCanFinish": true,
+      "optionalExamplesTwoContexts": true,
+      "keyboardReset": true,
+      "audioPlayPause": true,
+      "textPrologue": true,
+      "transferOverflow": false,
+      "externalRequests": 0,
+      "pageErrors": 0
+    }
+  ],
+  "boundaries": {
+    "humanApproval": false,
+    "scienceApproval": false,
+    "accessibilityApproval": false,
+    "learningClaim": false,
+    "studentData": false,
+    "assessmentAutomation": false,
+    "studioImportVerified": false,
+    "studioPinChanged": false,
+    "publicArtifact": false,
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "changesArena": false,
+    "changesMaster": false
+  },
+  "next": "Importazione e collaudo nel candidato Studio Atlas con autorizzazione separata; riesami SCIENCE, PURPOSE, USE, ACCESSIBILITY, RIGHTS, CURRICOLO, voce e pubblicazione indipendenti."
+}
