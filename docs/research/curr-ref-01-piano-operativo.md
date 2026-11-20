@@ -10,7 +10,7 @@ Decisione del 19 novembre 2026. Priorità alla fonte Arena, separata dalla produ
 | E-R2 | Nuclei e progressione | Nove nuclei riconciliati, continuità e approfondimento motivati; diagnosi del campo progressione e integrazioni 15–16 | E-R2a e E-R2b Governance PASS |
 | E-R3 | Infanzia | Campo nativo, traguardi/obiettivi pertinenti, raccordo con primaria senza anticipazione disciplinare | Governance PASS |
 | E-R4 | Validazione professionale | Proposte tracciate nel processo esistente, fonti verificate, decisioni dei gruppi e revisione verticale separate | Fascicolo di raccordo predisposto; validazione umana ancora aperta |
-| G | Docente OS e Registro Docente | Audit dei contratti e un caso UdA/evidenze/giudizio docente; no dati individuali nell'infrastruttura comune | G01–G03 qualificati come linee editoriali; G04 collaudo operativo |
+| G | Docente OS e Registro Docente | Audit dei contratti e un caso UdA/evidenze/giudizio docente; no dati individuali nell'infrastruttura comune | G01–G03 qualificati; G04 candidata in Docente OS |
 | H | Recepimento | Integrazione deliberata per prodotto, compatibilità, prove e autorizzazioni distinte | Non autorizzata |
  
 F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce in LBC-03 dopo LBC-01/02; F-R4 prosegue separatamente nel riesame delle esperienze. Non riaprire la linea artistica da questo piano.
@@ -66,3 +66,8 @@ F-R0–F-R3d restano candidati qualificati nei rispettivi rami. F-R3e confluisce
 - Il componente verifica l'impronta della configurazione G02, identità e revisione del riferimento e coerenza tra fonte, regime, annualità, UdA e criteri. Non genera valutazioni, conferme, osservazioni individuali né file da importare in Registro. Il master Arena 1.3 rimane non vigente.
 - Qualificazione Governance sul commit d815caac2544de12e16214435c51693ae4523dc6: PASS, 568 prove totali eseguite, 13 escluse e 555 superate; 11 verifiche G03 superate.
 - Prossima priorità **G04**: collaudo dell'interazione nel prodotto che espone il riferimento all'attività, selezione e conferma effettiva del docente; prima riesame del destinatario e dei contratti esistenti, poi intervento localizzato senza conflitto con lo sviluppo parallelo di Registro Docente. Nessuna integrazione operativa o pubblicazione autorizzata con G03.
+
+## Ricevuta G04 — Prova d'interazione nell'interfaccia docente
+- [Docente OS PR #801](https://github.com/antoniocorsano-boop/docente-os-2026-27/pull/801) (ramo `curr-ref-01/g04-observation-criteria-ui`, in bozza): due criteri G03 proposti nella fase «Osserva» della lezione B25 e selezionabili mediante caselle di controllo, con conferma esplicita **locale alla sessione**. La conferma si annulla quando cambia la scelta e non è conservata in archivio; il master Arena resta provvisorio e non vigente.
+- Il nuovo riquadro compare solo per la proiezione didattica B25 specifica, con corrispondenza controllata di identità, obiettivo, durata, fonte e prodotto atteso. Per B24/B26 o revisione non compatibile non viene mostrato. Nessuna modifica ai percorsi di registrazione già in funzione, dati individuali, voti, conferme delle revisioni di Registro Docente, pubblicazione o invio.
+- Il collaudo automatico è separato dal riesame professionale. La PR Docente OS deve restare in bozza finché le verifiche CI e le prove di fruibilità 320/390 px, testo al 200%, tastiera e stato di conferma non siano completate. Nessun merge/deploy implicito. G04 non è ancora un contratto di scambio con Registro Docente.
