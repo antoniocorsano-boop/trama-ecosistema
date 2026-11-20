@@ -67,5 +67,6 @@ test("S3: rejects non-pinned evidence and format tampering without affecting the
   await assert.rejects(() => readPinnedEvidenceZip(source), /non coincide/);
   const invalid = new Uint8Array(source);
   invalid[invalid.length - 22] = 0;
-  await assert.rejects(() => readPinnedEvidenceZip(invalid, await sha256Hex(invalid)), /Indice ZIP/);
+  const corruptedDigest = await sha256Hex(invalid);
+  await assert.rejects(() => readPinnedEvidenceZip(invalid, corruptedDigest), /Indice ZIP/);
 });
