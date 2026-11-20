@@ -1,0 +1,165 @@
+"use client";
+
+import { useState } from "react";
+import type { PathwayProject, SceneWorldState } from "../lib/model";
+import { compareSceneWorld, worldPlaces } from "../lib/world-composer";
+
+type Representation = "2D" | "3D" | "COMBINATA";
+const REPRESENTATIONS: Array<{ value: Representation; title: string; description: string }> = [
+  { value: "2D", title: "Illustrata 2-D", description: "Immagini e indizi attivi, senza imporre una scena tridimensionale." },
+  { value: "3D", title: "Ambiente 3-D", description: "Da valutare solo se l'esplorazione dello spazio è necessaria." },
+  { value: "COMBINATA", title: "Combinata", description: "Immagini per raccontare, profondità solo nei momenti utili." },
+];
+
+const SIGNAL_LABELS: Record<string, string> = {
+  OFF: "Spento",
+  READY: "Pronto",
+  ACTIVE: "Attivo",
+  DELAYED: "In ritardo",
+  MISMATCH: "Non corrispondente",
+  STABLE: "Sincronizzato",
+  MANUAL: "Manuale",
+};
+
+export function WorldDesignOverview({ project }: { project: PathwayProject }) {
+  const [representation, setRepresentation] = useState<Representation>("2D");
+  const places = worldPlaces(project);
+
+  return (
+    <section className="world-composer-panel" aria-labelledby="world-design-heading">
+      <div className="world-composer-heading">
+        <h2 id="world-design-heading">Il mondo, a partire dalle scene</h2>
+        <p>Luoghi e situazioni provengono dal Percorso aperto. Non viene creata una seconda bozza.</p>
+      </div>
+      {places.length ? (
+        <ul className="world-composer-places">
+          {places.slice(0, 8).map((place) => (
+            <li key={place.id}><strong>{place.label}</strong><span>{place.detail}</span></li>
+          ))}
+        </ul>
+      ) : (
+        <p className="world-composer-note">I luoghi compariranno quando saranno descritti nelle scene.</p>
+      )}
+      {places.length > 8 && <p className="world-composer-note">Altri {places.length - 8} luoghi o stati sono documentati nelle scene.</p>}
+      <fieldset className="world-composer-fieldset">
+        <legend>Quale rappresentazione aiuterebbe a capire questo mondo?</legend>
+        <div className="world-composer-modes">
+          {REPRESENTATIONS.map((item) => (
+            <button
+              type="button"
+              className={representation === item.value ? "world-composer-choice selected" : "world-composer-choice"}
+              key={item.value}
+              aria-pressed={representation === item.value}
+              onClick={() => setRepresentation(item.value)}
+            >
+              <strong>{item.title}</strong><span>{item.description}</span>
+            </button>
+          ))}
+        </div>
+        <p className="world-composer-note" role="status">
+          {representation === "2D"
+            ? "La rappresentazione illustrata resta il riferimento disponibile per la progettazione."
+            : "Questa è una valutazione progettuale: la produzione 3-D non è ancora collegata a questo editor."}
+          {" "}La scelta di confronto non viene salvata né modifica la produzione esistente.
+        </p>
+      </fieldset>
+    </section>
+  );
+}
+
+function ObservableState({ state, fallback }: { state: SceneWorldState | null; fallback: string }) {
+  if (!state) {
+    return <p className="world-composer-note">{fallback}</p>;
+  }
+  return (
+    <div className="world-composer-state">
+      <strong>{state.place}</strong>
+      <p>{state.status}</p>
+      <ul>
+        {state.signals.map((signal) => (
+          <li key={signal.id}>
+            <strong>{signal.label}</strong>
+            <span>{SIGNAL_LABELS[signal.state] ?? signal.state}{signal.detail ? ` · ${signal.detail}` : ""}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function SceneDesignComparison({ project }: { project: PathwayProject }) {
+  const [selectedSceneId, setSelectedSceneId] = useState(project.scenes[0]?.sceneId ?? "");
+  const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
+  const scene = project.scenes.find((candidate) => candidate.sceneId === selectedSceneId)
+    ?? project.scenes[0];
+
+  if (!scene) return null;
+
+  const comparison = compareSceneWorld(scene, selectedChoiceId);
+  const observableChoices = scene.choices.filter((choice) => choice.worldAfter);
+  const changed = Boolean(comparison.variation);
+
+  return (
+    <section className="world-composer-panel" aria-labelledby="scene-comparison-heading">
+      <div className="world-composer-heading">
+        <h2 id="scene-comparison-heading">Tavola della scena</h2>
+        <p>Osserva la situazione iniziale e le conseguenze già definite. Non è una simulazione 3-D.</p>
+      </div>
+      <label className="world-composer-selector">
+        <strong>Scena da osservare</strong>
+        <select
+          value={scene.sceneId}
+          onChange={(event) => {
+            setSelectedSceneId(event.target.value);
+            setSelectedChoiceId(null);
+          }}
+        >
+          {project.scenes.map((item, index) => (
+            <option key={item.sceneId} value={item.sceneId}>{index + 1}. {item.title}</option>
+          ))}
+        </select>
+      </label>
+      <p className="world-composer-note"><strong>Lo studente:</strong> {scene.learnerAction}</p>
+      {observableChoices.length > 0 ? (
+        <fieldset className="world-composer-fieldset">
+          <legend>Confronta una conseguenza osservabile</legend>
+          <div className="world-composer-buttons">
+            <button type="button" className={!changed ? "secondary-action is-current" : "secondary-action"} aria-pressed={!changed} onClick={() => setSelectedChoiceId(null)}>
+              Originale
+            </button>
+            {observableChoices.map((choice) => (
+              <button
+                type="button"
+                key={choice.choiceId}
+                className={selectedChoiceId === choice.choiceId ? "secondary-action is-current" : "secondary-action"}
+                aria-pressed={selectedChoiceId === choice.choiceId}
+                onClick={() => setSelectedChoiceId(choice.choiceId)}
+              >
+                {choice.label}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      ) : (
+        <p className="world-composer-note">Questa scena non contiene ancora alternative con uno stato successivo documentato.</p>
+      )}
+      <div className="world-composer-comparison" aria-live="polite">
+        <section>
+          <h3>Situazione originale</h3>
+          <ObservableState state={comparison.original} fallback={scene.visibleSituation} />
+        </section>
+        <section>
+          <h3>{changed ? "Dopo la scelta" : "Conseguenza prevista"}</h3>
+          <ObservableState state={comparison.variation} fallback={scene.consequence} />
+          {changed && comparison.feedback && <p className="world-composer-note">{comparison.feedback}</p>}
+        </section>
+      </div>
+      <div className="world-composer-footer">
+        <button className="quiet-action" type="button" onClick={() => setSelectedChoiceId(null)} disabled={!changed}>
+          Ripristina la vista originale
+        </button>
+        <p className="world-composer-note">Il ripristino riguarda solo il confronto. Per modificare e salvare una scena usa i campi sottostanti: nessuna variazione sovrascrive lo stato originale.</p>
+      </div>
+    </section>
+  );
+}
