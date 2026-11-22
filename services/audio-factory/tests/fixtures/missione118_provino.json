@@ -1,0 +1,12 @@
+{
+  "contract": "trama.audio-generation-plan/v0.1",
+  "request_id": "missione118-prologo-01",
+  "language": "it-IT",
+  "voice": "im_nicola",
+  "text": "Anno duemilaquarantacinque. Tutto sembra funzionare. Ma una sera, nella città intelligente, le persone scoprono che gli algoritmi stanno scegliendo al posto loro.",
+  "purpose": "narration",
+  "compute_mode": "FREE_ONLY",
+  "no_personal_data": true,
+  "voice_cloning": false,
+  "max_seconds": 40
+}

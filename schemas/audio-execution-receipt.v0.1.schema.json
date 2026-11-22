@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.example/schemas/audio-execution-receipt.v0.1.schema.json",
+  "title": "TRAMA AudioExecutionReceipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "request_id",
+    "plan_sha256",
+    "engine",
+    "model_id",
+    "voice",
+    "language",
+    "compute_mode",
+    "status",
+    "reason",
+    "asset",
+    "review_state",
+    "published"
+  ],
+  "properties": {
+    "contract": {
+      "const": "trama.audio-execution-receipt/v0.1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "plan_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "engine": {
+      "const": "KOKORO_LOCAL_CPU"
+    },
+    "model_id": {
+      "const": "hexgrad/Kokoro-82M"
+    },
+    "voice": {
+      "enum": [
+        "im_nicola",
+        "if_sara"
+      ]
+    },
+    "language": {
+      "const": "it-IT"
+    },
+    "compute_mode": {
+      "const": "FREE_ONLY"
+    },
+    "status": {
+      "enum": [
+        "CANDIDATE",
+        "REJECTED"
+      ]
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "asset": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "review_state": {
+      "const": "HUMAN_LISTENING_PENDING"
+    },
+    "published": {
+      "const": false
+    }
+  }
+}
