@@ -334,7 +334,7 @@ Capacità trasversale, subordinata ai domini esistenti. Atlas Edu = destinazione
 - **FD-01** — inventario, quote, termini, permessi e costi: PRELIMINARY.
 - **FD-02** — qualificazione distribuzione statica portabile: PLANNED.
 - **FD-03** — collaudo riservato permanente: PLANNED.
-- **FD-04** — pilota Missione 118 V9.1 e pubblicazione solo dopo autorizzazione distinta: PLANNED.
+- **FD-04** — pilota Missione 118: V9.1 **REWORK ESPERIENZIALE** (revisione docente 14/11); evidenze tecniche conservate. V10 da progettare secondo [EduTwin Experience Quality Lock v1](docs/capabilities/atlas-percorsi/product/EDUTWIN-EXPERIENCE-QUALITY-LOCK-v1.md); collaudo e pubblicazione solo dopo gate distinti. Nessuna candidatura pubblica V9.1.
 - **FD-05** — distribuzione ripetibile, ripristino, portabilità: PLANNED.
 - **FD-06** — controllo quote e sostenibilità: PLANNED.
 

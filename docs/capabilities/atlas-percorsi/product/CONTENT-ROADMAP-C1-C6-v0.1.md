@@ -25,11 +25,15 @@ Prova editoriale unica: entro il primo minuto, il lettore comprende situazione, 
 
 La luce giusta: prima mostrare il disegno in ombra e far muovere la lampada; spiegare in situazione che inclinazione e direzione cambiano il fascio; solo dopo introdurre angoli, confronto delle configurazioni e trasferimento. Percentuale = copertura geometrica, non intensità luminosa o sicurezza meccanica. Tenere la versione esistente intatta.
 
+## C2 — Missione 118 V9.1: decisione umana e priorità V10 (14 novembre 2026)
+V9.1, 0.4.2-draft: REWORK esperienziale sulla base della revisione docente; la grafica è apprezzata, il contenuto è giudicato banale e poco avvincente. Conservare esatta versione, asset ed evidenze tecniche; non candidare a pubblicazione. Priorità V10 prima dell'estensione del catalogo: sinossi → mondo e conseguenze → scena giocabile → Human Use Review → produzione completa. Il lavoro di distribuzione resta disponibile ma non abilita la pubblicazione.
+Riferimento vincolante candidato per C2 e C6: [EduTwin Experience Quality Lock v1](EDUTWIN-EXPERIENCE-QUALITY-LOCK-v1.md), applicazione dei gate esistenti, non nuovo standard.
+
 ## C3–C6 — Ordine
 C3: estendere/riconciliare i contratti esistenti ActivityPackage v1, Pathway Authoring Package e ATLAS-MAT-PUB-01; distinguere schede, video, simulazioni, percorsi, asset; nessun nuovo standard parallelo. Arena fornisce ID verificati, non sostituibili con testo libero. Riconciliare handoff UDA #262.
 C4: biblioteca visuale Atlas, copertine originali, scorrimento orizzontale per temi, poche scelte per vista, titolo e azione comprensibili; accesso anonimo solo ai prodotti esplicitamente autorizzati, link stabili. Bozze restano fuori dal pubblico. Completare il primo percorso intero prima di estendere il catalogo.
 C5: consolidare acquisizione, revisione, approvazione, pubblicazione, ricevuta, ritiro, versionamento e controlli; riutilizzare LOI-01/02 già integrati, LOI-03 #310 qualificata ma non integrata. Anteprima Vercel non è un prerequisito della revisione editoriale; niente deploy in questa fase.
-C6: EduTwin Studio in ChatGPT, dialogo adattivo e approvazioni; riuso dei mondi e degli asset; interoperabilità con Studio Atlas, non pubblicazione automatica.
+C6: EduTwin Studio in ChatGPT, dialogo adattivo e approvazioni; applicare [EduTwin Experience Quality Lock v1](EDUTWIN-EXPERIENCE-QUALITY-LOCK-v1.md) ai candidati narrativi; riuso dei mondi e degli asset; interoperabilità con Studio Atlas, non pubblicazione automatica.
 
 ## Percorso visibile dell'autore
 Una schermata alla volta: scegli contenuto → chiarisci il pubblico e lo scopo → verifica la storia o il compito → prova → collega al curricolo → invia per revisione. Mostrare sempre una sola azione principale e il passo successivo. Per lo studente: scegli dalla biblioteca visuale → scopri la situazione → fai la prima azione → osserva cosa cambia → continua. Queste sono regole UX, non autorizzazione all'implementazione pubblica.
