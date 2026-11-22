@@ -1,0 +1,1839 @@
+{
+  "schemaVersion": "atlas.axf-master-state/candidate-v1",
+  "planId": "AXF-MASTER-01",
+  "asOf": "2026-11-15",
+  "status": "CONSOLIDATION_CANDIDATE",
+  "runtimeAuthorized": false,
+  "studentAuthorized": false,
+  "paidFallbackAllowed": false,
+  "planRef": "ATLAS-MASTER-PLAN-v1.md",
+  "authorityRefs": [
+    "../../../governance/TRAMA-GOVERNATORE-INTELLIGENTE-v1.md",
+    "../architecture/productive-pathway-workflow-v1.md",
+    "../grammars/registry.yaml",
+    "../product/STUDENT-LIBRARY-PRODUCT-CONTRACT-v1.md"
+  ],
+  "baselines": [
+    {
+      "repo": "antoniocorsano-boop/trama-ecosistema",
+      "pr": 332,
+      "head": "1f47247fd96e3cb819a24d22bf98773b7759c065",
+      "state": "DRAFT",
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "repo": "Atlas",
+      "pr": 95,
+      "head": "a7a8539f20336201f3a2c55f801ac2d7df5c16f4",
+      "state": "DRAFT",
+      "passed": 14,
+      "skipped": 1,
+      "failed": 0,
+      "githubRepositoryId": 1376266693
+    },
+    {
+      "repo": "Atlas",
+      "githubRepositoryId": 1376266693,
+      "pr": 96,
+      "head": "3589c363e24fc66be588d336849997545bcd1b7f",
+      "state": "OPEN_NOT_MERGED",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "repo": "Atlas",
+      "githubRepositoryId": 1376266693,
+      "pr": 96,
+      "head": "a02341910803bfb8c0944d4e5237260be5ed6059",
+      "state": "DRAFT",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "repo": "Atlas",
+      "githubRepositoryId": 1376266693,
+      "pr": 97,
+      "head": "8ff6ece6dc487dc5341881066db6bace5a49d27e",
+      "state": "DRAFT",
+      "passed": 6,
+      "failed": 0
+    }
+  ],
+  "phases": [
+    {
+      "id": "F0",
+      "state": "BASELINE_DOCUMENTED",
+      "evidence": "../production/STUDIO-ATLAS-INTERACTIVE-FACTORY-HANDOFF-v1.md"
+    },
+    {
+      "id": "F1",
+      "state": "TECHNICAL_PASS_CANDIDATE",
+      "evidence": "../production/AXF-F1-SPECIALIZED-HANDOFF-EVIDENCE-v1.md"
+    },
+    {
+      "id": "F2",
+      "state": "TECHNICAL_PASS_CANDIDATE",
+      "evidence": "../production/AXF-F2-SPECIALIZED-PREVIEW-EVIDENCE-v1.md",
+      "closeout": "https://github.com/antoniocorsano-boop/trama-ecosistema/pull/331#issuecomment-6892411392"
+    },
+    {
+      "id": "F3-A",
+      "state": "TECHNICAL_PASS_CANDIDATE",
+      "evidence": {
+        "githubRepositoryId": 1376266693,
+        "runId": 43700272516
+      },
+      "artifact": {
+        "githubRepositoryId": 1376266693,
+        "runId": 43700272516,
+        "artifactId": 14155464015
+      },
+      "artifactExpires": "2026-11-22",
+      "sha256": "2fd722328f233d4c48d3fdf19013fb9f4337842cf0f8d7a1ddcdb659ddf1886b"
+    },
+    {
+      "id": "F3-B",
+      "state": "REVISE_M1_DIRECTION_ACCEPTED",
+      "evidence": "../production/AXF-F3B-IMMERSIVE-EXPERIENCE-REVIEW-v1.md"
+    },
+    {
+      "id": "F3-C",
+      "state": "PARTIAL",
+      "limits": [
+        "Android rendering and completed state observed",
+        "physical LIM untested",
+        "full accessibility and gesture/reset checks open"
+      ]
+    },
+    {
+      "id": "F3-D",
+      "state": "OPEN"
+    },
+    {
+      "id": "F4",
+      "state": "BLOCKED_BY_F3",
+      "case": "agriculture"
+    },
+    {
+      "id": "F5",
+      "state": "BLOCKED_BY_F4"
+    }
+  ],
+  "next": {
+    "id": "M3-B",
+    "phase": "F3-B3",
+    "state": "EDITORIAL_METHOD_REVIEW_PROTOCOL_CANDIDATE_W3_W6A_REOPEN",
+    "action": "Review authentic R3 in exact editorial-only private composition; physical Android/LIM and distinct editorial/disciplinary review remain open; then revise Atelier under existing protocol and qualify public format/authority. Preserve G2 and technical tests, P2 HOLD; no deployment/student authorization.",
+    "evidence": "../production/AXF-M3B-ART-DIRECTION-ASSET-BRIEF-v1.md",
+    "requires": [
+      "M3-A technical PASS",
+      "human W6A review",
+      "reference lock and rights"
+    ],
+    "blockers": [
+      "F3-B REVISE",
+      "human W6A/W5A and rights/licensing open",
+      "M6-A targeted revision and in-memory regression PASS; human visual/educational acceptance pending",
+      "Android local opening and core flow observed; presentation, wrong-choice feedback and landscape PASS user-reported; direct drag, preserve/delete, exit/reopen and LIM pending",
+      "complete accessibility and storage audit pending",
+      "M7 Android core path screenshot PASS; residual physical interactions, authorized storage, full accessibility and human/rights qualification open",
+      "M6-B1 physical bulb drag FAIL; M7-D1 correction in-memory 4/4 PASS, real Android retest pending",
+      "M7-D1 intermittent physical drag failure; M7-D2 repeat tests PASS in simulated Chromium, physical cause/retest open",
+      "M7-D2 first-entry physical drag FAIL/intermittent (user reported); root cause unconfirmed; ER-01–ER-05 editorial usability findings open",
+      "Editorial production protocol candidate documented; W3A/W5A/W6A review reopened; ER-01–06 unresolved and no new production until gate passage."
+    ],
+    "notAllowed": [
+      "production engine adoption",
+      "student publication",
+      "paid service",
+      "automatic approval"
+    ],
+    "review": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md",
+    "artBrief": "../production/AXF-M3B-E02-ART-CANDIDATE-BRIEF-v1.md",
+    "humanDirection": {
+      "source": "Okay, bene (15/11/2026)",
+      "scope": "E02 v2 art direction for candidate continuation only",
+      "fullW6A": "PENDING",
+      "rights": "OPEN"
+    },
+    "artReceipt": "../production/AXF-M3B-E02-ART-CANDIDATE-RECEIPT-v1.md",
+    "artMaster": {
+      "libraryFileId": "libfile_637f0946af58819192b0e2bd1e02a87a",
+      "fileId": "file_00000000c5a88210bacfe12ffcabc417",
+      "sha256": "009a83c3dfbb1a81b4ee5b8d2fb68c6c34a73ce4f91f948bee28226d5285d5c7",
+      "width": 1536,
+      "height": 1024,
+      "gitImport": "PENDING"
+    },
+    "zoneCandidate": {
+      "repo": "Atlas",
+      "pr": 97,
+      "head": "c6d32bfe04f9c505b29fc61a3c70830e28121993",
+      "path": "labs/axf-m2/m3-handoff/e02-zone-candidate.json",
+      "localReview": "CHROMIUM_IN_MEMORY_PASS_ONLY",
+      "htmlLibraryFileId": "libfile_1050fcb3c7a88191a90236ed0a2e90b5",
+      "zipLibraryFileId": "libfile_ef798bd3ce808191a9293503d017e533",
+      "runtimeIntegration": "PENDING"
+    },
+    "artVariant": {
+      "version": "v2",
+      "libraryFileId": "libfile_48d9ed45f0688191b3060806613d17aa",
+      "sha256": "509000e27fe51e7c3c3d336029039cf8c6bf52e79fdd0be3d7f722d5a1509eaa",
+      "width": 1536,
+      "height": 1024,
+      "gitImport": "PENDING",
+      "candidateRepo": "Atlas",
+      "candidatePr": 97,
+      "candidateHead": "fb7603ba92a011da6d9682c0b04a4ca1d063c9dc",
+      "packageLibraryFileId": "libfile_dab7861963dc81919800998c25caf58b",
+      "qualification": "LOCAL_STATIC_AND_MOCK_DISPATCH_PASS_ONLY",
+      "preview": {
+        "htmlLibraryFileId": "libfile_b82f5077ca1881918ac1552f140d7bce",
+        "zipLibraryFileId": "libfile_be7ee6c9773c81919ec25cdc860671be",
+        "status": "CHROMIUM_IN_MEMORY_PASS_ONLY"
+      },
+      "pw01": {
+        "run": 43711905548,
+        "status": "PASS",
+        "note": "one-shot hash; no policy exemption"
+      }
+    },
+    "m3c": {
+      "repo": "Atlas",
+      "pr": 97,
+      "head": "dd84370c3e0f78ceb212c8a4b881754c0c908002",
+      "baselinePassed": 5,
+      "asset": "SYNTHETIC_FIXTURE_NOT_E02_ART",
+      "status": "FIXTURE_TECHNICAL_PASS",
+      "exactMasterLock": "UNCHANGED",
+      "studentAuthorized": false,
+      "passed": 5,
+      "failed": 0,
+      "runId": 43715351717,
+      "jobId": 132815576787,
+      "artifactId": 14162462066,
+      "artifactDigest": "sha256:ed7c5ecb93c77679979f9e9685ff406e8e9316d7f6efa341f96d95b8d817608e",
+      "artifactExpires": "2026-11-22T12:48:44Z",
+      "evidenceLibraryFileId": "libfile_80067438ce54819197c925638acafae2"
+    },
+    "m3d": {
+      "repo": "Atlas",
+      "pr": 97,
+      "head": "2df78d9d68071d2da4480c554fe613a9bf95ead5",
+      "status": "ASSEMBLED_NOT_QUALIFIED",
+      "masterInPublicRepo": false,
+      "assembly": "PRIVATE_POST_EXPORT_EXACT_PNG_SUBSTITUTION",
+      "nativeExportWithMaster": "NOT_TESTED",
+      "rights": "OPEN",
+      "studentAuthorized": false,
+      "ciPassed": 5,
+      "runId": 43717801997,
+      "artifactId": 14163121835,
+      "artifactDigest": "sha256:e0494694a00c146a943f9ee8e6cdde7af205125c64bae9baa4a1804b2326beba",
+      "privatePackageLibraryId": "libfile_383f8c5913948191978202fda30b7732",
+      "privatePackageSha256": "a71024f0b88bcf04558a3e4518be7bc364d75a5f8b11ca0a81dec68911743aed",
+      "unchangedFiles": 83,
+      "browser": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD"
+    },
+    "m4": {
+      "status": "IN_MEMORY_BROWSER_PASS_HUMAN_REVIEW_PENDING",
+      "viewports": [
+        320,
+        390,
+        1280
+      ],
+      "htmlLibraryFileId": "libfile_2e82bc13f3048191b02992ce4d06005c",
+      "htmlSha256": "c984fd737fede39f170db43e8f8e3ca6f92b9ec86d81bde9a0a4ad2b8380a7f8",
+      "evidenceLibraryFileId": "libfile_7da73742c9108191ad9a261acf44ddb3",
+      "evidenceSha256": "ebc215ab8291cdae596e9c89907e13d161974296d74ebe6f6cf978e660064516",
+      "fileNavigation": "NOT_TESTED",
+      "visualQuality": "REVISE_BENCH_HOST",
+      "studentAuthorized": false
+    },
+    "m5": {
+      "status": "IN_MEMORY_BROWSER_FUNCTIONAL_PASS_HUMAN_REVIEW_PENDING",
+      "htmlLibraryFileId": "libfile_9cb04da6317081918a617511a0119ed8",
+      "htmlSha256": "ca8e72f1d0561d5af8b1ded915b45babb22ee8553bdbbfbbcf882fd4389e3e7a",
+      "packageLibraryFileId": "libfile_30adb5d8013c8191bf45578f4fa39f3e",
+      "viewports": [
+        320,
+        390,
+        1280
+      ],
+      "unchangedSourceFiles": 83,
+      "changedSourceFiles": [
+        "energy/scene.mjs",
+        "handoff.mjs",
+        "index.html"
+      ],
+      "newAsset": "assets/E03-bench.webp (derivative crop of original E02 v2 master)",
+      "scientificModel": "UNCHANGED",
+      "canvasTap": "PASS",
+      "desktopDrag": "PASS",
+      "mobileDrag": "NOT_TESTED",
+      "alternativeButtons": "PASS",
+      "httpRequests": 0,
+      "jsErrors": 0,
+      "fileNavigation": "NOT_TESTED",
+      "cleanup": "wrapper timed out after per-viewport PASS receipts",
+      "studentAuthorized": false,
+      "advisoryReview": {
+        "status": "REVISE_TARGETED_NOT_INDEPENDENT_HUMAN_PENDING",
+        "docCommit": "21a6e6a596bb2dc24885c43a6f93c97c1f0ab6e3",
+        "evidenceLibraryFileId": "libfile_5d47cf33f310819184748645845c3154",
+        "evidenceSha256": "31adf677e3d7293910bb1764ece018752491fc60fc24e220815fed7ed23ae7f7",
+        "emulatedTouchDrag": "PASS",
+        "physicalTouchDrag": "OPEN",
+        "keyboardActivation": "PASS_PARTIAL_NOT_FULL_TAB",
+        "fileNavigation": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+        "storage": "INCONCLUSIVE_ACCESS_DENIED",
+        "additionalPageError": "undefined (isolate)",
+        "wrongChoiceFeedback": "REVISE",
+        "layout": "REVISE",
+        "studentAuthorized": false
+      }
+    },
+    "m6": {
+      "status": "PRIVATE_IN_MEMORY_REGRESSION_PASS_HUMAN_REVIEW_PENDING",
+      "scope": "M6-A scene-first interaction and notebook, contextual prediction, neutral comparison feedback and evidence presentation",
+      "acceptanceRef": "../production/AXF-M3B-W6A-ADVISORY-REVIEW-v1.md",
+      "studentAuthorized": false,
+      "htmlLibraryFileId": "libfile_384ad1c73ef881919f6e1378dfd16026",
+      "htmlSha256": "94945098a3d9fe87f7841db7e88ca92a2880fdf01e7b8e4432c74685fe88913a",
+      "packageLibraryFileId": "libfile_201e1aace80081918ff717f4587f1f48",
+      "packageSha256": "2b0f6dc9a89d3a94f0ee9503c26dd5fb7bb4afb3e623ac5885b4ec92d7fc89a4",
+      "viewports": [
+        320,
+        390,
+        1280
+      ],
+      "functional": "PASS",
+      "primaryVisible": "PASS",
+      "notebookRetention": "PASS",
+      "neutralFeedback": "PASS",
+      "quantitativePresentation": "PASS",
+      "resetConfirmation": "PASS",
+      "httpRequests": 0,
+      "pageErrors": 0,
+      "extendedQualification": "TARGETED_IN_MEMORY_PASS_PHYSICAL_AND_HUMAN_PENDING",
+      "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
+      "changedSourceFiles": [
+        "handoff.mjs",
+        "index.html",
+        "energy/scene.mjs"
+      ],
+      "unchangedSourceFiles": 84,
+      "emulatedTouchDrag": "PASS_320_390_AFTER_REFRESHED_CANVAS_BOUNDS_AND_PACED_EVENTS",
+      "desktopDrag": "PASS",
+      "keyboardTabSequence": "PASS_PARTIAL",
+      "rootFont200": "PASS_NO_HORIZONTAL_OVERFLOW_NOTEBOOK",
+      "persistentStorage": "OPEN",
+      "fileNavigation": "NOT_TESTED",
+      "physicalDevices": "OPEN",
+      "humanReview": "PENDING",
+      "m6b": {
+        "status": "REVISE_TARGETED",
+        "htmlUnchanged": true,
+        "testedHtmlSha256": "94945098a3d9fe87f7841db7e88ca92a2880fdf01e7b8e4432c74685fe88913a",
+        "localPackageSha256": "f561e513e6ab8e4faff6ade7aa9480d35981cf33c11017ea1703d4abac02bfd0",
+        "packageNote": "local package matches earlier recorded commit 5325b84, not current revised package digest; exact tested HTML matches both",
+        "evidenceLibraryFileId": "libfile_5c1b90b349808191a13217a8a491ed74",
+        "evidenceSha256": "8cf0e201afb330c5cbbdea87b3037e226ffffe845b18e3a0bf52cb935af802bd",
+        "keyboardComplete": "PASS_TAB_ENTER_ESCAPE",
+        "viewports": [
+          [
+            320,
+            740
+          ],
+          [
+            844,
+            390
+          ]
+        ],
+        "diagnosticViewport": [
+          390,
+          844
+        ],
+        "rootFont200": "PARTIAL_PASS_320_EXPANDS_321",
+        "landscape": "REVISE_VERTICAL_SCROLL",
+        "dialogAccessibleName": "FAIL",
+        "focusRestoration": "PASS",
+        "pageErrorsPerRun": 2,
+        "diagnostic": "unhandledrejection undefined at prologue and bench; cause not established",
+        "httpRequests": 0,
+        "cookies": 0,
+        "storage": "INCONCLUSIVE_ACCESS_DENIED",
+        "physicalDevices": "PENDING",
+        "studentAuthorized": false
+      },
+      "m6b1": {
+        "status": "IN_MEMORY_TARGETED_REGRESSION_PASS_PHYSICAL_AND_HUMAN_PENDING",
+        "htmlLibraryFileId": "libfile_328bafdd7108819185620ad40ef082c6",
+        "htmlSha256": "c0fc72ebfbb6b6260cc483e1aab505cf75547a77acf90b98333a0e8d2b6d6d35",
+        "packageLibraryFileId": "libfile_0fefb7157ae08191af1ff1f63261ccfd",
+        "packageSha256": "3ed3a3450a34b350de451d3171ab93c3370b613e21ede419d3cd32a712a3d075",
+        "baselineHtmlSha256": "94945098a3d9fe87f7841db7e88ca92a2880fdf01e7b8e4432c74685fe88913a",
+        "changedSources": [
+          "handoff.mjs",
+          "index.html"
+        ],
+        "unchangedSourceCount": 85,
+        "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
+        "functionalViewports": [
+          [
+            320,
+            740
+          ],
+          [
+            390,
+            844
+          ],
+          [
+            844,
+            390
+          ],
+          [
+            1280,
+            800
+          ]
+        ],
+        "keyboard200Viewports": [
+          [
+            320,
+            740
+          ],
+          [
+            390,
+            844
+          ],
+          [
+            844,
+            390
+          ]
+        ],
+        "errors": 0,
+        "httpRequests": 0,
+        "cookies": 0,
+        "rootCause": "CDP shows both undefined rejections at indexedDB.databases() invocation in diagnostic store() expression, denied in opaque context; not app errors; no suppression; separate storage audit remains inconclusive",
+        "dialog": "PASS_LABEL_DESCRIPTION_FOCUS",
+        "landscape": "PASS_SCENE_AND_PRIMARY_CONTROLS_VISIBLE_844x390",
+        "reflow": "PASS_NO_HORIZONTAL_OVERFLOW_ROOT_FONT_200_PERCENT",
+        "storage": "NOT_QUALIFIED_OPAQUE_ORIGIN",
+        "fileNavigation": "NOT_TESTED",
+        "physicalDevices": "PENDING",
+        "humanReview": "PENDING",
+        "studentAuthorized": false
+      }
+    },
+    "m7": {
+      "status": "ANDROID_CORE_PATH_SCREENSHOT_PASS_RESIDUAL_OPEN",
+      "evidenceDate": "2026-11-15",
+      "candidate": "M6-B1 banner visible; exact device file hash not verified",
+      "evidenceLibraryFileId": "libfile_c28ab15b87808191ad21a0ea08c6f9fd",
+      "evidenceSha256": "99ac93ac7ba90b6881ada5085d1c94712fb6cce4e3caf0ff25755e158ae699c6",
+      "screenshots": 10,
+      "device": "Android real, portrait and landscape",
+      "opening": "PASS_OBSERVED_CONTENT_DOWNLOADS_URI",
+      "observed": [
+        "prologue",
+        "map rendered",
+        "piazza and notebook clues",
+        "bench prediction prompt",
+        "A/B/C experiment states and quantitative measures",
+        "notebook with three consistent measures",
+        "reset confirmation visible",
+        "C presentation with C/A comparison and 60 J difference",
+        "B presentation with B/C comparison and neutral revision prompt",
+        "exit confirmation visible",
+        "landscape bench and controls visible with A measurement and notebook 1/3 matching preceding portrait state"
+      ],
+      "pending": [
+        "M7-D2 physical repeat drag (D1 intermittent FAIL user-reported)",
+        "cancel/confirm reset effects",
+        "exit effect and reopen",
+        "offline/network and storage",
+        "LIM",
+        "complete accessibility",
+        "human W6A/W5A",
+        "rights/licensing and independent review"
+      ],
+      "visualAdvisory": [
+        "GDevelop branding visible in map; verify applicable attribution and export terms, do not remove by circumvention",
+        "scene still framed as a page; large unused lower area in portrait; distinguish functional acceptance from immersive/editorial acceptance",
+        "station and illuminated lamp are visually separate; verify direct-action clarity"
+      ],
+      "studentAuthorized": false,
+      "userReported": {
+        "source": "User follow-up checklist, 2026-11-15",
+        "passed": [
+          "choice C and presentation",
+          "feedback after less efficient choice",
+          "landscape orientation"
+        ],
+        "pending": [
+          "direct lamp drag onto station",
+          "both preserve and delete actions"
+        ],
+        "qualification": "User-reported results; no additional screenshots or independent measurements supplied"
+      },
+      "secondEvidence": {
+        "libraryFileId": "libfile_eb64328ebc988191ba2de37cbee547e4",
+        "sha256": "c3d072e8c4591fc49790bc709f8d77a8cd25a9b1c991679394266d14f52f0986",
+        "receivedScreenshots": 9,
+        "includesPreviousViews": true,
+        "choiceC": "PASS_VISUAL",
+        "choiceBFeedback": "PASS_VISUAL",
+        "exitDialog": "PASS_VISIBLE_NOT_EFFECT",
+        "landscape": "PASS_VISUAL",
+        "rotationState": "CONSISTENT_SNAPSHOTS_NOT_CONTINUOUS_OBSERVATION"
+      },
+      "dragReport": {
+        "source": "User report on real Android M6-B1",
+        "tap": "PASS",
+        "bulbDrag": "FAIL",
+        "diagnosis": "Source scene.mjs configured bulb as pointerup-only zone, only label rectangle draggable; prior regression dragged label.",
+        "repair": {
+          "status": "EMULATED_PASS_PHYSICAL_PENDING",
+          "htmlLibraryFileId": "libfile_d142ad0c28048191b40b3b321b2ce5dc",
+          "htmlSha256": "9bddfa42bb67e6dc0f85e1f82ed2b2e7ecf7a0d1826b0948b04f2c4d1e9d65b9",
+          "packageLibraryFileId": "libfile_215f33e8310c81918cb104a7f8cccc58",
+          "packageSha256": "3b0a1c3a7ea747eeba9b0a46b6b6ec49ef215490626bec48d86796b81614894d",
+          "changedSources": [
+            "energy/scene.mjs",
+            "index.html"
+          ],
+          "modelSha256": "8c5b79a03c151001ef1f245fb0ac31c7873a631e81f443248ae3e347faf641b3",
+          "viewports": [
+            320,
+            390,
+            844,
+            1280
+          ],
+          "functional": "4/4 PASS",
+          "dragFromBulb": "PASS_EMULATED",
+          "outsideDrop": "PASS_NO_NEW_MEASUREMENT",
+          "visualPreview": "pointer-following ghost",
+          "errors": 0,
+          "httpRequests": 0,
+          "studentAuthorized": false,
+          "physicalRetest": {
+            "status": "FAIL_INTERMITTENT_USER_REPORTED",
+            "description": "Initial drag succeeded, later stopped working; physical root cause unconfirmed"
+          }
+        },
+        "d2": {
+          "status": "EMULATED_REPEAT_PASS_PHYSICAL_PENDING",
+          "htmlLibraryFileId": "libfile_6e64710a1fec8191b67cfee73812727c",
+          "htmlSha256": "54f4763d7e2d5d4634e57914f1e91635bfade76225cb6c75364b773c09f4c338",
+          "packageLibraryFileId": "libfile_a9fc78db30788191802c266736945656",
+          "packageSha256": "1c7523b9be4d2f28086547980bc83866d9baff12f6d4481268daae08fbf240ec",
+          "change": "Native pointer events/capture, fresh canvas bounds, one gesture session, cancellation on pointercancel/lost capture/blur/resize/hidden/reset/disposal; Phaser rendering retained",
+          "functional390": "PASS",
+          "repeatViewports": [
+            320,
+            390,
+            844,
+            1280
+          ],
+          "repeatResults": "4/4 PASS; six successive drags, notebook return, outside drop, touch cancel on mobile, map return and reset",
+          "errors": 0,
+          "httpRequests": 0,
+          "modelUnchanged": true,
+          "studentAuthorized": false,
+          "physicalRetest": {
+            "status": "FAIL_INTERMITTENT_FIRST_ENTRY_USER_REPORTED",
+            "source": "User report and screenshot M7-D2, 2026-11-15",
+            "description": "Drag fails on first access to bench; after tapping and retrying, sometimes works. Screenshot documents A measurement, not the gesture sequence itself.",
+            "rootCause": "UNCONFIRMED; examine initial scene readiness, first pointer event, bounds and transition from prediction to experiment; do not infer a single cause.",
+            "requiredRetest": [
+              "fresh open and first bench entry",
+              "first drag immediately after prediction, without prior lamp tap",
+              "repeat drag and revisit bench",
+              "real Android; explicit result for each attempt"
+            ]
+          }
+        }
+      },
+      "editorialReview": {
+        "status": "FINDINGS_CONSOLIDATED_PROTOCOL_CANDIDATE_HUMAN_GATES_REOPEN",
+        "findings": [
+          {
+            "id": "ER-01",
+            "scene": "E02 plastico",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_USABILITY",
+            "observation": "Entry to map: Piazza/Quaderno/Banco and generic exploration instruction do not explain purpose of each destination or next meaningful action; learner proceeds by trial and error.",
+            "proposal": "Brief character-led contextual mission reminder, explicit reason to investigate objects, visible contextual interaction cues, optional guidance and freedom of exploration; no long instruction wall.",
+            "acceptance": "A first-time learner can explain goal and choose a meaningful next action without external guidance; validate with teacher walkthrough before promotion.",
+            "status": "OPEN"
+          },
+          {
+            "id": "ER-02",
+            "scene": "E02 piazza/lampione",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_USABILITY",
+            "observation": "After selecting Piazza by trial, message 'Il lampione appare affievolito. L’immagine non è una misura: la causa rimane ignota.' is almost incomprehensible to user; abstract epistemic caveat replaces meaningful clue and offers no next action.",
+            "proposal": "Use short contextual character-led clue in age-appropriate language, explaining observation, mission and meaningful next step toward notebook/bench; retain scientific uncertainty in plain language, do not imply lamp replacement diagnoses or repairs fault.",
+            "acceptance": "First-time learner understands what was observed, what remains unknown and why the next action matters; teacher validates wording and scientific distinction. No implementation until findings collection ends.",
+            "status": "OPEN"
+          },
+          {
+            "id": "ER-03",
+            "scene": "E02 quaderno/indizio",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_USABILITY",
+            "observation": "Message 'Nel modello virtuale, A trasferisce più energia termica di B.' introduces undefined A/B references and energy terminology before learner has met the models or understood the comparison. Information lacks a referent and purpose.",
+            "proposal": "Reorder conceptual progression: contextual observation about light and heat, question about energy use, introduce labelled virtual lamps at bench, compare under equal useful-light conditions, then name and explain efficiency. Notebook clue should be a comprehensible character observation/question, not an unexplained conclusion; preserve scientific uncertainty and model scope.",
+            "acceptance": "First-time learner can identify what each term and object refers to, explain why the clue matters, and connect it to the experiment without external explanation. Review all clues for prerequisite vocabulary, sequencing and cognitive load; no implementation until findings collection ends.",
+            "status": "OPEN"
+          },
+          {
+            "id": "ER-04",
+            "scene": "E03 banco delle lampade / osserva",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_NARRATIVE_AND_PEDAGOGICAL_USABILITY",
+            "observation": "User describes bench as hermetic, incomprehensible, without story or involvement, emotionally cold despite warm colors. Identical-looking lamps, undefined 20 J and energy indicators, prediction buttons and station do not communicate meaningful action or reason for it; characters absent from the interaction.",
+            "proposal": "Rebuild scene around character-led shared inquiry, contextual action cues, an optional guided initial demonstration or prediction based on comprehensible evidence, progressive introduction of model terms and controls, and visible consequences of actions. Preserve open exploration, scientific model, accessible alternatives, and avoid revealing the entire comparison before learner inquiry.",
+            "acceptance": "First-time learner understands why the bench matters, identifies the first action and can explain the meaning of each displayed measurement as it appears. Teacher reviews narrative continuity, cognitive scaffolding and emotional engagement, not just palette or technical completion. Do not implement until findings collection concludes.",
+            "status": "OPEN"
+          },
+          {
+            "id": "ER-05",
+            "scene": "E03 banco / sperimenta",
+            "source": "User screenshot M7-D2 and direct feedback, 2026-11-15",
+            "severity": "HIGH_PEDAGOGICAL_AND_EXPERIENTIAL_USABILITY",
+            "observation": "User finds the active experiment schematic, incomprehensible and unengaging. A lights up and displays input 100 J, useful light 20 J, heat 80 J and efficiency 20%, but the interface provides no contextual interpretation of the bars or quantities. The station remains a textual target, not a perceptibly functioning measurement instrument.",
+            "proposal": "Integrate a character-guided first experiment and progressive visual feedback: represent energy entering the virtual lamp and splitting into light and heat, explain the quantities in plain language before introducing joules and efficiency, show why equal light permits comparison, and link observations to a meaningful subsequent action. Preserve exact model values, comparable scales, accessible alternatives and scientific uncertainty; avoid decorative animation, forced quizzes or adding information density.",
+            "acceptance": "A first-time learner can explain what changes when a lamp is tested, what input/light/heat mean and why the result matters to the mission; visual feedback conveys the experiment even before reading formal numbers. Human walkthrough required. No implementation until editorial findings collection is complete.",
+            "status": "OPEN"
+          },
+          {
+            "id": "ER-06",
+            "scene": "E04 quaderno / confronto",
+            "source": "Two user screenshots M7-D2, 2026-11-15; one measurement and three measurements with C and input-only criterion selected",
+            "severity": "HIGH_PEDAGOGICAL_AND_NARRATIVE_USABILITY",
+            "observation": "Partial notebook with A only shows numeric table, reset and disabled presentation without contextual next-step guidance. Completed notebook becomes a multiple-choice form detached from narrative. With C selected and input-only criterion selected, feedback compares C and A but does not explicitly explain why input alone is insufficient as a general efficiency criterion; equal useful light is the controlling condition. User has not explicitly commented on these screenshots; findings are advisory interpretation.",
+            "proposal": "Make notebook an incremental character-linked inquiry tool: contextual guidance to collect a second measurement; visual side-by-side comparison emphasizing same useful light, different input and heat; support learner explanation using observations and optional oral discussion, not a forced multiple-choice quiz. Explain that lower input is meaningful when useful output is held constant, and distinguish correct choice from incomplete reasoning. Retain accessible numeric table, exact model values, reset safeguards and voluntary revision.",
+            "acceptance": "With one measurement learner understands why another is needed; with multiple measurements learner can identify the invariant, compare quantities and justify the recommendation. Feedback distinguishes choice and reasoning and links conclusion to narrative task. Human review required; no implementation until findings collection concludes.",
+            "status": "OPEN"
+          }
+        ],
+        "note": "ER-01–05 user findings; ER-06 advisory screenshot interpretation. All remain OPEN. Protocol prepared, not validated. No implementation until appropriate human gates. Physical drag failure open."
+      },
+      "editorialProtocol": {
+        "status": "CANDIDATE_NOT_HUMAN_APPROVED",
+        "ref": "../production/AXF-EDITORIAL-PRODUCTION-PROTOCOL-v1.md",
+        "commit": "ff7634fcd2f3637ccd8be2cad220621bb2895a95",
+        "masterPlanCommit": "f7affea9e182fcff9525ee3c4c823d86047f1e38",
+        "controls": [
+          "C01 orientation",
+          "C02 language",
+          "C03 prerequisites",
+          "C04 narrative direction",
+          "C05 perceptible consequence",
+          "C06 reasoning",
+          "C07 accessibility",
+          "C08 science",
+          "C09 reliability",
+          "C10 governance"
+        ],
+        "nextDeliverable": "Preproduction diptych drafted; resolve W0 references and applicable gates, perform cold adult walkthrough, then low-fidelity visual storyboard and representative prototype only when permitted",
+        "humanReview": "PENDING",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false,
+        "identityRef": "AXF-ED-ID-01"
+      },
+      "professionalAuthoringQualification": {
+        "status": "BOTH_ISOLATED_SMOKE_PASS_INTEGRATION_PENDING",
+        "pr": 333,
+        "head": "b44e45f98b03323802406980ec2242a591dacc9b",
+        "catalogCommit": "8f782f50cfc255fc7953995f04a3b69679beee17",
+        "runs": [
+          {
+            "id": 43738148274,
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 43738148237,
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "scope": "Authoring tooling qualification, not production or replacement of W3A/W5A/W6A; eXeLearning and Ink first, H5P/Lumi and PhET research candidates",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false,
+        "firstRun": {
+          "head": "82382c30ddbc21e46481667a493751e5c08cda61",
+          "run": 43737834084,
+          "inkJob": 132884253882,
+          "ink": "PASS",
+          "exeJob": 132884253583,
+          "exe": "FAIL_INPUT_NOT_FOUND",
+          "staticIntegrity": "PASS"
+        },
+        "repair": "Test original mount permissions, assign dedicated directory to actual nonroot bun identity, check read/write, verify output ZIP and index.html; root cause to confirm",
+        "retest": {
+          "ink": "PASS",
+          "inkJob": 132885213650,
+          "exe": "PASS",
+          "exeJob": 132885213462,
+          "rootCause": "CONFIRMED_ORIGINAL_MOUNT_ACCESS_DENIED",
+          "html5Zip": "PASS",
+          "scope": "synthetic narrative and upstream public fixture only"
+        },
+        "next": "Qualify a synthetic original authoring-to-export roundtrip, rendered output, privacy, accessibility, licensing, then bounded integration design; no new student content or adoption before existing gates",
+        "roundtrip": {
+          "id": "AXF-AUTH-RT01",
+          "head": "7736a86f55da14d1a9ff67a7282186a69c9097e6",
+          "pr": 333,
+          "status": "ISOLATED_SYNTHETIC_ROUNDTRIP_PASS_INTEGRATION_PENDING",
+          "runs": [
+            {
+              "id": 43738675650,
+              "name": "Governance",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "id": 43738675643,
+              "name": "AXF professional authoring probe",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ],
+          "scope": "synthetic original generation, editable ELPX revision, HTML5 export, Ink compile/replay, isolated browser previews and scoped checks",
+          "integration": "NOT_IMPLEMENTED",
+          "studentAuthorized": false,
+          "runtimeAuthorized": false,
+          "jobs": "3/3 PASS",
+          "limits": "Synthetic material only; receipt details/visual/axe/storage and licenses still to inspect; no actual Studio/Atlas adapter or deployment"
+        }
+      },
+      "editorialIdentity": {
+        "id": "AXF-ED-ID-01",
+        "status": "USER_DIRECTION_RECORDED_OPERATIONAL_CANDIDATE_HUMAN_REVIEW_PENDING",
+        "scope": [
+          "Storie",
+          "Laboratori",
+          "Scoperte",
+          "Percorsi"
+        ],
+        "protocolRef": "../production/AXF-EDITORIAL-PRODUCTION-PROTOCOL-v1.md#9-identità-editoriale-atlas--esperienza-dal-punto-di-vista-dello-studente-axf-ed-id-01",
+        "protocolCommit": "636fb13340556027577094e73eefaed8179403d2",
+        "masterPlanCommit": "a98c2156adfd203dbde28daa578fbc3fdcd2f372",
+        "principles": [
+          "orientation",
+          "meaningful curiosity",
+          "appropriate agency",
+          "self-paced calm",
+          "understanding",
+          "nonjudgmental revision",
+          "meaningful closure/application"
+        ],
+        "wholeExperienceReview": "Required proposed implementation of existing C01–C10/W6A; cold adult walkthrough plus disciplinary/product review on exact version; no automatic engagement approval",
+        "formatPolicy": "Different expressive forms; no mandatory screen sequence, story, quiz or engine; classify under applicable contracts",
+        "studentVoice": "Design hypotheses, not learner testimony",
+        "alternateDemo": "Private HTML demonstration, user questioned ending; advisory limitations; not approved or substituted for M7-D2",
+        "humanReview": "PENDING",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false,
+        "preproduction": {
+          "id": "AXF-ED-ID-01-DIPTYCH",
+          "status": "SCRIPT_AND_TEXTUAL_STORYBOARD_CANDIDATE_HUMAN_REVIEW_PENDING",
+          "ref": "../production/AXF-ED-ID-01-PREPRODUCTION-DIPTYCH-v1.md",
+          "commit": "9e737897d3b3e821875a9f8ad3f911083ccb5201",
+          "forms": [
+            "A: narrative laboratory, Energia",
+            "B: standalone visual explanation, same topic"
+          ],
+          "illustrationPolicy": "Instructional asset briefs A-V01–04 and B-V01–02; art and editable semantic overlays separate; reference images not acquired or rights-cleared",
+          "deliverables": [
+            "creative-pedagogical direction",
+            "learning map",
+            "literal learner script",
+            "textual low-fidelity storyboard",
+            "meaningful closure and transfer hypothesis",
+            "comparative cold-review plan"
+          ],
+          "pending": [
+            "exact Arena reference not located",
+            "B applicable contract classification",
+            "A human story review",
+            "W5A/W6A",
+            "disciplinary verification of transfer case",
+            "rights",
+            "actual cold review"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false,
+          "lowFidelityReviewArtifacts": {
+            "status": "PRIVATE_DESIGN_REVIEW_MATERIALS_IN_MEMORY_FUNCTIONAL_PASS_HUMAN_PENDING",
+            "libraryFileId": "libfile_8d9b653581548191ba645c5217b0162f",
+            "packageSha256": "a7da6480df144b8df8e6512fe9689d5bb721b4c3c3b735c0a7d043c82adbc1c2",
+            "artifacts": [
+              {
+                "name": "atlas-atelier-bozzetto.html",
+                "sha256": "edf72a26e0786d03df9a3e04f86e57c87438f1f139120e9a4cadf088b354d973",
+                "scope": "Review-only existing art, scrollable lab and reversible two-point project schematic; not final immersive product"
+              },
+              {
+                "name": "atlas-scoperta-bozzetto.html",
+                "sha256": "a25a863ca01c0847940328a9ad1243f8a4ec8c4841c9f31caf39cea6779ff9e8",
+                "scope": "Static original SVG and optional details; no required interactions"
+              }
+            ],
+            "test": {
+              "mode": "Chromium set_content in memory",
+              "viewports": [
+                [
+                  320,
+                  740
+                ],
+                [
+                  390,
+                  844
+                ],
+                [
+                  844,
+                  390
+                ],
+                [
+                  1280,
+                  800
+                ]
+              ],
+              "functional": "8/8 PASS",
+              "httpRequests": 0,
+              "jsErrors": 0,
+              "horizontalOverflow": false,
+              "directFile": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+              "physical": "PENDING"
+            },
+            "limits": [
+              "A uses prior internal art with rights pending and schematic controls, not final immersive composition",
+              "No final asset generation or W9 handoff",
+              "No full accessibility, disciplinary, cold-review or human gate closure",
+              "Arena references and B classification open",
+              "No student publication"
+            ],
+            "studentAuthorized": false,
+            "runtimeAuthorized": false
+          },
+          "adultReview": {
+            "status": "PARTIAL_CLARITY_POSITIVE_DEPTH_REVISE",
+            "source": "User direct feedback on both low-fidelity prototypes",
+            "observation": "Both fairly clear but very elementary; enrichment needed for those already familiar with basics",
+            "notEstablished": [
+              "naturalness",
+              "engagement",
+              "disciplinary adequacy",
+              "learning outcomes",
+              "W5A/W6A approval"
+            ],
+            "next": "Revise depth in design with alternate entry and new model-variable case; disciplinary review before implementation.",
+            "bozzettiUnchanged": true
+          }
+        },
+        "depthPolicy": {
+          "id": "AXF-ED-DEPTH-01",
+          "status": "USER_FEEDBACK_RECORDED_DESIGN_CANDIDATE",
+          "protocolCommit": "2107e7c55e03f5d6fd547a1e456df25159ee65fb",
+          "diptychCommit": "f6f873354357a47b11491d9487b839b0a5b55327",
+          "principles": [
+            "accessible entry",
+            "optional meaningful depth",
+            "direct access and return",
+            "no learner profiling or forced test",
+            "format-specific enrichment"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
+        },
+        "firstStandaloneResource": {
+          "id": "AXF-SCOPERTA-LUCE-R1",
+          "status": "COMPLETE_PRIVATE_EDITORIAL_REVIEW_CANDIDATE",
+          "date": "2026-11-15",
+          "section": "Scoperte",
+          "title": "Dove va l’energia di una lampada?",
+          "htmlLibraryFileId": "libfile_8dc42365cdc88191b5c6591c022372a7",
+          "htmlSha256": "48186c80a6900595a085aedf2de14a419639b39d39aad9323f9e15d4041321f1",
+          "packageLibraryFileId": "libfile_d12f12fc935081918374d7d0cae5d618",
+          "packageSha256": "0709257ef63b11573ac65fc942b31c52068f17d0504b2caf3891ba65ae96b4e5",
+          "scope": "One complete standalone review candidate, original inline SVG, base explanation and optional efficiency/model-D comparison; directly accessible without compulsory exercise; no external dependencies; handwritten HTML not professional authoring integration",
+          "test": {
+            "mode": "Chromium in-memory set_content",
+            "viewports": [
+              [
+                320,
+                740
+              ],
+              [
+                390,
+                844
+              ],
+              [
+                844,
+                390
+              ],
+              [
+                1280,
+                800
+              ]
+            ],
+            "functional": "4/4 PASS",
+            "optionalTargets": [
+              20,
+              40,
+              60
+            ],
+            "keyboardDetails": "PASS",
+            "rootFont200Reflow": "PASS",
+            "externalHttp": 0,
+            "pageErrors": 0,
+            "fileOpen": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+            "storage": "INCONCLUSIVE_OPAQUE_ORIGIN; no persistence requested in source",
+            "physical": "PENDING"
+          },
+          "pending": [
+            "exact Arena references",
+            "applicable standalone contract classification",
+            "disciplinary model D review",
+            "human/independent review",
+            "complete accessibility",
+            "rights and distribution decision"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false,
+          "curriculumBindingReview": {
+            "status": "CANDIDATE_MATCH_AUTHORITY_PENDING",
+            "source": "Arena v1.3 §7.3.8, Tecnologia Classe III",
+            "projectedIds": [
+              "tecnologia-classe-iii-o2",
+              "tecnologia-classe-iii-o4"
+            ],
+            "authority": "PROVISIONAL_COMPLETE",
+            "receipt": null,
+            "sourceState": "MATERIALIZED_HUMAN_VALIDATION_OPEN_NOT_IN_FORCE",
+            "matchingAtlasExport": true
+          },
+          "publicationQualification": {
+            "status": "BLOCKED",
+            "reasons": [
+              "Standalone interactive HTML applicable contract not qualified; lesson-material validator does not accept HTML",
+              "Current matching Arena export provisional and not in force",
+              "Existing human, disciplinary, accessibility, rights and distribution checks pending"
+            ],
+            "candidatePreserved": true
+          },
+          "editorialReviewDossier": {
+            "status": "ADVISORY_REVIEW_CONTENT_CHECKED_HUMAN_PENDING",
+            "ref": "../production/AXF-FIRST-LIBRARY-EDITORIAL-REVIEW-v1.md",
+            "commit": "c841e562ba7bd1c6857406c6c9d6129f240832ba",
+            "masterPlanCommit": "218a3ee999e3742197e6f94bebbb4dea81a5ea35",
+            "sha256Verified": "48186c80a6900595a085aedf2de14a419639b39d39aad9323f9e15d4041321f1",
+            "findings": [
+              "A-D energy balances and comparative model arithmetic consistent",
+              "Optional depth and direct entry present",
+              "R1-Q01 clarify no accumulation during illustrative interval"
+            ],
+            "humanReview": "PENDING",
+            "independentReview": "PENDING",
+            "formatQualification": "BLOCKED",
+            "runtimeAuthorized": false,
+            "studentAuthorized": false,
+            "learnerCenteredReview": {
+              "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_REVISE_PROPOSED",
+              "docCommit": "a430027bbd4375b6e297a318bf3042ae1349b49e",
+              "artifactUnchanged": true,
+              "evidence": {
+                "libraryFileId": "libfile_4f152e0171388191b841e08bd935e345",
+                "sha256": "d5d950b5ccd22823a460ebf53b094128ebe04ad0a27147c8a5a3efe130a31e2a"
+              },
+              "browser": "8/8 viewport × root-font combinations; C/D comparisons, direct depth, details, no horizontal overflow, network or JS errors",
+              "findings": [
+                "Q01 model no accumulation",
+                "Q02 shorten opening and improve mobile diagram proximity",
+                "Q03 informative optional depth access",
+                "Q04 autonomous closure and model limits"
+              ],
+              "humanReview": "PENDING",
+              "studentAuthorized": false,
+              "runtimeAuthorized": false
+            }
+          },
+          "revisionR2": {
+            "id": "AXF-SCOPERTA-LUCE-R2",
+            "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_CANDIDATE_HUMAN_REVIEW_PENDING",
+            "docCommit": "d51e9219e35dd6091136753a949f2f5bb70e1306",
+            "htmlLibraryFileId": "libfile_55319b5131d48191a32134c51e02a3f5",
+            "htmlSha256": "f79eb9095cc6a09d70c40f19dbd6dda0ce72049e1ee4f77358da1f6fab0776d1",
+            "evidenceLibraryFileId": "libfile_5dff253eb6948191b5e98254297956ed",
+            "evidenceSha256": "b2352bb2ca77787a43724ac0b1603560b2826b69b0de5cffa03c544905c6cb32",
+            "r1Preserved": true,
+            "svgAndComparisonScriptUnchanged": true,
+            "browser": "8/8 scoped in-memory Chromium, 0 HTTP/JS errors/overflow",
+            "publication": "BLOCKED",
+            "studentAuthorized": false,
+            "runtimeAuthorized": false
+          },
+          "revisionR3": {
+            "id": "AXF-SCOPERTA-LUCE-R3",
+            "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_VIEW_CANDIDATE",
+            "protocolRef": "AXF-ED-VIEW-01",
+            "protocolCommit": "52e9a926e2d77b5d172b4dfdf4dbd4d0fed2c22b",
+            "docCommit": "201a19a735a95b9b6f29ab4d89a2e35ad32328d0",
+            "htmlLibraryFileId": "libfile_704bbbefb47481919ef841696b279cbb",
+            "htmlSha256": "19627994f0f92b1a73d4f73701873e7e78ad529706918b063482c4bf187d544c",
+            "evidenceLibraryFileId": "libfile_581209b1c22c8191a69f73d7c2406e03",
+            "evidenceSha256": "6a75369da7b429c9a2b480e849a844be574dd77c61a785108ba4220de30cb68d",
+            "r2Preserved": true,
+            "views": [
+              "osserva",
+              "confronto",
+              "oltre",
+              "lettura"
+            ],
+            "browser": "8/8 Chromium in-memory, no overflow/HTTP/JS errors; direct navigation, focus, history, comparison, read-all, no-JS reading",
+            "humanReview": "PENDING",
+            "publication": "BLOCKED",
+            "studentAuthorized": false,
+            "runtimeAuthorized": false,
+            "privateGatewayLink": {
+              "id": "P4-R3-L",
+              "status": "TECHNICAL_PASS_SCOPED_PRIVATE_LINK",
+              "planCommit": "51360960a7578802cf2fb6a672c290193dae31db",
+              "pr": 102,
+              "head": "cd51b45659ef89201d7c9034e5ce74ce0e86f216",
+              "basePr": 101,
+              "ci": {
+                "workflows": "9/9 PASS",
+                "engineRun": 43767841756,
+                "job": 132976844992,
+                "regression": "20/20 PASS",
+                "host": "4/4 PASS"
+              },
+              "recipe": {
+                "head": "f5827085e3223d9f6b7a1ebc1f92d6ea940cff52",
+                "run": 43767973283,
+                "artifact": 14182753403,
+                "sha256": "73833066b71915a727144632e64678ceb0af6b50eb12758013d25c30714eea0b"
+              },
+              "htmlLibraryFileId": "libfile_2058d821864c819185aab6adeeeb0377",
+              "htmlSha256": "593134faebfb740427ca5f9719bca15bd37c553ad2767d15f9ccd7f768258167",
+              "evidenceLibraryFileId": "libfile_64a7277587608191b4ea3fd42583046b",
+              "evidenceSha256": "8659d3f7a51b131e6c30d40d4b7822e822e748a633c662da66c6def977232f26",
+              "originalsVerified": 11,
+              "r3OriginalPreserved": true,
+              "iframe": "sandbox allow-scripts, fixed local fragment adapter",
+              "browser": "4/4 in-memory Chromium, explicit return and query/section preserved; 0 HTTP/JS/console errors and horizontal overflow",
+              "remaining": [
+                "physical and distinct review",
+                "mobile technical header and nested scroll/back history",
+                "public format contract, rights, curriculum authority"
+              ],
+              "studentAuthorized": false,
+              "runtimeAuthorized": false,
+              "publication": "BLOCKED"
+            },
+            "continuity": {
+              "id": "P4-R3-C",
+              "status": "TECHNICAL_PASS_SCOPED_PRIVATE_CONTINUITY",
+              "pr": 103,
+              "head": "b41a596f6de5858c0b5aaadc084932326dd76313",
+              "basePr": 102,
+              "planCommit": "49c6c08dc994d0aa41a432321aded14d517f4254",
+              "ciClosureCommit": "04b95238b39c3799ab20551476bcfeb0038e40a0",
+              "ci": {
+                "workflows": "9/9 PASS",
+                "engineRun": 43768636874,
+                "job": 132979351127,
+                "regression": "20/20 PASS",
+                "host": "5/5 PASS"
+              },
+              "recipe": {
+                "head": "7301eaa97c0df07d05288f01265807c580f83b33",
+                "run": 43768647772,
+                "artifact": 14182814491,
+                "sha256": "dcab2479956fed079adf5880af42572c05764d7df1e9709b947341256dcbcbbf"
+              },
+              "htmlLibraryFileId": "libfile_2b00dae265dc8191b10f194266b38e46",
+              "htmlSha256": "12a0e7de6fe1eb04270a25bbb8c5e01b428f6ef7d96f1730eae51a092d972112",
+              "evidenceLibraryFileId": "libfile_6711c282ee2c819190680edcb5fcbce5",
+              "evidenceSha256": "6f0db8ee36f47991fb7597b5aca3a83cd03ff2e18dab35010a75d798dd93ec2d",
+              "browser": "4/4 in-memory Chromium, 49px header, no outer scroll, history.back() three views then library, focus restoration, no errors/HTTP",
+              "remaining": [
+                "physical Android and LIM",
+                "distinct editorial and disciplinary review",
+                "rights, standalone public format, Arena authority"
+              ],
+              "studentAuthorized": false,
+              "runtimeAuthorized": false,
+              "publication": "BLOCKED",
+              "physicalFeedback": {
+                "status": "PHYSICAL_ENGINE_OPEN_AND_ADVANCE_OBSERVED_EDITORIAL_REVISE",
+                "date": "2026-11-15",
+                "source": "User feedback and two Android screenshots in conversation",
+                "observed": [
+                  "content:// browser",
+                  "synthetic pathway Qualcosa non torna",
+                  "advanced to Prova una modifica"
+                ],
+                "screenshotSha256": [
+                  "738e43567061a6e8c479b2fb1a0cf9ba44b9e42e9f2645c88f6dd9dee3e40654",
+                  "309f65fa12e69a1f75a7b1178394c28246739d1a535b61a2329817de11b6f474"
+                ],
+                "limits": [
+                  "exact device file hash unverified",
+                  "not R3 standalone",
+                  "return/physical gestures/accessibility/LIM not observed"
+                ],
+                "findings": [
+                  "abstract technical text",
+                  "English internal status labels",
+                  "stacked cards",
+                  "no visual world"
+                ],
+                "decision": "Keep technical fixtures separate from authentic editorial review; not learner content. No editorial promotion."
+              }
+            },
+            "editorialOnly": {
+              "id": "P4-R3-E",
+              "status": "TECHNICAL_PASS_SCOPED_EDITORIAL_ONLY",
+              "planCommit": "05c785f368817320fa576a221fd9b748069568b8",
+              "sourcePr": 103,
+              "sourceHead": "b41a596f6de5858c0b5aaadc084932326dd76313",
+              "recipe": {
+                "head": "f62850bc53e198e3a5417894ff0a49011a8e2e33",
+                "run": 43770061797,
+                "artifact": 14183378167,
+                "sha256": "b0dcca75ddfd366291aacdd6e84851ef42ec4bfc1f3f8b5506abf3ebbadfbad7"
+              },
+              "htmlLibraryFileId": "libfile_1f44de5a72a08191913653ef0473cdd4",
+              "htmlSha256": "a1aeacad432f4acc3278e5a9234f250d622f6838b47535bcd1f48e311e31b381",
+              "evidenceLibraryFileId": "libfile_cb1676341a4c8191870902738db1a738",
+              "evidenceSha256": "43c255e1a80455089efbf84c467e2c1bef9f137efd9f43ea5368d3d3b59b27a0",
+              "syntheticFixtureCount": 0,
+              "editorialCandidateCount": 1,
+              "originalsVerified": 11,
+              "browser": "4/4 in-memory Chromium; old synthetic routes rejected; 8 worlds empty; R3 three views, comparison, history and return focus PASS; 0 HTTP/JS/console errors or overflow",
+              "physical": "PENDING",
+              "independentReview": "PENDING",
+              "studentAuthorized": false,
+              "runtimeAuthorized": false,
+              "publication": "BLOCKED"
+            }
+          }
+        }
+      },
+      "systemHorizon": {
+        "id": "AXF-HORIZON-01",
+        "status": "STRATEGIC_CONSOLIDATION_CANDIDATE_HUMAN_REVIEW_PENDING",
+        "ref": "ATLAS-MASTER-PLAN-v1.md",
+        "commit": "4db4f4d71a54109836bf23296dd0711ced3ff486",
+        "scope": "Multidisciplinary editorial library + professional Studio Atlas; Arena authoritative, Docente OS lesson continuity, TRAMA governance; Esplora curriculum distinct from library",
+        "order": [
+          "Qualify or explicitly block standalone Scoperte R1 under applicable contract",
+          "Complete Atelier F3-B/C/D",
+          "Verify Energy collection and bounded professional cycle under applicable gates",
+          "Agriculture F4 then F5 industrialisation"
+        ],
+        "active": "AXF-SCOPERTA-LUCE-R1 classification and qualification only",
+        "completionStates": [
+          "COMPLETE_PRIVATE_CANDIDATE",
+          "QUALIFIED_EXACT_VERSION_HUMAN_DECISION",
+          "AUTHORIZED_PUBLISHED"
+        ],
+        "preserveDependencies": "F3→F4→F5 unchanged; no exemption for Percorsi or assumption existing bridge supports Scoperte; if standalone contract unavailable return BLOCKED to applicable gate",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
+      },
+      "parametricProduction": {
+        "id": "AXF-PARAM-01",
+        "status": "P1_R2_PR98_PR99_PR100_PR101_SCOPED_PASS_G2_COMPACT_PRIVATE_RENDER_PASS_DISTINCT_PHYSICAL_PENDING_P2_HOLD",
+        "ref": "ATLAS-MASTER-PLAN-v1.md",
+        "commit": "0582bd20f986a175d2b2d6691df1f291bdfc4c3b",
+        "direction": "Reuse-first parameter-driven shell, component registry, existing authoring package and compiler; content and assets declarative; no per-theme app or arbitrary code",
+        "milestones": [
+          {
+            "id": "P0",
+            "state": "REUSE_MAP_COMPLETE_BOUNDED_PROBE_SCOPE_RECORDED",
+            "exit": "exact-head code/contract reuse map and isolated-test admissibility"
+          },
+          {
+            "id": "P1",
+            "state": "OFFLINE_SYNTHETIC_PASS_NO_PRODUCT_PROMOTION",
+            "exit": "one shell/bundle, three distinct synthetic fixtures, four viewports, touch/key/accessibility equivalents"
+          },
+          {
+            "id": "P2",
+            "state": "HOLD_PENDING_R09_R10_AND_DISTINCT_REVIEW",
+            "exit": "100 synthetic fixtures one command; no per-fixture code edits; common change and targeted rebuild, negative tests, measured timings"
+          },
+          {
+            "id": "P3",
+            "state": "PENDING_P2",
+            "exit": "one bounded professional intent→preview→revision flow, contract and license checks"
+          },
+          {
+            "id": "P4",
+            "state": "EXISTING_EDITORIAL_GATES",
+            "exit": "R1 qualification or BLOCKED, Atelier F3-B/C/D closure"
+          },
+          {
+            "id": "P5",
+            "state": "BLOCKED_BY_F3_F4",
+            "exit": "Agriculture F4 then F5 generalisation and applicable authority"
+          }
+        ],
+        "safety": "No persistent learner progress, inferred knowledge, engagement optimization or hidden-only essential controls; semantic accessibility and session-only selection; no student data or runtime AI",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false,
+        "p0": {
+          "status": "REUSE_MAP_COMPLETE_BOUNDED_PROBE_SCOPE_RECORDED",
+          "planCommit": "2865196daf55e79c5362c98bc2da13e45bfe086c",
+          "atlasHead": "d2938378c9384c5122adb8379396dbad5b4385fe",
+          "arenaHead": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+          "arenaAtlasExportBlob": "d1ab3fd860db9c043452e62359e404e4c9b94bfd",
+          "currentPublicPathwaysFromPortfolio": 0,
+          "currentResourceFixtures": {
+            "count": 5,
+            "cataloguedOnly": true
+          },
+          "gatewayArtifactIntegrity": "G2 and R1 verified exact SHA256; R1 and Atelier draft embedded, nine worlds",
+          "minimalGap": "Authorisation-filtered learner library projection, resource-first index and stable routes; retain existing curriculum and professional surfaces",
+          "p1": "Synthetic isolated composition test only, pending applicable authority; no runtime or public deployment",
+          "admissibility": {
+            "status": "USER_DIRECTION_RECORDED_BOUNDED_OFFLINE_RESEARCH_PROBE_ONLY",
+            "basis": "User explicitly proceeded after P0/P1 explanation; AXF-PARAM-01 permits minimum isolated synthetic experiment with governance, AXF-M2D permits explicitly governed isolated experiment. Not approval of canonical schema, product implementation, runtime, or any higher gate.",
+            "scope": "Private offline test artifact only; synthetic geometry/data; no learner content, no G2 artwork distribution, no repository runtime or site changes. Reuse G2 interaction patterns and current public-pathway filter semantics; no executable payload from data.",
+            "stop": "Any production integration or change to contracts requires separate authority."
+          }
+        },
+        "p1": {
+          "status": "PASS_SCOPED_OFFLINE_SYNTHETIC_PROBE",
+          "date": "2026-11-15",
+          "libraryFileId": "libfile_301c367719788191b0fe03abe6775e0f",
+          "packageSha256": "fb25b3f9808081486c3dd32762014bfd48b70a16aca28aec4848f025b281fdeb",
+          "htmlSha256": "d57572cd3a0368dd991c80a50b5825cc54925c265e00c2514598be87567c9820",
+          "sharedShellSha256": "332623417d9a5c0882c366575b4970cacb0faa8b550e9f5b16912cedb6d866f4",
+          "source": "One standalone shell using G2 CSS and normalization, no G2 artwork. Internal synthetic data only; one generated HTML with 3 scenes, 6 SVG variants, orbit and anchor composition, direct search, inspect/select actions and alternative index; synthetic eligibility filter analogue, not actual catalogue authority.",
+          "build": {
+            "scenes": 3,
+            "assetVariants": 6,
+            "deterministicRebuild": "same HTML SHA256",
+            "negativeTests": "5/5 PASS: runtime true, missing target, arbitrary action, missing variant, arbitrary code field"
+          },
+          "browser": {
+            "mode": "Chromium set_content",
+            "viewports": [
+              [
+                320,
+                740
+              ],
+              [
+                390,
+                844
+              ],
+              [
+                844,
+                390
+              ],
+              [
+                1280,
+                800
+              ]
+            ],
+            "functional": "4/4 PASS",
+            "rawTouchSwipeThenTap": "PASS after pointerup correction; click suppressed by Chromium after swipe observed before fix",
+            "keyboard": "PASS scoped",
+            "reducedMotion": "computed transition 0s",
+            "externalHttp": 0,
+            "pageErrors": 0,
+            "localFile": "BLOCKED_BY_ADMINISTRATOR",
+            "physical": "PENDING"
+          },
+          "limits": [
+            "No integration of Experience Engine, Studio or live Atlas catalogue",
+            "No canonical schema or authorization changes",
+            "No learner content or real artwork; not Q3 visual evidence",
+            "No full accessibility, physical-device or actual file-opening validation"
+          ],
+          "studentAuthorized": false,
+          "runtimeAuthorized": false,
+          "criticalReview": {
+            "id": "P1-R",
+            "status": "REVISE_PROPOSED",
+            "independent": false,
+            "reviewer": "Separate consultative source and adversarial test review; no independent reviewer attested",
+            "planCommit": "b206dbc30a25f6106ea0116c8f92b53a4b734b42",
+            "verified": [
+              "ZIP SHA256 exact",
+              "deterministic rebuild exact HTML SHA256",
+              "five original negatives PASS",
+              "revoked synthetic scene excluded in search but reachable via orb",
+              "320px root font 200% header intersects orb",
+              "search query lost after opening"
+            ],
+            "additionalValidatorCasesAccepted": [
+              "overlap",
+              "long title",
+              "non-string inspect target",
+              "alias",
+              "orphan",
+              "self-loop"
+            ],
+            "findings": [
+              "P1-R01 eligibility bypass",
+              "P1-R02 validation/geometry",
+              "P1-R03 accessibility/reflow",
+              "P1-R04 navigation regression",
+              "P1-R05 shared shell/kernel boundary and real batch diversity",
+              "P1-R06 product/authority",
+              "P1-R07 operational and distribution limits",
+              "P1-R08 editorial quality"
+            ],
+            "next": "One bounded corrective tranche P1-R01–R04 and boundary/test plan R05, then independent review before P2; R06–R08 retained for relevant gates.",
+            "originalPassPreserved": true,
+            "runtimeAuthorized": false,
+            "studentAuthorized": false,
+            "correctedCandidate": {
+              "id": "P1-R",
+              "status": "SCOPED_CORRECTIONS_PASS_DISTINCT_REVIEW_PENDING",
+              "planCommit": "06a3092b35cfe3b69a31c90ee378a2d5b47336f9",
+              "libraryFileId": "libfile_2574482ce5688191b1c6d9e369258df0",
+              "packageSha256": "f8b4bd9763bc2119daf40e86d8cbacbc4cbe33529af901506c86e188fffc33fd",
+              "htmlSha256": "cfebe0d6828ae40614a236c5fd46fd21938a2f59f0bbccb47add15f732b6896a",
+              "shellSha256": "a7fc4d56579015d0dee24eb462ab276eaca7cfdb314948016bcf2db6748e7c56",
+              "tests": {
+                "negative": "11/11 PASS",
+                "projection": "2/2 PASS",
+                "regression": "4/4 viewport PASS",
+                "geometry": "8/8 groups 3 scenes and controls open/closed, root font 100/200%",
+                "adversarialBrowser": "3/3 groups PASS",
+                "touch": "CDP swipe then tap PASS",
+                "deterministicRebuild": "same hash",
+                "localFile": "BLOCKED_BY_ADMINISTRATOR",
+                "physical": "PENDING"
+              },
+              "findings": {
+                "R01": "CORRECTED_SYNTHETIC_SCOPE",
+                "R02": "CORRECTED_SYNTHETIC_SCOPE",
+                "R03": "CORRECTED_SCOPED_REFLOW_NOT_FULL_ACCESSIBILITY",
+                "R04": "CORRECTED_SCOPED_NAVIGATION",
+                "R05": "BOUNDARY_AND_P2_PLAN_DOCUMENTED_INTEGRATION_UNVERIFIED",
+                "R06_R08": "OPEN_RELEVANT_GATES"
+              },
+              "additionalRisk": "Existing Atlas load-public-pathways.ts treats missing/non-WITHDRAWN availability as ACTIVE; requires governed verification/correction before integration. Not changed.",
+              "independentReview": "PENDING",
+              "originalPreserved": true,
+              "studentAuthorized": false,
+              "runtimeAuthorized": false,
+              "reassessment": {
+                "status": "REVISE_BEFORE_P2",
+                "independent": false,
+                "planCommit": "95da48b8957d6983d80074108e82a6e303dff5b1",
+                "evidenceLibraryFileId": "libfile_6b9e2deba8ec8191899d3fb82059d6f4",
+                "evidenceSha256": "b611c28b414d16def49146b57ac8fe07b54fbf79632b23f45f068d4b32a55604",
+                "replay": "Exact HTML hash; 11 negative, 4 viewport, 8 geometry, 3 adversarial groups and CDP touch PASS; file direct blocked",
+                "findings": [
+                  {
+                    "id": "R09",
+                    "status": "OPEN",
+                    "evidence": "Valid root-only and reordered catalog both exit 1 after output creation; fixture-specific assertions in build",
+                    "severity": "HIGH"
+                  },
+                  {
+                    "id": "R10",
+                    "status": "OPEN",
+                    "evidence": "Hash #discovery persists on home and workshop after direct-route entry",
+                    "severity": "MEDIUM_HIGH"
+                  }
+                ],
+                "next": "Separate generic compiler from fixture tests, stage/commit artifacts after validation; synchronize navigation and route, then exact-version distinct review.",
+                "followup": {
+                  "id": "P1-R2",
+                  "status": "SCOPED_PASS_DISTINCT_REVIEW_PENDING",
+                  "planCommit": "52a5363c4c174d07550c836994e60efa2a4f5f88",
+                  "libraryFileId": "libfile_a44fc4a90bf081919aae2d3fe1ba23ea",
+                  "packageSha256": "a257d54b4b63ee45d556f4d71da725a7c1823d774a1ddf6978955c40eeed8d26",
+                  "htmlSha256": "d57116e979e678f142d477f7f7eaa8c11a5e6ee7b314455d436b839ee1a3913c",
+                  "shellSha256": "abcaf8601b37a5b308fd5368f2cf142110836e4616ac794ada39009c86fd13da",
+                  "findings": {
+                    "R09": "CORRECTED_SYNTHETIC_SCOPE",
+                    "R10": "CORRECTED_SYNTHETIC_SCOPE_REAL_FILE_PENDING"
+                  },
+                  "tests": {
+                    "compiler": "25/25 PASS including historical negatives",
+                    "route": "6/6 PASS in memory",
+                    "regression": "4/4 viewport, 8/8 geometry, 3/3 adversarial groups, CDP swipe/tap PASS",
+                    "deterministicRebuild": "identical HTML SHA256",
+                    "externalHttp": 0,
+                    "pageErrors": 0,
+                    "localFileAndHttp": "BLOCKED_BY_ADMINISTRATOR",
+                    "physical": "PENDING"
+                  },
+                  "independentReview": "PENDING",
+                  "runtimeAuthorized": false,
+                  "studentAuthorized": false,
+                  "originalPreserved": true,
+                  "next": "Exact-candidate distinct review of R09/R10, R05 boundary and P2 test plan; P2 remains HOLD, no production or publication.",
+                  "realEngineFollowup": {
+                    "id": "P1-R2-F",
+                    "planCommit": "3f3856f82a19d0cfca5eda33515aef14256a0c25",
+                    "atlasBase": "d2938378c9384c5122adb8379396dbad5b4385fe",
+                    "atlasPr": 98,
+                    "head": "9dad4946eab619cefd32ecf775614095f20c8054",
+                    "ciRunId": 43758603713,
+                    "ciStatus": "PASS_COMPLETE",
+                    "scope": "Explicit availability catalog/export, canonical engine/Studio preview contract probe; no P1 shell mount",
+                    "physicalFile": "BLOCKED_BY_ADMINISTRATOR; exact standalone HTML supplied for authorized real-device review",
+                    "independentReview": "PENDING_DISTINCT_REVIEWER",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false,
+                    "ciEvidence": [
+                      {
+                        "name": "Experience contracts",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Experience grammar registry",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Generic experience factory",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi portfolio factory",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi student product contract",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi publication filter contract",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "AXF shared engine boundary",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Smart material contracts",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Smart conformance cases",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Percorsi G2 contracts",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Four-case generality proof",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Smart publication reconciliation",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Typecheck",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Lint",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Production build",
+                        "conclusion": "success"
+                      },
+                      {
+                        "name": "Browser conformance",
+                        "conclusion": "success"
+                      }
+                    ],
+                    "completedWorkflowCount": 11,
+                    "skippedWorkflowCount": 1
+                  },
+                  "mountCandidate": {
+                    "id": "P1-R2-G",
+                    "planCommit": "526de97ac79c677f2f0e07c49d8cf73938d44c23",
+                    "atlasPr": 99,
+                    "head": "5df0a0169ad861dadb5654173d7d1390d43077be",
+                    "basePr": 98,
+                    "ciRunId": 43759786641,
+                    "ciStatus": "PASS_COMPLETE",
+                    "scope": "Preview-only host mounts real ExperienceRuntime through Studio adapter; existing synthetic fixtures; temporary CI-only route; no production integration or visual fidelity claim",
+                    "independentReview": "PENDING",
+                    "physical": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false,
+                    "completedWorkflowCount": 9,
+                    "ciJobId": 132951790674,
+                    "qualificationCommit": "07161bf7c6ea467bc33e52b7f13e4c87c237ad86",
+                    "mountBrowserTests": "2/2 PASS"
+                  },
+                  "visualCandidate": {
+                    "id": "P1-R2-H",
+                    "planCommit": "a2358ee35607ca0292e10c5061881abba92ff53e",
+                    "atlasPr": 100,
+                    "head": "742e72ce7b56f258ae68598bfb51167ad667a9b6",
+                    "basePr": 99,
+                    "ciRunId": 43760502110,
+                    "ciStatus": "PASS_COMPLETE",
+                    "originalG2Sha256": "b7c95e87241c59448963ebe0b8c6883df3b224205e09fc1f6ffd761d9aeca5e3",
+                    "privateAssetPack": {
+                      "libraryFileId": "libfile_c43305a484c4819181dacc42d9a3a4dd",
+                      "sha256": "6e0f43396c00317666bfbc09f8ea35dac7783521bfb53dd92c041437b74531fb",
+                      "assetCount": 11
+                    },
+                    "scope": "G2 nine worlds, editorial sections, direct search, explicit preview placement, private artwork prop; no original bytes in repo",
+                    "originalArtRender": "PASS_SCOPED_PRIVATE_CHROMIUM",
+                    "independentReview": "PENDING",
+                    "physical": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false,
+                    "completedWorkflowCount": 9,
+                    "ciJobId": 132954003578,
+                    "qualificationCommit": "57a406bb1d1798595c791d94e150046f251df3d9",
+                    "browserRegressionTests": "20/20 PASS",
+                    "visualHostTests": "3/3 PASS"
+                  },
+                  "privateRender": {
+                    "id": "P1-R2-I",
+                    "planCommit": "e864204554ab1695c1ef85278dca45479f448bb4",
+                    "sourcePr": 100,
+                    "sourceHead": "742e72ce7b56f258ae68598bfb51167ad667a9b6",
+                    "recipeHead": "a6dd67111909369ae41d3858ff1a2f2ce1ff576b",
+                    "workflowRunId": 43761214746,
+                    "artifactId": 14180890319,
+                    "artifactSha256": "90b00ed616fb0e4781ec315154890e957d2bf3a734cee73aadcd30521759035e",
+                    "privateHtml": {
+                      "libraryFileId": "libfile_ae791f993f408191af113435f2034ca1",
+                      "sha256": "49444ad074edbc7b7470c6553ff56eb574ebc7ae3765399002dbfff972a2616c"
+                    },
+                    "evidencePack": {
+                      "libraryFileId": "libfile_2adab217ed808191b6ed2229534e865d",
+                      "sha256": "d0bcb20ad8aaa05a4dc4f62cc2ec3a70981d9bf3e7e05e003bffe592ece1c641"
+                    },
+                    "originals": "11/11 verified",
+                    "browser": "4/4 PASS after review-wrapper correction; exact compiled app CSS and JS",
+                    "visualReview": "REVISE_MOBILE_COMPOSITION_ADDRESSED_IN_P1_R2_J_SCOPED",
+                    "physical": "PENDING",
+                    "independentReview": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false
+                  },
+                  "compactGateway": {
+                    "id": "P1-R2-J",
+                    "planCommit": "77282384cfde910c6f6d0226e28c4fcda18b83c7",
+                    "atlasPr": 101,
+                    "sourceHead": "b52c8368669bfaf0b20d32282d8a13d38d836c31",
+                    "basePr": 100,
+                    "ciRunId": 43762463100,
+                    "ciJobId": 132960089099,
+                    "ciStatus": "9/9 PASS; 20/20 regression and 3/3 host tests",
+                    "recipeHead": "17c46a7e091c6866e5eb52477c81bfbfc51f1e2e",
+                    "recipeRunId": 43762483883,
+                    "artifactId": 14180278198,
+                    "artifactSha256": "947564e29a032c1923ba10b257f0d5f3c1661068e4ed89344863c78e58f1519a",
+                    "privateHtml": {
+                      "libraryFileId": "libfile_58e62fe110fc8191829c671fcbcd99a2",
+                      "sha256": "1cd2a0b09d2a92c3ce9a3e46e57dc2201209575894a9865754b04e5f6a33a57a"
+                    },
+                    "evidencePack": {
+                      "libraryFileId": "libfile_1bc16f9028908191a8f46d7775b72069",
+                      "sha256": "ab009eaf9b43b9b71065535d6bb07e36699e6dbcbfa5050f8023329104e7d98b"
+                    },
+                    "privateBrowser": "5/5 functional, 4/4 first viewport, short landscape scroll fallback, 11 originals, zero overlap/overflow/network/errors",
+                    "visualReview": "CONSULTATIVE_SCOPED_PASS_MOBILE_REVISE_ADDRESSED",
+                    "physical": "PENDING",
+                    "independentReview": "PENDING",
+                    "p2": "HOLD",
+                    "studentAuthorized": false,
+                    "runtimeAuthorized": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "gatewayReview": {
+        "id": "AXF-GATEWAY-G1",
+        "status": "PRIVATE_FUNCTIONAL_GATEWAY_DESIGN_CANDIDATE_HUMAN_REVIEW_PENDING",
+        "date": "2026-11-15",
+        "userDirection": "Realise the initial Atlas access environment before proceeding with generic motor or further world production; globe and orbital library as whole-product visual identity.",
+        "htmlLibraryFileId": "libfile_0777b1ea2c848191883b31efe818168d",
+        "htmlSha256": "4220b21fa6e655364701513079cd1b51e1a80a1b8176467539b5480925931994",
+        "packageLibraryFileId": "libfile_502f89de3a3c81918f1acf9e8ae5b217",
+        "packageSha256": "9b5b4f87d6f65752d03ad61fc10c5861bb8e1ee21f6d000d297bbf52b2c702ea",
+        "scope": "Standalone private HTML; original generated ambient background and portrait compositional derivative; nine thematic orbs data-driven, rotation of nodes not the Earth/artwork itself, contextual controls, search/index, two unchanged private Energy resources embedded, other domains explicitly in preparation. No live Atlas integration, no persistent learner state, no publication.",
+        "test": {
+          "mode": "Chromium in-memory",
+          "viewports": [
+            [
+              320,
+              740
+            ],
+            [
+              390,
+              844
+            ],
+            [
+              844,
+              390
+            ],
+            [
+              1280,
+              800
+            ]
+          ],
+          "functional": "4/4 PASS",
+          "supplemental": "CDP touch swipe then immediate tap, second resource return, keyboard reveal PASS after fix",
+          "externalHttp": 0,
+          "pageErrors": 0,
+          "localFileNavigation": "BLOCKED_BY_ADMINISTRATOR_BEFORE_LOAD",
+          "physical": "PENDING"
+        },
+        "limits": [
+          "Portal only; not P1/P2 generic engine qualification",
+          "Background fixed; orbit nodes rotate",
+          "Prior content embedded unchanged, still private and not qualified",
+          "Portrait derivative not separate generated master",
+          "Accessibility, actual Android/LIM, image rights and formal reviews pending",
+          "No changes to Atlas production or deployment"
+        ],
+        "studentAuthorized": false,
+        "runtimeAuthorized": false,
+        "g2": {
+          "id": "AXF-GATEWAY-G2",
+          "status": "PRIVATE_DIRECT_ACCESS_REVIEW_CANDIDATE",
+          "scope": "Preserve G1 scene and embedded resources byte-identical; visible ambient search affordance; resource-first indexed search from local titles/kinds/descriptions/curated keywords; unavailable worlds separate; search restored on return; stable candidate world/resource hash resolver. No semantic AI search, actual platform links or production integration.",
+          "htmlLibraryFileId": "libfile_34c88a7c188881919c640e17f45bb851",
+          "htmlSha256": "b7c95e87241c59448963ebe0b8c6883df3b224205e09fc1f6ffd761d9aeca5e3",
+          "packageLibraryFileId": "libfile_af0346f5aa7c8191808de0cebf938bb5",
+          "packageSha256": "0e33370a39789708bb4fa62942c1008b8523e1f6184119ff15b25d1f15a3c12b",
+          "tests": {
+            "mode": "Chromium in-memory set_content",
+            "viewports": [
+              [
+                320,
+                740
+              ],
+              [
+                390,
+                844
+              ],
+              [
+                844,
+                390
+              ],
+              [
+                1280,
+                800
+              ]
+            ],
+            "result": "4/4 PASS direct results, return query/focus, unavailable theme, valid/invalid resolver; 0 HTTP requests, 0 JS errors",
+            "actualURLNavigation": "BLOCKED_BY_ADMINISTRATOR for file and intercepted HTTPS before load; resolver invoked explicitly, real URL navigation unverified",
+            "physical": "PENDING"
+          },
+          "next": "Review immediate access on physical device; stable published resource IDs and authorised routes must be integrated with existing Atlas catalog and publication authority when permitted. Preserve exploration; no mandatory browsing or personalized progress.",
+          "studentAuthorized": false,
+          "runtimeAuthorized": false
+        }
+      },
+      "sharedVision": {
+        "id": "AXF-VISION-01",
+        "status": "STRATEGIC_DIRECTION_EXPLICITLY_SHARED_BY_USER_IMPLEMENTATION_PENDING",
+        "planCommit": "e840bc9336b10cd1b4e86b9ce2c0917d86970c52",
+        "ref": "ATLAS-MASTER-PLAN-v1.md",
+        "principles": [
+          "wonder without manipulation",
+          "free exploration and immediate access",
+          "disciplinary depth",
+          "meaningful interdisciplinary connections",
+          "personal reflection"
+        ],
+        "accessDimensions": [
+          "knowledge",
+          "experience",
+          "connections"
+        ],
+        "relationshipToSections": "Cross-cutting metadata perspectives, not replacement for Storie/Laboratori/Scoperte/Percorsi",
+        "reflectionSpace": "Future optional hypothesis only; no new workstream, centralized data, profiling or automatic evaluation",
+        "decisionRule": "Learner value + editorial purpose + shared capability reuse; human qualification remains required",
+        "next": "Preserve G2 review and existing P0–P5/R1 sequence; consider metadata-driven access dimensions when authorised; no new product or deployment.",
+        "studentAuthorized": false,
+        "runtimeAuthorized": false
+      }
+    }
+  },
+  "queued": [
+    {
+      "id": "M4",
+      "requires": [
+        "M3-B candidate",
+        "applicable quality gates"
+      ],
+      "action": "human and technical quality closure"
+    },
+    {
+      "id": "M5",
+      "requires": [
+        "M4 PASS"
+      ],
+      "action": "Agriculture vertical"
+    },
+    {
+      "id": "M6",
+      "requires": [
+        "M5"
+      ],
+      "action": "generalize authoring factory"
+    },
+    {
+      "id": "M7",
+      "requires": [
+        "applicable quality and authority gates"
+      ],
+      "action": "library and governed delivery"
+    }
+  ],
+  "continuity": {
+    "readFirst": [
+      "CANONICAL-INDEX-v1.md",
+      "ATLAS-MASTER-PLAN-v1.md",
+      "atlas-master-state.v1.json"
+    ],
+    "appendEvidence": true,
+    "verifyExactHead": true,
+    "oneActivePriority": true,
+    "noRepeatWithoutReason": true,
+    "authority": "existing governance only"
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "state": "DIRECTION_ACCEPTED_FOR_TOOL_EXPERIMENT",
+      "source": "Human response 2026-11-15: Ok controlla e procedi",
+      "governance": {
+        "head": "ed288b02131f3e5e2386bb1ea38358f88c184b60",
+        "runId": 43702772162,
+        "result": "PASS"
+      },
+      "limits": [
+        "not final W6A quality PASS",
+        "no implementation or publication approval",
+        "Arena receipt and transfer review open"
+      ]
+    },
+    {
+      "id": "M2",
+      "phase": "F3-B2",
+      "state": "M2_C_EQUIVALENT_TECHNICAL_PASS",
+      "action": "M2-C: compare same Energy micro-world using common assets, actions and pure model; select only after equivalent comparison",
+      "artifacts": [
+        {
+          "githubRepositoryId": 1376266693,
+          "pr": 96,
+          "head": "5a555650974572dacde1ba0bd81924adaf29729e"
+        }
+      ],
+      "requires": [
+        "M1 direction accepted",
+        "Tiled real export and Phaser object interactions",
+        "GDevelop official local export and browser baseline"
+      ],
+      "acceptance": [
+        "record exact versions and source hashes",
+        "same episode comparison still required",
+        "evidence and user review before tool selection"
+      ],
+      "blockers": [
+        "equivalent Energy scene not yet compared",
+        "physical devices, full accessibility, licensing and human review open"
+      ],
+      "notAllowed": [
+        "new production engine adoption",
+        "student publication",
+        "paid service",
+        "automatic approval"
+      ],
+      "evidence": "../production/AXF-M2-SPATIAL-BASELINE-EVIDENCE-v1.md",
+      "baselineResults": {
+        "runId": 43704132244,
+        "tiled": "PASS",
+        "gdevelop": "FAIL_PRIVACY",
+        "head": "5a555650974572dacde1ba0bd81924adaf29729e"
+      },
+      "retest": {
+        "githubRepositoryId": 1376266693,
+        "pr": 96,
+        "head": "1a659859c53d7f3d67092c56a45187f5083d162e",
+        "attempt": 1,
+        "maxAttempts": 1,
+        "change": "Official EnableMetrics no at first SceneJustBegins; assert generated false, three viewports, input, visibility/exit, storage and network checks",
+        "guardrailUnchanged": true,
+        "result": "PASS",
+        "runId": 43705042820,
+        "evidence": "../production/AXF-M2-PRIVACY-RETEST-EVIDENCE-v1.md"
+      },
+      "comparison": {
+        "githubRepositoryId": 1376266693,
+        "pr": 96,
+        "head": "3589c363e24fc66be588d336849997545bcd1b7f",
+        "passed": 6,
+        "failed": 0,
+        "runId": 43705917257,
+        "artifactId": 14158363789,
+        "artifactExpires": "2026-11-22",
+        "sha256": "18354f42cbab6c640866007427afa6c62179f8431911f4ec8790caa3db1cd8f2",
+        "evidence": "../production/AXF-M2C-EQUIVALENT-WORLD-EVIDENCE-v1.md"
+      }
+    },
+    {
+      "id": "M2-D",
+      "state": "AUTHORING_CHANGE_EXACT_HEAD_PASS_BOUNDED_PREFLIGHT",
+      "evidence": "../production/AXF-M2D-AUTHORING-CHANGE-EVIDENCE-v1.md",
+      "head": "a02341910803bfb8c0944d4e5237260be5ed6059",
+      "runId": 43708682098,
+      "artifactId": 14159488531,
+      "sha256": "b64104a1a44340fa7257d847b1aebbf97a48c4c7ecb6afbcf35f2d38844ccf3f",
+      "passed": 6,
+      "failed": 0,
+      "limits": [
+        "single source coordinate change only",
+        "human authoring effort and narrative advantage unproven",
+        "no W6A or production approval"
+      ]
+    },
+    {
+      "id": "M3-A",
+      "state": "EXACT_HEAD_TECHNICAL_PASS_CANDIDATE",
+      "evidence": "../production/AXF-M3A-MIXED-HANDOFF-EVIDENCE-v1.md",
+      "githubRepositoryId": 1376266693,
+      "pr": 97,
+      "head": "8ff6ece6dc487dc5341881066db6bace5a49d27e",
+      "runId": 43709590550,
+      "artifactId": 14159807460,
+      "sha256": "bc84633c4c659de33021bb9b5271907b742bcdf5d27962201ab1247a7b924f53",
+      "passed": 6,
+      "failed": 0,
+      "limits": [
+        "isolated schematic scene",
+        "no W6A or production approval"
+      ]
+    }
+  ]
+}
