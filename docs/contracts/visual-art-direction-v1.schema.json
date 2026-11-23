@@ -211,27 +211,33 @@
       "required": [
         "model",
         "sunElevationDegrees",
-        "turbidity",
+        "airDensity",
+        "dustDensity",
         "worldStrength"
       ],
       "properties": {
         "model": {
-          "const": "NISHITA"
+          "const": "PHYSICAL_ATMOSPHERE"
         },
         "sunElevationDegrees": {
           "type": "number",
           "minimum": -2,
           "maximum": 90
         },
-        "turbidity": {
-          "type": "number",
-          "minimum": 1,
-          "maximum": 10
-        },
         "worldStrength": {
           "type": "number",
           "minimum": 0,
           "maximum": 3
+        },
+        "airDensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "dustDensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
         }
       }
     },
