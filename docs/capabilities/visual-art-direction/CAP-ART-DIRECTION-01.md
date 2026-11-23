@@ -62,7 +62,7 @@ Lo schema normativo è [visual-art-direction-v1.schema.json](../../contracts/vis
 | Architettura | 4 livelli, raggio oculo 6,25 unità Blender, quattro pannelli selezionabili invariati |
 | Materiali | 5 famiglie principali motivate, valori PBR nel dominio [0,1], niente modifiche non dichiarate |
 | Luce | Preset con origine, intensità, colore e dimensione; nessuna luce casuale |
-| Cielo | Ambiente Blender fisicamente modellato e verificato in Cycles; web distinto e qualificato |
+| Cielo | Atmosfera fisica definita dalla specifica; l'adattatore usa Nishita sulle versioni compatibili e Multiple Scattering in Blender 5, con ricevuta del modello effettivo; web distinto e qualificato |
 | Vista | Confronti desktop e telefono, codice telecamera associato a ciascuna immagine |
 | Prestazioni | Bilancio triangoli, dimensioni texture, memoria e tempo di caricamento verificati nel web |
 | Accessibilità | Portali alternativi e preferenza movimento ridotto mantenuti |
