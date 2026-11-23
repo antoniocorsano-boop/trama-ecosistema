@@ -70,11 +70,11 @@ Lo schema normativo è [visual-art-direction-v1.schema.json](../../contracts/vis
 
 Il punteggio estetico non si ricava dalla sola compilazione né dai controlli del navigatore. Si registrano separatamente esito tecnico e decisione artistica.
 
-## 5. Primo adattatore: Curriculum Atlas P3B/R3
+## 5. Primo adattatore: Atlas Atlas P3B/R3
 
 - Sorgente selezionata P3A/R2; master originale SHA-256 `35371d226c289bd348a1137f63bfd14c74ee79389c4c1b53b522759ca0246d30`.
 - Geometria immutabile: piano terra + tre gallerie, oculo circolare r=6,25 BU, quattro portali esistenti.
-- `Curriculum-Atlas` PR #188 è la candidata di integrazione privata e rimane non integrata.
+- `Atlas` PR #188 è la candidata di integrazione privata e rimane non integrata.
 - Il prototipo di questa capacità **applica i materiali e l'illuminazione solo a una copia Blender**; la pubblicazione e l'esportazione WebGL aggiornata sono fasi successive.
 - Archivio dei rendering e delle ricevute nel progetto Atlas già esistente, non in nuovi spazi.
 - Nessuna spesa, nessun dato personale di studenti e nessun automatismo di pubblicazione.
