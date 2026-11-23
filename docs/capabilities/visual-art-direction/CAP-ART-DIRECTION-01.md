@@ -50,7 +50,7 @@ Lo schema normativo è [visual-art-direction-v1.schema.json](../../contracts/vis
 
 **Preflight:** non modifica binari; controlla fonti, schema, materiali, compromessi e compatibilità.  
 **Applicazione:** non modifica la fonte; crea `.blend` derivato e una ricevuta con hash, cambiamenti e limiti dichiarati. È autorizzata come prova privata Atlas, non come capacità mutativa OR-07 esposta ad altri prodotti.  
-**Revisione:** immagini comparabili a camera fissa e rapporto uguale, giudizio su materiale, gerarchia, cielo, portali e composizione mobile.  
+**Revisione:** immagini comparabili a camera fissa e rapporto uguale, giudizio su materiale, gerarchia, cielo, portali e composizione mobile. La revisione include anche movimento introduttivo, trascinamento/gesti, recupero della vista e scelta dei portali sul dispositivo reale: la fotografia non sostituisce questa prova.  
 **Traduzione web:** è una fase separata, con controllo che la resa in glTF preservi l'intento. Il render Cycles non è la prova del WebGL.  
 **Rilascio:** richiede verifiche generali, dispositivi fisici quando previsti, prova umana sull'HEAD esatto e consenso specifico.
 
@@ -66,6 +66,7 @@ Lo schema normativo è [visual-art-direction-v1.schema.json](../../contracts/vis
 | Vista | Confronti desktop e telefono, codice telecamera associato a ciascuna immagine |
 | Prestazioni | Bilancio triangoli, dimensioni texture, memoria e tempo di caricamento verificati nel web |
 | Accessibilità | Portali alternativi e preferenza movimento ridotto mantenuti |
+| Esperienza reale | Nessuna approvazione artistica per solo rendering o caricamento WebGL; collaudo di movimento, trascinamento e focus portali su telefono reale distinto dal controllo automatico |
 | Adozione | Non ammessa senza ART_FINAL_PASS umano e verifiche necessarie |
 
 Il punteggio estetico non si ricava dalla sola compilazione né dai controlli del navigatore. Si registrano separatamente esito tecnico e decisione artistica.
