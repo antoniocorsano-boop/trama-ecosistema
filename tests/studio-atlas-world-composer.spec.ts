@@ -301,7 +301,8 @@ test("UX1: non-narrative topic, no forced choice, readable at 320px", async ({ p
   await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Simulazione dell’energia con variabili e parametri");
   await page.getByRole("button",{name:"Esplora le possibilità"}).click();
   await expect(page.getByRole("radio",{name:/Laboratorio e simulazione/})).toBeVisible();
-  await expect(page.getByText(/Suggerita · .*variabili/)).toBeVisible();
+  await expect(page.locator(".experience-gallery").getByText(/Suggerita · .*variabili/)).toBeVisible();
+  await expect(page.locator(".catalog-gallery").getByRole("button", {name:"Laboratorio",exact:true}).getByText(/Suggerita · .*variabili/)).toBeVisible();
   await expect(page.getByRole("radio",{name:/Deciderò più avanti/})).toBeChecked();
   async function assertReflow() {
     const geometry = await page.evaluate(() => ({
