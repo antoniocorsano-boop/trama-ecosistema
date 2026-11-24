@@ -1,12 +1,12 @@
 "use client";
 
 import type {
-  ExperienceGrammar,
   PathwayProject,
   PathwayScene,
   StoryDraft,
   WorldDraft,
 } from "../lib/model";
+import { EXPERIENCE_FORMS } from "../lib/experience-forms";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 import { updateWorldChoiceStatus } from "../lib/world-composer";
 
@@ -211,14 +211,7 @@ export function WorldEditor({ project, onPatch }: Props) {
   );
 }
 
-const grammars: Array<[Exclude<ExperienceGrammar, "">, string, string]> = [
-  ["INQUIRY_EVIDENCE", "Indagine", "Raccogli indizi e costruisci una spiegazione."],
-  ["BRANCHING_CONSEQUENCE", "Conseguenze", "Fai scelte e osserva come cambia la situazione."],
-  ["WORKSHOP_CONSTRUCTION", "Officina", "Costruisci, combina o correggi qualcosa."],
-  ["SIMULATION_MICROWORLD", "Micromondo", "Agisci su un sistema e osserva le relazioni."],
-  ["VISUAL_NARRATIVE", "Narrazione visuale", "Attraversa una sequenza in cui immagini e azioni portano avanti la storia."],
-  ["ENVIRONMENTAL_STORYTELLING", "Esplorazione", "Capisci il mondo leggendo ciò che contiene."],
-];
+const grammars = EXPERIENCE_FORMS.map(({ id, title, description }) => [id, title, description] as const);
 
 export function ExperienceEditor({ project, onPatch }: Props) {
   return (

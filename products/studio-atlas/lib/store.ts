@@ -89,7 +89,7 @@ export function getProject(projectId: string): PathwayProject | null {
   return readAll().find((project) => project.projectId === projectId) ?? null;
 }
 
-export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand">) {
+export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand"> & { experience?: PathwayProject["experience"] }) {
   const now = new Date().toISOString();
   const project: PathwayProject = {
     projectId: crypto.randomUUID(),
@@ -102,7 +102,7 @@ export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ag
     storyReview: { decision: "DRAFT" },
     world: { ...EMPTY_WORLD },
     worldReview: { decision: "DRAFT" },
-    experience: { ...EMPTY_EXPERIENCE },
+    experience: { ...EMPTY_EXPERIENCE, ...(input.experience ?? {}) },
     scenes: [],
     storyboardReady: false,
     archived: false,

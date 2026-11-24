@@ -262,3 +262,47 @@ test("AWC S3b: gracefully reports WebGL absence without changing student authori
   await expect(page.locator("canvas.awc-live-canvas")).toHaveCount(0);
   await context.close();
 });
+
+
+test("UX1: idea, motivated suggestions, free selection and persisted existing project", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(STUDIO + "/nuovo");
+  await page.getByRole("textbox", {name:"L’idea",exact:true}).fill("Indagine: indizi e cause di un guasto del sensore");
+  await page.getByRole("textbox", {name:/Titolo di lavoro/}).fill("Indagine prova");
+  await page.getByRole("button", {name:"Esplora le possibilità"}).click();
+  await expect(page.getByRole("heading", {name:"Come vuoi sviluppare l’argomento?"})).toBeVisible();
+  await expect(page.getByText(/Suggerita · indizi/)).toBeVisible();
+  await expect(page.getByRole("radio", {name:/Deciderò più avanti/})).toBeChecked();
+  await page.getByRole("button", {name:"Modifica l’idea"}).click();
+  await expect(page.getByRole("textbox", {name:"L’idea",exact:true})).toHaveValue("Indagine: indizi e cause di un guasto del sensore");
+  await page.getByRole("button", {name:"Esplora le possibilità"}).click();
+  await page.getByRole("radio", {name:/Officina/}).check();
+  await page.getByRole("button", {name:"Crea il Percorso"}).click();
+  await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
+  const projectUrl = page.url();
+  await page.reload();
+  await expect(page.getByRole("textbox", {name:"Titolo del Percorso"})).toHaveValue("Indagine prova");
+  await page.getByRole("navigation", {name:"Fasi del Percorso"}).getByRole("button",{name:"Esperienza"}).click();
+  await expect(page.getByRole("button",{name:/Officina/})).toHaveClass(/active/);
+  await expect.poll(() => page.evaluate(() => {
+    const project = JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1") ?? "[]")
+      .find((item: {title:string}) => item.title === "Indagine prova");
+    return {grammar:project.experience.grammar, state:project.humanState, story:project.storyReview.decision, scenes:project.scenes.length};
+  })).toEqual({grammar:"WORKSHOP_CONSTRUCTION",state:"IDEA",story:"DRAFT",scenes:0});
+  expect(page.url()).toBe(projectUrl);
+});
+
+test("UX1: non-narrative topic, no forced choice, readable at 320px", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 780 });
+  await page.goto(STUDIO + "/nuovo");
+  await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Simulazione dell’energia con variabili e parametri");
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  await expect(page.getByRole("radio",{name:/Laboratorio e simulazione/})).toBeVisible();
+  await expect(page.getByText(/Suggerita · .*variabili/)).toBeVisible();
+  await expect(page.getByRole("radio",{name:/Deciderò più avanti/})).toBeChecked();
+  await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await page.getByRole("button",{name:"Crea il Percorso"}).click();
+  await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1") ?? "[]")[0].experience.grammar)).toBe("");
+});
