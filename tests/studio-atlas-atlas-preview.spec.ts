@@ -304,7 +304,7 @@ test("MUSEO ZERO stays REVISE while review preview exercises investigation, repr
 });
 
 
-test("ESS-01A agriculture: empty project to interactive places in real Atlas without imported approvals",async({page,context})=>{
+for(const illustrated of [false,true]) test(illustrated?"ESS-01B agriculture: import original image, position points, explore in Atlas":"ESS-01A agriculture: empty project to interactive places in real Atlas without imported approvals",async({page,context},testInfo)=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto(STUDIO+"/nuovo");
   await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Esplorare l’agricoltura come sistema di suolo, acqua e lavoro umano.");
@@ -363,6 +363,31 @@ test("ESS-01A agriculture: empty project to interactive places in real Atlas wit
   await water.getByRole("button",{name:"Aggiungi indizio"}).click();
   await water.getByLabel("Nome dell’indizio").fill("Distribuzione dell’acqua");
   await water.getByLabel("Che cosa rivela").fill("La distribuzione dipende dalla posizione dei tubi e dalle operazioni di irrigazione.");
+  if(illustrated){
+    const imageEditor=first.getByRole("region",{name:"Immagine interattiva"});
+    // Render a repository-owned rural illustration into a local WebP test file.
+    const base64=await page.evaluate(async()=>{
+      const image=new Image();image.src="/design/atelier/catalog/nature.svg";await image.decode();
+      const canvas=document.createElement("canvas");canvas.width=640;canvas.height=360;
+      canvas.getContext("2d")!.drawImage(image,0,0,640,360);
+      return canvas.toDataURL("image/webp",0.9).split(",")[1];
+    });
+    await imageEditor.getByLabel("Carica immagine WebP").setInputFiles({name:"orto.webp",mimeType:"image/webp",buffer:Buffer.from(base64,"base64")});
+    await expect(imageEditor.getByRole("img")).toBeVisible();
+    await expect(page.getByRole("button",{name:"Anteprima di revisione",exact:true})).toBeDisabled();
+    await imageEditor.getByLabel("Descrizione alternativa dell’immagine").fill("Orto illustrato con campi e filari");
+    await imageEditor.getByLabel("Indizio da posizionare").selectOption({label:"1. Umidità del suolo"});
+    await imageEditor.getByRole("button",{name:"Posiziona sull’immagine"}).click({position:{x:35,y:35}});
+    await imageEditor.getByLabel("Indizio da posizionare").selectOption({label:"2. Distribuzione dell’acqua"});
+    await imageEditor.getByLabel("Posizione orizzontale (%)").fill("75");
+    await imageEditor.getByLabel("Posizione verticale (%)").fill("60");
+    await imageEditor.getByRole("button",{name:"Conferma posizione"}).click();
+    await expect(imageEditor.locator(".scene-image-marker")).toHaveCount(2);
+    await imageEditor.screenshot({path:testInfo.outputPath("ess-01b-teacher-image.png")});
+    await page.reload();
+    await nav.getByRole("button",{name:"Scene"}).click();
+    await expect(first.getByRole("region",{name:"Immagine interattiva"}).locator(".scene-image-marker")).toHaveCount(2);
+  }
   await page.getByRole("button",{name:"Storyboard pronto",exact:true}).click();
   await page.reload();
   await expect(page.getByRole("button",{name:"Anteprima di revisione",exact:true})).toBeEnabled();
@@ -372,11 +397,20 @@ test("ESS-01A agriculture: empty project to interactive places in real Atlas wit
   await expect(popup.getByText("ANTEPRIMA STUDIO ATLAS · NON AUTORIZZATA AGLI STUDENTI")).toBeVisible({timeout:15000});
   const locations=popup.getByRole("navigation",{name:"Luoghi del percorso"});
   await expect(locations.getByRole("button",{name:/Campo coltivato/})).toBeVisible();
+  if(illustrated){
+    const figure=popup.locator(".experience-hotspot-figure");
+    await expect(figure.getByRole("img",{name:"Orto illustrato con campi e filari"})).toBeVisible();
+    await figure.getByRole("button",{name:"Esplora Distribuzione dell’acqua",exact:true}).click();
+    await expect(figure).toContainText("La distribuzione dipende dalla posizione dei tubi");
+    await figure.getByRole("button",{name:"Esplora Umidità del suolo",exact:true}).click();
+    await expect(figure).toContainText("Il terreno trattiene parte dell’acqua");
+    await figure.screenshot({path:testInfo.outputPath("ess-01b-learner-image.png")});
+  }
   await popup.getByRole("button",{name:/Umidità del suolo/}).click();
-  await expect(popup.getByText("Il terreno trattiene parte dell’acqua disponibile alle radici.",{exact:true})).toBeVisible();
+  await expect(popup.locator(".experience-evidence-detail").getByText("Il terreno trattiene parte dell’acqua disponibile alle radici.",{exact:true})).toBeVisible();
   await locations.getByRole("button",{name:/Irrigazione/}).click();
   await popup.getByRole("button",{name:/Distribuzione dell’acqua/}).click();
-  await expect(popup.getByText("La distribuzione dipende dalla posizione dei tubi e dalle operazioni di irrigazione.",{exact:true})).toBeVisible();
+  await expect(popup.locator(".experience-evidence-detail").getByText("La distribuzione dipende dalla posizione dei tubi e dalle operazioni di irrigazione.",{exact:true})).toBeVisible();
   await popup.getByRole("button",{name:"Continua",exact:true}).click();
   await expect(popup.getByRole("heading",{name:"Un frutteto diverso"})).toBeVisible();
   const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]")[0]);
@@ -384,4 +418,5 @@ test("ESS-01A agriculture: empty project to interactive places in real Atlas wit
   expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
   expect(stored.productReview?.decision).not.toBe("PASS");
   expect(stored.scenes[0].stage.locations).toHaveLength(2);
+  if(illustrated){expect(stored.lastPreviewSnapshot.sceneMedia.images[0].sha256).toBe(stored.scenes[0].illustration.sha256);expect(stored.lastPreviewSnapshot.scenes[0].illustration).toBeUndefined();}
 });

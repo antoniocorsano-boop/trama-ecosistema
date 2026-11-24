@@ -8,16 +8,8 @@ import {DISPLAY_TOTAL_PIXELS,MEDIA_MAX_TOTAL_BYTES} from "./activity-media-limit
 // Created only by explicit local story-review action. Never import approval from a handoff.
 export type LocalStoryReview={revisionDigest:string;decision:"PASS";reviewedAt:string};
 function fail(code:string):never{throw new Error(code);}
-// Must match the receiver's fixed order exactly. SHA-256 binds integrity, not identity.
-export function mediaDigestInput(snapshot:StudioAtlasPreviewSnapshot,media:Omit<PreviewIllustratedMedia,"mediaDigest">){
- return JSON.stringify({snapshotId:snapshot.snapshotId,packageDigest:snapshot.packageDigest,pathwayId:snapshot.pathwayId,version:snapshot.version,title:snapshot.title,description:snapshot.description,
-  scenes:snapshot.scenes,revisionDigest:media.revisionDigest,
-  bindings:media.bindings.map(b=>[b.sceneId,b.assetId,b.alt,b.role]),
-  images:media.images.map(i=>[i.assetId,i.sha256,i.pixelWidth,i.pixelHeight])});
-}
-async function sha(text:string){
- return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,"0")).join("");
-}
+import {mediaDigestInput,shaText as sha} from "./preview-media-integrity";
+export {mediaDigestInput} from "./preview-media-integrity";
 export async function buildEduTwinIllustratedReviewSnapshot(revision:ConversationRevision,review:LocalStoryReview|undefined,drafts:readonly ActivityDraft[]):Promise<StudioAtlasPreviewSnapshot>{
  if(!review||review.decision!=="PASS"||review.revisionDigest!==revision.digest||!Number.isFinite(Date.parse(review.reviewedAt))||
   new Date(review.reviewedAt).toISOString()!==review.reviewedAt||review.reviewedAt<revision.project.updatedAt)

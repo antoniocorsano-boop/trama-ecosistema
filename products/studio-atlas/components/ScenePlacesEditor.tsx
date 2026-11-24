@@ -11,7 +11,7 @@ export function ScenePlacesEditor({scene,onChange}:{scene:PathwayScene;onChange:
   const evidence=stage?.evidence??[];
   return <details className="scene-places-editor">
     <summary>Luoghi e indizi · {places.length} luoghi, {evidence.length} indizi</summary>
-    <p>Componi ciò che lo studente può esplorare in Atlas. I luoghi e gli indizi diventano elementi interattivi della scena, non un’immagine con punti sovrapposti.</p>
+    <p>Componi ciò che lo studente può esplorare in Atlas. I luoghi e gli indizi diventano elementi interattivi della scena. Puoi anche posizionarli sull’immagine della scena.</p>
     {stagePlaceErrors(stage).length>0&&<p role="status" className="scene-places-warning">Completa i nomi, le descrizioni e i riferimenti prima della prova.</p>}
     <button type="button" className="secondary-action" onClick={()=>onChange(addStageLocation(stage,crypto.randomUUID()))}>Aggiungi luogo</button>
     {stage&&places.map((place,i)=><section key={place.id} className="scene-place-card" aria-label={"Luogo "+(i+1)}>

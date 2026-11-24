@@ -98,6 +98,7 @@ export type SceneStage = {
     locationId: string;
     kind: SceneStageEvidenceKind;
     character?: string;
+    hotspot?: {x:number;y:number};
   }>;
   characterBeat?: {
     name: string;
@@ -120,6 +121,8 @@ export type PathwaySceneChoice = {
   worldAfter?: SceneWorldState;
 };
 
+export type SceneIllustration = {sha256:string;pixelWidth:number;pixelHeight:number;base64:string;alt:string};
+
 export type PathwayScene = {
   sceneId: string;
   kind: "SCENE" | "TRANSFER";
@@ -131,6 +134,7 @@ export type PathwayScene = {
   reveal: string;
   world?: SceneWorldState;
   stage?: SceneStage;
+  illustration?: SceneIllustration;
   choices: PathwaySceneChoice[];
 };
 
@@ -181,6 +185,7 @@ export type StudioAtlasPreviewSnapshot = {
   studentAuthorized: false;
   scenes: PathwayScene[];
   edutwinMedia?: PreviewIllustratedMedia;
+  sceneMedia?: PreviewIllustratedMedia;
 };
 
 export type VisualProductionReceipt = {

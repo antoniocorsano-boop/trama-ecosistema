@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  ATLAS_PREVIEW_SHA: 98805c2e3575af40f60e8e5933ca0b863daed7b3
+  ATLAS_PREVIEW_SHA: bd10dddec2d1a9cbe985414497980708918741cb
   STUDIO_ORIGIN: http://127.0.0.1:3100
   ATLAS_ORIGIN: http://127.0.0.1:3200
 
@@ -117,6 +117,10 @@ jobs:
           cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --reporter=line
+          mkdir -p "$RUNNER_TEMP/ess-01b-screenshots"
+          find test-results -type f -name 'ess-01b-*.png' -exec cp {} "$RUNNER_TEMP/ess-01b-screenshots/" \;
+          test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-teacher-image.png"
+          test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-learner-image.png"
 
       - name: Qualify World Composer at mobile sizes and across local draft revisions
         shell: bash
@@ -181,6 +185,15 @@ jobs:
         with:
           name: studio-atlas-atelier-design-02
           path: ${{ runner.temp }}/studio-atelier-screenshots/*.png
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve ESS-01B teacher and learner screenshots
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ess-01b-interactive-image
+          path: ${{ runner.temp }}/ess-01b-screenshots/*.png
           if-no-files-found: error
           retention-days: 7
 

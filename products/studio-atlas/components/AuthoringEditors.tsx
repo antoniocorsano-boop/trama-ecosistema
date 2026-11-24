@@ -8,6 +8,8 @@ import type {
 } from "../lib/model";
 import { ExperienceGallery } from "./ExperienceGallery";
 import { ScenePlacesEditor } from "./ScenePlacesEditor";
+import { SceneImageEditor } from "./SceneImageEditor";
+import { projectImageErrors,sceneImageBytes } from "../lib/scene-media";
 import { stagePlaceErrors } from "../lib/scene-places";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 import { updateSceneFocus, updateWorldChoiceStatus } from "../lib/world-composer";
@@ -248,6 +250,7 @@ export function ExperienceEditor({ project, onPatch }: Props) {
 
 export function SceneEditor({ project, onPatch }: Props) {
   const complete =
+    projectImageErrors(project.scenes).length===0 &&
     project.scenes.length > 0 &&
     project.scenes.some((scene) => scene.kind === "TRANSFER") &&
     project.scenes.every(
@@ -407,9 +410,15 @@ export function SceneEditor({ project, onPatch }: Props) {
 
                 <ScenePlacesEditor scene={scene} onChange={stage=>onPatch({
                   scenes:project.scenes.map(item=>item.sceneId===scene.sceneId?{...item,stage}:item),
-                  worldReview:{decision:"DRAFT"},storyboardReady:false,
+                  worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
                   ...invalidateProductReview(project),humanState:"SCENES",
                 })}/>
+                <SceneImageEditor scene={scene} otherImageBytes={project.scenes.reduce((sum,item)=>{if(item.sceneId===scene.sceneId||!item.illustration)return sum;try{return sum+sceneImageBytes(item.illustration).length}catch{return sum}},0)}
+                  onChange={(illustration,stage)=>onPatch({
+                    scenes:project.scenes.map(item=>item.sceneId===scene.sceneId?{...item,stage,illustration}:item),
+                    worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
+                    ...invalidateProductReview(project),humanState:"SCENES",
+                  })}/>
 
                 {scene.interaction === "CHOICE" && (
                   <div className="scene-choice-editor">

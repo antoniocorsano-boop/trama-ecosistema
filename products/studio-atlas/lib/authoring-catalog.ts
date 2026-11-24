@@ -20,7 +20,7 @@ export const AUTHORING_TOOLS = [
   {id:"SCENES",title:"Sequenza delle scene",description:"Componi situazione, azione, conseguenza e scoperta.",stage:"Scene",availability:"EDITOR"},
   {id:"CHOICES",title:"Scelte e conseguenze",description:"Nelle scene imposta una scelta e collega gli esiti.",stage:"Scene",availability:"EDITOR"},
   {id:"SIMULATION",title:"Simulazione e stati",description:"Progetta condizioni ed effetti; il generatore generale non è collegato.",stage:"Mondo",availability:"PLANNING"},
-  {id:"HOTSPOTS",title:"Punti interattivi",description:"Definisci cosa osservare; il posizionamento visuale generale non è disponibile.",stage:"Mondo",availability:"PLANNING"},
+  {id:"HOTSPOTS",title:"Punti interattivi",description:"Importa un’immagine WebP e posiziona gli indizi delle scene.",stage:"Scene",availability:"EDITOR"},
   {id:"VISUAL",title:"Produzione di immagini",description:"La produzione delle risorse è attualmente collegata al pilota Museo Zero.",stage:"Produzione",availability:"PILOT"},
   {id:"PREVIEW",title:"Anteprima e verifica",description:"Apri la fase di prova; restano necessari i controlli previsti.",stage:"Prova",availability:"EDITOR"},
 ] as const satisfies readonly Tool[];

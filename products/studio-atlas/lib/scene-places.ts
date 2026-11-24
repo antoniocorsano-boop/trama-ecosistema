@@ -1,4 +1,5 @@
 import type { SceneStage } from "./model";
+import { validHotspot } from "./scene-media";
 type Location=NonNullable<SceneStage["locations"]>[number];
 type Evidence=NonNullable<SceneStage["evidence"]>[number];
 const POSITIONS=["ENTRY","ROOM","CONTROL","LAB"] as const;
@@ -21,6 +22,7 @@ export function stagePlaceErrors(stage:SceneStage|undefined):string[]{
   for(const e of stage.evidence??[]){
     if(!e||!nonempty(e.id)||evidenceIds.has(e.id)||!nonempty(e.label)||!nonempty(e.detail)||!ids.has(e.locationId)||!KINDS.includes(e.kind)||(e.character!==undefined&&!nonempty(e.character)))errors.push("EVIDENCE");
     if(e&&nonempty(e.id))evidenceIds.add(e.id);
+    if(e?.hotspot!==undefined&&!validHotspot(e.hotspot))errors.push("HOTSPOT");
   }
   return [...new Set(errors)];
 }

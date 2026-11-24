@@ -5,6 +5,7 @@ import type {
   VisualProductionRequest,
 } from "./model";
 import { stagePlaceErrors } from "./scene-places";
+import { projectImageErrors } from "./scene-media";
 
 function hasValidWorldState(world: SceneWorldState | undefined) {
   if (!world) return true;
@@ -40,6 +41,7 @@ export function getProductionBlockers(project: PathwayProject) {
   );
   if (incompleteScene) blockers.push("INCOMPLETE_SCENES");
   if (project.scenes.some(scene=>stagePlaceErrors(scene.stage).length>0)) blockers.push("INCOMPLETE_STAGE_PLACES");
+  if(projectImageErrors(project.scenes).length)blockers.push("INCOMPLETE_SCENE_MEDIA");
 
   const invalidChoice = project.scenes.some(
     (scene) =>

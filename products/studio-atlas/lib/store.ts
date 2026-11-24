@@ -132,9 +132,12 @@ export function updateProject(
     throw new Error("PROJECT_REVISION_CONFLICT");
   }
 
+  const hasSceneImages=current.scenes.some(scene=>!!scene.illustration)||patch.scenes?.some(scene=>!!scene.illustration);
+  const authoringChanged=["title","idea","ageBand","story","storyReview","world","worldReview","productReview","experience","scenes","storyboardReady"].some(key=>Object.hasOwn(patch,key));
   const updated = normalizeProject({
     ...current,
     ...patch,
+    ...(hasSceneImages&&authoringChanged?{lastPreviewSnapshot:undefined}:{}),
     projectId,
     createdAt: current.createdAt,
     updatedAt: new Date().toISOString(),

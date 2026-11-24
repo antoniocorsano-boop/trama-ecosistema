@@ -206,3 +206,19 @@ body { background: var(--paper); }
 .scene-places-editor :is(input,textarea,select){min-width:0;width:100%;max-width:100%}
 .scene-places-editor button{max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere}
 .scene-places-editor button[aria-pressed="true"]{color:var(--accent);font-weight:700}
+
+/* ESS-01B: one local image and its authored evidence points. */
+.scene-image-editor{display:grid;gap:10px;min-width:0;max-width:100%;padding:12px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);overflow-wrap:anywhere}
+.scene-image-editor h4{margin:0;font-family:var(--studio-heading);font-size:1.1rem}
+.scene-image-editor p,.scene-image-editor small{margin:0;font-size:.9rem;line-height:1.5;color:var(--muted)}
+.scene-image-editor label{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;min-width:0}
+.scene-image-editor :is(input,select){min-width:0;width:100%;max-width:100%}
+.scene-image-editor button{min-height:44px;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.scene-image-board{position:relative;min-width:0;margin:8px 24px;isolation:isolate}
+.scene-image-board img{display:block;width:100%;height:auto;border-radius:8px}
+.scene-image-editor .scene-image-position-surface{position:absolute;inset:0;width:100%;height:100%;min-height:0;border:0;border-radius:8px;padding:0;background:transparent;cursor:crosshair}
+.scene-image-position-surface:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.scene-image-marker{position:absolute;transform:translate(-50%,-50%);width:32px;height:32px;display:grid;place-items:center;pointer-events:none;border:2px solid #fff;border-radius:50%;background:#214c42;color:#fff;font-weight:700;box-shadow:0 2px 6px #0007}
+.scene-image-marker.active{background:#f1c975;color:#172e28;border-color:#172e28}
+.scene-image-coordinates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(max-width:650px){.scene-image-coordinates{grid-template-columns:minmax(0,1fr)}}
