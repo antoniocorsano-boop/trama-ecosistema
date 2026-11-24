@@ -193,3 +193,16 @@ body { background: var(--paper); }
 .catalog-visual-card:hover strong{text-decoration:underline;text-underline-offset:4px}
 @media(max-width:650px){.catalog-gallery,.profile-gallery{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:420px){.authoring-catalog .catalog-tool label,.studio-intent .seed-form .catalog-tool label{grid-template-columns:24px minmax(0,1fr)}.catalog-tool label>img{grid-column:2;width:min(100%,180px)}.catalog-tool label>span{grid-column:2}}
+
+/* ESS-01A: editable exploration places and evidence on the existing scene. */
+.scene-places-editor{min-width:0;max-width:100%;border:1px solid var(--line);border-radius:var(--studio-radius);padding:12px;margin:12px 0;background:var(--surface);overflow-wrap:anywhere}
+.scene-places-editor summary{cursor:pointer;font-family:var(--studio-heading);font-weight:650;line-height:1.5;min-height:44px}
+.scene-places-editor p,.scene-places-editor small{font-size:.9rem;color:var(--muted);line-height:1.5}
+.scene-places-editor .scene-places-warning{color:var(--ink);font-weight:650}
+.scene-place-card,.scene-evidence-card{display:grid;gap:10px;min-width:0;max-width:100%;padding:12px;margin-top:12px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--paper)}
+.scene-place-card h4{margin:0;font-size:1rem}
+.scene-evidence-card{background:var(--surface);border-left:3px solid var(--accent)}
+.scene-places-editor label{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+.scene-places-editor :is(input,textarea,select){min-width:0;width:100%;max-width:100%}
+.scene-places-editor button{max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere}
+.scene-places-editor button[aria-pressed="true"]{color:var(--accent);font-weight:700}

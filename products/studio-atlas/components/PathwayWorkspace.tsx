@@ -531,6 +531,7 @@ function blockerLabel(blocker: string) {
     STORYBOARD_NOT_READY: "Lo storyboard non è ancora segnato come pronto.",
     NO_SCENES: "Non esiste ancora nessuna scena.",
     INCOMPLETE_SCENES: "Una o più scene non hanno situazione, azione e conseguenza.",
+    INCOMPLETE_STAGE_PLACES: "Completa i luoghi e gli indizi nelle scene: nomi, descrizioni e riferimenti devono essere validi.",
     INCOMPLETE_CHOICES: "Una scena di scelta non ha ancora almeno due possibilità complete.",
     INCOMPLETE_WORLD_STATE: "Una scena contiene uno stato del mondo incompleto: servono luogo, stato e almeno un segnale osservabile.",
     TERMINAL_CHOICE_NEEDS_CLOSURE: "L’ultima scena è una scelta: aggiungi una breve scena di chiusura dopo la conseguenza.",

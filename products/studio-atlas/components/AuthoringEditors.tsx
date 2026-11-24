@@ -7,6 +7,8 @@ import type {
   WorldDraft,
 } from "../lib/model";
 import { ExperienceGallery } from "./ExperienceGallery";
+import { ScenePlacesEditor } from "./ScenePlacesEditor";
+import { stagePlaceErrors } from "../lib/scene-places";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 import { updateSceneFocus, updateWorldChoiceStatus } from "../lib/world-composer";
 
@@ -253,6 +255,7 @@ export function SceneEditor({ project, onPatch }: Props) {
         scene.visibleSituation.trim() &&
         scene.learnerAction.trim() &&
         scene.consequence.trim() &&
+        stagePlaceErrors(scene.stage).length === 0 &&
         (
           scene.interaction !== "CHOICE" ||
           (
@@ -401,6 +404,12 @@ export function SceneEditor({ project, onPatch }: Props) {
                   <span>Cosa scopre</span>
                   <textarea rows={2} value={scene.reveal} onChange={(e) => updateScene(scene.sceneId, { reveal: e.target.value })} />
                 </label>
+
+                <ScenePlacesEditor scene={scene} onChange={stage=>onPatch({
+                  scenes:project.scenes.map(item=>item.sceneId===scene.sceneId?{...item,stage}:item),
+                  worldReview:{decision:"DRAFT"},storyboardReady:false,
+                  ...invalidateProductReview(project),humanState:"SCENES",
+                })}/>
 
                 {scene.interaction === "CHOICE" && (
                   <div className="scene-choice-editor">
