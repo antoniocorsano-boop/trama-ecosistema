@@ -6,8 +6,7 @@ import type {
   StoryDraft,
   WorldDraft,
 } from "../lib/model";
-import { EXPERIENCE_FORMS } from "../lib/experience-forms";
-import { ExperienceFormMark } from "./ExperienceFormMark";
+import { ExperienceGallery } from "./ExperienceGallery";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 import { updateSceneFocus, updateWorldChoiceStatus } from "../lib/world-composer";
 
@@ -212,8 +211,6 @@ export function WorldEditor({ project, onPatch }: Props) {
   );
 }
 
-const grammars = EXPERIENCE_FORMS.map(({ id, title, description }) => [id, title, description] as const);
-
 export function ExperienceEditor({ project, onPatch }: Props) {
   return (
     <div className="authoring-editor">
@@ -222,23 +219,13 @@ export function ExperienceEditor({ project, onPatch }: Props) {
         Scegli la forma dell’esperienza che rende necessaria l’azione dello studente.
       </p>
 
-      <div className="grammar-list">
-        {grammars.map(([value, title, description]) => (
-          <button
-            key={value}
-            className={project.experience.grammar === value ? "grammar-row active" : "grammar-row"}
-            onClick={() => onPatch({
-              experience: { ...project.experience, grammar: value },
-              storyboardReady: false,
-              ...invalidateProductReview(project),
-              humanState: "SCENES",
-            })}
-          >
-            <strong className="experience-form-title"><ExperienceFormMark grammar={value} />{title}</strong>
-            <span>{description}</span>
-          </button>
-        ))}
-      </div>
+      <ExperienceGallery idea={project.idea} grammar={project.experience.grammar} mode="button"
+        onChange={value=>onPatch({
+          experience: { ...project.experience, grammar: value },
+          storyboardReady: false,
+          ...invalidateProductReview(project),
+          humanState: "SCENES",
+        })} />
 
       <label className="rationale-field">
         <strong>Perché questa forma?</strong>

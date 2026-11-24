@@ -18,3 +18,8 @@ test("UX1 normalizes accents, avoids substring matches and limits suggestions", 
   assert.deepEqual(suggestExperienceForms(""), []);
   assert.equal(suggestExperienceForms("indagine scelta costruire simulazione storia museo").length, 3);
 });
+
+test("DESIGN-03 each experience has a distinct local illustrative asset",()=>{
+  assert.equal(new Set(EXPERIENCE_FORMS.map(form=>form.image)).size,6);
+  assert.ok(EXPERIENCE_FORMS.every(form=>form.image.startsWith("/design/atelier/")&&form.image.endsWith(".webp")&&form.description.length>0));
+});

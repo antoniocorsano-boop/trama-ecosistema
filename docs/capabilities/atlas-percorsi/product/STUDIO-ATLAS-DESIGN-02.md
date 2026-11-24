@@ -3,7 +3,7 @@ Decisione dell'ideatore: la rappresentazione mostrata in conversazione (Lato doc
 ## Implementazione
 Un componente AtelierWorkflow condiviso: pagina iniziale panoramica e progetto aperto (Idea) con accessi effettivi ai medesimi editor Mondo, Storia, Esperienza, Scene, Produzione, Prova. Non crea un secondo modello, non modifica contenuti né gate. Il docente può utilizzare i due temi già disponibili; disposizione a tre colonne su desktop e verticale su mobile. Nessuna dipendenza esterna. La schermata di origine era una composizione concettuale con immagini cercate esternamente, non un contratto pixel per pixel: le immagini qui sono originali canoniche Museo Zero riutilizzate in modo documentato, non il risultato automatico del progetto corrente.
 ## Registro delle risorse
-Origine Curriculum-Atlas commit cdc7fee5082ba7ce59cd074bdb16725a8a36a6f5, byte identici verificati tramite SHA Git; destinazione products/studio-atlas/public/design/atelier/workflow/.
+Origine Curricolo Atlas commit cdc7fee5082ba7ce59cd074bdb16725a8a36a6f5, byte identici verificati tramite SHA Git; destinazione products/studio-atlas/public/design/atelier/workflow/.
 - ambienti.webp: public/media/museo-zero/narrative-v1/sala.webp — 394c0baafb33effcdd3c5d4637acd11304936cc0, 121098 byte.
 - personaggi.webp: public/media/museo-zero/narrative-v1/squadra.webp — 0bfc6b8b0569c2be78ad029577455040aa726587, 172230 byte.
 - interazioni.webp: public/media/museo-zero/narrative-v1/regia.webp — ac51399172129b363c374f5e85f1663c8e03c668, 168034 byte.

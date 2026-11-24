@@ -213,7 +213,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
 
           {stage === "Idea" && (
             <>
-              <AtelierWorkflow onGoTo={setStage} />
+              <AtelierWorkflow onGoTo={setStage} grammar={project.experience.grammar} />
               <h1>Che cosa vuoi far vivere?</h1>
               <p className="lead">Non serve compilare un modulo didattico. Parti da ciò che dovrebbe accadere allo studente.</p>
               <textarea

@@ -496,3 +496,45 @@ test("UX-DESIGN-02: illustrated teacher workflow opens real editors, same assets
   await expect(nav.getByRole("button",{name:"Prova"})).toHaveClass(/active/);
   expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
 });
+
+
+test("DESIGN-03: six illustrated experience cards, same choice persisted and editable",async({page},testInfo)=>{
+  await page.setViewportSize({width:1366,height:1000});
+  await page.goto(STUDIO+"/nuovo");
+  await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Indagine sui sensori, variabili e automazione");
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  const gallery=page.locator(".experience-gallery");
+  await expect(gallery.locator(".experience-card")).toHaveCount(6);
+  await expect(gallery.locator("img")).toHaveCount(6);
+  for(const img of await gallery.locator("img").all()){
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(()=>img.evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBeGreaterThan(0);
+  }
+  await gallery.getByRole("radio",{name:/Laboratorio e simulazione/}).check();
+  await expect(gallery.getByRole("radio",{name:/Laboratorio e simulazione/})).toBeChecked();
+  await gallery.screenshot({path:testInfo.outputPath("studio-atelier-experience-contemporary.png")});
+  await page.getByLabel("Stile dello Studio").selectOption("atelier");
+  await expect(page.locator("html")).toHaveAttribute("data-studio-theme","atelier");
+  await gallery.screenshot({path:testInfo.outputPath("studio-atelier-experience-artistic.png")});
+  await page.getByRole("button",{name:"Modifica l’idea"}).click();
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  await expect(gallery.getByRole("radio",{name:/Laboratorio e simulazione/})).toBeChecked();
+  await page.setViewportSize({width:320,height:800});
+  await page.evaluate(()=>{document.documentElement.style.fontSize="200%"});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.evaluate(()=>{document.documentElement.style.fontSize=""});
+  await gallery.screenshot({path:testInfo.outputPath("studio-atelier-experience-mobile.png")});
+  await page.getByRole("button",{name:"Crea il Percorso"}).click();
+  await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
+  await page.reload();
+  const board=page.getByRole("region",{name:"Atelier digitale del docente"});
+  await expect(board.locator(".atelier-chosen-type")).toContainText("Laboratorio e simulazione");
+  await board.getByRole("button",{name:"Modifica il tipo di esperienza"}).click();
+  await expect(gallery.getByRole("button",{name:/Laboratorio e simulazione/})).toHaveAttribute("aria-pressed","true");
+  await gallery.getByRole("button",{name:/Narrazione visuale/}).click();
+  await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Idea"}).click();
+  await expect(board.locator(".atelier-chosen-type")).toContainText("Narrazione visuale");
+  await page.reload();
+  await expect(board.locator(".atelier-chosen-type")).toContainText("Narrazione visuale");
+  await expect(page.getByRole("button",{name:"Anteprima di revisione"})).toBeDisabled();
+});

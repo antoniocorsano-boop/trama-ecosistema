@@ -124,6 +124,14 @@ jobs:
           cp tests/studio-atlas-world-composer.spec.ts _atlas/tests/studio-atlas-world-composer.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-world-composer.spec.ts --project=chromium --reporter=line
+          mkdir -p "$RUNNER_TEMP/studio-atelier-screenshots"
+          find test-results -type f -name 'studio-atelier-*.png' -exec cp {} "$RUNNER_TEMP/studio-atelier-screenshots/" \;
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-contemporary-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-artistic-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-artistic-mobile.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-contemporary.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-artistic.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-mobile.png"
 
       - name: Exercise the offline S3b real WebGL trial in Chromium
         shell: bash
@@ -167,7 +175,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: studio-atlas-atelier-design-02
-          path: _atlas/test-results/**/studio-atelier-*.png
+          path: ${{ runner.temp }}/studio-atelier-screenshots/*.png
           if-no-files-found: error
           retention-days: 7
 

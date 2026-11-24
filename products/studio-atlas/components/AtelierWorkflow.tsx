@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import type { STAGES } from "../lib/model";
+import type { ExperienceGrammar, STAGES } from "../lib/model";
+import { EXPERIENCE_FORMS } from "../lib/experience-forms";
+import { ExperienceFormArtwork } from "./ExperienceGallery";
 type Stage = (typeof STAGES)[number];
 type CreativeArea = { title:string; caption:string; image:string; alt:string; stage:Stage; action:string };
 
@@ -17,12 +19,20 @@ function ExampleImage({name,alt}:{name:string;alt:string}) {
 function Down() {
   return <span className="atelier-down" aria-hidden="true">↓</span>;
 }
-export function AtelierWorkflow({ onGoTo }: { onGoTo?: (stage:Stage)=>void }) {
+export function AtelierWorkflow({ onGoTo, grammar }: { onGoTo?: (stage:Stage)=>void; grammar?:ExperienceGrammar }) {
+  const chosen=EXPERIENCE_FORMS.find(form=>form.id===grammar);
   return <section className="atelier-workflow" aria-label="Atelier digitale del docente">
     <div className="atelier-intent">
       <p className="atelier-side-label">Lato docente</p>
       <h2>Studio Atlas — Atelier digitale</h2>
       <p>Ideazione e composizione creativa</p>
+    </div>
+    <Down/>
+    <div className="atelier-type">
+      <h3>Tipo di esperienza</h3>
+      {chosen?<div className="atelier-chosen-type"><ExperienceFormArtwork form={chosen}/><div><strong>{chosen.title}</strong><p>{chosen.description}</p></div></div>:
+      <p>Indagine, laboratorio, esplorazione, narrazione, officina o scelte e conseguenze.</p>}
+      {onGoTo&&<button type="button" className="secondary-action" onClick={()=>onGoTo("Esperienza")}>{chosen?"Modifica il tipo di esperienza":"Scegli il tipo di esperienza"}</button>}
     </div>
     <Down/>
     <div className="atelier-areas">

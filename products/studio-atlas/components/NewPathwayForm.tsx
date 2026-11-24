@@ -4,12 +4,11 @@ import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createProject } from "../lib/store";
-import { EXPERIENCE_FORMS, suggestExperienceForms } from "../lib/experience-forms";
+import { ExperienceGallery } from "./ExperienceGallery";
 import { EMPTY_STORY, EMPTY_WORLD, type ExperienceGrammar, type PathwayProject } from "../lib/model";
 import { AuthoringProfileField } from "./AuthoringProfileField";
 import { AuthoringCatalog } from "./AuthoringCatalog";
 import type { AuthoringSelection } from "../lib/authoring-catalog";
-import { ExperienceFormMark } from "./ExperienceFormMark";
 
 export function NewPathwayForm() {
   const router = useRouter();
@@ -23,15 +22,12 @@ export function NewPathwayForm() {
   const [error, setError] = useState(false);
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
-  const suggestions = suggestExperienceForms(idea);
-  const suggestedIds = new Set(suggestions.map(item => item.form.id));
-  const ordered = [...suggestions.map(item => item.form), ...EXPERIENCE_FORMS.filter(item => !suggestedIds.has(item.id))];
+
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!idea.trim() || savingRef.current) return;
     if (stage === "idea") {
-      setGrammar("");
       setStage("forms");
       return;
     }
@@ -50,7 +46,7 @@ export function NewPathwayForm() {
   }
 
   return (
-    <main className="studio-shell narrow studio-intent">
+    <main className={`studio-shell studio-intent ${stage==="idea"?"narrow":"illustrated-intent"}`}>
       <nav className="back-nav"><Link href="/">← Studio Atlas</Link></nav>
       <header className="form-heading">
         <p className="eyebrow">Nuovo percorso · {stage === "idea" ? "1 di 2" : "2 di 2"}</p>
@@ -76,23 +72,7 @@ export function NewPathwayForm() {
           <button className="primary-action" type="submit" disabled={!idea.trim()}>Esplora le possibilità</button>
         </> : <>
           <p className="intent-summary">{idea}</p>
-          <fieldset className="intent-forms">
-            <legend>Forma dell’esperienza</legend>
-            <p className="intent-hint">{suggestions.length
-              ? "I suggerimenti si basano sulle parole dell’idea. Tutte le forme restano disponibili."
-              : "Non ci sono suggerimenti specifici per questa idea. Scegli liberamente."}</p>
-            {ordered.map(item => {
-              const suggested = suggestions.find(candidate => candidate.form.id === item.id);
-              return <label className="intent-form-option" key={item.id}>
-                <input type="radio" name="experience-form" value={item.id} checked={grammar === item.id}
-                  onChange={() => setGrammar(item.id)} />
-                <span><strong className="experience-form-title"><ExperienceFormMark grammar={item.id} />{item.title}</strong>{suggested && <small className="intent-recommended">Suggerita · {suggested.matches.join(", ")}</small>}
-                  <span>{item.description}</span>{suggested && <small>{item.reason}</small>}</span>
-              </label>;
-            })}
-            <label className="intent-form-option"><input type="radio" name="experience-form" value=""
-              checked={grammar === ""} onChange={() => setGrammar("")}/><span><strong>Deciderò più avanti</strong><span>Inizia con una bozza senza scegliere una forma.</span></span></label>
-          </fieldset>
+          <ExperienceGallery idea={idea} grammar={grammar} onChange={setGrammar} />
           <AuthoringProfileField input={{ authoringComplexity: complexity, authoringSelection:selection, experience: { grammar, rationale: "" }, scenes: [], story: EMPTY_STORY, world: EMPTY_WORLD }} onChange={setComplexity} />
           <AuthoringCatalog project={{idea,experience:{grammar,rationale:""},authoringComplexity:complexity,authoringSelection:selection,scenes:[]}} onChange={setSelection} />
           <div className="intent-actions">

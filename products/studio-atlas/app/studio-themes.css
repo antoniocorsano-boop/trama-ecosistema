@@ -141,3 +141,31 @@ body { background: var(--paper); }
 :root[data-studio-theme="atelier"] .atelier-compose{background:#e5e7d2;border-radius:18px 10px 15px 9px}
 .work-surface .atelier-areas{grid-template-columns:repeat(auto-fit,minmax(min(100%,142px),1fr))}
 @media(max-width:650px){.atelier-areas,.work-surface .atelier-areas{grid-template-columns:minmax(0,1fr)}.atelier-workflow{margin:14px 0 28px}.atelier-compose-actions{flex-direction:column;align-items:stretch}}
+
+/* DESIGN-03: same illustrated card vocabulary in creation and authoring. */
+.illustrated-intent{width:min(960px,calc(100% - 40px))}
+.illustrated-experiences{border:0;padding:0;min-width:0;max-width:100%;margin:20px 0 0}
+.illustrated-experiences legend{font-family:var(--studio-heading);font-size:1.25rem;font-weight:650;max-width:100%;overflow-wrap:anywhere}
+.illustrated-experiences .intent-hint{margin:10px 0;color:var(--muted);line-height:1.5}
+.experience-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;min-width:0}
+.experience-artwork{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:calc(var(--studio-radius) - 3px);background:var(--paper)}
+.experience-gallery .experience-card,.studio-intent .seed-form .experience-gallery .experience-card{
+  display:flex;flex-direction:column;align-items:stretch;position:relative;text-align:left;min-width:0;max-width:100%;gap:0;
+  padding:9px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.experience-gallery .experience-card.active,.studio-intent .seed-form .experience-gallery .experience-card.active{border:2px solid var(--accent);padding:8px;background:var(--accent-soft)}
+.experience-gallery .experience-card input[type=radio]{position:absolute;right:13px;top:13px;margin:0;width:24px;height:24px;background:var(--surface);z-index:1;accent-color:var(--accent)}
+.experience-card-copy,.studio-intent .experience-card>span.experience-card-copy{display:grid;min-width:0;gap:6px;padding:12px 3px}
+.experience-card-copy strong{font-family:var(--studio-heading);font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.25;overflow-wrap:anywhere}
+.experience-card-copy span,.experience-card-copy small{color:var(--muted);line-height:1.5;overflow-wrap:anywhere}
+.experience-card-copy .intent-recommended{color:var(--accent);font-weight:650}
+.experience-card:focus-within,.experience-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.experience-card:hover strong{text-decoration:underline;text-underline-offset:4px}
+.experience-defer{margin-top:15px;min-height:44px}
+.experience-art-note{font-size:.85rem}
+.atelier-type{text-align:center;min-width:0;padding:14px;border:1px solid var(--line);border-radius:var(--studio-radius)}
+.atelier-type button{margin-top:12px;max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere}
+.atelier-chosen-type{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;text-align:left;gap:14px;margin:14px auto 0;max-width:560px}
+.atelier-chosen-type>div{min-width:0;overflow-wrap:anywhere}
+:root[data-studio-theme="atelier"] .experience-card{background:var(--surface)}
+:root[data-studio-theme="atelier"] .experience-card-copy strong{font-weight:600}
+@media(max-width:650px){.experience-gallery{grid-template-columns:minmax(0,1fr)}.atelier-chosen-type{grid-template-columns:minmax(0,1fr)}}
