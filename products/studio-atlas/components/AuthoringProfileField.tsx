@@ -2,6 +2,8 @@
 
 import { AUTHORING_PROFILES, deriveAuthoringPlan, parseAuthoringComplexity } from "../lib/authoring-plan";
 import type { PathwayProject } from "../lib/model";
+import { PROFILE_ART } from "../lib/catalog-artwork";
+import { CatalogArtwork } from "./CatalogArtwork";
 
 export function AuthoringProfileField({ input, onChange }: {
   input: Parameters<typeof deriveAuthoringPlan>[0];
@@ -12,7 +14,13 @@ export function AuthoringProfileField({ input, onChange }: {
   const chosen = AUTHORING_PROFILES.find(profile => profile.id === input.authoringComplexity);
   return <section className="authoring-profile" aria-label="Organizzazione del lavoro">
     <h2>Quanto vuoi sviluppare l’esperienza?</h2>
-    <label>
+    <div className="profile-gallery" role="group" aria-label="Profili illustrati">
+      {AUTHORING_PROFILES.map(profile=><button key={profile.id} type="button" className={"catalog-visual-card"+(input.authoringComplexity===profile.id?" active":"")} aria-label={"Profilo "+profile.title} aria-pressed={input.authoringComplexity===profile.id} onClick={()=>onChange(profile.id)}>
+        <CatalogArtwork src={PROFILE_ART[profile.id]}/>
+        <span className="catalog-card-copy"><strong>{profile.title}</strong><span>{profile.description}</span>{plan.suggested===profile.id&&<small className="catalog-recommended">Suggerito</small>}</span>
+      </button>)}
+    </div>
+    <label className="catalog-compact-choice">
       <span>Complessità del progetto</span>
       <select value={input.authoringComplexity ?? ""} onChange={event => onChange(parseAuthoringComplexity(event.target.value))}>
         <option value="">Decidi più avanti</option>

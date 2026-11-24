@@ -538,3 +538,45 @@ test("DESIGN-03: six illustrated experience cards, same choice persisted and edi
   await expect(board.locator(".atelier-chosen-type")).toContainText("Narrazione visuale");
   await expect(page.getByRole("button",{name:"Anteprima di revisione"})).toBeDisabled();
 });
+
+test("DESIGN-04: illustrated environments, tools and profiles share real saved choices", async ({page},testInfo)=>{
+  await page.setViewportSize({width:1366,height:1000});
+  await page.goto(STUDIO+"/nuovo");
+  await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Agricoltura, colture e paesaggio");
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  const profiles=page.getByRole("group",{name:"Profili illustrati"});
+  const environments=page.locator(".catalog-gallery");
+  const toolsPanel=page.locator(".catalog-tools");
+  await expect(profiles.locator("img")).toHaveCount(3);
+  await expect(environments.locator("img")).toHaveCount(7);
+  await expect(toolsPanel.locator("img")).toHaveCount(9);
+  for(const img of await page.locator(".catalog-artwork").all()){
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(()=>img.evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBeGreaterThan(0);
+  }
+  await profiles.getByRole("button",{name:"Profilo Essenziale",exact:true}).click();
+  await expect(page.getByLabel("Complessità del progetto")).toHaveValue("ESSENTIAL");
+  await environments.getByRole("button",{name:"Ambiente naturale e rurale",exact:true}).click();
+  await expect(page.getByLabel("Ambientazione di progetto")).toHaveValue("NATURE");
+  await expect(environments.getByRole("button",{name:"Ambiente naturale e rurale",exact:true})).toHaveAttribute("aria-pressed","true");
+  await toolsPanel.getByRole("checkbox",{name:/Simulazione e stati/}).check();
+  await expect(toolsPanel.getByText(/^Solo progettazione/).first()).toBeVisible();
+  await profiles.screenshot({path:testInfo.outputPath("studio-atelier-profiles-desktop.png")});
+  await environments.screenshot({path:testInfo.outputPath("studio-atelier-environments-desktop.png")});
+  await page.getByLabel("Stile dello Studio").selectOption("atelier");
+  await expect(page.locator("html")).toHaveAttribute("data-studio-theme","atelier");
+  await environments.screenshot({path:testInfo.outputPath("studio-atelier-environments-artistic.png")});
+  await toolsPanel.screenshot({path:testInfo.outputPath("studio-atelier-tools-artistic.png")});
+  await page.setViewportSize({width:320,height:800});
+  await page.evaluate(()=>{document.documentElement.style.fontSize="200%"});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.evaluate(()=>{document.documentElement.style.fontSize=""});
+  await environments.screenshot({path:testInfo.outputPath("studio-atelier-environments-mobile.png")});
+  await page.getByRole("button",{name:"Crea il Percorso"}).click();
+  await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
+  await page.reload();
+  await expect(profiles.getByRole("button",{name:"Profilo Essenziale",exact:true})).toHaveAttribute("aria-pressed","true");
+  await expect(environments.getByRole("button",{name:"Ambiente naturale e rurale",exact:true})).toHaveAttribute("aria-pressed","true");
+  await expect(toolsPanel.getByRole("checkbox",{name:/Simulazione e stati/})).toBeChecked();
+  await expect(page.getByRole("button",{name:"Anteprima di revisione"})).toBeDisabled();
+});

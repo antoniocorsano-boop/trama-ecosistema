@@ -132,6 +132,11 @@ jobs:
           test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-contemporary.png"
           test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-artistic.png"
           test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-mobile.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-profiles-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-environments-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-environments-artistic.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-tools-artistic.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-environments-mobile.png"
 
       - name: Exercise the offline S3b real WebGL trial in Chromium
         shell: bash
