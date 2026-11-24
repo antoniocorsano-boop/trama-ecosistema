@@ -197,7 +197,11 @@ export type VisualProductionReceipt = {
   publicationAuthorityGranted: false;
 };
 
+// Authoring preference only: not a learner level or publication decision.
+export type AuthoringComplexity = "ESSENTIAL" | "ARTICULATED" | "ADVANCED";
+
 export type PathwayProject = {
+  authoringComplexity?: AuthoringComplexity;
   projectId: string;
   title: string;
   idea: string;

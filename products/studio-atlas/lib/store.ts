@@ -6,6 +6,7 @@ import {
   EMPTY_WORLD,
   type PathwayProject,
 } from "./model";
+import { parseAuthoringComplexity } from "./authoring-plan";
 import {
   MUSEO_ZERO_PRODUCT_REVIEW_REF,
   MUSEO_ZERO_PROJECT_ID,
@@ -30,6 +31,7 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     title: raw.title ?? "Senza titolo",
     idea: raw.idea ?? "",
     ageBand: raw.ageBand ?? "lower-secondary",
+    authoringComplexity: parseAuthoringComplexity(raw.authoringComplexity),
     humanState: raw.humanState ?? "IDEA",
     productionState: raw.productionState ?? "NOT_REQUESTED",
     story: { ...EMPTY_STORY, ...(raw.story ?? {}) },
@@ -89,13 +91,14 @@ export function getProject(projectId: string): PathwayProject | null {
   return readAll().find((project) => project.projectId === projectId) ?? null;
 }
 
-export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand"> & { experience?: PathwayProject["experience"] }) {
+export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand"> & { experience?: PathwayProject["experience"]; authoringComplexity?: PathwayProject["authoringComplexity"] }) {
   const now = new Date().toISOString();
   const project: PathwayProject = {
     projectId: crypto.randomUUID(),
     title: input.title.trim(),
     idea: input.idea.trim(),
     ageBand: input.ageBand,
+    authoringComplexity: parseAuthoringComplexity(input.authoringComplexity),
     humanState: "IDEA",
     productionState: "NOT_REQUESTED",
     story: { ...EMPTY_STORY },

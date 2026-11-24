@@ -632,3 +632,16 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .studio-intent .intent-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
   .studio-intent .intent-actions button { width: 100%; }
 }
+
+/* UX1b: a planning preference, not a new dashboard or a second editor. */
+.authoring-profile { min-width: 0; max-width: 100%; overflow-wrap: anywhere; padding: 24px 0 10px; border-top: 1px solid var(--line); }
+.authoring-profile h2 { font-size: clamp(21px, 3vw, 28px); line-height: 1.2; margin: 0 0 16px; }
+.authoring-profile label { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; font-weight: 650; min-width: 0; }
+.authoring-profile select { width: 100%; min-width: 0; max-width: 100%; min-height: 44px; padding: 8px 0; border: 0; border-bottom: 1px solid var(--line); color: var(--ink); background: transparent; }
+.authoring-profile .profile-explanation { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+.authoring-profile .profile-plan { min-width: 0; }
+.authoring-profile .profile-plan h3 { font-size: 1rem; margin: 20px 0 8px; }
+.authoring-profile .profile-plan p { line-height: 1.55; }
+.authoring-profile summary { cursor: pointer; min-height: 44px; padding: 8px 0; color: var(--accent); }
+.authoring-profile ul { margin: 8px 0; padding-left: 24px; line-height: 1.5; }
+.authoring-profile :is(select,summary):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

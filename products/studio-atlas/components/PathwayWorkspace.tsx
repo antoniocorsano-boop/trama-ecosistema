@@ -23,6 +23,8 @@ import {
   WorldEditor,
 } from "./AuthoringEditors";
 import { VisualFactoryStage } from "./VisualFactoryStage";
+import { AuthoringProfileField } from "./AuthoringProfileField";
+import { deriveAuthoringPlan } from "../lib/authoring-plan";
 
 export function PathwayWorkspace({ id }: { id: string }) {
   const [project, setProject] = useState<PathwayProject | null>(null);
@@ -132,6 +134,9 @@ export function PathwayWorkspace({ id }: { id: string }) {
     );
   }
 
+  const plan = deriveAuthoringPlan(project);
+  const nextStage = plan.focusStages[1] ?? "Esperienza";
+
   return (
     <main className="workspace-shell">
       <header className="workspace-header">
@@ -215,9 +220,10 @@ export function PathwayWorkspace({ id }: { id: string }) {
                 onBlur={saveIdea}
                 aria-label="Idea del Percorso"
               />
+              <AuthoringProfileField input={project} onChange={value => { if (value !== project.authoringComplexity) patchProject({ authoringComplexity: value }); }} />
               <div className="next-line">
-                <span>Quando l’idea regge, il passo successivo sarà costruire la storia.</span>
-                <button className="quiet-action" onClick={() => setStage("Storia")}>Vai a Storia →</button>
+                <span>Continua dalla fase consigliata, oppure scegli una delle fasi disponibili.</span>
+                <button className="quiet-action" onClick={() => setStage(nextStage)}>Vai a {nextStage} →</button>
               </div>
             </>
           )}

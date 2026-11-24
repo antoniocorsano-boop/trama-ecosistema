@@ -277,11 +277,14 @@ test("UX1: idea, motivated suggestions, free selection and persisted existing pr
   await expect(page.getByRole("textbox", {name:"L’idea",exact:true})).toHaveValue("Indagine: indizi e cause di un guasto del sensore");
   await page.getByRole("button", {name:"Esplora le possibilità"}).click();
   await page.getByRole("radio", {name:/Officina/}).check();
+  await page.getByLabel("Complessità del progetto").selectOption("ESSENTIAL");
+  await expect(page.getByTestId("authoring-focus-stages")).not.toContainText("Produzione");
   await page.getByRole("button", {name:"Crea il Percorso"}).click();
   await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
   const projectUrl = page.url();
   await page.reload();
   await expect(page.getByRole("textbox", {name:"Titolo del Percorso"})).toHaveValue("Indagine prova");
+  await expect(page.getByLabel("Complessità del progetto")).toHaveValue("ESSENTIAL");
   await page.getByRole("navigation", {name:"Fasi del Percorso"}).getByRole("button",{name:"Esperienza"}).click();
   await expect(page.getByRole("button",{name:/Officina/})).toHaveClass(/active/);
   await expect.poll(() => page.evaluate(() => {
@@ -322,4 +325,33 @@ test("UX1: non-narrative topic, no forced choice, readable at 320px", async ({ p
   await page.getByRole("button",{name:"Crea il Percorso"}).click();
   await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1") ?? "[]")[0].experience.grammar)).toBe("");
+});
+
+test("UX1b: profile is reversible on an existing project without changing its content or approvals", async ({page}) => {
+  await page.setViewportSize({width:390,height:844});
+  await openMuseo(page);
+  const snapshot = () => page.evaluate(projectId => {
+    const p = JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1") ?? "[]")
+      .find((item:{projectId:string}) => item.projectId === projectId);
+    const {authoringComplexity, revision, updatedAt, ...content} = p;
+    return {authoringComplexity, content};
+  }, MUSEO);
+  const before = await snapshot();
+  await page.getByLabel("Complessità del progetto").selectOption("ADVANCED");
+  await expect(page.getByTestId("authoring-focus-stages")).toContainText("Produzione");
+  await page.reload();
+  await expect(page.getByLabel("Complessità del progetto")).toHaveValue("ADVANCED");
+  expect((await snapshot()).content).toEqual(before.content);
+  await page.getByLabel("Complessità del progetto").selectOption("ESSENTIAL");
+  await page.getByText("Controlli da prevedere", {exact:true}).click();
+  await expect(page.getByText("Scelte: destinazioni, conseguenze e chiusure", {exact:true})).toBeVisible();
+  await expect(page.getByText("Sistema: condizioni iniziali, segnali ed effetti osservabili", {exact:true})).toBeVisible();
+  await expect(page.getByRole("navigation", {name:"Fasi del Percorso"}).getByRole("button",{name:"Revisione"})).toBeEnabled();
+  await expect(page.getByRole("navigation", {name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"})).toBeEnabled();
+  await page.reload();
+  await expect(page.getByLabel("Complessità del progetto")).toHaveValue("ESSENTIAL");
+  expect((await snapshot()).content).toEqual(before.content);
+  await page.getByLabel("Complessità del progetto").selectOption("");
+  await expect.poll(async () => (await snapshot()).authoringComplexity).toBeUndefined();
+  expect((await snapshot()).content).toEqual(before.content);
 });
