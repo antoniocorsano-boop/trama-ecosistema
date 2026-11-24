@@ -66,3 +66,12 @@ export function updateWorldChoiceStatus(
   if (!found) throw new Error("SCENE_VARIATION_NOT_FOUND");
   return result;
 }
+
+/** Il fuoco della scena appartiene alla scena esistente, non a una nuova bozza. */
+export function updateSceneFocus(scene: PathwayScene, locationId: string): PathwayScene {
+  if (!scene.stage || !scene.stage.locations?.some(location => location.id === locationId)) {
+    throw new Error("SCENE_FOCUS_LOCATION_NOT_FOUND");
+  }
+  if (scene.stage.focusLocationId === locationId) return scene;
+  return { ...scene, stage: { ...scene.stage, focusLocationId: locationId } };
+}

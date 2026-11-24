@@ -9,7 +9,7 @@ import type {
 import { EXPERIENCE_FORMS } from "../lib/experience-forms";
 import { ExperienceFormMark } from "./ExperienceFormMark";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
-import { updateWorldChoiceStatus } from "../lib/world-composer";
+import { updateSceneFocus, updateWorldChoiceStatus } from "../lib/world-composer";
 
 type Props = {
   project: PathwayProject;
@@ -343,7 +343,13 @@ export function SceneEditor({ project, onPatch }: Props) {
         <button className="primary-action" onClick={addScene}>Aggiungi scena</button>
       </div>
 
-      <SceneDesignComparison project={project} onUpdateChoiceState={updateChoiceState} />
+      <SceneDesignComparison project={project} onUpdateChoiceState={updateChoiceState}
+        onUpdateFocus={(sceneId, locationId) => {
+          const source = project.scenes.find(scene => scene.sceneId === sceneId);
+          if (!source) return;
+          const updated = updateSceneFocus(source, locationId);
+          if (updated !== source) updateScene(sceneId, { stage: updated.stage });
+        }} />
 
       {project.scenes.length === 0 ? (
         <div className="empty-stage">

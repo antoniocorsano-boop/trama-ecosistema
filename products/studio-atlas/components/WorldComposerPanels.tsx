@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { PathwayProject, SceneWorldState } from "../lib/model";
+import type { PathwayProject, PathwayScene, SceneWorldState } from "../lib/model";
 import { compareSceneWorld, worldPlaces } from "../lib/world-composer";
 import { AwcTechnicalEvidencePanel } from "./AwcTechnicalEvidencePanel";
 
@@ -88,12 +88,88 @@ function ObservableState({ state, fallback }: { state: SceneWorldState | null; f
   );
 }
 
+
+const LOCATION_LABELS = { ENTRY: "Ingresso", ROOM: "Ambiente", CONTROL: "Controllo", LAB: "Laboratorio" } as const;
+
+function SceneComposition({ scene, scenes, onFocus }: {
+  scene: PathwayScene;
+  scenes: PathwayScene[];
+  onFocus: (sceneId: string, locationId: string) => void;
+}) {
+  const locations = scene.stage?.locations ?? [];
+  const focus = locations.find(location => location.id === scene.stage?.focusLocationId);
+  const evidence = scene.stage?.evidence ?? [];
+  const character = scene.stage?.characterBeat;
+  const [inspected, setInspected] = useState<string | null>(null);
+  const current = locations.find(location => location.id === inspected) ?? focus;
+  return (
+    <section className="composition-board" aria-labelledby="composition-heading">
+      <header>
+        <h3 id="composition-heading">Composizione visuale</h3>
+        <p>Una tavola di lavoro della scena esistente: luoghi, indizi, azione e conseguenze. Non è un rendering né un'anteprima per gli studenti.</p>
+      </header>
+      <div className="composition-layout">
+        <div className="composition-space">
+          <h4>{scene.title || "Scena senza titolo"}</h4>
+          <p>{scene.visibleSituation || "Situazione da descrivere nell’editor della scena."}</p>
+          {locations.length > 0 ? (
+            <>
+              <div className="composition-map" role="group" aria-label="Mappa schematica dei luoghi">
+                {locations.map(location => (
+                  <button type="button" key={location.id}
+                    data-position={location.position}
+                    className="composition-location"
+                    aria-pressed={current?.id === location.id}
+                    onClick={() => setInspected(location.id)}>
+                    <small>{LOCATION_LABELS[location.position]}</small>
+                    <strong>{location.label}</strong>
+                    {focus?.id === location.id && <span>Fuoco attuale</span>}
+                    <span>{evidence.filter(item => item.locationId === location.id).length} indizi</span>
+                  </button>
+                ))}
+              </div>
+              {current && <div className="composition-inspector" aria-live="polite">
+                <strong>{current.label}</strong>
+                <p>{current.detail}</p>
+                <ul>{evidence.filter(item => item.locationId === current.id).map(item =>
+                  <li key={item.id}><strong>{item.label}</strong><span>{item.detail}</span></li>
+                )}</ul>
+                <button type="button" className="secondary-action" disabled={current.id === focus?.id}
+                  onClick={() => onFocus(scene.sceneId, current.id)}>Imposta come fuoco della scena</button>
+              </div>}
+            </>
+          ) : <p className="composition-empty">Nessun luogo visuale documentato: non vengono inventati ambienti o immagini.</p>}
+          {character && <div className="composition-character">
+            <strong>{character.name} · {character.role}</strong><p>{character.line}</p>
+          </div>}
+        </div>
+        <aside className="composition-flow" aria-label="Sequenza educativa">
+          <div><small>01 · Azione</small><p>{scene.learnerAction || "Da definire"}</p></div>
+          <div><small>02 · Conseguenza</small><p>{scene.consequence || "Da definire"}</p></div>
+          {scene.interaction === "CHOICE" && <div>
+            <small>Possibilità e destinazioni</small>
+            <ul>{scene.choices.map(choice => <li key={choice.choiceId}>
+              <strong>{choice.label || "Scelta da definire"}</strong>
+              <span>{choice.feedback || "Conseguenza da definire"}</span>
+              <span>→ {scenes.find(item => item.sceneId === choice.targetSceneId)?.title || "Destinazione non definita"}</span>
+            </li>)}</ul>
+          </div>}
+          <div><small>03 · Scoperta</small><p>{scene.reveal || "Da definire"}</p></div>
+        </aside>
+      </div>
+      <p className="world-composer-note">Esplorare la tavola non modifica il Percorso. Impostare il fuoco salva nella scena e riapre la revisione, senza autorizzare la pubblicazione.</p>
+    </section>
+  );
+}
+
 export function SceneDesignComparison({
   project,
   onUpdateChoiceState,
+  onUpdateFocus,
 }: {
   project: PathwayProject;
   onUpdateChoiceState: (sceneId: string, choiceId: string, status: string) => void;
+  onUpdateFocus: (sceneId: string, locationId: string) => void;
 }) {
   const [selectedSceneId, setSelectedSceneId] = useState(project.scenes[0]?.sceneId ?? "");
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
@@ -135,6 +211,7 @@ export function SceneDesignComparison({
         </select>
       </label>
       <p className="world-composer-note"><strong>Lo studente:</strong> {scene.learnerAction}</p>
+      <SceneComposition key={scene.sceneId} scene={scene} scenes={project.scenes} onFocus={onUpdateFocus} />
       {observableChoices.length > 0 ? (
         <fieldset className="world-composer-fieldset">
           <legend>Confronta una conseguenza osservabile</legend>

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createMuseoZeroPilotProject } from "./canonical/museo-zero";
-import { compareSceneWorld, updateWorldChoiceStatus, worldPlaces } from "./world-composer";
+import { compareSceneWorld, updateSceneFocus, updateWorldChoiceStatus, worldPlaces } from "./world-composer";
 
 test("AWC S2: riusa luoghi e identità dal progetto canonico", () => {
   const project = createMuseoZeroPilotProject();
@@ -62,4 +62,19 @@ test("AWC S2: una conseguenza modificata resta separata dallo stato originale", 
     () => updateWorldChoiceStatus(project.scenes, "MZ4_TEST_MAPPING", "switch-b", " "),
     /EMPTY_SCENE_VARIATION/,
   );
+});
+
+test("UX2b: modifica solo il fuoco reale, senza clonare o inventare luoghi", () => {
+  const project = createMuseoZeroPilotProject();
+  const scene = project.scenes.find(item => (item.stage?.locations?.length ?? 0) > 1);
+  assert.ok(scene?.stage?.locations);
+  const target = scene.stage.locations.find(location => location.id !== scene.stage?.focusLocationId);
+  assert.ok(target);
+  const before = JSON.stringify(scene);
+  const next = updateSceneFocus(scene, target.id);
+  assert.equal(next.stage?.focusLocationId, target.id);
+  assert.deepEqual(next, { ...scene, stage: { ...scene.stage, focusLocationId: target.id } });
+  assert.equal(JSON.stringify(scene), before);
+  assert.equal(updateSceneFocus(next, target.id), next);
+  assert.throws(() => updateSceneFocus(scene, "invented"), /SCENE_FOCUS_LOCATION_NOT_FOUND/);
 });

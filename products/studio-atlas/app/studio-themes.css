@@ -89,3 +89,25 @@ body { background: var(--paper); }
 .catalog-tool label>span{display:grid;gap:4px;min-width:0}
 .authoring-catalog button{min-height:44px;max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .authoring-catalog :is(button,input,select):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* UX2b: schematic composition, shared semantic model and both studio themes. */
+.composition-board{min-width:0;max-width:100%;padding:clamp(12px,2vw,22px);border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);overflow-wrap:anywhere}
+.composition-board h3,.composition-board h4{margin:0 0 8px;font-family:var(--studio-heading)}
+.composition-board p{margin:0 0 10px;color:var(--ink)}
+.composition-layout{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px}
+.composition-space,.composition-flow{min-width:0}
+.composition-map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px;background:var(--accent-soft);border:1px solid var(--line);border-radius:var(--studio-radius)}
+.composition-location{display:grid;gap:5px;text-align:left;min-width:0;min-height:74px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);overflow-wrap:anywhere;font:inherit;cursor:pointer}
+.composition-location[aria-pressed=true]{border:2px solid var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.composition-location:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.composition-location small,.composition-flow small{color:var(--muted);font-weight:650}
+.composition-location span,.composition-inspector li span,.composition-flow li span{display:block;font-size:.85rem}
+.composition-inspector,.composition-character,.composition-flow>div{min-width:0;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--panel)}
+.composition-flow>div:first-child{margin-top:0}
+.composition-flow ul,.composition-inspector ul{margin:8px 0;padding-inline-start:18px;display:grid;gap:8px}
+.composition-inspector button{max-width:100%;white-space:normal}
+.composition-empty{padding:12px;border:1px dashed var(--line);border-radius:var(--studio-radius)}
+:root[data-studio-theme="atelier"] .composition-map{background:repeating-linear-gradient(0deg,transparent 0 27px,var(--line) 28px 29px),var(--paper)}
+:root[data-studio-theme="atelier"] .composition-location{border-radius:14px 9px 12px 8px}
+@media(max-width:650px){.composition-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:360px){.composition-map{grid-template-columns:minmax(0,1fr)}}

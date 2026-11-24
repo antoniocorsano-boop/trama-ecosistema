@@ -434,3 +434,23 @@ test("UX2a: suggested environment, reversible toolbox and actual editor access",
   await expect(page.getByRole("textbox",{name:"Titolo scena 1"})).toHaveValue("Il campo");
   await expect(page.getByRole("button",{name:"Anteprima di revisione"})).toBeDisabled();
 });
+
+test("UX2b: composizione visuale reale nei due temi, senza luoghi inventati", async ({page}) => {
+  await page.setViewportSize({width:390,height:844});
+  await openMuseo(page);
+  await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Scene"}).click();
+  const board=page.getByRole("region",{name:"Composizione visuale"});
+  await expect(board).toBeVisible();
+  await expect(board.getByRole("complementary",{name:"Sequenza educativa"})).toBeVisible();
+  const map=board.getByRole("group",{name:"Mappa schematica dei luoghi"});
+  await expect(map).toBeVisible();
+  const choices=map.getByRole("button");
+  expect(await choices.count()).toBeGreaterThan(0);
+  await choices.first().click();
+  await expect(choices.first()).toHaveAttribute("aria-pressed","true");
+  await page.getByLabel("Stile dello Studio").selectOption("atelier");
+  await expect(board).toBeVisible();
+  await expect(choices.first()).toHaveAttribute("aria-pressed","true");
+  await page.setViewportSize({width:320,height:800});
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
