@@ -7,6 +7,7 @@ import type {
   WorldDraft,
 } from "../lib/model";
 import { EXPERIENCE_FORMS } from "../lib/experience-forms";
+import { ExperienceFormMark } from "./ExperienceFormMark";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 import { updateWorldChoiceStatus } from "../lib/world-composer";
 
@@ -233,7 +234,7 @@ export function ExperienceEditor({ project, onPatch }: Props) {
               humanState: "SCENES",
             })}
           >
-            <strong>{title}</strong>
+            <strong className="experience-form-title"><ExperienceFormMark grammar={value} />{title}</strong>
             <span>{description}</span>
           </button>
         ))}

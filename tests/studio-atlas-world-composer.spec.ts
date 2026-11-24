@@ -355,3 +355,51 @@ test("UX1b: profile is reversible on an existing project without changing its co
   await expect.poll(async () => (await snapshot()).authoringComplexity).toBeUndefined();
   expect((await snapshot()).content).toEqual(before.content);
 });
+
+
+test("UX-DESIGN: two themes, persistence and the same project data", async ({page}) => {
+  await page.setViewportSize({width:390,height:844});
+  await openMuseo(page);
+  const selector=page.getByLabel("Stile dello Studio");
+  const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+  await expect(selector).toHaveValue("contemporary");
+  await selector.selectOption("atelier");
+  await expect(page.locator("html")).toHaveAttribute("data-studio-theme","atelier");
+  await expect(page.getByRole("textbox",{name:"Titolo del Percorso"})).toBeVisible();
+  const ink=await page.locator("html").evaluate(el=>getComputedStyle(el).getPropertyValue("--paper").trim());
+  await page.reload();
+  await expect(selector).toHaveValue("atelier");
+  await expect(page.locator("html")).toHaveAttribute("data-studio-theme","atelier");
+  expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+  await selector.selectOption("contemporary");
+  await expect(page.locator("html")).toHaveAttribute("data-studio-theme","contemporary");
+  expect(await page.locator("html").evaluate(el=>getComputedStyle(el).getPropertyValue("--paper").trim())).not.toBe(ink);
+  expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+  await page.reload();
+  await expect(selector).toHaveValue("contemporary");
+});
+
+test("UX-DESIGN: Atelier assets decode locally, accessible choices and 320px reflow", async ({page}) => {
+  await page.setViewportSize({width:320,height:780});
+  await page.goto(STUDIO+"/nuovo");
+  await page.getByLabel("Stile dello Studio").selectOption("atelier");
+  await expect(page.locator("html")).toHaveAttribute("data-studio-theme","atelier");
+  const assets=await page.evaluate(async ()=>{
+    return Promise.all(["compass","idea"].map(async name=>{
+      const img=new Image(); img.src="/design/atelier/"+name+".webp"; await img.decode();
+      return [img.naturalWidth,img.naturalHeight];
+    }));
+  });
+  expect(assets).toEqual([[200,116],[120,104]]);
+  await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Indagine sui sensori");
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  await expect(page.getByRole("radio",{name:/Indagine/})).toBeVisible();
+  await page.getByRole("radio",{name:/Indagine/}).check();
+  await page.getByLabel("Complessità del progetto").selectOption("ARTICULATED");
+  await page.evaluate(()=>{document.documentElement.style.fontSize="200%";});
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.getByRole("button",{name:"Crea il Percorso"}).click();
+  await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
+  await expect(page.getByLabel("Stile dello Studio")).toHaveValue("atelier");
+  await expect(page.getByLabel("Complessità del progetto")).toHaveValue("ARTICULATED");
+});

@@ -7,6 +7,7 @@ import { createProject } from "../lib/store";
 import { EXPERIENCE_FORMS, suggestExperienceForms } from "../lib/experience-forms";
 import { EMPTY_STORY, EMPTY_WORLD, type ExperienceGrammar, type PathwayProject } from "../lib/model";
 import { AuthoringProfileField } from "./AuthoringProfileField";
+import { ExperienceFormMark } from "./ExperienceFormMark";
 
 export function NewPathwayForm() {
   const router = useRouter();
@@ -82,7 +83,7 @@ export function NewPathwayForm() {
               return <label className="intent-form-option" key={item.id}>
                 <input type="radio" name="experience-form" value={item.id} checked={grammar === item.id}
                   onChange={() => setGrammar(item.id)} />
-                <span><strong>{item.title}</strong>{suggested && <small className="intent-recommended">Suggerita · {suggested.matches.join(", ")}</small>}
+                <span><strong className="experience-form-title"><ExperienceFormMark grammar={item.id} />{item.title}</strong>{suggested && <small className="intent-recommended">Suggerita · {suggested.matches.join(", ")}</small>}
                   <span>{item.description}</span>{suggested && <small>{item.reason}</small>}</span>
               </label>;
             })}

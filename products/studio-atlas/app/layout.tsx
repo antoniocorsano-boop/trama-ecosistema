@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "../components/VisualFactoryStage.css";
+import "./studio-themes.css";
+import { StudioAppearance } from "../components/StudioAppearance";
 
 export const metadata: Metadata = {
   title: "Studio Atlas",
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="it">
-      <body>{children}</body>
+      <body><StudioAppearance />{children}</body>
     </html>
   );
 }
