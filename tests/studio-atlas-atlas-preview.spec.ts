@@ -406,10 +406,10 @@ for(const illustrated of [false,true]) test(illustrated?"ESS-01B agriculture: im
     await expect(figure).toContainText("Il terreno trattiene parte dell’acqua");
     await figure.screenshot({path:testInfo.outputPath("ess-01b-learner-image.png")});
   }
-  await popup.getByRole("button",{name:/Umidità del suolo/}).click();
+  await popup.locator(".experience-evidence-grid").getByRole("button",{name:/Umidità del suolo/}).click();
   await expect(popup.locator(".experience-evidence-detail").getByText("Il terreno trattiene parte dell’acqua disponibile alle radici.",{exact:true})).toBeVisible();
   await locations.getByRole("button",{name:/Irrigazione/}).click();
-  await popup.getByRole("button",{name:/Distribuzione dell’acqua/}).click();
+  await popup.locator(".experience-evidence-grid").getByRole("button",{name:/Distribuzione dell’acqua/}).click();
   await expect(popup.locator(".experience-evidence-detail").getByText("La distribuzione dipende dalla posizione dei tubi e dalle operazioni di irrigazione.",{exact:true})).toBeVisible();
   await popup.getByRole("button",{name:"Continua",exact:true}).click();
   await expect(popup.getByRole("heading",{name:"Un frutteto diverso"})).toBeVisible();
