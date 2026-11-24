@@ -24,6 +24,7 @@ import {
 } from "./AuthoringEditors";
 import { VisualFactoryStage } from "./VisualFactoryStage";
 import { AuthoringProfileField } from "./AuthoringProfileField";
+import { AuthoringCatalog } from "./AuthoringCatalog";
 import { deriveAuthoringPlan } from "../lib/authoring-plan";
 
 export function PathwayWorkspace({ id }: { id: string }) {
@@ -221,6 +222,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
                 aria-label="Idea del Percorso"
               />
               <AuthoringProfileField input={project} onChange={value => { if (value !== project.authoringComplexity) patchProject({ authoringComplexity: value }); }} />
+              <AuthoringCatalog project={{...project,idea:draftIdea}} onChange={value=>patchProject({authoringSelection:value})} onGoTo={setStage} />
               <div className="next-line">
                 <span>Continua dalla fase consigliata, oppure scegli una delle fasi disponibili.</span>
                 <button className="quiet-action" onClick={() => setStage(nextStage)}>Vai a {nextStage} →</button>

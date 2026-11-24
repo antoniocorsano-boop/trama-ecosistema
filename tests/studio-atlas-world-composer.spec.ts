@@ -403,3 +403,34 @@ test("UX-DESIGN: Atelier assets decode locally, accessible choices and 320px ref
   await expect(page.getByLabel("Stile dello Studio")).toHaveValue("atelier");
   await expect(page.getByLabel("Complessità del progetto")).toHaveValue("ARTICULATED");
 });
+
+test("UX2a: suggested environment, reversible toolbox and actual editor access",async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(STUDIO+"/nuovo");
+  await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Agricoltura, colture e paesaggio");
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  await page.getByRole("button",{name:"Ambiente naturale e rurale",exact:true}).click();
+  await expect(page.getByLabel("Ambientazione di progetto")).toHaveValue("NATURE");
+  await page.getByLabel("Complessità del progetto").selectOption("ESSENTIAL");
+  await page.getByRole("checkbox",{name:/Scelte e conseguenze/}).check();
+  await page.getByRole("checkbox",{name:/Simulazione e stati/}).check();
+  await expect(page.getByTestId("authoring-focus-stages")).toContainText("Mondo");
+  await page.getByRole("button",{name:"Crea il Percorso"}).click();
+  await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
+  await page.reload();
+  await expect(page.getByLabel("Ambientazione di progetto")).toHaveValue("NATURE");
+  await expect(page.getByRole("checkbox",{name:/Scelte e conseguenze/})).toBeChecked();
+  await page.getByRole("button",{name:"Apri scelte e conseguenze",exact:true}).click();
+  await expect(page.getByRole("button",{name:"Aggiungi scena"})).toBeVisible();
+  await page.getByRole("button",{name:"Aggiungi scena"}).click();
+  await page.getByRole("textbox",{name:"Titolo scena 1"}).fill("Il campo");
+  await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Idea"}).click();
+  await page.getByRole("checkbox",{name:/Scelte e conseguenze/}).uncheck();
+  await page.getByLabel("Ambientazione di progetto").selectOption("LAB");
+  await page.reload();
+  await expect(page.getByLabel("Ambientazione di progetto")).toHaveValue("LAB");
+  await expect(page.getByRole("checkbox",{name:/Scelte e conseguenze/})).not.toBeChecked();
+  await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Scene"}).click();
+  await expect(page.getByRole("textbox",{name:"Titolo scena 1"})).toHaveValue("Il campo");
+  await expect(page.getByRole("button",{name:"Anteprima di revisione"})).toBeDisabled();
+});

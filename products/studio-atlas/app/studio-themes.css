@@ -71,3 +71,21 @@ body { background: var(--paper); }
 @media (forced-colors: active) {
   .studio-appearance select,.studio-shell .primary-action,.workspace-shell .primary-action { border:1px solid ButtonText; }
 }
+
+/* Catalog: native selectors, quiet rows, both themes use the same tokens. */
+.authoring-catalog{min-width:0;max-width:100%;overflow-wrap:anywhere;border-top:1px solid var(--line);padding:24px 0 8px}
+.authoring-catalog h2{font-size:clamp(22px,3vw,30px);line-height:1.2;margin:0 0 14px}
+.authoring-catalog h3{font-size:1rem;margin:16px 0 8px}
+.catalog-note,.catalog-suggestions span,.catalog-tool small,.catalog-tool label>span>span{color:var(--muted);font-size:.9rem;line-height:1.5}
+.authoring-catalog>label{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;font-weight:650}
+.authoring-catalog select{width:100%;min-width:0;max-width:100%;min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--studio-radius);padding:8px}
+.catalog-suggestions p{margin:0 0 8px;display:grid;gap:4px}
+.catalog-suggestions button{justify-self:start;text-align:left}
+.catalog-tools{min-width:0;max-width:100%;border:0;padding:0;margin:24px 0 0}
+.catalog-tools legend{max-width:100%;font-weight:700;overflow-wrap:anywhere}
+.authoring-catalog .catalog-tool{min-width:0;padding:12px 0;border-bottom:1px solid var(--line)}
+.authoring-catalog .catalog-tool label,.studio-intent .seed-form .catalog-tool label{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:start;min-height:44px}
+.authoring-catalog .catalog-tool input[type=checkbox]{width:20px;height:20px;margin:3px 0;padding:0;accent-color:var(--accent)}
+.catalog-tool label>span{display:grid;gap:4px;min-width:0}
+.authoring-catalog button{min-height:44px;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.authoring-catalog :is(button,input,select):focus-visible{outline:2px solid var(--accent);outline-offset:3px}

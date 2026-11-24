@@ -1,0 +1,51 @@
+import type { PathwayProject, STAGES } from "./model";
+type Stage = (typeof STAGES)[number];
+
+export const ENVIRONMENTS = [
+  {id:"MUSEUM",title:"Museo e mostra",description:"Oggetti, reperti e indizi da osservare.",reason:"Permette di indagare fenomeni attraverso testimonianze e oggetti.",terms:["museo","mostra","reperti","patrimonio","indagine"]},
+  {id:"LAB",title:"Laboratorio",description:"Esperimenti, misure e confronto di risultati.",reason:"Rende visibili relazioni tra variabili e sistemi.",terms:["laboratorio","esperimento","esperimenti","sensori","sensore","automazione","energia","variabili","circuiti"]},
+  {id:"INDUSTRY",title:"Officina e industria",description:"Macchine, materiali e processi produttivi.",reason:"Consente di esplorare sequenze di lavoro e trasformazioni.",terms:["industria","fabbrica","officina","produzione","macchine","materiali","automazione"]},
+  {id:"NATURE",title:"Ambiente naturale e rurale",description:"Paesaggi, ecosistemi, colture e risorse.",reason:"Aiuta a collegare elementi naturali, tecnici e ambientali.",terms:["agricoltura","fattoria","colture","ecosistema","ecosistemi","paesaggio","natura","allevamento"]},
+  {id:"CITY",title:"Città e comunità",description:"Spazi, servizi, infrastrutture e vita quotidiana.",reason:"Collega i contenuti alla realtà sociale e alle scelte collettive.",terms:["citta","comunita","traffico","mobilita","servizi","urbanistica","cittadinanza"]},
+  {id:"HISTORY",title:"Ricostruzione storica",description:"Luoghi, epoche e fonti da confrontare.",reason:"Consente di contestualizzare fatti e trasformazioni.",terms:["storia","storico","epoca","romani","medioevo","antichita","fonti"]},
+  {id:"CUSTOM",title:"Ambiente personalizzato",description:"Un contesto da descrivere liberamente.",reason:"Lascia piena libertà di progettazione.",terms:[]},
+] as const;
+export type EnvironmentId = typeof ENVIRONMENTS[number]["id"];
+
+type Tool = {id:string; title:string; description:string; stage:Stage; availability:"EDITOR"|"PLANNING"|"PILOT";};
+export const AUTHORING_TOOLS = [
+  {id:"STORY",title:"Storia e personaggi",description:"Definisci protagonisti, motivazioni e situazione iniziale.",stage:"Storia",availability:"EDITOR"},
+  {id:"WORLD",title:"Ambienti e osservazioni",description:"Descrivi luoghi, oggetti osservabili e ruolo dello studente.",stage:"Mondo",availability:"EDITOR"},
+  {id:"FORM",title:"Forma dell’esperienza",description:"Scegli e motiva l’attività educativa.",stage:"Esperienza",availability:"EDITOR"},
+  {id:"SCENES",title:"Sequenza delle scene",description:"Componi situazione, azione, conseguenza e scoperta.",stage:"Scene",availability:"EDITOR"},
+  {id:"CHOICES",title:"Scelte e conseguenze",description:"Nelle scene imposta una scelta e collega gli esiti.",stage:"Scene",availability:"EDITOR"},
+  {id:"SIMULATION",title:"Simulazione e stati",description:"Progetta condizioni ed effetti; il generatore generale non è collegato.",stage:"Mondo",availability:"PLANNING"},
+  {id:"HOTSPOTS",title:"Punti interattivi",description:"Definisci cosa osservare; il posizionamento visuale generale non è disponibile.",stage:"Mondo",availability:"PLANNING"},
+  {id:"VISUAL",title:"Produzione di immagini",description:"La produzione delle risorse è attualmente collegata al pilota Museo Zero.",stage:"Produzione",availability:"PILOT"},
+  {id:"PREVIEW",title:"Anteprima e verifica",description:"Apri la fase di prova; restano necessari i controlli previsti.",stage:"Prova",availability:"EDITOR"},
+] as const satisfies readonly Tool[];
+export type AuthoringToolId = typeof AUTHORING_TOOLS[number]["id"];
+export type AuthoringSelection = {environment?:EnvironmentId; tools:AuthoringToolId[]};
+
+export function normalizeAuthoringSelection(value: unknown): AuthoringSelection | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const raw = value as Record<string, unknown>;
+  const environment = ENVIRONMENTS.find(item=>item.id===raw.environment)?.id;
+  const tools = Array.isArray(raw.tools) ? AUTHORING_TOOLS.filter(item=>(raw.tools as unknown[]).includes(item.id)).map(item=>item.id) : [];
+  return { ...(environment ? {environment}:{}), tools };
+}
+export function suggestEnvironments(idea:string) {
+  const words = new Set(idea.normalize("NFD").replace(/\p{M}/gu,"").toLowerCase().match(/[a-z0-9]+/g)??[]);
+  return ENVIRONMENTS.map((environment,order)=>({environment,order,matches:environment.terms.filter(word=>words.has(word))}))
+    .filter(item=>item.matches.length>0).sort((a,b)=>b.matches.length-a.matches.length||a.order-b.order).slice(0,3);
+}
+export function suggestedTools(project: Pick<PathwayProject,"experience"|"authoringComplexity"|"scenes">) {
+  const ids = new Set<AuthoringToolId>(["FORM","SCENES","PREVIEW"]);
+  const grammar=project.experience.grammar;
+  if(grammar==="VISUAL_NARRATIVE"||project.authoringComplexity==="ADVANCED")ids.add("STORY");
+  if(grammar==="INQUIRY_EVIDENCE"||grammar==="ENVIRONMENTAL_STORYTELLING"||grammar==="SIMULATION_MICROWORLD")ids.add("WORLD");
+  if(grammar==="BRANCHING_CONSEQUENCE"||project.scenes.some(scene=>scene.interaction==="CHOICE"))ids.add("CHOICES");
+  if(grammar==="SIMULATION_MICROWORLD")ids.add("SIMULATION");
+  if(grammar==="ENVIRONMENTAL_STORYTELLING"||grammar==="INQUIRY_EVIDENCE")ids.add("HOTSPOTS");
+  return AUTHORING_TOOLS.filter(tool=>ids.has(tool.id));
+}

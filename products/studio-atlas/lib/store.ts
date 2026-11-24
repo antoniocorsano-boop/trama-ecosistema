@@ -7,6 +7,7 @@ import {
   type PathwayProject,
 } from "./model";
 import { parseAuthoringComplexity } from "./authoring-plan";
+import { normalizeAuthoringSelection } from "./authoring-catalog";
 import {
   MUSEO_ZERO_PRODUCT_REVIEW_REF,
   MUSEO_ZERO_PROJECT_ID,
@@ -32,6 +33,7 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     idea: raw.idea ?? "",
     ageBand: raw.ageBand ?? "lower-secondary",
     authoringComplexity: parseAuthoringComplexity(raw.authoringComplexity),
+    authoringSelection: normalizeAuthoringSelection(raw.authoringSelection),
     humanState: raw.humanState ?? "IDEA",
     productionState: raw.productionState ?? "NOT_REQUESTED",
     story: { ...EMPTY_STORY, ...(raw.story ?? {}) },
@@ -91,7 +93,7 @@ export function getProject(projectId: string): PathwayProject | null {
   return readAll().find((project) => project.projectId === projectId) ?? null;
 }
 
-export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand"> & { experience?: PathwayProject["experience"]; authoringComplexity?: PathwayProject["authoringComplexity"] }) {
+export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand"> & { experience?: PathwayProject["experience"]; authoringComplexity?: PathwayProject["authoringComplexity"]; authoringSelection?: PathwayProject["authoringSelection"] }) {
   const now = new Date().toISOString();
   const project: PathwayProject = {
     projectId: crypto.randomUUID(),
@@ -99,6 +101,7 @@ export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ag
     idea: input.idea.trim(),
     ageBand: input.ageBand,
     authoringComplexity: parseAuthoringComplexity(input.authoringComplexity),
+    authoringSelection: normalizeAuthoringSelection(input.authoringSelection),
     humanState: "IDEA",
     productionState: "NOT_REQUESTED",
     story: { ...EMPTY_STORY },

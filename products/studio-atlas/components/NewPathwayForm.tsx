@@ -7,6 +7,8 @@ import { createProject } from "../lib/store";
 import { EXPERIENCE_FORMS, suggestExperienceForms } from "../lib/experience-forms";
 import { EMPTY_STORY, EMPTY_WORLD, type ExperienceGrammar, type PathwayProject } from "../lib/model";
 import { AuthoringProfileField } from "./AuthoringProfileField";
+import { AuthoringCatalog } from "./AuthoringCatalog";
+import type { AuthoringSelection } from "../lib/authoring-catalog";
 import { ExperienceFormMark } from "./ExperienceFormMark";
 
 export function NewPathwayForm() {
@@ -17,6 +19,7 @@ export function NewPathwayForm() {
   const [stage, setStage] = useState<"idea" | "forms">("idea");
   const [grammar, setGrammar] = useState<ExperienceGrammar>("");
   const [complexity, setComplexity] = useState<PathwayProject["authoringComplexity"]>();
+  const [selection,setSelection] = useState<AuthoringSelection>();
   const [error, setError] = useState(false);
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
@@ -37,7 +40,7 @@ export function NewPathwayForm() {
     setError(false);
     try {
       const project = createProject({ title: title.trim() || "Nuovo percorso", idea, ageBand,
-        experience: { grammar, rationale: "" }, authoringComplexity: complexity });
+        experience: { grammar, rationale: "" }, authoringComplexity: complexity, authoringSelection:selection });
       router.push(`/percorso/${project.projectId}`);
     } catch {
       savingRef.current = false;
@@ -90,7 +93,8 @@ export function NewPathwayForm() {
             <label className="intent-form-option"><input type="radio" name="experience-form" value=""
               checked={grammar === ""} onChange={() => setGrammar("")}/><span><strong>Deciderò più avanti</strong><span>Inizia con una bozza senza scegliere una forma.</span></span></label>
           </fieldset>
-          <AuthoringProfileField input={{ authoringComplexity: complexity, experience: { grammar, rationale: "" }, scenes: [], story: EMPTY_STORY, world: EMPTY_WORLD }} onChange={setComplexity} />
+          <AuthoringProfileField input={{ authoringComplexity: complexity, authoringSelection:selection, experience: { grammar, rationale: "" }, scenes: [], story: EMPTY_STORY, world: EMPTY_WORLD }} onChange={setComplexity} />
+          <AuthoringCatalog project={{idea,experience:{grammar,rationale:""},authoringComplexity:complexity,authoringSelection:selection,scenes:[]}} onChange={setSelection} />
           <div className="intent-actions">
             <button className="quiet-action" type="button" disabled={saving} onClick={() => setStage("idea")}>Modifica l’idea</button>
             <button className="primary-action" type="submit" disabled={saving}>{saving ? "Salvataggio…" : "Crea il Percorso"}</button>

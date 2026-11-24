@@ -1,7 +1,8 @@
 import { STAGES, type AuthoringComplexity, type PathwayProject } from "./model";
+import { AUTHORING_TOOLS } from "./authoring-catalog";
 
 type Stage = (typeof STAGES)[number];
-type Input = Pick<PathwayProject, "authoringComplexity" | "experience" | "scenes" | "story" | "world">;
+type Input = Pick<PathwayProject, "authoringComplexity" | "authoringSelection" | "experience" | "scenes" | "story" | "world">;
 
 export const AUTHORING_PROFILES = [
   { id: "ESSENTIAL", title: "Essenziale", description: "Attività circoscritta, pochi contenuti e interazioni." },
@@ -15,13 +16,14 @@ export function parseAuthoringComplexity(value: unknown): AuthoringComplexity | 
 
 export function deriveAuthoringPlan(input: Input) {
   const grammar = input.experience.grammar;
-  const hasBranching = grammar === "BRANCHING_CONSEQUENCE" ||
+  const selected = new Set(input.authoringSelection?.tools ?? []);
+  const hasBranching = selected.has("CHOICES") || grammar === "BRANCHING_CONSEQUENCE" ||
     input.scenes.some(scene => scene.interaction === "CHOICE" || scene.choices.length > 0);
-  const hasState = grammar === "SIMULATION_MICROWORLD" ||
+  const hasState = selected.has("SIMULATION") || grammar === "SIMULATION_MICROWORLD" ||
     input.scenes.some(scene => !!scene.world || scene.choices.some(choice => !!choice.worldAfter));
-  const hasStory = grammar === "VISUAL_NARRATIVE" || Object.values(input.story).some(value => !!value.trim()) ||
+  const hasStory = selected.has("STORY") || grammar === "VISUAL_NARRATIVE" || Object.values(input.story).some(value => !!value.trim()) ||
     input.scenes.some(scene => !!scene.stage?.characterBeat);
-  const hasWorld = grammar === "ENVIRONMENTAL_STORYTELLING" || Object.values(input.world).some(value => !!value.trim()) ||
+  const hasWorld = !!input.authoringSelection?.environment || selected.has("WORLD") || selected.has("HOTSPOTS") || grammar === "ENVIRONMENTAL_STORYTELLING" || Object.values(input.world).some(value => !!value.trim()) ||
     input.scenes.some(scene => !!scene.stage?.locations?.length);
   const suggested: AuthoringComplexity = hasBranching && hasState ? "ADVANCED"
     : hasBranching || hasState || hasStory || hasWorld || grammar === "INQUIRY_EVIDENCE" || input.scenes.length > 2
@@ -33,6 +35,7 @@ export function deriveAuthoringPlan(input: Input) {
   if (effective !== "ESSENTIAL" || hasStory) focus.add("Storia");
   if (effective !== "ESSENTIAL" || hasWorld || hasState) focus.add("Mondo");
   if (effective !== "ESSENTIAL") focus.add("Produzione");
+  for(const tool of AUTHORING_TOOLS) if(selected.has(tool.id)) focus.add(tool.stage);
   const checks = [
     "Obiettivi, destinatari, azione ed evidenza di apprendimento",
     "Accessibilità, diritti delle risorse, riservatezza e revisione",

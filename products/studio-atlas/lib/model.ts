@@ -202,6 +202,7 @@ export type AuthoringComplexity = "ESSENTIAL" | "ARTICULATED" | "ADVANCED";
 
 export type PathwayProject = {
   authoringComplexity?: AuthoringComplexity;
+  authoringSelection?: import("./authoring-catalog").AuthoringSelection;
   projectId: string;
   title: string;
   idea: string;
