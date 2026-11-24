@@ -300,8 +300,25 @@ test("UX1: non-narrative topic, no forced choice, readable at 320px", async ({ p
   await expect(page.getByRole("radio",{name:/Laboratorio e simulazione/})).toBeVisible();
   await expect(page.getByText(/Suggerita · .*variabili/)).toBeVisible();
   await expect(page.getByRole("radio",{name:/Deciderò più avanti/})).toBeChecked();
+  async function assertReflow() {
+    const geometry = await page.evaluate(() => ({
+      viewport: window.innerWidth,
+      width: document.documentElement.scrollWidth,
+      overflowing: Array.from(document.querySelectorAll(".studio-intent, .studio-intent *"))
+        .map(element => ({ element: element.tagName, className: element.getAttribute("class"), right: Math.round(element.getBoundingClientRect().right) }))
+        .filter(item => item.right > window.innerWidth + 1).slice(0, 15),
+    }));
+    expect(geometry.width, JSON.stringify(geometry)).toBeLessThanOrEqual(geometry.viewport);
+    expect(geometry.overflowing, JSON.stringify(geometry)).toEqual([]);
+  }
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+  await assertReflow();
+  await page.getByRole("button",{name:"Modifica l’idea"}).click();
+  await expect(page.getByRole("heading",{name:"Che cosa vuoi far scoprire?"})).toBeVisible();
+  await assertReflow();
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  await expect(page.getByRole("radio",{name:/Deciderò più avanti/})).toBeChecked();
+  await assertReflow();
   await page.getByRole("button",{name:"Crea il Percorso"}).click();
   await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1") ?? "[]")[0].experience.grammar)).toBe("");

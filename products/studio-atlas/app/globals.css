@@ -609,3 +609,26 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
 .studio-intent .intent-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .studio-intent button { min-height: 44px; }
 .studio-intent :is(button,input,select,textarea,a):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* UX1a R1: constrain intrinsic grid/flex widths rather than conceal overflow.
+   Reflow applies at enlarged text as well as narrow viewports. */
+.studio-intent { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.studio-intent .seed-form { grid-template-columns: minmax(0, 1fr); }
+.studio-intent .seed-form > *,
+.studio-intent .seed-form label,
+.studio-intent .intent-forms legend,
+.studio-intent .intent-form-option > span,
+.studio-intent .intent-form-option > span > *,
+.studio-intent .intent-actions > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.studio-intent .seed-form label:not(.intent-form-option) { grid-template-columns: minmax(0, 1fr); }
+.studio-intent .seed-form :is(textarea,select,input:not([type="radio"])) { min-width: 0; max-width: 100%; }
+.studio-intent .intent-forms { width: 100%; max-width: 100%; }
+.studio-intent button { white-space: normal; text-align: center; overflow-wrap: anywhere; max-width: 100%; }
+@media (max-width: 480px) {
+  .studio-intent .intent-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .studio-intent .intent-actions button { width: 100%; }
+}
