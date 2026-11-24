@@ -9,6 +9,7 @@ import {
   updateProject,
 } from "../lib/store";
 import type { PathwayProject } from "../lib/model";
+import { AtelierWorkflow } from "./AtelierWorkflow";
 
 export function StudioHome() {
   const router = useRouter();
@@ -34,6 +35,8 @@ export function StudioHome() {
         </div>
         <div className="studio-home-actions"><Link className="secondary-action" href="/edutwin">Continua da ChatGPT</Link><Link className="secondary-action" href="/attivita">Importa attività</Link><Link className="primary-action" href="/nuovo">Nuovo percorso</Link></div>
       </header>
+
+      <AtelierWorkflow />
 
       <section className="home-intro">
         <p>

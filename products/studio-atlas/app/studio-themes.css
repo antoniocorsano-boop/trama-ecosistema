@@ -111,3 +111,33 @@ body { background: var(--paper); }
 :root[data-studio-theme="atelier"] .composition-location{border-radius:14px 9px 12px 8px}
 @media(max-width:650px){.composition-layout{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:360px){.composition-map{grid-template-columns:minmax(0,1fr)}}
+
+/* UX-DESIGN-02: visual teacher-to-learner composition, not a static dashboard. */
+.atelier-workflow{min-width:0;max-width:100%;margin:26px auto 36px;padding:clamp(16px,3vw,32px);border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);overflow-wrap:anywhere}
+.atelier-workflow h2,.atelier-workflow h3{font-family:var(--studio-heading);line-height:1.2;letter-spacing:-.015em;margin:0}
+.atelier-workflow h2{font-size:clamp(24px,3vw,34px)}
+.atelier-workflow h3{font-size:clamp(18px,2vw,23px)}
+.atelier-workflow p{margin:5px 0 0;color:var(--muted);line-height:1.5;font-size:.95rem}
+.atelier-intent,.atelier-compose,.atelier-result{text-align:center;min-width:0}
+.atelier-intent .atelier-side-label,.atelier-result .atelier-side-label{font-size:.86rem;color:var(--accent);font-weight:650;letter-spacing:.045em;margin:0 0 7px}
+.atelier-down{display:block;text-align:center;font-size:1.5rem;color:var(--muted);line-height:1.4;margin:12px 0}
+.atelier-areas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,2vw,20px)}
+.atelier-area{min-width:0}
+.atelier-example-image{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:calc(var(--studio-radius) - 2px);background:var(--paper)}
+.atelier-area h3,.atelier-area-action strong{display:block;margin-top:10px;font-family:var(--studio-heading);font-size:clamp(18px,2vw,22px);font-weight:650}
+.atelier-area-action{display:block;text-align:left;width:100%;min-width:0;min-height:44px;border:0;padding:0 0 8px;background:transparent;color:var(--ink);font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.atelier-area-action span{display:block;color:var(--muted);font-size:.9rem;line-height:1.45;margin-top:4px}
+.atelier-area-action:hover strong{text-decoration:underline;text-underline-offset:4px;color:var(--accent)}
+.atelier-area-action:focus-visible,.atelier-compose button:focus-visible,.atelier-result button:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:var(--studio-radius)}
+.atelier-compose{padding:18px 10px;background:var(--accent-soft);border-radius:var(--studio-radius)}
+.atelier-compose-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;margin-top:14px}
+.atelier-compose-actions button,.atelier-result button{max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere}
+.atelier-result .atelier-example-image{width:min(100%,620px);margin:0 auto 14px;aspect-ratio:16/9}
+.atelier-result button{margin-top:12px}
+.atelier-workflow .atelier-example-note{font-size:.83rem;margin-top:20px;padding-top:12px;border-top:1px solid var(--line)}
+:root[data-studio-theme="atelier"] .atelier-workflow{background:linear-gradient(120deg,#fff9ee,#f8f0e3)}
+:root[data-studio-theme="atelier"] .atelier-intent{padding:4px 0 12px;border-bottom:1px solid #a7785266}
+:root[data-studio-theme="atelier"] .atelier-area .atelier-example-image{border-radius:8px 14px 11px 6px}
+:root[data-studio-theme="atelier"] .atelier-compose{background:#e5e7d2;border-radius:18px 10px 15px 9px}
+.work-surface .atelier-areas{grid-template-columns:repeat(auto-fit,minmax(min(100%,142px),1fr))}
+@media(max-width:650px){.atelier-areas,.work-surface .atelier-areas{grid-template-columns:minmax(0,1fr)}.atelier-workflow{margin:14px 0 28px}.atelier-compose-actions{flex-direction:column;align-items:stretch}}

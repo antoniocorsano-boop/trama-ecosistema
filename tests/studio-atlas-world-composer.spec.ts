@@ -454,3 +454,45 @@ test("UX2b: composizione visuale reale nei due temi, senza luoghi inventati", as
   await page.setViewportSize({width:320,height:800});
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
 });
+
+
+test("UX-DESIGN-02: illustrated teacher workflow opens real editors, same assets in both themes", async ({page},testInfo)=>{
+  await page.setViewportSize({width:1366,height:1000});
+  await page.goto(STUDIO);
+  const home=page.getByRole("region",{name:"Atelier digitale del docente"});
+  await expect(home.getByText("Lato docente",{exact:true})).toBeVisible();
+  await expect(home.getByText("Lato studente",{exact:true})).toBeVisible();
+  await expect(home.locator("img")).toHaveCount(4);
+  for(const img of await home.locator("img").all()) {
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(()=>img.evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBeGreaterThan(0);
+  }
+  await home.scrollIntoViewIfNeeded();
+  await home.screenshot({path:testInfo.outputPath("studio-atelier-contemporary-desktop.png")});
+  await page.getByLabel("Stile dello Studio").selectOption("atelier");
+  await expect(page.locator("html")).toHaveAttribute("data-studio-theme","atelier");
+  await home.screenshot({path:testInfo.outputPath("studio-atelier-artistic-desktop.png")});
+  await page.getByRole("button",{name:"Apri MUSEO ZERO"}).click();
+  await expect(page).toHaveURL(new RegExp("/percorso/"+MUSEO+"$"));
+  const board=page.getByRole("region",{name:"Atelier digitale del docente"});
+  const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});
+  const routes=[
+    ["Progetta gli ambienti","Fai esistere il mondo."],
+    ["Progetta i personaggi","Costruisci la storia."],
+    ["Progetta le interazioni","Che cosa farà davvero lo studente?"],
+    ["Componi le scene","Metti in sequenza ciò che accade."],
+  ];
+  for(const [action,heading] of routes){
+    await board.getByRole("button",{name:action,exact:true}).click();
+    await expect(page.getByRole("heading",{name:heading,exact:true})).toBeVisible();
+    await nav.getByRole("button",{name:"Idea"}).click();
+  }
+  const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+  await page.setViewportSize({width:320,height:800});
+  await expect(board).toBeVisible();
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await board.screenshot({path:testInfo.outputPath("studio-atelier-artistic-mobile.png")});
+  await board.getByRole("button",{name:"Vai alla prova dell’esperienza",exact:true}).click();
+  await expect(nav.getByRole("button",{name:"Prova"})).toHaveClass(/active/);
+  expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+});

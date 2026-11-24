@@ -162,6 +162,15 @@ jobs:
           include-hidden-files: true
           retention-days: 7
 
+      - name: Preserve illustrated atelier screenshots
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-atlas-atelier-design-02
+          path: _atlas/test-results/**/studio-atelier-*.png
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Upload server logs on failure
         if: failure()
         uses: actions/upload-artifact@v4

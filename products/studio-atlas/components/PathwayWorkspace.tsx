@@ -25,6 +25,7 @@ import {
 import { VisualFactoryStage } from "./VisualFactoryStage";
 import { AuthoringProfileField } from "./AuthoringProfileField";
 import { AuthoringCatalog } from "./AuthoringCatalog";
+import { AtelierWorkflow } from "./AtelierWorkflow";
 import { deriveAuthoringPlan } from "../lib/authoring-plan";
 
 export function PathwayWorkspace({ id }: { id: string }) {
@@ -212,6 +213,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
 
           {stage === "Idea" && (
             <>
+              <AtelierWorkflow onGoTo={setStage} />
               <h1>Che cosa vuoi far vivere?</h1>
               <p className="lead">Non serve compilare un modulo didattico. Parti da ciò che dovrebbe accadere allo studente.</p>
               <textarea
