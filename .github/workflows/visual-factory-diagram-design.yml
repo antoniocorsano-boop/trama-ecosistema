@@ -150,6 +150,92 @@ jobs:
                   if name.split("}")[-1] in {"href","src"}:
                       assert value.startswith("#")
           PY
+      - name: Qualify static-only security boundary and rejection cases
+        id: static_security
+        shell: bash
+        run: |
+          set -euo pipefail
+          receipt="$RUNNER_TEMP/vf-diagram-receipt"
+          python3 - "$receipt" <<'PY'
+          import json, pathlib, re, sys, xml.etree.ElementTree as ET
+          out = pathlib.Path(sys.argv[1])
+          original = (out / "trama-architecture.svg").read_text()
+          ns = "{http://www.w3.org/2000/svg}"
+          tags = {"svg","title","desc","defs","style","marker","path","g","rect","text"}
+          attrs = {
+              "svg": {"viewBox","role","aria-labelledby","id"},
+              "title": {"id"}, "desc": {"id"}, "defs": set(), "style": set(),
+              "marker": {"id","markerWidth","markerHeight","refX","refY","orient"},
+              "path": {"d","fill","stroke","stroke-width"},
+              "g": {"fill","stroke","stroke-width","marker-end"},
+              "rect": {"x","y","width","height","rx","fill","stroke"},
+              "text": {"x","y","text-anchor","font-size","font-weight","fill"}
+          }
+          num = r"-?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)"
+          ident = r"[A-Za-z_][A-Za-z0-9_-]*"
+          def require(ok, why):
+              if not ok: raise ValueError(why)
+          def gate(raw):
+              require(len(raw.encode()) <= 100000, "size")
+              require(not re.search(r"<!(?:DOCTYPE|ENTITY|\[CDATA\[)|<\?(?!xml\s)",raw,re.I),"active declaration")
+              root=ET.fromstring(raw)
+              require(root.tag==ns+"svg" and root.get("role")=="img","root")
+              ids=set()
+              refs=[]
+              for el in root.iter():
+                  require(el.tag.startswith(ns),"namespace")
+                  tag=el.tag[len(ns):]
+                  require(tag in tags,"element "+tag)
+                  require(set(el.attrib)<=attrs[tag],"attributes "+tag)
+                  if tag=="style":
+                      require(re.fullmatch(r"\s*#trama-architecture-root\s*\{\s*color:\s*#2d3142;\s*font-family:\s*system-ui, sans-serif;\s*\}\s*",el.text or "") is not None,"CSS outside pilot profile")
+                  for key,value in el.attrib.items():
+                      if key=="id":
+                          require(re.fullmatch(ident,value) and value not in ids,"ID")
+                          ids.add(value)
+                      elif key=="aria-labelledby":
+                          refs.extend(value.split())
+                      elif key=="marker-end":
+                          m=re.fullmatch(r"url\(#("+ident+r")\)",value)
+                          require(m is not None,"marker reference")
+                          refs.append(m.group(1))
+                      elif key in {"fill","stroke"}:
+                          require(re.fullmatch(r"#[0-9A-Fa-f]{6}|none",value),"paint")
+                      elif key=="d":
+                          require(re.fullmatch(r"[MmLlHhVvZz0-9 .,+-]+",value),"path syntax")
+                      elif key=="viewBox":
+                          require(len(value.split())==4 and all(re.fullmatch(num,v) for v in value.split()),"viewBox")
+                      elif key=="role":
+                          require(value=="img","role")
+                      elif key=="orient":
+                          require(value=="auto","orient")
+                      elif key=="text-anchor":
+                          require(value=="middle","anchor")
+                      else:
+                          require(re.fullmatch(num,value),"numeric attribute")
+              require(all(r in ids for r in refs),"unresolved fragment")
+          gate(original)
+          cases={
+            "script": original.replace("</svg>","<script>void 0</script></svg>"),
+            "event": original.replace("<svg ","<svg onload=\"void 0\" ",1),
+            "external_image": original.replace("</svg>","<image href=\"https://example.invalid/a.png\"/></svg>"),
+            "foreign_object": original.replace("</svg>","<foreignObject/></svg>"),
+            "animation": original.replace("</svg>","<animate attributeName=\"x\"/></svg>"),
+            "remote_paint": original.replace('fill="#4f5d75"','fill="url(https://example.invalid/a)"',1),
+            "css_import": original.replace("<style>","<style>@import url(https://example.invalid/a);",1),
+            "entity": original.replace("<svg ","<!DOCTYPE svg [<!ENTITY probe 'x'>]><svg ",1),
+            "external_marker": original.replace('marker-end="url(#trama-architecture-arrow)"','marker-end="url(https://example.invalid/a)"',1)
+          }
+          results={"profile":"TRAMA_ARCHITECTURE_STATIC_PILOT_ONLY","positive":"PASS","rejections":{}}
+          for name,raw in cases.items():
+              require(raw!=original,"negative fixture unchanged: "+name)
+              try: gate(raw)
+              except (ValueError,ET.ParseError) as exc: results["rejections"][name]={"status":"PASS","reason":str(exc)}
+              else: results["rejections"][name]={"status":"FAIL"}
+          (out/"security-boundary.json").write_text(json.dumps(results,indent=2)+"\n")
+          print(json.dumps(results))
+          require(all(v["status"]=="PASS" for v in results["rejections"].values()),"negative gate")
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -280,6 +366,7 @@ jobs:
         env:
           FUNCTIONAL: ${{ steps.browser_functional.outcome }}
           CAPTURE: ${{ steps.browser_capture.outcome }}
+          STATIC_SECURITY: ${{ steps.static_security.outcome }}
         run: |
           python3 - <<'PY'
           import json, os, pathlib
@@ -289,6 +376,7 @@ jobs:
               states={"success":"PASS","failure":"FAIL","skipped":"NOT_RUN","cancelled":"CANCELLED"}
               r["browser_offline_test"]=states.get(os.environ["FUNCTIONAL"],"NOT_RUN")
               r["visual_capture"]=states.get(os.environ["CAPTURE"],"NOT_RUN")
+              r["static_pilot_boundary"]=states.get(os.environ["STATIC_SECURITY"],"NOT_RUN")
               r["production_admitted"]=False
               p.write_text(json.dumps(r,indent=2)+"\n")
           PY
@@ -296,6 +384,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p0b-r2b-r2-pilot
+          name: vf-diagram-p0b-r3-static-security
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
