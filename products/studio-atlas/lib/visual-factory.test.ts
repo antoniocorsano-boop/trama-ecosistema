@@ -340,7 +340,7 @@ test("F3.2a same planners support a second explicit profile offline and preserve
     ...candidateReceipt().assets[0], subjectRef: "field", assetId: "field-1",
     purpose: "ENVIRONMENT_REFERENCE" as const,
   };
-  state = ingestVisualCandidates(state, { ...candidateReceipt(), assets: [asset] });
+  state = ingestVisualCandidates(state, { ...candidateReceipt(), profileDigest: state.profileDigest, assets: [asset] });
   state = lockVisualReference(state, "field", asset.assetId, DIGEST, profile);
   assert.equal(state.stage, "READY_FOR_SHOTS");
   const shot = compileProfileShotJobs(project, DIGEST, state, [passReceipt(profile.shots[0], [asset.url], [asset.sha256])], profile);
@@ -360,4 +360,44 @@ test("F3.2a reject cross-project, stale, duplicate or orphaned profile data", ()
   assert.throws(() => validateVisualProductionProfile({ ...profile, shots: [{ ...profile.shots[0], subjectRefs: ["unknown"] }] }), /VISUAL_PRODUCTION_PROFILE_INVALID/);
   assert.throws(() => validateVisualProductionProfile({ ...profile, references: [{ ...profile.references[0], pathwayId: "other" }] }), /VISUAL_PRODUCTION_PROFILE_INVALID/);
   assert.throws(() => validateVisualProductionProfile({ ...profile, references: [{ ...profile.references[0], artDirectionVersion: "other" }] }), /VISUAL_PRODUCTION_PROFILE_INVALID/);
+});
+
+test("F3.2b profile content changes invalidate candidates, locks and old planning state", () => {
+  const profile = agricultureProfile();
+  const project = { ...createMuseoZeroPilotProject(), projectId: profile.pathwayId };
+  let state = createInitialVisualFactoryState(DIGEST, profile);
+  const asset = {
+    ...candidateReceipt().assets[0], subjectRef: "field", assetId: "field-1",
+    purpose: "ENVIRONMENT_REFERENCE" as const,
+  };
+  const receipt = { ...candidateReceipt(), profileDigest: state.profileDigest, assets: [asset] };
+  state = ingestVisualCandidates(state, receipt);
+  state = lockVisualReference(state, "field", asset.assetId, DIGEST, profile);
+  const changed = { ...profile, references: [{ ...profile.references[0], requiredVisualFacts: ["A different irrigation system"] }] };
+  assert.equal(reconcileVisualFactoryState(state, DIGEST, structuredClone(profile)), state);
+  assert.throws(() => compileProfileReferenceJobs(project, DIGEST, state, [], changed), /STALE_VISUAL_FACTORY_STATE/);
+  assert.throws(() => compileProfileShotJobs(project, DIGEST, state, [], changed), /STALE_VISUAL_FACTORY_STATE/);
+  assert.throws(() => lockVisualReference(state, "field", asset.assetId, DIGEST, changed), /STALE_VISUAL_CANDIDATE/);
+  const next = reconcileVisualFactoryState(state, DIGEST, changed);
+  assert.notEqual(next, state);
+  assert.notEqual(next.profileDigest, state.profileDigest);
+  assert.equal(next.stage, "NEEDS_REFERENCES");
+  assert.deepEqual(next.candidates, []);
+  assert.deepEqual(next.referenceLocks, []);
+  assert.deepEqual(next.sceneAssets, []);
+  assert.equal(next.lastReceipt, undefined);
+  assert.equal(compileProfileReferenceJobs(project, DIGEST, next, [], changed).decision, "STOP_PREFLIGHT_REQUIRED");
+  assert.throws(() => ingestVisualCandidates(next, receipt), /STALE_VISUAL_CANDIDATE/);
+  assert.throws(() => ingestVisualCandidates(next, { ...receipt, profileDigest: undefined }), /STALE_VISUAL_CANDIDATE/);
+  assert.throws(() => ingestVisualCandidates(next, { ...receipt, status: "FAILED" }), /STALE_VISUAL_CANDIDATE/);
+});
+
+test("F3.2b legacy state without a content binding cannot retain qualification", () => {
+  const state = lockedState();
+  const legacy = { ...state, profileDigest: undefined };
+  const next = reconcileVisualFactoryState(legacy, DIGEST);
+  assert.equal(next.stage, "NEEDS_REFERENCES");
+  assert.deepEqual(next.referenceLocks, []);
+  assert.throws(() => compileReferenceJobs(createMuseoZeroPilotProject(), DIGEST, legacy, []), /STALE_VISUAL_FACTORY_STATE/);
+  assert.throws(() => ingestVisualCandidates(legacy, candidateReceipt()), /STALE_VISUAL_CANDIDATE/);
 });
