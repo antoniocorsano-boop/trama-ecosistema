@@ -3,15 +3,19 @@ on:
   pull_request:
     paths:
       - ".github/workflows/visual-factory-diagram-design.yml"
+      - "fixtures/visual-factory-diagram/**"
 permissions:
   contents: read
 jobs:
   pinned-source:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       SOURCE_SHA: b228c5d77794a84150fca41b22940bb316b1398d
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Acquire pinned public source without checkout or upstream execution
         shell: bash
         run: |
@@ -84,6 +88,7 @@ jobs:
           git -C "$RUNNER_TEMP/diagram-design.git" archive --format=tar "$SOURCE_SHA" | sudo tar -xf - -C "$source" --no-same-owner --no-same-permissions
           # Retain owner write mode for shutil.copy2 fixtures, while the
           # dynamic test user cannot write the root-owned source tree.
+          sudo install -m 0644 fixtures/visual-factory-diagram/trama-architecture.html "$source/trama-architecture.html"
           sudo chown -R root:root "$source"
           sudo chmod -R u+rwX,go-w "$source"
           sudo chmod -R a+rX "$source"
@@ -130,10 +135,85 @@ jobs:
           report.write_text(json.dumps(data, indent=2)+"\n")
           PY
           test "$failed" -eq 0
+          run_isolated skills/diagram-design/scripts/self_check.py --offline trama-architecture.html | tee "$receipt/pilot-self-check.log"
+          run_isolated -c 'import pathlib,subprocess,sys,tempfile; d=tempfile.TemporaryDirectory(); out=pathlib.Path(d.name)/"pilot.svg"; result=subprocess.run([sys.executable,"skills/diagram-design/scripts/export_svg.py","trama-architecture.html",str(out),"--system-fonts"],capture_output=True,check=True); sys.stderr.buffer.write(result.stdout+result.stderr); sys.stdout.buffer.write(out.read_bytes()); d.cleanup()' > "$receipt/trama-architecture.svg" 2> "$receipt/pilot-export.log"
+          cp fixtures/visual-factory-diagram/trama-architecture.html "$receipt/trama-architecture.html"
+          python3 - "$receipt/trama-architecture.svg" <<'PY'
+          import sys, xml.etree.ElementTree as ET
+          root = ET.parse(sys.argv[1]).getroot()
+          assert root.tag == "{http://www.w3.org/2000/svg}svg"
+          assert root.get("role") == "img"
+          for node in root.iter():
+              assert node.tag.split("}")[-1] not in {"script","foreignObject","image"}
+              for name,value in node.attrib.items():
+                  assert not name.lower().startswith("on")
+                  if name.split("}")[-1] in {"href","src"}:
+                      assert value.startswith("#")
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install existing locked browser test dependencies
+        working-directory: apps/control-center
+        run: npm ci --ignore-scripts
+      - name: Install existing Chromium test target
+        working-directory: apps/control-center
+        run: npx playwright install chromium
+      - name: Verify HTML and exported SVG in offline Chromium
+        working-directory: apps/control-center
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium } from '@playwright/test';
+          import { strict as assert } from 'node:assert';
+          import { pathToFileURL } from 'node:url';
+          import { writeFile } from 'node:fs/promises';
+          const dir = process.env.RUNNER_TEMP + '/vf-diagram-receipt';
+          const browser = await chromium.launch();
+          const results = [];
+          try {
+            for (const width of [360,390,1280]) {
+              for (const ext of ['html','svg']) {
+                const context = await browser.newContext({ viewport: { width, height: 900 }, offline: true, javaScriptEnabled: false, reducedMotion: 'reduce' });
+                try {
+                  const page = await context.newPage();
+                  const requests = [], errors = [];
+                  page.on('request', r => { if (/^https?:/i.test(r.url())) requests.push(r.url()); });
+                  page.on('pageerror', e => errors.push(String(e)));
+                  const target = pathToFileURL(dir+'/trama-architecture.'+ext).href;
+                  await page.goto(target);
+                  const svg = page.locator('svg').first();
+                  assert(await svg.isVisible());
+                  assert.equal(await svg.getAttribute('role'),'img');
+                  const measured = await svg.evaluate(el => {
+                    const view = el.viewBox.baseVal;
+                    const labels = Array.from(el.querySelectorAll('text')).map(t => {
+                      const b = t.getBBox();
+                      return {text:t.textContent, inBounds:b.x>=view.x-1 && b.y>=view.y-1 && b.x+b.width<=view.x+view.width+1 && b.y+b.height<=view.y+view.height+1};
+                    });
+                    return {width:el.getBoundingClientRect().width, scroll:document.documentElement.scrollWidth, labels, title:el.querySelector('title')?.textContent};
+                  });
+                  assert(measured.width>0 && measured.width<=width+1);
+                  if(ext==='html') assert(measured.scroll<=width+1);
+                  assert(measured.labels.length>=12 && measured.labels.every(l=>l.inBounds));
+                  assert(measured.title);
+                  assert.deepEqual(requests,[]);
+                  assert.deepEqual(errors,[]);
+                  await page.screenshot({path:dir+'/pilot-'+ext+'-'+width+'.png',fullPage:true});
+                  results.push({width,ext,status:'PASS',requests,errors,measured});
+                } finally { await context.close(); }
+              }
+            }
+          } finally {
+            await browser.close();
+            await writeFile(dir+'/browser-results.json',JSON.stringify(results,null,2));
+          }
+          assert.equal(results.length,6);
+          JS
       - name: Retain acquisition and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p0b-r2a-r1-tests
+          name: vf-diagram-p0b-r2b-pilot
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
