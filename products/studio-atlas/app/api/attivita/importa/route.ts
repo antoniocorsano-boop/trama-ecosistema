@@ -28,17 +28,12 @@ type Pull = { state: string; head: { sha: string; repo: { full_name: string } } 
 type StoredFile = { path: string; type: string; format: string; sha256: string; base64: string; pixelWidth?:number; pixelHeight?:number };
 
 async function readJson<T>(url: string,phase:"PR_METADATA"|"PR_FILES"): Promise<T> {
-  const response = await fetchIntake(url,phase,12000,HEADERS);
-  return response.json() as Promise<T>;
+  const bytes = await fetchIntake(url,phase,12000,HEADERS);
+  return JSON.parse(new TextDecoder().decode(bytes)) as T;
 }
 
 async function readBytes(url: string, phase:"MANIFEST"|"ASSET",max = MAX_FILE_BYTES): Promise<Uint8Array> {
-  const response = await fetchIntake(url,phase,18000);
-  const length = Number(response.headers.get("content-length") ?? "0");
-  if (length > max) throw new Error("Risorsa troppo grande per l'importazione");
-  const data = new Uint8Array(await response.arrayBuffer());
-  if (data.byteLength > max) throw new Error("Risorsa troppo grande per l'importazione");
-  return data;
+  return fetchIntake(url,phase,18000,undefined,max);
 }
 
 async function changedFiles(prNumber: number): Promise<string[]> {
