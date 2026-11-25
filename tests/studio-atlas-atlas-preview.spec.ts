@@ -753,3 +753,34 @@ for (const width of [390, 1280]) test(`F3.3c: original authoring and regeneratio
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
   expect(external).toEqual([]);
 });
+
+
+test("F3.3c: eight relations remain legible in both standalone formats", async ({page, request}) => {
+  const ids = ["n1", "n2", "n3", "n4"];
+  const source = {
+    schema: "trama.diagram-education-source/v0.1", id: "diagramma-docente",
+    status: "TEACHER_REVIEW_REQUIRED", profile: "studio-atlas",
+    runtimeAuthorized: false, publicationAuthorized: false,
+    title: "Scambi di energia", description: "Descrivere gli scambi tra sistemi.",
+    nodes: ids.map((id, index) => ({id, label: `Sistema ${index + 1}`, detail: "Trasferimento"})),
+    edges: ids.flatMap(a => ids.filter(b => b !== a).map(b => [a, b])).slice(0, 8),
+  };
+  const response = await request.post(STUDIO + "/api/education-diagram", {data: source});
+  expect(response.ok()).toBe(true);
+  const {files} = await response.json();
+  for (const [variant, width] of [["mobile-vertical", 390], ["desktop-lim-horizontal", 1280]] as const) {
+    await page.setViewportSize({width, height: 900});
+    await page.setContent(files[`diagramma-docente-${variant}.html`]);
+    const rows = await page.locator("svg text").evaluateAll(nodes => nodes.slice(-3).map(node => {
+      const {y, height} = (node as SVGGraphicsElement).getBBox();
+      return {y, height, text: node.textContent};
+    }));
+    expect(rows[0].text).toContain("Relazioni:");
+    expect(rows[0].text?.match(/→/g)).toHaveLength(4);
+    expect(rows[1].text?.match(/→/g)).toHaveLength(4);
+    expect(rows[2].text).toContain("proposta didattica");
+    for (const [row, next] of [[rows[0], rows[1]], [rows[1], rows[2]]]) {
+      expect(row.y + row.height).toBeLessThanOrEqual(next.y);
+    }
+  }
+});

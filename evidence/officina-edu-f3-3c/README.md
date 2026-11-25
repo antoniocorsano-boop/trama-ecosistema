@@ -9,7 +9,7 @@ Base collaudata `5d1b960a2948c8c950e4a99acf7074256f8e4370`. Ambiente locale con 
 | Build e verifica TypeScript di Studio Atlas | Superati |
 | Prove unitarie Studio Atlas | 255 superate, 1 saltata (trasporto privato V9.1) |
 | Contratto Python | 2 prove superate, incluse 14 fonti da rifiutare |
-| Chromium cumulativo Studio Atlas | 38/38, comprese 7/7 F3.3a–c |
+| Chromium cumulativo Studio Atlas | 39/39, comprese 8/8 F3.3a–c |
 | Profili Visual Factory | 15/15 misure e 45/45 prove di accessibilità SVG |
 | Pilota ECO02 su HTML e SVG | 9/9 |
 | Diagrammi P2 su HTML e SVG | 9/27 in questo Chromium. I 18 rilievi geometrici si riproducono sulla base con gli stessi esiti. |
@@ -19,7 +19,11 @@ zero, modifica la relazione, sostituisce «Lampadina» con «LED», reimporta la
 fonte e ripete la generazione. Le ricevute mostrano gli SHA-256 dei sei
 artefatti, con variazione dei file dopo la modifica e identità al riutilizzo
 della stessa fonte. Il test verifica anche la revoca dell'anteprima obsoleta,
-il rifiuto del markup e l'assenza di richieste a origini esterne.
+il rifiuto del markup e l'assenza di richieste a origini esterne. Una prova
+separata controlla in Chromium le altezze effettive delle due righe di
+relazioni e del piè di pagina al limite di otto relazioni, su entrambi i formati.
+Su mobile a 390 px, lo stesso caso passa da 14 px di sovrapposizione
+fra seconda riga e piè di pagina a 9 px di separazione.
 
 ## Ripetizione
 
@@ -31,7 +35,7 @@ il rifiuto del markup e l'assenza di richieste a origini esterne.
 - Per le qualificazioni Chromium usare i cinque insiemi di prove e le due
   origini fissate nel flusso `studio-atlas-atlas-preview-e2e.yml`.
   Il filtro `F3.3[abc]` in `studio-atlas-atlas-preview.spec.ts` isola le
-  sette prove di questa sequenza. Il flusso conserva PNG e ricevute.
+  otto prove di questa sequenza. Il flusso conserva PNG e ricevute.
 
 Il termine della verifica automatica lascia in attesa le revisioni educativa,
 artistica e tecnica indipendente. La fonte ammette 1–4 nodi e fino a 8

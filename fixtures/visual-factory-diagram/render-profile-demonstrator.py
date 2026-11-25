@@ -83,7 +83,7 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
     if variant=="mobile-vertical":
         label(180,37,profile["name"],21,dark,700)
         label(180,64,source["title"],13 if authored else 16,dark,600)
-        boxes=[(24,86+132*i,312,100) for i in range(len(source["nodes"]))]
+        boxes=[(24,86+(120 if authored else 132)*i,312,100) for i in range(len(source["nodes"]))]
         font,small=(16,14) if authored else (20,16)
     else:
         label(640,72,profile["name"],36,dark,700)
@@ -136,7 +136,7 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
         for row in range(2):
             line=" · ".join(pairs[row*4:row*4+4])
             if line or row==0:
-                label(w//2,(602 if variant=="mobile-vertical" else 498)+row*16,
+                label(w//2,575+row*20 if variant=="mobile-vertical" else 498+row*28,
                     ("Relazioni: " if row==0 else "")+(line or "nessuna"),14 if variant=="mobile-vertical" else 20,dark)
     label(w//2,h-16 if variant=="mobile-vertical" else h-56,footer,15 if variant=="mobile-vertical" else 22,dark)
     parts.append("</g></svg>")
