@@ -82,7 +82,10 @@ jobs:
           PY
           sudo install -d -m 0755 "$source"
           git -C "$RUNNER_TEMP/diagram-design.git" archive --format=tar "$SOURCE_SHA" | sudo tar -xf - -C "$source" --no-same-owner --no-same-permissions
-          sudo chmod -R a-w "$source"
+          # Retain owner write mode for shutil.copy2 fixtures, while the
+          # dynamic test user cannot write the root-owned source tree.
+          sudo chown -R root:root "$source"
+          sudo chmod -R u+rwX,go-w "$source"
           sudo chmod -R a+rX "$source"
           /usr/bin/python3 --version > "$receipt/python-version.txt"
           run_isolated() {
@@ -100,6 +103,9 @@ jobs:
           }
           # Fail closed: prove uid, network restriction and read-only source before tests.
           run_isolated -c 'import os,socket,errno; assert os.geteuid()!=0; assert not os.access(".",os.W_OK); exec("try:\n socket.socket(socket.AF_INET,socket.SOCK_STREAM)\nexcept OSError as e:\n assert e.errno in (errno.EAFNOSUPPORT,errno.EPERM,errno.EACCES),e\nelse:\n raise AssertionError(\"network socket allowed\")")' > "$receipt/isolation.log" 2>&1
+          # Reproduce the exact copy2 fixture operation before upstream tests.
+          run_isolated -c 'import os, pathlib, shutil, tempfile, hashlib; src=pathlib.Path("skills/diagram-design/references/style-guide.md"); original=src.read_bytes(); assert src.stat().st_uid==0; assert not os.access(src,os.W_OK); assert os.statvfs(src).f_flag & os.ST_RDONLY; d=tempfile.TemporaryDirectory(); dst=pathlib.Path(d.name)/"style-guide.md"; shutil.copy2(src,dst); assert dst.stat().st_uid==os.geteuid(); dst.write_bytes(original+b"\\nfixture-probe"); assert dst.read_bytes()!=original; assert src.read_bytes()==original; print("COPY2_FIXTURE_PASS",hashlib.sha256(original).hexdigest()); d.cleanup()' >> "$receipt/isolation.log" 2>&1
+          cat "$receipt/isolation.log"
           printf 'test\tstatus\n' > "$receipt/tests.tsv"
           failed=0
           for script in test-self-check test-export-svg-standalone test-lint-a11y verify-geometry; do
@@ -109,15 +115,25 @@ jobs:
               printf '%s\tPASS\n' "$script" >> "$receipt/tests.tsv"
             else
               printf '%s\tFAIL\n' "$script" >> "$receipt/tests.tsv"
+              tail -n 35 "$receipt/$script.log"
               failed=1
             fi
           done
           cat "$receipt/tests.tsv"
+          python3 - "$receipt/report.json" "$receipt/tests.tsv" <<'PY'
+          import csv, json, pathlib, sys
+          report, tests = map(pathlib.Path, sys.argv[1:])
+          data = json.loads(report.read_text())
+          with tests.open() as stream:
+              results = {r["test"]: r["status"] for r in csv.DictReader(stream, delimiter="\t")}
+          data.update(isolation_probe="PASS", copy2_fixture_probe="PASS", upstream_test_results=results, upstream_tests="PASS" if len(results)==4 and all(v=="PASS" for v in results.values()) else "FAIL")
+          report.write_text(json.dumps(data, indent=2)+"\n")
+          PY
           test "$failed" -eq 0
       - name: Retain acquisition and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p0b-r2a-tests
+          name: vf-diagram-p0b-r2a-r1-tests
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
