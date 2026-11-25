@@ -601,8 +601,9 @@ jobs:
           import hashlib,json,pathlib,sys,xml.etree.ElementTree as ET
           p=pathlib.Path(sys.argv[1])
           r=json.loads((p/"p2-receipt.json").read_text())
-          assert len(r["outputs"])==6 and len(r["semanticRejections"])==4
+          assert len(r["outputs"])==6 and len(r["semanticRejections"])==5
           assert all(v=="PASS" for v in r["semanticRejections"].values())
+          assert r["semanticRejections"]["review_attribution"]=="PASS"
           assert r["runtimeAuthorized"] is False and r["publicationAuthorized"] is False
           assert len({x["id"] for x in r["outputs"]})==6
           for item in r["outputs"]:
@@ -618,6 +619,13 @@ jobs:
               assert root.find("s:title",ns).text==item["title"]
               assert root.find("s:desc",ns).text==item["description"]
               assert [e.text for e in root.findall(".//s:text",ns)]==item["labels"]
+              if item["diagram"]=="registro-qualification":
+                  # Independent positive check of visible and accessible attribution.
+                  labels=item["labels"]
+                  assert "PR #414" in labels and "PR #412" not in labels
+                  assert "PR #412 in bozza, non integrata" in labels
+                  desc=root.find("s:desc",ns).text
+                  assert "Codex / PR #414" in desc and "PR #412 in bozza, non integrata" in desc
           PY
       - name: Qualify six P2 diagrams in HTML and SVG
         working-directory: apps/control-center

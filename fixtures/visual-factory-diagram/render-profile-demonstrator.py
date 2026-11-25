@@ -191,6 +191,18 @@ def p2_validate_source(register,compositions):
                 need(1<=len(step)<=2,"numero righe nodo")
                 for line in step: p2_text(line,24)
             for line in panel["note"]: p2_text(line,58)
+        # A review receipt and a product candidate may share a SHA but not a PR identity.
+        if record["id"]=="registro-qualification":
+            review=record["sources"]["review"]
+            candidate=record["sources"]["candidate"]
+            panels=[p for p in design["panels"] if p["relation"]=="review"]
+            need(len(panels)==1,"unico pannello riesame Registro")
+            panel=panels[0]
+            need(record["facts"][panel["fact"]]["source"]=="review","fonte ricevuta Codex")
+            need(review["commit"]==candidate["head"] and review["result"]=="CODE_REVIEW_NO_FINDINGS","ricevuta sul candidato esatto")
+            need(candidate["draft"] is True and candidate["merged"] is False,"stato candidato Registro")
+            need(panel["steps"]==[["Codex"],[f"PR #{review['number']}"]],"attribuzione PR riesaminata")
+            need(panel["note"]==[f"Nessun rilievo sul commit {review['commit'][:7]}",f"PR #{candidate['number']} in bozza, non integrata"],"stato PR candidata distinto")
 
 def p2_render(profile,record,design,variant):
     w,h=P2_SIZES[variant]
@@ -279,13 +291,17 @@ def generate_p2(out):
                 "contrast":checks,"htmlSha256":sha(data["html"]),"svgSha256":sha(data["svg"]),"staticGrammar":"PASS"})
     # Causal rejection of invented statuses, missing provenance and excessive layout bounds.
     tests={}
-    for key in ("status","fact","relation","authority"):
+    for key in ("status","fact","relation","authority","review_attribution"):
         mutant=json.loads(json.dumps(compositions))
         p=mutant["diagrams"][0]["panels"][0]
         if key=="status": p["state"]="VERIFICATO"
         elif key=="fact": p["fact"]=99
         elif key=="relation": p["relation"]="unknown"
-        else: mutant["publicationAuthorized"]=True
+        elif key=="authority": mutant["publicationAuthorized"]=True
+        else:
+            record=register["diagrams"][2]
+            review_panel=next(p for p in mutant["diagrams"][2]["panels"] if p["relation"]=="review")
+            review_panel["steps"][1]=[f"PR #{record['sources']['candidate']['number']}"]
         try: p2_validate_source(register,mutant)
         except (ValueError,KeyError,TypeError): tests[key]="PASS"
         else: raise ValueError("mutazione P2 accettata: "+key)

@@ -329,12 +329,12 @@
               "Codex"
             ],
             [
-              "PR #412"
+              "PR #414"
             ]
           ],
           "note": [
             "Nessun rilievo sul commit 72dd969",
-            "Candidato non integrato in main"
+            "PR #412 in bozza, non integrata"
           ],
           "relation": "review"
         },
