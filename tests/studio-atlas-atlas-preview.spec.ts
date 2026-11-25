@@ -556,3 +556,46 @@ test("ESS-02-R1: delayed image import retains intervening unrelated scene edit",
  expect(stored.productReview.decision).toBe("DRAFT");
  expect(stored.lastPreviewSnapshot).toBeUndefined();
 });
+
+
+for (const viewport of [{width:390,height:844},{width:1280,height:900}]) test("F3.3a: project-specific production planning remains local "+viewport.width, async ({page},testInfo)=>{
+ await page.setViewportSize(viewport);
+ const pageErrors:string[]=[];
+ const productionRequests:string[]=[];
+ page.on("pageerror",error=>pageErrors.push(error.message));
+ page.on("request",request=>{
+  const url=new URL(request.url());
+  if (url.pathname.includes("/api/visual") || ((url.protocol==="http:"||url.protocol==="https:") && url.origin!==STUDIO)) productionRequests.push(request.url());
+ });
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});
+ const readDraft=()=>page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]").find((p:{projectId:string})=>p.projectId==="ess-02-dal-campo-al-raccolto"));
+ const initial=await readDraft();
+ await nav.getByRole("button",{name:"Produzione"}).click();
+ const bank=page.locator(".visual-factory-authoring");
+ await expect(bank.getByRole("heading",{name:"Produzione visiva del percorso"})).toBeVisible();
+ const confirmation=bank.getByRole("button",{name:"Conferma la coerenza e prepara il piano locale"});
+ await expect(confirmation).toBeEnabled();
+ await expect(bank.getByText("Illustrazione già presente nel progetto",{exact:true})).toHaveCount(5);
+ for(const place of ["Orto scolastico","Impianto di irrigazione","Banco delle misure","Mappa del sistema","Frutteto collinare"])await expect(bank.getByText(place,{exact:false}).first()).toBeVisible();
+ await bank.getByText("Verifica contenuto e proposta visiva",{exact:true}).first().click();
+ await expect(bank.getByText("Elementi da rappresentare:",{exact:true}).first()).toBeVisible();
+ await expect(bank.getByText("Pianificazione da confermare.",{exact:true})).toBeVisible();
+ await confirmation.click();
+ await expect(bank.getByText("5 richieste di riferimento pianificate, non eseguite.",{exact:true})).toBeVisible();
+ await expect(confirmation).toBeDisabled();
+ await expect(bank.getByRole("button",{name:/Genera personaggi|Genera le scene/})).toHaveCount(0);
+ expect(await readDraft()).toEqual(initial);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath("ess-02-production-planning-"+viewport.width+".png"),fullPage:true});
+ await nav.getByRole("button",{name:"Scene"}).click();
+ await page.getByRole("textbox",{name:"Titolo scena 2"}).fill("Indagine sul campo aggiornata");
+ await nav.getByRole("button",{name:"Produzione"}).click();
+ await expect(bank.getByText("Indagine sul campo aggiornata",{exact:true})).toBeVisible();
+ await expect(bank.getByText("Pianificazione da confermare.",{exact:true})).toBeVisible();
+ await expect(confirmation).toBeEnabled();
+ expect(productionRequests).toEqual([]);
+ expect(pageErrors).toEqual([]);
+});
