@@ -21,7 +21,8 @@ export const AUTHORING_TOOLS = [
   {id:"CHOICES",title:"Scelte e conseguenze",description:"Nelle scene imposta una scelta e collega gli esiti.",stage:"Scene",availability:"EDITOR"},
   {id:"SIMULATION",title:"Simulazione e stati",description:"Progetta condizioni ed effetti; il generatore generale non è collegato.",stage:"Mondo",availability:"PLANNING"},
   {id:"HOTSPOTS",title:"Punti interattivi",description:"Importa un’immagine WebP e posiziona gli indizi delle scene.",stage:"Scene",availability:"EDITOR"},
-  {id:"VISUAL",title:"Produzione di immagini",description:"La produzione delle risorse è attualmente collegata al pilota Museo Zero.",stage:"Produzione",availability:"PILOT"},
+  {id:"VISUAL",title:"Produzione di immagini",description:"Pianificazione locale del percorso; esecuzione automatica limitata al pilota Museo Zero.",stage:"Produzione",availability:"PILOT"},
+  {id:"DIAGRAM",title:"Diagrammi statici",description:"Consulta ed esporta il materiale pilota generato dal laboratorio qualificato.",stage:"Produzione",availability:"PILOT"},
   {id:"PREVIEW",title:"Anteprima e verifica",description:"Apri la fase di prova; restano necessari i controlli previsti.",stage:"Prova",availability:"EDITOR"},
 ] as const satisfies readonly Tool[];
 export type AuthoringToolId = typeof AUTHORING_TOOLS[number]["id"];

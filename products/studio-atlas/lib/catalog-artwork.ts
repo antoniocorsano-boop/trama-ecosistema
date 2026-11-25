@@ -9,7 +9,7 @@ export const ENVIRONMENT_ART:Record<EnvironmentId,string>={
 export const TOOL_ART:Record<AuthoringToolId,string>={
  STORY:root+"story.svg",WORLD:root+"world.svg",FORM:root+"form.svg",SCENES:root+"scenes.svg",
  CHOICES:root+"choices.svg",SIMULATION:root+"simulation.svg",HOTSPOTS:root+"hotspots.svg",
- VISUAL:root+"visual.svg",PREVIEW:root+"preview.svg",
+ VISUAL:root+"visual.svg",DIAGRAM:root+"simulation.svg",PREVIEW:root+"preview.svg",
 };
 export const PROFILE_ART:Record<AuthoringComplexity,string>={
  ESSENTIAL:root+"essential.svg",ARTICULATED:root+"articulated.svg",ADVANCED:root+"advanced.svg",

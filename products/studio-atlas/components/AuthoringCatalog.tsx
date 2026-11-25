@@ -51,7 +51,7 @@ export function AuthoringCatalog({project,onChange,onGoTo}: {
           <small>{tool.availability==="EDITOR"?"Editor disponibile":tool.availability==="PILOT"?"Disponibilità pilota":"Solo progettazione"}{recommended.has(tool.id)?" · Suggerito":""}</small>
           <span>{tool.description}</span></span>
         </label>
-        {onGoTo&&selection.tools.includes(tool.id)&&tool.availability!=="PILOT"&&<button type="button" className="quiet-action" onClick={()=>onGoTo(tool.stage)}>Apri {tool.title.toLowerCase()}</button>}
+        {onGoTo&&selection.tools.includes(tool.id)&&(tool.availability!=="PILOT"||tool.id==="DIAGRAM")&&<button type="button" className="quiet-action" onClick={()=>onGoTo(tool.stage)}>Apri {tool.title.toLowerCase()}</button>}
       </div>)}
     </fieldset>
     <p className="catalog-note">Gli strumenti selezionati organizzano il lavoro. Non sostituiscono le verifiche di produzione e non autorizzano la pubblicazione. Le illustrazioni sono esempi e schemi di lavoro, non materiali generati per questa bozza.</p>
