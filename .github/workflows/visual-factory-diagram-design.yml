@@ -431,13 +431,16 @@ jobs:
           import hashlib,json,pathlib,sys
           p=pathlib.Path(sys.argv[1])
           r=json.loads((p/"profile-receipt.json").read_text())
-          assert len(r["outputs"])==10 and len(r["rejections"])==8
+          assert len(r["outputs"])==10 and len(r["rejections"])==11
+          assert len(r["semanticUpdates"])==2 and all(v=="PASS" for v in r["semanticUpdates"].values())
           assert all(v=="PASS" for v in r["rejections"].values())
           assert not r["runtimeAuthorized"] and not r["publicationAuthorized"]
           for item in r["outputs"]:
               for ext in ("html","svg"):
                   f=p/(item["id"]+"."+ext)
-                  assert hashlib.sha256(f.read_bytes()).hexdigest()==item[ext+"Sha256"]
+                  data=f.read_bytes()
+                  assert b"\r" not in data, f
+                  assert hashlib.sha256(data).hexdigest()==item[ext+"Sha256"]
           PY
       - name: Qualify profile rendering and capture evidence
         working-directory: apps/control-center
@@ -500,10 +503,98 @@ jobs:
           assert.equal(results.length,15);
           assert(results.every(r=>r.status==='PASS'),'Profile browser evidence failed');
           JS
+      - name: Qualify standalone and embedded SVG with accessible names
+        working-directory: apps/control-center
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium, expect } from '@playwright/test';
+          import { strict as assert } from 'node:assert';
+          import { pathToFileURL } from 'node:url';
+          import { readFile,writeFile } from 'node:fs/promises';
+          const dir=process.env.RUNNER_TEMP+'/vf-diagram-receipt/profiles';
+          const receipt=JSON.parse(await readFile(dir+'/profile-receipt.json','utf8'));
+          const source=JSON.parse(await readFile('../../fixtures/visual-factory-diagram/profile-demonstrator-source.json','utf8'));
+          const manifest=JSON.parse(await readFile('../../fixtures/visual-factory-diagram/profile-candidates.json','utf8'));
+          const description=source.description+' Fasi: '+source.nodes.map(n=>n.label).join('; ')+'.';
+          const escape=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+          const browser=await chromium.launch();
+          const results=[];
+          try {
+            for(const output of receipt.outputs){
+              const profile=manifest.profiles.find(p=>p.id===output.profile);
+              assert(profile);
+              const name=source.title+' — '+profile.name;
+              const max=output.variant==='mobile-vertical'?360:1280;
+              const embed=output.id+'-embedded.html';
+              await writeFile(dir+'/'+embed,'<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+escape(name)+'</title><style>body{margin:0}img{display:block;width:100%;max-width:'+max+'px;height:auto;margin:auto}p{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}</style><img src="'+output.id+'.svg" alt="'+escape(name)+'" aria-describedby="diagram-summary"><p id="diagram-summary">'+escape(description)+'</p></html>');
+              for(const width of output.variant==='mobile-vertical'?[360,390]:[1280]){
+                for(const mode of ['html','svg','embedded']){
+                  const item={id:output.id,width,mode,status:'FAIL',requests:[],errors:[]};
+                  results.push(item);
+                  let context;
+                  try{
+                    context=await browser.newContext({viewport:{width,height:900},offline:true,javaScriptEnabled:false,reducedMotion:'reduce'});
+                    const page=await context.newPage();
+                    page.on('request',r=>{if(!r.url().startsWith('file:'))item.requests.push(r.url());});
+                    page.on('pageerror',e=>item.errors.push(String(e)));
+                    const filename=mode==='embedded'?embed:output.id+'.'+mode;
+                    await page.goto(pathToFileURL(dir+'/'+filename).href,{timeout:10000});
+                    const graphic=page.getByRole('img');
+                    await expect(graphic).toHaveCount(1,{timeout:3000});
+                    await expect(graphic).toBeVisible({timeout:3000});
+                    await expect(graphic).toHaveAccessibleName(name,{timeout:3000});
+                    await expect(graphic).toHaveAccessibleDescription(description,{timeout:3000});
+                    if(mode==='embedded'){
+                      item.measured=await graphic.evaluate(el=>({complete:el.complete,naturalWidth:el.naturalWidth,naturalHeight:el.naturalHeight,width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,scroll:document.documentElement.scrollWidth,lang:document.documentElement.lang}));
+                      const m=item.measured;
+                      assert(m.complete&&m.naturalWidth>0&&m.naturalHeight>0&&m.width>0&&m.width<=width+1&&m.height<=900&&m.scroll<=width+1&&m.lang==='it');
+                      assert(Math.abs(m.width/m.height-(output.variant==='mobile-vertical'?360/640:1280/720))<.02);
+                      const file=output.id+'-embedded-'+width+'.png';
+                      const png=await page.screenshot({path:dir+'/'+file,fullPage:false,timeout:15000});
+                      assert(png.length>1000);
+                      Object.assign(item,{file,bytes:png.length});
+                    }else{
+                      item.measured=await graphic.evaluate(el=>{
+                        const v=el.viewBox.baseVal;
+                        const labels=[...el.querySelectorAll('text')].map(t=>{
+                          const b=t.getBBox(), c=t.getScreenCTM();
+                          const scale=Math.hypot(c.a,c.b);
+                          return {text:t.textContent,x:b.x,y:b.y,w:b.width,h:b.height,cssPx:Number(t.getAttribute('font-size'))*scale};
+                        });
+                        const overlaps=[];
+                        for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){
+                          const a=labels[i],b=labels[j];
+                          if(Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>1&&Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>1)overlaps.push([a.text,b.text]);
+                        }
+                        return {width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,labels,overlaps,view:{width:v.width,height:v.height},lang:el.getAttributeNS('http://www.w3.org/XML/1998/namespace','lang'),labelledby:el.getAttribute('aria-labelledby'),describedby:el.getAttribute('aria-describedby')};
+                      });
+                      const m=item.measured;
+                      assert(m.width>0&&m.width<=width+1&&m.height<=901);
+                      assert(m.lang==='it'&&m.labelledby==='diagram-title'&&m.describedby==='diagram-desc');
+                      assert(m.labels.length===15&&m.labels.some(l=>l.text===source.title));
+                      assert.deepEqual(m.overlaps,[]);
+                      assert(m.labels.every(l=>l.x>=0&&l.y>=0&&l.x+l.w<=m.view.width+1&&l.y+l.h<=m.view.height+1));
+                      assert(m.labels.every(l=>l.cssPx>=(width===1280?18:14)));
+                    }
+                    assert.deepEqual(item.requests,[]);
+                    assert.deepEqual(item.errors,[]);
+                    item.status='PASS';
+                  }catch(e){item.failure=String(e);}
+                  finally{if(context)await context.close();}
+                  console.log(JSON.stringify(item));
+                  await writeFile(dir+'/profile-accessibility-svg-results.json',JSON.stringify(results,null,2));
+                }
+              }
+            }
+          }finally{await browser.close();}
+          assert.equal(results.length,45);
+          assert(results.every(r=>r.status==='PASS'),'Profile standalone/embedded accessibility failed');
+          JS
       - name: Retain acquisition and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p1b-profiles
+          name: vf-diagram-p1d-r1-profiles
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
