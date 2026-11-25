@@ -43,7 +43,16 @@ export function WorldDesignOverview({ project }: { project: PathwayProject }) {
       ) : (
         <p className="world-composer-note">I luoghi compariranno quando saranno descritti nelle scene.</p>
       )}
-      {places.length > 8 && <p className="world-composer-note">Altri {places.length - 8} luoghi o stati sono documentati nelle scene.</p>}
+      {places.length > 8 && (
+        <details className="world-composer-note">
+          <summary>Mostra altri {places.length - 8} luoghi o stati</summary>
+          <ul className="world-composer-places">
+            {places.slice(8).map((place) => (
+              <li key={place.id}><strong>{place.label}</strong><span>{place.detail}</span></li>
+            ))}
+          </ul>
+        </details>
+      )}
       <fieldset className="world-composer-fieldset">
         <legend>Quale rappresentazione aiuterebbe a capire questo mondo?</legend>
         <div className="world-composer-modes">

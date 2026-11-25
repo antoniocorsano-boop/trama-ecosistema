@@ -78,3 +78,29 @@ test("UX2b: modifica solo il fuoco reale, senza clonare o inventare luoghi", () 
   assert.equal(updateSceneFocus(next, target.id), next);
   assert.throws(() => updateSceneFocus(scene, "invented"), /SCENE_FOCUS_LOCATION_NOT_FOUND/);
 });
+
+test("AWC: gli identificativi locali non collassano luoghi di scene diverse", () => {
+  const project = createMuseoZeroPilotProject();
+  const first = project.scenes[0];
+  const second = project.scenes[1];
+  assert.ok(first.stage && second.stage);
+  const location = first.stage.locations![0];
+  const scoped = {
+    ...project,
+    scenes: [
+      { ...first, world: undefined, stage: { ...first.stage, locations: [location, location] } },
+      { ...second, world: undefined, stage: { ...second.stage, locations: [
+        { ...location, label: "Altro ambiente", detail: "Altro dettaglio" },
+      ] } },
+    ],
+  };
+  const before = JSON.stringify(scoped);
+  const places = worldPlaces(scoped);
+  assert.deepEqual(places.map(({ label, detail }) => ({ label, detail })), [
+    { label: location.label, detail: location.detail },
+    { label: "Altro ambiente", detail: "Altro dettaglio" },
+  ]);
+  assert.equal(new Set(places.map(place => place.id)).size, 2);
+  assert.deepEqual(worldPlaces(scoped), places);
+  assert.equal(JSON.stringify(scoped), before);
+});

@@ -6,9 +6,11 @@ export function worldPlaces(project: PathwayProject) {
 
   for (const scene of project.scenes) {
     for (const location of scene.stage?.locations ?? []) {
-      if (!places.has(location.id)) {
-        places.set(location.id, {
-          id: location.id,
+      // Gli identificativi dei luoghi sono locali alla scena.
+      const id = JSON.stringify(["stage", scene.sceneId, location.id]);
+      if (!places.has(id)) {
+        places.set(id, {
+          id,
           label: location.label,
           detail: location.detail,
         });
@@ -16,7 +18,7 @@ export function worldPlaces(project: PathwayProject) {
     }
     if (scene.world?.place.trim()) {
       const label = scene.world.place.trim();
-      const id = `world:${label}`;
+      const id = JSON.stringify(["world", label]);
       if (!places.has(id)) {
         places.set(id, { id, label, detail: scene.world.status });
       }
