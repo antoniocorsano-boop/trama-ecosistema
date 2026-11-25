@@ -586,7 +586,7 @@ for (const viewport of [{width:390,height:844},{width:1280,height:900}]) test("F
   const row=sceneRows.nth(index);
   await expect(row).toBeVisible();
   // The place is in the visible row's direct text, not its collapsed facts list.
-  expect(await row.evaluate(element=>Array.from(element.childNodes).filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent??"").join(" ").trim())).toBe("· "+place);
+  expect(await row.evaluate(element=>Array.from(element.childNodes).filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent??"").join(" ").replace(/\s+/g," ").trim())).toBe("· "+place);
   const details=row.locator("details");
   await expect(details).not.toHaveAttribute("open","");
   await details.locator("summary").click();
