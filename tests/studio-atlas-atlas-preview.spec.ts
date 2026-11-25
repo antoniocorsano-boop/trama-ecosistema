@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import {writeFile} from "node:fs/promises";
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 const STUDIO = "http://127.0.0.1:3100";
@@ -666,4 +667,89 @@ test("F3.3b: corrupted diagram candidate is rejected before preview or download"
  await expect(bank.getByRole("alert")).toContainText("non integro");
  await expect(bank.getByRole("img")).toHaveCount(0);
  await expect(bank.getByRole("link")).toHaveCount(0);
+});
+
+for (const width of [390, 1280]) test(`F3.3c: original authoring and regeneration ${width}`, async ({page}, testInfo) => {
+  await page.setViewportSize({width, height: 900});
+  const external: string[] = [];
+  page.on("request", request => {
+    const url = new URL(request.url());
+    if (["http:", "https:"].includes(url.protocol) && url.origin !== STUDIO) external.push(url.href);
+  });
+  await page.goto(STUDIO);
+  await page.getByRole("button", {name: "Apri Dal campo al raccolto"}).click();
+  await page.getByRole("navigation", {name: "Fasi del Percorso"}).getByRole("button", {name: "Produzione"}).click();
+  const editor = page.getByRole("region", {name: "Componi un diagramma didattico"});
+  await editor.getByLabel("Titolo").fill("Circuito con lampadina");
+  await editor.getByLabel("Finalità").fill("Riconoscere i componenti di un circuito aperto o chiuso.");
+  for (const [index, label, detail] of [[1, "Pila", "Fornisce energia"], [2, "Interruttore", "Apre o chiude"], [3, "Lampadina", "Emette luce"]] as const) {
+    await editor.getByRole("button", {name: "Aggiungi nodo"}).click();
+    const node = editor.getByRole("group", {name: `Nodo ${index}`, exact: true});
+    await node.getByLabel("Etichetta").fill(label);
+    await node.getByLabel("Dettaglio").fill(detail);
+  }
+  await editor.getByRole("button", {name: "Aggiungi relazione"}).click();
+  const relation = editor.getByRole("group", {name: "Relazione 1", exact: true});
+  await relation.getByRole("combobox", {name: "A", exact: true}).selectOption("n3");
+  await relation.getByRole("combobox", {name: "Da", exact: true}).selectOption("n2");
+  const generate = editor.getByRole("button", {name: "Genera diagramma"});
+  const image = editor.getByRole("img");
+  const format = editor.getByLabel("Formato dell’anteprima");
+  async function produce() {
+    const response = page.waitForResponse(response => response.url().endsWith("/api/education-diagram"));
+    await generate.click();
+    const result = await response;
+    expect(result.status()).toBe(200);
+    await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+    const {files} = await result.json();
+    const receipt = JSON.parse(files["education-receipt.json"]);
+    expect(receipt.runtimeAuthorized).toBe(false);
+    expect(receipt.publicationAuthorized).toBe(false);
+    for (const [name, digest] of Object.entries(receipt.files)) {
+      expect(await page.evaluate(async text => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",
+        new TextEncoder().encode(text))), value => value.toString(16).padStart(2, "0")).join(""), files[name])).toBe(digest);
+    }
+    return {files, receipt};
+  }
+  const first = await produce();
+  for (const variant of ["mobile-vertical", "desktop-lim-horizontal"]) {
+    await format.selectOption(variant);
+    await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+    const svg = first.files[`diagramma-docente-${variant}.svg`];
+    expect(svg).toContain("Interruttore");
+    expect(svg).toContain("2 → 3");
+    expect(svg).toContain("<path");
+    const href = await editor.getByRole("link", {name: "Scarica SVG", exact: true}).getAttribute("href");
+    expect(await page.evaluate(async href => (await fetch(href!)).text(), href)).toBe(svg);
+    await image.screenshot({path: testInfo.outputPath(`f3-3c-${variant}-${width}.png`)});
+  }
+  const oldUrl = await image.getAttribute("src");
+  await editor.getByRole("group", {name: "Nodo 3", exact: true}).getByLabel("Etichetta").fill("LED");
+  await expect(image).toHaveCount(0);
+  expect(await page.evaluate(url => fetch(url!).then(() => true, () => false), oldUrl)).toBe(false);
+  const changed = await produce();
+  for (const variant of ["mobile-vertical", "desktop-lim-horizontal"]) {
+    for (const ext of ["html", "svg"]) {
+      const name = `diagramma-docente-${variant}.${ext}`;
+      expect(changed.receipt.files[name]).not.toBe(first.receipt.files[name]);
+      expect(changed.files[name]).toContain("LED");
+    }
+  }
+  expect(changed.files["guida-docente.md"]).toContain("Interruttore → LED");
+  const exported = Buffer.from(changed.files["education-source.json"]);
+  await editor.getByLabel("Importa fonte JSON").setInputFiles({name: "fonte.json", mimeType: "application/json", buffer: exported});
+  await expect(image).toHaveCount(0);
+  const repeated = await produce();
+  expect(repeated.files).toEqual(changed.files);
+  await writeFile(testInfo.outputPath(`f3-3c-receipts-${width}.json`), JSON.stringify({
+    width, original: first.receipt, modified: changed.receipt, repeated: repeated.receipt,
+  }, null, 2) + "\n");
+  await editor.getByLabel("Titolo").fill("<script>");
+  await generate.click();
+  await expect(editor.getByRole("alert")).toContainText("senza markup");
+  await expect(image).toHaveCount(0);
+  await editor.getByRole("button", {name: "Elimina nodo 3"}).click();
+  await expect(relation).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+  expect(external).toEqual([]);
 });

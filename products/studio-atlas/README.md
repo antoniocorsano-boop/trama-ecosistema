@@ -84,3 +84,19 @@ npm test, npm run typecheck, npm run build.
 
 Un collaudo umano su Android deve confermare apertura di Missione 118, presenza delle otto illustrazioni e della guida, continuità delle interazioni, assenza di navigazioni esterne e riapertura della bozza dopo il riavvio.
 Il superamento dei test automatici non equivale a questo collaudo.
+
+## Banco Produzione · Diagrammi didattici
+
+Il campione rimane disponibile dalla cartella generata durante `prebuild` e
+`predev`. Per comporre una fonte originale, apri **Produzione** e usa il banco
+diagrammi. I due formati collegano con frecce i nodi numerati e riportano
+le relazioni anche in forma testuale. Il pacchetto include fonte, guida e ricevuta di integrità. È destinato
+alla revisione docente.
+
+La generazione usa Next.js con runtime Node e Python 3 standard. Avvia lo Studio
+dalla directory `products/studio-atlas` con il repository completo: la rotta legge
+il renderer qualificato e i profili dalla cartella `fixtures/visual-factory-diagram`.
+L'ingresso è JSON limitato a 8 KiB. Il processo riceve la fonte su stdin e restituisce
+i materiali su stdout. Non richiede credenziali, servizi o dipendenze aggiuntive.
+Il profilo statico o Edge non supporta l'esecuzione del renderer. La rotta non
+integra un sistema di autenticazione e va usata nel perimetro docente locale.

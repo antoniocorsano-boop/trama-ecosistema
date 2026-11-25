@@ -1,5 +1,6 @@
 "use client";
 import {useEffect,useRef,useState} from "react";
+import {EducationDiagramEditor} from "./EducationDiagramEditor";
 import {DIAGRAM_ROOT,DIAGRAM_STEM,DIAGRAM_VARIANTS,educationFiles,parseEducationReceipt,verifyEducationFile,type DiagramVariant} from "../lib/education-diagram";
 
 export function EducationDiagramBank() {
@@ -67,7 +68,8 @@ export function EducationDiagramBank() {
         <li><a href={links["guida-docente.md"]} download={"guida-docente.md"}>Scarica guida docente</a></li>
         <li><a href={links["education-receipt.json"]} download={"education-receipt.json"}>Scarica ricevuta di produzione</a></li>
       </ul>
-      <small>Il generatore viene eseguito durante la preparazione dell’applicazione. La modifica e rigenerazione della fonte dal banco non sono ancora disponibili.</small>
+      <small>Il campione viene preparato con l’applicazione.</small>
     </>}
+    <EducationDiagramEditor />
   </section>;
 }

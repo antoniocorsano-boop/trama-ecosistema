@@ -5,6 +5,8 @@ import html
 import json
 import pathlib
 import re
+import sys
+import textwrap
 import xml.etree.ElementTree as ET
 
 BASE = pathlib.Path(__file__).resolve().parent
@@ -47,7 +49,7 @@ def load_inputs():
         need(isinstance(text,str) and 0<len(text)<=160 and not re.search(r"[\x00-\x1f<>]",text),"plain text")
     return manifest,source,sha(profiles_raw),sha(source_raw)
 
-def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", include_details=False):
+def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", include_details=False, authored=False):
     w,h=VARIANTS[variant]
     p=profile["palette"]
     need(set(p)==PALETTE,"palette keys")
@@ -67,6 +69,10 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
     title=esc(source["title"])
     name=esc(profile["name"])
     description=source["description"]+" Fasi: "+"; ".join(n["label"]+(": "+n["detail"] if include_details else "") for n in source["nodes"])+"."
+    if authored:
+        numbers={node["id"]: i+1 for i,node in enumerate(source["nodes"])}
+        relations=" · ".join(f"{numbers[a]} → {numbers[b]}" for a,b in source["edges"])
+        description += " Relazioni: "+(relations or "nessuna")+"."
     parts=[f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
       f'<title id="diagram-title">{title} — {name}</title>',
       f'<desc id="diagram-desc">{esc(description)}</desc>',
@@ -76,16 +82,18 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
         parts.append(f'<text x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" fill="{fill}">{esc(value)}</text>')
     if variant=="mobile-vertical":
         label(180,37,profile["name"],21,dark,700)
-        label(180,64,source["title"],16,dark,600)
-        boxes=[(24,86+132*i,312,100) for i in range(4)]
-        font,small=20,16
+        label(180,64,source["title"],13 if authored else 16,dark,600)
+        boxes=[(24,86+132*i,312,100) for i in range(len(source["nodes"]))]
+        font,small=(16,14) if authored else (20,16)
     else:
         label(640,72,profile["name"],36,dark,700)
         label(640,119,source["title"],30,dark,600)
-        boxes=[(42+310*i,244,266,180) for i in range(4)]
-        font,small=27,19
+        boxes=[(42+310*i,244,266,180) for i in range(len(source["nodes"]))]
+        font,small=(16,18) if authored else (27,19)
+    if authored and variant=="desktop-lim-horizontal":
+        boxes=[(x+(4-len(boxes))*155,y,bw,bh) for x,y,bw,bh in boxes]
     for i,(x,y,bw,bh) in enumerate(boxes):
-        if i<3:
+        if not authored and i<3:
             if variant=="mobile-vertical":
                 xx=x+bw//2; yy=y+bh
                 d=f"M {xx} {yy} V {yy+30} M {xx-6} {yy+22} L {xx} {yy+30} L {xx+6} {yy+22}"
@@ -98,17 +106,45 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
         if variant=="mobile-vertical":
             parts.append(f'<rect x="{x+13}" y="{y+14}" width="36" height="29" rx="6" fill="{accent}"/>')
             label(x+31,y+34,str(i+1),17,p["onAccent"],700)
-            label(cx,y+43,source["nodes"][i]["label"],font,dark,700)
-            label(cx,y+74,source["nodes"][i]["detail"],small,p["secondaryInk"])
+            label(cx,y+(61 if authored else 43),source["nodes"][i]["label"],font,dark,700)
+            label(cx,y+(83 if authored else 74),source["nodes"][i]["detail"],small,p["secondaryInk"])
         else:
             parts.append(f'<rect x="{cx-23}" y="{y+16}" width="46" height="36" rx="7" fill="{accent}"/>')
             label(cx,y+42,str(i+1),22,p["onAccent"],700)
             label(cx,y+92,source["nodes"][i]["label"],font,dark,700)
-            label(cx,y+132,source["nodes"][i]["detail"],small,p["secondaryInk"])
+            detail=source["nodes"][i]["detail"]
+            lines=textwrap.wrap(detail,width=14) if authored else [detail]
+            for row,line in enumerate(lines):
+                label(cx,y+122+row*22 if authored else y+132,line,small,p["secondaryInk"])
+    if authored:
+        for index,(start,end) in enumerate(source["edges"]):
+            ax,ay,aw,_=boxes[numbers[start]-1]
+            bx,by,bw,_=boxes[numbers[end]-1]
+            if variant=="mobile-vertical":
+                y1=ay+24+index*7
+                y2=by+24+index*7
+                x=344+index*2
+                end_x=bx+bw
+                d=f"M {ax+aw} {y1} H {x} V {y2} H {end_x} M {end_x+5} {y2-4} L {end_x} {y2} L {end_x+5} {y2+4}"
+            else:
+                x1=ax+aw//2-28+index*8
+                x2=bx+bw//2-28+index*8
+                y=ay-18-index*9
+                d=f"M {x1} {ay} V {y} H {x2} V {by} M {x2-5} {by-7} L {x2} {by} L {x2+5} {by-7}"
+            parts.append(f'<path d="{d}" fill="none" stroke="{accent}" stroke-width="2"/>')
+        pairs=relations.split(" · ") if relations else []
+        for row in range(2):
+            line=" · ".join(pairs[row*4:row*4+4])
+            if line or row==0:
+                label(w//2,(602 if variant=="mobile-vertical" else 498)+row*16,
+                    ("Relazioni: " if row==0 else "")+(line or "nessuna"),14 if variant=="mobile-vertical" else 20,dark)
     label(w//2,h-16 if variant=="mobile-vertical" else h-56,footer,15 if variant=="mobile-vertical" else 22,dark)
     parts.append("</g></svg>")
     svg="\n".join(parts)
     wrapper='<!doctype html>\n<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+title+' — '+name+'</title><style>html,body{margin:0;padding:0;background:'+p["canvas"]+';color:'+dark+';font-family:system-ui,sans-serif}main{width:100%;max-width:'+str(w)+'px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main>\n'+svg+'\n</main></body></html>\n'
+    if authored:
+        policy="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"
+        wrapper=wrapper.replace("<head>",f'<head><meta http-equiv="Content-Security-Policy" content="{policy}">',1)
     return wrapper,svg,checks
 
 def validate(svg, profile, variant, *, view_size=None):
@@ -353,12 +389,100 @@ def generate_education(out):
     print("Education pilot: 2 static pairs; teacher decision pending")
 
 
+def authored_text(value, limit, field):
+    need(isinstance(value,str) and 0<len(value.strip())<=limit, f"{field}: da 1 a {limit} caratteri.")
+    need(not re.search(r"[<>@\x00-\x1f\x7f-\x9f\ud800-\udfff]|(?:[a-z][a-z0-9+.-]*://|(?:https?|javascript|data|mailto|file|blob|vbscript)\s*:|www\.|//|\b[\w-]+\.(?:it|com|org|net|edu|gov|io|dev)\b)",value,re.I),
+         f"{field}: inserisci solo testo, senza markup o indirizzi.")
+    return value.strip()
+
+
+def validate_authored(source):
+    fields={"schema","id","status","profile","runtimeAuthorized","publicationAuthorized","title","description","nodes","edges"}
+    need(isinstance(source,dict) and source.keys()==fields,"Struttura della fonte non valida.")
+    fixed={"schema":"trama.diagram-education-source/v0.1","id":"diagramma-docente",
+        "status":"TEACHER_REVIEW_REQUIRED","profile":"studio-atlas"}
+    need(all(source[k]==v for k,v in fixed.items()) and source["runtimeAuthorized"] is False
+         and source["publicationAuthorized"] is False,"Identità o autorizzazioni della fonte non valide.")
+    title=authored_text(source["title"],26,"Titolo")
+    description=authored_text(source["description"],160,"Finalità")
+    need(isinstance(source["nodes"],list) and 1<=len(source["nodes"])<=4,"Inserisci da 1 a 4 nodi.")
+    nodes=[]
+    ids=set()
+    for index,node in enumerate(source["nodes"],1):
+        need(isinstance(node,dict) and node.keys()=={"id","label","detail"},f"Struttura del nodo {index} non valida.")
+        node_id=node["id"]
+        need(isinstance(node_id,str) and re.fullmatch(r"n[1-4]",node_id) and node_id not in ids,
+            f"Identificativo del nodo {index} non valido o duplicato.")
+        ids.add(node_id)
+        nodes.append({"id":node_id,"label":authored_text(node["label"],16,f"Etichetta del nodo {index}"),
+                      "detail":authored_text(node["detail"],22,f"Dettaglio del nodo {index}")})
+    edges=source["edges"]
+    need(isinstance(edges,list) and len(edges)<=8,"Inserisci al massimo 8 relazioni.")
+    seen=set()
+    for edge in edges:
+        need(isinstance(edge,list) and len(edge)==2 and all(isinstance(n,str) and n in ids for n in edge)
+             and edge[0]!=edge[1],"Ogni relazione deve collegare due nodi presenti e distinti.")
+        need(tuple(edge) not in seen,"Relazione duplicata.")
+        seen.add(tuple(edge))
+    return {**fixed,"runtimeAuthorized":False,"publicationAuthorized":False,
+            "title":title,"description":description,"nodes":nodes,"edges":edges}
+
+
+def authored_package(source):
+    manifest,_,profile_hash,_=load_inputs()
+    profile=next(p for p in manifest["profiles"] if p["id"]==source["profile"])
+    names={node["id"]: node["label"] for node in source["nodes"]}
+    guide=[source["title"],"="*len(source["title"]),"","Finalità: "+source["description"],"",
+           "## Nodi",""]
+    guide.extend(f"- {n['label']}: {n['detail']}" for n in source["nodes"])
+    guide.extend(["","## Relazioni",""])
+    guide.extend([f"- {names[a]} → {names[b]}" for a,b in source["edges"]] or ["Nessuna relazione esplicita."])
+    guide.extend(["","Verificare contenuto e leggibilità prima di qualsiasi uso con la classe.",""])
+    files={"education-source.json":json.dumps(source,ensure_ascii=False,indent=2)+"\n",
+           "guida-docente.md":"\n".join(guide)}
+    for variant in VARIANTS:
+        doc,svg,_=render(profile,source,variant,footer="Tecnologia · proposta didattica",include_details=True,authored=True)
+        validate(svg,profile,variant)
+        files[f"diagramma-docente-{variant}.html"]=doc
+        files[f"diagramma-docente-{variant}.svg"]=svg
+    receipt={"schema":"trama.diagram-education-receipt/v0.2","status":"GENERATED_TEACHER_REVIEW_REQUIRED",
+        "runtimeAuthorized":False,"publicationAuthorized":False,"profilesSha256":profile_hash,
+        "rendererSha256":sha(pathlib.Path(__file__).read_bytes()),"sourceOrigin":"teacher-authored",
+        "files":{name:sha(content.encode("utf-8")) for name,content in files.items()}}
+    files["education-receipt.json"]=json.dumps(receipt,ensure_ascii=False,indent=2)+"\n"
+    return files
+
+
+def authored_stdio():
+    data=sys.stdin.buffer.read(8193)
+    try:
+        need(len(data)<=8192,"La fonte supera 8 KiB.")
+        source=json.loads(data.decode("utf-8"))
+    except (UnicodeError,json.JSONDecodeError):
+        print(json.dumps({"error":"La fonte deve essere un documento JSON UTF-8 valido."}))
+        return
+    except (ValueError,RecursionError):
+        print(json.dumps({"error":"La fonte supera i limiti della struttura JSON."}))
+        return
+    try:
+        source=validate_authored(source)
+    except ValueError as error:
+        print(json.dumps({"error":str(error)}))
+        return
+    print(json.dumps({"files":authored_package(source)}))
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--out",type=pathlib.Path)
     ap.add_argument("--p2-out",type=pathlib.Path)
     ap.add_argument("--education-out",type=pathlib.Path)
+    ap.add_argument("--education-stdio",action="store_true")
     args=ap.parse_args()
+    if args.education_stdio:
+        need(args.out is None and args.p2_out is None and args.education_out is None,"modalità di generazione esclusive")
+        authored_stdio()
+        return
     if args.education_out is not None:
         need(args.out is None and args.p2_out is None,"modalità di generazione esclusive")
         generate_education(args.education_out)

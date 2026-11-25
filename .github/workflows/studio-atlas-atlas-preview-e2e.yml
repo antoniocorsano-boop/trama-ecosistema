@@ -136,6 +136,9 @@ jobs:
           find test-results -type f -name 'ess-02-*.png' -exec cp {} "$RUNNER_TEMP/ess-02-screenshots/" \;
           for size in 390 1280; do for scene in teacher opening investigation decision system transfer; do test -f "$RUNNER_TEMP/ess-02-screenshots/ess-02-$scene-$size.png"; done; done
           for size in 390 1280; do for variant in mobile-vertical desktop-lim-horizontal; do test -f "$RUNNER_TEMP/ess-02-screenshots/ess-02-diagram-$variant-$size.png"; done; done
+          mkdir -p "$RUNNER_TEMP/f3-3c-screenshots"
+          find test-results -type f \( -name "f3-3c-*.png" -o -name "f3-3c-receipts-*.json" \) -exec cp {} "$RUNNER_TEMP/f3-3c-screenshots/" \;
+          for size in 390 1280; do for variant in mobile-vertical desktop-lim-horizontal; do test -f "$RUNNER_TEMP/f3-3c-screenshots/f3-3c-$variant-$size.png"; done; done
 
       - name: Qualify World Composer at mobile sizes and across local draft revisions
         id: composer
@@ -224,6 +227,14 @@ jobs:
           path: ${{ runner.temp }}/ess-02-screenshots/*.png
           if-no-files-found: error
           retention-days: 7
+
+      - name: Preserve F3.3c diagram screenshots
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: officina-edu-f3-3c-diagrams
+          path: ${{ runner.temp }}/f3-3c-screenshots/
+          if-no-files-found: error
 
       - name: Preserve pinned source receipt
         if: ${{ !cancelled() && steps.missione118.outcome != 'skipped' }}

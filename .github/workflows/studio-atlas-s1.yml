@@ -32,6 +32,9 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      - name: Educational diagram renderer contract
+        run: python3 ../../tests/test_education_diagram_authored.py
+
       - name: Typecheck
         run: npm run typecheck
 
