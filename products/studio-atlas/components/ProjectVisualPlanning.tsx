@@ -39,6 +39,13 @@ export function ProjectVisualPlanning({ project }: { project: PathwayProject }) 
         <ol>{result.plan.profile.shots.map((shot,index) => <li key={shot.specId}>
           <strong>{project.scenes[index].title}</strong> · {result.plan.profile.references[index].composition.dominantSubject}
           <p>{shot.narrativeFunction}</p>
+          <details>
+            <summary>Verifica contenuto e proposta visiva</summary>
+            <p>Elementi da rappresentare:</p>
+            <ul>{shot.requiredVisualFacts.map((fact, i) => <li key={i}>{fact}</li>)}</ul>
+            <p>{shot.camera.shotScale} · {shot.camera.viewpoint} · luce: {shot.lightingMood}.</p>
+            <p>{shot.composition.spatialRelation}</p>
+          </details>
           <small>{project.scenes[index].illustration ? "Illustrazione già presente nel progetto" : "Illustrazione da predisporre"}</small>
         </li>)}</ol>
         {result.plan.findings.length > 0 && <ul>{result.plan.findings.map((item,index) => <li key={index}>{item.message}</li>)}</ul>}
