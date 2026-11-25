@@ -318,7 +318,7 @@ def generate_education(out):
     source=json.loads(raw)
     need(source["schema"]=="trama.diagram-education-pilot/v0.1" and source["id"]=="eco02-p1-filiera-orticola","identità pilota")
     need(source["status"]=="TEACHER_REVIEW_REQUIRED" and source["runtimeAuthorized"] is False and source["publicationAuthorized"] is False,"autorità didattica")
-    need(source["context"]["curriculumClaim"]=="none" and source["context"]["curriculumAuthority"]=="Arena","autorità curricolare")
+    need(source["context"]["curricoloClaim"]=="none" and source["context"]["curricoloAuthority"]=="Arena","autorità curricolare")
     need(source["profile"]=="studio-atlas","profilo pilota")
     need([n["id"] for n in source["nodes"]]==["source","compose","review","archive"],"sequenza pilota")
     need(source["edges"]==[["source","compose"],["compose","review"],["review","archive"]],"relazioni pilota")
