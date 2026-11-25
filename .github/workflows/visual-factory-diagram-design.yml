@@ -627,7 +627,36 @@ jobs:
                   desc=root.find("s:desc",ns).text
                   assert "Codex / PR #414" in desc and "PR #412 in bozza, non integrata" in desc
           PY
-      - name: Qualify six P2 diagrams in HTML and SVG
+      - name: Generate bounded educational pilot using qualified renderer
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/vf-diagram-receipt/education"
+          python3 fixtures/visual-factory-diagram/render-profile-demonstrator.py --education-out "$out"
+          python3 - "$out" <<'PY'
+          import hashlib,json,pathlib,sys,xml.etree.ElementTree as ET
+          p=pathlib.Path(sys.argv[1])
+          r=json.loads((p/"education-receipt.json").read_text())
+          assert len(r["outputs"])==2 and r["runtimeAuthorized"] is False and r["publicationAuthorized"] is False
+          assert r["status"]=="GENERATED_TEACHER_REVIEW_REQUIRED"
+          assert hashlib.sha256((p/"guida-docente.md").read_bytes()).hexdigest()==r["guideSha256"]
+          for item in r["outputs"]:
+              for ext in ("html","svg"):
+                  data=(p/(item["id"]+"."+ext)).read_bytes()
+                  assert hashlib.sha256(data).hexdigest()==item[ext+"Sha256"]
+              svg=(p/(item["id"]+".svg")).read_bytes()
+              assert svg in (p/(item["id"]+".html")).read_bytes()
+              root=ET.fromstring(svg)
+              ns={"s":"http://www.w3.org/2000/svg"}
+              labels=[e.text for e in root.findall(".//s:text",ns)]
+              expected=["Coltivazione","Raccolta","Distribuzione","Consumo"]
+              assert [x for x in labels if x in expected]==expected
+              assert "Tecnologia · proposta didattica" in labels
+              desc=root.find("s:desc",ns).text
+              for label,detail in zip(expected,["Acqua, suolo, energia","Ortaggi maturi","Vendita locale","Acquisto e uso"]):
+                  assert label+": "+detail in desc
+          PY
+      - name: Qualify P2 and educational pilot in HTML and SVG
         working-directory: apps/control-center
         shell: bash
         run: |
@@ -636,13 +665,16 @@ jobs:
           import { strict as assert } from 'node:assert';
           import { pathToFileURL } from 'node:url';
           import { readFile,writeFile } from 'node:fs/promises';
-          const dir=process.env.RUNNER_TEMP+'/vf-diagram-receipt/p2';
-          const receipt=JSON.parse(await readFile(dir+'/p2-receipt.json','utf8'));
+          const baseDir=process.env.RUNNER_TEMP+'/vf-diagram-receipt';
+          const p2Dir=baseDir+'/p2',eduDir=baseDir+'/education';
+          const receipt=JSON.parse(await readFile(p2Dir+'/p2-receipt.json','utf8'));
+          const edu=JSON.parse(await readFile(eduDir+'/education-receipt.json','utf8'));
+          const outputs=[...receipt.outputs.map(output=>({output,dir:p2Dir})),...edu.outputs.map(output=>({output,dir:eduDir}))];
           const escape=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
           const browser=await chromium.launch();
           const results=[];
           try{
-            for(const output of receipt.outputs){
+            for(const {output,dir} of outputs){
               const [vw,vh]=output.viewBox;
               const embed=output.id+'-embedded.html';
               await writeFile(dir+'/'+embed,'<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+escape(output.title)+'</title><style>body{margin:0}img{display:block;width:100%;max-width:'+vw+'px;height:auto;margin:auto}p{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}</style><img src="'+output.id+'.svg" alt="'+escape(output.title)+'" aria-describedby="diagram-summary"><p id="diagram-summary">'+escape(output.description)+'</p></html>');
@@ -704,13 +736,15 @@ jobs:
                   }catch(e){item.failure=String(e);}
                   finally{if(context)await context.close();}
                   console.log(JSON.stringify(item));
-                  await writeFile(dir+'/p2-browser-results.json',JSON.stringify(results,null,2));
+                  await writeFile(p2Dir+'/p2-browser-results.json',JSON.stringify(results.filter(r=>!r.id.startsWith('eco02-p1-filiera-orticola-')),null,2));
+                  await writeFile(eduDir+'/education-browser-results.json',JSON.stringify(results.filter(r=>r.id.startsWith('eco02-p1-filiera-orticola-')),null,2));
                 }
               }
             }
           }finally{await browser.close();}
-          assert.equal(results.length,27);
-          assert(results.every(r=>r.status==='PASS'),'Qualificazione grafica P2 non superata');
+          assert.equal(results.filter(r=>!r.id.startsWith('eco02-p1-filiera-orticola-')).length,27);
+          assert.equal(results.filter(r=>r.id.startsWith('eco02-p1-filiera-orticola-')).length,9);
+          assert(results.every(r=>r.status==='PASS'),'Qualificazione grafica P2/pilota non superata');
           JS
       - name: Retain acquisition and test evidence
         if: always()
