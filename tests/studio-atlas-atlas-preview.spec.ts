@@ -579,9 +579,23 @@ for (const viewport of [{width:390,height:844},{width:1280,height:900}]) test("F
  const confirmation=bank.getByRole("button",{name:"Conferma la coerenza e prepara il piano locale"});
  await expect(confirmation).toBeEnabled();
  await expect(bank.getByText("Illustrazione già presente nel progetto",{exact:true})).toHaveCount(5);
- for(const place of ["Orto scolastico","Impianto di irrigazione","Banco delle misure","Mappa del sistema","Frutteto collinare"])await expect(bank.getByText(place,{exact:false}).first()).toBeVisible();
- await bank.getByText("Verifica contenuto e proposta visiva",{exact:true}).first().click();
- await expect(bank.getByText("Elementi da rappresentare:",{exact:true}).first()).toBeVisible();
+ const places=["Orto scolastico","Impianto di irrigazione","Banco delle misure","Mappa del sistema","Frutteto collinare"];
+ const sceneRows=bank.locator("section.visual-factory-step > ol > li");
+ await expect(sceneRows).toHaveCount(places.length);
+ for (const [index,place] of places.entries()) {
+  const row=sceneRows.nth(index);
+  await expect(row).toBeVisible();
+  // The place is in the visible row's direct text, not its collapsed facts list.
+  expect(await row.evaluate(element=>Array.from(element.childNodes).filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent??"").join(" ").trim())).toBe("· "+place);
+  const details=row.locator("details");
+  await expect(details).not.toHaveAttribute("open","");
+  await details.locator("summary").click();
+  await expect(details).toHaveAttribute("open","");
+  await expect(details.getByText("Elementi da rappresentare:",{exact:true})).toBeVisible();
+  await expect(details.getByText(place,{exact:true})).toBeVisible();
+  await details.locator("summary").click();
+  await expect(details).not.toHaveAttribute("open","");
+ }
  await expect(bank.getByText("Pianificazione da confermare.",{exact:true})).toBeVisible();
  await confirmation.click();
  await expect(bank.getByText("5 richieste di riferimento pianificate, non eseguite.",{exact:true})).toBeVisible();
