@@ -35,6 +35,18 @@ test("AWC S3b offline: actual local 3-D, touch, light A/B and reset, with no net
     const canvas = page.locator("#viewport canvas");
     await expect(canvas).toBeVisible();
     const original = await canvas.screenshot({ path: join(output, "awc-s3b-original.png") });
+    const material = page.getByLabel("Superficie di riferimento");
+    for (const [id,label] of [["stone","Pietra"],["bronze","Bronzo"],["obsidian","Ossidiana"],["frame","Cornice"]]) {
+      await material.selectOption(id);
+      await expect(status).toContainText("superficie "+label);
+      await expect(canvas).toHaveAttribute("data-optical-profile",id);
+      const alternate = await canvas.screenshot({path:join(output,"awc-s3b-material-"+id+".png")});
+      expect(sha(alternate)).not.toBe(sha(original));
+    }
+    await material.selectOption("original");
+    await expect(status).toContainText("superficie Originale");
+    const restored = await canvas.screenshot({path:join(output,"awc-s3b-material-restored.png")});
+    expect(sha(restored)).toBe(sha(original));
     await page.getByRole("button", { name: "Luce originale AWC-F" }).click();
     await expect(status).toContainText("luce originale");
     const old = await canvas.screenshot({ path: join(output, "awc-s3b-luce-originale.png") });
@@ -58,6 +70,8 @@ test("AWC S3b offline: actual local 3-D, touch, light A/B and reset, with no net
     await expect(status).toContainText("segnale A");
     const state = await page.evaluate(() => (window as any).__awcTrial?.getState());
     expect(state.objects).toBe(16);
+    expect(state.material).toBe("original");
+    expect(consoleErrors).toEqual([]);
     expect(state.studentAuthorized).toBe(false);
     expect(state.publishable).toBe(false);
     expect(network).toEqual([]);

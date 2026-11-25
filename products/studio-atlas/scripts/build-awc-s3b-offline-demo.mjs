@@ -21,7 +21,22 @@ if (gitBlob(engine) !== "b14f47c0908bab15e890b468d53bb07db0be3a18")
   throw Error("AWC-F: Three.js r128 engine differs from the qualified version");
 if (engine.toString("utf8").toLowerCase().includes("</script"))
   throw Error("Unexpected script delimiter in the verified library");
-const template = readFileSync(join(base, "scripts/awc-s3b-offline-template.html"), "utf8");
+const ts = require("typescript");
+// Embed the exact same typed sources as Studio Atlas, with no extra runtime package.
+const moduleSource = (name) => {
+  const input = readFileSync(join(base, "lib", name), "utf8");
+  const emitted = ts.transpileModule(input, {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
+    reportDiagnostics: true,
+  });
+  if (emitted.diagnostics?.some(d => d.category === ts.DiagnosticCategory.Error) ||
+      /\brequire\s*\(/.test(emitted.outputText) || /<\/script/i.test(emitted.outputText))
+    throw Error("Offline optical module must be standalone: " + name);
+  return "(function(){var exports={};\n" + emitted.outputText + "\nreturn exports;})()";
+};
+const template = readFileSync(join(base, "scripts/awc-s3b-offline-template.html"), "utf8")
+  .replace("__OPTICS_MODULE__", () => moduleSource("scene-optics.ts"))
+  .replace("__RECIPE_MODULE__", () => moduleSource("scene-visual-recipe.ts"));
 const app = template.match(/<script>(\n[\s\S]*?)<\/script>\s*<\/body>/)?.[1];
 const css = template.match(/<style>([\s\S]*?)<\/style>/)?.[1];
 if (!app || !css || !template.includes("__ENGINE_HASH__")) throw Error("Invalid offline template");
@@ -44,5 +59,7 @@ writeFileSync(path, html, "utf8");
 console.log(JSON.stringify({
   status: "OFFLINE_S3B_TRIAL_READY", path, bytes: Buffer.byteLength(html),
   sha256: createHash("sha256").update(html).digest("hex"),
-  sourceBlob: gitBlob(origin), engineBlob: gitBlob(engine), studentAuthorized: false,
+  sourceBlob: gitBlob(origin), engineBlob: gitBlob(engine),
+  opticsBlob: gitBlob(readFileSync(join(base,"lib/scene-optics.ts"))),
+  recipeBlob: gitBlob(readFileSync(join(base,"lib/scene-visual-recipe.ts"))), studentAuthorized: false,
 }));

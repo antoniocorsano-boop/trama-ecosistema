@@ -14,19 +14,22 @@ h1{font-size:clamp(26px,6vw,39px);line-height:1.16;margin:10px 0 12px}
 p{color:#c1ced9}.bar{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
 button{border:1px solid #49647a;border-radius:10px;background:#192a3a;color:#f3f8fa;padding:12px 15px;min-height:48px;font:inherit;cursor:pointer}
 button[aria-pressed="true"]{background:#d4ece7;color:#112b2b;border-color:#d4ece7;font-weight:650}
-button:focus-visible,canvas:focus-visible{outline:3px solid #7de1d5;outline-offset:3px}
+select{font:inherit;color:#f3f8fa;background:#192a3a;border:1px solid #49647a;border-radius:10px;padding:12px;min-height:48px;width:100%;min-width:0;max-width:100%}
+.material-control{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;margin:18px 0;overflow-wrap:anywhere}
+button:focus-visible,select:focus-visible,canvas:focus-visible{outline:3px solid #7de1d5;outline-offset:3px}
 .viewport{width:100%;max-width:800px;aspect-ratio:4/3;margin:20px auto;overflow:hidden;background:#111c29;border:1px solid #355166;border-radius:14px}
 canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 canvas:active{cursor:grabbing}.status{padding:11px 14px;margin:14px 0;background:#172b3c;border-radius:9px;color:#def0ed}
 .note{font-size:13px;line-height:1.5;border-top:1px solid #2d4256;margin-top:28px;padding-top:18px}
 [role="alert"]{color:#ffd8c7}
-@media(max-width:460px){.bar{display:grid;grid-template-columns:1fr 1fr}.bar button{font-size:14px;padding:10px 7px}}
+@media(max-width:460px){.bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.bar button{min-width:0;overflow-wrap:anywhere;padding:10px 7px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
 <body><main>
 <div class="eyebrow">STUDIO ATLAS · PROVA LOCALE NON PUBBLICA</div>
 <h1>MUSEO ZERO · Sala Zero navigabile</h1>
+<p>VF-MOTION-05B1 · confronto materico e collaudo fisico. Modifica un solo parametro alla volta.</p>
 <p>Trascina sulla scena per ruotare l'inquadratura. Prova il segnale B e confronta la luce originale con la correzione sperimentale.</p>
 <div class="bar">
 <button id="reset">Ripristina inquadratura</button>
@@ -39,6 +42,8 @@ canvas:active{cursor:grabbing}.status{padding:11px 14px;margin:14px 0;background
 <p id="error" role="alert" hidden></p>
 <div class="bar"><button id="balance" aria-pressed="true">Luce equilibrata · prova</button>
 <button id="reference" aria-pressed="false">Luce originale AWC-F</button></div>
+<label class="material-control" for="material">Superficie di riferimento<select id="material"></select></label>
+<p>Le alternative applicano i riflessi sintetici al solo pavimento. Non sono riflessi reali della stanza. Per il confronto usa luce equilibrata, segnale A e rotazione 0.00 rad.</p>
 <p class="note">Prova tecnica isolata, non la Biblioteca Atlas né un ambiente per studenti. 
 16 oggetti, 192 triangoli, Three.js r128. La geometria resta invariata; l'illuminazione è una proposta da valutare.
 Nessuna richiesta di rete, raccolta di dati o controllo di apparecchiature.
@@ -50,6 +55,8 @@ Origine AWC-F: 6285c47c · Fonte immutabile f8e91ca7.</p>
 (function(){
 "use strict";
 var T=window.THREE;
+var optics=__OPTICS_MODULE__;
+var recipes=__RECIPE_MODULE__;
 var cfg=JSON.parse(document.getElementById("awc-scene").textContent);
 var host=document.getElementById("viewport");
 var status=document.getElementById("status");
@@ -77,6 +84,25 @@ for(var name in cfg.materials){if(Object.prototype.hasOwnProperty.call(cfg.mater
 cfg.objects.forEach(function(obj){var mesh=new T.Mesh(new T.BoxGeometry(obj.size[0],obj.size[1],obj.size[2]),materials[obj.material]);mesh.name=obj.id;mesh.position.set(obj.position[0],obj.position[1],obj.position[2]);mesh.castShadow=["console-plinth","console-panel","sensor-A","sensor-B"].includes(obj.id);mesh.receiveShadow=true;scene.add(mesh);});
 var camera=new T.PerspectiveCamera(cfg.camera.fov,4/3,cfg.camera.near,cfg.camera.far);camera.up.set(0,0,1);
 var orbit=0,signal="A",profile="balanced",pointer=null,paintRequest=0;
+var materialProfile="original",opticalTarget=null;
+var materialSelect=document.getElementById("material");
+Object.keys(recipes.MATERIAL_PRESETS).forEach(function(name){var option=document.createElement("option");option.value=name;option.textContent=recipes.MATERIAL_PRESETS[name].label;materialSelect.appendChild(option);});
+function applyMaterial(name){
+ if(!Object.prototype.hasOwnProperty.call(recipes.MATERIAL_PRESETS,name))throw Error("Profilo materiale non valido");
+ var preset=recipes.MATERIAL_PRESETS[name],floor=materials.floor;
+ if(name!=="original"&&!opticalTarget){
+  var source=new T.DataTexture(optics.makeEnvironment(),256,128,T.RGBAFormat,T.UnsignedByteType);
+  source.mapping=T.EquirectangularReflectionMapping;source.encoding=T.LinearEncoding;source.minFilter=source.magFilter=T.LinearFilter;source.needsUpdate=true;
+  var generator=new T.PMREMGenerator(renderer);
+  try{opticalTarget=generator.fromEquirectangular(source);}finally{source.dispose();generator.dispose();}
+ }
+ var nextMap=name==="original"?null:opticalTarget.texture;
+ if(floor.envMap!==nextMap){floor.envMap=nextMap;floor.needsUpdate=true;}
+ floor.envMapIntensity=nextMap?optics.OPTICAL_ENV_INTENSITY[name]:1;
+ floor.roughness=preset.roughness;floor.metalness=preset.metalness;
+ materialProfile=name;materialSelect.value=name;canvas.setAttribute("data-optical-profile",name);redraw();
+}
+materialSelect.onchange=function(){try{applyMaterial(materialSelect.value);}catch(e){materialSelect.value=materialProfile;fail(String(e));}};
 function paint(){
 paintRequest=0;
 var c=cfg.camera,t=c.azimuth+orbit,d=c.distance,h=c.elevation;
@@ -86,7 +112,7 @@ materials.screen.color.set(signal==="B"?"#224b57":"#23384c");
 materials.screen.emissive.set(signal==="B"?"#67d9ca":"#1d3448");
 materials.screen.emissiveIntensity=signal==="B"?3:.08;
 renderer.render(scene,camera);
-status.textContent="WebGL attivo · rotazione "+orbit.toFixed(2)+" rad · segnale "+signal+" · luce "+(profile==="balanced"?"equilibrata":"originale");
+status.textContent="WebGL attivo · rotazione "+orbit.toFixed(2)+" rad · segnale "+signal+" · luce "+(profile==="balanced"?"equilibrata":"originale")+" · superficie "+recipes.MATERIAL_PRESETS[materialProfile].label;
 }
 function redraw(){if(!paintRequest)paintRequest=requestAnimationFrame(paint);}
 function lighting(name){
@@ -116,8 +142,9 @@ canvas.addEventListener("pointermove",function(e){if(pointer===null)return;var d
 canvas.addEventListener("keydown",function(e){if(e.key==="ArrowLeft"){e.preventDefault();rotate(-10);}if(e.key==="ArrowRight"){e.preventDefault();rotate(10);}if(e.key==="Home"){e.preventDefault();reset();}});
 canvas.addEventListener("webglcontextlost",function(e){e.preventDefault();fail("WebGL interrotto. Riapri il documento per riprovare.");});
 if(typeof ResizeObserver!=="undefined"){new ResizeObserver(resize).observe(host);}else{window.addEventListener("resize",resize);}
-lighting("balanced");resize();paint();
-window.__awcTrial={ready:true,engine:"three-r128",getState:function(){return {orbit:orbit,signal:signal,profile:profile,objects:cfg.objects.length,studentAuthorized:false,publishable:false};}};
+lighting("balanced");applyMaterial("original");resize();paint();
+window.addEventListener("pagehide",function(e){if(!e.persisted&&opticalTarget)opticalTarget.dispose();});
+window.__awcTrial={ready:true,engine:"three-r128",getState:function(){return {orbit:orbit,signal:signal,profile:profile,material:materialProfile,objects:cfg.objects.length,studentAuthorized:false,publishable:false};}};
 }catch(e){fail(String(e));window.__awcTrial={ready:false,error:String(e),studentAuthorized:false,publishable:false};}
 })();
 </script>
