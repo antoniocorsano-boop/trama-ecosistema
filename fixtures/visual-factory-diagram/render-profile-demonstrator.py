@@ -47,7 +47,7 @@ def load_inputs():
         need(isinstance(text,str) and 0<len(text)<=160 and not re.search(r"[\x00-\x1f<>]",text),"plain text")
     return manifest,source,sha(profiles_raw),sha(source_raw)
 
-def render(profile, source, variant):
+def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", include_details=False):
     w,h=VARIANTS[variant]
     p=profile["palette"]
     need(set(p)==PALETTE,"palette keys")
@@ -66,7 +66,7 @@ def render(profile, source, variant):
     accent=p["accent"]
     title=esc(source["title"])
     name=esc(profile["name"])
-    description=source["description"]+" Fasi: "+"; ".join(n["label"] for n in source["nodes"])+"."
+    description=source["description"]+" Fasi: "+"; ".join(n["label"]+(": "+n["detail"] if include_details else "") for n in source["nodes"])+"."
     parts=[f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
       f'<title id="diagram-title">{title} — {name}</title>',
       f'<desc id="diagram-desc">{esc(description)}</desc>',
@@ -105,7 +105,7 @@ def render(profile, source, variant):
             label(cx,y+42,str(i+1),22,p["onAccent"],700)
             label(cx,y+92,source["nodes"][i]["label"],font,dark,700)
             label(cx,y+132,source["nodes"][i]["detail"],small,p["secondaryInk"])
-    label(w//2,h-16 if variant=="mobile-vertical" else h-56,"Campione P1 · non pubblicato",15 if variant=="mobile-vertical" else 22,dark)
+    label(w//2,h-16 if variant=="mobile-vertical" else h-56,footer,15 if variant=="mobile-vertical" else 22,dark)
     parts.append("</g></svg>")
     svg="\n".join(parts)
     wrapper='<!doctype html>\n<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+title+' — '+name+'</title><style>html,body{margin:0;padding:0;background:'+p["canvas"]+';color:'+dark+';font-family:system-ui,sans-serif}main{width:100%;max-width:'+str(w)+'px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main>\n'+svg+'\n</main></body></html>\n'
@@ -311,11 +311,58 @@ def generate_p2(out):
     (out/"p2-receipt.json").write_bytes((json.dumps(receipt,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
     print(f"P2: {len(results)} coppie statiche; {len(tests)} rifiuti semantici PASS")
 
+def generate_education(out):
+    # One explicit educational pilot, not arbitrary source ingestion or a new renderer.
+    manifest,_,profile_hash,_=load_inputs()
+    raw=(BASE/"education-pilot-source.json").read_bytes()
+    source=json.loads(raw)
+    need(source["schema"]=="trama.diagram-education-pilot/v0.1" and source["id"]=="eco02-p1-filiera-orticola","identità pilota")
+    need(source["status"]=="TEACHER_REVIEW_REQUIRED" and source["runtimeAuthorized"] is False and source["publicationAuthorized"] is False,"autorità didattica")
+    need(source["context"]["curriculumClaim"]=="none" and source["context"]["curriculumAuthority"]=="Arena","autorità curricolare")
+    need(source["profile"]=="studio-atlas","profilo pilota")
+    need([n["id"] for n in source["nodes"]]==["source","compose","review","archive"],"sequenza pilota")
+    need(source["edges"]==[["source","compose"],["compose","review"],["review","archive"]],"relazioni pilota")
+    p2_text(source["title"],32)
+    p2_text(source["description"],160)
+    for n in source["nodes"]:
+        p2_text(n["label"],18)
+        p2_text(n["detail"],24)
+    profile=next(p for p in manifest["profiles"] if p["id"]==source["profile"])
+    out.mkdir(parents=True,exist_ok=True)
+    outputs=[]
+    for variant in VARIANTS:
+        doc,svg,checks=render(profile,source,variant,footer="Tecnologia · proposta didattica",include_details=True)
+        validate(svg,profile,variant)
+        root=ET.fromstring(svg)
+        labels=[e.text for e in root.iter(f"{{{NS}}}text")]
+        desc=root.find(f"{{{NS}}}desc").text
+        for n in source["nodes"]:
+            need(n["label"] in labels and n["detail"] in labels and n["label"]+": "+n["detail"] in desc,"propagazione contenuto didattico")
+        stem=source["id"]+"-"+variant
+        data={"html":doc.encode("utf-8"),"svg":svg.encode("utf-8")}
+        for ext,content in data.items(): (out/(stem+"."+ext)).write_bytes(content)
+        outputs.append({"id":stem,"diagram":source["id"],"variant":variant,"viewBox":list(VARIANTS[variant]),
+            "title":root.find(f"{{{NS}}}title").text,"description":desc,"labels":labels,
+            "contrast":checks,"htmlSha256":sha(data["html"]),"svgSha256":sha(data["svg"])})
+    guide=(BASE/"education-pilot-guide.md").read_bytes()
+    (out/"guida-docente.md").write_bytes(guide)
+    receipt={"schema":"trama.diagram-education-receipt/v0.1","status":"GENERATED_TEACHER_REVIEW_REQUIRED",
+        "sourceSha256":sha(raw),"profilesSha256":profile_hash,"guideSha256":sha(guide),
+        "runtimeAuthorized":False,"publicationAuthorized":False,"outputs":outputs}
+    (out/"education-receipt.json").write_bytes((json.dumps(receipt,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
+    print("Education pilot: 2 static pairs; teacher decision pending")
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--out",type=pathlib.Path)
     ap.add_argument("--p2-out",type=pathlib.Path)
+    ap.add_argument("--education-out",type=pathlib.Path)
     args=ap.parse_args()
+    if args.education_out is not None:
+        need(args.out is None and args.p2_out is None,"modalità di generazione esclusive")
+        generate_education(args.education_out)
+        return
     if args.p2_out is not None:
         need(args.out is None,"modalità di generazione esclusive")
         generate_p2(args.p2_out)
