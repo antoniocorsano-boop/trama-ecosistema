@@ -1,10 +1,23 @@
 import type { PathwayProject, PathwayScene, SceneStage, SceneIllustration } from "../model";
-import { makeSceneIllustration, PROJECT_IMAGE_MAX_BYTES, SCENE_IMAGE_MAX_BYTES } from "../scene-media";
+import { makeSceneIllustration, PROJECT_IMAGE_MAX_BYTES, SCENE_IMAGE_MAX_BYTES, validHotspot } from "../scene-media";
 import manifest from "../../public/design/ess-02/r2b/manifest.json";
 
 export const AGRICULTURE_PROJECT_ID = "ess-02-dal-campo-al-raccolto";
 export const AGRICULTURE_GUIDE = "/design/ess-02/fascicolo.html";
 const artwork = manifest.scenes;
+
+/** Bind exact evidence IDs to validated percentage coordinates from the artwork. */
+export function bindAgricultureHotspots(stage:SceneStage, points:Readonly<Record<string,unknown>>):SceneStage {
+ const evidence=stage.evidence??[];
+ const ids=new Set(evidence.map(item=>item.id));
+ if(ids.size!==evidence.length||Object.keys(points).length!==evidence.length)throw Error("AGRICULTURE_HOTSPOT_COUNT");
+ return {...stage,evidence:evidence.map(item=>{
+  if(!Object.hasOwn(points,item.id))throw Error("AGRICULTURE_HOTSPOT_MISSING");
+  const hotspot=points[item.id];
+  if(!validHotspot(hotspot))throw Error("AGRICULTURE_HOTSPOT_INVALID");
+  return {...item,hotspot:{x:hotspot.x,y:hotspot.y}};
+ })};
+}
 
 
 type Point = [id:string,label:string,detail:string,x:number,y:number,kind:NonNullable<SceneStage["evidence"]>[number]["kind"]];
@@ -87,11 +100,8 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
   if(!image)throw Error("AGRICULTURE_IMAGE_MISSING");
   scene.illustration=image;
   const binding=artwork.find(item=>item.sceneId===sceneId)!;
-  const points=binding.hotspots as Record<string,{x:number;y:number}>;
-  if(!scene.stage||Object.keys(points).length!==(scene.stage.evidence?.length??0))throw Error("AGRICULTURE_HOTSPOT_COUNT");
-  scene.stage={...scene.stage,evidence:scene.stage.evidence?.map(item=>{
-    const hotspot=points[item.id];if(!hotspot)throw Error("AGRICULTURE_HOTSPOT_MISSING");return {...item,hotspot};
-  })};
+  if(!scene.stage)throw Error("AGRICULTURE_HOTSPOT_COUNT");
+  scene.stage=bindAgricultureHotspots(scene.stage,binding.hotspots);
  }
  return {projectId:AGRICULTURE_PROJECT_ID,title:"Dal campo al raccolto · Il mistero dei filari asciutti",idea:"Indaga perché due filari irrigati insieme mostrano condizioni diverse. Aiuta Sara e Luca a ricostruire il sistema agricolo e a verificare una soluzione senza sprechi.",ageBand:"lower-secondary",
  authoringComplexity:"ARTICULATED",authoringSelection:{environment:"NATURE",tools:["STORY","WORLD","FORM","SCENES","CHOICES","HOTSPOTS","PREVIEW"]},
