@@ -1,15 +1,11 @@
 import type { PathwayProject, PathwayScene, SceneStage, SceneIllustration } from "../model";
-import { makeSceneIllustration } from "../scene-media";
+import { makeSceneIllustration, PROJECT_IMAGE_MAX_BYTES, SCENE_IMAGE_MAX_BYTES } from "../scene-media";
+import manifest from "../../public/design/ess-02/r2b/manifest.json";
 
 export const AGRICULTURE_PROJECT_ID = "ess-02-dal-campo-al-raccolto";
 export const AGRICULTURE_GUIDE = "/design/ess-02/fascicolo.html";
-const artwork = [
- {sceneId:"AG1",file:"orto-apertura.svg",alt:"Sara e Luca accanto a un orto: a sinistra piante verdi, a destra piante appassite. Sullo sfondo il serbatoio."},
- {sceneId:"AG2",file:"orto-indagine.svg",alt:"Vista dell'orto dall'alto: serbatoio, tubazione, due recipienti di misura, terreno e filari con vegetazione diversa."},
- {sceneId:"AG3",file:"banco-misure.svg",alt:"Sara e Luca al banco di lavoro con due recipienti graduati e un quaderno; a sinistra acqua a monte, a destra acqua a valle."},
- {sceneId:"AG4",file:"sistema-agricolo.svg",alt:"Quattro stazioni collegate: risorse naturali, strumenti e lavoro, colture e raccolto, effetti su acqua e suolo."},
- {sceneId:"AG5",file:"frutteto.svg",alt:"Frutteto collinare con alberi, due settori di terreno diversi e linea di irrigazione."},
-] as const;
+const artwork = manifest.scenes;
+
 
 type Point = [id:string,label:string,detail:string,x:number,y:number,kind:NonNullable<SceneStage["evidence"]>[number]["kind"]];
 function stage(place:string,detail:string,points:Point[],characterBeat?:SceneStage["characterBeat"]):SceneStage {
@@ -90,27 +86,39 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
   const image=images[sceneId];
   if(!image)throw Error("AGRICULTURE_IMAGE_MISSING");
   scene.illustration=image;
+  const binding=artwork.find(item=>item.sceneId===sceneId)!;
+  const points=binding.hotspots as Record<string,{x:number;y:number}>;
+  if(!scene.stage||Object.keys(points).length!==(scene.stage.evidence?.length??0))throw Error("AGRICULTURE_HOTSPOT_COUNT");
+  scene.stage={...scene.stage,evidence:scene.stage.evidence?.map(item=>{
+    const hotspot=points[item.id];if(!hotspot)throw Error("AGRICULTURE_HOTSPOT_MISSING");return {...item,hotspot};
+  })};
  }
  return {projectId:AGRICULTURE_PROJECT_ID,title:"Dal campo al raccolto · Il mistero dei filari asciutti",idea:"Indaga perché due filari irrigati insieme mostrano condizioni diverse. Aiuta Sara e Luca a ricostruire il sistema agricolo e a verificare una soluzione senza sprechi.",ageBand:"lower-secondary",
  authoringComplexity:"ARTICULATED",authoringSelection:{environment:"NATURE",tools:["STORY","WORLD","FORM","SCENES","CHOICES","HOTSPOTS","PREVIEW"]},
  humanState:"STORY_REVIEW",productionState:"NOT_REQUESTED",
  story:{hook:"Due filari irrigati insieme mostrano condizioni diverse.",setting:"Orto scolastico e frutteto collinare.",characters:"Sara, responsabile dell’orto; Luca, osservatore delle misure; lo studente, consulente dell’orto.",characterGoal:"Individuare una soluzione motivata che eviti sprechi d’acqua.",disruption:"Le piante a valle sono appassite dopo l’irrigazione.",unknown:"Quale relazione impedisce la distribuzione uniforme? Quali misure distinguono le ipotesi?",learnerRole:"Consulente che osserva, confronta, sceglie e verifica nel modello didattico.",turningPoint:"Confronto fra misure a monte e a valle, indizio di ostruzione e seconda prova.",ending:"Ricostruzione del sistema e trasferimento del metodo in un frutteto."},
  storyReview:{decision:"READY"},world:{learnerRole:"Consulente dell’orto",canObserve:"Riserva, linea, due misure, terreno, piante e operazioni.",canChange:"Seleziona interventi nel modello e confronta conseguenze.",unknown:"Causa della distribuzione irregolare nel caso.",consequence:"Le misure simulate cambiano in funzione della scelta.",motivation:"Salvare le colture senza sprechi e saper spiegare le decisioni."},
- worldReview:{decision:"READY"},productReview:{decision:"READY",evidenceRef:"ESS-02 · Fascicolo educativo-didattico v0.3 (bozza)"},experience:{grammar:"INQUIRY_EVIDENCE",rationale:"L’indagine richiede osservazione di indizi, confronto di misure, una scelta causale e trasferimento."},scenes,storyboardReady:false,archived:false,createdAt:now,updatedAt:now,revision:1};
+ worldReview:{decision:"READY"},productReview:{decision:"READY",evidenceRef:"ESS-02 · Fascicolo educativo-didattico v0.4 (bozza)"},experience:{grammar:"INQUIRY_EVIDENCE",rationale:"L’indagine richiede osservazione di indizi, confronto di misure, una scelta causale e trasferimento."},scenes,storyboardReady:false,archived:false,createdAt:now,updatedAt:now,revision:1};
 }
 
-// Local repository artwork is converted once using the existing WebP validator;
-// no external provider, no paid generation, no approval is imported.
+// Preserve and verify original repository bytes, without canvas recompression.
 export async function loadAgricultureDraft():Promise<PathwayProject>{
  const images:Record<string,SceneIllustration>={};
+ let total=0;
  for(const item of artwork){
-  const source=new Image();source.src="/design/ess-02/"+item.file;
-  await source.decode();
-  const canvas=document.createElement("canvas");canvas.width=960;canvas.height=540;
-  const ctx=canvas.getContext("2d");if(!ctx)throw Error("AGRICULTURE_CANVAS");
-  ctx.drawImage(source,0,0,960,540);
-  const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(value=>value&&value.type==="image/webp"?resolve(value):reject(Error("AGRICULTURE_WEBP")),"image/webp",0.85));
-  images[item.sceneId]={...await makeSceneIllustration(new Uint8Array(await blob.arrayBuffer())),alt:item.alt};
+  const response=await fetch("/design/ess-02/r2b/"+item.file,{cache:"no-cache"});
+  if(!response.ok)throw Error("AGRICULTURE_IMAGE_MISSING");
+  const declared=Number(response.headers.get("content-length")??"0");
+  if(declared>SCENE_IMAGE_MAX_BYTES)throw Error("AGRICULTURE_IMAGE_LIMIT");
+  const bytes=new Uint8Array(await response.arrayBuffer());
+  total+=bytes.byteLength;
+  if(total>PROJECT_IMAGE_MAX_BYTES||bytes.byteLength!==item.bytes)throw Error("AGRICULTURE_IMAGE_LIMIT");
+  const image=await makeSceneIllustration(bytes);
+  if(image.sha256!==item.sha256||image.pixelWidth!==item.width||image.pixelHeight!==item.height)throw Error("AGRICULTURE_IMAGE_INTEGRITY");
+  const decoded=new Image();decoded.src="data:image/webp;base64,"+image.base64;await decoded.decode();
+  if(decoded.naturalWidth!==item.width||decoded.naturalHeight!==item.height)throw Error("AGRICULTURE_IMAGE_INTEGRITY");
+  images[item.sceneId]={...image,alt:item.alt};
  }
+ if(total!==manifest.totalBytes)throw Error("AGRICULTURE_IMAGE_LIMIT");
  return createAgricultureDraft(images);
 }

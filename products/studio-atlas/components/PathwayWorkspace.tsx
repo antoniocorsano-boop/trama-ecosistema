@@ -279,7 +279,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
             <div><dt>Destinatari</dt><dd>{ageLabel(project.ageBand)}</dd></div>
             <div><dt>Revisione</dt><dd>{project.revision}</dd></div>
           </dl>
-          {project.projectId===AGRICULTURE_PROJECT_ID&&<p><Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico (bozza v0.3; verificare la versione della copia locale)</Link><br/><small>Da riallineare se modifichi il percorso.</small></p>}
+          {project.projectId===AGRICULTURE_PROJECT_ID&&<p><Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico (bozza v0.4; verificare la versione della copia locale)</Link><br/><small>Da riallineare se modifichi il percorso.</small></p>}
           <p className="context-note">
             Nessuna classe, studente o provider di calcolo è legato a questo draft. Il salvataggio resta locale a questo dispositivo: non costituisce una copia di sicurezza né sincronizza il Percorso.
           </p>

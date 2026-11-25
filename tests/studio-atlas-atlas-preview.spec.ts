@@ -425,7 +425,7 @@ for(const illustrated of [false,true]) test(illustrated?"ESS-01B agriculture: im
 for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS-02 agriculture: real editable draft, guarded review, five scenes "+viewport.width,async({page,context},testInfo)=>{
  await page.setViewportSize(viewport);
  await page.goto(STUDIO);
- await page.getByRole("link",{name:"Fascicolo educativo-didattico · v0.3"}).click();
+ await page.getByRole("link",{name:"Fascicolo educativo-didattico · v0.4"}).click();
  await expect(page.getByRole("heading",{name:"Verifica e valutazione formativa"})).toBeVisible();
  await page.goto(STUDIO);
  await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
@@ -437,6 +437,15 @@ for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS
  const initial=await readDraft();
  expect(initial.storyReview.decision).toBe("READY");expect(initial.productReview.decision).toBe("READY");expect(initial.storyboardReady).toBe(false);
  expect(initial.scenes).toHaveLength(5);expect(initial.scenes.filter((s:{illustration?:unknown})=>s.illustration)).toHaveLength(5);
+ const artManifest=await (await page.request.get(STUDIO+"/design/ess-02/r2b/manifest.json")).json();
+ expect(artManifest.totalBytes).toBe(443758);
+ for(const entry of artManifest.scenes){
+  const scene=initial.scenes.find((s:{sceneId:string})=>s.sceneId===entry.sceneId);
+  expect(scene.illustration.sha256).toBe(entry.sha256);
+  expect(Buffer.from(scene.illustration.base64,"base64").length).toBe(entry.bytes);
+  expect(scene.illustration.pixelWidth).toBe(entry.width);expect(scene.illustration.pixelHeight).toBe(entry.height);
+  for(const point of scene.stage.evidence)expect(point.hotspot).toEqual(entry.hotspots[point.id]);
+ }
  await nav.getByRole("button",{name:"Storia"}).click();
  // Explicit reviewer action in disposable test context, not a seeded approval.
  await page.getByRole("button",{name:"Approva storia"}).click();
