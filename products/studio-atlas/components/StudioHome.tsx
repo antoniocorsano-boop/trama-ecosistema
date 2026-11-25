@@ -5,16 +5,19 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   ensureMuseoZeroPilotProject,
+  ensureAgriculturePilotProject,
   listProjects,
   updateProject,
 } from "../lib/store";
 import type { PathwayProject } from "../lib/model";
 import { AtelierWorkflow } from "./AtelierWorkflow";
+import { AGRICULTURE_GUIDE } from "../lib/canonical/agriculture";
 
 export function StudioHome() {
   const router = useRouter();
   const [projects, setProjects] = useState<PathwayProject[]>([]);
 
+  const [agricultureState,setAgricultureState] = useState<"idle"|"loading"|"error">("idle");
   const refresh = () => setProjects(listProjects());
 
   useEffect(() => {
@@ -65,6 +68,21 @@ export function StudioHome() {
         >
           Apri MUSEO ZERO
         </button>
+      </section>
+
+      <section className="pilot-pathway" aria-labelledby="agriculture-pilot-title">
+        <div>
+          <p className="eyebrow">Prodotto educativo · Bozza da rivedere</p>
+          <h2 id="agriculture-pilot-title">Dal campo al raccolto · Il mistero dei filari asciutti</h2>
+          <p>Indagine in cinque scene: osservazioni, misure, scelte e trasferimento. Tecnologia, seconda annualità.</p>
+          <Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico · v0.1</Link>
+          {agricultureState==="error"&&<p role="alert">Non è stato possibile preparare la bozza locale. Riprova senza cancellare i tuoi percorsi.</p>}
+        </div>
+        <button className="secondary-action" disabled={agricultureState==="loading"} onClick={async()=>{
+          setAgricultureState("loading");
+          try{const project=await ensureAgriculturePilotProject();refresh();setAgricultureState("idle");router.push(`/percorso/${project.projectId}`);}
+          catch{setAgricultureState("error");}
+        }}>{agricultureState==="loading"?"Preparazione della bozza…":"Apri Dal campo al raccolto"}</button>
       </section>
 
       <section className="project-list" aria-labelledby="continue-title">

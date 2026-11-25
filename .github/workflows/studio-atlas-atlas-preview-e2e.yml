@@ -132,6 +132,9 @@ jobs:
           find test-results -type f -name 'ess-01b-*.png' -exec cp {} "$RUNNER_TEMP/ess-01b-screenshots/" \;
           test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-teacher-image.png"
           test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-learner-image.png"
+          mkdir -p "$RUNNER_TEMP/ess-02-screenshots"
+          find test-results -type f -name 'ess-02-*.png' -exec cp {} "$RUNNER_TEMP/ess-02-screenshots/" \;
+          for size in 390 1280; do for scene in teacher opening investigation decision system transfer; do test -f "$RUNNER_TEMP/ess-02-screenshots/ess-02-$scene-$size.png"; done; done
 
       - name: Qualify World Composer at mobile sizes and across local draft revisions
         id: composer
@@ -209,6 +212,15 @@ jobs:
         with:
           name: ess-01b-interactive-image
           path: ${{ runner.temp }}/ess-01b-screenshots/*.png
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve ESS-02 teacher and learner review screenshots
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ess-02-agriculture-review
+          path: ${{ runner.temp }}/ess-02-screenshots/*.png
           if-no-files-found: error
           retention-days: 7
 

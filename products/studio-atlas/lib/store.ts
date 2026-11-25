@@ -14,6 +14,8 @@ import {
   createMuseoZeroPilotProject,
 } from "./canonical/museo-zero";
 
+import { AGRICULTURE_PROJECT_ID, loadAgricultureDraft } from "./canonical/agriculture";
+
 const KEY = "studio-atlas.projects.v0.1";
 const MUSEO_ZERO_HUMAN_PRODUCT_REVIEW_REF =
   "docs/capabilities/atlas-percorsi/pathways/PW-STRATEGY-SELECTION-01/worlds/MUSEO-ZERO/HUMAN-PRODUCT-REVIEW-v0.1.md";
@@ -170,4 +172,12 @@ export function ensureMuseoZeroPilotProject(): PathwayProject {
 
   writeAll([project, ...readAll()]);
   return project;
+}
+
+// A teacher explicitly opens a new local copy; existing revisions are never replaced.
+export async function ensureAgriculturePilotProject():Promise<PathwayProject>{
+ const existing=getProject(AGRICULTURE_PROJECT_ID);if(existing)return existing;
+ const draft=await loadAgricultureDraft();
+ const current=getProject(AGRICULTURE_PROJECT_ID);if(current)return current;
+ writeAll([draft,...readAll()]);return draft;
 }

@@ -1,0 +1,7 @@
+# ESS-02 — Dal campo al raccolto · v0.1
+Stato: IMPLEMENTED_CANDIDATE / REVIEW_REQUIRED. Base qualificata Studio 2c253c9c795a90d50b42fa4df382346dbdd2ded6, ricevitore Atlas f8f2a84b5725fd23aac4415df619147e0a102128 invariato.
+## Prodotto e autorità
+Bozza locale modificabile accessibile dall’ingresso Studio, riapertura conservativa senza riscrittura. Cinque scene AG1–AG5, tre decisioni nel modello con stati conseguenti, quattro tavole SVG originali convertite in WebP via il validatore già esistente. Dati inventati dichiarati, nessun simulatore fisico generale. Fascicolo HTML leggibile dal docente collegato a ingresso e percorso; riferito alla versione iniziale, da riallineare dopo modifiche. Non è ancora un catalogo pubblico Atlas.
+Non si importa alcuna approvazione. Storia READY, mondo e prodotto READY, storyboard non approvato. L’anteprima di revisione usa il gate esistente e resta senza autorizzazioni studente/runtime. Raccordo Arena da confermare. Il test esercita l’atto di approvazione storia solo nel contesto isolato di prova.
+## Evidenze richieste
+Due prove browser 390/1280, percorso reale dal pulsante ingresso, quattro immagini, sei indizi, tre scelte, trasferimento, riapertura non distruttiva, conservazione delle schermate complete. Restano valutazione estetica (tavole vettoriali di prima produzione, non render fotorealistici), valutazione educativa e accessibilità su dispositivo reale. Conservare il codice già qualificato, nessun nuovo ramo, dipendenza o costo. Nessun merge/deploy.
