@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { PathwayProject } from "../lib/model";
+import { usesCanonicalVisualExecutor } from "../lib/visual-project-profile";
+import { ProjectVisualPlanning } from "./ProjectVisualPlanning";
 import { digestAuthoringState, getProductionBlockers } from "../lib/production";
 import {
   getMuseoZeroReferenceIntent,
@@ -78,6 +80,12 @@ function preflightMessage(receipts: readonly VisualPreflightReceipt[], blockers:
 }
 
 export function VisualFactoryStage({ project }: { project: PathwayProject }) {
+  return usesCanonicalVisualExecutor(project.projectId)
+    ? <CanonicalVisualFactoryStage key={project.projectId} project={project} />
+    : <ProjectVisualPlanning key={JSON.stringify([project.projectId, project.revision])} project={project} />;
+}
+
+function CanonicalVisualFactoryStage({ project }: { project: PathwayProject }) {
   const [packageDigest, setPackageDigest] = useState<string | null>(null);
   const [state, setState] = useState<VisualFactoryState | null>(null);
   const [busy, setBusy] = useState(false);
