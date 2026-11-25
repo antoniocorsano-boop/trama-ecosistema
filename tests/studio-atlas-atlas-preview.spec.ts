@@ -613,3 +613,57 @@ for (const viewport of [{width:390,height:844},{width:1280,height:900}]) test("F
  expect(productionRequests).toEqual([]);
  expect(pageErrors).toEqual([]);
 });
+
+
+for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("F3.3b: verified static diagram package "+viewport.width,async({page},testInfo)=>{
+ await page.setViewportSize(viewport);
+ const external:string[]=[];
+ page.on("request",request=>{const u=new URL(request.url());if((u.protocol==="http:"||u.protocol==="https:")&&u.origin!==STUDIO)external.push(request.url());});
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco diagrammi"});
+ await expect(bank.getByRole("heading",{name:"Diagrammi e infografiche"})).toBeVisible();
+ const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ await bank.getByRole("button",{name:"Apri materiale didattico"}).click();
+ await expect(bank.getByRole("status")).toHaveText("Integrità del pacchetto verificata. Proposta da revisionare.");
+ const image=bank.getByRole("img");
+ const select=bank.getByLabel("Composizione");
+ const root=STUDIO+"/design/education-diagram/";
+ const receipt=await (await page.request.get(root+"education-receipt.json")).json();
+ const checkFile=async(name:string,expected:string)=>{
+  const link=bank.locator("a[download]").filter({hasText:name});
+  const href=await link.getAttribute("href");
+  expect(href).toMatch(/^blob:/);
+  const digest=await page.evaluate(async url=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await (await fetch(url!)).arrayBuffer())),b=>b.toString(16).padStart(2,"0")).join(""),href);
+  expect(digest).toBe(expected);
+ };
+ for(const variant of ["mobile-vertical","desktop-lim-horizontal"]){
+  await select.selectOption(variant);
+  await expect.poll(()=>image.evaluate((node:HTMLImageElement)=>node.complete&&node.naturalWidth>0)).toBe(true);
+  const output=receipt.outputs.find((o:{variant:string})=>o.variant===variant);
+  await checkFile("Scarica HTML della composizione",output.htmlSha256);
+  await checkFile("Scarica SVG della composizione",output.svgSha256);
+  await page.screenshot({path:testInfo.outputPath("ess-02-diagram-"+variant+"-"+viewport.width+".png"),fullPage:true});
+ }
+ await checkFile("Scarica fonte JSON",receipt.sourceSha256);
+ await checkFile("Scarica guida docente",receipt.guideSha256);
+ await expect(bank.getByRole("link",{name:"Scarica ricevuta di produzione"})).toBeVisible();
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+ expect(external).toEqual([]);
+});
+
+test("F3.3b: corrupted diagram candidate is rejected before preview or download",async({page})=>{
+ await page.route("**/design/education-diagram/*mobile-vertical.svg",route=>route.fulfill({status:200,contentType:"image/svg+xml",body:"<svg xmlns='http://www.w3.org/2000/svg'/>"}));
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco diagrammi"});
+ await bank.getByRole("button",{name:"Apri materiale didattico"}).click();
+ await expect(bank.getByRole("alert")).toContainText("non integro");
+ await expect(bank.getByRole("img")).toHaveCount(0);
+ await expect(bank.getByRole("link")).toHaveCount(0);
+});

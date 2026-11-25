@@ -1,23 +1,45 @@
 "use client";
-import {useState} from "react";
+import {useEffect,useRef,useState} from "react";
 import {DIAGRAM_ROOT,DIAGRAM_STEM,DIAGRAM_VARIANTS,educationFiles,parseEducationReceipt,verifyEducationFile,type DiagramVariant} from "../lib/education-diagram";
 
 export function EducationDiagramBank() {
   const [state,setState]=useState<"closed"|"checking"|"ready"|"error">("closed");
   const [variant,setVariant]=useState<DiagramVariant>("mobile-vertical");
+  const [links,setLinks]=useState<Record<string,string>>({});
+  const request=useRef<AbortController|null>(null);
+  const urls=useRef<string[]>([]);
+  useEffect(()=>()=>{request.current?.abort();urls.current.forEach(url=>URL.revokeObjectURL(url));urls.current=[];},[]);
   async function open() {
+    if(request.current)return;
+    const controller=new AbortController();
+    request.current=controller;
     setState("checking");
     try {
-      const res=await fetch(DIAGRAM_ROOT+"education-receipt.json",{cache:"no-store"});
+      const options={cache:"no-store" as const,signal:controller.signal};
+      const res=await fetch(DIAGRAM_ROOT+"education-receipt.json",options);
       if(!res.ok)throw Error("DIAGRAM_MISSING");
-      const receipt=parseEducationReceipt(await res.json());
-      await Promise.all(educationFiles(receipt).map(async file=>{
-        const response=await fetch(DIAGRAM_ROOT+file.name,{cache:"no-store"});
+      const receiptBytes=await res.arrayBuffer();
+      const receipt=parseEducationReceipt(JSON.parse(new TextDecoder().decode(receiptBytes)));
+      const files=await Promise.all(educationFiles(receipt).map(async file=>{
+        const response=await fetch(DIAGRAM_ROOT+file.name,options);
         if(!response.ok)throw Error("DIAGRAM_MISSING");
-        await verifyEducationFile(await response.arrayBuffer(),file.sha256);
+        const bytes=await response.arrayBuffer();
+        await verifyEducationFile(bytes,file.sha256);
+        return {name:file.name,bytes};
       }));
-      setState("ready");
-    }catch{setState("error");}
+      if(controller.signal.aborted)return;
+      files.push({name:"education-receipt.json",bytes:receiptBytes});
+      const next:Record<string,string>={};
+      for(const file of files){
+        const type=file.name.endsWith(".svg")?"image/svg+xml":file.name.endsWith(".html")?"text/html":file.name.endsWith(".json")?"application/json":"text/markdown";
+        const url=URL.createObjectURL(new Blob([file.bytes],{type}));
+        urls.current.push(url);next[file.name]=url;
+      }
+      setLinks(next);setState("ready");
+    }catch{
+      urls.current.forEach(url=>URL.revokeObjectURL(url));urls.current=[];
+      if(!controller.signal.aborted)setState("error");
+    }finally{if(request.current===controller)request.current=null;}
   }
   const stem=DIAGRAM_STEM+"-"+variant;
   return <section className="visual-factory-step" aria-label="Banco diagrammi">
@@ -34,16 +56,16 @@ export function EducationDiagramBank() {
         <option value="desktop-lim-horizontal">Desktop e LIM · orizzontale</option>
       </select></label>
       <figure style={{margin:"1rem 0"}}>
-        <img src={DIAGRAM_ROOT+stem+".svg"} alt="Dal campo alla tavola: coltivazione, raccolta, distribuzione e consumo." style={{display:"block",width:"100%",maxWidth:variant==="mobile-vertical"?360:1280,height:"auto",margin:"auto"}} />
+        <img src={links[stem+".svg"]} alt="Dal campo alla tavola: coltivazione, raccolta, distribuzione e consumo." style={{display:"block",width:"100%",maxWidth:variant==="mobile-vertical"?360:1280,height:"auto",margin:"auto"}} />
         <figcaption>Filiera orticola locale, esempio semplificato.</figcaption>
       </figure>
       <p>Sequenza testuale: Coltivazione (acqua, suolo, energia); Raccolta (ortaggi maturi); Distribuzione (vendita locale); Consumo (acquisto e uso).</p>
       <ul>
-        <li><a href={DIAGRAM_ROOT+stem+".html"} download>Scarica HTML della composizione</a></li>
-        <li><a href={DIAGRAM_ROOT+stem+".svg"} download>Scarica SVG della composizione</a></li>
-        <li><a href={DIAGRAM_ROOT+"education-pilot-source.json"} download>Scarica fonte JSON</a></li>
-        <li><a href={DIAGRAM_ROOT+"guida-docente.md"} download>Scarica guida docente</a></li>
-        <li><a href={DIAGRAM_ROOT+"education-receipt.json"} download>Scarica ricevuta di produzione</a></li>
+        <li><a href={links[stem+".html"]} download={stem+".html"}>Scarica HTML della composizione</a></li>
+        <li><a href={links[stem+".svg"]} download={stem+".svg"}>Scarica SVG della composizione</a></li>
+        <li><a href={links["education-pilot-source.json"]} download={"education-pilot-source.json"}>Scarica fonte JSON</a></li>
+        <li><a href={links["guida-docente.md"]} download={"guida-docente.md"}>Scarica guida docente</a></li>
+        <li><a href={links["education-receipt.json"]} download={"education-receipt.json"}>Scarica ricevuta di produzione</a></li>
       </ul>
       <small>Il generatore viene eseguito durante la preparazione dell’applicazione. La modifica e rigenerazione della fonte dal banco non sono ancora disponibili.</small>
     </>}

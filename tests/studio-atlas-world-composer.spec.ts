@@ -559,7 +559,7 @@ test("DESIGN-04: illustrated environments, tools and profiles share real saved c
   const toolsPanel=page.locator(".catalog-tools");
   await expect(profiles.locator("img")).toHaveCount(3);
   await expect(environments.locator("img")).toHaveCount(7);
-  await expect(toolsPanel.locator("img")).toHaveCount(9);
+  await expect(toolsPanel.locator("img")).toHaveCount(10);
   for(const img of await page.locator(".catalog-artwork").all()){
     await img.scrollIntoViewIfNeeded();
     await expect.poll(()=>img.evaluate((el:HTMLImageElement)=>el.naturalWidth)).toBeGreaterThan(0);
