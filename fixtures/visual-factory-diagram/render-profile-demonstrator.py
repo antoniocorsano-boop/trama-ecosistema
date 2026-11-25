@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 
 BASE = pathlib.Path(__file__).resolve().parent
 NS = "http://www.w3.org/2000/svg"
+XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
 PROFILES = ("trama", "atlas", "studio-atlas", "arena", "registro-docente")
 PALETTE = {"canvas", "surface", "ink", "secondaryInk", "accent", "onAccent"}
 VARIANTS = {"mobile-vertical": (360, 640), "desktop-lim-horizontal": (1280, 720)}
@@ -65,16 +66,17 @@ def render(profile, source, variant):
     accent=p["accent"]
     title=esc(source["title"])
     name=esc(profile["name"])
-    parts=[f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title diagram-desc">',
+    description=source["description"]+" Fasi: "+"; ".join(n["label"] for n in source["nodes"])+"."
+    parts=[f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
       f'<title id="diagram-title">{title} — {name}</title>',
-      f'<desc id="diagram-desc">{esc(source["description"])} Fonte verificata, composizione, revisione, conservazione.</desc>',
+      f'<desc id="diagram-desc">{esc(description)}</desc>',
       f'<rect x="0" y="0" width="{w}" height="{h}" fill="{p["canvas"]}"/>',
       '<g font-family="system-ui, sans-serif" text-anchor="middle">']
     def label(x,y,value,size,fill,weight=400):
         parts.append(f'<text x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" fill="{fill}">{esc(value)}</text>')
     if variant=="mobile-vertical":
         label(180,37,profile["name"],21,dark,700)
-        label(180,64,"Ciclo di produzione documentale",16,dark,600)
+        label(180,64,source["title"],16,dark,600)
         boxes=[(24,86+132*i,312,100) for i in range(4)]
         font,small=20,16
     else:
@@ -113,14 +115,14 @@ def validate(svg, profile, variant):
     """Closed grammar for these generated demonstrators only."""
     need(len(svg.encode())<=50000 and not re.search(r"<!|<\?",svg),"declaration/size")
     root=ET.fromstring(svg)
-    allowed={"svg":{"viewBox","role","aria-labelledby"},"title":{"id"},"desc":{"id"},
+    allowed={"svg":{"viewBox","role","aria-labelledby","aria-describedby",XML_LANG},"title":{"id"},"desc":{"id"},
         "rect":{"x","y","width","height","rx","fill","stroke","stroke-width"},
         "g":{"font-family","text-anchor"},
         "path":{"d","fill","stroke","stroke-width"},
         "text":{"x","y","font-size","font-weight","fill"}}
     need(root.tag==f"{{{NS}}}svg","root")
     w,h=VARIANTS[variant]
-    need(root.attrib=={"viewBox":f"0 0 {w} {h}","role":"img","aria-labelledby":"diagram-title diagram-desc"},"root attributes")
+    need(root.attrib=={"viewBox":f"0 0 {w} {h}","role":"img","aria-labelledby":"diagram-title","aria-describedby":"diagram-desc",XML_LANG:"it"},"root attributes")
     palette=set(profile["palette"].values())|{"none"}
     for e in root.iter():
         need(e.tag.startswith(f"{{{NS}}}"),"namespace")
@@ -132,12 +134,17 @@ def validate(svg, profile, variant):
             elif k=="font-family": need(v=="system-ui, sans-serif","font")
             elif k=="text-anchor": need(v=="middle","alignment")
             elif k=="id": need(v in ("diagram-title","diagram-desc"),"id")
-            elif k not in ("viewBox","role","aria-labelledby"):
+            elif k not in ("viewBox","role","aria-labelledby","aria-describedby",XML_LANG):
                 need(re.fullmatch(r"[0-9]+",v),"numeric")
         need(not e.tail or not e.tail.strip(),"tail")
         if tag not in ("text","title","desc"): need(not e.text or not e.text.strip(),"text")
         else: need(len(e)==0,"text child")
-    need(len(root.findall(f"{{{NS}}}title"))==len(root.findall(f"{{{NS}}}desc"))==1,"accessible metadata")
+    titles=root.findall(f"{{{NS}}}title")
+    descriptions=root.findall(f"{{{NS}}}desc")
+    need(len(titles)==len(descriptions)==1,"accessible metadata")
+    ids=[e.attrib["id"] for e in root.iter() if "id" in e.attrib]
+    need(sorted(ids)==["diagram-desc","diagram-title"],"unique accessible IDs")
+    need(titles[0].get("id")=="diagram-title" and descriptions[0].get("id")=="diagram-desc","accessible references")
 
 def main():
     ap=argparse.ArgumentParser()
@@ -151,10 +158,28 @@ def main():
             doc,svg,checks=render(p,source,variant)
             validate(svg,p,variant)
             stem=p["id"]+"-"+variant
-            (args.out/(stem+".html")).write_text(doc,encoding="utf-8")
-            (args.out/(stem+".svg")).write_text(svg,encoding="utf-8")
+            doc_bytes,svg_bytes=doc.encode("utf-8"),svg.encode("utf-8")
+            (args.out/(stem+".html")).write_bytes(doc_bytes)
+            (args.out/(stem+".svg")).write_bytes(svg_bytes)
             results.append({"id":stem,"profile":p["id"],"variant":variant,"contrast":checks,
-                "htmlSha256":sha(doc.encode()),"svgSha256":sha(svg.encode()),"staticGrammar":"PASS"})
+                "htmlSha256":sha(doc_bytes),"svgSha256":sha(svg_bytes),"staticGrammar":"PASS"})
+    # Prove source changes reach visible and accessible text in both variants.
+    changed=json.loads(json.dumps(source))
+    changed["title"]="Preparazione di documenti"
+    changed["nodes"][0]["label"]="Verifica delle fonti"
+    semantic_results={}
+    for variant in VARIANTS:
+        doc,svg,_=render(manifest["profiles"][0],changed,variant)
+        validate(svg,manifest["profiles"][0],variant)
+        root=ET.fromstring(svg)
+        labels=[e.text for e in root.iter(f"{{{NS}}}text")]
+        expected=changed["description"]+" Fasi: "+"; ".join(n["label"] for n in changed["nodes"])+"."
+        need(changed["title"] in labels and changed["nodes"][0]["label"] in labels,"updated visible source")
+        need(source["title"] not in labels and source["nodes"][0]["label"] not in labels,"stale visible source")
+        need(root.find(f"{{{NS}}}desc").text==expected,"updated accessible source")
+        need(root.find(f"{{{NS}}}title").text==changed["title"]+" — "+manifest["profiles"][0]["name"],"accessible title")
+        need(svg in doc and root.get(XML_LANG)=="it","language and HTML parity")
+        semantic_results[variant]="PASS"
     # Negative cases are never rendered. Assert independent rejection and positive control.
     p=manifest["profiles"][0]
     _,svg,_=render(p,source,"mobile-vertical")
@@ -167,6 +192,9 @@ def main():
        "remotePaint":svg.replace('fill="'+p["palette"]["canvas"]+'"','fill="url(https://example.invalid/x)"',1),
        "css":svg.replace("</svg>","<style>@import url(https://example.invalid/x);</style></svg>"),
        "doctype":"<!DOCTYPE svg>"+svg,
+       "wrongLanguage":svg.replace('xml:lang="it"','xml:lang="en"'),
+       "wrongAccessibleReference":svg.replace('aria-describedby="diagram-desc"','aria-describedby="diagram-title"'),
+       "duplicateAccessibleId":svg.replace('id="diagram-desc"','id="diagram-title"'),
     }
     rejected={}
     for key,mutant in cases.items():
@@ -176,8 +204,8 @@ def main():
         else: raise ValueError("accepted negative fixture: "+key)
     receipt={"schema":"trama.diagram-profile-receipt/v0.1","status":"GENERATED_NOT_REVIEWED",
        "sourceSha256":source_hash,"profilesSha256":profile_hash,"outputs":results,
-       "rejections":rejected,"runtimeAuthorized":False,"publicationAuthorized":False}
-    (args.out/"profile-receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
+       "rejections":rejected,"semanticUpdates":semantic_results,"runtimeAuthorized":False,"publicationAuthorized":False}
+    (args.out/"profile-receipt.json").write_bytes((json.dumps(receipt,indent=2)+"\n").encode("utf-8"))
     print(f"Generated {len(results)} static pairs; {len(rejected)} rejection cases PASS")
 
 if __name__=="__main__":
