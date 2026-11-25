@@ -67,7 +67,6 @@
       "id": "atlas",
       "name": "Atlas",
       "source": {
-        "repository": "antoniocorsano-boop/Curriculum-Atlas",
         "commit": "d2938378c9384c5122adb8379396dbad5b4385fe",
         "path": "src/app/globals.css",
         "blob": "ae09d79b0093b80f329b12208dfb56cceed78660",
@@ -79,7 +78,11 @@
           "secondaryInk": "--text-secondary",
           "accent": "--action-primary",
           "onAccent": "--surface-raised"
-        }
+        },
+        "repositoryId": 1376266693,
+        "repositoryUrl": "https://api.github.com/repositories/1376266693",
+        "blobUrl": "https://api.github.com/repositories/1376266693/git/blobs/ae09d79b0093b80f329b12208dfb56cceed78660",
+        "referenceNote": "Stable GitHub repository ID, immutable commit, file path and blob; canonical product name Atlas. No legacy product label in new documents."
       },
       "palette": {
         "canvas": "#f5f7fb",
