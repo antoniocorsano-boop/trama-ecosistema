@@ -1,0 +1,76 @@
+name: Visual Factory — Diagram Design acquisition
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/visual-factory-diagram-design.yml"
+permissions:
+  contents: read
+jobs:
+  pinned-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      SOURCE_SHA: b228c5d77794a84150fca41b22940bb316b1398d
+    steps:
+      - name: Acquire pinned public source without checkout or upstream execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init --bare "$RUNNER_TEMP/diagram-design.git"
+          git -C "$RUNNER_TEMP/diagram-design.git" -c core.hooksPath=/dev/null fetch --no-tags --depth=1 https://github.com/cathrynlavery/diagram-design.git "$SOURCE_SHA"
+          test "$(git -C "$RUNNER_TEMP/diagram-design.git" rev-parse FETCH_HEAD)" = "$SOURCE_SHA"
+          mkdir -p "$RUNNER_TEMP/vf-diagram-receipt"
+          git -C "$RUNNER_TEMP/diagram-design.git" ls-tree -r -l "$SOURCE_SHA" > "$RUNNER_TEMP/vf-diagram-receipt/tree.txt"
+          git -C "$RUNNER_TEMP/diagram-design.git" archive --format=tar "$SOURCE_SHA" | sha256sum > "$RUNNER_TEMP/vf-diagram-receipt/archive.sha256"
+      - name: Verify source inventory and collect static review evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import ast, hashlib, json, os, pathlib, subprocess
+          root = pathlib.Path(os.environ["RUNNER_TEMP"])
+          receipt = root / "vf-diagram-receipt"
+          sha = os.environ["SOURCE_SHA"]
+          git = ["git", "-C", str(root / "diagram-design.git")]
+          expected = {
+              "THIRD_PARTY_LICENSES.md": "5311158e2621738d0f9f6efa09dc7c7ef05b160a",
+              "skills/diagram-design/SKILL.md": "3b41b0f61db73b0e0a4505439b827bb2cd412e51",
+              "scripts/test-self-check.py": "7a8fb7f965d60f10ad211a8ca64bc521e9ecaebb",
+              "scripts/test-export-svg-standalone.py": "5473e39b4641c6c8176bb579cdd7369392f12dc3",
+              "scripts/test-lint-a11y.py": "34d8fd9628d4bbefe072f6ec5f0d17e311c37273",
+              "scripts/verify-geometry.py": "5ef14827f57fe2484344f4b381fe17f1b5092206",
+          }
+          files = {}
+          for path in ["LICENSE", "PRIVACY.md", "SECURITY.md", ".github/workflows/ci.yml", *expected]:
+              blob = subprocess.check_output(git + ["show", f"{sha}:{path}"])
+              digest = hashlib.sha1(b"blob " + str(len(blob)).encode() + b"\0" + blob).hexdigest()
+              if path in expected and digest != expected[path]:
+                  raise SystemExit(f"Blob mismatch: {path}")
+              files[path] = {"git_blob_sha1": digest, "sha256": hashlib.sha256(blob).hexdigest(), "bytes": len(blob)}
+          license_text = subprocess.check_output(git + ["show", f"{sha}:LICENSE"])
+          if b"MIT License" not in license_text:
+              raise SystemExit("Expected MIT license text absent")
+          entries = subprocess.check_output(git + ["ls-tree", "-rz", sha]).split(b"\0")
+          imports, review = {}, []
+          for entry in entries:
+              if not entry:
+                  continue
+              meta, raw_path = entry.split(b"\t", 1)
+              mode, kind, oid = meta.decode().split()
+              path = raw_path.decode("utf-8", errors="replace")
+              if mode in ("120000", "160000"):
+                  review.append({"path": path, "mode": mode})
+              if path.endswith(".py") and kind == "blob":
+                  data = subprocess.check_output(git + ["cat-file", "blob", oid])
+                  tree = ast.parse(data, filename=path)
+                  imports[path] = sorted({a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names} | {n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)})
+          report = {"source_commit": sha, "acquisition": "PASS", "pinned_file_checks": "PASS", "python_syntax": "PASS", "files": files, "python_imports": imports, "special_entries_review": review, "license_review": "PENDING", "security_review": "PENDING", "upstream_tests": "NOT_RUN", "browser_offline_test": "NOT_RUN", "execution_authorized": False, "production_admitted": False}
+          (receipt / "report.json").write_text(json.dumps(report, indent=2) + "\n")
+          print("Pinned source and syntax inventory verified; execution and admission remain blocked.")
+          PY
+      - name: Retain acquisition evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf-diagram-p0b-r1-acquisition
+          path: ${{ runner.temp }}/vf-diagram-receipt/
+          retention-days: 7
