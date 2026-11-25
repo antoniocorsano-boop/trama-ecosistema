@@ -111,7 +111,7 @@ def render(profile, source, variant):
     wrapper='<!doctype html>\n<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+title+' — '+name+'</title><style>html,body{margin:0;padding:0;background:'+p["canvas"]+';color:'+dark+';font-family:system-ui,sans-serif}main{width:100%;max-width:'+str(w)+'px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main>\n'+svg+'\n</main></body></html>\n'
     return wrapper,svg,checks
 
-def validate(svg, profile, variant):
+def validate(svg, profile, variant, *, view_size=None):
     """Closed grammar for these generated demonstrators only."""
     need(len(svg.encode())<=50000 and not re.search(r"<!|<\?",svg),"declaration/size")
     root=ET.fromstring(svg)
@@ -121,7 +121,8 @@ def validate(svg, profile, variant):
         "path":{"d","fill","stroke","stroke-width"},
         "text":{"x","y","font-size","font-weight","fill"}}
     need(root.tag==f"{{{NS}}}svg","root")
-    w,h=VARIANTS[variant]
+    w,h=VARIANTS[variant] if view_size is None else view_size
+    need((w,h) in {(360,640),(1280,720),(360,960)},"dimensioni autorizzate")
     need(root.attrib=={"viewBox":f"0 0 {w} {h}","role":"img","aria-labelledby":"diagram-title","aria-describedby":"diagram-desc",XML_LANG:"it"},"root attributes")
     palette=set(profile["palette"].values())|{"none"}
     for e in root.iter():
@@ -146,10 +147,164 @@ def validate(svg, profile, variant):
     need(sorted(ids)==["diagram-desc","diagram-title"],"unique accessible IDs")
     need(titles[0].get("id")=="diagram-title" and descriptions[0].get("id")=="diagram-desc","accessible references")
 
+
+P2_SIZES={"mobile-vertical":(360,960),"desktop-lim-horizontal":(1280,720)}
+P2_IDS=("trama-ecosystem","studio-atlas-production","registro-qualification")
+P2_STATES={
+    "ARCHITECTURAL_DECISION":"DECISIONE",
+    "APPROVED_DECISION_RULE":"DECISIONE",
+    "APPROVED_PRODUCT_DIRECTION":"INDIRIZZO",
+    "PROPOSED_CONTRACT":"PROPOSTA",
+    "IMPLEMENTED_STRUCTURE":"CODICE",
+    "IMPLEMENTED_CONTRACT":"CODICE",
+    "QUALIFIED_EXACT_CANDIDATE":"VERIFICATO",
+    "REVIEWED_NOT_RELEASED":"VERIFICATO",
+}
+P2_RELATIONS={"direction","sequence","contains","separate","parallel","review"}
+
+def p2_text(value, max_len=80):
+    need(isinstance(value,str) and 0<len(value)<=max_len and not re.search(r"[\x00-\x1f<>]",value),"testo P2 non ammesso")
+    return value
+
+def p2_validate_source(register,compositions):
+    need(register["schema"]=="trama.diagram-source-register/v0.1","schema registro P2")
+    need(compositions["schema"]=="trama.diagram-compositions/v0.1","schema composizioni P2")
+    need(compositions["register"]=="p2-source-register.json","riferimento registro P2")
+    for obj in (register,compositions):
+        need(obj["publicationAuthorized"] is False and obj["runtimeAuthorized"] is False,"autorità P2")
+        need(tuple(d["id"] for d in obj["diagrams"])==P2_IDS,"identità documenti P2")
+    for record,design in zip(register["diagrams"],compositions["diagrams"]):
+        need(record["id"]==design["id"],"identità fonte/composizione")
+        need(len(design["titleLines"])==2 and len(design["panels"])==6,"composizione chiusa a sei pannelli")
+        for line in design["titleLines"]: p2_text(line,48)
+        for panel in design["panels"]:
+            need(set(panel)=={"heading","state","fact","steps","note","relation"},"campi pannello P2")
+            need(type(panel["fact"]) is int and 0<=panel["fact"]<len(record["facts"]),"riferimento fatto")
+            fact=record["facts"][panel["fact"]]
+            need(fact["source"] in record["sources"],"fonte fatto")
+            need(P2_STATES[fact["state"]]==panel["state"],"stato del fatto alterato")
+            need(panel["relation"] in P2_RELATIONS,"tipo di relazione")
+            p2_text(panel["heading"],44)
+            need(1<=len(panel["steps"])<=3,"numero nodi")
+            need(1<=len(panel["note"])<=2,"numero note")
+            for step in panel["steps"]:
+                need(1<=len(step)<=2,"numero righe nodo")
+                for line in step: p2_text(line,24)
+            for line in panel["note"]: p2_text(line,58)
+
+def p2_render(profile,record,design,variant):
+    w,h=P2_SIZES[variant]
+    p=profile["palette"]
+    need(set(p)==PALETTE,"palette P2")
+    for value in p.values(): luminance(value)
+    # Pairings preserve P1 including the Studio Atlas restriction.
+    checks=[]
+    for fg,bg,limit in (("ink","canvas",4.5),("ink","surface",4.5),("secondaryInk","surface",4.5),("onAccent","accent",4.5),("accent","canvas",3),("accent","surface",3)):
+        ratio=contrast(p[fg],p[bg])
+        need(ratio>=limit,"contrasto P2")
+        checks.append({"foreground":fg,"background":bg,"ratio":round(ratio,3),"minimum":limit})
+    e=html.escape
+    title=record["title"]
+    desc="; ".join(f"Pannello {i+1}, {panel['state']}: {panel['heading']}. "+(" → " if panel["relation"] in ("direction","sequence") else " / ").join(" ".join(s) for s in panel["steps"])+". "+" ".join(panel["note"])+f". Fonte F{panel['fact']+1}." for i,panel in enumerate(design["panels"]))
+    desc+=". Riferimenti e vincoli nel registro delle fonti P2. Candidato non pubblicato."
+    parts=[f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
+        f'<title id="diagram-title">{e(title)}</title>',f'<desc id="diagram-desc">{e(desc)}</desc>',
+        f'<rect x="0" y="0" width="{w}" height="{h}" fill="{p["canvas"]}"/>',
+        '<g font-family="system-ui, sans-serif" text-anchor="middle">']
+    labels=[]
+    def text(x,y,value,size,color,weight=400):
+        labels.append(value)
+        parts.append(f'<text x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" fill="{color}">{e(value)}</text>')
+    def rect(x,y,bw,bh,fill,stroke=None,radius=8):
+        border=f' stroke="{stroke}" stroke-width="2"' if stroke else ""
+        parts.append(f'<rect x="{x}" y="{y}" width="{bw}" height="{bh}" rx="{radius}" fill="{fill}"{border}/>')
+    def arrow(x1,x2,y):
+        parts.append(f'<path d="M {x1} {y} H {x2} M {x2-5} {y-4} L {x2} {y} L {x2-5} {y+4}" fill="none" stroke="{p["accent"]}" stroke-width="2"/>')
+    mobile=variant=="mobile-vertical"
+    text(w//2,34 if mobile else 38,design["titleLines"][0],23 if mobile else 32,p["ink"],700)
+    text(w//2,62 if mobile else 70,design["titleLines"][1],16 if mobile else 23,p["ink"],600)
+    for i,panel in enumerate(design["panels"]):
+        x,y,bw,bh=(12,84+140*i,336,132) if mobile else (24+626*(i%2),92+196*(i//2),606,180)
+        cx=x+bw//2
+        rect(x,y,bw,bh,p["surface"],p["accent"],10)
+        text(cx,y+(20 if mobile else 28),panel["heading"],16 if mobile else 23,p["ink"],700)
+        text(cx,y+(39 if mobile else 53),f"{panel['state']} · F{panel['fact']+1}",14 if mobile else 18,p["secondaryInk"],600)
+        n=len(panel["steps"])
+        gap=20 if mobile else 34
+        inner=bw-(24 if mobile else 48)
+        nodew=(inner-gap*(n-1))//n
+        start=x+(bw-(nodew*n+gap*(n-1)))//2
+        ny=y+(47 if mobile else 64)
+        nh=46 if mobile else 62
+        for j,step in enumerate(panel["steps"]):
+            nx=start+j*(nodew+gap)
+            rect(nx,ny,nodew,nh,p["surface"],p["accent"],6)
+            for k,line in enumerate(step):
+                baseline=ny+(28 if mobile else 38) if len(step)==1 else ny+(19+17*k if mobile else 25+24*k)
+                text(nx+nodew//2,baseline,line,14 if mobile else 20,p["ink"],600)
+            if j<n-1:
+                mid=ny+nh//2
+                if panel["relation"] in ("direction","sequence"):
+                    arrow(nx+nodew+2,nx+nodew+gap-3,mid)
+                else:
+                    # A neutral separator avoids inventing direction for parallel or distinct concepts.
+                    text(nx+nodew+gap//2,mid+(4 if mobile else 6),"·",16 if mobile else 22,p["ink"],700)
+        for k,line in enumerate(panel["note"]):
+            text(cx,y+(108+16*k if mobile else 150+22*k),line,14 if mobile else 18,p["secondaryInk"])
+    text(w//2,h-(16 if mobile else 19),"Fonti nel registro P2 · candidato non pubblicato",14 if mobile else 18,p["ink"])
+    parts.append("</g></svg>")
+    svg="\n".join(parts)
+    wrapper='<!doctype html>\n<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+e(title)+'</title><style>html,body{margin:0;padding:0;background:'+p["canvas"]+';color:'+p["ink"]+';font-family:system-ui,sans-serif}main{width:100%;max-width:'+str(w)+'px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main>\n'+svg+'\n</main></body></html>\n'
+    validate(svg,profile,variant,view_size=(w,h))
+    return wrapper,svg,checks,labels,desc
+
+def generate_p2(out):
+    manifest,_,profile_hash,_=load_inputs()
+    register_raw=(BASE/"p2-source-register.json").read_bytes()
+    compositions_raw=(BASE/"p2-compositions.json").read_bytes()
+    register,compositions=json.loads(register_raw),json.loads(compositions_raw)
+    p2_validate_source(register,compositions)
+    profiles={p["id"]:p for p in manifest["profiles"]}
+    out.mkdir(parents=True,exist_ok=True)
+    results=[]
+    for record,design in zip(register["diagrams"],compositions["diagrams"]):
+        profile=profiles[record["profile"]]
+        for variant in P2_SIZES:
+            doc,svg,checks,labels,desc=p2_render(profile,record,design,variant)
+            stem=record["id"]+"-"+variant
+            data={"html":doc.encode("utf-8"),"svg":svg.encode("utf-8")}
+            for ext,content in data.items(): (out/(stem+"."+ext)).write_bytes(content)
+            results.append({"id":stem,"diagram":record["id"],"profile":record["profile"],"variant":variant,
+                "viewBox":list(P2_SIZES[variant]),"title":record["title"],"description":desc,"labels":labels,
+                "contrast":checks,"htmlSha256":sha(data["html"]),"svgSha256":sha(data["svg"]),"staticGrammar":"PASS"})
+    # Causal rejection of invented statuses, missing provenance and excessive layout bounds.
+    tests={}
+    for key in ("status","fact","relation","authority"):
+        mutant=json.loads(json.dumps(compositions))
+        p=mutant["diagrams"][0]["panels"][0]
+        if key=="status": p["state"]="VERIFICATO"
+        elif key=="fact": p["fact"]=99
+        elif key=="relation": p["relation"]="unknown"
+        else: mutant["publicationAuthorized"]=True
+        try: p2_validate_source(register,mutant)
+        except (ValueError,KeyError,TypeError): tests[key]="PASS"
+        else: raise ValueError("mutazione P2 accettata: "+key)
+    receipt={"schema":"trama.diagram-p2-receipt/v0.1","status":"GENERATED_NOT_REVIEWED",
+        "registerSha256":sha(register_raw),"compositionsSha256":sha(compositions_raw),"profilesSha256":profile_hash,
+        "outputs":results,"semanticRejections":tests,"runtimeAuthorized":False,"publicationAuthorized":False}
+    (out/"p2-receipt.json").write_bytes((json.dumps(receipt,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
+    print(f"P2: {len(results)} coppie statiche; {len(tests)} rifiuti semantici PASS")
+
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument("--out",type=pathlib.Path,required=True)
+    ap.add_argument("--out",type=pathlib.Path)
+    ap.add_argument("--p2-out",type=pathlib.Path)
     args=ap.parse_args()
+    if args.p2_out is not None:
+        need(args.out is None,"modalità di generazione esclusive")
+        generate_p2(args.p2_out)
+        return
+    need(args.out is not None,"destinazione obbligatoria")
     manifest,source,profile_hash,source_hash=load_inputs()
     args.out.mkdir(parents=True,exist_ok=True)
     results=[]
