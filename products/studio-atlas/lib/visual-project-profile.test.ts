@@ -2,9 +2,15 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createAgricultureDraft, AGRICULTURE_PROJECT_ID } from "./canonical/agriculture";
 import { buildProjectVisualProfile, planProjectVisualReferences, usesCanonicalVisualExecutor } from "./visual-project-profile";
+import manifest from "../public/design/ess-02/r2b/manifest.json";
+import type { SceneIllustration } from "./model";
 const DIGEST = "a".repeat(64);
+function agricultureProject() {
+  const images: Record<string, SceneIllustration> = Object.fromEntries(manifest.scenes.map(item=>[item.sceneId,{sha256:item.sha256,pixelWidth:item.width,pixelHeight:item.height,base64:"",alt:item.alt}]));
+  return createAgricultureDraft(images);
+}
 test("F3.3a actual agriculture project derives five separate references and frames without mutation",()=>{
-  const project=createAgricultureDraft({});
+  const project=agricultureProject();
   const before=JSON.stringify(project);
   const profile=buildProjectVisualProfile(project,DIGEST);
   assert.equal(profile.pathwayId,AGRICULTURE_PROJECT_ID);
@@ -15,7 +21,7 @@ test("F3.3a actual agriculture project derives five separate references and fram
   assert.equal(JSON.stringify(project),before);
 });
 test("F3.3a no automatic approval or execution admission",()=>{
-  const project=createAgricultureDraft({});
+  const project=agricultureProject();
   const draft=planProjectVisualReferences(project,DIGEST,false);
   assert.equal(draft.references.decision,"STOP_PREFLIGHT_REQUIRED");
   assert.equal(draft.references.jobs.length,0);
@@ -30,7 +36,7 @@ test("F3.3a no automatic approval or execution admission",()=>{
   assert.equal(usesCanonicalVisualExecutor("pw-strategy-selection-01-museo-zero"),true);
 });
 test("F3.3a reject incomplete or ambiguous scenes and preserve canonical isolation",()=>{
-  const project=createAgricultureDraft({});
+  const project=agricultureProject();
   assert.throws(()=>buildProjectVisualProfile({...project,archived:true},DIGEST),/SCOPE_UNSUPPORTED/);
   assert.throws(()=>buildProjectVisualProfile({...project,scenes:[project.scenes[0],project.scenes[0]]},DIGEST),/SCOPE_UNSUPPORTED/);
   assert.throws(()=>buildProjectVisualProfile({...project,scenes:[{...project.scenes[0],stage:undefined,world:undefined}]},DIGEST),/SCENE_INCOMPLETE/);
