@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_RECIPE, MATERIAL_PRESETS, type SceneVisualRecipe } from "../lib/scene-visual-recipe";
-import { makeEnvironment, OPTICAL_ENV_INTENSITY } from "../lib/scene-optics";
+import { makeEnvironment, OPTICAL_ENV_INTENSITY, makeSurfaceMaps, SURFACE_MAP_SIZE, SURFACE_RELIEF, type SurfaceRole } from "../lib/scene-optics";
 import {
   AWC_S3B_SCENE,
   AWC_S3B_ENGINE_VERSION,
@@ -49,6 +49,9 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
       let canvas: HTMLCanvasElement | undefined;
       let timer = 0;
       let opticalTarget: import("three").WebGLRenderTarget | undefined;
+      let colorTexture: import("three").DataTexture | undefined;
+      let heightTexture: import("three").DataTexture | undefined;
+      let appliedSurface: SceneVisualRecipe["material"] = "original";
       const geometry: import("three").BufferGeometry[] = [];
       const materials: import("three").Material[] = [];
       const target = host.current;
@@ -114,6 +117,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
         }
         const floor = matMap.get("floor");
         if (!floor) throw new Error("Superficie di prova mancante");
+        const originalFloorColor = floor.color.clone();
         const projection = matMap.get("screen");
         if (!projection) throw new Error("Proiezione AWC-F mancante");
 
@@ -194,6 +198,25 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
           const nextMap = next.material === "original" ? null : opticalTarget?.texture ?? null;
           if (floor.envMap !== nextMap) { floor.envMap = nextMap; floor.needsUpdate = true; }
           floor.envMapIntensity = nextMap ? OPTICAL_ENV_INTENSITY[next.material] : 1;
+          if(appliedSurface!==next.material){
+            let nextColor: import("three").DataTexture | undefined;
+            let nextHeight: import("three").DataTexture | undefined;
+            if(next.material!=="original"){
+              const maps=makeSurfaceMaps(next.material);
+              nextColor=new T.DataTexture(maps.color,SURFACE_MAP_SIZE,SURFACE_MAP_SIZE,T.RGBAFormat,T.UnsignedByteType);
+              nextHeight=new T.DataTexture(maps.height,SURFACE_MAP_SIZE,SURFACE_MAP_SIZE,T.RGBAFormat,T.UnsignedByteType);
+              nextColor.encoding=T.sRGBEncoding;
+              for(const texture of [nextColor,nextHeight]){
+                texture.minFilter=texture.magFilter=T.LinearFilter;texture.needsUpdate=true;
+              }
+            }
+            colorTexture?.dispose();heightTexture?.dispose();
+            colorTexture=nextColor;heightTexture=nextHeight;
+            floor.map=colorTexture??null;floor.bumpMap=heightTexture??null;
+            floor.bumpScale=next.material==="original"?1:SURFACE_RELIEF[next.material as SurfaceRole];
+            if(next.material==="original")floor.color.copy(originalFloorColor);else floor.color.set(0xffffff);
+            floor.needsUpdate=true;appliedSurface=next.material;
+          }
           floor.roughness=preset.roughness;floor.metalness=preset.metalness;
           canvas?.setAttribute("data-optical-profile", nextMap ? next.material : "original");
           localOrbit=next.orbit;setOrbit(localOrbit);
@@ -268,6 +291,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
           }
           geometry.forEach((value) => value.dispose());
           materials.forEach((value) => value.dispose());
+          colorTexture?.dispose();heightTexture?.dispose();
           opticalTarget?.dispose();
           renderer?.dispose();
           renderer?.forceContextLoss();
@@ -282,6 +306,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
         canvas?.remove();
         geometry.forEach((value) => value.dispose());
         materials.forEach((value) => value.dispose());
+        colorTexture?.dispose();heightTexture?.dispose();
         opticalTarget?.dispose();
         renderer?.dispose();
         renderer?.forceContextLoss();
@@ -340,7 +365,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
             Trascina sulla scena per ruotare. In alternativa usa i pulsanti o i tasti freccia.
             L’illuminazione equilibrata è un’ipotesi artistica reversibile, non una
             certificazione di equivalenza con Blender. Nessun salvataggio o invio di dati.
-            Il profilo di composizione agisce sul pavimento di prova, sulla luce e sull’inquadratura. I materiali alternativi usano riflessi da una mappa ambientale sintetica locale, non riflessi della stanza reale. I colori originali, la geometria e i segnali restano invariati. Motore {AWC_S3B_ENGINE_VERSION}.
+            Il profilo di composizione agisce sul pavimento di prova, sulla luce e sull’inquadratura. I materiali alternativi usano mappe cromatiche e micro-rilievo procedurali, con riflessi da una mappa ambientale sintetica locale, non riflessi della stanza reale. I colori originali, la geometria e i segnali restano invariati. Motore {AWC_S3B_ENGINE_VERSION}.
           </p>
         </>
       )}

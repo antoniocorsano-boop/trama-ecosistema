@@ -36,12 +36,14 @@ test("AWC S3b offline: actual local 3-D, touch, light A/B and reset, with no net
     await expect(canvas).toBeVisible();
     const original = await canvas.screenshot({ path: join(output, "awc-s3b-original.png") });
     const material = page.getByLabel("Superficie di riferimento");
+    const materialDigests = new Set([sha(original)]);
     for (const [id,label] of [["stone","Pietra"],["bronze","Bronzo"],["obsidian","Ossidiana"],["frame","Cornice"]]) {
       await material.selectOption(id);
       await expect(status).toContainText("superficie "+label);
       await expect(canvas).toHaveAttribute("data-optical-profile",id);
       const alternate = await canvas.screenshot({path:join(output,"awc-s3b-material-"+id+".png")});
-      expect(sha(alternate)).not.toBe(sha(original));
+      expect(materialDigests.has(sha(alternate))).toBe(false);
+      materialDigests.add(sha(alternate));
     }
     await material.selectOption("original");
     await expect(status).toContainText("superficie Originale");

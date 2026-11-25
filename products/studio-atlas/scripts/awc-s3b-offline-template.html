@@ -43,7 +43,7 @@ canvas:active{cursor:grabbing}.status{padding:11px 14px;margin:14px 0;background
 <div class="bar"><button id="balance" aria-pressed="true">Luce equilibrata · prova</button>
 <button id="reference" aria-pressed="false">Luce originale AWC-F</button></div>
 <label class="material-control" for="material">Superficie di riferimento<select id="material"></select></label>
-<p>Le alternative applicano i riflessi sintetici al solo pavimento. Non sono riflessi reali della stanza. Per il confronto usa luce equilibrata, segnale A e rotazione 0.00 rad.</p>
+<p>Le alternative applicano al solo pavimento colore, micro-rilievo e riflessi sintetici. Non sono riflessi reali della stanza. Per il confronto usa luce equilibrata, segnale A e rotazione 0.00 rad.</p>
 <p class="note">Prova tecnica isolata, non la Biblioteca Atlas né un ambiente per studenti. 
 16 oggetti, 192 triangoli, Three.js r128. La geometria resta invariata; l'illuminazione è una proposta da valutare.
 Nessuna richiesta di rete, raccolta di dati o controllo di apparecchiature.
@@ -84,7 +84,8 @@ for(var name in cfg.materials){if(Object.prototype.hasOwnProperty.call(cfg.mater
 cfg.objects.forEach(function(obj){var mesh=new T.Mesh(new T.BoxGeometry(obj.size[0],obj.size[1],obj.size[2]),materials[obj.material]);mesh.name=obj.id;mesh.position.set(obj.position[0],obj.position[1],obj.position[2]);mesh.castShadow=["console-plinth","console-panel","sensor-A","sensor-B"].includes(obj.id);mesh.receiveShadow=true;scene.add(mesh);});
 var camera=new T.PerspectiveCamera(cfg.camera.fov,4/3,cfg.camera.near,cfg.camera.far);camera.up.set(0,0,1);
 var orbit=0,signal="A",profile="balanced",pointer=null,paintRequest=0;
-var materialProfile="original",opticalTarget=null;
+var materialProfile="original",opticalTarget=null,colorTexture=null,heightTexture=null;
+var originalFloorColor=materials.floor.color.clone();
 var materialSelect=document.getElementById("material");
 Object.keys(recipes.MATERIAL_PRESETS).forEach(function(name){var option=document.createElement("option");option.value=name;option.textContent=recipes.MATERIAL_PRESETS[name].label;materialSelect.appendChild(option);});
 function applyMaterial(name){
@@ -99,6 +100,22 @@ function applyMaterial(name){
  var nextMap=name==="original"?null:opticalTarget.texture;
  if(floor.envMap!==nextMap){floor.envMap=nextMap;floor.needsUpdate=true;}
  floor.envMapIntensity=nextMap?optics.OPTICAL_ENV_INTENSITY[name]:1;
+ if(materialProfile!==name){
+  var nextColor=null,nextHeight=null;
+  if(name!=="original"){
+   var maps=optics.makeSurfaceMaps(name),size=optics.SURFACE_MAP_SIZE;
+   nextColor=new T.DataTexture(maps.color,size,size,T.RGBAFormat,T.UnsignedByteType);
+   nextHeight=new T.DataTexture(maps.height,size,size,T.RGBAFormat,T.UnsignedByteType);
+   nextColor.encoding=T.sRGBEncoding;
+   [nextColor,nextHeight].forEach(function(tex){tex.minFilter=tex.magFilter=T.LinearFilter;tex.needsUpdate=true;});
+  }
+  if(colorTexture)colorTexture.dispose();if(heightTexture)heightTexture.dispose();
+  colorTexture=nextColor;heightTexture=nextHeight;
+  floor.map=colorTexture;floor.bumpMap=heightTexture;
+  floor.bumpScale=name==="original"?1:optics.SURFACE_RELIEF[name];
+  if(name==="original")floor.color.copy(originalFloorColor);else floor.color.set(0xffffff);
+  floor.needsUpdate=true;
+ }
  floor.roughness=preset.roughness;floor.metalness=preset.metalness;
  materialProfile=name;materialSelect.value=name;canvas.setAttribute("data-optical-profile",name);redraw();
 }
@@ -143,7 +160,7 @@ canvas.addEventListener("keydown",function(e){if(e.key==="ArrowLeft"){e.preventD
 canvas.addEventListener("webglcontextlost",function(e){e.preventDefault();fail("WebGL interrotto. Riapri il documento per riprovare.");});
 if(typeof ResizeObserver!=="undefined"){new ResizeObserver(resize).observe(host);}else{window.addEventListener("resize",resize);}
 lighting("balanced");applyMaterial("original");resize();paint();
-window.addEventListener("pagehide",function(e){if(!e.persisted&&opticalTarget)opticalTarget.dispose();});
+window.addEventListener("pagehide",function(e){if(!e.persisted){if(opticalTarget)opticalTarget.dispose();if(colorTexture)colorTexture.dispose();if(heightTexture)heightTexture.dispose();}});
 window.__awcTrial={ready:true,engine:"three-r128",getState:function(){return {orbit:orbit,signal:signal,profile:profile,material:materialProfile,objects:cfg.objects.length,studentAuthorized:false,publishable:false};}};
 }catch(e){fail(String(e));window.__awcTrial={ready:false,error:String(e),studentAuthorized:false,publishable:false};}
 })();
