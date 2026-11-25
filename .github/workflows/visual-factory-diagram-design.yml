@@ -159,7 +159,8 @@ jobs:
       - name: Install existing Chromium test target
         working-directory: apps/control-center
         run: npx playwright install chromium
-      - name: Verify HTML and exported SVG in offline Chromium
+      - name: Verify functional rendering in offline Chromium
+        id: browser_functional
         working-directory: apps/control-center
         shell: bash
         run: |
@@ -169,51 +170,132 @@ jobs:
           import { pathToFileURL } from 'node:url';
           import { writeFile } from 'node:fs/promises';
           const dir = process.env.RUNNER_TEMP + '/vf-diagram-receipt';
+          const wrapper = '<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SVG export rendering</title><style>body{margin:0;padding:16px;background:#f5f5f5}img{display:block;width:100%;max-width:480px;height:auto;margin:auto}</style></head><body><img src="trama-architecture.svg" alt="Architettura funzionale TRAMA"></body></html>';
+          await writeFile(dir+'/svg-wrapper.html',wrapper);
           const browser = await chromium.launch();
           const results = [];
+          const paths = {html:'trama-architecture.html',svg:'trama-architecture.svg',embedded:'svg-wrapper.html'};
           try {
             for (const width of [360,390,1280]) {
-              for (const ext of ['html','svg']) {
-                const context = await browser.newContext({ viewport: { width, height: 900 }, offline: true, javaScriptEnabled: false, reducedMotion: 'reduce' });
+              for (const mode of ['html','svg','embedded']) {
+                const item = {width,mode,status:'FAIL',requests:[],errors:[]};
+                results.push(item);
+                let context;
                 try {
+                  context = await browser.newContext({ viewport:{width,height:1200}, offline:true, javaScriptEnabled:false, reducedMotion:'reduce' });
                   const page = await context.newPage();
-                  const requests = [], errors = [];
-                  page.on('request', r => { if (/^https?:/i.test(r.url())) requests.push(r.url()); });
-                  page.on('pageerror', e => errors.push(String(e)));
-                  const target = pathToFileURL(dir+'/trama-architecture.'+ext).href;
-                  await page.goto(target);
-                  const svg = page.locator('svg').first();
-                  assert(await svg.isVisible());
-                  assert.equal(await svg.getAttribute('role'),'img');
-                  const measured = await svg.evaluate(el => {
-                    const view = el.viewBox.baseVal;
-                    const labels = Array.from(el.querySelectorAll('text')).map(t => {
-                      const b = t.getBBox();
-                      return {text:t.textContent, inBounds:b.x>=view.x-1 && b.y>=view.y-1 && b.x+b.width<=view.x+view.width+1 && b.y+b.height<=view.y+view.height+1};
+                  page.setDefaultTimeout(10000);
+                  page.on('request',r=>{if(/^https?:/i.test(r.url()))item.requests.push(r.url());});
+                  page.on('pageerror',e=>item.errors.push(String(e)));
+                  await page.goto(pathToFileURL(dir+'/'+paths[mode]).href,{waitUntil:'load',timeout:10000});
+                  if(mode==='embedded'){
+                    const img=page.locator('img');
+                    assert(await img.isVisible());
+                    item.measured=await img.evaluate(el=>({width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,complete:el.complete,naturalWidth:el.naturalWidth,naturalHeight:el.naturalHeight,scroll:document.documentElement.scrollWidth,alt:el.alt}));
+                    assert(item.measured.complete && item.measured.naturalWidth>0 && item.measured.naturalHeight>0);
+                    assert(item.measured.alt);
+                  } else {
+                    const svg=page.locator('svg').first();
+                    assert(await svg.isVisible());
+                    assert.equal(await svg.getAttribute('role'),'img');
+                    item.measured=await svg.evaluate(el=>{
+                      const view=el.viewBox.baseVal;
+                      const labels=Array.from(el.querySelectorAll('text')).map(t=>{
+                        const b=t.getBBox();
+                        return {text:t.textContent,inBounds:b.x>=view.x-1 && b.y>=view.y-1 && b.x+b.width<=view.x+view.width+1 && b.y+b.height<=view.y+view.height+1};
+                      });
+                      return {width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,scroll:document.documentElement.scrollWidth,labels,title:el.querySelector('title')?.textContent};
                     });
-                    return {width:el.getBoundingClientRect().width, scroll:document.documentElement.scrollWidth, labels, title:el.querySelector('title')?.textContent};
-                  });
-                  assert(measured.width>0 && measured.width<=width+1);
-                  if(ext==='html') assert(measured.scroll<=width+1);
-                  assert(measured.labels.length>=12 && measured.labels.every(l=>l.inBounds));
-                  assert(measured.title);
-                  assert.deepEqual(requests,[]);
-                  assert.deepEqual(errors,[]);
-                  await page.screenshot({path:dir+'/pilot-'+ext+'-'+width+'.png',fullPage:true});
-                  results.push({width,ext,status:'PASS',requests,errors,measured});
-                } finally { await context.close(); }
+                    assert(item.measured.labels.length>=14 && item.measured.labels.every(l=>l.inBounds));
+                    assert(item.measured.title);
+                  }
+                  assert(item.measured.width>0 && item.measured.width<=width+1);
+                  assert(item.measured.height>0);
+                  if(mode!=='svg')assert(item.measured.scroll<=width+1);
+                  assert.deepEqual(item.requests,[]);
+                  assert.deepEqual(item.errors,[]);
+                  item.status='PASS';
+                } catch(e){item.failure=String(e);}
+                finally{if(context)await context.close();}
+                console.log(JSON.stringify(item));
+                await writeFile(dir+'/browser-results.json',JSON.stringify(results,null,2));
               }
             }
-          } finally {
-            await browser.close();
-            await writeFile(dir+'/browser-results.json',JSON.stringify(results,null,2));
-          }
-          assert.equal(results.length,6);
+          } finally {await browser.close();}
+          assert.equal(results.length,9);
+          assert(results.every(r=>r.status==='PASS'),'One or more functional rendering cases failed');
           JS
+      - name: Capture independent visual evidence for HTML and exact exported SVG
+        id: browser_capture
+        if: always() && steps.browser_functional.outcome != 'skipped'
+        working-directory: apps/control-center
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium } from '@playwright/test';
+          import { strict as assert } from 'node:assert';
+          import { pathToFileURL } from 'node:url';
+          import { writeFile } from 'node:fs/promises';
+          const dir=process.env.RUNNER_TEMP+'/vf-diagram-receipt';
+          const browser=await chromium.launch();
+          const results=[];
+          try{
+            for(const width of [360,390,1280]){
+              for(const mode of ['html','embedded']){
+                const item={width,mode,status:'FAIL',requests:[],errors:[]};
+                results.push(item);
+                let context;
+                try{
+                  context=await browser.newContext({viewport:{width,height:1200},offline:true,javaScriptEnabled:false,reducedMotion:'reduce'});
+                  const page=await context.newPage();
+                  page.setDefaultTimeout(10000);
+                  page.on('request',r=>{if(/^https?:/i.test(r.url()))item.requests.push(r.url());});
+                  page.on('pageerror',e=>item.errors.push(String(e)));
+                  const name=mode==='html'?'trama-architecture.html':'svg-wrapper.html';
+                  await page.goto(pathToFileURL(dir+'/'+name).href,{waitUntil:'load',timeout:10000});
+                  const target=page.locator(mode==='html'?'svg':'img').first();
+                  assert(await target.isVisible());
+                  const box=await target.boundingBox();
+                  assert(box && box.x>=0 && box.y>=0 && box.x+box.width<=width+1 && box.y+box.height<=1200,'Diagram must fit capture viewport');
+                  if(mode==='embedded')assert(await target.evaluate(el=>el.complete&&el.naturalWidth>0));
+                  const file='pilot-'+(mode==='html'?'html':'svg-embedded')+'-'+width+'.png';
+                  const png=await page.screenshot({path:dir+'/'+file,fullPage:false,timeout:15000});
+                  assert(png.length>1000 && png.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));
+                  assert.deepEqual(item.requests,[]);
+                  assert.deepEqual(item.errors,[]);
+                  Object.assign(item,{status:'PASS',file,bytes:png.length,box});
+                }catch(e){item.failure=String(e);}
+                finally{if(context)await context.close();}
+                console.log(JSON.stringify(item));
+                await writeFile(dir+'/capture-results.json',JSON.stringify(results,null,2));
+              }
+            }
+          } finally{await browser.close();}
+          assert.equal(results.length,6);
+          assert(results.every(r=>r.status==='PASS'),'One or more visual captures failed');
+          JS
+      - name: Record independent functional and visual verdicts
+        if: always()
+        shell: bash
+        env:
+          FUNCTIONAL: ${{ steps.browser_functional.outcome }}
+          CAPTURE: ${{ steps.browser_capture.outcome }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"vf-diagram-receipt/report.json"
+          if p.exists():
+              r=json.loads(p.read_text())
+              states={"success":"PASS","failure":"FAIL","skipped":"NOT_RUN","cancelled":"CANCELLED"}
+              r["browser_offline_test"]=states.get(os.environ["FUNCTIONAL"],"NOT_RUN")
+              r["visual_capture"]=states.get(os.environ["CAPTURE"],"NOT_RUN")
+              r["production_admitted"]=False
+              p.write_text(json.dumps(r,indent=2)+"\n")
+          PY
       - name: Retain acquisition and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p0b-r2b-pilot
+          name: vf-diagram-p0b-r2b-r2-pilot
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
