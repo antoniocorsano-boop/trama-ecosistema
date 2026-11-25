@@ -73,6 +73,11 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
         numbers={node["id"]: i+1 for i,node in enumerate(source["nodes"])}
         relations=" · ".join(f"{numbers[a]} → {numbers[b]}" for a,b in source["edges"])
         description += " Relazioni: "+(relations or "nessuna")+"."
+        ordered=[n["id"] for n in source["nodes"]]
+        forward=set(zip(ordered,ordered[1:]))
+        actual={tuple(edge) for edge in source["edges"]}
+        cyclic=len(ordered)>1 and actual==forward|{(ordered[-1],ordered[0])}
+        structured=len(ordered)>1 and (actual==forward or cyclic)
     parts=[f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
       f'<title id="diagram-title">{title} — {name}</title>',
       f'<desc id="diagram-desc">{esc(description)}</desc>',
@@ -85,7 +90,7 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
         return min(maximum, available//max(1,len(value)))
     if variant=="mobile-vertical":
         if authored:
-            label(180,27,profile["name"],12,dark,600)
+            label(180,27,profile["name"],11,dark,600)
             label(180,60,source["title"],fit(source["title"],22,320),dark,700)
         else:
             label(180,37,profile["name"],21,dark,700)
@@ -103,7 +108,15 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
         boxes=[(42+310*i,244,266,180) for i in range(len(source["nodes"]))]
         font,small=(26,20) if authored else (27,19)
     if authored and variant=="desktop-lim-horizontal":
-        boxes=[(x+(4-len(boxes))*155,y,bw,bh) for x,y,bw,bh in boxes]
+        if structured:
+            count=len(boxes)
+            bw={2:440,3:340,4:276}[count]
+            gap={2:112,3:64,4:32}[count]
+            left=(w-(count*bw+(count-1)*gap))//2
+            boxes=[(left+i*(bw+gap),200,bw,230) for i in range(count)]
+            font,small=30,24
+        else:
+            boxes=[(x+(4-len(boxes))*155,y,bw,bh) for x,y,bw,bh in boxes]
     for i,(x,y,bw,bh) in enumerate(boxes):
         if not authored and i<3:
             if variant=="mobile-vertical":
@@ -119,20 +132,39 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
             parts.append(f'<rect x="{x+13}" y="{y+14}" width="36" height="29" rx="6" fill="{accent}"/>')
             label(x+31,y+34,str(i+1),17,p["onAccent"],700)
             label(cx,y+(61 if authored else 43),source["nodes"][i]["label"],fit(source["nodes"][i]["label"],font,280) if authored else font,dark,700)
-            label(cx,y+(83 if authored else 74),source["nodes"][i]["detail"],small,p["secondaryInk"])
+            label(cx,y+(83 if authored else 74),source["nodes"][i]["detail"],fit(source["nodes"][i]["detail"],small,280) if authored else small,p["secondaryInk"])
         else:
             parts.append(f'<rect x="{cx-23}" y="{y+16}" width="46" height="36" rx="7" fill="{accent}"/>')
             label(cx,y+42,str(i+1),22,p["onAccent"],700)
-            label(cx,y+92,source["nodes"][i]["label"],fit(source["nodes"][i]["label"],font,246) if authored else font,dark,700)
+            label(cx,y+(110 if authored and structured else 92),source["nodes"][i]["label"],fit(source["nodes"][i]["label"],font,bw-20) if authored else font,dark,700)
             detail=source["nodes"][i]["detail"]
-            lines=textwrap.wrap(detail,width=14) if authored else [detail]
+            lines=textwrap.wrap(detail,width=16 if authored and structured else 14) if authored else [detail]
             for row,line in enumerate(lines):
-                label(cx,y+122+row*22 if authored else y+132,line,fit(line,small,246) if authored else small,p["secondaryInk"])
+                yy=y+(151+row*29 if structured else 122+row*22) if authored else y+132
+                label(cx,yy,line,fit(line,small,bw-20) if authored else small,p["secondaryInk"])
     if authored:
         for index,(start,end) in enumerate(source["edges"]):
-            ax,ay,aw,_=boxes[numbers[start]-1]
-            bx,by,bw,_=boxes[numbers[end]-1]
-            if variant=="mobile-vertical":
+            ax,ay,aw,ah=boxes[numbers[start]-1]
+            bx,by,bw,bh=boxes[numbers[end]-1]
+            if structured:
+                returning=(start==ordered[-1] and end==ordered[0])
+                if variant=="mobile-vertical":
+                    if returning:
+                        y1=ay+ah//2
+                        y2=by+bh//2
+                        d=f"M {ax} {y1} H 12 V {y2} H {bx} M {bx-6} {y2-5} L {bx} {y2} L {bx-6} {y2+5}"
+                    else:
+                        x=ax+aw//2
+                        d=f"M {x} {ay+ah} V {by} M {x-6} {by-7} L {x} {by} L {x+6} {by-7}"
+                else:
+                    if returning:
+                        x1=ax+aw//2
+                        x2=bx+bw//2
+                        d=f"M {x1} {ay+ah} V 466 H {x2} V {by+bh} M {x2-7} {by+bh+8} L {x2} {by+bh} L {x2+7} {by+bh+8}"
+                    else:
+                        y=ay+ah//2
+                        d=f"M {ax+aw} {y} H {bx} M {bx-8} {y-7} L {bx} {y} L {bx-8} {y+7}"
+            elif variant=="mobile-vertical":
                 y1=ay+24+index*7
                 y2=by+24+index*7
                 x=344+index*2
@@ -143,7 +175,7 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
                 x2=bx+bw//2-28+index*8
                 y=ay-18-index*9
                 d=f"M {x1} {ay} V {y} H {x2} V {by} M {x2-5} {by-7} L {x2} {by} L {x2+5} {by-7}"
-            parts.append(f'<path d="{d}" fill="none" stroke="{accent}" stroke-width="2"/>')
+            parts.append(f'<path d="{d}" fill="none" stroke="{accent}" stroke-width="{3 if structured else 2}"/>')
         pairs=relations.split(" · ") if relations else []
         for row in range(2):
             line=" · ".join(pairs[row*4:row*4+4])
@@ -410,7 +442,7 @@ def authored_text(value, limit, field):
 
 def validate_authored(source):
     fields={"schema","id","status","profile","runtimeAuthorized","publicationAuthorized","title","description","nodes","edges"}
-    need(isinstance(source,dict) and source.keys()==fields,"Struttura della fonte non valida.")
+    need(isinstance(source,dict) and (source.keys()==fields or source.keys()==fields|{"activity"}),"Struttura della fonte non valida.")
     fixed={"schema":"trama.diagram-education-source/v0.1","id":"diagramma-docente",
         "status":"TEACHER_REVIEW_REQUIRED","profile":"studio-atlas"}
     need(all(source[k]==v for k,v in fixed.items()) and source["runtimeAuthorized"] is False
@@ -436,8 +468,14 @@ def validate_authored(source):
              and edge[0]!=edge[1],"Ogni relazione deve collegare due nodi presenti e distinti.")
         need(tuple(edge) not in seen,"Relazione duplicata.")
         seen.add(tuple(edge))
-    return {**fixed,"runtimeAuthorized":False,"publicationAuthorized":False,
+    result={**fixed,"runtimeAuthorized":False,"publicationAuthorized":False,
             "title":title,"description":description,"nodes":nodes,"edges":edges}
+    if "activity" in source:
+        activity=source["activity"]
+        need(isinstance(activity,dict) and activity.keys()=={"question","criterion"},"Struttura dell'attività non valida.")
+        result["activity"]={"question":authored_text(activity["question"],160,"Domanda operativa"),
+                            "criterion":authored_text(activity["criterion"],160,"Criterio di risposta")}
+    return result
 
 
 def authored_package(source):
@@ -449,6 +487,12 @@ def authored_package(source):
     guide.extend(f"- {n['label']}: {n['detail']}" for n in source["nodes"])
     guide.extend(["","## Relazioni",""])
     guide.extend([f"- {names[a]} → {names[b]}" for a,b in source["edges"]] or ["Nessuna relazione esplicita."])
+    guide.extend(["","## Attività e verifica",""])
+    if "activity" in source:
+        guide.extend(["Domanda operativa: "+source["activity"]["question"],"",
+                      "Criterio di risposta: "+source["activity"]["criterion"],""])
+    else:
+        guide.extend(["Domanda operativa e criterio di risposta non ancora definiti dal docente.",""])
     guide.extend(["","Verificare contenuto e leggibilità prima di qualsiasi uso con la classe.",""])
     files={"education-source.json":json.dumps(source,ensure_ascii=False,indent=2)+"\n",
            "guida-docente.md":"\n".join(guide)}

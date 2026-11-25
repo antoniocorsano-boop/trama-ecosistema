@@ -50,6 +50,24 @@ class AuthoredDiagram(unittest.TestCase):
                 self.assertIn("2 → 1", second[name])
         self.assertIn("Ventola → Batteria", second["guida-docente.md"])
 
+    def test_optional_activity_and_backward_compatibility(self):
+        original=generate(SOURCE)["files"]
+        self.assertNotIn("activity",json.loads(original["education-source.json"]))
+        self.assertIn("non ancora definiti",original["guida-docente.md"])
+        activity={"question":"Quale trasformazione avviene?","criterion":"Individua la trasformazione energetica."}
+        source={**SOURCE,"activity":activity}
+        files=generate(source)["files"]
+        self.assertEqual(json.loads(files["education-source.json"])["activity"],activity)
+        self.assertIn(activity["question"],files["guida-docente.md"])
+        self.assertIn(activity["criterion"],files["guida-docente.md"])
+        self.assertEqual(files,generate(source)["files"])
+        for invalid in [{"question":"<script>","criterion":"Risposta"},
+                        {"question":"Domanda","criterion":""},
+                        {"question":"Domanda","criterion":"a"*161},
+                        {"question":"Domanda","criterion":"Risposta","extra":True}]:
+            with self.subTest(invalid=invalid):
+                self.assertIn("error",generate({**SOURCE,"activity":invalid}))
+
     def test_closed_source(self):
         for edits in [
             {"title": "<script>"}, {"title": "https://example.org"}, {"title": "example.org"},

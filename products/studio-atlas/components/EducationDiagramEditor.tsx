@@ -78,6 +78,11 @@ export function EducationDiagramEditor() {
     anchor.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+  function updateActivity(field: "question" | "criterion", value: string) {
+    const activity = {...(source.activity ?? {question: "", criterion: ""}), [field]: value};
+    const {activity: previous, ...base} = source;
+    update(activity.question || activity.criterion ? {...base, activity} : base);
+  }
   function updateEdge(index: number, position: 0 | 1, id: string) {
     update({...source, edges: source.edges.map((edge, i): DiagramEdge =>
       i !== index ? edge : position === 0 ? [id, edge[1]] : [edge[0], id])});
@@ -91,6 +96,14 @@ export function EducationDiagramEditor() {
     <p>Inserisci da 1 a 4 nodi e fino a 8 relazioni direzionali. Usa solo testo didattico, senza dati personali o indirizzi.</p>
     <label>Titolo <input value={source.title} maxLength={26} onChange={e => update({...source, title: e.target.value})} /></label>
     <label>Finalità <textarea value={source.description} maxLength={160} onChange={e => update({...source, description: e.target.value})} /></label>
+    <fieldset>
+      <legend>Attività e verifica dell’apprendimento (facoltativa)</legend>
+      <p>Compila entrambi i campi per includerli nella guida docente; lascia entrambi vuoti per una proposta senza attività.</p>
+      <label>Domanda operativa <textarea value={source.activity?.question ?? ""} maxLength={160}
+        onChange={e => updateActivity("question", e.target.value)} /></label>
+      <label>Criterio di risposta <textarea value={source.activity?.criterion ?? ""} maxLength={160}
+        onChange={e => updateActivity("criterion", e.target.value)} /></label>
+    </fieldset>
     {source.nodes.map((node, index) => <fieldset key={node.id}>
       <legend>Nodo {index + 1}</legend>
       <label>Etichetta <input maxLength={16} value={node.label} onChange={e => update({...source,

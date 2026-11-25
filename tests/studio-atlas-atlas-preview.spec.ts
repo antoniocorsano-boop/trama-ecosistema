@@ -796,7 +796,7 @@ const f33dSources = [
     "runtimeAuthorized": false,
     "publicationAuthorized": false,
     "title": "Dalla carta alla carta",
-    "description": "Ricostruire il riciclo della carta e distinguere materia prima secondaria, lavorazione e nuovo prodotto.",
+    "description": "Le frecce indicano la successione delle fasi del riciclo della carta: dalla materia recuperata al nuovo prodotto.",
     "nodes": [
       {
         "id": "n1",
@@ -832,7 +832,11 @@ const f33dSources = [
         "n3",
         "n4"
       ]
-    ]
+    ],
+    "activity": {
+      "question": "Quale fase trasforma le fibre recuperate in un nuovo foglio?",
+      "criterion": "Distingue preparazione dell’impasto e formazione del nuovo foglio"
+    }
   },
   {
     "schema": "trama.diagram-education-source/v0.1",
@@ -842,7 +846,7 @@ const f33dSources = [
     "runtimeAuthorized": false,
     "publicationAuthorized": false,
     "title": "Dal campo alla tavola",
-    "description": "Ricostruire una filiera orticola e spiegare come la disponibilità di acqua condiziona la coltivazione.",
+    "description": "Le frecce indicano la successione della filiera orticola. Individuare l’effetto della scarsità d’acqua sulla coltivazione.",
     "nodes": [
       {
         "id": "n1",
@@ -878,7 +882,11 @@ const f33dSources = [
         "n3",
         "n4"
       ]
-    ]
+    ],
+    "activity": {
+      "question": "Che cosa può accadere alla raccolta se manca acqua durante la coltivazione?",
+      "criterion": "Collega scarsità d’acqua, crescita degli ortaggi e possibile riduzione della raccolta"
+    }
   },
   {
     "schema": "trama.diagram-education-source/v0.1",
@@ -888,7 +896,7 @@ const f33dSources = [
     "runtimeAuthorized": false,
     "publicationAuthorized": false,
     "title": "Circuito chiuso",
-    "description": "Riconoscere il percorso convenzionale della corrente in un circuito chiuso e spiegare l'effetto dell'interruttore aperto. Modello concettuale.",
+    "description": "Le frecce rappresentano il percorso della corrente convenzionale nel circuito chiuso. Modello concettuale, non schema elettrico.",
     "nodes": [
       {
         "id": "n1",
@@ -919,7 +927,11 @@ const f33dSources = [
         "n3",
         "n1"
       ]
-    ]
+    ],
+    "activity": {
+      "question": "Che cosa cambia quando si apre l’interruttore?",
+      "criterion": "Spiega che il percorso si interrompe, la corrente cessa e la lampadina si spegne"
+    }
   }
 ];
 for (const [caseIndex, source] of f33dSources.entries()) {
@@ -937,6 +949,10 @@ for (const [caseIndex, source] of f33dSources.entries()) {
     await expect(editor.getByRole("status")).toContainText("Integrità verificata");
     const {files}=await response.json();
     expect(JSON.parse(files["education-source.json"])).toEqual(source);
+    await expect(editor.getByLabel("Domanda operativa")).toHaveValue(source.activity.question);
+    await expect(editor.getByLabel("Criterio di risposta")).toHaveValue(source.activity.criterion);
+    expect(files["guida-docente.md"]).toContain(source.activity.question);
+    expect(files["guida-docente.md"]).toContain(source.activity.criterion);
     const receipt=JSON.parse(files["education-receipt.json"]);
     expect(receipt.runtimeAuthorized).toBe(false);
     expect(receipt.publicationAuthorized).toBe(false);
@@ -963,14 +979,33 @@ for (const [caseIndex, source] of f33dSources.entries()) {
           const sizes=texts.slice(0,2).map(t=>Number(t.getAttribute("font-size")));
           const outside=texts.filter(t=>{const b=t.getBBox();return b.x<0||b.y<0||b.x+b.width>width+1||b.y+b.height>height+1;}).map(t=>t.textContent);
           const nodes=Array.from(root.querySelectorAll("rect")).filter(r=>Number(r.getAttribute("width"))>=266&&r.hasAttribute("stroke"));
-          return {sizes,outside,nodes:nodes.length,edges:root.querySelectorAll("path").length};
+          return {sizes,outside,nodes:nodes.length,edges:root.querySelectorAll("path").length,
+            paths:Array.from(root.querySelectorAll("path")).map(p=>p.getAttribute("d"))};
         });
         expect(geometry.outside).toEqual([]);
         expect(geometry.sizes[1]).toBeGreaterThan(geometry.sizes[0]);
         expect(geometry.nodes).toBe(source.nodes.length);
         expect(geometry.edges).toBe(source.edges.length);
+        if(caseIndex===2) {
+          expect(geometry.paths.at(-1)).toContain(variant==="mobile-vertical"?"H 12 V":"V 466 H");
+        } else {
+          expect(geometry.paths.every(d=>variant==="mobile-vertical"?!d?.includes("H 12 V"):!d?.includes("V 466 H"))).toBe(true);
+        }
       } finally {await standalone.close();}
     }
     await writeFile(testInfo.outputPath(`f3-3d-case${caseIndex+1}-package-${width}.json`),JSON.stringify(files,null,2)+"\n");
+    if(caseIndex===0 && width===390) {
+      const criterion=source.activity.criterion+".";
+      await editor.getByLabel("Criterio di risposta").fill(criterion);
+      await expect(editor.getByRole("img")).toHaveCount(0);
+      const nextResponse=page.waitForResponse(r=>r.url().endsWith("/api/education-diagram"));
+      await editor.getByRole("button",{name:"Genera diagramma"}).click();
+      const next=await nextResponse;
+      expect(next.status()).toBe(200);
+      await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+      const edited=(await next.json()).files;
+      expect(JSON.parse(edited["education-source.json"]).activity.criterion).toBe(criterion);
+      expect(edited["guida-docente.md"]).toContain(criterion);
+    }
   });
 }

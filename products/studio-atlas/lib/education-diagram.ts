@@ -47,14 +47,17 @@ const SOURCE_METADATA = {
   publicationAuthorized: false,
 } as const;
 
-export function authoredSource(title = "", description = "", nodes: DiagramNode[] = [], edges: DiagramEdge[] = []) {
-  return {...SOURCE_METADATA, title, description, nodes, edges};
+export type DiagramActivity = {question: string; criterion: string};
+export function authoredSource(title = "", description = "", nodes: DiagramNode[] = [], edges: DiagramEdge[] = [], activity?: DiagramActivity) {
+  return {...SOURCE_METADATA, title, description, nodes, edges, ...(activity === undefined ? {} : {activity})};
 }
 export type AuthoredSource = ReturnType<typeof authoredSource>;
 
 export function importAuthoredSource(value: unknown): AuthoredSource {
   const source = record(value);
-  if (Object.keys(source).length !== 10 ||
+  const allowed = new Set([...Object.keys(SOURCE_METADATA), "title", "description", "nodes", "edges", "activity"]);
+  if (Object.keys(source).some(key => !allowed.has(key)) ||
+      Object.keys(source).length !== (Object.prototype.hasOwnProperty.call(source, "activity") ? 11 : 10) ||
       Object.entries(SOURCE_METADATA).some(([key, expected]) => source[key] !== expected) ||
       typeof source.title !== "string" || typeof source.description !== "string" ||
       !Array.isArray(source.nodes) || source.nodes.length > 4 || !Array.isArray(source.edges) || source.edges.length > 8) {
@@ -81,10 +84,20 @@ export function importAuthoredSource(value: unknown): AuthoredSource {
   });
   if (new Set(edges.map(edge => edge.join(":"))).size !== edges.length) throw Error("Relazione duplicata.");
   const forbidden = /[<>@\u0000-\u001f\u007f-\u009f]|(?:[a-z][a-z0-9+.-]*:\/\/|(?:https?|javascript|data|mailto|file|blob|vbscript)\s*:|www\.|\/\/|\b[\w-]+\.(?:it|com|org|net|edu|gov|io|dev)\b)/i;
-  if ([source.title, source.description, ...nodes.flatMap(node => [node.label, node.detail])].some(text => forbidden.test(text))) {
+  let activity: DiagramActivity | undefined;
+  if (Object.prototype.hasOwnProperty.call(source, "activity")) {
+    const value = record(source.activity);
+    if (Object.keys(value).length !== 2 || typeof value.question !== "string" || typeof value.criterion !== "string" ||
+        Array.from(value.question).length > 160 || Array.from(value.criterion).length > 160) {
+      throw Error("Controlla domanda operativa e criterio di risposta.");
+    }
+    activity = {question: value.question, criterion: value.criterion};
+  }
+  if ([source.title, source.description, ...nodes.flatMap(node => [node.label, node.detail]),
+       ...(activity ? [activity.question, activity.criterion] : [])].some(text => forbidden.test(text))) {
     throw Error("Inserisci solo testo, senza markup o indirizzi.");
   }
-  return authoredSource(source.title, source.description, nodes, edges);
+  return authoredSource(source.title, source.description, nodes, edges, activity);
 }
 
 export async function verifyAuthoredPackage(value: unknown) {
