@@ -591,10 +591,131 @@ jobs:
           assert.equal(results.length,45);
           assert(results.every(r=>r.status==='PASS'),'Profile standalone/embedded accessibility failed');
           JS
+      - name: Generate P2 source-grounded diagrams
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/vf-diagram-receipt/p2"
+          python3 fixtures/visual-factory-diagram/render-profile-demonstrator.py --p2-out "$out"
+          python3 - "$out" <<'PY'
+          import hashlib,json,pathlib,sys,xml.etree.ElementTree as ET
+          p=pathlib.Path(sys.argv[1])
+          r=json.loads((p/"p2-receipt.json").read_text())
+          assert len(r["outputs"])==6 and len(r["semanticRejections"])==5
+          assert all(v=="PASS" for v in r["semanticRejections"].values())
+          assert r["semanticRejections"]["review_attribution"]=="PASS"
+          assert r["runtimeAuthorized"] is False and r["publicationAuthorized"] is False
+          assert len({x["id"] for x in r["outputs"]})==6
+          for item in r["outputs"]:
+              for ext in ("html","svg"):
+                  data=(p/(item["id"]+"."+ext)).read_bytes()
+                  assert b"\r" not in data
+                  assert hashlib.sha256(data).hexdigest()==item[ext+"Sha256"]
+              svg=(p/(item["id"]+".svg")).read_bytes()
+              html=(p/(item["id"]+".html")).read_bytes()
+              assert svg in html
+              root=ET.fromstring(svg)
+              ns={"s":"http://www.w3.org/2000/svg"}
+              assert root.find("s:title",ns).text==item["title"]
+              assert root.find("s:desc",ns).text==item["description"]
+              assert [e.text for e in root.findall(".//s:text",ns)]==item["labels"]
+              if item["diagram"]=="registro-qualification":
+                  # Independent positive check of visible and accessible attribution.
+                  labels=item["labels"]
+                  assert "PR #414" in labels and "PR #412" not in labels
+                  assert "PR #412 in bozza, non integrata" in labels
+                  desc=root.find("s:desc",ns).text
+                  assert "Codex / PR #414" in desc and "PR #412 in bozza, non integrata" in desc
+          PY
+      - name: Qualify six P2 diagrams in HTML and SVG
+        working-directory: apps/control-center
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium, expect } from '@playwright/test';
+          import { strict as assert } from 'node:assert';
+          import { pathToFileURL } from 'node:url';
+          import { readFile,writeFile } from 'node:fs/promises';
+          const dir=process.env.RUNNER_TEMP+'/vf-diagram-receipt/p2';
+          const receipt=JSON.parse(await readFile(dir+'/p2-receipt.json','utf8'));
+          const escape=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+          const browser=await chromium.launch();
+          const results=[];
+          try{
+            for(const output of receipt.outputs){
+              const [vw,vh]=output.viewBox;
+              const embed=output.id+'-embedded.html';
+              await writeFile(dir+'/'+embed,'<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+escape(output.title)+'</title><style>body{margin:0}img{display:block;width:100%;max-width:'+vw+'px;height:auto;margin:auto}p{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}</style><img src="'+output.id+'.svg" alt="'+escape(output.title)+'" aria-describedby="diagram-summary"><p id="diagram-summary">'+escape(output.description)+'</p></html>');
+              for(const width of output.variant==='mobile-vertical'?[360,390]:[1280]){
+                for(const mode of ['html','svg','embedded']){
+                  const item={id:output.id,width,mode,status:'FAIL',requests:[],errors:[]};
+                  results.push(item);
+                  let context;
+                  try{
+                    const height=width===1280?900:1100;
+                    context=await browser.newContext({viewport:{width,height},offline:true,javaScriptEnabled:false,reducedMotion:'reduce'});
+                    const page=await context.newPage();
+                    page.on('request',r=>{if(!r.url().startsWith('file:'))item.requests.push(r.url());});
+                    page.on('pageerror',e=>item.errors.push(String(e)));
+                    await page.goto(pathToFileURL(dir+'/'+(mode==='embedded'?embed:output.id+'.'+mode)).href,{timeout:10000});
+                    const graphic=page.getByRole('img');
+                    await expect(graphic).toHaveCount(1,{timeout:3000});
+                    await expect(graphic).toBeVisible({timeout:3000});
+                    await expect(graphic).toHaveAccessibleName(output.title,{timeout:3000});
+                    await expect(graphic).toHaveAccessibleDescription(output.description,{timeout:3000});
+                    if(mode==='embedded'){
+                      item.measured=await graphic.evaluate(el=>({complete:el.complete,naturalWidth:el.naturalWidth,naturalHeight:el.naturalHeight,width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,scroll:document.documentElement.scrollWidth,lang:document.documentElement.lang}));
+                      const m=item.measured;
+                      assert(m.complete&&m.naturalWidth>0&&m.naturalHeight>0&&m.width>0&&m.width<=width+1&&m.height<=height+1&&m.scroll<=width+1&&m.lang==='it');
+                      assert(Math.abs(m.width/m.height-vw/vh)<.02);
+                    }else{
+                      item.measured=await graphic.evaluate(el=>{
+                        const v=el.viewBox.baseVal;
+                        const labels=[...el.querySelectorAll('text')].map(t=>{const b=t.getBBox(),c=t.getScreenCTM();return {text:t.textContent,x:b.x,y:b.y,w:b.width,h:b.height,cssPx:Number(t.getAttribute('font-size'))*Math.hypot(c.a,c.b)};});
+                        const rects=[...el.querySelectorAll('rect')].slice(1).map(t=>({x:Number(t.getAttribute('x')),y:Number(t.getAttribute('y')),w:Number(t.getAttribute('width')),h:Number(t.getAttribute('height'))}));
+                        const overlaps=[],crossings=[];
+                        for(let i=0;i<labels.length;i++){
+                          const a=labels[i];
+                          for(let j=i+1;j<labels.length;j++){const b=labels[j];if(Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>1&&Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>1)overlaps.push([a.text,b.text]);}
+                          for(const b of rects){
+                            const intersects=Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>1&&Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>1;
+                            const contained=a.x>=b.x-1&&a.y>=b.y-1&&a.x+a.w<=b.x+b.w+1&&a.y+a.h<=b.y+b.h+1;
+                            if(intersects&&!contained)crossings.push(a.text);
+                          }
+                        }
+                        return {width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,scroll:document.documentElement.scrollWidth,labels,overlaps,crossings,view:{width:v.width,height:v.height},lang:el.getAttributeNS('http://www.w3.org/XML/1998/namespace','lang')};
+                      });
+                      const m=item.measured;
+                      assert(m.width>0&&m.width<=width+1&&m.height<=height+1&&m.scroll<=width+1);
+                      assert(m.lang==='it'&&m.view.width===vw&&m.view.height===vh);
+                      assert.deepEqual(m.labels.map(l=>l.text),output.labels);
+                      assert.deepEqual(m.overlaps,[]);assert.deepEqual(m.crossings,[]);
+                      assert(m.labels.every(l=>l.x>=0&&l.y>=0&&l.x+l.w<=vw+1&&l.y+l.h<=vh+1));
+                      assert(m.labels.every(l=>l.cssPx>=(width===1280?18:14)));
+                    }
+                    assert.deepEqual(item.requests,[]);assert.deepEqual(item.errors,[]);
+                    // Keep screenshots for HTML and embedded SVG; standalone SVG is tested independently.
+                    if(mode!=='svg'){
+                      const file=output.id+'-'+mode+'-'+width+'.png';
+                      const png=await page.screenshot({path:dir+'/'+file,fullPage:false,timeout:15000});
+                      assert(png.length>1000);Object.assign(item,{file,bytes:png.length});
+                    }
+                    item.status='PASS';
+                  }catch(e){item.failure=String(e);}
+                  finally{if(context)await context.close();}
+                  console.log(JSON.stringify(item));
+                  await writeFile(dir+'/p2-browser-results.json',JSON.stringify(results,null,2));
+                }
+              }
+            }
+          }finally{await browser.close();}
+          assert.equal(results.length,27);
+          assert(results.every(r=>r.status==='PASS'),'Qualificazione grafica P2 non superata');
+          JS
       - name: Retain acquisition and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p1d-r1-profiles
+          name: vf-diagram-p2b-documents
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7

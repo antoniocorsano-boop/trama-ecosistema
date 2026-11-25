@@ -1,0 +1,222 @@
+{
+  "schema": "trama.diagram-source-register/v0.1",
+  "status": "P2A_SOURCE_REVIEW_REQUIRED",
+  "mandate": 358,
+  "profileBase": "a3a8afebb4e597311a6464a5a23a3d82976a78ba",
+  "publicationAuthorized": false,
+  "runtimeAuthorized": false,
+  "notes": "Inventario delle fonti, non nuovo contratto di prodotto. Le issue sono riferimenti mutabili: conservare data e sezione, verificare aggiornamenti prima di produrre. Le qualificazioni non equivalgono a pubblicazione.",
+  "diagrams": [
+    {
+      "id": "trama-ecosystem",
+      "profile": "trama",
+      "title": "TRAMA — architettura dell'ecosistema",
+      "sources": {
+        "architecture": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "commit": "a3a8afebb4e597311a6464a5a23a3d82976a78ba",
+          "path": "docs/architecture/ecosystem-overview.md",
+          "blob": "9282243bca9ec5b9384803d4f42be6b55decd8ae"
+        },
+        "officina": {
+          "type": "decision",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "number": 354,
+          "observedUpdatedAt": "2026-11-25T10:35:44Z",
+          "section": "OFFICINA-EDU-01"
+        },
+        "visualFactory": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "commit": "a3a8afebb4e597311a6464a5a23a3d82976a78ba",
+          "path": "docs/capabilities/atlas-percorsi/production/VISUAL-FACTORY-v0.1.md",
+          "blob": "029c713cadb41074af6adcd1b63462425c181b11"
+        }
+      },
+      "facts": [
+        {
+          "text": "TRAMA governa contratti e decisioni, senza conservare curricolo, materiali o dati personali.",
+          "source": "architecture",
+          "state": "ARCHITECTURAL_DECISION"
+        },
+        {
+          "text": "Arena è l'autorità curricolare; trasferisce direttamente a Docente OS e rende disponibili contenuti pubblicabili ad Atlas. Atlas propone risorse a Docente OS, non è passaggio obbligatorio.",
+          "source": "architecture",
+          "state": "ARCHITECTURAL_DECISION"
+        },
+        {
+          "text": "Studio Atlas è l'officina professionale; Atlas è consultazione e fruizione. World Composer, Visual Factory e Compute Factory mantengono confini distinti.",
+          "source": "officina",
+          "state": "APPROVED_PRODUCT_DIRECTION"
+        },
+        {
+          "text": "Visual Factory produce candidati dopo la revisione della storia e del mondo; non pubblica automaticamente.",
+          "source": "visualFactory",
+          "state": "PROPOSED_CONTRACT"
+        }
+      ],
+      "constraints": [
+        "Nessuna scrittura autonoma tra prodotti.",
+        "Non confondere Docente OS con Registro Docente: il documento architetturale non specifica una relazione diretta con quest'ultimo.",
+        "Non presentare il contratto proposto come operativo."
+      ]
+    },
+    {
+      "id": "studio-atlas-production",
+      "profile": "studio-atlas",
+      "title": "Studio Atlas — progettazione e produzione",
+      "sources": {
+        "model": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "commit": "a3a8afebb4e597311a6464a5a23a3d82976a78ba",
+          "path": "products/studio-atlas/lib/model.ts",
+          "blob": "14ec552853c4a07328ba32707562889a55225d7f"
+        },
+        "workspace": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "commit": "a3a8afebb4e597311a6464a5a23a3d82976a78ba",
+          "path": "products/studio-atlas/components/PathwayWorkspace.tsx",
+          "blob": "21d2d4b9d8d61d4903dbe2d27137d0f2900f0cac"
+        },
+        "officina": {
+          "type": "decision",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "number": 354,
+          "observedUpdatedAt": "2026-11-25T10:35:44Z",
+          "section": "OFFICINA-EDU-01"
+        },
+        "visualFactory": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/trama-ecosistema",
+          "commit": "a3a8afebb4e597311a6464a5a23a3d82976a78ba",
+          "path": "docs/capabilities/atlas-percorsi/production/VISUAL-FACTORY-v0.1.md",
+          "blob": "029c713cadb41074af6adcd1b63462425c181b11"
+        }
+      },
+      "facts": [
+        {
+          "text": "Fasi dichiarate nel modello: Idea, Storia, Mondo, Esperienza, Scene, Produzione, Prova, Revisione.",
+          "source": "model",
+          "state": "IMPLEMENTED_STRUCTURE"
+        },
+        {
+          "text": "Il workspace integra editor, VisualFactoryStage, blocchi di produzione e anteprima. Anteprima di revisione distinta da quella del pacchetto approvato; origine Atlas configurabile; snapshot non pubblico.",
+          "source": "workspace",
+          "state": "IMPLEMENTED_STRUCTURE"
+        },
+        {
+          "text": "Il processo comune approvato parte da obiettivi e destinatari, formato, progettazione, risorse, composizione e revisione; prosegue con fascicolo e pacchetto, decisione separata e fruizione.",
+          "source": "officina",
+          "state": "APPROVED_PRODUCT_DIRECTION"
+        },
+        {
+          "text": "VF0–VF6: ingresso, direzione artistica, risorse canoniche, rifinitura umana, composizione, qualità e decisione umana.",
+          "source": "visualFactory",
+          "state": "PROPOSED_CONTRACT"
+        }
+      ],
+      "constraints": [
+        "Non rappresentare la navigazione delle fasi come approvazione automatica.",
+        "Formati ulteriori e tutte le capacità F3 non ancora dimostrati dalla fonte.",
+        "Nessuna autorizzazione agli studenti dalla sola anteprima."
+      ]
+    },
+    {
+      "id": "registro-qualification",
+      "profile": "registro-docente",
+      "title": "Registro Docente — motore ibrido di qualificazione",
+      "sources": {
+        "mandate": {
+          "type": "decision",
+          "repository": "antoniocorsano-boop/registro-docente",
+          "number": 413,
+          "observedUpdatedAt": "2026-11-25T10:22:30Z",
+          "section": "Regole di decisione e piano Q0–Q5"
+        },
+        "workflow": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/registro-docente",
+          "commit": "72dd969863d6fa74229f04a8c95eabda0095ebb8",
+          "path": ".github/workflows/qa-stability-01-q4.yml",
+          "blob": "0603a44e5c0ab8424929bc86bbc0dfcdffdc1313"
+        },
+        "f2": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/registro-docente",
+          "commit": "72dd969863d6fa74229f04a8c95eabda0095ebb8",
+          "path": ".github/workflows/ap02-f2-native-device.yml",
+          "blob": "a25b81dd0ef0d53311fb8593c029005c9c747eb3"
+        },
+        "driver": {
+          "type": "file",
+          "repository": "antoniocorsano-boop/registro-docente",
+          "commit": "72dd969863d6fa74229f04a8c95eabda0095ebb8",
+          "path": "scripts/diagnostics/appium-pilot/pilot.py",
+          "blob": "c9ec5c67f139730d8fed075e25ed5c44b813c2ba"
+        },
+        "qualification": {
+          "type": "run",
+          "repository": "antoniocorsano-boop/registro-docente",
+          "id": 45570196358,
+          "commit": "72dd969863d6fa74229f04a8c95eabda0095ebb8",
+          "conclusion": "success",
+          "observedJobs": {
+            "success": 18,
+            "skipped": 7
+          }
+        },
+        "review": {
+          "type": "pull_request_review_receipt",
+          "repository": "antoniocorsano-boop/registro-docente",
+          "number": 414,
+          "commit": "72dd969863d6fa74229f04a8c95eabda0095ebb8",
+          "commentId": 7159227911,
+          "result": "CODE_REVIEW_NO_FINDINGS"
+        },
+        "candidate": {
+          "type": "pull_request",
+          "repository": "antoniocorsano-boop/registro-docente",
+          "number": 412,
+          "head": "72dd969863d6fa74229f04a8c95eabda0095ebb8",
+          "draft": true,
+          "merged": false
+        }
+      },
+      "facts": [
+        {
+          "text": "Il laboratorio distingue stabilità, conformità e rilascio; classificazione INFRASTRUCTURE/HARNESS/PRODUCT/INDETERMINATE e nessuna ripetizione di mutazioni a esito ignoto.",
+          "source": "mandate",
+          "state": "APPROVED_DECISION_RULE"
+        },
+        {
+          "text": "Il workflow F2 seleziona il canale ibrido per le PR #414/#412 e richiede nativeContextOnly, cdpDirect e sessionClosed.",
+          "source": "f2",
+          "state": "IMPLEMENTED_CONTRACT"
+        },
+        {
+          "text": "Appium/UiAutomator2 osserva il contesto nativo; gestione del selettore SAF tramite sessione nativa e prove CDP separate secondo il contratto F2.",
+          "source": "driver",
+          "state": "IMPLEMENTED_STRUCTURE"
+        },
+        {
+          "text": "Q4 preflight, due prove ibride, sei avvii, due prove funzionali e sei prove Q4: 18 job conclusi positivamente; sette job ausiliari saltati, non PASS.",
+          "source": "qualification",
+          "state": "QUALIFIED_EXACT_CANDIDATE"
+        },
+        {
+          "text": "Codex non ha segnalato rilievi sul commit; la PR #412 rimane in bozza e non integrata.",
+          "source": "review",
+          "state": "REVIEWED_NOT_RELEASED"
+        }
+      ],
+      "constraints": [
+        "Mostrare candidato e perimetro delle evidenze, non rilascio prodotto.",
+        "Non includere credenziali, dettagli di backup o dati personali.",
+        "Non conteggiare job saltati come superati."
+      ]
+    }
+  ]
+}
