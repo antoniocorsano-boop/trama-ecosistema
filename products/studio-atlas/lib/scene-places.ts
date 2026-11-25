@@ -24,6 +24,10 @@ export function stagePlaceErrors(stage:SceneStage|undefined):string[]{
     if(e&&nonempty(e.id))evidenceIds.add(e.id);
     if(e?.hotspot!==undefined&&!validHotspot(e.hotspot))errors.push("HOTSPOT");
   }
+  if(stage.discovery!==undefined){
+    const d=stage.discovery;
+    if(!d||!Number.isInteger(d.minObservations)||d.minObservations<1||d.minObservations>(stage.evidence?.length??0)||!nonempty(d.reflectionPrompt)||stage.locations?.length!==1||stage.workbench!==undefined||stage.evidence?.some(item=>!item.hotspot))errors.push("DISCOVERY");
+  }
   return [...new Set(errors)];
 }
 

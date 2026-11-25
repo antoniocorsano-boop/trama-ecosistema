@@ -75,7 +75,7 @@ export function StudioHome() {
           <p className="eyebrow">Prodotto educativo · Bozza da rivedere</p>
           <h2 id="agriculture-pilot-title">Dal campo al raccolto · Il mistero dei filari asciutti</h2>
           <p>Indagine in cinque scene: osservazioni, misure, scelte e trasferimento. Tecnologia, seconda annualità.</p>
-          <Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico · v0.2</Link>
+          <Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico · v0.3</Link>
           {agricultureState==="error"&&<p role="alert">Non è stato possibile preparare la bozza locale. Riprova senza cancellare i tuoi percorsi.</p>}
         </div>
         <button className="secondary-action" disabled={agricultureState==="loading"} onClick={async()=>{

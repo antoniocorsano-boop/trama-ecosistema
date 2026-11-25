@@ -31,7 +31,7 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  ["sara","Sara","«Vorrei salvare le piante senza consumare acqua inutilmente. Ci aiuti?»",21,56,"PERSON"],
  ["luca","Luca","«Ho osservato che il tempo di irrigazione era lo stesso. Dobbiamo confrontare altre condizioni.»",76,55,"PERSON"],
  ["filari","I due filari","Il filare a destra appare meno vigoroso. L’aspetto è un indizio, non dimostra ancora la causa.",57,75,"TRACE"]
- ],{name:"Sara",role:"Responsabile dell’orto",line:"Ci aiuti a capire perché un filare riceve meno acqua?"})}),
+ ],{name:"Sara",role:"Responsabile dell’orto",line:"Ci aiuti a scoprire che cosa sta succedendo?"})}),
  situation("AG2","L’indagine sul campo","Luca ha raccolto misure nella stessa durata, con due recipienti uguali. Tutti i valori sono inventati per questo caso didattico.",
  "Esplora i sei punti. Confronta i volumi e cerca una spiegazione della differenza.",
  "Le osservazioni permettono di formulare un’ipotesi verificabile sulla distribuzione dell’acqua.",
@@ -39,12 +39,12 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  {stage:stage("Impianto di irrigazione","Osserva la linea dalla sorgente fino ai filari.",[
  ["serbatoio","Riserva d’acqua","Nel serbatoio l’acqua è disponibile: è una risorsa del sistema.",15,29,"OBJECT"],
  ["monte","Misura a monte","Il primo recipiente raccoglie 200 mL nello stesso intervallo di misura.",35,55,"TRACE"],
- ["ostruzione","Tratto della linea","Luca osserva un’ostruzione nel tratto fra i due punti di misura. È un indizio da verificare.",53,55,"SYSTEM"],
+ ["ostruzione","Tratto della linea","Luca nota un deposito visibile all’interno del raccordo tra i due punti di misura. Che effetto potrebbe avere?",53,55,"SYSTEM"],
  ["valle","Misura a valle","Il secondo recipiente raccoglie 50 mL nello stesso intervallo: un quarto del primo.",72,55,"TRACE"],
  ["suolo","Terreno","In questa prova i due filari hanno suolo simile; in altri terreni la capacità di trattenere acqua può cambiare.",33,79,"OBJECT"],
  ["piante","Colture e lavoro","Sara ha usato lo stesso tempo di irrigazione. Le piante a valle sono meno vigorose: risultato osservato, non una misura diretta dell’acqua nelle radici.",82,79,"TRACE"]
  ],{name:"Luca",role:"Osservatore",line:"Quali osservazioni ci permettono di distinguere le ipotesi?"})}),
- situation("AG3","Quale intervento scegli?","Le misure sono diverse e c’è un indizio di ostruzione. Sara chiede di decidere prima di modificare il sistema.",
+ situation("AG3","Quale intervento scegli?","Sara guarda Luca: «Abbiamo raccolto le misure. Ora dobbiamo scegliere una prova, senza sprecare acqua».",
  "Prevedi il risultato di un intervento. Scegli, osserva le conseguenze e motiva la decisione.",
  "Una seconda misura comparabile permette di valutare l’intervento.",
  "Una spiegazione causale si controlla modificando una condizione e osservando gli effetti, non indovinando.",
@@ -67,28 +67,36 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  ["prodotti","Risultati","Crescita e raccolto: non immediati, dipendono anche da altre condizioni.",63,50,"TRACE"],
  ["effetti","Impatti e controllo","Consumo d’acqua, condizioni del suolo, osservazioni che guidano le prossime scelte.",87,50,"SYSTEM"]
  ])}),
- situation("AG5","Un nuovo problema nel frutteto","In un frutteto collinare le misure di erogazione sono simili, ma due zone di terreno hanno caratteristiche diverse e gli alberi mostrano crescita diversa.",
+ situation("AG5","Un nuovo problema nel frutteto","Il responsabile di un frutteto collinare chiede aiuto: alcuni alberi crescono meno degli altri. Luca ti consegna il quaderno delle nuove osservazioni.",
  "Proponi due controlli. Quale risultato ti farebbe cambiare ipotesi? Discuti o annota la risposta.",
- "Hai trasferito il metodo: osservare, confrontare condizioni, formulare un’ipotesi, verificare e rivedere.",
+ "Confronta la tua proposta con un possibile piano: misurare l’umidità nei due terreni a pari condizioni, controllare drenaggio ed esposizione, poi rivedere l’ipotesi se le misure non la sostengono.",
  "La soluzione dell’orto non è una regola universale: la strategia si trasferisce, la causa va indagata nuovamente.",
  {kind:"TRANSFER",stage:stage("Frutteto collinare","Un ambiente diverso richiede nuove osservazioni.",[
- ["linea","Erogazione","I recipienti della nuova prova raccolgono quantità simili nello stesso intervallo: non attribuire automaticamente il problema alla linea.",46,68,"TRACE"],
- ["terreno","Suoli diversi","Una zona è più sabbiosa e una più compatta. Confronta umidità e drenaggio a condizioni comparabili.",74,81,"OBJECT"],
- ["alberi","Stato delle colture","Crescita diversa: valuta anche esposizione, condizioni delle radici e altre ipotesi pertinenti.",24,47,"TRACE"]
+ ["linea","Erogazione","I recipienti della nuova prova raccolgono quantità simili nello stesso intervallo.",46,68,"TRACE"],
+ ["terreno","Suoli diversi","Una zona è più sabbiosa, l’altra più compatta. Quali proprietà potrebbero cambiare?",74,81,"OBJECT"],
+ ["alberi","Stato delle colture","Gli alberi crescono in modo diverso. Non abbiamo ancora misure di umidità del terreno né informazioni sulle radici.",24,47,"TRACE"]
  ])})
  ];
+ const discovery:Record<string,{minObservations:number;reflectionPrompt:string}>={
+ AG1:{minObservations:3,reflectionPrompt:"Qual è la tua prima ipotesi?"},
+ AG2:{minObservations:6,reflectionPrompt:"Quali due indizi sostengono la tua spiegazione?"},
+ AG3:{minObservations:2,reflectionPrompt:"Che cosa prevedi che accada alle due misure?"},
+ AG4:{minObservations:4,reflectionPrompt:"Quale relazione collega una risorsa, un’operazione e un risultato?"},
+ AG5:{minObservations:3,reflectionPrompt:"Quali due controlli proponi e quale risultato smentirebbe la tua ipotesi?"}
+ };
+ for(const scene of scenes){if(scene.stage)scene.stage={...scene.stage,discovery:discovery[scene.sceneId]};}
  for(const {sceneId} of artwork){
   const scene=scenes.find(item=>item.sceneId===sceneId)!;
   const image=images[sceneId];
   if(!image)throw Error("AGRICULTURE_IMAGE_MISSING");
   scene.illustration=image;
  }
- return {projectId:AGRICULTURE_PROJECT_ID,title:"Dal campo al raccolto · Il mistero dei filari asciutti",idea:"Indaga perché l’acqua non raggiunge allo stesso modo due filari. Aiuta Sara e Luca a ricostruire il sistema agricolo e a verificare una soluzione senza sprechi.",ageBand:"lower-secondary",
+ return {projectId:AGRICULTURE_PROJECT_ID,title:"Dal campo al raccolto · Il mistero dei filari asciutti",idea:"Indaga perché due filari irrigati insieme mostrano condizioni diverse. Aiuta Sara e Luca a ricostruire il sistema agricolo e a verificare una soluzione senza sprechi.",ageBand:"lower-secondary",
  authoringComplexity:"ARTICULATED",authoringSelection:{environment:"NATURE",tools:["STORY","WORLD","FORM","SCENES","CHOICES","HOTSPOTS","PREVIEW"]},
  humanState:"STORY_REVIEW",productionState:"NOT_REQUESTED",
  story:{hook:"Due filari irrigati insieme mostrano condizioni diverse.",setting:"Orto scolastico e frutteto collinare.",characters:"Sara, responsabile dell’orto; Luca, osservatore delle misure; lo studente, consulente dell’orto.",characterGoal:"Individuare una soluzione motivata che eviti sprechi d’acqua.",disruption:"Le piante a valle sono appassite dopo l’irrigazione.",unknown:"Quale relazione impedisce la distribuzione uniforme? Quali misure distinguono le ipotesi?",learnerRole:"Consulente che osserva, confronta, sceglie e verifica nel modello didattico.",turningPoint:"Confronto fra misure a monte e a valle, indizio di ostruzione e seconda prova.",ending:"Ricostruzione del sistema e trasferimento del metodo in un frutteto."},
  storyReview:{decision:"READY"},world:{learnerRole:"Consulente dell’orto",canObserve:"Riserva, linea, due misure, terreno, piante e operazioni.",canChange:"Seleziona interventi nel modello e confronta conseguenze.",unknown:"Causa della distribuzione irregolare nel caso.",consequence:"Le misure simulate cambiano in funzione della scelta.",motivation:"Salvare le colture senza sprechi e saper spiegare le decisioni."},
- worldReview:{decision:"READY"},productReview:{decision:"READY",evidenceRef:"ESS-02 · Fascicolo educativo-didattico v0.2 (bozza)"},experience:{grammar:"INQUIRY_EVIDENCE",rationale:"L’indagine richiede osservazione di indizi, confronto di misure, una scelta causale e trasferimento."},scenes,storyboardReady:false,archived:false,createdAt:now,updatedAt:now,revision:1};
+ worldReview:{decision:"READY"},productReview:{decision:"READY",evidenceRef:"ESS-02 · Fascicolo educativo-didattico v0.3 (bozza)"},experience:{grammar:"INQUIRY_EVIDENCE",rationale:"L’indagine richiede osservazione di indizi, confronto di misure, una scelta causale e trasferimento."},scenes,storyboardReady:false,archived:false,createdAt:now,updatedAt:now,revision:1};
 }
 
 // Local repository artwork is converted once using the existing WebP validator;

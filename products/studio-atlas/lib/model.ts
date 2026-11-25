@@ -84,6 +84,7 @@ export type SceneWorkbenchMode = "TIMELINE" | "CONNECTIONS" | "COMPARE";
 
 export type SceneStage = {
   visualMode: "CINEMATIC_EDITORIAL";
+  discovery?: {minObservations:number;reflectionPrompt:string};
   focusLocationId?: string;
   locations?: Array<{
     id: string;

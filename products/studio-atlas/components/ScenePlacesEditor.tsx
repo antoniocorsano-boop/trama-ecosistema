@@ -13,6 +13,11 @@ export function ScenePlacesEditor({scene,onChange}:{scene:PathwayScene;onChange:
     <summary>Luoghi e indizi · {places.length} luoghi, {evidence.length} indizi</summary>
     <p>Componi ciò che lo studente può esplorare in Atlas. I luoghi e gli indizi diventano elementi interattivi della scena. Puoi anche posizionarli sull’immagine della scena.</p>
     {stagePlaceErrors(stage).length>0&&<p role="status" className="scene-places-warning">Completa i nomi, le descrizioni e i riferimenti prima della prova.</p>}
+    {stage&&<fieldset>
+      <legend>Scoperta progressiva</legend>
+      <label><input type="checkbox" checked={Boolean(stage.discovery)} onChange={e=>{if(e.target.checked)onChange({...stage,discovery:{minObservations:1,reflectionPrompt:"Che cosa hai osservato?"}});else{const {discovery,...rest}=stage;void discovery;onChange(rest)}}}/> Richiedi osservazioni e una riflessione prima di mostrare le conclusioni</label>
+      {stage.discovery&&<><label>Numero minimo di indizi<input type="number" min={1} max={Math.max(1,evidence.length)} value={stage.discovery.minObservations} onChange={e=>onChange({...stage,discovery:{...stage.discovery!,minObservations:Number(e.target.value)}})}/></label><label>Domanda di riflessione<textarea value={stage.discovery.reflectionPrompt} onChange={e=>onChange({...stage,discovery:{...stage.discovery!,reflectionPrompt:e.target.value}})}/></label><small>Richiede una scena illustrata, un luogo, tutti gli indizi posizionati e nessun banco di lavoro. La risposta non è valutata automaticamente.</small></>}
+    </fieldset>}
     <button type="button" className="secondary-action" onClick={()=>onChange(addStageLocation(stage,crypto.randomUUID()))}>Aggiungi luogo</button>
     {stage&&places.map((place,i)=><section key={place.id} className="scene-place-card" aria-label={"Luogo "+(i+1)}>
       <h4>Luogo {i+1}</h4>
