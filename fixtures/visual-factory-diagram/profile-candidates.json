@@ -148,30 +148,35 @@
         {
           "foreground": "ink",
           "background": "canvas",
-          "ratio": 13.7
+          "ratio": 13.7,
+          "verdict": "PASS"
         },
         {
           "foreground": "ink",
           "background": "surface",
-          "ratio": 14.81
+          "ratio": 14.81,
+          "verdict": "PASS"
         },
         {
           "foreground": "secondaryInk",
           "background": "canvas",
-          "ratio": 4.47
+          "ratio": 4.47,
+          "verdict": "FAIL_RESTRICTED_PAIR"
         },
         {
           "foreground": "secondaryInk",
           "background": "surface",
-          "ratio": 4.83
+          "ratio": 4.83,
+          "verdict": "PASS"
         },
         {
           "foreground": "onAccent",
           "background": "accent",
-          "ratio": 8.76
+          "ratio": 8.76,
+          "verdict": "PASS"
         }
       ],
-      "notes": "Candidate derivation from existing UI source, not new brand authority."
+      "notes": "Candidate derivation from existing UI source, not new brand authority. Secondary ink #6a7069 on paper #f4f0e7 gives 4.47:1; keep source token documented but restrict secondary text to surface #fbf9f4; use #202521 on canvas. Not qualified for unrestricted use."
     },
     {
       "id": "arena",
@@ -324,6 +329,6 @@
     ],
     "layoutNote": "Candidate targets; not rendered or qualified. Use same semantic source for both variants; adapt typography, avoid clip/overlap and preserve reading order. Minimum contrast 4.5 for text, 3 for meaningful graphical boundaries; use explicit labels and shapes, not color alone. No external resources, active content, student data, new dependencies or fees.",
     "minimumTextContrast": 4.5,
-    "qualification": "P1a source recovery and palette calculation only; actual SVG/HTML, browser and physical-device reviews pending. Existing R3 gate is pilot-specific; qualify new profiles separately."
+    "qualification": "P1a source recovery and palette calculation only; actual SVG/HTML, browser and physical-device reviews pending. Existing R3 gate is pilot-specific; qualify new profiles separately. Studio Atlas has one contrast exception, explicitly restricted; enforce permitted pairings before approval."
   }
 }
