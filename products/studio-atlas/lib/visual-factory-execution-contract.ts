@@ -1,7 +1,8 @@
 import {
-  getMuseoZeroReferenceIntent,
-  getMuseoZeroShotIntent,
-} from "./canonical/museo-zero-visual-intents";
+  resolveCanonicalVisualProductionProfile,
+  getProfileReferenceIntent,
+  getProfileShotIntent,
+} from "./visual-factory";
 import type {
   VisualGenerationJob,
   VisualGenerationPlan,
@@ -17,7 +18,10 @@ import {
 } from "./visual-preflight";
 
 const HEX_64 = /^[0-9a-f]{64}$/;
-const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
+function admittedProfile(pathwayId: string) {
+  try { return resolveCanonicalVisualProductionProfile(pathwayId); }
+  catch { throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID"); }
+}
 
 function sameStrings(left: readonly string[], right: readonly string[]): boolean {
   return left.length === right.length && left.every((item, index) => item === right[index]);
@@ -64,20 +68,18 @@ export function assertVisualPreflightBoundPlan(plan: VisualGenerationPlan): void
 }
 
 function expectedSpec(plan: VisualGenerationPlan, job: VisualGenerationJob): VisualIntentSpec {
-  if (plan.pathwayId !== MUSEO_ZERO_PROJECT_ID) {
-    throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
-  }
+  const profile = admittedProfile(plan.pathwayId);
   if (plan.planType === "REFERENCE_GENERATION") {
     if (!job.subjectRef || job.shotId || job.purpose === "SCENE_FRAME") {
       throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
     }
-    return bindPackageDigest(getMuseoZeroReferenceIntent(job.subjectRef), plan.packageDigest);
+    return bindPackageDigest(getProfileReferenceIntent(profile, job.subjectRef), plan.packageDigest);
   }
   if (plan.planType === "SHOT_GENERATION") {
     if (!job.shotId || job.subjectRef !== job.shotId || job.purpose !== "SCENE_FRAME") {
       throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
     }
-    return bindPackageDigest(getMuseoZeroShotIntent(job.shotId), plan.packageDigest);
+    return bindPackageDigest(getProfileShotIntent(profile, job.shotId), plan.packageDigest);
   }
   throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
 }
@@ -115,9 +117,7 @@ function assertCanonicalJobSemantics(plan: VisualGenerationPlan, job: VisualGene
 
 export function assertCanonicalVisualPlanSemantics(plan: VisualGenerationPlan): void {
   assertVisualPreflightBoundPlan(plan);
-  if (plan.pathwayId !== MUSEO_ZERO_PROJECT_ID) {
-    throw new Error("VISUAL_PREFLIGHT_BINDING_INVALID");
-  }
+  admittedProfile(plan.pathwayId);
   for (const job of plan.jobs) assertCanonicalJobSemantics(plan, job);
 }
 
