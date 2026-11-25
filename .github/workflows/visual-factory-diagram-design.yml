@@ -68,9 +68,9 @@ jobs:
                   data = subprocess.check_output(git + ["cat-file", "blob", oid])
                   tree = ast.parse(data, filename=path)
                   imports[path] = sorted({a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names} | {n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)})
-          report = {"source_commit": sha, "acquisition": "PASS", "pinned_file_checks": "PASS", "python_syntax": "PASS", "files": files, "python_imports": imports, "special_entries_review": review, "license_review": "PENDING", "security_review": "PENDING", "upstream_tests": "NOT_RUN", "browser_offline_test": "NOT_RUN", "execution_authorized": False, "production_admitted": False}
+          report = {"source_commit": sha, "acquisition": "PASS", "pinned_file_checks": "PASS", "python_syntax": "PASS", "files": files, "python_imports": imports, "special_entries_review": review, "license_review": "PENDING", "security_review": "PENDING", "upstream_tests": "NOT_RUN", "browser_offline_test": "NOT_RUN", "qualification_execution_authorized": True, "qualification_authorization_ref": "TRAMA #358", "qualification_execution_scope": "PINNED_OFFLINE_LAB_ONLY", "qualification_execution_started": False, "production_execution_authorized": False, "production_admitted": False, "runtime_authorized": False, "publication_authorized": False, "independent_review": "PENDING_CODEX", "isolation_probe": "NOT_RUN", "copy2_fixture_probe": "NOT_RUN", "static_pilot_boundary": "NOT_RUN", "visual_capture": "NOT_RUN"}
           (receipt / "report.json").write_text(json.dumps(report, indent=2) + "\n")
-          print("Pinned source and syntax inventory verified; execution and admission remain blocked.")
+          print("Pinned source and syntax inventory verified; bounded qualification is authorized by #358, upstream execution requires isolation probes; production remains blocked.")
           PY
       - name: Run selected original tests with no network and no writable source
         shell: bash
@@ -111,6 +111,16 @@ jobs:
           # Reproduce the exact copy2 fixture operation before upstream tests.
           run_isolated -c 'import os, pathlib, shutil, tempfile, hashlib; src=pathlib.Path("skills/diagram-design/references/style-guide.md"); original=src.read_bytes(); assert src.stat().st_uid==0; assert not os.access(src,os.W_OK); assert os.statvfs(src).f_flag & os.ST_RDONLY; d=tempfile.TemporaryDirectory(); dst=pathlib.Path(d.name)/"style-guide.md"; shutil.copy2(src,dst); assert dst.stat().st_uid==os.geteuid(); dst.write_bytes(original+b"\\nfixture-probe"); assert dst.read_bytes()!=original; assert src.read_bytes()==original; print("COPY2_FIXTURE_PASS",hashlib.sha256(original).hexdigest()); d.cleanup()' >> "$receipt/isolation.log" 2>&1
           cat "$receipt/isolation.log"
+          python3 - "$receipt/report.json" <<'PY'
+          import json, pathlib, sys
+          p=pathlib.Path(sys.argv[1])
+          data=json.loads(p.read_text())
+          assert data["qualification_execution_authorized"] is True
+          assert data["qualification_execution_scope"] == "PINNED_OFFLINE_LAB_ONLY"
+          assert not data["production_execution_authorized"] and not data["production_admitted"]
+          data.update(isolation_probe="PASS", copy2_fixture_probe="PASS", qualification_execution_started=True)
+          p.write_text(json.dumps(data,indent=2)+"\n")
+          PY
           printf 'test\tstatus\n' > "$receipt/tests.tsv"
           failed=0
           for script in test-self-check test-export-svg-standalone test-lint-a11y verify-geometry; do
@@ -377,13 +387,44 @@ jobs:
               r["browser_offline_test"]=states.get(os.environ["FUNCTIONAL"],"NOT_RUN")
               r["visual_capture"]=states.get(os.environ["CAPTURE"],"NOT_RUN")
               r["static_pilot_boundary"]=states.get(os.environ["STATIC_SECURITY"],"NOT_RUN")
+              # The receipt reports actual results, never grants production authority.
               r["production_admitted"]=False
+              r["production_execution_authorized"]=False
+              r["runtime_authorized"]=False
+              r["publication_authorized"]=False
               p.write_text(json.dumps(r,indent=2)+"\n")
+          PY
+      - name: Verify qualification receipt authority and evidence consistency
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"vf-diagram-receipt/report.json"
+          r=json.loads(p.read_text())
+          assert r["qualification_execution_authorized"] is True
+          assert r["qualification_authorization_ref"]=="TRAMA #358"
+          assert r["qualification_execution_scope"]=="PINNED_OFFLINE_LAB_ONLY"
+          for key in ("production_admitted","production_execution_authorized","runtime_authorized","publication_authorized"):
+              assert r[key] is False, key
+          assert r["independent_review"]=="PENDING_CODEX"
+          assert "execution_authorized" not in r
+          started=r["qualification_execution_started"]
+          if started:
+              assert r["isolation_probe"]==r["copy2_fixture_probe"]=="PASS"
+          else:
+              assert r["upstream_tests"]=="NOT_RUN"
+          if r["upstream_tests"]=="PASS":
+              assert started and len(r["upstream_test_results"])==4
+              assert all(v=="PASS" for v in r["upstream_test_results"].values())
+          if r["browser_offline_test"]=="PASS":
+              assert r["upstream_tests"]==r["static_pilot_boundary"]=="PASS"
+          print("Receipt authority and evidence consistency: PASS")
           PY
       - name: Retain acquisition and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p0b-r3-static-security
+          name: vf-diagram-p0b-r4-receipt
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
