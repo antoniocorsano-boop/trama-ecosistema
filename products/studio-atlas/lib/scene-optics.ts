@@ -1,9 +1,9 @@
 // VF-MOTION-05B1: source-locked transfer of the qualified Atlas procedural environment.
-// Curriculum-Atlas a2c89a8a8d5abaaebfe7f54d235b2a5f2384bc3c, optical-profile.mjs blob 7fb4435b4dc74ebec0406fdfa04a16920289c007.
+// Atlas (repository sorgente, PR #152) a2c89a8a8d5abaaebfe7f54d235b2a5f2384bc3c, optical-profile.mjs blob 7fb4435b4dc74ebec0406fdfa04a16920289c007.
 // Only the floor receives the environment; Sala Zero has no oculus. No new geometry or network.
-export function makeEnvironment(width=256,height=128): Uint8Array{
+export function makeEnvironment(width=256,height=128): Uint8Array<ArrayBuffer>{
   if(width!==256||height!==128)throw Error("Optical texture budget exceeded");
-  const data=new Uint8Array(width*height*4);
+  const data=new Uint8Array(new ArrayBuffer(width*height*4));
   for(let y=0;y<height;y++)for(let x=0;x<width;x++){
     const u=(x+.5)/width,v=(y+.5)/height;
     const zenith=Math.exp(-((v-.18)**2)/.026);
