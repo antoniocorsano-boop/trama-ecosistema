@@ -51,6 +51,8 @@ export type VisualFactoryStage =
 export type VisualFactoryState = {
   packageDigest: string;
   artDirectionVersion?: string;
+  /** Absent only in legacy persisted state; never sufficient for reuse. */
+  profileDigest?: string;
   stage: VisualFactoryStage;
   candidates: VisualAssetCandidate[];
   referenceLocks: VisualReferenceLock[];
@@ -81,6 +83,8 @@ export type VisualGenerationPlan = {
   schemaVersion: "atlas.visual-generation-plan/v0.1";
   pathwayId: string;
   packageDigest: string;
+  /** Explicit offline profiles require a content-bound receipt. */
+  profileDigest?: string;
   planType: "REFERENCE_GENERATION" | "SHOT_GENERATION";
   decision:
     | "REFERENCE_GENERATION_READY"
@@ -130,6 +134,8 @@ export type VisualExecutionReceipt = {
   schemaVersion: "atlas.visual-execution-receipt/v0.1";
   receiptId: string;
   packageDigest: string;
+  /** Required for explicit noncanonical profiles. Canonical executor receipts remain compatible. */
+  profileDigest?: string;
   status: "SUCCEEDED" | "WAITING_FOR_COMPUTE" | "FAILED";
   costClass: "FREE_ONLY";
   assets: VisualAssetCandidate[];
@@ -205,6 +211,13 @@ const MUSEO_ZERO_PROFILE: VisualProductionProfile = {
   references: MUSEO_ZERO_REFERENCE_INTENTS,
   shots: MUSEO_ZERO_SHOT_INTENTS,
 };
+
+function digestVisualProductionProfile(profile: VisualProductionProfile): string {
+  validateVisualProductionProfile(profile);
+  return canonicalDigest(profile);
+}
+
+const CANONICAL_PROFILE_DIGEST = digestVisualProductionProfile(MUSEO_ZERO_PROFILE);
 
 /** Only the existing canonical profile is execution-admitted. Never accept a client profile here. */
 export function resolveCanonicalVisualProductionProfile(pathwayId: string): VisualProductionProfile {
@@ -359,6 +372,7 @@ function basePlan(
     schemaVersion: "atlas.visual-generation-plan/v0.1",
     pathwayId: project.projectId,
     packageDigest,
+    ...(digestVisualProductionProfile(profile) === CANONICAL_PROFILE_DIGEST ? {} : { profileDigest: digestVisualProductionProfile(profile) }),
     planType,
     paidComputeAuthorized: false,
     allowQualityDowngrade: false,
@@ -375,6 +389,7 @@ export function createInitialVisualFactoryState(packageDigest: string, profile: 
   return {
     packageDigest,
     artDirectionVersion: profile.artDirectionVersion,
+    profileDigest: digestVisualProductionProfile(profile),
     stage: "NEEDS_REFERENCES",
     candidates: [],
     referenceLocks: [],
@@ -391,7 +406,8 @@ export function reconcileVisualFactoryState(
   if (
     !state ||
     state.packageDigest !== packageDigest ||
-    state.artDirectionVersion !== profile.artDirectionVersion
+    state.artDirectionVersion !== profile.artDirectionVersion ||
+    state.profileDigest !== digestVisualProductionProfile(profile)
   ) {
     return createInitialVisualFactoryState(packageDigest, profile);
   }
@@ -418,7 +434,8 @@ export function compileProfileReferenceJobs(
   const prefix = basePlan(project, packageDigest, "REFERENCE_GENERATION", profile);
   if (
     state.packageDigest !== packageDigest ||
-    state.artDirectionVersion !== profile.artDirectionVersion
+    state.artDirectionVersion !== profile.artDirectionVersion ||
+    state.profileDigest !== digestVisualProductionProfile(profile)
   ) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
@@ -469,6 +486,14 @@ export function ingestVisualCandidates(
   state: VisualFactoryState,
   receipt: VisualExecutionReceipt,
 ): VisualFactoryState {
+  // The existing executor admits only the canonical Museo Zero profile. Never
+  // interpret a legacy/unbound receipt as evidence for an explicit profile.
+  if (!state.profileDigest || receipt.packageDigest !== state.packageDigest ||
+      (receipt.profileDigest === undefined
+        ? state.profileDigest !== CANONICAL_PROFILE_DIGEST
+        : receipt.profileDigest !== state.profileDigest)) {
+    throw new Error("STALE_VISUAL_CANDIDATE");
+  }
   if (receipt.status !== "SUCCEEDED") {
     return {
       ...state,
@@ -517,7 +542,8 @@ export function lockVisualReference(
   profile: VisualProductionProfile = MUSEO_ZERO_PROFILE,
 ): VisualFactoryState {
   validateVisualProductionProfile(profile);
-  if (state.artDirectionVersion !== profile.artDirectionVersion || packageDigest !== state.packageDigest) {
+  if (state.artDirectionVersion !== profile.artDirectionVersion || packageDigest !== state.packageDigest ||
+      state.profileDigest !== digestVisualProductionProfile(profile)) {
     throw new Error("STALE_VISUAL_CANDIDATE");
   }
   const candidate = state.candidates.find(
@@ -565,7 +591,8 @@ export function compileProfileShotJobs(
   const prefix = basePlan(project, packageDigest, "SHOT_GENERATION", profile);
   if (
     state.packageDigest !== packageDigest ||
-    state.artDirectionVersion !== profile.artDirectionVersion
+    state.artDirectionVersion !== profile.artDirectionVersion ||
+    state.profileDigest !== digestVisualProductionProfile(profile)
   ) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
