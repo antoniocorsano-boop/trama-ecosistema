@@ -80,16 +80,28 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
       '<g font-family="system-ui, sans-serif" text-anchor="middle">']
     def label(x,y,value,size,fill,weight=400):
         parts.append(f'<text x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" fill="{fill}">{esc(value)}</text>')
+    def fit(value, maximum, available):
+        # Conservative em-width budget for plain text, including wide glyphs.
+        return min(maximum, available//max(1,len(value)))
     if variant=="mobile-vertical":
-        label(180,37,profile["name"],21,dark,700)
-        label(180,64,source["title"],13 if authored else 16,dark,600)
-        boxes=[(24,86+(120 if authored else 132)*i,312,100) for i in range(len(source["nodes"]))]
-        font,small=(16,14) if authored else (20,16)
+        if authored:
+            label(180,27,profile["name"],12,dark,600)
+            label(180,60,source["title"],fit(source["title"],22,320),dark,700)
+        else:
+            label(180,37,profile["name"],21,dark,700)
+            label(180,64,source["title"],16,dark,600)
+        step=140 if authored and len(source["nodes"])==3 else 120 if authored else 132
+        boxes=[(24,86+step*i,312,100) for i in range(len(source["nodes"]))]
+        font,small=(18,14) if authored else (20,16)
     else:
-        label(640,72,profile["name"],36,dark,700)
-        label(640,119,source["title"],30,dark,600)
+        if authored:
+            label(640,53,profile["name"],20,dark,600)
+            label(640,109,source["title"],fit(source["title"],44,1120),dark,700)
+        else:
+            label(640,72,profile["name"],36,dark,700)
+            label(640,119,source["title"],30,dark,600)
         boxes=[(42+310*i,244,266,180) for i in range(len(source["nodes"]))]
-        font,small=(16,18) if authored else (27,19)
+        font,small=(26,20) if authored else (27,19)
     if authored and variant=="desktop-lim-horizontal":
         boxes=[(x+(4-len(boxes))*155,y,bw,bh) for x,y,bw,bh in boxes]
     for i,(x,y,bw,bh) in enumerate(boxes):
@@ -106,16 +118,16 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
         if variant=="mobile-vertical":
             parts.append(f'<rect x="{x+13}" y="{y+14}" width="36" height="29" rx="6" fill="{accent}"/>')
             label(x+31,y+34,str(i+1),17,p["onAccent"],700)
-            label(cx,y+(61 if authored else 43),source["nodes"][i]["label"],font,dark,700)
+            label(cx,y+(61 if authored else 43),source["nodes"][i]["label"],fit(source["nodes"][i]["label"],font,280) if authored else font,dark,700)
             label(cx,y+(83 if authored else 74),source["nodes"][i]["detail"],small,p["secondaryInk"])
         else:
             parts.append(f'<rect x="{cx-23}" y="{y+16}" width="46" height="36" rx="7" fill="{accent}"/>')
             label(cx,y+42,str(i+1),22,p["onAccent"],700)
-            label(cx,y+92,source["nodes"][i]["label"],font,dark,700)
+            label(cx,y+92,source["nodes"][i]["label"],fit(source["nodes"][i]["label"],font,246) if authored else font,dark,700)
             detail=source["nodes"][i]["detail"]
             lines=textwrap.wrap(detail,width=14) if authored else [detail]
             for row,line in enumerate(lines):
-                label(cx,y+122+row*22 if authored else y+132,line,small,p["secondaryInk"])
+                label(cx,y+122+row*22 if authored else y+132,line,fit(line,small,246) if authored else small,p["secondaryInk"])
     if authored:
         for index,(start,end) in enumerate(source["edges"]):
             ax,ay,aw,_=boxes[numbers[start]-1]

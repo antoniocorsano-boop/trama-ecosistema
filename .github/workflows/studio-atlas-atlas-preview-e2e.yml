@@ -140,6 +140,13 @@ jobs:
           find test-results -type f \( -name "f3-3c-*.png" -o -name "f3-3c-receipts-*.json" \) -exec cp {} "$RUNNER_TEMP/f3-3c-screenshots/" \;
           for size in 390 1280; do for variant in mobile-vertical desktop-lim-horizontal; do test -f "$RUNNER_TEMP/f3-3c-screenshots/f3-3c-$variant-$size.png"; done; done
 
+          mkdir -p "$RUNNER_TEMP/f3-3d-evidence"
+          find test-results -type f \( -name "f3-3d-*.png" -o -name "f3-3d-package-*.json" -o -name "f3-3d-case*-package-*.json" \) -exec cp {} "$RUNNER_TEMP/f3-3d-evidence/" \;
+          for case in 1 2 3; do for size in 390 1280; do
+            test -f "$RUNNER_TEMP/f3-3d-evidence/f3-3d-case$case-package-$size.json"
+            for variant in mobile-vertical desktop-lim-horizontal; do test -f "$RUNNER_TEMP/f3-3d-evidence/f3-3d-case$case-$variant-$size.png"; done
+          done; done
+
       - name: Qualify World Composer at mobile sizes and across local draft revisions
         id: composer
         shell: bash
@@ -234,6 +241,14 @@ jobs:
         with:
           name: officina-edu-f3-3c-diagrams
           path: ${{ runner.temp }}/f3-3c-screenshots/
+          if-no-files-found: error
+
+      - name: Preserve F3.3d teaching candidates
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: officina-edu-f3-3d-diagrams
+          path: ${{ runner.temp }}/f3-3d-evidence/
           if-no-files-found: error
 
       - name: Preserve pinned source receipt

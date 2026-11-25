@@ -784,3 +784,193 @@ test("F3.3c: eight relations remain legible in both standalone formats", async (
     }
   }
 });
+
+
+// F3.3d: original teaching candidates; semantic approval remains a separate human review.
+const f33dSources = [
+  {
+    "schema": "trama.diagram-education-source/v0.1",
+    "id": "diagramma-docente",
+    "status": "TEACHER_REVIEW_REQUIRED",
+    "profile": "studio-atlas",
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "title": "Dalla carta alla carta",
+    "description": "Ricostruire il riciclo della carta e distinguere materia prima secondaria, lavorazione e nuovo prodotto.",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Carta usata",
+        "detail": "Raccolta e selezione"
+      },
+      {
+        "id": "n2",
+        "label": "Impasto",
+        "detail": "Fibre e acqua"
+      },
+      {
+        "id": "n3",
+        "label": "Nuovo foglio",
+        "detail": "Forma e asciugatura"
+      },
+      {
+        "id": "n4",
+        "label": "Uso",
+        "detail": "Nuovo utilizzo"
+      }
+    ],
+    "edges": [
+      [
+        "n1",
+        "n2"
+      ],
+      [
+        "n2",
+        "n3"
+      ],
+      [
+        "n3",
+        "n4"
+      ]
+    ]
+  },
+  {
+    "schema": "trama.diagram-education-source/v0.1",
+    "id": "diagramma-docente",
+    "status": "TEACHER_REVIEW_REQUIRED",
+    "profile": "studio-atlas",
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "title": "Dal campo alla tavola",
+    "description": "Ricostruire una filiera orticola e spiegare come la disponibilità di acqua condiziona la coltivazione.",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Coltivazione",
+        "detail": "Acqua, suolo, energia"
+      },
+      {
+        "id": "n2",
+        "label": "Raccolta",
+        "detail": "Ortaggi maturi"
+      },
+      {
+        "id": "n3",
+        "label": "Distribuzione",
+        "detail": "Vendita locale"
+      },
+      {
+        "id": "n4",
+        "label": "Consumo",
+        "detail": "Acquisto e uso"
+      }
+    ],
+    "edges": [
+      [
+        "n1",
+        "n2"
+      ],
+      [
+        "n2",
+        "n3"
+      ],
+      [
+        "n3",
+        "n4"
+      ]
+    ]
+  },
+  {
+    "schema": "trama.diagram-education-source/v0.1",
+    "id": "diagramma-docente",
+    "status": "TEACHER_REVIEW_REQUIRED",
+    "profile": "studio-atlas",
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "title": "Circuito chiuso",
+    "description": "Riconoscere il percorso convenzionale della corrente in un circuito chiuso e spiegare l'effetto dell'interruttore aperto. Modello concettuale.",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Pila",
+        "detail": "Tensione elettrica"
+      },
+      {
+        "id": "n2",
+        "label": "Interruttore",
+        "detail": "Chiuso: continuità"
+      },
+      {
+        "id": "n3",
+        "label": "Lampadina",
+        "detail": "Luce e calore"
+      }
+    ],
+    "edges": [
+      [
+        "n1",
+        "n2"
+      ],
+      [
+        "n2",
+        "n3"
+      ],
+      [
+        "n3",
+        "n1"
+      ]
+    ]
+  }
+];
+for (const [caseIndex, source] of f33dSources.entries()) {
+  for (const width of [390, 1280]) test(`F3.3d: teaching candidate ${caseIndex + 1} at ${width}`, async ({page}, testInfo) => {
+    await page.setViewportSize({width,height:900});
+    await page.goto(STUDIO);
+    await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+    await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+    const editor=page.getByRole("region",{name:"Componi un diagramma didattico"});
+    await editor.getByLabel("Importa fonte JSON").setInputFiles({name:"fonte.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(source))});
+    const pending=page.waitForResponse(r=>r.url().endsWith("/api/education-diagram"));
+    await editor.getByRole("button",{name:"Genera diagramma"}).click();
+    const response=await pending;
+    expect(response.status()).toBe(200);
+    await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+    const {files}=await response.json();
+    expect(JSON.parse(files["education-source.json"])).toEqual(source);
+    const receipt=JSON.parse(files["education-receipt.json"]);
+    expect(receipt.runtimeAuthorized).toBe(false);
+    expect(receipt.publicationAuthorized).toBe(false);
+    for(const [name,digest] of Object.entries(receipt.files)) {
+      expect(await page.evaluate(async value=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,"0")).join(""),files[name])).toBe(digest);
+    }
+    for (const edge of source.edges) {
+      const labels=edge.map(id=>source.nodes.find(n=>n.id===id)!.label);
+      expect(files["guida-docente.md"]).toContain(labels.join(" → "));
+    }
+    for(const variant of ["mobile-vertical","desktop-lim-horizontal"]) {
+      await editor.getByLabel("Formato dell’anteprima").selectOption(variant);
+      const img=editor.getByRole("img");
+      await expect.poll(()=>img.evaluate((n:HTMLImageElement)=>n.complete&&n.naturalWidth>0)).toBe(true);
+      await img.screenshot({path:testInfo.outputPath(`f3-3d-case${caseIndex+1}-${variant}-${width}.png`)});
+      const standalone=await page.context().newPage();
+      await standalone.setViewportSize({width,height:900});
+      try {
+        await standalone.setContent(files[`diagramma-docente-${variant}.html`]);
+        const geometry=await standalone.locator("svg").evaluate(svg=>{
+          const root=svg as unknown as SVGSVGElement;
+          const {width,height}=root.viewBox.baseVal;
+          const texts=Array.from(root.querySelectorAll("text"));
+          const sizes=texts.slice(0,2).map(t=>Number(t.getAttribute("font-size")));
+          const outside=texts.filter(t=>{const b=t.getBBox();return b.x<0||b.y<0||b.x+b.width>width+1||b.y+b.height>height+1;}).map(t=>t.textContent);
+          const nodes=Array.from(root.querySelectorAll("rect")).filter(r=>Number(r.getAttribute("width"))>=266&&r.hasAttribute("stroke"));
+          return {sizes,outside,nodes:nodes.length,edges:root.querySelectorAll("path").length};
+        });
+        expect(geometry.outside).toEqual([]);
+        expect(geometry.sizes[1]).toBeGreaterThan(geometry.sizes[0]);
+        expect(geometry.nodes).toBe(source.nodes.length);
+        expect(geometry.edges).toBe(source.edges.length);
+      } finally {await standalone.close();}
+    }
+    await writeFile(testInfo.outputPath(`f3-3d-case${caseIndex+1}-package-${width}.json`),JSON.stringify(files,null,2)+"\n");
+  });
+}
