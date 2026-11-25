@@ -3,13 +3,14 @@
 import type {
   PathwayProject,
   PathwayScene,
+  SceneIllustration,
   StoryDraft,
   WorldDraft,
 } from "../lib/model";
 import { ExperienceGallery } from "./ExperienceGallery";
 import { ScenePlacesEditor } from "./ScenePlacesEditor";
 import { SceneImageEditor } from "./SceneImageEditor";
-import { projectImageErrors,sceneImageBytes } from "../lib/scene-media";
+import { projectImageErrors } from "../lib/scene-media";
 import { stagePlaceErrors } from "../lib/scene-places";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 import { updateSceneFocus, updateWorldChoiceStatus } from "../lib/world-composer";
@@ -248,7 +249,7 @@ export function ExperienceEditor({ project, onPatch }: Props) {
   );
 }
 
-export function SceneEditor({ project, onPatch }: Props) {
+export function SceneEditor({ project, onPatch, onImportImage }: Props & {onImportImage:(sceneId:string,image:SceneIllustration,expected:SceneIllustration|undefined)=>void}) {
   const complete =
     projectImageErrors(project.scenes).length===0 &&
     project.scenes.length > 0 &&
@@ -413,7 +414,7 @@ export function SceneEditor({ project, onPatch }: Props) {
                   worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
                   ...invalidateProductReview(project),humanState:"SCENES",
                 })}/>
-                <SceneImageEditor scene={scene} otherImageBytes={project.scenes.reduce((sum,item)=>{if(item.sceneId===scene.sceneId||!item.illustration)return sum;try{return sum+sceneImageBytes(item.illustration).length}catch{return sum}},0)}
+                <SceneImageEditor scene={scene} onImport={(image,expected)=>onImportImage(scene.sceneId,image,expected)}
                   onChange={(illustration,stage)=>onPatch({
                     scenes:project.scenes.map(item=>item.sceneId===scene.sceneId?{...item,stage,illustration}:item),
                     worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,

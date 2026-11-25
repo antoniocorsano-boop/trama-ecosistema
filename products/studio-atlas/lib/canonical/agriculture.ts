@@ -6,6 +6,7 @@ export const AGRICULTURE_GUIDE = "/design/ess-02/fascicolo.html";
 const artwork = [
  {sceneId:"AG1",file:"orto-apertura.svg",alt:"Sara e Luca accanto a un orto: a sinistra piante verdi, a destra piante appassite. Sullo sfondo il serbatoio."},
  {sceneId:"AG2",file:"orto-indagine.svg",alt:"Vista dell'orto dall'alto: serbatoio, tubazione, due recipienti di misura, terreno e filari con vegetazione diversa."},
+ {sceneId:"AG3",file:"banco-misure.svg",alt:"Sara e Luca al banco di lavoro con due recipienti graduati e un quaderno; a sinistra acqua a monte, a destra acqua a valle."},
  {sceneId:"AG4",file:"sistema-agricolo.svg",alt:"Quattro stazioni collegate: risorse naturali, strumenti e lavoro, colture e raccolto, effetti su acqua e suolo."},
  {sceneId:"AG5",file:"frutteto.svg",alt:"Frutteto collinare con alberi, due settori di terreno diversi e linea di irrigazione."},
 ] as const;
@@ -23,7 +24,7 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  const now=new Date().toISOString();
  const scenes:PathwayScene[]=[
  situation("AG1","La chiamata nell’orto","Sara indica due filari: «Li abbiamo irrigati insieme, ma queste piante sono appassite». Luca mostra il suo quaderno: «Prima di usare altra acqua, cerchiamo di capire dove finisce».",
- "Sei il consulente dell’orto. Esplora i due indizi, poi formula una prima ipotesi: da che cosa potrebbe dipendere la differenza?",
+ "Sei il consulente dell’orto. Esplora i tre indizi, poi formula una prima ipotesi: da che cosa potrebbe dipendere la differenza?",
  "La differenza fra i filari diventa il problema da spiegare, non un motivo per irrigare alla cieca.",
  "Una stessa operazione può produrre esiti diversi se le relazioni del sistema cambiano.",
  {stage:stage("Orto scolastico","Una mattina di lavoro nell’orto.",[
@@ -32,7 +33,7 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  ["filari","I due filari","Il filare a destra appare meno vigoroso. L’aspetto è un indizio, non dimostra ancora la causa.",57,75,"TRACE"]
  ],{name:"Sara",role:"Responsabile dell’orto",line:"Ci aiuti a capire perché un filare riceve meno acqua?"})}),
  situation("AG2","L’indagine sul campo","Luca ha raccolto misure nella stessa durata, con due recipienti uguali. Tutti i valori sono inventati per questo caso didattico.",
- "Apri i sei punti. Confronta i due volumi, cerca un indizio che spieghi la differenza e distingui risorse, strumenti e operazioni.",
+ "Esplora i sei punti. Confronta i volumi e cerca una spiegazione della differenza.",
  "Le osservazioni permettono di formulare un’ipotesi verificabile sulla distribuzione dell’acqua.",
  "Il risultato agricolo dipende dall’organizzazione delle risorse e delle operazioni, non soltanto dalla quantità disponibile.",
  {stage:stage("Impianto di irrigazione","Osserva la linea dalla sorgente fino ai filari.",[
@@ -44,17 +45,20 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  ["piante","Colture e lavoro","Sara ha usato lo stesso tempo di irrigazione. Le piante a valle sono meno vigorose: risultato osservato, non una misura diretta dell’acqua nelle radici.",82,79,"TRACE"]
  ],{name:"Luca",role:"Osservatore",line:"Quali osservazioni ci permettono di distinguere le ipotesi?"})}),
  situation("AG3","Quale intervento scegli?","Le misure sono diverse e c’è un indizio di ostruzione. Sara chiede di decidere prima di modificare il sistema.",
- "Scegli un intervento nel modello didattico. Spiega a voce o sul quaderno quale indizio lo sostiene; confronta la conseguenza prima di proseguire.",
+ "Prevedi il risultato di un intervento. Scegli, osserva le conseguenze e motiva la decisione.",
  "Una seconda misura comparabile permette di valutare l’intervento.",
  "Una spiegazione causale si controlla modificando una condizione e osservando gli effetti, non indovinando.",
- {interaction:"CHOICE",world:{place:"Banco delle misure",status:"Prova iniziale: distribuzione irregolare",signals:[{id:"up",label:"Monte",state:"ACTIVE",detail:"200 mL"},{id:"down",label:"Valle",state:"MISMATCH",detail:"50 mL"}]},
+ {interaction:"CHOICE",stage:stage("Banco delle misure","Una scelta da verificare, non una risposta da indovinare.",[
+ ["recipiente-monte","Recipiente a monte","Misura iniziale: 200 mL. Confronta le tre ipotesi prima di scegliere.",37,63,"TRACE"],
+ ["recipiente-valle","Recipiente a valle","Misura iniziale: 50 mL. Il confronto dopo l’intervento è riportato nello stato della prova.",64,63,"TRACE"]
+ ]),world:{place:"Banco delle misure",status:"Prova iniziale: distribuzione irregolare",signals:[{id:"up",label:"Monte",state:"ACTIVE",detail:"200 mL"},{id:"down",label:"Valle",state:"MISMATCH",detail:"50 mL"}]},
  choices:[
  {choiceId:"longer",label:"Prolungo l’irrigazione di tutti i filari",feedback:"Nel caso simulato cresce l’acqua usata, ma resta la differenza di erogazione. Confronta gli indizi e prova un’altra scelta.",targetSceneId:"AG3",worldAfter:{place:"Banco delle misure",status:"Più acqua, distribuzione ancora irregolare",signals:[{id:"up",label:"Monte",state:"ACTIVE",detail:"400 mL"},{id:"down",label:"Valle",state:"MISMATCH",detail:"100 mL"}]}},
  {choiceId:"restore",label:"Chiedo di ripristinare la distribuzione e ripeto la misura",feedback:"Dopo il ripristino da parte del responsabile, la prova simulata nello stesso intervallo dà 190 mL a monte e 185 mL a valle. L’erogazione è più uniforme: l’ipotesi è sostenuta.",targetSceneId:"AG4",worldAfter:{place:"Banco delle misure",status:"Seconda prova comparabile: distribuzione più uniforme",signals:[{id:"up",label:"Monte",state:"STABLE",detail:"190 mL"},{id:"down",label:"Valle",state:"STABLE",detail:"185 mL"}]}},
  {choiceId:"manual",label:"Compenso soltanto il filare asciutto con un annaffiatoio",feedback:"Nel caso simulato il filare riceve acqua aggiuntiva, ma la linea continua a distribuire in modo irregolare. È un rimedio temporaneo, non la verifica della causa.",targetSceneId:"AG3",worldAfter:{place:"Banco delle misure",status:"Compensazione locale, causa ancora presente",signals:[{id:"up",label:"Monte",state:"ACTIVE",detail:"200 mL dalla linea"},{id:"down",label:"Valle",state:"MANUAL",detail:"50 mL dalla linea più acqua manuale"}]}}
  ]}),
  situation("AG4","Ricostruisci il sistema","Sara e Luca confrontano le due prove. Ora vogliono descrivere l’orto come sistema, non come una somma di oggetti.",
- "Apri i quattro punti. Disegna sul quaderno una catena di relazioni e una freccia di ritorno: che cosa osserviamo per decidere come irrigare la prossima volta?",
+ "Esplora i quattro punti e disegna sul quaderno le relazioni. Quali risultati guideranno la prossima irrigazione?",
  "Colleghi risorse, tecniche, lavoro, prodotti e impatti; confronti i risultati per regolare le operazioni.",
  "Il controllo dei risultati aiuta a correggere le decisioni. Il raccolto dipende da molti fattori, non solo dall’irrigazione.",
  {stage:stage("Mappa del sistema","Quattro parti, molte relazioni.",[
@@ -64,7 +68,7 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  ["effetti","Impatti e controllo","Consumo d’acqua, condizioni del suolo, osservazioni che guidano le prossime scelte.",87,50,"SYSTEM"]
  ])}),
  situation("AG5","Un nuovo problema nel frutteto","In un frutteto collinare le misure di erogazione sono simili, ma due zone di terreno hanno caratteristiche diverse e gli alberi mostrano crescita diversa.",
- "Apri gli indizi e proponi due controlli prima di decidere: che cosa misureresti? Quale risultato ti farebbe cambiare ipotesi? Discuti o annota la risposta.",
+ "Proponi due controlli. Quale risultato ti farebbe cambiare ipotesi? Discuti o annota la risposta.",
  "Hai trasferito il metodo: osservare, confrontare condizioni, formulare un’ipotesi, verificare e rivedere.",
  "La soluzione dell’orto non è una regola universale: la strategia si trasferisce, la causa va indagata nuovamente.",
  {kind:"TRANSFER",stage:stage("Frutteto collinare","Un ambiente diverso richiede nuove osservazioni.",[
@@ -84,7 +88,7 @@ export function createAgricultureDraft(images:Readonly<Record<string,SceneIllust
  humanState:"STORY_REVIEW",productionState:"NOT_REQUESTED",
  story:{hook:"Due filari irrigati insieme mostrano condizioni diverse.",setting:"Orto scolastico e frutteto collinare.",characters:"Sara, responsabile dell’orto; Luca, osservatore delle misure; lo studente, consulente dell’orto.",characterGoal:"Individuare una soluzione motivata che eviti sprechi d’acqua.",disruption:"Le piante a valle sono appassite dopo l’irrigazione.",unknown:"Quale relazione impedisce la distribuzione uniforme? Quali misure distinguono le ipotesi?",learnerRole:"Consulente che osserva, confronta, sceglie e verifica nel modello didattico.",turningPoint:"Confronto fra misure a monte e a valle, indizio di ostruzione e seconda prova.",ending:"Ricostruzione del sistema e trasferimento del metodo in un frutteto."},
  storyReview:{decision:"READY"},world:{learnerRole:"Consulente dell’orto",canObserve:"Riserva, linea, due misure, terreno, piante e operazioni.",canChange:"Seleziona interventi nel modello e confronta conseguenze.",unknown:"Causa della distribuzione irregolare nel caso.",consequence:"Le misure simulate cambiano in funzione della scelta.",motivation:"Salvare le colture senza sprechi e saper spiegare le decisioni."},
- worldReview:{decision:"READY"},productReview:{decision:"READY",evidenceRef:"ESS-02 · Fascicolo educativo-didattico v0.1 (bozza)"},experience:{grammar:"INQUIRY_EVIDENCE",rationale:"L’indagine richiede osservazione di indizi, confronto di misure, una scelta causale e trasferimento."},scenes,storyboardReady:false,archived:false,createdAt:now,updatedAt:now,revision:1};
+ worldReview:{decision:"READY"},productReview:{decision:"READY",evidenceRef:"ESS-02 · Fascicolo educativo-didattico v0.2 (bozza)"},experience:{grammar:"INQUIRY_EVIDENCE",rationale:"L’indagine richiede osservazione di indizi, confronto di misure, una scelta causale e trasferimento."},scenes,storyboardReady:false,archived:false,createdAt:now,updatedAt:now,revision:1};
 }
 
 // Local repository artwork is converted once using the existing WebP validator;

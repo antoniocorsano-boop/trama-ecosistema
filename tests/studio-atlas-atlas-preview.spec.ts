@@ -425,7 +425,7 @@ for(const illustrated of [false,true]) test(illustrated?"ESS-01B agriculture: im
 for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS-02 agriculture: real editable draft, guarded review, five scenes "+viewport.width,async({page,context},testInfo)=>{
  await page.setViewportSize(viewport);
  await page.goto(STUDIO);
- await page.getByRole("link",{name:"Fascicolo educativo-didattico · v0.1"}).click();
+ await page.getByRole("link",{name:"Fascicolo educativo-didattico · v0.2"}).click();
  await expect(page.getByRole("heading",{name:"Verifica e valutazione formativa"})).toBeVisible();
  await page.goto(STUDIO);
  await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
@@ -436,7 +436,7 @@ for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS
  const readDraft=()=>page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]").find((p:{projectId:string})=>p.projectId==="ess-02-dal-campo-al-raccolto"));
  const initial=await readDraft();
  expect(initial.storyReview.decision).toBe("READY");expect(initial.productReview.decision).toBe("READY");expect(initial.storyboardReady).toBe(false);
- expect(initial.scenes).toHaveLength(5);expect(initial.scenes.filter((s:{illustration?:unknown})=>s.illustration)).toHaveLength(4);
+ expect(initial.scenes).toHaveLength(5);expect(initial.scenes.filter((s:{illustration?:unknown})=>s.illustration)).toHaveLength(5);
  await nav.getByRole("button",{name:"Storia"}).click();
  // Explicit reviewer action in disposable test context, not a seeded approval.
  await page.getByRole("button",{name:"Approva storia"}).click();
@@ -455,6 +455,11 @@ for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS
  await expect(popup.getByRole("heading",{name:"La chiamata nell’orto"})).toBeVisible();
  await figure.getByRole("button",{name:"Esplora Sara",exact:true}).click();
  await expect(figure).toContainText("Ci aiuti?");
+ await expect(popup.locator(".experience-compact-task")).toContainText("consulente");
+ await expect(popup.locator(".experience-compact-evidence")).not.toHaveAttribute("open","");
+ await popup.getByText("Indizi in formato testuale",{exact:true}).click();
+ await expect(popup.locator(".experience-compact-evidence")).toContainText("Ho osservato");
+ await popup.getByText("Indizi in formato testuale",{exact:true}).click();
  await snap("opening");
  await popup.getByRole("button",{name:"Continua",exact:true}).click();
  await expect(popup.getByRole("heading",{name:"L’indagine sul campo"})).toBeVisible();
@@ -463,14 +468,15 @@ for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS
  await snap("investigation");
  await popup.getByRole("button",{name:"Continua",exact:true}).click();
  await expect(popup.getByRole("heading",{name:"Quale intervento scegli?"})).toBeVisible();
- await popup.getByRole("radio",{name:"Prolungo l’irrigazione di tutti i filari"}).check();
+ await popup.getByRole("button",{name:"Prolungo l’irrigazione di tutti i filari",exact:true}).click();
  await expect(popup.getByRole("status").filter({hasText:"resta la differenza"})).toBeVisible();
- await popup.getByRole("radio",{name:"Compenso soltanto il filare asciutto con un annaffiatoio"}).check();
+ await popup.getByRole("button",{name:"Compenso soltanto il filare asciutto con un annaffiatoio",exact:true}).click();
  await expect(popup.getByRole("status").filter({hasText:"rimedio temporaneo"})).toBeVisible();
- await popup.getByRole("radio",{name:"Chiedo di ripristinare la distribuzione e ripeto la misura"}).check();
+ await popup.getByRole("button",{name:"Chiedo di ripristinare la distribuzione e ripeto la misura",exact:true}).click();
  await expect(popup.getByRole("status").filter({hasText:"190 mL"})).toBeVisible();
+ await expect(figure.getByRole("img")).toBeVisible();
  await snap("decision");
- await popup.getByRole("button",{name:"Continua",exact:true}).click();
+ await popup.getByRole("button",{name:"Continua dalla conseguenza",exact:true}).click();
  await expect(popup.getByRole("heading",{name:"Ricostruisci il sistema"})).toBeVisible();
  await figure.getByRole("button",{name:"Esplora Impatti e controllo",exact:true}).click();await expect(figure).toContainText("prossime scelte");
  await snap("system");
@@ -480,6 +486,39 @@ for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS
  await snap("transfer");
  const stored=await readDraft();expect(stored.productReview.decision).toBe("READY");
  expect(stored.lastPreviewSnapshot.studentAuthorized).toBe(false);expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
- expect(stored.lastPreviewSnapshot.sceneMedia.images).toHaveLength(4);
+ expect(stored.lastPreviewSnapshot.sceneMedia.images).toHaveLength(5);
  expect(stored.lastPreviewSnapshot.scenes.map((s:{sceneId:string})=>s.sceneId)).toEqual(["AG1","AG2","AG3","AG4","AG5"]);
+});
+
+
+test("ESS-02-R1: delayed image import retains intervening unrelated scene edit",async({page})=>{
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Scene"}).click();
+ const first=page.locator(".scene-timeline .scene-row").first();
+ const editor=first.getByRole("region",{name:"Immagine interattiva"});
+ const base64=await page.evaluate(async()=>{
+  const img=new Image();img.src="/design/atelier/catalog/nature.svg";await img.decode();
+  const canvas=document.createElement("canvas");canvas.width=320;canvas.height=180;canvas.getContext("2d")!.drawImage(img,0,0,320,180);
+  return canvas.toDataURL("image/webp",0.8).split(",")[1];
+ });
+ await page.evaluate(()=>{
+  const original=File.prototype.arrayBuffer;
+  const state=window as unknown as {releaseImage?:()=>void};
+  File.prototype.arrayBuffer=async function(){await new Promise<void>(resolve=>{state.releaseImage=resolve});return original.call(this);};
+ });
+ await editor.getByLabel("Carica immagine WebP").setInputFiles({name:"delayed.webp",mimeType:"image/webp",buffer:Buffer.from(base64,"base64")});
+ await expect(editor.getByText("Verifica dell’immagine…")).toBeVisible();
+ await page.getByRole("textbox",{name:"Titolo scena 2"}).fill("Indagine aggiornata durante importazione");
+ await page.evaluate(()=>{(window as unknown as {releaseImage:()=>void}).releaseImage()});
+ await expect(editor.getByText("Verifica dell’immagine…")).toHaveCount(0);
+ await expect(editor.getByRole("alert")).toHaveCount(0);
+ const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]").find((p:{projectId:string})=>p.projectId==="ess-02-dal-campo-al-raccolto"));
+ expect(stored.scenes[0].illustration.pixelWidth).toBe(320);
+ expect(stored.scenes[0].stage.evidence.every((item:{hotspot?:unknown})=>!item.hotspot)).toBe(true);
+ expect(stored.scenes[0].stage.evidence).toHaveLength(3);
+ expect(stored.scenes[1].title).toBe("Indagine aggiornata durante importazione");
+ expect(stored.productReview.decision).toBe("DRAFT");
+ expect(stored.lastPreviewSnapshot).toBeUndefined();
 });

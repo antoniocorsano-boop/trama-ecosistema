@@ -5,6 +5,7 @@ import {
   EMPTY_STORY,
   EMPTY_WORLD,
   type PathwayProject,
+  type SceneIllustration,
 } from "./model";
 import { parseAuthoringComplexity } from "./authoring-plan";
 import { normalizeAuthoringSelection } from "./authoring-catalog";
@@ -15,6 +16,8 @@ import {
 } from "./canonical/museo-zero";
 
 import { AGRICULTURE_PROJECT_ID, loadAgricultureDraft } from "./canonical/agriculture";
+
+import { projectImageErrors } from "./scene-media";
 
 const KEY = "studio-atlas.projects.v0.1";
 const MUSEO_ZERO_HUMAN_PRODUCT_REVIEW_REF =
@@ -180,4 +183,18 @@ export async function ensureAgriculturePilotProject():Promise<PathwayProject>{
  const draft=await loadAgricultureDraft();
  const current=getProject(AGRICULTURE_PROJECT_ID);if(current)return current;
  writeAll([draft,...readAll()]);return draft;
+}
+
+// Complete a decoded import against the latest revision; retain unrelated edits.
+export function commitDecodedSceneImage(projectId:string,sceneId:string,expected:SceneIllustration|undefined,image:SceneIllustration):PathwayProject{
+ const latest=getProject(projectId);
+ const scene=latest?.scenes.find(item=>item.sceneId===sceneId);
+ if(!latest||latest.archived||!scene||JSON.stringify(scene.illustration??null)!==JSON.stringify(expected??null))throw Error("IMAGE_CONFLICT");
+ const stage=scene.stage?{...scene.stage,evidence:scene.stage.evidence?.map(({hotspot,...item})=>{void hotspot;return item;})}:undefined;
+ const scenes=latest.scenes.map(item=>item.sceneId===sceneId?{...item,illustration:image,stage}:item);
+ const errors=projectImageErrors(scenes);
+ if(errors.includes("PROJECT_IMAGE_LIMIT"))throw Error("IMAGE_LIMIT");
+ if(errors.includes("IMAGE_INTEGRITY"))throw Error("IMAGE_INTEGRITY");
+ return updateProject(projectId,{scenes,worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
+ ...(latest.productReview?{productReview:{decision:"DRAFT",evidenceRef:latest.productReview.evidenceRef}}:{}),humanState:"SCENES"},latest.revision);
 }

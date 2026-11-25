@@ -1,11 +1,12 @@
 "use client";
-import {useState} from "react";
+import {useRef,useState} from "react";
 import type {PathwayScene,SceneStage,SceneIllustration} from "../lib/model";
-import {makeSceneIllustration,sceneImageBytes,SCENE_IMAGE_MAX_BYTES,PROJECT_IMAGE_MAX_BYTES} from "../lib/scene-media";
+import {makeSceneIllustration,sceneImageBytes,SCENE_IMAGE_MAX_BYTES} from "../lib/scene-media";
 
-export function SceneImageEditor({scene,otherImageBytes,onChange}:{scene:PathwayScene;otherImageBytes:number;onChange:(image:SceneIllustration|undefined,stage:SceneStage|undefined)=>void}){
+export function SceneImageEditor({scene,onImport,onChange}:{scene:PathwayScene;onImport:(image:SceneIllustration,expected:SceneIllustration|undefined)=>void;onChange:(image:SceneIllustration|undefined,stage:SceneStage|undefined)=>void}){
  const [selected,setSelected]=useState("");
  const [busy,setBusy]=useState(false);
+ const importing=useRef(false);
  const [error,setError]=useState("");
  const image=scene.illustration,stage=scene.stage;
  const evidence=stage?.evidence??[];
@@ -14,15 +15,16 @@ export function SceneImageEditor({scene,otherImageBytes,onChange}:{scene:Pathway
  let src="";
  if(image)try{sceneImageBytes(image);src="data:image/webp;base64,"+image.base64}catch{/* fail closed */}
  async function load(file:File){
-  setBusy(true);setError("");
+  if(importing.current)return;
+  importing.current=true;setBusy(true);setError("");
   try{
-   if(file.size>SCENE_IMAGE_MAX_BYTES||otherImageBytes+file.size>PROJECT_IMAGE_MAX_BYTES)throw Error("IMAGE_LIMIT");
+   if(file.size>SCENE_IMAGE_MAX_BYTES)throw Error("IMAGE_LIMIT");
    const next=await makeSceneIllustration(new Uint8Array(await file.arrayBuffer()));
    const decoded=new Image();decoded.src="data:image/webp;base64,"+next.base64;await decoded.decode();
    if(decoded.naturalWidth!==next.pixelWidth||decoded.naturalHeight!==next.pixelHeight)throw Error("IMAGE_INTEGRITY");
-   onChange(next,clearPoints());setSelected("");
-  }catch(e){setError(e instanceof Error&&e.message==="IMAGE_LIMIT"?"Limite superato: 256 KiB per immagine, 512 KiB per progetto.":"File non valido: scegli un’immagine WebP statica e integra.");}
-  finally{setBusy(false);}
+   onImport(next,image);setSelected("");
+  }catch(e){const code=e instanceof Error?e.message:"";setError(code==="IMAGE_LIMIT"?"Limite superato: 256 KiB per immagine, 512 KiB per progetto.":code==="IMAGE_CONFLICT"||code==="PROJECT_REVISION_CONFLICT"?"La scena o la sua immagine è cambiata durante l’importazione. Nessuna modifica sovrascritta: riprova.":code==="IMAGE_INTEGRITY"||code==="IMAGE_FORMAT"?"File non valido: scegli un’immagine WebP statica e integra.":"Importazione non salvata. Verifica il file e lo spazio locale, poi riprova.");}
+  finally{importing.current=false;setBusy(false);}
  }
  function point(x:number,y:number){
   if(!stage||!image||!current||busy)return;

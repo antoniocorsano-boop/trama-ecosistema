@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { STAGES, type PathwayProject } from "../lib/model";
-import { getProject, updateProject } from "../lib/store";
+import { STAGES, type PathwayProject, type SceneIllustration } from "../lib/model";
+import { getProject, updateProject, commitDecodedSceneImage } from "../lib/store";
 import { getProductionBlockers } from "../lib/production";
 import {
   buildStudioAtlasPreviewSnapshot,
@@ -69,6 +69,11 @@ export function PathwayWorkspace({ id }: { id: string }) {
     } catch {
       setSaveState("error");
     }
+  }
+
+  function importSceneImage(sceneId:string,image:SceneIllustration,expected:SceneIllustration|undefined){
+    try{const updated=commitDecodedSceneImage(id,sceneId,expected,image);setProject(updated);setSaveState("saved");}
+    catch(error){setSaveState("error");throw error;}
   }
 
   async function openLearnerPreview() {
@@ -246,7 +251,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Scene" && (
-            <SceneEditor project={project} onPatch={patchProject} />
+            <SceneEditor project={project} onPatch={patchProject} onImportImage={importSceneImage} />
           )}
 
           {stage === "Produzione" && (
@@ -274,7 +279,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
             <div><dt>Destinatari</dt><dd>{ageLabel(project.ageBand)}</dd></div>
             <div><dt>Revisione</dt><dd>{project.revision}</dd></div>
           </dl>
-          {project.projectId===AGRICULTURE_PROJECT_ID&&<p><Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico (bozza iniziale v0.1)</Link><br/><small>Da riallineare se modifichi il percorso.</small></p>}
+          {project.projectId===AGRICULTURE_PROJECT_ID&&<p><Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico (bozza v0.2; verificare la versione della copia locale)</Link><br/><small>Da riallineare se modifichi il percorso.</small></p>}
           <p className="context-note">
             Nessuna classe, studente o provider di calcolo è legato a questo draft. Il salvataggio resta locale a questo dispositivo: non costituisce una copia di sicurezza né sincronizza il Percorso.
           </p>
