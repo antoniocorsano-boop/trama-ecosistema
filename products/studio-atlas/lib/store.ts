@@ -18,6 +18,7 @@ import {
 import { AGRICULTURE_PROJECT_ID, loadAgricultureDraft } from "./canonical/agriculture";
 
 import { projectImageErrors } from "./scene-media";
+import { parseVisualRecipe } from "./scene-visual-recipe";
 
 const KEY = "studio-atlas.projects.v0.1";
 const MUSEO_ZERO_HUMAN_PRODUCT_REVIEW_REF =
@@ -54,6 +55,7 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     scenes: Array.isArray(raw.scenes)
       ? raw.scenes.map((scene) => ({
           ...scene,
+          ...(scene.visualRecipe !== undefined ? { visualRecipe: parseVisualRecipe(scene.visualRecipe) } : {}),
           kind: scene.kind === "TRANSFER" ? "TRANSFER" as const : "SCENE" as const,
           interaction: scene.interaction === "CHOICE" ? "CHOICE" as const : "SUMMARY" as const,
           choices: Array.isArray(scene.choices)

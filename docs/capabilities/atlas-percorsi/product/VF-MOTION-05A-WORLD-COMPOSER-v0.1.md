@@ -1,0 +1,6 @@
+# VF-MOTION-05A — Compositore parametrico, prima integrazione
+Riferimento laboratorio Atlas PR #152, commit a2c89a8a8d5abaaebfe7f54d235b2a5f2384bc3c: 25 procedure eseguite PASS, tre saltate. Lavoro sul ramo AWC S3c esistente (PR #352), non nuova applicazione.
+- Ricetta tipizzata e limitata nella scena esistente: profilo materiale, luce, orbita, intenzione di movimento e video. Salvataggio revisionato tramite lo store locale e invalidazione delle revisioni; esclusione esplicita dal trasporto studente. Nessuna modifica al master o autorizzazione di pubblicazione.
+- Controlli nella tavola di World Composer. Sala Zero usa il renderer Three.js r128 già presente: superficie del pavimento (rugosità/metallicità, non mappa ambientale), luce e orbita applicate in tempo reale. Preservati segnali, colori, geometria e comparatore tecnico. Le altre scene conservano la ricetta ma non hanno ancora una derivazione 3-D.
+- Movimento e video sono intenzioni da produrre: nessuna falsa disponibilità. 05B deve collegare il profilo ottico completo e le ricette di regia/video qualificate al produttore esistente, con risorse identificate e ricevute. Non è ancora integrazione del motore di produzione né collaudo fisico.
+- Prove unitarie di limiti, rifiuto campi estranei, isolamento e rimozione. Qualificazioni automatiche del ramo da verificare. Nessun merge o rilascio.

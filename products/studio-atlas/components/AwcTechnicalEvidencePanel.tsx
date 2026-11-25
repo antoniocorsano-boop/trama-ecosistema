@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AwcSalaZeroLivePreview } from "./AwcSalaZeroLivePreview";
+import type { SceneVisualRecipe } from "../lib/scene-visual-recipe";
 import {
   AWC_F_PLAN_SHA256,
   AWC_FRAMES,
@@ -20,7 +21,7 @@ const FRAME_LABEL: Record<AwcFrame, string> = {
 
 type PreviewUrls = Record<AwcRenderer, Record<AwcFrame, string>>;
 
-export function AwcTechnicalEvidencePanel() {
+export function AwcTechnicalEvidencePanel({recipe}:{recipe?:SceneVisualRecipe} = {}) {
   const [evidence, setEvidence] = useState<AwcEvidencePreview | null>(null);
   const [frame, setFrame] = useState<AwcFrame>("reference");
   const [urls, setUrls] = useState<PreviewUrls | null>(null);
@@ -72,7 +73,7 @@ export function AwcTechnicalEvidencePanel() {
         Confronta i fotogrammi originali delle due derivazioni oppure apri, qui sotto,
         una prova WebGL tridimensionale separata. Nessuna delle due sostituisce l’esperienza dello studente.
       </p>
-      <AwcSalaZeroLivePreview />
+      <AwcSalaZeroLivePreview recipe={recipe}/>
       <label className="awc-evidence-input">
         <strong>Apri la prova tecnica conservata</strong>
         <span>Seleziona l’archivio ZIP AWC-F, senza caricarlo su alcun servizio.</span>

@@ -1,6 +1,7 @@
 import type { PathwayProject, StudioAtlasPreviewSnapshot } from "./model";
 import { digestAuthoringState, getProductionBlockers } from "./production";
 import { attachSceneMedia } from "./scene-media";
+import { withoutVisualRecipe } from "./scene-visual-recipe";
 
 const REVIEW_ONLY_BLOCKERS = new Set([
   "PRODUCT_REVIEW_NOT_PASS",
@@ -36,7 +37,7 @@ async function buildSnapshot(
     description: project.idea,
     runtimeAuthorized: false,
     studentAuthorized: false,
-    scenes: project.scenes.map(({illustration,...scene}) => {void illustration;return structuredClone(scene);}),
+    scenes: project.scenes.map(({illustration,...scene}) => {void illustration;return structuredClone(withoutVisualRecipe(scene));}),
   };
   return attachSceneMedia(project,snapshot);
 }

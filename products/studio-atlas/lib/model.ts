@@ -136,6 +136,7 @@ export type PathwayScene = {
   world?: SceneWorldState;
   stage?: SceneStage;
   illustration?: SceneIllustration;
+  visualRecipe?: import("./scene-visual-recipe").SceneVisualRecipe;
   choices: PathwaySceneChoice[];
 };
 

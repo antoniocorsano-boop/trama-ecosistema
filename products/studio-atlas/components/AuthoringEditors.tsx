@@ -14,6 +14,7 @@ import { projectImageErrors } from "../lib/scene-media";
 import { stagePlaceErrors } from "../lib/scene-places";
 import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
 import { updateSceneFocus, updateWorldChoiceStatus } from "../lib/world-composer";
+import { updateSceneVisualRecipe } from "../lib/scene-visual-recipe";
 
 type Props = {
   project: PathwayProject;
@@ -338,6 +339,11 @@ export function SceneEditor({ project, onPatch, onImportImage }: Props & {onImpo
       </div>
 
       <SceneDesignComparison project={project} onUpdateChoiceState={updateChoiceState}
+        onUpdateRecipe={(sceneId,recipe)=>onPatch({
+          scenes:updateSceneVisualRecipe(project.scenes,sceneId,recipe),
+          worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
+          ...invalidateProductReview(project),humanState:"SCENES",
+        })}
         onUpdateFocus={(sceneId, locationId) => {
           const source = project.scenes.find(scene => scene.sceneId === sceneId);
           if (!source) return;

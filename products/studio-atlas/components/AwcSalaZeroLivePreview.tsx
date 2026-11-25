@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { DEFAULT_RECIPE, MATERIAL_PRESETS, type SceneVisualRecipe } from "../lib/scene-visual-recipe";
 import {
   AWC_S3B_SCENE,
   AWC_S3B_ENGINE_VERSION,
@@ -16,11 +17,12 @@ type Driver = {
   setSignal: (signal: "A" | "B") => void;
   setProfile: (profile: AwcLightProfile) => void;
   rotate: (deltaPixels: number) => void;
+  setRecipe: (recipe: SceneVisualRecipe) => void;
 };
 type Signal = "A" | "B";
 
 /** Non montare alcun contesto WebGL fino al comando esplicito del docente. */
-export function AwcSalaZeroLivePreview() {
+export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVisualRecipe} = {}) {
   const [active, setActive] = useState(false);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
@@ -29,6 +31,8 @@ export function AwcSalaZeroLivePreview() {
   const [profile, setProfile] = useState<AwcLightProfile>("balanced");
   const host = useRef<HTMLDivElement>(null);
   const driver = useRef<Driver | null>(null);
+  const latestRecipe=useRef(recipe);
+  useEffect(()=>{latestRecipe.current=recipe;driver.current?.setRecipe(recipe);},[recipe]);
 
   useEffect(() => {
     if (!active) return;
@@ -106,6 +110,8 @@ export function AwcSalaZeroLivePreview() {
           materials.push(material);
           matMap.set(key, material);
         }
+        const floor = matMap.get("floor");
+        if (!floor) throw new Error("Superficie di prova mancante");
         const projection = matMap.get("screen");
         if (!projection) throw new Error("Proiezione AWC-F mancante");
 
@@ -170,6 +176,12 @@ export function AwcSalaZeroLivePreview() {
           setProfile(localProfile);
           schedulePaint();
         };
+        const setRecipe = (next:SceneVisualRecipe) => {
+          const preset=MATERIAL_PRESETS[next.material];
+          floor.roughness=preset.roughness;floor.metalness=preset.metalness;
+          localOrbit=next.orbit;setOrbit(localOrbit);
+          setProfileLocal(next.light);schedulePaint();
+        };
         const reset = () => {
           localOrbit = 0;
           setOrbit(0);
@@ -218,9 +230,9 @@ export function AwcSalaZeroLivePreview() {
         resizeObserver = new ResizeObserver(resize);
         resizeObserver.observe(target);
         resize();
-        setProfileLocal("balanced");
+        setRecipe(latestRecipe.current);
         paint();
-        driver.current = { reset, setSignal: setSignalLocal, setProfile: setProfileLocal, rotate };
+        driver.current = { reset, setSignal: setSignalLocal, setProfile: setProfileLocal, rotate, setRecipe };
         setReady(true);
 
         cleanup = () => {
@@ -309,7 +321,7 @@ export function AwcSalaZeroLivePreview() {
             Trascina sulla scena per ruotare. In alternativa usa i pulsanti o i tasti freccia.
             L’illuminazione equilibrata è un’ipotesi artistica reversibile, non una
             certificazione di equivalenza con Blender. Nessun salvataggio o invio di dati.
-            Motore {AWC_S3B_ENGINE_VERSION}.
+            Il profilo di composizione agisce sul pavimento di prova, sulla luce e sull’inquadratura. I colori originali, la geometria e i segnali restano invariati. Motore {AWC_S3B_ENGINE_VERSION}.
           </p>
         </>
       )}

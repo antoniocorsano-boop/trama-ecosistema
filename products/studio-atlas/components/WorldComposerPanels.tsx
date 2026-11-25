@@ -4,6 +4,8 @@ import { useState } from "react";
 import type { PathwayProject, PathwayScene, SceneWorldState } from "../lib/model";
 import { compareSceneWorld, worldPlaces } from "../lib/world-composer";
 import { AwcTechnicalEvidencePanel } from "./AwcTechnicalEvidencePanel";
+import { SceneVisualRecipeEditor } from "./SceneVisualRecipeEditor";
+import { DEFAULT_RECIPE, type SceneVisualRecipe } from "../lib/scene-visual-recipe";
 
 type Representation = "2D" | "3D" | "COMBINATA";
 const REPRESENTATIONS: Array<{ value: Representation; title: string; description: string }> = [
@@ -162,14 +164,26 @@ function SceneComposition({ scene, scenes, onFocus }: {
   );
 }
 
+function SceneVisualWorkbench({scene,showSalaZero,onSave}:{scene:PathwayScene;showSalaZero:boolean;onSave:(id:string,recipe:SceneVisualRecipe|undefined)=>void}){
+  const [draft,setDraft]=useState(scene.visualRecipe??DEFAULT_RECIPE);
+  return <>
+    <SceneVisualRecipeEditor value={draft} saved={scene.visualRecipe} onChange={setDraft}
+      onSave={()=>onSave(scene.sceneId,draft)}
+      onRemove={()=>{onSave(scene.sceneId,undefined);setDraft(DEFAULT_RECIPE);}}/>
+    {showSalaZero&&<AwcTechnicalEvidencePanel recipe={draft}/>}
+  </>;
+}
+
 export function SceneDesignComparison({
   project,
   onUpdateChoiceState,
   onUpdateFocus,
+  onUpdateRecipe,
 }: {
   project: PathwayProject;
   onUpdateChoiceState: (sceneId: string, choiceId: string, status: string) => void;
   onUpdateFocus: (sceneId: string, locationId: string) => void;
+  onUpdateRecipe: (sceneId: string, recipe: SceneVisualRecipe | undefined) => void;
 }) {
   const [selectedSceneId, setSelectedSceneId] = useState(project.scenes[0]?.sceneId ?? "");
   const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(null);
@@ -287,10 +301,8 @@ export function SceneDesignComparison({
           </div>
         </div>
       )}
-      {project.projectId === "pw-strategy-selection-01-museo-zero" &&
-       scene.sceneId === "MZ4_TEST_MAPPING" && (
-        <AwcTechnicalEvidencePanel />
-      )}
+      <SceneVisualWorkbench key={scene.sceneId} scene={scene} onSave={onUpdateRecipe}
+        showSalaZero={project.projectId === "pw-strategy-selection-01-museo-zero" && scene.sceneId === "MZ4_TEST_MAPPING"}/>
       <div className="world-composer-footer">
         <button className="quiet-action" type="button" onClick={() => { setSelectedChoiceId(null); setProposal(null); }} disabled={!changed}>
           Ripristina la vista originale
