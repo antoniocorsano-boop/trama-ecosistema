@@ -8,7 +8,7 @@ permissions:
 jobs:
   pinned-source:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 15
     env:
       SOURCE_SHA: b228c5d77794a84150fca41b22940bb316b1398d
     steps:
@@ -68,9 +68,56 @@ jobs:
           (receipt / "report.json").write_text(json.dumps(report, indent=2) + "\n")
           print("Pinned source and syntax inventory verified; execution and admission remain blocked.")
           PY
-      - name: Retain acquisition evidence
+      - name: Run selected original tests with no network and no writable source
+        shell: bash
+        run: |
+          set -euo pipefail
+          receipt="$RUNNER_TEMP/vf-diagram-receipt"
+          source="/opt/vf-diagram-${GITHUB_RUN_ID}"
+          # Do not extract links or gitlinks into the runner.
+          python3 - "$receipt/report.json" <<'PY'
+          import json, sys
+          if json.load(open(sys.argv[1]))["special_entries_review"]:
+              raise SystemExit("Special tree entries require manual review")
+          PY
+          sudo install -d -m 0755 "$source"
+          git -C "$RUNNER_TEMP/diagram-design.git" archive --format=tar "$SOURCE_SHA" | sudo tar -xf - -C "$source" --no-same-owner --no-same-permissions
+          sudo chmod -R a-w "$source"
+          sudo chmod -R a+rX "$source"
+          /usr/bin/python3 --version > "$receipt/python-version.txt"
+          run_isolated() {
+            sudo systemd-run --quiet --wait --pipe --collect \
+              --property=DynamicUser=yes --property=PrivateNetwork=yes \
+              --property=RestrictAddressFamilies=AF_UNIX --property=ProtectSystem=strict \
+              --property=ProtectHome=yes --property=PrivateTmp=yes --property=PrivateDevices=yes \
+              --property=NoNewPrivileges=yes --property=CapabilityBoundingSet= \
+              --property=ProtectKernelTunables=yes --property=ProtectKernelModules=yes \
+              --property=ProtectControlGroups=yes --property=RestrictSUIDSGID=yes \
+              --property=MemoryMax=1G --property=TasksMax=64 --property=RuntimeMaxSec=90 \
+              --property=WorkingDirectory="$source" \
+              --setenv=PYTHONDONTWRITEBYTECODE=1 --setenv=PYTHONUTF8=1 \
+              /usr/bin/python3 "$@"
+          }
+          # Fail closed: prove uid, network restriction and read-only source before tests.
+          run_isolated -c 'import os,socket,errno; assert os.geteuid()!=0; assert not os.access(".",os.W_OK); exec("try:\n socket.socket(socket.AF_INET,socket.SOCK_STREAM)\nexcept OSError as e:\n assert e.errno in (errno.EAFNOSUPPORT,errno.EPERM,errno.EACCES),e\nelse:\n raise AssertionError(\"network socket allowed\")")' > "$receipt/isolation.log" 2>&1
+          printf 'test\tstatus\n' > "$receipt/tests.tsv"
+          failed=0
+          for script in test-self-check test-export-svg-standalone test-lint-a11y verify-geometry; do
+            args=()
+            if [ "$script" = verify-geometry ]; then args+=(--all); fi
+            if run_isolated "scripts/$script.py" "${args[@]}" > "$receipt/$script.log" 2>&1; then
+              printf '%s\tPASS\n' "$script" >> "$receipt/tests.tsv"
+            else
+              printf '%s\tFAIL\n' "$script" >> "$receipt/tests.tsv"
+              failed=1
+            fi
+          done
+          cat "$receipt/tests.tsv"
+          test "$failed" -eq 0
+      - name: Retain acquisition and test evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p0b-r1-acquisition
+          name: vf-diagram-p0b-r2a-tests
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
