@@ -421,10 +421,89 @@ jobs:
               assert r["upstream_tests"]==r["static_pilot_boundary"]=="PASS"
           print("Receipt authority and evidence consistency: PASS")
           PY
+      - name: Generate five static profiles in two compositions
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/vf-diagram-receipt/profiles"
+          python3 fixtures/visual-factory-diagram/render-profile-demonstrator.py --out "$out"
+          python3 - "$out" <<'PY'
+          import hashlib,json,pathlib,sys
+          p=pathlib.Path(sys.argv[1])
+          r=json.loads((p/"profile-receipt.json").read_text())
+          assert len(r["outputs"])==10 and len(r["rejections"])==8
+          assert all(v=="PASS" for v in r["rejections"].values())
+          assert not r["runtimeAuthorized"] and not r["publicationAuthorized"]
+          for item in r["outputs"]:
+              for ext in ("html","svg"):
+                  f=p/(item["id"]+"."+ext)
+                  assert hashlib.sha256(f.read_bytes()).hexdigest()==item[ext+"Sha256"]
+          PY
+      - name: Qualify profile rendering and capture evidence
+        working-directory: apps/control-center
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium } from '@playwright/test';
+          import { strict as assert } from 'node:assert';
+          import { pathToFileURL } from 'node:url';
+          import { readFile,writeFile } from 'node:fs/promises';
+          const dir=process.env.RUNNER_TEMP+'/vf-diagram-receipt/profiles';
+          const receipt=JSON.parse(await readFile(dir+'/profile-receipt.json','utf8'));
+          const browser=await chromium.launch();
+          const results=[];
+          try {
+            for(const output of receipt.outputs){
+              for(const width of output.variant==='mobile-vertical'?[360,390]:[1280]){
+                const item={id:output.id,width,status:'FAIL',requests:[],errors:[]};
+                results.push(item);
+                let context;
+                try {
+                  context=await browser.newContext({viewport:{width,height:900},offline:true,javaScriptEnabled:false,reducedMotion:'reduce'});
+                  const page=await context.newPage();
+                  page.on('request',r=>{if(!r.url().startsWith('file:'))item.requests.push(r.url());});
+                  page.on('pageerror',e=>item.errors.push(String(e)));
+                  await page.goto(pathToFileURL(dir+'/'+output.id+'.html').href,{timeout:10000});
+                  const svg=page.locator('svg');
+                  assert(await svg.isVisible());
+                  item.measured=await svg.evaluate(el=>{
+                    const v=el.viewBox.baseVal, scale=el.getBoundingClientRect().width/v.width;
+                    const labels=[...el.querySelectorAll('text')].map(t=>{
+                      const b=t.getBBox();return {text:t.textContent,x:b.x,y:b.y,w:b.width,h:b.height,cssPx:Number(t.getAttribute('font-size'))*scale};
+                    });
+                    const overlaps=[];
+                    for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){
+                      const a=labels[i],b=labels[j];
+                      if(Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>1 && Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>1)overlaps.push([a.text,b.text]);
+                    }
+                    return {width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,scroll:document.documentElement.scrollWidth,labels,overlaps,view:{width:v.width,height:v.height},title:el.querySelector('title')?.textContent,desc:el.querySelector('desc')?.textContent};
+                  });
+                  const m=item.measured;
+                  assert(m.width>0&&m.width<=width+1&&m.scroll<=width+1&&m.height<=900);
+                  assert(m.title&&m.desc&&m.labels.length===15);
+                  assert.deepEqual(m.overlaps,[]);
+                  assert(m.labels.every(l=>l.x>=0&&l.y>=0&&l.x+l.w<=m.view.width+1&&l.y+l.h<=m.view.height+1));
+                  assert(m.labels.every(l=>l.cssPx>=(width===1280?18:14)));
+                  assert.deepEqual(item.requests,[]);
+                  assert.deepEqual(item.errors,[]);
+                  const file=output.id+'-'+width+'.png';
+                  const png=await page.screenshot({path:dir+'/'+file,fullPage:false,timeout:15000});
+                  assert(png.length>1000);
+                  Object.assign(item,{status:'PASS',file,bytes:png.length});
+                }catch(e){item.failure=String(e);}
+                finally{if(context)await context.close();}
+                console.log(JSON.stringify(item));
+                await writeFile(dir+'/profile-browser-results.json',JSON.stringify(results,null,2));
+              }
+            }
+          }finally{await browser.close();}
+          assert.equal(results.length,15);
+          assert(results.every(r=>r.status==='PASS'),'Profile browser evidence failed');
+          JS
       - name: Retain acquisition and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vf-diagram-p0b-r4-receipt
+          name: vf-diagram-p1b-profiles
           path: ${{ runner.temp }}/vf-diagram-receipt/
           retention-days: 7
