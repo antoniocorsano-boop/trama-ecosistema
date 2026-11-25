@@ -1,0 +1,46 @@
+{
+  "schema": "trama.diagram-source/v0.1",
+  "id": "vf-profile-demonstrator",
+  "status": "DRAFT_DEMONSTRATION",
+  "title": "Ciclo di produzione documentale",
+  "description": "Schema dimostrativo del ciclo di produzione di candidati statici; non rappresenta una nuova integrazione applicativa.",
+  "nodes": [
+    {
+      "id": "source",
+      "label": "Fonte verificata",
+      "detail": "Contenuti e provenienza"
+    },
+    {
+      "id": "compose",
+      "label": "Composizione",
+      "detail": "Profilo e diagramma"
+    },
+    {
+      "id": "review",
+      "label": "Revisione",
+      "detail": "Qualità e sicurezza"
+    },
+    {
+      "id": "archive",
+      "label": "Conservazione",
+      "detail": "Versione ed evidenze"
+    }
+  ],
+  "edges": [
+    [
+      "source",
+      "compose"
+    ],
+    [
+      "compose",
+      "review"
+    ],
+    [
+      "review",
+      "archive"
+    ]
+  ],
+  "authority": "TRAMA #358; schema dimostrativo P1b",
+  "publicationAuthorized": false,
+  "runtimeAuthorized": false
+}
