@@ -13,6 +13,11 @@ import {
 import {
   MUSEO_ZERO_VISUAL_SUBJECTS,
   compileReferenceJobs,
+  compileProfileReferenceJobs,
+  compileProfileShotJobs,
+  validateVisualProductionProfile,
+  resolveCanonicalVisualProductionProfile,
+  type VisualProductionProfile,
   compileShotJobs,
   createInitialVisualFactoryState,
   ingestVisualCandidates,
@@ -276,4 +281,83 @@ test("the same authoring digest preserves visual review state", () => {
   let state = createInitialVisualFactoryState(DIGEST);
   state = ingestVisualCandidates(state, candidateReceipt());
   assert.equal(reconcileVisualFactoryState(state, DIGEST), state);
+});
+
+
+// A non-personal, planning-only agricultural demonstrator: not an execution-admitted project.
+function agricultureProfile(): VisualProductionProfile {
+  const pathwayId = "fixture-agriculture-system";
+  const artDirectionVersion = "agriculture-fixture/v1";
+  const reference: VisualIntentSpec = {
+    schemaVersion: "atlas.visual-intent-spec/v0.1",
+    specId: "agriculture-field-reference-v1",
+    pathwayId, artDirectionVersion, packageDigest: DIGEST,
+    purpose: "ENVIRONMENT_REFERENCE", subjectRefs: ["field"],
+    narrativeFunction: "Recognize the field and irrigation infrastructure.",
+    requiredVisualFacts: ["Rows of crops beside a water channel"],
+    worldAnchors: ["Cultivated field", "Water channel"],
+    identityAnchors: [],
+    composition: {
+      dominantSubject: "Cultivated field", foreground: ["Water channel"],
+      midground: ["Crop rows"], background: ["Hedgerow"],
+      spatialRelation: "Channel runs alongside the crop rows",
+    },
+    camera: { shotScale: "wide", viewpoint: "ground level", lensLanguage: "natural perspective" },
+    lightingMood: "soft daylight", materialTextureLanguage: ["soil", "water", "leaves"],
+    continuityRefs: [], negativeConstraints: ["watermark"], forbiddenTextPatterns: ["watermark"],
+    qualityCriteria: ["Channel and rows are clearly distinguishable"], targetAspectRatio: "16:9",
+  };
+  const shot: VisualIntentSpec = {
+    ...reference, specId: "agriculture-irrigation-shot-v1", purpose: "SCENE_FRAME",
+    shotId: "irrigation-01", sceneRef: "water-distribution",
+    narrativeFunction: "Compare irrigation before and after opening a channel.",
+    requiredVisualFacts: ["Water travels from the channel toward the crop rows"],
+  };
+  return { pathwayId, artDirectionVersion, references: [reference], shots: [shot] };
+}
+
+test("F3.2a canonical profile retains five references and six shots", () => {
+  const profile = resolveCanonicalVisualProductionProfile(createMuseoZeroPilotProject().projectId);
+  assert.deepEqual(profile.references.map(spec => spec.subjectRefs[0]), ["lia", "omar", "teo", "sala-zero", "cabina-regia"]);
+  assert.deepEqual(profile.shots.map(spec => spec.shotId), SHOT_IDS);
+  profile.references[0].subjectRefs[0] = "tampered";
+  assert.equal(resolveCanonicalVisualProductionProfile(profile.pathwayId).references[0].subjectRefs[0], "lia");
+});
+
+test("F3.2a same planners support a second explicit profile offline and preserve execution admission", () => {
+  const profile = agricultureProfile();
+  const project = { ...createMuseoZeroPilotProject(), projectId: profile.pathwayId };
+  let state = createInitialVisualFactoryState(DIGEST, profile);
+  assert.equal(compileProfileReferenceJobs(project, DIGEST, state, [], profile).decision, "STOP_PREFLIGHT_REQUIRED");
+  const plan = compileProfileReferenceJobs(project, DIGEST, state, [passReceipt(profile.references[0])], profile);
+  assert.equal(plan.decision, "REFERENCE_GENERATION_READY");
+  assert.deepEqual(plan.jobs.map(job => job.subjectRef), ["field"]);
+  assert.equal(plan.paidComputeAuthorized, false);
+  assert.equal(plan.runtimeAuthorized, false);
+  assert.equal(plan.publicationAuthorityGranted, false);
+  assert.equal(compileProfileShotJobs(project, DIGEST, state, [], profile).decision, "STOP_REFERENCE_LOCK_REQUIRED");
+  const asset = {
+    ...candidateReceipt().assets[0], subjectRef: "field", assetId: "field-1",
+    purpose: "ENVIRONMENT_REFERENCE" as const,
+  };
+  state = ingestVisualCandidates(state, { ...candidateReceipt(), assets: [asset] });
+  state = lockVisualReference(state, "field", asset.assetId, DIGEST, profile);
+  assert.equal(state.stage, "READY_FOR_SHOTS");
+  const shot = compileProfileShotJobs(project, DIGEST, state, [passReceipt(profile.shots[0], [asset.url], [asset.sha256])], profile);
+  assert.equal(shot.decision, "SHOT_GENERATION_READY");
+  assert.deepEqual(shot.jobs.map(job => job.sceneRef), ["water-distribution"]);
+  assert.throws(() => compileReferenceJobs(project, DIGEST, state), /VISUAL_FACTORY_UNSUPPORTED_PATHWAY/);
+  assert.throws(() => resolveCanonicalVisualProductionProfile(profile.pathwayId), /VISUAL_FACTORY_UNSUPPORTED_PATHWAY/);
+});
+
+test("F3.2a reject cross-project, stale, duplicate or orphaned profile data", () => {
+  const profile = agricultureProfile();
+  const project = { ...createMuseoZeroPilotProject(), projectId: profile.pathwayId };
+  const state = createInitialVisualFactoryState(DIGEST, profile);
+  assert.throws(() => compileProfileReferenceJobs(createMuseoZeroPilotProject(), DIGEST, state, [], profile), /VISUAL_FACTORY_UNSUPPORTED_PATHWAY/);
+  assert.throws(() => compileProfileReferenceJobs(project, OTHER_DIGEST, state, [], profile), /STALE_VISUAL_FACTORY_STATE/);
+  assert.throws(() => validateVisualProductionProfile({ ...profile, references: [profile.references[0], profile.references[0]] }), /VISUAL_PRODUCTION_PROFILE_INVALID/);
+  assert.throws(() => validateVisualProductionProfile({ ...profile, shots: [{ ...profile.shots[0], subjectRefs: ["unknown"] }] }), /VISUAL_PRODUCTION_PROFILE_INVALID/);
+  assert.throws(() => validateVisualProductionProfile({ ...profile, references: [{ ...profile.references[0], pathwayId: "other" }] }), /VISUAL_PRODUCTION_PROFILE_INVALID/);
+  assert.throws(() => validateVisualProductionProfile({ ...profile, references: [{ ...profile.references[0], artDirectionVersion: "other" }] }), /VISUAL_PRODUCTION_PROFILE_INVALID/);
 });
