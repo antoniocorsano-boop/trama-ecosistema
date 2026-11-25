@@ -7,3 +7,9 @@ Riferimento laboratorio Atlas PR #152, commit a2c89a8a8d5abaaebfe7f54d235b2a5f23
 
 ## 05A-R1 — Base qualificata e controllo degli indizi
 Il commit precedente 9615c607 e il commit 8b628554 riportano le medesime due procedure fallite in compilazione, con identico blob del modulo Agricoltura (947dc439). TS2352 alla riga 90: conversione forzata di un'unione inferita dal manifesto JSON in Record di coordinate. Rimosso il cast; riutilizzato validHotspot come guardia di tipo, associando esattamente gli identificativi e rifiutando coordinate mancanti, estranee, duplicate o fuori intervallo. Prove sui cinque manifesti e 18 indizi, senza modifica delle immagini o della narrazione. Controllo preliminare obbligatorio per futuri incrementi: verificare commit base e procedure pertinenti; se fallite, isolare e risolvere oppure documentare esplicitamente il blocco prima di aggiungere funzionalità. Qualificazione da verificare.
+
+## 05A-R2 — Baseline qualificata
+Commit 8cc1362285e05bfdd81d3a804e20e2e69f1e1300, workflow 45571063823: 31/31 prove browser, 18/18 World Composer. Quattro procedure superate; nessuna pubblicazione.
+
+## 05B1 — Trasferimento ottico locale
+Fonte: Curriculum-Atlas a2c89a8a8d5abaaebfe7f54d235b2a5f2384bc3c, scripts/atlas-gateway-foyer/optical-profile.mjs, blob 7fb4435b4dc74ebec0406fdfa04a16920289c007. Trasferimento tipizzato del generatore ambientale 256×128 e delle intensità per ruolo, PMREM Three.js r128 creato al primo materiale alternativo; riutilizzo e rilascio alla chiusura. Applicazione al pavimento della Sala Zero, nessun oculo inventato, nessuna modifica alla geometria o al profilo originale. Riflessi sintetici, non riflessione fisica della sala. Due prove unitarie e ampliamento della prova WebGL esistente. Qualificazione automatica e verifica visiva/dispositivo ancora necessarie. Regia temporale e video con produttore/ricevute restano 05B2/05B3; nessuna autorizzazione o pubblicazione.

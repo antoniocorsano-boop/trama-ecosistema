@@ -218,6 +218,15 @@ test("AWC S3b: native WebGL touch orbit, exact camera reset and isolated signal 
     expect(gl.available).toBe(true);
     expect(gl.error).toBe(0);
 
+    await expect(canvas).toHaveAttribute("data-optical-profile", "original");
+    const material = page.getByLabel("Superficie di riferimento");
+    await material.selectOption("bronze");
+    await expect(canvas).toHaveAttribute("data-optical-profile", "bronze");
+    await material.selectOption("stone");
+    await expect(canvas).toHaveAttribute("data-optical-profile", "stone");
+    await material.selectOption("original");
+    await expect(canvas).toHaveAttribute("data-optical-profile", "original");
+    await expect(status).toContainText("3-D attivo");
     const bounds = await canvas.boundingBox();
     if (!bounds) throw new Error("Area WebGL non disponibile");
     await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);

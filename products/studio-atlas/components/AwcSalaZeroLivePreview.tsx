@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_RECIPE, MATERIAL_PRESETS, type SceneVisualRecipe } from "../lib/scene-visual-recipe";
+import { makeEnvironment, OPTICAL_ENV_INTENSITY } from "../lib/scene-optics";
 import {
   AWC_S3B_SCENE,
   AWC_S3B_ENGINE_VERSION,
@@ -47,6 +48,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
       let contextLost: ((event: Event) => void) | undefined;
       let canvas: HTMLCanvasElement | undefined;
       let timer = 0;
+      let opticalTarget: import("three").WebGLRenderTarget | undefined;
       const geometry: import("three").BufferGeometry[] = [];
       const materials: import("three").Material[] = [];
       const target = host.current;
@@ -178,7 +180,22 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
         };
         const setRecipe = (next:SceneVisualRecipe) => {
           const preset=MATERIAL_PRESETS[next.material];
+          // Allocate once, on explicit material selection, never per animation frame.
+          if (next.material !== "original" && !opticalTarget && renderer) {
+            const source = new T.DataTexture(makeEnvironment(),256,128,T.RGBAFormat,T.UnsignedByteType);
+            source.mapping = T.EquirectangularReflectionMapping;
+            source.encoding = T.LinearEncoding;
+            source.minFilter = source.magFilter = T.LinearFilter;
+            source.needsUpdate = true;
+            const generator = new T.PMREMGenerator(renderer);
+            try { opticalTarget = generator.fromEquirectangular(source); }
+            finally { source.dispose(); generator.dispose(); }
+          }
+          const nextMap = next.material === "original" ? null : opticalTarget?.texture ?? null;
+          if (floor.envMap !== nextMap) { floor.envMap = nextMap; floor.needsUpdate = true; }
+          floor.envMapIntensity = nextMap ? OPTICAL_ENV_INTENSITY[next.material] : 1;
           floor.roughness=preset.roughness;floor.metalness=preset.metalness;
+          canvas?.setAttribute("data-optical-profile", nextMap ? next.material : "original");
           localOrbit=next.orbit;setOrbit(localOrbit);
           setProfileLocal(next.light);schedulePaint();
         };
@@ -251,6 +268,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
           }
           geometry.forEach((value) => value.dispose());
           materials.forEach((value) => value.dispose());
+          opticalTarget?.dispose();
           renderer?.dispose();
           renderer?.forceContextLoss();
         };
@@ -264,6 +282,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
         canvas?.remove();
         geometry.forEach((value) => value.dispose());
         materials.forEach((value) => value.dispose());
+        opticalTarget?.dispose();
         renderer?.dispose();
         renderer?.forceContextLoss();
       }
@@ -321,7 +340,7 @@ export function AwcSalaZeroLivePreview({recipe=DEFAULT_RECIPE}:{recipe?:SceneVis
             Trascina sulla scena per ruotare. In alternativa usa i pulsanti o i tasti freccia.
             L’illuminazione equilibrata è un’ipotesi artistica reversibile, non una
             certificazione di equivalenza con Blender. Nessun salvataggio o invio di dati.
-            Il profilo di composizione agisce sul pavimento di prova, sulla luce e sull’inquadratura. I colori originali, la geometria e i segnali restano invariati. Motore {AWC_S3B_ENGINE_VERSION}.
+            Il profilo di composizione agisce sul pavimento di prova, sulla luce e sull’inquadratura. I materiali alternativi usano riflessi da una mappa ambientale sintetica locale, non riflessi della stanza reale. I colori originali, la geometria e i segnali restano invariati. Motore {AWC_S3B_ENGINE_VERSION}.
           </p>
         </>
       )}
