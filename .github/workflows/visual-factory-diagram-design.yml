@@ -1,0 +1,430 @@
+name: Visual Factory — Diagram Design acquisition
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/visual-factory-diagram-design.yml"
+      - "fixtures/visual-factory-diagram/**"
+permissions:
+  contents: read
+jobs:
+  pinned-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SOURCE_SHA: b228c5d77794a84150fca41b22940bb316b1398d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Acquire pinned public source without checkout or upstream execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init --bare "$RUNNER_TEMP/diagram-design.git"
+          git -C "$RUNNER_TEMP/diagram-design.git" -c core.hooksPath=/dev/null fetch --no-tags --depth=1 https://github.com/cathrynlavery/diagram-design.git "$SOURCE_SHA"
+          test "$(git -C "$RUNNER_TEMP/diagram-design.git" rev-parse FETCH_HEAD)" = "$SOURCE_SHA"
+          mkdir -p "$RUNNER_TEMP/vf-diagram-receipt"
+          git -C "$RUNNER_TEMP/diagram-design.git" ls-tree -r -l "$SOURCE_SHA" > "$RUNNER_TEMP/vf-diagram-receipt/tree.txt"
+          git -C "$RUNNER_TEMP/diagram-design.git" archive --format=tar "$SOURCE_SHA" | sha256sum > "$RUNNER_TEMP/vf-diagram-receipt/archive.sha256"
+      - name: Verify source inventory and collect static review evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import ast, hashlib, json, os, pathlib, subprocess
+          root = pathlib.Path(os.environ["RUNNER_TEMP"])
+          receipt = root / "vf-diagram-receipt"
+          sha = os.environ["SOURCE_SHA"]
+          git = ["git", "-C", str(root / "diagram-design.git")]
+          expected = {
+              "THIRD_PARTY_LICENSES.md": "5311158e2621738d0f9f6efa09dc7c7ef05b160a",
+              "skills/diagram-design/SKILL.md": "3b41b0f61db73b0e0a4505439b827bb2cd412e51",
+              "scripts/test-self-check.py": "7a8fb7f965d60f10ad211a8ca64bc521e9ecaebb",
+              "scripts/test-export-svg-standalone.py": "5473e39b4641c6c8176bb579cdd7369392f12dc3",
+              "scripts/test-lint-a11y.py": "34d8fd9628d4bbefe072f6ec5f0d17e311c37273",
+              "scripts/verify-geometry.py": "5ef14827f57fe2484344f4b381fe17f1b5092206",
+          }
+          files = {}
+          for path in ["LICENSE", "PRIVACY.md", "SECURITY.md", ".github/workflows/ci.yml", *expected]:
+              blob = subprocess.check_output(git + ["show", f"{sha}:{path}"])
+              digest = hashlib.sha1(b"blob " + str(len(blob)).encode() + b"\0" + blob).hexdigest()
+              if path in expected and digest != expected[path]:
+                  raise SystemExit(f"Blob mismatch: {path}")
+              files[path] = {"git_blob_sha1": digest, "sha256": hashlib.sha256(blob).hexdigest(), "bytes": len(blob)}
+          license_text = subprocess.check_output(git + ["show", f"{sha}:LICENSE"])
+          if b"MIT License" not in license_text:
+              raise SystemExit("Expected MIT license text absent")
+          entries = subprocess.check_output(git + ["ls-tree", "-rz", sha]).split(b"\0")
+          imports, review = {}, []
+          for entry in entries:
+              if not entry:
+                  continue
+              meta, raw_path = entry.split(b"\t", 1)
+              mode, kind, oid = meta.decode().split()
+              path = raw_path.decode("utf-8", errors="replace")
+              if mode in ("120000", "160000"):
+                  review.append({"path": path, "mode": mode})
+              if path.endswith(".py") and kind == "blob":
+                  data = subprocess.check_output(git + ["cat-file", "blob", oid])
+                  tree = ast.parse(data, filename=path)
+                  imports[path] = sorted({a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names} | {n.module or "" for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)})
+          report = {"source_commit": sha, "acquisition": "PASS", "pinned_file_checks": "PASS", "python_syntax": "PASS", "files": files, "python_imports": imports, "special_entries_review": review, "license_review": "PENDING", "security_review": "PENDING", "upstream_tests": "NOT_RUN", "browser_offline_test": "NOT_RUN", "qualification_execution_authorized": True, "qualification_authorization_ref": "TRAMA #358", "qualification_execution_scope": "PINNED_OFFLINE_LAB_ONLY", "qualification_execution_started": False, "production_execution_authorized": False, "production_admitted": False, "runtime_authorized": False, "publication_authorized": False, "independent_review": "PENDING_CODEX", "isolation_probe": "NOT_RUN", "copy2_fixture_probe": "NOT_RUN", "static_pilot_boundary": "NOT_RUN", "visual_capture": "NOT_RUN"}
+          (receipt / "report.json").write_text(json.dumps(report, indent=2) + "\n")
+          print("Pinned source and syntax inventory verified; bounded qualification is authorized by #358, upstream execution requires isolation probes; production remains blocked.")
+          PY
+      - name: Run selected original tests with no network and no writable source
+        shell: bash
+        run: |
+          set -euo pipefail
+          receipt="$RUNNER_TEMP/vf-diagram-receipt"
+          source="/opt/vf-diagram-${GITHUB_RUN_ID}"
+          # Do not extract links or gitlinks into the runner.
+          python3 - "$receipt/report.json" <<'PY'
+          import json, sys
+          if json.load(open(sys.argv[1]))["special_entries_review"]:
+              raise SystemExit("Special tree entries require manual review")
+          PY
+          sudo install -d -m 0755 "$source"
+          git -C "$RUNNER_TEMP/diagram-design.git" archive --format=tar "$SOURCE_SHA" | sudo tar -xf - -C "$source" --no-same-owner --no-same-permissions
+          # Retain owner write mode for shutil.copy2 fixtures, while the
+          # dynamic test user cannot write the root-owned source tree.
+          sudo install -m 0644 fixtures/visual-factory-diagram/trama-architecture.html "$source/trama-architecture.html"
+          sudo chown -R root:root "$source"
+          sudo chmod -R u+rwX,go-w "$source"
+          sudo chmod -R a+rX "$source"
+          /usr/bin/python3 --version > "$receipt/python-version.txt"
+          run_isolated() {
+            sudo systemd-run --quiet --wait --pipe --collect \
+              --property=DynamicUser=yes --property=PrivateNetwork=yes \
+              --property=RestrictAddressFamilies=AF_UNIX --property=ProtectSystem=strict \
+              --property=ProtectHome=yes --property=PrivateTmp=yes --property=PrivateDevices=yes \
+              --property=NoNewPrivileges=yes --property=CapabilityBoundingSet= \
+              --property=ProtectKernelTunables=yes --property=ProtectKernelModules=yes \
+              --property=ProtectControlGroups=yes --property=RestrictSUIDSGID=yes \
+              --property=MemoryMax=1G --property=TasksMax=64 --property=RuntimeMaxSec=90 \
+              --property=WorkingDirectory="$source" \
+              --setenv=PYTHONDONTWRITEBYTECODE=1 --setenv=PYTHONUTF8=1 \
+              /usr/bin/python3 "$@"
+          }
+          # Fail closed: prove uid, network restriction and read-only source before tests.
+          run_isolated -c 'import os,socket,errno; assert os.geteuid()!=0; assert not os.access(".",os.W_OK); exec("try:\n socket.socket(socket.AF_INET,socket.SOCK_STREAM)\nexcept OSError as e:\n assert e.errno in (errno.EAFNOSUPPORT,errno.EPERM,errno.EACCES),e\nelse:\n raise AssertionError(\"network socket allowed\")")' > "$receipt/isolation.log" 2>&1
+          # Reproduce the exact copy2 fixture operation before upstream tests.
+          run_isolated -c 'import os, pathlib, shutil, tempfile, hashlib; src=pathlib.Path("skills/diagram-design/references/style-guide.md"); original=src.read_bytes(); assert src.stat().st_uid==0; assert not os.access(src,os.W_OK); assert os.statvfs(src).f_flag & os.ST_RDONLY; d=tempfile.TemporaryDirectory(); dst=pathlib.Path(d.name)/"style-guide.md"; shutil.copy2(src,dst); assert dst.stat().st_uid==os.geteuid(); dst.write_bytes(original+b"\\nfixture-probe"); assert dst.read_bytes()!=original; assert src.read_bytes()==original; print("COPY2_FIXTURE_PASS",hashlib.sha256(original).hexdigest()); d.cleanup()' >> "$receipt/isolation.log" 2>&1
+          cat "$receipt/isolation.log"
+          python3 - "$receipt/report.json" <<'PY'
+          import json, pathlib, sys
+          p=pathlib.Path(sys.argv[1])
+          data=json.loads(p.read_text())
+          assert data["qualification_execution_authorized"] is True
+          assert data["qualification_execution_scope"] == "PINNED_OFFLINE_LAB_ONLY"
+          assert not data["production_execution_authorized"] and not data["production_admitted"]
+          data.update(isolation_probe="PASS", copy2_fixture_probe="PASS", qualification_execution_started=True)
+          p.write_text(json.dumps(data,indent=2)+"\n")
+          PY
+          printf 'test\tstatus\n' > "$receipt/tests.tsv"
+          failed=0
+          for script in test-self-check test-export-svg-standalone test-lint-a11y verify-geometry; do
+            args=()
+            if [ "$script" = verify-geometry ]; then args+=(--all); fi
+            if run_isolated "scripts/$script.py" "${args[@]}" > "$receipt/$script.log" 2>&1; then
+              printf '%s\tPASS\n' "$script" >> "$receipt/tests.tsv"
+            else
+              printf '%s\tFAIL\n' "$script" >> "$receipt/tests.tsv"
+              tail -n 35 "$receipt/$script.log"
+              failed=1
+            fi
+          done
+          cat "$receipt/tests.tsv"
+          python3 - "$receipt/report.json" "$receipt/tests.tsv" <<'PY'
+          import csv, json, pathlib, sys
+          report, tests = map(pathlib.Path, sys.argv[1:])
+          data = json.loads(report.read_text())
+          with tests.open() as stream:
+              results = {r["test"]: r["status"] for r in csv.DictReader(stream, delimiter="\t")}
+          data.update(isolation_probe="PASS", copy2_fixture_probe="PASS", upstream_test_results=results, upstream_tests="PASS" if len(results)==4 and all(v=="PASS" for v in results.values()) else "FAIL")
+          report.write_text(json.dumps(data, indent=2)+"\n")
+          PY
+          test "$failed" -eq 0
+          run_isolated skills/diagram-design/scripts/self_check.py --offline trama-architecture.html | tee "$receipt/pilot-self-check.log"
+          run_isolated -c 'import pathlib,subprocess,sys,tempfile; d=tempfile.TemporaryDirectory(); out=pathlib.Path(d.name)/"pilot.svg"; result=subprocess.run([sys.executable,"skills/diagram-design/scripts/export_svg.py","trama-architecture.html",str(out),"--system-fonts"],capture_output=True,check=True); sys.stderr.buffer.write(result.stdout+result.stderr); sys.stdout.buffer.write(out.read_bytes()); d.cleanup()' > "$receipt/trama-architecture.svg" 2> "$receipt/pilot-export.log"
+          cp fixtures/visual-factory-diagram/trama-architecture.html "$receipt/trama-architecture.html"
+          python3 - "$receipt/trama-architecture.svg" <<'PY'
+          import sys, xml.etree.ElementTree as ET
+          root = ET.parse(sys.argv[1]).getroot()
+          assert root.tag == "{http://www.w3.org/2000/svg}svg"
+          assert root.get("role") == "img"
+          for node in root.iter():
+              assert node.tag.split("}")[-1] not in {"script","foreignObject","image"}
+              for name,value in node.attrib.items():
+                  assert not name.lower().startswith("on")
+                  if name.split("}")[-1] in {"href","src"}:
+                      assert value.startswith("#")
+          PY
+      - name: Qualify static-only security boundary and rejection cases
+        id: static_security
+        shell: bash
+        run: |
+          set -euo pipefail
+          receipt="$RUNNER_TEMP/vf-diagram-receipt"
+          python3 - "$receipt" <<'PY'
+          import json, pathlib, re, sys, xml.etree.ElementTree as ET
+          out = pathlib.Path(sys.argv[1])
+          original = (out / "trama-architecture.svg").read_text()
+          ns = "{http://www.w3.org/2000/svg}"
+          tags = {"svg","title","desc","defs","style","marker","path","g","rect","text"}
+          attrs = {
+              "svg": {"viewBox","role","aria-labelledby","id"},
+              "title": {"id"}, "desc": {"id"}, "defs": set(), "style": set(),
+              "marker": {"id","markerWidth","markerHeight","refX","refY","orient"},
+              "path": {"d","fill","stroke","stroke-width"},
+              "g": {"fill","stroke","stroke-width","marker-end"},
+              "rect": {"x","y","width","height","rx","fill","stroke"},
+              "text": {"x","y","text-anchor","font-size","font-weight","fill"}
+          }
+          num = r"-?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)"
+          ident = r"[A-Za-z_][A-Za-z0-9_-]*"
+          def require(ok, why):
+              if not ok: raise ValueError(why)
+          def gate(raw):
+              require(len(raw.encode()) <= 100000, "size")
+              require(not re.search(r"<!(?:DOCTYPE|ENTITY|\[CDATA\[)|<\?(?!xml\s)",raw,re.I),"active declaration")
+              root=ET.fromstring(raw)
+              require(root.tag==ns+"svg" and root.get("role")=="img","root")
+              ids=set()
+              refs=[]
+              for el in root.iter():
+                  require(el.tag.startswith(ns),"namespace")
+                  tag=el.tag[len(ns):]
+                  require(tag in tags,"element "+tag)
+                  require(set(el.attrib)<=attrs[tag],"attributes "+tag)
+                  if tag=="style":
+                      require(re.fullmatch(r"\s*#trama-architecture-root\s*\{\s*color:\s*#2d3142;\s*font-family:\s*system-ui, sans-serif;\s*\}\s*",el.text or "") is not None,"CSS outside pilot profile")
+                  for key,value in el.attrib.items():
+                      if key=="id":
+                          require(re.fullmatch(ident,value) and value not in ids,"ID")
+                          ids.add(value)
+                      elif key=="aria-labelledby":
+                          refs.extend(value.split())
+                      elif key=="marker-end":
+                          m=re.fullmatch(r"url\(#("+ident+r")\)",value)
+                          require(m is not None,"marker reference")
+                          refs.append(m.group(1))
+                      elif key in {"fill","stroke"}:
+                          require(re.fullmatch(r"#[0-9A-Fa-f]{6}|none",value),"paint")
+                      elif key=="d":
+                          require(re.fullmatch(r"[MmLlHhVvZz0-9 .,+-]+",value),"path syntax")
+                      elif key=="viewBox":
+                          require(len(value.split())==4 and all(re.fullmatch(num,v) for v in value.split()),"viewBox")
+                      elif key=="role":
+                          require(value=="img","role")
+                      elif key=="orient":
+                          require(value=="auto","orient")
+                      elif key=="text-anchor":
+                          require(value=="middle","anchor")
+                      else:
+                          require(re.fullmatch(num,value),"numeric attribute")
+              require(all(r in ids for r in refs),"unresolved fragment")
+          gate(original)
+          cases={
+            "script": original.replace("</svg>","<script>void 0</script></svg>"),
+            "event": original.replace("<svg ","<svg onload=\"void 0\" ",1),
+            "external_image": original.replace("</svg>","<image href=\"https://example.invalid/a.png\"/></svg>"),
+            "foreign_object": original.replace("</svg>","<foreignObject/></svg>"),
+            "animation": original.replace("</svg>","<animate attributeName=\"x\"/></svg>"),
+            "remote_paint": original.replace('fill="#4f5d75"','fill="url(https://example.invalid/a)"',1),
+            "css_import": original.replace("<style>","<style>@import url(https://example.invalid/a);",1),
+            "entity": original.replace("<svg ","<!DOCTYPE svg [<!ENTITY probe 'x'>]><svg ",1),
+            "external_marker": original.replace('marker-end="url(#trama-architecture-arrow)"','marker-end="url(https://example.invalid/a)"',1)
+          }
+          results={"profile":"TRAMA_ARCHITECTURE_STATIC_PILOT_ONLY","positive":"PASS","rejections":{}}
+          for name,raw in cases.items():
+              require(raw!=original,"negative fixture unchanged: "+name)
+              try: gate(raw)
+              except (ValueError,ET.ParseError) as exc: results["rejections"][name]={"status":"PASS","reason":str(exc)}
+              else: results["rejections"][name]={"status":"FAIL"}
+          (out/"security-boundary.json").write_text(json.dumps(results,indent=2)+"\n")
+          print(json.dumps(results))
+          require(all(v["status"]=="PASS" for v in results["rejections"].values()),"negative gate")
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install existing locked browser test dependencies
+        working-directory: apps/control-center
+        run: npm ci --ignore-scripts
+      - name: Install existing Chromium test target
+        working-directory: apps/control-center
+        run: npx playwright install chromium
+      - name: Verify functional rendering in offline Chromium
+        id: browser_functional
+        working-directory: apps/control-center
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium } from '@playwright/test';
+          import { strict as assert } from 'node:assert';
+          import { pathToFileURL } from 'node:url';
+          import { writeFile } from 'node:fs/promises';
+          const dir = process.env.RUNNER_TEMP + '/vf-diagram-receipt';
+          const wrapper = '<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>SVG export rendering</title><style>body{margin:0;padding:16px;background:#f5f5f5}img{display:block;width:100%;max-width:480px;height:auto;margin:auto}</style></head><body><img src="trama-architecture.svg" alt="Architettura funzionale TRAMA"></body></html>';
+          await writeFile(dir+'/svg-wrapper.html',wrapper);
+          const browser = await chromium.launch();
+          const results = [];
+          const paths = {html:'trama-architecture.html',svg:'trama-architecture.svg',embedded:'svg-wrapper.html'};
+          try {
+            for (const width of [360,390,1280]) {
+              for (const mode of ['html','svg','embedded']) {
+                const item = {width,mode,status:'FAIL',requests:[],errors:[]};
+                results.push(item);
+                let context;
+                try {
+                  context = await browser.newContext({ viewport:{width,height:1200}, offline:true, javaScriptEnabled:false, reducedMotion:'reduce' });
+                  const page = await context.newPage();
+                  page.setDefaultTimeout(10000);
+                  page.on('request',r=>{if(/^https?:/i.test(r.url()))item.requests.push(r.url());});
+                  page.on('pageerror',e=>item.errors.push(String(e)));
+                  await page.goto(pathToFileURL(dir+'/'+paths[mode]).href,{waitUntil:'load',timeout:10000});
+                  if(mode==='embedded'){
+                    const img=page.locator('img');
+                    assert(await img.isVisible());
+                    item.measured=await img.evaluate(el=>({width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,complete:el.complete,naturalWidth:el.naturalWidth,naturalHeight:el.naturalHeight,scroll:document.documentElement.scrollWidth,alt:el.alt}));
+                    assert(item.measured.complete && item.measured.naturalWidth>0 && item.measured.naturalHeight>0);
+                    assert(item.measured.alt);
+                  } else {
+                    const svg=page.locator('svg').first();
+                    assert(await svg.isVisible());
+                    assert.equal(await svg.getAttribute('role'),'img');
+                    item.measured=await svg.evaluate(el=>{
+                      const view=el.viewBox.baseVal;
+                      const labels=Array.from(el.querySelectorAll('text')).map(t=>{
+                        const b=t.getBBox();
+                        return {text:t.textContent,inBounds:b.x>=view.x-1 && b.y>=view.y-1 && b.x+b.width<=view.x+view.width+1 && b.y+b.height<=view.y+view.height+1};
+                      });
+                      return {width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,scroll:document.documentElement.scrollWidth,labels,title:el.querySelector('title')?.textContent};
+                    });
+                    assert(item.measured.labels.length>=14 && item.measured.labels.every(l=>l.inBounds));
+                    assert(item.measured.title);
+                  }
+                  assert(item.measured.width>0 && item.measured.width<=width+1);
+                  assert(item.measured.height>0);
+                  if(mode!=='svg')assert(item.measured.scroll<=width+1);
+                  assert.deepEqual(item.requests,[]);
+                  assert.deepEqual(item.errors,[]);
+                  item.status='PASS';
+                } catch(e){item.failure=String(e);}
+                finally{if(context)await context.close();}
+                console.log(JSON.stringify(item));
+                await writeFile(dir+'/browser-results.json',JSON.stringify(results,null,2));
+              }
+            }
+          } finally {await browser.close();}
+          assert.equal(results.length,9);
+          assert(results.every(r=>r.status==='PASS'),'One or more functional rendering cases failed');
+          JS
+      - name: Capture independent visual evidence for HTML and exact exported SVG
+        id: browser_capture
+        if: always() && steps.browser_functional.outcome != 'skipped'
+        working-directory: apps/control-center
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium } from '@playwright/test';
+          import { strict as assert } from 'node:assert';
+          import { pathToFileURL } from 'node:url';
+          import { writeFile } from 'node:fs/promises';
+          const dir=process.env.RUNNER_TEMP+'/vf-diagram-receipt';
+          const browser=await chromium.launch();
+          const results=[];
+          try{
+            for(const width of [360,390,1280]){
+              for(const mode of ['html','embedded']){
+                const item={width,mode,status:'FAIL',requests:[],errors:[]};
+                results.push(item);
+                let context;
+                try{
+                  context=await browser.newContext({viewport:{width,height:1200},offline:true,javaScriptEnabled:false,reducedMotion:'reduce'});
+                  const page=await context.newPage();
+                  page.setDefaultTimeout(10000);
+                  page.on('request',r=>{if(/^https?:/i.test(r.url()))item.requests.push(r.url());});
+                  page.on('pageerror',e=>item.errors.push(String(e)));
+                  const name=mode==='html'?'trama-architecture.html':'svg-wrapper.html';
+                  await page.goto(pathToFileURL(dir+'/'+name).href,{waitUntil:'load',timeout:10000});
+                  const target=page.locator(mode==='html'?'svg':'img').first();
+                  assert(await target.isVisible());
+                  const box=await target.boundingBox();
+                  assert(box && box.x>=0 && box.y>=0 && box.x+box.width<=width+1 && box.y+box.height<=1200,'Diagram must fit capture viewport');
+                  if(mode==='embedded')assert(await target.evaluate(el=>el.complete&&el.naturalWidth>0));
+                  const file='pilot-'+(mode==='html'?'html':'svg-embedded')+'-'+width+'.png';
+                  const png=await page.screenshot({path:dir+'/'+file,fullPage:false,timeout:15000});
+                  assert(png.length>1000 && png.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));
+                  assert.deepEqual(item.requests,[]);
+                  assert.deepEqual(item.errors,[]);
+                  Object.assign(item,{status:'PASS',file,bytes:png.length,box});
+                }catch(e){item.failure=String(e);}
+                finally{if(context)await context.close();}
+                console.log(JSON.stringify(item));
+                await writeFile(dir+'/capture-results.json',JSON.stringify(results,null,2));
+              }
+            }
+          } finally{await browser.close();}
+          assert.equal(results.length,6);
+          assert(results.every(r=>r.status==='PASS'),'One or more visual captures failed');
+          JS
+      - name: Record independent functional and visual verdicts
+        if: always()
+        shell: bash
+        env:
+          FUNCTIONAL: ${{ steps.browser_functional.outcome }}
+          CAPTURE: ${{ steps.browser_capture.outcome }}
+          STATIC_SECURITY: ${{ steps.static_security.outcome }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"vf-diagram-receipt/report.json"
+          if p.exists():
+              r=json.loads(p.read_text())
+              states={"success":"PASS","failure":"FAIL","skipped":"NOT_RUN","cancelled":"CANCELLED"}
+              r["browser_offline_test"]=states.get(os.environ["FUNCTIONAL"],"NOT_RUN")
+              r["visual_capture"]=states.get(os.environ["CAPTURE"],"NOT_RUN")
+              r["static_pilot_boundary"]=states.get(os.environ["STATIC_SECURITY"],"NOT_RUN")
+              # The receipt reports actual results, never grants production authority.
+              r["production_admitted"]=False
+              r["production_execution_authorized"]=False
+              r["runtime_authorized"]=False
+              r["publication_authorized"]=False
+              p.write_text(json.dumps(r,indent=2)+"\n")
+          PY
+      - name: Verify qualification receipt authority and evidence consistency
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"vf-diagram-receipt/report.json"
+          r=json.loads(p.read_text())
+          assert r["qualification_execution_authorized"] is True
+          assert r["qualification_authorization_ref"]=="TRAMA #358"
+          assert r["qualification_execution_scope"]=="PINNED_OFFLINE_LAB_ONLY"
+          for key in ("production_admitted","production_execution_authorized","runtime_authorized","publication_authorized"):
+              assert r[key] is False, key
+          assert r["independent_review"]=="PENDING_CODEX"
+          assert "execution_authorized" not in r
+          started=r["qualification_execution_started"]
+          if started:
+              assert r["isolation_probe"]==r["copy2_fixture_probe"]=="PASS"
+          else:
+              assert r["upstream_tests"]=="NOT_RUN"
+          if r["upstream_tests"]=="PASS":
+              assert started and len(r["upstream_test_results"])==4
+              assert all(v=="PASS" for v in r["upstream_test_results"].values())
+          if r["browser_offline_test"]=="PASS":
+              assert r["upstream_tests"]==r["static_pilot_boundary"]=="PASS"
+          print("Receipt authority and evidence consistency: PASS")
+          PY
+      - name: Retain acquisition and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vf-diagram-p0b-r4-receipt
+          path: ${{ runner.temp }}/vf-diagram-receipt/
+          retention-days: 7
