@@ -1,0 +1,39 @@
+name: Studio Atlas — Live GitHub Intake
+on:
+  pull_request:
+    paths:
+      - "products/studio-atlas/**"
+      - ".github/workflows/studio-atlas-live-intake.yml"
+      - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
+permissions:
+  contents: read
+concurrency:
+  group: studio-atlas-live-intake-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  live:
+    name: Real GitHub adapter (external dependency)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Install Studio Atlas
+        working-directory: products/studio-atlas
+        run: npm install --no-audit --no-fund
+      - name: Qualify real public GitHub API and original resource integrity
+        working-directory: products/studio-atlas
+        run: |
+          set -o pipefail
+          npx --no-install tsx scripts/qualify-live-intake.ts 2>&1 | tee "$RUNNER_TEMP/live-intake.log"
+      - name: Preserve live adapter diagnostic
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-github-intake-diagnostic
+          path: ${{ runner.temp }}/live-intake.log
+          if-no-files-found: warn
+          retention-days: 7

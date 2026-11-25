@@ -90,3 +90,39 @@ test("invalid manifest metadata rejected before any draft is returned", async()=
   const response=await runFixture(responses);
   assert.equal(response.status,422);assert.equal((await response.json()).draft,undefined);
 });
+
+test("DIAG-02: temporary metadata error retries once and preserves the complete draft",async()=>{
+ const {responses}=await fixture();
+ const original=globalThis.fetch;let count=0;
+ globalThis.fetch=async input=>{
+  const url=input.toString();
+  if(url===API+"/pulls/84"&&++count===1)return new Response("temporary",{status:503});
+  const value=responses.get(url);
+  return new Response(typeof value==="string"?value:value?Uint8Array.from(value):"missing",{status:value===undefined?404:200});
+ };
+ try{
+  const r=await POST(new Request("http://localhost/api/attivita/importa",{method:"POST",body:JSON.stringify({url:SOURCE_URL})}));
+  assert.equal(r.status,200);assert.equal((await r.json()).verified,10);assert.equal(count,2);
+ }finally{globalThis.fetch=original;}
+});
+for(const scenario of [
+ {status:403,headers:{"x-ratelimit-remaining":"0"},category:"RATE_LIMIT",calls:1},
+ {status:403,headers:{},category:"UPSTREAM_REJECTED",calls:1},
+ {status:429,headers:{"retry-after":"60"},category:"RATE_LIMIT",calls:1},
+ {status:503,headers:{},category:"UPSTREAM_TEMPORARY",calls:2},
+ {status:404,headers:{},category:"UPSTREAM_REJECTED",calls:1},
+] as const)test("DIAG-02: classify HTTP "+scenario.status+" "+scenario.category+" without draft",async()=>{
+ const {responses}=await fixture();const original=globalThis.fetch;let count=0;
+ globalThis.fetch=async input=>{
+  const url=input.toString();
+  if(url.includes("/files?")){count++;return new Response("untrusted body",{status:scenario.status,headers:new Headers(Object.entries(scenario.headers))});}
+  const value=responses.get(url);return new Response(typeof value==="string"?value:value?Uint8Array.from(value):"missing",{status:value===undefined?404:200});
+ };
+ try{
+  const r=await POST(new Request("http://localhost/api/attivita/importa",{method:"POST",body:JSON.stringify({url:SOURCE_URL})}));
+  const result=await r.json();assert.equal(r.status,502);assert.equal(result.draft,undefined);
+  assert.equal(result.diagnostic.phase,"PR_FILES");assert.equal(result.diagnostic.upstreamStatus,scenario.status);
+  assert.equal(result.diagnostic.category,scenario.category);assert.equal(count,scenario.calls);
+  assert.ok(!JSON.stringify(result).includes("untrusted body"));
+ }finally{globalThis.fetch=original;}
+});

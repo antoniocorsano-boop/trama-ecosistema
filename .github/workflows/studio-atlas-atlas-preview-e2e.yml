@@ -8,6 +8,8 @@ on:
       - "tests/studio-atlas-world-composer.spec.ts"
       - "tests/studio-atlas-awc-s3b-offline.spec.ts"
       - "tests/studio-atlas-activity-import.spec.ts"
+      - "tests/qualification/missione118-*.mjs"
+      - "tests/qualification/missione118-*.cjs"
       - "tests/studio-atlas-edutwin-handoff.spec.ts"
       - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
 
@@ -48,6 +50,12 @@ jobs:
           git -C _atlas checkout "$ATLAS_PREVIEW_SHA"
           test "$(git -C _atlas rev-parse HEAD)" = "$ATLAS_PREVIEW_SHA"
 
+      - name: Prepare original Missione 118 transport from pinned Git objects
+        run: |
+          SOURCE=f0c29655632a7edc6d78c78d48d006aa8da020a2
+          git -C _atlas cat-file -e "$SOURCE^{commit}" 2>/dev/null || git -C _atlas fetch --no-tags origin "$SOURCE"
+          node tests/qualification/missione118-prepare.mjs _atlas "$RUNNER_TEMP/missione118-intake.json" | tee "$RUNNER_TEMP/missione118-source-receipt.json"
+
       - name: Install Studio Atlas
         working-directory: products/studio-atlas
         run: npm install --no-audit --no-fund
@@ -84,7 +92,9 @@ jobs:
 
           (
             cd products/studio-atlas
-            NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN="$ATLAS_ORIGIN" \
+            STUDIO_QUALIFICATION_INTAKE_FIXTURE="$RUNNER_TEMP/missione118-intake.json" \
+              NODE_OPTIONS="--require=$GITHUB_WORKSPACE/tests/qualification/missione118-transport.cjs" \
+              NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN="$ATLAS_ORIGIN" \
               npm run start -- --hostname 127.0.0.1 --port 3100 \
               >/tmp/studio-atlas-e2e.log 2>&1
           ) &
@@ -112,6 +122,7 @@ jobs:
           exit 1
 
       - name: Run cross-origin browser qualification
+        id: cross_origin
         shell: bash
         run: |
           cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
@@ -123,6 +134,7 @@ jobs:
           test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-learner-image.png"
 
       - name: Qualify World Composer at mobile sizes and across local draft revisions
+        id: composer
         shell: bash
         run: |
           cp tests/studio-atlas-world-composer.spec.ts _atlas/tests/studio-atlas-world-composer.spec.ts
@@ -143,13 +155,15 @@ jobs:
           test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-environments-mobile.png"
 
       - name: Exercise the offline S3b real WebGL trial in Chromium
+        id: webgl
         shell: bash
         run: |
           cp tests/studio-atlas-awc-s3b-offline.spec.ts _atlas/tests/studio-atlas-awc-s3b-offline.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-awc-s3b-offline.spec.ts --project=chromium --reporter=line
 
-      - name: Exercise exact Missione 118 acquisition in Chromium
+      - name: Exercise exact Missione 118 acquisition in Chromium (pinned original transport)
+        id: missione118
         shell: bash
         run: |
           cp tests/studio-atlas-activity-import.spec.ts _atlas/tests/studio-atlas-activity-import.spec.ts
@@ -157,6 +171,7 @@ jobs:
           pnpm exec playwright test tests/studio-atlas-activity-import.spec.ts --project=chromium --reporter=line
 
       - name: Verify local EduTwin handoff and revision archive in Chromium
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
         shell: bash
         run: |
           (
@@ -168,7 +183,7 @@ jobs:
           pnpm exec playwright test tests/studio-atlas-edutwin-handoff.spec.ts --project=chromium --reporter=line
 
       - name: Preserve source-locked offline Android trial and rendered frames
-        if: success()
+        if: ${{ !cancelled() && steps.webgl.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: awc-s3b-live-webgl-offline
@@ -180,7 +195,7 @@ jobs:
           retention-days: 7
 
       - name: Preserve illustrated atelier screenshots
-        if: success()
+        if: ${{ !cancelled() && steps.composer.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: studio-atlas-atelier-design-02
@@ -189,11 +204,20 @@ jobs:
           retention-days: 7
 
       - name: Preserve ESS-01B teacher and learner screenshots
-        if: success()
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: ess-01b-interactive-image
           path: ${{ runner.temp }}/ess-01b-screenshots/*.png
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve pinned source receipt
+        if: ${{ !cancelled() && steps.missione118.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: missione118-original-source-receipt
+          path: ${{ runner.temp }}/missione118-source-receipt.json
           if-no-files-found: error
           retention-days: 7
 
