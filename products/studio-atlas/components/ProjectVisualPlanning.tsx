@@ -28,7 +28,7 @@ export function ProjectVisualPlanning({ project }: { project: PathwayProject }) 
       <p className="eyebrow">Visual Factory · pianificazione locale</p>
       <h1>Produzione visiva del percorso</h1>
       <p className="lead">{project.title}</p>
-      <p>Proposta ricavata dalle scene. Verifica luoghi, inquadrature e coerenza didattica. La produzione automatica per questo progetto non è ancora ammessa: nessun servizio esterno verrà chiamato.</p>
+      <p>Proposta ricavata dalle scene. Verifica luoghi, inquadrature e coerenza didattica. La produzione automatica per questo progetto non è ancora ammessa. È necessaria una fonte del progetto verificata sul server e la qualificazione degli esecutori; nessun servizio esterno verrà chiamato.</p>
     </header>
     {error && <p role="alert">{error}</p>}
     {!result && !error && <p role="status">Preparazione della proposta…</p>}
