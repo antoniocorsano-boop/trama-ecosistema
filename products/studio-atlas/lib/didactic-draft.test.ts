@@ -32,3 +32,5 @@ test('riferimento contestuale non vale come verifica contenuto',()=>{const d=mak
 test('curricolo importato non verificato rifiutato',()=>{const d=make();(d.curricolo as any).status='IN_FORCE_CURRICOLO';assert.ok(validateDidacticDraft(d).includes('UNVERIFIED_CURRICOLO'));});
 test('esito privo di verifica rifiutato',()=>{const d=make();d.assessmentItems[0].outcomeRefs=['o1'];assert.ok(validateDidacticDraft(d).includes('UNCOVERED_OUTCOME'));});
 test('nessuna mutazione del pacchetto in composizione',()=>{const original=copy(pack);const d=make();d.steps[0].content='Modificato';assert.deepEqual(pack,original);});
+test('obiettivo valutato ma assente dalle fasi: validazione rifiuta',()=>{const d=make();for(const step of d.steps)step.outcomeRefs=['o1'];const errors=validateDidacticDraft(d);assert.ok(errors.includes('UNCOVERED_TEACHING_OUTCOME'));assert.ok(!errors.includes('UNCOVERED_OUTCOME'));});
+test('obiettivo valutato ma assente dalle fasi: composizione rifiuta',()=>{const p=copy(pack);for(const step of p.steps)step.outcomeRefs=['o1'];assert.throws(()=>composeDidacticDraft({project:ctx,config,pack:p,draftId:'d3'}),/UNCOVERED_TEACHING_OUTCOME/);});
