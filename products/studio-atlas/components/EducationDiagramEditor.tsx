@@ -9,7 +9,9 @@ import {EDUCATION_DIAGRAM_EXAMPLES} from "../lib/education-diagram-examples";
 const mime: Record<string, string> = {svg: "image/svg+xml", html: "text/html", json: "application/json", md: "text/markdown"};
 const maxSourceBytes = 8192;
 
-export function EducationDiagramEditor() {
+import type {DiagramSeed} from "../lib/didactic-production";
+
+export function EducationDiagramEditor({didacticSeed,getDidacticSeed}:{didacticSeed?:DiagramSeed;getDidacticSeed?:()=>DiagramSeed|undefined}={}) {
   const [source, setSource] = useState(() => authoredSource());
   const [variant, setVariant] = useState<DiagramVariant>("mobile-vertical");
   const [links, setLinks] = useState<Record<string, string>>({});
@@ -97,6 +99,18 @@ export function EducationDiagramEditor() {
   return <section className="education-diagram-editor" aria-label="Componi un diagramma didattico">
     <h3>Componi un diagramma didattico</h3>
     <p>Inserisci da 1 a 4 nodi e fino a 8 relazioni direzionali. Usa solo testo didattico, senza dati personali o indirizzi.</p>
+    {didacticSeed&&<fieldset>
+      <legend>Richiesta dalla bozza didattica</legend>
+      <p>{didacticSeed.title} · proposta modificabile, da revisionare.</p>
+      <button type="button" disabled={!sourceIsEmpty||working} onClick={()=>{
+        if(!sourceIsEmpty||working)return;
+        try{
+          const seed=getDidacticSeed?.();
+          if(!seed)throw Error("La richiesta è cambiata. Verifica la bozza corrente.");
+          update(importAuthoredSource(authoredSource(seed.title,seed.description,seed.nodes,seed.edges,seed.activity)));
+        }catch(e){setError(e instanceof Error?e.message:"Richiesta non valida.");}
+      }}>Carica diagramma della bozza</button>
+    </fieldset>}
     <fieldset>
       <legend>Parti da un esempio modificabile</legend>
       <p>Proposte da revisionare, indipendenti dal percorso aperto. Non vengono associate o pubblicate automaticamente.</p>

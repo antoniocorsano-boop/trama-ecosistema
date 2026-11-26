@@ -3,7 +3,9 @@ import {useEffect,useRef,useState} from "react";
 import {EducationDiagramEditor} from "./EducationDiagramEditor";
 import {DIAGRAM_ROOT,DIAGRAM_STEM,DIAGRAM_VARIANTS,educationFiles,parseEducationReceipt,verifyEducationFile,type DiagramVariant} from "../lib/education-diagram";
 
-export function EducationDiagramBank() {
+import type {DiagramSeed} from "../lib/didactic-production";
+
+export function EducationDiagramBank({didacticSeed,getDidacticSeed}:{didacticSeed?:DiagramSeed;getDidacticSeed?:()=>DiagramSeed|undefined}={}) {
   const [state,setState]=useState<"closed"|"checking"|"ready"|"error">("closed");
   const [variant,setVariant]=useState<DiagramVariant>("mobile-vertical");
   const [links,setLinks]=useState<Record<string,string>>({});
@@ -70,6 +72,6 @@ export function EducationDiagramBank() {
       </ul>
       <small>Il campione viene preparato con l’applicazione.</small>
     </>}
-    <EducationDiagramEditor />
+    <EducationDiagramEditor didacticSeed={didacticSeed} getDidacticSeed={getDidacticSeed}/>
   </section>;
 }

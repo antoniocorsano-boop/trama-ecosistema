@@ -952,5 +952,17 @@ for(const width of [390,1280])test("EC04a: compose edit reload and production na
  expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
  await page.screenshot({path:testInfo.outputPath("ec04a-draft-"+width+".png"),fullPage:true});
+ const draftBefore=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]));
  await panel.getByRole("button",{name:"Vai al banco Produzione"}).click();await expect(page.getByRole("region",{name:"Banco simulatori"})).toBeVisible();
+ const queue=page.getByRole("region",{name:"Materiali della bozza didattica"});
+ await expect(queue.getByText("Bozza didattica · revisione 2",{exact:true})).toBeVisible();
+ await expect(queue.getByRole("link",{name:"Apri editor diagrammi"})).toBeVisible();
+ const editor=page.getByRole("region",{name:"Componi un diagramma didattico"});
+ const load=editor.getByRole("button",{name:"Carica diagramma della bozza"});
+ await load.click();await expect(editor.getByLabel("Titolo",{exact:true})).toHaveValue("Rete di irrigazione");
+ await expect(load).toBeDisabled();
+ await editor.getByRole("button",{name:"Genera diagramma"}).click();
+ await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+ expect(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]))).toEqual(draftBefore);
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
 });
