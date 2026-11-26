@@ -81,6 +81,22 @@ jobs:
           NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN: ${{ env.STUDIO_ORIGIN }}
         run: pnpm build
 
+      - name: Stage and discover cross-origin browser qualification
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The spec runs in the pinned Atlas checkout but imports Studio's
+          # canonical teaching examples. Link that exact source, never copy it.
+          source="$GITHUB_WORKSPACE/products/studio-atlas/lib/education-diagram-examples.ts"
+          target="_atlas/products/studio-atlas/lib/education-diagram-examples.ts"
+          test -f "$source"
+          mkdir -p "$(dirname "$target")"
+          ln -sT "$source" "$target"
+          test "$(realpath "$target")" = "$(realpath "$source")"
+          cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --list --reporter=line
+
       - name: Install Chromium
         working-directory: _atlas
         run: pnpm exec playwright install --with-deps chromium
@@ -125,7 +141,6 @@ jobs:
         id: cross_origin
         shell: bash
         run: |
-          cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --reporter=line
           mkdir -p "$RUNNER_TEMP/ess-01b-screenshots"
