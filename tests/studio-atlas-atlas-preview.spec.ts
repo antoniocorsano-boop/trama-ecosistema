@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import {writeFile,readFile} from "node:fs/promises";
+import {EDUCATION_DIAGRAM_EXAMPLES} from "../products/studio-atlas/lib/education-diagram-examples";
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 const STUDIO = "http://127.0.0.1:3100";
@@ -803,153 +804,7 @@ test("F3.3c: eight relations remain legible in both standalone formats", async (
 
 
 // F3.3d: original teaching candidates; semantic approval remains a separate human review.
-const f33dSources = [
-  {
-    "schema": "trama.diagram-education-source/v0.1",
-    "id": "diagramma-docente",
-    "status": "TEACHER_REVIEW_REQUIRED",
-    "profile": "studio-atlas",
-    "runtimeAuthorized": false,
-    "publicationAuthorized": false,
-    "title": "Dalla carta alla carta",
-    "description": "Le frecce indicano la successione delle fasi del riciclo della carta: dalla materia recuperata al nuovo prodotto.",
-    "nodes": [
-      {
-        "id": "n1",
-        "label": "Carta usata",
-        "detail": "Raccolta e selezione"
-      },
-      {
-        "id": "n2",
-        "label": "Impasto",
-        "detail": "Fibre e acqua"
-      },
-      {
-        "id": "n3",
-        "label": "Nuovo foglio",
-        "detail": "Forma e asciugatura"
-      },
-      {
-        "id": "n4",
-        "label": "Uso",
-        "detail": "Nuovo utilizzo"
-      }
-    ],
-    "edges": [
-      [
-        "n1",
-        "n2"
-      ],
-      [
-        "n2",
-        "n3"
-      ],
-      [
-        "n3",
-        "n4"
-      ]
-    ],
-    "activity": {
-      "question": "Quale fase trasforma le fibre recuperate in un nuovo foglio?",
-      "criterion": "Distingue preparazione dell’impasto e formazione del nuovo foglio"
-    }
-  },
-  {
-    "schema": "trama.diagram-education-source/v0.1",
-    "id": "diagramma-docente",
-    "status": "TEACHER_REVIEW_REQUIRED",
-    "profile": "studio-atlas",
-    "runtimeAuthorized": false,
-    "publicationAuthorized": false,
-    "title": "Dal campo alla tavola",
-    "description": "Le frecce indicano la successione della filiera orticola. Individuare l’effetto della scarsità d’acqua sulla coltivazione.",
-    "nodes": [
-      {
-        "id": "n1",
-        "label": "Coltivazione",
-        "detail": "Acqua, suolo, energia"
-      },
-      {
-        "id": "n2",
-        "label": "Raccolta",
-        "detail": "Ortaggi maturi"
-      },
-      {
-        "id": "n3",
-        "label": "Distribuzione",
-        "detail": "Vendita locale"
-      },
-      {
-        "id": "n4",
-        "label": "Consumo",
-        "detail": "Acquisto e uso"
-      }
-    ],
-    "edges": [
-      [
-        "n1",
-        "n2"
-      ],
-      [
-        "n2",
-        "n3"
-      ],
-      [
-        "n3",
-        "n4"
-      ]
-    ],
-    "activity": {
-      "question": "Che cosa può accadere alla raccolta se manca acqua durante la coltivazione?",
-      "criterion": "Collega scarsità d’acqua, crescita degli ortaggi e possibile riduzione della raccolta"
-    }
-  },
-  {
-    "schema": "trama.diagram-education-source/v0.1",
-    "id": "diagramma-docente",
-    "status": "TEACHER_REVIEW_REQUIRED",
-    "profile": "studio-atlas",
-    "runtimeAuthorized": false,
-    "publicationAuthorized": false,
-    "title": "Circuito chiuso",
-    "description": "Le frecce rappresentano il percorso della corrente convenzionale nel circuito chiuso. Modello concettuale, non schema elettrico.",
-    "nodes": [
-      {
-        "id": "n1",
-        "label": "Pila",
-        "detail": "Tensione elettrica"
-      },
-      {
-        "id": "n2",
-        "label": "Interruttore",
-        "detail": "Chiuso: continuità"
-      },
-      {
-        "id": "n3",
-        "label": "Lampadina",
-        "detail": "Luce e calore"
-      }
-    ],
-    "edges": [
-      [
-        "n1",
-        "n2"
-      ],
-      [
-        "n2",
-        "n3"
-      ],
-      [
-        "n3",
-        "n1"
-      ]
-    ],
-    "activity": {
-      "question": "Che cosa cambia quando si apre l’interruttore?",
-      "criterion": "Spiega che il percorso si interrompe, la corrente cessa e la lampadina si spegne"
-    }
-  }
-];
+const f33dSources = EDUCATION_DIAGRAM_EXAMPLES;
 for (const [caseIndex, source] of f33dSources.entries()) {
   for (const width of [390, 1280]) test(`F3.3d: teaching candidate ${caseIndex + 1} at ${width}`, async ({page}, testInfo) => {
     await page.setViewportSize({width,height:900});
@@ -957,7 +812,12 @@ for (const [caseIndex, source] of f33dSources.entries()) {
     await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
     await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
     const editor=page.getByRole("region",{name:"Componi un diagramma didattico"});
-    await editor.getByLabel("Importa fonte JSON").setInputFiles({name:"fonte.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(source))});
+    const exampleButton=editor.getByRole("button",{name:`Carica esempio: ${source.title}`,exact:true});
+    await exampleButton.click();
+    await expect(editor.getByLabel("Titolo",{exact:true})).toHaveValue(source.title);
+    for(const example of EDUCATION_DIAGRAM_EXAMPLES) {
+      await expect(editor.getByRole("button",{name:`Carica esempio: ${example.title}`,exact:true})).toBeDisabled();
+    }
     const pending=page.waitForResponse(r=>r.url().endsWith("/api/education-diagram"));
     await editor.getByRole("button",{name:"Genera diagramma"}).click();
     const response=await pending;

@@ -4,6 +4,8 @@ import {useEffect, useRef, useState} from "react";
 import {AUTHORED_STEM, authoredSource, importAuthoredSource, verifyAuthoredPackage,
   type AuthoredSource, type DiagramEdge, type DiagramVariant} from "../lib/education-diagram";
 
+import {EDUCATION_DIAGRAM_EXAMPLES} from "../lib/education-diagram-examples";
+
 const mime: Record<string, string> = {svg: "image/svg+xml", html: "text/html", json: "application/json", md: "text/markdown"};
 const maxSourceBytes = 8192;
 
@@ -87,6 +89,7 @@ export function EducationDiagramEditor() {
     update({...source, edges: source.edges.map((edge, i): DiagramEdge =>
       i !== index ? edge : position === 0 ? [id, edge[1]] : [edge[0], id])});
   }
+  const sourceIsEmpty = !source.title && !source.description && source.nodes.length === 0 && source.edges.length === 0 && !source.activity;
   const stem = `${AUTHORED_STEM}-${variant}`;
   const nextId = ["n1", "n2", "n3", "n4"].find(id => !source.nodes.some(node => node.id === id));
   const nextEdge = source.nodes.flatMap(a => source.nodes.map((b): DiagramEdge => [a.id, b.id]))
@@ -94,6 +97,16 @@ export function EducationDiagramEditor() {
   return <section className="education-diagram-editor" aria-label="Componi un diagramma didattico">
     <h3>Componi un diagramma didattico</h3>
     <p>Inserisci da 1 a 4 nodi e fino a 8 relazioni direzionali. Usa solo testo didattico, senza dati personali o indirizzi.</p>
+    <fieldset>
+      <legend>Parti da un esempio modificabile</legend>
+      <p>Proposte da revisionare, indipendenti dal percorso aperto. Non vengono associate o pubblicate automaticamente.</p>
+      <p>Gli esempi possono essere caricati solo in un modulo vuoto, per non sovrascrivere il lavoro in corso.</p>
+      {EDUCATION_DIAGRAM_EXAMPLES.map(example =>
+        <button key={example.title} type="button" disabled={!sourceIsEmpty || working}
+          onClick={() => { if (sourceIsEmpty && !working) update(importAuthoredSource(example)); }}>
+          Carica esempio: {example.title}
+        </button>)}
+    </fieldset>
     <label>Titolo <input value={source.title} maxLength={26} onChange={e => update({...source, title: e.target.value})} /></label>
     <label>Finalità <textarea value={source.description} maxLength={160} onChange={e => update({...source, description: e.target.value})} /></label>
     <fieldset>
