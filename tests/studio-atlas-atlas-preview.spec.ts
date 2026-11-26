@@ -977,29 +977,36 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});await nav.getByRole("button",{name:"Esperienza"}).click();
  const draft=page.getByRole("region",{name:"Composizione didattica"});
  await expect(draft.getByLabel("Classe",{exact:true})).toHaveValue("seconda");
+ await draft.screenshot({path:testInfo.outputPath("ec07b-configurazione-"+width+".png")});
  await draft.getByRole("button",{name:"Componi bozza",exact:true}).click();
  await expect(draft.getByRole("heading",{name:"Bozza didattica · revisione 1"})).toBeVisible();
+ await draft.screenshot({path:testInfo.outputPath("ec07b-bozza-"+width+".png")});
  const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
  const draftBefore=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]));
  await draft.getByRole("button",{name:"Vai al banco Produzione"}).click();
  const workflow=page.getByRole("region",{name:"Materiali del percorso",exact:true});
  await expect(workflow.getByText("0 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
+ await workflow.screenshot({path:testInfo.outputPath("ec07b-richieste-"+width+".png")});
  for(const [i,name] of ["Diagramma","Simulatore","Scheda di lavoro"].entries()){
   await workflow.getByRole("button",{name:"Prepara e conserva "+name,exact:true}).click();
   await expect(workflow.getByText((i+1)+" di 3 materiali conservati e verificati",{exact:true})).toBeVisible({timeout:20000});
  }
+ await workflow.screenshot({path:testInfo.outputPath("ec07b-preparati-"+width+".png")});
  await workflow.getByRole("button",{name:"Anteprima Scheda di lavoro",exact:true}).click();
  const sheet=workflow.frameLocator('iframe[title="Anteprima Scheda di lavoro"]');
  await expect(sheet.getByRole("heading",{name:"Ingranaggi: prevedi e confronta",exact:true})).toBeVisible();
  await expect(sheet.getByText("Criteri e riscontri",{exact:true})).toHaveCount(0);
  await expect(workflow.locator('iframe[title="Anteprima Scheda di lavoro"]')).toHaveAttribute("sandbox","");
+ await workflow.locator('iframe[title="Anteprima Scheda di lavoro"]').screenshot({path:testInfo.outputPath("ec07b-scheda-"+width+".png")});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
  await workflow.getByRole("button",{name:"Anteprima Guida riservata al docente",exact:true}).click();
  await expect(workflow.frameLocator('iframe[title="Anteprima Guida riservata al docente"]').getByRole("heading",{name:"Criteri e riscontri",exact:true})).toBeVisible();
+ await workflow.locator('iframe[title="Anteprima Guida riservata al docente"]').screenshot({path:testInfo.outputPath("ec07b-guida-"+width+".png")});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
  await workflow.getByRole("button",{name:"Anteprima Diagramma",exact:true}).click();
  await expect(workflow.locator('iframe[title="Anteprima Diagramma"]')).toHaveAttribute("sandbox","");
  await expect(workflow.frameLocator('iframe[title="Anteprima Diagramma"]').locator("svg")).toBeVisible();
+ await workflow.locator('iframe[title="Anteprima Diagramma"]').screenshot({path:testInfo.outputPath("ec07b-diagramma-"+width+".png")});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
  await page.reload();await nav.getByRole("button",{name:"Produzione"}).click();
  await expect(workflow.getByText("3 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
@@ -1009,11 +1016,29 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  await expect(sim.getByRole("heading",{name:"Laboratorio delle trasmissioni",exact:true})).toBeVisible();
  await sim.getByRole("button",{name:"Avanza di 90°"}).click();
  await expect(sim.locator("#readout")).toContainText("Rapporto velocità:");
+ await workflow.locator('iframe[title="Anteprima Simulatore"]').screenshot({path:testInfo.outputPath("ec07b-simulatore-"+width+".png")});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
  expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
  expect(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]))).toEqual(draftBefore);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  await page.screenshot({path:testInfo.outputPath("ec07b-materials-"+width+".png"),fullPage:true});
+ const originalExports=new Map<string,string>();
+ for(const [name,kind] of [["Diagramma","DIAGRAM"],["Simulatore","SIMULATION"],["Scheda di lavoro","STUDENT_SHEET"]]){
+  const card=workflow.getByRole("article",{name,exact:true});
+  await card.getByText("File e ricevute",{exact:true}).click();
+  const [download]=await Promise.all([page.waitForEvent("download"),card.getByRole("button",{name:"Esporta associazione completa",exact:true}).click()]);
+  expect(download.suggestedFilename()).toBe("associazione-materiale.json");
+  expect(await download.failure()).toBeNull();
+  const body=await readFile(await download.path(),"utf8"),binding=JSON.parse(body);
+  expect(binding.schema).toBe("studio-atlas.didactic-material-binding/v0.1");
+  expect(binding.kind).toBe(kind);expect(binding.draftRevision).toBe(1);
+  expect(binding.draftSnapshot).toBe(draftBefore.find(([key])=>key==="studio-atlas.didactic-draft.v0.1:"+binding.project.projectId)?.[1]);
+  expect(binding.receiptSha256).toMatch(/^[a-f0-9]{64}$/);expect(binding.packageSha256).toMatch(/^[a-f0-9]{64}$/);
+  expect(binding.status).toBe("TEACHER_REVIEW_REQUIRED");expect(binding.studentAuthorized).toBe(false);expect(binding.publicationAuthorized).toBe(false);expect(binding.paidComputeAuthorized).toBe(false);
+  expect(binding.payload).toBeTruthy();originalExports.set(kind,body);
+  await card.getByText("File e ricevute",{exact:true}).click();
+ }
+ expect(originalExports.size).toBe(3);
  await nav.getByRole("button",{name:"Esperienza"}).click();
  await draft.getByRole("button",{name:"Modifica Problema",exact:true}).click();
  await draft.getByLabel("Testo della fase").fill("Confronta le previsioni con il modello.");
@@ -1023,7 +1048,22 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  await expect(workflow.getByText("0 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
  await workflow.getByText("Materiali precedenti o non validi (3)",{exact:true}).click();
  await expect(workflow.getByText("Obsoleto: non appartiene alla bozza corrente.",{exact:true})).toHaveCount(3);
+ const obsolete=workflow.getByRole("article").filter({hasText:"Obsoleto: non appartiene alla bozza corrente."});
+ await expect(obsolete).toHaveCount(3);
+ await expect(workflow.getByRole("button",{name:"Esporta associazione completa",exact:true})).toHaveCount(0);
+ for(let i=0;i<3;i++)await obsolete.nth(i).getByText("File e ricevute",{exact:true}).click();
  await expect(workflow.getByRole("button",{name:"Esporta associazione completa",exact:true})).toHaveCount(3);
+ const exportedKinds=new Set<string>();
+ for(let i=0;i<3;i++){
+  const [download]=await Promise.all([page.waitForEvent("download"),obsolete.nth(i).getByRole("button",{name:"Esporta associazione completa",exact:true}).click()]);
+  expect(download.suggestedFilename()).toBe("associazione-materiale.json");expect(await download.failure()).toBeNull();
+  const body=await readFile(await download.path(),"utf8"),binding=JSON.parse(body);
+  expect(binding.draftRevision).toBe(1);expect(originalExports.has(binding.kind)).toBe(true);
+  expect(body).toBe(originalExports.get(binding.kind));exportedKinds.add(binding.kind);
+  await writeFile(testInfo.outputPath("ec07b-obsoleto-"+binding.kind+"-"+width+".json"),body);
+ }
+ expect([...exportedKinds].sort()).toEqual(["DIAGRAM","SIMULATION","STUDENT_SHEET"]);
+ await workflow.screenshot({path:testInfo.outputPath("ec07b-obsoleti-"+width+".png")});
  await workflow.getByRole("button",{name:"Prepara e conserva Scheda di lavoro",exact:true}).click();
  await expect(workflow.getByText("1 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
  await expect(workflow.getByText("Materiali precedenti o non validi (3)",{exact:true})).toBeVisible();
