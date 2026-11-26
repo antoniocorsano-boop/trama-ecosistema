@@ -124,3 +124,52 @@ test("VF-SIMULATION-01 P2 gear laboratory: real offline WebGL, prediction and re
     }
   }finally{await browser.close();}
 });
+
+test("VF-SIMULATION-01 P2-R1: all 16 pairs fit at three widths throughout sampled rotation; legacy camera clips",async()=>{
+  test.setTimeout(120_000);
+  const browser=await chromium.launch({headless:true,args:["--use-gl=angle","--use-angle=swiftshader","--enable-unsafe-swiftshader"]});
+  const records:any[]=[];
+  try{
+    const context=await browser.newContext({viewport:{width:360,height:900},offline:true});
+    const page=await context.newPage(),errors:string[]=[],network:string[]=[];
+    page.on("pageerror",e=>errors.push(e.message));
+    page.on("request",r=>{if(/^https?:/i.test(r.url()))network.push(r.url());});
+    await page.goto(pathToFileURL(join(output,"vf-simulation-gear.html")).href);
+    await expect(page.locator("#graphics")).toContainText("WebGL attivo");
+    const sample=()=>page.evaluate(()=>(window as any).__vfSimulation.getFrameEvidence());
+    const teeth=[12,24,36,48];
+    for(const width of [360,390,1280]){
+      await page.setViewportSize({width,height:900});
+      for(const a of teeth)for(const b of teeth){
+        await page.getByLabel("Denti del conduttore").selectOption(String(a));
+        await page.getByLabel("Denti del condotto").selectOption(String(b));
+        const poses:any[]=[];let fixed:any=null;
+        for(let i=0;i<4;i++){
+          const e=await sample();expect(e).not.toBeNull();expect(e.objects).toBe(4);expect(e.vertices).toBeGreaterThan(0);
+          const values=Object.values(e.bounds);expect(values.every(v=>typeof v==="number"&&Number.isFinite(v))).toBe(true);
+          for(const axis of ["X","Y"]){expect(e.bounds["min"+axis]).toBeGreaterThanOrEqual(-.9);expect(e.bounds["max"+axis]).toBeLessThanOrEqual(.9);}
+          expect(e.bounds.minZ).toBeGreaterThanOrEqual(-1);expect(e.bounds.maxZ).toBeLessThanOrEqual(1);
+          if(fixed)expect(e.frustum).toEqual(fixed);else fixed=e.frustum;
+          // RED counterfactual: apply the exact previous centered frustum to
+          // measured vertices in camera coordinates, without changing the product.
+          const span=Math.max(4.4,(a+b)/24+1.2),half=span/2,vertical=half*e.height/e.width;
+          const oldClips=e.viewBounds.minX < -half||e.viewBounds.maxX>half||e.viewBounds.minY < -vertical||e.viewBounds.maxY>vertical;
+          poses.push({bounds:e.bounds,oldClips});
+          await page.getByRole("button",{name:"Avanza di 90°"}).click();
+        }
+        if(a===48&&b===48)expect(poses.every(p=>p.oldClips)).toBe(true);
+        records.push({width,a,b,poses});
+      }
+      await page.locator("canvas").screenshot({path:join(output,"vf-simulation-gear-framing-"+width+".png")});
+    }
+    expect(records.length).toBe(48);
+    expect(records.reduce((sum,r)=>sum+r.poses.length,0)).toBe(192);
+    // Test resizing the largest gears without changing inputs.
+    await page.setViewportSize({width:360,height:900});
+    await expect.poll(async()=>{const e=await sample();return Math.abs((e.frustum.right-e.frustum.left)/(e.frustum.top-e.frustum.bottom)-e.width/e.height);}).toBeLessThan(1e-6);
+    const e=await sample();expect(e.bounds.minX).toBeGreaterThanOrEqual(-.9);expect(e.bounds.maxX).toBeLessThanOrEqual(.9);expect(e.bounds.minY).toBeGreaterThanOrEqual(-.9);expect(e.bounds.maxY).toBeLessThanOrEqual(.9);
+    expect(errors).toEqual([]);expect(network).toEqual([]);
+    const {writeFileSync}=await import("node:fs");writeFileSync(join(output,"vf-simulation-gear-framing.json"),JSON.stringify({status:"PASS",records},null,2));
+    await context.close();
+  }finally{await browser.close();}
+});
