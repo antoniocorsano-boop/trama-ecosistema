@@ -67,7 +67,7 @@ function isOrchestrationEvidence(value: unknown): value is VisualOrchestrationEv
   if (
     value.schemaVersion !== "atlas.visual-orchestration-evidence/v0.1" ||
     typeof value.orchestrationId !== "string" || !value.orchestrationId ||
-    (value.workloadClass !== "CANONICAL_REFERENCE" && value.workloadClass !== "SCENE_FRAME") ||
+    (value.workloadClass !== "CANONICAL_REFERENCE" && value.workloadClass !== "PROJECT_REFERENCE" && value.workloadClass !== "SCENE_FRAME") ||
     !Array.isArray(value.consideredProviders) ||
     value.consideredProviders.length < 1 ||
     value.consideredProviders.length > 2 ||

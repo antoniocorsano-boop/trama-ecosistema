@@ -122,7 +122,7 @@ export type VisualProviderAttemptEvidence = {
 export type VisualOrchestrationEvidence = {
   schemaVersion: "atlas.visual-orchestration-evidence/v0.1";
   orchestrationId: string;
-  workloadClass: "CANONICAL_REFERENCE" | "SCENE_FRAME";
+  workloadClass: "CANONICAL_REFERENCE" | "PROJECT_REFERENCE" | "SCENE_FRAME";
   consideredProviders: VisualExecutionProviderId[];
   selectedProvider?: VisualExecutionProviderId;
   selectedModelRef?: string;

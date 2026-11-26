@@ -91,6 +91,8 @@ export function selectProviderOrder(
 ): VisualProviderId[] {
   assertVisualPreflightBoundPlan(plan);
 
+  if (plan.planType === "REFERENCE_GENERATION" && plan.profileDigest) return ["CLOUDFLARE_WORKERS_AI"];
+
   if (plan.planType === "REFERENCE_GENERATION") {
     return hfCanServeCanonicalReference(plan, ctx)
       ? ["HF_ZEROGPU", "CLOUDFLARE_WORKERS_AI"]
@@ -161,7 +163,7 @@ function orchestrationEvidence(
   return {
     schemaVersion: "atlas.visual-orchestration-evidence/v0.1",
     orchestrationId,
-    workloadClass: plan.planType === "REFERENCE_GENERATION" ? "CANONICAL_REFERENCE" : "SCENE_FRAME",
+    workloadClass: plan.planType === "REFERENCE_GENERATION" ? (plan.profileDigest ? "PROJECT_REFERENCE" : "CANONICAL_REFERENCE") : "SCENE_FRAME",
     consideredProviders,
     selectedProvider,
     selectedModelRef,

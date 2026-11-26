@@ -14,6 +14,7 @@
     "visual-factory:preflight-references": "tsx scripts/compile-canonical-visual-preflight.ts --mode references",
     "visual-factory:compile-reference-plan": "tsx scripts/compile-canonical-reference-plan.ts",
     "visual-factory:project-source": "tsx scripts/qualify-visual-project-source.ts",
+    "visual-factory:project-reference": "tsx scripts/run-visual-project-reference.ts",
     "visual-factory:orchestrate": "tsx scripts/run-visual-factory-orchestrator.ts",
     "prebuild": "python3 scripts/prepare-education-diagram.py",
     "predev": "python3 scripts/prepare-education-diagram.py"
