@@ -5,9 +5,9 @@ import type { VisualGenerationPlan } from "./visual-factory";
 import { canonicalDigest } from "./visual-preflight";
 import { planProjectVisualReferences, usesCanonicalVisualExecutor } from "./visual-project-profile";
 
-const MAX_APPROVAL_BYTES = 16 * 1024 * 1024;
+import { PROJECT_APPROVAL_SCHEMA, MAX_PROJECT_SOURCE_BYTES } from "./visual-project-source";
+export { PROJECT_APPROVAL_SCHEMA } from "./visual-project-source";
 const HEX = /^[0-9a-f]{64}$/;
-export const PROJECT_APPROVAL_SCHEMA = "atlas.visual-project-source-approval/v0.1";
 export type ProjectAdmissionResult =
   | "PROJECT_SOURCE_UNAVAILABLE"
   | "PROJECT_SOURCE_INVALID"
@@ -68,7 +68,7 @@ export async function checkServerProjectPlan(
   try {
     handle = await open(approvalFile, "r");
     const info = await handle.stat();
-    if (!info.isFile() || info.size < 1 || info.size > MAX_APPROVAL_BYTES) return "PROJECT_SOURCE_INVALID";
+    if (!info.isFile() || info.size < 1 || info.size > MAX_PROJECT_SOURCE_BYTES) return "PROJECT_SOURCE_INVALID";
     const bytes = Buffer.alloc(info.size + 1);
     let used = 0;
     while (used < bytes.length) {

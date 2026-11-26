@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import {writeFile} from "node:fs/promises";
+import {writeFile,readFile} from "node:fs/promises";
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 const STUDIO = "http://127.0.0.1:3100";
@@ -601,6 +601,22 @@ for (const viewport of [{width:390,height:844},{width:1280,height:900}]) test("F
  await confirmation.click();
  await expect(bank.getByText("5 richieste di riferimento pianificate, non eseguite.",{exact:true})).toBeVisible();
  await expect(confirmation).toBeDisabled();
+ const exportButton=bank.getByRole("button",{name:"Esporta fonte progettuale"});
+ await expect(exportButton).toBeDisabled();
+ await bank.getByRole("checkbox",{name:"Ho verificato che i contenuti non includano dati personali degli studenti."}).check();
+ const downloadPromise=page.waitForEvent("download");
+ await exportButton.click();
+ const download=await downloadPromise;
+ const downloadPath=await download.path();
+ expect(downloadPath).not.toBeNull();
+ const candidate=JSON.parse(await readFile(downloadPath!,"utf8"));
+ expect(candidate.schemaVersion).toBe("atlas.visual-project-source-candidate/v0.1");
+ expect(candidate.decision).toBe("PENDING_OPERATOR_REVIEW");
+ expect(candidate.project.projectId).toBe(initial.projectId);
+ expect(candidate.project.revision).toBe(initial.revision);
+ expect(candidate.project.scenes).toEqual(initial.scenes);
+ expect(candidate.project.lastPreviewSnapshot).toBeUndefined();
+ expect(candidate.planDigest).toMatch(/^[a-f0-9]{64}$/);
  await expect(bank.getByRole("button",{name:/Genera personaggi|Genera le scene/})).toHaveCount(0);
  expect(await readDraft()).toEqual(initial);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
