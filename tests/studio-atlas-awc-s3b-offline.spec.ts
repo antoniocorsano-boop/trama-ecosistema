@@ -96,7 +96,7 @@ test("VF-SIMULATION-01 P2 gear laboratory: real offline WebGL, prediction and re
       page.on("pageerror",e=>errors.push(e.message));
       page.on("request",r=>{if(/^https?:/i.test(r.url()))network.push(r.url());});
       await page.goto(pathToFileURL(join(output,"vf-simulation-gear.html")).href);
-      await expect(page.getByRole("status")).toContainText("WebGL attivo");
+      await expect(page.locator("#graphics")).toContainText("WebGL attivo");
       const state=()=>page.evaluate(()=>(window as any).__vfSimulation.getState());
       expect((await state()).outputRpm).toBe(-30);
       await page.getByLabel("Come ruoterà il condotto?").selectOption("slow");
