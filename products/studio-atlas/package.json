@@ -17,8 +17,8 @@
     "visual-factory:cloudflare-entitlement": "tsx scripts/inspect-visual-cloudflare-entitlement.ts",
     "visual-factory:project-reference": "tsx scripts/run-visual-project-reference.ts",
     "visual-factory:orchestrate": "tsx scripts/run-visual-factory-orchestrator.ts",
-    "prebuild": "python3 scripts/prepare-education-diagram.py",
-    "predev": "python3 scripts/prepare-education-diagram.py"
+    "prebuild": "python3 scripts/prepare-education-diagram.py && node scripts/prepare-simulation-labs.mjs",
+    "predev": "python3 scripts/prepare-education-diagram.py && node scripts/prepare-simulation-labs.mjs"
   },
   "dependencies": {
     "@gradio/client": "2.7.1",

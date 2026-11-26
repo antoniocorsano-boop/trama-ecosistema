@@ -885,3 +885,44 @@ for (const [caseIndex, source] of f33dSources.entries()) {
     }
   });
 }
+
+for(const width of [390,1280])test("VF-SIMULATION-01 P4: teacher simulation bank "+width,async({page},testInfo)=>{
+ test.setTimeout(90000);await page.setViewportSize({width,height:900});
+ const external:string[]=[];page.on("request",r=>{const u=new URL(r.url());if(["http:","https:"].includes(u.protocol)&&u.origin!==STUDIO)external.push(r.url());});
+ await page.goto(STUDIO);await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco simulatori"});
+ const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ for(const [id,title] of [["gear","Laboratorio delle trasmissioni"],["slider-crank","Laboratorio biella-manovella"]]){
+  await bank.getByLabel("Laboratorio",{exact:true}).selectOption(id);
+  await bank.getByRole("button",{name:"Verifica laboratorio"}).click();
+  await expect(bank.getByRole("status")).toHaveText("Integrità verificata. Candidato da revisionare.");
+  const expected=await (await page.request.get(STUDIO+"/design/simulation-labs/"+id+".json")).json();
+  const link=bank.getByRole("link",{name:"Scarica simulatore HTML"});
+  const href=await link.getAttribute("href");expect(href).toMatch(/^blob:/);
+  expect(await page.evaluate(async url=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await (await fetch(url!)).arrayBuffer())),b=>b.toString(16).padStart(2,"0")).join(""),href)).toBe(expected.receipt.htmlSha256);
+  const manifest=await bank.getByRole("link",{name:"Scarica manifesto di produzione"}).getAttribute("href");
+  expect(await page.evaluate(async url=>(await (await fetch(url!)).json()),manifest)).toEqual(expected.receipt);
+  await bank.getByRole("button",{name:"Apri anteprima interattiva"}).click();
+  const iframe=bank.locator("iframe");await expect(iframe).toHaveAttribute("sandbox","allow-scripts");
+  const frame=bank.frameLocator("iframe");await expect(frame.getByRole("heading",{name:title,exact:true})).toBeVisible();
+  await frame.getByRole("button",{name:"Avanza di 90°"}).click();
+  if(id==="slider-crank")await expect(frame.locator("#readout")).toContainText("Angolo: 90°");
+  else await expect(frame.locator("#readout")).toContainText("Rapporto velocità:");
+  await bank.getByRole("button",{name:"Chiudi anteprima"}).click();await expect(iframe).toHaveCount(0);
+ }
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ expect(external).toEqual([]);
+ await page.screenshot({path:testInfo.outputPath("vf-simulation-bank-"+width+".png"),fullPage:true});
+});
+test("VF-SIMULATION-01 P4: corrupted simulation package cannot open or download",async({page})=>{
+ await page.route("**/design/simulation-labs/gear.json",async route=>{
+  const res=await route.fetch();const p=await res.json();p.html=p.html.replace("Studio Atlas","StudiX Atlas");await route.fulfill({response:res,json:p});
+ });
+ await page.goto(STUDIO);await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco simulatori"});
+ await bank.getByRole("button",{name:"Verifica laboratorio"}).click();
+ await expect(bank.getByRole("alert")).toContainText("non integro");await expect(bank.locator("iframe")).toHaveCount(0);await expect(bank.getByRole("link")).toHaveCount(0);
+});

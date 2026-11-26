@@ -23,6 +23,7 @@ import {
   WorldEditor,
 } from "./AuthoringEditors";
 import { EducationDiagramBank } from "./EducationDiagramBank";
+import { SimulationLabBank } from "./SimulationLabBank";
 import { VisualFactoryStage } from "./VisualFactoryStage";
 import { AuthoringProfileField } from "./AuthoringProfileField";
 import { AuthoringCatalog } from "./AuthoringCatalog";
@@ -256,7 +257,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Produzione" && (
-            <><VisualFactoryStage project={project} /><EducationDiagramBank /></>
+            <><VisualFactoryStage project={project} /><EducationDiagramBank /><SimulationLabBank /></>
           )}
 
           {stage === "Prova" && (
