@@ -1,17 +1,18 @@
 "use client";
-import {useEffect,useRef,useState} from "react";
+import {useEffect,useId,useRef,useState} from "react";
 import {LABS,MAX_LAB_BYTES,verifyLabPackage,type LabId} from "../lib/simulation-lab-package";
 
 type Verified={htmlUrl:string;receiptUrl:string;objective:string;question:string};
 export function SimulationLabBank(){
  const [id,setId]=useState<LabId>("gear");
+ const labSelectId=useId();
  return <section className="visual-factory-step" aria-label="Banco simulatori">
   <p className="eyebrow">Visual Factory · simulazioni deterministiche</p>
   <h2>Simulatori didattici</h2>
   <p>Scegli un laboratorio prodotto dal generatore comune. Provalo e scaricalo per la revisione docente: nessuna associazione automatica al percorso, nessuna pubblicazione agli studenti.</p>
-  <label>Laboratorio <select value={id} onChange={e=>{const lab=LABS.find(x=>x.id===e.target.value);if(lab)setId(lab.id);}}>
+  <div><label htmlFor={labSelectId}>Laboratorio</label> <select id={labSelectId} value={id} onChange={e=>{const lab=LABS.find(x=>x.id===e.target.value);if(lab)setId(lab.id);}}>
    {LABS.map(lab=><option key={lab.id} value={lab.id}>{lab.title}</option>)}
-  </select></label>
+  </select></div>
   <LabCandidate key={id} id={id}/>
  </section>;
 }
