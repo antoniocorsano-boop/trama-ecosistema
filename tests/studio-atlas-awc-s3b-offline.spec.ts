@@ -173,3 +173,51 @@ test("VF-SIMULATION-01 P2-R1: all 16 pairs fit at three widths throughout sample
     await context.close();
   }finally{await browser.close();}
 });
+
+test("VF-SIMULATION-01 P3a: shared production contract and second offline mechanism",async()=>{
+  test.setTimeout(90_000);
+  const receipts=["gear","slider-crank"].map(id=>{
+    const receipt=JSON.parse(readFileSync(join(output,"vf-simulation-"+id+"-receipt.json"),"utf8"));
+    const bytes=readFileSync(join(output,"vf-simulation-"+id+".html"));
+    expect(receipt.id).toBe(id);expect(receipt.schema).toBe("atlas.simulation-lab/v0.1");
+    expect(receipt.htmlSha256).toBe(sha(bytes));expect(receipt.bytes).toBe(bytes.length);
+    expect(receipt.costPolicy).toBe("FREE_ONLY");expect(receipt.studentAuthorized).toBe(false);expect(receipt.publicationAuthorized).toBe(false);
+    expect(receipt.status).toBe("TEACHER_REVIEW_REQUIRED");expect(receipt.objective).toBeTruthy();expect(receipt.question).toBeTruthy();
+    return receipt;
+  });
+  expect(receipts[0].engine).toBe("three-r128");expect(receipts[1].engine).toBe("native-svg");
+  expect(receipts[1].engineBlob).toBeNull();expect(receipts[1].bytes).toBeLessThan(30_000);
+  const browser=await chromium.launch({headless:true});
+  try{
+    for(const width of [360,390,1280]){
+      const context=await browser.newContext({viewport:{width,height:900},offline:true,reducedMotion:"reduce"});
+      const page=await context.newPage(),errors:string[]=[],network:string[]=[];
+      page.on("pageerror",e=>errors.push(e.message));
+      page.on("request",r=>{if(/^https?:/i.test(r.url()))network.push(r.url());});
+      await page.goto(pathToFileURL(join(output,"vf-simulation-slider-crank.html")).href);
+      await expect(page.getByRole("img",{name:"Biella e manovella con cursore"})).toBeVisible();
+      const state=()=>page.evaluate(()=>(window as any).__vfSimulation.getState());
+      expect((await state()).sliderX).toBe(120);expect((await state()).playing).toBe(false);
+      await page.getByRole("button",{name:"Avanza di 90°"}).click();
+      await page.getByRole("button",{name:"Avanza di 90°"}).click();
+      expect((await state()).sliderX).toBe(80);
+      expect((await state()).displacement).toBe(40);
+      await expect(page.locator("#readout")).toContainText("40.0 mm");
+      await page.getByLabel("Raggio manovella (mm)").selectOption("40");
+      await page.getByLabel("Lunghezza biella (mm)").selectOption("140");
+      expect((await state()).stroke).toBe(80);
+      await page.getByLabel("Quanto misura la corsa del cursore?").selectOption("2r");
+      await page.getByRole("button",{name:"Verifica la previsione"}).click();
+      await expect(page.locator("#feedback")).toContainText("Previsione corretta. La corsa misura 80 mm");
+      await page.getByRole("button",{name:"Avvia"}).click();
+      await expect.poll(async()=>(await state()).angle).toBeGreaterThan(0);
+      await page.getByRole("button",{name:"Pausa"}).click();
+      await page.getByRole("button",{name:"Ripristina"}).click();
+      expect((await state()).angle).toBe(0);expect((await state()).radius).toBe(20);expect((await state()).rod).toBe(100);
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width+1);
+      expect(errors).toEqual([]);expect(network).toEqual([]);
+      await page.screenshot({path:join(output,"vf-simulation-slider-crank-"+width+".png"),fullPage:true});
+      await context.close();
+    }
+  }finally{await browser.close();}
+});

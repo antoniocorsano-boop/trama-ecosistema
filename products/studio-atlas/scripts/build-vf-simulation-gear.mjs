@@ -1,24 +1,3 @@
-import {createHash} from "node:crypto";
-import {createRequire} from "node:module";
-import {readFileSync,mkdirSync,writeFileSync} from "node:fs";
-import {resolve,join} from "node:path";
-const require=createRequire(import.meta.url), base=resolve(import.meta.dirname,"..");
-const engine=readFileSync(require.resolve("three/build/three.min.js"));
-const blob=b=>createHash("sha1").update(Buffer.concat([Buffer.from("blob "+b.length+"\0"),b])).digest("hex");
-if(blob(engine)!=="b14f47c0908bab15e890b468d53bb07db0be3a18")throw Error("Unexpected Three runtime");
-const source=readFileSync(join(base,"lib/inkworks-gear.ts"),"utf8");
-const ts=require("typescript");
-const emitted=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS},reportDiagnostics:true});
-if(emitted.diagnostics?.some(d=>d.category===ts.DiagnosticCategory.Error)||/<\/script/i.test(emitted.outputText)||/<\/script/i.test(engine.toString()))throw Error("Unsafe module");
-const mod="(function(){var exports={};function require(name){if(name!==\"three\")throw Error(\"Unexpected dependency\");return window.THREE;}\n"+emitted.outputText+"\nreturn exports;})()";
-const template=readFileSync(join(base,"scripts/vf-simulation-gear-template.html"),"utf8").replace("__GEAR_MODULE__",()=>mod);
-const app=template.match(/<script>\n([\s\S]*?)<\/script><\/body>/)?.[1];
-const css=template.match(/<style>([\s\S]*?)<\/style>/)?.[1];
-if(!app||!css)throw Error("Invalid template");
-const hash=b=>createHash("sha256").update(b).digest("base64");
-// The newline after the script start is part of the CSP hash.
-const html=template.replace("__ENGINE_HASH__",hash(engine)).replace("__APP_HASH__",hash("\n"+app)).replace("__CSS_HASH__",hash(css)).replace("__THREE_RUNTIME__",()=>engine.toString());
-if(/__(?:ENGINE_HASH|APP_HASH|CSS_HASH|THREE_RUNTIME|GEAR_MODULE)__/.test(html))throw Error("Unresolved placeholder");
-const dir=join(base,".artifacts");mkdirSync(dir,{recursive:true});
-const file=join(dir,"vf-simulation-gear.html");writeFileSync(file,html);
-writeFileSync(join(dir,"vf-simulation-gear-receipt.json"),JSON.stringify({schema:"atlas.simulation-lab/v0.1",status:"TEACHER_REVIEW_REQUIRED",engine:"three-r128",sourceBlob:blob(Buffer.from(source)),engineBlob:blob(engine),htmlSha256:createHash("sha256").update(html).digest("hex"),studentAuthorized:false,publicationAuthorized:false},null,2));
+// Preserve the existing gear-only entry point for callers.
+import {buildSimulationLab} from "./build-vf-simulation-labs.mjs";
+buildSimulationLab("gear");

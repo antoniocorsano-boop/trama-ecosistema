@@ -64,7 +64,7 @@ jobs:
         working-directory: products/studio-atlas
         run: |
           node scripts/build-awc-s3b-offline-demo.mjs
-          node scripts/build-vf-simulation-gear.mjs
+          node scripts/build-vf-simulation-labs.mjs
 
       - name: Install Atlas exact candidate
         working-directory: _atlas
@@ -221,7 +221,7 @@ jobs:
           path: |
             products/studio-atlas/.artifacts/awc-sala-zero-live-webgl-offline.html
             products/studio-atlas/.artifacts/awc-s3b-*.png
-            products/studio-atlas/.artifacts/vf-simulation-gear*
+            products/studio-atlas/.artifacts/vf-simulation-*
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 7
