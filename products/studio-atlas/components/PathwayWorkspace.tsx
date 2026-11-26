@@ -24,6 +24,7 @@ import {
 } from "./AuthoringEditors";
 import { EducationDiagramBank } from "./EducationDiagramBank";
 import { SimulationLabBank } from "./SimulationLabBank";
+import { DidacticDraftPanel } from "./DidacticDraftPanel";
 import { VisualFactoryStage } from "./VisualFactoryStage";
 import { AuthoringProfileField } from "./AuthoringProfileField";
 import { AuthoringCatalog } from "./AuthoringCatalog";
@@ -249,7 +250,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Esperienza" && (
-            <ExperienceEditor project={project} onPatch={patchProject} />
+            <><ExperienceEditor project={project} onPatch={patchProject} /><DidacticDraftPanel key={project.projectId} project={project} onGoToProduction={()=>setStage("Produzione")} /></>
           )}
 
           {stage === "Scene" && (

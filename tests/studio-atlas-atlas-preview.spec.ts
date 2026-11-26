@@ -926,3 +926,24 @@ test("VF-SIMULATION-01 P4: corrupted simulation package cannot open or download"
  await bank.getByRole("button",{name:"Verifica laboratorio"}).click();
  await expect(bank.getByRole("alert")).toContainText("non integro");await expect(bank.locator("iframe")).toHaveCount(0);await expect(bank.getByRole("link")).toHaveCount(0);
 });
+
+for(const width of [390,1280])test("EC04a: compose edit reload and production navigation "+width,async({page},testInfo)=>{
+ await page.setViewportSize({width,height:900});await page.goto(STUDIO);await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});await nav.getByRole("button",{name:"Esperienza"}).click();
+ const panel=page.getByRole("region",{name:"Composizione didattica"});
+ const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ await panel.getByRole("button",{name:"Componi bozza",exact:true}).click();
+ await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 1"})).toBeVisible();
+ await expect(panel.getByRole("heading",{name:"Sequenza didattica"})).toBeVisible();
+ await panel.getByRole("button",{name:"Modifica Problema",exact:true}).click();
+ await panel.getByLabel("Testo della fase").fill("Confronta le condizioni dei filari.");
+ await panel.getByRole("button",{name:"Salva fase",exact:true}).click();
+ await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 2"})).toBeVisible();
+ await page.reload();await nav.getByRole("button",{name:"Esperienza"}).click();
+ await expect(panel.getByText("Confronta le condizioni dei filari.",{exact:true})).toBeVisible();
+ await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 2"})).toBeVisible();
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath("ec04a-draft-"+width+".png"),fullPage:true});
+ await panel.getByRole("button",{name:"Vai al banco Produzione"}).click();await expect(page.getByRole("region",{name:"Banco simulatori"})).toBeVisible();
+});
