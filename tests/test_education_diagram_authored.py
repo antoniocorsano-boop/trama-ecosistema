@@ -68,6 +68,20 @@ class AuthoredDiagram(unittest.TestCase):
             with self.subTest(invalid=invalid):
                 self.assertIn("error",generate({**SOURCE,"activity":invalid}))
 
+    def test_eight_relations_mobile_footer_clearance(self):
+        import xml.etree.ElementTree as ET
+        source = copy.deepcopy(SOURCE)
+        source["nodes"] += [{"id":"n3","label":"Albero","detail":"Rotazione"},{"id":"n4","label":"Ruota","detail":"Trasmissione"}]
+        source["edges"] = [["n1","n2"],["n1","n3"],["n1","n4"],["n2","n1"],["n2","n3"],["n2","n4"],["n3","n1"],["n3","n2"]]
+        files = generate(source)["files"]
+        mobile = next(value for name,value in files.items() if name.endswith(".svg") and "mobile" in name)
+        texts = ET.fromstring(mobile).findall(".//{http://www.w3.org/2000/svg}text")
+        footer = next(t for t in texts if "proposta didattica" in "".join(t.itertext()))
+        rows = [t for t in texts if "→" in "".join(t.itertext())]
+        self.assertEqual(len(rows), 2)
+        for row in rows:
+            self.assertGreaterEqual(float(footer.attrib["y"])-float(row.attrib["y"]), 28)
+
     def test_closed_source(self):
         for edits in [
             {"title": "<script>"}, {"title": "https://example.org"}, {"title": "example.org"},

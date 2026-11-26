@@ -85,3 +85,42 @@ test("AWC S3b offline: actual local 3-D, touch, light A/B and reset, with no net
     await context.close();
   } finally { await browser.close(); }
 });
+
+test("VF-SIMULATION-01 P2 gear laboratory: real offline WebGL, prediction and reset",async()=>{
+  test.setTimeout(90_000);
+  const browser=await chromium.launch({headless:true,args:["--use-gl=angle","--use-angle=swiftshader","--enable-unsafe-swiftshader"]});
+  try{
+    for(const width of [360,390,1280]){
+      const context=await browser.newContext({viewport:{width,height:900},offline:true});
+      const page=await context.newPage(), errors:string[]=[], network:string[]=[];
+      page.on("pageerror",e=>errors.push(e.message));
+      page.on("request",r=>{if(/^https?:/i.test(r.url()))network.push(r.url());});
+      await page.goto(pathToFileURL(join(output,"vf-simulation-gear.html")).href);
+      await expect(page.getByRole("status")).toContainText("WebGL attivo");
+      const state=()=>page.evaluate(()=>(window as any).__vfSimulation.getState());
+      expect((await state()).outputRpm).toBe(-30);
+      await page.getByLabel("Come ruoterà il condotto?").selectOption("slow");
+      await page.getByRole("button",{name:"Verifica la previsione"}).click();
+      await expect(page.locator("#feedback")).toContainText("Previsione corretta");
+      const original=await page.locator("canvas").screenshot();
+      await page.getByRole("button",{name:"Avanza di 90°"}).click();
+      expect((await state()).outputAngle).toBe(-45);
+      expect(sha(await page.locator("canvas").screenshot())).not.toBe(sha(original));
+      await page.getByLabel("Denti del conduttore").selectOption("48");
+      expect((await state()).outputRpm).toBe(-120);
+      await page.getByRole("button",{name:"Avvia"}).click();
+      await expect.poll(async()=>(await state()).inputAngle).toBeGreaterThan(0);
+      await page.getByRole("button",{name:"Pausa"}).click();
+      const stopped=(await state()).inputAngle;
+      await page.getByRole("button",{name:"Ripristina"}).click();
+      expect(stopped).toBeGreaterThan(0);
+      expect((await state()).inputAngle).toBe(0);
+      expect((await state()).studentAuthorized).toBe(false);
+      expect((await state()).publicationAuthorized).toBe(false);
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width+1);
+      expect(errors).toEqual([]);expect(network).toEqual([]);
+      await page.screenshot({path:join(output,"vf-simulation-gear-"+width+".png"),fullPage:true});
+      await context.close();
+    }
+  }finally{await browser.close();}
+});

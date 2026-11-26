@@ -1,49 +1,8 @@
-/**
- * VF-SIMULATION-01 P1: isolated compatibility probe, NOT production runtime.
- * Source: https://github.com/Moh4696/inkworks-skill/blob/8769b7d4191088a94448294d7bd28ae84d34906c/skills/inkworks/kit/js/kit.js
- * Original blob: 67e6086991b325a6ee87772b01046d87cad77f0a. Extracted gearGeometry only;
- * parameter types added for the Studio Atlas TypeScript test environment.
- * The profile is illustrative, not an involute manufacturing model.
- *
- * MIT License
- * 
- * Copyright (c) 2026 exploraX
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 import assert from "node:assert/strict";
 import test from "node:test";
 import * as THREE from "three";
 
-function gearGeometry(r: number, teeth: number, depth: number, hole = 0.18, toothH = 0.05) {
-    const s = new THREE.Shape();
-    for (let k = 0; k <= teeth * 4; k++) {
-      const a = (k / (teeth * 4)) * Math.PI * 2;
-      const rr = (k % 4 < 2) ? r : r - toothH;
-      k === 0 ? s.moveTo(rr * Math.cos(a), rr * Math.sin(a)) : s.lineTo(rr * Math.cos(a), rr * Math.sin(a));
-    }
-    if (hole) { const h = new THREE.Path(); h.absarc(0, 0, hole, 0, Math.PI * 2, true); s.holes.push(h); }
-    const g = new THREE.ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: 16 });
-    g.rotateY(Math.PI / 2);
-    g.translate(-depth / 2, 0, 0);
-    return g;
-  }
+import { gearGeometry, transmission } from "./inkworks-gear";
 
 const near = (a: number, b: number) => Math.abs(a - b) < 1e-5;
 
@@ -93,3 +52,16 @@ for (const teeth of [12, 24, 36, 48]) {
     }
   });
 }
+
+test("VF-SIMULATION-01 external gear kinematics: ratio, direction, angle, stop", () => {
+  for (const [a,b] of [[12,24],[24,12],[24,24],[36,48]]) {
+    const s=transmission(a,b,360,60);
+    assert.equal(s.outputAngle,-360*a/b);
+    assert.equal(s.outputRpm,-60*a/b);
+    assert.equal(s.direction,"opposite");
+  }
+  assert.equal(transmission(12,24,0,0).outputRpm,0*-1);
+  assert.throws(()=>transmission(0,24,0,60));
+  assert.throws(()=>transmission(12,24,Infinity,60));
+  assert.throws(()=>transmission(12,24,0,-1));
+});
