@@ -14,6 +14,8 @@ import { createCloudflareWorkersAiAdapter } from "./visual-factory-provider-clou
 import { orchestrateVisualGeneration } from "./visual-factory-orchestrator";
 import { normalizeExecutorResponse, waitingForComputeReceipt } from "./visual-factory-executor";
 
+import { verifyProjectFreeExecution, claimProjectFreeExecution } from "./visual-project-free-proof-node";
+
 type Env = Readonly<Record<string,string|undefined>>;
 type Options = { approvalFile:string; reviewedPlanDigest:string; jobId:string; outputDir:string; execute:boolean };
 const MAX_IMAGE_BYTES=10*1024*1024;
@@ -68,11 +70,15 @@ export async function runApprovedProjectReference(options:Options,env:Env,fetchI
   const config=buildVisualProviderConfig(env);
   const enabled=options.execute===true && env.VISUAL_FACTORY_PROJECT_REFERENCE_EXECUTION==="true" &&
     config.cloudflare?.workersFreeAdmitted===true && !!config.cloudflare.token && !!config.cloudflare.accountId;
+  const proof=enabled?await verifyProjectFreeExecution(env,{accountId:config.cloudflare!.accountId!,token:config.cloudflare!.token!,scopedPlanDigest:prepared.scopedPlanDigest}):null;
   let providerCallCount=0;
   let receipt:VisualExecutionReceipt;
   if(!enabled) receipt=waitingForComputeReceipt(plan.packageDigest,options.execute?"PROJECT_FREE_PROVIDER_NOT_ADMITTED":"PROJECT_PREPARE_ONLY");
+  else if(!proof) receipt=waitingForComputeReceipt(plan.packageDigest,"PROJECT_FREE_PROOF_INVALID_OR_MISSING");
+  else if(!await claimProjectFreeExecution(proof)) receipt=waitingForComputeReceipt(plan.packageDigest,"PROJECT_FREE_PROOF_EXPIRED_OR_CONSUMED");
   else {
     const adapter=createCloudflareWorkersAiAdapter(config.cloudflare!,{fetchImpl:async (input,init)=>{
+      if(Date.now()>=proof.expires) throw Error("PROJECT_FREE_PROOF_EXPIRED");
       if(providerCallCount!==0) throw Error("PROJECT_EXECUTION_CALL_LIMIT");
       providerCallCount++;
       return fetchImpl(input,init);
@@ -99,6 +105,7 @@ export async function runApprovedProjectReference(options:Options,env:Env,fetchI
   const evidence={schemaVersion:"atlas.visual-project-reference-evidence/v0.1",pathwayId:plan.pathwayId,
     revision:prepared.revision,reviewedPlanDigest:prepared.reviewedPlanDigest,scopedPlanDigest:prepared.scopedPlanDigest,
     packageDigest:plan.packageDigest,profileDigest:plan.profileDigest,jobId:options.jobId,providerCallCount,
+    freeProof:proof?{digest:proof.digest,sourceSha256:proof.sourceSha256,verifierKeySha256:proof.keySha256,expiresAt:new Date(proof.expires).toISOString()}:null,
     status:receipt.status,asset:assetFile,licenseVerification:"PENDING",humanReview:"PENDING",
     actualCostVerification:"PENDING",paidComputeAuthorized:false,runtimeAuthorized:false,publicationAuthorityGranted:false};
   await save("evidence.json",evidence);
