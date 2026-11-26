@@ -2,6 +2,7 @@
 import {useEffect,useId,useState} from "react";
 import {canonicalDraft,composeDidacticDraft,reviseSection,type Config,type Draft,type ResourceKind} from "../lib/didactic-draft";
 import {defaultDidacticConfig,MATERIAL_CHOICES,sourceForIdea} from "../lib/didactic-content-candidates";
+import {DURATION_CHOICES,SUPPORT_CHOICES} from "../lib/didactic-content-variants";
 import {readDidacticDraft,saveDidacticDraft} from "../lib/didactic-draft-local";
 import {getProject} from "../lib/store";
 import type {PathwayProject} from "../lib/model";
@@ -14,12 +15,15 @@ export function DidacticDraftPanel({project,onGoToProduction}:{project:PathwayPr
  const uid=useId();
  useEffect(()=>{try{const d=readDidacticDraft(localStorage,project.projectId);setSaved(d);if(d)setConfig(d.config);setReady(true);}catch{setError("Bozza locale non leggibile. Nessuna sovrascrittura eseguita.");}},[project.projectId]);
  const stale=!!saved&&saved.sourceProjectRevision!==project.revision;
- const source=sourceForIdea(project.idea);
+ const source=sourceForIdea(project.idea,config.durationMinutes,config.differentiationMode);
+ const availableKinds=new Set(source?.resources.map(r=>r.kind)??[]);
+ const unsupportedMaterials=config.requestedResourceKinds.filter(k=>!availableKinds.has(k));
  const configChanged=!!saved&&JSON.stringify(config)!==JSON.stringify(saved.config);
- function fail(e:unknown){const message=e instanceof Error?e.message:"";setError(message.includes("CONFLICT")?"Il percorso o la bozza è cambiato. Ricarica la pagina prima di proseguire.":message.includes("TIMING_MISMATCH")?"La fonte disponibile richiede 60 minuti.": "Composizione o salvataggio non riusciti. La bozza precedente è conservata.");}
+ function fail(e:unknown){const message=e instanceof Error?e.message:"";setError(message.includes("CONFLICT")?"Il percorso o la bozza è cambiato. Ricarica la pagina prima di proseguire.":message.includes("TIMING_MISMATCH")?"La durata non è coerente con la fonte candidata.": "Composizione o salvataggio non riusciti. La bozza precedente è conservata.");}
  function persist(next:Draft){const latest=getProject(project.projectId);if(!latest||latest.revision!==project.revision)throw Error("PROJECT_REVISION_CONFLICT");saveDidacticDraft(localStorage,next,latest,saved);setSaved(next);setEditing(null);setNotice("Bozza didattica salvata su questo dispositivo.");}
  function compose(){setError("");setNotice("");try{
   if(saved&&!window.confirm("Sostituire la bozza didattica locale? Scarica prima la versione da conservare."))return;
+  if(source&&unsupportedMaterials.length)throw Error("UNSUPPORTED_MATERIAL");
   const draft=composeDidacticDraft({project:{projectId:project.projectId,revision:project.revision,idea:project.idea,grammar:project.experience.grammar},config,pack:source,draftId:crypto.randomUUID()});
   persist(draft);
  }catch(e){fail(e);}}
@@ -31,11 +35,13 @@ export function DidacticDraftPanel({project,onGoToProduction}:{project:PathwayPr
   <p>Configura il percorso e verifica una proposta da revisionare. Non inserire dati personali degli studenti. Nessuna produzione o pubblicazione automatica.</p>
   <div><strong>Disciplina:</strong> Tecnologia · Secondaria di primo grado</div>
   <div><label htmlFor={uid+"-grade"}>Classe</label> <select id={uid+"-grade"} value={config.grade} onChange={e=>setConfig(c=>({...c,grade:e.target.value}))}><option value="prima">Prima</option><option value="seconda">Seconda</option><option value="terza">Terza</option></select></div>
-  <div><label htmlFor={uid+"-duration"}>Durata</label> <select id={uid+"-duration"} value={config.durationMinutes} onChange={e=>setConfig(c=>({...c,durationMinutes:Number(e.target.value)}))}><option value={45}>45 minuti</option><option value={60}>60 minuti</option><option value={90}>90 minuti</option></select></div>
-  <p>Metodo: indagine guidata. Percorso comune con supporti. Le fonti candidate attuali sono predisposte per 60 minuti.</p>
-  <fieldset><legend>Materiali da richiedere</legend>{MATERIAL_CHOICES.map(k=><div key={k.id}><label><input type="checkbox" checked={config.requestedResourceKinds.includes(k.id)} onChange={e=>selectMaterial(k.id,e.target.checked)}/> {k.label}</label></div>)}</fieldset>
-  <p>{source?"Fonte contestuale candidata disponibile; contenuto da verificare.":"Nessuna fonte contestuale pertinente: il compositore non inventerà contenuti."}</p>
-  <button type="button" className="secondary-action" disabled={!ready||project.ageBand!=="lower-secondary"} onClick={compose}>{saved?"Ricomponi bozza":"Componi bozza"}</button>
+  <div><label htmlFor={uid+"-duration"}>Durata</label> <select id={uid+"-duration"} value={config.durationMinutes} onChange={e=>setConfig(c=>({...c,durationMinutes:Number(e.target.value)}))}>{DURATION_CHOICES.map(n=><option key={n} value={n}>{n} minuti</option>)}</select></div>
+  <div><label htmlFor={uid+"-support"}>Supporti didattici</label> <select id={uid+"-support"} value={config.differentiationMode} onChange={e=>setConfig(c=>({...c,differentiationMode:e.target.value}))}>{SUPPORT_CHOICES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}</select></div>
+  <p>Metodo: indagine guidata. Le consegne cambiano in base alla durata e ai supporti selezionati.</p>
+  <fieldset><legend>Materiali da richiedere</legend>{MATERIAL_CHOICES.filter(k=>availableKinds.has(k.id)||config.requestedResourceKinds.includes(k.id)).map(k=><div key={k.id}><label><input type="checkbox" checked={config.requestedResourceKinds.includes(k.id)} onChange={e=>selectMaterial(k.id,e.target.checked)}/> {k.label}{!availableKinds.has(k.id)?" (non disponibile per questa fonte)":""}</label></div>)}{!availableKinds.size&&!config.requestedResourceKinds.length&&<p>Nessun materiale disponibile per questa fonte.</p>}</fieldset>
+  {source&&unsupportedMaterials.length>0&&<p>Deseleziona i materiali non disponibili prima di comporre.</p>}
+  <p>{source?(source.grade===config.grade?"Fonte contestuale candidata disponibile; contenuto da verificare.":"La fonte candidata riguarda la classe "+source.grade+". Con la classe selezionata la bozza sarà priva di contenuti."):"Nessuna fonte contestuale pertinente: il compositore non inventerà contenuti."}</p>
+  <button type="button" className="secondary-action" disabled={!ready||project.ageBand!=="lower-secondary"||!!source&&unsupportedMaterials.length>0} onClick={compose}>{saved?"Ricomponi bozza":"Componi bozza"}</button>
   {project.ageBand!=="lower-secondary"&&<p>Le fonti di questo primo configuratore riguardano la secondaria di primo grado.</p>}
   {error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
   {saved&&<div style={{overflowWrap:"anywhere"}}>

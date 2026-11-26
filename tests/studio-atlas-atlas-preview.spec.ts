@@ -932,7 +932,12 @@ for(const width of [390,1280])test("EC04a: compose edit reload and production na
  const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});await nav.getByRole("button",{name:"Esperienza"}).click();
  const panel=page.getByRole("region",{name:"Composizione didattica"});
  const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ const duration=width===390?"45":"90";
+ await panel.getByLabel("Durata",{exact:true}).selectOption(duration);
+ await panel.getByLabel("Supporti didattici",{exact:true}).selectOption(width===390?"COMMON":"COMMON_WITH_SUPPORT");
  await panel.getByRole("button",{name:"Componi bozza",exact:true}).click();
+ await expect(panel.getByRole("heading",{name:width===390?"Indagine · 15 min":"Indagine · 30 min",exact:true})).toBeVisible();
+ await expect(panel.getByText("Supporto:",{exact:false})).toHaveCount(width===390?0:1);
  await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 1"})).toBeVisible();
  await expect(panel.getByRole("heading",{name:"Sequenza didattica"})).toBeVisible();
  await panel.getByRole("button",{name:"Modifica Problema",exact:true}).click();
@@ -941,6 +946,8 @@ for(const width of [390,1280])test("EC04a: compose edit reload and production na
  await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 2"})).toBeVisible();
  await page.reload();await nav.getByRole("button",{name:"Esperienza"}).click();
  await expect(panel.getByText("Confronta le condizioni dei filari.",{exact:true})).toBeVisible();
+ await expect(panel.getByLabel("Durata",{exact:true})).toHaveValue(duration);
+ await expect(panel.getByLabel("Supporti didattici",{exact:true})).toHaveValue(width===390?"COMMON":"COMMON_WITH_SUPPORT");
  await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 2"})).toBeVisible();
  expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
