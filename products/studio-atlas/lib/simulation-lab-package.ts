@@ -33,3 +33,18 @@ export async function verifyLabPackage(input:unknown,id:LabId){
  if(hash!==p.receipt.htmlSha256)throw Error("SIMULATION_PACKAGE_INTEGRITY");
  return p;
 }
+
+/** Shared bounded loader: the contextual panel and existing bank verify identical bytes. */
+export async function loadLabPackage(id:LabId,signal?:AbortSignal,fetchImpl:typeof fetch=fetch){
+ if(!LABS.some(lab=>lab.id===id))throw Error("SIMULATION_PACKAGE_INVALID");
+ const res=await fetchImpl("/design/simulation-labs/"+id+".json",{cache:"no-store",signal});
+ if(!res.ok||!res.body)throw Error("SIMULATION_MISSING");
+ const reader=res.body.getReader(),parts:Uint8Array[]=[];let length=0;
+ try{for(;;){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;
+  if(length>MAX_LAB_BYTES*3){void reader.cancel().catch(()=>{});throw Error("SIMULATION_TOO_LARGE");}parts.push(value);
+ }}finally{reader.releaseLock();}
+ const bytes=new Uint8Array(length);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
+ const raw:unknown=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(bytes));
+ const verified=await verifyLabPackage(raw,id);
+ return {...verified,package:{html:(raw as {html:string}).html,receipt:verified.receipt}};
+}

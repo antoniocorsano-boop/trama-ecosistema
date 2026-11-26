@@ -1,6 +1,6 @@
 "use client";
 import {useEffect,useId,useRef,useState} from "react";
-import {LABS,MAX_LAB_BYTES,verifyLabPackage,type LabId} from "../lib/simulation-lab-package";
+import {LABS,loadLabPackage,type LabId} from "../lib/simulation-lab-package";
 
 type Verified={htmlUrl:string;receiptUrl:string;objective:string;question:string};
 export function SimulationLabBank({didacticGearRequested=false,confirmDidacticGear}:{didacticGearRequested?:boolean;confirmDidacticGear?:()=>boolean}={}){
@@ -28,14 +28,7 @@ function LabCandidate({id}:{id:LabId}){
   if(controller.current)return;
   const c=new AbortController();controller.current=c;setState("checking");
   try{
-   const res=await fetch("/design/simulation-labs/"+id+".json",{cache:"no-store",signal:c.signal});
-   if(!res.ok||!res.body)throw Error("SIMULATION_MISSING");
-   const reader=res.body.getReader();const parts:Uint8Array[]=[];let length=0;
-   try{for(;;){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;
-    if(length>MAX_LAB_BYTES*3){void reader.cancel().catch(()=>{});throw Error("SIMULATION_TOO_LARGE");}parts.push(value);
-   }}finally{reader.releaseLock();}
-   const bytes=new Uint8Array(length);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
-   const verified=await verifyLabPackage(JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(bytes)),id);
+   const verified=await loadLabPackage(id,c.signal);
    if(c.signal.aborted)return;
    const htmlUrl=URL.createObjectURL(new Blob([verified.bytes],{type:"text/html;charset=utf-8"}));
    urls.current.push(htmlUrl);

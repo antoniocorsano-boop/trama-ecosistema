@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect, useRef, useState} from "react";
-import {AUTHORED_STEM, authoredSource, importAuthoredSource, verifyAuthoredPackage,
+import {AUTHORED_STEM, authoredSource, importAuthoredSource, generateAuthoredPackage,
   type AuthoredSource, type DiagramEdge, type DiagramVariant} from "../lib/education-diagram";
 
 import {EDUCATION_DIAGRAM_EXAMPLES} from "../lib/education-diagram-examples";
@@ -56,13 +56,7 @@ export function EducationDiagramEditor({didacticSeed,getDidacticSeed}:{didacticS
     setLinks({});
     setGuide("");
     await run(async controller => {
-      const response = await fetch("/api/education-diagram", {
-        method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(source), signal: controller.signal,
-      });
-      const result = await response.json();
-      if (!response.ok) throw Error(result.error || "Generazione non riuscita.");
-      const files = await verifyAuthoredPackage(result);
+      const files = await generateAuthoredPackage(source,controller.signal);
       if (controller.signal.aborted) return;
       const next: Record<string, string> = {};
       for (const [name, content] of Object.entries(files)) {

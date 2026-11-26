@@ -121,3 +121,11 @@ export async function verifyAuthoredPackage(value: unknown) {
   }));
   return Object.fromEntries([...artifacts, [receiptName, files[receiptName]]]);
 }
+
+/** Shared existing renderer transport; both editor and contextual production use it. */
+export async function generateAuthoredPackage(source:AuthoredSource,signal?:AbortSignal,fetchImpl:typeof fetch=fetch){
+ const response=await fetchImpl("/api/education-diagram",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(source),signal});
+ const result=await response.json();
+ if(!response.ok)throw Error(result.error||"Generazione non riuscita.");
+ return verifyAuthoredPackage(result);
+}
