@@ -55,7 +55,7 @@ type WorkMode = {
   id: string;
   title: string;
   description: string;
-  entry: "DOCUMENT" | "IDEA" | "CURRICULUM" | "RESOURCE" | "PROJECT";
+  entry: "DOCUMENT" | "IDEA" | "CURRICOLO" | "RESOURCE" | "PROJECT";
   intent: "ANALYZE" | "DESIGN" | "PRODUCE" | "COMPOSE" | "REVIEW";
   product: "RESOURCE" | "EXPERIENCE" | "WORLD";
 } & ({ availability: "EDITOR"; stage: Stage } | { availability: "BLOCKED" });
@@ -63,7 +63,7 @@ type WorkMode = {
 export const WORK_MODES = [
   { id: "DOCUMENT", title: "Documento", description: "L’analisi di documenti disciplinari non è ancora integrata. Puoi importare un’attività in un formato supportato.", entry: "DOCUMENT", intent: "ANALYZE", product: "RESOURCE", availability: "BLOCKED" },
   { id: "IDEA", title: "Idea", description: "Imposta l’idea e scegli gli strumenti del progetto.", entry: "IDEA", intent: "DESIGN", product: "EXPERIENCE", availability: "EDITOR", stage: "Idea" },
-  { id: "CURRICULUM", title: "Curricolo", description: "L’acquisizione di obiettivi verificati da Arena non è ancora integrata.", entry: "CURRICULUM", intent: "DESIGN", product: "EXPERIENCE", availability: "BLOCKED" },
+  { id: "CURRICOLO", title: "Curricolo", description: "L’acquisizione di obiettivi verificati da Arena non è ancora integrata.", entry: "CURRICOLO", intent: "DESIGN", product: "EXPERIENCE", availability: "BLOCKED" },
   { id: "PRODUCTION", title: "Produzione", description: "Apri i banchi diagrammi e simulatori o prepara i materiali di una bozza.", entry: "RESOURCE", intent: "PRODUCE", product: "RESOURCE", availability: "EDITOR", stage: "Produzione" },
   { id: "COMPOSITION", title: "Composizione", description: "Componi la bozza didattica o apri le scene del Percorso.", entry: "PROJECT", intent: "COMPOSE", product: "EXPERIENCE", availability: "EDITOR", stage: "Esperienza" },
   { id: "REVIEW", title: "Revisione", description: "Rivedi il Percorso e accedi alle anteprime secondo i controlli previsti.", entry: "PROJECT", intent: "REVIEW", product: "EXPERIENCE", availability: "EDITOR", stage: "Revisione" },

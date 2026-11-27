@@ -1046,7 +1046,7 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  await expect(workflow.locator('iframe[title="Anteprima Diagramma"]')).toBeVisible();
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
  const mode=page.getByRole("combobox",{name:"Modalità di lavoro",exact:true});
- for(const choice of ["DOCUMENT","CURRICULUM","COMPOSITION","REVIEW","IDEA","PRODUCTION"]){
+ for(const choice of ["DOCUMENT","CURRICOLO","COMPOSITION","REVIEW","IDEA","PRODUCTION"]){
   await mode.selectOption(choice);
   await expect(mode).toHaveValue(choice);
  }
@@ -1090,7 +1090,7 @@ for (const width of [390, 1280]) test(`M1/M2: standalone banks and legacy pathwa
   await page.setViewportSize({ width, height: 900 });
   await page.goto(STUDIO);
   const mode = page.getByRole("combobox", { name: "Modalità di lavoro", exact: true });
-  await mode.selectOption("CURRICULUM");
+  await mode.selectOption("CURRICOLO");
   await expect(page.getByText("L’acquisizione di obiettivi verificati da Arena non è ancora integrata.")).toBeVisible();
   await expect(page.getByRole("region", { name: "Banco diagrammi", exact: true })).toHaveCount(0);
   await mode.selectOption("PRODUCTION");
@@ -1115,21 +1115,32 @@ for (const width of [390, 1280]) test(`M1/M2: standalone banks and legacy pathwa
 
   await page.goto(STUDIO);
   await mode.selectOption("PRODUCTION");
-  await page.getByRole("link", { name: /Banco M1\/M2/ }).click();
-  await expect(mode).toHaveValue("PRODUCTION");
-  await expect(page.getByRole("region", { name: "Banco diagrammi", exact: true })).toBeVisible();
-  await expect(page.getByRole("region", { name: "Banco simulatori", exact: true })).toBeVisible();
-  await mode.selectOption("REVIEW");
+  const projectLink = page.getByRole("link", { name: /Banco M1\/M2/ });
+  const projectUrl = new URL((await projectLink.getAttribute("href"))!, STUDIO);
+  const modeKey = "studio-atlas.work-mode.v1:" + projectUrl.pathname.split("/").pop();
+  projectUrl.search = "";
+
+  const workspace = page.locator("main.workspace-shell");
+  const projectMode = workspace.getByRole("combobox", { name: "Modalità di lavoro", exact: true });
+  await projectLink.click();
+  await expect(projectMode).toHaveValue("PRODUCTION");
+  await expect(page).toHaveURL(projectUrl.href);
+  await expect(workspace.getByRole("region", { name: "Banco diagrammi", exact: true })).toBeVisible();
+  await expect(workspace.getByRole("region", { name: "Banco simulatori", exact: true })).toBeVisible();
+
+  await projectMode.selectOption("REVIEW");
+  expect(await page.evaluate(key => localStorage.getItem(key), modeKey)).toBe("REVIEW");
   await page.reload();
-  await expect(mode).toHaveValue("REVIEW");
-  await expect(page.getByRole("button", { name: "Anteprima di revisione", exact: true })).toBeDisabled();
-  await mode.selectOption("CURRICULUM");
+  await expect(projectMode).toHaveValue("REVIEW");
+  await expect(workspace.getByRole("button", { name: "Anteprima di revisione", exact: true })).toBeDisabled();
+  await projectMode.selectOption("CURRICOLO");
   await page.reload();
-  await expect(mode).toHaveValue("CURRICULUM");
-  await mode.selectOption("");
-  await expect(page.getByRole("textbox", { name: "Idea del Percorso" })).toBeVisible();
+  await expect(projectMode).toHaveValue("CURRICOLO");
+  await projectMode.selectOption("");
+  await expect(workspace.getByRole("textbox", { name: "Idea del Percorso" })).toBeVisible();
+  expect(await page.evaluate(key => localStorage.getItem(key), modeKey)).toBeNull();
   await page.reload();
-  await expect(mode).toHaveValue("");
+  await expect(projectMode).toHaveValue("");
 
   await page.goto(STUDIO);
   await mode.selectOption("COMPOSITION");

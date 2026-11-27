@@ -44,7 +44,7 @@ test("M1/M2: work mode persists apart from the project and does not change gates
   const values = new Map([["studio-atlas.projects.v0.1", '{"revision":4,"digest":"original"}']]);
   const storage = { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); } };
   assert.equal(loadWorkMode(storage, "p1"), undefined);
-  for (const mode of ["DOCUMENT", "IDEA", "CURRICULUM", "PRODUCTION", "COMPOSITION", "REVIEW"] as const) {
+  for (const mode of ["DOCUMENT", "IDEA", "CURRICOLO", "PRODUCTION", "COMPOSITION", "REVIEW"] as const) {
     saveWorkMode(storage, "p1", mode);
     assert.equal(loadWorkMode(storage, "p1"), mode);
     assert.deepEqual(deriveAuthoringPlan(base, mode).availableStages, STAGES);
@@ -53,7 +53,7 @@ test("M1/M2: work mode persists apart from the project and does not change gates
   assert.equal(loadWorkMode(storage, "p1"), "REVIEW");
   assert.equal(values.get("studio-atlas.projects.v0.1"), '{"revision":4,"digest":"original"}');
   assert.equal(deriveAuthoringPlan(base, "DOCUMENT").workMode?.availability, "BLOCKED");
-  assert.equal(deriveAuthoringPlan(base, "CURRICULUM").workMode?.availability, "BLOCKED");
+  assert.equal(deriveAuthoringPlan(base, "CURRICOLO").workMode?.availability, "BLOCKED");
   const production = deriveAuthoringPlan(base, "PRODUCTION").workMode;
   assert.equal(production?.availability, "EDITOR");
   assert.equal(production.stage, "Produzione");
