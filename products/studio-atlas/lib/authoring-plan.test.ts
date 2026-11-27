@@ -38,3 +38,26 @@ test("UX1b: scope changes recommendations, not available gates or content", () =
   assert.deepEqual(essential.availableStages, advanced.availableStages);
   assert.ok(essential.checks.every(check => advanced.checks.includes(check)));
 });
+
+test("M1/M2: work mode persists apart from the project and does not change gates", async () => {
+  const { loadWorkMode, saveWorkMode } = await import("./authoring-catalog");
+  const values = new Map([["studio-atlas.projects.v0.1", '{"revision":4,"digest":"original"}']]);
+  const storage = { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); } };
+  assert.equal(loadWorkMode(storage, "p1"), undefined);
+  for (const mode of ["DOCUMENT", "IDEA", "CURRICULUM", "PRODUCTION", "COMPOSITION", "REVIEW"] as const) {
+    saveWorkMode(storage, "p1", mode);
+    assert.equal(loadWorkMode(storage, "p1"), mode);
+    assert.deepEqual(deriveAuthoringPlan(base, mode).availableStages, STAGES);
+  }
+  assert.equal(loadWorkMode(storage, "p2"), undefined);
+  assert.equal(loadWorkMode(storage, "p1"), "REVIEW");
+  assert.equal(values.get("studio-atlas.projects.v0.1"), '{"revision":4,"digest":"original"}');
+  assert.equal(deriveAuthoringPlan(base, "DOCUMENT").workMode?.availability, "BLOCKED");
+  assert.equal(deriveAuthoringPlan(base, "CURRICULUM").workMode?.availability, "BLOCKED");
+  const production = deriveAuthoringPlan(base, "PRODUCTION").workMode;
+  assert.equal(production?.availability, "EDITOR");
+  assert.equal(production.stage, "Produzione");
+  assert.equal(production.product, "RESOURCE");
+  values.set("studio-atlas.work-mode.v1:p1", "PUBLISHED");
+  assert.equal(loadWorkMode(storage, "p1"), undefined);
+});

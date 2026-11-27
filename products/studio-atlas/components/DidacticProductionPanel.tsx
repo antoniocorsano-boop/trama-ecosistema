@@ -11,7 +11,7 @@ import {getProject} from "../lib/store";
 import type {PathwayProject} from "../lib/model";
 
 const messages={MISSING:"Nessuna bozza didattica salvata. I banchi rimangono disponibili in modalità autonoma.",INVALID:"Bozza non valida: nessuna richiesta trasferita.",STALE:"Bozza o percorso obsoleto: ricomponi la bozza prima di trasferire richieste.",UNSUPPORTED:"Fonte contestuale non più pertinente: nessuna richiesta trasferita."};
-export function DidacticProductionPanel({project}:{project:PathwayProject}){
+export function DidacticProductionPanel({project,openStandaloneBanks=false}:{project:PathwayProject;openStandaloneBanks?:boolean}){
  const [materialContext,setMaterialContext]=useState<MaterialContext|null>(null);
  function getMaterialContext():MaterialContext{
   const latest=getProject(project.projectId);if(!latest||latest.revision!==project.revision||latest.idea!==project.idea)throw Error("MATERIAL_PROJECT_CONFLICT");
@@ -41,7 +41,7 @@ export function DidacticProductionPanel({project}:{project:PathwayProject}){
  const gear=materialContext&&sourceForIdea(materialContext.project.idea)?.id==="pack-gear";
  if(gear&&materialContext)return <>
   <DidacticMaterialWorkflow context={materialContext} getCurrent={getMaterialContext}/>
-  <details><summary>Strumenti di produzione avanzati</summary><EducationDiagramBank didacticSeed={plan?.diagram} getDidacticSeed={()=>confirmed()?.diagram}/><SimulationLabBank didacticGearRequested={!!plan?.requests.some(r=>r.target==="GEAR")} confirmDidacticGear={()=>!!confirmed()?.requests.some(r=>r.target==="GEAR")}/></details>
+  <details open={openStandaloneBanks || undefined}><summary>Strumenti di produzione avanzati</summary><EducationDiagramBank didacticSeed={plan?.diagram} getDidacticSeed={()=>confirmed()?.diagram}/><SimulationLabBank didacticGearRequested={!!plan?.requests.some(r=>r.target==="GEAR")} confirmDidacticGear={()=>!!confirmed()?.requests.some(r=>r.target==="GEAR")}/></details>
  </>;
  return <>
   <section className="visual-factory-step" aria-label="Materiali della bozza didattica">

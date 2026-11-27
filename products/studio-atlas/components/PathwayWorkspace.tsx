@@ -31,9 +31,14 @@ import { AtelierWorkflow } from "./AtelierWorkflow";
 import { deriveAuthoringPlan } from "../lib/authoring-plan";
 import { AGRICULTURE_PROJECT_ID, AGRICULTURE_GUIDE } from "../lib/canonical/agriculture";
 
+import { clearWorkMode, findWorkMode, loadWorkMode, saveWorkMode, type WorkModeId } from "../lib/authoring-catalog";
+import { WorkModePicker } from "./WorkModePicker";
+
 export function PathwayWorkspace({ id }: { id: string }) {
   const [project, setProject] = useState<PathwayProject | null>(null);
   const [stage, setStage] = useState<(typeof STAGES)[number]>("Idea");
+  const [mode, setMode] = useState<WorkModeId>();
+  const [modeSaveError, setModeSaveError] = useState(false);
   const [draftIdea, setDraftIdea] = useState("");
   const [saveState, setSaveState] = useState<"saved" | "saving" | "error">("saved");
 
@@ -41,9 +46,45 @@ export function PathwayWorkspace({ id }: { id: string }) {
     const loaded = getProject(id);
     setProject(loaded);
     setDraftIdea(loaded?.idea ?? "");
+    setStage("Idea");
+    setMode(undefined);
+    setModeSaveError(false);
+    if (!loaded) return;
+
+    const url = new URL(window.location.href);
+    const requested = findWorkMode(url.searchParams.get("modalita"));
+    try {
+      const selected = requested ?? findWorkMode(loadWorkMode(localStorage, id));
+      if (selected) {
+        setMode(selected.id);
+        if (selected.availability === "EDITOR") setStage(selected.stage);
+      }
+      if (requested) {
+        saveWorkMode(localStorage, id, requested.id);
+        url.searchParams.delete("modalita");
+        window.history.replaceState(window.history.state, "", url);
+      }
+    } catch {
+      setModeSaveError(true);
+    }
   }, [id]);
 
   const stageIndex = useMemo(() => STAGES.indexOf(stage), [stage]);
+
+  function chooseMode(nextMode?: WorkModeId) {
+    if (!project) return;
+    const selected = findWorkMode(nextMode);
+    setMode(nextMode);
+    if (!selected) setStage("Idea");
+    else if (selected.availability === "EDITOR") setStage(selected.stage);
+    try {
+      if (nextMode) saveWorkMode(localStorage, project.projectId, nextMode);
+      else clearWorkMode(localStorage, project.projectId);
+      setModeSaveError(false);
+    } catch {
+      setModeSaveError(true);
+    }
+  }
 
   function saveIdea() {
     if (!project) return;
@@ -144,7 +185,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
     );
   }
 
-  const plan = deriveAuthoringPlan(project);
+  const plan = deriveAuthoringPlan(project, mode);
   const nextStage = plan.focusStages[1] ?? "Esperienza";
 
   return (
@@ -203,7 +244,13 @@ export function PathwayWorkspace({ id }: { id: string }) {
         </div>
       </header>
 
-      <div className="workspace-grid">
+      <WorkModePicker value={plan.workMode?.id} onChange={chooseMode} defaultLabel="Fasi del Percorso" />
+      {modeSaveError && <p role="status">Preferenza di lavoro non salvata su questo dispositivo.</p>}
+      {mode === "DOCUMENT" && <Link className="secondary-action" href="/attivita">Apri importazione attività</Link>}
+      {mode === "COMPOSITION" && <button className="quiet-action" onClick={() => setStage("Scene")}>Apri le scene</button>}
+      {mode === "REVIEW" && <button className="quiet-action" onClick={() => setStage("Prova")}>Apri il banco anteprime</button>}
+
+      {plan.workMode?.availability !== "BLOCKED" && <div className="workspace-grid">
         <nav className="stage-rail" aria-label="Fasi del Percorso">
           {STAGES.map((item, index) => (
             <button
@@ -257,7 +304,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Produzione" && (
-            <><VisualFactoryStage project={project} /><DidacticProductionPanel key={project.projectId} project={project}/></>
+            <><VisualFactoryStage project={project} /><DidacticProductionPanel key={project.projectId} project={project} openStandaloneBanks={mode === "PRODUCTION"}/></>
           )}
 
           {stage === "Prova" && (
@@ -286,7 +333,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
             Nessuna classe, studente o provider di calcolo è legato a questo draft. Il salvataggio resta locale a questo dispositivo: non costituisce una copia di sicurezza né sincronizza il Percorso.
           </p>
         </aside>
-      </div>
+      </div>}
     </main>
   );
 }

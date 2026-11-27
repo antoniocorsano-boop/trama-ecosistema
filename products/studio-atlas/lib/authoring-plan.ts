@@ -1,5 +1,5 @@
 import { STAGES, type AuthoringComplexity, type PathwayProject } from "./model";
-import { AUTHORING_TOOLS } from "./authoring-catalog";
+import { AUTHORING_TOOLS, findWorkMode, type WorkModeId } from "./authoring-catalog";
 
 type Stage = (typeof STAGES)[number];
 type Input = Pick<PathwayProject, "authoringComplexity" | "authoringSelection" | "experience" | "scenes" | "story" | "world">;
@@ -14,7 +14,7 @@ export function parseAuthoringComplexity(value: unknown): AuthoringComplexity | 
   return AUTHORING_PROFILES.find(profile => profile.id === value)?.id;
 }
 
-export function deriveAuthoringPlan(input: Input) {
+export function deriveAuthoringPlan(input: Input, mode?: WorkModeId) {
   const grammar = input.experience.grammar;
   const selected = new Set(input.authoringSelection?.tools ?? []);
   const hasBranching = selected.has("CHOICES") || grammar === "BRANCHING_CONSEQUENCE" ||
@@ -47,6 +47,7 @@ export function deriveAuthoringPlan(input: Input) {
   ];
   return {
     suggested, effective,
+    workMode: findWorkMode(mode),
     focusStages: STAGES.filter(stage => focus.has(stage)),
     checks,
     // Planning cannot waive a current production or preview requirement.

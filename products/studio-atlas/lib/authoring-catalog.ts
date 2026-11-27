@@ -50,3 +50,47 @@ export function suggestedTools(project: Pick<PathwayProject,"experience"|"author
   if(grammar==="ENVIRONMENTAL_STORYTELLING"||grammar==="INQUIRY_EVIDENCE")ids.add("HOTSPOTS");
   return AUTHORING_TOOLS.filter(tool=>ids.has(tool.id));
 }
+
+type WorkMode = {
+  id: string;
+  title: string;
+  description: string;
+  entry: "DOCUMENT" | "IDEA" | "CURRICULUM" | "RESOURCE" | "PROJECT";
+  intent: "ANALYZE" | "DESIGN" | "PRODUCE" | "COMPOSE" | "REVIEW";
+  product: "RESOURCE" | "EXPERIENCE" | "WORLD";
+} & ({ availability: "EDITOR"; stage: Stage } | { availability: "BLOCKED" });
+
+export const WORK_MODES = [
+  { id: "DOCUMENT", title: "Documento", description: "L’analisi di documenti disciplinari non è ancora integrata. Puoi importare un’attività in un formato supportato.", entry: "DOCUMENT", intent: "ANALYZE", product: "RESOURCE", availability: "BLOCKED" },
+  { id: "IDEA", title: "Idea", description: "Imposta l’idea e scegli gli strumenti del progetto.", entry: "IDEA", intent: "DESIGN", product: "EXPERIENCE", availability: "EDITOR", stage: "Idea" },
+  { id: "CURRICULUM", title: "Curricolo", description: "L’acquisizione di obiettivi verificati da Arena non è ancora integrata.", entry: "CURRICULUM", intent: "DESIGN", product: "EXPERIENCE", availability: "BLOCKED" },
+  { id: "PRODUCTION", title: "Produzione", description: "Apri i banchi diagrammi e simulatori o prepara i materiali di una bozza.", entry: "RESOURCE", intent: "PRODUCE", product: "RESOURCE", availability: "EDITOR", stage: "Produzione" },
+  { id: "COMPOSITION", title: "Composizione", description: "Componi la bozza didattica o apri le scene del Percorso.", entry: "PROJECT", intent: "COMPOSE", product: "EXPERIENCE", availability: "EDITOR", stage: "Esperienza" },
+  { id: "REVIEW", title: "Revisione", description: "Rivedi il Percorso e accedi alle anteprime secondo i controlli previsti.", entry: "PROJECT", intent: "REVIEW", product: "EXPERIENCE", availability: "EDITOR", stage: "Revisione" },
+] as const satisfies readonly WorkMode[];
+
+export type WorkModeId = typeof WORK_MODES[number]["id"];
+
+export function findWorkMode(value: unknown) {
+  return WORK_MODES.find(mode => mode.id === value);
+}
+
+type WorkModeStorage = Pick<Storage, "getItem" | "setItem">;
+const WORK_MODE_PREFIX = "studio-atlas.work-mode.v1:";
+const workModeKey = (projectId: string) => WORK_MODE_PREFIX + projectId;
+
+export function isWorkModeStorageKey(key: string | null) {
+  return key?.startsWith(WORK_MODE_PREFIX) ?? false;
+}
+
+export function clearWorkMode(storage: Pick<Storage, "removeItem">, projectId: string) {
+  storage.removeItem(workModeKey(projectId));
+}
+
+export function loadWorkMode(storage: WorkModeStorage, projectId: string) {
+  return findWorkMode(storage.getItem(workModeKey(projectId)))?.id;
+}
+
+export function saveWorkMode(storage: WorkModeStorage, projectId: string, mode: WorkModeId) {
+  storage.setItem(workModeKey(projectId), mode);
+}

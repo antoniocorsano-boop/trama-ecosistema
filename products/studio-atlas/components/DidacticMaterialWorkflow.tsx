@@ -3,6 +3,7 @@ import {useEffect,useRef,useState} from "react";
 import {contextKey,isGearWorkflow,isolatedPreview,materialFiles,prepareDidacticMaterial,verifyInteractivePreview,workflowState,type MaterialFile} from "../lib/didactic-material-workflow";
 import {readMaterialArchive,saveMaterialBinding,type ArchivedMaterial,type MaterialContext} from "../lib/didactic-material-archive";
 import {inspectMaterial} from "../lib/didactic-materials";
+import {isWorkModeStorageKey} from "../lib/authoring-catalog";
 import {MATERIAL_CHOICES} from "../lib/didactic-content-candidates";
 
 type View={key:string;rows:ArchivedMaterial[];status:"loading"|"ready"|"error"};
@@ -37,8 +38,9 @@ export function DidacticMaterialWorkflow({context,getCurrent,historyOnly=false}:
   void refresh();
   const changed=()=>{operation.current?.abort();setNotice("");void refresh();};
   const visible=()=>{if(document.visibilityState==="visible")changed();};
-  window.addEventListener("storage",changed);document.addEventListener("visibilitychange",visible);
-  return ()=>{alive.current=false;++generation.current;operation.current?.abort();window.removeEventListener("storage",changed);document.removeEventListener("visibilitychange",visible);};
+  const storageChanged=(event:StorageEvent)=>{if(!isWorkModeStorageKey(event.key))changed();};
+  window.addEventListener("storage",storageChanged);document.addEventListener("visibilitychange",visible);
+  return ()=>{alive.current=false;++generation.current;operation.current?.abort();window.removeEventListener("storage",storageChanged);document.removeEventListener("visibilitychange",visible);};
  },[key]);
  const ready=view.key===key&&view.status==="ready";
  const rows=ready?view.rows:[];

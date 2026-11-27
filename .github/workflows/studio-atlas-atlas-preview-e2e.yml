@@ -8,6 +8,7 @@ on:
       - "tests/studio-atlas-world-composer.spec.ts"
       - "tests/studio-atlas-awc-s3b-offline.spec.ts"
       - "tests/studio-atlas-activity-import.spec.ts"
+      - "tests/qualification/ec07b-evidence.py"
       - "tests/qualification/missione118-*.mjs"
       - "tests/qualification/missione118-*.cjs"
       - "tests/studio-atlas-edutwin-handoff.spec.ts"
@@ -145,6 +146,9 @@ jobs:
         run: |
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --reporter=line
+          # Later Playwright runs reset test-results. Keep test paths to detect duplicate names.
+          mkdir -p "$RUNNER_TEMP/ec07b-originals"
+          find test-results -type f -name 'ec07b-*' -exec cp --parents {} "$RUNNER_TEMP/ec07b-originals/" \;
           mkdir -p "$RUNNER_TEMP/ess-01b-screenshots"
           find test-results -type f -name 'ess-01b-*.png' -exec cp {} "$RUNNER_TEMP/ess-01b-screenshots/" \;
           test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-teacher-image.png"
@@ -275,6 +279,26 @@ jobs:
         with:
           name: missione118-original-source-receipt
           path: ${{ runner.temp }}/missione118-source-receipt.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Verify and package EC07b browser evidence
+        # The manifest records PASS only after the browser step succeeds.
+        id: ec07b_evidence
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ec07b-python"
+          "$RUNNER_TEMP/ec07b-python/bin/pip" install 'Pillow==12.2.0' 'reportlab==4.4.9'
+          "$RUNNER_TEMP/ec07b-python/bin/python" tests/qualification/ec07b-evidence.py \
+            "$RUNNER_TEMP/ec07b-originals" "$RUNNER_TEMP/ec07b-evidence" "$(git rev-parse HEAD)"
+
+      - name: Preserve EC07b originals, manifest and consultation PDF
+        if: ${{ !cancelled() && steps.ec07b_evidence.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-atlas-ec07b-evidence
+          path: ${{ runner.temp }}/ec07b-evidence/
           if-no-files-found: error
           retention-days: 7
 

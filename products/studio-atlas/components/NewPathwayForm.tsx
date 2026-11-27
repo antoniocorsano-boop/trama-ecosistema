@@ -10,7 +10,7 @@ import { AuthoringProfileField } from "./AuthoringProfileField";
 import { AuthoringCatalog } from "./AuthoringCatalog";
 import type { AuthoringSelection } from "../lib/authoring-catalog";
 
-export function NewPathwayForm() {
+export function NewPathwayForm({ startInComposition = false }: { startInComposition?: boolean }) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [idea, setIdea] = useState("");
@@ -27,7 +27,7 @@ export function NewPathwayForm() {
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!idea.trim() || savingRef.current) return;
-    if (stage === "idea") {
+    if (stage === "idea" && !startInComposition) {
       setStage("forms");
       return;
     }
@@ -37,7 +37,7 @@ export function NewPathwayForm() {
     try {
       const project = createProject({ title: title.trim() || "Nuovo percorso", idea, ageBand,
         experience: { grammar, rationale: "" }, authoringComplexity: complexity, authoringSelection:selection });
-      router.push(`/percorso/${project.projectId}`);
+      router.push(`/percorso/${project.projectId}${startInComposition ? "?modalita=COMPOSITION" : ""}`);
     } catch {
       savingRef.current = false;
       setSaving(false);
@@ -49,7 +49,7 @@ export function NewPathwayForm() {
     <main className={`studio-shell studio-intent ${stage==="idea"?"narrow":"illustrated-intent"}`}>
       <nav className="back-nav"><Link href="/">← Studio Atlas</Link></nav>
       <header className="form-heading">
-        <p className="eyebrow">Nuovo percorso · {stage === "idea" ? "1 di 2" : "2 di 2"}</p>
+        <p className="eyebrow">{startInComposition ? "Composizione" : `Nuovo percorso · ${stage === "idea" ? "1 di 2" : "2 di 2"}`}</p>
         <h1>{stage === "idea" ? "Che cosa vuoi far scoprire?" : "Come vuoi sviluppare l’argomento?"}</h1>
         <p>{stage === "idea" ? "Descrivi ciò che gli studenti dovrebbero comprendere o sperimentare." : "Scegli una forma di progettazione. Potrai cambiarla nell’officina."}</p>
       </header>
@@ -69,7 +69,10 @@ export function NewPathwayForm() {
           <label><span>Titolo di lavoro (facoltativo)</span>
             <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Es. Museo Zero" />
           </label>
-          <button className="primary-action" type="submit" disabled={!idea.trim()}>Esplora le possibilità</button>
+          <button className="primary-action" type="submit" disabled={!idea.trim() || saving}>
+            {startInComposition ? (saving ? "Salvataggio…" : "Apri il banco Composizione") : "Esplora le possibilità"}
+          </button>
+          {startInComposition && error && <p role="alert">Non è stato possibile salvare la bozza su questo dispositivo. Riprova.</p>}
         </> : <>
           <p className="intent-summary">{idea}</p>
           <ExperienceGallery idea={idea} grammar={grammar} onChange={setGrammar} />

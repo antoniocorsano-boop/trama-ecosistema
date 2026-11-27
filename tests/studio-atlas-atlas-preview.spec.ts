@@ -1039,6 +1039,23 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
   await card.getByText("File e ricevute",{exact:true}).click();
  }
  expect(originalExports.size).toBe(3);
+ await workflow.getByRole("button",{name:"Anteprima Diagramma",exact:true}).click();
+ await page.evaluate(()=>window.dispatchEvent(new StorageEvent("storage",{
+  key:"studio-atlas.work-mode.v1:another-project",newValue:"PRODUCTION",storageArea:localStorage,
+ })));
+ await expect(workflow.locator('iframe[title="Anteprima Diagramma"]')).toBeVisible();
+ await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
+ const mode=page.getByRole("combobox",{name:"Modalità di lavoro",exact:true});
+ for(const choice of ["DOCUMENT","CURRICULUM","COMPOSITION","REVIEW","IDEA","PRODUCTION"]){
+  await mode.selectOption(choice);
+  await expect(mode).toHaveValue(choice);
+ }
+ await page.reload();
+ await expect(mode).toHaveValue("PRODUCTION");
+ await expect(workflow.getByText("3 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]))).toEqual(draftBefore);
+
  await nav.getByRole("button",{name:"Esperienza"}).click();
  await draft.getByRole("button",{name:"Modifica Problema",exact:true}).click();
  await draft.getByLabel("Testo della fase").fill("Confronta le previsioni con il modello.");
@@ -1067,4 +1084,58 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  await workflow.getByRole("button",{name:"Prepara e conserva Scheda di lavoro",exact:true}).click();
  await expect(workflow.getByText("1 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
  await expect(workflow.getByText("Materiali precedenti o non validi (3)",{exact:true})).toBeVisible();
+});
+
+for (const width of [390, 1280]) test(`M1/M2: standalone banks and legacy pathway at ${width}`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 });
+  await page.goto(STUDIO);
+  const mode = page.getByRole("combobox", { name: "Modalità di lavoro", exact: true });
+  await mode.selectOption("CURRICULUM");
+  await expect(page.getByText("L’acquisizione di obiettivi verificati da Arena non è ancora integrata.")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Banco diagrammi", exact: true })).toHaveCount(0);
+  await mode.selectOption("PRODUCTION");
+  const diagrams = page.getByRole("region", { name: "Banco diagrammi", exact: true });
+  await diagrams.getByRole("button", { name: "Apri materiale didattico", exact: true }).click();
+  await expect(diagrams.getByRole("link", { name: "Scarica SVG della composizione", exact: true })).toBeVisible();
+  const simulator = page.getByRole("region", { name: "Banco simulatori", exact: true });
+  await simulator.getByRole("button", { name: "Verifica laboratorio", exact: true }).click();
+  await expect(simulator.getByRole("link", { name: "Scarica simulatore HTML", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem("studio-atlas.projects.v0.1"))).toBeNull();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+
+  await page.goto(STUDIO + "/nuovo");
+  await page.getByLabel("L’idea", { exact: true }).fill("Ingranaggi");
+  await page.getByLabel("Titolo di lavoro (facoltativo)", { exact: true }).fill("Banco M1/M2");
+  await page.getByRole("button", { name: "Esplora le possibilità", exact: true }).click();
+  await page.getByText("Indagine", { exact: true }).click();
+  await page.getByRole("button", { name: "Crea il Percorso", exact: true }).click();
+  await expect(mode).toHaveValue("");
+  await expect(page.getByRole("textbox", { name: "Idea del Percorso" })).toHaveValue("Ingranaggi");
+  await expect(page.getByRole("button", { name: "Anteprima di revisione", exact: true })).toBeDisabled();
+
+  await page.goto(STUDIO);
+  await mode.selectOption("PRODUCTION");
+  await page.getByRole("link", { name: /Banco M1\/M2/ }).click();
+  await expect(mode).toHaveValue("PRODUCTION");
+  await expect(page.getByRole("region", { name: "Banco diagrammi", exact: true })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Banco simulatori", exact: true })).toBeVisible();
+  await mode.selectOption("REVIEW");
+  await page.reload();
+  await expect(mode).toHaveValue("REVIEW");
+  await expect(page.getByRole("button", { name: "Anteprima di revisione", exact: true })).toBeDisabled();
+  await mode.selectOption("CURRICULUM");
+  await page.reload();
+  await expect(mode).toHaveValue("CURRICULUM");
+  await mode.selectOption("");
+  await expect(page.getByRole("textbox", { name: "Idea del Percorso" })).toBeVisible();
+  await page.reload();
+  await expect(mode).toHaveValue("");
+
+  await page.goto(STUDIO);
+  await mode.selectOption("COMPOSITION");
+  await page.getByRole("link", { name: "Componi una nuova bozza", exact: true }).click();
+  await page.getByLabel("L’idea", { exact: true }).fill("Ingranaggi");
+  await page.getByRole("button", { name: "Apri il banco Composizione", exact: true }).click();
+  await expect(mode).toHaveValue("COMPOSITION");
+  await expect(page.getByRole("region", { name: "Composizione didattica", exact: true })).toBeVisible();
 });

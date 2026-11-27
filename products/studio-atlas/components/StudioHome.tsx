@@ -13,8 +13,14 @@ import type { PathwayProject } from "../lib/model";
 import { AtelierWorkflow } from "./AtelierWorkflow";
 import { AGRICULTURE_GUIDE } from "../lib/canonical/agriculture";
 
+import { WorkModePicker } from "./WorkModePicker";
+import { EducationDiagramBank } from "./EducationDiagramBank";
+import { SimulationLabBank } from "./SimulationLabBank";
+import type { WorkModeId } from "../lib/authoring-catalog";
+
 export function StudioHome() {
   const router = useRouter();
+  const [mode, setMode] = useState<WorkModeId>();
   const [projects, setProjects] = useState<PathwayProject[]>([]);
 
   const [agricultureState,setAgricultureState] = useState<"idle"|"loading"|"error">("idle");
@@ -34,20 +40,20 @@ export function StudioHome() {
       <header className="studio-header">
         <div>
           <p className="eyebrow">Studio Atlas</p>
-          <h1>Crea Percorsi da vivere in Atlas.</h1>
+          <h1>Progetta materiali ed esperienze didattiche.</h1>
         </div>
         <div className="studio-home-actions"><Link className="secondary-action" href="/edutwin">Continua da ChatGPT</Link><Link className="secondary-action" href="/attivita">Importa attività</Link><Link className="primary-action" href="/nuovo">Nuovo percorso</Link></div>
       </header>
 
       <AtelierWorkflow />
 
-      <section className="home-intro">
-        <p>
-          Parti da un’idea. Costruisci la storia, il mondo e le scene.
-          La parte tecnica resta dietro lo Studio.
-        </p>
-        <span className="development-note">S1 · salvataggio locale di sviluppo</span>
-      </section>
+      <WorkModePicker value={mode} onChange={setMode} />
+      {mode === "DOCUMENT" && <Link className="secondary-action" href="/attivita">Apri importazione attività</Link>}
+      {mode === "IDEA" && <Link className="secondary-action" href="/nuovo">Parti da una nuova idea</Link>}
+      {mode === "PRODUCTION" && <><EducationDiagramBank /><SimulationLabBank /></>}
+      {mode === "COMPOSITION" && <Link className="secondary-action" href="/nuovo?modalita=COMPOSITION">Componi una nuova bozza</Link>}
+      {(mode === "COMPOSITION" || mode === "REVIEW") && active.length > 0 && <p>Seleziona un progetto nella sezione Continua.</p>}
+      {mode === "REVIEW" && active.length === 0 && <p>Serve un progetto salvato per aprire la revisione.</p>}
 
       <section className="pilot-pathway" aria-labelledby="pilot-title">
         <div>
@@ -99,7 +105,7 @@ export function StudioHome() {
         ) : (
           active.map((project) => (
             <article className="project-row" key={project.projectId}>
-              <Link href={`/percorso/${project.projectId}`} className="project-main">
+              <Link href={`/percorso/${project.projectId}${mode ? `?modalita=${mode}` : ""}`} className="project-main">
                 <strong>{project.title}</strong>
                 <span>{labelState(project)}</span>
               </Link>
