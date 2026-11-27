@@ -567,3 +567,7 @@ Current progression authority:
 `ATLAS_IMPLEMENTATION = HOLD`
 
 `RUNTIME_AUTHORIZATION = NOT_RUNTIME_AUTHORIZED`
+
+
+## Annex — MZ-NARRATIVE-01 (2026-11-24)
+[Educational and teaching dossier for Museo Zero](worlds/MUSEO-ZERO/MZ-NARRATIVE-01-FASCICOLO-EDUCATIVO-DIDATTICO.md): recovered canonical narrative, proposed prologue, learner actions, formative evidence, teacher guide, optional transfer, asset recovery and product acceptance. This candidate annex preserves the original evidence and does not imply implementation or runtime approval.
