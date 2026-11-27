@@ -82,6 +82,24 @@ class AuthoredDiagram(unittest.TestCase):
         for row in rows:
             self.assertGreaterEqual(float(footer.attrib["y"])-float(row.attrib["y"]), 28)
 
+    def test_versioned_external_gear_pair(self):
+        pair = {"kind": "external-gear-pair", "driverTeeth": 24, "drivenTeeth": 48}
+        source = {**SOURCE, "schema": "trama.diagram-education-source/v0.2",
+                  "nodes": [{"id": "n1", "label": "Motrice", "detail": "24 denti"},
+                            {"id": "n2", "label": "Condotta", "detail": "48 denti"}],
+                  "edges": [["n1", "n2"]], "transmission": pair}
+        files = generate(source)["files"]
+        self.assertEqual(json.loads(files["education-source.json"]), source)
+        for variant in ("mobile-vertical", "desktop-lim-horizontal"):
+            svg = files[f"diagramma-docente-{variant}.svg"]
+            self.assertIn("Punto di contatto", svg)
+            self.assertIn("antiorario", svg)
+        for invalid in ({**pair, "drivenTeeth": 24}, {**pair, "driverTeeth": 24.0},
+                        {**pair, "kind": "chain"}, {**pair, "profile": "custom"}):
+            with self.subTest(model=invalid):
+                self.assertIn("error", generate({**source, "transmission": invalid}))
+        self.assertIn("error", generate({**source, "schema": SOURCE["schema"]}))
+
     def test_closed_source(self):
         for edits in [
             {"title": "<script>"}, {"title": "https://example.org"}, {"title": "example.org"},

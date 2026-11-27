@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import html
+import math
 import json
 import pathlib
 import re
@@ -185,11 +186,89 @@ def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", 
     label(w//2,h-16 if variant=="mobile-vertical" else h-56,footer,15 if variant=="mobile-vertical" else 22,dark)
     parts.append("</g></svg>")
     svg="\n".join(parts)
+    wrapper=diagram_document(svg,w,p,title,name,authored)
+    return wrapper,svg,checks
+
+def diagram_document(svg, w, p, title, name, authored):
+    dark=p["ink"]
     wrapper='<!doctype html>\n<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+title+' — '+name+'</title><style>html,body{margin:0;padding:0;background:'+p["canvas"]+';color:'+dark+';font-family:system-ui,sans-serif}main{width:100%;max-width:'+str(w)+'px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main>\n'+svg+'\n</main></body></html>\n'
     if authored:
         policy="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"
         wrapper=wrapper.replace("<head>",f'<head><meta http-equiv="Content-Security-Policy" content="{policy}">',1)
-    return wrapper,svg,checks
+    return wrapper
+
+
+def render_external_gears(profile, source, variant):
+    """Draw a bounded ideal external pair using only the existing SVG grammar."""
+    w, h = VARIANTS[variant]
+    p = profile["palette"]
+    ink, accent = p["ink"], p["accent"]
+    model = source["transmission"]
+    teeth = (model["driverTeeth"], model["drivenTeeth"])
+    mobile = variant == "mobile-vertical"
+    scale = 1.55 if mobile else 4.4
+    r1, r2 = [n*scale for n in teeth]
+    cy = 276 if mobile else 360
+    x2 = (w-2*(r1+r2))/2+r2
+    contact = x2+r2
+    x1 = contact+r1
+    title = html.escape(source["title"])
+    name = html.escape(profile["name"])
+    text_size = 15 if mobile else 26
+    description = (f"{source['description']} {source['nodes'][0]['label']}: {teeth[0]} denti, senso orario. "
+                   f"{source['nodes'][1]['label']}: {teeth[1]} denti, senso antiorario. Punto di contatto tra le ruote.")
+    parts = [
+        f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
+        f'<title id="diagram-title">{title} — {name}</title>',
+        f'<desc id="diagram-desc">{html.escape(description)}</desc>',
+        f'<rect x="0" y="0" width="{w}" height="{h}" fill="{p["canvas"]}"/>',
+        '<g font-family="system-ui, sans-serif" text-anchor="middle">',
+    ]
+    def label(x, y, value, size=text_size, weight=600):
+        parts.append(f'<text x="{round(x)}" y="{round(y)}" font-size="{size}" font-weight="{weight}" fill="{ink}">{html.escape(value)}</text>')
+    def point(cx, y, radius, angle):
+        return (cx+radius*math.cos(angle), y+radius*math.sin(angle))
+    def path(points, fill="none", stroke=accent, width=2, close=False):
+        coords = [f"{x:.2f} {y:.2f}" for x,y in points]
+        data = "M "+" L ".join(coords + ([coords[0]] if close else []))
+        parts.append(f'<path d="{data}" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>')
+
+    label(w/2, 63, source["title"], 24 if mobile else 46, 700)
+    label(w/2, 96, "Due ruote esterne in presa", 15 if mobile else 25, 400)
+    for index, (cx, radius, count) in enumerate(zip((x1,x2),(r1,r2),teeth)):
+        depth = 3.4 if mobile else 8.5
+        # Offset the driven tooth by half a pitch; tooth outlines are illustrative.
+        phase = math.pi if index == 0 else math.pi/count
+        outline = [point(cx,cy,radius+(depth if k%4 in (0,1) else -depth),phase+2*math.pi*k/(count*4)) for k in range(count*4)]
+        path(outline,p["surface"],accent,2 if mobile else 4,True)
+        path([point(cx,cy,6 if mobile else 12,k*math.pi/8) for k in range(16)],accent,accent,1,True)
+        # Opposite arrow directions in the plane of the drawing.
+        angles = [-2.60+k*.105 for k in range(21)]
+        if index:
+            angles.reverse()
+        arc = [point(cx,cy,radius+12 if mobile else radius+25,a) for a in angles]
+        path(arc,"none",ink,2 if mobile else 4)
+        x,y = arc[-1]
+        dx,dy = x-arc[-2][0],y-arc[-2][1]
+        factor = (8 if mobile else 17)/math.hypot(dx,dy)
+        dx,dy = dx*factor,dy*factor
+        path([(x-dx-dy*.5,y-dy+dx*.5),(x,y),(x-dx+dy*.5,y-dy-dx*.5)],"none",ink,2 if mobile else 4)
+    path([(contact-5,cy),(contact,cy-5),(contact+5,cy),(contact,cy+5)],ink,ink,1,True)
+    path([(contact,cy+(5 if mobile else -5)),(contact,379 if mobile else 163)],"none",ink,2)
+    label(contact, 406 if mobile else 145, "Punto di contatto")
+    if mobile:
+        # Keep the labels legible even for pairs whose centres are close.
+        label(180,461,f"{source['nodes'][0]['label']} a destra: {teeth[0]} denti · orario")
+        label(180,487,f"{source['nodes'][1]['label']} a sinistra: {teeth[1]} denti · antiorario")
+    else:
+        for cx,node,count,direction in zip((x1,x2),source["nodes"],teeth,("orario","antiorario")):
+            label(cx,605,f"{node['label']}: {count} denti")
+            label(cx,639,f"Senso {direction}",23,400)
+    label(w/2,h-24,"Tecnologia · proposta didattica",text_size,400)
+    parts.append("</g></svg>")
+    svg = "\n".join(parts)
+    return diagram_document(svg,w,p,title,name,True), svg
+
 
 def validate(svg, profile, variant, *, view_size=None):
     """Closed grammar for these generated demonstrators only."""
@@ -442,9 +521,15 @@ def authored_text(value, limit, field):
 
 def validate_authored(source):
     fields={"schema","id","status","profile","runtimeAuthorized","publicationAuthorized","title","description","nodes","edges"}
-    need(isinstance(source,dict) and (source.keys()==fields or source.keys()==fields|{"activity"}),"Struttura della fonte non valida.")
+    need(isinstance(source,dict),"Struttura della fonte non valida.")
+    mechanical=source.get("schema")=="trama.diagram-education-source/v0.2"
+    if mechanical:
+        fields.add("transmission")
+    need(source.keys() in (fields,fields|{"activity"}),"Struttura della fonte non valida.")
     fixed={"schema":"trama.diagram-education-source/v0.1","id":"diagramma-docente",
         "status":"TEACHER_REVIEW_REQUIRED","profile":"studio-atlas"}
+    if mechanical:
+        fixed["schema"]="trama.diagram-education-source/v0.2"
     need(all(source[k]==v for k,v in fixed.items()) and source["runtimeAuthorized"] is False
          and source["publicationAuthorized"] is False,"Identità o autorizzazioni della fonte non valide.")
     title=authored_text(source["title"],26,"Titolo")
@@ -470,6 +555,15 @@ def validate_authored(source):
         seen.add(tuple(edge))
     result={**fixed,"runtimeAuthorized":False,"publicationAuthorized":False,
             "title":title,"description":description,"nodes":nodes,"edges":edges}
+    if mechanical:
+        model=source["transmission"]
+        need(isinstance(model,dict) and model.keys()=={"kind","driverTeeth","drivenTeeth"}
+             and model["kind"]=="external-gear-pair","Trasmissione esterna non valida.")
+        teeth=(model["driverTeeth"],model["drivenTeeth"])
+        need(all(type(n) is int and n in (12,24,36,48) for n in teeth) and len(nodes)==2
+             and edges==[[node["id"] for node in nodes]]
+             and all(node["detail"]==f"{n} denti" for node,n in zip(nodes,teeth)),"Dentatura o relazione non valida.")
+        result["transmission"]=model
     if "activity" in source:
         activity=source["activity"]
         need(isinstance(activity,dict) and activity.keys()=={"question","criterion"},"Struttura dell'attività non valida.")
@@ -497,7 +591,10 @@ def authored_package(source):
     files={"education-source.json":json.dumps(source,ensure_ascii=False,indent=2)+"\n",
            "guida-docente.md":"\n".join(guide)}
     for variant in VARIANTS:
-        doc,svg,_=render(profile,source,variant,footer="Tecnologia · proposta didattica",include_details=True,authored=True)
+        if "transmission" in source:
+            doc,svg=render_external_gears(profile,source,variant)
+        else:
+            doc,svg,_=render(profile,source,variant,footer="Tecnologia · proposta didattica",include_details=True,authored=True)
         validate(svg,profile,variant)
         files[f"diagramma-docente-{variant}.html"]=doc
         files[f"diagramma-docente-{variant}.svg"]=svg

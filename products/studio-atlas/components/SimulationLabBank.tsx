@@ -4,15 +4,17 @@ import {LABS,loadLabPackage,type LabId} from "../lib/simulation-lab-package";
 
 type Verified={htmlUrl:string;receiptUrl:string;objective:string;question:string};
 export function SimulationLabBank({didacticGearRequested=false,confirmDidacticGear}:{didacticGearRequested?:boolean;confirmDidacticGear?:()=>boolean}={}){
- const [id,setId]=useState<LabId>("gear");
+ const [selected,setId]=useState<LabId>("gear");
+ const id=!didacticGearRequested&&selected==="gear-ec07b"?"gear":selected;
  const labSelectId=useId();
  return <section className="visual-factory-step" aria-label="Banco simulatori">
   <p className="eyebrow">Visual Factory · simulazioni deterministiche</p>
   <h2>Simulatori didattici</h2>
   <p>Scegli un laboratorio prodotto dal generatore comune. Provalo e scaricalo per la revisione docente: nessuna associazione automatica al percorso, nessuna pubblicazione agli studenti.</p>
-  {didacticGearRequested&&<p>Richiesta dalla bozza: laboratorio delle trasmissioni. <button type="button" onClick={()=>{if(confirmDidacticGear?.())setId("gear");}}>Seleziona laboratorio richiesto</button></p>}
-  <div><label htmlFor={labSelectId}>Laboratorio</label> <select id={labSelectId} value={id} onChange={e=>{const lab=LABS.find(x=>x.id===e.target.value);if(lab)setId(lab.id);}}>
+  {didacticGearRequested&&<p>Richiesta dalla bozza: laboratorio delle trasmissioni. <button type="button" onClick={()=>{if(confirmDidacticGear?.())setId("gear-ec07b");}}>Seleziona laboratorio richiesto</button></p>}
+  <div><label htmlFor={labSelectId}>Laboratorio</label> <select id={labSelectId} value={id} onChange={e=>{const lab=LABS.find(x=>x.id===e.target.value);if(lab)setId(lab.id);else if(e.target.value==="gear-ec07b"&&confirmDidacticGear?.())setId("gear-ec07b");}}>
    {LABS.map(lab=><option key={lab.id} value={lab.id}>{lab.title}</option>)}
+   {didacticGearRequested&&<option value="gear-ec07b">Trasmissioni · coppia della bozza</option>}
   </select></div>
   <LabCandidate key={id} id={id}/>
  </section>;

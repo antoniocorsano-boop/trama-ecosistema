@@ -1,8 +1,12 @@
+import gearTeachingProfile from "./gear-teaching-profile.json";
+
 export const LABS=[
   {id:"gear",title:"Laboratorio delle trasmissioni",engine:"three-r128"},
   {id:"slider-crank",title:"Laboratorio biella-manovella",engine:"native-svg"},
 ] as const;
-export type LabId=typeof LABS[number]["id"];
+const CONTEXTUAL_LAB={id:"gear-ec07b",title:"Laboratorio delle trasmissioni",engine:"three-r128"} as const;
+export type LabId=typeof LABS[number]["id"]|typeof CONTEXTUAL_LAB.id;
+const labById=(id:LabId)=>id===CONTEXTUAL_LAB.id?CONTEXTUAL_LAB:LABS.find(lab=>lab.id===id);
 export const MAX_LAB_BYTES=1024*1024;
 const digest=(v:unknown):v is string=>typeof v==="string"&&/^[a-f0-9]{64}$/.test(v);
 const blob=(v:unknown):v is string=>typeof v==="string"&&/^[a-f0-9]{40}$/.test(v);
@@ -11,14 +15,20 @@ function record(v:unknown):Record<string,unknown>{
  return v as Record<string,unknown>;
 }
 export function parseLabPackage(input:unknown,id:LabId){
- const p=record(input),r=record(p.receipt),lab=LABS.find(x=>x.id===id);
+ const p=record(input),r=record(p.receipt),lab=labById(id);
+ const contextual=id===CONTEXTUAL_LAB.id;
+ const keys="bytes,costPolicy,engine,engineBlob,htmlSha256,id,objective,publicationAuthorized,question,schema,sourceBlob,sourceKind,status,studentAuthorized,templateBlob";
+ if(contextual){
+  const config=record(r.configuration);
+  if(Object.keys(config).length!==2||config.driverTeeth!==gearTeachingProfile.driverTeeth||config.drivenTeeth!==gearTeachingProfile.drivenTeeth)throw Error("SIMULATION_CONFIGURATION_INVALID");
+ }
  if(!lab||Object.keys(p).sort().join(",")!=="html,receipt"||
-    Object.keys(r).sort().join(",")!=="bytes,costPolicy,engine,engineBlob,htmlSha256,id,objective,publicationAuthorized,question,schema,sourceBlob,sourceKind,status,studentAuthorized,templateBlob"||
-    r.schema!=="atlas.simulation-lab/v0.1"||r.id!==id||r.engine!==lab.engine||
+    Object.keys(r).sort().join(",")!==(contextual?keys.replace("bytes,", "bytes,configuration,"):keys)||
+    r.schema!==(contextual?"atlas.simulation-lab/v0.2":"atlas.simulation-lab/v0.1")||r.id!==id||r.engine!==lab.engine||
     r.status!=="TEACHER_REVIEW_REQUIRED"||r.costPolicy!=="FREE_ONLY"||
     r.studentAuthorized!==false||r.publicationAuthorized!==false||
     r.sourceKind!=="editable-teaching-model"||!blob(r.sourceBlob)||!blob(r.templateBlob)||
-    (id==="gear"?r.engineBlob!=="b14f47c0908bab15e890b468d53bb07db0be3a18":r.engineBlob!==null)||
+    (lab.engine==="three-r128"?r.engineBlob!=="b14f47c0908bab15e890b468d53bb07db0be3a18":r.engineBlob!==null)||
     !digest(r.htmlSha256)||typeof r.bytes!=="number"||!Number.isSafeInteger(r.bytes)||r.bytes<1||r.bytes>MAX_LAB_BYTES||
     typeof r.objective!=="string"||!r.objective.trim()||r.objective.length>200||
     typeof r.question!=="string"||!r.question.trim()||r.question.length>200||
@@ -36,7 +46,7 @@ export async function verifyLabPackage(input:unknown,id:LabId){
 
 /** Shared bounded loader: the contextual panel and existing bank verify identical bytes. */
 export async function loadLabPackage(id:LabId,signal?:AbortSignal,fetchImpl:typeof fetch=fetch){
- if(!LABS.some(lab=>lab.id===id))throw Error("SIMULATION_PACKAGE_INVALID");
+ if(!labById(id))throw Error("SIMULATION_PACKAGE_INVALID");
  const res=await fetchImpl("/design/simulation-labs/"+id+".json",{cache:"no-store",signal});
  if(!res.ok||!res.body)throw Error("SIMULATION_MISSING");
  const reader=res.body.getReader(),parts:Uint8Array[]=[];let length=0;

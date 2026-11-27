@@ -968,7 +968,14 @@ for(const width of [390,1280])test("EC04a: compose edit reload and production na
 });
 
 for(const width of [390,1280])test("EC07b: complete gear materials, reopen and invalidate "+width,async({page},testInfo)=>{
- test.setTimeout(120000);await page.setViewportSize({width,height:900});await page.goto(STUDIO+"/nuovo");
+ test.setTimeout(120000);
+ const frameRequests:string[]=[];
+ page.on("request", request=>{
+  if(!/^https?:/.test(request.url()))return;
+  const frame=request.frame();
+  if(frame.parentFrame()||new URL(request.url()).origin!==STUDIO)frameRequests.push(request.url());
+ });
+ await page.setViewportSize({width,height:900});await page.goto(STUDIO+"/nuovo");
  await page.getByLabel("L’idea",{exact:true}).fill("Ingranaggi");
  await page.getByLabel("Titolo di lavoro (facoltativo)",{exact:true}).fill("Laboratorio ingranaggi EC07b");
  await page.getByRole("button",{name:"Esplora le possibilità",exact:true}).click();
@@ -996,6 +1003,7 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  const sheet=workflow.frameLocator('iframe[title="Anteprima Scheda di lavoro"]');
  await expect(sheet.getByRole("heading",{name:"Ingranaggi: prevedi e confronta",exact:true})).toBeVisible();
  await expect(sheet.getByText("Criteri e riscontri",{exact:true})).toHaveCount(0);
+ await expect(sheet.getByText(/Indica separatamente il verso/)).toBeVisible();
  await expect(workflow.locator('iframe[title="Anteprima Scheda di lavoro"]')).toHaveAttribute("sandbox","");
  await workflow.locator('iframe[title="Anteprima Scheda di lavoro"]').screenshot({path:testInfo.outputPath("ec07b-scheda-"+width+".png")});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
@@ -1003,10 +1011,14 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  await expect(workflow.frameLocator('iframe[title="Anteprima Guida riservata al docente"]').getByRole("heading",{name:"Criteri e riscontri",exact:true})).toBeVisible();
  await workflow.locator('iframe[title="Anteprima Guida riservata al docente"]').screenshot({path:testInfo.outputPath("ec07b-guida-"+width+".png")});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
- await workflow.getByRole("button",{name:"Anteprima Diagramma",exact:true}).click();
- await expect(workflow.locator('iframe[title="Anteprima Diagramma"]')).toHaveAttribute("sandbox","");
- await expect(workflow.frameLocator('iframe[title="Anteprima Diagramma"]').locator("svg")).toBeVisible();
- await workflow.locator('iframe[title="Anteprima Diagramma"]').screenshot({path:testInfo.outputPath("ec07b-diagramma-"+width+".png")});
+ const diagramName=width===390?"Diagramma":"Diagramma LIM";
+ await workflow.getByRole("button",{name:"Anteprima "+diagramName,exact:true}).click();
+ const diagramFrame='iframe[title="Anteprima '+diagramName+'"]';
+ await expect(workflow.locator(diagramFrame)).toHaveAttribute("sandbox","");
+ const diagram=workflow.frameLocator(diagramFrame);
+ await expect(diagram.locator("svg")).toHaveAttribute("viewBox",width===390?"0 0 360 640":"0 0 1280 720");
+ await expect(diagram.getByText("Punto di contatto",{exact:true})).toBeVisible();
+ await workflow.locator(diagramFrame).screenshot({path:testInfo.outputPath("ec07b-diagramma-"+width+".png")});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
  await page.reload();await nav.getByRole("button",{name:"Produzione"}).click();
  await expect(workflow.getByText("3 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
@@ -1014,9 +1026,60 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  const sim=workflow.frameLocator('iframe[title="Anteprima Simulatore"]');
  await expect(workflow.locator('iframe[title="Anteprima Simulatore"]')).toHaveAttribute("sandbox","allow-scripts");
  await expect(sim.getByRole("heading",{name:"Laboratorio delle trasmissioni",exact:true})).toBeVisible();
+ await expect(sim.locator("#driver")).toHaveValue("24");
+ await expect(sim.locator("#driven")).toHaveValue("48");
+
  await sim.getByRole("button",{name:"Avanza di 90°"}).click();
  await expect(sim.locator("#readout")).toContainText("Rapporto velocità:");
+ await sim.getByRole("heading",{name:"Laboratorio delle trasmissioni",exact:true}).scrollIntoViewIfNeeded();
  await workflow.locator('iframe[title="Anteprima Simulatore"]').screenshot({path:testInfo.outputPath("ec07b-simulatore-"+width+".png")});
+ for (const [driver,driven,ratio] of [[48,24,"-2.00"],[48,48,"-1.00"]] as const) {
+  await sim.locator("#driver").selectOption(String(driver));
+  await sim.locator("#driven").selectOption(String(driven));
+  await expect(sim.locator("#readout")).toContainText("Rapporto velocità: "+ratio);
+ }
+ await sim.getByRole("button",{name:"Ripristina",exact:true}).click();
+ await expect(sim.locator("#driver")).toHaveValue("24");
+ await expect(sim.locator("#driven")).toHaveValue("48");
+ for (const framingWidth of width===390?[390,360]:[1280]) {
+  await page.setViewportSize({width:framingWidth,height:900});
+  const samples=await sim.locator("html").evaluate(()=>{
+   const driver=document.querySelector<HTMLSelectElement>("#driver")!;
+   const driven=document.querySelector<HTMLSelectElement>("#driven")!;
+   const step=document.querySelector<HTMLButtonElement>("#step")!;
+   const probe=(window as any).__vfSimulation;
+   const pairs=[];
+   for(const a of [12,24,36,48]) for(const b of [12,24,36,48]) {
+    driver.value=String(a);driven.value=String(b);
+    driven.dispatchEvent(new Event("input",{bubbles:true}));
+    const poses=[];
+    for(let i=0;i<4;i++){
+     poses.push(probe.getFrameEvidence());
+     step.click();
+    }
+    pairs.push({a,b,poses,ratio:document.querySelector("#readout")!.textContent});
+   }
+   return pairs;
+  });
+  expect(samples).toHaveLength(16);
+  expect(new Set(samples.map(pair=>pair.poses[0]?.vertices)).size).toBeGreaterThan(1);
+  for(const {a,b,poses,ratio} of samples){
+   expect(ratio).toContain("Rapporto velocità: "+(-a/b).toFixed(2));
+   for(const pose of poses){
+    expect(pose).not.toBeNull();
+    expect(pose.objects).toBe(4);
+    expect(pose.vertices).toBeGreaterThan(0);
+    for(const axis of ["X","Y"]){
+     expect(pose.bounds["min"+axis]).toBeGreaterThanOrEqual(-.9);
+     expect(pose.bounds["max"+axis]).toBeLessThanOrEqual(.9);
+    }
+    expect(pose.bounds.minZ).toBeGreaterThanOrEqual(-1);
+    expect(pose.bounds.maxZ).toBeLessThanOrEqual(1);
+    expect(pose.frustum).toEqual(poses[0].frustum);
+   }
+  }
+ }
+ await page.setViewportSize({width,height:900});
  await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
  expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
  expect(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]))).toEqual(draftBefore);
@@ -1084,6 +1147,7 @@ for(const width of [390,1280])test("EC07b: complete gear materials, reopen and i
  await workflow.getByRole("button",{name:"Prepara e conserva Scheda di lavoro",exact:true}).click();
  await expect(workflow.getByText("1 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
  await expect(workflow.getByText("Materiali precedenti o non validi (3)",{exact:true})).toBeVisible();
+ expect(frameRequests).toEqual([]);
 });
 
 for (const width of [390, 1280]) test(`M1/M2: standalone banks and legacy pathway at ${width}`, async ({ page }) => {

@@ -48,17 +48,24 @@ const SOURCE_METADATA = {
 } as const;
 
 export type DiagramActivity = {question: string; criterion: string};
-export function authoredSource(title = "", description = "", nodes: DiagramNode[] = [], edges: DiagramEdge[] = [], activity?: DiagramActivity) {
-  return {...SOURCE_METADATA, title, description, nodes, edges, ...(activity === undefined ? {} : {activity})};
+export type GearTransmission = { kind: "external-gear-pair"; driverTeeth: number; drivenTeeth: number };
+const MECHANICAL_SCHEMA = "trama.diagram-education-source/v0.2";
+
+export function authoredSource(title = "", description = "", nodes: DiagramNode[] = [], edges: DiagramEdge[] = [], activity?: DiagramActivity, transmission?: GearTransmission) {
+  return {...SOURCE_METADATA, schema: transmission ? MECHANICAL_SCHEMA : SOURCE_METADATA.schema,
+    title, description, nodes, edges, ...(activity === undefined ? {} : {activity}),
+    ...(transmission === undefined ? {} : {transmission})};
 }
 export type AuthoredSource = ReturnType<typeof authoredSource>;
 
 export function importAuthoredSource(value: unknown): AuthoredSource {
   const source = record(value);
   const allowed = new Set([...Object.keys(SOURCE_METADATA), "title", "description", "nodes", "edges", "activity"]);
+  const mechanical = source.schema === MECHANICAL_SCHEMA;
+  if (mechanical) allowed.add("transmission");
   if (Object.keys(source).some(key => !allowed.has(key)) ||
-      Object.keys(source).length !== (Object.prototype.hasOwnProperty.call(source, "activity") ? 11 : 10) ||
-      Object.entries(SOURCE_METADATA).some(([key, expected]) => source[key] !== expected) ||
+      Object.keys(source).length !== (10 + Number(Object.hasOwn(source, "activity")) + Number(mechanical)) ||
+      Object.entries(SOURCE_METADATA).some(([key, expected]) => source[key] !== (mechanical && key === "schema" ? MECHANICAL_SCHEMA : expected)) ||
       typeof source.title !== "string" || typeof source.description !== "string" ||
       !Array.isArray(source.nodes) || source.nodes.length > 4 || !Array.isArray(source.edges) || source.edges.length > 8) {
     throw Error("Struttura o autorizzazioni della fonte non valide.");
@@ -97,7 +104,20 @@ export function importAuthoredSource(value: unknown): AuthoredSource {
        ...(activity ? [activity.question, activity.criterion] : [])].some(text => forbidden.test(text))) {
     throw Error("Inserisci solo testo, senza markup o indirizzi.");
   }
-  return authoredSource(source.title, source.description, nodes, edges, activity);
+  let transmission: GearTransmission | undefined;
+  if (mechanical) {
+    const model = record(source.transmission);
+    const {driverTeeth, drivenTeeth} = model;
+    if (Object.keys(model).length !== 3 || model.kind !== "external-gear-pair" ||
+        typeof driverTeeth !== "number" || typeof drivenTeeth !== "number" ||
+        ![12, 24, 36, 48].includes(driverTeeth) || ![12, 24, 36, 48].includes(drivenTeeth) ||
+        nodes.length !== 2 || edges.length !== 1 || edges[0][0] !== nodes[0].id || edges[0][1] !== nodes[1].id ||
+        nodes[0].detail !== driverTeeth + " denti" || nodes[1].detail !== drivenTeeth + " denti") {
+      throw Error("Trasmissione esterna non valida.");
+    }
+    transmission = {kind: "external-gear-pair", driverTeeth, drivenTeeth};
+  }
+  return authoredSource(source.title, source.description, nodes, edges, activity, transmission);
 }
 
 export async function verifyAuthoredPackage(value: unknown) {
