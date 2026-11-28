@@ -23,6 +23,16 @@ describe('TRAMA gateway', () => {
     );
   });
 
+  it('presents the permanent educational principle on the public landing', () => {
+    render(<App />);
+    const principle = screen.getByRole('region', { name: 'Il nostro principio guida' });
+    expect(principle).toBeVisible();
+    expect(principle).toHaveTextContent("La tecnologia è al servizio dell'educazione.");
+    expect(principle).toHaveTextContent("L'intelligenza artificiale è al servizio della tecnologia.");
+    expect(principle).toHaveTextContent('Nessun vincolo tecnologico o commerciale deve compromettere la finalità educativa, la sostenibilità sociale e la tutela delle persone.');
+    expect(document.querySelector('.trama-gateway-stage')).not.toContainElement(principle);
+  });
+
   it('resolves every secondary navigation anchor to a real landing section', () => {
     render(<App />);
 

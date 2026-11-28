@@ -72,6 +72,25 @@ export function App() {
       </TramaGatewayShell>
 
       <div className="relative bg-[hsl(var(--background))] px-5 py-16 text-[hsl(var(--foreground))] sm:px-8 sm:py-20 lg:py-24">
+        <section
+          id="principio-guida"
+          aria-labelledby="principio-guida-title"
+          className="mx-auto mb-16 w-full max-w-6xl border-t border-white/15 pt-8 text-left sm:mb-20"
+        >
+          <h2 id="principio-guida-title" className="mb-5 text-xs font-medium tracking-[0.24em] text-[var(--solar-highlight)]">
+            Il nostro principio guida
+          </h2>
+          <p className="max-w-3xl text-2xl font-normal leading-tight sm:text-4xl" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+            La tecnologia è al servizio dell'educazione.
+          </p>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[hsl(var(--foreground)/0.88)] sm:text-lg">
+            L'intelligenza artificiale è al servizio della tecnologia.
+          </p>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-[hsl(var(--foreground)/0.88)] sm:text-base">
+            Nessun vincolo tecnologico o commerciale deve compromettere la finalità educativa, la sostenibilità sociale e la tutela delle persone.
+          </p>
+        </section>
+
         <div className="mx-auto grid w-full max-w-6xl gap-10 md:grid-cols-3 md:gap-8">
           {landingSections.map((section) => (
             <section

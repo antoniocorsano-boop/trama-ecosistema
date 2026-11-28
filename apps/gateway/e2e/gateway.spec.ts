@@ -196,3 +196,16 @@ test('desktop secondary navigation reaches real landing sections', async ({ page
     await expect(section).toBeVisible();
   }
 });
+
+
+test('educational principle is readable on the public landing at S/M/L/LIM', async ({ page }) => {
+  await openGateway(page);
+  const principle = page.getByRole('region', { name: 'Il nostro principio guida' });
+  await principle.scrollIntoViewIfNeeded();
+  await expect(principle).toBeVisible();
+  await expect(principle.getByText("La tecnologia è al servizio dell'educazione.", { exact: true })).toBeVisible();
+  await expect(principle.getByText("L'intelligenza artificiale è al servizio della tecnologia.", { exact: true })).toBeVisible();
+  await expect(principle.getByText('Nessun vincolo tecnologico o commerciale deve compromettere la finalità educativa, la sostenibilità sociale e la tutela delle persone.', { exact: true })).toBeVisible();
+  const dimensions = await principle.evaluate((element) => ({ width: element.clientWidth, scroll: element.scrollWidth }));
+  expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width + 1);
+});

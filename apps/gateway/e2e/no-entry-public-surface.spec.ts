@@ -7,6 +7,7 @@ test('public Gateway stays visible and professional entry fails closed without a
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Il nostro principio guida' })).toBeVisible();
 
   const unavailableEntries = page.getByRole('button', { name: 'Accesso in preparazione' });
   await expect(unavailableEntries).toHaveCount(2);
