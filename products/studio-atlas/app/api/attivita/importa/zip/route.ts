@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { intakeJsonResponse } from "../../../../../lib/activity-intake-response";
 import { MAX_ZIP_BYTES, prepareZipDraft } from "../../../../../lib/activity-zip";
 
 export const runtime = "nodejs";
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
       }
     } finally { reader.releaseLock(); }
     const result=await prepareZipDraft(Buffer.concat(chunks,total));
-    return NextResponse.json(result,{headers:{"Cache-Control":"no-store"}});
+    return intakeJsonResponse(result);
   } catch(error) {
     const message=error instanceof Error?error.message:"Pacchetto non valido";
     return NextResponse.json({error:message.slice(0,240)},{status:422,headers:{"Cache-Control":"no-store"}});
