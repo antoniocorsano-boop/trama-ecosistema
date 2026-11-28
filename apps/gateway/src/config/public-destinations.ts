@@ -32,13 +32,14 @@ export function resolvePublicAtlasDestination(release: PublicAtlasRelease | null
 // Candidate admission: existing canonical Pages release (14 November) and human
 // smartphone reachability (28 November). Neither proves a current live SHA or
 // qualifies the Gateway-to-Atlas flow. No identity, state transfer or new release.
-const atlasCurriculum: PublicAtlasRelease = {
+const canonicalAtlasBaseUrl = 'https://antoniocorsano-boop.github.io/Curriculum-Atlas/';
+const atlasCurricolo: PublicAtlasRelease = {
   flowId: 'gateway_to_curricolo_atlas_public',
   destinationAdmission: 'ADMITTED',
   releaseEvidenceRef: 'https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43628770886',
   reachabilityEvidenceRef: 'https://github.com/antoniocorsano-boop/trama-ecosistema/issues/353#issuecomment-7238874583',
-  publicBaseUrl: 'https://antoniocorsano-boop.github.io/Curriculum-Atlas/',
-  href: 'https://antoniocorsano-boop.github.io/Curriculum-Atlas/curricolo/',
+  publicBaseUrl: canonicalAtlasBaseUrl,
+  href: new URL('curricolo/', canonicalAtlasBaseUrl).href,
 };
 
-export const publicAtlasHref = resolvePublicAtlasDestination(atlasCurriculum);
+export const publicAtlasHref = resolvePublicAtlasDestination(atlasCurricolo);

@@ -12,14 +12,14 @@ describe('public Atlas destination', () => {
     expect(publicAtlasHref).toBe('https://antoniocorsano-boop.github.io/Curriculum-Atlas/curricolo/');
     expect(resolvePublicAtlasDestination(null)).toBeNull();
   });
-  it('allows only the admitted curriculum route', () => {
+  it('allows only the admitted curricolo route', () => {
     expect(resolvePublicAtlasDestination(admitted)).toBe(admitted.href);
     expect(resolvePublicAtlasDestination({ ...admitted, href: admitted.href + '/' })).toBe(admitted.href + '/');
   });
   it('supports a canonical deployed subpath without escaping it', () => {
-    const pages = { ...admitted, publicBaseUrl: 'https://atlas.example/Curriculum-Atlas/', href: 'https://atlas.example/Curriculum-Atlas/curricolo/' };
+    const pages = { ...admitted, publicBaseUrl: 'https://atlas.example/Atlas-demo/', href: 'https://atlas.example/Atlas-demo/curricolo/' };
     expect(resolvePublicAtlasDestination(pages)).toBe(pages.href);
-    for (const href of ['https://atlas.example/curricolo/', 'https://atlas.example/Other/curricolo/', 'https://atlas.example/Curriculum-Atlas/../curricolo/', 'https://atlas.example/Curriculum-Atlas/%63urricolo/', pages.href + '?preview=1']) {
+    for (const href of ['https://atlas.example/curricolo/', 'https://atlas.example/Other/curricolo/', 'https://atlas.example/Atlas-demo/../curricolo/', 'https://atlas.example/Atlas-demo/%63urricolo/', pages.href + '?preview=1']) {
       expect(resolvePublicAtlasDestination({ ...pages, href })).toBeNull();
     }
   });

@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-const atlas = 'https://antoniocorsano-boop.github.io/Curriculum-Atlas/curricolo/';
+import { publicAtlasHref } from '../src/config/public-destinations';
+
+const atlas = publicAtlasHref;
+if (!atlas) throw new Error('Public Atlas destination required');
 
 // Deterministic destination fixture: not a claim about the live Atlas deployment.
 for (const profile of ['atelier', 'studio-classico', 'orizzonte'] as const) {
