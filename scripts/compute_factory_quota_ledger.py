@@ -6,6 +6,10 @@ from contextlib import contextmanager
 from scripts.compile_compute_factory_handoff import digest
 
 UNITS = {"LAB_UNIT", "NEURON_SIM", "GPU_WEIGHTED_SECOND_SIM", "CPU_SECOND_SIM"}
+REVIEW_UNIT = "REVIEW_SIM"
+
+class QuotaUnavailable(Exception):
+    """Internal signal to roll back an entire synthetic review batch."""
 HEX = re.compile(r"[0-9a-f]{64}")
 NAME = re.compile(r"[A-Za-z0-9._:-]{1,100}")
 
@@ -37,6 +41,8 @@ class QuotaLedger:
           reference TEXT NOT NULL, amount INTEGER NOT NULL CHECK(amount>0),
           expiry INTEGER NOT NULL,
           state TEXT NOT NULL CHECK(state IN ('RESERVED','SIMULATED_RUNNING','SIMULATED_DONE','CANCELLED','UNCERTAIN')));
+        CREATE TABLE IF NOT EXISTS cf_review_batch (
+          candidate TEXT PRIMARY KEY, reference TEXT NOT NULL);
         """)
     def close(self):
         self.db.close()
@@ -54,7 +60,8 @@ class QuotaLedger:
     def seed(self, bucket, unit, capacity, expires):
         check(isinstance(bucket, str) and bucket.startswith("synthetic:") and NAME.fullmatch(bucket),
               "synthetic bucket only")
-        check(unit in UNITS and number(capacity) and number(expires, 1), "bucket contract")
+        check((unit in UNITS or (unit == REVIEW_UNIT and bucket.startswith("synthetic:review:")))
+              and number(capacity) and number(expires, 1), "bucket contract")
         with self.transaction():
             self.db.execute("INSERT OR IGNORE INTO cf_bucket VALUES (?,?,?,0,?)",
                             (bucket, unit, capacity, expires))
@@ -88,21 +95,79 @@ class QuotaLedger:
         # One reservation per request digest, even if its plan reference changes.
         key = digest({"simulationRequest": handoff["requestDigest"]})
         with self.transaction():
-            old = self.db.execute("SELECT bucket,amount,expiry,state,reference FROM cf_reservation WHERE id=?",
-                                  (key,)).fetchone()
-            # Existing identity is queryable even after expiry; never reserve again.
-            if old:
-                check(old[:3] == (bucket, amount, expiry) and old[4] == ref and
-                      self.balance(bucket)[0] == unit, "duplicate parameters differ")
-                return key, old[3]
-            row = self.balance(bucket)
-            check(row is not None and row[0] == unit and now < expiry <= row[3], "bucket mismatch")
-            if self.db.execute("UPDATE cf_bucket SET used=used+? WHERE id=? AND used<=capacity-?",
-                               (amount, bucket, amount)).rowcount != 1:
-                return key, "STOP_QUOTA"
-            self.db.execute("INSERT INTO cf_reservation VALUES (?,?,?,?,?,'RESERVED')",
-                            (key, bucket, ref, amount, expiry))
-            return key, "RESERVED"
+            return self._reserve_locked(key, ref, bucket, unit, amount, expiry, now)
+
+    def _reserve_locked(self, key, ref, bucket, unit, amount, expiry, now):
+        """Shared atomic accounting. Called only inside an existing transaction."""
+        old = self.db.execute("SELECT bucket,amount,expiry,state,reference FROM cf_reservation WHERE id=?",
+                              (key,)).fetchone()
+        # Existing identity is queryable even after expiry; never reserve again.
+        if old:
+            check(old[:3] == (bucket, amount, expiry) and old[4] == ref and
+                  self.balance(bucket)[0] == unit, "duplicate parameters differ")
+            return key, old[3]
+        row = self.balance(bucket)
+        check(row is not None and row[0] == unit and now < expiry <= row[3], "bucket mismatch")
+        if self.db.execute("UPDATE cf_bucket SET used=used+? WHERE id=? AND used<=capacity-?",
+                           (amount, bucket, amount)).rowcount != 1:
+            return key, "STOP_QUOTA"
+        self.db.execute("INSERT INTO cf_reservation VALUES (?,?,?,?,?,'RESERVED')",
+                        (key, bucket, ref, amount, expiry))
+        return key, "RESERVED"
+
+    def reserve_review_plan(self, request, providers, receipts, as_of):
+        """Reserve a whole reviewer set in the *synthetic* ledger, never dispatch.
+
+        Only synthetic observations may enter this laboratory. A candidate has
+        one immutable batch: changed assignments require separate reconciliation.
+        Provider quotas are mock bucket capacities, not vendor account balances.
+        """
+        from scripts.review_orchestrator import plan, time, identity
+        check(type(providers) is list and type(receipts) is list, "review observations")
+        check(all(isinstance(x, dict) and isinstance(x.get("evidenceRef"), str) and
+                  x["evidenceRef"].startswith("synthetic://") for x in providers + receipts),
+              "synthetic review evidence only")
+        result = plan(request, providers, receipts, as_of)
+        def outcome(decision, reservations=None):
+            return {"decision": decision, "reservations": reservations or [],
+                    "dispatchAuthorized": False, "paidComputeAuthorized": False,
+                    "reviewAccepted": False, "mergeAuthorized": False, "releaseAuthorized": False}
+        if result["decision"] != "PLAN_READY_FOR_REVIEW":
+            return outcome(result["decision"])
+        candidate = digest({"reviewCandidate": identity(request)})
+        assignments = result["assignments"]
+        ref = digest({"candidate": candidate, "request": request, "assignments": assignments,
+                      "receiptEvidence": result["receiptEvidence"]})
+        now = int(time(as_of).timestamp())
+        check(number(now), "review time")
+        try:
+            with self.transaction():
+                existing = self.db.execute("SELECT reference FROM cf_review_batch WHERE candidate=?",
+                                           (candidate,)).fetchone()
+                if existing and existing[0] != ref:
+                    return outcome("HOLD_RECONCILIATION")
+                rows = []
+                for a in assignments:
+                    provider = a["providerId"]
+                    expiry = int(time(a["expiresAt"]).timestamp())
+                    check(number(expiry, 1) and now < expiry, "review expiry")
+                    # Scope is bound in the reference; the candidate/provider key
+                    # cannot be reused by changing the requested scope.
+                    key = digest({"reviewCandidate": candidate, "provider": provider})
+                    bucket = "synthetic:review:" + provider
+                    if existing:
+                        check(self.db.execute("SELECT 1 FROM cf_reservation WHERE id=?", (key,)).fetchone(),
+                              "incomplete existing batch")
+                    _, state = self._reserve_locked(key, ref, bucket, REVIEW_UNIT, 1, expiry, now)
+                    if state == "STOP_QUOTA":
+                        raise QuotaUnavailable()
+                    rows.append({"providerId": provider, "key": key, "state": state})
+                if not existing:
+                    self.db.execute("INSERT INTO cf_review_batch VALUES (?,?)", (candidate, ref))
+                return outcome("SIMULATED_RESERVED" if all(r["state"] == "RESERVED" for r in rows)
+                               else "HOLD_RECONCILIATION", rows)
+        except QuotaUnavailable:
+            return outcome("HOLD_SIMULATED_QUOTA")
 
     def transition(self, key, action, now):
         check(sha(key) and number(now), "transition identity")

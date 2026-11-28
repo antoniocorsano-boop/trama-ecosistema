@@ -75,7 +75,8 @@ def choose_accelerator(provider: dict[str, Any], policy: dict[str, Any]) -> dict
     return None
 
 
-def provider_reasons(provider: dict[str, Any], policy: dict[str, Any]) -> list[str]:
+def free_entitlement_reasons(provider: dict[str, Any], policy: dict[str, Any]) -> list[str]:
+    """Shared FREE_ONLY eligibility; independent of infrastructure and GPU selection."""
     reasons: list[str] = []
     allowlist = set(policy.get("providerAllowlist", []))
     if allowlist and provider.get("providerId") not in allowlist:
@@ -90,6 +91,11 @@ def provider_reasons(provider: dict[str, Any], policy: dict[str, Any]) -> list[s
         reasons.append("NOT_ZERO_MARGINAL_COST")
     if int(provider.get("estimatedRunsRemaining", 0)) < int(policy["requiredEstimatedRunsRemaining"]):
         reasons.append("INSUFFICIENT_FREE_ENTITLEMENT")
+    return reasons
+
+
+def provider_reasons(provider: dict[str, Any], policy: dict[str, Any]) -> list[str]:
+    reasons = free_entitlement_reasons(provider, policy)
     if float(provider.get("systemRamGiB", 0)) < float(policy["minSystemRamGiB"]):
         reasons.append("INSUFFICIENT_SYSTEM_RAM")
     if float(provider.get("diskFreeGiB", 0)) < float(policy["minDiskGiB"]):

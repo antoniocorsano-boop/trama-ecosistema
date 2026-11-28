@@ -1,0 +1,117 @@
+{
+  "request": {
+    "repository": "antoniocorsano-boop/registro-docente-governance",
+    "pr": 7,
+    "base": "938ad6352d9de0c8a222e3ca2be1d772e33576d6",
+    "head": "17a58e64e2fa9298b88f8c2f3e866a34177481ae",
+    "risk": "CRITICAL",
+    "requiredScopes": [
+      "code",
+      "security",
+      "ci"
+    ],
+    "humanRequired": true,
+    "requiredHumanScopes": [
+      "security"
+    ],
+    "authorGroups": [
+      "implementation-agent"
+    ],
+    "maxRequests": 4,
+    "providerAllowlist": [
+      "codex",
+      "devin",
+      "ecc",
+      "coderabbit"
+    ]
+  },
+  "providers": [
+    {
+      "providerId": "codex",
+      "independenceGroup": "openai-review",
+      "capabilities": [
+        "code",
+        "security",
+        "ci",
+        "supply-chain"
+      ],
+      "kind": "INDEPENDENT",
+      "authorized": true,
+      "credentialsAvailable": false,
+      "status": "UNAVAILABLE",
+      "effectiveCostClass": "UNKNOWN",
+      "estimatedRunsRemaining": 0,
+      "evidenceRef": "https://github.com/antoniocorsano-boop/registro-docente/pull/416#issuecomment-7235131290",
+      "observedAt": "2026-11-28T08:18:21Z",
+      "expiresAt": "2026-11-28T09:18:21Z"
+    },
+    {
+      "providerId": "devin",
+      "independenceGroup": "cognition",
+      "capabilities": [
+        "code",
+        "security",
+        "ci"
+      ],
+      "kind": "INDEPENDENT",
+      "authorized": true,
+      "credentialsAvailable": false,
+      "status": "UNKNOWN",
+      "effectiveCostClass": "UNKNOWN",
+      "estimatedRunsRemaining": 0,
+      "evidenceRef": "https://github.com/antoniocorsano-boop/registro-docente-governance/pull/7#pullrequestreview-6096512821",
+      "observedAt": "2026-11-28T08:18:21Z",
+      "expiresAt": "2026-11-28T09:18:21Z"
+    },
+    {
+      "providerId": "ecc",
+      "independenceGroup": "scanner",
+      "capabilities": [
+        "security",
+        "ci"
+      ],
+      "kind": "COMPLEMENTARY",
+      "authorized": true,
+      "credentialsAvailable": false,
+      "status": "UNKNOWN",
+      "effectiveCostClass": "UNKNOWN",
+      "estimatedRunsRemaining": 0,
+      "evidenceRef": "https://github.com/antoniocorsano-boop/registro-docente-governance/pull/7#issuecomment-7236154648",
+      "observedAt": "2026-11-28T08:18:21Z",
+      "expiresAt": "2026-11-28T09:18:21Z"
+    },
+    {
+      "providerId": "coderabbit",
+      "independenceGroup": "coderabbit",
+      "capabilities": [
+        "code",
+        "security",
+        "ci"
+      ],
+      "kind": "INDEPENDENT",
+      "authorized": false,
+      "credentialsAvailable": false,
+      "status": "UNKNOWN",
+      "effectiveCostClass": "UNKNOWN",
+      "estimatedRunsRemaining": 0,
+      "evidenceRef": "https://www.coderabbit.ai/oss",
+      "observedAt": "2026-11-28T08:18:21Z",
+      "expiresAt": "2026-11-28T09:18:21Z"
+    }
+  ],
+  "receipts": [
+    {
+      "repository": "antoniocorsano-boop/registro-docente-governance",
+      "pr": 7,
+      "base": "938ad6352d9de0c8a222e3ca2be1d772e33576d6",
+      "head": "d353fa22e9ce0975094fe418c3ce89c47d143e5d",
+      "providerId": "devin",
+      "scopes": [],
+      "state": "UNCERTAIN",
+      "evidenceRef": "https://github.com/antoniocorsano-boop/registro-docente-governance/pull/7#pullrequestreview-6096512821",
+      "openFindings": [],
+      "limitations": []
+    }
+  ],
+  "asOf": "2026-11-28T08:18:21Z"
+}

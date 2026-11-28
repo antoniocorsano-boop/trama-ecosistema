@@ -17,6 +17,14 @@ on:
       - "tests/test_compute_factory_convergence.py"
       - "scripts/compute_factory_quota_ledger.py"
       - "tests/test_compute_factory_quota_ledger.py"
+      - "scripts/review_orchestrator.py"
+      - "scripts/coderabbit_review_adapter.py"
+      - "tests/test_review_orchestrator.py"
+      - "tests/test_coderabbit_review_adapter.py"
+      - "tests/test_review_reservation.py"
+      - "examples/pr-7-v2-input.json"
+      - "examples/coderabbit-pr7-observation.json"
+      - "docs/decisions/trama-review-orchestration-v0.1.md"
       - "scripts/compute_factory_procedural_evidence.py"
       - "scripts/verify_compute_factory_test_gate.py"
       - "tests/test_compute_factory_test_gate.py"
@@ -64,6 +72,7 @@ jobs:
           python -m unittest tests/test_visual_factory_provider_adapters.py -v
           python -m unittest tests/test_compute_factory_handoff.py -v
           python -m unittest tests/test_compute_factory_quota_ledger.py -v
+          python -m unittest tests/test_review_orchestrator.py tests/test_coderabbit_review_adapter.py tests/test_review_reservation.py -v
           python -m unittest tests/test_compute_factory_procedural_evidence.py -v
           python -m unittest tests/test_compute_factory_test_gate.py -v
 
