@@ -12,6 +12,11 @@ test("Overview orients without inventing blocking decisions", async ({ page }, t
   await page.goto("/#/");
 
   await expect(page.getByRole("heading", { name: "Dove siamo e cosa richiede attenzione." })).toBeVisible();
+  const principle = page.getByRole("region", { name: "Il nostro principio guida" });
+  await expect(principle).toBeVisible();
+  await expect(principle.getByText("La tecnologia è al servizio dell'educazione.", { exact: true })).toBeVisible();
+  await expect(principle.getByText("L'intelligenza artificiale è al servizio della tecnologia.", { exact: true })).toBeVisible();
+  await expect(principle.getByText("Nessun vincolo tecnologico o commerciale deve compromettere la finalità educativa, la sostenibilità sociale e la tutela delle persone.", { exact: true })).toBeVisible();
   await expect(page.getByText("Nessun gate bloccante aperto.")).toBeVisible();
   await expect(page.getByText(/Prossimo fronte pianificato: R4/)).toBeVisible();
   const specialistNav = page.getByRole("navigation", { name: "Viste specialistiche" });
@@ -45,4 +50,12 @@ test("mobile navigation keeps only migrated destinations actionable", async ({ p
   await expect(primaryNav.getByRole("link", { name: "Evidenze" })).toBeVisible();
   await expect(primaryNav.getByRole("link", { name: "Operazioni" })).toBeVisible();
   await expect(primaryNav.getByRole("link", { name: "Assurance" })).toBeVisible();
+});
+
+
+test("the permanent principle stays visible when the snapshot is unavailable", async ({ page }) => {
+  await page.route("**/data/ecosystem-snapshot.json", route => route.fulfill({ status: 503, body: "Unavailable" }));
+  await page.goto("/#/");
+  await expect(page.getByRole("alert").filter({ hasText: "Lo stato governato non è utilizzabile." })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Il nostro principio guida" })).toBeVisible();
 });

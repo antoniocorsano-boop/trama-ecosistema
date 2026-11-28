@@ -63,6 +63,8 @@ export function OverviewView({
         </div>
       </header>
 
+      <TramaPrinciple />
+
       <section className="orientation-strip" aria-label="Orientamento corrente">
         <article>
           <span>Focus</span>
@@ -264,11 +266,24 @@ function Destination({
   );
 }
 
+function TramaPrinciple() {
+  return (
+    <section className="overview-panel trama-principle" aria-labelledby="trama-principle-title">
+      <p className="overview-eyebrow" id="trama-principle-title">Il nostro principio guida</p>
+      <p><strong>La tecnologia è al servizio dell'educazione.</strong></p>
+      <p>L'intelligenza artificiale è al servizio della tecnologia.</p>
+      <p>Nessun vincolo tecnologico o commerciale deve compromettere la finalità educativa, la sostenibilità sociale e la tutela delle persone.</p>
+      <p className="trama-principle-values">Educazione · Sostenibilità · Autonomia · Privacy</p>
+    </section>
+  );
+}
+
 function OverviewStatus({ message, error = false }: { message: string; error?: boolean }) {
   return (
     <section className={error ? "overview-status is-error" : "overview-status"}>
       <p className="section-kicker">A3 · OVERVIEW</p>
       <h2>Control Center</h2>
+      <TramaPrinciple />
       <p role={error ? "alert" : undefined}>{message}</p>
     </section>
   );
