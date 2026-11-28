@@ -37,3 +37,16 @@ test('public Gateway stays visible and professional entry fails closed without a
 
   expect(pageErrors).toEqual([]);
 });
+
+test('Orizzonte does not bypass the missing professional entry destination', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?ambiente=orizzonte');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByTestId('trama-media-poster')).toBeVisible();
+  const unavailable = page.getByRole('button', { name: 'Accesso in preparazione' });
+  await expect(unavailable).toHaveCount(2);
+  for (const button of await unavailable.all()) await expect(button).toBeDisabled();
+  await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Accedi' })).toHaveCount(0);
+  await expect(page.locator('video')).toHaveCount(0);
+});

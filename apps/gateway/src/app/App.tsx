@@ -95,7 +95,7 @@ export function App() {
         <section id="ambienti-grafici" aria-labelledby="ambienti-grafici-title" className="mx-auto mb-16 w-full max-w-6xl border-t border-white/15 pt-8 sm:mb-20">
           <h2 id="ambienti-grafici-title" className="text-xl font-medium">Ambiente grafico</h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-[hsl(var(--foreground)/0.88)] sm:text-base">
-            Scegli una delle due composizioni originali di TRAMA. La scelta modifica soltanto lo sfondo, non i contenuti o le modalità di accesso.
+            Scegli una delle tre composizioni originali di TRAMA. La scelta modifica soltanto lo sfondo, non i contenuti o le modalità di accesso.
           </p>
           <nav aria-label="Scelta ambiente grafico" className="mt-5 flex flex-wrap gap-3">
             <a href="?ambiente=atelier#top" aria-current={profile === 'atelier' ? 'page' : undefined} className="min-w-0 max-w-full rounded-xl border border-white/40 px-4 py-3 text-sm [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
@@ -103,6 +103,9 @@ export function App() {
             </a>
             <a href="?ambiente=studio-classico#top" aria-current={profile === 'studio-classico' ? 'page' : undefined} className="min-w-0 max-w-full rounded-xl border border-white/40 px-4 py-3 text-sm [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
               Studio classico{profile === 'studio-classico' ? ' · attuale' : ''}
+            </a>
+            <a href="?ambiente=orizzonte#top" aria-current={profile === 'orizzonte' ? 'page' : undefined} className="min-w-0 max-w-full rounded-xl border border-white/40 px-4 py-3 text-sm [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              Orizzonte della conoscenza{profile === 'orizzonte' ? ' · attuale' : ''}
             </a>
           </nav>
         </section>
