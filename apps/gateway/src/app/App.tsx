@@ -1,4 +1,5 @@
 import { gatewayConfig, resolveGatewayVisualProfile } from '../config/gateway';
+import { publicAtlasHref } from '../config/public-destinations';
 import { TramaGatewayShell } from '../components/trama/TramaGatewayShell';
 import { TramaGlassAction } from '../components/trama/TramaGlassAction';
 import { TramaNavigation } from '../components/trama/TramaNavigation';
@@ -131,6 +132,11 @@ export function App() {
               <p className="mt-5 max-w-md text-sm leading-7 text-[hsl(var(--foreground)/0.72)] sm:text-base">
                 {section.body}
               </p>
+              {section.id === 'curricolo' && publicAtlasHref ? (
+                <TramaGlassAction href={publicAtlasHref} className="mt-5 h-auto min-h-10 max-w-full whitespace-normal text-left">
+                  Consulta il curricolo in Atlas
+                </TramaGlassAction>
+              ) : null}
             </section>
           ))}
         </div>

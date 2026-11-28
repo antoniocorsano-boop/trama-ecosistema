@@ -20,6 +20,7 @@ test('public Gateway stays visible and professional entry fails closed without a
 
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Accedi' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Consulta il curricolo in Atlas' })).toHaveAttribute('href', 'https://antoniocorsano-boop.github.io/Curriculum-Atlas/curricolo/');
   await expect(page.getByRole('button', { name: 'Entra in TRAMA' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Accedi' })).toHaveCount(0);
 
@@ -48,5 +49,6 @@ test('Orizzonte does not bypass the missing professional entry destination', asy
   for (const button of await unavailable.all()) await expect(button).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Accedi' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Consulta il curricolo in Atlas' })).toHaveAttribute('href', 'https://antoniocorsano-boop.github.io/Curriculum-Atlas/curricolo/');
   await expect(page.locator('video')).toHaveCount(0);
 });
