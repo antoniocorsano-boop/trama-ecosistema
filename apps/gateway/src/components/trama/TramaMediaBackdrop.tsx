@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { usePrefersReducedMotion } from '../../hooks/use-prefers-reduced-motion';
-
 export type TramaBackgroundSources = {
   lim: string;
   s: string;
@@ -9,15 +6,11 @@ export type TramaBackgroundSources = {
 };
 
 export type TramaMediaBackdropProps = {
-  videoSrc: string;
   background: TramaBackgroundSources;
   className?: string;
 };
 
-export function TramaMediaBackdrop({ videoSrc, background, className }: TramaMediaBackdropProps) {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const [videoFailed, setVideoFailed] = useState(false);
-  const showVideo = !prefersReducedMotion && !videoFailed;
+export function TramaMediaBackdrop({ background, className }: TramaMediaBackdropProps) {
 
   return (
     <div className={className} aria-hidden="true">
@@ -32,20 +25,6 @@ export function TramaMediaBackdrop({ videoSrc, background, className }: TramaMed
           className="trama-media-visual absolute inset-0 h-full w-full object-cover"
         />
       </picture>
-      {showVideo ? (
-        <video
-          data-testid="trama-media-video"
-          src={videoSrc}
-          poster={background.l}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          onError={() => setVideoFailed(true)}
-          className="trama-media-visual absolute inset-0 h-full w-full object-cover"
-        />
-      ) : null}
     </div>
   );
 }

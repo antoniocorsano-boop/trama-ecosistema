@@ -15,15 +15,18 @@ test('reduced motion uses static poster and suppresses entrance animation', asyn
   expect(animation).toBe('none');
 });
 
-test('video request failure leaves poster, copy and CTA usable', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'L', 'Media failure evidence is viewport-independent.');
-  await page.route(VIDEO_HOST, (route) => route.abort());
+test('normal motion does not request or overlay the archived external prototype', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const requests: string[] = [];
+  page.on('request', request => { if (new URL(request.url()).hostname === 'd8j0ntlcm91z4.cloudfront.net') requests.push(request.url()); });
   await page.goto('/');
-
   await expect(page.getByTestId('trama-media-poster')).toBeVisible();
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.getByText(/Un ecosistema per progettare/)).toBeVisible();
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toBeVisible();
+  await expect(page.locator('video')).toHaveCount(0);
+  await expect(page.locator('picture img')).toHaveCount(1);
+  expect(requests).toEqual([]);
 });
 
 test('canonical L background is viewport-sufficient for large displays', async ({ page }, testInfo) => {

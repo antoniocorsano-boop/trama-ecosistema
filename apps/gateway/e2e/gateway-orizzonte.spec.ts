@@ -1,0 +1,96 @@
+import { expect, test } from '@playwright/test';
+import path from 'node:path';
+import fs from 'node:fs';
+import AxeBuilder from '@axe-core/playwright';
+
+const media = '**/media/orizzonte-*.mp4';
+const historicHost = 'd8j0ntlcm91z4.cloudfront.net';
+
+test('third profile selects one responsive local media only after explicit request', async ({ page }, testInfo) => {
+  const requested: string[] = [];
+  const external: string[] = [];
+  page.on('request', request => {
+    const url = new URL(request.url());
+    if (url.pathname.endsWith('.mp4')) requested.push(url.pathname);
+    if (url.hostname === historicHost) external.push(url.href);
+  });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  const chooser = page.getByRole('navigation', { name: 'Scelta ambiente grafico' });
+  await chooser.getByRole('link', { name: 'Orizzonte della conoscenza', exact: true }).click();
+  const role = testInfo.project.name;
+  const poster = page.getByTestId('trama-media-poster');
+  const video = page.getByTestId('trama-historical-video');
+  await expect(page.locator('.trama-gateway-stage')).toHaveAttribute('data-visual-profile', 'orizzonte');
+  await expect.poll(() => poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain(`orizzonte-${role}.webp`);
+  await expect.poll(() => poster.evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect(poster).toBeVisible();
+  await expect(video).toHaveCount(0);
+  expect(requested).toEqual([]);
+  await page.getByRole('button', { name: 'Riproduci animazione' }).click();
+  await expect(video).toHaveAttribute('src', `/media/orizzonte-${role}.mp4`);
+  await expect(video).toBeVisible({ timeout: 15000 });
+  await expect.poll(() => video.evaluate(el => (el as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
+  await expect(poster).toBeHidden();
+  expect(new Set(requested)).toEqual(new Set([`/media/orizzonte-${role}.mp4`]));
+  expect(external).toEqual([]);
+  await page.getByRole('button', { name: 'Interrompi animazione' }).click();
+  await expect(video).toHaveCount(0);
+  await expect(poster).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveAttribute('href', '/ecosistema');
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations.filter(item => item.impact === 'serious' || item.impact === 'critical')).toEqual([]);
+  const dimensions = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+  expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client + 1);
+  const evidence = path.resolve('test-results/evidence');
+  fs.mkdirSync(evidence, { recursive: true });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({path: path.join(evidence, `orizzonte-${role}.png`), fullPage: true});
+  await page.reload();
+  await expect(video).toHaveCount(0);
+  await chooser.getByRole('link', { name: 'Atelier panoramico', exact: true }).click();
+  await expect(page.locator('.trama-gateway-stage')).toHaveAttribute('data-visual-profile', 'atelier');
+  await expect(video).toHaveCount(0);
+});
+
+test('motion preference and video error retain coherent poster', async ({ page }) => {
+  const requested: string[] = [];
+  await page.route(media, route => { requested.push(route.request().url()); return route.abort(); });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?ambiente=orizzonte');
+  await expect(page.getByTestId('trama-media-poster')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Riproduci animazione' })).toHaveCount(0);
+  expect(requested).toEqual([]);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.getByRole('button', { name: 'Riproduci animazione' }).click();
+  await expect(page.getByText('Video non disponibile. Immagine statica mantenuta.')).toBeVisible();
+  await expect(page.getByTestId('trama-historical-video')).toHaveCount(0);
+  await expect(page.getByTestId('trama-media-poster')).toBeVisible();
+  expect(requested.length).toBeGreaterThan(0);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.getByRole('button', { name: 'Riproduci animazione' })).toHaveCount(0);
+});
+
+test('changing viewport or enabling reduced motion stops active playback without requesting a new file', async ({ page }) => {
+  const requested: string[] = [];
+  page.on('request', request => { if (new URL(request.url()).pathname.endsWith('.mp4')) requested.push(new URL(request.url()).pathname); });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/?ambiente=orizzonte');
+  await page.getByRole('button', { name: 'Riproduci animazione' }).click();
+  await expect(page.getByTestId('trama-historical-video')).toBeVisible({ timeout: 15000 });
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await expect(page.getByTestId('trama-historical-video')).toHaveCount(0);
+  await expect(page.getByTestId('trama-media-poster')).toBeVisible();
+  await expect.poll(() => page.getByTestId('trama-media-poster').evaluate(el => (el as HTMLImageElement).currentSrc)).toContain('orizzonte-M.webp');
+  expect(new Set(requested)).toEqual(new Set(['/media/orizzonte-S.mp4']));
+  await page.getByRole('button', { name: 'Riproduci animazione' }).click();
+  await expect(page.getByTestId('trama-historical-video')).toBeVisible({ timeout: 15000 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.getByTestId('trama-historical-video')).toHaveCount(0);
+  await expect(page.getByTestId('trama-media-poster')).toBeVisible();
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await expect(page.getByRole('button', { name: 'Riproduci animazione' })).toBeVisible();
+  await expect(page.getByTestId('trama-historical-video')).toHaveCount(0);
+  expect(new Set(requested)).toEqual(new Set(['/media/orizzonte-S.mp4', '/media/orizzonte-M.mp4']));
+});
