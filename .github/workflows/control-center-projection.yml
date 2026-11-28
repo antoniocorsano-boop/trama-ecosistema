@@ -7,6 +7,12 @@ on:
       - "status/ecosystem-status.json"
       - "scripts/build_ecosystem_snapshot.py"
       - "scripts/build_ecosystem_snapshot_core.py"
+      - "governance/access/trama-ecosystem-state-v0.3.json"
+      - "schemas/trama-ecosystem-state-v0.3.schema.json"
+      - "scripts/validate_ecosystem_state_v03.py"
+      - "scripts/test_ecosystem_state_v03_contract.py"
+      - "scripts/test_ecosystem_graph_projection.py"
+      - "docs/evidence/access-01/trama-access-state-promotion-v0.3-2026-10-17.md"
       - ".github/workflows/control-center-projection.yml"
 
 permissions:
@@ -22,6 +28,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+
+      - name: Install JSON Schema validator
+        run: python -m pip install --disable-pip-version-check --quiet jsonschema
+
+      - name: Validate ecosystem state v0.3 contract
+        run: python scripts/test_ecosystem_state_v03_contract.py
+
+      - name: Validate ecosystem graph projection contract
+        run: python scripts/test_ecosystem_graph_projection.py
 
       - name: Regenerate governed projection in workspace
         run: python scripts/build_ecosystem_snapshot.py --output /tmp/ecosystem-snapshot.json

@@ -324,6 +324,22 @@ La sequenza OR è quindi **conclusa nel perimetro NO_RUNTIME**. Il passo success
 
 Un proof runtime-only può qualificare infrastruttura ma non dimostra, da solo, valore di ecosistema.
 
+## TRAMA FREE-DEPLOY — Distribuzione sostenibile a costo zero
+
+Stato: **HUMAN_DIRECTION_APPROVED / DOCUMENTATION_CANDIDATE / NO_RUNTIME** (14 novembre 2026). Decisione [TRAMA-ADR-022](docs/decisions/trama-adr-022-free-deploy.md); [piano e inventario](docs/strategy/trama-free-deploy-v1.md); [lista di controllo obbligatoria proposta](docs/strategy/trama-free-deploy-checklist-v1.md).
+
+Capacità trasversale, subordinata ai domini esistenti. Atlas Edu = destinazione logica dei prodotti pubblici approvati; TRAMA Lab = collaudi riservati; dati professionali e scolastici restano sotto le rispettive autorità. FREE_ONLY, stop se costo/permessi/quote/protezioni non verificati; nessun fallback pubblico o a pagamento. Nessuna promozione di runtime, pubblicazione, DOS-A1 o maturità.
+
+- **FD-00** — decisione e documentazione: CANDIDATE.
+- **FD-01** — inventario, quote, termini, permessi e costi: PRELIMINARY.
+- **FD-02** — qualificazione distribuzione statica portabile: PLANNED.
+- **FD-03** — collaudo riservato permanente: PLANNED.
+- **FD-04** — pilota Missione 118 V9.1 e pubblicazione solo dopo autorizzazione distinta: PLANNED.
+- **FD-05** — distribuzione ripetibile, ripristino, portabilità: PLANNED.
+- **FD-06** — controllo quote e sostenibilità: PLANNED.
+
+Questa sequenza rimuove il blocco della distribuzione dei contenuti senza sostituire R3-P4, i gate Atlas, le revisioni C1–C6 o la roadmap dei prodotti. Prima prova con fixture sintetica. Nessuna migrazione o attivazione di servizi in questa tranche.
+
 ## R5 Preparazione all'adozione
 
 - verifica del nome TRAMA;

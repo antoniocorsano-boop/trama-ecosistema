@@ -1,0 +1,46 @@
+name: Visual Factory — 3D planning contract
+
+on:
+  pull_request:
+    paths:
+      - "scripts/compile_visual_factory_3d_plan.py"
+      - "tests/test_visual_factory_3d_plan.py"
+      - "schemas/trama-visual-3d-planning-input.v0.1.schema.json"
+      - "fixtures/visual-factory-3d/**"
+      - "docs/capabilities/atlas-percorsi/production/VISUAL-FACTORY-3D-ORCHESTRATION-v0.1.md"
+      - ".github/workflows/visual-factory-3d-plan.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-planner:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate JSON syntax and compile Python
+        run: |
+          python -m json.tool schemas/trama-visual-3d-planning-input.v0.1.schema.json >/dev/null
+          python -m json.tool fixtures/visual-factory-3d/engine-registry.v0.1.json >/dev/null
+          python -m json.tool fixtures/visual-factory-3d/comfyui-recipe-catalog.v0.1.json >/dev/null
+          python -m py_compile scripts/compile_visual_factory_3d_plan.py
+      - name: Offline deterministic tests — no model download or inference
+        run: python -m unittest discover -s tests -p test_visual_factory_3d_plan.py -v
+      - name: Compile synthetic reference-pending example
+        run: |
+          mkdir -p /tmp/vf3d-plan
+          python scripts/compile_visual_factory_3d_plan.py \
+            --request-bundle fixtures/visual-factory-3d/storie-planning-example.json \
+            --registry fixtures/visual-factory-3d/engine-registry.v0.1.json \
+            --recipes fixtures/visual-factory-3d/comfyui-recipe-catalog.v0.1.json \
+            --now 2026-11-17T15:30:00Z --out /tmp/vf3d-plan/plan.json
+          python -c 'import json; p=json.load(open("/tmp/vf3d-plan/plan.json")); assert p["decision"]=="WAITING_FOR_REFERENCE" and p["plannedJobs"]==0 and p["executionAuthorized"] is False and p["liveEvidenceVerified"] is False'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vf3d-offline-plan-synthetic
+          path: /tmp/vf3d-plan/plan.json
+          retention-days: 7

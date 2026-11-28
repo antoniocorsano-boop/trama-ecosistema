@@ -1,4 +1,5 @@
-import { gatewayConfig } from '../config/gateway';
+import { gatewayConfig, resolveGatewayVisualProfile } from '../config/gateway';
+import { publicAtlasHref } from '../config/public-destinations';
 import { TramaGatewayShell } from '../components/trama/TramaGatewayShell';
 import { TramaGlassAction } from '../components/trama/TramaGlassAction';
 import { TramaNavigation } from '../components/trama/TramaNavigation';
@@ -25,9 +26,10 @@ const landingSections = [
 ] as const;
 
 export function App() {
+  const profile = resolveGatewayVisualProfile(typeof window === 'undefined' ? '' : window.location.search);
   return (
     <>
-      <TramaGatewayShell>
+      <TramaGatewayShell profile={profile}>
         <TramaNavigation />
         <main className="trama-hero-main relative z-10 flex min-h-[calc(100svh-96px)] flex-col items-center justify-center px-5 pb-20 pt-10 text-center sm:px-8 sm:pb-24 sm:pt-14 lg:pb-28">
           <section
@@ -72,6 +74,43 @@ export function App() {
       </TramaGatewayShell>
 
       <div className="relative bg-[hsl(var(--background))] px-5 py-16 text-[hsl(var(--foreground))] sm:px-8 sm:py-20 lg:py-24">
+        <section
+          id="principio-guida"
+          aria-labelledby="principio-guida-title"
+          className="mx-auto mb-16 w-full max-w-6xl border-t border-white/15 pt-8 text-left sm:mb-20"
+        >
+          <h2 id="principio-guida-title" className="mb-5 text-xs font-medium tracking-[0.24em] text-[var(--solar-highlight)]">
+            Il nostro principio guida
+          </h2>
+          <p className="max-w-3xl text-2xl font-normal leading-tight sm:text-4xl" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+            La tecnologia è al servizio dell'educazione.
+          </p>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[hsl(var(--foreground)/0.88)] sm:text-lg">
+            L'intelligenza artificiale è al servizio della tecnologia.
+          </p>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-[hsl(var(--foreground)/0.88)] sm:text-base">
+            Nessun vincolo tecnologico o commerciale deve compromettere la finalità educativa, la sostenibilità sociale e la tutela delle persone.
+          </p>
+        </section>
+
+        <section id="ambienti-grafici" aria-labelledby="ambienti-grafici-title" className="mx-auto mb-16 w-full max-w-6xl border-t border-white/15 pt-8 sm:mb-20">
+          <h2 id="ambienti-grafici-title" className="text-xl font-medium">Ambiente grafico</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-[hsl(var(--foreground)/0.88)] sm:text-base">
+            Scegli una delle tre composizioni originali di TRAMA. La scelta modifica soltanto lo sfondo, non i contenuti o le modalità di accesso.
+          </p>
+          <nav aria-label="Scelta ambiente grafico" className="mt-5 flex flex-wrap gap-3">
+            <a href="?ambiente=atelier#top" aria-current={profile === 'atelier' ? 'page' : undefined} className="min-w-0 max-w-full rounded-xl border border-white/40 px-4 py-3 text-sm [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              Atelier panoramico{profile === 'atelier' ? ' · attuale' : ''}
+            </a>
+            <a href="?ambiente=studio-classico#top" aria-current={profile === 'studio-classico' ? 'page' : undefined} className="min-w-0 max-w-full rounded-xl border border-white/40 px-4 py-3 text-sm [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              Studio classico{profile === 'studio-classico' ? ' · attuale' : ''}
+            </a>
+            <a href="?ambiente=orizzonte#top" aria-current={profile === 'orizzonte' ? 'page' : undefined} className="min-w-0 max-w-full rounded-xl border border-white/40 px-4 py-3 text-sm [overflow-wrap:anywhere] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+              Orizzonte della conoscenza{profile === 'orizzonte' ? ' · attuale' : ''}
+            </a>
+          </nav>
+        </section>
+
         <div className="mx-auto grid w-full max-w-6xl gap-10 md:grid-cols-3 md:gap-8">
           {landingSections.map((section) => (
             <section
@@ -93,6 +132,11 @@ export function App() {
               <p className="mt-5 max-w-md text-sm leading-7 text-[hsl(var(--foreground)/0.72)] sm:text-base">
                 {section.body}
               </p>
+              {section.id === 'curricolo' && publicAtlasHref ? (
+                <TramaGlassAction href={publicAtlasHref} className="mt-5 h-auto min-h-10 max-w-full whitespace-normal text-left">
+                  Consulta il curricolo in Atlas
+                </TramaGlassAction>
+              ) : null}
             </section>
           ))}
         </div>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { gatewayConfig, resolveGatewayEntryHref } from './gateway';
+import { gatewayConfig, resolveGatewayEntryHref, resolveGatewayVisualProfile } from './gateway';
 
 describe('gatewayConfig background contract', () => {
   it('exposes governed LIM/S/M/L background roles and no canonical legacy poster reference', () => {
@@ -47,5 +47,18 @@ describe('resolveGatewayEntryHref', () => {
 
   it('uses a configured destination outside production when one is supplied', () => {
     expect(resolveGatewayEntryHref('  /ecosistema  ', false)).toBe('/ecosistema');
+  });
+});
+
+describe('resolveGatewayVisualProfile', () => {
+  it('keeps the approved atelier as the default and rejects unknown values', () => {
+    expect(resolveGatewayVisualProfile('')).toBe('atelier');
+    expect(resolveGatewayVisualProfile('?ambiente=video')).toBe('atelier');
+    expect(resolveGatewayVisualProfile('?ambiente=https://example.com')).toBe('atelier');
+  });
+  it('only accepts the explicitly selected historical studio', () => {
+    expect(resolveGatewayVisualProfile('?ambiente=studio-classico')).toBe('studio-classico');
+    expect(resolveGatewayVisualProfile('?ambiente=atelier')).toBe('atelier');
+    expect(Object.keys(gatewayConfig.classicBackground).sort()).toEqual(['l', 'lim', 'm', 's']);
   });
 });

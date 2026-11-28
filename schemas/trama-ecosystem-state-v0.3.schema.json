@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/trama-ecosystem-state-v0.3.schema.json",
+  "title": "TRAMA Ecosystem State v0.3",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "asOf",
+    "authorityPolicy",
+    "legend",
+    "externalActors",
+    "nodes",
+    "flows",
+    "views",
+    "transitionPolicy"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "trama.ecosystem.state/v0.3" },
+    "asOf": { "type": "string", "format": "date" },
+    "authorityPolicy": { "type": "object" },
+    "legend": { "type": "object" },
+    "externalActors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/externalActor" }
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "flows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/flow" }
+    },
+    "views": { "type": "object" },
+    "transitionPolicy": { "type": "object" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "state": {
+      "enum": ["REAL", "PARTIAL", "DESIGNED", "DEFERRED"]
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "externalActor": {
+      "type": "object",
+      "required": ["id", "label", "kind"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["HUMAN_ACTOR", "SYSTEM_ACTOR"] }
+      },
+      "additionalProperties": false
+    },
+    "gap": {
+      "type": "object",
+      "required": ["summary", "missing"],
+      "properties": {
+        "summary": { "type": "string" },
+        "missing": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "required": ["boundary", "value"],
+      "properties": {
+        "boundary": { "type": "string", "minLength": 1 },
+        "value": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "nextAllowedIntervention": {
+      "type": "object",
+      "required": ["action", "preconditions", "forbiddenUntil"],
+      "properties": {
+        "action": { "type": "string", "minLength": 1 },
+        "preconditions": { "$ref": "#/$defs/stringArray" },
+        "forbiddenUntil": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": false
+    },
+    "governedSubject": {
+      "type": "object",
+      "required": [
+        "id",
+        "state",
+        "targetState",
+        "boundary",
+        "authorityOwner",
+        "authorityRefs",
+        "implementationOwners",
+        "maturityRef",
+        "evidenceRefs",
+        "blockerRefs",
+        "gap",
+        "target",
+        "nextAllowedIntervention",
+        "sourceRefs",
+        "lastSignificantChange",
+        "decisionRefs"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "state": { "$ref": "#/$defs/state" },
+        "targetState": { "$ref": "#/$defs/state" },
+        "boundary": { "type": "string", "minLength": 1 },
+        "authorityOwner": { "type": ["string", "null"], "minLength": 1 },
+        "authorityRefs": { "$ref": "#/$defs/stringArray" },
+        "implementationOwners": { "$ref": "#/$defs/stringArray", "minItems": 1 },
+        "maturityRef": { "type": ["string", "null"], "minLength": 1 },
+        "evidenceRefs": { "$ref": "#/$defs/stringArray" },
+        "blockerRefs": { "$ref": "#/$defs/stringArray" },
+        "gap": { "$ref": "#/$defs/gap" },
+        "target": { "$ref": "#/$defs/target" },
+        "nextAllowedIntervention": { "$ref": "#/$defs/nextAllowedIntervention" },
+        "sourceRefs": { "$ref": "#/$defs/stringArray", "minItems": 1 },
+        "lastSignificantChange": { "type": ["string", "null"], "format": "date" },
+        "decisionRefs": { "$ref": "#/$defs/stringArray" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "authorityOwner": { "type": "null" } },
+            "required": ["authorityOwner"]
+          },
+          "then": {
+            "properties": { "authorityRefs": { "minItems": 1 } }
+          }
+        }
+      ]
+    },
+    "node": {
+      "allOf": [
+        { "$ref": "#/$defs/governedSubject" },
+        {
+          "type": "object",
+          "required": ["label", "plane"],
+          "properties": {
+            "label": { "type": "string", "minLength": 1 },
+            "plane": {
+              "enum": ["PUBLIC", "PROFESSIONAL", "LEARNER", "GOVERNANCE", "CROSS_CUTTING"]
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "flow": {
+      "allOf": [
+        { "$ref": "#/$defs/governedSubject" },
+        {
+          "type": "object",
+          "required": ["from", "to", "kind"],
+          "properties": {
+            "from": { "type": "string", "minLength": 1 },
+            "to": { "type": "string", "minLength": 1 },
+            "kind": {
+              "enum": [
+                "NAVIGATION",
+                "AUTHENTICATION",
+                "AUTHORITY",
+                "DATA",
+                "AUTHORING",
+                "PUBLICATION",
+                "ASSIGNMENT",
+                "GOVERNANCE",
+                "OTHER"
+              ]
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

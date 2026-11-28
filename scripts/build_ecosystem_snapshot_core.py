@@ -24,6 +24,7 @@ from evaluate_maturity_definitions import evaluate_area, validate_definitions
 from project_component_maturity import project_components, validate_projection as validate_component_projection
 from validate_stakeholder_assurance import assurance_readiness, validate_registry as validate_assurance_registry
 from validate_maturity_evidence_registry import validate_registry as validate_maturity_evidence_registry
+from validate_ecosystem_state_v03 import validate_graph as validate_ecosystem_graph
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -616,6 +617,43 @@ def timeline_projection(governed_events: dict) -> list[dict]:
     )
 
 
+
+def project_ecosystem_graph(graph_doc: dict, maturity_areas: list[dict]) -> dict:
+    """Project the canonical graph without inferring topology or realization state."""
+    maturity_by_id = {area["id"]: area for area in maturity_areas}
+    projected_nodes = []
+    for item in graph_doc.get("nodes", []):
+        projected = json.loads(json.dumps(item))
+        maturity_ref = item.get("maturityRef")
+        if maturity_ref is not None:
+            area = maturity_by_id.get(maturity_ref)
+            if area is None:
+                raise ValueError(f"Unresolved ecosystem graph maturityRef: {maturity_ref}")
+            projected["maturityContext"] = {
+                "confirmedLevel": area["confirmedLevel"],
+                "candidateLevel": area["candidateLevel"],
+                "evidenceBindingStatus": area["evidenceBindingStatus"],
+                "nextTargetLevel": area["nextTargetLevel"],
+                "nextRequiredEvidenceTypes": list(area["nextRequiredEvidenceTypes"]),
+                "interpretation": area["interpretation"],
+                "sourceRef": f"snapshot:areas/{maturity_ref}",
+                "authorityRef": "governance/maturity/trama-maturity-reconciliation-v1.json",
+            }
+        projected_nodes.append(projected)
+
+    return {
+        "schemaVersion": graph_doc["schemaVersion"],
+        "asOf": graph_doc["asOf"],
+        "sourceRef": "governance/access/trama-ecosystem-state-v0.3.json",
+        "authorityPolicy": json.loads(json.dumps(graph_doc.get("authorityPolicy", {}))),
+        "legend": json.loads(json.dumps(graph_doc.get("legend", {}))),
+        "externalActors": json.loads(json.dumps(graph_doc.get("externalActors", []))),
+        "nodes": projected_nodes,
+        "flows": json.loads(json.dumps(graph_doc.get("flows", []))),
+        "views": json.loads(json.dumps(graph_doc.get("views", {}))),
+        "transitionPolicy": json.loads(json.dumps(graph_doc.get("transitionPolicy", {}))),
+    }
+
 def build_snapshot(root: Path) -> dict:
     observed_at = datetime.now(timezone.utc).isoformat()
     config = load_json(root / "config/control-center-snapshot-sources.json")
@@ -626,6 +664,9 @@ def build_snapshot(root: Path) -> dict:
     governed_events = load_json(root / "status/governed-events.json")
     component_registry = load_json(root / "governance/ui-development/trama-component-evidence-registry-v1.json")
     maturity_evidence_registry = load_json(root / "governance/maturity/trama-maturity-evidence-registry-v1.json")
+    ecosystem_graph_path = root / "governance/access/trama-ecosystem-state-v0.3.json"
+    ecosystem_graph_doc = load_json(ecosystem_graph_path)
+    validate_ecosystem_graph(ecosystem_graph_doc, root)
     validate_definitions(maturity_definitions)
     validate_assurance_registry(assurance_registry)
     validate_maturity_evidence_registry(maturity_evidence_registry)
@@ -663,6 +704,13 @@ def build_snapshot(root: Path) -> dict:
                     "supports": [],
                 }
             )
+
+    source_state["ecosystem-state-v0.3"] = {
+        "status": "FRESH",
+        "observedAt": observed_at,
+        "ref": "governance/access/trama-ecosystem-state-v0.3.json",
+        "sha256": sha256_file(ecosystem_graph_path),
+    }
 
     evidence.extend(json.loads(json.dumps(maturity_evidence_registry["evidence"])))
 
@@ -805,6 +853,7 @@ def build_snapshot(root: Path) -> dict:
         for result in maturity_results
     ]
 
+    ecosystem_graph_projection = project_ecosystem_graph(ecosystem_graph_doc, maturity_areas)
     capabilities = capability_projection(eco_status, maturity_areas)
     dependencies = [
             {
@@ -844,12 +893,13 @@ def build_snapshot(root: Path) -> dict:
     ]
     snapshot = {
         "$schema": "../../schemas/ecosystem-snapshot.schema.json",
-        "schemaVersion": "1.6.0",
+        "schemaVersion": "1.7.0",
         "generatedAt": observed_at,
         "sourceState": source_state,
         "phases": phase_status(caps),
         "areas": maturity_areas,
         "capabilities": capabilities,
+        "ecosystemGraph": ecosystem_graph_projection,
         "components": components,
         "gates": gates,
         "evidence": evidence,
@@ -885,6 +935,7 @@ def validate(snapshot: dict) -> None:
         "phases",
         "areas",
         "capabilities",
+        "ecosystemGraph",
         "components",
         "gates",
         "evidence",
@@ -952,6 +1003,34 @@ def validate(snapshot: dict) -> None:
         for evidence_ref in capability.get("evidenceRefs", []):
             if evidence_ref not in evidence_ids:
                 raise ValueError(f"Unresolved capability evidence reference: {evidence_ref}")
+
+    graph = snapshot["ecosystemGraph"]
+    if graph.get("schemaVersion") != "trama.ecosystem.state/v0.3":
+        raise ValueError("Unexpected ecosystemGraph schemaVersion")
+    if graph.get("sourceRef") != "governance/access/trama-ecosystem-state-v0.3.json":
+        raise ValueError("Unexpected ecosystemGraph sourceRef")
+    graph_node_ids = {item["id"] for item in graph.get("nodes", [])}
+    graph_actor_ids = {item["id"] for item in graph.get("externalActors", [])}
+    graph_flow_ids = {item["id"] for item in graph.get("flows", [])}
+    if len(graph_node_ids) != len(graph.get("nodes", [])):
+        raise ValueError("Duplicate ecosystemGraph node id detected")
+    if len(graph_flow_ids) != len(graph.get("flows", [])):
+        raise ValueError("Duplicate ecosystemGraph flow id detected")
+    graph_endpoints = graph_node_ids | graph_actor_ids
+    for node in graph.get("nodes", []):
+        maturity_ref = node.get("maturityRef")
+        if maturity_ref is not None:
+            if maturity_ref not in area_ids:
+                raise ValueError(f"Unresolved ecosystemGraph maturityRef: {maturity_ref}")
+            context = node.get("maturityContext")
+            if not isinstance(context, dict):
+                raise ValueError(f"Missing ecosystemGraph maturityContext: {node['id']}")
+            area = next(item for item in snapshot["areas"] if item["id"] == maturity_ref)
+            if context.get("confirmedLevel") != area.get("confirmedLevel"):
+                raise ValueError(f"Divergent ecosystemGraph maturityContext: {node['id']}")
+    for flow in graph.get("flows", []):
+        if flow.get("from") not in graph_endpoints or flow.get("to") not in graph_endpoints:
+            raise ValueError(f"Unresolved ecosystemGraph flow endpoint: {flow['id']}")
 
     integrity_ids = {item["id"] for item in snapshot["integrityChecks"]}
     if len(integrity_ids) != len(snapshot["integrityChecks"]):

@@ -50,9 +50,8 @@ except ValueError:
 else:
     raise AssertionError("strong evidence with both areaRef and capabilityRef must fail")
 
-# Registry-only expectations remain conservative. Atlas still needs the existing
-# governed exit accessibility/human projection; Docente OS now has the
-# version-bound runtime canary required for L4.
+# Registry-only expectations remain conservative for every area except Docente OS,
+# whose approved M5-01 + M5-02 evidence now completes the canonical L5 chain.
 results = {
     area["id"]: evaluate_area(area, registry["evidence"])
     for area in definitions["areas"]
@@ -60,13 +59,17 @@ results = {
 assert results["governance"]["confirmedLevel"] == 4, results["governance"]
 assert results["arena"]["confirmedLevel"] == 4, results["arena"]
 assert results["atlas"]["confirmedLevel"] == 3, results["atlas"]
-assert results["docente-os"]["confirmedLevel"] == 4, results["docente-os"]
+assert results["docente-os"]["confirmedLevel"] == 5, results["docente-os"]
 
 dos_types = set(results["docente-os"]["availableEvidenceTypes"])
 assert "AUTOMATED_TEST" in dos_types
 assert "HUMAN_REVIEW" in dos_types
 assert "RUNTIME_CANARY" in dos_types
+assert "REGRESSION_HISTORY" in dos_types
+assert "ADOPTION_EVIDENCE" in dos_types
 assert "EV-MAT-DOS-RUNTIME-CANARY-2026-10-07" in results["docente-os"]["currentEvidenceRefs"]
+assert "EV-MAT-DOS-REGRESSION-HISTORY-2026-10-17" in results["docente-os"]["currentEvidenceRefs"]
+assert "EV-MAT-DOS-ADOPTION-EVIDENCE-2026-10-17" in results["docente-os"]["currentEvidenceRefs"]
 
 receipt = (ROOT / "docs/evidence/trama-maturity-evidence-binding-2026-09-29.md").read_text(
     encoding="utf-8"

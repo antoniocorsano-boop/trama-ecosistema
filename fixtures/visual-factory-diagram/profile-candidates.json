@@ -1,0 +1,337 @@
+{
+  "schema": "trama.diagram-profile-candidates/v0.1",
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "mandate": 358,
+  "qualifiedLabCommit": "9bb99b5eaf263e5a972ca3e80e952eda2bed6c26",
+  "upstreamCommit": "b228c5d77794a84150fca41b22940bb316b1398d",
+  "productionScope": "ASSISTED_STATIC_CANDIDATES_ONLY",
+  "runtimeAuthorized": false,
+  "publicationAuthorized": false,
+  "profiles": [
+    {
+      "id": "trama",
+      "name": "TRAMA",
+      "source": {
+        "repository": "antoniocorsano-boop/trama-ecosistema",
+        "commit": "61e1282d9778d79826b896d6ae41de6ece5e969b",
+        "path": "apps/control-center/src/styles/tokens.css",
+        "blob": "1ed4cd46e72099f8faf1167593944ec37c97be12",
+        "additionalReferences": [],
+        "tokens": {
+          "canvas": "--cc-bg",
+          "surface": "--cc-surface",
+          "ink": "--cc-text",
+          "secondaryInk": "--cc-muted",
+          "accent": "--cc-info",
+          "onAccent": "--cc-bg"
+        }
+      },
+      "palette": {
+        "canvas": "#071827",
+        "surface": "#0b2235",
+        "ink": "#f4f8fb",
+        "secondaryInk": "#9fb9cb",
+        "accent": "#58bff7",
+        "onAccent": "#071827"
+      },
+      "contrastChecks": [
+        {
+          "foreground": "ink",
+          "background": "canvas",
+          "ratio": 16.82
+        },
+        {
+          "foreground": "ink",
+          "background": "surface",
+          "ratio": 15.19
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "canvas",
+          "ratio": 8.79
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "surface",
+          "ratio": 7.94
+        },
+        {
+          "foreground": "onAccent",
+          "background": "accent",
+          "ratio": 8.73
+        }
+      ],
+      "notes": "Profilo candidato derivato dall'interfaccia esistente; non costituisce una nuova identità ufficiale."
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "source": {
+        "commit": "d2938378c9384c5122adb8379396dbad5b4385fe",
+        "path": "src/app/globals.css",
+        "blob": "ae09d79b0093b80f329b12208dfb56cceed78660",
+        "additionalReferences": [],
+        "tokens": {
+          "canvas": "--surface-canvas",
+          "surface": "--surface-raised",
+          "ink": "--text-primary",
+          "secondaryInk": "--text-secondary",
+          "accent": "--action-primary",
+          "onAccent": "--surface-raised"
+        },
+        "repositoryId": 1376266693,
+        "repositoryUrl": "https://api.github.com/repositories/1376266693",
+        "blobUrl": "https://api.github.com/repositories/1376266693/git/blobs/ae09d79b0093b80f329b12208dfb56cceed78660",
+        "referenceNote": "Identificativo permanente del repository GitHub, commit immutabile, percorso e impronta del file; denominazione ufficiale Atlas."
+      },
+      "palette": {
+        "canvas": "#f5f7fb",
+        "surface": "#ffffff",
+        "ink": "#12213b",
+        "secondaryInk": "#51627a",
+        "accent": "#265fc4",
+        "onAccent": "#ffffff"
+      },
+      "contrastChecks": [
+        {
+          "foreground": "ink",
+          "background": "canvas",
+          "ratio": 14.99
+        },
+        {
+          "foreground": "ink",
+          "background": "surface",
+          "ratio": 16.07
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "canvas",
+          "ratio": 5.8
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "surface",
+          "ratio": 6.22
+        },
+        {
+          "foreground": "onAccent",
+          "background": "accent",
+          "ratio": 5.97
+        }
+      ],
+      "notes": "Profilo candidato derivato dall'interfaccia esistente; non costituisce una nuova identità ufficiale."
+    },
+    {
+      "id": "studio-atlas",
+      "name": "Studio Atlas",
+      "source": {
+        "repository": "antoniocorsano-boop/trama-ecosistema",
+        "commit": "61e1282d9778d79826b896d6ae41de6ece5e969b",
+        "path": "products/studio-atlas/app/globals.css",
+        "blob": "7be94171d280c49bc6569332bd43aac234e3b2ff",
+        "additionalReferences": [],
+        "tokens": {
+          "canvas": "--paper",
+          "surface": "--surface",
+          "ink": "--ink",
+          "secondaryInk": "--muted",
+          "accent": "--accent",
+          "onAccent": "--surface"
+        }
+      },
+      "palette": {
+        "canvas": "#f4f0e7",
+        "surface": "#fbf9f4",
+        "ink": "#202521",
+        "secondaryInk": "#6a7069",
+        "accent": "#244f45",
+        "onAccent": "#fbf9f4"
+      },
+      "contrastChecks": [
+        {
+          "foreground": "ink",
+          "background": "canvas",
+          "ratio": 13.7,
+          "verdict": "PASS"
+        },
+        {
+          "foreground": "ink",
+          "background": "surface",
+          "ratio": 14.81,
+          "verdict": "PASS"
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "canvas",
+          "ratio": 4.47,
+          "verdict": "FAIL_RESTRICTED_PAIR"
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "surface",
+          "ratio": 4.83,
+          "verdict": "PASS"
+        },
+        {
+          "foreground": "onAccent",
+          "background": "accent",
+          "ratio": 8.76,
+          "verdict": "PASS"
+        }
+      ],
+      "notes": "Profilo candidato derivato dall'interfaccia esistente. Il testo secondario #6a7069 su carta #f4f0e7 ha contrasto 4,47:1; conservarlo come riferimento ma usarlo solo sulla superficie #fbf9f4. Sulla carta usare #202521. Non qualificato per un impiego senza restrizioni."
+    },
+    {
+      "id": "arena",
+      "name": "Arena",
+      "source": {
+        "repository": "antoniocorsano-boop/CurManLight_arena",
+        "commit": "d8b1bf43388cb5c4cdcc940b0c558bb128976c4c",
+        "path": "tailwind.config.js",
+        "blob": "fd38e8fe10f2d46bbbb80783ec268379316b03db",
+        "additionalReferences": [
+          {
+            "path": "docs/04_product_experience/03_DESIGN_SYSTEM.md",
+            "blob": "6b491f1a53598eabb799e1fed82e1d4a62e6b7fe",
+            "note": "Scheda bianca e testo bianco del pulsante primario documentati; primary.950 differisce tra configurazione e documento ed è escluso."
+          }
+        ],
+        "tokens": {
+          "canvas": "primary.50",
+          "surface": "bg-white (scheda documentata)",
+          "ink": "primary.900",
+          "secondaryInk": "primary.800",
+          "accent": "primary.600",
+          "onAccent": "text-white (pulsante documentato)"
+        }
+      },
+      "palette": {
+        "canvas": "#eef2ff",
+        "surface": "#ffffff",
+        "ink": "#312e81",
+        "secondaryInk": "#3730a3",
+        "accent": "#4f46e5",
+        "onAccent": "#ffffff"
+      },
+      "contrastChecks": [
+        {
+          "foreground": "ink",
+          "background": "canvas",
+          "ratio": 10.22
+        },
+        {
+          "foreground": "ink",
+          "background": "surface",
+          "ratio": 11.42
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "canvas",
+          "ratio": 8.88
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "surface",
+          "ratio": 9.93
+        },
+        {
+          "foreground": "onAccent",
+          "background": "accent",
+          "ratio": 6.29
+        }
+      ],
+      "notes": "Adattamento della scala primaria documentata; non attesta la corrispondenza con tutti i temi correnti dell'interfaccia."
+    },
+    {
+      "id": "registro-docente",
+      "name": "Registro Docente",
+      "source": {
+        "repository": "antoniocorsano-boop/registro-docente",
+        "commit": "1e9bcd0eb8bd5c7e72ea059b3f90f72805f9cdd1",
+        "path": "src/index.css",
+        "blob": "a4d75bd0de63357824ecf6a53eaede6484a8a261",
+        "additionalReferences": [],
+        "tokens": {
+          "canvas": "--bg",
+          "surface": "--surface",
+          "ink": "--text-main",
+          "secondaryInk": "--text-muted",
+          "accent": "--primary",
+          "onAccent": "--primary-text"
+        }
+      },
+      "palette": {
+        "canvas": "#030712",
+        "surface": "#0b0f19",
+        "ink": "#f8fafc",
+        "secondaryInk": "#94a3b8",
+        "accent": "#00d8d6",
+        "onAccent": "#030712"
+      },
+      "contrastChecks": [
+        {
+          "foreground": "ink",
+          "background": "canvas",
+          "ratio": 19.24
+        },
+        {
+          "foreground": "ink",
+          "background": "surface",
+          "ratio": 18.3
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "canvas",
+          "ratio": 7.85
+        },
+        {
+          "foreground": "secondaryInk",
+          "background": "surface",
+          "ratio": 7.47
+        },
+        {
+          "foreground": "onAccent",
+          "background": "accent",
+          "ratio": 11.31
+        }
+      ],
+      "notes": "Solo tema predefinito; stampa e temi opzionali non qualificati."
+    }
+  ],
+  "common": {
+    "fontFamily": "system-ui, sans-serif",
+    "fontNote": "Adattamento per funzionamento senza connessione; nessuna acquisizione di caratteri esterni.",
+    "layoutVariants": [
+      {
+        "id": "mobile-vertical",
+        "viewBox": [
+          0,
+          0,
+          360,
+          640
+        ],
+        "targetWidths": [
+          360,
+          390
+        ],
+        "minLabelCssPx": 14
+      },
+      {
+        "id": "desktop-lim-horizontal",
+        "viewBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "targetWidths": [
+          1280
+        ],
+        "minLabelCssPx": 18
+      }
+    ],
+    "layoutNote": "Obiettivi di composizione: unica fonte semantica, tipografia adattata, assenza di tagli e sovrapposizioni, ordine di lettura preservato. Contrasto minimo 4,5:1 per il testo e 3:1 per i confini grafici significativi. Non affidarsi soltanto al colore. Nessuna risorsa esterna, contenuto attivo, dato personale, nuova dipendenza o spesa.",
+    "minimumTextContrast": 4.5,
+    "qualification": "Cinque profili candidati. P1c ha superato le prove HTML e statiche; P1d-R1 estende il collaudo ai file SVG autonomi e incorporati. Esito del nuovo commit, revisione Codex e prova fisica ancora da acquisire. Il controllo R3 resta specifico del pilota. Studio Atlas: combinazione secondaria sulla carta esclusa dal generatore."
+  }
+}

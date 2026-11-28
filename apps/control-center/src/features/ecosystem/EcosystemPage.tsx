@@ -1,6 +1,18 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { loadEcosystemSnapshot, type SnapshotLoadState } from "../../data/client";
-import { capabilityStateLabel, relationKindLabel, relationTone, toEcosystemModel, type Dependency } from "../../domain/ecosystem/model";
+import {
+  authorityDisplayLabel,
+  capabilityStateLabel,
+  relationKindLabel,
+  relationTone,
+  selectGapEntries,
+  toEcosystemModel,
+  type Dependency,
+  type EcosystemGraphFlow,
+  type EcosystemModel,
+} from "../../domain/ecosystem/model";
+import { EcosystemGapView } from "./EcosystemGapView";
+import { EcosystemStateList } from "./EcosystemStateList";
 import "./ecosystem.css";
 
 const EcosystemGraph=lazy(()=>import("./EcosystemGraph").then((module)=>({default:module.EcosystemGraph})));
@@ -8,9 +20,6 @@ const initial:SnapshotLoadState={status:"LOADING"};
 
 export function EcosystemPage(){
   const [state,setState]=useState<SnapshotLoadState>(initial);
-  const [selected,setSelected]=useState<string|null>(null);
-  const [search,setSearch]=useState("");
-  const [owner,setOwner]=useState("ALL");
 
   useEffect(()=>{
     const controller=new AbortController();
@@ -21,59 +30,90 @@ export function EcosystemPage(){
   if(state.status==="LOADING") return <Status message="Caricamento dello snapshot governato…" />;
   if(state.status==="INVALID" || state.status==="UNAVAILABLE") return <Status message="Snapshot non utilizzabile. Nessuna relazione viene inferita." error />;
 
-  const model=toEcosystemModel(state.data);
+  return <EcosystemView model={toEcosystemModel(state.data)} />;
+}
+
+export function EcosystemView({model}:{model:EcosystemModel}){
+  const [view,setView]=useState<"MAP"|"GAP">("MAP");
+  const [includeSafeguards,setIncludeSafeguards]=useState(false);
+  const [selectedFlow,setSelectedFlow]=useState<string|null>(model.ecosystemGraph.flows[0]?.id ?? null);
+  const [selectedLegacy,setSelectedLegacy]=useState<string|null>(model.dependencies[0]?.id ?? null);
+  const [search,setSearch]=useState("");
+  const [owner,setOwner]=useState("ALL");
+
+  const gapEntries=useMemo(
+    ()=>selectGapEntries(model.ecosystemGraph,includeSafeguards),
+    [model.ecosystemGraph,includeSafeguards],
+  );
+  const openGapCount=selectGapEntries(model.ecosystemGraph).length;
+  const selectedCanonical=model.ecosystemGraph.flows.find((flow)=>flow.id===selectedFlow) ?? model.ecosystemGraph.flows[0] ?? null;
+  const selectedRelation=model.dependencies.find((item)=>item.id===selectedLegacy) ?? model.dependencies[0] ?? null;
   const owners=[...new Set(model.capabilities.map((c)=>c.ownerDomain).filter(Boolean) as string[])].sort();
   const capabilities=model.capabilities.filter((cap)=>{
     const q=search.trim().toLowerCase();
     return (owner==="ALL" || cap.ownerDomain===owner) && (!q || cap.id.toLowerCase().includes(q) || cap.label.toLowerCase().includes(q));
   });
-  const selectedRelation=model.dependencies.find((d)=>d.id===selected) ?? model.dependencies[0] ?? null;
 
   return (
     <section className="ecosystem-page" aria-labelledby="ecosystem-title">
       <header className="feature-header">
-        <p className="section-kicker">A4 · ECOSISTEMA</p>
+        <p className="section-kicker">A4 · ECOSISTEMA · CONTROL MAP v0.3</p>
         <h2 id="ecosystem-title">Capability e relazioni governate</h2>
-        <p>La vista mostra solo relazioni presenti nello snapshot. “Futuro non autorizzato” resta distinto da authority e flussi attivi.</p>
+        <p>La topologia primaria proviene dal grafo canonico v0.3. Stato, gap, target e prossimo intervento sono proiezioni read-only: il browser non promuove nulla.</p>
       </header>
 
-      <section className="ecosystem-summary" aria-label="Sintesi ecosistema">
-        <div><span>Capability dichiarate</span><strong>{model.capabilities.length}</strong></div>
-        <div><span>Relazioni governate</span><strong>{model.dependencies.length}</strong></div>
-        <div><span>Runtime deferred</span><strong>{model.capabilities.filter((c)=>c.runtimeState==="DEFERRED").length}</strong></div>
+      <section className="ecosystem-summary" aria-label="Sintesi ecosistema canonico">
+        <div><span>Nodi canonici</span><strong>{model.ecosystemGraph.nodes.length} nodi</strong></div>
+        <div><span>Flussi canonici</span><strong>{model.ecosystemGraph.flows.length} flussi</strong></div>
+        <div><span>Gap governati</span><strong>{openGapCount}</strong></div>
       </section>
 
-      <section className="ecosystem-section" aria-labelledby="relations-title">
-        <div className="section-title">
-          <div><h3 id="relations-title">Relazioni</h3><p>Grafo visuale lazy + elenco accessibile equivalente.</p></div>
-        </div>
+      <div className="ecosystem-view-switch" role="group" aria-label="Vista ecosistema">
+        <button type="button" aria-pressed={view==="MAP"} onClick={()=>setView("MAP")}>Mappa governata</button>
+        <button type="button" aria-pressed={view==="GAP"} onClick={()=>setView("GAP")}>AS IS → GAP → TO BE</button>
+      </div>
 
+      {view==="MAP" ? (
+        <section className="ecosystem-section" aria-labelledby="canonical-map-title">
+          <div className="section-title">
+            <div><h3 id="canonical-map-title">Stato completo del grafo canonico</h3><p>Ogni arco visuale corrisponde a un record di <code>ecosystemGraph.flows[]</code>.</p></div>
+          </div>
+          <div className="ecosystem-canonical-layout">
+            <div>
+              <Suspense fallback={<div className="graph-loading" role="status">Caricamento mappa…</div>}>
+                <EcosystemGraph graph={model.ecosystemGraph} selectedId={selectedCanonical?.id ?? null} onSelect={setSelectedFlow} />
+              </Suspense>
+              <EcosystemStateList graph={model.ecosystemGraph} selectedFlowId={selectedCanonical?.id ?? null} onSelectFlow={setSelectedFlow} />
+            </div>
+            <CanonicalFlowDetail flow={selectedCanonical} />
+          </div>
+        </section>
+      ) : (
+        <section className="ecosystem-section" aria-labelledby="gap-view-title">
+          <div className="section-title gap-title-row">
+            <div><h3 id="gap-view-title">AS IS → GAP → TO BE</h3><p>Mostra solo il delta governato; nessun backlog viene inferito.</p></div>
+            <label className="safeguard-toggle"><input type="checkbox" checked={includeSafeguards} onChange={(event)=>setIncludeSafeguards(event.target.checked)} />Mostra elementi da non riaprire</label>
+          </div>
+          <EcosystemGapView entries={gapEntries} />
+        </section>
+      )}
+
+      <section className="ecosystem-section legacy-context" aria-labelledby="legacy-context-title">
+        <div className="section-title"><div><h3 id="legacy-context-title">Contesto capability e lifecycle</h3><p>Contesto secondario già governato: non definisce la topologia v0.3.</p></div></div>
         <div className="ecosystem-relationship-layout">
           <div>
-            <Suspense fallback={<div className="graph-loading" role="status">Caricamento mappa…</div>}>
-              <EcosystemGraph dependencies={model.dependencies} selectedId={selectedRelation?.id ?? null} onSelect={setSelected} />
-            </Suspense>
             <div className="relation-list" aria-label="Elenco equivalente delle relazioni">
               {model.dependencies.map((relation)=>(
-                <button
-                  key={relation.id}
-                  type="button"
-                  className={relation.id===selectedRelation?.id?"relation-item is-selected":"relation-item"}
-                  aria-pressed={relation.id===selectedRelation?.id}
-                  onClick={()=>setSelected(relation.id)}
-                >
+                <button key={relation.id} type="button" className={relation.id===selectedRelation?.id?"relation-item is-selected":"relation-item"} aria-pressed={relation.id===selectedRelation?.id} onClick={()=>setSelectedLegacy(relation.id)}>
                   <span><strong>{relation.from} → {relation.to}</strong><small>{relationKindLabel(relation.kind)}</small></span>
                   <em data-tone={relationTone(relation.kind)}>{relation.status.replaceAll("_"," ")}</em>
                 </button>
               ))}
             </div>
           </div>
-          <RelationDetail relation={selectedRelation} />
+          <LegacyRelationDetail relation={selectedRelation} />
         </div>
-      </section>
 
-      <section className="ecosystem-section" aria-labelledby="capabilities-title">
-        <div className="section-title"><div><h3 id="capabilities-title">Capability</h3><p>Ricerca locale sul solo snapshot validato.</p></div></div>
         <div className="ecosystem-filters">
           <label>Cerca capability<input type="search" value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="ID o nome" /></label>
           <label>Owner<select value={owner} onChange={(e)=>setOwner(e.target.value)}><option value="ALL">Tutti</option>{owners.map((item)=><option key={item}>{item}</option>)}</select></label>
@@ -93,12 +133,29 @@ export function EcosystemPage(){
         </div>
       </section>
 
-      <footer className="feature-footer">Snapshot {formatDate(model.generatedAt)} · READ_ONLY · nessuna authority browser</footer>
+      <footer className="feature-footer">Snapshot {formatDate(model.generatedAt)} · GRAPH {model.ecosystemGraph.schemaVersion} · READ_ONLY · nessuna authority browser</footer>
     </section>
   );
 }
 
-function RelationDetail({relation}:{relation:Dependency|null}){
+function CanonicalFlowDetail({flow}:{flow:EcosystemGraphFlow|null}){
+  if(!flow) return <aside className="relation-detail"><p>Nessun flusso canonico disponibile.</p></aside>;
+  return (
+    <aside className="relation-detail" aria-label="Dettaglio flusso canonico" aria-live="polite">
+      <p className="detail-kicker">{relationKindLabel(flow.kind)}</p>
+      <h4>{flow.from} → {flow.to}</h4>
+      <dl>
+        <div><dt>AS IS</dt><dd>{flow.state}</dd></div>
+        <div><dt>TO BE</dt><dd>{flow.targetState}</dd></div>
+        <div><dt>GAP</dt><dd>{flow.gap.summary}</dd></div>
+        <div><dt>Authority</dt><dd>{authorityDisplayLabel(flow.authorityOwner,flow.authorityRefs)}</dd></div>
+        <div><dt>Evidenze</dt><dd>{flow.evidenceRefs.join(", ") || "Nessuna"}</dd></div>
+      </dl>
+    </aside>
+  );
+}
+
+function LegacyRelationDetail({relation}:{relation:Dependency|null}){
   if(!relation) return <aside className="relation-detail"><p>Nessuna relazione disponibile.</p></aside>;
   return (
     <aside className="relation-detail" aria-live="polite">

@@ -1,0 +1,362 @@
+{
+  "schema": "trama.diagram-compositions/v0.1",
+  "register": "p2-source-register.json",
+  "status": "CANDIDATE",
+  "runtimeAuthorized": false,
+  "publicationAuthorized": false,
+  "diagrams": [
+    {
+      "id": "trama-ecosystem",
+      "titleLines": [
+        "TRAMA",
+        "Architettura dell'ecosistema"
+      ],
+      "panels": [
+        {
+          "heading": "Governo comune",
+          "state": "DECISIONE",
+          "fact": 0,
+          "steps": [
+            [
+              "TRAMA"
+            ]
+          ],
+          "note": [
+            "Contratti e decisioni comuni",
+            "Non conserva dati personali"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Trasferimento diretto",
+          "state": "DECISIONE",
+          "fact": 1,
+          "steps": [
+            [
+              "Arena"
+            ],
+            [
+              "Docente",
+              "OS"
+            ]
+          ],
+          "note": [
+            "Autorità curricolare → lavoro didattico"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Contenuti pubblicabili",
+          "state": "DECISIONE",
+          "fact": 1,
+          "steps": [
+            [
+              "Arena"
+            ],
+            [
+              "Atlas"
+            ]
+          ],
+          "note": [
+            "Curricolo autorevole → consultazione"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Risorse proposte",
+          "state": "DECISIONE",
+          "fact": 1,
+          "steps": [
+            [
+              "Atlas"
+            ],
+            [
+              "Docente",
+              "OS"
+            ]
+          ],
+          "note": [
+            "Proposta distinta dall'adozione"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Officina professionale",
+          "state": "INDIRIZZO",
+          "fact": 2,
+          "steps": [
+            [
+              "Studio",
+              "Atlas"
+            ],
+            [
+              "World",
+              "Composer"
+            ]
+          ],
+          "note": [
+            "Composizione interna all'officina"
+          ],
+          "relation": "contains"
+        },
+        {
+          "heading": "Produzione controllata",
+          "state": "PROPOSTA",
+          "fact": 3,
+          "steps": [
+            [
+              "Visual",
+              "Factory"
+            ],
+            [
+              "Candidati"
+            ]
+          ],
+          "note": [
+            "Compute Factory: confine distinto",
+            "Pubblicazione separata"
+          ],
+          "relation": "direction"
+        }
+      ]
+    },
+    {
+      "id": "studio-atlas-production",
+      "titleLines": [
+        "Studio Atlas",
+        "Dall'idea alla revisione"
+      ],
+      "panels": [
+        {
+          "heading": "Progettazione narrativa",
+          "state": "CODICE",
+          "fact": 0,
+          "steps": [
+            [
+              "1. Idea"
+            ],
+            [
+              "2. Storia"
+            ]
+          ],
+          "note": [
+            "Fasi presenti nel modello"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Progettazione del mondo",
+          "state": "CODICE",
+          "fact": 0,
+          "steps": [
+            [
+              "3. Mondo"
+            ],
+            [
+              "4. Esperienza"
+            ]
+          ],
+          "note": [
+            "Fasi presenti nel modello"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Composizione e risorse",
+          "state": "CODICE",
+          "fact": 1,
+          "steps": [
+            [
+              "5. Scene"
+            ],
+            [
+              "6. Produzione"
+            ]
+          ],
+          "note": [
+            "Editor e Visual Factory Stage"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Verifica del prodotto",
+          "state": "CODICE",
+          "fact": 0,
+          "steps": [
+            [
+              "7. Prova"
+            ],
+            [
+              "8. Revisione"
+            ]
+          ],
+          "note": [
+            "Anteprima non pubblica"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Qualità della produzione",
+          "state": "PROPOSTA",
+          "fact": 3,
+          "steps": [
+            [
+              "Risorse"
+            ],
+            [
+              "Rifinitura"
+            ],
+            [
+              "Qualità"
+            ]
+          ],
+          "note": [
+            "Contratto VF0–VF6 proposto",
+            "Decisione umana distinta"
+          ],
+          "relation": "sequence"
+        },
+        {
+          "heading": "Consegna e fruizione",
+          "state": "INDIRIZZO",
+          "fact": 2,
+          "steps": [
+            [
+              "Fascicolo"
+            ],
+            [
+              "Decisione"
+            ],
+            [
+              "Atlas"
+            ]
+          ],
+          "note": [
+            "Pubblicazione separata",
+            "Non è un esito automatico"
+          ],
+          "relation": "direction"
+        }
+      ]
+    },
+    {
+      "id": "registro-qualification",
+      "titleLines": [
+        "Registro Docente",
+        "Motore ibrido di qualificazione"
+      ],
+      "panels": [
+        {
+          "heading": "Regole di qualificazione",
+          "state": "DECISIONE",
+          "fact": 0,
+          "steps": [
+            [
+              "Stabilità"
+            ],
+            [
+              "Conformità"
+            ],
+            [
+              "Rilascio"
+            ]
+          ],
+          "note": [
+            "Decisioni distinte; no replay incerto"
+          ],
+          "relation": "separate"
+        },
+        {
+          "heading": "Canale nativo",
+          "state": "CODICE",
+          "fact": 2,
+          "steps": [
+            [
+              "Appium"
+            ],
+            [
+              "Android",
+              "SAF"
+            ]
+          ],
+          "note": [
+            "UiAutomator2 · contesto nativo"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Canale applicativo",
+          "state": "CODICE",
+          "fact": 1,
+          "steps": [
+            [
+              "CDP",
+              "diretto"
+            ],
+            [
+              "WebView"
+            ]
+          ],
+          "note": [
+            "Contratto F2: canali indipendenti"
+          ],
+          "relation": "direction"
+        },
+        {
+          "heading": "Prove su emulatore",
+          "state": "VERIFICATO",
+          "fact": 3,
+          "steps": [
+            [
+              "API 32"
+            ],
+            [
+              "API 36"
+            ]
+          ],
+          "note": [
+            "6 prove Q4 + avvii e controlli",
+            "18 job PASS · 7 saltati"
+          ],
+          "relation": "parallel"
+        },
+        {
+          "heading": "Riesame del candidato",
+          "state": "VERIFICATO",
+          "fact": 4,
+          "steps": [
+            [
+              "Codex"
+            ],
+            [
+              "PR #414"
+            ]
+          ],
+          "note": [
+            "Nessun rilievo sul commit 72dd969",
+            "PR #412 in bozza, non integrata"
+          ],
+          "relation": "review"
+        },
+        {
+          "heading": "Esito e rilascio",
+          "state": "DECISIONE",
+          "fact": 0,
+          "steps": [
+            [
+              "Evidenze"
+            ],
+            [
+              "Decisione"
+            ]
+          ],
+          "note": [
+            "Esito indeterminato: blocco",
+            "Rilascio non automatico"
+          ],
+          "relation": "direction"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.maturity-reconciliation/v1",
-  "updatedAt": "2026-10-07",
+  "updatedAt": "2026-10-17",
   "policy": {
     "evidenceBoundOnly": true,
     "noSyntheticPromotion": true,
@@ -11,72 +11,41 @@
       "area": "governance",
       "observedLevel": 4,
       "target": "L5_AFTER_REGRESSION_HISTORY",
-      "nextWork": [
-        "collect version-bound regression history"
-      ],
-      "l5Gap": [
-        "REGRESSION_HISTORY"
-      ]
+      "nextWork": ["collect version-bound regression history"],
+      "l5Gap": ["REGRESSION_HISTORY"]
     },
     {
       "area": "arena",
       "observedLevel": 4,
       "target": "L5_AFTER_REGRESSION_HISTORY",
-      "nextWork": [
-        "complete product regression history"
-      ],
-      "l5Gap": [
-        "REGRESSION_HISTORY"
-      ]
+      "nextWork": ["complete product regression history"],
+      "l5Gap": ["REGRESSION_HISTORY"]
     },
     {
       "area": "atlas",
       "observedLevel": 4,
       "target": "L5_AFTER_STABILITY_AND_ADOPTION",
-      "nextWork": [
-        "collect regression history",
-        "collect adoption evidence without student tracking"
-      ],
-      "l5Gap": [
-        "REGRESSION_HISTORY",
-        "ADOPTION_EVIDENCE"
-      ]
+      "nextWork": ["collect regression history", "collect adoption evidence without student tracking"],
+      "l5Gap": ["REGRESSION_HISTORY", "ADOPTION_EVIDENCE"]
     },
     {
       "area": "docente-os",
-      "observedLevel": 4,
-      "target": "L5_AFTER_STABILITY_AND_ADOPTION",
-      "nextWork": [
-        "collect version-bound regression history",
-        "collect adoption evidence without student tracking"
-      ],
-      "l5Gap": [
-        "REGRESSION_HISTORY",
-        "ADOPTION_EVIDENCE"
-      ]
+      "observedLevel": 5,
+      "target": "L5_CONFIRMED",
+      "nextWork": [],
+      "l5Gap": []
     },
     {
       "area": "studio-atlas",
       "observedLevel": 1,
       "target": "L2_AFTER_CANONICAL_CONTRACT",
-      "nextWork": [
-        "approve and bind the canonical Studio Atlas cross-product authority contract"
-      ],
-      "l5Gap": [
-        "CONTRACT_APPROVED",
-        "PR_EXACT_HEAD",
-        "AUTOMATED_TEST",
-        "HUMAN_REVIEW",
-        "REGRESSION_HISTORY",
-        "ADOPTION_EVIDENCE"
-      ]
+      "nextWork": ["approve and bind the canonical Studio Atlas cross-product authority contract"],
+      "l5Gap": ["CONTRACT_APPROVED", "PR_EXACT_HEAD", "AUTOMATED_TEST", "HUMAN_REVIEW", "REGRESSION_HISTORY", "ADOPTION_EVIDENCE"]
     }
   ],
   "components": {
     "currentRegistryCount": 11,
-    "missingProductCoverage": [
-      "Studio Atlas"
-    ],
+    "missingProductCoverage": ["Studio Atlas"],
     "nextTargets": [
       "DOCENTE_OS.APPSHELL.FAMILY:ISOLATED",
       "DOCENTE_OS.TIMETABLE.INTERACTIVE_CELLS:ISOLATED",

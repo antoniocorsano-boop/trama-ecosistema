@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "trama.visual-3d-planning-input/v0.1",
+  "request": {
+    "requestId": "synthetic-storie-reference-pending",
+    "subjectRef": "storie",
+    "packageDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "artDirectionRef": "SYNTHETIC_TEST_ONLY_NOT_A_REFERENCE_LOCK",
+    "sourceRevision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "purpose": "EVALUATION",
+    "qualityProfile": "Q4",
+    "costClass": "FREE_ONLY",
+    "maxAttempts": 2,
+    "maxConcurrentGpuJobs": 1,
+    "assets": [],
+    "jobs": [
+      {
+        "id": "quick-shape",
+        "role": "QUICK_SHAPE",
+        "inputIds": [],
+        "engineOrder": [
+          "triposr",
+          "sf3d"
+        ]
+      },
+      {
+        "id": "high-fidelity-shape",
+        "role": "HIGH_FIDELITY_SHAPE",
+        "inputIds": [],
+        "engineOrder": [
+          "direct3d-s2",
+          "trellis2",
+          "spar3d",
+          "instantmesh"
+        ]
+      }
+    ],
+    "paidComputeAuthorized": false,
+    "allowQualityDowngrade": false,
+    "runtimeAuthorized": false,
+    "publicationAuthorityGranted": false,
+    "studentAuthorized": false
+  },
+  "admissions": [],
+  "pools": []
+}

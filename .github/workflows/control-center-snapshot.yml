@@ -17,6 +17,10 @@ on:
       - "governance/maturity/trama-maturity-evidence-registry-v1.json"
       - "schemas/maturity-evidence-registry.schema.json"
       - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/test_ecosystem_graph_projection.py"
+      - "scripts/validate_ecosystem_state_v03.py"
+      - "schemas/trama-ecosystem-state-v0.3.schema.json"
+      - "governance/access/trama-ecosystem-state-v0.3.json"
       - "control-center/data/ecosystem-snapshot.json"
       - "scripts/build_ecosystem_snapshot_core.py"
       - "docs/contracts/trama-component-maturity-projection-v1.md"
@@ -58,6 +62,10 @@ on:
       - "governance/maturity/trama-maturity-evidence-registry-v1.json"
       - "schemas/maturity-evidence-registry.schema.json"
       - "scripts/build_ecosystem_snapshot.py"
+      - "scripts/test_ecosystem_graph_projection.py"
+      - "scripts/validate_ecosystem_state_v03.py"
+      - "schemas/trama-ecosystem-state-v0.3.schema.json"
+      - "governance/access/trama-ecosystem-state-v0.3.json"
       - "control-center/data/ecosystem-snapshot.json"
       - "governance/ui-development/trama-component-evidence-registry-v1.json"
       - "scripts/project_component_maturity.py"
@@ -91,6 +99,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Install ecosystem schema validator
+        run: python -m pip install --disable-pip-version-check --quiet jsonschema
       - name: Validate snapshot foundation
         run: python scripts/build_ecosystem_snapshot.py --check
       - name: Build snapshot fixture
@@ -127,6 +137,7 @@ jobs:
           assert committed["components"] == generated["components"]
           assert committed["gates"] == generated["gates"]
           assert committed["dependencies"] == generated["dependencies"]
+          assert committed["ecosystemGraph"] == generated["ecosystemGraph"]
           assert committed["expansionCandidates"] == generated["expansionCandidates"]
           assert committed["integrityChecks"] == generated["integrityChecks"]
           assert committed["operationalPath"] == generated["operationalPath"]
@@ -203,8 +214,10 @@ jobs:
           assert areas["governance"]["confirmedLevel"] == 4, areas["governance"]
           assert areas["arena"]["confirmedLevel"] == 4, areas["arena"]
           assert areas["atlas"]["confirmedLevel"] == 4, areas["atlas"]
-          assert areas["docente-os"]["confirmedLevel"] == 4, areas["docente-os"]
-          assert set(areas["docente-os"]["nextRequiredEvidenceTypes"]) == {"REGRESSION_HISTORY", "ADOPTION_EVIDENCE"}, areas["docente-os"]
+          assert areas["docente-os"]["confirmedLevel"] == 5, areas["docente-os"]
+          assert areas["docente-os"]["evidenceBindingStatus"] == "COMPLETE", areas["docente-os"]
+          assert areas["docente-os"]["nextTargetLevel"] is None, areas["docente-os"]
+          assert areas["docente-os"]["nextRequiredEvidenceTypes"] == [], areas["docente-os"]
           assert areas["studio-atlas"]["confirmedLevel"] == 1, areas["studio-atlas"]
           assert areas["studio-atlas"]["candidateLevel"] == 1, areas["studio-atlas"]
           assert areas["studio-atlas"]["nextTargetLevel"] == 2, areas["studio-atlas"]
@@ -213,11 +226,27 @@ jobs:
               item.get("area") == "studio-atlas" and item.get("type") != "DOCUMENT_CANONICAL"
               for item in snapshot["evidence"]
           ), snapshot["evidence"]
-          assert all(area["evidenceBindingStatus"] == "PARTIAL" for area in areas.values()), areas
+          assert all(
+              area["evidenceBindingStatus"] == "PARTIAL"
+              for area_id, area in areas.items()
+              if area_id != "docente-os"
+          ), areas
           assert any(
               item.get("id") == "EV-MAT-DOS-RUNTIME-CANARY-2026-10-07"
               and item.get("type") == "RUNTIME_CANARY"
               and (item.get("binding") or {}).get("exactHead") == "39bce05fa2e87f3746ee3b6dcd7433065cb2d876"
+              for item in snapshot["evidence"]
+          )
+          assert any(
+              item.get("id") == "EV-MAT-DOS-REGRESSION-HISTORY-2026-10-17"
+              and item.get("type") == "REGRESSION_HISTORY"
+              and item.get("status") == "PASS"
+              for item in snapshot["evidence"]
+          )
+          assert any(
+              item.get("id") == "EV-MAT-DOS-ADOPTION-EVIDENCE-2026-10-17"
+              and item.get("type") == "ADOPTION_EVIDENCE"
+              and item.get("status") == "PASS"
               for item in snapshot["evidence"]
           )
           print("TRAMA_MATURITY_WIRING_CONSERVATIVE_PASS")
@@ -274,7 +303,7 @@ jobs:
           source = json.loads(Path("governance/ui-development/trama-component-evidence-registry-v1.json").read_text(encoding="utf-8"))
           projected = {item["componentId"]: item for item in snapshot["components"]}
           assert set(projected) == {item["componentId"] for item in source["entries"]}, projected
-          assert snapshot["schemaVersion"] == "1.6.0", snapshot["schemaVersion"]
+          assert snapshot["schemaVersion"] == "1.7.0", snapshot["schemaVersion"]
           assert snapshot["sourceState"]["component-evidence-registry"]["status"] == "FRESH"
           assert len(projected) == 11, len(projected)
           assert {item["product"] for item in snapshot["components"]} == {"ARENA","ATLAS","DOCENTE_OS","TRAMA_CONTROL_CENTER"}

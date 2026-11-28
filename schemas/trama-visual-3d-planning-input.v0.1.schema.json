@@ -1,0 +1,499 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trama.local/schemas/trama-visual-3d-planning-input.v0.1.schema.json",
+  "title": "Visual Factory 3D planning input (no execution authority)",
+  "description": "Cross-record references, identity uniqueness, qualification bindings, timestamps and resource reservations are checked by the deterministic compiler; the schema alone is insufficient.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "request",
+    "admissions",
+    "pools"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "trama.visual-3d-planning-input/v0.1"
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requestId",
+        "subjectRef",
+        "packageDigest",
+        "artDirectionRef",
+        "sourceRevision",
+        "purpose",
+        "qualityProfile",
+        "costClass",
+        "maxAttempts",
+        "maxConcurrentGpuJobs",
+        "assets",
+        "jobs",
+        "paidComputeAuthorized",
+        "allowQualityDowngrade",
+        "runtimeAuthorized",
+        "publicationAuthorityGranted",
+        "studentAuthorized"
+      ],
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+        },
+        "subjectRef": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+        },
+        "packageDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "artDirectionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "sourceRevision": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "purpose": {
+          "enum": [
+            "EVALUATION",
+            "PRODUCTION_CANDIDATE"
+          ]
+        },
+        "qualityProfile": {
+          "enum": [
+            "Q3",
+            "Q4"
+          ]
+        },
+        "costClass": {
+          "const": "FREE_ONLY"
+        },
+        "maxAttempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "maxConcurrentGpuJobs": {
+          "const": 1
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind",
+              "sha256",
+              "bytes",
+              "rightsRef",
+              "reviewRef",
+              "dataClass"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+              },
+              "kind": {
+                "enum": [
+                  "IMAGE",
+                  "PHOTO",
+                  "MESH"
+                ]
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 268435456
+              },
+              "rightsRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "reviewRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "dataClass": {
+                "const": "NONPERSONAL"
+              }
+            }
+          },
+          "maxItems": 32,
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "jobs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "role",
+              "inputIds",
+              "engineOrder"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+              },
+              "role": {
+                "enum": [
+                  "QUICK_SHAPE",
+                  "HIGH_FIDELITY_SHAPE",
+                  "PART_AWARE_SHAPE",
+                  "EDITABLE_POINT_CLOUD",
+                  "UV_TEXTURE",
+                  "RELIGHTABLE_ASSET",
+                  "PBR_ASSET",
+                  "MULTIVIEW_GENERATION",
+                  "MULTIVIEW_RECONSTRUCTION",
+                  "SURFACE_NORMALS",
+                  "INTERACTIVE_GEOMETRY_REFINEMENT",
+                  "TEXTURE_ON_MESH",
+                  "PHOTOGRAMMETRY",
+                  "CONTROLLED_SHAPE",
+                  "REPAIR",
+                  "RELIGHT",
+                  "RENDER",
+                  "OPTIMIZE",
+                  "EXPORT"
+                ]
+              },
+              "inputIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+                },
+                "maxItems": 32,
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "engineOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+                },
+                "maxItems": 16,
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          },
+          "maxItems": 4,
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "paidComputeAuthorized": {
+          "const": false
+        },
+        "allowQualityDowngrade": {
+          "const": false
+        },
+        "runtimeAuthorized": {
+          "const": false
+        },
+        "publicationAuthorityGranted": {
+          "const": false
+        },
+        "studentAuthorized": {
+          "const": false
+        }
+      }
+    },
+    "admissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "engineId",
+          "role",
+          "backendId",
+          "recipeId",
+          "graphDigest",
+          "backendRevision",
+          "sourceRevision",
+          "modelArtifactDigest",
+          "environmentDigest",
+          "parametersDigest",
+          "licenseEvidenceRef",
+          "qualificationEvidenceRef",
+          "qualityProfile",
+          "poolId",
+          "computePlanDigest",
+          "expiresAt",
+          "minVramMiB",
+          "minRamMiB",
+          "minDiskMiB",
+          "reservedSeconds"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+          },
+          "engineId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+          },
+          "role": {
+            "enum": [
+              "QUICK_SHAPE",
+              "HIGH_FIDELITY_SHAPE",
+              "PART_AWARE_SHAPE",
+              "EDITABLE_POINT_CLOUD",
+              "UV_TEXTURE",
+              "RELIGHTABLE_ASSET",
+              "PBR_ASSET",
+              "MULTIVIEW_GENERATION",
+              "MULTIVIEW_RECONSTRUCTION",
+              "SURFACE_NORMALS",
+              "INTERACTIVE_GEOMETRY_REFINEMENT",
+              "TEXTURE_ON_MESH",
+              "PHOTOGRAMMETRY",
+              "CONTROLLED_SHAPE",
+              "REPAIR",
+              "RELIGHT",
+              "RENDER",
+              "OPTIMIZE",
+              "EXPORT"
+            ]
+          },
+          "backendId": {
+            "enum": [
+              "direct-cli",
+              "comfyui-local"
+            ]
+          },
+          "recipeId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "graphDigest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "backendRevision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          },
+          "sourceRevision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          },
+          "modelArtifactDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "environmentDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "parametersDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "licenseEvidenceRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "qualificationEvidenceRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "qualityProfile": {
+            "enum": [
+              "Q3",
+              "Q4"
+            ]
+          },
+          "poolId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+          },
+          "computePlanDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "minVramMiB": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          },
+          "minRamMiB": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          },
+          "minDiskMiB": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          },
+          "reservedSeconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 86400
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "backendId": {
+                  "const": "direct-cli"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "recipeId": {
+                  "type": "null"
+                },
+                "graphDigest": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "recipeId": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+                },
+                "graphDigest": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "maxItems": 100,
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "pools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "providerId",
+          "computePlanDigest",
+          "evidenceRef",
+          "observedAt",
+          "expiresAt",
+          "costClass",
+          "zeroMarginalVerified",
+          "availableSeconds",
+          "vramMiB",
+          "ramMiB",
+          "diskMiB"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+          },
+          "providerId": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+          },
+          "computePlanDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "evidenceRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "costClass": {
+            "enum": [
+              "ZERO_MARGINAL",
+              "CREDIT_COVERED",
+              "PAID",
+              "UNKNOWN"
+            ]
+          },
+          "zeroMarginalVerified": {
+            "type": "boolean"
+          },
+          "availableSeconds": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          },
+          "vramMiB": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          },
+          "ramMiB": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          },
+          "diskMiB": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          }
+        }
+      },
+      "maxItems": 32,
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  }
+}

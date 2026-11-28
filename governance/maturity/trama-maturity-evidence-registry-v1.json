@@ -1,6 +1,6 @@
 {
   "schemaVersion": "trama.maturity-evidence-registry/v1",
-  "updatedAt": "2026-10-07",
+  "updatedAt": "2026-10-17",
   "policy": {
     "projectionReadOnly": true,
     "automaticPromotion": false,
@@ -529,6 +529,60 @@
         "areaRef": "docente-os",
         "releaseRef": "dep-db2ke2ajnfac73f3qoog",
         "exactHead": "39bce05fa2e87f3746ee3b6dcd7433065cb2d876"
+      }
+    },
+    {
+      "id": "EV-MAT-DOS-REGRESSION-HISTORY-2026-10-17",
+      "type": "REGRESSION_HISTORY",
+      "area": "docente-os",
+      "subject": "Docente OS post-L4 regression history with two independent compatible-change checkpoints",
+      "status": "PASS",
+      "source": {
+        "ref": "docs/qualification/DOS-M5-01-regression-history.md",
+        "path": "docs/qualification/DOS-M5-01-regression-history.md",
+        "mergeCommit": "e4e911bdc73d5bbcfd480bf4d1fbeab89d341878"
+      },
+      "observedAt": "2026-10-17T09:44:00Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 5
+        }
+      ],
+      "binding": {
+        "areaRef": "docente-os",
+        "releaseRef": "docente-os-2026-27:product-closure",
+        "exactHead": "3f2b4fbac475109fdc331415aa16af680fd96c87"
+      }
+    },
+    {
+      "id": "EV-MAT-DOS-ADOPTION-EVIDENCE-2026-10-17",
+      "type": "ADOPTION_EVIDENCE",
+      "area": "docente-os",
+      "subject": "Docente OS repeated real teacher-use adoption evidence with privacy-safe positive binding",
+      "status": "PASS",
+      "source": {
+        "ref": "docs/qualification/DOS-M5-02-adoption-evidence.md",
+        "path": "docs/qualification/DOS-M5-02-adoption-evidence.md",
+        "mergeCommit": "9f0c4c0522ec372e21cdb4319cb331d9c2bcf6f7"
+      },
+      "observedAt": "2026-10-17T09:44:11Z",
+      "freshness": {
+        "policy": "EVENT_BOUND"
+      },
+      "confidence": "HIGH",
+      "supports": [
+        {
+          "level": 5
+        }
+      ],
+      "binding": {
+        "areaRef": "docente-os",
+        "releaseRef": "docente-os-2026-27:product-closure",
+        "exactHead": "3f2b4fbac475109fdc331415aa16af680fd96c87"
       }
     }
   ]

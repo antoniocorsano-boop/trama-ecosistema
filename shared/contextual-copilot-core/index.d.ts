@@ -1,0 +1,184 @@
+export const CAPABILITIES: readonly CapabilityId[];
+export const ACTION_RISKS: readonly ActionRisk[];
+export const DATA_CLASSES: readonly DataClass[];
+
+export type CapabilityId =
+  | 'ASK' | 'SEARCH' | 'OPEN' | 'CREATE' | 'ANNOTATE' | 'SUMMARIZE'
+  | 'PREPARE' | 'CONTINUE' | 'REMIND' | 'LINK' | 'IMPORT' | 'REVIEW' | 'EXPLAIN';
+
+export type ActionRisk =
+  | 'READ_ONLY' | 'PROPOSE' | 'WRITE_REVERSIBLE' | 'WRITE_EXTERNAL' | 'INSTITUTIONAL_DECISION';
+
+export type DataClass =
+  | 'PUBLIC_APP' | 'TEACHER_PROFESSIONAL' | 'CURRICOLO'
+  | 'STUDENT_PERSONAL' | 'STUDENT_SENSITIVE' | 'INSTITUTIONAL';
+
+export type PolicyPhase = 'DISCOVER' | 'RESOLVE' | 'DISPATCH';
+
+export interface ContextEntity {
+  type: string;
+  id: string;
+  [key: string]: unknown;
+}
+
+export interface PrivacyContext {
+  dataClasses: readonly DataClass[];
+  remoteProviderAllowed: boolean;
+  [key: string]: unknown;
+}
+
+export interface TemporalContext {
+  [key: string]: unknown;
+}
+
+export interface ContextSnapshot {
+  appId: string;
+  surface: string;
+  entities: readonly ContextEntity[];
+  capabilities: readonly CapabilityId[];
+  permissions: readonly string[];
+  privacy: PrivacyContext;
+  temporal?: TemporalContext;
+  state?: string;
+}
+
+export interface ContextualAction {
+  id: string;
+  capability: CapabilityId;
+  label: string;
+  priority: number;
+  risk: ActionRisk;
+  requiresGenerativeAI: boolean;
+  requiresSemanticSearch: boolean;
+}
+
+export interface IntentActionCandidate {
+  id: string;
+  capability: CapabilityId;
+  label: string;
+  priority: number;
+  risk: ActionRisk;
+  requiresGenerativeAI: boolean;
+  requiresSemanticSearch: boolean;
+}
+
+export interface PolicyDecision {
+  allowed: boolean;
+  reason: string;
+  humanConfirmationRequired: boolean;
+}
+
+export interface PolicyEngine {
+  evaluate(input: {
+    context: ContextSnapshot;
+    action: ContextualAction;
+    phase?: PolicyPhase;
+  }): PolicyDecision | Promise<PolicyDecision>;
+}
+
+export interface SemanticRank {
+  actionId: string;
+  score: number;
+}
+
+export interface SemanticPort {
+  mode: 'local' | 'remote';
+  search?(request: unknown): Promise<unknown>;
+  rank?(input: { context: ContextSnapshot; actions: readonly ResolvedAction[] }): Promise<SemanticRank[]>;
+}
+
+export interface ResolvedAction extends ContextualAction {
+  policy: PolicyDecision;
+}
+
+export interface CopilotRequest {
+  context: ContextSnapshot;
+  message: string;
+  allowedCapabilities: readonly CapabilityId[];
+}
+
+export interface IntentMatch {
+  actionId: string;
+  score: number;
+}
+
+export interface IntentPort {
+  mode: 'local' | 'remote';
+  resolve(input: {
+    context: ContextSnapshot;
+    message: string;
+    actions: readonly ResolvedAction[];
+  }): Promise<readonly IntentMatch[]>;
+  discover?(input: {
+    context: ContextSnapshot;
+    message: string;
+    actions: readonly IntentActionCandidate[];
+  }): Promise<readonly IntentMatch[]>;
+}
+
+export interface CopilotRequestResolution {
+  status: 'RESOLVED' | 'UNRESOLVED';
+  reason:
+    | 'INTENT_RESOLVED'
+    | 'NO_ALLOWED_ACTIONS'
+    | 'INTENT_PORT_UNAVAILABLE'
+    | 'REMOTE_PROVIDER_NOT_AUTHORIZED'
+    | 'PROTECTED_DATA_REMOTE_DENIED'
+    | 'INTENT_RESOLUTION_FAILED'
+    | 'NO_INTENT_MATCH';
+  actions: readonly ResolvedAction[];
+}
+
+export interface DiscoveredIntent {
+  actionId: string;
+  capability: CapabilityId;
+}
+
+export interface CopilotIntentDiscovery {
+  status: 'DISCOVERED' | 'UNRESOLVED';
+  reason:
+    | 'INTENT_DISCOVERED'
+    | 'NO_DISCOVERABLE_ACTIONS'
+    | 'INTENT_PORT_UNAVAILABLE'
+    | 'INTENT_DISCOVERY_UNAVAILABLE'
+    | 'REMOTE_PROVIDER_NOT_AUTHORIZED'
+    | 'PROTECTED_DATA_REMOTE_DENIED'
+    | 'INTENT_DISCOVERY_FAILED'
+    | 'NO_INTENT_MATCH';
+  intents: readonly DiscoveredIntent[];
+}
+
+export interface ActionRegistry {
+  list(): readonly ContextualAction[];
+  get(actionId: string): ContextualAction | null;
+}
+
+export interface ContextualCopilotCore {
+  resolveActions(context: ContextSnapshot): Promise<readonly ResolvedAction[]>;
+  resolveRequest(request: CopilotRequest): Promise<CopilotRequestResolution>;
+  discoverRequestIntent(request: CopilotRequest): Promise<CopilotIntentDiscovery>;
+  dispatch<TOutput>(input: {
+    context: ContextSnapshot;
+    actionId: string;
+    humanConfirmed?: boolean;
+    executor: (input: { context: ContextSnapshot; action: ContextualAction }) => TOutput | Promise<TOutput>;
+  }): Promise<
+    | { status: 'DENIED'; reason: string }
+    | { status: 'HUMAN_CONFIRMATION_REQUIRED'; reason: string }
+    | { status: 'EXECUTED'; output: TOutput }
+  >;
+}
+
+export function validateContextSnapshot(context: ContextSnapshot): ContextSnapshot;
+export function createActionRegistry(actions: ContextualAction[]): ActionRegistry;
+export function createFailClosedPolicyEngine(options?: {
+  generativeMode?: 'none' | 'local' | 'remote';
+  externalWriteAllowed?: boolean;
+}): PolicyEngine;
+export function createContextualCopilotCore(input: {
+  registry: ActionRegistry;
+  policyEngine: PolicyEngine;
+  semanticPort?: SemanticPort | null;
+  intentPort?: IntentPort | null;
+  generativeMode?: 'none' | 'local' | 'remote';
+}): ContextualCopilotCore;

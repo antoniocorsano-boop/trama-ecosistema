@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { publicAtlasHref } from '../src/config/public-destinations';
 
 test('public Gateway stays visible and professional entry fails closed without a destination', async ({ page }) => {
   const pageErrors: Error[] = [];
@@ -7,6 +8,7 @@ test('public Gateway stays visible and professional entry fails closed without a
   await page.goto('/');
 
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Il nostro principio guida' })).toBeVisible();
 
   const unavailableEntries = page.getByRole('button', { name: 'Accesso in preparazione' });
   await expect(unavailableEntries).toHaveCount(2);
@@ -19,11 +21,13 @@ test('public Gateway stays visible and professional entry fails closed without a
 
   await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Accedi' })).toHaveCount(0);
+  expect(publicAtlasHref).not.toBeNull();
+  await expect(page.getByRole('link', { name: 'Consulta il curricolo in Atlas', exact: true })).toHaveAttribute('href', publicAtlasHref ?? 'missing');
   await expect(page.getByRole('button', { name: 'Entra in TRAMA' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Accedi' })).toHaveCount(0);
 
   await expect(page.getByRole('link', { name: 'Ecosistema' })).toHaveAttribute('href', '#ecosistema');
-  await expect(page.getByRole('link', { name: 'Curricolo' })).toHaveAttribute('href', '#curricolo');
+  await expect(page.getByRole('navigation', { name: 'Navigazione principale' }).getByRole('link', { name: 'Curricolo', exact: true })).toHaveAttribute('href', '#curricolo');
   await expect(page.getByRole('link', { name: 'Guida' })).toHaveAttribute('href', '#guida');
   await expect(page.locator('#ecosistema')).toHaveCount(1);
   await expect(page.locator('#curricolo')).toHaveCount(1);
@@ -35,4 +39,19 @@ test('public Gateway stays visible and professional entry fails closed without a
   });
 
   expect(pageErrors).toEqual([]);
+});
+
+test('Orizzonte does not bypass the missing professional entry destination', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?ambiente=orizzonte');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.getByTestId('trama-media-poster')).toBeVisible();
+  const unavailable = page.getByRole('button', { name: 'Accesso in preparazione' });
+  await expect(unavailable).toHaveCount(2);
+  for (const button of await unavailable.all()) await expect(button).toBeDisabled();
+  await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Accedi' })).toHaveCount(0);
+  expect(publicAtlasHref).not.toBeNull();
+  await expect(page.getByRole('link', { name: 'Consulta il curricolo in Atlas', exact: true })).toHaveAttribute('href', publicAtlasHref ?? 'missing');
+  await expect(page.locator('video')).toHaveCount(0);
 });

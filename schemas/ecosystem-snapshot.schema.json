@@ -11,6 +11,7 @@
     "phases",
     "areas",
     "capabilities",
+    "ecosystemGraph",
     "components",
     "gates",
     "evidence",
@@ -1431,6 +1432,541 @@
           }
         }
       }
+    },
+    "ecosystemGraph": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "asOf",
+        "sourceRef",
+        "authorityPolicy",
+        "legend",
+        "externalActors",
+        "nodes",
+        "flows",
+        "views",
+        "transitionPolicy"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "trama.ecosystem.state/v0.3"
+        },
+        "asOf": {
+          "type": "string"
+        },
+        "sourceRef": {
+          "const": "governance/access/trama-ecosystem-state-v0.3.json"
+        },
+        "authorityPolicy": {
+          "type": "object"
+        },
+        "legend": {
+          "type": "object"
+        },
+        "externalActors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "label",
+              "kind"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "HUMAN_ACTOR",
+                  "SYSTEM_ACTOR"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "label",
+              "plane",
+              "state",
+              "targetState",
+              "boundary",
+              "authorityOwner",
+              "authorityRefs",
+              "implementationOwners",
+              "maturityRef",
+              "evidenceRefs",
+              "blockerRefs",
+              "gap",
+              "target",
+              "nextAllowedIntervention",
+              "sourceRefs",
+              "lastSignificantChange",
+              "decisionRefs"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "state": {
+                "enum": [
+                  "REAL",
+                  "PARTIAL",
+                  "DESIGNED",
+                  "DEFERRED"
+                ]
+              },
+              "targetState": {
+                "enum": [
+                  "REAL",
+                  "PARTIAL",
+                  "DESIGNED",
+                  "DEFERRED"
+                ]
+              },
+              "boundary": {
+                "type": "string"
+              },
+              "authorityOwner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "authorityRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "implementationOwners": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "maturityRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blockerRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "gap": {
+                "type": "object",
+                "required": [
+                  "summary",
+                  "missing"
+                ],
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  },
+                  "missing": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "target": {
+                "type": "object",
+                "required": [
+                  "boundary",
+                  "value"
+                ],
+                "properties": {
+                  "boundary": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "nextAllowedIntervention": {
+                "type": "object",
+                "required": [
+                  "action",
+                  "preconditions",
+                  "forbiddenUntil"
+                ],
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "preconditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "forbiddenUntil": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "sourceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "lastSignificantChange": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "decisionRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "maturityContext": {
+                "type": "object",
+                "required": [
+                  "confirmedLevel",
+                  "candidateLevel",
+                  "evidenceBindingStatus",
+                  "nextTargetLevel",
+                  "nextRequiredEvidenceTypes",
+                  "interpretation",
+                  "sourceRef",
+                  "authorityRef"
+                ],
+                "properties": {
+                  "confirmedLevel": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "candidateLevel": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "evidenceBindingStatus": {
+                    "enum": [
+                      "NONE",
+                      "PARTIAL",
+                      "COMPLETE"
+                    ]
+                  },
+                  "nextTargetLevel": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "nextRequiredEvidenceTypes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "interpretation": {
+                    "const": "BOUND_EVIDENCE_ONLY"
+                  },
+                  "sourceRef": {
+                    "type": "string"
+                  },
+                  "authorityRef": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "label": {
+                "type": "string"
+              },
+              "plane": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "flows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "from",
+              "to",
+              "kind",
+              "state",
+              "targetState",
+              "boundary",
+              "authorityOwner",
+              "authorityRefs",
+              "implementationOwners",
+              "maturityRef",
+              "evidenceRefs",
+              "blockerRefs",
+              "gap",
+              "target",
+              "nextAllowedIntervention",
+              "sourceRefs",
+              "lastSignificantChange",
+              "decisionRefs"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "state": {
+                "enum": [
+                  "REAL",
+                  "PARTIAL",
+                  "DESIGNED",
+                  "DEFERRED"
+                ]
+              },
+              "targetState": {
+                "enum": [
+                  "REAL",
+                  "PARTIAL",
+                  "DESIGNED",
+                  "DEFERRED"
+                ]
+              },
+              "boundary": {
+                "type": "string"
+              },
+              "authorityOwner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "authorityRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "implementationOwners": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "maturityRef": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "evidenceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blockerRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "gap": {
+                "type": "object",
+                "required": [
+                  "summary",
+                  "missing"
+                ],
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  },
+                  "missing": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "target": {
+                "type": "object",
+                "required": [
+                  "boundary",
+                  "value"
+                ],
+                "properties": {
+                  "boundary": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "nextAllowedIntervention": {
+                "type": "object",
+                "required": [
+                  "action",
+                  "preconditions",
+                  "forbiddenUntil"
+                ],
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "preconditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "forbiddenUntil": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "additionalProperties": true
+              },
+              "sourceRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "lastSignificantChange": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "decisionRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "maturityContext": {
+                "type": "object",
+                "required": [
+                  "confirmedLevel",
+                  "candidateLevel",
+                  "evidenceBindingStatus",
+                  "nextTargetLevel",
+                  "nextRequiredEvidenceTypes",
+                  "interpretation",
+                  "sourceRef",
+                  "authorityRef"
+                ],
+                "properties": {
+                  "confirmedLevel": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "candidateLevel": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "evidenceBindingStatus": {
+                    "enum": [
+                      "NONE",
+                      "PARTIAL",
+                      "COMPLETE"
+                    ]
+                  },
+                  "nextTargetLevel": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "nextRequiredEvidenceTypes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "interpretation": {
+                    "const": "BOUND_EVIDENCE_ONLY"
+                  },
+                  "sourceRef": {
+                    "type": "string"
+                  },
+                  "authorityRef": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "NAVIGATION",
+                  "AUTHENTICATION",
+                  "AUTHORITY",
+                  "DATA",
+                  "AUTHORING",
+                  "PUBLICATION",
+                  "ASSIGNMENT",
+                  "GOVERNANCE",
+                  "OTHER"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "views": {
+          "type": "object"
+        },
+        "transitionPolicy": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

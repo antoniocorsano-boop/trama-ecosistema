@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TramaMediaBackdrop } from './TramaMediaBackdrop';
 
@@ -16,33 +16,21 @@ function setReducedMotion(value: boolean) {
 }
 
 const responsiveProps = {
-  videoSrc: '/video.mp4',
   background: {
     lim: '/media/trama-gateway-bg-lim.webp',
     s: '/media/trama-gateway-bg-s.webp',
     m: '/media/trama-gateway-bg-m.webp',
     l: '/media/trama-gateway-bg-l.webp',
   },
-  // Transitional test input: keeps the current implementation renderable during RED.
-  poster: {
-    s: '/media/trama-gateway-poster-s.webp',
-    m: '/media/trama-gateway-poster-m.webp',
-    l: '/media/trama-gateway-poster-l.webp',
-  },
-} as unknown as React.ComponentProps<typeof TramaMediaBackdrop>;
+};
 
 describe('TramaMediaBackdrop', () => {
   beforeEach(() => setReducedMotion(false));
 
-  it('renders the native full-bleed looping video in normal-motion mode', () => {
-    render(<TramaMediaBackdrop {...responsiveProps} />);
-    const video = screen.getByTestId('trama-media-video') as HTMLVideoElement;
-    expect(video.autoplay).toBe(true);
-    expect(video.loop).toBe(true);
-    expect(video.muted).toBe(true);
-    expect(video.playsInline).toBe(true);
-    expect(video).toHaveClass('absolute', 'inset-0', 'h-full', 'w-full', 'object-cover');
-    expect(video).toHaveAttribute('src', '/video.mp4');
+  it('never overlays or fetches a prototype video in normal-motion mode', () => {
+    const { container } = render(<TramaMediaBackdrop {...responsiveProps} />);
+    expect(container.querySelectorAll('video')).toHaveLength(0);
+    expect(screen.getByTestId('trama-media-poster')).toBeVisible();
   });
 
   it('exposes L/M/LIM with S fallback through one native responsive picture', () => {
@@ -74,11 +62,13 @@ describe('TramaMediaBackdrop', () => {
     );
   });
 
-  it('keeps the responsive background visible when the prototype video fails', () => {
-    render(<TramaMediaBackdrop {...responsiveProps} />);
-    const video = screen.getByTestId('trama-media-video');
-    fireEvent.error(video);
-    expect(screen.queryByTestId('trama-media-video')).not.toBeInTheDocument();
-    expect(screen.getByTestId('trama-media-poster')).toBeVisible();
+  it('renders only the chosen responsive family without retaining the previous image', () => {
+    const classic = { lim: '/classic-lim.webp', s: '/classic-s.webp', m: '/classic-m.webp', l: '/classic-l.webp' };
+    const { container, rerender } = render(<TramaMediaBackdrop {...responsiveProps} />);
+    rerender(<TramaMediaBackdrop background={classic} />);
+    expect(container.querySelectorAll('picture img')).toHaveLength(1);
+    expect(container.querySelectorAll('video')).toHaveLength(0);
+    expect(screen.getByTestId('trama-media-poster')).toHaveAttribute('src', classic.s);
+    expect(Array.from(container.querySelectorAll('picture source')).map(source => source.getAttribute('srcset'))).toEqual([classic.l, classic.m, classic.lim]);
   });
 });

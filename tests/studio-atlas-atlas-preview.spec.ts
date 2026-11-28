@@ -237,7 +237,7 @@ test("MUSEO ZERO stays REVISE while review preview exercises investigation, repr
   await pinEvidence("Percorso invertito");
   await pinEvidence("Perché il percorso è cambiato");
 
-  const locations = popup.getByRole("navigation", { name: "Luoghi di Museo Zero" });
+  const locations = popup.getByRole("navigation", { name: "Luoghi del percorso" });
   await locations.getByRole("button", { name: "Sala Zero" }).click();
   await pinEvidence("Sensor B spostato");
 

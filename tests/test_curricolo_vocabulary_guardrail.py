@@ -131,6 +131,27 @@ class CurricoloVocabularyValidatorTests(unittest.TestCase):
 """
         self.assertEqual(1, len(validator.scan_added_lines(forbidden_diff, policy)))
 
+    def test_gateway_legacy_urls_are_literal_and_path_scoped(self) -> None:
+        validator = self._validator()
+        policy = validator.load_policy(REGISTRY_PATH)
+        source = "apps/gateway/src/config/public-destinations.ts"
+        checks = [
+            (source, "const canonicalAtlasBaseUrl = 'https://antoniocorsano-boop.github.io/Curriculum-Atlas/';"),
+            (source, "  releaseEvidenceRef: 'https://github.com/antoniocorsano-boop/Curriculum-Atlas/actions/runs/43628770886',"),
+            ("apps/gateway/src/config/public-destinations.test.ts", "    expect(publicAtlasHref).toBe('https://antoniocorsano-boop.github.io/Curriculum-Atlas/curricolo/');"),
+        ]
+
+        def diff(path: str, line: str) -> str:
+            return f"--- /dev/null\n+++ b/{path}\n@@ -0,0 +1 @@\n+{line}\n"
+
+        for path, line in checks:
+            with self.subTest(path=path, line=line):
+                self.assertEqual([], validator.scan_added_lines(diff(path, line), policy))
+                self.assertTrue(validator.scan_added_lines(diff("apps/gateway/src/other.ts", line), policy))
+                self.assertTrue(validator.scan_added_lines(diff(path, line + " // Curriculum pubblico"), policy))
+                self.assertTrue(validator.scan_added_lines(diff(path, line.replace("Curriculum-Atlas", "Curriculum-Other")), policy))
+        self.assertTrue(validator.scan_added_lines(diff(source, "const CurriculumUnit = 1;"), policy))
+
     def test_matching_is_case_insensitive(self) -> None:
         validator = self._validator()
         diff = """diff --git a/docs/new.md b/docs/new.md
