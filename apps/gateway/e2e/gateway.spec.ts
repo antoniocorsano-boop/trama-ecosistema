@@ -187,7 +187,7 @@ test('desktop secondary navigation reaches real landing sections', async ({ page
     ['Curricolo', 'curricolo'],
     ['Guida', 'guida'],
   ] as const) {
-    const link = page.getByRole('link', { name: label });
+    const link = page.getByRole('navigation', { name: 'Navigazione principale' }).getByRole('link', { name: label, exact: true });
     const section = page.locator(`#${id}`);
     await expect(link).toHaveAttribute('href', `#${id}`);
     await expect(section).toHaveAttribute('aria-labelledby', `${id}-title`);

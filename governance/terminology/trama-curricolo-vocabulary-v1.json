@@ -67,6 +67,21 @@
       "path": "docs/architecture/ecosystem-overview.md",
       "pattern": "CurriculumSnapshot",
       "reason": "Il diagramma può citare il nome letterale del contratto ECO-01 v1 finché CurricoloSnapshot v2 non è autorizzato."
+    },
+    {
+      "path": "apps/gateway/src/config/public-destinations.ts",
+      "pattern": "^const\\ canonicalAtlasBaseUrl\\ =\\ 'https://antoniocorsano\\-boop\\.github\\.io/Curriculum\\-Atlas/';$",
+      "reason": "TRAMA-TERM-01 §4.6: identificatore infrastrutturale immutato di GitHub/Pages, necessario al raccordo pubblico o alla sua verifica indipendente. Eccezione circoscritta alla riga letterale; nessuna nuova denominazione di dominio."
+    },
+    {
+      "path": "apps/gateway/src/config/public-destinations.ts",
+      "pattern": "^\\ \\ releaseEvidenceRef:\\ 'https://github\\.com/antoniocorsano\\-boop/Curriculum\\-Atlas/actions/runs/43628770886',$",
+      "reason": "TRAMA-TERM-01 §4.6: identificatore infrastrutturale immutato di GitHub/Pages, necessario al raccordo pubblico o alla sua verifica indipendente. Eccezione circoscritta alla riga letterale; nessuna nuova denominazione di dominio."
+    },
+    {
+      "path": "apps/gateway/src/config/public-destinations.test.ts",
+      "pattern": "^\\ \\ \\ \\ expect\\(publicAtlasHref\\)\\.toBe\\('https://antoniocorsano\\-boop\\.github\\.io/Curriculum\\-Atlas/curricolo/'\\);$",
+      "reason": "TRAMA-TERM-01 §4.6: identificatore infrastrutturale immutato di GitHub/Pages, necessario al raccordo pubblico o alla sua verifica indipendente. Eccezione circoscritta alla riga letterale; nessuna nuova denominazione di dominio."
     }
   ],
   "excludedPaths": [
