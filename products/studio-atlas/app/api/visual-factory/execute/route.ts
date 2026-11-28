@@ -4,6 +4,8 @@ import {
   assertExactCanonicalVisualPreflightBoundPlan,
   isVisualPreflightBoundPlan,
 } from "../../../../lib/visual-factory-execution-contract";
+import { checkServerProjectPlan } from "../../../../lib/visual-project-admission-node";
+import { usesCanonicalVisualExecutor } from "../../../../lib/visual-project-profile";
 import { waitingForComputeReceipt } from "../../../../lib/visual-factory-executor";
 import {
   loadPersistedVisualPreflightEvidence,
@@ -28,7 +30,7 @@ function isPlan(value: unknown): value is VisualGenerationPlan {
     !Array.isArray(plan.jobs) || plan.jobs.length < 1 || plan.jobs.length > 6 ||
     plan.paidComputeAuthorized !== false || plan.allowQualityDowngrade !== false ||
     plan.runtimeAuthorized !== false || plan.publicationAuthorityGranted !== false ||
-    !plan.jobs.every((job) => job.workflowFamily === "flux2-klein-4b/v0.2" && job.maxVariants === 1)
+    !plan.jobs.every((job) => job && typeof job === "object" && job.workflowFamily === "flux2-klein-4b/v0.2" && job.maxVariants === 1)
   ) return false;
   return isVisualPreflightBoundPlan(plan as VisualGenerationPlan);
 }
@@ -41,6 +43,15 @@ function responseForReceipt(receipt: VisualExecutionReceipt) {
 export async function POST(request: Request) {
   const raw = await request.json().catch(() => null);
   if (!isPlan(raw)) return NextResponse.json({ error: "INVALID_VISUAL_GENERATION_PLAN" }, { status: 400 });
+
+  // Generic projects are still qualification-only. A matching server-owned
+  // approval establishes the source binding but cannot activate providers.
+  if (!usesCanonicalVisualExecutor(raw.pathwayId)) {
+    const result = await checkServerProjectPlan(raw, process.env.VISUAL_FACTORY_PROJECT_APPROVAL_FILE);
+    return NextResponse.json({ error: result, executionAuthorized: false, providerCallCount: 0 }, {
+      status: result === "PROJECT_PLAN_MISMATCH" || result === "PROJECT_SOURCE_INVALID" ? 400 : 409,
+    });
+  }
 
   const evidenceDirectory = process.env.VISUAL_FACTORY_PREFLIGHT_EVIDENCE_DIR?.trim();
   if (!evidenceDirectory) return NextResponse.json({ error: "PREFLIGHT_EVIDENCE_UNAVAILABLE" }, { status: 409 });

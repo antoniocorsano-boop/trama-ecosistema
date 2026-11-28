@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-__APP_HASH__'; style-src 'sha256-__CSS_HASH__'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Studio Atlas — Laboratorio biella-manovella</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f5f9;color:#17283e;font:16px/1.5 system-ui,sans-serif}main{max-width:1060px;margin:auto;padding:16px}h1{font-size:clamp(24px,4vw,38px);line-height:1.2;margin:8px 0}h2{font-size:19px;margin:0 0 8px}p{margin:8px 0}.eyebrow{font-size:12px;letter-spacing:.1em;color:#365772;font-weight:700}.layout{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}.panel{min-width:0;background:#fff;border:1px solid #cbd5e1;border-radius:14px;padding:14px}svg{display:block;width:100%;height:auto;background:#edf2f7;border-radius:10px}label{display:block;font-weight:600;margin:8px 0 4px}select,button{font:inherit;max-width:100%;min-height:44px}select{width:100%}button{background:#1d4d73;color:white;border:0;border-radius:8px;padding:8px 12px;cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid #b45309;outline-offset:3px}.buttons{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}output{display:block;background:#e8f3f4;padding:10px;border-radius:8px;font-weight:600}small{display:block;margin-top:10px;color:#42566c}@media(max-width:720px){.layout{grid-template-columns:1fr}main{padding:10px}}
+</style></head><body><main>
+<p class="eyebrow">STUDIO ATLAS · TECNOLOGIA · CANDIDATO DA REVISIONARE</p>
+<h1>Laboratorio biella-manovella</h1><p>Scopri come una rotazione diventa un movimento rettilineo alternato.</p>
+<div class="layout"><section class="panel"><h2>Schema cinematico</h2>
+<svg id="view" viewBox="0 0 340 200" role="img" aria-labelledby="svg-title svg-desc">
+<title id="svg-title">Biella e manovella con cursore</title><desc id="svg-desc">La manovella ruota attorno a un centro fisso; la biella collega il perno mobile al cursore che scorre orizzontalmente.</desc>
+<path d="M22 100 H320" stroke="#94a3b8" stroke-dasharray="4 4" fill="none"/><path d="M97 82 H319 M97 118 H319" stroke="#64748b" stroke-width="2" fill="none"/>
+<circle id="orbit" cx="70" cy="100" r="22" fill="#dce7f3" stroke="#306ba3" stroke-width="2"/>
+<line id="crank" x1="70" y1="100" x2="92" y2="100" stroke="#306ba3" stroke-width="7" stroke-linecap="round"/>
+<line id="rod" x1="92" y1="100" x2="202" y2="100" stroke="#138a80" stroke-width="7" stroke-linecap="round"/>
+<circle cx="70" cy="100" r="5" fill="#17283e"/><circle id="pin" cx="92" cy="100" r="5" fill="#b45309"/>
+<rect id="slider" x="187" y="86" width="30" height="28" rx="4" fill="#f5d299" stroke="#87520b" stroke-width="2"/>
+<circle id="joint" cx="202" cy="100" r="4" fill="#87520b"/>
+<text x="70" y="165" text-anchor="middle" font-size="12" fill="#306ba3">Manovella</text><text x="170" y="165" text-anchor="middle" font-size="12" fill="#087b70">Biella</text><text x="270" y="165" text-anchor="middle" font-size="12" fill="#87520b">Cursore</text>
+</svg><p id="readout"></p><small>Modello geometrico ideale, senza forze, attrito o gioco meccanico. Misure in millimetri.</small></section>
+<section class="panel"><h2>Previsione e verifica</h2>
+<label for="radius">Raggio manovella (mm)</label><select id="radius"><option>20</option><option>30</option><option>40</option></select>
+<label for="length">Lunghezza biella (mm)</label><select id="length"><option>100</option><option>140</option></select>
+<div class="buttons"><button id="play">Avvia</button><button id="step">Avanza di 90°</button><button id="reset">Ripristina</button></div>
+<label for="prediction">Quanto misura la corsa del cursore?</label><select id="prediction"><option value="">Scegli la previsione</option><option value="r">Il raggio</option><option value="2r">Il doppio del raggio</option><option value="l">La lunghezza della biella</option></select>
+<div class="buttons"><button id="verify">Verifica la previsione</button></div>
+<output id="feedback" aria-live="polite">Formula una previsione.</output>
+<small>Osserva le due posizioni estreme a 0° e 180°. Il laboratorio si avvia fermo.</small></section></div></main>
+<script>
+const M=__MECHANISM_MODULE__;
+const el=id=>document.getElementById(id),n=id=>Number(el(id).value);
+let angle=0,playing=false,last=0,frame=0;
+const state=()=>M.sliderCrank(n("radius"),n("length"),angle);
+function draw(){
+  const s=state(),x=70+s.pinX*1.1,y=100-s.pinY*1.1,z=70+s.sliderX*1.1;
+  const put=(id,values)=>{for(const [k,v] of Object.entries(values))el(id).setAttribute(k,String(v));};
+  put("orbit",{r:s.radius*1.1});put("crank",{x2:x,y2:y});put("rod",{x1:x,y1:y,x2:z,y2:100});
+  put("pin",{cx:x,cy:y});put("slider",{x:z-15});put("joint",{cx:z});
+  el("readout").textContent="Angolo: "+s.angle.toFixed(0)+"° · spostamento dalla posizione iniziale: "+s.displacement.toFixed(1)+" mm";
+}
+function pause(){playing=false;cancelAnimationFrame(frame);last=0;el("play").textContent="Avvia";}
+function tick(t){if(!playing)return;if(last)angle=(angle+(t-last)*.18)%360;last=t;draw();frame=requestAnimationFrame(tick);}
+function clearPrediction(){el("prediction").value="";el("feedback").textContent="Formula una previsione.";}
+for(const id of ["radius","length"])el(id).addEventListener("input",()=>{pause();angle=0;clearPrediction();draw();});
+el("play").onclick=()=>{if(playing)pause();else{playing=true;el("play").textContent="Pausa";frame=requestAnimationFrame(tick);}};
+el("step").onclick=()=>{pause();angle=(angle+90)%360;draw();};
+el("reset").onclick=()=>{pause();angle=0;el("radius").value="20";el("length").value="100";clearPrediction();draw();};
+el("verify").onclick=()=>{const p=el("prediction").value;if(!p){el("feedback").textContent="Seleziona prima una previsione.";return;}el("feedback").textContent=(p==="2r"?"Previsione corretta. ":"Rivedi la previsione. ")+"La corsa misura "+state().stroke+" mm, il doppio del raggio.";};
+window.__vfSimulation={getState:()=>({...state(),playing,studentAuthorized:false,publicationAuthorized:false})};
+draw();
+</script></body></html>

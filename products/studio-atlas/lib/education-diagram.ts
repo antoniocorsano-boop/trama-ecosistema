@@ -1,0 +1,151 @@
+/** Closed manifest contract for the existing build-time educational renderer. */
+export const DIAGRAM_ROOT = "/design/education-diagram/";
+export const DIAGRAM_STEM = "eco02-p1-filiera-orticola";
+export const DIAGRAM_VARIANTS = ["mobile-vertical","desktop-lim-horizontal"] as const;
+export type DiagramVariant = typeof DIAGRAM_VARIANTS[number];
+type Output = {id:string;variant:DiagramVariant;htmlSha256:string;svgSha256:string};
+type Receipt = {sourceSha256:string;guideSha256:string;outputs:Output[]};
+const hash = (value:unknown): value is string => typeof value==="string" && /^[0-9a-f]{64}$/.test(value);
+function record(value:unknown): Record<string,unknown> {
+  if (!value || typeof value!=="object" || Array.isArray(value)) throw Error("DIAGRAM_RECEIPT_INVALID");
+  return value as Record<string,unknown>;
+}
+export function parseEducationReceipt(input:unknown): Receipt {
+  const r=record(input);
+  if(r.schema!=="trama.diagram-education-receipt/v0.1" || r.status!=="GENERATED_TEACHER_REVIEW_REQUIRED" ||
+    r.runtimeAuthorized!==false || r.publicationAuthorized!==false || !hash(r.sourceSha256) ||
+    !hash(r.guideSha256) || !hash(r.profilesSha256) || !Array.isArray(r.outputs) || r.outputs.length!==2) throw Error("DIAGRAM_RECEIPT_INVALID");
+  const outputs=DIAGRAM_VARIANTS.map((variant,index)=>{
+    const o=record((r.outputs as unknown[])[index]);
+    const id=DIAGRAM_STEM+"-"+variant;
+    if(o.id!==id || o.variant!==variant || o.diagram!==DIAGRAM_STEM || !hash(o.htmlSha256) || !hash(o.svgSha256)) throw Error("DIAGRAM_RECEIPT_INVALID");
+    return {id,variant,htmlSha256:o.htmlSha256,svgSha256:o.svgSha256};
+  });
+  return {sourceSha256:r.sourceSha256,guideSha256:r.guideSha256,outputs};
+}
+export function educationFiles(receipt:Receipt): {name:string;sha256:string}[] {
+  return [
+    {name:"education-pilot-source.json",sha256:receipt.sourceSha256},
+    {name:"guida-docente.md",sha256:receipt.guideSha256},
+    ...receipt.outputs.flatMap(o=>[{name:o.id+".html",sha256:o.htmlSha256},{name:o.id+".svg",sha256:o.svgSha256}]),
+  ];
+}
+export async function verifyEducationFile(bytes:ArrayBuffer,expected:string):Promise<void> {
+  const digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),b=>b.toString(16).padStart(2,"0")).join("");
+  if(digest!==expected) throw Error("DIAGRAM_FILE_INTEGRITY");
+}
+
+export type DiagramNode = {id: string; label: string; detail: string};
+export type DiagramEdge = [string, string];
+export const AUTHORED_STEM = "diagramma-docente";
+const SOURCE_METADATA = {
+  schema: "trama.diagram-education-source/v0.1",
+  id: AUTHORED_STEM,
+  status: "TEACHER_REVIEW_REQUIRED",
+  profile: "studio-atlas",
+  runtimeAuthorized: false,
+  publicationAuthorized: false,
+} as const;
+
+export type DiagramActivity = {question: string; criterion: string};
+export type GearTransmission = { kind: "external-gear-pair"; driverTeeth: number; drivenTeeth: number };
+const MECHANICAL_SCHEMA = "trama.diagram-education-source/v0.2";
+
+export function authoredSource(title = "", description = "", nodes: DiagramNode[] = [], edges: DiagramEdge[] = [], activity?: DiagramActivity, transmission?: GearTransmission) {
+  return {...SOURCE_METADATA, schema: transmission ? MECHANICAL_SCHEMA : SOURCE_METADATA.schema,
+    title, description, nodes, edges, ...(activity === undefined ? {} : {activity}),
+    ...(transmission === undefined ? {} : {transmission})};
+}
+export type AuthoredSource = ReturnType<typeof authoredSource>;
+
+export function importAuthoredSource(value: unknown): AuthoredSource {
+  const source = record(value);
+  const allowed = new Set([...Object.keys(SOURCE_METADATA), "title", "description", "nodes", "edges", "activity"]);
+  const mechanical = source.schema === MECHANICAL_SCHEMA;
+  if (mechanical) allowed.add("transmission");
+  if (Object.keys(source).some(key => !allowed.has(key)) ||
+      Object.keys(source).length !== (10 + Number(Object.hasOwn(source, "activity")) + Number(mechanical)) ||
+      Object.entries(SOURCE_METADATA).some(([key, expected]) => source[key] !== (mechanical && key === "schema" ? MECHANICAL_SCHEMA : expected)) ||
+      typeof source.title !== "string" || typeof source.description !== "string" ||
+      !Array.isArray(source.nodes) || source.nodes.length > 4 || !Array.isArray(source.edges) || source.edges.length > 8) {
+    throw Error("Struttura o autorizzazioni della fonte non valide.");
+  }
+  const nodes = source.nodes.map((value: unknown) => {
+    const node = record(value);
+    if (Object.keys(node).length !== 3 || typeof node.id !== "string" || !/^n[1-4]$/.test(node.id) ||
+        typeof node.label !== "string" || typeof node.detail !== "string" ||
+        Array.from(node.label).length > 16 || Array.from(node.detail).length > 22) {
+      throw Error("Controlla identificativo, etichetta e dettaglio dei nodi.");
+    }
+    return {id: node.id, label: node.label, detail: node.detail};
+  });
+  const ids = new Set(nodes.map(node => node.id));
+  if (ids.size !== nodes.length || Array.from(source.title).length > 26 || Array.from(source.description).length > 160) {
+    throw Error("Controlla gli identificativi dei nodi e la lunghezza di titolo e finalità.");
+  }
+  const edges = source.edges.map((edge: unknown): DiagramEdge => {
+    if (!Array.isArray(edge) || edge.length !== 2 || !ids.has(edge[0]) || !ids.has(edge[1]) || edge[0] === edge[1]) {
+      throw Error("Ogni relazione deve collegare due nodi presenti e distinti.");
+    }
+    return [edge[0], edge[1]];
+  });
+  if (new Set(edges.map(edge => edge.join(":"))).size !== edges.length) throw Error("Relazione duplicata.");
+  const forbidden = /[<>@\u0000-\u001f\u007f-\u009f]|(?:[a-z][a-z0-9+.-]*:\/\/|(?:https?|javascript|data|mailto|file|blob|vbscript)\s*:|www\.|\/\/|\b[\w-]+\.(?:it|com|org|net|edu|gov|io|dev)\b)/i;
+  let activity: DiagramActivity | undefined;
+  if (Object.prototype.hasOwnProperty.call(source, "activity")) {
+    const value = record(source.activity);
+    if (Object.keys(value).length !== 2 || typeof value.question !== "string" || typeof value.criterion !== "string" ||
+        Array.from(value.question).length > 160 || Array.from(value.criterion).length > 160) {
+      throw Error("Controlla domanda operativa e criterio di risposta.");
+    }
+    activity = {question: value.question, criterion: value.criterion};
+  }
+  if ([source.title, source.description, ...nodes.flatMap(node => [node.label, node.detail]),
+       ...(activity ? [activity.question, activity.criterion] : [])].some(text => forbidden.test(text))) {
+    throw Error("Inserisci solo testo, senza markup o indirizzi.");
+  }
+  let transmission: GearTransmission | undefined;
+  if (mechanical) {
+    const model = record(source.transmission);
+    const {driverTeeth, drivenTeeth} = model;
+    if (Object.keys(model).length !== 3 || model.kind !== "external-gear-pair" ||
+        typeof driverTeeth !== "number" || typeof drivenTeeth !== "number" ||
+        ![12, 24, 36, 48].includes(driverTeeth) || ![12, 24, 36, 48].includes(drivenTeeth) ||
+        nodes.length !== 2 || edges.length !== 1 || edges[0][0] !== nodes[0].id || edges[0][1] !== nodes[1].id ||
+        nodes[0].detail !== driverTeeth + " denti" || nodes[1].detail !== drivenTeeth + " denti") {
+      throw Error("Trasmissione esterna non valida.");
+    }
+    transmission = {kind: "external-gear-pair", driverTeeth, drivenTeeth};
+  }
+  return authoredSource(source.title, source.description, nodes, edges, activity, transmission);
+}
+
+export async function verifyAuthoredPackage(value: unknown) {
+  const files = record(record(value).files);
+  const receiptName = "education-receipt.json";
+  const names = ["education-source.json", "guida-docente.md", ...DIAGRAM_VARIANTS.flatMap(variant =>
+    ["html", "svg"].map(extension => `${AUTHORED_STEM}-${variant}.${extension}`))];
+  if (Object.keys(files).length !== names.length + 1 || typeof files[receiptName] !== "string") throw Error("Pacchetto incompleto.");
+  const receipt = record(JSON.parse(files[receiptName]));
+  if (receipt.schema !== "trama.diagram-education-receipt/v0.2" || receipt.status !== "GENERATED_TEACHER_REVIEW_REQUIRED" ||
+      receipt.runtimeAuthorized !== false || receipt.publicationAuthorized !== false || receipt.sourceOrigin !== "teacher-authored" ||
+      !hash(receipt.profilesSha256) || !hash(receipt.rendererSha256)) throw Error("Ricevuta non valida.");
+  const hashes = record(receipt.files);
+  if (Object.keys(hashes).length !== names.length) throw Error("Ricevuta incompleta.");
+  const artifacts = await Promise.all(names.map(async name => {
+    const file = files[name];
+    const expected = hashes[name];
+    if (typeof file !== "string" || !hash(expected)) throw Error("Pacchetto incompleto.");
+    await verifyEducationFile(new TextEncoder().encode(file).buffer, expected);
+    return [name, file] as const;
+  }));
+  return Object.fromEntries([...artifacts, [receiptName, files[receiptName]]]);
+}
+
+/** Shared existing renderer transport; both editor and contextual production use it. */
+export async function generateAuthoredPackage(source:AuthoredSource,signal?:AbortSignal,fetchImpl:typeof fetch=fetch){
+ const response=await fetchImpl("/api/education-diagram",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(source),signal});
+ const result=await response.json();
+ if(!response.ok)throw Error(result.error||"Generazione non riuscita.");
+ return verifyAuthoredPackage(result);
+}

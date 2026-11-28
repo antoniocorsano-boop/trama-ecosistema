@@ -38,6 +38,10 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
 .secondary-action { background: transparent; border: 1px solid var(--line); padding: 11px 16px; border-radius: 999px; color: var(--ink); }
 .secondary-action:disabled { opacity: .45; cursor: default; }
 .quiet-action { background: transparent; padding: 6px 0; color: var(--accent); font-weight: 650; }
+.work-mode-picker { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; margin: 20px 0; }
+.work-mode-picker label { font-weight: 600; }
+.work-mode-picker select { padding: 6px; font: inherit; }
+.work-mode-picker p { margin: 0; overflow-wrap: anywhere; }
 .home-intro { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; padding: 42px 0 70px; }
 .home-intro p { font-size: 24px; line-height: 1.35; max-width: 720px; margin: 0; }
 .development-note { align-self: end; color: var(--muted); font-size: 13px; }
@@ -74,7 +78,7 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
 .stage-rail button { border: 0; background: transparent; text-align: left; padding: 10px 0; color: var(--muted); cursor: pointer; display: grid; grid-template-columns: 34px 1fr; }
 .stage-rail button span { font-variant-numeric: tabular-nums; font-size: 11px; padding-top: 3px; }
 .stage-rail button.active { color: var(--ink); font-weight: 700; }
-.work-surface { padding: 48px clamp(28px, 5vw, 80px); }
+.work-surface { min-width: 0; padding: 48px clamp(28px, 5vw, 80px); }
 .work-surface h1 { font-size: clamp(36px, 5vw, 64px); max-width: 760px; }
 .lead { font-size: 20px; line-height: 1.5; color: var(--muted); max-width: 720px; margin: 24px 0 38px; }
 .idea-editor { min-height: 260px; resize: vertical; font-size: 22px; line-height: 1.55; padding: 22px 0; }
@@ -97,7 +101,7 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .home-intro { grid-template-columns: 1fr; }
   .project-main { grid-template-columns: 1fr; gap: 4px; }
   .workspace-shell { padding: 20px; }
-  .workspace-grid { grid-template-columns: 1fr; }
+  .workspace-grid { grid-template-columns: minmax(0, 1fr); }
   .stage-rail { border-right: 0; border-bottom: 1px solid var(--line); padding: 18px 0; flex-direction: row; overflow-x: auto; }
   .stage-rail button { min-width: 112px; grid-template-columns: 28px 1fr; }
   .work-surface { padding: 36px 0; }
@@ -347,4 +351,349 @@ h2 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
   .studio-home-actions, .activity-form-row { flex-direction: column; align-items: stretch; }
   .activity-form-row button { align-self: start; }
   .activity-preview iframe { min-height: 520px; height: 73vh; }
+}
+
+
+/* AWC S1-S2: il mondo e il confronto delle scene riusano gli editor esistenti. */
+.world-composer-panel {
+  margin: 26px 0 30px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: clamp(16px, 3vw, 28px);
+  min-width: 0;
+}
+.world-composer-heading h2 { font-size: clamp(21px, 2.5vw, 28px); }
+.world-composer-heading p, .world-composer-note {
+  color: var(--muted);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.world-composer-places {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: 10px;
+}
+.world-composer-places li {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+}
+.world-composer-places span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.world-composer-fieldset { border: 0; padding: 0; margin: 24px 0 0; min-width: 0; max-width: 100%; }
+.world-composer-fieldset legend { font-weight: 700; margin-bottom: 12px; max-width: 100%; overflow-wrap: anywhere; }
+/* VF-MOTION-05A-R2: native selects and range inputs must not impose their
+   intrinsic width on the visual direction editor, including enlarged text. */
+.world-composer-fieldset .world-grid { min-width: 0; max-width: 100%; }
+.world-composer-fieldset .world-field {
+  min-width: 0; max-width: 100%; grid-template-columns: minmax(0, 1fr);
+  overflow-wrap: anywhere;
+}
+.world-composer-fieldset .world-field :is(select, input) {
+  width: 100%; min-width: 0; max-width: 100%; min-height: 44px;
+}
+.world-composer-fieldset .world-field :is(select, input):focus-visible {
+  outline: 3px solid var(--accent); outline-offset: 2px;
+}
+.world-composer-modes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.world-composer-choice {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  text-align: left;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.world-composer-choice span { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.world-composer-choice.selected, .world-composer-buttons .is-current {
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+  background: var(--accent-soft);
+}
+.world-composer-selector { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 9px; margin: 22px 0; }
+.world-composer-selector select {
+  width: 100%; min-width: 0; max-width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.world-composer-buttons { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.world-composer-buttons button {
+  min-width: 0; max-width: 100%; min-height: 44px;
+  white-space: normal; overflow-wrap: anywhere;
+}
+.world-composer-buttons .secondary-action { border-radius: 9px; text-align: left; }
+.world-composer-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+.world-composer-comparison > section {
+  min-width: 0;
+  border-top: 2px solid var(--line);
+  padding: 16px 0;
+}
+.world-composer-comparison h3 { margin: 0 0 12px; font-size: 18px; }
+.world-composer-state > strong { display: block; }
+.world-composer-state p { line-height: 1.5; }
+.world-composer-state ul { padding: 0; list-style: none; }
+.world-composer-state li { border-top: 1px solid var(--line); padding: 10px 0; display: grid; gap: 3px; overflow-wrap: anywhere; }
+.world-composer-state li span { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.world-composer-footer { border-top: 1px solid var(--line); padding-top: 15px; }
+.world-composer-footer .quiet-action:disabled { opacity: .5; cursor: default; }
+.world-composer-panel button:focus-visible,
+.world-composer-panel select:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 700px) {
+  .world-composer-modes, .world-composer-comparison,
+  .world-composer-fieldset .world-grid { grid-template-columns: minmax(0, 1fr); }
+  .world-composer-buttons { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .world-composer-buttons .secondary-action { justify-content: start; }
+}
+
+/* Stato del salvataggio leggibile anche su schermi stretti e con testo ingrandito. */
+.workspace-actions { flex-wrap: wrap; }
+.save-state { min-width: 0; max-width: 230px; line-height: 1.4; text-align: left; }
+@media (max-width: 390px) {
+  .workspace-shell { padding: 14px; }
+  .world-composer-panel { padding: 14px; }
+  .world-composer-choice { min-width: 0; }
+}
+
+.world-composer-variation-editor {
+  margin: 12px 0 22px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+.world-composer-variation-editor label { display: grid; gap: 8px; }
+.world-composer-variation-editor textarea {
+  width: 100%;
+  min-height: 88px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+.world-composer-variation-editor textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.world-composer-variation-editor .primary-action:disabled { cursor: default; }
+
+
+/* AWC S2: impedisce ai campi delle scelte di allargare l'intera pagina mobile. */
+.scene-timeline, .scene-row, .scene-body, .scene-heading-row,
+.scene-choice-editor, .scene-choice-row, .choice-target {
+  min-width: 0;
+  max-width: 100%;
+}
+.scene-body textarea, .scene-title, .scene-kind,
+.scene-choice-row input, .scene-choice-row textarea,
+.scene-choice-row select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.scene-choice-row label, .scene-choice-row .choice-target {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .scene-choice-row .choice-target {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .scene-choice-row .choice-target select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* AWC S3: revisione tecnica di fotogrammi 3-D qualificati, non player studente. */
+.awc-evidence-panel {
+  margin: 28px 0 0;
+  padding: 20px 0 10px;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+.awc-evidence-panel h3 { margin: 0 0 10px; font-size: 21px; }
+.awc-evidence-input { display: grid; gap: 8px; margin: 20px 0; overflow-wrap: anywhere; }
+.awc-evidence-input > span { color: var(--muted); line-height: 1.5; }
+.awc-evidence-input input { max-width: 100%; width: 100%; color: var(--ink); }
+.awc-evidence-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 20px; }
+.awc-evidence-actions .secondary-action { border-radius: 9px; text-align: left; }
+.awc-evidence-actions .is-current { background: var(--accent-soft); border-color: var(--accent); }
+.awc-evidence-views { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.awc-evidence-views figure { margin: 0; min-width: 0; }
+.awc-evidence-views img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #111c29;
+}
+.awc-evidence-views figcaption { color: var(--muted); font-size: 13px; padding: 9px 0; }
+.awc-evidence-error { color: var(--danger); overflow-wrap: anywhere; }
+@media (max-width: 700px) { .awc-evidence-views { grid-template-columns: 1fr; } }
+.awc-evidence-panel button:focus-visible,
+.awc-evidence-panel input:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+
+/* AWC S3b — local Three.js r128 experience, never used as student runtime. */
+.awc-live-panel {
+  margin: 12px 0 28px;
+  padding: 16px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+}
+.awc-live-panel h4 { margin: 0 0 8px; font-size: 17px; line-height: 1.35; }
+.awc-live-toolbar, .awc-live-controls, .awc-live-steering {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 8px;
+  margin: 12px 0;
+}
+.awc-live-toolbar button, .awc-live-controls button, .awc-live-steering button {
+  min-height: 42px;
+  min-width: 0;
+  max-width: 100%;
+}
+.awc-live-controls .is-current { background: var(--accent-soft); border-color: var(--accent); }
+.awc-live-stage {
+  width: 100%;
+  min-width: 0;
+  max-width: 720px;
+  margin: 16px auto 4px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #111c29;
+  aspect-ratio: 4 / 3;
+}
+.awc-live-canvas {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  touch-action: none;
+  cursor: grab;
+}
+.awc-live-canvas:active { cursor: grabbing; }
+.awc-live-canvas:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+@media (max-width: 480px) {
+  .awc-live-panel { padding: 12px; }
+  .awc-live-toolbar, .awc-live-controls, .awc-live-steering { display: grid; grid-template-columns: 1fr 1fr; }
+  .awc-live-toolbar button:nth-child(3) { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .awc-live-panel *, .awc-live-panel *::before, .awc-live-panel *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+
+/* UX1: one quiet column, one primary action, native accessible choice controls. */
+.studio-intent h1 { font-size: clamp(30px, 5.5vw, 52px); line-height: 1.08; overflow-wrap: anywhere; }
+.studio-intent .seed-form { margin-top: 30px; gap: 24px; min-width: 0; }
+.studio-intent .seed-form textarea { min-height: 110px; }
+.studio-intent .intent-summary { margin: 0; color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
+.studio-intent .intent-forms { border: 0; padding: 0; margin: 0; min-width: 0; }
+.studio-intent .intent-forms legend { padding: 0; font-weight: 700; font-size: 1.15rem; }
+.studio-intent .intent-hint { color: var(--muted); font-size: .93rem; line-height: 1.5; margin: 0 0 10px; }
+.studio-intent .seed-form .intent-form-option { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 12px; min-height: 44px; padding: 14px 0; border-bottom: 1px solid var(--line); cursor: pointer; font-weight: 400; }
+.studio-intent .seed-form .intent-form-option input { width: 20px; height: 20px; margin: 2px 0; accent-color: var(--accent); }
+.studio-intent .intent-form-option > span { display: grid; gap: 4px; overflow-wrap: anywhere; }
+.studio-intent .intent-form-option span span, .studio-intent .intent-form-option small { color: var(--muted); line-height: 1.4; }
+.studio-intent .intent-form-option .intent-recommended { color: var(--accent); font-weight: 650; }
+.studio-intent .intent-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.studio-intent button { min-height: 44px; }
+.studio-intent :is(button,input,select,textarea,a):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* UX1a R1: constrain intrinsic grid/flex widths rather than conceal overflow.
+   Reflow applies at enlarged text as well as narrow viewports. */
+.studio-intent { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.studio-intent .seed-form { grid-template-columns: minmax(0, 1fr); }
+.studio-intent .seed-form > *,
+.studio-intent .seed-form label,
+.studio-intent .intent-forms legend,
+.studio-intent .intent-form-option > span,
+.studio-intent .intent-form-option > span > *,
+.studio-intent .intent-actions > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.studio-intent .seed-form label:not(.intent-form-option) { grid-template-columns: minmax(0, 1fr); }
+.studio-intent .seed-form :is(textarea,select,input:not([type="radio"])) { min-width: 0; max-width: 100%; }
+.studio-intent .intent-forms { width: 100%; max-width: 100%; }
+.studio-intent button { white-space: normal; text-align: center; overflow-wrap: anywhere; max-width: 100%; }
+@media (max-width: 480px) {
+  .studio-intent .intent-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .studio-intent .intent-actions button { width: 100%; }
+}
+
+/* UX1b: a planning preference, not a new dashboard or a second editor. */
+.authoring-profile { min-width: 0; max-width: 100%; overflow-wrap: anywhere; padding: 24px 0 10px; border-top: 1px solid var(--line); }
+.authoring-profile h2 { font-size: clamp(21px, 3vw, 28px); line-height: 1.2; margin: 0 0 16px; }
+.authoring-profile label { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; font-weight: 650; min-width: 0; }
+.authoring-profile select { width: 100%; min-width: 0; max-width: 100%; min-height: 44px; padding: 8px 0; border: 0; border-bottom: 1px solid var(--line); color: var(--ink); background: transparent; }
+.authoring-profile .profile-explanation { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+.authoring-profile .profile-plan { min-width: 0; }
+.authoring-profile .profile-plan h3 { font-size: 1rem; margin: 20px 0 8px; }
+.authoring-profile .profile-plan p { line-height: 1.55; }
+.authoring-profile summary { cursor: pointer; min-height: 44px; padding: 8px 0; color: var(--accent); }
+.authoring-profile ul { margin: 8px 0; padding-left: 24px; line-height: 1.5; }
+.authoring-profile :is(select,summary):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.education-diagram-editor {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1.25rem;
+  min-width: 0;
+}
+
+.education-diagram-editor fieldset {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.education-diagram-editor label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.education-diagram-editor input,
+.education-diagram-editor textarea,
+.education-diagram-editor select {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.education-diagram-editor pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }

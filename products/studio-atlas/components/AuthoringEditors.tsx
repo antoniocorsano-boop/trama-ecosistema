@@ -1,12 +1,20 @@
 "use client";
 
 import type {
-  ExperienceGrammar,
   PathwayProject,
   PathwayScene,
+  SceneIllustration,
   StoryDraft,
   WorldDraft,
 } from "../lib/model";
+import { ExperienceGallery } from "./ExperienceGallery";
+import { ScenePlacesEditor } from "./ScenePlacesEditor";
+import { SceneImageEditor } from "./SceneImageEditor";
+import { projectImageErrors } from "../lib/scene-media";
+import { stagePlaceErrors } from "../lib/scene-places";
+import { SceneDesignComparison, WorldDesignOverview } from "./WorldComposerPanels";
+import { updateSceneFocus, updateWorldChoiceStatus } from "../lib/world-composer";
+import { updateSceneVisualRecipe } from "../lib/scene-visual-recipe";
 
 type Props = {
   project: PathwayProject;
@@ -153,6 +161,8 @@ export function WorldEditor({ project, onPatch }: Props) {
         Il mondo deve dare allo studente qualcosa da osservare, cambiare e capire.
       </p>
 
+      <WorldDesignOverview project={project} />
+
       <div className="world-grid">
         {worldFields.map(([key, label, hint]) => (
           <label className="world-field" key={key}>
@@ -207,15 +217,6 @@ export function WorldEditor({ project, onPatch }: Props) {
   );
 }
 
-const grammars: Array<[Exclude<ExperienceGrammar, "">, string, string]> = [
-  ["INQUIRY_EVIDENCE", "Indagine", "Raccogli indizi e costruisci una spiegazione."],
-  ["BRANCHING_CONSEQUENCE", "Conseguenze", "Fai scelte e osserva come cambia la situazione."],
-  ["WORKSHOP_CONSTRUCTION", "Officina", "Costruisci, combina o correggi qualcosa."],
-  ["SIMULATION_MICROWORLD", "Micromondo", "Agisci su un sistema e osserva le relazioni."],
-  ["VISUAL_NARRATIVE", "Narrazione visuale", "Attraversa una sequenza in cui immagini e azioni portano avanti la storia."],
-  ["ENVIRONMENTAL_STORYTELLING", "Esplorazione", "Capisci il mondo leggendo ciò che contiene."],
-];
-
 export function ExperienceEditor({ project, onPatch }: Props) {
   return (
     <div className="authoring-editor">
@@ -224,23 +225,13 @@ export function ExperienceEditor({ project, onPatch }: Props) {
         Scegli la forma dell’esperienza che rende necessaria l’azione dello studente.
       </p>
 
-      <div className="grammar-list">
-        {grammars.map(([value, title, description]) => (
-          <button
-            key={value}
-            className={project.experience.grammar === value ? "grammar-row active" : "grammar-row"}
-            onClick={() => onPatch({
-              experience: { ...project.experience, grammar: value },
-              storyboardReady: false,
-              ...invalidateProductReview(project),
-              humanState: "SCENES",
-            })}
-          >
-            <strong>{title}</strong>
-            <span>{description}</span>
-          </button>
-        ))}
-      </div>
+      <ExperienceGallery idea={project.idea} grammar={project.experience.grammar} mode="button"
+        onChange={value=>onPatch({
+          experience: { ...project.experience, grammar: value },
+          storyboardReady: false,
+          ...invalidateProductReview(project),
+          humanState: "SCENES",
+        })} />
 
       <label className="rationale-field">
         <strong>Perché questa forma?</strong>
@@ -259,8 +250,9 @@ export function ExperienceEditor({ project, onPatch }: Props) {
   );
 }
 
-export function SceneEditor({ project, onPatch }: Props) {
+export function SceneEditor({ project, onPatch, onImportImage }: Props & {onImportImage:(sceneId:string,image:SceneIllustration,expected:SceneIllustration|undefined)=>void}) {
   const complete =
+    projectImageErrors(project.scenes).length===0 &&
     project.scenes.length > 0 &&
     project.scenes.some((scene) => scene.kind === "TRANSFER") &&
     project.scenes.every(
@@ -268,6 +260,7 @@ export function SceneEditor({ project, onPatch }: Props) {
         scene.visibleSituation.trim() &&
         scene.learnerAction.trim() &&
         scene.consequence.trim() &&
+        stagePlaceErrors(scene.stage).length === 0 &&
         (
           scene.interaction !== "CHOICE" ||
           (
@@ -324,6 +317,15 @@ export function SceneEditor({ project, onPatch }: Props) {
     });
   }
 
+  function updateChoiceState(sceneId: string, choiceId: string, status: string) {
+    onPatch({
+      scenes: updateWorldChoiceStatus(project.scenes, sceneId, choiceId, status),
+      storyboardReady: false,
+      ...invalidateProductReview(project),
+      humanState: "SCENES",
+    });
+  }
+
   return (
     <div className="authoring-editor">
       <div className="section-action-heading">
@@ -335,6 +337,19 @@ export function SceneEditor({ project, onPatch }: Props) {
         </div>
         <button className="primary-action" onClick={addScene}>Aggiungi scena</button>
       </div>
+
+      <SceneDesignComparison project={project} onUpdateChoiceState={updateChoiceState}
+        onUpdateRecipe={(sceneId,recipe)=>onPatch({
+          scenes:updateSceneVisualRecipe(project.scenes,sceneId,recipe),
+          worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
+          ...invalidateProductReview(project),humanState:"SCENES",
+        })}
+        onUpdateFocus={(sceneId, locationId) => {
+          const source = project.scenes.find(scene => scene.sceneId === sceneId);
+          if (!source) return;
+          const updated = updateSceneFocus(source, locationId);
+          if (updated !== source) updateScene(sceneId, { stage: updated.stage });
+        }} />
 
       {project.scenes.length === 0 ? (
         <div className="empty-stage">
@@ -399,6 +414,18 @@ export function SceneEditor({ project, onPatch }: Props) {
                   <span>Cosa scopre</span>
                   <textarea rows={2} value={scene.reveal} onChange={(e) => updateScene(scene.sceneId, { reveal: e.target.value })} />
                 </label>
+
+                <ScenePlacesEditor scene={scene} onChange={stage=>onPatch({
+                  scenes:project.scenes.map(item=>item.sceneId===scene.sceneId?{...item,stage}:item),
+                  worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
+                  ...invalidateProductReview(project),humanState:"SCENES",
+                })}/>
+                <SceneImageEditor scene={scene} onImport={(image,expected)=>onImportImage(scene.sceneId,image,expected)}
+                  onChange={(illustration,stage)=>onPatch({
+                    scenes:project.scenes.map(item=>item.sceneId===scene.sceneId?{...item,stage,illustration}:item),
+                    worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
+                    ...invalidateProductReview(project),humanState:"SCENES",
+                  })}/>
 
                 {scene.interaction === "CHOICE" && (
                   <div className="scene-choice-editor">

@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "studio-atlas.ess02-artwork/v1",
+  "status": "CANDIDATE_REVIEW",
+  "source": "Original AI-generated educational artwork, selected storyboard, fictional characters",
+  "scenes": [
+    {
+      "sceneId": "AG1",
+      "file": "orto-apertura.webp",
+      "bytes": 97898,
+      "sha256": "58ac09bc342a8b4cec69f6960f9e675f8012ace04cbe02f7afbf49b8541a53b7",
+      "width": 960,
+      "height": 540,
+      "alt": "Sara e Luca nell’orto scolastico, accanto a filari rigogliosi e appassiti.",
+      "hotspots": {
+        "sara": {
+          "x": 22,
+          "y": 45
+        },
+        "luca": {
+          "x": 82,
+          "y": 44
+        },
+        "filari": {
+          "x": 60,
+          "y": 68
+        }
+      },
+      "crop": [
+        5,
+        4,
+        833,
+        318
+      ],
+      "sourceId": "3e88847e-62fd-4bb0-bedb-1481488826e2",
+      "quality": 82
+    },
+    {
+      "sceneId": "AG2",
+      "file": "orto-indagine.webp",
+      "bytes": 95540,
+      "sha256": "ec5d23e8b84bcbf6ddf2683e93c50ba4d577c22770b67a07c4e2a921eef8244f",
+      "width": 960,
+      "height": 540,
+      "alt": "Serbatoio, tubazione con raccordo trasparente, due recipienti di misura, terreno e colture.",
+      "hotspots": {
+        "serbatoio": {
+          "x": 13,
+          "y": 28
+        },
+        "monte": {
+          "x": 37,
+          "y": 58
+        },
+        "ostruzione": {
+          "x": 55,
+          "y": 68
+        },
+        "valle": {
+          "x": 74,
+          "y": 58
+        },
+        "suolo": {
+          "x": 18,
+          "y": 78
+        },
+        "piante": {
+          "x": 91,
+          "y": 34
+        }
+      },
+      "crop": [
+        840,
+        4,
+        1667,
+        318
+      ],
+      "sourceId": "3e88847e-62fd-4bb0-bedb-1481488826e2",
+      "quality": 82
+    },
+    {
+      "sceneId": "AG3",
+      "file": "banco-misure.webp",
+      "bytes": 78456,
+      "sha256": "b64c06524be7740f8fede4f4208b8576f611f19e33f404ab1e81a10a37586b58",
+      "width": 960,
+      "height": 540,
+      "alt": "Sara e Luca al tavolo con due recipienti graduati e il quaderno delle osservazioni.",
+      "hotspots": {
+        "recipiente-monte": {
+          "x": 50,
+          "y": 67
+        },
+        "recipiente-valle": {
+          "x": 71,
+          "y": 67
+        }
+      },
+      "crop": [
+        5,
+        326,
+        803,
+        635
+      ],
+      "sourceId": "3e88847e-62fd-4bb0-bedb-1481488826e2",
+      "quality": 86
+    },
+    {
+      "sceneId": "AG4",
+      "file": "sistema-agricolo.webp",
+      "bytes": 96942,
+      "sha256": "3e5af3faa05126709009798975b326a1bbfcf01c9a4c751aacf819b59d20bcf5",
+      "width": 960,
+      "height": 540,
+      "alt": "Quattro vedute del sistema agricolo: risorse naturali, lavoro, raccolto e monitoraggio.",
+      "hotspots": {
+        "risorse": {
+          "x": 12,
+          "y": 50
+        },
+        "processi": {
+          "x": 37,
+          "y": 50
+        },
+        "prodotti": {
+          "x": 64,
+          "y": 50
+        },
+        "effetti": {
+          "x": 88,
+          "y": 50
+        }
+      },
+      "crop": [
+        811,
+        326,
+        1667,
+        635
+      ],
+      "sourceId": "3e88847e-62fd-4bb0-bedb-1481488826e2",
+      "quality": 82
+    },
+    {
+      "sceneId": "AG5",
+      "file": "frutteto.webp",
+      "bytes": 74922,
+      "sha256": "dd19039a4ee50a00e80c665907eadfa5da32cb62dd64dc23148482ee8aee3119",
+      "width": 960,
+      "height": 540,
+      "alt": "Frutteto collinare: Sara e Luca osservano i recipienti lungo la linea irrigua e due zone di terreno.",
+      "hotspots": {
+        "linea": {
+          "x": 33,
+          "y": 57
+        },
+        "terreno": {
+          "x": 83,
+          "y": 58
+        },
+        "alberi": {
+          "x": 12,
+          "y": 42
+        }
+      },
+      "crop": [
+        5,
+        642,
+        1667,
+        937
+      ],
+      "sourceId": "3e88847e-62fd-4bb0-bedb-1481488826e2",
+      "quality": 86
+    }
+  ],
+  "totalBytes": 443758,
+  "notes": "Illustrative images, not measurement evidence. Numeric values in the educational text and simulated state are authoritative; check alignment and touch targets during professional review."
+}

@@ -1,0 +1,54 @@
+{
+  "width": 390,
+  "original": {
+    "schema": "trama.diagram-education-receipt/v0.2",
+    "status": "GENERATED_TEACHER_REVIEW_REQUIRED",
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "profilesSha256": "3b2512ff98974a5fd971650b74c8543f2587276d76e338b9e162956fad73f442",
+    "rendererSha256": "fcdf08b1c8942ba6a984bdebab48b319661777d8e839d32dcbe542c6a4b555de",
+    "sourceOrigin": "teacher-authored",
+    "files": {
+      "education-source.json": "d885999b43dd8068f48e712241148b8caf64abe69c4e3ce6bf0d286afa3dde0a",
+      "guida-docente.md": "517f5fbdc059a5053e85c6aff5a47294f4aecda00904606e111dbb0a8d8fa464",
+      "diagramma-docente-mobile-vertical.html": "2195fc9baad23e72b641eb3bb7994951eb68966502f61ed0229855dd17848d16",
+      "diagramma-docente-mobile-vertical.svg": "aeb65de600c4b307cd137a65eff9be609ee0134052348d74467e8d6fa1abdf2e",
+      "diagramma-docente-desktop-lim-horizontal.html": "6d09f8ee89e853370b471beaf97f35ee6c9ae9f0c22b917a1853789835205ba1",
+      "diagramma-docente-desktop-lim-horizontal.svg": "ba637f68806bab271df099f736be58caf76604d60d0634cb165a5b02a2134176"
+    }
+  },
+  "modified": {
+    "schema": "trama.diagram-education-receipt/v0.2",
+    "status": "GENERATED_TEACHER_REVIEW_REQUIRED",
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "profilesSha256": "3b2512ff98974a5fd971650b74c8543f2587276d76e338b9e162956fad73f442",
+    "rendererSha256": "fcdf08b1c8942ba6a984bdebab48b319661777d8e839d32dcbe542c6a4b555de",
+    "sourceOrigin": "teacher-authored",
+    "files": {
+      "education-source.json": "1b8bb39f59f7d7cf8d3b369d501f56cb5d59643d7e4a100ceda435f246d1d98e",
+      "guida-docente.md": "4ad78631b4b740c50b85d0a218fe5c10742489815b3bda4b805604759cba026a",
+      "diagramma-docente-mobile-vertical.html": "d9cf3010d9b1b4958ea49a5399e2b48dcf384c103c66f48a34c3ce51789f4b46",
+      "diagramma-docente-mobile-vertical.svg": "9ea7f376808970eaa1d4457f23a85485bb920878c27c94a98f7f32165e2d3289",
+      "diagramma-docente-desktop-lim-horizontal.html": "7d0e4df013ebcab4ea990b5b8dcdef2011d307e0635948324c76629ec95eacda",
+      "diagramma-docente-desktop-lim-horizontal.svg": "4cfa724f000c87adecf8fd6f49abb955cdd243c0d6b2eb498f3dfe709cb798b7"
+    }
+  },
+  "repeated": {
+    "schema": "trama.diagram-education-receipt/v0.2",
+    "status": "GENERATED_TEACHER_REVIEW_REQUIRED",
+    "runtimeAuthorized": false,
+    "publicationAuthorized": false,
+    "profilesSha256": "3b2512ff98974a5fd971650b74c8543f2587276d76e338b9e162956fad73f442",
+    "rendererSha256": "fcdf08b1c8942ba6a984bdebab48b319661777d8e839d32dcbe542c6a4b555de",
+    "sourceOrigin": "teacher-authored",
+    "files": {
+      "education-source.json": "1b8bb39f59f7d7cf8d3b369d501f56cb5d59643d7e4a100ceda435f246d1d98e",
+      "guida-docente.md": "4ad78631b4b740c50b85d0a218fe5c10742489815b3bda4b805604759cba026a",
+      "diagramma-docente-mobile-vertical.html": "d9cf3010d9b1b4958ea49a5399e2b48dcf384c103c66f48a34c3ce51789f4b46",
+      "diagramma-docente-mobile-vertical.svg": "9ea7f376808970eaa1d4457f23a85485bb920878c27c94a98f7f32165e2d3289",
+      "diagramma-docente-desktop-lim-horizontal.html": "7d0e4df013ebcab4ea990b5b8dcdef2011d307e0635948324c76629ec95eacda",
+      "diagramma-docente-desktop-lim-horizontal.svg": "4cfa724f000c87adecf8fd6f49abb955cdd243c0d6b2eb498f3dfe709cb798b7"
+    }
+  }
+}

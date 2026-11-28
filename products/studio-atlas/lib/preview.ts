@@ -1,5 +1,7 @@
 import type { PathwayProject, StudioAtlasPreviewSnapshot } from "./model";
 import { digestAuthoringState, getProductionBlockers } from "./production";
+import { attachSceneMedia } from "./scene-media";
+import { withoutVisualRecipe } from "./scene-visual-recipe";
 
 const REVIEW_ONLY_BLOCKERS = new Set([
   "PRODUCT_REVIEW_NOT_PASS",
@@ -25,7 +27,7 @@ async function buildSnapshot(
     throw new Error(`PREVIEW_BLOCKED:${blockers.join(",")}`);
   }
 
-  return {
+  const snapshot:StudioAtlasPreviewSnapshot = {
     schemaVersion: "studio-atlas.preview-snapshot/v0.1",
     snapshotId: crypto.randomUUID(),
     packageDigest: await digestAuthoringState(project),
@@ -35,8 +37,9 @@ async function buildSnapshot(
     description: project.idea,
     runtimeAuthorized: false,
     studentAuthorized: false,
-    scenes: project.scenes.map((scene) => ({ ...scene })),
+    scenes: project.scenes.map(({illustration,...scene}) => {void illustration;return structuredClone(withoutVisualRecipe(scene));}),
   };
+  return attachSceneMedia(project,snapshot);
 }
 
 export async function buildStudioAtlasPreviewSnapshot(

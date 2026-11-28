@@ -2,7 +2,9 @@
   "name": "studio-atlas",
   "version": "0.1.0",
   "private": true,
-  "engines": { "node": "22.x" },
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,20 +13,27 @@
     "typecheck": "tsc --noEmit",
     "visual-factory:preflight-references": "tsx scripts/compile-canonical-visual-preflight.ts --mode references",
     "visual-factory:compile-reference-plan": "tsx scripts/compile-canonical-reference-plan.ts",
-    "visual-factory:orchestrate": "tsx scripts/run-visual-factory-orchestrator.ts"
+    "visual-factory:project-source": "tsx scripts/qualify-visual-project-source.ts",
+    "visual-factory:cloudflare-entitlement": "tsx scripts/inspect-visual-cloudflare-entitlement.ts",
+    "visual-factory:project-reference": "tsx scripts/run-visual-project-reference.ts",
+    "visual-factory:orchestrate": "tsx scripts/run-visual-factory-orchestrator.ts",
+    "prebuild": "python3 scripts/prepare-education-diagram.py && node scripts/prepare-simulation-labs.mjs",
+    "predev": "python3 scripts/prepare-education-diagram.py && node scripts/prepare-simulation-labs.mjs"
   },
   "dependencies": {
     "@gradio/client": "2.7.1",
     "next": "16.3.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "sharp": "0.35.5"
+    "sharp": "0.35.5",
+    "three": "0.128.0"
   },
   "devDependencies": {
     "@types/node": "24.3.0",
     "@types/react": "19.2.0",
     "@types/react-dom": "19.2.0",
     "tsx": "4.20.6",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "@types/three": "0.128.0"
   }
 }

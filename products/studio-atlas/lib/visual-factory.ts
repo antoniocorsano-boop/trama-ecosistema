@@ -1,7 +1,7 @@
 import type { PathwayProject } from "./model";
 import {
-  getMuseoZeroReferenceIntent,
-  getMuseoZeroShotIntent,
+  MUSEO_ZERO_REFERENCE_INTENTS,
+  MUSEO_ZERO_SHOT_INTENTS,
 } from "./canonical/museo-zero-visual-intents";
 import {
   canonicalDigest,
@@ -51,6 +51,8 @@ export type VisualFactoryStage =
 export type VisualFactoryState = {
   packageDigest: string;
   artDirectionVersion?: string;
+  /** Absent only in legacy persisted state; never sufficient for reuse. */
+  profileDigest?: string;
   stage: VisualFactoryStage;
   candidates: VisualAssetCandidate[];
   referenceLocks: VisualReferenceLock[];
@@ -81,6 +83,8 @@ export type VisualGenerationPlan = {
   schemaVersion: "atlas.visual-generation-plan/v0.1";
   pathwayId: string;
   packageDigest: string;
+  /** Explicit offline profiles require a content-bound receipt. */
+  profileDigest?: string;
   planType: "REFERENCE_GENERATION" | "SHOT_GENERATION";
   decision:
     | "REFERENCE_GENERATION_READY"
@@ -118,7 +122,7 @@ export type VisualProviderAttemptEvidence = {
 export type VisualOrchestrationEvidence = {
   schemaVersion: "atlas.visual-orchestration-evidence/v0.1";
   orchestrationId: string;
-  workloadClass: "CANONICAL_REFERENCE" | "SCENE_FRAME";
+  workloadClass: "CANONICAL_REFERENCE" | "PROJECT_REFERENCE" | "SCENE_FRAME";
   consideredProviders: VisualExecutionProviderId[];
   selectedProvider?: VisualExecutionProviderId;
   selectedModelRef?: string;
@@ -130,6 +134,8 @@ export type VisualExecutionReceipt = {
   schemaVersion: "atlas.visual-execution-receipt/v0.1";
   receiptId: string;
   packageDigest: string;
+  /** Required for explicit noncanonical profiles. Canonical executor receipts remain compatible. */
+  profileDigest?: string;
   status: "SUCCEEDED" | "WAITING_FOR_COMPUTE" | "FAILED";
   costClass: "FREE_ONLY";
   assets: VisualAssetCandidate[];
@@ -159,24 +165,94 @@ type QualifiedPreflight = {
 };
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
-const MUSEO_ZERO_ART_DIRECTION_VERSION = getMuseoZeroReferenceIntent("lia").artDirectionVersion;
 
-export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = [
-  { subjectRef: "lia", purpose: "CHARACTER_REFERENCE" },
-  { subjectRef: "omar", purpose: "CHARACTER_REFERENCE" },
-  { subjectRef: "teo", purpose: "CHARACTER_REFERENCE" },
-  { subjectRef: "sala-zero", purpose: "ENVIRONMENT_REFERENCE" },
-  { subjectRef: "cabina-regia", purpose: "ENVIRONMENT_REFERENCE" },
-];
+export type VisualProductionProfile = {
+  readonly pathwayId: string;
+  readonly artDirectionVersion: string;
+  readonly references: readonly VisualIntentSpec[];
+  readonly shots: readonly VisualIntentSpec[];
+};
 
-const MUSEO_ZERO_SHOTS: ShotDefinition[] = [
-  { shotId: "F1", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
-  { shotId: "F2", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "sala-zero"] },
-  { shotId: "F3", sceneRef: "MZ1_FAILED_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
-  { shotId: "F4", sceneRef: "MZ4_TEST_MAPPING", subjectRefs: ["teo", "cabina-regia"] },
-  { shotId: "F5", sceneRef: "MZ4_TEST_MAPPING", subjectRefs: ["teo", "cabina-regia"] },
-  { shotId: "F6", sceneRef: "MZ6_FINAL_REHEARSAL", subjectRefs: ["lia", "omar", "teo", "sala-zero"] },
-];
+/** Planning-only profile. Admission to execution remains a separate trusted boundary. */
+export function validateVisualProductionProfile(profile: VisualProductionProfile): void {
+  const invalid = () => { throw new Error("VISUAL_PRODUCTION_PROFILE_INVALID"); };
+  if (!profile.pathwayId.trim() || !profile.artDirectionVersion.trim() ||
+      profile.references.length < 1 || profile.references.length > 6 ||
+      profile.shots.length < 1 || profile.shots.length > 6) invalid();
+  const refs = new Set<string>();
+  const shots = new Set<string>();
+  const specs = new Set<string>();
+  for (const spec of [...profile.references, ...profile.shots]) {
+    if (spec.pathwayId !== profile.pathwayId ||
+        spec.artDirectionVersion !== profile.artDirectionVersion ||
+        !/^[0-9a-f]{64}$/.test(spec.packageDigest) ||
+        !spec.specId.trim() || specs.has(spec.specId) ||
+        !spec.subjectRefs.length ||
+        new Set(spec.subjectRefs).size !== spec.subjectRefs.length ||
+        spec.subjectRefs.some(id => !id.trim())) invalid();
+    specs.add(spec.specId);
+  }
+  for (const spec of profile.references) {
+    if ((spec.purpose !== "CHARACTER_REFERENCE" && spec.purpose !== "ENVIRONMENT_REFERENCE") ||
+        spec.subjectRefs.length !== 1 || spec.sceneRef || spec.shotId ||
+        refs.has(spec.subjectRefs[0])) invalid();
+    refs.add(spec.subjectRefs[0]);
+  }
+  for (const spec of profile.shots) {
+    if (spec.purpose !== "SCENE_FRAME" || !spec.shotId?.trim() || !spec.sceneRef?.trim() ||
+        shots.has(spec.shotId!) || spec.subjectRefs.some(id => !refs.has(id))) invalid();
+    shots.add(spec.shotId!);
+  }
+}
+
+const MUSEO_ZERO_PROFILE: VisualProductionProfile = {
+  pathwayId: MUSEO_ZERO_PROJECT_ID,
+  artDirectionVersion: MUSEO_ZERO_REFERENCE_INTENTS[0].artDirectionVersion,
+  references: MUSEO_ZERO_REFERENCE_INTENTS,
+  shots: MUSEO_ZERO_SHOT_INTENTS,
+};
+
+function digestVisualProductionProfile(profile: VisualProductionProfile): string {
+  validateVisualProductionProfile(profile);
+  return canonicalDigest(profile);
+}
+
+const CANONICAL_PROFILE_DIGEST = digestVisualProductionProfile(MUSEO_ZERO_PROFILE);
+
+/** Only the existing canonical profile is execution-admitted. Never accept a client profile here. */
+export function resolveCanonicalVisualProductionProfile(pathwayId: string): VisualProductionProfile {
+  if (pathwayId !== MUSEO_ZERO_PROJECT_ID) throw new Error("VISUAL_FACTORY_UNSUPPORTED_PATHWAY");
+  const profile = structuredClone(MUSEO_ZERO_PROFILE);
+  validateVisualProductionProfile(profile);
+  return profile;
+}
+
+function profileSubjects(profile: VisualProductionProfile): VisualSubject[] {
+  return profile.references.map(spec => ({
+    subjectRef: spec.subjectRefs[0],
+    purpose: spec.purpose as VisualSubject["purpose"],
+  }));
+}
+
+function profileShots(profile: VisualProductionProfile): ShotDefinition[] {
+  return profile.shots.map(spec => ({
+    shotId: spec.shotId!, sceneRef: spec.sceneRef!, subjectRefs: [...spec.subjectRefs],
+  }));
+}
+
+export const MUSEO_ZERO_VISUAL_SUBJECTS: VisualSubject[] = profileSubjects(MUSEO_ZERO_PROFILE);
+
+export function getProfileReferenceIntent(profile: VisualProductionProfile, subjectRef: string): VisualIntentSpec {
+  const spec = profile.references.find(item => item.subjectRefs[0] === subjectRef);
+  if (!spec) throw new Error("VISUAL_FACTORY_UNKNOWN_REFERENCE");
+  return spec;
+}
+
+export function getProfileShotIntent(profile: VisualProductionProfile, shotId: string): VisualIntentSpec {
+  const spec = profile.shots.find(item => item.shotId === shotId);
+  if (!spec) throw new Error("VISUAL_FACTORY_UNKNOWN_SHOT");
+  return spec;
+}
 
 function bindPackageDigest(intent: VisualIntentSpec, packageDigest: string): VisualIntentSpec {
   return { ...intent, packageDigest };
@@ -283,8 +359,10 @@ function basePlan(
   project: PathwayProject,
   packageDigest: string,
   planType: VisualGenerationPlan["planType"],
+  profile: VisualProductionProfile,
 ): Omit<VisualGenerationPlan, "decision" | "jobs" | "blockers"> {
-  if (project.projectId !== MUSEO_ZERO_PROJECT_ID) {
+  validateVisualProductionProfile(profile);
+  if (project.projectId !== profile.pathwayId) {
     throw new Error("VISUAL_FACTORY_UNSUPPORTED_PATHWAY");
   }
   if (!/^[0-9a-f]{64}$/.test(packageDigest)) {
@@ -294,6 +372,7 @@ function basePlan(
     schemaVersion: "atlas.visual-generation-plan/v0.1",
     pathwayId: project.projectId,
     packageDigest,
+    ...(digestVisualProductionProfile(profile) === CANONICAL_PROFILE_DIGEST ? {} : { profileDigest: digestVisualProductionProfile(profile) }),
     planType,
     paidComputeAuthorized: false,
     allowQualityDowngrade: false,
@@ -302,13 +381,15 @@ function basePlan(
   };
 }
 
-export function createInitialVisualFactoryState(packageDigest: string): VisualFactoryState {
+export function createInitialVisualFactoryState(packageDigest: string, profile: VisualProductionProfile = MUSEO_ZERO_PROFILE): VisualFactoryState {
+  validateVisualProductionProfile(profile);
   if (!/^[0-9a-f]{64}$/.test(packageDigest)) {
     throw new Error("VISUAL_FACTORY_INVALID_PACKAGE_DIGEST");
   }
   return {
     packageDigest,
-    artDirectionVersion: MUSEO_ZERO_ART_DIRECTION_VERSION,
+    artDirectionVersion: profile.artDirectionVersion,
+    profileDigest: digestVisualProductionProfile(profile),
     stage: "NEEDS_REFERENCES",
     candidates: [],
     referenceLocks: [],
@@ -319,13 +400,16 @@ export function createInitialVisualFactoryState(packageDigest: string): VisualFa
 export function reconcileVisualFactoryState(
   state: VisualFactoryState | null | undefined,
   packageDigest: string,
+  profile: VisualProductionProfile = MUSEO_ZERO_PROFILE,
 ): VisualFactoryState {
+  validateVisualProductionProfile(profile);
   if (
     !state ||
     state.packageDigest !== packageDigest ||
-    state.artDirectionVersion !== MUSEO_ZERO_ART_DIRECTION_VERSION
+    state.artDirectionVersion !== profile.artDirectionVersion ||
+    state.profileDigest !== digestVisualProductionProfile(profile)
   ) {
-    return createInitialVisualFactoryState(packageDigest);
+    return createInitialVisualFactoryState(packageDigest, profile);
   }
   return state;
 }
@@ -336,15 +420,27 @@ export function compileReferenceJobs(
   state: VisualFactoryState,
   preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
-  const prefix = basePlan(project, packageDigest, "REFERENCE_GENERATION");
+  return compileProfileReferenceJobs(project, packageDigest, state, preflightReceipts, resolveCanonicalVisualProductionProfile(project.projectId));
+}
+
+/** Offline planning for an explicit profile; does not admit that profile to any executor. */
+export function compileProfileReferenceJobs(
+  project: PathwayProject,
+  packageDigest: string,
+  state: VisualFactoryState,
+  preflightReceipts: readonly VisualPreflightReceipt[],
+  profile: VisualProductionProfile,
+): VisualGenerationPlan {
+  const prefix = basePlan(project, packageDigest, "REFERENCE_GENERATION", profile);
   if (
     state.packageDigest !== packageDigest ||
-    state.artDirectionVersion !== MUSEO_ZERO_ART_DIRECTION_VERSION
+    state.artDirectionVersion !== profile.artDirectionVersion ||
+    state.profileDigest !== digestVisualProductionProfile(profile)
   ) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
   const locked = new Set(state.referenceLocks.map((item) => item.subjectRef));
-  const pending = MUSEO_ZERO_VISUAL_SUBJECTS.filter((subject) => !locked.has(subject.subjectRef));
+  const pending = profileSubjects(profile).filter((subject) => !locked.has(subject.subjectRef));
   if (pending.length === 0) {
     return { ...prefix, decision: "NO_REFERENCE_GENERATION_REQUIRED", jobs: [], blockers: [] };
   }
@@ -352,7 +448,7 @@ export function compileReferenceJobs(
   const qualified = pending.map((subject) => ({
     subject,
     result: qualifyPreflight(
-      getMuseoZeroReferenceIntent(subject.subjectRef),
+      getProfileReferenceIntent(profile, subject.subjectRef),
       packageDigest,
       preflightReceipts,
       subject.subjectRef,
@@ -390,6 +486,14 @@ export function ingestVisualCandidates(
   state: VisualFactoryState,
   receipt: VisualExecutionReceipt,
 ): VisualFactoryState {
+  // The existing executor admits only the canonical Museo Zero profile. Never
+  // interpret a legacy/unbound receipt as evidence for an explicit profile.
+  if (!state.profileDigest || receipt.packageDigest !== state.packageDigest ||
+      (receipt.profileDigest === undefined
+        ? state.profileDigest !== CANONICAL_PROFILE_DIGEST
+        : receipt.profileDigest !== state.profileDigest)) {
+    throw new Error("STALE_VISUAL_CANDIDATE");
+  }
   if (receipt.status !== "SUCCEEDED") {
     return {
       ...state,
@@ -435,8 +539,11 @@ export function lockVisualReference(
   subjectRef: string,
   assetId: string,
   packageDigest: string,
+  profile: VisualProductionProfile = MUSEO_ZERO_PROFILE,
 ): VisualFactoryState {
-  if (packageDigest !== state.packageDigest) {
+  validateVisualProductionProfile(profile);
+  if (state.artDirectionVersion !== profile.artDirectionVersion || packageDigest !== state.packageDigest ||
+      state.profileDigest !== digestVisualProductionProfile(profile)) {
     throw new Error("STALE_VISUAL_CANDIDATE");
   }
   const candidate = state.candidates.find(
@@ -454,7 +561,7 @@ export function lockVisualReference(
     packageDigest,
     lockedAt: new Date().toISOString(),
   });
-  const required = new Set(MUSEO_ZERO_VISUAL_SUBJECTS.map((item) => item.subjectRef));
+  const required = new Set(profileSubjects(profile).map((item) => item.subjectRef));
   const locked = new Set(locks.map((item) => item.subjectRef));
   const ready = [...required].every((subject) => locked.has(subject));
   return {
@@ -470,15 +577,27 @@ export function compileShotJobs(
   state: VisualFactoryState,
   preflightReceipts: readonly VisualPreflightReceipt[] = [],
 ): VisualGenerationPlan {
-  const prefix = basePlan(project, packageDigest, "SHOT_GENERATION");
+  return compileProfileShotJobs(project, packageDigest, state, preflightReceipts, resolveCanonicalVisualProductionProfile(project.projectId));
+}
+
+/** Offline planning for an explicit profile; execution admission is unchanged. */
+export function compileProfileShotJobs(
+  project: PathwayProject,
+  packageDigest: string,
+  state: VisualFactoryState,
+  preflightReceipts: readonly VisualPreflightReceipt[],
+  profile: VisualProductionProfile,
+): VisualGenerationPlan {
+  const prefix = basePlan(project, packageDigest, "SHOT_GENERATION", profile);
   if (
     state.packageDigest !== packageDigest ||
-    state.artDirectionVersion !== MUSEO_ZERO_ART_DIRECTION_VERSION
+    state.artDirectionVersion !== profile.artDirectionVersion ||
+    state.profileDigest !== digestVisualProductionProfile(profile)
   ) {
     throw new Error("STALE_VISUAL_FACTORY_STATE");
   }
   const lockBySubject = new Map(state.referenceLocks.map((item) => [item.subjectRef, item]));
-  const missing = MUSEO_ZERO_VISUAL_SUBJECTS
+  const missing = profileSubjects(profile)
     .map((item) => item.subjectRef)
     .filter((subjectRef) => {
       const lock = lockBySubject.get(subjectRef);
@@ -494,7 +613,7 @@ export function compileShotJobs(
     };
   }
 
-  const qualified = MUSEO_ZERO_SHOTS.map((shot) => {
+  const qualified = profileShots(profile).map((shot) => {
     const referenceInputs = shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetUrl);
     const referenceInputDigests = shot.subjectRefs.map((subjectRef) => lockBySubject.get(subjectRef)!.assetSha256!);
     return {
@@ -502,7 +621,7 @@ export function compileShotJobs(
       referenceInputs,
       referenceInputDigests,
       result: qualifyPreflight(
-        getMuseoZeroShotIntent(shot.shotId),
+        getProfileShotIntent(profile, shot.shotId),
         packageDigest,
         preflightReceipts,
         shot.shotId,

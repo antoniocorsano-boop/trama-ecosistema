@@ -90,3 +90,89 @@ test("invalid manifest metadata rejected before any draft is returned", async()=
   const response=await runFixture(responses);
   assert.equal(response.status,422);assert.equal((await response.json()).draft,undefined);
 });
+
+test("DIAG-02: temporary metadata error retries once and preserves the complete draft",async()=>{
+ const {responses}=await fixture();
+ const original=globalThis.fetch;let count=0;
+ globalThis.fetch=async input=>{
+  const url=input.toString();
+  if(url===API+"/pulls/84"&&++count===1)return new Response("temporary",{status:503});
+  const value=responses.get(url);
+  return new Response(typeof value==="string"?value:value?Uint8Array.from(value):"missing",{status:value===undefined?404:200});
+ };
+ try{
+  const r=await POST(new Request("http://localhost/api/attivita/importa",{method:"POST",body:JSON.stringify({url:SOURCE_URL})}));
+  assert.equal(r.status,200);assert.equal((await r.json()).verified,10);assert.equal(count,2);
+ }finally{globalThis.fetch=original;}
+});
+for(const scenario of [
+ {status:403,headers:{"x-ratelimit-remaining":"0"},category:"RATE_LIMIT",calls:1},
+ {status:403,headers:{},category:"UPSTREAM_REJECTED",calls:1},
+ {status:429,headers:{"retry-after":"60"},category:"RATE_LIMIT",calls:1},
+ {status:503,headers:{},category:"UPSTREAM_TEMPORARY",calls:2},
+ {status:404,headers:{},category:"UPSTREAM_REJECTED",calls:1},
+] as const)test("DIAG-02: classify HTTP "+scenario.status+" "+scenario.category+" without draft",async()=>{
+ const {responses}=await fixture();const original=globalThis.fetch;let count=0;
+ globalThis.fetch=async input=>{
+  const url=input.toString();
+  if(url.includes("/files?")){count++;return new Response("untrusted body",{status:scenario.status,headers:new Headers(Object.entries(scenario.headers))});}
+  const value=responses.get(url);return new Response(typeof value==="string"?value:value?Uint8Array.from(value):"missing",{status:value===undefined?404:200});
+ };
+ try{
+  const r=await POST(new Request("http://localhost/api/attivita/importa",{method:"POST",body:JSON.stringify({url:SOURCE_URL})}));
+  const result=await r.json();assert.equal(r.status,502);assert.equal(result.draft,undefined);
+  assert.equal(result.diagnostic.phase,"PR_FILES");assert.equal(result.diagnostic.upstreamStatus,scenario.status);
+  assert.equal(result.diagnostic.category,scenario.category);assert.equal(count,scenario.calls);
+  assert.ok(!JSON.stringify(result).includes("untrusted body"));
+ }finally{globalThis.fetch=original;}
+});
+
+function interruptedBody(headers?:HeadersInit){
+ return new Response(new ReadableStream<Uint8Array>({
+  start(controller){controller.enqueue(new Uint8Array([123]));controller.error(new Error("simulated body interruption"));}
+ }),{status:200,headers});
+}
+
+for(const phase of ["PR_METADATA","ASSET"] as const){
+ for(const persistent of [false,true]){
+  test("ESS-01B-R3: "+phase+" interrupted body "+(persistent?"fails closed":"recovers once"),async()=>{
+   const {responses,rawPrefix}=await fixture();const original=globalThis.fetch;let calls=0;
+   const target=phase==="PR_METADATA"?API+"/pulls/84":rawPrefix+ROOT+"media/illustrazione-5.webp";
+   globalThis.fetch=async input=>{
+    const url=input.toString();
+    if(url===target){calls++;if(persistent||calls===1)return interruptedBody();}
+    const value=responses.get(url);return new Response(typeof value==="string"?value:value?Uint8Array.from(value):"missing",{status:value===undefined?404:200});
+   };
+   try{
+    const r=await POST(new Request("http://localhost/api/attivita/importa",{method:"POST",body:JSON.stringify({url:SOURCE_URL})}));
+    const result=await r.json();assert.equal(calls,2);
+    if(persistent){
+     assert.equal(r.status,502);assert.equal(result.draft,undefined);
+     assert.equal(result.diagnostic.phase,phase);assert.equal(result.diagnostic.category,"NETWORK");
+     assert.equal(result.diagnostic.upstreamStatus,200);assert.equal(result.diagnostic.attempt,2);
+     assert.ok(!JSON.stringify(result).includes("simulated body interruption"));
+    }else{assert.equal(r.status,200);assert.equal(result.verified,10);assert.equal(result.draft.files.length,10);}
+   }finally{globalThis.fetch=original;}
+  });
+ }
+}
+
+test("ESS-01B-R3: depleted quota after headers forbids body retry",async()=>{
+ const original=globalThis.fetch;let calls=0;
+ globalThis.fetch=async()=>{calls++;return interruptedBody({"x-ratelimit-remaining":"0"});};
+ try{
+  const r=await POST(new Request("http://localhost/api/attivita/importa",{method:"POST",body:JSON.stringify({url:SOURCE_URL})}));
+  const result=await r.json();assert.equal(r.status,502);assert.equal(result.draft,undefined);assert.equal(calls,1);
+  assert.equal(result.diagnostic.remaining,0);assert.equal(result.diagnostic.category,"NETWORK");
+ }finally{globalThis.fetch=original;}
+});
+
+test("ESS-01B-R3: malformed metadata is not a retryable body interruption",async()=>{
+ const original=globalThis.fetch;let calls=0;
+ globalThis.fetch=async()=>{calls++;return new Response("{invalid JSON",{status:200});};
+ try{
+  const r=await POST(new Request("http://localhost/api/attivita/importa",{method:"POST",body:JSON.stringify({url:SOURCE_URL})}));
+  const result=await r.json();assert.equal(r.status,502);assert.equal(result.draft,undefined);assert.equal(calls,1);
+  assert.equal(result.diagnostic,undefined);
+ }finally{globalThis.fetch=original;}
+});

@@ -5,7 +5,12 @@ on:
     paths:
       - "products/studio-atlas/**"
       - "tests/studio-atlas-atlas-preview.spec.ts"
+      - "tests/studio-atlas-world-composer.spec.ts"
+      - "tests/studio-atlas-awc-s3b-offline.spec.ts"
       - "tests/studio-atlas-activity-import.spec.ts"
+      - "tests/qualification/ec07b-evidence.py"
+      - "tests/qualification/missione118-*.mjs"
+      - "tests/qualification/missione118-*.cjs"
       - "tests/studio-atlas-edutwin-handoff.spec.ts"
       - ".github/workflows/studio-atlas-atlas-preview-e2e.yml"
 
@@ -14,10 +19,11 @@ permissions:
 
 concurrency:
   group: studio-atlas-preview-e2e-${{ github.ref }}
-  cancel-in-progress: false
+# New commits supersede obsolete checks only within the same PR ref.
+  cancel-in-progress: true
 
 env:
-  ATLAS_PREVIEW_SHA: 98805c2e3575af40f60e8e5933ca0b863daed7b3
+  ATLAS_PREVIEW_SHA: 39c8104b6aa5ba6f37418246c96660602de372dd
   STUDIO_ORIGIN: http://127.0.0.1:3100
   ATLAS_ORIGIN: http://127.0.0.1:3200
 
@@ -45,9 +51,21 @@ jobs:
           git -C _atlas checkout "$ATLAS_PREVIEW_SHA"
           test "$(git -C _atlas rev-parse HEAD)" = "$ATLAS_PREVIEW_SHA"
 
+      - name: Prepare original Missione 118 transport from pinned Git objects
+        run: |
+          SOURCE=f0c29655632a7edc6d78c78d48d006aa8da020a2
+          git -C _atlas cat-file -e "$SOURCE^{commit}" 2>/dev/null || git -C _atlas fetch --no-tags origin "$SOURCE"
+          node tests/qualification/missione118-prepare.mjs _atlas "$RUNNER_TEMP/missione118-intake.json" | tee "$RUNNER_TEMP/missione118-source-receipt.json"
+
       - name: Install Studio Atlas
         working-directory: products/studio-atlas
         run: npm install --no-audit --no-fund
+
+      - name: Build source-locked, network-free S3b Android trial
+        working-directory: products/studio-atlas
+        run: |
+          node scripts/build-awc-s3b-offline-demo.mjs
+          node scripts/build-vf-simulation-labs.mjs
 
       - name: Install Atlas exact candidate
         working-directory: _atlas
@@ -66,6 +84,22 @@ jobs:
           NEXT_PUBLIC_STUDIO_ATLAS_ORIGIN: ${{ env.STUDIO_ORIGIN }}
         run: pnpm build
 
+      - name: Stage and discover cross-origin browser qualification
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The spec runs in the pinned Atlas checkout but imports Studio's
+          # canonical teaching examples. Link that exact source, never copy it.
+          source="$GITHUB_WORKSPACE/products/studio-atlas/lib/education-diagram-examples.ts"
+          target="_atlas/products/studio-atlas/lib/education-diagram-examples.ts"
+          test -f "$source"
+          mkdir -p "$(dirname "$target")"
+          ln -sT "$source" "$target"
+          test "$(realpath "$target")" = "$(realpath "$source")"
+          cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --list --reporter=line
+
       - name: Install Chromium
         working-directory: _atlas
         run: pnpm exec playwright install --with-deps chromium
@@ -77,7 +111,9 @@ jobs:
 
           (
             cd products/studio-atlas
-            NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN="$ATLAS_ORIGIN" \
+            STUDIO_QUALIFICATION_INTAKE_FIXTURE="$RUNNER_TEMP/missione118-intake.json" \
+              NODE_OPTIONS="--require=$GITHUB_WORKSPACE/tests/qualification/missione118-transport.cjs" \
+              NEXT_PUBLIC_ATLAS_PREVIEW_ORIGIN="$ATLAS_ORIGIN" \
               npm run start -- --hostname 127.0.0.1 --port 3100 \
               >/tmp/studio-atlas-e2e.log 2>&1
           ) &
@@ -105,13 +141,64 @@ jobs:
           exit 1
 
       - name: Run cross-origin browser qualification
+        id: cross_origin
         shell: bash
         run: |
-          cp tests/studio-atlas-atlas-preview.spec.ts _atlas/tests/studio-atlas-atlas-preview.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-atlas-preview.spec.ts --project=chromium --reporter=line
+          # Later Playwright runs reset test-results. Keep test paths to detect duplicate names.
+          mkdir -p "$RUNNER_TEMP/ec07b-originals"
+          find test-results -type f -name 'ec07b-*' -exec cp --parents {} "$RUNNER_TEMP/ec07b-originals/" \;
+          mkdir -p "$RUNNER_TEMP/ess-01b-screenshots"
+          find test-results -type f -name 'ess-01b-*.png' -exec cp {} "$RUNNER_TEMP/ess-01b-screenshots/" \;
+          test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-teacher-image.png"
+          test -f "$RUNNER_TEMP/ess-01b-screenshots/ess-01b-learner-image.png"
+          mkdir -p "$RUNNER_TEMP/ess-02-screenshots"
+          find test-results -type f -name 'ess-02-*.png' -exec cp {} "$RUNNER_TEMP/ess-02-screenshots/" \;
+          for size in 390 1280; do for scene in teacher opening investigation decision system transfer; do test -f "$RUNNER_TEMP/ess-02-screenshots/ess-02-$scene-$size.png"; done; done
+          for size in 390 1280; do for variant in mobile-vertical desktop-lim-horizontal; do test -f "$RUNNER_TEMP/ess-02-screenshots/ess-02-diagram-$variant-$size.png"; done; done
+          mkdir -p "$RUNNER_TEMP/f3-3c-screenshots"
+          find test-results -type f \( -name "f3-3c-*.png" -o -name "f3-3c-receipts-*.json" \) -exec cp {} "$RUNNER_TEMP/f3-3c-screenshots/" \;
+          for size in 390 1280; do for variant in mobile-vertical desktop-lim-horizontal; do test -f "$RUNNER_TEMP/f3-3c-screenshots/f3-3c-$variant-$size.png"; done; done
 
-      - name: Exercise exact Missione 118 acquisition in Chromium
+          mkdir -p "$RUNNER_TEMP/f3-3d-evidence"
+          find test-results -type f \( -name "f3-3d-*.png" -o -name "f3-3d-package-*.json" -o -name "f3-3d-case*-package-*.json" \) -exec cp {} "$RUNNER_TEMP/f3-3d-evidence/" \;
+          for case in 1 2 3; do for size in 390 1280; do
+            test -f "$RUNNER_TEMP/f3-3d-evidence/f3-3d-case$case-package-$size.json"
+            for variant in mobile-vertical desktop-lim-horizontal; do test -f "$RUNNER_TEMP/f3-3d-evidence/f3-3d-case$case-$variant-$size.png"; done
+          done; done
+
+      - name: Qualify World Composer at mobile sizes and across local draft revisions
+        id: composer
+        shell: bash
+        run: |
+          cp tests/studio-atlas-world-composer.spec.ts _atlas/tests/studio-atlas-world-composer.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-world-composer.spec.ts --project=chromium --reporter=line
+          mkdir -p "$RUNNER_TEMP/studio-atelier-screenshots"
+          find test-results -type f -name 'studio-atelier-*.png' -exec cp {} "$RUNNER_TEMP/studio-atelier-screenshots/" \;
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-contemporary-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-artistic-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-artistic-mobile.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-contemporary.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-artistic.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-experience-mobile.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-profiles-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-environments-desktop.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-environments-artistic.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-tools-artistic.png"
+          test -f "$RUNNER_TEMP/studio-atelier-screenshots/studio-atelier-environments-mobile.png"
+
+      - name: Exercise the offline S3b real WebGL trial in Chromium
+        id: webgl
+        shell: bash
+        run: |
+          cp tests/studio-atlas-awc-s3b-offline.spec.ts _atlas/tests/studio-atlas-awc-s3b-offline.spec.ts
+          cd _atlas
+          pnpm exec playwright test tests/studio-atlas-awc-s3b-offline.spec.ts --project=chromium --reporter=line
+
+      - name: Exercise exact Missione 118 acquisition in Chromium (pinned original transport)
+        id: missione118
         shell: bash
         run: |
           cp tests/studio-atlas-activity-import.spec.ts _atlas/tests/studio-atlas-activity-import.spec.ts
@@ -119,6 +206,7 @@ jobs:
           pnpm exec playwright test tests/studio-atlas-activity-import.spec.ts --project=chromium --reporter=line
 
       - name: Verify local EduTwin handoff and revision archive in Chromium
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
         shell: bash
         run: |
           (
@@ -128,6 +216,91 @@ jobs:
           cp tests/studio-atlas-edutwin-handoff.spec.ts _atlas/tests/studio-atlas-edutwin-handoff.spec.ts
           cd _atlas
           pnpm exec playwright test tests/studio-atlas-edutwin-handoff.spec.ts --project=chromium --reporter=line
+
+      - name: Preserve source-locked offline Android trial and rendered frames
+        if: ${{ !cancelled() && steps.webgl.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: awc-s3b-live-webgl-offline
+          path: |
+            products/studio-atlas/.artifacts/awc-sala-zero-live-webgl-offline.html
+            products/studio-atlas/.artifacts/awc-s3b-*.png
+            products/studio-atlas/.artifacts/vf-simulation-*
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 7
+
+      - name: Preserve illustrated atelier screenshots
+        if: ${{ !cancelled() && steps.composer.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-atlas-atelier-design-02
+          path: ${{ runner.temp }}/studio-atelier-screenshots/*.png
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve ESS-01B teacher and learner screenshots
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ess-01b-interactive-image
+          path: ${{ runner.temp }}/ess-01b-screenshots/*.png
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve ESS-02 teacher and learner review screenshots
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ess-02-agriculture-review
+          path: ${{ runner.temp }}/ess-02-screenshots/*.png
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve F3.3c diagram screenshots
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: officina-edu-f3-3c-diagrams
+          path: ${{ runner.temp }}/f3-3c-screenshots/
+          if-no-files-found: error
+
+      - name: Preserve F3.3d teaching candidates
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: officina-edu-f3-3d-diagrams
+          path: ${{ runner.temp }}/f3-3d-evidence/
+          if-no-files-found: error
+
+      - name: Preserve pinned source receipt
+        if: ${{ !cancelled() && steps.missione118.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: missione118-original-source-receipt
+          path: ${{ runner.temp }}/missione118-source-receipt.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Verify and package EC07b browser evidence
+        # The manifest records PASS only after the browser step succeeds.
+        id: ec07b_evidence
+        if: ${{ !cancelled() && steps.cross_origin.outcome == 'success' }}
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ec07b-python"
+          "$RUNNER_TEMP/ec07b-python/bin/pip" install 'Pillow==12.2.0' 'reportlab==4.4.9'
+          "$RUNNER_TEMP/ec07b-python/bin/python" tests/qualification/ec07b-evidence.py \
+            "$RUNNER_TEMP/ec07b-originals" "$RUNNER_TEMP/ec07b-evidence" "$(git rev-parse HEAD)"
+
+      - name: Preserve EC07b originals, manifest and consultation PDF
+        if: ${{ !cancelled() && steps.ec07b_evidence.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-atlas-ec07b-evidence
+          path: ${{ runner.temp }}/ec07b-evidence/
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Upload server logs on failure
         if: failure()

@@ -1,0 +1,60 @@
+import gearTeachingProfile from "./gear-teaching-profile.json";
+
+export const LABS=[
+  {id:"gear",title:"Laboratorio delle trasmissioni",engine:"three-r128"},
+  {id:"slider-crank",title:"Laboratorio biella-manovella",engine:"native-svg"},
+] as const;
+const CONTEXTUAL_LAB={id:"gear-ec07b",title:"Laboratorio delle trasmissioni",engine:"three-r128"} as const;
+export type LabId=typeof LABS[number]["id"]|typeof CONTEXTUAL_LAB.id;
+const labById=(id:LabId)=>id===CONTEXTUAL_LAB.id?CONTEXTUAL_LAB:LABS.find(lab=>lab.id===id);
+export const MAX_LAB_BYTES=1024*1024;
+const digest=(v:unknown):v is string=>typeof v==="string"&&/^[a-f0-9]{64}$/.test(v);
+const blob=(v:unknown):v is string=>typeof v==="string"&&/^[a-f0-9]{40}$/.test(v);
+function record(v:unknown):Record<string,unknown>{
+ if(!v||typeof v!=="object"||Array.isArray(v))throw Error("SIMULATION_PACKAGE_INVALID");
+ return v as Record<string,unknown>;
+}
+export function parseLabPackage(input:unknown,id:LabId){
+ const p=record(input),r=record(p.receipt),lab=labById(id);
+ const contextual=id===CONTEXTUAL_LAB.id;
+ const keys="bytes,costPolicy,engine,engineBlob,htmlSha256,id,objective,publicationAuthorized,question,schema,sourceBlob,sourceKind,status,studentAuthorized,templateBlob";
+ if(contextual){
+  const config=record(r.configuration);
+  if(Object.keys(config).length!==2||config.driverTeeth!==gearTeachingProfile.driverTeeth||config.drivenTeeth!==gearTeachingProfile.drivenTeeth)throw Error("SIMULATION_CONFIGURATION_INVALID");
+ }
+ if(!lab||Object.keys(p).sort().join(",")!=="html,receipt"||
+    Object.keys(r).sort().join(",")!==(contextual?keys.replace("bytes,", "bytes,configuration,"):keys)||
+    r.schema!==(contextual?"atlas.simulation-lab/v0.2":"atlas.simulation-lab/v0.1")||r.id!==id||r.engine!==lab.engine||
+    r.status!=="TEACHER_REVIEW_REQUIRED"||r.costPolicy!=="FREE_ONLY"||
+    r.studentAuthorized!==false||r.publicationAuthorized!==false||
+    r.sourceKind!=="editable-teaching-model"||!blob(r.sourceBlob)||!blob(r.templateBlob)||
+    (lab.engine==="three-r128"?r.engineBlob!=="b14f47c0908bab15e890b468d53bb07db0be3a18":r.engineBlob!==null)||
+    !digest(r.htmlSha256)||typeof r.bytes!=="number"||!Number.isSafeInteger(r.bytes)||r.bytes<1||r.bytes>MAX_LAB_BYTES||
+    typeof r.objective!=="string"||!r.objective.trim()||r.objective.length>200||
+    typeof r.question!=="string"||!r.question.trim()||r.question.length>200||
+    typeof p.html!=="string"||p.html.length>MAX_LAB_BYTES)throw Error("SIMULATION_PACKAGE_INVALID");
+ const bytes=new TextEncoder().encode(p.html);
+ if(bytes.byteLength!==r.bytes)throw Error("SIMULATION_PACKAGE_SIZE");
+ return {receipt:{...r,htmlSha256:r.htmlSha256,objective:r.objective,question:r.question},bytes};
+}
+export async function verifyLabPackage(input:unknown,id:LabId){
+ const p=parseLabPackage(input,id);
+ const hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",p.bytes)),n=>n.toString(16).padStart(2,"0")).join("");
+ if(hash!==p.receipt.htmlSha256)throw Error("SIMULATION_PACKAGE_INTEGRITY");
+ return p;
+}
+
+/** Shared bounded loader: the contextual panel and existing bank verify identical bytes. */
+export async function loadLabPackage(id:LabId,signal?:AbortSignal,fetchImpl:typeof fetch=fetch){
+ if(!labById(id))throw Error("SIMULATION_PACKAGE_INVALID");
+ const res=await fetchImpl("/design/simulation-labs/"+id+".json",{cache:"no-store",signal});
+ if(!res.ok||!res.body)throw Error("SIMULATION_MISSING");
+ const reader=res.body.getReader(),parts:Uint8Array[]=[];let length=0;
+ try{for(;;){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;
+  if(length>MAX_LAB_BYTES*3){void reader.cancel().catch(()=>{});throw Error("SIMULATION_TOO_LARGE");}parts.push(value);
+ }}finally{reader.releaseLock();}
+ const bytes=new Uint8Array(length);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
+ const raw:unknown=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(bytes));
+ const verified=await verifyLabPackage(raw,id);
+ return {...verified,package:{html:(raw as {html:string}).html,receipt:verified.receipt}};
+}

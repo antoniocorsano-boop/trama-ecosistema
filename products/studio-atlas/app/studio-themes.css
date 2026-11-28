@@ -1,0 +1,224 @@
+/* Two visual themes; one semantic UI, one project model, no remote assets. */
+:root {
+  --paper: #f8f7f4;
+  --surface: #ffffff;
+  --ink: #242b28;
+  --muted: #525e57;
+  --line: #c8d0c8;
+  --accent: #285441;
+  --accent-soft: #e2ebe3;
+  --panel: #ffffff;
+  --studio-heading: ui-sans-serif, system-ui, sans-serif;
+  --studio-radius: 10px;
+}
+:root[data-studio-theme="atelier"] {
+  --paper: #f8f0e3;
+  --surface: #fff9ee;
+  --ink: #263428;
+  --muted: #51594b;
+  --line: #c9bba5;
+  --accent: #375333;
+  --accent-soft: #e5e7d2;
+  --panel: #f9f2e5;
+  --studio-heading: Georgia, "Times New Roman", serif;
+  --studio-radius: 16px;
+}
+body { background: var(--paper); }
+:root[data-studio-theme="atelier"] body {
+  background: radial-gradient(ellipse at 4% 15%, #c2d1cb65, transparent 22rem),
+    radial-gradient(ellipse at 100% 5%, #dfb5933b, transparent 24rem),
+    var(--paper);
+}
+.studio-appearance { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px;
+  padding:10px clamp(14px,3vw,40px); min-width:0; max-width:100%; border-bottom:1px solid var(--line);
+  background:var(--paper); overflow-wrap:anywhere; }
+.studio-appearance label { display:flex; align-items:center; flex-wrap:wrap; gap:10px; min-width:0; max-width:100%; }
+.studio-appearance label span { font-size:.85rem; color:var(--muted); }
+.studio-appearance select { max-width:100%; min-width:0; min-height:44px; border:1px solid var(--line);
+  background:var(--surface); color:var(--ink); padding:7px 10px; border-radius:var(--studio-radius); }
+.studio-appearance small { color:var(--muted); }
+.studio-shell h1,.studio-shell h2,.workspace-shell h1,.workspace-shell h2 { font-family:var(--studio-heading); }
+:root[data-studio-theme="atelier"] :is(.studio-shell,.workspace-shell) h1 { font-weight:600; line-height:1.08; letter-spacing:-.025em; }
+:root[data-studio-theme="atelier"] :is(.studio-shell,.workspace-shell) h2 { font-weight:600; letter-spacing:-.01em; }
+.studio-shell .primary-action,.workspace-shell .primary-action { border-radius:var(--studio-radius); min-height:44px; }
+.studio-shell .secondary-action,.workspace-shell .secondary-action { border-radius:var(--studio-radius); min-height:44px; }
+.studio-intent .seed-form :is(textarea,input:not([type=radio]),select),.workspace-shell .idea-editor {
+  border:1px solid var(--line); border-radius:var(--studio-radius); background:var(--surface); padding:12px; }
+.studio-intent .seed-form :is(input,textarea,select):focus-visible,.studio-appearance select:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.experience-form-title { display:flex; align-items:center; gap:9px; min-width:0; overflow-wrap:anywhere; }
+.experience-form-mark { flex:0 0 24px; color:var(--accent); }
+:root[data-studio-theme="atelier"] .experience-form-mark { padding:2px; background:#e6ddc5; border-radius:45% 55% 50% 44%; }
+:root[data-studio-theme="atelier"] .studio-intent .form-heading::before,
+:root[data-studio-theme="atelier"] .studio-header > div:first-child::before {
+  content:""; display:block; width:min(180px,100%); height:104px; margin:0 0 12px;
+  background:url("/design/atelier/compass.webp") center/contain no-repeat; mix-blend-mode:multiply;
+}
+:root[data-studio-theme="atelier"] .workspace-shell .authoring-profile::before {
+  content:""; display:block; width:84px; height:73px; margin:0 0 10px;
+  background:url("/design/atelier/idea.webp") center/contain no-repeat; mix-blend-mode:multiply;
+}
+:root[data-studio-theme="atelier"] .stage-rail button.active {
+  color:var(--accent); background:var(--accent-soft); border-radius:10px; }
+:root[data-studio-theme="atelier"] .authoring-profile .profile-plan {
+  background:var(--accent-soft); padding:14px; border-radius:var(--studio-radius); }
+@media (max-width:480px) {
+  .studio-appearance { justify-content:flex-start; }
+  .studio-appearance label { width:100%; }
+  .studio-appearance label span { flex:1 1 110px; }
+  .studio-appearance select { flex:1 1 140px; }
+  :root[data-studio-theme="atelier"] .studio-intent .form-heading::before { width:112px; height:65px; }
+}
+@media (forced-colors: active) {
+  .studio-appearance select,.studio-shell .primary-action,.workspace-shell .primary-action { border:1px solid ButtonText; }
+}
+
+/* Catalog: native selectors, quiet rows, both themes use the same tokens. */
+.authoring-catalog{min-width:0;max-width:100%;overflow-wrap:anywhere;border-top:1px solid var(--line);padding:24px 0 8px}
+.authoring-catalog h2{font-size:clamp(22px,3vw,30px);line-height:1.2;margin:0 0 14px}
+.authoring-catalog h3{font-size:1rem;margin:16px 0 8px}
+.catalog-note,.catalog-suggestions span,.catalog-tool small,.catalog-tool label>span>span{color:var(--muted);font-size:.9rem;line-height:1.5}
+.authoring-catalog>label{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;font-weight:650}
+.authoring-catalog select{width:100%;min-width:0;max-width:100%;min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--studio-radius);padding:8px}
+.catalog-suggestions p{margin:0 0 8px;display:grid;gap:4px}
+.catalog-suggestions button{justify-self:start;text-align:left}
+.catalog-tools{min-width:0;max-width:100%;border:0;padding:0;margin:24px 0 0}
+.catalog-tools legend{max-width:100%;font-weight:700;overflow-wrap:anywhere}
+.authoring-catalog .catalog-tool{min-width:0;padding:12px 0;border-bottom:1px solid var(--line)}
+.authoring-catalog .catalog-tool label,.studio-intent .seed-form .catalog-tool label{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:start;min-height:44px}
+.authoring-catalog .catalog-tool input[type=checkbox]{width:20px;height:20px;margin:3px 0;padding:0;accent-color:var(--accent)}
+.catalog-tool label>span{display:grid;gap:4px;min-width:0}
+.authoring-catalog button{min-height:44px;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.authoring-catalog :is(button,input,select):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* UX2b: schematic composition, shared semantic model and both studio themes. */
+.composition-board{min-width:0;max-width:100%;padding:clamp(12px,2vw,22px);border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);overflow-wrap:anywhere}
+.composition-board h3,.composition-board h4{margin:0 0 8px;font-family:var(--studio-heading)}
+.composition-board p{margin:0 0 10px;color:var(--ink)}
+.composition-layout{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px}
+.composition-space,.composition-flow{min-width:0}
+.composition-map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px;background:var(--accent-soft);border:1px solid var(--line);border-radius:var(--studio-radius)}
+.composition-location{display:grid;gap:5px;text-align:left;min-width:0;min-height:74px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);overflow-wrap:anywhere;font:inherit;cursor:pointer}
+.composition-location[aria-pressed=true]{border:2px solid var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.composition-location:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.composition-location small,.composition-flow small{color:var(--muted);font-weight:650}
+.composition-location span,.composition-inspector li span,.composition-flow li span{display:block;font-size:.85rem}
+.composition-inspector,.composition-character,.composition-flow>div{min-width:0;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--panel)}
+.composition-flow>div:first-child{margin-top:0}
+.composition-flow ul,.composition-inspector ul{margin:8px 0;padding-inline-start:18px;display:grid;gap:8px}
+.composition-inspector button{max-width:100%;white-space:normal}
+.composition-empty{padding:12px;border:1px dashed var(--line);border-radius:var(--studio-radius)}
+:root[data-studio-theme="atelier"] .composition-map{background:repeating-linear-gradient(0deg,transparent 0 27px,var(--line) 28px 29px),var(--paper)}
+:root[data-studio-theme="atelier"] .composition-location{border-radius:14px 9px 12px 8px}
+@media(max-width:650px){.composition-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:360px){.composition-map{grid-template-columns:minmax(0,1fr)}}
+
+/* UX-DESIGN-02: visual teacher-to-learner composition, not a static dashboard. */
+.atelier-workflow{min-width:0;max-width:100%;margin:26px auto 36px;padding:clamp(16px,3vw,32px);border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);overflow-wrap:anywhere}
+.atelier-workflow h2,.atelier-workflow h3{font-family:var(--studio-heading);line-height:1.2;letter-spacing:-.015em;margin:0}
+.atelier-workflow h2{font-size:clamp(24px,3vw,34px)}
+.atelier-workflow h3{font-size:clamp(18px,2vw,23px)}
+.atelier-workflow p{margin:5px 0 0;color:var(--muted);line-height:1.5;font-size:.95rem}
+.atelier-intent,.atelier-compose,.atelier-result{text-align:center;min-width:0}
+.atelier-intent .atelier-side-label,.atelier-result .atelier-side-label{font-size:.86rem;color:var(--accent);font-weight:650;letter-spacing:.045em;margin:0 0 7px}
+.atelier-down{display:block;text-align:center;font-size:1.5rem;color:var(--muted);line-height:1.4;margin:12px 0}
+.atelier-areas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,2vw,20px)}
+.atelier-area{min-width:0}
+.atelier-example-image{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:calc(var(--studio-radius) - 2px);background:var(--paper)}
+.atelier-area h3,.atelier-area-action strong{display:block;margin-top:10px;font-family:var(--studio-heading);font-size:clamp(18px,2vw,22px);font-weight:650}
+.atelier-area-action{display:block;text-align:left;width:100%;min-width:0;min-height:44px;border:0;padding:0 0 8px;background:transparent;color:var(--ink);font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.atelier-area-action span{display:block;color:var(--muted);font-size:.9rem;line-height:1.45;margin-top:4px}
+.atelier-area-action:hover strong{text-decoration:underline;text-underline-offset:4px;color:var(--accent)}
+.atelier-area-action:focus-visible,.atelier-compose button:focus-visible,.atelier-result button:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:var(--studio-radius)}
+.atelier-compose{padding:18px 10px;background:var(--accent-soft);border-radius:var(--studio-radius)}
+.atelier-compose-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;margin-top:14px}
+.atelier-compose-actions button,.atelier-result button{max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere}
+.atelier-result .atelier-example-image{width:min(100%,620px);margin:0 auto 14px;aspect-ratio:16/9}
+.atelier-result button{margin-top:12px}
+.atelier-workflow .atelier-example-note{font-size:.83rem;margin-top:20px;padding-top:12px;border-top:1px solid var(--line)}
+:root[data-studio-theme="atelier"] .atelier-workflow{background:linear-gradient(120deg,#fff9ee,#f8f0e3)}
+:root[data-studio-theme="atelier"] .atelier-intent{padding:4px 0 12px;border-bottom:1px solid #a7785266}
+:root[data-studio-theme="atelier"] .atelier-area .atelier-example-image{border-radius:8px 14px 11px 6px}
+:root[data-studio-theme="atelier"] .atelier-compose{background:#e5e7d2;border-radius:18px 10px 15px 9px}
+.work-surface .atelier-areas{grid-template-columns:repeat(auto-fit,minmax(min(100%,142px),1fr))}
+@media(max-width:650px){.atelier-areas,.work-surface .atelier-areas{grid-template-columns:minmax(0,1fr)}.atelier-workflow{margin:14px 0 28px}.atelier-compose-actions{flex-direction:column;align-items:stretch}}
+
+/* DESIGN-03: same illustrated card vocabulary in creation and authoring. */
+.illustrated-intent{width:min(960px,calc(100% - 40px))}
+.illustrated-experiences{border:0;padding:0;min-width:0;max-width:100%;margin:20px 0 0}
+.illustrated-experiences legend{font-family:var(--studio-heading);font-size:1.25rem;font-weight:650;max-width:100%;overflow-wrap:anywhere}
+.illustrated-experiences .intent-hint{margin:10px 0;color:var(--muted);line-height:1.5}
+.experience-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;min-width:0}
+.experience-artwork{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:calc(var(--studio-radius) - 3px);background:var(--paper)}
+.experience-gallery .experience-card,.studio-intent .seed-form .experience-gallery .experience-card{
+  display:flex;flex-direction:column;align-items:stretch;position:relative;text-align:left;min-width:0;max-width:100%;gap:0;
+  padding:9px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.experience-gallery .experience-card.active,.studio-intent .seed-form .experience-gallery .experience-card.active{border:2px solid var(--accent);padding:8px;background:var(--accent-soft)}
+.experience-gallery .experience-card input[type=radio]{position:absolute;right:13px;top:13px;margin:0;width:24px;height:24px;background:var(--surface);z-index:1;accent-color:var(--accent)}
+.experience-card-copy,.studio-intent .experience-card>span.experience-card-copy{display:grid;min-width:0;gap:6px;padding:12px 3px}
+.experience-card-copy strong{font-family:var(--studio-heading);font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.25;overflow-wrap:anywhere}
+.experience-card-copy span,.experience-card-copy small{color:var(--muted);line-height:1.5;overflow-wrap:anywhere}
+.experience-card-copy .intent-recommended{color:var(--accent);font-weight:650}
+.experience-card:focus-within,.experience-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.experience-card:hover strong{text-decoration:underline;text-underline-offset:4px}
+.experience-defer{margin-top:15px;min-height:44px}
+.experience-art-note{font-size:.85rem}
+.atelier-type{text-align:center;min-width:0;padding:14px;border:1px solid var(--line);border-radius:var(--studio-radius)}
+.atelier-type button{margin-top:12px;max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere}
+.atelier-chosen-type{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;text-align:left;gap:14px;margin:14px auto 0;max-width:560px}
+.atelier-chosen-type>div{min-width:0;overflow-wrap:anywhere}
+:root[data-studio-theme="atelier"] .experience-card{background:var(--surface)}
+:root[data-studio-theme="atelier"] .experience-card-copy strong{font-weight:600}
+@media(max-width:650px){.experience-gallery{grid-template-columns:minmax(0,1fr)}.atelier-chosen-type{grid-template-columns:minmax(0,1fr)}}
+
+/* DESIGN-04: illustrated choices, one canonical selection per field. */
+.catalog-environments{border:0;margin:20px 0 0;padding:0;min-width:0;max-width:100%}
+.catalog-environments legend{font-family:var(--studio-heading);font-size:1.12rem;font-weight:650;max-width:100%;overflow-wrap:anywhere}
+.catalog-gallery,.profile-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-width:0;margin-top:14px}
+.profile-gallery{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:14px}
+.catalog-visual-card{display:flex;flex-direction:column;align-items:stretch;gap:0;text-align:left;min-width:0;max-width:100%;padding:8px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.catalog-visual-card.active{border:2px solid var(--accent);padding:7px;background:var(--accent-soft)}
+.catalog-visual-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.catalog-artwork{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:calc(var(--studio-radius) - 3px);background:var(--paper)}
+.catalog-card-copy{display:grid;gap:6px;padding:11px 2px;min-width:0}
+.catalog-card-copy strong{font-family:var(--studio-heading);font-size:1.1rem;line-height:1.25}
+.catalog-card-copy span,.catalog-card-copy small{font-size:.9rem;color:var(--muted);line-height:1.5;overflow-wrap:anywhere}
+.catalog-card-copy .catalog-recommended{font-weight:650;color:var(--accent)}
+.catalog-compact-choice{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin:16px 0 0}
+.catalog-compact-choice select{min-width:0;max-width:100%;width:100%;min-height:44px;color:var(--ink);background:var(--surface)}
+.catalog-tools .catalog-tool{border:1px solid var(--line);border-radius:var(--studio-radius);padding:12px;margin:10px 0;background:var(--surface)}
+.catalog-tools .catalog-tool.active{border-color:var(--accent);background:var(--accent-soft)}
+.authoring-catalog .catalog-tool label,.studio-intent .seed-form .catalog-tool label{grid-template-columns:24px minmax(0,100px) minmax(0,1fr);align-items:start;gap:10px}
+.catalog-tool .catalog-artwork{aspect-ratio:16/10;align-self:center}
+.catalog-tool label>span{min-width:0;overflow-wrap:anywhere}
+.catalog-visual-card:hover strong{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:650px){.catalog-gallery,.profile-gallery{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:420px){.authoring-catalog .catalog-tool label,.studio-intent .seed-form .catalog-tool label{grid-template-columns:24px minmax(0,1fr)}.catalog-tool label>img{grid-column:2;width:min(100%,180px)}.catalog-tool label>span{grid-column:2}}
+
+/* ESS-01A: editable exploration places and evidence on the existing scene. */
+.scene-places-editor{min-width:0;max-width:100%;border:1px solid var(--line);border-radius:var(--studio-radius);padding:12px;margin:12px 0;background:var(--surface);overflow-wrap:anywhere}
+.scene-places-editor summary{cursor:pointer;font-family:var(--studio-heading);font-weight:650;line-height:1.5;min-height:44px}
+.scene-places-editor p,.scene-places-editor small{font-size:.9rem;color:var(--muted);line-height:1.5}
+.scene-places-editor .scene-places-warning{color:var(--ink);font-weight:650}
+.scene-place-card,.scene-evidence-card{display:grid;gap:10px;min-width:0;max-width:100%;padding:12px;margin-top:12px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--paper)}
+.scene-place-card h4{margin:0;font-size:1rem}
+.scene-evidence-card{background:var(--surface);border-left:3px solid var(--accent)}
+.scene-places-editor label{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+.scene-places-editor :is(input,textarea,select){min-width:0;width:100%;max-width:100%}
+.scene-places-editor button{max-width:100%;min-height:44px;white-space:normal;overflow-wrap:anywhere}
+.scene-places-editor button[aria-pressed="true"]{color:var(--accent);font-weight:700}
+
+/* ESS-01B: one local image and its authored evidence points. */
+.scene-image-editor{display:grid;gap:10px;min-width:0;max-width:100%;padding:12px;border:1px solid var(--line);border-radius:var(--studio-radius);background:var(--surface);overflow-wrap:anywhere}
+.scene-image-editor h4{margin:0;font-family:var(--studio-heading);font-size:1.1rem}
+.scene-image-editor p,.scene-image-editor small{margin:0;font-size:.9rem;line-height:1.5;color:var(--muted)}
+.scene-image-editor label{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;min-width:0}
+.scene-image-editor :is(input,select){min-width:0;width:100%;max-width:100%}
+.scene-image-editor button{min-height:44px;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.scene-image-board{position:relative;min-width:0;margin:8px 24px;isolation:isolate}
+.scene-image-board img{display:block;width:100%;height:auto;border-radius:8px}
+.scene-image-editor .scene-image-position-surface{position:absolute;inset:0;width:100%;height:100%;min-height:0;border:0;border-radius:8px;padding:0;background:transparent;cursor:crosshair}
+.scene-image-position-surface:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.scene-image-marker{position:absolute;transform:translate(-50%,-50%);width:32px;height:32px;display:grid;place-items:center;pointer-events:none;border:2px solid #fff;border-radius:50%;background:#214c42;color:#fff;font-weight:700;box-shadow:0 2px 6px #0007}
+.scene-image-marker.active{background:#f1c975;color:#172e28;border-color:#172e28}
+.scene-image-coordinates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(max-width:650px){.scene-image-coordinates{grid-template-columns:minmax(0,1fr)}}

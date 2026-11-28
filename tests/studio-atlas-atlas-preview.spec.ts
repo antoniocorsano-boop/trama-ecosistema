@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import {writeFile,readFile} from "node:fs/promises";
+import {EDUCATION_DIAGRAM_EXAMPLES} from "../products/studio-atlas/lib/education-diagram-examples";
 
 const MUSEO_ZERO_PROJECT_ID = "pw-strategy-selection-01-museo-zero";
 const STUDIO = "http://127.0.0.1:3100";
@@ -301,4 +303,914 @@ test("MUSEO ZERO stays REVISE while review preview exercises investigation, repr
   ).toBe(false);
 
   await context.close();
+});
+
+
+for(const illustrated of [false,true]) test(illustrated?"ESS-01B agriculture: import original image, position points, explore in Atlas":"ESS-01A agriculture: empty project to interactive places in real Atlas without imported approvals",async({page,context},testInfo)=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(STUDIO+"/nuovo");
+  await page.getByRole("textbox",{name:"L’idea",exact:true}).fill("Esplorare l’agricoltura come sistema di suolo, acqua e lavoro umano.");
+  await page.getByRole("textbox",{name:/Titolo di lavoro/}).fill("Dal campo al raccolto");
+  await page.getByRole("button",{name:"Esplora le possibilità"}).click();
+  await page.getByRole("radio",{name:/^Esplorazione/}).check();
+  await page.getByLabel("Complessità del progetto").selectOption("ESSENTIAL");
+  await page.getByRole("button",{name:"Ambiente naturale e rurale",exact:true}).click();
+  await page.getByRole("checkbox",{name:/Punti interattivi/}).check();
+  await page.getByRole("button",{name:"Crea il Percorso"}).click();
+  await expect(page).toHaveURL(/\/percorso\/[^/]+$/);
+  const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});
+  await expect(page.getByRole("button",{name:"Anteprima di revisione",exact:true})).toBeDisabled();
+  await nav.getByRole("button",{name:"Storia"}).click();
+  const story=["Il terreno non riceve acqua allo stesso modo.","Un orto scolastico.","Una coltivatrice e un osservatore.","Far crescere le piante senza sprechi.","Una parte del terreno resta asciutta.","Quali risorse e operazioni sono collegate?","Osservare le parti del sistema.","Confrontare suolo e irrigazione.","Riutilizzare la strategia in un frutteto."];
+  const storyFields=page.locator(".story-sequence textarea");
+  await expect(storyFields).toHaveCount(story.length);
+  for(let i=0;i<story.length;i++)await storyFields.nth(i).fill(story[i]);
+  await page.getByRole("button",{name:"Pronta per revisione"}).click();
+  await page.getByRole("button",{name:"Approva storia"}).click();
+  await nav.getByRole("button",{name:"Mondo"}).click();
+  const world=["Osservatore dell’orto.","Suolo, acqua e attività umane.","Confronta gli indizi e decide un intervento.","Come le parti dipendono tra loro.","L’acqua arriva dove serve.","Capire come ridurre gli sprechi."];
+  const worldFields=page.locator(".world-grid textarea");
+  await expect(worldFields).toHaveCount(world.length);
+  for(let i=0;i<world.length;i++)await worldFields.nth(i).fill(world[i]);
+  await page.getByRole("button",{name:"Approva mondo"}).click();
+  await nav.getByRole("button",{name:"Scene"}).click();
+  await page.getByRole("button",{name:"Aggiungi scena"}).click();
+  await page.getByRole("button",{name:"Aggiungi scena"}).click();
+  const rows=page.locator(".scene-timeline .scene-row");
+  await expect(rows).toHaveCount(2);
+  const contents=[["L’orto come sistema","Alcune piante sono asciutte, altre ben irrigate.","Esplora il suolo e la distribuzione dell’acqua.","Collega le risorse alle attività umane."],["Un frutteto diverso","Un frutteto riceve acqua in modo irregolare.","Indica quali parti del sistema osserveresti.","Applica lo stesso metodo in un altro contesto."]];
+  for(let i=0;i<contents.length;i++){
+    const row=rows.nth(i);
+    await row.getByRole("textbox",{name:"Titolo scena "+(i+1)}).fill(contents[i][0]);
+    await row.getByLabel("Cosa vede",{exact:true}).fill(contents[i][1]);
+    await row.getByLabel("Cosa può fare",{exact:true}).fill(contents[i][2]);
+    await row.getByLabel("Cosa cambia",{exact:true}).fill(contents[i][3]);
+  }
+  await page.getByLabel("Tipo scena 2").selectOption("TRANSFER");
+  const first=rows.first();
+  await first.locator("summary").filter({hasText:"Luoghi e indizi"}).click();
+  await first.getByRole("button",{name:"Aggiungi luogo"}).click();
+  await expect(page.getByRole("button",{name:"Anteprima di revisione",exact:true})).toBeDisabled();
+  const field=first.getByRole("region",{name:"Luogo 1",exact:true});
+  await field.getByLabel("Nome del luogo").fill("Campo coltivato");
+  await field.getByLabel("Descrizione del luogo").fill("Il terreno è più umido vicino alla fonte d’acqua.");
+  await field.getByRole("button",{name:"Aggiungi indizio"}).click();
+  await field.getByLabel("Nome dell’indizio").fill("Umidità del suolo");
+  await field.getByLabel("Che cosa rivela").fill("Il terreno trattiene parte dell’acqua disponibile alle radici.");
+  await expect(field.getByRole("button",{name:"Rimuovi luogo"})).toBeDisabled();
+  await first.getByRole("button",{name:"Aggiungi luogo"}).click();
+  const water=first.getByRole("region",{name:"Luogo 2",exact:true});
+  await water.getByLabel("Nome del luogo").fill("Irrigazione");
+  await water.getByLabel("Descrizione del luogo").fill("L’acqua viene distribuita lungo i filari.");
+  await water.getByRole("button",{name:"Aggiungi indizio"}).click();
+  await water.getByLabel("Nome dell’indizio").fill("Distribuzione dell’acqua");
+  await water.getByLabel("Che cosa rivela").fill("La distribuzione dipende dalla posizione dei tubi e dalle operazioni di irrigazione.");
+  if(illustrated){
+    const imageEditor=first.getByRole("region",{name:"Immagine interattiva"});
+    // Render a repository-owned rural illustration into a local WebP test file.
+    const base64=await page.evaluate(async()=>{
+      const image=new Image();image.src="/design/atelier/catalog/nature.svg";await image.decode();
+      const canvas=document.createElement("canvas");canvas.width=640;canvas.height=360;
+      canvas.getContext("2d")!.drawImage(image,0,0,640,360);
+      return canvas.toDataURL("image/webp",0.9).split(",")[1];
+    });
+    await imageEditor.getByLabel("Carica immagine WebP").setInputFiles({name:"orto.webp",mimeType:"image/webp",buffer:Buffer.from(base64,"base64")});
+    await expect(imageEditor.getByRole("img")).toBeVisible();
+    await expect(page.getByRole("button",{name:"Anteprima di revisione",exact:true})).toBeDisabled();
+    await imageEditor.getByLabel("Descrizione alternativa dell’immagine").fill("Orto illustrato con campi e filari");
+    await imageEditor.getByLabel("Indizio da posizionare").selectOption({label:"1. Umidità del suolo"});
+    await imageEditor.getByRole("button",{name:"Posiziona sull’immagine"}).click({position:{x:35,y:35}});
+    await imageEditor.getByLabel("Indizio da posizionare").selectOption({label:"2. Distribuzione dell’acqua"});
+    await imageEditor.getByLabel("Posizione orizzontale (%)").fill("75");
+    await imageEditor.getByLabel("Posizione verticale (%)").fill("60");
+    await imageEditor.getByRole("button",{name:"Conferma posizione"}).click();
+    await expect(imageEditor.locator(".scene-image-marker")).toHaveCount(2);
+    await imageEditor.screenshot({path:testInfo.outputPath("ess-01b-teacher-image.png")});
+    await page.reload();
+    await nav.getByRole("button",{name:"Scene"}).click();
+    await expect(first.getByRole("region",{name:"Immagine interattiva"}).locator(".scene-image-marker")).toHaveCount(2);
+  }
+  await page.getByRole("button",{name:"Storyboard pronto",exact:true}).click();
+  await page.reload();
+  await expect(page.getByRole("button",{name:"Anteprima di revisione",exact:true})).toBeEnabled();
+  const popupPromise=context.waitForEvent("page");
+  await page.getByRole("button",{name:"Anteprima di revisione",exact:true}).click();
+  const popup=await popupPromise;
+  await expect(popup.getByText("ANTEPRIMA STUDIO ATLAS · NON AUTORIZZATA AGLI STUDENTI")).toBeVisible({timeout:15000});
+  const locations=popup.getByRole("navigation",{name:"Luoghi del percorso"});
+  await expect(locations.getByRole("button",{name:/Campo coltivato/})).toBeVisible();
+  if(illustrated){
+    const figure=popup.locator(".experience-hotspot-figure");
+    await expect(figure.getByRole("img",{name:"Orto illustrato con campi e filari"})).toBeVisible();
+    await figure.getByRole("button",{name:"Esplora Distribuzione dell’acqua",exact:true}).click();
+    await expect(figure).toContainText("La distribuzione dipende dalla posizione dei tubi");
+    await figure.getByRole("button",{name:"Esplora Umidità del suolo",exact:true}).click();
+    await expect(figure).toContainText("Il terreno trattiene parte dell’acqua");
+    await figure.screenshot({path:testInfo.outputPath("ess-01b-learner-image.png")});
+  }
+  await popup.locator(".experience-evidence-grid").getByRole("button",{name:/Umidità del suolo/}).click();
+  await expect(popup.locator(".experience-evidence-detail").getByText("Il terreno trattiene parte dell’acqua disponibile alle radici.",{exact:true})).toBeVisible();
+  await locations.getByRole("button",{name:/Irrigazione/}).click();
+  await popup.locator(".experience-evidence-grid").getByRole("button",{name:/Distribuzione dell’acqua/}).click();
+  await expect(popup.locator(".experience-evidence-detail").getByText("La distribuzione dipende dalla posizione dei tubi e dalle operazioni di irrigazione.",{exact:true})).toBeVisible();
+  await popup.getByRole("button",{name:"Continua",exact:true}).click();
+  await expect(popup.getByRole("heading",{name:"Un frutteto diverso"})).toBeVisible();
+  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]")[0]);
+  expect(stored.lastPreviewSnapshot.studentAuthorized).toBe(false);
+  expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
+  expect(stored.productReview?.decision).not.toBe("PASS");
+  expect(stored.scenes[0].stage.locations).toHaveLength(2);
+  if(illustrated){expect(stored.lastPreviewSnapshot.sceneMedia.images[0].sha256).toBe(stored.scenes[0].illustration.sha256);expect(stored.lastPreviewSnapshot.scenes[0].illustration).toBeUndefined();}
+});
+
+
+for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("ESS-02 agriculture: real editable draft, guarded review, five scenes "+viewport.width,async({page,context},testInfo)=>{
+ await page.setViewportSize(viewport);
+ await page.goto(STUDIO);
+ await page.getByRole("link",{name:"Fascicolo educativo-didattico · v0.4"}).click();
+ await expect(page.getByRole("heading",{name:"Verifica e valutazione formativa"})).toBeVisible();
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});
+ const preview=page.getByRole("button",{name:"Anteprima di revisione",exact:true});
+ await expect(preview).toBeDisabled();
+ const readDraft=()=>page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]").find((p:{projectId:string})=>p.projectId==="ess-02-dal-campo-al-raccolto"));
+ const initial=await readDraft();
+ expect(initial.storyReview.decision).toBe("READY");expect(initial.productReview.decision).toBe("READY");expect(initial.storyboardReady).toBe(false);
+ expect(initial.scenes).toHaveLength(5);expect(initial.scenes.filter((s:{illustration?:unknown})=>s.illustration)).toHaveLength(5);
+ const artManifest=await (await page.request.get(STUDIO+"/design/ess-02/r2b/manifest.json")).json();
+ expect(artManifest.totalBytes).toBe(443758);
+ for(const entry of artManifest.scenes){
+  const scene=initial.scenes.find((s:{sceneId:string})=>s.sceneId===entry.sceneId);
+  expect(scene.illustration.sha256).toBe(entry.sha256);
+  expect(Buffer.from(scene.illustration.base64,"base64").length).toBe(entry.bytes);
+  expect(scene.illustration.pixelWidth).toBe(entry.width);expect(scene.illustration.pixelHeight).toBe(entry.height);
+  for(const point of scene.stage.evidence)expect(point.hotspot).toEqual(entry.hotspots[point.id]);
+ }
+ await nav.getByRole("button",{name:"Storia"}).click();
+ // Explicit reviewer action in disposable test context, not a seeded approval.
+ await page.getByRole("button",{name:"Approva storia"}).click();
+ await nav.getByRole("button",{name:"Scene"}).click();
+ await expect(page.getByRole("textbox",{name:"Titolo scena 5"})).toHaveValue("Un nuovo problema nel frutteto");
+ await page.screenshot({path:testInfo.outputPath("ess-02-teacher-"+viewport.width+".png"),fullPage:true});
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(preview).toBeEnabled();
+ expect((await readDraft()).storyReview.decision).toBe("PASS");
+ const popupPromise=context.waitForEvent("page");await preview.click();const popup=await popupPromise;
+ await popup.setViewportSize(viewport);
+ await expect(popup.getByText("ANTEPRIMA STUDIO ATLAS · NON AUTORIZZATA AGLI STUDENTI")).toBeVisible({timeout:15000});
+ const snap=async(name:string)=>popup.screenshot({path:testInfo.outputPath("ess-02-"+name+"-"+viewport.width+".png"),fullPage:true});
+ const figure=popup.locator(".experience-hotspot-figure");
+ await expect(popup.getByRole("heading",{name:"La chiamata nell’orto"})).toBeVisible();
+ await figure.getByRole("button",{name:"Esplora Sara",exact:true}).click();
+ await expect(figure).toContainText("Ci aiuti?");
+ await expect(popup.locator(".experience-compact-task")).toContainText("consulente");
+ await expect(popup.locator(".experience-compact-evidence")).not.toHaveAttribute("open","");
+ await popup.getByText("Indizi in formato testuale",{exact:true}).click();
+ await expect(popup.locator(".experience-compact-evidence")).not.toContainText("Ho osservato");
+ await popup.getByRole("button",{name:"Luca · Osserva",exact:true}).click();
+ await expect(popup.locator(".experience-compact-evidence")).toContainText("Ho osservato");
+ await popup.getByText("Indizi in formato testuale",{exact:true}).click();
+ await expect(popup.getByRole("button",{name:"Verifica la tua ipotesi"})).toBeDisabled();
+ await expect(popup.getByText("Una stessa operazione può produrre esiti diversi",{exact:false})).toHaveCount(0);
+ await figure.getByRole("button",{name:"Esplora I due filari",exact:true}).click();
+ await popup.getByLabel("Qual è la tua prima ipotesi?").fill("Forse cambia la quantità di acqua ricevuta.");
+ await snap("opening");
+ await popup.getByRole("button",{name:"Verifica la tua ipotesi"}).click();
+ await expect(popup.getByRole("status").filter({hasText:"Una stessa operazione"})).toBeVisible();
+ await popup.getByRole("button",{name:"Prosegui",exact:true}).click();
+ await expect(popup.getByRole("heading",{name:"L’indagine sul campo"})).toBeVisible();
+ for(const label of ["Riserva d’acqua","Misura a monte","Tratto della linea","Misura a valle","Terreno","Colture e lavoro"])await figure.getByRole("button",{name:"Esplora "+label,exact:true}).click();
+ await figure.getByRole("button",{name:"Esplora Misura a valle",exact:true}).click();await expect(figure).toContainText("50 mL");
+ await expect(popup.getByRole("button",{name:"Verifica la tua ipotesi"})).toBeDisabled();
+ await popup.getByLabel("Quali due indizi sostengono la tua spiegazione?").fill("200 e 50 mL in condizioni comparabili; deposito nel raccordo.");
+ await snap("investigation");
+ await popup.getByRole("button",{name:"Verifica la tua ipotesi"}).click();
+ await expect(popup.getByRole("status").filter({hasText:"Il risultato agricolo"})).toBeVisible();
+ await popup.getByRole("button",{name:"Prosegui",exact:true}).click();
+ await expect(popup.getByRole("heading",{name:"Quale intervento scegli?"})).toBeVisible();
+ await expect(popup.getByRole("button",{name:"Prolungo l’irrigazione di tutti i filari",exact:true})).toBeDisabled();
+ const choiceReveal="Una spiegazione causale si controlla modificando una condizione e osservando gli effetti, non indovinando.";
+ await expect(popup.getByText(choiceReveal,{exact:false})).toHaveCount(0);
+ for(const label of ["Recipiente a monte","Recipiente a valle"])await figure.getByRole("button",{name:"Esplora "+label,exact:true}).click();
+ await popup.getByLabel("Che cosa prevedi che accada alle due misure?").fill("Se aumento il tempo, aumentano entrambi ma la differenza resta.");
+ await popup.getByRole("button",{name:"Prolungo l’irrigazione di tutti i filari",exact:true}).click();
+ await expect(popup.getByRole("status").filter({hasText:"resta la differenza"})).toContainText(choiceReveal);
+ await popup.getByRole("button",{name:"Compenso soltanto il filare asciutto con un annaffiatoio",exact:true}).click();
+ await expect(popup.getByRole("status").filter({hasText:"rimedio temporaneo"})).toContainText(choiceReveal);
+ await popup.getByRole("button",{name:"Chiedo di ripristinare la distribuzione e ripeto la misura",exact:true}).click();
+ await expect(popup.getByRole("status").filter({hasText:"190 mL"}).filter({hasText:choiceReveal})).toBeVisible();
+ await expect(figure.getByRole("img")).toBeVisible();
+ await snap("decision");
+ await popup.getByRole("button",{name:"Continua dalla conseguenza",exact:true}).click();
+ await expect(popup.getByRole("heading",{name:"Ricostruisci il sistema"})).toBeVisible();
+ await figure.getByRole("button",{name:"Esplora Impatti e controllo",exact:true}).click();await expect(figure).toContainText("prossime scelte");
+ for(const label of ["Risorse","Tecniche e lavoro","Risultati"])await figure.getByRole("button",{name:"Esplora "+label,exact:true}).click();
+ await popup.getByLabel("Quale relazione collega una risorsa, un’operazione e un risultato?").fill("L'acqua distribuita con la linea sostiene la crescita; controllo i risultati.");
+ await snap("system");
+ await popup.getByRole("button",{name:"Verifica la tua ipotesi"}).click();
+ await popup.getByRole("button",{name:"Prosegui",exact:true}).click();
+ await expect(popup.getByRole("heading",{name:"Un nuovo problema nel frutteto"})).toBeVisible();
+ await expect(popup.getByRole("button",{name:"Confronta la tua proposta"})).toBeDisabled();
+ await expect(popup.getByText("Confronta la tua proposta con un possibile piano",{exact:false})).toHaveCount(0);
+ for(const label of ["Erogazione","Suoli diversi","Stato delle colture"])await figure.getByRole("button",{name:"Esplora "+label,exact:true}).click();
+ await popup.getByLabel("Quali due controlli proponi e quale risultato smentirebbe la tua ipotesi?").fill("Misuro umidità e drenaggio, se uguali cerco altre cause.");
+ await popup.getByRole("button",{name:"Confronta la tua proposta"}).click();
+ await expect(popup.getByRole("status").filter({hasText:"misurare l’umidità"})).toBeVisible();
+ await snap("transfer");
+ const stored=await readDraft();expect(stored.productReview.decision).toBe("READY");
+ expect(stored.lastPreviewSnapshot.studentAuthorized).toBe(false);expect(stored.lastPreviewSnapshot.runtimeAuthorized).toBe(false);
+ expect(stored.lastPreviewSnapshot.sceneMedia.images).toHaveLength(5);
+ expect(stored.lastPreviewSnapshot.scenes.map((s:{sceneId:string})=>s.sceneId)).toEqual(["AG1","AG2","AG3","AG4","AG5"]);
+});
+
+
+test("ESS-02-R1: delayed image import retains intervening unrelated scene edit",async({page})=>{
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Scene"}).click();
+ const first=page.locator(".scene-timeline .scene-row").first();
+ const editor=first.getByRole("region",{name:"Immagine interattiva"});
+ const base64=await page.evaluate(async()=>{
+  const img=new Image();img.src="/design/atelier/catalog/nature.svg";await img.decode();
+  const canvas=document.createElement("canvas");canvas.width=320;canvas.height=180;canvas.getContext("2d")!.drawImage(img,0,0,320,180);
+  return canvas.toDataURL("image/webp",0.8).split(",")[1];
+ });
+ await page.evaluate(()=>{
+  const original=File.prototype.arrayBuffer;
+  const state=window as unknown as {releaseImage?:()=>void};
+  File.prototype.arrayBuffer=async function(){await new Promise<void>(resolve=>{state.releaseImage=resolve});return original.call(this);};
+ });
+ await editor.getByLabel("Carica immagine WebP").setInputFiles({name:"delayed.webp",mimeType:"image/webp",buffer:Buffer.from(base64,"base64")});
+ await expect(editor.getByText("Verifica dell’immagine…")).toBeVisible();
+ await page.getByRole("textbox",{name:"Titolo scena 2"}).fill("Indagine aggiornata durante importazione");
+ await page.evaluate(()=>{(window as unknown as {releaseImage:()=>void}).releaseImage()});
+ await expect(editor.getByText("Verifica dell’immagine…")).toHaveCount(0);
+ await expect(editor.getByRole("alert")).toHaveCount(0);
+ const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]").find((p:{projectId:string})=>p.projectId==="ess-02-dal-campo-al-raccolto"));
+ expect(stored.scenes[0].illustration.pixelWidth).toBe(320);
+ expect(stored.scenes[0].stage.evidence.every((item:{hotspot?:unknown})=>!item.hotspot)).toBe(true);
+ expect(stored.scenes[0].stage.evidence).toHaveLength(3);
+ expect(stored.scenes[1].title).toBe("Indagine aggiornata durante importazione");
+ expect(stored.productReview.decision).toBe("DRAFT");
+ expect(stored.lastPreviewSnapshot).toBeUndefined();
+});
+
+
+for (const viewport of [{width:390,height:844},{width:1280,height:900}]) test("F3.3a: project-specific production planning remains local "+viewport.width, async ({page},testInfo)=>{
+ await page.setViewportSize(viewport);
+ const pageErrors:string[]=[];
+ const productionRequests:string[]=[];
+ page.on("pageerror",error=>pageErrors.push(error.message));
+ page.on("request",request=>{
+  const url=new URL(request.url());
+  if (url.pathname.includes("/api/visual") || ((url.protocol==="http:"||url.protocol==="https:") && url.origin!==STUDIO)) productionRequests.push(request.url());
+ });
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});
+ const readDraft=()=>page.evaluate(()=>JSON.parse(localStorage.getItem("studio-atlas.projects.v0.1")??"[]").find((p:{projectId:string})=>p.projectId==="ess-02-dal-campo-al-raccolto"));
+ const initial=await readDraft();
+ await nav.getByRole("button",{name:"Produzione"}).click();
+ const bank=page.locator(".visual-factory-authoring");
+ await expect(bank.getByRole("heading",{name:"Produzione visiva del percorso"})).toBeVisible();
+ const confirmation=bank.getByRole("button",{name:"Conferma la coerenza e prepara il piano locale"});
+ await expect(confirmation).toBeEnabled();
+ await expect(bank.getByText("Illustrazione già presente nel progetto",{exact:true})).toHaveCount(5);
+ const places=["Orto scolastico","Impianto di irrigazione","Banco delle misure","Mappa del sistema","Frutteto collinare"];
+ const sceneRows=bank.locator("section.visual-factory-step > ol > li");
+ await expect(sceneRows).toHaveCount(places.length);
+ for (const [index,place] of places.entries()) {
+  const row=sceneRows.nth(index);
+  await expect(row).toBeVisible();
+  // The place is in the visible row's direct text, not its collapsed facts list.
+  expect(await row.evaluate(element=>Array.from(element.childNodes).filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent??"").join(" ").replace(/\s+/g," ").trim())).toBe("· "+place);
+  const details=row.locator("details");
+  await expect(details).not.toHaveAttribute("open","");
+  await details.locator("summary").click();
+  await expect(details).toHaveAttribute("open","");
+  await expect(details.getByText("Elementi da rappresentare:",{exact:true})).toBeVisible();
+  await expect(details.getByText(place,{exact:true})).toBeVisible();
+  await details.locator("summary").click();
+  await expect(details).not.toHaveAttribute("open","");
+ }
+ await expect(bank.getByText("Pianificazione da confermare.",{exact:true})).toBeVisible();
+ await confirmation.click();
+ await expect(bank.getByText("5 richieste di riferimento pianificate, non eseguite.",{exact:true})).toBeVisible();
+ await expect(confirmation).toBeDisabled();
+ const exportButton=bank.getByRole("button",{name:"Esporta fonte progettuale"});
+ await expect(exportButton).toBeDisabled();
+ await bank.getByRole("checkbox",{name:"Ho verificato che i contenuti non includano dati personali degli studenti."}).check();
+ const downloadPromise=page.waitForEvent("download");
+ await exportButton.click();
+ const download=await downloadPromise;
+ const downloadPath=await download.path();
+ expect(downloadPath).not.toBeNull();
+ const candidate=JSON.parse(await readFile(downloadPath!,"utf8"));
+ expect(candidate.schemaVersion).toBe("atlas.visual-project-source-candidate/v0.1");
+ expect(candidate.decision).toBe("PENDING_OPERATOR_REVIEW");
+ expect(candidate.project.projectId).toBe(initial.projectId);
+ expect(candidate.project.revision).toBe(initial.revision);
+ expect(candidate.project.scenes).toEqual(initial.scenes);
+ expect(candidate.project.lastPreviewSnapshot).toBeUndefined();
+ expect(candidate.planDigest).toMatch(/^[a-f0-9]{64}$/);
+ await expect(bank.getByRole("button",{name:/Genera personaggi|Genera le scene/})).toHaveCount(0);
+ expect(await readDraft()).toEqual(initial);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath("ess-02-production-planning-"+viewport.width+".png"),fullPage:true});
+ await nav.getByRole("button",{name:"Scene"}).click();
+ await page.getByRole("textbox",{name:"Titolo scena 2"}).fill("Indagine sul campo aggiornata");
+ await nav.getByRole("button",{name:"Produzione"}).click();
+ await expect(bank.getByText("Indagine sul campo aggiornata",{exact:true})).toBeVisible();
+ await expect(bank.getByText("Pianificazione da confermare.",{exact:true})).toBeVisible();
+ await expect(confirmation).toBeEnabled();
+ expect(productionRequests).toEqual([]);
+ expect(pageErrors).toEqual([]);
+});
+
+
+for(const viewport of [{width:390,height:844},{width:1280,height:900}])test("F3.3b: verified static diagram package "+viewport.width,async({page},testInfo)=>{
+ await page.setViewportSize(viewport);
+ const external:string[]=[];
+ page.on("request",request=>{const u=new URL(request.url());if((u.protocol==="http:"||u.protocol==="https:")&&u.origin!==STUDIO)external.push(request.url());});
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco diagrammi"});
+ await expect(bank.getByRole("heading",{name:"Diagrammi e infografiche"})).toBeVisible();
+ const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ await bank.getByRole("button",{name:"Apri materiale didattico"}).click();
+ await expect(bank.getByRole("status")).toHaveText("Integrità del pacchetto verificata. Proposta da revisionare.");
+ const image=bank.getByRole("img");
+ const select=bank.getByLabel("Composizione");
+ const root=STUDIO+"/design/education-diagram/";
+ const receipt=await (await page.request.get(root+"education-receipt.json")).json();
+ const checkFile=async(name:string,expected:string)=>{
+  const link=bank.locator("a[download]").filter({hasText:name});
+  const href=await link.getAttribute("href");
+  expect(href).toMatch(/^blob:/);
+  const digest=await page.evaluate(async url=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await (await fetch(url!)).arrayBuffer())),b=>b.toString(16).padStart(2,"0")).join(""),href);
+  expect(digest).toBe(expected);
+ };
+ for(const variant of ["mobile-vertical","desktop-lim-horizontal"]){
+  await select.selectOption(variant);
+  await expect.poll(()=>image.evaluate((node:HTMLImageElement)=>node.complete&&node.naturalWidth>0)).toBe(true);
+  const output=receipt.outputs.find((o:{variant:string})=>o.variant===variant);
+  await checkFile("Scarica HTML della composizione",output.htmlSha256);
+  await checkFile("Scarica SVG della composizione",output.svgSha256);
+  await page.screenshot({path:testInfo.outputPath("ess-02-diagram-"+variant+"-"+viewport.width+".png"),fullPage:true});
+ }
+ await checkFile("Scarica fonte JSON",receipt.sourceSha256);
+ await checkFile("Scarica guida docente",receipt.guideSha256);
+ await expect(bank.getByRole("link",{name:"Scarica ricevuta di produzione"})).toBeVisible();
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+ expect(external).toEqual([]);
+});
+
+test("F3.3b: corrupted diagram candidate is rejected before preview or download",async({page})=>{
+ await page.route("**/design/education-diagram/*mobile-vertical.svg",route=>route.fulfill({status:200,contentType:"image/svg+xml",body:"<svg xmlns='http://www.w3.org/2000/svg'/>"}));
+ await page.goto(STUDIO);
+ await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await expect(page).toHaveURL(/\/percorso\/ess-02-dal-campo-al-raccolto$/);
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco diagrammi"});
+ await bank.getByRole("button",{name:"Apri materiale didattico"}).click();
+ await expect(bank.getByRole("alert")).toContainText("non integro");
+ await expect(bank.getByRole("img")).toHaveCount(0);
+ await expect(bank.getByRole("link")).toHaveCount(0);
+});
+
+for (const width of [390, 1280]) test(`F3.3c: original authoring and regeneration ${width}`, async ({page}, testInfo) => {
+  await page.setViewportSize({width, height: 900});
+  const external: string[] = [];
+  page.on("request", request => {
+    const url = new URL(request.url());
+    if (["http:", "https:"].includes(url.protocol) && url.origin !== STUDIO) external.push(url.href);
+  });
+  await page.goto(STUDIO);
+  await page.getByRole("button", {name: "Apri Dal campo al raccolto"}).click();
+  await page.getByRole("navigation", {name: "Fasi del Percorso"}).getByRole("button", {name: "Produzione"}).click();
+  const editor = page.getByRole("region", {name: "Componi un diagramma didattico"});
+  await editor.getByLabel("Titolo").fill("Circuito con lampadina");
+  await editor.getByLabel("Finalità").fill("Riconoscere i componenti di un circuito aperto o chiuso.");
+  for (const [index, label, detail] of [[1, "Pila", "Fornisce energia"], [2, "Interruttore", "Apre o chiude"], [3, "Lampadina", "Emette luce"]] as const) {
+    await editor.getByRole("button", {name: "Aggiungi nodo"}).click();
+    const node = editor.getByRole("group", {name: `Nodo ${index}`, exact: true});
+    await node.getByLabel("Etichetta").fill(label);
+    await node.getByLabel("Dettaglio").fill(detail);
+  }
+  await editor.getByRole("button", {name: "Aggiungi relazione"}).click();
+  const relation = editor.getByRole("group", {name: "Relazione 1", exact: true});
+  await relation.getByRole("combobox", {name: "A", exact: true}).selectOption("n3");
+  await relation.getByRole("combobox", {name: "Da", exact: true}).selectOption("n2");
+  const generate = editor.getByRole("button", {name: "Genera diagramma"});
+  const image = editor.getByRole("img");
+  const format = editor.getByLabel("Formato dell’anteprima");
+  async function produce() {
+    const response = page.waitForResponse(response => response.url().endsWith("/api/education-diagram"));
+    await generate.click();
+    const result = await response;
+    expect(result.status()).toBe(200);
+    await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+    const {files} = await result.json();
+    const receipt = JSON.parse(files["education-receipt.json"]);
+    expect(receipt.runtimeAuthorized).toBe(false);
+    expect(receipt.publicationAuthorized).toBe(false);
+    for (const [name, digest] of Object.entries(receipt.files)) {
+      expect(await page.evaluate(async text => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",
+        new TextEncoder().encode(text))), value => value.toString(16).padStart(2, "0")).join(""), files[name])).toBe(digest);
+    }
+    return {files, receipt};
+  }
+  const first = await produce();
+  for (const variant of ["mobile-vertical", "desktop-lim-horizontal"]) {
+    await format.selectOption(variant);
+    await expect.poll(() => image.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+    const svg = first.files[`diagramma-docente-${variant}.svg`];
+    expect(svg).toContain("Interruttore");
+    expect(svg).toContain("2 → 3");
+    expect(svg).toContain("<path");
+    const href = await editor.getByRole("link", {name: "Scarica SVG", exact: true}).getAttribute("href");
+    expect(await page.evaluate(async href => (await fetch(href!)).text(), href)).toBe(svg);
+    await image.screenshot({path: testInfo.outputPath(`f3-3c-${variant}-${width}.png`)});
+  }
+  const oldUrl = await image.getAttribute("src");
+  await editor.getByRole("group", {name: "Nodo 3", exact: true}).getByLabel("Etichetta").fill("LED");
+  await expect(image).toHaveCount(0);
+  expect(await page.evaluate(url => fetch(url!).then(() => true, () => false), oldUrl)).toBe(false);
+  const changed = await produce();
+  for (const variant of ["mobile-vertical", "desktop-lim-horizontal"]) {
+    for (const ext of ["html", "svg"]) {
+      const name = `diagramma-docente-${variant}.${ext}`;
+      expect(changed.receipt.files[name]).not.toBe(first.receipt.files[name]);
+      expect(changed.files[name]).toContain("LED");
+    }
+  }
+  expect(changed.files["guida-docente.md"]).toContain("Interruttore → LED");
+  const exported = Buffer.from(changed.files["education-source.json"]);
+  await editor.getByLabel("Importa fonte JSON").setInputFiles({name: "fonte.json", mimeType: "application/json", buffer: exported});
+  await expect(image).toHaveCount(0);
+  const repeated = await produce();
+  expect(repeated.files).toEqual(changed.files);
+  await writeFile(testInfo.outputPath(`f3-3c-receipts-${width}.json`), JSON.stringify({
+    width, original: first.receipt, modified: changed.receipt, repeated: repeated.receipt,
+  }, null, 2) + "\n");
+  await editor.getByLabel("Titolo").fill("<script>");
+  await generate.click();
+  await expect(editor.getByRole("alert")).toContainText("senza markup");
+  await expect(image).toHaveCount(0);
+  await editor.getByRole("button", {name: "Elimina nodo 3"}).click();
+  await expect(relation).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+  expect(external).toEqual([]);
+});
+
+
+test("F3.3c: eight relations remain legible in both standalone formats", async ({page, request}) => {
+  const ids = ["n1", "n2", "n3", "n4"];
+  const source = {
+    schema: "trama.diagram-education-source/v0.1", id: "diagramma-docente",
+    status: "TEACHER_REVIEW_REQUIRED", profile: "studio-atlas",
+    runtimeAuthorized: false, publicationAuthorized: false,
+    title: "Scambi di energia", description: "Descrivere gli scambi tra sistemi.",
+    nodes: ids.map((id, index) => ({id, label: `Sistema ${index + 1}`, detail: "Trasferimento"})),
+    edges: ids.flatMap(a => ids.filter(b => b !== a).map(b => [a, b])).slice(0, 8),
+  };
+  const response = await request.post(STUDIO + "/api/education-diagram", {data: source});
+  expect(response.ok()).toBe(true);
+  const {files} = await response.json();
+  for (const [variant, width] of [["mobile-vertical", 390], ["desktop-lim-horizontal", 1280]] as const) {
+    await page.setViewportSize({width, height: 900});
+    await page.setContent(files[`diagramma-docente-${variant}.html`]);
+    const rows = await page.locator("svg text").evaluateAll(nodes => nodes.slice(-3).map(node => {
+      const {y, height} = (node as SVGGraphicsElement).getBBox();
+      return {y, height, text: node.textContent};
+    }));
+    expect(rows[0].text).toContain("Relazioni:");
+    expect(rows[0].text?.match(/→/g)).toHaveLength(4);
+    expect(rows[1].text?.match(/→/g)).toHaveLength(4);
+    expect(rows[2].text).toContain("proposta didattica");
+    for (const [row, next] of [[rows[0], rows[1]], [rows[1], rows[2]]]) {
+      expect(row.y + row.height).toBeLessThanOrEqual(next.y);
+    }
+  }
+});
+
+
+// F3.3d: original teaching candidates; semantic approval remains a separate human review.
+const f33dSources = EDUCATION_DIAGRAM_EXAMPLES;
+for (const [caseIndex, source] of f33dSources.entries()) {
+  for (const width of [390, 1280]) test(`F3.3d: teaching candidate ${caseIndex + 1} at ${width}`, async ({page}, testInfo) => {
+    await page.setViewportSize({width,height:900});
+    await page.goto(STUDIO);
+    await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+    await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+    const editor=page.getByRole("region",{name:"Componi un diagramma didattico"});
+    const exampleButton=editor.getByRole("button",{name:`Carica esempio: ${source.title}`,exact:true});
+    await exampleButton.click();
+    await expect(editor.getByLabel("Titolo",{exact:true})).toHaveValue(source.title);
+    for(const example of EDUCATION_DIAGRAM_EXAMPLES) {
+      await expect(editor.getByRole("button",{name:`Carica esempio: ${example.title}`,exact:true})).toBeDisabled();
+    }
+    const pending=page.waitForResponse(r=>r.url().endsWith("/api/education-diagram"));
+    await editor.getByRole("button",{name:"Genera diagramma"}).click();
+    const response=await pending;
+    expect(response.status()).toBe(200);
+    await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+    const {files}=await response.json();
+    expect(JSON.parse(files["education-source.json"])).toEqual(source);
+    await expect(editor.getByLabel("Domanda operativa")).toHaveValue(source.activity.question);
+    await expect(editor.getByLabel("Criterio di risposta")).toHaveValue(source.activity.criterion);
+    expect(files["guida-docente.md"]).toContain(source.activity.question);
+    expect(files["guida-docente.md"]).toContain(source.activity.criterion);
+    const receipt=JSON.parse(files["education-receipt.json"]);
+    expect(receipt.runtimeAuthorized).toBe(false);
+    expect(receipt.publicationAuthorized).toBe(false);
+    for(const [name,digest] of Object.entries(receipt.files)) {
+      expect(await page.evaluate(async value=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,"0")).join(""),files[name])).toBe(digest);
+    }
+    for (const edge of source.edges) {
+      const labels=edge.map(id=>source.nodes.find(n=>n.id===id)!.label);
+      expect(files["guida-docente.md"]).toContain(labels.join(" → "));
+    }
+    for(const variant of ["mobile-vertical","desktop-lim-horizontal"]) {
+      await editor.getByLabel("Formato dell’anteprima").selectOption(variant);
+      const img=editor.getByRole("img");
+      await expect.poll(()=>img.evaluate((n:HTMLImageElement)=>n.complete&&n.naturalWidth>0)).toBe(true);
+      await img.screenshot({path:testInfo.outputPath(`f3-3d-case${caseIndex+1}-${variant}-${width}.png`)});
+      const standalone=await page.context().newPage();
+      await standalone.setViewportSize({width,height:900});
+      try {
+        await standalone.setContent(files[`diagramma-docente-${variant}.html`]);
+        const geometry=await standalone.locator("svg").evaluate(svg=>{
+          const root=svg as unknown as SVGSVGElement;
+          const {width,height}=root.viewBox.baseVal;
+          const texts=Array.from(root.querySelectorAll("text"));
+          const sizes=texts.slice(0,2).map(t=>Number(t.getAttribute("font-size")));
+          const outside=texts.filter(t=>{const b=t.getBBox();return b.x<0||b.y<0||b.x+b.width>width+1||b.y+b.height>height+1;}).map(t=>t.textContent);
+          const nodes=Array.from(root.querySelectorAll("rect")).filter(r=>Number(r.getAttribute("width"))>=266&&r.hasAttribute("stroke"));
+          return {sizes,outside,nodes:nodes.length,edges:root.querySelectorAll("path").length,
+            paths:Array.from(root.querySelectorAll("path")).map(p=>p.getAttribute("d"))};
+        });
+        expect(geometry.outside).toEqual([]);
+        expect(geometry.sizes[1]).toBeGreaterThan(geometry.sizes[0]);
+        expect(geometry.nodes).toBe(source.nodes.length);
+        expect(geometry.edges).toBe(source.edges.length);
+        if(caseIndex===2) {
+          expect(geometry.paths.at(-1)).toContain(variant==="mobile-vertical"?"H 12 V":"V 466 H");
+        } else {
+          expect(geometry.paths.every(d=>variant==="mobile-vertical"?!d?.includes("H 12 V"):!d?.includes("V 466 H"))).toBe(true);
+        }
+      } finally {await standalone.close();}
+    }
+    await writeFile(testInfo.outputPath(`f3-3d-case${caseIndex+1}-package-${width}.json`),JSON.stringify(files,null,2)+"\n");
+    if(caseIndex===0 && width===390) {
+      const criterion=source.activity.criterion+".";
+      await editor.getByLabel("Criterio di risposta").fill(criterion);
+      await expect(editor.getByRole("img")).toHaveCount(0);
+      const nextResponse=page.waitForResponse(r=>r.url().endsWith("/api/education-diagram"));
+      await editor.getByRole("button",{name:"Genera diagramma"}).click();
+      const next=await nextResponse;
+      expect(next.status()).toBe(200);
+      await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+      const edited=(await next.json()).files;
+      expect(JSON.parse(edited["education-source.json"]).activity.criterion).toBe(criterion);
+      expect(edited["guida-docente.md"]).toContain(criterion);
+    }
+  });
+}
+
+for(const width of [390,1280])test("VF-SIMULATION-01 P4: teacher simulation bank "+width,async({page},testInfo)=>{
+ test.setTimeout(90000);await page.setViewportSize({width,height:900});
+ const external:string[]=[];page.on("request",r=>{const u=new URL(r.url());if(["http:","https:"].includes(u.protocol)&&u.origin!==STUDIO)external.push(r.url());});
+ await page.goto(STUDIO);await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco simulatori"});
+ const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ for(const [id,title] of [["gear","Laboratorio delle trasmissioni"],["slider-crank","Laboratorio biella-manovella"]]){
+  await bank.getByLabel("Laboratorio",{exact:true}).selectOption(id);
+  await bank.getByRole("button",{name:"Verifica laboratorio"}).click();
+  await expect(bank.getByRole("status")).toHaveText("Integrità verificata. Candidato da revisionare.");
+  const expected=await (await page.request.get(STUDIO+"/design/simulation-labs/"+id+".json")).json();
+  const link=bank.getByRole("link",{name:"Scarica simulatore HTML"});
+  const href=await link.getAttribute("href");expect(href).toMatch(/^blob:/);
+  expect(await page.evaluate(async url=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",await (await fetch(url!)).arrayBuffer())),b=>b.toString(16).padStart(2,"0")).join(""),href)).toBe(expected.receipt.htmlSha256);
+  const manifest=await bank.getByRole("link",{name:"Scarica manifesto di produzione"}).getAttribute("href");
+  expect(await page.evaluate(async url=>(await (await fetch(url!)).json()),manifest)).toEqual(expected.receipt);
+  await bank.getByRole("button",{name:"Apri anteprima interattiva"}).click();
+  const iframe=bank.locator("iframe");await expect(iframe).toHaveAttribute("sandbox","allow-scripts");
+  const frame=bank.frameLocator("iframe");await expect(frame.getByRole("heading",{name:title,exact:true})).toBeVisible();
+  await frame.getByRole("button",{name:"Avanza di 90°"}).click();
+  if(id==="slider-crank")await expect(frame.locator("#readout")).toContainText("Angolo: 90°");
+  else await expect(frame.locator("#readout")).toContainText("Rapporto velocità:");
+  await bank.getByRole("button",{name:"Chiudi anteprima"}).click();await expect(iframe).toHaveCount(0);
+ }
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ expect(external).toEqual([]);
+ await page.screenshot({path:testInfo.outputPath("vf-simulation-bank-"+width+".png"),fullPage:true});
+});
+test("VF-SIMULATION-01 P4: corrupted simulation package cannot open or download",async({page})=>{
+ await page.route("**/design/simulation-labs/gear.json",async route=>{
+  const res=await route.fetch();const p=await res.json();p.html=p.html.replace("Studio Atlas","StudiX Atlas");await route.fulfill({response:res,json:p});
+ });
+ await page.goto(STUDIO);await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ await page.getByRole("navigation",{name:"Fasi del Percorso"}).getByRole("button",{name:"Produzione"}).click();
+ const bank=page.getByRole("region",{name:"Banco simulatori"});
+ await bank.getByRole("button",{name:"Verifica laboratorio"}).click();
+ await expect(bank.getByRole("alert")).toContainText("non integro");await expect(bank.locator("iframe")).toHaveCount(0);await expect(bank.getByRole("link")).toHaveCount(0);
+});
+
+for(const width of [390,1280])test("EC04a: compose edit reload and production navigation "+width,async({page},testInfo)=>{
+ await page.setViewportSize({width,height:900});await page.goto(STUDIO);await page.getByRole("button",{name:"Apri Dal campo al raccolto"}).click();
+ const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});await nav.getByRole("button",{name:"Esperienza"}).click();
+ const panel=page.getByRole("region",{name:"Composizione didattica"});
+ const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ const duration=width===390?"45":"90";
+ await panel.getByLabel("Durata",{exact:true}).selectOption(duration);
+ await panel.getByLabel("Supporti didattici",{exact:true}).selectOption(width===390?"COMMON":"COMMON_WITH_SUPPORT");
+ await panel.getByRole("button",{name:"Componi bozza",exact:true}).click();
+ await expect(panel.getByRole("heading",{name:width===390?"Indagine · 15 min":"Indagine · 30 min",exact:true})).toBeVisible();
+ await expect(panel.getByText("Supporto:",{exact:false})).toHaveCount(width===390?0:1);
+ await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 1"})).toBeVisible();
+ await expect(panel.getByRole("heading",{name:"Sequenza didattica"})).toBeVisible();
+ await panel.getByRole("button",{name:"Modifica Problema",exact:true}).click();
+ await panel.getByLabel("Testo della fase").fill("Confronta le condizioni dei filari.");
+ await panel.getByRole("button",{name:"Salva fase",exact:true}).click();
+ await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 2"})).toBeVisible();
+ await page.reload();await nav.getByRole("button",{name:"Esperienza"}).click();
+ await expect(panel.getByText("Confronta le condizioni dei filari.",{exact:true})).toBeVisible();
+ await expect(panel.getByLabel("Durata",{exact:true})).toHaveValue(duration);
+ await expect(panel.getByLabel("Supporti didattici",{exact:true})).toHaveValue(width===390?"COMMON":"COMMON_WITH_SUPPORT");
+ await expect(panel.getByRole("heading",{name:"Bozza didattica · revisione 2"})).toBeVisible();
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath("ec04a-draft-"+width+".png"),fullPage:true});
+ const draftBefore=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]));
+ await panel.getByRole("button",{name:"Vai al banco Produzione"}).click();await expect(page.getByRole("region",{name:"Banco simulatori"})).toBeVisible();
+ const queue=page.getByRole("region",{name:"Materiali della bozza didattica"});
+ await expect(queue.getByText("Bozza didattica · revisione 2",{exact:true})).toBeVisible();
+ await expect(queue.getByRole("link",{name:"Apri editor diagrammi"})).toBeVisible();
+ const editor=page.getByRole("region",{name:"Componi un diagramma didattico"});
+ const load=editor.getByRole("button",{name:"Carica diagramma della bozza"});
+ await load.click();await expect(editor.getByLabel("Titolo",{exact:true})).toHaveValue("Rete di irrigazione");
+ await expect(load).toBeDisabled();
+ await editor.getByRole("button",{name:"Genera diagramma"}).click();
+ await expect(editor.getByRole("status")).toContainText("Integrità verificata");
+ expect(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]))).toEqual(draftBefore);
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+});
+
+for(const width of [390,1280])test("EC07b: complete gear materials, reopen and invalidate "+width,async({page},testInfo)=>{
+ test.setTimeout(120000);
+ const frameRequests:string[]=[];
+ page.on("request", request=>{
+  if(!/^https?:/.test(request.url()))return;
+  const frame=request.frame();
+  if(frame.parentFrame()||new URL(request.url()).origin!==STUDIO)frameRequests.push(request.url());
+ });
+ await page.setViewportSize({width,height:900});await page.goto(STUDIO+"/nuovo");
+ await page.getByLabel("L’idea",{exact:true}).fill("Ingranaggi");
+ await page.getByLabel("Titolo di lavoro (facoltativo)",{exact:true}).fill("Laboratorio ingranaggi EC07b");
+ await page.getByRole("button",{name:"Esplora le possibilità",exact:true}).click();
+ await page.getByText("Indagine",{exact:true}).click();
+ await page.getByRole("button",{name:"Crea il Percorso",exact:true}).click();
+ const nav=page.getByRole("navigation",{name:"Fasi del Percorso"});await nav.getByRole("button",{name:"Esperienza"}).click();
+ const draft=page.getByRole("region",{name:"Composizione didattica"});
+ await expect(draft.getByLabel("Classe",{exact:true})).toHaveValue("seconda");
+ await draft.screenshot({path:testInfo.outputPath("ec07b-configurazione-"+width+".png")});
+ await draft.getByRole("button",{name:"Componi bozza",exact:true}).click();
+ await expect(draft.getByRole("heading",{name:"Bozza didattica · revisione 1"})).toBeVisible();
+ await draft.screenshot({path:testInfo.outputPath("ec07b-bozza-"+width+".png")});
+ const before=await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"));
+ const draftBefore=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]));
+ await draft.getByRole("button",{name:"Vai al banco Produzione"}).click();
+ const workflow=page.getByRole("region",{name:"Materiali del percorso",exact:true});
+ await expect(workflow.getByText("0 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
+ await workflow.screenshot({path:testInfo.outputPath("ec07b-richieste-"+width+".png")});
+ for(const [i,name] of ["Diagramma","Simulatore","Scheda di lavoro"].entries()){
+  await workflow.getByRole("button",{name:"Prepara e conserva "+name,exact:true}).click();
+  await expect(workflow.getByText((i+1)+" di 3 materiali conservati e verificati",{exact:true})).toBeVisible({timeout:20000});
+ }
+ await workflow.screenshot({path:testInfo.outputPath("ec07b-preparati-"+width+".png")});
+ await workflow.getByRole("button",{name:"Anteprima Scheda di lavoro",exact:true}).click();
+ const sheet=workflow.frameLocator('iframe[title="Anteprima Scheda di lavoro"]');
+ await expect(sheet.getByRole("heading",{name:"Ingranaggi: prevedi e confronta",exact:true})).toBeVisible();
+ await expect(sheet.getByText("Criteri e riscontri",{exact:true})).toHaveCount(0);
+ await expect(sheet.getByText(/Indica separatamente il verso/)).toBeVisible();
+ await expect(workflow.locator('iframe[title="Anteprima Scheda di lavoro"]')).toHaveAttribute("sandbox","");
+ await workflow.locator('iframe[title="Anteprima Scheda di lavoro"]').screenshot({path:testInfo.outputPath("ec07b-scheda-"+width+".png")});
+ await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
+ await workflow.getByRole("button",{name:"Anteprima Guida riservata al docente",exact:true}).click();
+ await expect(workflow.frameLocator('iframe[title="Anteprima Guida riservata al docente"]').getByRole("heading",{name:"Criteri e riscontri",exact:true})).toBeVisible();
+ await workflow.locator('iframe[title="Anteprima Guida riservata al docente"]').screenshot({path:testInfo.outputPath("ec07b-guida-"+width+".png")});
+ await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
+ const diagramName=width===390?"Diagramma":"Diagramma LIM";
+ await workflow.getByRole("button",{name:"Anteprima "+diagramName,exact:true}).click();
+ const diagramFrame='iframe[title="Anteprima '+diagramName+'"]';
+ await expect(workflow.locator(diagramFrame)).toHaveAttribute("sandbox","");
+ const diagram=workflow.frameLocator(diagramFrame);
+ await expect(diagram.locator("svg")).toHaveAttribute("viewBox",width===390?"0 0 360 640":"0 0 1280 720");
+ await expect(diagram.getByText("Punto di contatto",{exact:true})).toBeVisible();
+ await workflow.locator(diagramFrame).screenshot({path:testInfo.outputPath("ec07b-diagramma-"+width+".png")});
+ await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
+ await page.reload();await nav.getByRole("button",{name:"Produzione"}).click();
+ await expect(workflow.getByText("3 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
+ await workflow.getByRole("button",{name:"Anteprima Simulatore",exact:true}).click();
+ const sim=workflow.frameLocator('iframe[title="Anteprima Simulatore"]');
+ await expect(workflow.locator('iframe[title="Anteprima Simulatore"]')).toHaveAttribute("sandbox","allow-scripts");
+ await expect(sim.getByRole("heading",{name:"Laboratorio delle trasmissioni",exact:true})).toBeVisible();
+ await expect(sim.locator("#driver")).toHaveValue("24");
+ await expect(sim.locator("#driven")).toHaveValue("48");
+
+ await sim.getByRole("button",{name:"Avanza di 90°"}).click();
+ await expect(sim.locator("#readout")).toContainText("Rapporto velocità:");
+ await sim.getByRole("heading",{name:"Laboratorio delle trasmissioni",exact:true}).scrollIntoViewIfNeeded();
+ await workflow.locator('iframe[title="Anteprima Simulatore"]').screenshot({path:testInfo.outputPath("ec07b-simulatore-"+width+".png")});
+ for (const [driver,driven,ratio] of [[48,24,"-2.00"],[48,48,"-1.00"]] as const) {
+  await sim.locator("#driver").selectOption(String(driver));
+  await sim.locator("#driven").selectOption(String(driven));
+  await expect(sim.locator("#readout")).toContainText("Rapporto velocità: "+ratio);
+ }
+ await sim.getByRole("button",{name:"Ripristina",exact:true}).click();
+ await expect(sim.locator("#driver")).toHaveValue("24");
+ await expect(sim.locator("#driven")).toHaveValue("48");
+ for (const framingWidth of width===390?[390,360]:[1280]) {
+  await page.setViewportSize({width:framingWidth,height:900});
+  const samples=await sim.locator("html").evaluate(()=>{
+   const driver=document.querySelector<HTMLSelectElement>("#driver")!;
+   const driven=document.querySelector<HTMLSelectElement>("#driven")!;
+   const step=document.querySelector<HTMLButtonElement>("#step")!;
+   const probe=(window as any).__vfSimulation;
+   const pairs=[];
+   for(const a of [12,24,36,48]) for(const b of [12,24,36,48]) {
+    driver.value=String(a);driven.value=String(b);
+    driven.dispatchEvent(new Event("input",{bubbles:true}));
+    const poses=[];
+    for(let i=0;i<4;i++){
+     poses.push(probe.getFrameEvidence());
+     step.click();
+    }
+    pairs.push({a,b,poses,ratio:document.querySelector("#readout")!.textContent});
+   }
+   return pairs;
+  });
+  expect(samples).toHaveLength(16);
+  expect(new Set(samples.map(pair=>pair.poses[0]?.vertices)).size).toBeGreaterThan(1);
+  for(const {a,b,poses,ratio} of samples){
+   expect(ratio).toContain("Rapporto velocità: "+(-a/b).toFixed(2));
+   for(const pose of poses){
+    expect(pose).not.toBeNull();
+    expect(pose.objects).toBe(4);
+    expect(pose.vertices).toBeGreaterThan(0);
+    for(const axis of ["X","Y"]){
+     expect(pose.bounds["min"+axis]).toBeGreaterThanOrEqual(-.9);
+     expect(pose.bounds["max"+axis]).toBeLessThanOrEqual(.9);
+    }
+    expect(pose.bounds.minZ).toBeGreaterThanOrEqual(-1);
+    expect(pose.bounds.maxZ).toBeLessThanOrEqual(1);
+    expect(pose.frustum).toEqual(poses[0].frustum);
+   }
+  }
+ }
+ await page.setViewportSize({width,height:900});
+ await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]))).toEqual(draftBefore);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+ await page.screenshot({path:testInfo.outputPath("ec07b-materials-"+width+".png"),fullPage:true});
+ const originalExports=new Map<string,string>();
+ for(const [name,kind] of [["Diagramma","DIAGRAM"],["Simulatore","SIMULATION"],["Scheda di lavoro","STUDENT_SHEET"]]){
+  const card=workflow.getByRole("article",{name,exact:true});
+  await card.getByText("File e ricevute",{exact:true}).click();
+  const [download]=await Promise.all([page.waitForEvent("download"),card.getByRole("button",{name:"Esporta associazione completa",exact:true}).click()]);
+  expect(download.suggestedFilename()).toBe("associazione-materiale.json");
+  expect(await download.failure()).toBeNull();
+  const body=await readFile(await download.path(),"utf8"),binding=JSON.parse(body);
+  expect(binding.schema).toBe("studio-atlas.didactic-material-binding/v0.1");
+  expect(binding.kind).toBe(kind);expect(binding.draftRevision).toBe(1);
+  expect(binding.draftSnapshot).toBe(draftBefore.find(([key])=>key==="studio-atlas.didactic-draft.v0.1:"+binding.project.projectId)?.[1]);
+  expect(binding.receiptSha256).toMatch(/^[a-f0-9]{64}$/);expect(binding.packageSha256).toMatch(/^[a-f0-9]{64}$/);
+  expect(binding.status).toBe("TEACHER_REVIEW_REQUIRED");expect(binding.studentAuthorized).toBe(false);expect(binding.publicationAuthorized).toBe(false);expect(binding.paidComputeAuthorized).toBe(false);
+  expect(binding.payload).toBeTruthy();originalExports.set(kind,body);
+  await card.getByText("File e ricevute",{exact:true}).click();
+ }
+ expect(originalExports.size).toBe(3);
+ await workflow.getByRole("button",{name:"Anteprima Diagramma",exact:true}).click();
+ await page.evaluate(()=>window.dispatchEvent(new StorageEvent("storage",{
+  key:"studio-atlas.work-mode.v1:another-project",newValue:"PRODUCTION",storageArea:localStorage,
+ })));
+ await expect(workflow.locator('iframe[title="Anteprima Diagramma"]')).toBeVisible();
+ await workflow.getByRole("button",{name:"Chiudi anteprima",exact:true}).click();
+ const mode=page.getByRole("combobox",{name:"Modalità di lavoro",exact:true});
+ for(const choice of ["DOCUMENT","CURRICOLO","COMPOSITION","REVIEW","IDEA","PRODUCTION"]){
+  await mode.selectOption(choice);
+  await expect(mode).toHaveValue(choice);
+ }
+ await page.reload();
+ await expect(mode).toHaveValue("PRODUCTION");
+ await expect(workflow.getByText("3 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
+ expect(await page.evaluate(()=>localStorage.getItem("studio-atlas.projects.v0.1"))).toBe(before);
+ expect(await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("studio-atlas.didactic-draft.v0.1:")).sort().map(k=>[k,localStorage.getItem(k)]))).toEqual(draftBefore);
+
+ await nav.getByRole("button",{name:"Esperienza"}).click();
+ await draft.getByRole("button",{name:"Modifica Problema",exact:true}).click();
+ await draft.getByLabel("Testo della fase").fill("Confronta le previsioni con il modello.");
+ await draft.getByRole("button",{name:"Salva fase",exact:true}).click();
+ await expect(draft.getByRole("heading",{name:"Bozza didattica · revisione 2"})).toBeVisible();
+ await draft.getByRole("button",{name:"Vai al banco Produzione"}).click();
+ await expect(workflow.getByText("0 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
+ await workflow.getByText("Materiali precedenti o non validi (3)",{exact:true}).click();
+ await expect(workflow.getByText("Obsoleto: non appartiene alla bozza corrente.",{exact:true})).toHaveCount(3);
+ const obsolete=workflow.getByRole("article").filter({hasText:"Obsoleto: non appartiene alla bozza corrente."});
+ await expect(obsolete).toHaveCount(3);
+ await expect(workflow.getByRole("button",{name:"Esporta associazione completa",exact:true})).toHaveCount(0);
+ for(let i=0;i<3;i++)await obsolete.nth(i).getByText("File e ricevute",{exact:true}).click();
+ await expect(workflow.getByRole("button",{name:"Esporta associazione completa",exact:true})).toHaveCount(3);
+ const exportedKinds=new Set<string>();
+ for(let i=0;i<3;i++){
+  const [download]=await Promise.all([page.waitForEvent("download"),obsolete.nth(i).getByRole("button",{name:"Esporta associazione completa",exact:true}).click()]);
+  expect(download.suggestedFilename()).toBe("associazione-materiale.json");expect(await download.failure()).toBeNull();
+  const body=await readFile(await download.path(),"utf8"),binding=JSON.parse(body);
+  expect(binding.draftRevision).toBe(1);expect(originalExports.has(binding.kind)).toBe(true);
+  expect(body).toBe(originalExports.get(binding.kind));exportedKinds.add(binding.kind);
+  await writeFile(testInfo.outputPath("ec07b-obsoleto-"+binding.kind+"-"+width+".json"),body);
+ }
+ expect([...exportedKinds].sort()).toEqual(["DIAGRAM","SIMULATION","STUDENT_SHEET"]);
+ await workflow.screenshot({path:testInfo.outputPath("ec07b-obsoleti-"+width+".png")});
+ await workflow.getByRole("button",{name:"Prepara e conserva Scheda di lavoro",exact:true}).click();
+ await expect(workflow.getByText("1 di 3 materiali conservati e verificati",{exact:true})).toBeVisible();
+ await expect(workflow.getByText("Materiali precedenti o non validi (3)",{exact:true})).toBeVisible();
+ expect(frameRequests).toEqual([]);
+});
+
+for (const width of [390, 1280]) test(`M1/M2: standalone banks and legacy pathway at ${width}`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 900 });
+  await page.goto(STUDIO);
+  const mode = page.getByRole("combobox", { name: "Modalità di lavoro", exact: true });
+  await mode.selectOption("CURRICOLO");
+  await expect(page.getByText("L’acquisizione di obiettivi verificati da Arena non è ancora integrata.")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Banco diagrammi", exact: true })).toHaveCount(0);
+  await mode.selectOption("PRODUCTION");
+  const diagrams = page.getByRole("region", { name: "Banco diagrammi", exact: true });
+  await diagrams.getByRole("button", { name: "Apri materiale didattico", exact: true }).click();
+  await expect(diagrams.getByRole("link", { name: "Scarica SVG della composizione", exact: true })).toBeVisible();
+  const simulator = page.getByRole("region", { name: "Banco simulatori", exact: true });
+  await simulator.getByRole("button", { name: "Verifica laboratorio", exact: true }).click();
+  await expect(simulator.getByRole("link", { name: "Scarica simulatore HTML", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem("studio-atlas.projects.v0.1"))).toBeNull();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+
+  await page.goto(STUDIO + "/nuovo");
+  await page.getByLabel("L’idea", { exact: true }).fill("Ingranaggi");
+  await page.getByLabel("Titolo di lavoro (facoltativo)", { exact: true }).fill("Banco M1/M2");
+  await page.getByRole("button", { name: "Esplora le possibilità", exact: true }).click();
+  await page.getByText("Indagine", { exact: true }).click();
+  await page.getByRole("button", { name: "Crea il Percorso", exact: true }).click();
+  await expect(mode).toHaveValue("");
+  await expect(page.getByRole("textbox", { name: "Idea del Percorso" })).toHaveValue("Ingranaggi");
+  await expect(page.getByRole("button", { name: "Anteprima di revisione", exact: true })).toBeDisabled();
+
+  await page.goto(STUDIO);
+  await mode.selectOption("PRODUCTION");
+  const projectLink = page.getByRole("link", { name: /Banco M1\/M2/ });
+  const projectUrl = new URL((await projectLink.getAttribute("href"))!, STUDIO);
+  const modeKey = "studio-atlas.work-mode.v1:" + projectUrl.pathname.split("/").pop();
+  projectUrl.search = "";
+
+  const workspace = page.locator("main.workspace-shell");
+  const projectMode = workspace.getByRole("combobox", { name: "Modalità di lavoro", exact: true });
+  await projectLink.click();
+  await expect(projectMode).toHaveValue("PRODUCTION");
+  await expect(page).toHaveURL(projectUrl.href);
+  await expect(workspace.getByRole("region", { name: "Banco diagrammi", exact: true })).toBeVisible();
+  await expect(workspace.getByRole("region", { name: "Banco simulatori", exact: true })).toBeVisible();
+
+  await projectMode.selectOption("REVIEW");
+  expect(await page.evaluate(key => localStorage.getItem(key), modeKey)).toBe("REVIEW");
+  await page.reload();
+  await expect(projectMode).toHaveValue("REVIEW");
+  await expect(workspace.getByRole("button", { name: "Anteprima di revisione", exact: true })).toBeDisabled();
+  await projectMode.selectOption("CURRICOLO");
+  await page.reload();
+  await expect(projectMode).toHaveValue("CURRICOLO");
+  await projectMode.selectOption("");
+  await expect(workspace.getByRole("textbox", { name: "Idea del Percorso" })).toBeVisible();
+  expect(await page.evaluate(key => localStorage.getItem(key), modeKey)).toBeNull();
+  await page.reload();
+  await expect(projectMode).toHaveValue("");
+
+  await page.goto(STUDIO);
+  await mode.selectOption("COMPOSITION");
+  await page.getByRole("link", { name: "Componi una nuova bozza", exact: true }).click();
+  await page.getByLabel("L’idea", { exact: true }).fill("Ingranaggi");
+  await page.getByRole("button", { name: "Apri il banco Composizione", exact: true }).click();
+  await expect(mode).toHaveValue("COMPOSITION");
+  await expect(page.getByRole("region", { name: "Composizione didattica", exact: true })).toBeVisible();
 });

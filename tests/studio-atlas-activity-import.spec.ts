@@ -7,7 +7,15 @@ const ATLAS_REPO = "antoniocorsano-boop/" + ["Curri", "culum-Atlas"].join("");
 const INTAKE_URL = "https://github.com/" + ATLAS_REPO + "/pull/84";
 const EXACT_SOURCE_SHA = "f0c29655632a7edc6d78c78d48d006aa8da020a2";
 
-test("Missione 118: live intake, eight original illustrations, three environments and retained draft", async ({ browser }) => {
+async function expectImportOutcome(page:import("@playwright/test").Page,expected:string){
+ const scope=page.locator(".activity-import");
+ const status=scope.getByRole("status"),alert=scope.getByRole("alert");
+ await expect(status.or(alert).first()).toBeVisible({timeout:90_000});
+ if(await alert.isVisible())throw Error("IMPORT_REJECTED: "+await alert.innerText());
+ await expect(status).toContainText(expected);
+}
+
+test("Missione 118: pinned original intake, eight original illustrations, three environments and retained draft", async ({ browser }) => {
   test.setTimeout(180_000);
   const context = await browser.newContext({ viewport: { width: 393, height: 873 } });
   const page = await context.newPage();
@@ -19,7 +27,7 @@ test("Missione 118: live intake, eight original illustrations, three environment
   await expect(page.getByLabel("Collegamento alla revisione che contiene il materiale")).toHaveValue(INTAKE_URL);
 
   await page.getByRole("button", { name: "Importa", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("10 risorse verificate e conservate", { timeout: 90_000 });
+  await expectImportOutcome(page,"10 risorse verificate e conservate");
   await expect(page.getByRole("heading", { name: "Missione 118 — Il futuro è da riprogettare" })).toBeVisible();
   await expect(page.locator(".activity-gallery figure")).toHaveCount(8);
   for (const image of await page.locator(".activity-gallery img").all()) {
@@ -127,7 +135,7 @@ test("Missione 118: live intake, eight original illustrations, three environment
   await expect(page.getByRole("heading", { name: "Missione 118 — Il futuro è da riprogettare" })).toBeVisible();
   await expect(page.locator(".activity-gallery figure")).toHaveCount(8);
   await page.getByRole("button", { name: "Importa", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("già presente: nessuna modifica agli originali", { timeout: 90_000 });
+  await expectImportOutcome(page,"già presente: nessuna modifica agli originali");
   await expect(page.locator(".activity-list-item")).toHaveCount(1);
 
   // Simulate a real v1 archive created before the media budget existed.

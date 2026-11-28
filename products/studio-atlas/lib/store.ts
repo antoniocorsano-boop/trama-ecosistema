@@ -5,12 +5,20 @@ import {
   EMPTY_STORY,
   EMPTY_WORLD,
   type PathwayProject,
+  type SceneIllustration,
 } from "./model";
+import { parseAuthoringComplexity } from "./authoring-plan";
+import { normalizeAuthoringSelection } from "./authoring-catalog";
 import {
   MUSEO_ZERO_PRODUCT_REVIEW_REF,
   MUSEO_ZERO_PROJECT_ID,
   createMuseoZeroPilotProject,
 } from "./canonical/museo-zero";
+
+import { AGRICULTURE_PROJECT_ID, loadAgricultureDraft } from "./canonical/agriculture";
+
+import { projectImageErrors } from "./scene-media";
+import { parseVisualRecipe } from "./scene-visual-recipe";
 
 const KEY = "studio-atlas.projects.v0.1";
 const MUSEO_ZERO_HUMAN_PRODUCT_REVIEW_REF =
@@ -30,6 +38,8 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     title: raw.title ?? "Senza titolo",
     idea: raw.idea ?? "",
     ageBand: raw.ageBand ?? "lower-secondary",
+    authoringComplexity: parseAuthoringComplexity(raw.authoringComplexity),
+    authoringSelection: normalizeAuthoringSelection(raw.authoringSelection),
     humanState: raw.humanState ?? "IDEA",
     productionState: raw.productionState ?? "NOT_REQUESTED",
     story: { ...EMPTY_STORY, ...(raw.story ?? {}) },
@@ -45,6 +55,7 @@ function normalizeProject(raw: Partial<PathwayProject>): PathwayProject {
     scenes: Array.isArray(raw.scenes)
       ? raw.scenes.map((scene) => ({
           ...scene,
+          ...(scene.visualRecipe !== undefined ? { visualRecipe: parseVisualRecipe(scene.visualRecipe) } : {}),
           kind: scene.kind === "TRANSFER" ? "TRANSFER" as const : "SCENE" as const,
           interaction: scene.interaction === "CHOICE" ? "CHOICE" as const : "SUMMARY" as const,
           choices: Array.isArray(scene.choices)
@@ -89,20 +100,22 @@ export function getProject(projectId: string): PathwayProject | null {
   return readAll().find((project) => project.projectId === projectId) ?? null;
 }
 
-export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand">) {
+export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ageBand"> & { experience?: PathwayProject["experience"]; authoringComplexity?: PathwayProject["authoringComplexity"]; authoringSelection?: PathwayProject["authoringSelection"] }) {
   const now = new Date().toISOString();
   const project: PathwayProject = {
     projectId: crypto.randomUUID(),
     title: input.title.trim(),
     idea: input.idea.trim(),
     ageBand: input.ageBand,
+    authoringComplexity: parseAuthoringComplexity(input.authoringComplexity),
+    authoringSelection: normalizeAuthoringSelection(input.authoringSelection),
     humanState: "IDEA",
     productionState: "NOT_REQUESTED",
     story: { ...EMPTY_STORY },
     storyReview: { decision: "DRAFT" },
     world: { ...EMPTY_WORLD },
     worldReview: { decision: "DRAFT" },
-    experience: { ...EMPTY_EXPERIENCE },
+    experience: { ...EMPTY_EXPERIENCE, ...(input.experience ?? {}) },
     scenes: [],
     storyboardReady: false,
     archived: false,
@@ -117,24 +130,31 @@ export function createProject(input: Pick<PathwayProject, "title" | "idea" | "ag
 export function updateProject(
   projectId: string,
   patch: Partial<Omit<PathwayProject, "projectId" | "createdAt">>,
-) {
-  let updated: PathwayProject | null = null;
-  const projects = readAll().map((project) => {
-    if (project.projectId !== projectId) return project;
-    updated = normalizeProject({
-      ...project,
-      ...patch,
-      projectId,
-      createdAt: project.createdAt,
-      updatedAt: new Date().toISOString(),
-      revision: project.revision + 1,
-    });
-    return updated;
+  expectedRevision?: number,
+): PathwayProject {
+  const projects = readAll();
+  const current = projects.find((project) => project.projectId === projectId);
+  if (!current) throw new Error("PROJECT_NOT_FOUND");
+  if (expectedRevision !== undefined && current.revision !== expectedRevision) {
+    throw new Error("PROJECT_REVISION_CONFLICT");
+  }
+
+  const hasSceneImages=current.scenes.some(scene=>!!scene.illustration)||patch.scenes?.some(scene=>!!scene.illustration);
+  const authoringChanged=["title","idea","ageBand","story","storyReview","world","worldReview","productReview","experience","scenes","storyboardReady"].some(key=>Object.hasOwn(patch,key));
+  const updated = normalizeProject({
+    ...current,
+    ...patch,
+    ...(hasSceneImages&&authoringChanged?{lastPreviewSnapshot:undefined}:{}),
+    projectId,
+    createdAt: current.createdAt,
+    updatedAt: new Date().toISOString(),
+    revision: current.revision + 1,
   });
-  writeAll(projects);
+  writeAll(projects.map((project) => (
+    project.projectId === projectId ? updated : project
+  )));
   return updated;
 }
-
 
 export function ensureMuseoZeroPilotProject(): PathwayProject {
   const existing = getProject(MUSEO_ZERO_PROJECT_ID);
@@ -157,4 +177,26 @@ export function ensureMuseoZeroPilotProject(): PathwayProject {
 
   writeAll([project, ...readAll()]);
   return project;
+}
+
+// A teacher explicitly opens a new local copy; existing revisions are never replaced.
+export async function ensureAgriculturePilotProject():Promise<PathwayProject>{
+ const existing=getProject(AGRICULTURE_PROJECT_ID);if(existing)return existing;
+ const draft=await loadAgricultureDraft();
+ const current=getProject(AGRICULTURE_PROJECT_ID);if(current)return current;
+ writeAll([draft,...readAll()]);return draft;
+}
+
+// Complete a decoded import against the latest revision; retain unrelated edits.
+export function commitDecodedSceneImage(projectId:string,sceneId:string,expected:SceneIllustration|undefined,image:SceneIllustration):PathwayProject{
+ const latest=getProject(projectId);
+ const scene=latest?.scenes.find(item=>item.sceneId===sceneId);
+ if(!latest||latest.archived||!scene||JSON.stringify(scene.illustration??null)!==JSON.stringify(expected??null))throw Error("IMAGE_CONFLICT");
+ const stage=scene.stage?{...scene.stage,evidence:scene.stage.evidence?.map(({hotspot,...item})=>{void hotspot;return item;})}:undefined;
+ const scenes=latest.scenes.map(item=>item.sceneId===sceneId?{...item,illustration:image,stage}:item);
+ const errors=projectImageErrors(scenes);
+ if(errors.includes("PROJECT_IMAGE_LIMIT"))throw Error("IMAGE_LIMIT");
+ if(errors.includes("IMAGE_INTEGRITY"))throw Error("IMAGE_INTEGRITY");
+ return updateProject(projectId,{scenes,worldReview:{decision:"DRAFT"},storyboardReady:false,lastPreviewSnapshot:undefined,
+ ...(latest.productReview?{productReview:{decision:"DRAFT",evidenceRef:latest.productReview.evidenceRef}}:{}),humanState:"SCENES"},latest.revision);
 }

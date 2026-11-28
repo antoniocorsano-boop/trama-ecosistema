@@ -84,6 +84,7 @@ export type SceneWorkbenchMode = "TIMELINE" | "CONNECTIONS" | "COMPARE";
 
 export type SceneStage = {
   visualMode: "CINEMATIC_EDITORIAL";
+  discovery?: {minObservations:number;reflectionPrompt:string};
   focusLocationId?: string;
   locations?: Array<{
     id: string;
@@ -98,6 +99,7 @@ export type SceneStage = {
     locationId: string;
     kind: SceneStageEvidenceKind;
     character?: string;
+    hotspot?: {x:number;y:number};
   }>;
   characterBeat?: {
     name: string;
@@ -120,6 +122,8 @@ export type PathwaySceneChoice = {
   worldAfter?: SceneWorldState;
 };
 
+export type SceneIllustration = {sha256:string;pixelWidth:number;pixelHeight:number;base64:string;alt:string};
+
 export type PathwayScene = {
   sceneId: string;
   kind: "SCENE" | "TRANSFER";
@@ -131,6 +135,8 @@ export type PathwayScene = {
   reveal: string;
   world?: SceneWorldState;
   stage?: SceneStage;
+  illustration?: SceneIllustration;
+  visualRecipe?: import("./scene-visual-recipe").SceneVisualRecipe;
   choices: PathwaySceneChoice[];
 };
 
@@ -181,6 +187,7 @@ export type StudioAtlasPreviewSnapshot = {
   studentAuthorized: false;
   scenes: PathwayScene[];
   edutwinMedia?: PreviewIllustratedMedia;
+  sceneMedia?: PreviewIllustratedMedia;
 };
 
 export type VisualProductionReceipt = {
@@ -197,7 +204,12 @@ export type VisualProductionReceipt = {
   publicationAuthorityGranted: false;
 };
 
+// Authoring preference only: not a learner level or publication decision.
+export type AuthoringComplexity = "ESSENTIAL" | "ARTICULATED" | "ADVANCED";
+
 export type PathwayProject = {
+  authoringComplexity?: AuthoringComplexity;
+  authoringSelection?: import("./authoring-catalog").AuthoringSelection;
   projectId: string;
   title: string;
   idea: string;

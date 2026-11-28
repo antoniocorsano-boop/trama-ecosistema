@@ -2,9 +2,12 @@
 import argparse
 import hashlib
 import html
+import math
 import json
 import pathlib
 import re
+import sys
+import textwrap
 import xml.etree.ElementTree as ET
 
 BASE = pathlib.Path(__file__).resolve().parent
@@ -47,7 +50,7 @@ def load_inputs():
         need(isinstance(text,str) and 0<len(text)<=160 and not re.search(r"[\x00-\x1f<>]",text),"plain text")
     return manifest,source,sha(profiles_raw),sha(source_raw)
 
-def render(profile, source, variant):
+def render(profile, source, variant, *, footer="Campione P1 · non pubblicato", include_details=False, authored=False):
     w,h=VARIANTS[variant]
     p=profile["palette"]
     need(set(p)==PALETTE,"palette keys")
@@ -66,7 +69,16 @@ def render(profile, source, variant):
     accent=p["accent"]
     title=esc(source["title"])
     name=esc(profile["name"])
-    description=source["description"]+" Fasi: "+"; ".join(n["label"] for n in source["nodes"])+"."
+    description=source["description"]+" Fasi: "+"; ".join(n["label"]+(": "+n["detail"] if include_details else "") for n in source["nodes"])+"."
+    if authored:
+        numbers={node["id"]: i+1 for i,node in enumerate(source["nodes"])}
+        relations=" · ".join(f"{numbers[a]} → {numbers[b]}" for a,b in source["edges"])
+        description += " Relazioni: "+(relations or "nessuna")+"."
+        ordered=[n["id"] for n in source["nodes"]]
+        forward=set(zip(ordered,ordered[1:]))
+        actual={tuple(edge) for edge in source["edges"]}
+        cyclic=len(ordered)>1 and actual==forward|{(ordered[-1],ordered[0])}
+        structured=len(ordered)>1 and (actual==forward or cyclic)
     parts=[f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
       f'<title id="diagram-title">{title} — {name}</title>',
       f'<desc id="diagram-desc">{esc(description)}</desc>',
@@ -74,18 +86,40 @@ def render(profile, source, variant):
       '<g font-family="system-ui, sans-serif" text-anchor="middle">']
     def label(x,y,value,size,fill,weight=400):
         parts.append(f'<text x="{x}" y="{y}" font-size="{size}" font-weight="{weight}" fill="{fill}">{esc(value)}</text>')
+    def fit(value, maximum, available):
+        # Conservative em-width budget for plain text, including wide glyphs.
+        return min(maximum, available//max(1,len(value)))
     if variant=="mobile-vertical":
-        label(180,37,profile["name"],21,dark,700)
-        label(180,64,source["title"],16,dark,600)
-        boxes=[(24,86+132*i,312,100) for i in range(4)]
-        font,small=20,16
+        if authored:
+            label(180,27,profile["name"],11,dark,600)
+            label(180,60,source["title"],fit(source["title"],22,320),dark,700)
+        else:
+            label(180,37,profile["name"],21,dark,700)
+            label(180,64,source["title"],16,dark,600)
+        step=140 if authored and len(source["nodes"])==3 else 120 if authored else 132
+        boxes=[(24,86+step*i,312,100) for i in range(len(source["nodes"]))]
+        font,small=(18,14) if authored else (20,16)
     else:
-        label(640,72,profile["name"],36,dark,700)
-        label(640,119,source["title"],30,dark,600)
-        boxes=[(42+310*i,244,266,180) for i in range(4)]
-        font,small=27,19
+        if authored:
+            label(640,53,profile["name"],20,dark,600)
+            label(640,109,source["title"],fit(source["title"],44,1120),dark,700)
+        else:
+            label(640,72,profile["name"],36,dark,700)
+            label(640,119,source["title"],30,dark,600)
+        boxes=[(42+310*i,244,266,180) for i in range(len(source["nodes"]))]
+        font,small=(26,20) if authored else (27,19)
+    if authored and variant=="desktop-lim-horizontal":
+        if structured:
+            count=len(boxes)
+            bw={2:440,3:340,4:276}[count]
+            gap={2:112,3:64,4:32}[count]
+            left=(w-(count*bw+(count-1)*gap))//2
+            boxes=[(left+i*(bw+gap),200,bw,230) for i in range(count)]
+            font,small=30,24
+        else:
+            boxes=[(x+(4-len(boxes))*155,y,bw,bh) for x,y,bw,bh in boxes]
     for i,(x,y,bw,bh) in enumerate(boxes):
-        if i<3:
+        if not authored and i<3:
             if variant=="mobile-vertical":
                 xx=x+bw//2; yy=y+bh
                 d=f"M {xx} {yy} V {yy+30} M {xx-6} {yy+22} L {xx} {yy+30} L {xx+6} {yy+22}"
@@ -98,18 +132,143 @@ def render(profile, source, variant):
         if variant=="mobile-vertical":
             parts.append(f'<rect x="{x+13}" y="{y+14}" width="36" height="29" rx="6" fill="{accent}"/>')
             label(x+31,y+34,str(i+1),17,p["onAccent"],700)
-            label(cx,y+43,source["nodes"][i]["label"],font,dark,700)
-            label(cx,y+74,source["nodes"][i]["detail"],small,p["secondaryInk"])
+            label(cx,y+(61 if authored else 43),source["nodes"][i]["label"],fit(source["nodes"][i]["label"],font,280) if authored else font,dark,700)
+            label(cx,y+(83 if authored else 74),source["nodes"][i]["detail"],fit(source["nodes"][i]["detail"],small,280) if authored else small,p["secondaryInk"])
         else:
             parts.append(f'<rect x="{cx-23}" y="{y+16}" width="46" height="36" rx="7" fill="{accent}"/>')
             label(cx,y+42,str(i+1),22,p["onAccent"],700)
-            label(cx,y+92,source["nodes"][i]["label"],font,dark,700)
-            label(cx,y+132,source["nodes"][i]["detail"],small,p["secondaryInk"])
-    label(w//2,h-16 if variant=="mobile-vertical" else h-56,"Campione P1 · non pubblicato",15 if variant=="mobile-vertical" else 22,dark)
+            label(cx,y+(110 if authored and structured else 92),source["nodes"][i]["label"],fit(source["nodes"][i]["label"],font,bw-20) if authored else font,dark,700)
+            detail=source["nodes"][i]["detail"]
+            lines=textwrap.wrap(detail,width=16 if authored and structured else 14) if authored else [detail]
+            for row,line in enumerate(lines):
+                yy=y+(151+row*29 if structured else 122+row*22) if authored else y+132
+                label(cx,yy,line,fit(line,small,bw-20) if authored else small,p["secondaryInk"])
+    if authored:
+        for index,(start,end) in enumerate(source["edges"]):
+            ax,ay,aw,ah=boxes[numbers[start]-1]
+            bx,by,bw,bh=boxes[numbers[end]-1]
+            if structured:
+                returning=(start==ordered[-1] and end==ordered[0])
+                if variant=="mobile-vertical":
+                    if returning:
+                        y1=ay+ah//2
+                        y2=by+bh//2
+                        d=f"M {ax} {y1} H 12 V {y2} H {bx} M {bx-6} {y2-5} L {bx} {y2} L {bx-6} {y2+5}"
+                    else:
+                        x=ax+aw//2
+                        d=f"M {x} {ay+ah} V {by} M {x-6} {by-7} L {x} {by} L {x+6} {by-7}"
+                else:
+                    if returning:
+                        x1=ax+aw//2
+                        x2=bx+bw//2
+                        d=f"M {x1} {ay+ah} V 466 H {x2} V {by+bh} M {x2-7} {by+bh+8} L {x2} {by+bh} L {x2+7} {by+bh+8}"
+                    else:
+                        y=ay+ah//2
+                        d=f"M {ax+aw} {y} H {bx} M {bx-8} {y-7} L {bx} {y} L {bx-8} {y+7}"
+            elif variant=="mobile-vertical":
+                y1=ay+24+index*7
+                y2=by+24+index*7
+                x=344+index*2
+                end_x=bx+bw
+                d=f"M {ax+aw} {y1} H {x} V {y2} H {end_x} M {end_x+5} {y2-4} L {end_x} {y2} L {end_x+5} {y2+4}"
+            else:
+                x1=ax+aw//2-28+index*8
+                x2=bx+bw//2-28+index*8
+                y=ay-18-index*9
+                d=f"M {x1} {ay} V {y} H {x2} V {by} M {x2-5} {by-7} L {x2} {by} L {x2+5} {by-7}"
+            parts.append(f'<path d="{d}" fill="none" stroke="{accent}" stroke-width="{3 if structured else 2}"/>')
+        pairs=relations.split(" · ") if relations else []
+        for row in range(2):
+            line=" · ".join(pairs[row*4:row*4+4])
+            if line or row==0:
+                label(w//2,575+row*20 if variant=="mobile-vertical" else 498+row*28,
+                    ("Relazioni: " if row==0 else "")+(line or "nessuna"),14 if variant=="mobile-vertical" else 20,dark)
+    label(w//2,h-16 if variant=="mobile-vertical" else h-56,footer,15 if variant=="mobile-vertical" else 22,dark)
     parts.append("</g></svg>")
     svg="\n".join(parts)
-    wrapper='<!doctype html>\n<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+title+' — '+name+'</title><style>html,body{margin:0;padding:0;background:'+p["canvas"]+';color:'+dark+';font-family:system-ui,sans-serif}main{width:100%;max-width:'+str(w)+'px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main>\n'+svg+'\n</main></body></html>\n'
+    wrapper=diagram_document(svg,w,p,title,name,authored)
     return wrapper,svg,checks
+
+def diagram_document(svg, w, p, title, name, authored):
+    dark=p["ink"]
+    wrapper='<!doctype html>\n<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+title+' — '+name+'</title><style>html,body{margin:0;padding:0;background:'+p["canvas"]+';color:'+dark+';font-family:system-ui,sans-serif}main{width:100%;max-width:'+str(w)+'px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main>\n'+svg+'\n</main></body></html>\n'
+    if authored:
+        policy="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"
+        wrapper=wrapper.replace("<head>",f'<head><meta http-equiv="Content-Security-Policy" content="{policy}">',1)
+    return wrapper
+
+
+def render_external_gears(profile, source, variant):
+    """Draw a bounded ideal external pair using only the existing SVG grammar."""
+    w, h = VARIANTS[variant]
+    p = profile["palette"]
+    ink, accent = p["ink"], p["accent"]
+    model = source["transmission"]
+    teeth = (model["driverTeeth"], model["drivenTeeth"])
+    mobile = variant == "mobile-vertical"
+    scale = 1.55 if mobile else 4.4
+    r1, r2 = [n*scale for n in teeth]
+    cy = 276 if mobile else 360
+    x2 = (w-2*(r1+r2))/2+r2
+    contact = x2+r2
+    x1 = contact+r1
+    title = html.escape(source["title"])
+    name = html.escape(profile["name"])
+    text_size = 15 if mobile else 26
+    description = (f"{source['description']} {source['nodes'][0]['label']}: {teeth[0]} denti, senso orario. "
+                   f"{source['nodes'][1]['label']}: {teeth[1]} denti, senso antiorario. Punto di contatto tra le ruote.")
+    parts = [
+        f'<svg xmlns="{NS}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="diagram-title" aria-describedby="diagram-desc" xml:lang="it">',
+        f'<title id="diagram-title">{title} — {name}</title>',
+        f'<desc id="diagram-desc">{html.escape(description)}</desc>',
+        f'<rect x="0" y="0" width="{w}" height="{h}" fill="{p["canvas"]}"/>',
+        '<g font-family="system-ui, sans-serif" text-anchor="middle">',
+    ]
+    def label(x, y, value, size=text_size, weight=600):
+        parts.append(f'<text x="{round(x)}" y="{round(y)}" font-size="{size}" font-weight="{weight}" fill="{ink}">{html.escape(value)}</text>')
+    def point(cx, y, radius, angle):
+        return (cx+radius*math.cos(angle), y+radius*math.sin(angle))
+    def path(points, fill="none", stroke=accent, width=2, close=False):
+        coords = [f"{x:.2f} {y:.2f}" for x,y in points]
+        data = "M "+" L ".join(coords + ([coords[0]] if close else []))
+        parts.append(f'<path d="{data}" fill="{fill}" stroke="{stroke}" stroke-width="{width}"/>')
+
+    label(w/2, 63, source["title"], 24 if mobile else 46, 700)
+    label(w/2, 96, "Due ruote esterne in presa", 15 if mobile else 25, 400)
+    for index, (cx, radius, count) in enumerate(zip((x1,x2),(r1,r2),teeth)):
+        depth = 3.4 if mobile else 8.5
+        # Offset the driven tooth by half a pitch; tooth outlines are illustrative.
+        phase = math.pi if index == 0 else math.pi/count
+        outline = [point(cx,cy,radius+(depth if k%4 in (0,1) else -depth),phase+2*math.pi*k/(count*4)) for k in range(count*4)]
+        path(outline,p["surface"],accent,2 if mobile else 4,True)
+        path([point(cx,cy,6 if mobile else 12,k*math.pi/8) for k in range(16)],accent,accent,1,True)
+        # Opposite arrow directions in the plane of the drawing.
+        angles = [-2.60+k*.105 for k in range(21)]
+        if index:
+            angles.reverse()
+        arc = [point(cx,cy,radius+12 if mobile else radius+25,a) for a in angles]
+        path(arc,"none",ink,2 if mobile else 4)
+        x,y = arc[-1]
+        dx,dy = x-arc[-2][0],y-arc[-2][1]
+        factor = (8 if mobile else 17)/math.hypot(dx,dy)
+        dx,dy = dx*factor,dy*factor
+        path([(x-dx-dy*.5,y-dy+dx*.5),(x,y),(x-dx+dy*.5,y-dy-dx*.5)],"none",ink,2 if mobile else 4)
+    path([(contact-5,cy),(contact,cy-5),(contact+5,cy),(contact,cy+5)],ink,ink,1,True)
+    path([(contact,cy+(5 if mobile else -5)),(contact,379 if mobile else 163)],"none",ink,2)
+    label(contact, 406 if mobile else 145, "Punto di contatto")
+    if mobile:
+        # Keep the labels legible even for pairs whose centres are close.
+        label(180,461,f"{source['nodes'][0]['label']} a destra: {teeth[0]} denti · orario")
+        label(180,487,f"{source['nodes'][1]['label']} a sinistra: {teeth[1]} denti · antiorario")
+    else:
+        for cx,node,count,direction in zip((x1,x2),source["nodes"],teeth,("orario","antiorario")):
+            label(cx,605,f"{node['label']}: {count} denti")
+            label(cx,639,f"Senso {direction}",23,400)
+    label(w/2,h-24,"Tecnologia · proposta didattica",text_size,400)
+    parts.append("</g></svg>")
+    svg = "\n".join(parts)
+    return diagram_document(svg,w,p,title,name,True), svg
+
 
 def validate(svg, profile, variant, *, view_size=None):
     """Closed grammar for these generated demonstrators only."""
@@ -311,11 +470,176 @@ def generate_p2(out):
     (out/"p2-receipt.json").write_bytes((json.dumps(receipt,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
     print(f"P2: {len(results)} coppie statiche; {len(tests)} rifiuti semantici PASS")
 
+def generate_education(out):
+    # One explicit educational pilot, not arbitrary source ingestion or a new renderer.
+    manifest,_,profile_hash,_=load_inputs()
+    raw=(BASE/"education-pilot-source.json").read_bytes()
+    source=json.loads(raw)
+    need(source["schema"]=="trama.diagram-education-pilot/v0.1" and source["id"]=="eco02-p1-filiera-orticola","identità pilota")
+    need(source["status"]=="TEACHER_REVIEW_REQUIRED" and source["runtimeAuthorized"] is False and source["publicationAuthorized"] is False,"autorità didattica")
+    need(source["context"]["curricoloClaim"]=="none" and source["context"]["curricoloAuthority"]=="Arena","autorità curricolare")
+    need(source["profile"]=="studio-atlas","profilo pilota")
+    need([n["id"] for n in source["nodes"]]==["source","compose","review","archive"],"sequenza pilota")
+    need(source["edges"]==[["source","compose"],["compose","review"],["review","archive"]],"relazioni pilota")
+    p2_text(source["title"],32)
+    p2_text(source["description"],160)
+    for n in source["nodes"]:
+        p2_text(n["label"],18)
+        p2_text(n["detail"],24)
+    profile=next(p for p in manifest["profiles"] if p["id"]==source["profile"])
+    out.mkdir(parents=True,exist_ok=True)
+    outputs=[]
+    for variant in VARIANTS:
+        doc,svg,checks=render(profile,source,variant,footer="Tecnologia · proposta didattica",include_details=True)
+        validate(svg,profile,variant)
+        root=ET.fromstring(svg)
+        labels=[e.text for e in root.iter(f"{{{NS}}}text")]
+        desc=root.find(f"{{{NS}}}desc").text
+        for n in source["nodes"]:
+            need(n["label"] in labels and n["detail"] in labels and n["label"]+": "+n["detail"] in desc,"propagazione contenuto didattico")
+        stem=source["id"]+"-"+variant
+        data={"html":doc.encode("utf-8"),"svg":svg.encode("utf-8")}
+        for ext,content in data.items(): (out/(stem+"."+ext)).write_bytes(content)
+        outputs.append({"id":stem,"diagram":source["id"],"variant":variant,"viewBox":list(VARIANTS[variant]),
+            "title":root.find(f"{{{NS}}}title").text,"description":desc,"labels":labels,
+            "contrast":checks,"htmlSha256":sha(data["html"]),"svgSha256":sha(data["svg"])})
+    guide=(BASE/"education-pilot-guide.md").read_bytes()
+    (out/"guida-docente.md").write_bytes(guide)
+    receipt={"schema":"trama.diagram-education-receipt/v0.1","status":"GENERATED_TEACHER_REVIEW_REQUIRED",
+        "sourceSha256":sha(raw),"profilesSha256":profile_hash,"guideSha256":sha(guide),
+        "runtimeAuthorized":False,"publicationAuthorized":False,"outputs":outputs}
+    (out/"education-receipt.json").write_bytes((json.dumps(receipt,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
+    print("Education pilot: 2 static pairs; teacher decision pending")
+
+
+def authored_text(value, limit, field):
+    need(isinstance(value,str) and 0<len(value.strip())<=limit, f"{field}: da 1 a {limit} caratteri.")
+    need(not re.search(r"[<>@\x00-\x1f\x7f-\x9f\ud800-\udfff]|(?:[a-z][a-z0-9+.-]*://|(?:https?|javascript|data|mailto|file|blob|vbscript)\s*:|www\.|//|\b[\w-]+\.(?:it|com|org|net|edu|gov|io|dev)\b)",value,re.I),
+         f"{field}: inserisci solo testo, senza markup o indirizzi.")
+    return value.strip()
+
+
+def validate_authored(source):
+    fields={"schema","id","status","profile","runtimeAuthorized","publicationAuthorized","title","description","nodes","edges"}
+    need(isinstance(source,dict),"Struttura della fonte non valida.")
+    mechanical=source.get("schema")=="trama.diagram-education-source/v0.2"
+    if mechanical:
+        fields.add("transmission")
+    need(source.keys() in (fields,fields|{"activity"}),"Struttura della fonte non valida.")
+    fixed={"schema":"trama.diagram-education-source/v0.1","id":"diagramma-docente",
+        "status":"TEACHER_REVIEW_REQUIRED","profile":"studio-atlas"}
+    if mechanical:
+        fixed["schema"]="trama.diagram-education-source/v0.2"
+    need(all(source[k]==v for k,v in fixed.items()) and source["runtimeAuthorized"] is False
+         and source["publicationAuthorized"] is False,"Identità o autorizzazioni della fonte non valide.")
+    title=authored_text(source["title"],26,"Titolo")
+    description=authored_text(source["description"],160,"Finalità")
+    need(isinstance(source["nodes"],list) and 1<=len(source["nodes"])<=4,"Inserisci da 1 a 4 nodi.")
+    nodes=[]
+    ids=set()
+    for index,node in enumerate(source["nodes"],1):
+        need(isinstance(node,dict) and node.keys()=={"id","label","detail"},f"Struttura del nodo {index} non valida.")
+        node_id=node["id"]
+        need(isinstance(node_id,str) and re.fullmatch(r"n[1-4]",node_id) and node_id not in ids,
+            f"Identificativo del nodo {index} non valido o duplicato.")
+        ids.add(node_id)
+        nodes.append({"id":node_id,"label":authored_text(node["label"],16,f"Etichetta del nodo {index}"),
+                      "detail":authored_text(node["detail"],22,f"Dettaglio del nodo {index}")})
+    edges=source["edges"]
+    need(isinstance(edges,list) and len(edges)<=8,"Inserisci al massimo 8 relazioni.")
+    seen=set()
+    for edge in edges:
+        need(isinstance(edge,list) and len(edge)==2 and all(isinstance(n,str) and n in ids for n in edge)
+             and edge[0]!=edge[1],"Ogni relazione deve collegare due nodi presenti e distinti.")
+        need(tuple(edge) not in seen,"Relazione duplicata.")
+        seen.add(tuple(edge))
+    result={**fixed,"runtimeAuthorized":False,"publicationAuthorized":False,
+            "title":title,"description":description,"nodes":nodes,"edges":edges}
+    if mechanical:
+        model=source["transmission"]
+        need(isinstance(model,dict) and model.keys()=={"kind","driverTeeth","drivenTeeth"}
+             and model["kind"]=="external-gear-pair","Trasmissione esterna non valida.")
+        teeth=(model["driverTeeth"],model["drivenTeeth"])
+        need(all(type(n) is int and n in (12,24,36,48) for n in teeth) and len(nodes)==2
+             and edges==[[node["id"] for node in nodes]]
+             and all(node["detail"]==f"{n} denti" for node,n in zip(nodes,teeth)),"Dentatura o relazione non valida.")
+        result["transmission"]=model
+    if "activity" in source:
+        activity=source["activity"]
+        need(isinstance(activity,dict) and activity.keys()=={"question","criterion"},"Struttura dell'attività non valida.")
+        result["activity"]={"question":authored_text(activity["question"],160,"Domanda operativa"),
+                            "criterion":authored_text(activity["criterion"],160,"Criterio di risposta")}
+    return result
+
+
+def authored_package(source):
+    manifest,_,profile_hash,_=load_inputs()
+    profile=next(p for p in manifest["profiles"] if p["id"]==source["profile"])
+    names={node["id"]: node["label"] for node in source["nodes"]}
+    guide=[source["title"],"="*len(source["title"]),"","Finalità: "+source["description"],"",
+           "## Nodi",""]
+    guide.extend(f"- {n['label']}: {n['detail']}" for n in source["nodes"])
+    guide.extend(["","## Relazioni",""])
+    guide.extend([f"- {names[a]} → {names[b]}" for a,b in source["edges"]] or ["Nessuna relazione esplicita."])
+    guide.extend(["","## Attività e verifica",""])
+    if "activity" in source:
+        guide.extend(["Domanda operativa: "+source["activity"]["question"],"",
+                      "Criterio di risposta: "+source["activity"]["criterion"],""])
+    else:
+        guide.extend(["Domanda operativa e criterio di risposta non ancora definiti dal docente.",""])
+    guide.extend(["","Verificare contenuto e leggibilità prima di qualsiasi uso con la classe.",""])
+    files={"education-source.json":json.dumps(source,ensure_ascii=False,indent=2)+"\n",
+           "guida-docente.md":"\n".join(guide)}
+    for variant in VARIANTS:
+        if "transmission" in source:
+            doc,svg=render_external_gears(profile,source,variant)
+        else:
+            doc,svg,_=render(profile,source,variant,footer="Tecnologia · proposta didattica",include_details=True,authored=True)
+        validate(svg,profile,variant)
+        files[f"diagramma-docente-{variant}.html"]=doc
+        files[f"diagramma-docente-{variant}.svg"]=svg
+    receipt={"schema":"trama.diagram-education-receipt/v0.2","status":"GENERATED_TEACHER_REVIEW_REQUIRED",
+        "runtimeAuthorized":False,"publicationAuthorized":False,"profilesSha256":profile_hash,
+        "rendererSha256":sha(pathlib.Path(__file__).read_bytes()),"sourceOrigin":"teacher-authored",
+        "files":{name:sha(content.encode("utf-8")) for name,content in files.items()}}
+    files["education-receipt.json"]=json.dumps(receipt,ensure_ascii=False,indent=2)+"\n"
+    return files
+
+
+def authored_stdio():
+    data=sys.stdin.buffer.read(8193)
+    try:
+        need(len(data)<=8192,"La fonte supera 8 KiB.")
+        source=json.loads(data.decode("utf-8"))
+    except (UnicodeError,json.JSONDecodeError):
+        print(json.dumps({"error":"La fonte deve essere un documento JSON UTF-8 valido."}))
+        return
+    except (ValueError,RecursionError):
+        print(json.dumps({"error":"La fonte supera i limiti della struttura JSON."}))
+        return
+    try:
+        source=validate_authored(source)
+    except ValueError as error:
+        print(json.dumps({"error":str(error)}))
+        return
+    print(json.dumps({"files":authored_package(source)}))
+
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--out",type=pathlib.Path)
     ap.add_argument("--p2-out",type=pathlib.Path)
+    ap.add_argument("--education-out",type=pathlib.Path)
+    ap.add_argument("--education-stdio",action="store_true")
     args=ap.parse_args()
+    if args.education_stdio:
+        need(args.out is None and args.p2_out is None and args.education_out is None,"modalità di generazione esclusive")
+        authored_stdio()
+        return
+    if args.education_out is not None:
+        need(args.out is None and args.p2_out is None,"modalità di generazione esclusive")
+        generate_education(args.education_out)
+        return
     if args.p2_out is not None:
         need(args.out is None,"modalità di generazione esclusive")
         generate_p2(args.p2_out)

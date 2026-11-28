@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { STAGES, type PathwayProject } from "../lib/model";
-import { getProject, updateProject } from "../lib/store";
+import { STAGES, type PathwayProject, type SceneIllustration } from "../lib/model";
+import { getProject, updateProject, commitDecodedSceneImage } from "../lib/store";
 import { getProductionBlockers } from "../lib/production";
 import {
   buildStudioAtlasPreviewSnapshot,
@@ -22,11 +22,23 @@ import {
   StoryEditor,
   WorldEditor,
 } from "./AuthoringEditors";
+import { DidacticProductionPanel } from "./DidacticProductionPanel";
+import { DidacticDraftPanel } from "./DidacticDraftPanel";
 import { VisualFactoryStage } from "./VisualFactoryStage";
+import { AuthoringProfileField } from "./AuthoringProfileField";
+import { AuthoringCatalog } from "./AuthoringCatalog";
+import { AtelierWorkflow } from "./AtelierWorkflow";
+import { deriveAuthoringPlan } from "../lib/authoring-plan";
+import { AGRICULTURE_PROJECT_ID, AGRICULTURE_GUIDE } from "../lib/canonical/agriculture";
+
+import { clearWorkMode, findWorkMode, loadWorkMode, saveWorkMode, type WorkModeId } from "../lib/authoring-catalog";
+import { WorkModePicker } from "./WorkModePicker";
 
 export function PathwayWorkspace({ id }: { id: string }) {
   const [project, setProject] = useState<PathwayProject | null>(null);
   const [stage, setStage] = useState<(typeof STAGES)[number]>("Idea");
+  const [mode, setMode] = useState<WorkModeId>();
+  const [modeSaveError, setModeSaveError] = useState(false);
   const [draftIdea, setDraftIdea] = useState("");
   const [saveState, setSaveState] = useState<"saved" | "saving" | "error">("saved");
 
@@ -34,15 +46,55 @@ export function PathwayWorkspace({ id }: { id: string }) {
     const loaded = getProject(id);
     setProject(loaded);
     setDraftIdea(loaded?.idea ?? "");
+    setStage("Idea");
+    setMode(undefined);
+    setModeSaveError(false);
+    if (!loaded) return;
+
+    const url = new URL(window.location.href);
+    const requested = findWorkMode(url.searchParams.get("modalita"));
+    try {
+      const selected = requested ?? findWorkMode(loadWorkMode(localStorage, id));
+      if (selected) {
+        setMode(selected.id);
+        if (selected.availability === "EDITOR") setStage(selected.stage);
+      }
+      if (requested) {
+        saveWorkMode(localStorage, id, requested.id);
+        url.searchParams.delete("modalita");
+        window.history.replaceState(window.history.state, "", url);
+      }
+    } catch {
+      setModeSaveError(true);
+    }
   }, [id]);
 
   const stageIndex = useMemo(() => STAGES.indexOf(stage), [stage]);
 
+  function chooseMode(nextMode?: WorkModeId) {
+    if (!project) return;
+    const selected = findWorkMode(nextMode);
+    setMode(nextMode);
+    if (!selected) setStage("Idea");
+    else if (selected.availability === "EDITOR") setStage(selected.stage);
+    try {
+      if (nextMode) saveWorkMode(localStorage, project.projectId, nextMode);
+      else clearWorkMode(localStorage, project.projectId);
+      setModeSaveError(false);
+    } catch {
+      setModeSaveError(true);
+    }
+  }
+
   function saveIdea() {
     if (!project) return;
+    if (draftIdea === project.idea) {
+      setSaveState("saved");
+      return;
+    }
     setSaveState("saving");
     try {
-      const updated = updateProject(project.projectId, { idea: draftIdea });
+      const updated = updateProject(project.projectId, { idea: draftIdea }, project.revision);
       setProject(updated);
       setSaveState("saved");
     } catch {
@@ -54,12 +106,17 @@ export function PathwayWorkspace({ id }: { id: string }) {
     if (!project) return;
     setSaveState("saving");
     try {
-      const updated = updateProject(project.projectId, patch);
+      const updated = updateProject(project.projectId, patch, project.revision);
       setProject(updated);
       setSaveState("saved");
     } catch {
       setSaveState("error");
     }
+  }
+
+  function importSceneImage(sceneId:string,image:SceneIllustration,expected:SceneIllustration|undefined){
+    try{const updated=commitDecodedSceneImage(id,sceneId,expected,image);setProject(updated);setSaveState("saved");}
+    catch(error){setSaveState("error");throw error;}
   }
 
   async function openLearnerPreview() {
@@ -71,7 +128,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
         const updated = updateProject(project.projectId, {
           humanState: "PREVIEW",
           lastPreviewSnapshot: result.snapshot,
-        });
+        }, project.revision);
         setProject(updated);
         setSaveState("saved");
         return;
@@ -90,7 +147,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
       if (result.status === "OPENED") {
         const updated = updateProject(project.projectId, {
           lastPreviewSnapshot: result.snapshot,
-        });
+        }, project.revision);
         setProject(updated);
         setSaveState("saved");
         return;
@@ -111,7 +168,7 @@ export function PathwayWorkspace({ id }: { id: string }) {
       const updated = updateProject(project.projectId, {
         humanState: "PREVIEW",
         lastPreviewSnapshot: snapshot,
-      });
+      }, project.revision);
       setProject(updated);
       setSaveState("saved");
     } catch {
@@ -128,6 +185,9 @@ export function PathwayWorkspace({ id }: { id: string }) {
     );
   }
 
+  const plan = deriveAuthoringPlan(project, mode);
+  const nextStage = plan.focusStages[1] ?? "Esperienza";
+
   return (
     <main className="workspace-shell">
       <header className="workspace-header">
@@ -138,15 +198,30 @@ export function PathwayWorkspace({ id }: { id: string }) {
             value={project.title}
             aria-label="Titolo del Percorso"
             onChange={(e) => {
-              const updated = updateProject(project.projectId, { title: e.target.value });
-              setProject(updated);
+              setSaveState("saving");
+              try {
+                const updated = updateProject(project.projectId, { title: e.target.value }, project.revision);
+                setProject(updated);
+                setSaveState("saved");
+              } catch {
+                setSaveState("error");
+              }
             }}
           />
         </div>
         <div className="workspace-actions">
-          <span className={`save-state ${saveState}`}>
-            {saveState === "saving" ? "Salvataggio…" : saveState === "error" ? "Non salvato" : "Salvato"}
+          <span className={`save-state ${saveState}`} role="status" aria-live="polite">
+            {saveState === "saving" ? "Salvataggio…" : saveState === "error" ? "Non salvato" : "Salvato su questo dispositivo"}
           </span>
+          {saveState === "error" && (
+            <button className="quiet-action" type="button" onClick={() => {
+              if (!window.confirm("Ricaricare la copia locale? Le modifiche non salvate andranno perse.")) return;
+              const latest = getProject(id);
+              setProject(latest);
+              setDraftIdea(latest?.idea ?? "");
+              setSaveState("saved");
+            }}>Ricarica copia salvata</button>
+          )}
           <button
             className="secondary-action"
             disabled={
@@ -169,7 +244,13 @@ export function PathwayWorkspace({ id }: { id: string }) {
         </div>
       </header>
 
-      <div className="workspace-grid">
+      <WorkModePicker value={plan.workMode?.id} onChange={chooseMode} defaultLabel="Fasi del Percorso" />
+      {modeSaveError && <p role="status">Preferenza di lavoro non salvata su questo dispositivo.</p>}
+      {mode === "DOCUMENT" && <Link className="secondary-action" href="/attivita">Apri importazione attività</Link>}
+      {mode === "COMPOSITION" && <button className="quiet-action" onClick={() => setStage("Scene")}>Apri le scene</button>}
+      {mode === "REVIEW" && <button className="quiet-action" onClick={() => setStage("Prova")}>Apri il banco anteprime</button>}
+
+      {plan.workMode?.availability !== "BLOCKED" && <div className="workspace-grid">
         <nav className="stage-rail" aria-label="Fasi del Percorso">
           {STAGES.map((item, index) => (
             <button
@@ -187,18 +268,21 @@ export function PathwayWorkspace({ id }: { id: string }) {
 
           {stage === "Idea" && (
             <>
+              <AtelierWorkflow onGoTo={setStage} grammar={project.experience.grammar} />
               <h1>Che cosa vuoi far vivere?</h1>
               <p className="lead">Non serve compilare un modulo didattico. Parti da ciò che dovrebbe accadere allo studente.</p>
               <textarea
                 className="idea-editor"
                 value={draftIdea}
-                onChange={(e) => setDraftIdea(e.target.value)}
+                onChange={(e) => { setDraftIdea(e.target.value); setSaveState("saving"); }}
                 onBlur={saveIdea}
                 aria-label="Idea del Percorso"
               />
+              <AuthoringProfileField input={project} onChange={value => { if (value !== project.authoringComplexity) patchProject({ authoringComplexity: value }); }} />
+              <AuthoringCatalog project={{...project,idea:draftIdea}} onChange={value=>patchProject({authoringSelection:value})} onGoTo={setStage} />
               <div className="next-line">
-                <span>Quando l’idea regge, il passo successivo sarà costruire la storia.</span>
-                <button className="quiet-action" onClick={() => setStage("Storia")}>Vai a Storia →</button>
+                <span>Continua dalla fase consigliata, oppure scegli una delle fasi disponibili.</span>
+                <button className="quiet-action" onClick={() => setStage(nextStage)}>Vai a {nextStage} →</button>
               </div>
             </>
           )}
@@ -212,15 +296,15 @@ export function PathwayWorkspace({ id }: { id: string }) {
           )}
 
           {stage === "Esperienza" && (
-            <ExperienceEditor project={project} onPatch={patchProject} />
+            <><ExperienceEditor project={project} onPatch={patchProject} /><DidacticDraftPanel key={project.projectId} project={project} onGoToProduction={()=>setStage("Produzione")} /></>
           )}
 
           {stage === "Scene" && (
-            <SceneEditor project={project} onPatch={patchProject} />
+            <SceneEditor project={project} onPatch={patchProject} onImportImage={importSceneImage} />
           )}
 
           {stage === "Produzione" && (
-            <VisualFactoryStage project={project} />
+            <><VisualFactoryStage project={project} /><DidacticProductionPanel key={project.projectId} project={project} openStandaloneBanks={mode === "PRODUCTION"}/></>
           )}
 
           {stage === "Prova" && (
@@ -244,11 +328,12 @@ export function PathwayWorkspace({ id }: { id: string }) {
             <div><dt>Destinatari</dt><dd>{ageLabel(project.ageBand)}</dd></div>
             <div><dt>Revisione</dt><dd>{project.revision}</dd></div>
           </dl>
+          {project.projectId===AGRICULTURE_PROJECT_ID&&<p><Link href={AGRICULTURE_GUIDE}>Fascicolo educativo-didattico (bozza v0.4; verificare la versione della copia locale)</Link><br/><small>Da riallineare se modifichi il percorso.</small></p>}
           <p className="context-note">
-            Nessuna classe, studente o provider di calcolo è legato a questo draft.
+            Nessuna classe, studente o provider di calcolo è legato a questo draft. Il salvataggio resta locale a questo dispositivo: non costituisce una copia di sicurezza né sincronizza il Percorso.
           </p>
         </aside>
-      </div>
+      </div>}
     </main>
   );
 }
@@ -502,6 +587,8 @@ function blockerLabel(blocker: string) {
     STORYBOARD_NOT_READY: "Lo storyboard non è ancora segnato come pronto.",
     NO_SCENES: "Non esiste ancora nessuna scena.",
     INCOMPLETE_SCENES: "Una o più scene non hanno situazione, azione e conseguenza.",
+    INCOMPLETE_STAGE_PLACES: "Completa i luoghi e gli indizi nelle scene: nomi, descrizioni e riferimenti devono essere validi.",
+    INCOMPLETE_SCENE_MEDIA: "Completa l’immagine interattiva: file valido, descrizione alternativa, almeno un punto e limiti di spazio.",
     INCOMPLETE_CHOICES: "Una scena di scelta non ha ancora almeno due possibilità complete.",
     INCOMPLETE_WORLD_STATE: "Una scena contiene uno stato del mondo incompleto: servono luogo, stato e almeno un segnale osservabile.",
     TERMINAL_CHOICE_NEEDS_CLOSURE: "L’ultima scena è una scelta: aggiungi una breve scena di chiusura dopo la conseguenza.",

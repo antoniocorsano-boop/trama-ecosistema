@@ -1,0 +1,58 @@
+{
+  "schema": "trama.diagram-education-pilot/v0.1",
+  "id": "eco02-p1-filiera-orticola",
+  "status": "TEACHER_REVIEW_REQUIRED",
+  "runtimeAuthorized": false,
+  "publicationAuthorized": false,
+  "profile": "studio-atlas",
+  "context": {
+    "discipline": "Tecnologia",
+    "grade": "seconda",
+    "sequence": "Agricoltura come sistema tecnologico",
+    "source": {
+      "commit": "f40b4576f4542b6630f20de9d063d2fcc1b88ced",
+      "path": "docs/pilots/eco-02-p1.md"
+    },
+    "curricoloAuthority": "Arena",
+    "curricoloClaim": "none",
+    "objective": "Ricostruire le fasi di una filiera orticola locale e individuare risorse, tecniche e possibili conseguenze di un cambiamento."
+  },
+  "title": "Dal campo alla tavola",
+  "description": "Esempio di filiera orticola locale: seguire quattro fasi, dal campo al consumo.",
+  "nodes": [
+    {
+      "id": "source",
+      "label": "Coltivazione",
+      "detail": "Acqua, suolo, energia"
+    },
+    {
+      "id": "compose",
+      "label": "Raccolta",
+      "detail": "Ortaggi maturi"
+    },
+    {
+      "id": "review",
+      "label": "Distribuzione",
+      "detail": "Vendita locale"
+    },
+    {
+      "id": "archive",
+      "label": "Consumo",
+      "detail": "Acquisto e uso"
+    }
+  ],
+  "edges": [
+    [
+      "source",
+      "compose"
+    ],
+    [
+      "compose",
+      "review"
+    ],
+    [
+      "review",
+      "archive"
+    ]
+  ]
+}
