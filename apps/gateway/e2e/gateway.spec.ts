@@ -209,3 +209,28 @@ test('educational principle is readable on the public landing at S/M/L/LIM', asy
   const dimensions = await principle.evaluate((element) => ({ width: element.clientWidth, scroll: element.scrollWidth }));
   expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width + 1);
 });
+
+test('explicit profile navigation selects one native background and preserves access', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await openGateway(page);
+  const stage = page.locator('.trama-gateway-stage');
+  const poster = page.getByTestId('trama-media-poster');
+  const chooser = page.getByRole('navigation', { name: 'Scelta ambiente grafico' });
+  const original = EXPECTED_BACKGROUND[testInfo.project.name];
+  await expect(stage).toHaveAttribute('data-visual-profile', 'atelier');
+  await expect.poll(async () => poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain(original);
+  await expect.poll(async () => poster.evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await chooser.getByRole('link', { name: 'Studio classico', exact: true }).click();
+  await expect(stage).toHaveAttribute('data-visual-profile', 'studio-classico');
+  await expect.poll(async () => poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain(original.replace('trama-gateway-bg-', 'trama-gateway-classic-bg-'));
+  await expect.poll(async () => poster.evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect(chooser.getByRole('link', { name: /Studio classico/ })).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('video')).toHaveCount(0);
+  await expect(page.locator('picture img')).toHaveCount(1);
+  await expect(page.getByRole('link', { name: 'Entra in TRAMA' })).toHaveAttribute('href', '/ecosistema');
+  await page.reload();
+  await expect(stage).toHaveAttribute('data-visual-profile', 'studio-classico');
+  await chooser.getByRole('link', { name: 'Atelier panoramico', exact: true }).click();
+  await expect(stage).toHaveAttribute('data-visual-profile', 'atelier');
+  await expect.poll(async () => poster.evaluate(el => (el as HTMLImageElement).currentSrc)).toContain(original);
+});
