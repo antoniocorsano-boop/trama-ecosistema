@@ -1,4 +1,4 @@
-import type { AuthProviderAdapter } from '../ports/auth-provider.ts';
+import type { AuthProviderAdapter, MagicLinkCallbackInput } from '../ports/auth-provider.ts';
 import type { IdentityRepository } from '../ports/identity-repository.ts';
 import type { SessionStore } from '../ports/session-store.ts';
 import type { RateLimiter } from '../ports/rate-limiter.ts';
@@ -81,20 +81,25 @@ async function isPilotAliasAllowedBeforeDeadline(
   }
 }
 
-async function settleSendBeforeDeadline(
-  provider: AuthProviderAdapter,
-  email: string,
-  deadlineAtMs: number,
-): Promise<void> {
-  const remainingMs = deadlineAtMs - performance.now();
+async function settleMagicLinkSendBeforeDeadline(input: {
+  provider: AuthProviderAdapter;
+  email: string;
+  redirectTo: string;
+  codeVerifier: string;
+  deadlineAtMs: number;
+}): Promise<void> {
+  const remainingMs = input.deadlineAtMs - performance.now();
   if (remainingMs <= 0) return;
 
   const controller = new AbortController();
   let timeout: ReturnType<typeof setTimeout> | undefined;
-  // Invoke the adapter inside a promise boundary so a synchronous throw is
-  // normalized exactly like an asynchronously rejected provider operation.
   const work = Promise.resolve()
-    .then(() => provider.requestEmailOtp({ email, signal: controller.signal }))
+    .then(() => input.provider.requestEmailMagicLink({
+      email: input.email,
+      redirectTo: input.redirectTo,
+      codeVerifier: input.codeVerifier,
+      signal: controller.signal,
+    }))
     .catch(() => undefined);
   const deadline = new Promise<void>((resolve) => {
     timeout = setTimeout(() => {
@@ -110,10 +115,9 @@ async function settleSendBeforeDeadline(
   }
 }
 
-async function verifyBeforeDeadline(input: {
+async function verifyMagicLinkBeforeDeadline(input: {
   provider: AuthProviderAdapter;
-  email: string;
-  otp: string;
+  callback: MagicLinkCallbackInput;
   deadlineAtMs: number;
 }): Promise<VerifiedExternalIdentity | null> {
   const remainingMs = input.deadlineAtMs - performance.now();
@@ -122,7 +126,7 @@ async function verifyBeforeDeadline(input: {
   const controller = new AbortController();
   let timeout: ReturnType<typeof setTimeout> | undefined;
   const work = Promise.resolve()
-    .then(() => input.provider.verifyEmailOtp({ email: input.email, otp: input.otp, signal: controller.signal }))
+    .then(() => input.provider.verifyEmailMagicLink({ ...input.callback, signal: controller.signal }))
     .then((identity) => ({ ok: true as const, identity }))
     .catch(() => ({ ok: false as const }));
   const deadline = new Promise<{ ok: false }>((resolve) => {
@@ -145,36 +149,35 @@ async function waitForPublicFloor(startedAtMs: number, publicFloorMs: number): P
   if (remaining > 0) await sleep(remaining);
 }
 
-export type RequestPilotOtpResult = { status: 'OTP_REQUESTED' | 'PROVIDER_UNAVAILABLE' };
-export async function requestPilotOtp(input: {
+export type RequestPilotMagicLinkResult = { status: 'MAGIC_LINK_REQUESTED' | 'PROVIDER_UNAVAILABLE' };
+export async function requestPilotMagicLink(input: {
   repo: IdentityRepository;
   provider: AuthProviderAdapter;
   email: string;
+  redirectTo: string;
+  codeVerifier: string;
   rateLimiter?: RateLimiter;
   now?: Date;
   timing?: OtpRequestTimingPolicy;
-}): Promise<RequestPilotOtpResult> {
+}): Promise<RequestPilotMagicLinkResult> {
   const email = normalizeLoginEmail(input.email);
   const now = input.now ?? new Date();
   if (input.rateLimiter) {
     const rate = await input.rateLimiter.consume({ scope: 'OTP_REQUEST', keyDigest: digestRateLimitKey(email), now });
-    if (!rate.allowed) return { status: 'OTP_REQUESTED' };
+    if (!rate.allowed) return { status: 'MAGIC_LINK_REQUESTED' };
     const globalRate = await input.rateLimiter.consume({
       scope: 'OTP_REQUEST_GLOBAL',
       keyDigest: GLOBAL_PROVIDER_REQUEST_KEY_DIGEST,
       now,
     });
-    if (!globalRate.allowed) return { status: 'OTP_REQUESTED' };
+    if (!globalRate.allowed) return { status: 'MAGIC_LINK_REQUESTED' };
   }
 
   const timing = input.timing ?? DEFAULT_OTP_REQUEST_TIMING;
   if (timing.providerBudgetMs < 0 || timing.publicFloorMs <= timing.providerBudgetMs) {
-    throw new Error('INVALID_OTP_REQUEST_TIMING_POLICY');
+    throw new Error('INVALID_MAGIC_LINK_REQUEST_TIMING_POLICY');
   }
 
-  // Availability, alias lookup and any real provider send share one absolute
-  // provider deadline. Each remote operation is actively cancellable rather
-  // than merely receiving a time budget that it can overrun in the background.
   const startedAtMs = performance.now();
   const providerDeadlineAtMs = startedAtMs + timing.providerBudgetMs;
   const available = await checkAvailabilityBeforeDeadline(input.provider, providerDeadlineAtMs);
@@ -182,29 +185,32 @@ export async function requestPilotOtp(input: {
 
   const allowed = await isPilotAliasAllowedBeforeDeadline(input.repo, email, providerDeadlineAtMs);
   if (allowed) {
-    await settleSendBeforeDeadline(input.provider, email, providerDeadlineAtMs);
+    await settleMagicLinkSendBeforeDeadline({
+      provider: input.provider,
+      email,
+      redirectTo: input.redirectTo,
+      codeVerifier: input.codeVerifier,
+      deadlineAtMs: providerDeadlineAtMs,
+    });
   }
   await waitForPublicFloor(startedAtMs, timing.publicFloorMs);
-  return { status: 'OTP_REQUESTED' };
+  return { status: 'MAGIC_LINK_REQUESTED' };
 }
 
-export type VerifyPilotOtpResult =
+export type VerifyPilotMagicLinkResult =
   | { status: 'AUTHENTICATED'; principalId: string; contextId: string; sessionSecret: string }
-  | { status: 'OTP_INVALID' | 'OTP_EXPIRED' | 'PROVIDER_UNAVAILABLE' | 'ACCESS_DENIED' | 'RATE_LIMITED' };
-export async function verifyPilotOtp(input: {
+  | { status: 'MAGIC_LINK_INVALID' | 'PROVIDER_UNAVAILABLE' | 'ACCESS_DENIED' | 'RATE_LIMITED' };
+
+export async function verifyPilotMagicLink(input: {
   repo: IdentityRepository;
   provider: AuthProviderAdapter;
   store: SessionStore;
-  email: string;
-  otp: string;
+  callback: MagicLinkCallbackInput;
   now: Date;
   rateLimiter?: RateLimiter;
   verifyProviderBudgetMs?: number;
-}): Promise<VerifyPilotOtpResult> {
-  const email = normalizeLoginEmail(input.email);
+}): Promise<VerifyPilotMagicLinkResult> {
   if (input.rateLimiter) {
-    const rate = await input.rateLimiter.consume({ scope: 'OTP_VERIFY', keyDigest: digestRateLimitKey(email), now: input.now });
-    if (!rate.allowed) return { status: 'RATE_LIMITED' };
     const globalRate = await input.rateLimiter.consume({
       scope: 'OTP_VERIFY_GLOBAL',
       keyDigest: GLOBAL_PROVIDER_VERIFY_KEY_DIGEST,
@@ -214,32 +220,56 @@ export async function verifyPilotOtp(input: {
   }
 
   const providerBudgetMs = input.verifyProviderBudgetMs ?? DEFAULT_OTP_VERIFY_PROVIDER_BUDGET_MS;
-  if (providerBudgetMs <= 0) throw new Error('INVALID_OTP_VERIFY_TIMING_POLICY');
+  if (providerBudgetMs <= 0) throw new Error('INVALID_MAGIC_LINK_VERIFY_TIMING_POLICY');
 
-  // Availability, alias lookup and verification share one provider deadline.
-  // Negative public outcomes are not released before that same deadline.
   const startedAtMs = performance.now();
   const providerDeadlineAtMs = startedAtMs + providerBudgetMs;
   const available = await checkAvailabilityBeforeDeadline(input.provider, providerDeadlineAtMs);
   if (!available) return { status: 'PROVIDER_UNAVAILABLE' };
 
-  const allowed = await isPilotAliasAllowedBeforeDeadline(input.repo, email, providerDeadlineAtMs);
-  const verified = await verifyBeforeDeadline({
+  const verified = await verifyMagicLinkBeforeDeadline({
     provider: input.provider,
-    email,
-    otp: input.otp,
+    callback: input.callback,
     deadlineAtMs: providerDeadlineAtMs,
   });
-  if (!verified || !allowed) {
+  if (!verified) {
     await waitForPublicFloor(startedAtMs, providerBudgetMs);
-    return { status: 'OTP_INVALID' };
+    return { status: 'MAGIC_LINK_INVALID' };
+  }
+
+  if (input.rateLimiter) {
+    const identityRateKey = verified.verifiedEmail
+      ? normalizeLoginEmail(verified.verifiedEmail)
+      : `${verified.issuer}:${verified.subject}`;
+    const rate = await input.rateLimiter.consume({
+      scope: 'OTP_VERIFY',
+      keyDigest: digestRateLimitKey(identityRateKey),
+      now: input.now,
+    });
+    if (!rate.allowed) {
+      await input.provider.bestEffortLogout?.();
+      return { status: 'RATE_LIMITED' };
+    }
   }
 
   const resolution = await resolvePrincipalForVerifiedIdentity(input.repo, verified);
   if (!resolution.ok) {
+    await input.provider.bestEffortLogout?.();
     await waitForPublicFloor(startedAtMs, providerBudgetMs);
     return { status: 'ACCESS_DENIED' };
   }
+
+  const entitlements = await input.repo.listEntitlements(
+    resolution.principal.principalId,
+    resolution.context.contextId,
+    input.now,
+  );
+  if (entitlements.length === 0) {
+    await input.provider.bestEffortLogout?.();
+    await waitForPublicFloor(startedAtMs, providerBudgetMs);
+    return { status: 'ACCESS_DENIED' };
+  }
+
   const { secret } = await issueAccessSession({
     store: input.store,
     principalId: resolution.principal.principalId,
@@ -249,5 +279,10 @@ export async function verifyPilotOtp(input: {
     providerSubject: resolution.alias.providerSubject,
     now: input.now,
   });
-  return { status: 'AUTHENTICATED', principalId: resolution.principal.principalId, contextId: resolution.context.contextId, sessionSecret: secret };
+  return {
+    status: 'AUTHENTICATED',
+    principalId: resolution.principal.principalId,
+    contextId: resolution.context.contextId,
+    sessionSecret: secret,
+  };
 }

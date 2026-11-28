@@ -49,6 +49,6 @@ export interface AccessSessionRecord {
   createdAt: Date;
   absoluteExpiresAt: Date;
   revokedAt?: Date;
-  authMethod: 'EMAIL_OTP';
+  authMethod: 'EMAIL_MAGIC_LINK';
   lastEntitlementCheckAt: Date;
 }

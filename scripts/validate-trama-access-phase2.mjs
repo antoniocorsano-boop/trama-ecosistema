@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 const RUNTIME_EXT = /\.(?:ts|tsx|js|jsx|mjs|cjs)$/i;
 const MIGRATION_RE = /^apps\/access\/supabase\/migrations\/.*\.sql$/i;
 const PRODUCT_DATA_TERMS = /(?:^|[^a-z0-9])(?:lesson|curricolo|student|learner|class|group|studio_draft|material|materials|materiale|materiali)(?:[^a-z0-9]|$)/i;
+const CANONICAL_RATE_SCOPES = ['OTP_REQUEST', 'OTP_REQUEST_GLOBAL', 'OTP_VERIFY', 'OTP_VERIFY_GLOBAL'];
+const ALLOWED_CANONICAL_METADATA_LITERALS = ['CURRICOLO_ATLAS'];
 
 function isRuntimeSource(file) {
   if (!file.startsWith('apps/access/')) return false;
@@ -38,6 +40,15 @@ function objectBlocks(source) {
   return blocks;
 }
 
+function migrationContentWithoutCanonicalMetadata(source) {
+  let result = source;
+  for (const literal of ALLOWED_CANONICAL_METADATA_LITERALS) {
+    result = result.replaceAll(`'${literal}'`, "'CANONICAL_APPLICATION'");
+    result = result.replaceAll(`\"${literal}\"`, '"CANONICAL_APPLICATION"');
+  }
+  return result;
+}
+
 export function validatePhase2Snapshot({ files, changedFiles = [] }) {
   const errors = [];
   const entries = Object.entries(files);
@@ -47,9 +58,41 @@ export function validatePhase2Snapshot({ files, changedFiles = [] }) {
     if (/\blocalStorage\b/.test(source) && /(?:token|session|auth|bearer|jwt)/i.test(source)) {
       errors.push(`${file}: localStorage must not carry Access authentication/session material`);
     }
-    if (/magic\s*link/i.test(source)) {
-      errors.push(`${file}: Magic Link is outside the approved OTP-only Phase 2 runtime`);
+    if (/shouldCreateUser\s*:\s*true/i.test(source) || /create_user\s*:\s*true/i.test(source) || /\.auth\.signUp\s*\(/.test(source)) {
+      errors.push(`${file}: Magic Link pilot must remain fail-closed with automatic user creation disabled and no runtime auto-signup`);
     }
+    if (/(?:Codice OTP|Verifica codice|Invia codice)/i.test(source)) {
+      errors.push(`${file}: numeric OTP user flow is superseded by the approved Magic Link pilot`);
+    }
+  }
+
+  const magicProvider = files['apps/access/src/infrastructure/supabase/supabase-auth-provider.ts'];
+  if (magicProvider) {
+    const hasMagicRequest = /requestEmailMagicLink/.test(magicProvider);
+    const hasCreateUserFalse = /create_user\s*:\s*false/i.test(magicProvider);
+    const hasExplicitRedirect = /['"]redirect_to['"]/.test(magicProvider) && /input\.redirectTo/.test(magicProvider);
+    const hasPkceChallenge = /code_challenge\s*:/.test(magicProvider)
+      && /code_challenge_method\s*:\s*['"]s256['"]/i.test(magicProvider);
+    const hasPkceExchange = /grant_type=pkce/.test(magicProvider)
+      && /code_verifier\s*:/.test(magicProvider)
+      && /auth_code\s*:/.test(magicProvider);
+    if (!hasMagicRequest || !hasCreateUserFalse || !hasExplicitRedirect || !hasPkceChallenge || !hasPkceExchange) {
+      errors.push('apps/access/src/infrastructure/supabase/supabase-auth-provider.ts: Magic Link request must disable auto-creation, pin redirect_to, and bind request/callback with S256 PKCE code_challenge + code_verifier');
+    }
+  }
+
+  const magicRequestHandler = files['apps/access/src/server/handlers/request-magic-link.ts'];
+  if (magicRequestHandler) {
+    if (!/runtime\.config\.origin/.test(magicRequestHandler)) {
+      errors.push('apps/access/src/server/handlers/request-magic-link.ts: Magic Link redirect must derive from configured Access origin');
+    }
+    if (/request\.headers|headers\s*\(|x-forwarded-host|x-forwarded-proto/i.test(magicRequestHandler)) {
+      errors.push('apps/access/src/server/handlers/request-magic-link.ts: request headers must not control the Magic Link redirect origin');
+    }
+  }
+
+  for (const file of ['apps/access/app/api/auth/request-otp/route.ts', 'apps/access/app/api/auth/verify-otp/route.ts']) {
+    if (files[file]) errors.push(`${file}: numeric OTP route is superseded by the approved Magic Link pilot`);
   }
 
   const registry = files['apps/access/src/config/application-registry.ts'];
@@ -90,10 +133,19 @@ export function validatePhase2Snapshot({ files, changedFiles = [] }) {
   }
 
   for (const [file, source] of entries) {
-    if (MIGRATION_RE.test(file)) {
-      const hit = source.match(PRODUCT_DATA_TERMS);
-      if (hit) errors.push(`${file}: product/learner data term forbidden in Access store migration: ${hit[0]}`);
+    if (!MIGRATION_RE.test(file)) continue;
+    const contentForBoundaryScan = migrationContentWithoutCanonicalMetadata(source);
+    const hit = contentForBoundaryScan.match(PRODUCT_DATA_TERMS);
+    if (hit) errors.push(`${file}: product/learner data term forbidden in Access store migration: ${hit[0]}`);
+
+    if (/rate_limit_counters|access_rate_limit_consume/i.test(source)) {
+      for (const scope of CANONICAL_RATE_SCOPES) {
+        if (!source.includes(scope)) errors.push(`${file}: live rate limiter migration must represent canonical scope ${scope}`);
+      }
     }
+
+    const unsafeGrant = source.match(/grant\s+(?:select|insert|update|delete|all|usage)\b[^;]*\bto\s+(?:anon|authenticated)\b/i);
+    if (unsafeGrant) errors.push(`${file}: Access private store must not grant Data API access to anon/authenticated roles`);
   }
 
   return errors;
